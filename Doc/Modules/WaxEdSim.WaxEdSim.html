@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:13:13 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:39:06 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -19,12 +19,12 @@
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WaxEdSim.WaxEdSim<BR>
 &nbsp;&nbsp;wxPython.wx.wxApp<BR>
-&nbsp;&nbsp;WaxEdit.WaxEdit<BR>
+&nbsp;&nbsp;OldWaxEdit.WaxEdit<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSim</SPAN>(<A CLASS="DocLink" HREF="wxPython.wx.wxApp.html">wxApp</A>, <A CLASS="DocLink" HREF="WaxEdit.WaxEdit.html">WaxEdit</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSim</SPAN>(<A CLASS="DocLink" HREF="wxPython.wx.wxApp.html">wxApp</A>, <A CLASS="DocLink" HREF="OldWaxEdit.WaxEdit.html">WaxEdit</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSim.OnInit</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSim.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSim.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">dummy=0</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSim.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSim.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
@@ -38,17 +38,26 @@
     <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSim.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSim.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # sets the filename to name (usually indicated in the title bar)</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSim.update_mic_button</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from WaxEdit.WaxEdit</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor frame is active</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.mic_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.mic_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)<SPAN CLASS="OneLiner"> # function to receive microphone state change callbacks</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.open_file_in_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.open_file_in_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # opens a new file in the existing TextBufferWX</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the file in the existing TextBufferWX</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # sets the filename to name (usually indicated in the title bar)</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.misc.wxObjectPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.GetClassName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from OldWaxEdit.WaxEdit</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor frame is active</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.mic_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.mic_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)<SPAN CLASS="OneLiner"> # function to receive microphone state change callbacks</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.open_file_in_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.open_file_in_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # opens a new file in the existing TextBufferWX</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the file in the existing TextBufferWX</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
+    <A CLASS="DocLink" HREF="#OldWaxEdit.WaxEdit.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">OldWaxEdit.WaxEdit.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # sets the filename to name (usually indicated in the title bar)</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.wx.wxPyApp</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxPyApp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.wx.wxApp</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxApp.MainLoop</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -57,9 +66,6 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxApp.SetTopWindow</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxApp.__del__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxApp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">redirect=1</SPAN>, <SPAN CLASS="Argument">filename=None</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.wx.wxPyApp</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxPyApp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.wx.wxPyAppPtr</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.wx.wxPyAppPtr.Dispatch</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -103,12 +109,6 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr._setOORInfo</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.misc.wxObjectPtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.GetClassName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -311,7 +311,7 @@ displayed in the title bar</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="WaxEdit.WaxEdit.editor_buffer" CLASS="Method">WaxEdit.WaxEdit.editor_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.editor_buffer" CLASS="Method">OldWaxEdit.WaxEdit.editor_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>returns a reference to the TextBufferWX embedded in the GUI</P>
 
 <P>
@@ -328,7 +328,7 @@ displayed in the title bar</P>
 <DD>the TextBufferWX
 
 </DL>
-<H2 ID="WaxEdit.WaxEdit.editor_has_focus" CLASS="Method">WaxEdit.WaxEdit.editor_has_focus(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.editor_has_focus" CLASS="Method">OldWaxEdit.WaxEdit.editor_has_focus(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>indicates whether the editor window has the focus</P>
 
 <P>
@@ -339,7 +339,7 @@ displayed in the title bar</P>
 <STRONG>OUTPUTS</STRONG>
 <EM>BOOL</EM> -- true if editor window has the focus
 </P>
-<H2 ID="WaxEdit.WaxEdit.is_active" CLASS="Method">WaxEdit.WaxEdit.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.is_active" CLASS="Method">OldWaxEdit.WaxEdit.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>indicates whether the editor frame is active</P>
 
 <P>
@@ -356,7 +356,7 @@ displayed in the title bar</P>
 <DD>true if frame window is active
 
 </DL>
-<H2 ID="WaxEdit.WaxEdit.mic_change" CLASS="Method">WaxEdit.WaxEdit.mic_change(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.mic_change" CLASS="Method">OldWaxEdit.WaxEdit.mic_change(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)</H2>
 <P>function to receive microphone state change callbacks</P>
 
 <P>
@@ -373,7 +373,7 @@ displayed in the title bar</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="WaxEdit.WaxEdit.open_file_in_buffer" CLASS="Method">WaxEdit.WaxEdit.open_file_in_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.open_file_in_buffer" CLASS="Method">OldWaxEdit.WaxEdit.open_file_in_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
 <P>opens a new file in the existing TextBufferWX</P>
 
 <P>
@@ -391,7 +391,7 @@ displayed in the title bar</P>
 there)
 
 </DL>
-<H2 ID="WaxEdit.WaxEdit.run" CLASS="Method">WaxEdit.WaxEdit.run(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.run" CLASS="Method">OldWaxEdit.WaxEdit.run(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -412,7 +412,7 @@ AppState interface
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="WaxEdit.WaxEdit.save_file" CLASS="Method">WaxEdit.WaxEdit.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.save_file" CLASS="Method">OldWaxEdit.WaxEdit.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
 <P>Saves the file in the existing TextBufferWX</P>
 
 <P>
@@ -439,7 +439,7 @@ an existing file.
 there)
 
 </DL>
-<H2 ID="WaxEdit.WaxEdit.set_change_callback" CLASS="Method">WaxEdit.WaxEdit.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.set_change_callback" CLASS="Method">OldWaxEdit.WaxEdit.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
 <P>changes the callback to a new function</P>
 
 <P>
@@ -469,7 +469,7 @@ rather than a reference to the underlying TextBufferWX.  </P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="WaxEdit.WaxEdit.set_instance_string" CLASS="Method">WaxEdit.WaxEdit.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.set_instance_string" CLASS="Method">OldWaxEdit.WaxEdit.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -489,7 +489,7 @@ displayed in the title bar</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="WaxEdit.WaxEdit.set_name" CLASS="Method">WaxEdit.WaxEdit.set_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<H2 ID="OldWaxEdit.WaxEdit.set_name" CLASS="Method">OldWaxEdit.WaxEdit.set_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
 <P>sets the filename to name (usually indicated in the title bar)</P>
 
 <P>

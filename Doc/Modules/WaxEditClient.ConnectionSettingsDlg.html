@@ -3,70 +3,65 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:55:26 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:42:09 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class WaxEditFrame</title>
+<title>Class ConnectionSettingsDlg</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class WaxEditFrame - the main frame and its contents</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="WaxEdit.html">WaxEdit</A></P>
+<H1 CLASS="ClassName">class ConnectionSettingsDlg - server connection dialog</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="WaxEditClient.html">WaxEditClient</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WaxEdit.WaxEditFrame<BR>
-&nbsp;&nbsp;wxPython.frames.wxFrame<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WaxEditClient.ConnectionSettingsDlg<BR>
+&nbsp;&nbsp;wxPython.frames.wxDialog<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEditFrame</SPAN>(<A CLASS="DocLink" HREF="wxPython.frames.wxFrame.html">wxFrame</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.close_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.new_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.on_activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.on_focus</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.open_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.quit_now</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.save_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.save_file_as</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdit.WaxEditFrame.update_status_bar"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEditFrame.update_status_bar</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">m</SPAN>)<SPAN CLASS="OneLiner"> # change the message in the status bar</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ConnectionSettingsDlg</SPAN>(<A CLASS="DocLink" HREF="wxPython.frames.wxDialog.html">wxDialog</A>):
+    <A CLASS="DocLink" HREF="#WaxEditClient.ConnectionSettingsDlg.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ConnectionSettingsDlg.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_string</SPAN>, <SPAN CLASS="Argument">talk_string</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxFrame</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxTopLevelWindowPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.Create</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.GetIcon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.GetTitle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.Iconize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.IsFullScreen</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.IsIconized</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.IsMaximized</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.Maximize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.Restore</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.SetIcon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.SetTitle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.ShowFullScreen</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxFramePtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Centre</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Command</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.CreateStatusBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.CreateToolBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetClientAreaOrigin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetIcon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetMenuBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetStatusBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetTitle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.GetToolBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Iconize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.IsIconized</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.IsMaximized</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.MakeModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Maximize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.ProcessCommand</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Restore</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetAcceleratorTable</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetIcon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetMenuBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetStatusBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetStatusText</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetStatusWidths</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetTitle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.SetToolBar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.ShowFullScreen</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxEvtHandlerPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.AddPendingEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Connect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Disconnect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.ProcessEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr._setOORInfo</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.misc.wxObjectPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.GetClassName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxWindowPtr</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.AcceptsFocus</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -77,6 +72,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Centre</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.CentreOnParent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.CentreOnScreen</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Clear</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ClientToScreen</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ClientToScreenXY</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Close</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -84,6 +80,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ConvertDialogSizeToPixels</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ConvertPixelPointToDialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ConvertPixelSizeToDialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Create</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.DLG_PNT</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.DLG_SZE</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -93,6 +90,8 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.FindWindowById</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.FindWindowByName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Fit</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Freeze</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetAcceleratorTable</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetAutoLayout</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetBackgroundColour</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetBestSize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -110,6 +109,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetFullTextExtent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetGrandParent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetHandle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetHelpText</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetId</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetLabel</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -131,6 +131,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.GetWindowStyleFlag</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Hide</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.InitDialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsBeingDeleted</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsExposed</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsExposedPoint</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -139,22 +140,30 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsShown</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.IsTopLevel</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Layout</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.LineDown</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.LineUp</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.LoadFromResource</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Lower</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.MakeModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Move</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.MoveXY</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.OnPaint</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PageDown</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PageUp</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PopEventHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PopupMenu</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PopupMenuXY</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.PushEventHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Raise</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Refresh</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.RefreshRect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ReleaseMouse</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.RemoveChild</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Reparent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ScreenToClient</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ScreenToClientXY</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ScrollLines</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ScrollPages</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.ScrollWindow</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetAcceleratorTable</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetAutoLayout</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -167,13 +176,16 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetDimensions</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetDropTarget</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetEventHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetExtraStyle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetFocus</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetFont</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetForegroundColour</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetHelpText</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetId</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetLabel</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetPosition</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetRect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetScrollPos</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetScrollbar</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetSize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -186,52 +198,35 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetWindowStyle</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.SetWindowStyleFlag</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Show</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Thaw</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.TransferDataFromWindow</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.TransferDataToWindow</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.UnsetConstraints</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Update</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.Validate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.WarpPointer</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxEvtHandlerPtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.AddPendingEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Connect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Disconnect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.ProcessEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxDialog</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialog.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
-</PRE><H2>Description</H2><P>
-<STRONG>CLASS ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxDialogPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.Centre</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.Create</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.CreateButtonSizer</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.CreateTextSizer</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.EndModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.GetReturnCode</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.IsModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.SetModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.SetReturnCode</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.ShowModal</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxDialogPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-<DL>
-
-<DT>
-<EM>WaxEditPane</EM> pane
-<DD>panel containing the controls
-<DT>
-<EM>wxWindow</EM> most_recent_focus
-<DD>subwindow which had the focus most
-recently.  Used to restore focus to this window when the user
-switches back to this application from another.
-<DT>
-others
-<DD>the various menus
-
-</DL>
-<H2 ID="WaxEdit.WaxEditFrame.update_status_bar" CLASS="Method">WaxEdit.WaxEditFrame.update_status_bar(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">m</SPAN>)</H2>
-<P>change the message in the status bar</P>
+</PRE><H2 ID="WaxEditClient.ConnectionSettingsDlg.__init__" CLASS="Method">WaxEditClient.ConnectionSettingsDlg.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_string</SPAN>, <SPAN CLASS="Argument">talk_string</SPAN>)</H2>
+<P>None</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -239,14 +234,15 @@ others
 <DL>
 
 <DT>
-<EM>STR</EM> m
-<DD>new message
+<EM>DummyString host</EM>
+<DD>the default host
+<DT>
+<EM>DummyString listen_string, talk_string</EM>
+<DD>string
+versions of the default (or most recent) listen_port and
+talk_port
+
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 
 <HR>
 <TABLE ALIGN="LEFT">
