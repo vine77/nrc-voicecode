@@ -501,7 +501,7 @@ class MediatorConsole(Object.OwnerObject):
         """
         debug.virtual('MediatorConsole.raise_active_window')
 
-class SymbolToReformat(Object.Object):
+class InterpretedSymbol(Object.Object):
     """class for a symbol that might be reformatted.
     
     **INSTANCE ATTRIBUTES**
@@ -518,7 +518,7 @@ class SymbolToReformat(Object.Object):
     then the symbol was not reformatted by the user.
     """
     def __init__(self, written, spoken, utterance, utter_id, **args):
-        self.deep_construct(SymbolToReformat,
+        self.deep_construct(InterpretedSymbol,
                             {'written': written,
                              'spoken': spoken,
                              'utterance': utterance,

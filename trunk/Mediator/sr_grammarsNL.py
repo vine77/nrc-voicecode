@@ -445,7 +445,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         debug.trace('SelectWinGramNL.gotResultsObject', '** invoked, resObj=%s' % repr(resObj))
         if recogType == 'self':
             utterance = sr_interface.SpokenUtteranceNL(resObj)
-            self.results_callback(utterance.words())
+            self.results_callback(utterance)
             debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self')        
             # If there are multiple matches in the text we need to scan through
             # the list of choices to find every entry which has the highest.
@@ -734,7 +734,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
     def gotResultsObject(self, recog_type, results):
         if recog_type == 'self':
             utterance = sr_interface.SpokenUtteranceNL(results)
-            self.results_callback(utterance.words())
+            self.results_callback(utterance)
 
 class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
     """natlink implementation of SymbolReformattingWinGram for window-specific 

@@ -961,6 +961,9 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
             self.choices.append(words)
 # return what we have.
         return self.choices
+        
 
+           
+        
 
 

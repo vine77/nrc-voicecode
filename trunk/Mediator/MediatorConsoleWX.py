@@ -1568,7 +1568,7 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
 
     **INSTANCE ATTRIBUTES**
 
-    *[SymbolToReformat] symbols* -- the n most recently uttered symbols
+    *[InterpretedSymbol] symbols* -- the n most recently uttered symbols
     sorted most recent last.
 
     *BOOL first* -- flag indicating whether this is the first time the
@@ -1610,7 +1610,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
     **INSTANCE ATTRIBUTES**
 
-    *[SymbolToReformat] symbols* -- A list of symbols that the user could
+    *[InterpretedSymbol] symbols* -- A list of symbols that the user could
     reformat. It is assumed that all of those symbols CAN be reformatted
     (i.e. that we can reinterpret the utterances where these symbols 
     were spoken).
@@ -1636,7 +1636,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *wxWindow parent* -- the parent wxWindow
 
-        *[SymbolToReformat] symbols* -- A list of symbols that the user could
+        *[InterpretedSymbol] symbols* -- A list of symbols that the user could
         reformat. It is assumed that all of those symbols CAN be reformatted
         (i.e. that we can reinterpret the utterances where these symbols 
         were spoken).
