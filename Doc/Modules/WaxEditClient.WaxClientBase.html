@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:13:45 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 16:41:09 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,27 +29,17 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.WaxClientBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_size=None</SPAN>, <SPAN CLASS="Argument">cmd_line=0</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEditClient.WaxClientBase.new_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.WaxClientBase.new_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.ActivateEventMixIn</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.active_frame_ID"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.active_frame_ID</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the ID of the currently active frame, if any</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.frame_activated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.frame_activated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether an editor frame is active</SPAN>
-
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from WaxEditClient.ClientBase</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)<SPAN CLASS="OneLiner"> # connect to the mediator server using current settings</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> #  checks whether we are connected to the mediator server</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connection_data"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connection_data</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> #  returns current default connection data</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.disconnect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disconnect from the mediator server </SPAN>
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.set_connection_data"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.set_connection_data</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)<SPAN CLASS="OneLiner"> # sets new connection data</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.testing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.testing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.update_connection_status"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.update_connection_status</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # updates the connection menu to reflect the current status</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.ActivateEventMixIn</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.active_frame_ID"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.active_frame_ID</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the ID of the currently active frame, if any</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.frame_activated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.frame_activated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether an editor frame is active</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -61,6 +51,16 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
     <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from WaxEditClient.ClientBase</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)<SPAN CLASS="OneLiner"> # connect to the mediator server using current settings</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> #  checks whether we are connected to the mediator server</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.connection_data"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.connection_data</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> #  returns current default connection data</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.disconnect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disconnect from the mediator server </SPAN>
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.set_connection_data"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.set_connection_data</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)<SPAN CLASS="OneLiner"> # sets new connection data</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.testing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.testing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.update_connection_status"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.update_connection_status</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # updates the connection menu to reflect the current status</SPAN>
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -107,65 +107,6 @@ new_buffer first, followed by add_frame</P>
 <DT>
 <EM>GenEditFrame</EM>
 <DD>the new frame 
-
-</DL>
-<H2 ID="GenEdit.ActivateEventMixIn.active_frame_ID" CLASS="Method">GenEdit.ActivateEventMixIn.active_frame_ID(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the ID of the currently active frame, if any</P>
-
-<P>
-<STRONG>INPUTS</STRONG> </P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM>
-<DD>the unique ID of the currently active frame, or None if
-no frame of the editor is active.
-
-</DL>
-<H2 ID="GenEdit.ActivateEventMixIn.frame_activated" CLASS="Method">GenEdit.ActivateEventMixIn.frame_activated(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-callback used by GenEditFrame to notify GenEditFrames that 
-it has been activated or deactivated.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR frame_ID</EM>
-<DD>the ID of the frame
-<DT>
-<EM>BOOL activated</EM>
-<DD>true if the frame has just been activated,
-otherwise false
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.ActivateEventMixIn.is_active" CLASS="Method">GenEdit.ActivateEventMixIn.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>indicates whether an editor frame is active</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if frame window is active
 
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
@@ -298,52 +239,11 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="WaxEditClient.ClientBase.connect" CLASS="Method">WaxEditClient.ClientBase.connect(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
-<P>connect to the mediator server using current settings</P>
+<H2 ID="GenEdit.ActivateEventMixIn.active_frame_ID" CLASS="Method">GenEdit.ActivateEventMixIn.active_frame_ID(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the ID of the currently active frame, if any</P>
 
 <P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL test_client</EM>
-<DD>flag indicating whether we are connecting as
-a test_client
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the connection was successfully established
-
-</DL>
-<H2 ID="WaxEditClient.ClientBase.connected" CLASS="Method">WaxEditClient.ClientBase.connected(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P> checks whether we are connected to the mediator server</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<EM>*OUTPUTS *</EM></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if we are currently connected to  the mediator
-server
-
-</DL>
-<H2 ID="WaxEditClient.ClientBase.connection_data" CLASS="Method">WaxEditClient.ClientBase.connection_data(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P> returns current default connection data</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
+<STRONG>INPUTS</STRONG> </P>
 <P>
 <EM>none</EM></P>
 <P>
@@ -352,56 +252,38 @@ server
 <DL>
 
 <DT>
-<EM>{STR:ANY}</EM>
-<DD>a map containing entries for the host name or IP
-address, <CODE>host</CODE>, (STR), and the listen and talk ports, 
-<CODE>listen_port</CODE> and <CODE>talk_port</CODE> (INT)
+<EM>INT</EM>
+<DD>the unique ID of the currently active frame, or None if
+no frame of the editor is active.
 
 </DL>
-<H2 ID="WaxEditClient.ClientBase.disconnect" CLASS="Method">WaxEditClient.ClientBase.disconnect(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>disconnect from the mediator server </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="WaxEditClient.ClientBase.set_connection_data" CLASS="Method">WaxEditClient.ClientBase.set_connection_data(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)</H2>
-<P>sets new connection data</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR host</EM>
-<DD>the host name or IP address
-<DT>
-<EM>INT listen_port</EM>
-<DD>the port on which the client will listen
-for messages from the mediator server, and reply to such
-messages
-<DT>
-<EM>INT talk_port</EM>
-<DD>the port on which the client will send
-messages to the mediator server, and receive replies
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="WaxEditClient.ClientBase.testing" CLASS="Method">WaxEditClient.ClientBase.testing(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="GenEdit.ActivateEventMixIn.frame_activated" CLASS="Method">GenEdit.ActivateEventMixIn.frame_activated(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
-tells whether we are connected to the mediator server and running
-regression tests</P>
+callback used by GenEditFrame to notify GenEditFrames that 
+it has been activated or deactivated.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR frame_ID</EM>
+<DD>the ID of the frame
+<DT>
+<EM>BOOL activated</EM>
+<DD>true if the frame has just been activated,
+otherwise false
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.ActivateEventMixIn.is_active" CLASS="Method">GenEdit.ActivateEventMixIn.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether an editor frame is active</P>
+
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -412,23 +294,10 @@ regression tests</P>
 <DL>
 
 <DT>
-<EM>BOOL test_client</EM>
-<DD>true if we are connected as
-a test_client
+<EM>BOOL</EM>
+<DD>true if frame window is active
 
 </DL>
-<H2 ID="WaxEditClient.ClientBase.update_connection_status" CLASS="Method">WaxEditClient.ClientBase.update_connection_status(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>updates the connection menu to reflect the current status</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>
 
@@ -575,6 +444,137 @@ remove_other_references method, after performing their own duties.
 Also, a class inheriting from two OwnerObject classes MUST
 define remove_other_references and call both subclasses'
 versions</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WaxEditClient.ClientBase.connect" CLASS="Method">WaxEditClient.ClientBase.connect(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
+<P>connect to the mediator server using current settings</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL test_client</EM>
+<DD>flag indicating whether we are connecting as
+a test_client
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the connection was successfully established
+
+</DL>
+<H2 ID="WaxEditClient.ClientBase.connected" CLASS="Method">WaxEditClient.ClientBase.connected(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P> checks whether we are connected to the mediator server</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<EM>*OUTPUTS *</EM></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if we are currently connected to  the mediator
+server
+
+</DL>
+<H2 ID="WaxEditClient.ClientBase.connection_data" CLASS="Method">WaxEditClient.ClientBase.connection_data(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P> returns current default connection data</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR:ANY}</EM>
+<DD>a map containing entries for the host name or IP
+address, <CODE>host</CODE>, (STR), and the listen and talk ports, 
+<CODE>listen_port</CODE> and <CODE>talk_port</CODE> (INT)
+
+</DL>
+<H2 ID="WaxEditClient.ClientBase.disconnect" CLASS="Method">WaxEditClient.ClientBase.disconnect(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>disconnect from the mediator server </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WaxEditClient.ClientBase.set_connection_data" CLASS="Method">WaxEditClient.ClientBase.set_connection_data(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)</H2>
+<P>sets new connection data</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR host</EM>
+<DD>the host name or IP address
+<DT>
+<EM>INT listen_port</EM>
+<DD>the port on which the client will listen
+for messages from the mediator server, and reply to such
+messages
+<DT>
+<EM>INT talk_port</EM>
+<DD>the port on which the client will send
+messages to the mediator server, and receive replies
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WaxEditClient.ClientBase.testing" CLASS="Method">WaxEditClient.ClientBase.testing(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+tells whether we are connected to the mediator server and running
+regression tests</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL test_client</EM>
+<DD>true if we are connected as
+a test_client
+
+</DL>
+<H2 ID="WaxEditClient.ClientBase.update_connection_status" CLASS="Method">WaxEditClient.ClientBase.update_connection_status(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>updates the connection menu to reflect the current status</P>
+
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
