@@ -379,6 +379,21 @@ class CmdInterp(Object):
 #            app.insert_indent(untranslated_text, '')
         
 
+    def enable_symbol_match_dlg(self, enable = 1):
+        """enables or disables the symbol match dialog
+
+        **INPUTS**
+
+        *BOOL* enable -- 1 to enable the dialog, 0 to disable it
+
+        **OUTPUTS**
+
+        *BOOL* -- previous status of the dialog
+        """
+        current = not self.disable_dlg_select_symbol_matches
+        self.disable_dlg_select_symbol_matches = not enable
+        return current
+
     def dlg_select_symbol_match(self, untranslated_text, symbol_matches, app):
         """Asks the user to select a match for pseudo symbol.
         

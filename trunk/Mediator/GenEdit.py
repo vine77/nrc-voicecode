@@ -1353,11 +1353,11 @@ class GenEditFrameWithBuffers(GenEditFrame):
 
     *STR instance_string* -- portion of the title string indicating the name of     this particular instance.
     """
-    def __init__(self, owner, app_name, **args):
+    def __init__(self, owner, app_name, instance_string = "", **args):
         self.deep_construct(GenEditFrameWithBuffers,
                             {'owner': owner,
                              'app_name': app_name,
-                             'instance_string': ""
+                             'instance_string': instance_string
                             }, args
                            )
         self.name_parent('owner')
@@ -1480,12 +1480,15 @@ class GenEditFrames(GenEditBuffers):
 
     *STR app_name* -- name of the application
     (used as part of the title string)
+
+    *STR instance_string* -- portion of the title string indicating the name of     this particular instance.
     """
     def __init__(self, app_name, **args):
         self.deep_construct(GenEditFrames,
                             {'frames': {},
                              'app_name': app_name,
                              'corresponding_frames': {},
+                             'instance_string': "",
                              'next_ID': 0
                             }, args)
         self.add_owned('frames')
@@ -1555,7 +1558,7 @@ class GenEditFrames(GenEditBuffers):
             return self.frames[self.corresponding_frames[buff_name]]
         return None
 
-    def new_frame(self, buff_name):
+    def new_frame(self, buff_name, instance_string = None):
         """creates a new frame of the appropriate concrete class
 	open buffer and new window callbacks to the AppState interface
 
@@ -1565,6 +1568,9 @@ class GenEditFrames(GenEditBuffers):
 	**INPUTS**
 
 	*STR buff_name* -- the name of the initial buffer for the frame
+
+        *STR instance_string* -- portion of the title string indicating 
+        the name of this particular instance.
 
 	**OUTPUTS**
 
@@ -2004,8 +2010,9 @@ class GenEditFrames(GenEditBuffers):
 
 	*none*
 	"""
+        self.instance_string = instance_string
         for frame in self.frames.values():
-            frame.set_instance_string()
+            frame.set_instance_string(instance_string)
   
 class ActivateEventMixIn(Object.Object):
     """mix-in which implements GenEditFrames.is_active and active_frame_ID
@@ -2227,7 +2234,8 @@ class GenEditSimple(GenEditFrames):
 	open_file_new_buffer should create a new, empty buffer with 
 	that file name.
 	"""
-        frame = self.new_frame(buff_name = new_buff_name)
+        frame = self.new_frame(buff_name = new_buff_name,
+            instance_string = self.instance_string)
         buffer = frame.editor_buffer(new_buff_name)
         if file_name == None:
 # unnecessary, since it is a new frame with a new buffer 

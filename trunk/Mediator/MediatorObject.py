@@ -201,6 +201,37 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 # ignored by MediatorObject
         pass
     
+    def suspend_cbk(self, instance):
+        """called when the editor notifies us that its process is about
+        to be suspended
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+# really, this shouldn't be ignored, but the old MediatorObject and 
+# ServerOldMediator have no mechanism for dealing with this
+        pass
+
+    def resume_cbk(self, instance):
+        """called when the editor notifies us that its process has 
+        resumed after having been suspended 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+# since we're ignoring suspend_cbk, there is nothing to do on resume_cbk
+        pass
+
 
 
 class MediatorObject(Object.Object):

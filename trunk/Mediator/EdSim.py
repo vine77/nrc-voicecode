@@ -396,6 +396,53 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	"""
         return 1
 
+    def suspendable(self):
+        """is the editor running in an environment where it can be suspended?
+        (if, e.g., it was started from a Unix command-line, except for 
+        GUI editors which fork, allowing the command-line command to exit).  
+        If so, this makes querying the editor to is if it is_active unsafe. 
+
+	Usually false for Windows and most GUI editors.
+
+        **NOTE:** this method is used to determine how to implement
+        is_active and whether is_active_is_safe.  It is generally 
+        called only by an AppState subclass (or a ClientEditor wrapper) 
+        and only when the editor first starts or connects to the mediator.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor is running in an environment where 
+        it can be suspended
+	"""
+# internal editors can't be suspended (without suspending the mediator)
+# of course, we could be running under a ClientEditor, so strictly
+# speaking this isn't true, but if we ever implement a way of dealing
+# with suspension of a ClientEditor, we'll fix this then
+        return 0
+
+    def suspend_notification(self):
+        """does the editor supports suspend notification?
+
+        **NOTE:** this method is used to determine how to implement
+        is_active and whether is_active_is_safe.  It is generally 
+        called only by an AppState subclass (or a ClientEditor wrapper) 
+        and only when the editor first starts or connects to the mediator.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if the editor can (and will) notify the mediator
+        prior to its process being suspended and once it has been resumed.
+	"""
+        return 0
+
     def shared_window(self):
         """is the editor running in a window which could be shared with
 	another editor instance (because it is a shell window,

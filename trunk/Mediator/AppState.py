@@ -609,6 +609,34 @@ class AppCbkHandler(Object):
 	"""
         debug.virtual('AppCbkHandler.new_window')
 
+    def suspend_cbk(self, instance):
+        """called when the editor notifies us that its process is about
+        to be suspended
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        debug.virtual('AppCbkHandler.suspend_cbk')
+
+    def resume_cbk(self, instance):
+        """called when the editor notifies us that its process has 
+        resumed after having been suspended 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        debug.virtual('AppCbkHandler.resume_cbk')
+
 class AppState(OwnerObject):
     """Interface to the programming environment.    
 
@@ -697,7 +725,7 @@ class AppState(OwnerObject):
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',
     'newline_conventions', 'pref_newline_convention',
-    'language_name']
+    'language_name', 'file_name']
 
     def __getattr__( self, name):
         if name in self.buffer_methods:
@@ -1024,6 +1052,8 @@ class AppState(OwnerObject):
             what = []
         if updates == None:
             updates = self.updates_from_app(what, exclude)
+            debug.trace('AppState.synchronize', 
+                'received updates:\n%s\n' % repr(updates))
         self.apply_updates(updates)
 
 
@@ -1308,6 +1338,49 @@ class AppState(OwnerObject):
 	even if the editor has been suspended. 
 	"""
         debug.virtual('AppState.is_active_is_safe')
+
+    def suspendable(self):
+        """is the editor running in an environment where it can be suspended?
+        (if, e.g., it was started from a Unix command-line, except for 
+        GUI editors which fork, allowing the command-line command to exit).  
+        If so, this makes querying the editor to is if it is_active unsafe. 
+
+	Usually false for Windows and most GUI editors.
+
+        **NOTE:** this method is used to determine how to implement
+        is_active and whether is_active_is_safe.  It is generally 
+        called only by an AppState subclass (or a ClientEditor wrapper) 
+        and only when the editor first starts or connects to the mediator.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor is running in an environment where 
+        it can be suspended
+	"""
+        debug.virtual('AppState.suspendable')
+
+    def suspend_notification(self):
+        """does the editor supports suspend notification?
+
+        **NOTE:** this method is used to determine how to implement
+        is_active and whether is_active_is_safe.  It is generally 
+        called only by an AppState subclass (or a ClientEditor wrapper) 
+        and only when the editor first starts or connects to the mediator.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if the editor can (and will) notify the mediator
+        prior to its process being suspended and once it has been resumed.
+	"""
+        debug.virtual('AppState.suspend_notification')
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
@@ -1608,6 +1681,36 @@ class AppState(OwnerObject):
 	"""
         if self.current_manager() and self.name():
             self.current_manager().new_window(self.name())
+
+    def suspend_cbk(self):
+        """called when the editor notifies us that its process is about
+        to be suspended
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        if self.current_manager() and self.name():
+            self.current_manager().suspend_cbk(self.name())
+
+    def resume_cbk(self, instance):
+        """called when the editor notifies us that its process has 
+        resumed after having been suspended 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        if self.current_manager() and self.name():
+            self.current_manager().resume_cbk(self.name())
 
     def close_app_cbk(self, unexpected = 0):
         """editor invokes this method to notify AppState that it is

@@ -70,17 +70,17 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     """
 
     def __init__(self, **args):
-        self.deep_construct(RecogStartMgr,
+        self.deep_construct(RecogStartMgrNL,
                             {'start_gram': RecogStartGram(),
                             },
                             args)
-        start_gram.initialize(self.starting)
+        self.start_gram.initialize(self.starting)
         
     def remove_other_references(self):
         self.deactivate()
         self.start_gram.unload()
         del self.start_gram
-        RSMBasic.cleanup(self)
+        RecogStartMgr.RSMBasic.remove_other_references(self)
 
     def parse_module_info(self, module_info):
         """rearrange natlink's module_info in our format
@@ -110,10 +110,10 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-        return parse_module_info(natlink.getCurrentModule())
+        return self.parse_module_info(natlink.getCurrentModule())
 
     def starting(self, module_info):
-        self._recognition_starting(self.parse_module_info(module_info))
+        apply(self._recognition_starting, self.parse_module_info(module_info))
 
 
 # defaults for vim - otherwise ignore

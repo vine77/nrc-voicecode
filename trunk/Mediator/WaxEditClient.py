@@ -337,7 +337,7 @@ class ClientFrameMixIn(Object.Object):
             msg = "Running regression tests will close all open\nbuffers without saving.  Are you sure?"
             proceed = wxMessageBox(msg, "Regression tests", 
                 wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT, self)
-            if answer != wxYES:
+            if proceed != wxYES:
                 return
         self.connect(test_client = 1)
 
@@ -380,6 +380,8 @@ class ClientFrameMixIn(Object.Object):
         connected = self.connected()
         if not connected:
             self.SetStatusText("")
+            self.set_instance_string("")
+            self.update_title()
 # if connecting or connected, message may vary, so don't change it here
         menu = self.get_menu_by_name("Connection")
         connect_item = self.find_item_by_label(menu, "Connect")
@@ -563,7 +565,7 @@ class WaxClientBase(ClientBase):
 #        if cmd_line:
 #            self.initial_cmd_space['testing'] = 5
 
-    def new_frame(self, buff_name):
+    def new_frame(self, buff_name, instance_string = ""):
         """creates a new frame of the appropriate concrete class
 	open buffer and new window callbacks to the AppState interface
 
@@ -574,18 +576,25 @@ class WaxClientBase(ClientBase):
 
 	*STR buff_name* -- the name of the initial buffer for the frame
 
+        *STR instance_string* -- portion of the title string indicating 
+        the name of this particular instance.
+
 	**OUTPUTS**
 
 	*GenEditFrame* -- the new frame 
 	"""
+#        print 'i.s. is "%s"' % instance_string
+#        debug.print_call_stack()
         if self.cmd_line:
             return WaxCmdClientFrame(owner = self, app_name = self.app_name,
                 ID = wxNewId(), size = self.frame_size, 
                 init_buff_name = buff_name, 
-                command_space = self.initial_cmd_space)
+                command_space = self.initial_cmd_space, 
+                instance_string = instance_string)
         return SimpleWaxClientFrame(owner = self, app_name = self.app_name,
             ID = wxNewId(), size = self.frame_size, 
-            init_buff_name = buff_name)
+            init_buff_name = buff_name,
+            instance_string = instance_string)
 
 class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
     """WaxClient with a single frame

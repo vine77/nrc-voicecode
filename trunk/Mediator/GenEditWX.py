@@ -91,6 +91,7 @@ class SingleBufferWindow:
 	**OUTPUTS**
 	*BOOL* -- true if editor window has the focus
 	"""
+        return 1
         current = wxWindow_FindFocus()
         if current and current.GetId() == self.editor_window().GetId():
             return 1
@@ -733,6 +734,8 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	*none*
 	"""
         self.Show(1)
+        self.update_title()
+#        print 'showing'
         if initial:
             self.initial_show()
 

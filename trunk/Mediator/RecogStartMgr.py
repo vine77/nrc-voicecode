@@ -184,8 +184,12 @@ class RecogStartMgr(OwnerObject):
     *none*
     """
 
-    def __init__(self, editors, trust_current_window = 0, **args):
+    def __init__(self, trust_current_window = 0, **args):
         """
+        Note: after construction, you must construct an AppMgr with this
+        RecogStartMgr, which will call set_app_mgr to give the
+        RecogStartMgr a reference to its parent AppMgr.
+
 	**INPUTS**
 
 	*AppMgr* editors -- the editors AppMgr object, which provides
@@ -197,7 +201,7 @@ class RecogStartMgr(OwnerObject):
 	"""
 
         self.deep_construct(RecogStartMgr,
-                            {'editors': editors,
+                            {'editors': None,
                              'trust_current_window': trust_current_window
                             },
                             args)
@@ -851,6 +855,8 @@ class RSMInfrastructure(RecogStartMgr):
             return 0
         self.instances[instance] = KnownInstance(window_id, module)
         app = self.editors.app_instance(instance)
+        debug.trace('RecogStartMgr._add_instance', 
+            'new manager')
         self.grammars[instance] = self.GM_factory.new_manager(app, self)
         return 1
 
@@ -1007,6 +1013,9 @@ class RSMInfrastructure(RecogStartMgr):
             elif self.known_module(module_name):
                 self._new_instance_known_module(window, title, 
                     instance, module_name, trust = self.trust_current_window)
+            else:
+                debug.trace('RecogStartMgr.new_instance', 
+                    'neither window nor module is known')
 
     def delete_instance(self, instance):
         """method called by AppMgr to notify RecogStartMgr that an
@@ -1219,14 +1228,22 @@ class RSMInfrastructure(RecogStartMgr):
 	*none*
 	"""
         win = self.windows[window]
+        debug.trace('RecogStartMgr._recognition_starting_known_window',
+            'known window: %s' % repr(win))
         instance = win.active_instance(title, self.editors)
+        debug.trace('RecogStartMgr._recognition_starting_known_window',
+            'active instance = "%s"' % instance)
         if instance == None:
             self._deactivate_grammars(window)
             return
         app = self.editors.app_instance(instance)
         if app == None:
+            debug.trace('RecogStartMgr._recognition_starting_known_window',
+                'unknown instance')
             self._deactivate_grammars(window)
             return
+        debug.trace('RecogStartMgr._recognition_starting_known_window',
+            'activating grammars')
         self._activate_grammars(app, instance, window)
         return
 
@@ -1353,6 +1370,8 @@ class RSMBasic(RSMInfrastructure):
 
 	*BOOL* -- true if the instance was added successfully
 	"""
+        debug.trace('RecogStartMgr._new_instance_known_window', 
+            'known window')
         win = self.windows[window]
         if not win.shared():
 # window is known and dedicated, so it cannot belong to the new instance
@@ -1395,6 +1414,8 @@ class RSMBasic(RSMInfrastructure):
 	*BOOL* -- true if the instance was added successfully
 	"""
 # unknown window but known module
+        debug.trace('RecogStartMgr._new_instance_known_module', 
+            'known module')
         module = self.modules[module_name]
         if module.dedicated():
             if module.editor() != self.editors.app_name(instance):
@@ -1440,6 +1461,8 @@ class RSMBasic(RSMInfrastructure):
 	*none*
 	"""
 # unknown window
+        debug.trace('RecogStartMgr._recognition_starting_known_module',
+            'known module %s' % module_name)
         module = self.modules[module_name]
 #        print 'rs known module'
         if module.single_display(window, title):
@@ -1450,17 +1473,27 @@ class RSMBasic(RSMInfrastructure):
             self._recognition_starting_known_window(window, title)
             return
 #        print 'rs known module: not single'
+        debug.trace('RecogStartMgr._recognition_starting_known_module',
+            'not single')
         for instance in self.known_instances():
 #            print 'rs known module: instance ', instance
+            debug.trace('RecogStartMgr._recognition_starting_known_module',
+                'checking instance "%s"' % instance)
             info = self.instances[instance]
             editor = self.editors.app_instance(instance)
             instance_module = info.module()
             if module.dedicated():
 #                print 'rs known module: dedicated'
+                debug.trace('RecogStartMgr._recognition_starting_known_module',
+                    'module is dedicated')
                 app_name = self.editors.app_name(instance)
                 if module.editor() != app_name or editor.shared_window():
+                    debug.trace('RecogStartMgr._recognition_starting_known_module', 
+                        'wrong editor or shared window')
 #                    print 'wrong editor or shared window'
                     continue
+                debug.trace('RecogStartMgr._recognition_starting_known_module',
+                    'right module')
             if instance_module == None or \
                (instance_module == module_name and editor.multiple_windows()):
 # if the instance has no module, it must be a fresh instance with no
@@ -1471,10 +1504,14 @@ class RSMBasic(RSMInfrastructure):
 # might be a new window for the existing instance.  In either case,
 # attempt to verify
 #                print 'possible window'
+                debug.trace('RecogStartMgr._recognition_starting_known_module',
+                    'possible_window')
                 verified = module.verify_new_instance(window, title, 
                     instance, self.editors)
                 if verified == 1:
 #                    print 'verified - creating new window'
+                    debug.trace('RecogStartMgr._recognition_starting_known_module',
+                        'verified - creating new window')
                     target = module.new_window(window, title, 
                         self.editors, instance)
                     if target != None:
@@ -1483,6 +1520,8 @@ class RSMBasic(RSMInfrastructure):
                                 title)
                     return
 #                print 'not verified'
+                debug.trace('RecogStartMgr._recognition_starting_known_module',
+                    'not verified')
                 continue
 
     def new_universal_instance(self, instance, exclusive = 1):
@@ -1508,6 +1547,8 @@ class RSMBasic(RSMInfrastructure):
         if self.universal == None:
             self.instances[instance] = KnownInstance()
             app = self.editors.app_instance(instance)
+            debug.trace('RecogStartMgr.new_universal_instance', 
+                'new global manager')
             self.grammars[instance] = \
                 self.GM_factory.new_global_manager(app, self, 
                 exclusive = exclusive)

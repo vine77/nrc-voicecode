@@ -1016,7 +1016,7 @@ class CodeSelectGrammar(SelectGramBase):
 
     def __init__(self, app = None, window = 0, exclusive = 0,
                  allResults = 0):
-        DictGramBase.__init__(self)
+        SelectGramBase.__init__(self)
         self.app = app
         self.window = window
         self.exclusive = exclusive
@@ -1179,6 +1179,8 @@ class CodeSelectGrammar(SelectGramBase):
                 
                 closest_range_index = self.app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)
 
+                if closest_range_index == None:
+                    return
                 trace('sr_interface.CodeSelectGrammar.gotResultsObject',
                       '** DONE with closest_occurence_to_cursor')
 

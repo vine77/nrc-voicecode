@@ -30,6 +30,7 @@ import SocketServer, string, sys, threading, time, whrandom, win32event
 import AppStateEmacs, AppStateMessaging, auto_test, debug, mediator 
 import messaging, Object
 import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
+import as_services
 import sim_commands, sr_interface, util
 import Queue
 import regression
@@ -42,6 +43,11 @@ from tcp_threads import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                                            'set_selection_cbk': 1,
+#                                            'goto_cbk': 1,
+#                                            'get_selection': 1,
+#                                            'insert_indent': 1,
+#                                            'synchronize': 1,
 #                                    'listen_one_transaction': 1,
 #                                    'SourceBuff.on_change': 1
 #                                   'get_mess':1, 
@@ -150,13 +156,41 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
     
     def __init__(self, **args_super):
         self.deep_construct(AS_MessExtEdSim, 
-                            {}, 
+                            {
+                             'breadcrumbs_srv': 
+                             as_services.AS_ServiceBreadcrumbs(app=self)
+                            }, 
                             args_super, 
                             {})
+        self.add_owned('breadcrumbs_srv')
 
     def new_compatible_sb(self, buff_name):
         buff = SB_MessExtEdSim(app=self, buff_name=buff_name)
         return buff
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at cursor position.
+
+        If *buff* not specified either, drop breadcrumb in current buffer
+	"""
+        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
+
         
 
 
@@ -228,7 +262,8 @@ class AppStateFactorySimple(AppStateFactory):
                             },
                             args)
     
-    def new_instance(self, app_name, id, listen_msgr, talk_msgr):
+    def new_instance(self, app_name, id, listen_msgr, talk_msgr,
+        listen_can_block = 0):
         """create a new AppState of the subclass appropriate to the given
 	app_name.
 
@@ -277,7 +312,8 @@ class AppStateFactorySimple(AppStateFactory):
             return None
         
         app = as_class(app_name=app_name, id=id, 
-            listen_msgr=listen_msgr, talk_msgr=talk_msgr)
+            listen_msgr=listen_msgr, talk_msgr=talk_msgr,
+            listen_can_block = listen_can_block)
         app.app_name = app_name
         return app
 
@@ -1322,6 +1358,22 @@ class ServerMainThread(Object.OwnerObject):
 	"""
         debug.virtual('ServerMainThread.known_instance')
 
+    def possible_editor_cleanup(self, app):
+        """cleanup AppState corresponding to editor used in regression
+        tests, unless we are using NewMediatorObject, where AppMgr will
+        already have taken care of this.
+
+        **INPUTS**
+
+        *AppStateMessaging app* -- the editor interface
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('ServerMainThread.possible_editor_cleanup')
+
+        
     def package_sock_pair(self, id, app_name, window_info, 
         listen_sock, talk_sock, test_client = 0):
         
@@ -1386,7 +1438,7 @@ class ServerMainThread(Object.OwnerObject):
 #            sys.stderr.write("joined thread (or timed out)\n")
             del data_thread
 #            sys.stderr.write("deleted our reference to data thread\n")
-            an_app_state.cleanup()
+            self.possible_editor_cleanup(an_app_state)
 #            sys.stderr.write("cleaned up app_state\n")
             if test_client and self.is_test_server():
 # only if it was a test client and we ran the test suite should we quit now
@@ -1712,7 +1764,6 @@ class ServerOldMediator(ServerMainThread):
             mediator.init_simulator_regression(on_app=instance)
             instance.print_buff_when_changed = 1
             args = [self.test_suite]
-            sys.stderr.write("terminating\n")
             sys.stderr.write("starting regression tests\n")
             sys.stderr.flush()
             try:
@@ -1816,6 +1867,21 @@ class ServerOldMediator(ServerMainThread):
 #            del active_meds[id]
 #            if unexpected:
 #                sys.stderr.write('Mediator %d disconnected unexpectedly\n' \ % id)
+
+    def possible_editor_cleanup(self, app):
+        """cleanup AppState corresponding to editor used in regression
+        tests, unless we are using NewMediatorObject, where AppMgr will
+        already have taken care of this.
+
+        **INPUTS**
+
+        *AppStateMessaging app* -- the editor interface
+
+        **OUTPUTS**
+
+        *none*
+        """
+        app.cleanup()
 
 
     def old_quit(self):
@@ -2046,6 +2112,34 @@ class DataEvtSource(Object.Object):
 	"""
         debug.virtual('DataEvtSource.data_event')
 
+class DataEvtSourceWin32(Object.Object):
+    """implementation of DataEvtSource using Win32 events
+
+    **INSTANCE ATTRIBUTES**
+
+    *PyHandle evt_sockets_ready* -- Win32 event raised when one of the
+     active VC_LISTEN sockets has unread data.
+
+    """
+    def __init__(self, evt_sockets_ready, **args_super):
+        self.deep_construct(DataEvtSourceWin32, 
+                            {'evt_sockets_ready': evt_sockets_ready}, 
+                            args_super)
+    def data_event(self, id):
+        """virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+        return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
+
 
 class ServerOldMediatorExtLoop(ServerOldMediator):
     """partial implementation of ServerOldMediator(ServerMainThread) which
@@ -2188,6 +2282,7 @@ class ExtLoopWin32(Object.OwnerObject):
         listener_evt = Win32InterThreadEvent(self.evt_new_listen_conn)
         talker_evt = Win32InterThreadEvent(self.evt_new_talk_conn)
         server = self.server()
+        sys.stderr.write('Starting server threads...\n')
         server.start_other_threads(listener_evt, talker_evt)
 
         #
@@ -2200,76 +2295,84 @@ class ExtLoopWin32(Object.OwnerObject):
         events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit]
         try:
-            while 1:		
-                rc = win32event.MsgWaitForMultipleObjects(events,
+            sys.stderr.write('Starting message loop...\n')
+            try:
+                while 1:		
+                    rc = win32event.MsgWaitForMultipleObjects(events,
 #                        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 
 #                         self.evt_sockets_ready, self.evt_quit), 
-                            0, # wait for all = false
-                            win32event.QS_ALLEVENTS, # type of input
-                            TIMEOUT) #  (or win32event.INFINITE)
+                                0, # wait for all = false
+                                win32event.QS_ALLEVENTS, # type of input
+                                TIMEOUT) #  (or win32event.INFINITE)
 
 
-                if rc == win32event.WAIT_OBJECT_0:
-                    #
-                    # A new VC_LISTEN connection was opened
-                    #
-                    debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
-                    server.handshake_listen_socks()
+                    if rc == win32event.WAIT_OBJECT_0:
+                        #
+                        # A new VC_LISTEN connection was opened
+                        #
+                        debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
+                        server.handshake_listen_socks()
 
-                elif rc == win32event.WAIT_OBJECT_0+1:
-                    #
-                    # A new VC_TALK connection was opened
-                    #
-                    debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
-                    if not server.handshake_talk_socks():
+                    elif rc == win32event.WAIT_OBJECT_0+1:
+                        #
+                        # A new VC_TALK connection was opened
+                        #
+                        debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
+                        if not server.handshake_talk_socks():
 #                    sys.stderr.write("got 0 from handshake_talk_socks\n")
-                        break
+                            break
 
-                    
-                elif rc == win32event.WAIT_OBJECT_0+2:
-                    #
-                    # Some of the active VC_LISTEN sockets have received data
-                    #
-                    debug.trace('ExtLoopWin32.run', 'got evt_sockets_ready')
+                        
+                    elif rc == win32event.WAIT_OBJECT_0+2:
+                        #
+                        # Some of the active VC_LISTEN sockets have received data
+                        #
+                        debug.trace('ExtLoopWin32.run', 'got evt_sockets_ready')
 # ServerMainThread.process_ready_socks takes a list of sockets to check,
 # but win32event.Event doesn't seem to provide any way of sending data
 # with the event.  Really, I should add a ready_socks list and lock,
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                    server.process_ready_socks()
+                        server.process_ready_socks()
 
-                elif rc == win32event.WAIT_OBJECT_0+3:
-                    #
-                    # Server is shutting down. Exit the event loop.
-                    #
-                    debug.trace('ExtLoopWin32.run', 'got evt_quit')
-                    break
-                    
-                elif rc == win32event.WAIT_OBJECT_0 + len(events):
-                    # A windows message is waiting - take care of it.
-                    # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
-                    # Note: this must be done for COM and other windowsy
-                    #   things to work.
+                    elif rc == win32event.WAIT_OBJECT_0+3:
+                        #
+                        # Server is shutting down. Exit the event loop.
+                        #
+                        debug.trace('ExtLoopWin32.run', 'got evt_quit')
+                        break
+                        
+                    elif rc == win32event.WAIT_OBJECT_0 + len(events):
+                        # A windows message is waiting - take care of it.
+                        # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
+                        # Note: this must be done for COM and other windowsy
+                        #   things to work.
 #                debug.trace('ExtLoopWin32.run', 'forwarding unknown message')
-                    if pythoncom.PumpWaitingMessages():
-                        break # wm_quit
-                    
-                elif rc == win32event.WAIT_TIMEOUT:
-                    # Our timeout has elapsed.
-                    # Do some work here (e.g, poll something can you can't thread)
-                    #   or just feel good to be alive.
-                    # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
-                    pass
+                        if pythoncom.PumpWaitingMessages():
+                            break # wm_quit
+                        
+                    elif rc == win32event.WAIT_TIMEOUT:
+                        # Our timeout has elapsed.
+                        # Do some work here (e.g, poll something can you can't thread)
+                        #   or just feel good to be alive.
+                        # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
+                        pass
 #                debug.trace('ExtLoopWin32.run', 'nothing to do, counter=%s' % counter)
-                else:
-                    raise RuntimeError( "unexpected win32wait return value")
+                    else:
+                        raise RuntimeError( "unexpected win32wait return value")
 
-                counter = counter + 1
+                    counter = counter + 1
+            except KeyboardInterrupt:
+                msg = 'Received KeyboardInterrupt in message loop, exiting\n'
+                sys.stderr.write(msg)
 
         finally:
+            sys.stderr.write('Message loop ended, cleaning up\n')
+            print 'cleanup method is ', self.cleanup
             self.cleanup()
+            sys.stderr.write('ExtLoopWin32.run returning\n')
 
 
 
@@ -2382,6 +2485,24 @@ class ServerNewMediator(ServerMainThread):
 	"""
         return self.data_events.data_event(id)
 
+    def possible_editor_cleanup(self, app):
+        """cleanup AppState corresponding to editor used in regression
+        tests, unless we are using NewMediatorObject, where AppMgr will
+        already have taken care of this.
+
+        **INPUTS**
+
+        *AppStateMessaging app* -- the editor interface
+
+        **OUTPUTS**
+
+        *none*
+        """
+# NewMediatorObject will already have made a delete_instance call to
+# AppMgr, which will have cleaned up the editor, so there is nothing for
+# us to do
+        return
+
     def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
@@ -2405,13 +2526,13 @@ class ServerNewMediator(ServerMainThread):
 	it, but it should be destroyed because it has run
 	the test suite and the server should exit 
 	"""
-        instance_name = self.mediator.new_editor(app, server = 1,
+        instance_name = self.mediator.new_editor(instance, server = 1,
             check_window = 1, window_info = window_info, 
             test_editor = test_client)
         if instance_name == None:
             return 0
         else:
-            self.editors[id] = app
+            self.editors[id] = instance
             self.editors[instance_name] = id
             return 1
 
@@ -2491,7 +2612,8 @@ class ServerNewMediator(ServerMainThread):
         if not self.mediator:
             msg = "can't start ServerNewMediator until you've set its mediator\n"
             raise RuntimeError(msg)
-        return self.start_other_threads(listener_evt, talker_evt)
+        return ServerMainThread.start_other_threads(self, 
+            listener_evt, talker_evt)
 
         
 

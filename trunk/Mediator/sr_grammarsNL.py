@@ -23,6 +23,7 @@
 """
 
 from Object import Object
+import sr_interface
 from sr_grammars import *
 import natlink
 import debug
@@ -46,6 +47,7 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.deep_construct(DictWinGramNL,
             {}, attrs, exclude_bases = {DictGramBase:1})
         DictGramBase.__init__(self)
+        self.load()
 
     def activate(self):
         """activates the grammar for recognition
@@ -60,11 +62,17 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 	*none*
 	"""
         if not self.is_active():
-            DictGramBase.activate(self, window = self.window, exclusive
-                = self.exclusive)
+            window = self.window
+            if window == None:
+                window = 0
+            DictGramBase.activate(self, window = window, 
+                exclusive = self.exclusive)
             self.active = 1
 
-    
+    def remove_other_references(self):
+        DictGramBase.unload(self)
+        DictWinGram.remove_other_references(self)
+
     def deactivate(self):
         """disable recognition from this grammar
 
@@ -76,7 +84,6 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
-        debug.virtual('WinGram.deactivate')
         if self.is_active():
             DictGramBase.deactivate(self)
             self.active = 0
@@ -105,8 +112,12 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 # not sure if yet if this is where we should store the utterance
                 words = results.getWords(0)
                 interp = self.interpreter()
-                interp.interpret_NL_cmd(words, self.app,
-                    initial_buffer = self.buff_name)
+                interp.interpret_NL_cmd(words, self.app)
+                # DCF - comment out temporarily to see if this is the
+                # source of the problem with dictating over selected
+                # text
+#                interp.interpret_NL_cmd(words, self.app,
+#                    initial_buffer = self.buff_name)
                 self.app.print_buff_if_necessary(buff_name
                     = self.buff_name)
 
@@ -129,6 +140,19 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         self.load(selectWords = self.select_words, throughWord =
             self.through_word)
 
+    def _set_visible(self, visible):
+        """internal call to set the currently visible range.
+
+	**INPUTS**
+
+	*STR* visible -- visible text range 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        SelectGramBase.setSelectText(self, visible)
+
     def activate(self, buff_name):
         """activates the grammar for recognition tied to the current window,
 	and checks with buffer for the currently visible range.
@@ -145,7 +169,10 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         self.find_visible()
 
         if not self.is_active():
-            SelectGramBase.activate(self, window = self.window, 
+            window = self.window
+            if window == None:
+                window = 0
+            SelectGramBase.activate(self, window = window, 
                 exclusive = self.exclusive)
             self.active = 1
 
@@ -165,6 +192,9 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
             DictGramBase.deactivate(self)
             self.active = 0
 
+    def cleanup(self):
+        SelectGramBase.unload(self)
+        SelectWinGram.cleanup(self)
     
     def buffer_name(self):
         """returns name of buffer corresponding to this selection grammar.
@@ -217,13 +247,13 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         
                         true_region = (region[0] + self.vis_start,
                           region[1] + self.vis_start)
-                        self.ranges.append(true_region)
+                        ranges.append(true_region)
 
             except natlink.OutOfRange:
                 pass
 
             spoken = self.selection_spoken_form(resObj)
-            self.find_closest(verb, spoken, results)
+            self.find_closest(verb, spoken, ranges)
 
     def selection_spoken_form(self, resObj):
 
@@ -245,7 +275,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         # Ignore first word because it is the verb
         #
         for a_word_info in resObj.getWordInfo(0)[1:]:
-            a_spoken_word, dummy = spoken_written_form(a_word_info[0])
+            a_spoken_word, dummy = sr_interface.spoken_written_form(a_word_info[0])
             if spoken_form != '':
                 spoken_form = spoken_form + ' '
             spoken_form = spoken_form + a_spoken_word
@@ -254,7 +284,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         
         return spoken_form
 
-class WinGramFactoryNL(Object):
+class WinGramFactoryNL(WinGramFactory):
     """natlink implementation of factory which returns 
     window-specific grammars
 

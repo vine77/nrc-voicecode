@@ -89,7 +89,6 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
     global the_mediator
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
-    print the_mediator
     if the_mediator:
         the_mediator.quit(clean_sr_voc=clean_sr_voc, 
             save_speech_files=save_speech_files, disconnect=disconnect)
@@ -190,7 +189,7 @@ def new_simulator(symdict_pickle_fname=None,
 #            the_mediator.quit(save_speech_files=0, disconnect=0)            
         
         interp = \
-            CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+            CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
                 disable_dlg_select_symbol_matches = \
                     disable_dlg_select_symbol_matches)
         the_mediator = MediatorObject.MediatorObject(app = on_app,
@@ -330,7 +329,7 @@ def init_simulator(symdict_pickle_fname=None,
             the_mediator.quit(save_speech_files=0, disconnect=0)            
         
         interp = \
-            CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+            CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
                 disable_dlg_select_symbol_matches = \
                     disable_dlg_select_symbol_matches)
         the_mediator = MediatorObject.MediatorObject(app = on_app,
