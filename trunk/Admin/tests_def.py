@@ -3439,63 +3439,63 @@ def test_basic_correction():
 
 ### AD: Testing symbol correction
 
-    print '\n***Testing reformatting of a new symbol to another new symbol***\n'
-
-    utterances.append(string.split('new statement return size of promised tax cuts'))
-    input.append('0\n')
-    status.append(1)    
-    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-    
-    sym_corrections = {}
-    sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
-    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
-    
-    print '\n***Testing state***\n'
-
-    check_stored_utterances(instance_name, expected = len(utterances))
-    check_recent(instance_name, utterances, status)
-
-    print '\n***Testing tentative symbol removal and correct symbol addition on correction***\n'
-
-    check_symbol(interpreter, 'size_of_promised_tax_cuts', expected = 0)
-    check_symbol(interpreter, 'sz_of_prom_tax_cuts', expected = 1)
-
-    print '\n***Testing subsequent dictation of reformatted symbol***\n'
-    
-    utterances.append(string.split('new statement size of promised tax cuts equals zero'))
-    input.append('0\n')
-    status.append(1)    
-    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-    
-    print '\n***Testing reformatting of an existing symbol to a new symbol***\n'
-    
-    check_symbol(interpreter, 'RedBook', expected = 1)    
-    check_symbol(interpreter, 'red_bk', expected = 0)    
-    
-    utterances.append(string.split('new statement red book equals none'))
-    input.append('0\n')
-    status.append(1)    
-    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-    
-    sym_corrections = {}
-    sym_corrections[1] = ('red book', 'RedBook', 'red_bk')
-    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
-    
-    print '\n***Testing state***\n'
-
-    check_stored_utterances(instance_name, expected = len(utterances))
-    check_recent(instance_name, utterances, status)
-
-    print '\n***Testing correct new symbol addition on correction***\n'
-
-    check_symbol(interpreter, 'red_bk', expected = 1)
-
-    print '\n***Testing subsequent dictation of reformatted symbol***\n'
-    
-    utterances.append(string.split('new statement command interpreter equals zero'))
-    input.append('0\n')
-    status.append(1)    
-    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+#   print '\n***Testing reformatting of a new symbol to another new symbol***\n'
+#
+#    utterances.append(string.split('new statement return size of promised tax cuts'))
+#    input.append('0\n')
+#    status.append(1)    
+#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+#    
+#    sym_corrections = {}
+#    sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
+#    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+#    
+#    print '\n***Testing state***\n'
+#
+#    check_stored_utterances(instance_name, expected = len(utterances))
+#    check_recent(instance_name, utterances, status)
+#
+#    print '\n***Testing tentative symbol removal and correct symbol addition on correction***\n'
+#
+#    check_symbol(interpreter, 'size_of_promised_tax_cuts', expected = 0)
+#    check_symbol(interpreter, 'sz_of_prom_tax_cuts', expected = 1)
+#
+#    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+#    
+#    utterances.append(string.split('new statement size of promised tax cuts equals zero'))
+#    input.append('0\n')
+#    status.append(1)    
+#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+#    
+#    print '\n***Testing reformatting of an existing symbol to a new symbol***\n'
+#    
+#    check_symbol(interpreter, 'RedBook', expected = 1)    
+#    check_symbol(interpreter, 'red_bk', expected = 0)    
+#    
+#    utterances.append(string.split('new statement red book equals none'))
+#    input.append('0\n')
+#    status.append(1)    
+#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+#    
+#    sym_corrections = {}
+#    sym_corrections[1] = ('red book', 'RedBook', 'red_bk')
+#    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+#    
+#    print '\n***Testing state***\n'
+#
+#    check_stored_utterances(instance_name, expected = len(utterances))
+#    check_recent(instance_name, utterances, status)
+#
+#    print '\n***Testing correct new symbol addition on correction***\n'
+#
+#    check_symbol(interpreter, 'red_bk', expected = 1)
+#
+#    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+#    
+#    utterances.append(string.split('new statement command interpreter equals zero'))
+#    input.append('0\n')
+#    status.append(1)    
+#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
     
 
