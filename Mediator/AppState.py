@@ -14,8 +14,10 @@ class AppState(Object):
     
     *STR app_name=None* -- name of the programming environment
     
-    *[* [SpeechCommand] *] history=[]* -- Array of recent speech commands
-     that have been applied
+    *[* [[SpeechCommand]] *] rec_utterances=[]* -- Array of recent
+     utterances that have been recognised. Each utterance is a list of
+     [SpeechComand] objects that speech commands that have been
+     interpreted for that utterance.
     
     *[* [SourceBuff] *] open_buffers=[]* -- List of source buffers that
      are currently open in the programming environment.
@@ -45,10 +47,10 @@ class AppState(Object):
     .. [SourceBuff] file:///SourceBuff.SourceBuff.html
     .. [self.curr_buffer] file:///AppState.AppState.html"""
     
-    def __init__(self, app_name=None, history=[], open_buffers=[],\
+    def __init__(self, app_name=None, rec_utterances=[], open_buffers=[],\
                  curr_dir=None, active_field=None, curr_buffer=None, **attrs):
         Object.__init__(self)
-        self.def_attrs({'app_name': None, 'history': [], 'open_buffers': [],\
+        self.def_attrs({'app_name': None, 'rec_utterances': [], 'open_buffers': [],\
                         'curr_dir': None, 'active_field': None, 'curr_buffer': None})
         self.init_attrs(attrs)
 
