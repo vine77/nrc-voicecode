@@ -4,6 +4,34 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+Communication protocol
+----------------------
+
+- Create a server that listens for connections and generates an
+  AppStateMessaging instance in response to them.
+
+- Create an AppStateMessaging class that will use a Messenger instance
+  to communicate with an external editor
+
+- Add SourceBuff.newline_is() method. This will return a list of
+  alternative forms of newline that the editor currently recognises in
+  the given buffer.
+
+  For default implementation will be to return a value
+  AppState.supported_newlines, which the editor will have sent during handshake
+
+- Add SourceBuff.preferred_newline() method. Will return the editor's
+  preferred form for newline in this buffer. Default implementation is
+  to return SourceBuff.newline_is()[0].
+
+- SourceBuff.insert() and SourceBuff.search_for() must substitute \n
+  by the appropriate \n convention in the string they are
+  inserting/searchin for.
+
+- Add a dummy authentification sequence in the handshake part of the
+  protocol. For now, this will be ignored, but later on we (i.e. Eric
+  Johanssen ;-) can add a true authentification implementation.
+
 
 Regression testing
 ------------------

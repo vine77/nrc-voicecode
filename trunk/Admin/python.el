@@ -112,7 +112,7 @@ When function ends, the template for the shor/long summary of the method is sele
     (py-insert-doc "\n\n**INPUTS**\n\n")
    
     
-    (mapcar #'(lambda (an-arg) (py-insert-doc (concat "*ANY* " an-arg " -- undocumented \n\n"))) arg-list)
+    (mapcar #'(lambda (an-arg) (py-insert-doc (concat "ANY *" an-arg "* -- undocumented \n\n"))) arg-list)
     (if (eq 0 (length arg-list)) (py-insert-doc "*none* -- \n\n"))
     
     (py-insert-doc "\n**OUTPUTS**\n\n*none* -- \n\"\"\"")
@@ -213,7 +213,7 @@ When function ends, the template for the shor/long summary of the class is selec
 	  (if (string= "" type) (setq type "ANY"))
 	  (setq name (elt name-value-pair 0))
 	  (setq value (elt name-value-pair 1))
-	  (py-insert-code (concat " *" type " " name "=" value "* -- undocumented\n"))
+	  (py-insert-code (concat type " *" name "=" value "* -- undocumented\n"))
 	  )
       )
     )
@@ -277,7 +277,7 @@ Returns a list of pairs with name and value of the argument."
   ;;;
   ;;; Call self.deep_construct 
   ;;;
-  (py-insert-code (concat "self.deep_construct(" class-name ", \\\n"))
+  (py-insert-code (concat "self.deep_construct(" class-name ", \n"))
 
   ;;;
   ;;; With list of attributes
@@ -285,7 +285,7 @@ Returns a list of pairs with name and value of the argument."
   (if (> (length attr-list) 0)
       (progn
 	(py-insert-code "{")
-	(mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 0) ", \\\n"))) attr-list)
+	(mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 0) ", \n"))) attr-list)
                   ;;; Delete last ", "
 	(backward-delete-char-untabify 4)
 	(py-insert-code "}")
@@ -293,12 +293,12 @@ Returns a list of pairs with name and value of the argument."
     (py-insert-code "{}")
     )
 
-  (py-insert-code ", \\\nargs_super, \\\n")
+  (py-insert-code ", \nargs_super, \n")
 
   (if (> (length exclude-list) 0)
       (progn
 	(py-insert-code "{")
-	(mapcar #'(lambda (a-base) (py-insert-code (concat "'" a-base "': 1, \\\n"))) exclude-bases)
+	(mapcar #'(lambda (a-base) (py-insert-code (concat "'" a-base "': 1, \n"))) exclude-bases)
 
 	(backward-delete-char-untabify 4)
 	(py-insert-code "}")
