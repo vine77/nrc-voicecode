@@ -213,7 +213,7 @@ def add_abbreviation(abbreviation, expansions):
     *none* -- 
     """
     global to_configure
-    to_configure.interp.known_symbols.abbreviations[abbreviation] = expansions
+    to_configure.interp.known_symbols.add_abbreviation(abbreviation, expansions)
 
 
 def define_language(name, definition):
