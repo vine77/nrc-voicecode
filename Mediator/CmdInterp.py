@@ -31,12 +31,7 @@ class CmdInterp(Object):
     *{STR: [STR]}* language_specific_aliases = {} -- Key is the name of
      a programming language (None means all languages). Value is a
      list of written form\spoken form words specific to a
-     language. These words are loaded automatically when we are in a
-     source buffer of that language and removed when we change to a
-     buffer in a different language.
-
-    *STR* last_loaded_language = None -- Name of the previous language
-     for which the language specific words were loaded.
+     language.
 
     *FILE symdict_pickle_file = None* -- File used to for
      reading/writing the symbol dictionary. If *None*, then don't
@@ -65,7 +60,6 @@ class CmdInterp(Object):
                             {'on_app': on_app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
                              'language_specific_aliases': {},\
-                             'last_loaded_language': None, \
                              'symdict_pickle_file': symdict_pickle_file},\
                             attrs)
 
@@ -710,51 +704,6 @@ class CmdInterp(Object):
                     sr_interface.addWord(a_spoken_form)
 
 
-
-    def load_language_specific_aliases(self):
-        
-        """Loads words specific to the language of the current buffer,
-        if needed.
-
-        Also, unloads words specific to previously loaded language if needed.
-        
-        **INPUTS**
-        
-        *none*
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        language = self.on_app.active_language()
-        last_language = self.last_loaded_language
-#        print '-- CmdInterp.load_language_specific_aliases: called, language=%s, last_language=%s' % (language, last_language)
-#        print '-- CmdInterp.load_language_specific_aliases: self.language_specific_aliases[%s]=%s' % (language, self.language_specific_aliases[language])
-        if language != last_language:
-            #
-            # Remove words from previous language (unless it was None
-            # which means LSAs not specific to a particular language)
-            #
-            if last_language != None and \
-               self.language_specific_aliases.has_key(last_language):
-                for a_word in self.language_specific_aliases[last_language]:
-                    sr_interface.deleteWord(a_word)
-                    spoken_as, written_as = sr_interface.spoken_written_form(a_word)
-            
-            #
-            # Add words for new language (unless language == None, which
-            # means LSAs that are not language specific)
-            #
-            if language != None and \
-               self.language_specific_aliases.has_key(language):
-                for a_word in self.language_specific_aliases[language]:
-                    sr_interface.addWord(a_word)
-                    spoken_as, written_as = sr_interface.spoken_written_form(a_word)
-
-            self.last_loaded_language = language
-            
-#        print '-- CmdInterp.load_language_specific_aliases: finished'
 
 
 

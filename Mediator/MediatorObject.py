@@ -153,9 +153,7 @@ class MediatorObject(Object.Object):
         **OUTPUTS**
         
         *none* --
-        """
-#        print '-- MediatorObject.quit: called'
-            
+        """            
         #
         # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
         # but don't save SymDict to file (we want the symbols and
@@ -164,7 +162,6 @@ class MediatorObject(Object.Object):
         self.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
     
         if sr_interface.speech_able():
-#            print '-- MediatorObject.quit: unloading grammars'
             if self.mixed_grammar:
                 self.mixed_grammar.unload()
             if self.code_select_grammar:
@@ -172,8 +169,6 @@ class MediatorObject(Object.Object):
 
             disconnect_from_sr(disconnect, save_speech_files)
                 
-#            print '-- MediatorObject.quit: ended'
-
 
             
     
