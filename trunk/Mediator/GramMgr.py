@@ -216,6 +216,22 @@ class GramMgrFactory(Object):
 	"""
 	debug.virtual('GramMgrFactory.new_manager')
 
+    def new_global_manager(self, editor, exclusive = 1):
+	"""creates a new GramMgr using global grammars (regardless of
+	the value of self.global_grammars)
+
+	**INPUTS**
+
+	*AppState* editor -- AppState object for which to manage
+	grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('GramMgrFactory.new_global_manager')
+
+
 class GramMgrDictContext(GramMgr):
     """implements finding of dictation context
 
@@ -586,6 +602,23 @@ class WinGramMgrFactory(GramMgrFactory):
 	return WinGramMgr(app = editor, factory = self.gram_factory,
 	    interp = self.interp,
 	    global_grammars = self.global_grammars, exclusive = self.exclusive)
+
+    def new_global_manager(self, editor, exclusive = 1):
+	"""creates a new GramMgr using global grammars (regardless of
+	the value of self.global_grammars)
+
+	**INPUTS**
+
+	*AppState* editor -- AppState object for which to manage
+	grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	return WinGramMgr(app = editor, factory = self.gram_factory,
+	    interp = self.interp,
+	    global_grammars = 1, exclusive = exclusive)
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

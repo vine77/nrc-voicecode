@@ -203,7 +203,7 @@ class ListenThread(threading.Thread, Object.Object):
 		save=['save'])
             self.xed.vc_talk_msgr.send_mess('close_buffer_resp',
 		{'value': success})
-        elif action == 'terminating':
+        elif action == 'mediator_closing' or action == 'terminating':
             print "VoiceCode server was unilaterally shutdown."
             sys.exit()
 
@@ -222,7 +222,7 @@ class ListenThread(threading.Thread, Object.Object):
 
         while 1:
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating'])
+                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating', 'mediator_closing'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'

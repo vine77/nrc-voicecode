@@ -101,6 +101,28 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         pass
 
+    def mediator_closing(self):
+
+	"""method called to inform AppState that the mediator is
+	closing.    Internal editors should exit.  They may prompt the
+	user to save modified files, but must not allow the user to
+	cancel and leave the editor running.  External editors should
+	disconnect but not close.  **Note:** this method should not
+	block.  For external editors, that means the corresponding
+	message should have a response for which to wait.  Otherwise, a
+	single hung or disconnected editor hang the mediator and prevent
+	it from closing or from notifying the rest of the connected
+	editors that it was closing.  
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.close_all_buffers()
 
     def updates_from_app(self, what=[], exclude=1):
         
@@ -404,15 +426,15 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	"""
 	return 0
 
-    def set_title_string(self, title):
+    def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
 	editor is capable of setting the window title to include this string, 
 	it should (and then should return this string when the
-	title_string method is called.  
+	instance_string method is called.  
 
 	**INPUTS**
 
-	*STR* -- the identifying string to be included in the
+	*STR* instance_string -- the identifying string to be included in the
 	window title if possible.
 
 	**OUTPUTS**
@@ -420,9 +442,9 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	*none*
 	"""
 	self.instance_string = title
-	self.the_editor.set_title_string(title)
+	self.the_editor.set_instance_string(title)
 
-    def title_string(self):
+    def instance_string(self):
         """returns the identifier string for this editor instance (which 
 	should be a substring of the window title)
 
@@ -521,7 +543,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	left end of the selection"""
 	return 0
 
-    def app_close_buffer(self, buff_name, save):
+    def app_close_buffer(self, buff_name, save=0):
         """Close a buffer.
         
         **INPUTS**
@@ -534,14 +556,15 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if the editor does close the buffer
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
 	buff = self.find_buff(buff_name)
 	if buff == None:
 	    return 0
-	self.active_buffer_name = None
+	if self.is_bound_to_buffer() == buff_name:
+	    self.unbind_from_buffer()
 	self.open_buffers[buff_name].cleanup()
 	del self.open_buffers[buff_name]
 	return 1

@@ -212,6 +212,155 @@ class KnownTargetModule(Object):
 	"""
 	debug.virtual('KnownTargetModule.verify_new_instance')
 	
+class LocalInterpreter(KnownTargetModule):
+    """implements KnownTargetModule for a local interpreter which can
+    run different applications (including internal editors)
+    but only one active application per window.  At the moment, this
+    class is functionally identical to RemoteShell, but at some point
+    there might be other methods which distinguish the two.
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* title_varies -- can the title of the window be changed?
+
+    **CLASS ATTRIBUTES**
+    
+    *none*
+    """
+    def __init__(self, title_varies = 0, **args):
+	""" 
+	**INPUTS**
+
+	*BOOL* title_varies -- can the title of the window be changed?
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.deep_construct(LocalInterpreter, 
+			    {'title_varies': title_varies}, args)
+
+    def dedicated(self):
+	"""is this module dedicated to a specific (local) editor, or is it a
+	(local or remote) shell in which many programs can be run?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- is window dedicated to a specific editor
+	"""
+	return 0
+
+    def editor(self):
+	"""if dedicated, returns VoiceCode's name for the corresponding
+	editor
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*STR* -- VoiceCode's internal name for the editor corresponding
+	to this module (or None if not dedicated)
+	"""
+	return None
+
+    def single_display(self, window, title):
+	"""does this module display multiple remote windows in this single 
+	local window?  **Note:** single_display is not consistent with a
+	dedicated module.
+
+	**INPUTS**
+
+	*INT* window -- handle of the local window
+
+	*STR* title -- title of the local window
+
+	**OUTPUTS**
+
+	*BOOL* -- is this a single-window display?
+	"""
+	return 0
+
+    def variable_title(self):
+	"""can an editor running in this module change the window title?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the module allows the editor to change the
+	window title
+	"""
+	return self.title_varies
+
+    def new_window(self, window, title, editors, instance_name = None):
+	"""factory which creates a new TargetWindow object.
+	**Note:** the caller should first check single_display.  If it
+	returns true, then the module cannot act as a window factory.
+	Instead, the subwindow identification client will play that role.
+	**Also note:** some subclasses will be unable to create a new
+	window without an initial instance.
+
+	**INPUTS**
+
+	*INT* window -- the window handle (unique identifier) of the
+	window
+
+	*STR* title -- the current title of the window
+
+	*AppMgr* editors -- the application manager
+	 
+	*STR* instance_name -- the name of the initial instance belonging to
+	the window, or None if there is none initially
+
+	**OUTPUTS**
+
+	*TargetWindow* -- a new TargetWindow object, or None
+	if the module is unable to create one
+	"""
+	return TargetWindow.SharedWindow(window = window, 
+	    module = self.name(), 
+	    instance = instance_name, 
+	    single_display = self.single_display(window, title), 
+	    variable_title = self.variable_title())
+    
+    def verify_new_instance(self, window, title, instance, editors):
+	"""attempt to verify whether the window belongs to
+	the named instance.  
+
+	**INPUTS**
+
+	*STR* title -- title of the window 
+
+	*STR* instance -- name of the editor instance
+
+	*AppMgr* editors -- the AppMgr object
+
+	**OUTPUTS**
+
+	*BOOL* -- true if verify_new_instance was able to determine that the
+	window was associated with the named instance, false if it
+	was able to determine that the window was not associated
+	with the instance, and None if it was unable to determine.
+	"""
+	if self.variable_title():
+	    app = editors.app_instance(instance)
+	    s = app.instance_string()
+	    if s != None:
+		if string.find(title, s) != -1:
+		    return 1
+		else:
+		    return 0
+# otherwise, unknown
+	return None
+	    	
 
 class RemoteShell(KnownTargetModule):
     """implements KnownTargetModule for a remote shell which can run
@@ -352,7 +501,7 @@ class RemoteShell(KnownTargetModule):
 	"""
 	if self.variable_title():
 	    app = editors.app_instance(instance)
-	    s = app.title_string()
+	    s = app.instance_string()
 	    if s != None:
 		if string.find(title, s) != -1:
 		    return 1
@@ -506,7 +655,7 @@ class DedicatedModule(KnownTargetModule):
 	    app = editors.app_instance(instance)
 #	    print 'verify new instance'
 #	    print instance, app
-	    s = app.title_string()
+	    s = app.instance_string()
 	    if s != None:
 		if string.find(title, s) != -1:
 		    return 1
@@ -804,7 +953,7 @@ class MultiWindowDisplay(RemoteDisplay):
 	"""
 	if self.variable_title():
 	    app = editors.app_instance(instance)
-	    s = app.title_string()
+	    s = app.instance_string()
 	    if s != None:
 		if string.find(title, s) != -1:
 		    return 1
@@ -909,7 +1058,7 @@ class DualModeDisplay(RemoteDisplay):
 	    return None
 	if self.variable_title():
 	    app = editors.app_instance(instance)
-	    s = app.title_string()
+	    s = app.instance_string()
 	    if s != None:
 		if string.find(title, s) != -1:
 		    return 1

@@ -454,7 +454,7 @@ class SharedWindow(TargetWindow):
 		    continue
 	    elif self.variable_title:
 # alternate means of checking whether the application is active
-		s = app.title_string()
+		s = app.instance_string()
 		if s != None:
 		    if string.find(title, s) != -1:
 			return instance
@@ -490,7 +490,7 @@ class SharedWindow(TargetWindow):
 	"""
 	if self.variable_title:
 	    app = editors.app_instance(instance)
-	    s = app.title_string()
+	    s = app.instance_string()
 	    if s != None:
 		if string.find(title, s) != -1:
 		    return 1

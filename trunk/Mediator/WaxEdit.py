@@ -122,19 +122,19 @@ class WaxEdit:
 	"""
 	debug.virtual('WaxEdit.save_file')
 
-    def set_title_string(self, title_string):
+    def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
 	displayed in the title bar
 
 	**INPUTS**
 
-	*STR* title_string -- string to include as part of the title
+	*STR* instance_string -- string to include as part of the title
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	debug.virtual('WaxEdit.set_title_string')
+	debug.virtual('WaxEdit.set_instance_string')
   
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)

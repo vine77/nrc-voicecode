@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Jun 09 12:05:10 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:56:36 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RecogStartMgr</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr._recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr._recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # activate the RecogStartMgr</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.activate_instance_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.activate_instance_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
@@ -40,11 +40,12 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a known window ID?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.set_app_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.set_app_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)<SPAN CLASS="OneLiner"> # fill in the reference to the parent AppMgr</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a shared window?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a single-window display?</SPAN>
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window_id=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
@@ -70,13 +71,33 @@ application and buffer are active, and tells the GramMgr to activate the
 appropriate grammars.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM></P>
+
+<DL>
+
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the parent AppMgr object, which provides
+information about editor application instances
+</DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="RecogStartMgr.RecogStartMgr.__init__" CLASS="Method">RecogStartMgr.RecogStartMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the editors AppMgr object, which provides
+information about editor application instances
+
+</DL>
 <H2 ID="RecogStartMgr.RecogStartMgr._recognition_starting" CLASS="Method">RecogStartMgr.RecogStartMgr._recognition_starting(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)</H2>
 <P>None</P>
 
@@ -431,6 +452,38 @@ current window belongs to this instance?
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="RecogStartMgr.RecogStartMgr.new_universal_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.new_universal_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by AppMgr to notify RecogStartMgr that a new
+test instance has been added which should use global grammars</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>should the instance use exclusive grammars
+as well?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the instance was added as a universal instance.
+False if there was already such a universal instance, in which case the
+new instance will be added normally, or if the instance name was
+already known.
+
+</DL>
 <H2 ID="RecogStartMgr.RecogStartMgr.set_app_mgr" CLASS="Method">RecogStartMgr.RecogStartMgr.set_app_mgr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)</H2>
 <P>fill in the reference to the parent AppMgr</P>
 
@@ -494,7 +547,7 @@ shareable).  None if window is unknown
 single-window display.  None if window is unknown
 
 </DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.specify_window" CLASS="Method">RecogStartMgr.RecogStartMgr.specify_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RecogStartMgr.specify_window" CLASS="Method">RecogStartMgr.RecogStartMgr.specify_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window_id=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -508,6 +561,11 @@ known instance with the current window </P>
 <DT>
 <EM>STR</EM> instance
 <DD>name of the application instance
+<DT>
+<EM>INT</EM> window_id
+<DD>handle which must match that of the current
+window (otherwise specify_window will ignore the current window
+and return 0), or None if the caller does not know the handle 
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
