@@ -1,0 +1,270 @@
+
+
+*******************************************************************************
+* Name        : CmdInterp
+* Description : self-test for CmdInterp.py
+*******************************************************************************
+
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting 'for loop index loop body' in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+  7:   move_vert(y)
+  8: }
+  9: 
+
+*** End of source buffer ***
+
+
+
+>>> Buffer is now:
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3:    for (index=0; <= ; ++)
+  4:    {
+  5: <CURSOR>   
+  5:    }
+  6:    
+  7: void move(float x, y)
+  8: {
+  9:   move_horiz(x);
+ 10:   move_vert(y)
+ 11: }
+ 12: 
+
+*** End of source buffer ***
+
+>>> Interpreting 'for loop index loop body' in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+  8:     def a_method(self, x):
+  9:         print '... and this is a dummy class'
+ 10: 
+
+*** End of source buffer ***
+
+
+
+>>> Buffer is now:
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4:    for index in :
+  5:    
+  6: <CURSOR>class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+  8:     def a_method(self, x):
+  9:         print '... and this is a dummy class'
+ 10: 
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : EdSim
+* Description : self-test for EdSim.py
+*******************************************************************************
+
+>>> Testing EdSim.py
+
+
+>>> Opening a buffer
+*** Start of source buffer ***
+<CURSOR>/* This is a small test buffer for C */
+  0: 
+  1: 
+  2: void move(float x, y)
+  3: {
+  4:   move_horiz(x);
+  5:   move_vert(y)
+  6: }
+  7: 
+
+*** End of source buffer ***
+
+
+>>> Moving to position 5
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+
+>>> Testing breadcrumbs
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+>>> Popping 2 crumbs -> end up here:
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: /* This is a small t<CURSOR>est buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+>>> Popping 1 crumb -> end up here...
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  1: 
+  2: 
+  3: void move(float x, y)
+  4: {
+  5:   move_horiz(x);
+  6:   move_vert(y)
+  7: }
+  8: 
+
+*** End of source buffer ***
+
+
+>>> Testing code indentation. Inserting for loop.
+
+
+
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: 
+  4:    for (ii=0; ii <= maxValue; ii++)
+  5:    {
+  6:    <CURSOR>
+  7:    }
+  8:    void move(float x, y)
+  9: {
+ 10:   move_horiz(x);
+ 11:   move_vert(y)
+ 12: }
+ 13: 
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : Object
+* Description : self-test for Object.py
+*******************************************************************************
+
+Testing exceptions for get/set
+
+
+Trying to get the value of attribute 'name'
+   -> Caught NO AttributeError exception. obj.name=Alain, x=Alain
+
+
+Trying to set the value of attribute 'name'
+   -> Caught NO AttributeError exception. obj.name=999, x=0
+
+
+Trying to get the value of attribute 'nonexistant'
+   -> Caught AttributeError exception: '[{'args': ('nonexistant',)}]'
+
+
+Trying to set the value of attribute 'nonexistant'
+   -> Caught NO AttributeError exception. obj.nonexistant=999, x=0
+
