@@ -4,8 +4,6 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
-Just testing that I can commit with cvs again
-----------------------------------------
 
 Link with Emacs through vr-mode
 -------------------------------
@@ -113,28 +111,6 @@ more closely approximates the way that VoiceCode is used in actual
 production setting.
 
 
-BUG in setmic
--------------
-
-Can't turn mic on after turned it off once. Ex:
-
-python gui_sim.py -s
-setmic('on')
-I say: "for" -> types "for ^:\n"
-setmic('off')
-setmic('on')
-I say: "for" -> doesn't type anything
-
-
-BUG in back indent
-------------------
-
-When cursor is at end of current line and say 'back indent', then it just deletes the CR character (but it seems to leave the LF character there).
-
-This doesn't happen when cursor is not at the end of the current line.
-
-
-
 BUG in gui_sim
 --------------
 
@@ -157,33 +133,6 @@ result is displayed
 say(['boost', 'slash', 'graph', 'slash', 'graph', 'traits', '.\\dot', 'H.',
 'P.', 'P.'])
 
-
-Performance
------------
-
-Command translation seems very slow. Profile it to figure out what is
-making it so slow.
-
-Also, startup is very slow. Why?
-
-
-BUGS: Regression test and pickle
---------------------------
-
-David wrote:
-
-During one of my tests from the command line, I did
-say(['remove','test']) and the interpreter typed remove_test.  However,
-when I ran the mediator again, it had apparently pickled this new symbol,
-but it tried to add it as 'remove_test\ ', which caused an exception in
-addWord, crashing the mediator.  The only way I was able to get the
-mediator to run again was to delete the symdict.pkl file.  Some
-of the problems getting the regression test to come out the same way may
-therefore be due to the change in the set of pickled symbols.
-
-Q1: Why did the mediator try to add the symbol as 'remove_test\ '?
-
-Q2: Why did the regression test use the pickle file? 
 
 
 BUG
@@ -238,43 +187,6 @@ to be familiar enough with the mediator code to know to find and delete
 the pickle file.
 
 
-BUG: Code indentation back indentation
---------------------------------------
-
-BUG #1: Doesn't work on first line of a buffer because the line is not preceded by a '\n'. The fix is to modify decr_indent_level and incr_indent_level so that they check if the first line is in the range and indent it before calling indent_by_spaces. 
-
-Note: we don't want indent_by_spaces to do a substitution on '(^\n)'
-because it is sometimes used to indent code that's in the middle of a
-line and that would result in the addition of spaces before that code.
-
-BUG #2: In gui_sim.py, 'back indent' and 'indent' don't work properly. It se
-
-Keep doing that
----------------
-
-Implement a keep "doing that" suffix command that will keep doing the
-repeatable command at a specified time interval (a new attribute of
-repeatable). Then "Stop", "Reverse", "faster", "slower" would affect
-the command being repeated.
-
-Need to implement a Mode object. This will remember what mode the mediator is in. "Keep doing that" would make the mode be a ModeKeepRepeating object. Context objects (like ContAny()) would check to make sure that the mode is "None". There would be some context objects like ContModeKeepRepeating that would check that the mode is of a particular class. 
-
-
-
-BUGS in pseudo python
----------------------
-
-'back slash cap charlie' don't work in regression test.
-
-uncomment python symbols in py_std_sym.py
-
-
-Division of labour between EdSim, AppState and SourceBuff
----------------------------------------------------------
-
-print_buff: and its supporting methods (number_line etc...) should be
-implemented at the level of SourceBuff, not SourceBuffEdSim (could
-be useful for debugging purposes).
 
 
 "Not what I said" correction
@@ -885,86 +797,7 @@ What can I say
     etc...
        
     
-Abbreviations cleanup
----------------------
-
-The console should have an abbrev_cleanup command. This would remove
-all abbrevs that are not currently used in at least one known symbol.
-
-That way, the user could compile a list of source files he currently
-cares about and run clean_abbrevs, thus removing abbreviations that
-were generated from old projects that he doesn't care about anymore.
-
-The command would display a list of abbrevs to be removed, giving the
-user a chance to keep some of them if he wanted.
 
 
-Abbreviations definition
-------------------------
-
-After compiling a series of source, system could sort abbrevs in
-decreasing order of their frequency, and then start a dialog allowing
-the user to dictate expansions for them.
-
-This would be useful for batch definition of abbrevs instead of the
-automatic as you go definition.
-
-
-SymDict
--------
-
--- Alain
-
-Right now, known symbols are removed from NatSpeak's vocabulary every
-time VoiceCode exits. This means NatSpeak looses all adaptation it may
-do to those symbols.
-
-It would be better to add them with spoken form x_y_z where x, y , z
-are words and leave them in the vocab all the time. That way, the user could still erase symbols relatively easily by listing all the user added symbols and removing the ones with _ in their spoken forms.
-
-Of course, this assumes that DNS will recognise x_y_z when you say "x
-y z" (i.e. tha the _s won't interfere with recognition).
-
--- Alain
-
-format_as_symbol
-Right now, the order in which the various formats are shown depends on a fixed
-rank specified by the programmer.
-
-It would be better if the rank was dynamic, i.e. it was based on how
-often the user recently accepted a new symbol formatted in that way in
-the current language.
-
-
-Symbol Compilation
-------------------
-
--- Alain
-
-Python standard libraries have lots of symbols of the form: getenv
-which can't be split into their constituents. So when expand_word
-finds a word that's neither in-vocab or known abbreviation, it should
-try to expand it as a concatenation of abbreviations and in-vocab
-words.
-
-
-Incompatibilities with pkled SymDict
-------------------------------------
-
-If you modify the attributes of SymDict, you can end up in a situation
-where the pickled SymDict is missing some attributes that the new
-SymDict class is expecting. This can result in crashes when users
-upgrade VoiceCode.
-
-To deal with this, we should do some kind of compatibility check
-between the SymDict class and the pickled instance. This could be
-something like:
-
-1. create a new SymDict from scratch.
-2. unpickle the old SymDict as old_symbols.
-3. retrieve the symbols from old_symbols and add them to the new
-dictionary (with add_symbol)
-4. ditto for old abbreviations
-5. if at any point during this copy process we encounter an exception, just ignore the pickled instance and start with a brand new blank SymDict (make sure you rename the old pickle file in case the exception was not due to an incompatibility... that way, he will not loose his pickled dictionary whenever there is a bug in the system).
 
 
