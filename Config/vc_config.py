@@ -826,12 +826,13 @@ acmd = CSCmd(spoken_forms=['new statement above'],
              docstring='start new statement on previous line')
 new_statement.add_csc(acmd)
 
+
 # compound statement dictation/navigation
 
 compound_statements = CSCmdSet('compound statements', 
     description = 'commands for dictation and navigating compound statements') 
 
-acmd = CSCmd(spoken_forms=['body', 'goto body'],
+acmd = CSCmd(spoken_forms=['body', 'go to body'],
              meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
                        ContPerl(): c_goto_body},
              docstring = 'move to body of a compound statement')
@@ -862,9 +863,13 @@ acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
                        ContPerl(): c_goto_body},
              docstring = 'move to body of loop')
 ctrl_structures.add_csc(acmd)
+acmd = CSCmd(spoken_forms=['do while'],
+             meanings={ContC(): c_do_while},
+             docstring='do...while loop')
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['if', 'if statement'],
              meanings={ContBlankLine('python'): ActionInsert('if ', ':\n\t'),
-                       ContC(): ActionInsert('if (', ')\n\t{\n\t}',
+                       ContC(): ActionInsert('if (', ')\n\t{\n\t\n}',
                            spacing = no_space_after),
                        ContPerl(): ActionInsert('if (', ') {\n\t}',
                            spacing = no_space_after)},
@@ -908,7 +913,19 @@ ctrl_structures.add_csc(acmd)
 data_structures = CSCmdSet('data structures', 
     description = 'commands for dictation of commands to define new data types')
 
-acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
+acmd = CSCmd(spoken_forms=['struct','structure','define structure','declare structure'],
+             meanings={ContC(): ActionInsert('struct ','\r\t{\n\t\n};')},
+                       docstring='structure definition')
+data_structures.add_csc(acmd)
+acmd = CSCmd(spoken_forms=['union','define union','declare union'],
+             meanings={ContC(): ActionInsert('union ','\r\t{\n\t\n};')},
+                       docstring='union definition')
+data_structures.add_csc(acmd)
+acmd = CSCmd(spoken_forms=['class'],
+             meanings={ContBlankLine('python'): py_class_definition},
+             docstring='class definition (python only)')
+data_structures.add_csc(acmd)
+acmd = CSCmd(spoken_forms=['define class', 'declare class',
                            'class definition', 'class declaration',
                            'new class'],
              meanings={ContC(): cpp_class_definition,
@@ -1066,11 +1083,11 @@ acmd = CSCmd(spoken_forms=['try'],
              docstring='python try statement')
 python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions', 'except when', 'except clause'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'except ', ': \n\t')},
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', code_bef='except ', code_after=': \n\t')},
              docstring='python except statement')
 python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['finally', 'finally do'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'finally:\n\t', '')},
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', code_bef='finally:\n\t')},
              docstring='finally clause of python try statement')
 python_compound.add_csc(acmd)
 
@@ -1289,6 +1306,54 @@ c_preprocessor.add_lsa(LSAlias(['macro undo define', 'undefine', 'pound undefine
 
 
 
+# Other C/C++ statements
+c_statements = CSCmdSet('C/C++ statements', 
+                        description = """dictating miscellaneous C/C++ statements""")
+
+acmd = CSCmd(spoken_forms=['try'],
+             meanings={ContC(): ActionInsert('try {\n\t', '\n}', 
+                                             spacing = no_space_after)},
+             docstring='insert code template for C++ try block')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['catch'],
+             meanings={ContC(): ActionInsert('catch (', ') {\n\t\n}', 
+                                             spacing = no_space_after)},
+             docstring='insert code template for C++ catch block')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['switch'],
+             meanings={ContC(): ActionInsert('switch (', ') {\n\t\n}', 
+                                             spacing = no_space_after)},
+             docstring='insert code template for C++ catch block')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['case'],
+             meanings={ContC(): ActionCompound((ActionInsert('case ARG', ':\r', 
+                                                            spacing = no_space_after),
+                                               ActionSearch(regexp='ARG', direction=-1, where=1),
+                                               ActionBackspace(n_times=3)))},
+             docstring='insert C/C++ case label template (for within a switch block)')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['default'],
+             meanings={ContC(): ActionInsert('default:\r','')}, 
+             docstring='insert C/C++ default label (for within a switch block)')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['type I. D.','type I. D. of'],
+             meanings={ContC(): ActionInsert('typeid(',')')},
+             docstring='insert typeid() operator')
+c_statements.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['template', 'define template', 'declare template',
+                           'template definition', 'template declaration',
+                           'new template'],
+             meanings={ContC(): cpp_template_definition},
+             docstring='template definition')
+data_structures.add_csc(acmd)
+
+
 
 # C/C++ specific syntax
 c_syntax = LSAliasSet('C/C++ -specific syntax',
@@ -1346,6 +1411,90 @@ acmd = CSCmd(spoken_forms=['returning'],
              docstring='position cursor before previous function identifier (previous identifier, before any parameter list)')
 c_type_declarations.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['declare enumerator','define enumerator','enumerator','enum'],
+             meanings={ContC(): ActionCompound(
+    (ActionInsert('enum ARG',' {};'),
+     ActionSearch(regexp='ARG', direction=-1, where=1),
+     ActionBackspace(n_times=3)))},
+             docstream='insert enumerator declaration template')
+c_type_declarations.add_csc(acmd)
+
+c_type_casts = CSCmdSet('C/C++ type casts',
+    description = "commands for dictating type casts in C and C++")
+
+# just use "parens" for this, don't need a separate command?
+acmd = CSCmd(spoken_forms=['cast'],
+             meanings={ContC(): ActionInsert('(', ')')},
+             docstring='insert parens for a C-style cast')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['cast to'],
+             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             code_bef='(', code_after=') ', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous identifier, ready to dictate type to cast to')
+c_type_casts.add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms=['constant cast'],
+             meanings={ContC(): ActionInsert('const_cast<', '>()')},
+             docstring='insert template text for a C++ const cast')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['constant cast to'],
+             meanings={ContC(): ActionCompound(
+                                (ActionInsertAround('[A-Za-z0-9_]*',
+                                                    '[A-Za-z0-9_]*',
+                                                    code_bef='const_cast<>(',
+                                                    code_after=')'),
+                                 ActionSearch(regexp=r'>\(', direction=-1, where=-1)))},
+             docstring='insert dynamic_cast<>( ) around current expression and move cursor so ready to dictate type to cast to')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['dynamic cast'],
+             meanings={ContC(): ActionInsert('dynamic_cast<', '>()')},
+             docstring='insert template text for a C++ dynamic cast')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['dynamic cast to'],
+             meanings={ContC(): ActionCompound(
+                                (ActionInsertAround('[A-Za-z0-9_]*',
+                                                    '[A-Za-z0-9_]*',
+                                                    code_bef='dynamic_cast<>(',
+                                                    code_after=')'),
+                                 ActionSearch(regexp=r'>\(', direction=-1, where=-1)))},
+             docstring='insert dynamic_cast<>( ) around current expression and move cursor so ready to dictate type to cast to')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['reinterpret cast'],
+             meanings={ContC(): ActionInsert('reinterpret_cast<', '>()')},
+             docstring='insert template text for a C++ reinterpret cast')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['reinterpret cast to'],
+             meanings={ContC(): ActionCompound(
+                                (ActionInsertAround('[A-Za-z0-9_]*',
+                                                    '[A-Za-z0-9_]*',
+                                                    code_bef='reinterpret_cast<>(',
+                                                    code_after=')'),
+                                 ActionSearch(regexp=r'>\(', direction=-1, where=-1)))},
+             docstring='insert reinterpret_cast<>( ) around current expression and move cursor so ready to dictate type to cast to')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['static cast'],
+             meanings={ContC(): ActionInsert('static_cast<', '>()')},
+             docstring='insert template text for a C++ static cast')
+c_type_casts.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['static cast to'],
+             meanings={ContC(): ActionCompound(
+                                (ActionInsertAround('[A-Za-z0-9_]*',
+                                                    '[A-Za-z0-9_]*',
+                                                    code_bef='static_cast<>(',
+                                                    code_after=')'),
+                                 ActionSearch(regexp=r'>\(', direction=-1, where=-1)))},
+             docstring='insert static_cast<>( ) around current expression and move cursor so ready to dictate type to cast to')
+c_type_casts.add_csc(acmd)
+
 
 # C/C++-specific navigation
 
@@ -1363,23 +1512,17 @@ c_navigation.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['private member','new private member', 'private members'],
              meanings={ContC(): ActionSearch(regexp='private:',
                                              direction=1, where=1)},
-             docstring='move to public members')
+             docstring='move to private members')
 c_navigation.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['protected member','new protected member', 'protected members'],
              meanings={ContC(): ActionSearch(regexp='protected:',
                                              direction=1, where=1)},
-             docstring='move to public members')
+             docstring='move to protected members')
 c_navigation.add_csc(acmd)
 
 
 # C/C++ reserved words
-
-# todo: const_cast, dynamic_cast, reinterpret_cast, static_cast, struct, union, try-catch, throw, public/private/protected, switch-case-default-break, do... loop, enum, template, typedef, typeid(), new block, a?b:c
-# handled elsewhere: continue, if-then-else, () cast, while & for loops, return
-# 'true', 'false', 'operator', 'this' not included because they probably won't get spaces after them
-# these are types and should be handled better: int, float, char, bool, double
-
 
 c_reserved_words = LSAliasSet('C/C++ keywords', 
     description = 'aliases for reserved words in C/C++')
@@ -1390,7 +1533,10 @@ c_reserved_words.add_lsa(LSAlias(['auto', 'automatic'],
         {'C': 'auto '}))
 c_reserved_words.add_lsa(LSAlias(['char','care'],
         {'C': 'char '}))
-c_reserved_words.add_lsa(LSAlias(['const','constant'],
+# the 'class' keyword prevents us from using 'class' as a CSC for defining a new class!
+c_reserved_words.add_lsa(LSAlias(['class'],
+        {'C': 'class '}))
+c_reserved_words.add_lsa(LSAlias(['constant','const'],
         {'C': 'const '}))
 c_reserved_words.add_lsa(LSAlias(['delete'],
         {'C': 'delete '}))
@@ -1420,6 +1566,12 @@ c_reserved_words.add_lsa(LSAlias(['namespace'],
         {'C': 'namespace '}))
 c_reserved_words.add_lsa(LSAlias(['new'],
         {'C': 'new '}))
+c_reserved_words.add_lsa(LSAlias(['public'],
+        {'C': 'public '}))
+c_reserved_words.add_lsa(LSAlias(['private'],
+        {'C': 'private '}))
+c_reserved_words.add_lsa(LSAlias(['protected'],
+        {'C': 'protected '}))
 c_reserved_words.add_lsa(LSAlias(['register'],
         {'C': 'register '}))
 c_reserved_words.add_lsa(LSAlias(['short'],
@@ -1430,8 +1582,12 @@ c_reserved_words.add_lsa(LSAlias(['size of'],
         {'C': 'sizeof '}))
 c_reserved_words.add_lsa(LSAlias(['static'],
         {'C': 'static '}))
+c_reserved_words.add_lsa(LSAlias(['throw'],
+        {'C': 'throw '}))
 c_reserved_words.add_lsa(LSAlias(['type name'],
         {'C': 'typename '}))
+c_reserved_words.add_lsa(LSAlias(['typedef'],
+        {'C': 'typedef '}))
 c_reserved_words.add_lsa(LSAlias(['unsigned'],
         {'C': 'unsigned '}))
 c_reserved_words.add_lsa(LSAlias(['using'],
