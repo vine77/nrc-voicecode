@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:35:29 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 11 13:41:09 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">NewMediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._configure_from_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._configure_from_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._new_test_editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._new_test_editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">server=1</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
@@ -122,6 +122,10 @@ status, allowing the user to close the mediator when it is running
 as a server, and for invoking the correction dialog boxes.  May be
 None if the mediator is not running in GUI mode
 <DT>
+<EM>CLASS</EM> wave_playback
+<DD>class constructor for a concrete
+subclass of WavePlayback, or None if no playback is available
+<DT>
 <EM>CorrectUtteranceEvent correct_evt</EM>
 <DD>doorbell used to send an
 event to bring up the correction box asynchronously.
@@ -161,7 +165,7 @@ This file will also be the default to use if reconfigure is called
 ..[CmdInterp] CmdInterp.CmdInterp.html
 ..[ServerNewMediator] ServerNewMediator.tcp_server.html
 </P>
-<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P>creates the NewMediatorObject</P>
 
 <P>
@@ -208,6 +212,10 @@ console is an interface to an underlying GUI, NewMediatorObject
 does not own it, and will not clean up either it or the
 underlying GUI.  May be None if the mediator is not running in 
 GUI mode.
+<DT>
+<EM>CLASS</EM> wave_playback
+<DD>class constructor for a concrete
+subclass of WavePlayback, or None if no playback is available
 <DT>
 <EM>CorrectUtteranceEvent correct_evt</EM>
 <DD>doorbell used to send an

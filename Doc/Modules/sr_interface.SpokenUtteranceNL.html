@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:37:50 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 11 13:42:20 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SpokenUtteranceNL</SPAN>(<A CLASS="DocLink" HREF="SpokenUtterance.SpokenUtterance.html">SpokenUtterance</A>):
-    <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">results</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates a SpokenUtteranceNL from a results object</SPAN>
+    <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">results</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates a SpokenUtteranceNL from a results object</SPAN>
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL._get_alternative"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL._get_alternative</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">choice</SPAN>)
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.adapt"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.adapt</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.adapt_spoken"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.adapt_spoken</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>)
@@ -99,7 +99,7 @@ or -1 if unknown
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_interface.SpokenUtteranceNL.__init__" CLASS="Method">sr_interface.SpokenUtteranceNL.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">results</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="sr_interface.SpokenUtteranceNL.__init__" CLASS="Method">sr_interface.SpokenUtteranceNL.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">results</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P>creates a SpokenUtteranceNL from a results object</P>
 
 <P>
@@ -111,6 +111,10 @@ or -1 if unknown
 <EM>ResObj</EM> results
 <DD>natlink results object representing speech
 information
+<DT>
+<EM>CLASS</EM> wave_playback
+<DD>class constructor for a concrete
+subclass of WavePlayback, or None if no playback is available
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
