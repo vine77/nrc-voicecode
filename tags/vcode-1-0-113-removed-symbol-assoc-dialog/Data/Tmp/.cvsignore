@@ -1,0 +1,4 @@
+*.pkl
+user_input.dat
+tmp_symdict.dat
+tmp_symdict.bak
