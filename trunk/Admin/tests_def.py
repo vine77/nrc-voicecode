@@ -3160,6 +3160,26 @@ add_test('number_dictation', test_number_dictation, desc='Test number dictation'
 
 
 ##############################################################################
+# Inserting new statements above/below current line
+##############################################################################
+
+def test_new_statement():
+   testing.init_simulator_regression()
+   temp_config = temp_factory.new_config()   
+   commands.open_file('blah1.py')
+   
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['tested', 'statement', 'below', 'when', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)      
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['tested', 'statement', 'below', 'when', 'at', 'last', 
+                 'character', 'of', 'the', 'buffer'], user_input='1\n', echo_utterance=1)
+                 
+   
+
+   
+
+
+##############################################################################
 # Voice Commands for compiling symbols
 ##############################################################################
 
@@ -3227,8 +3247,14 @@ def test_temporary():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
    commands.open_file('blah.py')
-   commands.say(['results', 'at', 'index', 'zero', 'jump', 'out', 'equals', 'zero'], user_input='0\n')
-
+   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)   
+   commands.say(['new', 'statement', 'above'] , user_input="0\n")   
+   commands.say(['results', 'at', 'index', 'zero'], user_input='0\n')
+   commands.say(['new', 'statement', 'below'] , user_input="0\n")
+   commands.say(['results', 'at', 'index', 'two'], user_input='0\n')
+#   commands.say(['new', 'statement', 'three'] , user_input="0\n")
+#   commands.say(['new', 'statement', 'above'] , user_input="0\n")         
+#   commands.say(['new', 'statement', 'four'] , user_input="0\n")      
    
 #add_test('temp', test_temporary, desc='temporary test')
 

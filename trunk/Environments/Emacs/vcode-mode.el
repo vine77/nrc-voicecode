@@ -3135,8 +3135,7 @@ buffer"
       (set-buffer buff-name)
       (goto-char opoint)
       (beginning-of-line)
-;;;      (setq line-num (line-num-at (point)))
-      (setq line-num (1+ (count-lines 1 (point))))
+      (setq line-num (line-num-at (point)))
       )
 
     (cl-puthash "value" line-num response)
@@ -3802,17 +3801,17 @@ tabs.
     (save-excursion
        (condition-case err     
 	   (progn 
-             (set-buffer buff-name)
-      (goto-line line)
+         (set-buffer buff-name)
+	     (goto-line line)
    	     (if (<  which-end 0) 
 	         (beginning-of-line)
 	       (end-of-line)
 	     )
-             (setq return-pos (point))
+         (setq return-pos (point))
 	     (cl-puthash "value" return-pos response)
 	     (setq reply-name (format "%S_of_line_resp" which-end-as-text))
 	     (vr-deprecated-send-reply 
-	      (run-hook-with-args 
+	     (run-hook-with-args 
 	       'vr-deprecated-serialize-message-hook 
 	       (list reply-name response)))
 	   )

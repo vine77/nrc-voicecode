@@ -42,6 +42,13 @@ py_new_statement = \
                           code_bef='', code_after='',
                            back_indent_by=0,
                            docstring = """Inserts a new line below current one""")
+                           
+py_new_statement_above = \
+    ActionInsertNewClause(end_of_clause_regexp='(^|\n)', where = -1, direction=-1,
+                          ignore_occur_at_cursor=1, add_lines = 1, 
+                          code_bef='', code_after='', back_indent_by=0,
+                          docstring = """Inserts a new line below current one""")
+                           
 
 py_class_definition = \
     ActionInsert(code_bef='class ', code_after=':\n\t',
