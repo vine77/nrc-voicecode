@@ -2725,18 +2725,12 @@ auto_test.add_test('set_text', test_set_text,
 
 def test_temporary():
     testing.init_simulator_regression()
-    commands.open_file('blah.py')    
-    
- 
-# Needed 1: Statement below is necessary for bug to occur, but not sufficient
-    
+    commands.open_file('blah.py')
+
+    commands.say(['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\n\\newline'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
     commands.say(['if', 'index', '&\\and percent', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+    commands.say(['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe sign', 'index', '|\\vertical bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-        
-    commands.say(['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-
-#auto_test.add_test('temp', test_temporary, desc='temporary test')
+auto_test.add_test('temp', test_temporary, desc='temporary test')

@@ -264,35 +264,36 @@ sent."
    )
 )
 
-
 (defun vcode-test ()
   (interactive)
   (vr-log "--** vcode-test: started")
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (setq old-py-indent-offset py-indent-offset)
  
   (vcode-close-all-buffers)
-
+  (vr-log "--** vcode-test: after close-all-buffers")
   (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-configure-for-regression-testing t)
   (vr-mode 1 "vcode-test")
-  (vcode-configure-for-regression-testing nil)
+;  (vcode-configure-for-regression-testing nil)
+;  (vr-mode nil)
 )
 
 (defun vcode-config-py-mode-for-regression-testing ()
    (setq py-smart-indentation nil) 
    (setq py-indent-offset 3)
    (setq tab-width 999)
-   (vr-log "**-- vcode-config-py-mode-for-regression-testing: upon exit, tab-width=%S" tab-width)
+   (vr-log "**-- vcode-config-py-mode-for-regression-testing: upon exit, py-indent-offset=%S, tab-width=%S" py-indent-offset tab-width)
 )
 
 (defun vcode-configure-for-regression-testing (status)
    (if status
        (progn 
+	 (vr-log "--** vcode-configure-for-regression-testing: adding the hook\n")
 	 (add-hook 'python-mode-hook 
 		   'vcode-config-py-mode-for-regression-testing)
        )
+     (vr-log "--** vcode-configure-for-regression-testing: removing the hook\n")
      (remove-hook 'python-mode-hook 
 		   'vcode-config-py-mode-for-regression-testing)
    )
@@ -692,7 +693,6 @@ will send the queued changes as a big reply message, when it's done
 executing.
 "
 
-  (vr-log "--** vr-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
   (let ((the-change nil))
     (setq the-change
           (vr-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
@@ -720,7 +720,6 @@ happens on a buffer (if it is voice enabled).
 
 Changes are put in a changes queue `vr-queued-changes.
 "
-  (vr-log "--** vr-report-goto-select-change: buff-name=%S sel-start=%S sel-end=%S\n"  buff-name sel-start sel-end)
   (setq vr-queued-changes 
 	(cons 
 ;	   (list 'change-is-select buff-name sel-start sel-end)
@@ -732,28 +731,22 @@ Changes are put in a changes queue `vr-queued-changes.
 
   (let ((change-desc) (buff-name) (inserted-start) (inserted-end) 
 	(deleted-length) (deleted-start) (deleted-end) (inserted-text))
-    (vr-log "--** vr-generate-raw-change-description: change-type=%S change-data=%S\n" change-type change-data)
     (if (eq 'change-is-select change-type)
 	(progn 
-	  (vr-log "--** vr-generate-raw-change-description: this is a select change\n")
 	  (setq change-desc (list change-type change-data))
 	)
-      (vr-log "--** vr-generate-raw-change-description: inside else clause\n")
       (setq buff-name (nth 0 change-data))
       (setq inserted-start (nth 1 change-data))
       (setq inserted-end (nth 2 change-data))
       (setq deleted-length (nth 3 change-data))	
       (setq deleted-start inserted-start)
       (setq deleted-end (+ deleted-start deleted-length))
-      (vr-log "--** vr-generate-raw-change-description: inserted-start=%S, inserted-end=%S, buff-name=%S\n" inserted-start inserted-end buff-name)
       (save-excursion
-	(vr-log "--** vr-generate-raw-change-description: inside save-excursion\n")
 	(switch-to-buffer buff-name)
 	(setq inserted-text (buffer-substring inserted-start inserted-end))
       )
       (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
     )
-    (vr-log "--** vr-generate-raw-change-description: exiting\n")
     change-desc
   )
 )
@@ -809,7 +802,6 @@ Changes are put in a changes queue `vr-queued-changes.
 	  ;;; contain some format descriptions (e.g. %s), in which case
 	  ;;; formatting it would cause "not enough arguments" error.
 	  ;;;
-;	  (message (format "**-- vr-log: (length s)=%S" (length s)))
 	  (if (= 1 (length s))
 	      (insert (nth 0 s))
 	    (insert (apply 'format s))
@@ -867,6 +859,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
+    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S" (current-buffer) py-indent-offset tab-width)
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -887,12 +880,9 @@ Changes are put in a changes queue `vr-queued-changes.
  	     (last-command-event (elt event 0))
  	     (last-command-keys event)
  	     )
- 	(vr-log "--** vcode-execute-command-string: key-sequence event=%s, command=%s (char-to-string last-command-char)=%s\n" 
-		event command (char-to-string last-command-char))
 	(run-hooks 'pre-command-hook)
 	(command-execute command nil )
 	(run-hooks 'post-command-hook)
- 	(vr-log "--** vcode-execute-command-string: after executing this event, buffer contains:\n%S\n" (buffer-substring (point-min) (point-max)))
       )
     )
   )
@@ -927,7 +917,6 @@ Changes are put in a changes queue `vr-queued-changes.
 )
 
 (defun vr-execute-event-handler (handler vr-request)
-    (vr-log "-- vr-execute-event-handler: vr-request=%S\n" vr-request)
   (let ((vr-changes-caused-by-sr-cmd (nth 0 vr-request))
 	(vr-request-mess (nth 1 vr-request)))
     (vr-log "**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S\n" vr-changes-caused-by-sr-cmd)
@@ -947,7 +936,7 @@ Changes are put in a changes queue `vr-queued-changes.
 	;;;
 	;;; If in debug mode, let the debugger intercept errors.
 	;;;
-	(apply handler (list vr-request))
+	(apply handler (list vr-request)) 
 
       ;;; 
       ;;; Not debug mode. We intercept errors ourself.
@@ -1606,6 +1595,9 @@ command was a yank or not."
   (cl-puthash 'set_instance_string 'vcode-cmd-set-instance-string vr-message-handler-hooks)
   (cl-puthash 'instance_string 'vcode-cmd-get-instance-string vr-message-handler-hooks)
 
+
+  (cl-puthash 'suspendable 'vcode-cmd-suspendable 
+	      vr-message-handler-hooks)
   (cl-puthash 'recog_begin 'vcode-cmd-recognition-start 
 	      vr-message-handler-hooks)
   (cl-puthash 'recog_end 'vcode-cmd-recognition-end 
@@ -1858,7 +1850,18 @@ a buffer"
    )
 )
 
+(defun vcode-cmd-suspendable (vcode-request)
+   (let ((resp-cont (make-hash-table :test 'string=)))
 
+     (if (string= "w32" window-system)
+	 (cl-puthash "value" 0 resp-cont)
+       (cl-puthash "value" 1 resp-cont)	 
+     )
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "suspendable_resp" resp-cont)))
+   )
+)
 
 (defun vcode-cmd-recognition-start (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
@@ -1926,7 +1929,6 @@ a buffer"
 	(deleted-end (nth 2 a-change))
 	(inserted-text (nth 3 a-change))
 	(insert-change-hash (make-hash-table :test 'string=)))
-    (vr-log "--** vcode-generate-insert-change-hash: a-change=%S, buff-name=%S, deleted-start=%S, deleted-end=%S, inserted-text=%S\n" a-change buff-name deleted-start deleted-end inserted-text)
 
     (cl-puthash "action" "insert" insert-change-hash)
     (cl-puthash "range" 
@@ -1947,7 +1949,6 @@ a buffer"
 	(sel-end (nth 2 a-change))
 	(select-change-hash (make-hash-table :test 'string=))
 	(range nil))
-    (vr-log "--** vcode-generate-select-change-hash: a-change=%S, buff-name=%S, sel-start=%S, sel-end=%S" a-change buff-name sel-start sel-end)
     (cl-puthash "action" "select" select-change-hash)
     (setq range (vcode-convert-range sel-start sel-end 'vcode))
     (cl-puthash "range" range select-change-hash)
@@ -2022,6 +2023,7 @@ message.
 	(response (make-hash-table :test 'string=)))
     (setq file-name (cl-gethash "file_name" mess-cont))
     (find-file (substitute-in-file-name file-name))
+    (vr-log "--** vcode-cmd-open-file: file-name=%S, py-indent-offset=%S\n" file-name py-indent-offset)
     (cl-puthash "buff_name" (buffer-name) response)
     (vr-send-reply
      (run-hook-with-args 
@@ -2242,7 +2244,6 @@ greater than the 2nd element."
 positions (Emacs starts from 1, VCode from 0), we need to convert from one
 to the other"
 
-  (vr-log "--** vcode-convert-pos: pos=%S, for-who=%S\n" pos for-who)
   (if (equal for-who 'vcode)
       (progn 
 	(1- pos)
@@ -2252,7 +2253,6 @@ to the other"
 )
 
 (defun vcode-convert-range (start end for-who)
-  (vr-log "--** vcode-convert-range: start=%S end=%S for-who=%S" start end for-who)
   (list (vcode-convert-pos start for-who) (vcode-convert-pos end for-who))
 )
 
@@ -2422,7 +2422,6 @@ change reports it sends to VCode.
     (setq buff-name (cl-gethash "buff_name" mess-cont))
     (setq sel-range (cl-gethash "range" mess-cont))
     (setq put-cursor-at (cl-gethash "cursor_at" mess-cont))
-    (vr-log "--** vcode-cmd-set-selection: buff-name=%S, sel-range=%S, put-cursor-at=%S\n" buff-name  sel-range put-cursor-at)
     (if (= put-cursor-at 1) 
 	(progn 
 	  (setq sel-start (elt sel-range 0))
@@ -2433,7 +2432,6 @@ change reports it sends to VCode.
 	(setq sel-end (elt sel-range 0))
 	)
       )
-    (vr-log "--** vcode-cmd-set-selection: sel-start=%S, sel-end=%S\n" sel-start sel-end)
     (condition-case err     
 	(progn
 	  (switch-to-buffer buff-name)
@@ -2452,7 +2450,6 @@ change reports it sends to VCode.
     ;;; statement. That way, if there are errors, we can still report
     ;;; where Emacs actually set the selection, as opposed to where we
     ;;; expected it to go.
-    (vr-log "--** vcode-cmd-set-selection: (mark)=%S, (point)=%S\n" (mark) (point))
     (vr-report-goto-select-change buff-name (mark) (point))
 
     (vr-send-queued-changes)
@@ -2474,7 +2471,6 @@ change reports it sends to VCode.
 	(mess-cont (elt vcode-request 1))
 	(text) (range) (vr-request) 
 	(delete-start) (delete-end))
-        (vr-log "--** vcode-cmd-insert: range=%S, text=%S\n" range text)
 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
 	(setq buff-name (cl-gethash "buff_name" mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
@@ -2500,12 +2496,13 @@ change reports it sends to VCode.
  	(mess-cont (elt vcode-request 1))
  	(buff-name) (text) (start) (end))
 
-
  	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
  	(setq buff-name (cl-gethash "buff_name" mess-cont))
  	(setq start (cl-gethash "start" mess-cont))
  	(setq end (cl-gethash "end" mess-cont))
+        (vr-log "--** vcode-cmd-set-text: buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
  	(set-buffer buff-name)
+        (vr-log "--** vcode-cmd-set-text: in buff-name, (point-min)=%S, (point-max)=%S\n" (point-min) (point-max))
  	(kill-region start end)
         (set-mark nil)
 ;;;
@@ -2576,7 +2573,6 @@ change reports it sends to VCode.
 tabs.
 "
    (let ((before-tab) (after-tab) (tab-pos) (tab-was-found))
-     (vr-log "--** vcode-insert-with-autoindented-tabs: text=%S\n" text)
      (while (not (string= text ""))
        ;;;
        ;;; Find text before and after next occurence of TAB
@@ -2595,7 +2591,6 @@ tabs.
 	 (setq text "")
        )  
 
-       (vr-log "--** vcode-insert-with-autoindented-tabs: tab-was-found=%S, tab-pos=%S, before-tab=%S, text=%S\n" tab-was-found tab-pos before-tab text)
        ;;;
        ;;; Insert text before tab, and indent the tab.
        ;;;
@@ -2738,11 +2733,11 @@ tabs.
 
 
 (defun vcode-cmd-unindent (vcode-request)
-;  (vr-log "-- vcode-cmd-unindent: invoked\n")
-;  (let ((mess-cont (nth 1 vcode-request))
-;	(pos) (buff-name) (final-pos))
-;    (setq pos (cl-gethash "pos" mess-cont))
-;    (setq buff-name (cl-gethash "buff_name" mess-cont))
+  (vr-log "-- vcode-cmd-unindent: invoked\n")
+  (let ((mess-cont (nth 1 vcode-request))
+	(pos) (buff-name) (final-pos))
+    (setq pos (cl-gethash "pos" mess-cont))
+    (setq buff-name (cl-gethash "buff_name" mess-cont))
 
   (vr-log "WARNING: function vcode-cmd-unindent not implemented!!!\n")
 )
