@@ -252,22 +252,22 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 
     def get_text(self, start = None, end = None):
-	"""retrieves a portion of the buffer from the cache.
+        """retrieves a portion of the buffer from the cache.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region returned.
-	Defaults to start of buffer.
+        *INT start* is the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
-#        print '-- SourceBuffCached.get_text: start=%s, end=%s' % (start, end)
+        *STR* -- contents of specified range of the buffer
+        """
+        trace('SourceBuffCached.get_text', 'start=%s, end=%s' % (start, end))
             
         
         if self.cache['get_text'] == None:
@@ -282,10 +282,13 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         #             
         if start == None: start = 0
         if end == None: end = len(self.cache['get_text'])
-	if end < start:
+        if end < start:
             tmp = end
             end = start
             start = tmp
+            
+        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s' % (start, end))
+        trace('SourceBuffCached.get_text', '** before returning, len(self.cache[\'get_text\'])=%s, self.cache[\'get_text\']="%s"' % (len(self.cache['get_text']), self.cache['get_text']))
 
         return self.cache['get_text'][start:end]
 
@@ -465,7 +468,6 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	    self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
 
 	self.uncache_data_after_buffer_change(what_changed = 'get_text')
-
         
 
     def insert_cbk(self, range, text):
@@ -488,7 +490,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         *none* -- 
         """
         trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
-        trace('SourceBuffCached.insert_cbk', '** upon entry, self.cache["get_text"]="%s"' % self.cache["get_text"])        
+        trace('SourceBuffCached.insert_cbk', '** upon entry, self.cache["cur_pos"]=%s, self.cache["get_text"]="%s"' % (self.cache["cur_pos"], self.cache["get_text"]))        
 
 #        if range == None:
 #            range = self.get_selection()
@@ -496,20 +498,20 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 # screwed up because the application will already have made the change.
 # Basically, callbacks should never use defaults for the range
 
-	SourceBuff.SourceBuff.insert_cbk(self, range, text)
-	if self.cache['get_text'] == None:
+        SourceBuff.SourceBuff.insert_cbk(self, range, text)
+        if self.cache['get_text'] == None:
 # if we don't have the buffer contents cached, just get the entire
 # current contents (which should already include the insertion), thereby
 # caching it
-	    self.get_text()
-	else:
-	    old_text = self.get_text()
-	    self.cache['get_text'] = old_text[:range[0]] + text + \
-	        old_text[range[1]:]
+            self.get_text()
+        else:
+            old_text = self.get_text()
+            self.cache['get_text'] = old_text[:range[0]] + text + \
+	             old_text[range[1]:]
 
         self.uncache_data_after_buffer_change(what_changed = 'get_text')
         
-        trace('SourceBuffCached.insert_cbk', '** upon exit, self.cache["get_text"]="%s"' % self.cache["get_text"])
+        trace('SourceBuffCached.insert_cbk', '** upon exit, self.cache["cur_pos"]=%s, self.cache["get_text"]="%s"' % (self.cache["cur_pos"], self.cache["get_text"]))
 
     def set_selection_cbk(self, range, cursor_at=1):
         
