@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:57:29 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:37:29 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,6 +29,7 @@
     <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.execute_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.execute_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.init_simulator_regression"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.init_simulator_regression</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)<SPAN CLASS="OneLiner"> # re-initialize the mediator, using the same editor application</SPAN>
+    <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.instance_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.instance_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.namespace"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.namespace</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
@@ -93,9 +94,8 @@ available
 <P>None</P>
 
 <P>
-returns the instance name of the editor instance being used
-for regression testing, if we are using NewMediatorObject,
-otherwise None</P>
+returns a reference to the editor instance being used
+for regression testing</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -106,9 +106,8 @@ otherwise None</P>
 <DL>
 
 <DT>
-<EM>STR</EM>
-<DD>the name of the editor instance, or None if we are
-using the old MediatorObject
+<EM>AppState</EM>
+<DD>the editor instance
 
 </DL>
 <H2 ID="regression.PersistentConfigOldMediator.execute_command" CLASS="Method">regression.PersistentConfigOldMediator.execute_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
@@ -144,6 +143,28 @@ persistent version of the symbols dictionnary.
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="regression.PersistentConfigOldMediator.instance_name" CLASS="Method">regression.PersistentConfigOldMediator.instance_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the instance name of the editor instance being used
+for regression testing, if we are using NewMediatorObject,
+otherwise None</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name of the editor instance, or None if we are
+using the old MediatorObject
+
+</DL>
 <H2 ID="regression.PersistentConfigOldMediator.mediator" CLASS="Method">regression.PersistentConfigOldMediator.mediator(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 

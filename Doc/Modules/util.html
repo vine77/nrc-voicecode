@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Sep 21 14:07:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:37:26 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,7 +15,8 @@
 
 
 <H1 CLASS="ModuleName">Module util</H1>
-<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">common_path</SPAN>(<SPAN CLASS="Argument">first</SPAN>, <SPAN CLASS="Argument">second</SPAN>)</SPAN>
+<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#bell"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">bell</SPAN></A>(<SPAN CLASS="Argument">length=3</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Plays a bell sound for a time proportional to INT length.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">common_path</SPAN>(<SPAN CLASS="Argument">first</SPAN>, <SPAN CLASS="Argument">second</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#dict_merge"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">dict_merge</SPAN></A>(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Merges two dictionaries</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_common</SPAN>(<SPAN CLASS="Argument">a</SPAN>, <SPAN CLASS="Argument">b</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">full_split</SPAN>(<SPAN CLASS="Argument">path</SPAN>)</SPAN>
@@ -30,9 +31,15 @@
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">within_VCode</SPAN>(<SPAN CLASS="Argument">path</SPAN>)</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\util.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">may_switch_win_during_tests</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7e2f70&gt;</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7efd70&gt;</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">redirected_stdin_fname</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\user_input.dat'</SPAN></SPAN>
-</PRE><H2 ID="dict_merge" CLASS="Function">dict_merge(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</H2>
+</PRE><H2 ID="bell" CLASS="Function">bell(<SPAN CLASS="Argument">length=3</SPAN>)</H2>
+<P>Plays a bell sound for a time proportional to INT length.</P>
+
+<P>
+Note: This function doesn't seem to work if the output of the script 
+is redirected to a file.</P>
+<H2 ID="dict_merge" CLASS="Function">dict_merge(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</H2>
 <P>Merges two dictionaries</P>
 
 <P>

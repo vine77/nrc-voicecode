@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:57:17 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:36:01 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -16,32 +16,33 @@
 
 <H1 CLASS="ModuleName">Module sim_commands</H1>
 <PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="sim_commands.SimCmdsObj.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimCmdsObj</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>, <A CLASS="DocLink" HREF="InstanceSpace.InstanceSpace.html">InstanceSpace</A>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">change_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_abbreviations</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_symbols</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">close_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">compile_symbols</SPAN>(<SPAN CLASS="Argument">file_list</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">getmic</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to position <EM>INT pos</EM> of the current buffer</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto_line</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">change_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_abbreviations</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_symbols</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">close_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">compile_symbols</SPAN>(<SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">echo_command</SPAN>(<SPAN CLASS="Argument">cmd_name</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">getmic</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto</SPAN>(<SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to position <EM>INT pos</EM> of the current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto_line</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">list_buffers</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">make_position_visible</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">open_file</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a file with name in current buffer.</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_abbreviations</SPAN>(<SPAN CLASS="Argument">show_unresolved=1</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_error</SPAN>(<SPAN CLASS="Argument">message</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_symbols</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">provoke</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>(<SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">save</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # save current buffer</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#save_as"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">save_as</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # save current buffer</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">select</SPAN>(<SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Selects from position <EM>start</EM> to position <EM>end</EM> in current buffer</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">show_buff</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Shows content of current source buffer</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">signal_quitting</SPAN>(<SPAN CLASS="Argument">quitting=1</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">list_buffers</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">make_position_visible</SPAN>(<SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">open_file</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a file with name in current buffer.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_abbreviations</SPAN>(<SPAN CLASS="Argument">show_unresolved=1</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_error</SPAN>(<SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_symbols</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">provoke</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>(<SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">save</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # save current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#save_as"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">save_as</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # save current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">never_bypass_sr_recog=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">select</SPAN>(<SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Selects from position <EM>start</EM> to position <EM>end</EM> in current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">show_buff</SPAN>(<SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Shows content of current source buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">signal_quitting</SPAN>(<SPAN CLASS="Argument">quitting=1</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\sim_commands.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_else</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
@@ -101,7 +102,7 @@ clear_symbols()
 clear_abbreviations()
    Removes all defined abbreviations from VoiceCode's symbol dictionary</P>
 
-<H3>say(STR utterance, bypass_NatLink=1, user_input=None)
+<H3>say(STR utterance, never_bypass_sr_recog=0, user_input=None)
    Interprets string <EM>utterance</EM> as though it had been said by a user.</H3>
    Note that this command will not work with <EM>Select XYZ</EM> utterances.
    For those, you must use the <EM>say_select</EM> command.
@@ -126,8 +127,8 @@ clear_abbreviations()
              say(['select', <CODE>previous</CODE>, <CODE>index</CODE>, <CODE> != \not equal to</CODE>, '0'])    Argument <EM>user_input</EM> is a string that will be sent to the
     mediator console's standard input. Use in automated regression
     testing, if the <EM>say</EM> command requires user additional user input
-    (e.g. confirmation of a symbol match).    If argument <EM>bypass_NatLink</EM> is true, the interpretation will be done
-    withouth going through NatLink's recognitionMimic function.goto(INT pos)
+    (e.g. confirmation of a symbol match).    If argument <EM>never_bypass_sr_recog</EM> is true, the interpretation will always be done
+    through NatLink's recognitionMimic function, even if the <CODE>bypass</CODE> switch was on.goto(INT pos)
    Moves cursor to position <EM>pos</EM>goto_line(INT linenum)
    Moves cursor to the beginning of line number <EM>linenum</EM>select(INT start, end)
    Selects from position <EM>start</EM> to position <EM>end</EM> in current buffershow_buff()
@@ -158,10 +159,10 @@ clear_abbreviations()
    Quit the simulator.</H3>
    Note that if you don't quit using this command
    (e.g. *Ctrl-C*), your DOS window will hang up.   
-<H2 ID="open_file" CLASS="Function">open_file(<SPAN CLASS="Argument">fname</SPAN>)</H2>
+<H2 ID="open_file" CLASS="Function">open_file(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</H2>
 <P>Open a file with name in current buffer.</P>
 
-<EM>STR fname</EM> is the path of the file<H2 ID="save_as" CLASS="Function">save_as(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
+<EM>STR fname</EM> is the path of the file<H2 ID="save_as" CLASS="Function">save_as(<SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</H2>
 <P>save current buffer</P>
 
 <EM>STR fname</EM> is the path of the file
@@ -172,7 +173,7 @@ clear_abbreviations()
 <DD>If true, don't prompt before overwriting
 an existing file
 </DL>
-<H2 ID="say" CLASS="Function">say(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</H2>
+<H2 ID="say" CLASS="Function">say(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">never_bypass_sr_recog=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>, <SPAN CLASS="Argument">echo_cmd=0</SPAN>)</H2>
 <P>Simulate an utterance <EM>STR utterance</EM></P>
 
 
@@ -199,20 +200,12 @@ of words instead of its written\spoken form?)
  command requires user additional user input (e.g. confirmation of
  a symbol match).
 <DT>
-<EM>BOOL bypass_NatLink</EM>
-<DD>if true, the interpretation will be done
-withouth going through NatLink's recognitionMimic function.
+BOOL <EM>never_bypass_sr_recog</EM>
+<DD>If <EM>TRUE</EM>, then the interpretation will always be done
+through NatLink's recognitionMimic function, even if the <CODE>bypass</CODE> command line switch was set.
 <DT>
 <EM>BOOL echo_utterance=0</EM>
 <DD>If true, echo the utterance on STDOUT.
-<DT>
-<EM>BOOL selection = 0</EM>
-<DD>if true, the utterance should be recognized
-by a selection grammar.  Normally, this flag is optional.  However,
-if you are running with Natspeak connected, but bypassing natlink
-for dictation recognition in order to profile the interpretation code, 
-you will need to specify selection = 1 for selection utterances to
-be handled properly.
 </DL>
 Examples: say('x not equal to') -&gt; <CODE>x != </CODE>
           say(['x', <CODE> != \not equal to'] -&gt; 'x != </CODE>

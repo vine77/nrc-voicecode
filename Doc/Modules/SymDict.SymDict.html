@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:59:37 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:31:45 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -61,8 +61,8 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from PickledObject.PickledObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">PickledObject.PickledObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pickle_fname=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#PickledObject.PickledObject.pickle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">PickledObject.PickledObject.pickle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Saves the object to file.</SPAN>
-    <A CLASS="DocLink" HREF="#PickledObject.PickledObject.unpickle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">PickledObject.PickledObject.unpickle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Reads the object from file.</SPAN>
+    <A CLASS="DocLink" HREF="#PickledObject.PickledObject.pickle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">PickledObject.PickledObject.pickle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">alt_file=None</SPAN>)<SPAN CLASS="OneLiner"> # Saves the object to file.</SPAN>
+    <A CLASS="DocLink" HREF="#PickledObject.PickledObject.unpickle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">PickledObject.PickledObject.unpickle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">alt_file=None</SPAN>)<SPAN CLASS="OneLiner"> # Reads the object from file.</SPAN>
 
 </PRE><H2>Description</H2><P>
 This class stores information about symbols defined in source files
@@ -981,38 +981,42 @@ already exist</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="PickledObject.PickledObject.pickle" CLASS="Method">PickledObject.PickledObject.pickle(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="PickledObject.PickledObject.pickle" CLASS="Method">PickledObject.PickledObject.pickle(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">alt_file=None</SPAN>)</H2>
 <P>Saves the object to file.</P>
 
-<P>
-Name of file is <EM>self.pickle_fname</EM>. If <EM>None</EM>,don't write to file.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD><STRONG>OUTPUTS</STRONG>
+<EM>STR alt_file</EM>
+<DD>name of file to which to save the object, or
+None to use the default of self.pickle_fname.  If alt_file is omitted 
+and self.pickle_fname is None, don't write to file.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
 <DT>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="PickledObject.PickledObject.unpickle" CLASS="Method">PickledObject.PickledObject.unpickle(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="PickledObject.PickledObject.unpickle" CLASS="Method">PickledObject.PickledObject.unpickle(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">alt_file=None</SPAN>)</H2>
 <P>Reads the object from file.</P>
 
-<P>
-Name of the file is <EM>self.pickle_fname</EM>. If <EM>None</EM> don't read from
-file.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR fname=None</EM>
-<DD>Name of the from which to read the
-instance. If <EM>None</EM>, use 
+<EM>STR alt_file</EM>
+<DD>name of file from which to restore the object, or
+None to use the default of self.pickle_fname.  If alt_file is omitted 
+and self.pickle_fname is None, leave the object unchanged
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
