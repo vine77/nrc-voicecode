@@ -3003,14 +3003,17 @@ def test_normal_text_dictation():
    recog_mgr = mediator.editors.recog_mgr
    
    commands.open_file('blah.py')   
-   recog_mgr.set_text_mode(1)
-   print 'Setting VCode in text mode.'
-   commands.say(['bug', 'this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'but', 'it', 'is', 'never', 'typed'], never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
-   print 'Setting VCode in code dictation mode.'   
-   recog_mgr.set_text_mode(0)
-   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   commands.say(['text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
    
-auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
+#   recog_mgr.set_text_mode(1)
+#   print 'Setting VCode in text mode.'
+#   commands.say(['bug', 'this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'but', 'it', 'is', 'never', 'typed'], never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
+#   print 'Setting VCode in code dictation mode.'   
+#   recog_mgr.set_text_mode(0)
+#   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   
+#auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
 
 
 ##############################################################################

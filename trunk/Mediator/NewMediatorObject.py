@@ -342,7 +342,7 @@ class NewMediatorObject(Object.OwnerObject):
         if self.the_console:
             self.the_console.set_gram_factory(grammar_factory)
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
-            global_grammars = 0, correction = 'basic')
+            global_grammars = 0, correction = 'basic', text_mode_toggling = 1)
 #        res_mgr_factory = \
 #            ResMgr.ResMgrStdFactory()
         res_mgr_factory = \
@@ -1008,7 +1008,7 @@ class NewMediatorObject(Object.OwnerObject):
             editor_name = instance_name, names = self.test_space,
             symbol_match_dlg = self.symbol_match_dlg_regression,
             bypass_sr_recog = self.bypass_sr_recog,
-            correction = 'basic')
+            correction = 'basic', text_mode_toggling = 1)
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg_regression)
         self.test_space['temp_factory'] = \
              regression.TempConfigNewMediatorFactory(symbol_match_dlg = \

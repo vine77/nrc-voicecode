@@ -234,7 +234,7 @@ class GramMgr(OwnerObject):
         """
         debug.virtual('GramMgr.activate_sink')
     
-    def activate(self, buffer, window, except_code_dictation = 0):
+    def activate(self, buffer, window, is_in_text_mode = 0):
         """activate grammars for a buffer displayed in a particular
         window, and deactivate all other buffer/window-specific grammars
 
@@ -242,8 +242,8 @@ class GramMgr(OwnerObject):
 
         *STR* buffer -- name of buffer
 
-        *BOOL* except_code_dictation = 0 -- if TRUE, then do not activate the
-        code dictation grammar.
+        *BOOL* is_in_text_mode = 0 -- if TRUE, then activate only the grammars
+        for putting VoiceCode in text mode
 
         *INT* window -- 
         number identifying the current window  displaying
@@ -502,6 +502,9 @@ class WinGramMgr(GramMgrDictContext):
 
     *{INT : BasicCorrectWinGram}* correction_grammars -- map from 
     window handles to grammars containing basic correction commands
+    
+    *{INT: TextModeTogglingGram}* text_mode_toggling_grammars -- map from
+    window handles to command grammars for turning text mode on-off.
 
     *WinGramFactory* factory -- factory which supplies WinGramMgr
     with new window-specific dictation and selection grammars.
@@ -516,7 +519,7 @@ class WinGramMgr(GramMgrDictContext):
     """
 
     def __init__(self, factory, global_grammars = 0, 
-        exclusive = 0, correction = None, **args):
+        exclusive = 0, correction = None, text_mode_toggling = None, **args):
         """
         
         **INPUTS**
@@ -533,6 +536,8 @@ class WinGramMgr(GramMgrDictContext):
         *STR* correction -- string indicating the type of correction
         which is available: 'basic' or 'advanced', or None if no 
         correction is available
+        
+        *BOOL text_mode_toggling* -- true IIF toggling of text mode is supported.        
         """
         self.deep_construct(WinGramMgr,
                             {'factory': factory, 
@@ -541,7 +546,9 @@ class WinGramMgr(GramMgrDictContext):
                             'dict_grammars' : {},
                             'sel_grammars' : {},
                             'correction_grammars' : {},
-                            'correction': correction},
+                            'text_mode_toggling_grammars': {},
+                            'correction': correction, 
+                            'text_mode_toggling': text_mode_toggling},
                             args)
         self.add_owned('dict_grammars')
         self.add_owned('sel_grammars')
@@ -571,7 +578,7 @@ class WinGramMgr(GramMgrDictContext):
         self.deactivate_all()
 
 
-    def activate(self, buffer, window, except_code_dictation = 0):
+    def activate(self, buffer, window, is_in_text_mode = 0):
         """activate grammars for a buffer displayed in a particular
         window, and deactivate all other buffer/window-specific grammars
 
@@ -579,8 +586,8 @@ class WinGramMgr(GramMgrDictContext):
 
         *STR* buffer -- name of buffer
 
-        *BOOL* except_code_dictation = 0 -- if TRUE, then do not activate the
-        code dictation grammar.                
+        *BOOL* is_in_text_mode = 0 -- if TRUE, then activate only the grammars
+        for putting VoiceCode in text mode         
 
         *INT* window -- 
         number identifying the current window  displaying
@@ -596,9 +603,14 @@ class WinGramMgr(GramMgrDictContext):
 # this also creates a new dictation grammar and selection grammar
         if not self.dict_grammars[window].has_key(buffer):
             self.new_buffer(buffer, window)
+            
+        if is_in_text_mode:
+            self.correction_grammars[window].deactivate()          
+           
         for buff_name in self.dict_grammars[window].keys():
-            if buff_name != buffer or except_code_dictation:
+            if buff_name != buffer or is_in_text_mode:
                 self.dict_grammars[window][buff_name].deactivate()
+
 # if the dictation grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows in dict_grammars
         if self.global_grammars:
@@ -617,18 +629,23 @@ class WinGramMgr(GramMgrDictContext):
                     self.sel_grammars[a_window].deactivate()
         if self.correction:
             self.correction_grammars[window].activate()
-# if the correction grammars are actually global, we need to deactivate 
+        if self.text_mode_toggling:
+            self.text_mode_toggling_grammars[window].activate()            
+# if the grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows
-            if self.global_grammars:
-                for a_window in self.correction_grammars.keys():
-                    if a_window != window:
+        if self.global_grammars and (self.correction or self.text_mode_toggling):
+            for a_window in self.correction_grammars.keys():
+                if a_window != window:
+                    if self.correction:
                         self.correction_grammars[a_window].deactivate()
-
+                    if self.text_mode_toggling:
+                        self.text_mode_toggling_grammars[a_window].deactivate()
+                        
 #  set dictation context
         before, after = self.find_context(buffer)
         self.dict_grammars[window][buffer].set_context(before, after)
 
-        if not except_code_dictation:
+        if not is_in_text_mode:
            self.dict_grammars[window][buffer].activate()
     
     def activate_sink(self, window):
@@ -676,6 +693,8 @@ class WinGramMgr(GramMgrDictContext):
             self.sel_grammars[window].deactivate()
             if self.correction:
                 self.correction_grammars[window].deactivate()
+            if self.text_mode_toggling:
+                self.text_mode_toggling_grammars[window].deactivate()
             buffers = self.dict_grammars[window].keys()
             buffers.sort()
             for a_buffer in buffers:
@@ -788,6 +807,13 @@ class WinGramMgr(GramMgrDictContext):
                 self.factory.make_correction(self, a_window, 
                 exclusive = self.exclusive)
 #            print self.correction_grammars[window]
+        if self.text_mode_toggling and not self.text_mode_toggling_grammars.has_key(window):
+            a_window = window
+            if self.global_grammars:
+                a_window = None
+            self.text_mode_toggling_grammars[window] = \
+                self.factory.make_text_mode(manager=self.app, window=a_window)
+           
 
     def delete_window(self, window):
         """clean up and destroy all grammars for a window which 
@@ -807,8 +833,11 @@ class WinGramMgr(GramMgrDictContext):
         if self.sel_grammars.has_key(window):
             self._deactivate_all_window(window)
             del self.sel_grammars[window]
+            if self.text_mode_toggling:
+                del self.text_mode_toggling_grammars[window]            
             if self.correction:
                 del self.correction_grammars[window]
+                
         if self.dict_grammars.has_key(window):
             for a_buffer in self.dict_grammars[window].keys():
                 self.dict_grammars[window][a_buffer].cleanup()
@@ -871,7 +900,7 @@ class WinGramMgrFactory(GramMgrFactory):
     *none*
     """
     def __init__(self, gram_factory, global_grammars = 0,
-        exclusive = 0, correction = None, **args):
+        exclusive = 0, correction = None, text_mode_toggling=None, **args):
         """create a GramMgrFactory which creates WinGramMgr objects for
         new editors
 
@@ -889,12 +918,16 @@ class WinGramMgrFactory(GramMgrFactory):
         *STR* correction -- string indicating the type of correction
         which is available: 'basic' or 'advanced', or None if no 
         correction is available
+        
+        *BOOL text_mode_toggling* -- true IIF toggling of text mode is supported.
+        
         """
         self.deep_construct(WinGramMgrFactory, 
                             {'gram_factory': gram_factory,
                              'global_grammars': global_grammars,
                              'exclusive': exclusive,
-                             'correction': correction
+                             'correction': correction,
+                             'text_mode_toggling': text_mode_toggling
                             }, args)
 
     def using_global(self):
@@ -935,7 +968,7 @@ class WinGramMgrFactory(GramMgrFactory):
             recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = self.global_grammars, exclusive = self.exclusive,
-            correction = self.correction)
+            correction = self.correction, text_mode_toggling = self.text_mode_toggling)
 
     def new_global_manager(self, editor, instance_name, recog_mgr, 
         exclusive = 1):
@@ -962,7 +995,7 @@ class WinGramMgrFactory(GramMgrFactory):
             recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = 1, exclusive = exclusive,
-            correction = self.correction)
+            correction = self.correction, text_mode_toggling = self.text_mode_toggling)
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

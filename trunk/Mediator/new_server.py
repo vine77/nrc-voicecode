@@ -45,16 +45,7 @@ import sr_interface, util
 debug.config_traces(status="on", 
                     active_traces={
 ###########################################################
-#                       'NewMediatorObject': 1,
-#                       'PersistentConfigNewMediator': 1,
-#                       'RecogStartGram': 1,
-#                       'RecogStartMgr': 1,
-#                       'RecogStartMgrNL': 1,
-#                       'TempConfigNewMediatorFactory': 1,
-#                        'sr_interface.addWord': 1,
-#                        'CmdInterp.add_lsa': 1,
-#                        'LSAlias.__init__': 1,
-#########################################################################
+###########################################################
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,
 #                       'ResMgrBasic.interpret_dictation': 1,

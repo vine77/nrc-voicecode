@@ -224,11 +224,9 @@ class RecogStartMgr(OwnerObject):
                             {'editors': None,
                              'trust_current_window': trust_current_window,
                              'is_in_text_mode': 0
-#                             'is_in_text_mode': 1
                             },
                             args)
         self.name_parent('editors')
-        debug.trace('RecogStartMgr.__init__', '** upon exit, self.is_in_text_mode=%sself=%s' % (self.is_in_text_mode, self))
         
     def user_message(self, message, instance = None):
         """sends a user message up the chain to the NewMediatorObject to
@@ -277,6 +275,7 @@ class RecogStartMgr(OwnerObject):
         object
         """
         return self.editors.app_instance(instance)
+          
         
     def set_text_mode(self, set_to):
         """Sets text mode on/off. In text mode, dictation utterances are
@@ -291,6 +290,7 @@ class RecogStartMgr(OwnerObject):
         *none*
         """
         self.is_in_text_mode = set_to
+
         
         #
         # Note: Enable NatText when enabling text mode. We could also disable it
@@ -1723,7 +1723,7 @@ class RSMInfrastructure(RecogStartMgr):
         app.synchronize_with_app()
         buff_name = app.curr_buffer_name()
         if app.active_field() == None and dictation_allowed:
-            self.grammars[instance_name].activate(buff_name, window, except_code_dictation = self.is_in_text_mode)
+            self.grammars[instance_name].activate(buff_name, window, is_in_text_mode = self.is_in_text_mode)
         else:
             self.grammars[instance_name].deactivate_all(window)
         others = self.windows[window].instance_names()
@@ -2200,19 +2200,19 @@ class RSMBasic(RSMInfrastructure):
         except messaging.SocketError:
             debug.trace('RSMInfrastructure._activate_universal_grammars',
                 'Socket Error during synch')
-            self.grammars[instance_name].activate_sink(-1, except_code_dictation = self.is_in_text_mode)
+            self.grammars[instance_name].activate_sink(-1)
             debug.trace('RSMInfrastructure._activate_universal_grammars',
                 'activated dictation sink')
         else:
             if dictation_allowed:
                 debug.trace('RSMInfrastructure._activate_universal_grammars',
                     'activating dictation grammar')
-                self.grammars[instance_name].activate(buff_name, -1, except_code_dictation = self.is_in_text_mode)
+                self.grammars[instance_name].activate(buff_name, -1, is_in_text_mode = self.is_in_text_mode)
             else:
                 msg = "recog_begin returned false unexpectedly during\n"
                 msg = msg + "regression tests.  Will abort test\n"
                 sys.stderr.write(msg)
-                self.grammars[instance_name].activate_sink(-1, except_code_dictation = self.is_in_text_mode)
+                self.grammars[instance_name].activate_sink(-1)
                 debug.trace('RSMInfrastructure._activate_universal_grammars',
                     'activated dictation sink')
                 self.editors.cancel_testing()
