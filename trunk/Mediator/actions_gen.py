@@ -321,16 +321,22 @@ class ActionRepeatBidirectCmd(Action):
         ActionRepeatLastCmd().log_execute(app, cont)
 
 
-class ActionSelect(Action):
-    """This action sets the selection in a buffer.
+class ActionSelectPseudoCode(ActionBidirectionalRepeat):
+    """This action sets the selection in a buffer to a range specified through a 
+    SelectPseudoCode utterance.
 
     **INSTANCE ATTRIBUTES**
+
+    *[(INT, INT)]* possible_ranges -- Start and end position of the ranges which
+    are in the visible portion of the code and which matched the pseudocode specified
+    in the SelectPseudoCode utterance.
     
-    *(INT, INT) range* -- Start and end position of the range to
-     be selected.
+    *INT* select_range_no -- index in *possible_ranges* of the range to be selected.
+    
 
     *INT cursor_at=1* -- If positive, put cursor at end of
      selection. Otherwise, put it at beginning.
+
 
     *STR buff_name=None* -- Name of file where to set selection. If
      *None*, selectin current buffer.
@@ -340,9 +346,11 @@ class ActionSelect(Action):
     *none* -- 
     """
     
-    def __init__(self, range, cursor_at=1, buff_name=None, **args_super):
-        self.deep_construct(ActionSelect,
-                            {'range': range, 'cursor_at': cursor_at,
+    def __init__(self, possible_ranges, select_range_no, cursor_at=1, buff_name=None, **args_super):
+        self.deep_construct(ActionSelectPseudoCode,
+                            {'possible_ranges': possible_ranges, 
+                             'select_range_no': select_range_no, 
+                             'cursor_at': cursor_at,
                              'buff_name': buff_name},
                             args_super,
                             {})
@@ -355,7 +363,8 @@ class ActionSelect(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
         
-        app.set_selection(range=self.range, cursor_at=self.cursor_at, buff_name=self.buff_name)
+        app.set_selection(range=self.possible_ranges[self.select_range_no], 
+                          cursor_at=self.cursor_at, buff_name=self.buff_name)
 
         
 class ActionInsert(Action):
