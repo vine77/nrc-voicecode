@@ -47,35 +47,35 @@ WARNING: source file 'buf2.py' doesn't exist.
 Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
-Associate 'dictated in buffer' with symbol (Enter selection):
+Associate 'dictated in buffer 2' with symbol (Enter selection):
 
   '0': no association
-  '1': dictated_in_buffer (*new*)
-  '2': DictatedInBuffer (*new*)
-  '3': dictatedInBuffer (*new*)
-  '4': DICTATED_IN_BUFFER (*new*)
-  '5': dictatedinbuffer (*new*)
-  '6': DICTATEDINBUFFER (*new*)
+  '1': dictated_in_buffer_2 (*new*)
+  '2': DictatedInBuffer2 (*new*)
+  '3': dictatedInBuffer2 (*new*)
+  '4': DICTATED_IN_BUFFER_2 (*new*)
+  '5': dictatedinbuffer2 (*new*)
+  '6': DICTATEDINBUFFER2 (*new*)
 
 > *** Start of source buffer ***
-  1: dictated in buffer2<CURSOR>
+  1: dictated in buffer 2<CURSOR>
 
 *** End of source buffer ***
 Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
-Associate 'dictated in buffer' with symbol (Enter selection):
+Associate 'dictated in buffer 2' with symbol (Enter selection):
 
   '0': no association
-  '1': dictated_in_buffer (*new*)
-  '2': DictatedInBuffer (*new*)
-  '3': dictatedInBuffer (*new*)
-  '4': DICTATED_IN_BUFFER (*new*)
-  '5': dictatedinbuffer (*new*)
-  '6': DICTATEDINBUFFER (*new*)
+  '1': dictated_in_buffer_2 (*new*)
+  '2': DictatedInBuffer2 (*new*)
+  '3': dictatedInBuffer2 (*new*)
+  '4': DICTATED_IN_BUFFER_2 (*new*)
+  '5': dictatedinbuffer2 (*new*)
+  '6': DICTATEDINBUFFER2 (*new*)
 
 > *** Start of source buffer ***
-  1: dictated in buffer2dictated in buffer2<CURSOR>
+  1: dictated in buffer 2dictated in buffer 2<CURSOR>
 
 *** End of source buffer ***
 Got simulated kbd event: type_text({Esc}xdelete-other-window{Enter},)
@@ -701,7 +701,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CCF6A8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CD80E8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2861,73 +2861,93 @@ WARNING: source file 'blah1.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
-Associate 'line' with symbol (Enter selection):
+Associate 'line 1' with symbol (Enter selection):
 
   '0': no association
-  '1': line (*new*)
-  '2': Line (*new*)
-  '3': LINE (*new*)
+  '1': line_1 (*new*)
+  '2': Line1 (*new*)
+  '3': line1 (*new*)
+  '4': LINE_1 (*new*)
+  '5': LINE1 (*new*)
+
+> Associate 'line 2' with symbol (Enter selection):
+
+  '0': no association
+  '1': line_2 (*new*)
+  '2': Line2 (*new*)
+  '3': line2 (*new*)
+  '4': LINE_2 (*new*)
+  '5': LINE2 (*new*)
+
+> Associate 'line 3' with symbol (Enter selection):
+
+  '0': no association
+  '1': line_3 (*new*)
+  '2': Line3 (*new*)
+  '3': line3 (*new*)
+  '4': LINE_3 (*new*)
+  '5': LINE3 (*new*)
 
 > *** Start of source buffer ***
-  1: line1
-  2: line2
-  3: line3<CURSOR>
+  1: line_1
+  2: line_2
+  3: line_3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: line2
-  3: <CURSOR>line3
+  1: line_1
+  2: line_2
+  3: <CURSOR>line_3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: line2
-  3: <CURSOR>line3
+  1: line_1
+  2: line_2
+  3: <CURSOR>line_3
 
 *** End of source buffer ***
 Got command: move_relative(-1,)
 *** Start of source buffer ***
-  1: line1
-  2: line2<CURSOR>
-  3: line3
+  1: line_1
+  2: line_2<CURSOR>
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: <CURSOR>line2
-  3: line3
+  1: line_1
+  2: <CURSOR>line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: move_relative(3,)
 *** Start of source buffer ***
-  1: line1
-  2: lin<CURSOR>e2
-  3: line3
+  1: line_1
+  2: lin<CURSOR>e_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: <CURSOR>line2
-  3: line3
+  1: line_1
+  2: <CURSOR>line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto(0,)
 *** Start of source buffer ***
-  1: <CURSOR>line1
-  2: line2
-  3: line3
+  1: <CURSOR>line_1
+  2: line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: <CURSOR>line1
-  2: line2
-  3: line3
+  1: <CURSOR>line_1
+  2: line_2
+  3: line_3
 
 *** End of source buffer ***
 WARNING: source file 'blah2.py' doesn't exist.
@@ -2937,73 +2957,100 @@ WARNING: source file 'blah2.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
-*** Start of source buffer ***
-  1: line1
-  2: line2
-  3: line3<CURSOR>
+Associate 'line 1' with symbol (Enter selection):
+
+  '0': no association
+  '1': line_1
+  '2': Line1 (*new*)
+  '3': line1 (*new*)
+  '4': LINE_1 (*new*)
+  '5': LINE1 (*new*)
+
+> Associate 'line 2' with symbol (Enter selection):
+
+  '0': no association
+  '1': line_2
+  '2': Line2 (*new*)
+  '3': line2 (*new*)
+  '4': LINE_2 (*new*)
+  '5': LINE2 (*new*)
+
+> Associate 'line 3' with symbol (Enter selection):
+
+  '0': no association
+  '1': line_3
+  '2': Line3 (*new*)
+  '3': line3 (*new*)
+  '4': LINE_3 (*new*)
+  '5': LINE3 (*new*)
+
+> *** Start of source buffer ***
+  1: line_1
+  2: line_2
+  3: line_3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto(0,)
 *** Start of source buffer ***
-  1: <CURSOR>line1
-  2: line2
-  3: line3
+  1: <CURSOR>line_1
+  2: line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line1<CURSOR>
-  2: line2
-  3: line3
+  1: line_1<CURSOR>
+  2: line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line1<CURSOR>
-  2: line2
-  3: line3
+  1: line_1<CURSOR>
+  2: line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: move_relative(1,)
 *** Start of source buffer ***
-  1: line1
-  2: <CURSOR>line2
-  3: line3
+  1: line_1
+  2: <CURSOR>line_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: line2<CURSOR>
-  3: line3
+  1: line_1
+  2: line_2<CURSOR>
+  3: line_3
 
 *** End of source buffer ***
 Got command: move_relative(-3,)
 *** Start of source buffer ***
-  1: line1
-  2: li<CURSOR>ne2
-  3: line3
+  1: line_1
+  2: lin<CURSOR>e_2
+  3: line_3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: line2<CURSOR>
-  3: line3
+  1: line_1
+  2: line_2<CURSOR>
+  3: line_3
 
 *** End of source buffer ***
-Got command: goto(17,)
+Got command: goto(20,)
 *** Start of source buffer ***
-  1: line1
-  2: line2
-  3: line3<CURSOR>
+  1: line_1
+  2: line_2
+  3: line_3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line1
-  2: line2
-  3: line3<CURSOR>
+  1: line_1
+  2: line_2
+  3: line_3<CURSOR>
 
 *** End of source buffer ***
 
@@ -10692,19 +10739,15 @@ Associate 'bug below' with symbol (Enter selection):
   '5': bugbelow (*new*)
   '6': BUGBELOW (*new*)
 
-> Associate 'following' with symbol (Enter selection):
+> Associate 'following 1 will' with symbol (Enter selection):
 
   '0': no association
-  '1': following (*new*)
-  '2': Following (*new*)
-  '3': FOLLOWING (*new*)
-
-> Associate 'will' with symbol (Enter selection):
-
-  '0': no association
-  '1': will (*new*)
-  '2': Will (*new*)
-  '3': WILL (*new*)
+  '1': following_1_will (*new*)
+  '2': Following1Will (*new*)
+  '3': following1Will (*new*)
+  '4': FOLLOWING_1_WILL (*new*)
+  '5': following1will (*new*)
+  '6': FOLLOWING1WILL (*new*)
 
 > Associate 'be inserted at the right level' with symbol (Enter selection):
 
@@ -10719,13 +10762,13 @@ Associate 'bug below' with symbol (Enter selection):
 >  12:             if some_flag:
  13:                do_some_stuff(some_argument)
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level<CURSOR>)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following_1_willnot be_inserted_at_the_right_level<CURSOR>)
  16:            
  17:         try:
  18:             do_some_stuff()
 Heard else do some stuff without arguments
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following_1_willnot be_inserted_at_the_right_level)
  16:             else:
  17:                do_some_stuff()<CURSOR>
  18:            
@@ -13203,5 +13246,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1450.09500003 secs
+Test suite completed in:  1477.90499997 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6

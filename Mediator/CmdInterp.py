@@ -35,6 +35,34 @@ import WordTrie
 
 from SpacingState import *
 
+class DeferInterp(Object):
+    """
+    abstract base class which allows the interpreter main loop to 
+    distinguish phrase translations which should be interpreted 
+    immediately from those whose interpretation should be deferred 
+    to the new symbol loop
+    """
+    def __init__(self, **args):
+        self.deep_construct(DeferInterp, {}, args)
+
+    def interp_now(self,  preceding_symbol = 0):
+        """tells the interpreter main loop whether to interpret this 
+        object now or whether to append it to the untranslated list
+        which will build up the components of a new symbol
+
+        **INPUTS**
+
+        BOOL *preceding_symbol* indicates if there is already
+        untranslated text (LSAs generating digits should be interpreted
+        immediately if there is no pending text, because digits cannot
+        start a symbol name)
+
+        **OUTPUTS**
+
+        *BOOL* -- if true, the object should be interpreted now
+        """
+        debug.virtual('DeferInterp.interp_now')
+
 class LSAlias(Object):
     """
     Language-specific alias (or LSA), a word with one or more spoken 
@@ -44,6 +72,8 @@ class LSAlias(Object):
     Generally, all combinations of written and spoken forms for an LSA 
     are added to the vocabulary as words, so as to enable
     select-pseudocode.
+
+    **INSTANCE ATTRIBUTES**
     
     *STR* spoken_forms -- List of spoken form of the word.
 
@@ -53,10 +83,18 @@ class LSAlias(Object):
      it means that this LSA applies for all languages (I know, it
      doesn't make much sense syntactically).
 
-    *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
-    IGNORED)
+    *INT* spacing -- spacing flags, from SpacingState (Note: only a
+    handful of these spacing flags are currently used)
+
+    *STR* new_symbol -- flag indicating whether the LSAlias can form
+    part of a new symbol.  Recognized values are None if the alias
+    is always interpreted on its own (and flushes any pending
+    untranslated phrase), 'start' if it can start a new symbol (e.g.
+    underscore, letter-alpha), or 'within' if it can appear within a
+    symbol but cannot start one (e.g. digits)
     """
-    def __init__(self, spoken_forms, meanings, spacing = 0, **args):
+    def __init__(self, spoken_forms, meanings, spacing = 0, 
+        new_symbol = None, **args):
         """
         **INPUTS**
 
@@ -69,17 +107,102 @@ class LSAlias(Object):
          doesn't make much sense syntactically).
 
         *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
-        IGNORED)
+        IGNORED BUT MUST BE SPECIFIED PROPERLY TO INSURE FUTURE
+        COMPATABILITY)
+
+        *STR* new_symbol -- flag indicating whether the LSAlias can form
+        part of a new symbol.  Recognized values are None if the alias
+        is always interpreted on its own (and flushes any pending
+        untranslated phrase), 'start' if it can start a new symbol (e.g.
+        underscore, letter-alpha), or 'within' if it can appear within a
+        symbol but cannot start one (e.g. digits)
         """
         self.deep_construct(LSAlias,
                             {'spoken_forms': spoken_forms,
                              'meanings': {},
-                             'spacing': spacing
+                             'spacing': spacing,
+                             'new_symbol': new_symbol
                             },
                             args)
 
         for language, written_as in meanings.items():
             self.meanings[language] = written_as
+
+class AliasMeaning(DeferInterp):
+    """underlying object used by CmdInterp to store the data associated 
+    with an LSAlias meaning
+
+    **INSTANCE ATTRIBUTES**
+
+    *STR* written_form -- the written form of the LSA 
+
+    *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
+    IGNORED BUT MUST BE SPECIFIED PROPERLY TO INSURE FUTURE
+    COMPATABILITY)
+
+    *STR* new_symbol -- flag indicating whether the LSAlias can form
+    part of a new symbol.  Recognized values are None if the alias
+    is always interpreted on its own (and flushes any pending
+    untranslated phrase), 'start' if it can start a new symbol (e.g.
+    underscore, letter-alpha), or 'within' if it can appear within a
+    symbol but cannot start one (e.g. digits)
+    """
+    def __init__(self, written_form, spacing = 0, new_symbol = None,
+        **args):
+        self.deep_construct(AliasMeaning,
+                            {
+                             'written_form': written_form,
+                             'spacing_flag': spacing,
+                             'new_symbol': new_symbol
+                            },
+                            args)
+    def written(self):
+        """returns the written form of the alias
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- the written form
+        """
+        return self.written_form
+
+    def spacing(self):
+        """returns the spacing flag for the alias
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- the spacing flag
+        """
+        return self.spacing_flag
+
+    def interp_now(self,  preceding_symbol = 0):
+        """tells the interpreter main loop whether to interpret this 
+        object now or whether to append it to the untranslated list
+        which will build up the components of a new symbol
+
+        **INPUTS**
+
+        BOOL *preceding_symbol* indicates if there is already
+        untranslated text (LSAs generating digits should be interpreted
+        immediately if there is no pending text, because digits cannot
+        start a symbol name)
+
+        **OUTPUTS**
+
+        *BOOL* -- if true, the object should be interpreted now
+        """
+        if self.new_symbol is None:
+            return 1
+        if self.new_symbol == 'within' and not preceding_symbol:
+            return 1
+        return 0
 
 class CSCmdSet(Object):
     """a collection of context-sensitive commands which may be deleted,
@@ -355,7 +478,7 @@ class CmdInterp(OwnerObject):
     
     {STR: WordTrie} *language_specific_aliases = {}* -- Key is the name of
      a programming language (None means all languages). Value is a
-     WordTrie of written forms over spoken form phrases
+     WordTrie of AliasMeaning objects over spoken form phrases
 
     BOOL *disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
@@ -367,11 +490,6 @@ class CmdInterp(OwnerObject):
     where we create a new mediator in each test, and don't want to waste
     CPU time adding the same LSAs and CSCs over and over again.
 
-    *{STR: {STR: STR}}* lsa_spacing = {} -- Key is the name of
-     a programming language (None means all languages). Value is a
-     dictionary of spacing flags over spoken form keys 
-     specific to a language.
-    
     CLASS ATTRIBUTES**
 
     *none* --
@@ -412,7 +530,6 @@ class CmdInterp(OwnerObject):
                              'known_symbols': None,
                              'language_specific_aliases': \
                                  {None: WordTrie.WordTrie()},
-                             'lsa_spacing': {None: {}},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
@@ -598,9 +715,9 @@ class CmdInterp(OwnerObject):
 
             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
 
-            trace('CmdInterp.interpret_massaged', 
+            trace('CmdInterp.interpret_phrase', 
             'possible_CSCs=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (possible_CSCs, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
-            trace('CmdInterp.interpret_massaged', 
+            trace('CmdInterp.interpret_phrase', 
                 'most_definite = %d' % most_definite)
             head_was_translated = 0
 
@@ -634,14 +751,21 @@ class CmdInterp(OwnerObject):
                 #
                 # LSA consumed the most words from command. Insert it.
                 #
-                trace('CmdInterp.interpret_massaged', 'processing leading LSA=\'%s\'' % chopped_LSA)
-# flush untranslated words before inserting LSA
+                trace('CmdInterp.interpret_phrase', 'processing leading LSA=\'%s\'' % chopped_LSA)
+                preceding_symbol = 0
                 if untranslated_words:
-                    self.match_untranslated_text(untranslated_words, app, 
-                        exact_symbol)
-                    untranslated_words = []
-                    exact_symbol = 0
-                actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
+                    preceding_symbol = 1
+                if not chopped_LSA.interp_now(preceding_symbol):
+                    untranslated_words.append(chopped_LSA.written())
+                else:
+# flush untranslated words before inserting LSA
+                    if untranslated_words:
+                        self.match_untranslated_text(untranslated_words, app, 
+                            exact_symbol)
+                        untranslated_words = []
+                        exact_symbol = 0
+                    actions_gen.ActionInsert(code_bef=chopped_LSA.written(), 
+                        code_after='').log_execute(app, None)
                 phrase = phrase[LSA_consumes:]
                 head_was_translated = 1
 
@@ -657,7 +781,7 @@ class CmdInterp(OwnerObject):
                 #       class SomeClass you may name the new class
                 #       SomeprefixSomeClass or SomeClassSomepostfix.
                 #
-                trace('CmdInterp.interpret_massaged', 'processing leading symbol=\'%s\'' % chopped_symbol)
+                trace('CmdInterp.interpret_phrase', 'processing leading symbol=\'%s\'' % chopped_symbol)
                 if untranslated_words:
                     exact_symbol = 0
                 else:
@@ -674,7 +798,7 @@ class CmdInterp(OwnerObject):
                 # Just chop off the first word and insert it, marking
                 # it as untranslated text.
                 #                 
-                trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
+                trace('CmdInterp.interpret_phrase', 'processing leading word=\'%s\'' % chopped_word)
                 untranslated_words.append( chopped_word)
                 exact_symbol = 0
                 phrase = phrase[word_consumes:]
@@ -692,7 +816,7 @@ class CmdInterp(OwnerObject):
                 # text. Try to match untranslated text to a known (or new)
                 # symbol.
                 #
-                trace('CmdInterp.interpret_massaged', 'found the end of some untranslated text')
+                trace('CmdInterp.interpret_phrase', 'found the end of some untranslated text')
                 self.match_untranslated_text(untranslated_words, app,
                     exact_symbol)
                 untranslated_words = []
@@ -702,7 +826,7 @@ class CmdInterp(OwnerObject):
                 untranslated_text = string.join(untranslated_words)
             else:
                 untranslated_text = None
-            trace('CmdInterp.interpret_massaged', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
+            trace('CmdInterp.interpret_phrase', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
@@ -1081,9 +1205,9 @@ class CmdInterp(OwnerObject):
 
         Returns a tuple *(chopped_LSA, consumed)* where:
         
-        *STR* chopped_LSA -- The written form of the LSA that was
-         chopped off. If *None*, it means *command* did not start with
-         an LSA.
+        *AliasMeaning* chopped_LSA -- The AliasMeaning object
+        corresponding to the LSA that was chopped off.  If *None*, it 
+        means *command* did not start with an LSA.
 
         *INT* consumed* -- Number of words consumed by the LSA from
          the command
@@ -1094,9 +1218,9 @@ class CmdInterp(OwnerObject):
         match = aliases.match_phrase(phrase)
         if match[0] is None:
             return None, 0
-        written_LSA, rest_spoken = match
+        meaning, rest_spoken = match
         consumed = len(phrase) - len(rest_spoken)
-        return written_LSA, consumed
+        return meaning, consumed
     
     def chop_symbol_phrase(self, phrase):
         """Chops off the beginning of a command if it is a known symbol.
@@ -1313,13 +1437,13 @@ class CmdInterp(OwnerObject):
                 if not self.language_specific_aliases.has_key(language):
                     self.language_specific_aliases[language] = \
                         WordTrie.WordTrie()
-                    self.lsa_spacing[language] = {}
 
-                self.lsa_spacing[language][clean_spoken] = an_LSA.spacing 
-
+                meaning = AliasMeaning(hacked_written_as, 
+                    spacing = an_LSA.spacing, 
+                    new_symbol = an_LSA.new_symbol)
                 phrase = string.split(clean_spoken)
                 self.language_specific_aliases[language].add_phrase(phrase, 
-                    hacked_written_as)
+                    meaning)
                 trace('CmdInterp.add_lsa', 'language = %s' % language)
                 trace('CmdInterp.add_lsa', 
                     'spoken, written = "%s", "%s"' % (clean_spoken,

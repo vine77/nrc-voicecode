@@ -231,7 +231,8 @@ std_US_punc.add("=", ['equal-sign'])
 std_US_punc.add('?', ['question-mark'], no_spaces)
 std_US_punc.add('@', ['at-sign'], like_hyphen)
 std_US_punc.add('^', ['caret'], no_spaces)
-std_US_punc.add('_', ['underscore'], joins_identifier | no_space_after)
+std_US_punc.add('_', ['underscore'], joins_identifier | no_space_after,
+    new_symbol = 'start')
 std_US_punc.add('|', ['vertical-bar'])
 std_US_punc.add('~', ['tilde'], no_space_after)
 std_US_punc.add('`', ['backquote'],
@@ -346,6 +347,12 @@ alt_US_quotes.add('`', ['backquote', 'reverse-quote'],
 #       e.g. 'between parens' -> '(^)'
 #
 
+#
+# Letters using military pronunciation
+#
+
+military_letters = LSAliasSet(name = 'military letters',
+    descriptions = 'letters using military pronunciation')
 
 #
 # Escaped characters (back slash a., a, alpha, etc.)

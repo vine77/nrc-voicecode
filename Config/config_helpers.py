@@ -63,6 +63,37 @@ alpha_bravo["x"] = "xray"
 alpha_bravo["y"] = "yankee"
 alpha_bravo["z"] = "zulu"
 
+def add_letters(aliases, prefix, alphabet = 'abcdefghijklmnopqrstuvwxyz', 
+    name_map = alpha_bravo, language = None):
+    """define LSAs for alpha, etc. or letter-alpha, etc.
+
+    **INPUTS**
+
+    *LSAliasSet* -- set to which to add the aliases 
+
+    *STR prefix* -- prefix to add to the letter names (e.g. "" for bare
+    letters, or "letter-" to mimic Natspeak behavior)
+
+    *STR* alphabet -- set of letters for which to define aliases
+
+    *{STR: STR}* -- map from letters to their spoken form (e.g.
+    the military alphabet)
+
+    *STR language* -- language of the aliases, or None to use in all
+    languages (almost certainly the desired behavior)
+    """
+    for letter in alphabet:
+        try:
+            name = "%s" % name_map[letter]
+            spoken = "%s%s" % (prefix, name)
+            an_LSA = LSAlias(spoken_forms = [spoken], 
+                meanings = {language: letter}, new_symbol = 'start')
+            aliases.add_lsa(an_LSA)
+        except KeyError:
+            pass
+
+    
+    
 def add_escaped_characters(commands, back_slash = 'back slash', 
     alphabet = 'abcdefghijklmnopqrstuvwxyz',
     name_map = alpha_bravo, cap = "cap", context = None):
@@ -409,15 +440,24 @@ class SinglePunctuation(PunctuationSet):
     *[[STR]]* spoken_forms -- list of corresponding (lists of) spoken forms 
 
     *[INT]* spacing -- corresponding spacing flags
+
+    *[STR]* new_symbol -- corresponding flags indicating whether the 
+    punctuation symbol part of a new identifier.  Recognized values 
+    are None if it cannot, 'start' if it can start a new symbol (e.g.
+    underscore), or 'within' if it can appear within a
+    symbol but cannot start one.
     """
     def __init__(self, **args):
         self.deep_construct(SinglePunctuation,
                             {'written_forms': [],
                              'spoken_forms': [],
-                             'spacing': []},
+                             'spacing': [],
+                             'new_symbol': []
+                            },
                             args)
 
-    def add(self, written_form, spoken_forms, spacing = 0):
+    def add(self, written_form, spoken_forms, spacing = 0, 
+        new_symbol = None):
         """add a punctuation symbol
 
         **INPUTS**
@@ -428,6 +468,12 @@ class SinglePunctuation(PunctuationSet):
 
         *INT spacing* -- the spacing flags (see SpacingState.py)
 
+        *STR* new_symbol -- flag indicating whether the punctuation
+        symbol part of a new identifier.  Recognized values are None if 
+        it cannot, 'start' if it can start a new symbol (e.g.
+        underscore), or 'within' if it can appear within a
+        symbol but cannot start one.
+
         **OUTPUTS**
 
         *none*
@@ -435,6 +481,7 @@ class SinglePunctuation(PunctuationSet):
         self.written_forms.append(written_form)
         self.spoken_forms.append(spoken_forms)
         self.spacing.append(spacing)
+        self.new_symbol.append(new_symbol)
     
     def create(self, interp, force = 0, dictation_only = 0):
         """add LSAs for dictation of punctuation symbols and CSCs for
@@ -1191,7 +1238,7 @@ class EnglishSmallNumbersSet(Object):
                                             'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
                                             'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
                                             'eighteen', 'nineteen'],
-                             'words_multiples_of_10': ['ten', 'twenty', 'thirty', 'fourty', 'fifty', 
+                             'words_multiples_of_10': ['ten', 'twenty', 'thirty', 'forty', 'fifty', 
                                                        'sixty', 'seventy', 'eighty', 'ninety']}, 
                               args)
         debug.trace('EnglishSmallNumbersSet.__init__', 'exited')                              
@@ -1216,7 +1263,8 @@ class EnglishSmallNumbersSet(Object):
                                     
                                                    
         aliases.add_lsa(LSAlias([spoken], 
-                        {None: written}, letters_and_digits))
+                        {None: written}, letters_and_digits, 
+                        new_symbol = 'within'))
 
     def _add_zero_prefixed_numbers(self, aliases):
        aliases.add_lsa(LSAlias(['oh X.'], 
@@ -1230,7 +1278,8 @@ class EnglishSmallNumbersSet(Object):
              spoken = 'oh %s' % self.words_0_19[digit]
              written = '0%s' % digit
           aliases.add_lsa(LSAlias([spoken], 
-                          {None: written}, letters_and_digits))
+                          {None: written}, letters_and_digits,
+                          new_symbol = 'within'))
                
     def create(self, interp):
         """Add LSAs for dictation of English 2-digit numbers.

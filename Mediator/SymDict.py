@@ -1462,7 +1462,7 @@ class SymDict(OwnerObject):
             if not a_file in self.abbrev_sources:
                 self.abbrev_sources.append(a_file)
 
-    def add_symbol(self, symbol, user_supplied_spoken_forms=[], \
+    def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
                    add_sr_entries=1):
         """Add a symbol to the dictionary
 
@@ -1518,9 +1518,10 @@ class SymDict(OwnerObject):
             #
             # Add user supplied spoken forms
             #
-            for a_spoken_form in user_supplied_spoken_forms:
-                if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
-                    self.symbol_info[symbol].spoken_forms.append(a_spoken_form)
+            if user_supplied_spoken_forms:
+                for a_spoken_form in user_supplied_spoken_forms:
+                    if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
+                        self.symbol_info[symbol].spoken_forms.append(a_spoken_form)
 
             trace('SymDict.add_symbol', 'new symbol spoken forms = %s' %
                 self.symbol_info[symbol].spoken_forms)
@@ -2140,7 +2141,8 @@ class SymDict(OwnerObject):
         # Add the word to the symbol dictionary its spoken forms if its
         # already there
         #
-        self.add_symbol(the_match.native_symbol, user_supplied_spoken_forms=the_match.pseudo_symbol)
+        self.add_symbol(the_match.native_symbol,
+        user_supplied_spoken_forms=[the_match.pseudo_symbol])
 
         #
         # Resave the dictionary to disk
