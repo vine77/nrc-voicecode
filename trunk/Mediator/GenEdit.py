@@ -1092,12 +1092,12 @@ class GenEditFrame(Object.OwnerObject):
 	"""
 	debug.virtual('GenEditFrame.close_window')
 
-    def show(self):
+    def show(self, initial = 0):
 	"""show the window corresponding to this frame
 
 	**INPUTS**
 
-	*none*
+	*BOOL* initial -- is this the initial time the frame is shown?
 
 	**OUTPUTS**
 
@@ -2091,7 +2091,7 @@ class GenEditSingle(GenEditFrames):
 # at this stage, GenEdit hasn't been added to AppStateGenEdit yet, so we
 # use user_initiated = 1 so we don't do any AppState callbacks
 	ID = self.add_frame(frame, init_buff_name, user_initiated = 1)
-	frame.show()
+	frame.show(initial = 1)
 	self.only_ID = ID
 
     def open_file_new_buffer(self, file_name, new_buff_name,
@@ -2190,7 +2190,7 @@ class GenEditSimple(GenEditFrames):
 # at this stage, GenEdit hasn't been added to AppStateGenEdit yet, so we
 # use user_initiated = 1 so we don't do any AppState callbacks
 	ID = self.add_frame(frame, init_buff_name, user_initiated = 1)
-	frame.show()
+	frame.show(initial = 1)
 
     def open_file_new_buffer(self, file_name, new_buff_name,
 	    user_initiated = 0):
@@ -2242,7 +2242,7 @@ class GenEditSimple(GenEditFrames):
 	ID = self.add_frame(frame, new_buff_name, user_initiated =
 	    user_initiated)
 	if ID != None:
-	    frame.show()
+	    frame.show(initial = 1)
 	    return 1
 	else:
 	    frame.cleanup()

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 31 13:28:38 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Sep 01 17:09:43 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,9 +15,17 @@
 
 
 <H1 CLASS="ModuleName">Module GenEditWX</H1>
-<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.SimpleWaxFrame.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimpleWaxFrame</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxFrameBase.html">WaxFrameBase</A>)</SPAN><SPAN CLASS="OneLiner"> # frame containing a SimpleWaxPanel</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.SimpleWaxPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimpleWaxPanel</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.windows.wxPanel.html">wxPanel</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # main panel containing a single text buffer </SPAN>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.EditorBuilder.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EditorBuilder</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.EditorBuilderBasic.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EditorBuilderBasic</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.EditorBuilder.html">EditorBuilder</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.OldSimpleWaxPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">OldSimpleWaxPanel</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.windows.wxPanel.html">wxPanel</A>, <A CLASS="DocLink" HREF="GenEditWX.SingleBufferWindow.html">SingleBufferWindow</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # simple main panel containing only a single text buffer </SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.SimpleWaxFrame.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimpleWaxFrame</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxFrame.html">WaxFrame</A>)</SPAN><SPAN CLASS="OneLiner"> # frame containing a SimpleWaxPanel</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.SimpleWaxPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimpleWaxPanel</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxPanel.html">WaxPanel</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.SingleBufferWindow.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SingleBufferWindow</SPAN></A></SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.WaxCmdFrame.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxCmdFrame</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxFrame.html">WaxFrame</A>)</SPAN><SPAN CLASS="OneLiner"> # frame containing a WaxCmdPanel</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.WaxCmdPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxCmdPanel</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxPanel.html">WaxPanel</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.WaxFrame.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxFrame</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxFrameBase.html">WaxFrameBase</A>)</SPAN><SPAN CLASS="OneLiner"> # partially concrete class for frame containing a WaxPanel</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.WaxFrameBase.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxFrameBase</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.frames.wxFrame.html">wxFrame</A>, <A CLASS="DocLink" HREF="GenEdit.GenEditFrameActivateEvent.html">GenEditFrameActivateEvent</A>, <A CLASS="DocLink" HREF="wxFrameMenuMixIn.wxFrameMenuMixIn.html">wxFrameMenuMixIn</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="GenEditWX.WaxPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxPanel</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.windows.wxPanel.html">wxPanel</A>, <A CLASS="DocLink" HREF="GenEditWX.EditorBuilderBasic.html">EditorBuilderBasic</A>, <A CLASS="DocLink" HREF="GenEditWX.SingleBufferWindow.html">SingleBufferWindow</A>)</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">FALSE</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">None</SPAN> <SPAN CLASS="VariableName">NULL</SPAN> = <SPAN CLASS="VariableValue">None</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">TRUE</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
@@ -124,7 +132,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_SUBTRACT</SPAN> = <SPAN CLASS="VariableValue">339</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_TAB</SPAN> = <SPAN CLASS="VariableValue">9</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_UP</SPAN> = <SPAN CLASS="VariableValue">317</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\GenEditWX.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:/Projects/VoiceCode/VCode/Mediator\\GenEditWX.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">varlink</SPAN> <SPAN CLASS="VariableName">cvar</SPAN> = <SPAN CLASS="VariableValue">&lt;Global variables&gt;</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">false</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">true</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>

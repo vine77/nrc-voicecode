@@ -82,6 +82,10 @@ OPTIONS
 -i :
    use client-side indentation
 
+-c :
+   add a command-line and log window to each frame, to assist in
+   debugging
+
 --host host:
   specify the host name or IP address (Defaults to the local host)
 
@@ -175,7 +179,7 @@ class ConnectionSettingsDlg(wxDialog):
 class ClientFrameMixIn(Object.OwnerObject):
     """mix-in class which adds a Connection menu and related
     infrastructure to concrete subclasses of WaxFrameBasic (such as
-    SimpleWaxFrame, and is designed to be used with WaxEditClient.
+    WaxFrame, and is designed to be used with WaxEditClient.
 
     **INSTANCE ATTRIBUTES**
     """
@@ -387,7 +391,12 @@ class SimpleWaxClientFrame(SimpleWaxFrame, ClientFrameMixIn):
 	self.deep_construct(SimpleWaxClientFrame, {}, args)
 	self.finish_construction()
 
-class WaxClientBase(GenEdit.ActivateEventMixIn):
+class WaxCmdClientFrame(WaxCmdFrame, ClientFrameMixIn):
+    def __init__(self, **args):
+	self.deep_construct(WaxCmdClientFrame, {}, args)
+	self.finish_construction()
+
+class ClientBase(GenEdit.ActivateEventMixIn):
     """Mix-in base class for WaxEdit clients, providing methods specific
     to a client editor
 
@@ -399,7 +408,7 @@ class WaxClientBase(GenEdit.ActivateEventMixIn):
     *STR app_name* -- name of the application
     """
     def __init__(self, app, app_name, **args):
-	self.deep_construct(WaxClientBase, 
+	self.deep_construct(ClientBase, 
 	                    {'app': app,
 			     'app_name': app_name
 			    }, args)
@@ -511,19 +520,27 @@ class WaxClientBase(GenEdit.ActivateEventMixIn):
 	for frame in self.frames.values():
 	    frame.update_connection_status()
 
-class SimpleWaxClientBase(WaxClientBase):
-    """Mix-in base class for WaxEdit clients using SimpleWaxFrame
+class WaxClientBase(ClientBase):
+    """Mix-in base class for WaxEdit clients using WaxFrame
 
     **INSTANCE ATTRIBUTES**
 
     *wxSize or (INT, INT) size* -- default size for frames
     *none*
+
+    *BOOL cmd_line* -- include a command-line and log window in each
+    frame?
     """
-    def __init__(self, frame_size = None, **args):
-	self.deep_construct(SimpleWaxClientBase, 
-	                    {'frame_size': frame_size}, args)
+    def __init__(self, frame_size = None, cmd_line = 0, **args):
+	self.deep_construct(WaxClientBase, 
+	                    {'frame_size': frame_size,
+			     'cmd_line': cmd_line}, args)
 	if frame_size == None:
-	    self.frame_size = (600, 400)
+	    if not cmd_line:
+		self.frame_size = (600, 400)
+            else:
+		self.frame_size = (1000, 600)
+
     def new_frame(self, buff_name):
 	"""creates a new frame of the appropriate concrete class
 	open buffer and new window callbacks to the AppState interface
@@ -542,35 +559,39 @@ class SimpleWaxClientBase(WaxClientBase):
 	*INT* -- ID of the new frame, or None if the frame was not 
 	added successfully
 	"""
+	if self.cmd_line:
+	    return WaxCmdClientFrame(owner = self, app_name = self.app_name,
+		ID = wxNewId(), size = self.frame_size, 
+		init_buff_name = buff_name)
 	return SimpleWaxClientFrame(owner = self, app_name = self.app_name,
 	    ID = wxNewId(), size = self.frame_size, 
 	    init_buff_name = buff_name)
 
-class SimpleWaxClientSingle(SimpleWaxClientBase, GenEdit.GenEditSingle):
+class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
     """
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxClientSingle, 
+	self.deep_construct(WaxClientSingle, 
 	                    {
 			    }, args)
 
 
-class SimpleWaxClient(SimpleWaxClientBase, GenEdit.GenEditSimple):
+class WaxClient(WaxClientBase, GenEdit.GenEditSimple):
     """
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxClient, 
+	self.deep_construct(WaxClient, 
 	                    {
 			    }, args)
 
-class WaxClientApp(wxApp, Object.OwnerObject):
+class WaxClientAppBase(wxApp, Object.OwnerObject):
     """wxApp subclass for WaxEdit clients
 
     **INSTANCE ATTRIBUTES**
 
     *WaxClientBase GUI_editor* -- the WaxClientBase (or, rather, a 
-    concrete subclass thereof, such as SimpleWaxClient) implementing the
-    GenEdit editor for wxPython
+    concrete subclass thereof, such as WaxClient or WaxClientSingle) 
+    implementing the GenEdit editor for wxPython
 
     *AppStateGenEdit editor* -- the AppState wrapper interface to 
     GUI_editor
@@ -606,11 +627,14 @@ class WaxClientApp(wxApp, Object.OwnerObject):
 
     *BOOL testing_flag* -- flag indicating that the current connection
     is running regression tests
+
+    *BOOL cmd_line* -- include a command-line and log window in each
+    frame?
     """
     def __init__(self, client_indentation = 0, 
 	    host = None, listen_port = None, 
-	    talk_port = None, **args):
-	self.deep_construct(WaxClientApp, 
+	    talk_port = None, cmd_line = 0, **args):
+	self.deep_construct(WaxClientAppBase, 
 	                    {
 			     'connection': tcp_client.ClientConnection(),
 			     'host': host,
@@ -621,6 +645,7 @@ class WaxClientApp(wxApp, Object.OwnerObject):
 			     'editor': None,
 			     'GUI_editor': None,
 			     'client_indentation': client_indentation,
+			     'cmd_line': cmd_line,
 			     'testing_flag': 0
 			    }, args, exclude_bases = {wxApp: 1})
 	self.name_parent('app')
@@ -635,8 +660,8 @@ class WaxClientApp(wxApp, Object.OwnerObject):
 	    self.talk_port = tcp_client.VC_TALKER_PORT
 # store the same initial values in old_host_data
 	self.backup_connection_data()
-	wxApp.__init__(self, 0)
-#	wxApp.__init__(self, 1, "appcrash")
+#	wxApp.__init__(self, 0)
+	wxApp.__init__(self, 1, "appcrash")
 
     def OnInit(self):
 	self.GUI_editor = self.create_editor()
@@ -876,15 +901,15 @@ class WaxClientApp(wxApp, Object.OwnerObject):
 	"""
 	EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
 
-class SimpleWaxClientAppSingle(WaxClientApp):
-    """concrete WaxClientApp subclass using a single SimpleWaxFrame 
+class WaxClientAppSingle(WaxClientAppBase):
+    """concrete WaxClientApp subclass using a single WaxFrame 
 
     **INSTANCE ATTRIBUTES**
 
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxClientAppSingle, 
+	self.deep_construct(WaxClientAppSingle, 
 	                    {
 			    }, args)
     def create_editor(self):
@@ -900,11 +925,11 @@ class SimpleWaxClientAppSingle(WaxClientApp):
 	editor, which must be an instance of a concrete subclass 
 	of WaxClientBase
 	"""
-	return SimpleWaxClientSingle(app = self, app_name = 'WaxEdit',
-	    curr_dir = vc_globals.test_data)
+	return WaxClientSingle(app = self, app_name = 'WaxEdit',
+	    curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
 
-class SimpleWaxClientApp(WaxClientApp):
-    """concrete WaxClientApp subclass using one or more SimpleWaxFrame 
+class WaxClientApp(WaxClientAppBase):
+    """concrete WaxClientApp subclass using one or more WaxFrame 
     windows
 
     **INSTANCE ATTRIBUTES**
@@ -912,7 +937,7 @@ class SimpleWaxClientApp(WaxClientApp):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxClientApp, 
+	self.deep_construct(WaxClientApp, 
 	                    {
 			    }, args)
     def create_editor(self):
@@ -928,24 +953,26 @@ class SimpleWaxClientApp(WaxClientApp):
 	editor, which must be an instance of a concrete subclass 
 	of WaxClientBase
 	"""
-	return SimpleWaxClient(app = self, app_name = 'WaxEdit',
-	    curr_dir = vc_globals.test_data)
+	return WaxClient(app = self, app_name = 'WaxEdit',
+	    curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
 
 def run(multiple = 0, client_indentation = 0,
-	host = None, listen_port = None, talk_port = None):
+	host = None, listen_port = None, talk_port = None, cmd_line = 0):
     if multiple:
-	app = SimpleWaxClientApp(client_indentation = client_indentation, 
-	    host = host, listen_port = listen_port, talk_port = talk_port)
+	app = WaxClientApp(client_indentation = client_indentation, 
+	    host = host, listen_port = listen_port, talk_port = talk_port, 
+	    cmd_line = cmd_line)
     else:
-	app = SimpleWaxClientAppSingle(client_indentation = client_indentation, 
-	    host = host, listen_port = listen_port, talk_port = talk_port)
+	app = WaxClientAppSingle(client_indentation = client_indentation, 
+	    host = host, listen_port = listen_port, talk_port = talk_port,
+	    cmd_line = cmd_line)
     app.run()
 
 
 
 if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 'm', None, 'p', None,
-                            'i', None,
+                            'i', None, 'c', None,
 			    'host=', None,
                             'talk=', None, 'listen=', None])
     if opts['h']:
@@ -961,8 +988,11 @@ if __name__ == '__main__':
 	client_indentation = 0
 	if opts['i']:
 	    client_indentation = 1
+	cmd_line = 0
+	if opts['c']:
+	    cmd_line = 1
 	run(multiple, client_indentation, host, 
-	    listen_port, talk_port)
+	    listen_port, talk_port, cmd_line = cmd_line)
 
 
 # defaults for vim - otherwise ignore
