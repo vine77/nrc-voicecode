@@ -4,7 +4,6 @@ Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Finished wxMediator init...
 Starting server threads...
-successfully created new instance
 Starting foreground tests...
 
 
@@ -341,40 +340,40 @@ EdSim instance EdSim(0) connected
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
-  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
+  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
- 11: 
 
 >>> Interpreting in a Python buffer
 
 >>> Current buffer is:
 
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
-  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
+  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
-  9:     def a_method(self, x):
 
 
 *******************************************************************************
@@ -391,7 +390,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Moving to position 5
@@ -400,7 +398,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Testing breadcrumbs
@@ -411,7 +408,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -419,7 +415,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Popping 2 crumbs -> end up here:
 *** Start of source buffer ***
@@ -427,7 +422,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -435,7 +429,6 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -443,13 +436,11 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 *** Start of source buffer ***
   1: /* This is a small t<CURSOR>est buffer for C */
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Popping 1 crumb -> end up here...
 *** Start of source buffer ***
@@ -457,17 +448,16 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Testing code indentation. Inserting for loop.
+  3: 
   4: for (ii=0; ii <= maxValue; ii++)
   5: {
   6: <CURSOR>
   7: }
   8: void move(float x, y)
   9: {
- 10:   move_horiz(x);
 
 
 *******************************************************************************
@@ -501,18 +491,17 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
-  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
+  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
- 11: 
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
@@ -521,23 +510,24 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Current buffer is:
 
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
-  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
+  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
-  9:     def a_method(self, x):
 EdSim.remove_other_references
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
@@ -566,41 +556,41 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
-  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
+  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
- 11: 
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Interpreting in a Python buffer
 
 >>> Current buffer is:
 
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
-  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
+  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
-  9:     def a_method(self, x):
 EdSim.remove_other_references
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
@@ -648,7 +638,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DC19A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DC5980>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3063,13 +3053,14 @@ SourceBuff.__init__: fowl.py
 DictWinGramDummy for buffer = 'fowl.py', window 5
 init
 activating buffer fish.C for window 5
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 DictWinGramDummy for buffer = 'fowl.py', window 5
 deactivating
 SelectWinGramDummy for buffer 'fish.C', window 5
@@ -3093,12 +3084,15 @@ SourceBuff.__init__: fish.h
 DictWinGramDummy for buffer = 'fish.h', window 7
 init
 activating buffer dog.pl for window 7
+ 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.h', window 7
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', window 7
@@ -3112,6 +3106,8 @@ activating buffer fish.h for window 7
 *** Start of source buffer ***
   1: void move(float x, y);<CURSOR>
   2: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'dog.pl', window 7
 deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
@@ -3122,15 +3118,14 @@ setting context: before = [ x, y);], after = [
 DictWinGramDummy for buffer = 'fish.h', window 7
 activating:  7  
 activating buffer fowl.py for window 5
+*** Start of source buffer ***
+  1: import sys
   2: 
   3: def something(value):
   4:     print <CURSOR>value
   5: 
   6: if __name__ == '__main__':
   7:     something('nice')
-  8: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
 SelectWinGramDummy for buffer 'fowl.py', window 5
@@ -3167,13 +3162,14 @@ SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
 close buffer dog.pl
 activating buffer fish.C for window 5
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
@@ -3228,13 +3224,14 @@ SourceBuff.__init__: fowl.py
 DictWinGramDummy for buffer = 'fowl.py', global
 init
 activating buffer fish.C for window 5
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 DictWinGramDummy for buffer = 'fowl.py', global
 deactivating
 SelectWinGramDummy for buffer 'fish.C', global
@@ -3260,12 +3257,15 @@ SourceBuff.__init__: fish.h
 DictWinGramDummy for buffer = 'fish.h', global
 init
 activating buffer dog.pl for window 7
+ 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.h', global
 deactivating
 DictWinGramDummy for buffer = 'fish.C', global
@@ -3287,6 +3287,8 @@ activating buffer fish.h for window 7
 *** Start of source buffer ***
   1: void move(float x, y);<CURSOR>
   2: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
 DictWinGramDummy for buffer = 'fish.C', global
@@ -3305,15 +3307,14 @@ DictWinGramDummy for buffer = 'fish.h', global
 activating:  global  exclusive 
 
 activating buffer fowl.py for window 5
+*** Start of source buffer ***
+  1: import sys
   2: 
   3: def something(value):
   4:     print <CURSOR>value
   5: 
   6: if __name__ == '__main__':
   7:     something('nice')
-  8: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
@@ -3364,13 +3365,14 @@ SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
 close buffer dog.pl
 activating buffer fish.C for window 5
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
 
@@ -4641,2980 +4643,2988 @@ Heard empty angles new statement
  25:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', '=\\equals', "'\\open-single-quote", 'message', "'\\close-single-quote", 'new statement']
-Heard string equals open-single-quote message close-single-quote new statement
+Saying: ['pattern', 'equals', 'raw', 'string', 'single', 'quotes', 'back slash sierra', 'asterisk', 'back slash cap sierra', '+\\plus-sign', 'new statement']
+Heard pattern equals raw string single quotes back slash sierra asterisk back slash cap sierra plus-sign new statement
  23:             <head>
  24:             <>
- 25:             string = 'message'
+ 25:             pattern = r'\s*\S+'
  26:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', 'equals', 'single', 'quotes', 'message', 'new statement']
-Heard string equals single quotes message new statement
+Saying: ['string', '=\\equals', "'\\open-single-quote", 'message', "'\\close-single-quote", 'new statement']
+Heard string equals open-single-quote message close-single-quote new statement
  24:             <>
- 25:             string = 'message'
+ 25:             pattern = r'\s*\S+'
  26:             string = 'message'
  27:             <CURSOR>
 
 *** End of source buffer ***
+Saying: ['string', 'equals', 'single', 'quotes', 'message', 'new statement']
+Heard string equals single quotes message new statement
+ 25:             pattern = r'\s*\S+'
+ 26:             string = 'message'
+ 27:             string = 'message'
+ 28:             <CURSOR>
+
+*** End of source buffer ***
 Saying: ["''\\empty single-quotes", 'new statement']
 Heard empty single-quotes new statement
- 25:             string = 'message'
  26:             string = 'message'
- 27:             ''
- 28:             <CURSOR>
+ 27:             string = 'message'
+ 28:             ''
+ 29:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', '"\\open-quote', 'message', '"\\close-quote', 'new statement']
 Heard string equals open-quote message close-quote new statement
- 26:             string = 'message'
- 27:             ''
- 28:             string = "message"
- 29:             <CURSOR>
-
-*** End of source buffer ***
-Saying: ['string', 'equals', 'quotes', 'message', 'new statement']
-Heard string equals quotes message new statement
- 27:             ''
- 28:             string = "message"
+ 27:             string = 'message'
+ 28:             ''
  29:             string = "message"
  30:             <CURSOR>
 
 *** End of source buffer ***
+Saying: ['string', 'equals', 'quotes', 'message', 'new statement']
+Heard string equals quotes message new statement
+ 28:             ''
+ 29:             string = "message"
+ 30:             string = "message"
+ 31:             <CURSOR>
+
+*** End of source buffer ***
 Saying: ['""\\empty quotes', 'new statement']
 Heard empty quotes new statement
- 28:             string = "message"
  29:             string = "message"
- 30:             ""
- 31:             <CURSOR>
+ 30:             string = "message"
+ 31:             ""
+ 32:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', '`\\open-backquote', 'message', '`\\close-backquote', 'new statement']
 Heard string equals open-backquote message close-backquote new statement
- 29:             string = "message"
- 30:             ""
- 31:             string = `message`
- 32:             <CURSOR>
-
-*** End of source buffer ***
-Saying: ['string', '=\\equals', 'backquotes', 'message', 'new statement']
-Heard string equals backquotes message new statement
- 30:             ""
- 31:             string = `message`
+ 30:             string = "message"
+ 31:             ""
  32:             string = `message`
  33:             <CURSOR>
 
 *** End of source buffer ***
+Saying: ['string', '=\\equals', 'backquotes', 'message', 'new statement']
+Heard string equals backquotes message new statement
+ 31:             ""
+ 32:             string = `message`
+ 33:             string = `message`
+ 34:             <CURSOR>
+
+*** End of source buffer ***
 Saying: ['``\\empty backquotes', 'new statement']
 Heard empty backquotes new statement
- 31:             string = `message`
  32:             string = `message`
- 33:             ``
- 34:             <CURSOR>
+ 33:             string = `message`
+ 34:             ``
+ 35:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 31:             string = `message`
  32:             string = `message`
- 33:             ``
- 34:             "<CURSOR>"
+ 33:             string = `message`
+ 34:             ``
+ 35:             "<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back slash A.', 'new statement']
 Heard back slash A. new statement
- 32:             string = `message`
- 33:             ``
- 34:             "\a"
- 35:             <CURSOR>
+ 33:             string = `message`
+ 34:             ``
+ 35:             "\a"
+ 36:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['back slash alpha', 'new statement']
 Heard back slash alpha new statement
- 33:             ``
- 34:             "\a"
- 35:             \a
- 36:             <CURSOR>
-
-*** End of source buffer ***
-Saying: ['quotes']
-Heard quotes
- 33:             ``
- 34:             "\a"
- 35:             \a
- 36:             "<CURSOR>"
-
-*** End of source buffer ***
-Saying: ['back slash B.']
-Heard back slash B.
- 33:             ``
- 34:             "\a"
- 35:             \a
- 36:             "\b<CURSOR>"
-
-*** End of source buffer ***
-Saying: ['back slash bravo']
-Heard back slash bravo
- 33:             ``
- 34:             "\a"
- 35:             \a
- 36:             "\b\b<CURSOR>"
-
-*** End of source buffer ***
-Saying: ['new statement']
-Heard new statement
- 34:             "\a"
- 35:             \a
- 36:             "\b\b"
+ 34:             ``
+ 35:             "\a"
+ 36:             \a
  37:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 34:             "\a"
- 35:             \a
- 36:             "\b\b"
+ 34:             ``
+ 35:             "\a"
+ 36:             \a
  37:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash C.']
-Heard back slash C.
- 34:             "\a"
- 35:             \a
- 36:             "\b\b"
- 37:             "\c<CURSOR>"
+Saying: ['back slash B.']
+Heard back slash B.
+ 34:             ``
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash charlie']
-Heard back slash charlie
- 34:             "\a"
- 35:             \a
- 36:             "\b\b"
- 37:             "\c\c<CURSOR>"
+Saying: ['back slash bravo']
+Heard back slash bravo
+ 34:             ``
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b\b<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 35:             \a
- 36:             "\b\b"
- 37:             "\c\c"
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b\b"
  38:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 35:             \a
- 36:             "\b\b"
- 37:             "\c\c"
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b\b"
  38:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash D.']
-Heard back slash D.
- 35:             \a
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d<CURSOR>"
+Saying: ['back slash C.']
+Heard back slash C.
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash delta']
-Heard back slash delta
- 35:             \a
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d\d<CURSOR>"
+Saying: ['back slash charlie']
+Heard back slash charlie
+ 35:             "\a"
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c\c<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d\d"
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c\c"
  39:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d\d"
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c\c"
  39:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash E.']
-Heard back slash E.
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e<CURSOR>"
+Saying: ['back slash D.']
+Heard back slash D.
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash echo']
-Heard back slash echo
- 36:             "\b\b"
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e\e<CURSOR>"
+Saying: ['back slash delta']
+Heard back slash delta
+ 36:             \a
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d\d<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e\e"
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d\d"
  40:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e\e"
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d\d"
  40:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash F.']
-Heard back slash F.
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f<CURSOR>"
+Saying: ['back slash E.']
+Heard back slash E.
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash foxtrot']
-Heard back slash foxtrot
- 37:             "\c\c"
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f\f<CURSOR>"
+Saying: ['back slash echo']
+Heard back slash echo
+ 37:             "\b\b"
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e\e<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f\f"
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e\e"
  41:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f\f"
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e\e"
  41:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash G.']
-Heard back slash G.
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g<CURSOR>"
+Saying: ['back slash F.']
+Heard back slash F.
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash golf']
-Heard back slash golf
- 38:             "\d\d"
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g\g<CURSOR>"
+Saying: ['back slash foxtrot']
+Heard back slash foxtrot
+ 38:             "\c\c"
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f\f<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g\g"
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f\f"
  42:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g\g"
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f\f"
  42:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash H.']
-Heard back slash H.
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h<CURSOR>"
+Saying: ['back slash G.']
+Heard back slash G.
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash hotel']
-Heard back slash hotel
- 39:             "\e\e"
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h\h<CURSOR>"
+Saying: ['back slash golf']
+Heard back slash golf
+ 39:             "\d\d"
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g\g<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h\h"
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g\g"
  43:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h\h"
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g\g"
  43:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash I.']
-Heard back slash I.
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i<CURSOR>"
+Saying: ['back slash H.']
+Heard back slash H.
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash india']
-Heard back slash india
- 40:             "\f\f"
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i\i<CURSOR>"
+Saying: ['back slash hotel']
+Heard back slash hotel
+ 40:             "\e\e"
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h\h<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i\i"
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h\h"
  44:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i\i"
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h\h"
  44:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash J.']
-Heard back slash J.
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j<CURSOR>"
+Saying: ['back slash I.']
+Heard back slash I.
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash juliett']
-Heard back slash juliett
- 41:             "\g\g"
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j\j<CURSOR>"
+Saying: ['back slash india']
+Heard back slash india
+ 41:             "\f\f"
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i\i<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j\j"
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i\i"
  45:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j\j"
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i\i"
  45:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash K.']
-Heard back slash K.
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k<CURSOR>"
+Saying: ['back slash J.']
+Heard back slash J.
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash kilo']
-Heard back slash kilo
- 42:             "\h\h"
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k\k<CURSOR>"
+Saying: ['back slash juliett']
+Heard back slash juliett
+ 42:             "\g\g"
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j\j<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k\k"
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j\j"
  46:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k\k"
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j\j"
  46:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash L.']
-Heard back slash L.
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l<CURSOR>"
+Saying: ['back slash K.']
+Heard back slash K.
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash lima']
-Heard back slash lima
- 43:             "\i\i"
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l\l<CURSOR>"
+Saying: ['back slash kilo']
+Heard back slash kilo
+ 43:             "\h\h"
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k\k<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l\l"
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k\k"
  47:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l\l"
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k\k"
  47:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash M.']
-Heard back slash M.
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m<CURSOR>"
+Saying: ['back slash L.']
+Heard back slash L.
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash mike']
-Heard back slash mike
- 44:             "\j\j"
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m\m<CURSOR>"
+Saying: ['back slash lima']
+Heard back slash lima
+ 44:             "\i\i"
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l\l<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m\m"
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l\l"
  48:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m\m"
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l\l"
  48:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash N.']
-Heard back slash N.
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n<CURSOR>"
+Saying: ['back slash M.']
+Heard back slash M.
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash november']
-Heard back slash november
- 45:             "\k\k"
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n\n<CURSOR>"
+Saying: ['back slash mike']
+Heard back slash mike
+ 45:             "\j\j"
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m\m<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n\n"
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m\m"
  49:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n\n"
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m\m"
  49:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash O.']
-Heard back slash O.
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o<CURSOR>"
+Saying: ['back slash N.']
+Heard back slash N.
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash oscar']
-Heard back slash oscar
- 46:             "\l\l"
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o\o<CURSOR>"
+Saying: ['back slash november']
+Heard back slash november
+ 46:             "\k\k"
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n\n<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o\o"
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n\n"
  50:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o\o"
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n\n"
  50:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash P.']
-Heard back slash P.
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p<CURSOR>"
+Saying: ['back slash O.']
+Heard back slash O.
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash papa']
-Heard back slash papa
- 47:             "\m\m"
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p\p<CURSOR>"
+Saying: ['back slash oscar']
+Heard back slash oscar
+ 47:             "\l\l"
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o\o<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p\p"
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o\o"
  51:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p\p"
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o\o"
  51:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash Q.']
-Heard back slash Q.
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q<CURSOR>"
+Saying: ['back slash P.']
+Heard back slash P.
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash quebec']
-Heard back slash quebec
- 48:             "\n\n"
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q\q<CURSOR>"
+Saying: ['back slash papa']
+Heard back slash papa
+ 48:             "\m\m"
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p\p<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q\q"
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p\p"
  52:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q\q"
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p\p"
  52:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash R.']
-Heard back slash R.
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r<CURSOR>"
+Saying: ['back slash Q.']
+Heard back slash Q.
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash romeo']
-Heard back slash romeo
- 49:             "\o\o"
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r\r<CURSOR>"
+Saying: ['back slash quebec']
+Heard back slash quebec
+ 49:             "\n\n"
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q\q<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r\r"
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q\q"
  53:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r\r"
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q\q"
  53:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash S.']
-Heard back slash S.
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s<CURSOR>"
+Saying: ['back slash R.']
+Heard back slash R.
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash sierra']
-Heard back slash sierra
- 50:             "\p\p"
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s\s<CURSOR>"
+Saying: ['back slash romeo']
+Heard back slash romeo
+ 50:             "\o\o"
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r\r<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s\s"
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r\r"
  54:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s\s"
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r\r"
  54:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash T.']
-Heard back slash T.
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t<CURSOR>"
+Saying: ['back slash S.']
+Heard back slash S.
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash tango']
-Heard back slash tango
- 51:             "\q\q"
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t\t<CURSOR>"
+Saying: ['back slash sierra']
+Heard back slash sierra
+ 51:             "\p\p"
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s\s<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t\t"
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s\s"
  55:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t\t"
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s\s"
  55:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash U.']
-Heard back slash U.
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u<CURSOR>"
+Saying: ['back slash T.']
+Heard back slash T.
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash uniform']
-Heard back slash uniform
- 52:             "\r\r"
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u\u<CURSOR>"
+Saying: ['back slash tango']
+Heard back slash tango
+ 52:             "\q\q"
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t\t<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u\u"
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t\t"
  56:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u\u"
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t\t"
  56:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash V.']
-Heard back slash V.
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v<CURSOR>"
+Saying: ['back slash U.']
+Heard back slash U.
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash victor']
-Heard back slash victor
- 53:             "\s\s"
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v\v<CURSOR>"
+Saying: ['back slash uniform']
+Heard back slash uniform
+ 53:             "\r\r"
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u\u<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v\v"
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u\u"
  57:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v\v"
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u\u"
  57:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash W.']
-Heard back slash W.
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w<CURSOR>"
+Saying: ['back slash V.']
+Heard back slash V.
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash whiskey']
-Heard back slash whiskey
- 54:             "\t\t"
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w\w<CURSOR>"
+Saying: ['back slash victor']
+Heard back slash victor
+ 54:             "\s\s"
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v\v<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w\w"
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v\v"
  58:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w\w"
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v\v"
  58:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash X.']
-Heard back slash X.
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x<CURSOR>"
+Saying: ['back slash W.']
+Heard back slash W.
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash xray']
-Heard back slash xray
- 55:             "\u\u"
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x\x<CURSOR>"
+Saying: ['back slash whiskey']
+Heard back slash whiskey
+ 55:             "\t\t"
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w\w<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x\x"
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w\w"
  59:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x\x"
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w\w"
  59:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash Y.']
-Heard back slash Y.
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y<CURSOR>"
+Saying: ['back slash X.']
+Heard back slash X.
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash yankee']
-Heard back slash yankee
- 56:             "\v\v"
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y\y<CURSOR>"
+Saying: ['back slash xray']
+Heard back slash xray
+ 56:             "\u\u"
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x\x<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y\y"
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x\x"
  60:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y\y"
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x\x"
  60:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash Z.']
-Heard back slash Z.
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y\y"
- 60:             "\z<CURSOR>"
+Saying: ['back slash Y.']
+Heard back slash Y.
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash zulu']
-Heard back slash zulu
- 57:             "\w\w"
- 58:             "\x\x"
- 59:             "\y\y"
- 60:             "\z\z<CURSOR>"
+Saying: ['back slash yankee']
+Heard back slash yankee
+ 57:             "\v\v"
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y\y<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 58:             "\x\x"
- 59:             "\y\y"
- 60:             "\z\z"
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y\y"
  61:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 58:             "\x\x"
- 59:             "\y\y"
- 60:             "\z\z"
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y\y"
  61:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap A.']
-Heard back slash cap A.
- 58:             "\x\x"
- 59:             "\y\y"
- 60:             "\z\z"
- 61:             "\A<CURSOR>"
+Saying: ['back slash Z.']
+Heard back slash Z.
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y\y"
+ 61:             "\z<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap alpha', 'new statement']
-Heard back slash cap alpha new statement
- 59:             "\y\y"
- 60:             "\z\z"
- 61:             "\A\A"
+Saying: ['back slash zulu']
+Heard back slash zulu
+ 58:             "\w\w"
+ 59:             "\x\x"
+ 60:             "\y\y"
+ 61:             "\z\z<CURSOR>"
+
+*** End of source buffer ***
+Saying: ['new statement']
+Heard new statement
+ 59:             "\x\x"
+ 60:             "\y\y"
+ 61:             "\z\z"
  62:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 59:             "\y\y"
- 60:             "\z\z"
- 61:             "\A\A"
+ 59:             "\x\x"
+ 60:             "\y\y"
+ 61:             "\z\z"
  62:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap B.']
-Heard back slash cap B.
- 59:             "\y\y"
- 60:             "\z\z"
- 61:             "\A\A"
- 62:             "\B<CURSOR>"
+Saying: ['back slash cap A.']
+Heard back slash cap A.
+ 59:             "\x\x"
+ 60:             "\y\y"
+ 61:             "\z\z"
+ 62:             "\A<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap bravo', 'new statement']
-Heard back slash cap bravo new statement
- 60:             "\z\z"
- 61:             "\A\A"
- 62:             "\B\B"
+Saying: ['back slash cap alpha', 'new statement']
+Heard back slash cap alpha new statement
+ 60:             "\y\y"
+ 61:             "\z\z"
+ 62:             "\A\A"
  63:             <CURSOR>
-
-*** End of source buffer ***
-Saying: ['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement']
-Heard quotes back slash cap C. back slash cap charlie new statement
- 61:             "\A\A"
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 61:             "\A\A"
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             "<CURSOR>"
+ 60:             "\y\y"
+ 61:             "\z\z"
+ 62:             "\A\A"
+ 63:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap D.']
-Heard back slash cap D.
- 61:             "\A\A"
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             "\D<CURSOR>"
+Saying: ['back slash cap B.']
+Heard back slash cap B.
+ 60:             "\y\y"
+ 61:             "\z\z"
+ 62:             "\A\A"
+ 63:             "\B<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap delta', 'new statement']
-Heard back slash cap delta new statement
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             "\D\D"
+Saying: ['back slash cap bravo', 'new statement']
+Heard back slash cap bravo new statement
+ 61:             "\z\z"
+ 62:             "\A\A"
+ 63:             "\B\B"
+ 64:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement']
+Heard quotes back slash cap C. back slash cap charlie new statement
+ 62:             "\A\A"
+ 63:             "\B\B"
+ 64:             "\C\C"
  65:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             "\D\D"
+ 62:             "\A\A"
+ 63:             "\B\B"
+ 64:             "\C\C"
  65:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap E.']
-Heard back slash cap E.
- 62:             "\B\B"
- 63:             "\C\C"
- 64:             "\D\D"
- 65:             "\E<CURSOR>"
+Saying: ['back slash cap D.']
+Heard back slash cap D.
+ 62:             "\A\A"
+ 63:             "\B\B"
+ 64:             "\C\C"
+ 65:             "\D<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap echo', 'new statement']
-Heard back slash cap echo new statement
- 63:             "\C\C"
- 64:             "\D\D"
- 65:             "\E\E"
+Saying: ['back slash cap delta', 'new statement']
+Heard back slash cap delta new statement
+ 63:             "\B\B"
+ 64:             "\C\C"
+ 65:             "\D\D"
  66:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 63:             "\C\C"
- 64:             "\D\D"
- 65:             "\E\E"
+ 63:             "\B\B"
+ 64:             "\C\C"
+ 65:             "\D\D"
  66:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap F.']
-Heard back slash cap F.
- 63:             "\C\C"
- 64:             "\D\D"
- 65:             "\E\E"
- 66:             "\F<CURSOR>"
+Saying: ['back slash cap E.']
+Heard back slash cap E.
+ 63:             "\B\B"
+ 64:             "\C\C"
+ 65:             "\D\D"
+ 66:             "\E<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap foxtrot', 'new statement']
-Heard back slash cap foxtrot new statement
- 64:             "\D\D"
- 65:             "\E\E"
- 66:             "\F\F"
+Saying: ['back slash cap echo', 'new statement']
+Heard back slash cap echo new statement
+ 64:             "\C\C"
+ 65:             "\D\D"
+ 66:             "\E\E"
  67:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 64:             "\D\D"
- 65:             "\E\E"
- 66:             "\F\F"
+ 64:             "\C\C"
+ 65:             "\D\D"
+ 66:             "\E\E"
  67:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap G.']
-Heard back slash cap G.
- 64:             "\D\D"
- 65:             "\E\E"
- 66:             "\F\F"
- 67:             "\G<CURSOR>"
+Saying: ['back slash cap F.']
+Heard back slash cap F.
+ 64:             "\C\C"
+ 65:             "\D\D"
+ 66:             "\E\E"
+ 67:             "\F<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap golf', 'new statement']
-Heard back slash cap golf new statement
- 65:             "\E\E"
- 66:             "\F\F"
- 67:             "\G\G"
+Saying: ['back slash cap foxtrot', 'new statement']
+Heard back slash cap foxtrot new statement
+ 65:             "\D\D"
+ 66:             "\E\E"
+ 67:             "\F\F"
  68:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 65:             "\E\E"
- 66:             "\F\F"
- 67:             "\G\G"
+ 65:             "\D\D"
+ 66:             "\E\E"
+ 67:             "\F\F"
  68:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap H.']
-Heard back slash cap H.
- 65:             "\E\E"
- 66:             "\F\F"
- 67:             "\G\G"
- 68:             "\H<CURSOR>"
+Saying: ['back slash cap G.']
+Heard back slash cap G.
+ 65:             "\D\D"
+ 66:             "\E\E"
+ 67:             "\F\F"
+ 68:             "\G<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap hotel', 'new statement']
-Heard back slash cap hotel new statement
- 66:             "\F\F"
- 67:             "\G\G"
- 68:             "\H\H"
+Saying: ['back slash cap golf', 'new statement']
+Heard back slash cap golf new statement
+ 66:             "\E\E"
+ 67:             "\F\F"
+ 68:             "\G\G"
  69:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 66:             "\F\F"
- 67:             "\G\G"
- 68:             "\H\H"
+ 66:             "\E\E"
+ 67:             "\F\F"
+ 68:             "\G\G"
  69:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap I.']
-Heard back slash cap I.
- 66:             "\F\F"
- 67:             "\G\G"
- 68:             "\H\H"
- 69:             "\I<CURSOR>"
+Saying: ['back slash cap H.']
+Heard back slash cap H.
+ 66:             "\E\E"
+ 67:             "\F\F"
+ 68:             "\G\G"
+ 69:             "\H<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap india', 'new statement']
-Heard back slash cap india new statement
- 67:             "\G\G"
- 68:             "\H\H"
- 69:             "\I\I"
+Saying: ['back slash cap hotel', 'new statement']
+Heard back slash cap hotel new statement
+ 67:             "\F\F"
+ 68:             "\G\G"
+ 69:             "\H\H"
  70:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 67:             "\G\G"
- 68:             "\H\H"
- 69:             "\I\I"
+ 67:             "\F\F"
+ 68:             "\G\G"
+ 69:             "\H\H"
  70:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap J.']
-Heard back slash cap J.
- 67:             "\G\G"
- 68:             "\H\H"
- 69:             "\I\I"
- 70:             "\J<CURSOR>"
+Saying: ['back slash cap I.']
+Heard back slash cap I.
+ 67:             "\F\F"
+ 68:             "\G\G"
+ 69:             "\H\H"
+ 70:             "\I<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap juliett', 'new statement']
-Heard back slash cap juliett new statement
- 68:             "\H\H"
- 69:             "\I\I"
- 70:             "\J\J"
+Saying: ['back slash cap india', 'new statement']
+Heard back slash cap india new statement
+ 68:             "\G\G"
+ 69:             "\H\H"
+ 70:             "\I\I"
  71:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 68:             "\H\H"
- 69:             "\I\I"
- 70:             "\J\J"
+ 68:             "\G\G"
+ 69:             "\H\H"
+ 70:             "\I\I"
  71:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap K.']
-Heard back slash cap K.
- 68:             "\H\H"
- 69:             "\I\I"
- 70:             "\J\J"
- 71:             "\K<CURSOR>"
+Saying: ['back slash cap J.']
+Heard back slash cap J.
+ 68:             "\G\G"
+ 69:             "\H\H"
+ 70:             "\I\I"
+ 71:             "\J<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap kilo', 'new statement']
-Heard back slash cap kilo new statement
- 69:             "\I\I"
- 70:             "\J\J"
- 71:             "\K\K"
+Saying: ['back slash cap juliett', 'new statement']
+Heard back slash cap juliett new statement
+ 69:             "\H\H"
+ 70:             "\I\I"
+ 71:             "\J\J"
  72:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 69:             "\I\I"
- 70:             "\J\J"
- 71:             "\K\K"
+ 69:             "\H\H"
+ 70:             "\I\I"
+ 71:             "\J\J"
  72:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap L.']
-Heard back slash cap L.
- 69:             "\I\I"
- 70:             "\J\J"
- 71:             "\K\K"
- 72:             "\L<CURSOR>"
+Saying: ['back slash cap K.']
+Heard back slash cap K.
+ 69:             "\H\H"
+ 70:             "\I\I"
+ 71:             "\J\J"
+ 72:             "\K<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap lima', 'new statement']
-Heard back slash cap lima new statement
- 70:             "\J\J"
- 71:             "\K\K"
- 72:             "\L\L"
+Saying: ['back slash cap kilo', 'new statement']
+Heard back slash cap kilo new statement
+ 70:             "\I\I"
+ 71:             "\J\J"
+ 72:             "\K\K"
  73:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 70:             "\J\J"
- 71:             "\K\K"
- 72:             "\L\L"
+ 70:             "\I\I"
+ 71:             "\J\J"
+ 72:             "\K\K"
  73:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap M.']
-Heard back slash cap M.
- 70:             "\J\J"
- 71:             "\K\K"
- 72:             "\L\L"
- 73:             "\M<CURSOR>"
+Saying: ['back slash cap L.']
+Heard back slash cap L.
+ 70:             "\I\I"
+ 71:             "\J\J"
+ 72:             "\K\K"
+ 73:             "\L<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap mike', 'new statement']
-Heard back slash cap mike new statement
- 71:             "\K\K"
- 72:             "\L\L"
- 73:             "\M\M"
+Saying: ['back slash cap lima', 'new statement']
+Heard back slash cap lima new statement
+ 71:             "\J\J"
+ 72:             "\K\K"
+ 73:             "\L\L"
  74:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 71:             "\K\K"
- 72:             "\L\L"
- 73:             "\M\M"
+ 71:             "\J\J"
+ 72:             "\K\K"
+ 73:             "\L\L"
  74:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap N.']
-Heard back slash cap N.
- 71:             "\K\K"
- 72:             "\L\L"
- 73:             "\M\M"
- 74:             "\N<CURSOR>"
+Saying: ['back slash cap M.']
+Heard back slash cap M.
+ 71:             "\J\J"
+ 72:             "\K\K"
+ 73:             "\L\L"
+ 74:             "\M<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap november', 'new statement']
-Heard back slash cap november new statement
- 72:             "\L\L"
- 73:             "\M\M"
- 74:             "\N\N"
+Saying: ['back slash cap mike', 'new statement']
+Heard back slash cap mike new statement
+ 72:             "\K\K"
+ 73:             "\L\L"
+ 74:             "\M\M"
  75:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 72:             "\L\L"
- 73:             "\M\M"
- 74:             "\N\N"
+ 72:             "\K\K"
+ 73:             "\L\L"
+ 74:             "\M\M"
  75:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap O.']
-Heard back slash cap O.
- 72:             "\L\L"
- 73:             "\M\M"
- 74:             "\N\N"
- 75:             "\O<CURSOR>"
+Saying: ['back slash cap N.']
+Heard back slash cap N.
+ 72:             "\K\K"
+ 73:             "\L\L"
+ 74:             "\M\M"
+ 75:             "\N<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap oscar', 'new statement']
-Heard back slash cap oscar new statement
- 73:             "\M\M"
- 74:             "\N\N"
- 75:             "\O\O"
+Saying: ['back slash cap november', 'new statement']
+Heard back slash cap november new statement
+ 73:             "\L\L"
+ 74:             "\M\M"
+ 75:             "\N\N"
  76:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 73:             "\M\M"
- 74:             "\N\N"
- 75:             "\O\O"
+ 73:             "\L\L"
+ 74:             "\M\M"
+ 75:             "\N\N"
  76:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap P.']
-Heard back slash cap P.
- 73:             "\M\M"
- 74:             "\N\N"
- 75:             "\O\O"
- 76:             "\P<CURSOR>"
+Saying: ['back slash cap O.']
+Heard back slash cap O.
+ 73:             "\L\L"
+ 74:             "\M\M"
+ 75:             "\N\N"
+ 76:             "\O<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap papa', 'new statement']
-Heard back slash cap papa new statement
- 74:             "\N\N"
- 75:             "\O\O"
- 76:             "\P\P"
+Saying: ['back slash cap oscar', 'new statement']
+Heard back slash cap oscar new statement
+ 74:             "\M\M"
+ 75:             "\N\N"
+ 76:             "\O\O"
  77:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 74:             "\N\N"
- 75:             "\O\O"
- 76:             "\P\P"
+ 74:             "\M\M"
+ 75:             "\N\N"
+ 76:             "\O\O"
  77:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap Q.']
-Heard back slash cap Q.
- 74:             "\N\N"
- 75:             "\O\O"
- 76:             "\P\P"
- 77:             "\Q<CURSOR>"
+Saying: ['back slash cap P.']
+Heard back slash cap P.
+ 74:             "\M\M"
+ 75:             "\N\N"
+ 76:             "\O\O"
+ 77:             "\P<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap quebec', 'new statement']
-Heard back slash cap quebec new statement
- 75:             "\O\O"
- 76:             "\P\P"
- 77:             "\Q\Q"
+Saying: ['back slash cap papa', 'new statement']
+Heard back slash cap papa new statement
+ 75:             "\N\N"
+ 76:             "\O\O"
+ 77:             "\P\P"
  78:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 75:             "\O\O"
- 76:             "\P\P"
- 77:             "\Q\Q"
+ 75:             "\N\N"
+ 76:             "\O\O"
+ 77:             "\P\P"
  78:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap R.']
-Heard back slash cap R.
- 75:             "\O\O"
- 76:             "\P\P"
- 77:             "\Q\Q"
- 78:             "\R<CURSOR>"
+Saying: ['back slash cap Q.']
+Heard back slash cap Q.
+ 75:             "\N\N"
+ 76:             "\O\O"
+ 77:             "\P\P"
+ 78:             "\Q<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap romeo', 'new statement']
-Heard back slash cap romeo new statement
- 76:             "\P\P"
- 77:             "\Q\Q"
- 78:             "\R\R"
+Saying: ['back slash cap quebec', 'new statement']
+Heard back slash cap quebec new statement
+ 76:             "\O\O"
+ 77:             "\P\P"
+ 78:             "\Q\Q"
  79:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 76:             "\P\P"
- 77:             "\Q\Q"
- 78:             "\R\R"
+ 76:             "\O\O"
+ 77:             "\P\P"
+ 78:             "\Q\Q"
  79:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap S.']
-Heard back slash cap S.
- 76:             "\P\P"
- 77:             "\Q\Q"
- 78:             "\R\R"
- 79:             "\S<CURSOR>"
+Saying: ['back slash cap R.']
+Heard back slash cap R.
+ 76:             "\O\O"
+ 77:             "\P\P"
+ 78:             "\Q\Q"
+ 79:             "\R<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap sierra', 'new statement']
-Heard back slash cap sierra new statement
- 77:             "\Q\Q"
- 78:             "\R\R"
- 79:             "\S\S"
+Saying: ['back slash cap romeo', 'new statement']
+Heard back slash cap romeo new statement
+ 77:             "\P\P"
+ 78:             "\Q\Q"
+ 79:             "\R\R"
  80:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 77:             "\Q\Q"
- 78:             "\R\R"
- 79:             "\S\S"
+ 77:             "\P\P"
+ 78:             "\Q\Q"
+ 79:             "\R\R"
  80:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap T.']
-Heard back slash cap T.
- 77:             "\Q\Q"
- 78:             "\R\R"
- 79:             "\S\S"
- 80:             "\T<CURSOR>"
+Saying: ['back slash cap S.']
+Heard back slash cap S.
+ 77:             "\P\P"
+ 78:             "\Q\Q"
+ 79:             "\R\R"
+ 80:             "\S<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap tango', 'new statement']
-Heard back slash cap tango new statement
- 78:             "\R\R"
- 79:             "\S\S"
- 80:             "\T\T"
+Saying: ['back slash cap sierra', 'new statement']
+Heard back slash cap sierra new statement
+ 78:             "\Q\Q"
+ 79:             "\R\R"
+ 80:             "\S\S"
  81:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 78:             "\R\R"
- 79:             "\S\S"
- 80:             "\T\T"
+ 78:             "\Q\Q"
+ 79:             "\R\R"
+ 80:             "\S\S"
  81:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap U.']
-Heard back slash cap U.
- 78:             "\R\R"
- 79:             "\S\S"
- 80:             "\T\T"
- 81:             "\U<CURSOR>"
+Saying: ['back slash cap T.']
+Heard back slash cap T.
+ 78:             "\Q\Q"
+ 79:             "\R\R"
+ 80:             "\S\S"
+ 81:             "\T<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap uniform', 'new statement']
-Heard back slash cap uniform new statement
- 79:             "\S\S"
- 80:             "\T\T"
- 81:             "\U\U"
+Saying: ['back slash cap tango', 'new statement']
+Heard back slash cap tango new statement
+ 79:             "\R\R"
+ 80:             "\S\S"
+ 81:             "\T\T"
  82:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 79:             "\S\S"
- 80:             "\T\T"
- 81:             "\U\U"
+ 79:             "\R\R"
+ 80:             "\S\S"
+ 81:             "\T\T"
  82:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap V.']
-Heard back slash cap V.
- 79:             "\S\S"
- 80:             "\T\T"
- 81:             "\U\U"
- 82:             "\V<CURSOR>"
+Saying: ['back slash cap U.']
+Heard back slash cap U.
+ 79:             "\R\R"
+ 80:             "\S\S"
+ 81:             "\T\T"
+ 82:             "\U<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap victor', 'new statement']
-Heard back slash cap victor new statement
- 80:             "\T\T"
- 81:             "\U\U"
- 82:             "\V\V"
+Saying: ['back slash cap uniform', 'new statement']
+Heard back slash cap uniform new statement
+ 80:             "\S\S"
+ 81:             "\T\T"
+ 82:             "\U\U"
  83:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 80:             "\T\T"
- 81:             "\U\U"
- 82:             "\V\V"
+ 80:             "\S\S"
+ 81:             "\T\T"
+ 82:             "\U\U"
  83:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap W.']
-Heard back slash cap W.
- 80:             "\T\T"
- 81:             "\U\U"
- 82:             "\V\V"
- 83:             "\W<CURSOR>"
+Saying: ['back slash cap V.']
+Heard back slash cap V.
+ 80:             "\S\S"
+ 81:             "\T\T"
+ 82:             "\U\U"
+ 83:             "\V<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap whiskey', 'new statement']
-Heard back slash cap whiskey new statement
- 81:             "\U\U"
- 82:             "\V\V"
- 83:             "\W\W"
+Saying: ['back slash cap victor', 'new statement']
+Heard back slash cap victor new statement
+ 81:             "\T\T"
+ 82:             "\U\U"
+ 83:             "\V\V"
  84:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 81:             "\U\U"
- 82:             "\V\V"
- 83:             "\W\W"
+ 81:             "\T\T"
+ 82:             "\U\U"
+ 83:             "\V\V"
  84:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap X.']
-Heard back slash cap X.
- 81:             "\U\U"
- 82:             "\V\V"
- 83:             "\W\W"
- 84:             "\X<CURSOR>"
+Saying: ['back slash cap W.']
+Heard back slash cap W.
+ 81:             "\T\T"
+ 82:             "\U\U"
+ 83:             "\V\V"
+ 84:             "\W<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap xray', 'new statement']
-Heard back slash cap xray new statement
- 82:             "\V\V"
- 83:             "\W\W"
- 84:             "\X\X"
+Saying: ['back slash cap whiskey', 'new statement']
+Heard back slash cap whiskey new statement
+ 82:             "\U\U"
+ 83:             "\V\V"
+ 84:             "\W\W"
  85:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 82:             "\V\V"
- 83:             "\W\W"
- 84:             "\X\X"
+ 82:             "\U\U"
+ 83:             "\V\V"
+ 84:             "\W\W"
  85:             "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap Y.']
-Heard back slash cap Y.
- 82:             "\V\V"
- 83:             "\W\W"
- 84:             "\X\X"
- 85:             "\Y<CURSOR>"
+Saying: ['back slash cap X.']
+Heard back slash cap X.
+ 82:             "\U\U"
+ 83:             "\V\V"
+ 84:             "\W\W"
+ 85:             "\X<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['back slash cap yankee', 'new statement']
-Heard back slash cap yankee new statement
- 83:             "\W\W"
- 84:             "\X\X"
- 85:             "\Y\Y"
+Saying: ['back slash cap xray', 'new statement']
+Heard back slash cap xray new statement
+ 83:             "\V\V"
+ 84:             "\W\W"
+ 85:             "\X\X"
  86:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 83:             "\W\W"
- 84:             "\X\X"
- 85:             "\Y\Y"
+ 83:             "\V\V"
+ 84:             "\W\W"
+ 85:             "\X\X"
  86:             "<CURSOR>"
+
+*** End of source buffer ***
+Saying: ['back slash cap Y.']
+Heard back slash cap Y.
+ 83:             "\V\V"
+ 84:             "\W\W"
+ 85:             "\X\X"
+ 86:             "\Y<CURSOR>"
+
+*** End of source buffer ***
+Saying: ['back slash cap yankee', 'new statement']
+Heard back slash cap yankee new statement
+ 84:             "\W\W"
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['quotes']
+Heard quotes
+ 84:             "\W\W"
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back slash cap Z.']
 Heard back slash cap Z.
- 83:             "\W\W"
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z<CURSOR>"
+ 84:             "\W\W"
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back slash cap zulu', 'new statement']
 Heard back slash cap zulu new statement
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             <CURSOR>
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['index', 'semi', 'variable', 'semi']
 Heard index semi variable semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable; <CURSOR>
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous semi', 'previous semi']
 Heard previous semi previous semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; <CURSOR>variable; 
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; <CURSOR>variable; 
 
 *** End of source buffer ***
 Saying: ['after semi']
 Heard after semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable; <CURSOR>
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous semi']
 Heard before previous semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable<CURSOR>; 
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable<CURSOR>; 
 
 *** End of source buffer ***
 Saying: ['after semi']
 Heard after semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable; <CURSOR>
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before semi']
 Heard before semi
- 84:             "\X\X"
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable; <CURSOR>
+ 85:             "\X\X"
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             <CURSOR>
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', 'brackets', '0\\zero', ',\\comma', '1\\one', ',\\comma', '3\\three']
 Heard variable equals brackets zero comma one comma three
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3<CURSOR>]
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['previous comma']
 Heard previous comma
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, <CURSOR>3]
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
 Saying: ['after comma']
 Heard after comma
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, <CURSOR>3]
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
 Saying: ['before previous comma']
 Heard before previous comma
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1<CURSOR>, 3]
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['before next comma']
 Heard before next comma
- 85:             "\Y\Y"
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1<CURSOR>, 3]
+ 86:             "\Y\Y"
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             <CURSOR>
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
 Heard variable dot field dot value
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value<CURSOR>
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous dot', 'previous dot']
 Heard previous dot previous dot
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.<CURSOR>field.value
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.<CURSOR>field.value
 
 *** End of source buffer ***
 Saying: ['after dot']
 Heard after dot
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.<CURSOR>value
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.<CURSOR>value
 
 *** End of source buffer ***
 Saying: ['before previous dot']
 Heard before previous dot
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field<CURSOR>.value
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field<CURSOR>.value
 
 *** End of source buffer ***
 Saying: ['before next dot']
 Heard before next dot
- 86:             "\Z\Z"
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field<CURSOR>.value
+ 87:             "\Z\Z"
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field<CURSOR>.value
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             <CURSOR>
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['braces', 'variable', ':\\colon', '0\\zero', 'comma', 'value', ':\\colon', '0\\zero']
 Heard braces variable colon zero comma value colon zero
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0<CURSOR>}
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
 Heard previous colon previous colon
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: <CURSOR>0, value: 0}
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: <CURSOR>0, value: 0}
 
 *** End of source buffer ***
 Saying: ['after colon']
 Heard after colon
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: <CURSOR>0}
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: <CURSOR>0}
 
 *** End of source buffer ***
 Saying: ['before previous colon']
 Heard before previous colon
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value<CURSOR>: 0}
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['before next colon']
 Heard before next colon
- 87:             index; variable;
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value<CURSOR>: 0}
+ 88:             index; variable;
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             <CURSOR>
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', '2\\two', '*\\asterisk', '3\\three', '*\\asterisk', '4\\four']
 Heard variable equals two asterisk three asterisk four
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4<CURSOR>
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous asterisk', 'previous star']
 Heard previous asterisk previous star
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*<CURSOR>3*4
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*<CURSOR>3*4
 
 *** End of source buffer ***
 Saying: ['after star']
 Heard after star
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*<CURSOR>4
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous asterisk']
 Heard before previous asterisk
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3<CURSOR>*4
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['before next star']
 Heard before next star
- 88:             variable = [0, 1, 3]
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3<CURSOR>*4
+ 89:             variable = [0, 1, 3]
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             <CURSOR>
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2\\two', '/\\slash', '3\\three', '/\\slash', '4\\four']
 Heard variable equals two slash three slash four
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4<CURSOR>
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous slash', 'previous slash']
 Heard previous slash previous slash
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/<CURSOR>3/4
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/<CURSOR>3/4
 
 *** End of source buffer ***
 Saying: ['after slash']
 Heard after slash
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/<CURSOR>4
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/<CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous slash']
 Heard before previous slash
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3<CURSOR>/4
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
 Saying: ['before next slash']
 Heard before next slash
- 89:             variable.field.value
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3<CURSOR>/4
+ 90:             variable.field.value
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             <CURSOR>
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', '2\\two', '+\\plus', '3\\three', '+\\plus', '4\\four']
 Heard variable equals two plus three plus four
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4<CURSOR>
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous plus', 'previous plus']
 Heard previous plus previous plus
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + <CURSOR>3 + 4
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + <CURSOR>3 + 4
 
 *** End of source buffer ***
 Saying: ['after plus']
 Heard after plus
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + <CURSOR>4
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + <CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous plus']
 Heard before previous plus
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3<CURSOR> + 4
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3<CURSOR> + 4
 
 *** End of source buffer ***
 Saying: ['before next plus']
 Heard before next plus
- 90:             {variable: 0, value: 0}
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3<CURSOR> + 4
+ 91:             {variable: 0, value: 0}
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3<CURSOR> + 4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             <CURSOR>
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2\\two', '-\\minus', '3\\three', '-\\minus', '4\\four']
 Heard variable equals two minus three minus four
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4<CURSOR>
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous minus', 'previous minus']
 Heard previous minus previous minus
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - <CURSOR>3 - 4
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - <CURSOR>3 - 4
 
 *** End of source buffer ***
 Saying: ['after minus']
 Heard after minus
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - <CURSOR>4
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - <CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous minus']
 Heard before previous minus
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3<CURSOR> - 4
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3<CURSOR> - 4
 
 *** End of source buffer ***
 Saying: ['before next minus']
 Heard before next minus
- 91:             variable = 2*3*4
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3<CURSOR> - 4
+ 92:             variable = 2*3*4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3<CURSOR> - 4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             <CURSOR>
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2\\two', '%\\modulo', '3\\three', '%\\modulo', '4\\four']
 Heard variable equals two modulo three modulo four
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4<CURSOR>
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous percent', 'previous percent']
 Heard previous percent previous percent
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % <CURSOR>3 % 4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % <CURSOR>3 % 4
 
 *** End of source buffer ***
 Saying: ['after percent']
 Heard after percent
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % <CURSOR>4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % <CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous percent']
 Heard before previous percent
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3<CURSOR> % 4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3<CURSOR> % 4
 
 *** End of source buffer ***
 Saying: ['before next percent']
 Heard before next percent
- 92:             variable = 2/3/4
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3<CURSOR> % 4
+ 93:             variable = 2/3/4
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3<CURSOR> % 4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             <CURSOR>
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '&\\ampersand', '1\\one', '&\\ampersand', '2\\two']
 Heard zero ampersand one ampersand two
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2<CURSOR>
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous ampersand', 'previous ampersand']
 Heard previous ampersand previous ampersand
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&<CURSOR>1&2
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&<CURSOR>1&2
 
 *** End of source buffer ***
 Saying: ['after ampersand']
 Heard after ampersand
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&<CURSOR>2
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous ampersand']
 Heard before previous ampersand
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1<CURSOR>&2
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1<CURSOR>&2
 
 *** End of source buffer ***
 Saying: ['before next ampersand']
 Heard before next ampersand
- 93:             variable = 2 + 3 + 4
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1<CURSOR>&2
+ 94:             variable = 2 + 3 + 4
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1<CURSOR>&2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             <CURSOR>
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '|\\pipe', '1\\one', '|\\pipe', '2\\two']
 Heard zero pipe one pipe two
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2<CURSOR>
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous pipe', 'previous pipe']
 Heard previous pipe previous pipe
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|<CURSOR>1|2
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|<CURSOR>1|2
 
 *** End of source buffer ***
 Saying: ['after pipe']
 Heard after pipe
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|<CURSOR>2
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous pipe']
 Heard before previous pipe
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1<CURSOR>|2
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1<CURSOR>|2
 
 *** End of source buffer ***
 Saying: ['before next pipe']
 Heard before next pipe
- 94:             variable = 2 - 3 - 4
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1<CURSOR>|2
+ 95:             variable = 2 - 3 - 4
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1<CURSOR>|2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             <CURSOR>
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '...\\ellipsis', '1\\one', '...\\ellipsis', '2\\two']
 Heard zero ellipsis one ellipsis two
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2<CURSOR>
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous ellipsis', 'previous ellipsis']
 Heard previous ellipsis previous ellipsis
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...<CURSOR>1...2
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...<CURSOR>1...2
 
 *** End of source buffer ***
 Saying: ['after ellipsis']
 Heard after ellipsis
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...<CURSOR>2
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous ellipsis']
 Heard before previous ellipsis
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1<CURSOR>...2
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1<CURSOR>...2
 
 *** End of source buffer ***
 Saying: ['before next ellipsis']
 Heard before next ellipsis
- 95:             variable = 2 % 3 % 4
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1<CURSOR>...2
+ 96:             variable = 2 % 3 % 4
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1<CURSOR>...2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             <CURSOR>
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '!\\bang', '1\\one', '!\\bang', '2\\two']
 Heard zero bang one bang two
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2<CURSOR>
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous bang', 'previous bang']
 Heard previous bang previous bang
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!<CURSOR>1!2
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!<CURSOR>1!2
 
 *** End of source buffer ***
 Saying: ['after bang']
 Heard after bang
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!<CURSOR>2
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous bang']
 Heard before previous bang
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1<CURSOR>!2
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1<CURSOR>!2
 
 *** End of source buffer ***
 Saying: ['before next bang']
 Heard before next bang
- 96:             0&1&2
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1<CURSOR>!2
+ 97:             0&1&2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1<CURSOR>!2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             <CURSOR>
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '?\\question-mark', '1\\one', '?\\question-mark', '2\\two']
 Heard zero question-mark one question-mark two
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2<CURSOR>
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous question-mark', 'previous question-mark']
 Heard previous question-mark previous question-mark
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             0?<CURSOR>1?2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?<CURSOR>1?2
 
 *** End of source buffer ***
 Saying: ['after question-mark']
 Heard after question-mark
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?<CURSOR>2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous question-mark']
 Heard before previous question-mark
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1<CURSOR>?2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1<CURSOR>?2
 
 *** End of source buffer ***
 Saying: ['before next question-mark']
 Heard before next question-mark
- 97:             0|1|2
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1<CURSOR>?2
+ 98:             0|1|2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1<CURSOR>?2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             <CURSOR>
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '#\\pound-sign', '1\\one', '#\\pound-sign', '2\\two']
 Heard zero pound-sign one pound-sign two
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2<CURSOR>
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous pound-sign', 'previous pound-sign']
 Heard previous pound-sign previous pound-sign
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             0#<CURSOR>1#2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             0#<CURSOR>1#2
 
 *** End of source buffer ***
 Saying: ['after pound-sign']
 Heard after pound-sign
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#<CURSOR>2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous pound-sign']
 Heard before previous pound-sign
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             0#1<CURSOR>#2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             0#1<CURSOR>#2
 
 *** End of source buffer ***
 Saying: ['before next pound-sign']
 Heard before next pound-sign
- 98:             0...1...2
- 99:             0!1!2
-100:             0?1?2
-101:             0#1<CURSOR>#2
+ 99:             0...1...2
+100:             0!1!2
+101:             0?1?2
+102:             0#1<CURSOR>#2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             <CURSOR>
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '::\\double colon', '1\\one', '::\\double colon', '2\\two']
 Heard zero double colon one double colon two
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2<CURSOR>
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous double colon', 'previous double colon']
 Heard previous double colon previous double colon
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             0::<CURSOR>1::2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             0::<CURSOR>1::2
 
 *** End of source buffer ***
 Saying: ['after double colon']
 Heard after double colon
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             0::1::<CURSOR>2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous double colon']
 Heard before previous double colon
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             0::1<CURSOR>::2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             0::1<CURSOR>::2
 
 *** End of source buffer ***
 Saying: ['before next double colon']
 Heard before next double colon
- 99:             0!1!2
-100:             0?1?2
-101:             0#1#2
-102:             0::1<CURSOR>::2
+100:             0!1!2
+101:             0?1?2
+102:             0#1#2
+103:             0::1<CURSOR>::2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             <CURSOR>
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '~\\tilde', '1\\one', '~\\tilde', '2\\two']
 Heard zero tilde one tilde two
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2<CURSOR>
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous tilde', 'previous tilde']
 Heard previous tilde previous tilde
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             0~<CURSOR>1~2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             0~<CURSOR>1~2
 
 *** End of source buffer ***
 Saying: ['after tilde']
 Heard after tilde
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             0~1~<CURSOR>2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous tilde']
 Heard before previous tilde
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             0~1<CURSOR>~2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             0~1<CURSOR>~2
 
 *** End of source buffer ***
 Saying: ['before next tilde']
 Heard before next tilde
-100:             0?1?2
-101:             0#1#2
-102:             0::1::2
-103:             0~1<CURSOR>~2
+101:             0?1?2
+102:             0#1#2
+103:             0::1::2
+104:             0~1<CURSOR>~2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             <CURSOR>
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two']
 Heard zero less-than one less-than two
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2<CURSOR>
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous less-than', 'previous less-than']
 Heard previous less-than previous less-than
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             0 < <CURSOR>1 < 2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             0 < <CURSOR>1 < 2
 
 *** End of source buffer ***
 Saying: ['after less-than']
 Heard after less-than
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < <CURSOR>2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < <CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous less-than']
 Heard before previous less-than
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1<CURSOR> < 2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1<CURSOR> < 2
 
 *** End of source buffer ***
 Saying: ['before next less-than']
 Heard before next less-than
-101:             0#1#2
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1<CURSOR> < 2
+102:             0#1#2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1<CURSOR> < 2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             <CURSOR>
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two']
 Heard zero greater-than one greater-than two
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2<CURSOR>
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous greater-than', 'previous greater-than']
 Heard previous greater-than previous greater-than
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > <CURSOR>1 > 2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > <CURSOR>1 > 2
 
 *** End of source buffer ***
 Saying: ['after greater-than']
 Heard after greater-than
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > <CURSOR>2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > <CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous greater-than']
 Heard before previous greater-than
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1<CURSOR> > 2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1<CURSOR> > 2
 
 *** End of source buffer ***
 Saying: ['before next greater-than']
 Heard before next greater-than
-102:             0::1::2
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1<CURSOR> > 2
+103:             0::1::2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1<CURSOR> > 2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             <CURSOR>
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['0\\zero', '=\\equal-sign', '1\\one', '=\\equal-sign', '2\\two']
 Heard zero equal-sign one equal-sign two
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2<CURSOR>
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous equal-sign', 'previous equal-sign']
 Heard previous equal-sign previous equal-sign
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=<CURSOR>1=2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=<CURSOR>1=2
 
 *** End of source buffer ***
 Saying: ['after equal-sign']
 Heard after equal-sign
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=<CURSOR>2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=<CURSOR>2
 
 *** End of source buffer ***
 Saying: ['before previous equal-sign']
 Heard before previous equal-sign
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1<CURSOR>=2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1<CURSOR>=2
 
 *** End of source buffer ***
 Saying: ['before next equal-sign']
 Heard before next equal-sign
-103:             0~1~2
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1<CURSOR>=2
+104:             0~1~2
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1<CURSOR>=2
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             <CURSOR>
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between parens', '1\\one']
 Heard between parens one
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1<CURSOR>)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['before previous paren']
 Heard before previous paren
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:            <CURSOR> (1)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:            <CURSOR> (1)
 
 *** End of source buffer ***
 Saying: ['after paren']
 Heard after paren
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (<CURSOR>1)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (<CURSOR>1)
 
 *** End of source buffer ***
 Saying: ['before paren']
 Heard before paren
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1<CURSOR>)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['previous paren']
 Heard previous paren
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (<CURSOR>1)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (<CURSOR>1)
 
 *** End of source buffer ***
 Saying: ['out of parens']
 Heard out of parens
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)<CURSOR>
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous paren']
 Heard before previous paren
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1<CURSOR>)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['back out of parens']
 Heard back out of parens
-104:             0 < 1 < 2
-105:             0 > 1 > 2
-106:             0=1=2
-107:            <CURSOR> (1)
+105:             0 < 1 < 2
+106:             0 > 1 > 2
+107:             0=1=2
+108:            <CURSOR> (1)
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             <CURSOR>
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between brackets', '1\\one']
 Heard between brackets one
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [1<CURSOR>]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
 Heard before previous bracket
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:            <CURSOR> [1]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:            <CURSOR> [1]
 
 *** End of source buffer ***
 Saying: ['after bracket']
 Heard after bracket
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [<CURSOR>1]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['before bracket']
 Heard before bracket
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [1<CURSOR>]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['previous bracket']
 Heard previous bracket
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [<CURSOR>1]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['out of brackets']
 Heard out of brackets
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [1]<CURSOR>
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [1]<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
 Heard before previous bracket
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:             [1<CURSOR>]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:             [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['back out of brackets']
 Heard back out of brackets
-105:             0 > 1 > 2
-106:             0=1=2
-107:             (1)
-108:            <CURSOR> [1]
+106:             0 > 1 > 2
+107:             0=1=2
+108:             (1)
+109:            <CURSOR> [1]
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             <CURSOR>
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between braces', '1\\one']
 Heard between braces one
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {1<CURSOR>}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['before previous brace']
 Heard before previous brace
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:            <CURSOR> {1}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:            <CURSOR> {1}
 
 *** End of source buffer ***
 Saying: ['after brace']
 Heard after brace
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {<CURSOR>1}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['before brace']
 Heard before brace
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {1<CURSOR>}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['previous brace']
 Heard previous brace
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {<CURSOR>1}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['out of braces']
 Heard out of braces
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {1}<CURSOR>
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {1}<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous brace']
 Heard before previous brace
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:             {1<CURSOR>}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:             {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['back out of braces']
 Heard back out of braces
-106:             0=1=2
-107:             (1)
-108:             [1]
-109:            <CURSOR> {1}
+107:             0=1=2
+108:             (1)
+109:             [1]
+110:            <CURSOR> {1}
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <CURSOR>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between angles', '1\\one']
 Heard between angles one
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <1<CURSOR>>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['before previous angle']
 Heard before previous angle
-107:             (1)
-108:             [1]
-109:             {1}
-110:            <CURSOR> <1>
+108:             (1)
+109:             [1]
+110:             {1}
+111:            <CURSOR> <1>
 
 *** End of source buffer ***
 Saying: ['after angle']
 Heard after angle
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <<CURSOR>1>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <<CURSOR>1>
 
 *** End of source buffer ***
 Saying: ['before angle']
 Heard before angle
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <1<CURSOR>>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['previous angle']
 Heard previous angle
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <<CURSOR>1>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <<CURSOR>1>
 
 *** End of source buffer ***
 Saying: ['out of angles']
 Heard out of angles
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <1><CURSOR>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <1><CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous angle']
 Heard before previous angle
-107:             (1)
-108:             [1]
-109:             {1}
-110:             <1<CURSOR>>
+108:             (1)
+109:             [1]
+110:             {1}
+111:             <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['back out of angles']
 Heard back out of angles
-107:             (1)
-108:             [1]
-109:             {1}
-110:            <CURSOR> <1>
+108:             (1)
+109:             [1]
+110:             {1}
+111:            <CURSOR> <1>
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-108:             [1]
-109:             {1}
-110:             <1>
-111:             <CURSOR>
+109:             [1]
+110:             {1}
+111:             <1>
+112:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between single-quotes', '1\\one']
 Heard between single-quotes one
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '1<CURSOR>'
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['before previous single-quote']
 Heard before previous single-quote
-108:             [1]
-109:             {1}
-110:             <1>
-111:            <CURSOR> '1'
+109:             [1]
+110:             {1}
+111:             <1>
+112:            <CURSOR> '1'
 
 *** End of source buffer ***
 Saying: ['after single-quote']
 Heard after single-quote
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '<CURSOR>1'
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '<CURSOR>1'
 
 *** End of source buffer ***
 Saying: ['before single-quote']
 Heard before single-quote
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '1<CURSOR>'
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['previous single-quote']
 Heard previous single-quote
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '<CURSOR>1'
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '<CURSOR>1'
 
 *** End of source buffer ***
 Saying: ['out of single-quotes']
 Heard out of single-quotes
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '1'<CURSOR>
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '1'<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous single-quote']
 Heard before previous single-quote
-108:             [1]
-109:             {1}
-110:             <1>
-111:             '1<CURSOR>'
+109:             [1]
+110:             {1}
+111:             <1>
+112:             '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['back out of single-quotes']
 Heard back out of single-quotes
-108:             [1]
-109:             {1}
-110:             <1>
-111:            <CURSOR> '1'
+109:             [1]
+110:             {1}
+111:             <1>
+112:            <CURSOR> '1'
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-109:             {1}
-110:             <1>
-111:             '1'
-112:             <CURSOR>
+110:             {1}
+111:             <1>
+112:             '1'
+113:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between quotes', '1\\one']
 Heard between quotes one
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "1<CURSOR>"
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['before previous quote']
 Heard before previous quote
-109:             {1}
-110:             <1>
-111:             '1'
-112:            <CURSOR> "1"
+110:             {1}
+111:             <1>
+112:             '1'
+113:            <CURSOR> "1"
 
 *** End of source buffer ***
 Saying: ['after quote']
 Heard after quote
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "<CURSOR>1"
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "<CURSOR>1"
 
 *** End of source buffer ***
 Saying: ['before quote']
 Heard before quote
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "1<CURSOR>"
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['previous quote']
 Heard previous quote
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "<CURSOR>1"
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "<CURSOR>1"
 
 *** End of source buffer ***
 Saying: ['out of quotes']
 Heard out of quotes
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "1"<CURSOR>
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "1"<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous quote']
 Heard before previous quote
-109:             {1}
-110:             <1>
-111:             '1'
-112:             "1<CURSOR>"
+110:             {1}
+111:             <1>
+112:             '1'
+113:             "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back out of quotes']
 Heard back out of quotes
-109:             {1}
-110:             <1>
-111:             '1'
-112:            <CURSOR> "1"
+110:             {1}
+111:             <1>
+112:             '1'
+113:            <CURSOR> "1"
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-110:             <1>
-111:             '1'
-112:             "1"
-113:             <CURSOR>
+111:             <1>
+112:             '1'
+113:             "1"
+114:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between backquotes', '1\\one']
 Heard between backquotes one
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `1<CURSOR>`
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['before previous backquote']
 Heard before previous backquote
-110:             <1>
-111:             '1'
-112:             "1"
-113:            <CURSOR> `1`
+111:             <1>
+112:             '1'
+113:             "1"
+114:            <CURSOR> `1`
 
 *** End of source buffer ***
 Saying: ['after backquote']
 Heard after backquote
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `<CURSOR>1`
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `<CURSOR>1`
 
 *** End of source buffer ***
 Saying: ['before backquote']
 Heard before backquote
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `1<CURSOR>`
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['previous backquote']
 Heard previous backquote
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `<CURSOR>1`
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `<CURSOR>1`
 
 *** End of source buffer ***
 Saying: ['out of backquotes']
 Heard out of backquotes
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `1`<CURSOR>
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `1`<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous backquote']
 Heard before previous backquote
-110:             <1>
-111:             '1'
-112:             "1"
-113:             `1<CURSOR>`
+111:             <1>
+112:             '1'
+113:             "1"
+114:             `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['back out of backquotes']
 Heard back out of backquotes
-110:             <1>
-111:             '1'
-112:             "1"
-113:            <CURSOR> `1`
+111:             <1>
+112:             '1'
+113:             "1"
+114:            <CURSOR> `1`
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-111:             '1'
-112:             "1"
-113:             `1`
-114:             <CURSOR>
+112:             '1'
+113:             "1"
+114:             `1`
+115:             <CURSOR>
 
 *** End of source buffer ***
 
@@ -9505,13 +9515,14 @@ emacs(0)
 
 new window 20
 new buffer fish.C for instance 1
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 
 instance emacs(0)
 running in module emacs
@@ -9786,12 +9797,15 @@ with window 15
 SelectWinGramDummy for buffer None, window 15
 init
 new buffer dog.pl for instance 10
+ 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
+
+*** End of source buffer ***
 
 instance Vim(0)
 running in module exceed
@@ -10171,13 +10185,14 @@ emacs(0)
 
 new window 20
 new buffer fish.C for instance 1
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
-  8:   this_sym_is_unres = 0;
 
 instance emacs(0)
 running in module emacs
@@ -10457,12 +10472,15 @@ with window 15
 SelectWinGramDummy for buffer None, window 15
 init
 new buffer dog.pl for instance 10
+ 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
+
+*** End of source buffer ***
 
 instance Vim(0)
 running in module exceed
@@ -11818,5 +11836,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1416.727 secs
+Test suite completed in:  1521.59799993 secs
 -----------------------------------------------

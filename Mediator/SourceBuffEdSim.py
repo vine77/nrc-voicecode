@@ -217,7 +217,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
     def len(self):
         return len(self.content)
 
-    def beginning_of_line(self, pos):
+    def beginning_of_line(self, pos = None):
         """Returns the position of the beginning of line at position *pos*
         
         **INPUTS**
@@ -232,7 +232,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
         return self.line_srv.beginning_of_line(pos)
 
 
-    def end_of_line(self, pos):
+    def end_of_line(self, pos = None):
         """Returns the position of the end of line at position *pos*
         
         **INPUTS**
@@ -444,7 +444,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
         *none* -- 
         """
         
-        return ['\n']
+        return ['\n', '\r\n']
 
 
     def pref_newline_convention(self):

@@ -335,7 +335,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         response = self.app.talk_msgr.get_mess(expect=['pref_newline_convention_resp'])
         return response[1]['value']
 
-    def beginning_of_line(self, pos):
+    def beginning_of_line(self, pos = None):
         """Returns the position of the beginning of line at position *pos*
         
         **INPUTS**
@@ -356,7 +356,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         
 
 
-    def end_of_line(self, pos):
+    def end_of_line(self, pos = None):
         """Returns the position of the end of line at position *pos*
         
         **INPUTS**

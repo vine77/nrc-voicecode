@@ -314,12 +314,13 @@ class SB_ServiceLineManip(SB_Service):
         return result
 
 
-    def beginning_of_line(self, pos):
+    def beginning_of_line(self, pos = None):
         """Returns the position of the beginning of line at position *pos*
         
         **INPUTS**
         
-        *INT* pos -- Position for which we want to know the beginning of line.
+        *INT* pos -- Position for which we want to know the beginning of
+        line, or None for the current line.
         
 
         **OUTPUTS**
@@ -329,6 +330,8 @@ class SB_ServiceLineManip(SB_Service):
 
 #        print '-- SB_ServiceLineManip.beginning_of_line: pos=%s' % pos
         
+        if pos is None:
+            pos = self.buff.cur_pos()
         contents = self.buff.contents()        
         from_pos = 0
         regexp = re.compile(self.buff.newline_regexp())
@@ -346,7 +349,7 @@ class SB_ServiceLineManip(SB_Service):
                 dist = pos - a_match.end()
                 if dist < 0:
                     break
-                if closest == None or (dist < closest_dist):
+                if dist < closest_dist:
                     closest = a_match.end()
                     closest_dist = dist
                 from_pos = a_match.end()
@@ -360,12 +363,13 @@ class SB_ServiceLineManip(SB_Service):
             
         return closest
 
-    def end_of_line(self, pos):
+    def end_of_line(self, pos = None):
         """Returns the position of the end of line at position *pos*
         
         **INPUTS**
         
-        *INT* pos -- Position for which we want to know the end of line.
+        *INT* pos -- Position for which we want to know the end of
+        line, or None for the current line.
         
 
         **OUTPUTS**
@@ -373,8 +377,14 @@ class SB_ServiceLineManip(SB_Service):
         *INT* end_pos -- Position of the end of the line
         """
 
+#        print 'pos ', pos
+        if pos is None:
+            pos = self.buff.cur_pos()
+#        print 'pos ', pos
         contents = self.buff.contents()
-        a_match = re.find(self.newline_regexp(), contents, pos)
+        regexp = re.compile('$|(%s)' % self.buff.newline_regexp())
+        a_match = regexp.search(contents, pos)
+#        print 'a_match ', repr(a_match), a_match.group(0)
         return a_match.start()
 
     def goto_line(self, linenum, where=-1):

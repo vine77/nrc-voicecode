@@ -1323,6 +1323,10 @@ def test_punctuation():
     commands.say(['angle brackets', 'head', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['<>\\empty angles', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+
+    commands.say(['pattern', 'equals', 'raw', 'string', 'single', 'quotes',
+        'back slash sierra', 'asterisk', 'back slash cap sierra', 
+        '+\\plus-sign', 'new statement'], echo_utterance = 1)
     
     commands.say(['string', '=\\equals', '\'\\open-single-quote', 'message', '\'\\close-single-quote', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
