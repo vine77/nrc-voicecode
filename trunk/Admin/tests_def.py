@@ -3361,6 +3361,32 @@ def test_beginning_end_of_line():
 add_test('beg_end_of_line', test_beginning_end_of_line, 'Testing methods for going to the beginning or end of a line.')
 
 ##############################################################################
+# Testing explicit indentation
+##############################################################################    
+
+
+def test_explicit_indentation():
+   testing.init_simulator_regression()   
+      
+   commands.open_file('blah1.py')
+   commands.say(['if', 'condition', 'do', 'the', 'following'] , user_input="1\n1\n1\n", echo_utterance=1)
+   commands.say(['back', 'indent'], user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['index', 'equals', 'one', 'do', 'the', 'following'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   commands.say(['indent'], user_input="1\n1\n1\n", echo_utterance=1)   
+   
+   # Try backindenting from middle of the line   
+   commands.move_relative(-3, echo_cmd=1)
+   commands.say(['back', 'indent'], user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Try indenting forward from middle of the line   
+   commands.move_relative(3, echo_cmd=1)
+   commands.say(['indent'], user_input="1\n1\n1\n", echo_utterance=1)      
+   
+      
+add_test('explicit_indent', test_explicit_indentation, 'Testing explicit indentation.')
+
+
+##############################################################################
 # Sending a large message to the client
 ##############################################################################    
     
@@ -3407,33 +3433,20 @@ def test_temporary():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
       
-   commands.open_file('blah1.py')
-      
-#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)   
-#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['out', 'of', 'quotes'] , user_input="0\n", echo_utterance=1)
+   commands.open_file('blah.py')
+        
+   commands.say(['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+   commands.say(['import\\import modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
    
-#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)   
-#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['out', 'of', 'parens'] , user_input="0\n", echo_utterance=1)
+   commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
    
-#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)   
-#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['back', 'out', 'of', 'quotes'] , user_input="0\n", echo_utterance=1)
-
-#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)   
-#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
-#   commands.say(['jump', 'back', 'out'] , user_input="0\n", echo_utterance=1)
-
-#   commands.say(['function', 'between', 'parens', 'one'] , user_input="1\n", echo_utterance=1)
-#   commands.say(['before', 'previous', 'paren'] , user_input="0\n", echo_utterance=1)   
-
-   commands.say(['function', 'between', 'parens', 'one'] , user_input="1\n", echo_utterance=1)
-   commands.say(['before', 'next', 'paren'] , user_input="0\n", echo_utterance=1)   
+   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+   commands.say(['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+   commands.say(['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
 
    
 #add_test('temp', test_temporary, desc='temporary test')
