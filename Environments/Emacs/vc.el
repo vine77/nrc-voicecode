@@ -1757,7 +1757,7 @@ in response to it."
 	      (vr-execute-command vr-deferred-deferred-deferred-function)))
  	)
     ;; if the current buffer is not VR-buffer
-    (vr-send-reply "-1"))
+    (vr-send-reply "-1")))
 
    (vr-log "-- vr-cmd-make-changes: exited")
 
