@@ -677,7 +677,7 @@ class SourceBuff(Object):
             self.goto(new_cur_pos)
             success = 1
         else:
-            succses = 0
+            success = 0
             
         return success
 
@@ -918,7 +918,7 @@ class SourceBuff(Object):
 #        print '-- SourceBuff.__setitem__: called'        
         return self.content()[start:end]
 
-    def __getslice__(self, start, end, value):
+    def __setslice__(self, start, end, value):
         """Sets slice of the buffer using the buff[start:end] = value syntax.
         
         **INPUTS**
