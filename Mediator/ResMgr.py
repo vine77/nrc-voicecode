@@ -1174,24 +1174,37 @@ class StateStackBasic(StateStack):
         safely restore the editor
         """
         if len(self.states) == 0:
+            debug.trace('StateStackBasic.safe_depth', 'empty stack')
             return 0
         if self.after_utterance is None:
+            debug.trace('StateStackBasic.safe_depth', 
+                'no state after utterance')
             return 0
 # have to synchronize to ensure that we've processed any pending updates
 # and that "current" is really current.
+        debug.trace('StateStackBasic.safe_depth', 
+            'about to synchronize')
         app.synchronize_with_app()
+        debug.trace('StateStackBasic.safe_depth', 
+            'just synchronized, about to compare')
         same = self.after_utterance.compare_with_current(app, 
             ignore_new = self.ignore_new, 
             ignore_deleted = self.ignore_deleted)
         if not same:
+            debug.trace('StateStackBasic.safe_depth', 
+                'not same')
             return 0
 # in this implementation, we clear the stack whenever the state before
 # the next dictation utterance doesn't match the state after
 # the previous utterance.  Therefore, the only thing left to check is
 # whether the states in the stack have valid cookies
+        debug.trace('StateStackBasic.safe_depth', 
+            'same')
         for n in range(1, len(self.states) + 1):
             if not self.states[-n].valid_cookies(app, 
                 ignore_deleted = self.ignore_deleted):
+                debug.trace('StateStackBasic.safe_depth', 
+                    'cookie at %d no longer valid, deleting' % n)
 # if the cookies aren't valid, we might as well delete those states
                 del self.states[0:-(n-1)]
                 return n-1
