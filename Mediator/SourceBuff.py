@@ -49,6 +49,20 @@ class SourceBuffCookie(Object):
     def __init__(self, **attrs):
         self.deep_construct(SourceBuffCookie, {}, attrs)
 
+    def rename_buffer_cbk(self, new_buff_name):
+        """callback which notifies us that the application
+	has renamed the buffer corresponding to this cookie
+
+	**INPUTS**
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.virtual('SourceBuffCookie.rename_buffer_cbk')
+
 class SourceBuff(OwnerObject):
     """Interface to a buffer being edited in the programming environment
    

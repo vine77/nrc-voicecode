@@ -168,6 +168,18 @@ class DictWinGram(WinGram, OwnerObject):
 	"""
         return self.manager.interpreter()
 
+    def rename_buffer_cbk(self, new_buff_name):
+        """callback from GramMgr which notifies us that the application
+	has renamed buffer corresponding to this dictation grammar
+
+	**INPUTS**
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+        self.buff_name = new_buff_name
+
     def set_context(self, before = "", after = ""):
         """set the context to improve dictation accuracy
 
@@ -185,6 +197,29 @@ class DictWinGram(WinGram, OwnerObject):
 	*none*
 	"""
         debug.virtual('DictWinGram.set_context')
+
+    def on_results(self, results):
+        """interpret the results of recognition.  This method must be
+        called by the concrete subclass of DictWinGram.
+
+        **INPUTS**
+
+        *SpokenUtterance results* -- the SpokenUtterance object
+        representing the recognition results
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.manager.interpret_dictation(results, initial_buffer =
+            initial_buffer)
+# old implementation - now taken care of by the ResMgr
+#        interp = self.interpreter()
+#        interp.interpret_NL_cmd(words, self.app,
+#            initial_buffer = self.buff_name)
+#        self.app.print_buff_if_necessary(buff_name = self.buff_name)
+
+
 
 
 class SelectWinGram(WinGram):
