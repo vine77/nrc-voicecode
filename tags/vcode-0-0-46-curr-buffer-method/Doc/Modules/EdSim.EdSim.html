@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 16:31:11 2001)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class EdSim</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class EdSim - VoiceCode editor simulator.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="EdSim.html">EdSim</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">EdSim.EdSim<BR>
+&nbsp;&nbsp;AppState.AppState<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EdSim</SPAN>(<A CLASS="DocLink" HREF="AppState.AppState.html">AppState</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return the name of the current buffer</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__getattr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">max_history=100</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the SourceBuff corresponding to the current editor buffer </SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the file name of the current buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.get_history"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.get_history</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
+
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">list</SPAN> <SPAN CLASS="VariableName">buffer_methods</SPAN> = <SPAN CLASS="VariableValue">['is_language', 'region_distance', 'cur_pos', 'get_selection', 'goto_end_of_selection', 'set_selection', ...]</SPAN></SPAN>
+</PRE><H2>Description</H2><P>
+This class is used to simulate an external programming editor.</P>
+<P>
+Useful for debugging VoiceCode mediator in isolation from external editor.</P>
+<P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SourceBuffEdSim</EM> only_buffer
+<DD>THE buffer
+<DT>
+<EM>STR</EM> only_buffer_name
+<DD>its name 
+</DL>
+<P>
+<EM>none</EM> --</P>
+<P>
+<STRONG>CLASSS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="EdSim.EdSim.bidirectional_selection" CLASS="Method">EdSim.EdSim.bidirectional_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support selections with cursor at left?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor allows setting the selection at the
+left end of the selection
+</DL>
+<H2 ID="EdSim.EdSim.curr_buffer_name" CLASS="Method">EdSim.EdSim.curr_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>return the name of the current buffer</P>
+
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> 
+<DD>current buffer
+
+</DL>
+<H2 ID="EdSim.EdSim.open_file" CLASS="Method">EdSim.EdSim.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)</H2>
+<P>Open a file.</P>
+
+<P>
+Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.        
+</P>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppState.AppState.active_field" CLASS="Method">AppState.AppState.active_field(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates what part of the editor has the focus.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(STR)</EM>
+<DD>Name of the active Field. Elements of
+the array refer to a sequence of objects in the user interface
+that lead to the active field.
+</DL>
+<P>
+If <EM>None</EM>, then the buffer [self.curr_buffer()] has the focus. </P>
+<P>
+Example: in VisualBasic, it might be: *('menu bar', <CODE>File</CODE>, 'Save
+as', 'file name')*.</P>
+<P>
+Example: in Emacs, it might be <EM>('find-buffer', 'buffer-name')</EM>
+where find-buffer is the name of the command that was invoked and
+buffer-name refers to the argument that is being asked for.
+</P>
+<H2 ID="AppState.AppState.active_language" CLASS="Method">AppState.AppState.active_language(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns name of active programming language.</P>
+
+<P>
+If no active programming language, then returns <EM>None</EM>.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> language
+<DD>Name of active programming language (*None*
+if no programming language is active).
+
+</DL>
+<H2 ID="AppState.AppState.bidirectional_selection" CLASS="Method">AppState.AppState.bidirectional_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support selections with cursor at left?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor allows setting the selection at the
+left end of the selection
+</DL>
+<H2 ID="AppState.AppState.curr_buffer" CLASS="Method">AppState.AppState.curr_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns the SourceBuff corresponding to the current editor buffer </P>
+
+<P>
+If no such buffer, returns <EM>None</EM>.</P>
+<H2 ID="AppState.AppState.curr_buffer_name" CLASS="Method">AppState.AppState.curr_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the file name of the current buffer</P>
+
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>file name of current buffer
+</DL>
+<H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<P>Drops a breadcrumb</P>
+
+<P>
+<EM>INT pos</EM> is the position where to drop the crumb. *STR
+ buffname* is the name of the source buffer.</P>
+<P>
+If <EM>pos</EM> not specified, drop breadcrumb at cursor position.</P>
+<P>
+If <EM>buff</EM> not specified either, drop breadcrumb in current buffer
+</P>
+<H2 ID="AppState.AppState.find_buff" CLASS="Method">AppState.AppState.find_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>Returns the open buffer with name <EM>STR buff_name</EM>.</P>
+
+<P>
+If no such buffer, returns <EM>None</EM>.</P>
+<P>
+If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.focus_is_source" CLASS="Method">AppState.AppState.focus_is_source(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)</H2>
+<P>Check if prog. env. focus is a source buffer</P>
+
+<P>
+Returns <EM>true</EM> if and only if focus of programming environment
+is a source buffer written in language <EM>STR lang_name</EM>.
+</P>
+<H2 ID="AppState.AppState.get_history" CLASS="Method">AppState.AppState.get_history(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Gets the <EM>nth</EM> most recent entry in the application's command
+history</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> nth
+<DD>Index of the requested entry (from the end)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(</EM> <A HREF="Context.Context.html">Context</A>, [Action]*)* hist_entry
+<DD>The context and action of the <EM>nth</EM> most
+recent command in the application's command history.
+</DL>
+<H2 ID="AppState.AppState.log_cmd" CLASS="Method">AppState.AppState.log_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)</H2>
+<P>Logs a command in the application's history</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[Context] cont
+<DD>Context in which the command was invoked.
+<DT>
+[Action] action
+<DD>Action that was executed in response to the command
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<P>Open a file.</P>
+
+<P>
+Open file with name <EM>STR name</EM>.        
+</P>
+<H2 ID="AppState.AppState.pop_breadcrumbs" CLASS="Method">AppState.AppState.pop_breadcrumbs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)</H2>
+<P>Pops breadcrumbs from the breadcrumbs stack</P>
+
+<P>
+<EM>INT num</EM> is the number of crumbs to pop. If None, then pop 1 crumb.</P>
+<P>
+if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
+breadcrumb.
+</P>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
