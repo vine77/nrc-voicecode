@@ -167,19 +167,30 @@ def test_dictate_from_scratch(testing):
     dictate_pseudo_python(commands)    
 
 
-def do_edit_test(testing, edit_file, test_fct):
+def do_edit_test(testing, edit_file, test_fct, descr=None):
    testing.init_simulator_regression()
    names = testing.namespace()
    commands = names['commands']
    commands.open_file(edit_file)
    test_fct(commands)
+   commands.close_file(edit_file)
     
 def test_editing(testing):
    #
    # This file contains code that will be edited in different ways
    #
-   edit_file = vc_globals.test_data + os.sep + 'use_this_to_test_edits.py'
+   edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
+   
+   do_edit_test(testing, edit_file, insert_import_statement, 'insert an import statement in middle of a file')
+   do_edit_test(testing, edit_file, )   
    
 # To create an edit test scenario, just   define a test function and invoke 
 # it through do_edit_test as below.
-#   do_edit_test(testing, edit_file, test_function)    
+#   do_edit_test(testing, edit_file, test_function, descr)    
+
+###################################################################
+# Python editing test functions
+###################################################################
+
+def insert_import(commands):
+   

@@ -699,6 +699,20 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
     (error "VR target buffer no longer exists; use vr-activate-buffer")))
 
 
+(defun vcode-set-hooks (status)
+  (vcode-set-after-change-functions status)
+  (vcode-set-kill-emacs-hook status)
+)
+
+(defun vcode-set-kill-emacs-hook (status)
+  (if status
+      (progn
+	(add-hook 'kill-emacs-hook 'vcode-disconnecting)
+	)
+    (remove-hook 'kill-emacs-hook 'vcode-disconnecting)
+    )
+)
+
 
 (defun vcode-set-after-change-functions (status)
   (vr-log "--** vcode-set-after-change-functions: invoked, (current-buffer)=%S, status=%S\n" (current-buffer) status)
@@ -1347,7 +1361,7 @@ speech server"
 	  (process-kill-without-query vr-process)
 ;	  (set-process-filter vr-process 'vr-output-filter)
 	  (set-process-sentinel vr-process 'vr-sentinel))
-	(vcode-set-after-change-functions 1)
+	(vcode-set-hooks 1)
 	)
     
     ;; Leaving VR mode
