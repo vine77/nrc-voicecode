@@ -217,3 +217,45 @@ class CorrectNthEvent(Object.Object):
         """
         debug.virtual('CorrectNthEvent.notify')
 
+class ReformatSymbolEvent(Object.Object):
+    """Abstract interface for sending a message to the main thread 
+    indicating that it should initiate reformatting of a given
+    utterance symbol.
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correction box, while letting the 
+    correction grammar's on_results method return immediately, so as to 
+    allow speech input to the correction box (or other windows).
+
+    **INSTANCE ATTRIBUTES**
+
+    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    post the event.
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+
+    def __init__(self, **args):
+        self.deep_construct(ReformatSymbolEvent,
+                            {},
+                            args)
+                            
+    def notify(self, instance_name, utterance_number):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *STR instance_name* -- unique name identifying the editor
+        instance
+
+        *INT utterance_number* -- the number assigned by
+        ResMgr.interpret_dictation to the utterance to be corrected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('ReformatSymbolEvent.notify', self)

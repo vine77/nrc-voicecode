@@ -30,6 +30,7 @@ wxEVT_SOCKET_DATA = wxNewEventType()
 wxEVT_CORRECT_UTTERANCE = wxNewEventType()
 wxEVT_CORRECT_RECENT = wxNewEventType()
 wxEVT_CORRECT_NTH_RECENT = wxNewEventType()
+wxEVT_REFORMAT_RECENT = wxNewEventType()
 
 class GenericEventWX(wxPyEvent):
     def __init__(self, evt_type):
@@ -50,6 +51,11 @@ class UtteranceCorrectionEventWX(GenericEventWX):
 class RecentCorrectionEventWX(GenericEventWX):
     def __init__(self, instance_name):
         GenericEventWX.__init__(self, evt_type = wxEVT_CORRECT_RECENT)
+        self.instance_name = instance_name
+        
+class RecentReformattingEventWX(GenericEventWX):
+    def __init__(self, instance_name):
+        GenericEventWX.__init__(self, evt_type = wxEVT_REFORMAT_RECENT)
         self.instance_name = instance_name
 
 class CorrectNthRecentEventWX(GenericEventWX):
@@ -170,25 +176,7 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         self.deep_construct(CorrectUtteranceEventWX,
                             {'evt_handler': evt_handler},
                             args)
-
-    def notify(self, instance_name, utterance_number):
-        """send the message, and return synchronously
-
-        **INPUTS**
-
-        *STR instance_name* -- unique name identifying the editor
-        instance
-
-        *INT utterance_number* -- the number assigned by
-        ResMgr.interpret_dictation to the utterance to be corrected
-
-        **OUTPUTS**
-
-        *none*
-        """
-        event = UtteranceCorrectionEventWX(instance_name, utterance_number)
-        wxPostEvent(self.evt_handler, event)
-
+                            
 class CorrectRecentEventWX(CorrectRecentEvent):
     """implementation of CorrectRecentEvent using custom wxPython
     events
@@ -284,3 +272,50 @@ class CorrectNthEventWX(CorrectNthEvent):
         event = CorrectNthRecentEventWX(recent_chosen)
         wxPostEvent(self.evt_handler, event)
 
+class ReformatSymbolEventWX(ReformatSymbolEvent):
+    """implementation of ReformatSymbolEvent using custom wxPython
+    events
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correction box, while letting the 
+    correction grammar's on_results method return immediately, so as to 
+    allow speech input to the correction box (or other windows).
+
+    **INSTANCE ATTRIBUTES**
+
+    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    post the event.
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    
+    def __init__(self, evt_handler, **args):
+        """
+        **INPUTS**
+
+        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        post the event.
+        """
+        self.deep_construct(ReformatSymbolEventWX,
+                            {'evt_handler': evt_handler},
+                            args)
+
+
+    def notify(self, instance_name):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *STR instance_name* -- unique name identifying the editor
+        instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('ReformatSymbolEventWX.notify', 'invoked')
+        event = RecentReformattingEventWX(instance_name)
+        wxPostEvent(self.evt_handler, event)

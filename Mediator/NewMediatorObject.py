@@ -144,6 +144,9 @@ class NewMediatorObject(Object.OwnerObject):
 
     *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an
     event to bring up the correct recent box asynchronously.
+    
+    *ReformatSymbolEvent reformat_recent_evt* -- doorbell used to send an
+    event to bring up the reformat recent box asynchronously.
 
     *{STR:ANY} test_space* -- if the mediator is started in regression 
     testing mode, test_space is the namespace in which regression tests 
@@ -210,6 +213,7 @@ class NewMediatorObject(Object.OwnerObject):
                  wave_playback = None,
                  correct_evt = None,
                  correct_recent_evt = None,
+                 reformat_recent_evt = None,
                  test_or_suite = None,
                  global_grammars = 0, exclusive = 0, 
                  profile_prefix = None,
@@ -299,6 +303,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'wave_playback': wave_playback,
                              'correct_evt': correct_evt,
                              'correct_recent_evt': correct_recent_evt,
+                             'reformat_recent_evt': reformat_recent_evt,
                              'interp': interp,
                              'test_or_suite': test_or_suite,
                              'test_space': None,
@@ -413,7 +418,8 @@ class NewMediatorObject(Object.OwnerObject):
 #            ResMgr.ResMgrStdFactory()
         res_mgr_factory = \
             ResMgr.ResMgrBasicFactory(correct_evt = self.correct_evt,
-            correct_recent_evt = self.correct_recent_evt)
+            correct_recent_evt = self.correct_recent_evt, 
+            reformat_recent_evt = self.reformat_recent_evt)
         recog_mgr = RecogStartMgrNL.RecogStartMgrNL(GM_factory = GM_factory,
             res_mgr_factory = res_mgr_factory)
         self.editors = AppMgr.AppMgr(recog_mgr, mediator = self)
@@ -1813,6 +1819,27 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.editors.correct_recent(instance_name)
+
+    def reformat_recent(self, instance_name):
+        """initiate user selection of a recent symbol to reformat
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correct recent dialog box.  Generally, it should 
+        be called only in response to a ReformatRecent event, rather than
+        in direct response to a spoken reformatting command.
+
+        **INPUTS**
+
+        *STR instance_name* -- name of the application instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('NewMediatorObject.reformat_recent', 'invoked with instance_name=%s' % instance_name)
+        self.editors.reformat_recent(instance_name)
+
     
     def input_error(self, message, fatal = 0):
         """called by CmdInterp to indicate that a serious error 

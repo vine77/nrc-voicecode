@@ -56,17 +56,18 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################       
-#                    'OwnerObject.__init__': 1,
-#                    'DlgModel.setView':1 ,
-#                    'TestCaseWithHelpers.assert_sequences_have_same_content': 1,
-#                    'MockSpokenUtterance.words': 1,
-#                    'MockSpokenUtterance.spoken_forms': 1,
-#                    'ReformatRecentSymbolsViewWX.displayed_symbols': 1,
-#                    'ReformatRecentSymbolsViewWX.__init__': 1,
-                    'SymbolReformattingWinGramNL.create_rules': 1,
-                    'SymbolReformattingWinGramNL.__init__': 1,
-                    'SymbolReformattingWinGram.__init__': 1,
-                    'WinGram.__init__': 1,
+                    'tests_def.get_foreground_window': 1,
+                    'AppMgr.reformat_recent': 1,
+                    'ResMgrBasic.reformat_recent': 1,
+                    'wxMediatorMainFrame.on_reformat_recent': 1,
+                    'ReformatSymbolEventWX.notify': 1,
+                    'NewMediatorObject.reformat_recent': 1,
+                    "ResMgrBasicreformat_recent_synchronous": 1,
+                    'AppMgr._add_new_instance': 1,
+                    'AppMgr.delete_instance': 1, 
+                    'RSMInfrastructure._add_instance': 1,
+                    'RSMInfrastructure.delete_instance': 1,
+                    'RSMBasic.new_universal_instance': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
@@ -361,12 +362,14 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
         correct_evt = CorrectUtteranceEventWX(self)
         correct_recent_evt = CorrectRecentEventWX(self)
+        reformat_recent_evt = ReformatSymbolEventWX(self)
         try:
             self.the_mediator = \
                 NewMediatorObject.NewMediatorObject(server = self.the_server,
                     console = console, wave_playback = WavePlaybackWX, 
                     correct_evt = correct_evt,
                     correct_recent_evt = correct_recent_evt,
+                    reformat_recent_evt = reformat_recent_evt,
                     test_or_suite = test_suite,
                     global_grammars = 1, exclusive = 1,
                     profile_prefix = profile_prefix,
@@ -546,6 +549,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         """
         EVT_MINE(self, wxEVT_CORRECT_UTTERANCE, self.on_correct_utterance)
         EVT_MINE(self, wxEVT_CORRECT_RECENT, self.on_correct_recent)
+        EVT_MINE(self, wxEVT_REFORMAT_RECENT, self.on_reformat_recent)
 
     def on_correct_utterance(self, event):
         """handler for UtteranceCorrectionEventWX
@@ -579,6 +583,23 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         if not self.quitting:
             instance = event.instance_name
             self.the_mediator.correct_recent(instance)
+
+    def on_reformat_recent(self, event):
+        """handler for RecentReformattingEventWX
+
+        **INPUTS**
+
+        *RecentReformattingEventWX event* -- the event posted by 
+        ResMgr.correct_recent via ReformatRecentEvent
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('wxMediatorMainFrame.on_reformat_recent', 'invoked')
+        if not self.quitting:
+            instance = event.instance_name
+            self.the_mediator.reformat_recent(instance)
 
 
     def create_main(self):
