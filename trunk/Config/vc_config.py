@@ -157,7 +157,7 @@ acmd = CSCmd(spoken_forms=['show symbols', 'print symbols'],
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['show abbreviatiosn', 'print abbreviations'], 
+acmd = CSCmd(spoken_forms=['show abbreviations', 'print abbreviations'], 
              meanings={ContLanguage(None): ActionPrintAbbrevs()}, 
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
@@ -168,10 +168,10 @@ mediator_ctrl.add_csc(acmd)
 #     CSCset later on... I'm just having a hard time creating
 #     a CSCSet and activating it.
 #################################################################
-acmd = CSCmd(spoken_forms=['New-Line', 'Enter'],
-             meanings={ContEmacsInMinibuffer(): ActionTypeText(key_strokes='\n')},
-             docstring='Type enter into minibuffer')
-mediator_ctrl.add_csc(acmd)
+#acmd = CSCmd(spoken_forms=['New-Line', 'Enter'],
+#             meanings={ContEmacsInMinibuffer(): ActionTypeText(key_strokes='\n')},
+#             docstring='Type enter into minibuffer')
+#mediator_ctrl.add_csc(acmd)
 
 #############################################################################
 # Punctuation marks.
@@ -334,7 +334,7 @@ alt_US_quotes = \
     PairedQuotes(name = 'alternate quotes',
         plural_pair = ['between %s', '%s'])
 alt_US_quotes.add('`', ['backquote', 'reverse-quote'], 
-    ['backquotes', 'reverse-quotes'])
+    ['backquotes', 'reverse-quotes'], no_singular_navigation = 1)
 # oops - punctuation regression test tests empty backquotes (even though
 # it is nonsense)
 #alt_US_quotes.add('`', ['backquote', 'reverse-quote'], 
@@ -750,8 +750,8 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
                            spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add_csc(acmd)
-acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
-                           'elsif clause', 'elif', 'elif clause'],
+acmd = CSCmd(spoken_forms=['else if', 'else if clause', 
+                           'elif', 'elif clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
                            code_bef = 'elif ', code_after = ': \n\t', 
 #                           back_indent_by=0,
@@ -968,7 +968,7 @@ python_comparisons.add_lsa(LSAlias(['is same', 'same as', 'is same as'], {'pytho
 # Python-specific quotes
 
 python_quotes = PairedQuotes(name = 'Python-specific quotes',
-        plural_pair = ['between %s', '%s'])
+        plural_pair = ['between %s', '%s'], context = ContPy())
 python_quotes.add('"""', ['triple-quote', 'triple-quotes'], ['triple-quotes'], 
     no_empty = 1)
 python_quotes.add("'''", ['triple-single-quote', 'three-single-quote', 'three-single'], ['triple-single-quotes', 'three-single-quotes', 'three-singles'], 

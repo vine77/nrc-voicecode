@@ -453,35 +453,6 @@ def test_mediator_console():
 
 add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
 
-##############################################################################
-# Testing configuration without user_config.py file
-##############################################################################
-
-        
-def test_no_config_file():
-    """Make sure that VCode fails gracefully it tries to use a non-existant config file"""
-
-    #
-    # Question... could this be refactored to get the interp from testing.interp()
-    # instead? Trying to get rid of the temp_factory. AD.
-    #
-    temp_config = temp_factory.new_config()
-    a_mediator = temp_config.mediator()
-    try:
-        non_existant_file = 'non_existant_config_file.py'
-        print "Trying to confugure using non-existant file '%s'\n" % non_existant_file
-        a_mediator.configure(user_config_file = non_existant_file)
-        print "ERROR: Exception was NOT properly raised!"
-#    except NewMediatorObject.VCodeInexistantConfigFile:
-    except:
-        print "Exception was properly raised!"
-
-# add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
-# DCF: I've now modified NMO so that it prompts the user to create a
-# configuration file, so this test no longer produces the expected
-# exception
-
-
 ###############################################################################
 # Testing Select Pseudocode console
 ###############################################################################

@@ -166,7 +166,7 @@ Got command: goto_line(10,)
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
  13:     
-Got simulated kbd event: stype_text(, hi,)
+Got simulated kbd event: type_text(, hi,)
 Got simulated kbd event: move_cursor_by_kbd(Left,5,)
 Got command: say(['next', 'comma'],None,0,0,)
 Heard next comma
@@ -185,7 +185,7 @@ Got command: goto_line(10,)
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
  13:     
-Got simulated kbd event: stype_text( hello ,)
+Got simulated kbd event: type_text( hello ,)
 Got command: say(['select', 'hello'],0
 ,1,0,)
 Heard select hello
@@ -701,7 +701,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x021782B0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0215CCD0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -716,7 +716,6 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
@@ -4803,7 +4802,6 @@ As best as I can tell from SF Browse CVS, this test was
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
@@ -13171,6 +13169,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1301.24099994 secs
+Test suite completed in:  1344.30300009 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6
