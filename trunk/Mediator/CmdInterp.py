@@ -205,6 +205,31 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
             return 1
         return 0
 
+    def make_element(self, spoken):
+        """create an AliasElement corresponding to this alias
+
+        **INPUTS**
+
+        *STR spoken* -- the spoken form used to dictate this alias
+
+        **OUTPUTS**
+
+        *AliasElement*
+        """
+        return AliasElement(self.written(), spoken)
+            
+class AliasElement(symbol_formatting.SymElement):
+    """LSAlias meaning as an element of a symbol
+    """
+
+    def __init__(self, written, spoken, **args):
+        self.deep_construct(AliasElement,
+                            {
+                             'written': written,
+                             'spoken': spoken
+                            },
+                            args)
+
     def add_to(self, builder):
         """Add alias's written form to the symbol builder
 
@@ -216,12 +241,13 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
 
         *none*
         """
-        written = self.written()
-        match = re.match(r'([a-zA-Z])\.{0,1}$', written)
+        match = re.match(r'([a-zA-Z])\.{0,1}$', self.written)
         if match:
-            builder.add_letter(string.lower(match.group(1)))
+            letter = match.group(1)
+            spoken = "%s." % string.upper(letter) 
+            builder.add_letter(string.lower(letter), spoken)
         else:
-            builder.add_word(written)
+            builder.add_word(self.written, self.spoken)
 
 
 class CapitalizationWord(Object):
@@ -253,7 +279,7 @@ class CapitalizationWord(Object):
                             },
                             args)
 
-class CapsModifier(DeferInterp, symbol_formatting.SymElement):
+class CapsModifier(DeferInterp):
     """underlying object used by CmdInterp to store the data associated 
     with a CapitalizationWord
     """
@@ -288,6 +314,31 @@ class CapsModifier(DeferInterp, symbol_formatting.SymElement):
     def written(self):
 # dummy method to allow CapsModifier to pretend to be an LSAlias
         return ""
+    
+    def make_element(self, spoken):
+        """create a CapsModifierElement corresponding to this modifier
+        
+        **INPUTS**
+
+        *STR spoken* -- the spoken form used to dictate this modifier
+
+        **OUTPUTS**
+
+        *CapsModifierElement*
+        """
+        return CapsModifierElement(self.caps, self.one_word)
+
+class CapsModifierElement(symbol_formatting.SymElement):
+    """SymElement corresponding to a word which changes capitalization of
+    the following word(s)
+    """
+    def __init__(self, caps, one_word = 1, **args):
+        self.deep_construct(CapsModifierElement, 
+                            {
+                             'caps': caps, 
+                             'one_word': one_word
+                            }, args)
+
 
     def add_to(self, builder):
         """Add element to the symbol builder
@@ -718,7 +769,9 @@ class SymWord(symbol_formatting.SymElement):
         """
         match = re.match(r'([a-zA-Z])\.{0,1}$', self.word)
         if match:
-            builder.add_letter(string.lower(match.group(1)))
+            letter = match.group(1)
+            spoken = "%s." % string.upper(letter) 
+            builder.add_letter(string.lower(letter), spoken)
         else:
             builder.add_word(self.word, self.original)
 
@@ -1181,9 +1234,11 @@ class CmdInterp(OwnerObject):
                     else:
                         new_symbol = 1
                     spoken_form = processed_phrase[:LSA_consumes]
+                    element = \
+                        chopped_LSA.make_element(string.join(spoken_form))
                     if not builder:
                         builder = self.new_builder(app)
-                    chopped_LSA.add_to(builder)
+                    element.add_to(builder)
                 else:
 # flush untranslated words before inserting LSA
                     if builder:
@@ -1491,14 +1546,22 @@ class CmdInterp(OwnerObject):
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
             phrase = string.split(spoken_form)
-            written_symbol = self.choose_best_symbol(spoken_form, 
-                self.known_symbols.complete_match(phrase))
-            trace('CmdInterp.match_untranslated_text', 
-                'exact symbol written "%s"' % (untranslated_text))
-            actions_gen.ActionInsert(code_bef=written_symbol,
-            code_after='').log_execute(app, None, self.state_interface)                            
-            return
-
+            complete_match = self.known_symbols.complete_match(phrase)
+            if complete_match:
+                written_symbol = self.choose_best_symbol(spoken_form, 
+                    complete_match)
+                trace('CmdInterp.match_untranslated_text', 
+                    'exact symbol written "%s"' % (untranslated_text))
+                actions_gen.ActionInsert(code_bef=written_symbol,
+                    code_after='').log_execute(app, None, self.state_interface)
+                return
+            else:
+                msg = "CmdInterp says there was an exact match to a known\n"
+                msg = msg + "symbol, but SymDict is not finding any"
+                msg = msg + "complete match:\n"
+                msg = msg + "match_phrase gives %s\n" \
+                    % self.known_symbols.match_phrase(phrase)
+                sys.stderr.write(msg)
         # Match untranslated text to new known symbol or a known symbol with
         # unresolved spoken forms.
         #
@@ -1519,12 +1582,15 @@ class CmdInterp(OwnerObject):
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
             trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
         if symbol_matches:
-            self.dlg_select_symbol_match(untranslated_text, 
-                symbol_matches, app)
+            actions_gen.ActionInsert(code_bef=symbol_matches[0].native_symbol,
+                code_after='').log_execute(app, None, self.state_interface)
+#            self.dlg_select_symbol_match(untranslated_text, 
+#                symbol_matches, app)
         else:
             symbol = builder.finish()
             actions_gen.ActionInsert(code_bef=symbol,
-            code_after='').log_execute(app, None, self.state_interface)                
+                code_after='').log_execute(app, None, self.state_interface)
+            self.known_symbols.add_symbol(symbol, [builder.spoken_form()])
         
 
     def new_builder(self, app):
@@ -1667,7 +1733,11 @@ class CmdInterp(OwnerObject):
             # untranslated text.
             #
             chosen_match = symbol_matches[choice_index]
-            self.known_symbols.accept_symbol_match(chosen_match)            
+# do this only on correction.  We'll have to add something to add
+# symbols tentatively when they've been dictated but not
+# corrected, but in that case, we should never add abbreviations (which
+# accept_symbol_match does)
+#            self.known_symbols.accept_symbol_match(chosen_match)            
 
             #
             # Insert matched symbol

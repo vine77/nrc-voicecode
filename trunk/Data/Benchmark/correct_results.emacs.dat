@@ -4,6 +4,7 @@ Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Finished wxMediator init...
 Starting server threads...
+successfully created new instance
 Starting foreground tests...
 
 
@@ -647,7 +648,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01951B30>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DC19A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -900,179 +901,16 @@ version number unchanged
 
 comparing symdict.dict created from scratch with
 the reference dictionary current_symdict.dict
-ERROR: contents of persistent SymDict dictionary appears
-to have changed, without a change in the version number.
-Both current_symdict.dict and symdict.dict
-(the latter created from scratch) have version 5
-but the following differences were found:
+no differences found
 
-item 'a' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
+initializing SymDict from dictionary
 
-item 'b' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
+initialization from dictionary was successful
+Abbreviation file was unchanged, as expected
+initializing fresh SymDict from dictionary
 
-item 'c' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'f' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'g' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'h' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'm' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'n' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'p' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'r' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 's' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'u' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'v' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'w' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'x' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'y' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'z' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'a.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'b.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'c.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'f.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'g.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'h.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'm.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'n.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'p.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'r.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 's.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'u.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'v.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'w.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'x.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'y.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'z.' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'g' of attribute 'branches' of item 'adpcm' of attribute 'branches' of item 'encoding' of attribute 'branches' of item 'file' of attribute 'branches' of item 'audio' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'g.' of attribute 'branches' of item 'adpcm' of attribute 'branches' of item 'encoding' of attribute 'branches' of item 'file' of attribute 'branches' of item 'audio' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 't' of attribute 'branches' of item 'parsedate' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 't.' of attribute 'branches' of item 'parsedate' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'h' of attribute 'branches' of item 'rlecode' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'h.' of attribute 'branches' of item 'rlecode' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'u' of attribute 'branches' of item 'st' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'u.' of attribute 'branches' of item 'st' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'e' of attribute 'branches' of item 'use' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'e.' of attribute 'branches' of item 'use' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-item 'b' of attribute 'branches' of item 'weight' of attribute 'branches' of item 'spoken_form_info'
-missing from second argument
-
-item 'b.' of attribute 'branches' of item 'weight' of attribute 'branches' of item 'spoken_form_info'
-missing from first argument
-
-element 1 of attribute 'spoken_forms' of item 'co_firstlineno' of item 'symbol_info'
-missing from second argument
-
-
-These differences could be due to a change to
-the persistent SymDict format without a corresponding
-increment in current_version in SymDict.py.  They could
-also be due to changes to the algorithm for generating
-spoken forms for known symbols, or to the input files
-py_abbrevs.py and selected_py_sym.py in
-%VCODE_HOME%\Data\TestData
-
-If these differences do reflect changes made to
-the persistent SymDict format, you must:
-  1. increment current_version in SymDict.py
-  2. create a new SingleVersionDictConverter to
-     convert from the old version
-  3. prepend this converter to the global symdict_cvtr
-     in SymDict.py
-  4. re-run this test to verify that the old version
-     can be properly converted
-
-
-If these differences are simply due to changes
-in the input files or the algorithms, then you must
-verify the new stored symdict.dict in 
-%VCODE_HOME%\Data\TestData
-manually, and then copy it to current_symdict.dict
-in the same directory.
+initialization from dictionary was successful
+Fresh abbreviation file matches current one, as expected
 
 
 *******************************************************************************
@@ -1653,7 +1491,6 @@ List of abbreviations
 'uid' expands to ['U. I. D.', 'user I. D.']
 'undef' expands to ['undefine', 'undefined']
 'uniq' expands to ['unique']
-'unres' expands to ['unresolved']
 'url' expands to ['U. R. L.']
 'uu' expands to ['U. U.']
 'var' expands to ['variable']
@@ -1667,6 +1504,7 @@ List of unresolved abbreviations
 'y': appears in ['y']
 'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
 
 
@@ -1682,8 +1520,8 @@ move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
 this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
-this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
-this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
@@ -1711,8 +1549,8 @@ move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
 this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
-this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
-this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
@@ -1894,7 +1732,6 @@ List of abbreviations
 'uid' expands to ['U. I. D.', 'user I. D.']
 'undef' expands to ['undefine', 'undefined']
 'uniq' expands to ['unique']
-'unres' expands to ['unresolved']
 'url' expands to ['U. R. L.']
 'uu' expands to ['U. U.']
 'var' expands to ['variable']
@@ -1908,12 +1745,12 @@ List of unresolved abbreviations
 'y': appears in ['y']
 'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
 Heard file name comma
-WARNING: abbreviation 'f' not added (length < 2)
 *** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, f_name, <CURSOR>
 
@@ -1932,8 +1769,8 @@ move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
 this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
-this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
-this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
@@ -2115,7 +1952,6 @@ List of abbreviations
 'uid' expands to ['U. I. D.', 'user I. D.']
 'undef' expands to ['undefine', 'undefined']
 'uniq' expands to ['unique']
-'unres' expands to ['unresolved']
 'url' expands to ['U. R. L.']
 'uu' expands to ['U. U.']
 'var' expands to ['variable']
@@ -2129,6 +1965,7 @@ List of unresolved abbreviations
 'y': appears in ['y']
 'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
 
 
@@ -2314,7 +2151,6 @@ List of abbreviations
 'uid' expands to ['U. I. D.', 'user I. D.']
 'undef' expands to ['undefine', 'undefined']
 'uniq' expands to ['unique']
-'unres' expands to ['unresolved']
 'url' expands to ['U. R. L.']
 'uu' expands to ['U. U.']
 'var' expands to ['variable']
@@ -2328,6 +2164,7 @@ List of unresolved abbreviations
 'y': appears in ['y']
 'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
 
 
@@ -8258,21 +8095,21 @@ Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols
 Heard from module context sensitive command import symbols context sensitive command new statement
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
-  6: from cont_sensitive_command import cont_sensitive_command
+  6: from context_sensitive_command import context_sensitive_command
   7: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
   5: from cont_gen import ContC, ContPy
-  6: from cont_sensitive_command import cont_sensitive_command
+  6: from context_sensitive_command import context_sensitive_command
   7: from EdSim import EdSim
   8: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 Heard from module object import symbol object new statement
-  6: from cont_sensitive_command import cont_sensitive_command
+  6: from context_sensitive_command import context_sensitive_command
   7: from EdSim import EdSim
   8: from Object import Object
   9: <CURSOR>
@@ -8728,7 +8565,7 @@ Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'in
 Heard self dot deep construct with arguments command interpreter comma continue statement
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
- 14:       self.deep_construct(command_interpreter, \
+ 14:       self.deep_construct(CommandInterpreter, \
  15:                           <CURSOR>)
 
 *** End of source buffer ***
@@ -8736,21 +8573,21 @@ Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out'
 Heard brace pair single quotes on application jump out colon on application comma
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
- 14:       self.deep_construct(command_interpreter, \
+ 14:       self.deep_construct(CommandInterpreter, \
  15:                           {'on_application': on_application, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
 Heard single quotes known symbols jump out colon symbol dictionary dot symbol dictionary without arguments comma continue statement
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
- 14:       self.deep_construct(command_interpreter, \
+ 14:       self.deep_construct(CommandInterpreter, \
  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
 Heard single quotes language specific aliases jump out colon empty dictionary comma continue statement
- 14:       self.deep_construct(command_interpreter, \
+ 14:       self.deep_construct(CommandInterpreter, \
  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            'language_specific_aliases': {}, \
  17:                            <CURSOR>})
@@ -11844,7 +11681,7 @@ Got command: say(['software', 'engineering', 'comma'],1
 ,0,0,)
 Heard software engineering comma
 *** Start of source buffer ***
-  1: se, <CURSOR>
+  1: software_engineering, <CURSOR>
 
 *** End of source buffer ***
 Next utterance should match non-separable symbol 'openlog'
@@ -11852,7 +11689,7 @@ Got command: say(['open', 'log'],1
 ,0,0,)
 Heard open log
 *** Start of source buffer ***
-  1: se, openlog<CURSOR>
+  1: software_engineering, openlog<CURSOR>
 
 *** End of source buffer ***
 
@@ -11981,6 +11818,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1403.76900005 secs
+Test suite completed in:  1416.727 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6

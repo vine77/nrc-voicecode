@@ -484,6 +484,11 @@ class SymDict(OwnerObject):
     pseudo symbol. Very short symbols tend to cause too many false positive
     matches, and in any case, they are easy to dictate by spelling (in fact
     the easiest way to dictate a short symbol is to spell it).
+    
+    [INT] *min_non_consec_chars_for_approx_match=3* -- minimum number of
+    characters from each word which must appear in a word of a native
+    symbol, unless the word of the native symbol is a prefix of the
+    spoken word
 
     [INT] *min_chars_run_together=3* -- Minimum number of characters
     for each run-together word that an abbreviation found by match_pseudo_symbol
@@ -524,6 +529,7 @@ class SymDict(OwnerObject):
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
                          'min_chars_for_approx_match': 4,
                          'min_chars_run_together': 3,
+                         'min_non_consec_chars_for_approx_match': 3,
                          'max_auto_acronym': 3
                         })
         
@@ -1970,10 +1976,19 @@ class SymDict(OwnerObject):
        good_matches = []
        for a_match in native_matches:
           native_sym = a_match.group(0)
+          native_sym = native_sym.strip()
+          trace('SymDict._remove_short_symbols', 
+              'checking match with native symbol = "%s"' % native_sym)
           if native_sym == pseudo_symbol:
               good_matches.append(a_match)
+              trace('SymDict._remove_short_symbols', 
+                  'pseudo_symbol matches native_sym, so good match')
               continue
+          trace('SymDict._remove_short_symbols', 
+                  'len(native_sym) = %d' % len(native_sym))
           if len(native_sym) < self.min_chars_for_approx_match:
+              trace('SymDict._remove_short_symbols', 
+                  'native_sym too short - skipping match')
               continue
           groups = a_match.groups()
 # this test looks at how many characters come from each word when
@@ -1982,6 +1997,13 @@ class SymDict(OwnerObject):
 # contains the first two characters of "some" and "me" contains the
 # first and last characters of "more")
           run_together = 0
+          for i in range(1, len(groups)):
+              if len(groups[i]) < self.min_non_consec_chars_for_approx_match:
+                  if not words[i-1].startswith(groups[i]):
+                      trace('SymDict._remove_short_symbols', 
+                          'too few non consec characters: %s vs. %s' \
+                          % (words[i-1], groups[i]))
+                      continue
           for i in range(1, len(groups)-1):
               end = a_match.end(i)
               next_start = a_match.start(i+1)
@@ -1989,12 +2011,20 @@ class SymDict(OwnerObject):
                   if len(groups[i]) < self.min_chars_run_together and \
                           groups[i] != words[i-1]:
                       run_together = 1
+                      trace('SymDict._remove_short_symbols', 
+                          'too few characters in words run together: %s' \
+                          % (groups[i]))
                       break
                   if len(groups[i+1]) < self.min_chars_run_together and \
                           groups[i+1] != words[i]:
+                      trace('SymDict._remove_short_symbols', 
+                          'too few characters in words run together: %s' \
+                          % (groups[i+1]))
                       run_together = 1
                       break
           if not run_together:
+              trace('SymDict._remove_short_symbols', 
+                  'adding to good_matches')
               good_matches.append(a_match)
 
        return good_matches
@@ -2020,7 +2050,7 @@ class SymDict(OwnerObject):
 
         trace('SymDict.match_pseudo_symbol', 'pseudo_symbol=\'%s\'' % pseudo_symbol)
         mess_symbols = lambda : "Symbols are: %s" % repr(self.symbol_info)
-        trace('SymDict.match_pseudo_symbol', mess_symbols)
+#        trace('SymDict.match_pseudo_symbol', mess_symbols)
 
         #
         # Find all known native symbols that match *pseudo_symbol*
@@ -2061,6 +2091,8 @@ class SymDict(OwnerObject):
         matches = []
         for a_match in good_matches:
             native_symbol = string.strip(a_match.group(0))
+            trace('SymDict.match_pseudo_symbol',
+                'matching to native symbol %s' % native_symbol)
             matches = matches + [SymbolMatch(pseudo_symbol = pseudo_symbol,
                 native_symbol = native_symbol, words = words, 
                 word_matches = a_match.groups()[1:])]
@@ -2257,7 +2289,7 @@ class SymDict(OwnerObject):
             word = the_match.words[ii]
             if abbrev != word:
                 if len(abbrev) >= min_abbreviation_len:
-                    self.add_abbreviation(word, abbrev)
+                    self.add_alt_abbreviations(word, [abbrev])
                 else:
                     print 'WARNING: abbreviation \'%s\' not added (length < %s)' % (abbrev, min_abbreviation_len)            
 
