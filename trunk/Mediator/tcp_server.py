@@ -725,7 +725,7 @@ class ServerSingleThread(Object.Object):
         # query whether client expects to be used for regression tests
         a_messenger.send_mess('test_client_query')
         mess = a_messenger.get_mess(expect=['test_client_query_resp'])
-	test_client = messaging.messarg2int(mess[1]['value'])
+        test_client = messaging.messarg2int(mess[1]['value'])
         
         #
         # Assign window, id and app_name to the last socket in the list of
