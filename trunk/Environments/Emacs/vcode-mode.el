@@ -3324,14 +3324,17 @@ change reports it sends to VCode.
             (vcode-trace "vcode-cmd-set-text" "*** before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S, buffer contains:\n%S" (point-min) (point-max) after-change-functions (buffer-substring (point-min) (point-max)))
             (kill-region start end)
             (vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
-            (set-mark nil)
+            ; DCF -- the code below was outside the excursion, so the
+            ; text got inserted into the wrong buffer
+            ;;;
+            ;;; We don't use 'vcode-execute-command-string because set_text message
+            ;;; is used to restore a buffer to a previous state (which is
+            ;;; assumed to have already been indented properly)
+            (insert text)
+            (push-mark nil)
+            (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
         )
 
-        ;;;
-	;;; We don't use 'vcode-execute-command-string because set_text message
-        ;;; is used to restore a buffer to a previous state (which is
-        ;;; assumed to have already been indented properly)
-	(insert text)
 
  	(vr-send-queued-changes)
     )

@@ -985,6 +985,19 @@ class SB_ServiceFullState(SB_ServiceState):
             cursor_at = 0
         else:
             cursor_at = 1
+        debug.trace('SB_ServiceFullState.store_current_state',
+            'buffer %s' % self.buff.name())
+#        debug.trace('SB_ServiceFullState.store_current_state',
+#            '%s: contents = \n%s\n' % (self.buff.name(), self.buff.contents()))
+        debug.trace('SB_ServiceFullState.store_current_state', 
+                    '*** len(contents)=%d' % len(self.buff.contents()))
+        if debug.trace_is_active('SB_ServiceFullState.store_current_state'):
+            contents = self.buff.contents()
+            first_lines = re.match(r'.*\n.*\n', contents).group()
+            last_lines = re.search(r'\n.*\n.*\n?$', contents).group()
+            debug.trace('SB_ServiceFullState.store_current_state', 
+                        '*** excerpt = \n%s\n[...]\n%s\n' \
+                        % (first_lines, last_lines))
         cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
             contents = self.buff.contents(), 
             selection = selection, cursor_at = cursor_at)
@@ -1009,11 +1022,22 @@ class SB_ServiceFullState(SB_ServiceState):
 
         """
         debug.trace('SB_ServiceFullState.restore_state', 'cookie=%s' % cookie)
+        debug.trace('SB_ServiceFullState.restore_state',
+            'buffer %s' % self.buff.name())
         if not self.valid_cookie(cookie):
             debug.trace('SB_ServiceFullState.restore_state', '*** returning 0')
             return 0
         debug.trace('SB_ServiceFullState.restore_state', 
-                    '*** cookie.contents=\n%s\n' % cookie.contents())
+                    '*** len(cookie.contents)=%d' % len(cookie.contents()))
+        if debug.trace_is_active('SB_ServiceFullState.restore_state'):
+            contents = cookie.contents()
+            first_lines = re.match(r'.*\n.*\n', contents).group()
+            last_lines = re.search(r'\n.*\n.*\n?$', contents).group()
+            debug.trace('SB_ServiceFullState.restore_state', 
+                        '*** excerpt = \n%s\n[...]\n%s\n' \
+                        % (first_lines, last_lines))
+#        debug.trace('SB_ServiceFullState.restore_state', 
+#                    '*** cookie.contents=\n%s\n' % cookie.contents())
         debug.trace('SB_ServiceFullState.restore_state', 
                     '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
                     
