@@ -64,7 +64,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
                             {'the_editor': editor, 
                              'the_instance_string': None,
                              'can_show_instance_string': 0,
-                             'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
+                             'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app = self)},
                             attrs, new_default = {'app_name': 'GenEdit'}
                             )
         self.add_owned('breadcrumbs_srv')

@@ -35,7 +35,10 @@ class WavePlaybackWX(WavePlayback):
             wave = wxWaveData(self.data)
             if wave.IsOk():
                 self.wave = wave
-  
+
+    def remove_other_references(self):
+        self.wave = None
+        WavePlayback.remove_other_references(self)
 
     def check(self):
         """check the wave data to see if it is okay

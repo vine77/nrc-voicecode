@@ -543,16 +543,18 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
             'choices_available': -1,
             'choices': []}, 
             attrs)
-        try:
-            wave_data = self.results.getWave()
-            wave = wave_playback(data = wave_data)
+        self.add_owned('wave')
+        if wave_playback:
+            try:
+                wave_data = self.results.getWave()
+                wave = wave_playback(data = wave_data)
 #            print 'utterance created wave -- checking'
-            if wave.check():
+                if wave.check():
 #                print 'utterance: wave ok'
-                self.wave = wave
-        except DataMissing:
+                    self.wave = wave
+            except DataMissing:
 #            print 'data missing'
-            pass
+                pass
 
     def spoken_forms(self):
         """returns list of spoken forms from the utterance

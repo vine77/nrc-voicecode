@@ -24,6 +24,7 @@ import Object, vc_globals
 import MediatorConsole
 import string
 from wxPython.wx import *
+import os
 
 
 # unfortunately, I haven't found any non-MS specific way of manipulating
@@ -31,6 +32,7 @@ from wxPython.wx import *
 # without the win32gui module from the win32all extensions package
 
 import win32gui
+import pywintypes
 
 """implementation of the MediatorConsole interface for a wxPython GUI mediator
 (e.g. wxMediator)
@@ -53,7 +55,14 @@ class WasForegroundWindowMSW(MediatorConsole.WasForegroundWindow):
 
     def restore_to_foreground(self):
         """restores the window to the foreground"""
-        win32gui.SetForegroundWindow(self.handle)
+        for i in range(2):
+            try:
+                win32gui.SetForegroundWindow(self.handle)
+            except pywintypes.error:
+                sys.stderr.write('error restoring window to foreground\n')
+            else:
+                return
+
 
 
 class MediatorConsoleWX(MediatorConsole.MediatorConsole):
@@ -102,7 +111,14 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         *none*
         """
         active_handle = win32gui.GetActiveWindow()
-        win32gui.SetForegroundWindow(active_handle)
+        for i in range(2):
+            try:
+                win32gui.SetForegroundWindow(active_handle)
+            except pywintypes.error:
+                sys.stderr.write('error restoring window to foreground\n')
+            else:
+                break
+
 
     def raise_wxWindow(self, window):
         """makes the given wxWindoactive window the
@@ -116,7 +132,14 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         *none*
         """
-        win32gui.SetForegroundWindow(window.GetHandle())
+        for i in range(2):
+            try:
+                win32gui.SetForegroundWindow(window.GetHandle())
+            except pywintypes.error:
+                sys.stderr.write('error restoring window to foreground\n')
+            else:
+                break
+
 
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
@@ -155,6 +178,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 #        app.ProcessEvent(evt)
         answer = box.ShowModal()
         box.cleanup()
+        box.Destroy()
 #        print answer, utterance.spoken_forms()
 #        win32gui.SetForegroundWindow(current_handle)
         editor_window.restore_to_foreground()
@@ -242,23 +266,24 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         for i in range(1, 10):
             st = wxStaticText(self, ID_NUMBERS + i, "%d" % i,
                 wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT)
-            number_sizer.Add(st, 0)
+            number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
         self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
              wxDefaultSize, self.choices, wxLB_SINGLE)
         EVT_LISTBOX(self, ID_CHOICES, self.on_chosen)
-        yes = wxBitmap("bitmaps/plus.bmp")
-        no = wxBitmap("bitmaps/minus.bmp")
+        bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
+        yes = wxBitmap(os.path.join(bitpath, 'plus.bmp'), wxBITMAP_TYPE_BMP)
+        no = wxBitmap(os.path.join(bitpath, 'minus.bmp'), wxBITMAP_TYPE_BMP)
         if can_reinterpret: 
             which = yes
         else:
             which = no
         maybe = wxStaticBitmap(self, wxNewId(), which,
             wxDefaultPosition, wxDefaultSize)
-        middle_sizer.AddMany([maybe,
+        middle_sizer.AddMany([(maybe, 0, wxALIGN_CENTER),
                               (intro, 0, wxEXPAND),
                               (0, 0), #spacer
-                              (self.text, 0, wxEXPAND),
-                              (number_sizer, 0, wxEXPAND),
+                              (self.text, 0, wxEXPAND | wxALIGN_TOP, 3),
+                              (number_sizer, 0, wxEXPAND | wxALIGN_RIGHT),
                               (self.choice_list, 0, wxEXPAND)])
         middle_sizer.AddGrowableRow(2)
         middle_sizer.AddGrowableCol(1)

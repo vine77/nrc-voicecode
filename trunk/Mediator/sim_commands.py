@@ -455,7 +455,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     **INSTANCE ATTRIBUTES**
 
     *AppState app* -- interface to the editor used for interactive or 
-	regression testing 
+    regression testing 
 
     *CmdInterp interp* -- interface to the mediator's command interpreter 
 
@@ -486,25 +486,25 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     
     def copy_flags(self):
         """copy our internal flags which control the mediator cleanup 
-	process to the namespace, in case they are being read from their
-	instead of from this object"""
+        process to the namespace, in case they are being read from there
+        instead of from this object"""
         self.names['clean_sr_voc'] = self.clean_sr_voc
         self.names['save_speech_files'] = self.save_speech_files
         self.names['disconnect_flag'] = self.disconnect_flag
 
     def bind_methods(self, names):
         """add bound copies of this class's methods to the given dictionary,
-	excluding those starting with '_'
+        excluding those starting with '_'
 
-	**NOTE:** if you subclass this class, you must redefine this method,
-	otherwise if called from an object of the subclass, it will only 
-	include methods of the subclass, not this class
+        **NOTE:** if you subclass this class, you must redefine this method,
+        otherwise if called from an object of the subclass, it will only 
+        include methods of the subclass, not this class
 
-	**INPUTS**
+        **INPUTS**
 
-	*{STR:ANY} names* -- dictionary into which to insert the  bound
-	methods
-	"""
+        *{STR:ANY} names* -- dictionary into which to insert the  bound
+        methods
+        """
         my_methods = InstanceSpace.selected_methods(self.__class__,
             exclude = '^_')
 #        print my_methods
@@ -518,7 +518,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def open_file(self, fname):
         """Open a file with name in current buffer.
 
-	*STR fname* is the path of the file"""
+        *STR fname* is the path of the file"""
 
         self.app.open_file(fname)
         self.interp.parse_symbols_from_file(fname)
@@ -544,10 +544,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def save_as(self, fname, no_prompt = 0):
         """save current buffer
 
-	*STR fname* is the path of the file
-	
-	*BOOL no_prompt* -- If true, don't prompt before overwriting
-	an existing file"""
+        *STR fname* is the path of the file
+        
+        *BOOL no_prompt* -- If true, don't prompt before overwriting
+        an existing file"""
 
         self.app.save_file(fname, no_prompt = no_prompt)
 
@@ -564,30 +564,30 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def say(self, utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         """Simulate an utterance *STR utterance*
 
-	*STR utterance* -- The utterance. This can be a string with the
-	 written form of what should be recognised by the SR system. If
-	 it's a list, it should be a list of words in their written\spoken
-	 form (or just written if it doesn't have a spoken form different
-	 from its written form).
+        *STR utterance* -- The utterance. This can be a string with the
+         written form of what should be recognised by the SR system. If
+         it's a list, it should be a list of words in their written\spoken
+         form (or just written if it doesn't have a spoken form different
+         from its written form).
 
-	In general, it's better to specify *utterance* as a list of
-	written\spoken words because it allows to simulate exactly what
-	the SR does (e.g. what if the SR recognises an LSA as a sequence
-	of words instead of its written\spoken form?)
+        In general, it's better to specify *utterance* as a list of
+        written\spoken words because it allows to simulate exactly what
+        the SR does (e.g. what if the SR recognises an LSA as a sequence
+        of words instead of its written\spoken form?)
 
-	*STR user_input* -- A string that will be sent to the mediator console's
-	 standard input. Use in automated regression testing, if the *say*
-	 command requires user additional user input (e.g. confirmation of
-	 a symbol match).
-	
-	*BOOL bypass_NatLink* -- if true, the interpretation will be done
-	withouth going through NatLink's recognitionMimic function.
+        *STR user_input* -- A string that will be sent to the mediator console's
+         standard input. Use in automated regression testing, if the *say*
+         command requires user additional user input (e.g. confirmation of
+         a symbol match).
+        
+        *BOOL bypass_NatLink* -- if true, the interpretation will be done
+        withouth going through NatLink's recognitionMimic function.
 
-	*BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+        *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
 
-	Examples: say('x not equal to') -> 'x != '
-		  say(['x', ' != \\not equal to'] -> 'x != '
-	"""
+        Examples: say('x not equal to') -> 'x != '
+        	  say(['x', ' != \\not equal to'] -> 'x != '
+        """
         
         global sleep_before_recognitionMimic
 

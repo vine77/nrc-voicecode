@@ -26,10 +26,10 @@ import debug
 from debug import trace
 import re, string, sys
 
-from Object import Object, ChildObject, OwnerObject
+from Object import Object, OwnerObject
 
 
-class SourceBuffCookie(Object):
+class SourceBuffCookie(OwnerObject):
     """abstract class which represents a restore-able SourceBuff state
 
     SourceBuffCookie itself is simply a dummy class which acts as a

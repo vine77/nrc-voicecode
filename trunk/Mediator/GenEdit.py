@@ -82,10 +82,10 @@ class GenEdit(Object.OwnerObject):
     """
     def __init__(self, **args):
         """**Note:** GenEdit requires the app_control attribute to
-	perform the appropriate callbacks to AppState.  However, since 
-	AppStateGenEdit can't be constructed without a reference to an 
-	existing GenEdit, AppStateGenEdit.__init__ will call 
-	set_app_control to set its value."""
+        perform the appropriate callbacks to AppState.  However, since 
+        AppStateGenEdit can't be constructed without a reference to an 
+        existing GenEdit, AppStateGenEdit.__init__ will call 
+        set_app_control to set its value."""
         self.deep_construct(GenEdit,
                             {'app_control': None},
                             args)
@@ -113,69 +113,69 @@ class GenEdit(Object.OwnerObject):
 
     def set_app_control(self, app_control):
         """method called by app_control's (AppStateGenEdit.) __init__ 
-	to supply reference to itself, so that GenEdit can perform
-	callbacks.
+        to supply reference to itself, so that GenEdit can perform
+        callbacks.
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppStateGenEdit app_control* -- the AppState interface
+        *AppStateGenEdit app_control* -- the AppState interface
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.app_control = app_control
 
     def mic_change(self, state):
         """function to receive microphone state change callbacks
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+        *STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
 # no-op by default, can be overridden
 
     def is_active(self):
         """indicates whether an editor frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         debug.virtual('GenEdit.is_active')
 
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
+        **OUTPUTS**
+        *BOOL* -- true if editor window has the focus
+        """
         debug.virtual('GenEdit.editor_has_focus')
 
     def app_active_buffer_name(self):
         """Returns the name of the buffer currently active in the
-	GenEdit editor.
+        GenEdit editor.
 
         **INPUTS**
 
         *none* 
         
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- buffer name of current buffer, or None if there is none
+        *STR* -- buffer name of current buffer, or None if there is none
 
         """
 
@@ -191,248 +191,248 @@ class GenEdit(Object.OwnerObject):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the application
-	successfully switches to it
+        successfully switches to it
         """
         debug.virtual('GenEdit.app_change_buffer')
 
     def open_buffers(self):
         """retrieve a list of the names of open buffers from the
-	application.
+        application.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
         debug.virtual('GenEdit.open_buffers')
 
     def editor_buffer(self, buff_name):
         """returns a reference to the TextBufferChangeSpec embedded 
-	in the GUI which corresponds to buffer buff_name
+        in the GUI which corresponds to buffer buff_name
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TextBufferChangeSpec* -- the TextBufferChangeSpec
-	"""
+        *TextBufferChangeSpec* -- the TextBufferChangeSpec
+        """
         debug.virtual('GenEdit.editor_buffer')
 
     def active_frame(self):
         """returns the currently active frame, if any
 
-	**INPUTS** 
+        **INPUTS** 
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*GenEditFrame* -- the currently active frame, or None if
-	no frame of the editor is active.
-	""" 
+        *GenEditFrame* -- the currently active frame, or None if
+        no frame of the editor is active.
+        """ 
         debug.virtual('GenEdit.active_frame')
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         debug.virtual('GenEdit.multiple_windows')
 
     def multiple_buffers(self):
         """does editor support multiple open buffers?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
         debug.virtual('GenEdit.multiple_windows')
 
     def new_buffer(self, buff_name, buffer, perform_callback = 1):
         """adds a new buffer, optionally performing a callback to the
-	AppState interface
+        AppState interface
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the new buffer
+        *STR buff_name* -- the name of the new buffer
 
-	*TextBufferChangeSpec buffer* -- the TextBufferChangeSpec 
-	interface to the new buffer
+        *TextBufferChangeSpec buffer* -- the TextBufferChangeSpec 
+        interface to the new buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's open buffer callback
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's open buffer callback
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the new buffer was added successfully
-	"""
+        *BOOL* -- true if the new buffer was added successfully
+        """
         debug.virtual('GenEdit.new_buffer')
 
     def rename_buffer(self, buff_name, new_buff_name, perform_callback = 1):
         """renames a buffer, optionally performing a callback to the
-	AppState interface
+        AppState interface
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the old name of the new buffer
+        *STR buff_name* -- the old name of the new buffer
 
-	*STR new_buff_name* -- the new name of the new buffer
+        *STR new_buff_name* -- the new name of the new buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's rename buffer callback
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's rename buffer callback
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the new buffer was renamed successfully
-	"""
+        *BOOL* -- true if the new buffer was renamed successfully
+        """
         debug.virtual('GenEdit.rename_buffer')
 
     def open_file(self, file_name, perform_callback = 0):
         """opens a new file 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the full path of the file to open
+        *STR file_name*  -- the full path of the file to open
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will not invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will not invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
         **OUTPUTS**
         
         STR *buff_name* -- Unique name of the buffer in which the file
         was opened. Returns *None* if the editor was not able to open
         the file.
-	"""
+        """
         debug.virtual('GenEdit.open_file')
 
     def prompt_to_save(self, buff_name):
         """prompts the user to save the current buffer before closing it, 
-	or cancel.  Note: prompt_to_save should save if the user so
-	indicates, and update the entry in self.filenames corresponding
-	to the buffer, but should not close the buffer, because
-	open_file could still fail.
+        or cancel.  Note: prompt_to_save should save if the user so
+        indicates, and update the entry in self.filenames corresponding
+        to the buffer, but should not close the buffer, because
+        open_file could still fail.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
-	
+        *STR buff_name* -- the name of the buffer
+        
         **OUTPUTS**
 
-	*BOOL* -- true if the user saved or told GenEdit to proceed
-	without saving, false if the user asked for the action causing
-	the buffer closing to be cancelled.
-	"""
+        *BOOL* -- true if the user saved or told GenEdit to proceed
+        without saving, false if the user asked for the action causing
+        the buffer closing to be cancelled.
+        """
         debug.virtual('GenEdit.prompt_to_save')
 
     def overwrite_prompt(self, buff_name, full_path):
         """prompts to see if the user is sure that he/she wants to
-	overwrite an existing file
+        overwrite an existing file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the user approves of overwriting the file
-	"""
+        *BOOL* -- true if the user approves of overwriting the file
+        """
         debug.virtual('GenEdit.overwrite_prompt')
 
     def open_file_dialog(self):
         """prompts for a file to open
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
         debug.virtual('GenEdit.open_file_dialog')
 
     def save_as_dialog(self, buff_name):
         """prompts for a filename under which to save the file, and
-	confirms overwriting
+        confirms overwriting
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
         debug.virtual('GenEdit.save_as_dialog')
 
     def save_file(self, buff_name, full_path = None, no_prompt = 0,
         rename_buff = 1, ask_for_new_name = 0, perform_callback = 0):
         """Saves the buffer buff_name to a file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	*STR full_path* -- path name of file to save, or None to use the
-	current file name, or prompt
+        *STR full_path* -- path name of file to save, or None to use the
+        current file name, or prompt
 
-	*BOOL no_prompt* -- if true, don't prompt before overwriting
-	an existing file.
+        *BOOL no_prompt* -- if true, don't prompt before overwriting
+        an existing file.
 
-	*BOOL rename_buff* -- if false, do not rename the buffer
+        *BOOL rename_buff* -- if false, do not rename the buffer
 
-	*BOOL ask_for_new_name* -- if true, prompt for a new name, even if the
-	buffer already has a corresponding filename.  Ignored unless
-	full_path == None.
+        *BOOL ask_for_new_name* -- if true, prompt for a new name, even if the
+        buffer already has a corresponding filename.  Ignored unless
+        full_path == None.
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's rename buffer callback.  AppState
-	should use the default value of false, because
-	AppState.save_file invokes the callback itself, but 
-	save_file initiated from the frame by the user must 
-	use perform_callback = 1
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's rename buffer callback.  AppState
+        should use the default value of false, because
+        AppState.save_file invokes the callback itself, but 
+        save_file initiated from the frame by the user must 
+        use perform_callback = 1
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- new buffer name if successful, or None if the save 
-	failed
-	"""
+        *STR* -- new buffer name if successful, or None if the save 
+        failed
+        """
         debug.virtual('GenEdit.save_file')
 
     def app_close_buffer(self, buff_name, save=0):
@@ -455,43 +455,43 @@ class GenEdit(Object.OwnerObject):
 
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
-	displayed in the title bar
+        displayed in the title bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor can and will include the 
         instance string in its window title for all windows 
         containing editor buffers.
-	"""
+        """
         debug.virtual('GenEdit.set_instance_string')
 
     def on_exit(self, ID = None):
         """method by which a frame can notify GenEdit that the user has
-	selected the Exit item from the File menu.  The user may have an 
-	opportunity to cancel this command (e.g. through the cancel button
-	in a dialog prompting to save modified files)
+        selected the Exit item from the File menu.  The user may have an 
+        opportunity to cancel this command (e.g. through the cancel button
+        in a dialog prompting to save modified files)
 
-	**NOTE:** GenEdit is responsible for telling all frames to
-	cleanup and close, so the calling should not assume that
-	it is in a sane state when this method returns.
+        **NOTE:** GenEdit is responsible for telling all frames to
+        cleanup and close, so the calling should not assume that
+        it is in a sane state when this method returns.
 
-	*BOOL* -- true if the editor is exiting in response to this
-	event (unless, e.g., the user has hit cancel in response to a 
-	save modified files dialog)
+        *BOOL* -- true if the editor is exiting in response to this
+        event (unless, e.g., the user has hit cancel in response to a 
+        save modified files dialog)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT ID* -- ID of the frame sending the event, or None if the
-	event doesn't originate from a frame.
+        *INT ID* -- ID of the frame sending the event, or None if the
+        event doesn't originate from a frame.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEdit.on_exit')
 
   
@@ -512,6 +512,9 @@ class GenEditBuffers(GenEdit):
     support the VisibleBuffer, StoreableTextBuffer, and NumberedLines
     interfaces as well)
 
+    *{STR: BOOL} scratch_buffers* -- set of buffers designated as
+    scratch buffers, not needing to be saved
+
     *{STR: STR} filenames* -- map from buffer names to filenames
 
     *STR curr_dir* -- the current directory
@@ -523,22 +526,51 @@ class GenEditBuffers(GenEdit):
         self.deep_construct(GenEditBuffers,
                             {'multiple': multiple,
                              'buffers': {},
+                             'scratch_buffers': {},
                              'filenames': {},
                              'curr_dir': curr_dir
                             }, args)
                              
+    def mark_as_scratch(self, buff_name, as_scratch = 1):
+        """mark a buffer as a scratch buffer which never needs to be
+        saved.
+
+        **NOTE:** Use this method with caution, as it can cause the user
+        to lose work when exiting the editor.  This method is used to
+        avoid having to save buffers created/modified by regression 
+        testing.
+
+        **INPUTS**
+
+        *STR buff_name* -- name of the buffer
+
+        *BOOL as_scratch* -- whether to mark the buffer as a scratch
+        buffer or unmark it
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if as_scratch:
+            self.scratch_buffers[buff_name] = 1
+        else:
+            try:
+                del self.scratch_buffers[buff_name]
+            except KeyError:
+                pass
+
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.buffers = None
         self.filenames = None
 # subclasses must call their parent class's remove_other_references
@@ -563,33 +595,40 @@ class GenEditBuffers(GenEdit):
 
     def open_buffers(self):
         """retrieve a list of the names of open buffers from the
-	application.
+        application.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
 #        print 'open buffers: ', self.buffers.keys()
         return self.buffers.keys()
 
     def modified_buffer(self, buff_name):
         """returns a list of names buffers which have been modified
-	since the last time they were saved
+        since the last time they were saved
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- the list of buffer names
-	"""
+        *[STR]* -- the list of buffer names
+        """
         buffer = self.buffers[buff_name]
         if buffer.modified():
+            try:
+                self.scratch_buffers[buff_name]
+            except KeyError:
+                pass
+            else:
+# if buffer is a scratch buffer, pretend it is unmodified
+                return 0
             if buffer.len() != 0 or self.filenames[buff_name] != None: 
 # our method of creating a new buffer when one is closed inadvertently
 # makes the new, empty buffer appear to have been modified
@@ -598,16 +637,16 @@ class GenEditBuffers(GenEdit):
 
     def modified_buffers(self):
         """returns a list of names buffers which have been modified
-	since the last time they were saved
+        since the last time they were saved
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- the list of buffer names
-	"""
+        *[STR]* -- the list of buffer names
+        """
         modified = []
 #        print 'checking modified buffers:'
 #        print 'all buffers:', self.buffers.keys()
@@ -619,16 +658,16 @@ class GenEditBuffers(GenEdit):
 
     def editor_buffer(self, buff_name):
         """returns a reference to the TextBufferChangeSpec embedded in 
-	the GUI which corresponds to buffer buff_name
+        the GUI which corresponds to buffer buff_name
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TextBufferChangeSpec* -- the TextBufferChangeSpec
-	"""
+        *TextBufferChangeSpec* -- the TextBufferChangeSpec
+        """
         if buff_name in self.buffers.keys():
             return self.buffers[buff_name]
         return None
@@ -636,34 +675,34 @@ class GenEditBuffers(GenEdit):
     def multiple_buffers(self):
         """does editor support multiple open buffers?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
         return self.multiple
 
     def new_buffer(self, buff_name, buffer, perform_callback = 1):
         """adds a new buffer, optionally performing a callback to the
-	AppState interface
+        AppState interface
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the new buffer
+        *STR buff_name* -- the name of the new buffer
 
-	*TextBufferChangeSpec buffer* -- the TextBufferChangeSpec interface 
-	to the new buffer
+        *TextBufferChangeSpec buffer* -- the TextBufferChangeSpec interface 
+        to the new buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's open buffer callback
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's open buffer callback
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the new buffer was added successfully
-	"""
+        *BOOL* -- true if the new buffer was added successfully
+        """
         if buff_name in self.open_buffers():
             return 0
         self.buffers[buff_name] = buffer
@@ -677,21 +716,21 @@ class GenEditBuffers(GenEdit):
 
     def rename_buffer(self, buff_name, new_buff_name, perform_callback = 1):
         """renames a buffer, optionally performing a callback to the
-	AppState interface
+        AppState interface
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the old name of the new buffer
+        *STR buff_name* -- the old name of the new buffer
 
-	*STR new_buff_name* -- the new name of the new buffer
+        *STR new_buff_name* -- the new name of the new buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's rename buffer callback
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's rename buffer callback
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the new buffer was renamed successfully
-	"""
+        *BOOL* -- true if the new buffer was renamed successfully
+        """
 #        print 'rename "%s" to "%s"' % (buff_name, new_buff_name)
 #        print 'buffers currently = ', self.open_buffers()
         if buff_name not in self.open_buffers():
@@ -712,21 +751,21 @@ class GenEditBuffers(GenEdit):
 
     def show_buffer(self, buff_name, perform_callback = 1):
         """makes a buffer the foreground one.
-	Depending on the subclass of GenEditBuffers, this may activate a
-	different frame, or reveal a previously hidden buffer and update
-	the window title appropriately)
+        Depending on the subclass of GenEditBuffers, this may activate a
+        different frame, or reveal a previously hidden buffer and update
+        the window title appropriately)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the curr_buffer_name_cbk
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the curr_buffer_name_cbk
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         success = self.app_change_buffer(buff_name)
         self.update_title(buff_name)
         if success and perform_callback:
@@ -736,63 +775,63 @@ class GenEditBuffers(GenEdit):
     def open_file_new_buffer(self, file_name, new_buff_name,
             user_initiated = 0):
         """opens a new file.  Depending on the subclass of 
-	GenEditBuffers, this may open a new frame, or hide the 
-	previously visible buffer in the same frame.
+        GenEditBuffers, this may open a new frame, or hide the 
+        previously visible buffer in the same frame.
 
-	**NOTE:** despite the name of this method, the 
-	TextBufferChangeSpec returned can be an existing buffer, 
-	if, e.g.,  the editor only has one window and one buffer.
+        **NOTE:** despite the name of this method, the 
+        TextBufferChangeSpec returned can be an existing buffer, 
+        if, e.g.,  the editor only has one window and one buffer.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the full path of the file to open, or None
-	to create a new, empty buffer
+        *STR file_name*  -- the full path of the file to open, or None
+        to create a new, empty buffer
 
-	*STR new_buff_name*  -- the name which will be given to the new
-	buffer
+        *STR new_buff_name*  -- the name which will be given to the new
+        buffer
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will not invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will not invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
         **OUTPUTS**
 
-	*BOOL* -- true if the file was opened successfully.
-	Note: if no file by the name file_name exists, 
-	open_file_new_buffer should create a new, empty buffer with 
-	that file name.
-	"""
+        *BOOL* -- true if the file was opened successfully.
+        Note: if no file by the name file_name exists, 
+        open_file_new_buffer should create a new, empty buffer with 
+        that file name.
+        """
         debug.virtual('GenEditBuffers.open_file_new_buffer')
 
     def corresponding_frame(self, buff_name):
         """returns a reference to the GenEditFrame containing the given
-	buffer
+        buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*GenEditFrame* -- the corresponding frame
-	"""
+        *GenEditFrame* -- the corresponding frame
+        """
         debug.virtual('GenEditBuffers.corresponding_frame')
 
     def generate_buffer_name(self, file_name):
         """find a new, unique buffer name for a buffer, given a file
-	name
+        name
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the short file name of the file (without the
-	path)
+        *STR file_name*  -- the short file name of the file (without the
+        path)
 
         **OUTPUTS**
         
         STR *buff_name* -- Unique name for the buffer 
-	"""
+        """
         new_buff_name = file_name
         if new_buff_name in self.buffers.keys():
             i = 2
@@ -806,28 +845,28 @@ class GenEditBuffers(GenEdit):
     def open_file(self, file_name = None, user_initiated = 0):
         """opens a new file 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the full path of the file to open, or None
-	to ask the user
+        *STR file_name*  -- the full path of the file to open, or None
+        to ask the user
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will not invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will not invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
         **OUTPUTS**
         
         STR *buff_name* -- Unique name of the buffer in which the file
         was opened. Returns *None* if the editor was not able to open
         the file.  Note: if no file by the name file_name exists, the 
-	regression tests expect the editor to open an empty buffer with
-	that name.  Therefore, open_file should only fail
-	if the user cancels the open file command (e.g. if there is an
-	unsaved buffer) or if file_name was omitted and the user cancelled
-	the Open File dialog box
-	"""
+        regression tests expect the editor to open an empty buffer with
+        that name.  Therefore, open_file should only fail
+        if the user cancels the open file command (e.g. if there is an
+        unsaved buffer) or if file_name was omitted and the user cancelled
+        the Open File dialog box
+        """
         if not self.multiple_buffers():
             buff_name = self.app_active_buffer_name()
             if buff_name != None:
@@ -879,23 +918,23 @@ class GenEditBuffers(GenEdit):
 
     def save_specified(self, buff_name, full_path, no_prompt = 0):
         """Saves the buffer buff_name to a file.  This version assumes
-	buff_name exists and full_path has actually been specified, but
-	will still prompt if asked to overwrite an existing file, unless
-	no_prompt is true.
+        buff_name exists and full_path has actually been specified, but
+        will still prompt if asked to overwrite an existing file, unless
+        no_prompt is true.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	*BOOL no_prompt* -- if true, don't prompt before overwriting
-	an existing file.
+        *BOOL no_prompt* -- if true, don't prompt before overwriting
+        an existing file.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if file was saved successfully
-	"""
+        *BOOL* -- true if file was saved successfully
+        """
         buffer = self.editor_buffer(buff_name)
         if buffer == None:
             return 0
@@ -910,34 +949,34 @@ class GenEditBuffers(GenEdit):
         rename_buff = 1, ask_for_new_name = 0, user_initiated = 0):
         """Saves the buffer buff_name to a file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	*STR full_path* -- path name of file to save, or None to use the
-	current file name, or prompt
+        *STR full_path* -- path name of file to save, or None to use the
+        current file name, or prompt
 
-	*BOOL no_prompt* -- if true, don't prompt before overwriting
-	an existing file.
+        *BOOL no_prompt* -- if true, don't prompt before overwriting
+        an existing file.
 
-	*BOOL rename_buff* -- if false, do not rename the buffer
+        *BOOL rename_buff* -- if false, do not rename the buffer
 
-	*BOOL ask_for_new_name* -- if true, prompt for a new name, even if the
-	buffer already has a corresponding filename.  Ignored unless
-	full_path == None.
+        *BOOL ask_for_new_name* -- if true, prompt for a new name, even if the
+        buffer already has a corresponding filename.  Ignored unless
+        full_path == None.
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
-	rename buffer callback.  If this method is called by AppState,
-	this would be redundant, because AppState.save_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will invoke the parent AppState's 
+        rename buffer callback.  If this method is called by AppState,
+        this would be redundant, because AppState.save_file invokes 
+        the callback itself. 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- new buffer name if successful, or None if the save 
-	failed
-	"""
+        *STR* -- new buffer name if successful, or None if the save 
+        failed
+        """
         buffer = self.editor_buffer(buff_name)
         if buffer == None:
             return None
@@ -986,53 +1025,53 @@ class GenEditBuffers(GenEdit):
 
     def update_title(self, buff_name):
         """update the window title of the frame containing buff_name to
-	reflect a new buffer name (unless that buffer is not the current
-	buffer displayed in that frame)
-	
-	**INPUTS**
+        reflect a new buffer name (unless that buffer is not the current
+        buffer displayed in that frame)
+        
+        **INPUTS**
 
-	*STR buff_name* -- name of the buffer
+        *STR buff_name* -- name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditBuffers.update_title')
 
     def buffer_title(self, buff_name):
         """the buffer or file name to be used when a particular buffer is 
-	active
-	
-	**INPUTS**
+        active
+        
+        **INPUTS**
 
-	*STR buff_name* -- name of the buffer
+        *STR buff_name* -- name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the name to combine with the application name and
-	instance string
-	"""
+        *STR* -- the name to combine with the application name and
+        instance string
+        """
         return buff_name
 
     def remove_buffer(self, buff_name, perform_callback = 1):
         """remove a buffer from the list of buffers.  
 
-	**Note:** this method only removes the buffer from GenEdit's
-	records, it does not destroy the underlying GUI buffer or the
-	window containing it.  For that, use delete_buffer (which will
-	also call this method)
+        **Note:** this method only removes the buffer from GenEdit's
+        records, it does not destroy the underlying GUI buffer or the
+        window containing it.  For that, use delete_buffer (which will
+        also call this method)
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the curr_buffer_name_cbk
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the curr_buffer_name_cbk
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 #        print 'removing buffer "%s"' %buff_name
         if buff_name in self.open_buffers():
             del self.buffers[buff_name]
@@ -1041,17 +1080,17 @@ class GenEditBuffers(GenEdit):
     def delete_buffer(self, buff_name, perform_callback = 1):
         """delete a buffer 
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the curr_buffer_name_cbk
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the curr_buffer_name_cbk
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditBuffers.delete_buffer')
 
     def app_close_buffer(self, buff_name, save=0):
@@ -1118,108 +1157,108 @@ class GenEditFrame(Object.OwnerObject):
 
     def set_frame_ID(self, ID):
         """set the frame ID, which the frame will use to identify itself
-	to its owner in callbacks
+        to its owner in callbacks
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT ID* -- unique ID for the frame (assigned by
-	GenEditFrames.add_frame, not by the GUI)
-	
-	**OUTPUTS**
+        *INT ID* -- unique ID for the frame (assigned by
+        GenEditFrames.add_frame, not by the GUI)
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.frame_ID = ID
 
     def close_window(self):
         """close the window corresponding to this frame
 
-	**NOTE:** The owner must call the frame's cleanup method before
-	calling this method to close the actual GUI frame
+        **NOTE:** The owner must call the frame's cleanup method before
+        calling this method to close the actual GUI frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.close_window')
 
     def show(self, initial = 0):
         """show the window corresponding to this frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* initial -- is this the initial time the frame is shown?
+        *BOOL* initial -- is this the initial time the frame is shown?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.show')
 
 
     def open_buffers(self):
         """retrieve a list of the names of open buffers associated with
-	contained by this frame.
+        contained by this frame.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
         debug.virtual('GenEditFrame.open_buffers')
 
     def is_active(self):
         """indicates whether this frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         debug.virtual('GenEditFrame.is_active')
 
     def editor_has_focus(self):
         """indicates whether the editor control has the focus in this
-	frame
+        frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if editor window has the focus
-	"""
+        *BOOL* -- true if editor window has the focus
+        """
         debug.virtual('GenEditFrame.editor_has_focus')
 
     def frame_active_buffer_name(self):
         """Returns the name of the buffer currently active in this
-	frame.
+        frame.
 
         **INPUTS**
 
         *none* 
         
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- buffer name of current buffer, or None if there is none
+        *STR* -- buffer name of current buffer, or None if there is none
         """
 
         debug.virtual('GenEditFrame.frame_active_buffer_name')
 
     def switch_to_buffer(self, buff_name):
         """Puts this frame in the foreground (if it isn't already), and
-	changes the active buffer to buff_name
+        changes the active buffer to buff_name
 
         **INPUTS**
         
@@ -1228,163 +1267,163 @@ class GenEditFrame(Object.OwnerObject):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the external application
-	successfully switches to it
+        successfully switches to it
         """
         debug.virtual('GenEditFrame.switch_to_buffer')
         
     def rename_buffer(self, buff_name, new_buff_name):
         """notifies the frame that one of its buffers has been renamed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the old name of the new buffer
+        *STR buff_name* -- the old name of the new buffer
 
-	*STR new_buff_name* -- the new name of the new buffer
+        *STR new_buff_name* -- the new name of the new buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- false if the old buff_name was unknown
-	"""
+        *BOOL* -- false if the old buff_name was unknown
+        """
         debug.virtual('GenEditFrame.rename_buffer')
 
     def remove_buffer(self, buff_name):
         """remove a buffer from the list of belong to this frame.  
 
-	**Note:** this method only removes the buffer from GenEditFrame's
-	records, it does not destroy the underlying GUI buffer or the
-	window containing it.
+        **Note:** this method only removes the buffer from GenEditFrame's
+        records, it does not destroy the underlying GUI buffer or the
+        window containing it.
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.remove_buffer')
 
     def delete_buffer(self, buff_name):
         """delete a buffer 
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.delete_buffer')
 
 
     def set_instance_string(self, instance_string):
         """update the title to reflect the new instance string
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.set_instance_string')
   
     def update_title(self):
         """update the window title of the frame reflect a new buffer name 
-	
-	**INPUTS**
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GenEditFrame.update_title')
 
     def open_file_dialog(self, init_dir):
         """prompts for a file to open
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR init_dir* -- the path of the initial directory for the Open
-	File dialog
+        *STR init_dir* -- the path of the initial directory for the Open
+        File dialog
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
         debug.virtual('GenEditFrame.open_file_dialog')
 
 
     def save_as_dialog(self, buff_name, init_dir):
         """prompts for a filename under which to save the file, and
-	confirms overwriting
+        confirms overwriting
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
-	*STR init_dir* -- the path of the initial directory for the Save
-	As dialog
+        *STR init_dir* -- the path of the initial directory for the Save
+        As dialog
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
         debug.virtual('GenEditFrame.save_as_dialog')
 
     def prompt_to_save(self, buff_name):
         """prompts the user to save the current buffer before closing it, 
-	or cancel.  Note: prompt_to_save should save if the user so
-	indicates, and update the entry in self.filenames corresponding
-	to the buffer, but should not close the buffer, because
-	open_file could still fail.
+        or cancel.  Note: prompt_to_save should save if the user so
+        indicates, and update the entry in self.filenames corresponding
+        to the buffer, but should not close the buffer, because
+        open_file could still fail.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
-	
+        *STR buff_name* -- the name of the buffer
+        
         **OUTPUTS**
 
-	*BOOL* -- true if the user saved or told GenEdit to proceed
-	without saving, false if the user asked for the action causing
-	the buffer closing to be cancelled.
-	"""
+        *BOOL* -- true if the user saved or told GenEdit to proceed
+        without saving, false if the user asked for the action causing
+        the buffer closing to be cancelled.
+        """
         debug.virtual('GenEditFrame.prompt_to_save')
 
     def overwrite_prompt(self, buff_name, full_path):
         """prompts to see if the user is sure that he/she wants to
-	overwrite an existing file
+        overwrite an existing file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the user approves of overwriting the file
-	"""
+        *BOOL* -- true if the user approves of overwriting the file
+        """
         debug.virtual('GenEditFrame.overwrite_prompt')
 
     def editor_buffer(self, buff_name):
         """returns a reference to the TextBufferChangeSpec embedded 
-	in the GUI which corresponds to buffer buff_name
+        in the GUI which corresponds to buffer buff_name
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TextBufferChangeSpec* -- the TextBufferChangeSpec
-	"""
+        *TextBufferChangeSpec* -- the TextBufferChangeSpec
+        """
         debug.virtual('GenEditFrame.editor_buffer')
 
 
@@ -1417,34 +1456,34 @@ class GenEditFrameWithBuffers(GenEditFrame):
     def set_instance_string(self, instance_string):
         """update the title to reflect the new instance string
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.instance_string = instance_string
         self.update_title()
   
     def on_activate(self, activated = 1):
         """event handler for activation and deactivation events
 
-	A concrete subclass of GenEditFrameActivateEvent must call this
-	handler when this frame is activated or deactivated, so that it can
-	inform its owner.  For subclasses which query for the active
-	frame instead of storing the state, calling this method is
-	optional
+        A concrete subclass of GenEditFrameActivateEvent must call this
+        handler when this frame is activated or deactivated, so that it can
+        inform its owner.  For subclasses which query for the active
+        frame instead of storing the state, calling this method is
+        optional
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL active* -- whether this is an activate or deactivate event.
+        *BOOL active* -- whether this is an activate or deactivate event.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if activated:
 # window is being activated
             self.owner.frame_activated( self.frame_ID, activated = 1)
@@ -1478,31 +1517,31 @@ class GenEditFrameActivateEvent(GenEditFrameWithBuffers):
     def is_active(self):
         """indicates whether this frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         return self.active
 
     def on_activate(self, activated = 1):
         """event handler for activation and deactivation events
 
-	A concrete subclass of GenEditFrameActivateEvent must call this
-	handler when this frame is activated or deactivated, so that it can
-	inform its owner.  
+        A concrete subclass of GenEditFrameActivateEvent must call this
+        handler when this frame is activated or deactivated, so that it can
+        inform its owner.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL active* -- whether this is an activate or deactivate event.
+        *BOOL active* -- whether this is an activate or deactivate event.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         GenEditFrameWithBuffers.on_activate(self, activated)
         if activated:
 # window is being activated
@@ -1548,30 +1587,30 @@ class GenEditFrames(GenEditBuffers):
     def active_frame_ID(self):
         """returns the ID of the currently active frame, if any
 
-	**INPUTS** 
+        **INPUTS** 
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the unique ID of the currently active frame, or None if
-	no frame of the editor is active.
-	""" 
+        *INT* -- the unique ID of the currently active frame, or None if
+        no frame of the editor is active.
+        """ 
         debug.virtual('GenEditFrames.active_frame_ID')
 
 
     def active_frame(self):
         """returns the currently active frame, if any
 
-	**INPUTS** 
+        **INPUTS** 
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*GenEditFrame* -- the currently active frame, or None if
-	no frame of the editor is active.
-	""" 
+        *GenEditFrame* -- the currently active frame, or None if
+        no frame of the editor is active.
+        """ 
         ID = self.active_frame_ID()
         if ID == None:
             return None
@@ -1579,82 +1618,82 @@ class GenEditFrames(GenEditBuffers):
                              
     def frame_activated(self, frame_ID, activated = 1):
         """callback used by GenEditFrame to notify GenEditFrames that 
-	it has been activated or deactivated.
+        it has been activated or deactivated.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR frame_ID* -- the ID of the frame
+        *STR frame_ID* -- the ID of the frame
 
-	*BOOL activated* -- true if the frame has just been activated,
-	otherwise false
+        *BOOL activated* -- true if the frame has just been activated,
+        otherwise false
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
 
     def corresponding_frame(self, buff_name):
         """returns a reference to the GenEditFrame containing the given
-	buffer
+        buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
+        *STR buff_name* -- the name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*GenEditFrame* -- the corresponding frame
-	"""
+        *GenEditFrame* -- the corresponding frame
+        """
         if buff_name in self.corresponding_frames.keys():
             return self.frames[self.corresponding_frames[buff_name]]
         return None
 
     def new_frame(self, buff_name, instance_string = None):
         """creates a new frame of the appropriate concrete class
-	open buffer and new window callbacks to the AppState interface
+        open buffer and new window callbacks to the AppState interface
 
-	**NOTE:** when adding a new frame with a buffer, you should call
-	new_buffer first, followed by add_frame
+        **NOTE:** when adding a new frame with a buffer, you should call
+        new_buffer first, followed by add_frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the initial buffer for the frame
+        *STR buff_name* -- the name of the initial buffer for the frame
 
         *STR instance_string* -- portion of the title string indicating 
         the name of this particular instance.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*GenEditFrame frame* -- the new frame 
-	"""
+        *GenEditFrame frame* -- the new frame 
+        """
         debug.virtual('GenEditFrames.new_frame')
 
     def add_frame(self, frame, buff_name, user_initiated = 1):
         """adds a new buffer to self.buffers and new frame window 
-	containing that buffer to self.frames, optionally performing 
-	open buffer and new window callbacks to the AppState interface
+        containing that buffer to self.frames, optionally performing 
+        open buffer and new window callbacks to the AppState interface
 
-	**NOTE:** when adding a new frame with a buffer, you should call
-	new_buffer first, followed by add_frame
+        **NOTE:** when adding a new frame with a buffer, you should call
+        new_buffer first, followed by add_frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*GenEditFrame frame* -- the new frame 
+        *GenEditFrame frame* -- the new frame 
 
-	*STR buff_name* -- the name of the initial buffer for the frame
+        *STR buff_name* -- the name of the initial buffer for the frame
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- ID of the new frame, or None if the frame was not 
-	added successfully
-	"""
+        *INT* -- ID of the new frame, or None if the frame was not 
+        added successfully
+        """
         ID = self.next_ID
         self.frames[ID] = frame
         frame.set_frame_ID(ID)
@@ -1670,21 +1709,21 @@ class GenEditFrames(GenEditBuffers):
     def remove_buffer(self, buff_name, perform_callback = 1):
         """remove a buffer from the list of buffers.  
 
-	**Note:** this method only removes the buffer from GenEdit's
-	records, it does not destroy the underlying GUI buffer or the
-	window containing it.
+        **Note:** this method only removes the buffer from GenEdit's
+        records, it does not destroy the underlying GUI buffer or the
+        window containing it.
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the curr_buffer_name_cbk
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the curr_buffer_name_cbk
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if buff_name in self.open_buffers():
             frame = self.corresponding_frame(buff_name)
             frame.remove_buffer(buff_name)
@@ -1695,17 +1734,17 @@ class GenEditFrames(GenEditBuffers):
     def delete_buffer(self, buff_name, perform_callback = 1):
         """delete a buffer 
 
-	**INPUTS**
+        **INPUTS**
 
         STR *buff_name* -- name of buffer to remove
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the curr_buffer_name_cbk
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the curr_buffer_name_cbk
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         ID = self.corresponding_frames[buff_name]
         frame = self.corresponding_frame(buff_name)
         buffers = frame.open_buffers()
@@ -1747,54 +1786,54 @@ class GenEditFrames(GenEditBuffers):
 
     def prompt_to_save(self, buff_name):
         """prompts the user to save the current buffer before closing it, 
-	or cancel.  Note: prompt_to_save should save if the user so
-	indicates, and update the entry in self.filenames corresponding
-	to the buffer, but should not close the buffer, because
-	open_file could still fail.
+        or cancel.  Note: prompt_to_save should save if the user so
+        indicates, and update the entry in self.filenames corresponding
+        to the buffer, but should not close the buffer, because
+        open_file could still fail.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer
-	
+        *STR buff_name* -- the name of the buffer
+        
         **OUTPUTS**
 
-	*BOOL* -- true if the user saved or told GenEdit to proceed
-	without saving, false if the user asked for the action causing
-	the buffer closing to be cancelled.
-	"""
+        *BOOL* -- true if the user saved or told GenEdit to proceed
+        without saving, false if the user asked for the action causing
+        the buffer closing to be cancelled.
+        """
         frame = self.corresponding_frame(buff_name)
 #        debug.print_call_stack()
         return frame.prompt_to_save(buff_name)
 
     def overwrite_prompt(self, buff_name, full_path):
         """prompts to see if the user is sure that he/she wants to
-	overwrite an existing file
+        overwrite an existing file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the user approves of overwriting the file
-	"""
+        *BOOL* -- true if the user approves of overwriting the file
+        """
         frame = self.corresponding_frame(buff_name)
         return frame.overwrite_prompt(buff_name)
 
     def open_file_dialog(self):
         """prompts for a file to open
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
 #        print 'in open_file_dialog'
 #        print self.active_frame
         frame = self.active_frame()
@@ -1803,17 +1842,17 @@ class GenEditFrames(GenEditBuffers):
 
     def save_as_dialog(self, buff_name):
         """prompts for a filename under which to save the file, and
-	confirms overwriting
+        confirms overwriting
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the name of the buffer (used to find the
-	corresponding frame over which to pop up the Save As dialog)
+        *STR buff_name* -- the name of the buffer (used to find the
+        corresponding frame over which to pop up the Save As dialog)
 
         **OUTPUTS**
 
-	*STR* -- the specified path, or None if the user cancelled 
-	"""
+        *STR* -- the specified path, or None if the user cancelled 
+        """
         frame = self.corresponding_frame(buff_name)
         init_dir = self.curr_dir
         try:
@@ -1827,27 +1866,27 @@ class GenEditFrames(GenEditBuffers):
 
     def on_frame_close(self, ID):
         """method by which a frame can notify GenEdit that the user has
-	requested that it be closed (either through the close button 
-	or a menu item)
+        requested that it be closed (either through the close button 
+        or a menu item)
 
-	The user may have an opportunity to cancel this command 
-	(e.g. through the cancel button in a dialog prompting to save 
-	modified files)
+        The user may have an opportunity to cancel this command 
+        (e.g. through the cancel button in a dialog prompting to save 
+        modified files)
 
-	**NOTE:** Unless the user cancels, this method will
-	tell the frame to cleanup and close, so the caller should 
-	not assume that it is in a sane state when this method returns.
+        **NOTE:** Unless the user cancels, this method will
+        tell the frame to cleanup and close, so the caller should 
+        not assume that it is in a sane state when this method returns.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT ID* -- ID of the frame sending the event
+        *INT ID* -- ID of the frame sending the event
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the frame should be closed in response to this
-	event (unless, e.g., the user has hit cancel in response to a 
-	save modified files dialog)
-	"""
+        *BOOL* -- true if the frame should be closed in response to this
+        event (unless, e.g., the user has hit cancel in response to a 
+        save modified files dialog)
+        """
         closing = 1
         frame = self.frames[ID]
         if len(self.frames.keys()) == 1:
@@ -1879,37 +1918,22 @@ class GenEditFrames(GenEditBuffers):
 # and return true so that the frame will close itself
         return 1
 
+    def confirm_exit(self, ID = None):
+        """method called by on_exit which allows the user to save files, 
+        etc. or cancel the exit process
 
-    def on_exit(self, ID = None):
-        """method by which a frame can notify GenEdit that the user has
-	selected the Exit item from the File menu.  The user may have an 
-	opportunity to cancel this command (e.g. through the cancel button
-	in a dialog prompting to save modified files)
+        **INPUTS**
 
-	Unless the user cancels, on_exit will close all frames. 
-	Depending on the particular GUI, this may cause the
-	GUI event loop to exit.  If not, on_exit in the GenEditFrames 
-	subclass for that GUI will have to call this method, and then 
-	perform some additional processing if it returns true.
+        *INT ID* -- ID of the frame sending the event, or None if the
+        event doesn't originate from a frame.  (Currently, this
+        parameter is ignored).
 
-	**NOTE:** GenEdit is responsible for telling all frames to
-	cleanup and close, so the caller should not assume that
-	it is in a sane state when this method returns.
+        **OUTPUTS**
 
-	on_exit
-
-	**INPUTS**
-
-	*INT ID* -- ID of the frame sending the event, or None if the
-	event doesn't originate from a frame.  (Currently, this
-	parameter is ignored).
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the editor is exiting in response to this
-	event (unless, e.g., the user has hit cancel in response to a 
-	save modified files dialog)
-	"""
+        *BOOL* -- true if the editor is exiting in response to this
+        event (unless, e.g., the user has hit cancel in response to a 
+        save modified files dialog)
+        """
         exiting = 1
 #        print 'here I am'
 #        sys.stdout.flush()
@@ -1921,6 +1945,40 @@ class GenEditFrames(GenEditBuffers):
             if not self.prompt_to_save(buff_name):
                 exiting = 0
         if not exiting:
+            return 0
+        return 1
+
+    def on_exit(self, ID = None):
+        """method by which a frame can notify GenEdit that the user has
+        selected the Exit item from the File menu.  The user may have an 
+        opportunity to cancel this command (e.g. through the cancel button
+        in a dialog prompting to save modified files)
+
+        Unless the user cancels, on_exit will close all frames. 
+        Depending on the particular GUI, this may cause the
+        GUI event loop to exit.  If not, on_exit in the GenEditFrames 
+        subclass for that GUI will have to call this method, and then 
+        perform some additional processing if it returns true.
+
+        **NOTE:** GenEdit is responsible for telling all frames to
+        cleanup and close, so the caller should not assume that
+        it is in a sane state when this method returns.
+
+        on_exit
+
+        **INPUTS**
+
+        *INT ID* -- ID of the frame sending the event, or None if the
+        event doesn't originate from a frame.  (Currently, this
+        parameter is ignored).
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the editor is exiting in response to this
+        event (unless, e.g., the user has hit cancel in response to a 
+        save modified files dialog)
+        """
+        if not self.confirm_exit(ID = ID):
             return 0
 
 # notify the owner
@@ -1956,21 +2014,21 @@ class GenEditFrames(GenEditBuffers):
 
     def rename_buffer(self, buff_name, new_buff_name, perform_callback = 1):
         """renames a buffer, optionally performing a callback to the
-	AppState interface
+        AppState interface
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- the old name of the new buffer
+        *STR buff_name* -- the old name of the new buffer
 
-	*STR new_buff_name* -- the new name of the new buffer
+        *STR new_buff_name* -- the new name of the new buffer
 
-	*BOOL perform_callback* -- indicates whether this method should
-	invoke the parent AppState's rename buffer callback
+        *BOOL perform_callback* -- indicates whether this method should
+        invoke the parent AppState's rename buffer callback
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the new buffer was renamed successfully
-	"""
+        *BOOL* -- true if the new buffer was renamed successfully
+        """
         ID = self.corresponding_frames[buff_name]
         frame = self.corresponding_frame(buff_name)
 #        print 'Frames.rename buffer "%s" to "%s"' % (buff_name, new_buff_name)
@@ -1983,17 +2041,17 @@ class GenEditFrames(GenEditBuffers):
 
     def update_title(self, buff_name):
         """update the window title of the frame containing buff_name to
-	reflect a new buffer name (unless that buffer is not the current
-	buffer displayed in that frame)
-	
-	**INPUTS**
+        reflect a new buffer name (unless that buffer is not the current
+        buffer displayed in that frame)
+        
+        **INPUTS**
 
-	*STR buff_name* -- name of the buffer
+        *STR buff_name* -- name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         frame = self.corresponding_frame(buff_name)
         if frame:
             frame.update_title()
@@ -2001,14 +2059,14 @@ class GenEditFrames(GenEditBuffers):
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if editor window has the focus
-	"""
+        *BOOL* -- true if editor window has the focus
+        """
         frame = self.active_frame()
         if frame == None:
             return 0
@@ -2016,15 +2074,15 @@ class GenEditFrames(GenEditBuffers):
 
     def app_active_buffer_name(self):
         """Returns the name of the buffer currently active in the
-	GenEdit editor.
+        GenEdit editor.
 
         **INPUTS**
 
         *none* 
         
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- buffer name of current buffer, or None if there is none
+        *STR* -- buffer name of current buffer, or None if there is none
 
         """
 #        print self, self.__class__, self.__class__.__bases__
@@ -2045,7 +2103,7 @@ class GenEditFrames(GenEditBuffers):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the application
-	successfully switches to it
+        successfully switches to it
         """
         frame = self.corresponding_frame(buff_name)
         if not frame:
@@ -2055,18 +2113,18 @@ class GenEditFrames(GenEditBuffers):
 
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
-	displayed in the title bar
+        displayed in the title bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
-	"""
+        """
         self.instance_string = instance_string
         for frame in self.frames.values():
             frame.set_instance_string(instance_string)
@@ -2091,19 +2149,19 @@ class ActivateEventMixIn(Object.Object):
 
     def frame_activated(self, frame_ID, activated = 1):
         """callback used by GenEditFrame to notify GenEditFrames that 
-	it has been activated or deactivated.
+        it has been activated or deactivated.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR frame_ID* -- the ID of the frame
+        *STR frame_ID* -- the ID of the frame
 
-	*BOOL activated* -- true if the frame has just been activated,
-	otherwise false
+        *BOOL activated* -- true if the frame has just been activated,
+        otherwise false
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 #        print 'activated = %d, %d' % (activated, frame_ID)
         if activated:
             self.current_frame = frame_ID
@@ -2113,14 +2171,14 @@ class ActivateEventMixIn(Object.Object):
     def is_active(self):
         """indicates whether an editor frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         if self.current_frame == None:
             return 0
         return 1
@@ -2128,15 +2186,15 @@ class ActivateEventMixIn(Object.Object):
     def active_frame_ID(self):
         """returns the ID of the currently active frame, if any
 
-	**INPUTS** 
+        **INPUTS** 
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the unique ID of the currently active frame, or None if
-	no frame of the editor is active.
-	""" 
+        *INT* -- the unique ID of the currently active frame, or None if
+        no frame of the editor is active.
+        """ 
         return self.current_frame
 
 class GenEditSingle(GenEditFrames):
@@ -2151,7 +2209,7 @@ class GenEditSingle(GenEditFrames):
 
     *INT only_ID* -- ID of the only frame
     """
-    def __init__(self, init_buff_name = "", **args):
+    def __init__(self, init_buff_name = "", show = 1, **args):
         self.deep_construct(GenEditSingle,
                             {'only_ID': None}, args,
                             enforce_value = {'multiple': 0})
@@ -2159,40 +2217,41 @@ class GenEditSingle(GenEditFrames):
 # at this stage, GenEdit hasn't been added to AppStateGenEdit yet, so we
 # use user_initiated = 1 so we don't do any AppState callbacks
         ID = self.add_frame(frame, init_buff_name, user_initiated = 1)
-        frame.show(initial = 1)
+        if show:
+            frame.show(initial = 1)
         self.only_ID = ID
 
     def open_file_new_buffer(self, file_name, new_buff_name,
             user_initiated = 0):
         """opens a new file.  Depending on the subclass of 
-	GenEditBuffers, this may open a new frame, or hide the 
-	previously visible buffer in the same frame.
+        GenEditBuffers, this may open a new frame, or hide the 
+        previously visible buffer in the same frame.
 
-	**NOTE:** despite the name of this method, the 
-	TextBufferChangeSpec returned can be an existing buffer, 
-	if, e.g.,  the editor only has one window and one buffer.
+        **NOTE:** despite the name of this method, the 
+        TextBufferChangeSpec returned can be an existing buffer, 
+        if, e.g.,  the editor only has one window and one buffer.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the full path of the file to open, or None
-	to create a new, empty buffer
+        *STR file_name*  -- the full path of the file to open, or None
+        to create a new, empty buffer
 
-	*STR new_buff_name*  -- the name which will be given to the new
-	buffer
+        *STR new_buff_name*  -- the name which will be given to the new
+        buffer
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
         **OUTPUTS**
 
-	*BOOL* -- true if the file was opened successfully.
-	Note: if no file by the name file_name exists, 
-	open_file_new_buffer should create a new, empty buffer with 
-	that file name.
-	"""
+        *BOOL* -- true if the file was opened successfully.
+        Note: if no file by the name file_name exists, 
+        open_file_new_buffer should create a new, empty buffer with 
+        that file name.
+        """
         frame = self.frames[self.only_ID]
         old_buff_name = frame.frame_active_buffer_name()
 #        print 'opening in old buffer "%s"' % old_buff_name
@@ -2217,28 +2276,28 @@ class GenEditSingle(GenEditFrames):
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         return 0
     
 class GenEditSimple(GenEditFrames):
@@ -2253,7 +2312,7 @@ class GenEditSimple(GenEditFrames):
 
     *none*
     """
-    def __init__(self, init_buff_name = "", **args):
+    def __init__(self, init_buff_name = "", show = 1, **args):
         self.deep_construct(GenEditSimple,
                             {}, args,
                             enforce_value = {'multiple': 1})
@@ -2261,40 +2320,41 @@ class GenEditSimple(GenEditFrames):
 # at this stage, GenEdit hasn't been added to AppStateGenEdit yet, so we
 # use user_initiated = 1 so we don't do any AppState callbacks
         ID = self.add_frame(frame, init_buff_name, user_initiated = 1)
-        frame.show(initial = 1)
+        if show:
+            frame.show(initial = 1)
 
     def open_file_new_buffer(self, file_name, new_buff_name,
             user_initiated = 0):
         """opens a new file and returns the corresponding
-	TextBufferChangeSpec.  Depending on the subclass of 
-	GenEditBuffers, this may open a new frame, or hide the 
-	previously visible buffer in the same frame.
+        TextBufferChangeSpec.  Depending on the subclass of 
+        GenEditBuffers, this may open a new frame, or hide the 
+        previously visible buffer in the same frame.
 
-	**NOTE:** despite the name of this method, the 
-	TextBufferChangeSpec returned can be an existing buffer, 
-	if, e.g.,  the editor only has one window and one buffer.
+        **NOTE:** despite the name of this method, the 
+        TextBufferChangeSpec returned can be an existing buffer, 
+        if, e.g.,  the editor only has one window and one buffer.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR file_name*  -- the full path of the file to open, or None
-	to create a new, empty buffer
+        *STR file_name*  -- the full path of the file to open, or None
+        to create a new, empty buffer
 
-	*STR new_buff_name*  -- the name which will be given to the new
-	buffer
+        *STR new_buff_name*  -- the name which will be given to the new
+        buffer
 
-	*BOOL user_initiated* -- indicates whether this method was
-	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
-	open buffer callback, because AppState.open_file invokes 
-	the callback itself. 
+        *BOOL user_initiated* -- indicates whether this method was
+        user-initiated or whether it was called by AppState.
+        In the latter case, it will invoke the parent AppState's 
+        open buffer callback, because AppState.open_file invokes 
+        the callback itself. 
 
         **OUTPUTS**
 
-	*BOOL* -- true if the file was opened successfully.
-	Note: if no file by the name file_name exists, 
-	open_file_new_buffer should create a new, empty buffer with 
-	that file name.
-	"""
+        *BOOL* -- true if the file was opened successfully.
+        Note: if no file by the name file_name exists, 
+        open_file_new_buffer should create a new, empty buffer with 
+        that file name.
+        """
         frame = self.new_frame(buff_name = new_buff_name,
             instance_string = self.instance_string)
         buffer = frame.editor_buffer(new_buff_name)
@@ -2325,28 +2385,28 @@ class GenEditSimple(GenEditFrames):
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         return 1
 
 

@@ -29,20 +29,21 @@ import NewMediatorObject
 from MediatorConsoleWX import MediatorConsoleWX
 import tcp_server
 
-import natlink, os, posixpath, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom
+import os, posixpath, re
+import string, sys, time
 
-import AppStateEmacs, AppStateMessaging, auto_test, debug
-import messaging, Object
-import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
+import debug
+import Object
 import sr_interface, util
 
-import win32gui
+import auto_test
 
 from wxPython.wx import *
 
+import SaveSpeech
 from WavePlaybackWX import WavePlaybackWX
 from thread_communication_WX import *
+
 
 
 
@@ -50,6 +51,7 @@ from thread_communication_WX import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'wxMediator': 1,
 #                        'send_mess': 1,
 #                        'get_mess': 1,
 #                        'RSMInfrastructure': 1,
@@ -156,16 +158,16 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
 
@@ -176,14 +178,14 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     def show(self, initial = 0):
         """show the window corresponding to this frame
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* initial -- is this the initial time the frame is shown?
+        *BOOL* initial -- is this the initial time the frame is shown?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.Show(1)
 #        self.update_title()
 #        print 'showing'
@@ -192,8 +194,8 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 
     def initial_show(self):
         """**NOTE:** the application must call this method when the
-	frame is initially shown.
-	"""
+        frame is initially shown.
+        """
         pass
 
     def save_speech_files(self, event):
@@ -203,9 +205,14 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 # owner will be responsible for prompting for the user to save files,
 # and calling cleanup for this frame (and all others)
 #        print 'quit_now'
+        debug.trace('wxMediatorMainFrame.quit_now',
+            'calling parent.on_exit')
         self.parent.on_exit()
     
     def close_window(self):
+        debug.trace('wxMediatorMainFrame.close_window',
+            'calling Close')
+#        debug.print_call_stack()
         self.Close()
 
     def on_close(self, event):
@@ -220,6 +227,8 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 # which will set the closing flag.  In the former case, the closing flag
 # will not have been set.
 
+        debug.trace('wxMediatorMainFrame.on_close',
+            'self.closing = %d' % self.closing)
         if self.closing:
 # after the owner has cleaned up the frame (on exit), go ahead and close
 #        print 'on_close'
@@ -229,22 +238,22 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 
 # otherwise, notify the owner, which will be responsible for 
 # prompting for the user to save files.
-        proceed = self.parent.on_main_frame_close()
+        debug.trace('wxMediatorMainFrame.on_close',
+            'calling parent.on_exit')
+        proceed = self.parent.on_exit(frame_closing = 1)
+        debug.trace('wxMediatorMainFrame.on_close',
+            'proceed = %d' % proceed)
 #        print 'proceed = ', proceed
 # Unless the user cancels closing the frame, the owner will
 # call cleanup for this frame, so it will be safe to close the frame
         if proceed:
             event.Skip()
 
-
-
-
-class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
+class wxMediator(wxApp, SaveSpeech.SaveSpeech,
+    Object.OwnerObject):
     """wxApp subclass for the mediator
 
     **INSTANCE ATTRIBUTES**
-
-    *wxMediatorMainFrame frame* -- the main frame window of the mediator
 
     *ServerNewMediator the_server* -- the underlying server
 
@@ -258,7 +267,6 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
     def __init__(self, test_suite = None, **args):
         self.deep_construct(wxMediator, 
                             {
-                             'frame': None,
                              'the_server': None,
                              'test_suite': test_suite,
                              'the_mediator': None,
@@ -266,28 +274,29 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
                             }, 
                             args, exclude_bases = {wxApp: 1})
         self.add_owned('the_mediator')
-        test_server = not (test_suite == None)
-        self.the_server = self.create_server(test_server)
+        testing = not (test_suite is None)
+        self.the_server = self.create_server(testing)
 
-        test_space = globals()
-#        test_space = {}
-#        test_space['auto_test'] = auto_test
-        if test_server:
+        test_args = None
+        test_space = None
+        if testing:
+            test_space = globals()
+            test_args = [test_suite]
             sys.stderr.write('Loading test definitions...\n')
             tests_def_fname = posixpath.expandvars('$VCODE_HOME' + \
                 os.sep + 'Admin' + os.sep + 'tests_def.py')
             execfile(tests_def_fname, test_space)        
 
         wxApp.__init__(self, 0)
-        console = MediatorConsoleWX(self.frame)
+#        wxApp.__init__(self, 1, 'medcrash')
+        console = MediatorConsoleWX(self.main_frame())
 
-#        print self.the_server
         correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
                 console = console, wave_playback = WavePlaybackWX, 
                 correct_evt = correct_evt,
-                test_args = [test_suite],
+                test_args = test_args,
                 test_space = test_space, global_grammars = 1, exclusive = 1)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
@@ -295,38 +304,60 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 #        print self.the_mediator.server
         sys.stderr.write('Finished wxMediator init...\n')
 
-        self.frame.show(1)
+        self.main_frame().show(1)
         self.hook_events()
 #        wxApp.__init__(self, 1, "crash.wxMediator")
 
+    def main_frame(self):
+        """returns a reference to the main frame of the wxMediator
+        application
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *wxFrame* -- the main wxFrame
+        """
+        debug.virtual('wxMediator.main_frame')
+
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
 
+        debug.trace('wxMediator.remove_other_references',
+            'setting self.quitting')
         self.quitting = 1
 # for now, quit first, then cleanup (including server owned by the
 # NewMediatorObject)
 #        print 'about to quit the mediator'
+        debug.trace('wxMediator.remove_other_references',
+            'del ref. to server (so NewMediatorObject can clean it up)')
         self.the_server = None
+        debug.trace('wxMediator.remove_other_references',
+            'about to quit the mediator')
         self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
             disconnect=1)
    
+        debug.trace('wxMediator.remove_other_references',
+            'done quitting the mediator')
         Object.OwnerObject.remove_other_references(self)
 
     def OnInit(self):
-        self.frame = self.create_main()
-        self.SetTopWindow(self.frame)
+        self.create_main()
+        self.SetTopWindow(self.main_frame())
         return 1
 
     def server(self):
@@ -334,32 +365,35 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 
     def run(self):
         """starts the message loop.  Note: this function does not
-	return until the GUI exits.
+        return until the GUI exits.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.MainLoop()
+        debug.trace('wxMediator.run',
+            'main loop finished, calling self.cleanup')
         self.quitting = 1
         self.cleanup()
+        debug.trace('wxMediator.run', 'done with self.cleanup')
 
 
     def hook_events(self):
         """hook events up to our handlers
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         EVT_MINE(self, wxEVT_CORRECT_UTTERANCE, self.on_correct_utterance)
 
     def on_correct_utterance(self, event):
@@ -379,9 +413,141 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
             instance = event.instance_name
             self.the_mediator.correct_utterance(instance, number)
 
+    def create_main(self):
+        """create the main frame window for the mediator, but do not
+        show it
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('wxMediator.create_main')
+
+    def create_server(self, test_server):
+        """create the TCP server for the mediator, if running in server
+        mode, and call hook_events, but do not start the server yet.
+        
+        **INPUTS**
+        
+        *BOOL test_server* -- true if the mediator has been started with
+        a test suite and the server should listen for connections from a
+        test client
+        
+        **OUTPUTS**
+
+        *ServerNewMediator* -- the server, or None if we are running
+        with an internal test editor instead
+        """
+        debug.virtual('wxMediator.create_server')
+    
+class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
+    """wxMediator with a server
+
+    **INSTANCE ATTRIBUTES**
+
+    *wxMediatorMainFrame frame* -- the main frame window of the mediator
+    """
+    def __init__(self, **args):
+        self.decl_attrs({'frame': None})
+        self.deep_construct(wxMediatorServer, 
+                            {}, args)
+
+    def main_frame(self):
+        """returns a reference to the main frame of the wxMediator
+        application
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *wxFrame* -- the main wxFrame
+        """
+        return self.frame
+
+    def on_exit(self, frame_closing = 0):
+        """method by which a frame can notify GenEdit that the user has
+        selected the Exit item from the File menu.  The user may have an 
+        opportunity to cancel this command (e.g. through the cancel button
+        in a dialog prompting to save modified files)
+
+        **INPUTS**
+
+        *BOOL frame_closing* -- flag indicating if on_exit is being
+        called by the close event handler of the frame (in which case we
+        don't need to close the frame ourselves, just return 0).
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the editor is exiting in response to this
+        event (unless, e.g., the user has hit cancel in response to a 
+        save modified files dialog)
+        """
+        return self.quit_now(frame_closing = frame_closing)
+
+    def quit_now(self, prompt = 1, frame_closing = 0):
+        """exit the mediator, unless the user cancels when prompted to
+        save speech files
+
+        **INPUTS**
+
+        *BOOL prompt* -- flag indicating whether or not we should prompt
+        the user to save speech files.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the user didn't cancel (or wasn't prompted)
+        """
+        exiting = 1
+        if prompt:
+            exiting = self.prompt_save_speech_files(self.frame)
+        debug.trace('wxMediator.quit_now', 'exiting is %d' % exiting)
+        if not exiting:
+            return 0
+        debug.trace('wxMediator.quit_now', 'cleanup frame')
+        if self.frame:
+            self.frame.cleanup()
+            if not frame_closing:
+                debug.trace('wxMediator.quit_now', 'frame.close_window')
+                self.frame.close_window()
+                debug.trace('wxMediator.quit_now', 'del reference to frame')
+                self.frame = None
+# since we called SetTopWindow with the frame, our message loop should
+# close when the frame does, allowing us to perform our own cleanup when
+# control returns from MainLoop to our run method
+
+        debug.trace('wxMediator.quit_now', 'returning')
+        return 1
+
+
+    def create_server(self, test_server):
+        """create the TCP server for the mediator, if running in server
+        mode, and call hook_events, but do not start the server yet.
+        
+        **INPUTS**
+        
+        *BOOL test_server* -- true if the mediator has been started with
+        a test suite and the server should listen for connections from a
+        test client
+        
+        **OUTPUTS**
+
+        *ServerNewMediator* -- the server, or None if we are running
+        with an internal test editor instead
+        """
+        factory = tcp_server.AppStateFactorySimple()
+        return tcp_server.ServerNewMediator(data_events = self,
+                                         test_server = test_server,
+                                         editor_factory = factory) 
+
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -390,210 +556,36 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         event = SocketHasDataWX(self, wxEVT_SOCKET_DATA, id) 
         return event
 
     def create_main(self):
         """create the main frame window for the mediator, and show it
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUTS**
-
-        *wxMediatorMainFrame, wxFrame* -- the main frame 
-	"""
-        debug.virtual('wxMediator.create_main')
-
-    def create_server(self, test_server):
-        """create the TCP server for the mediator, if running in server
-        mode, and call hook_events, but do not start the server yet.
-	
-	**INPUTS**
-	
-	*BOOL test_server* -- true if the mediator has been started with
-        a test suite and the server should listen for connections from a
-        test client
-	
-	**OUTPUTS**
-
-        *ServerNewMediator* -- the server, or None if we are running
-        with an internal test editor instead
-	"""
-        debug.virtual('wxMediator.create_server')
-    
-    def on_main_frame_close(self):
-        """method by which the main frame can notify us
-        the user has requested that it be closed (either through the 
-        close button or a menu item)
-
-	The user may have an opportunity to cancel this command 
-	(e.g. through the cancel button in a dialog prompting to save 
-	speech files)
-
-	**NOTE:** Unless the user cancels, this method will
-	tell the frame to cleanup and close, so the caller should 
-	not assume that it is in a sane state when this method returns.
-
-	**INPUTS**
-
+        
+        **INPUTS**
+        
         *none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the frame should be closed in response to this
-	event (unless, e.g., the user has hit cancel in response to a 
-	save modified files dialog)
-	"""
-        closing = 1
-        if not self.quitting and not self.test_suite:
-            closing = self.prompt_to_save(allow_cancel = not self.quitting)
-        if not closing and not self.quitting:
-            return 0
-# if the message loop has already exited, we have no choice but to close
-
-        self.frame.cleanup()
-        self.frame = None
-
-# and return true so that the frame will close itself
-        return 1
-
-
-    def on_exit(self):
-        """method by which a frame can notify GenEdit that the user has
-	selected the Exit item from the File menu.  The user may have an 
-	opportunity to cancel this command (e.g. through the cancel button
-	in a dialog prompting to save modified files)
-
-	Unless the user cancels, on_exit will close all frames. 
-	Depending on the particular GUI, this may cause the
-	GUI event loop to exit.  If not, on_exit in the GenEditFrames 
-	subclass for that GUI will have to call this method, and then 
-	perform some additional processing if it returns true.
-
-	**NOTE:** GenEdit is responsible for telling all frames to
-	cleanup and close, so the caller should not assume that
-	it is in a sane state when this method returns.
-
-	on_exit
-
-	**INPUTS**
-
-	*INT ID* -- ID of the frame sending the event, or None if the
-	event doesn't originate from a frame.  (Currently, this
-	parameter is ignored).
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the editor is exiting in response to this
-	event (unless, e.g., the user has hit cancel in response to a 
-	save modified files dialog)
-	"""
-        exiting = self.prompt_to_save(allow_cancel = not self.quitting)
-        if not exiting and not self.quitting:
-            return 0
-# if the message loop has already exited, we have no choice but to close
-
-        self.frame.cleanup()
-#            print 'closing'
-#            sys.stdout.flush()
-        self.frame.close_window()
-        self.frame = None
-# since we called SetTopWindow with the frame, our message loop should
-# close when the frame does, allowing us to perform our own cleanup when
-# control returns from MainLoop to our run method
-        return 1
-
-    def prompt_to_save(self, allow_cancel = 1):
-        """prompts the user to save speech files and other configuration 
-        files before exiting, or to cancel.   Note: prompt_to_save 
-        should save if the user so indicates
-
-	**INPUTS**
-
-        *BOOL allow_cancel* -- true to allow the user to cancel exiting,
-        false if the message loop has exited and we must quit
-	
+        
         **OUTPUTS**
 
-	*BOOL* -- true if the user saved or told the mediator to quit
-	without saving, false if the user cancelled.
-	"""
-        flags = wxICON_EXCLAMATION | wxYES_NO | wxYES_DEFAULT
-        if allow_cancel:
-            flags = flags | wxCANCEL
-        answer = wxMessageBox("Save speech files?",
-                "Exiting", flags, self.frame)
-        if answer == wxCANCEL:
-            return 0
-        if answer == wxYES:
-            self.save_speech_files()
-        return 1
- 
-    def save_speech_files(self):
-        if sr_interface.sr_user_needs_saving:
-            sr_interface.saveUser()
-
-class wxMediatorServer(wxMediator):
-    """wxMediator with a server
-
-    **INSTANCE ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, **args):
-        self.deep_construct(wxMediatorServer, 
-                            {
-                            }, args)
-
-    def create_server(self, test_server):
-        """create the TCP server for the mediator, if running in server
-        mode, and call hook_events, but do not start the server yet.
-	
-	**INPUTS**
-	
-	*BOOL test_server* -- true if the mediator has been started with
-        a test suite and the server should listen for connections from a
-        test client
-	
-	**OUTPUTS**
-
-        *ServerNewMediator* -- the server, or None if we are running
-        with an internal test editor instead
-	"""
-        factory = tcp_server.AppStateFactorySimple()
-        return tcp_server.ServerNewMediator(data_events = self,
-                                         test_server = test_server,
-                                         editor_factory = factory) 
-
-    def create_main(self):
-        """create the main frame window for the mediator, and show it
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUTS**
-
         *wxMediatorMainFrame, wxFrame* -- the main frame 
-	"""
-        return wxMediatorMainFrame(self)
+        """
+        self.frame = wxMediatorMainFrame(self)
 
     def run(self):
         """starts the message loop.  Note: this function does not
-	return until the GUI exits.
+        return until the GUI exits.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         listener_evt = InterThreadEventWX(self,
             wxEVT_NEW_LISTEN_CONN) 
         talker_evt = InterThreadEventWX(self,
@@ -606,14 +598,14 @@ class wxMediatorServer(wxMediator):
     def hook_events(self):
         """hook the server events up to our handlers
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         wxMediator.hook_events(self)
         EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
         EVT_MINE(self, wxEVT_NEW_LISTEN_CONN, self.new_listen_conn)
@@ -621,7 +613,7 @@ class wxMediatorServer(wxMediator):
 
     def on_data(self, event):
         """event handler for data events
-	"""
+        """
         if not self.quitting:
             self.the_server.process_ready_socks([event.socket_ID])
 
@@ -632,7 +624,8 @@ class wxMediatorServer(wxMediator):
     def new_talk_conn(self, event):
         if not self.quitting:
             if not self.the_server.handshake_talk_socks():
-                self.frame.close_window()
+# if we've just run regression tests, we quit now, without prompting
+                self.quit_now(prompt = 0)
 
 
 ##############################################################################

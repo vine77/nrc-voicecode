@@ -24,7 +24,7 @@
 
 from Object import Object, OwnerObject
 
-class WavePlayback(Object):
+class WavePlayback(OwnerObject):
     """abstract base class for object providing playback of a Wave
     sound-file data
 
@@ -42,6 +42,9 @@ class WavePlayback(Object):
         """
         self.deep_construct(WavePlayback,
             {'data': data}, attrs)
+
+    def remove_other_references(self):
+        self.data = None
 
     def check(self):
         """check the wave data to see if it is okay
