@@ -35,13 +35,29 @@ gotoline(INT linenum)
 
 showbuff()
    Prints the content of the current buffer
+
+listen()
+   Throws the mediator into a dictation loop. It will listen for
+   dictation utterances and interpret and execute any part of the
+   utterance that corresponds to a Context Sensitive Command.
+
+   Once in 'listen' mode, you cannot type console commands until you
+   have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
+   window.
+
+quit()
+   Quit the simulator. 
 """
+
+import natlink
+natlink.natConnect(1)
 
 import os, sys, util
 
 import vc_globals
 from CSCmd import CSCmd
 from config import add_csc
+
 
 # for actions that span different languages
 from cont_gen import ContC, ContPy
@@ -63,7 +79,7 @@ except Exception, err:
     print 'ERROR: in configuration file %s.\n' % config_file
     raise err
 
-
+quit_flag = 0
 
 def openfile(fname):
     """Open a file with name in current buffer.
@@ -73,10 +89,17 @@ def openfile(fname):
     vc_globals.interp.app.open_file(fname)
     showbuff()
 
-def say(utterance):
-    """Simulate an utterance *STR utterance*"""
+def say(utterance, bypass_NatLink=0):
+    """Simulate an utterance *STR utterance*
 
-    vc_globals.interp.interpret_NL_cmd(utterance)
+    IF *BOOL bypass_NatLink* is true, the interpretation will be done withouth
+    going through NatLink's recognitionMimic function.
+    """
+
+    if bypass_NatLink:
+        vc_globals.interp.interpret_NL_cmd(utterance)
+    else:
+        natlink.recognitionMimic(utterance)
     showbuff()
 
 def goto(pos):
@@ -100,7 +123,22 @@ def move(steps):
     vc_globals.interp.app.goto(pos + steps)
     showbuff()
 
-    
+
+def setmic(state):
+    natlink.setMicState(state)
+
+
+def listen():
+    natlink.setMicState('on')
+    natlink.waitForSpeech(0)
+        
+def quit():
+    global quit_flag
+    quit_flag = 1
+    if not vc_globals.interp.dictation_object == None:
+        vc_globals.interp.terminate()
+        natlink.natDisconnect()
+
 if (__name__ == '__main__'):
 
     opts, args = util.gopt(['h', None, 's', None])
@@ -110,7 +148,8 @@ if (__name__ == '__main__'):
         #
         # Start in console mode with editor simulator.
         #
-        while (1):
+        vc_globals.interp.activate(0)
+        while (not quit_flag):
             sys.stdout.write('Command> ')
             cmd = sys.stdin.readline()
             try:
@@ -119,6 +158,9 @@ if (__name__ == '__main__'):
                 print 'Error executing command.\n'
                 print '   Error type: %s' % err
                 print '   Error data: %s' % err.__dict__
+
+quit()
+        
 
 
 

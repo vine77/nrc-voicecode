@@ -48,12 +48,13 @@ class Object:
     attributes from their ancestor classes.
     
     The [Object] class defines a method [deep_construct], which can be
-    used to create "standard" constructors which allow you to:
+    used to create "standard" constructors with interesting properties:
 
-    - automatically invoke the constructor of any superclass that has a "standard" constructor
-    - initialise the value of any attribute (including ones defined by ancestor classe) by specifying its value as a named argument
-    - leaving the value of any attribute (including ones defined by ancestor classe) at a consistent default value, by not specifying its value as a named argument.
-    - inherit default attribute values from ancestor classes
+    - it automatically invoke the constructor of any superclass that has a "standard" constructor
+    - it inherits default attribute values from ancestor classes
+    - you can call it without arguments to obtain a consistent default instance
+    - you can override the default value of any attribute (including ones defined by ancestor classe) simply by passing a named argument to the constructor
+    - you can leave the value of any attribute (including ones defined by ancestor classe) at its default value, simply by not passing a named argument for that attribute
 
     Below is a template for such a standard constructor.
 
@@ -71,14 +72,15 @@ class Object:
 
     Here, *StdClass1, ..., StdClassN* are "standard" classes, that is
     classes that have standard constructor. The constructor of those
-    classes can be invoked automatically because it doesn't require
-    any arguments.
+    classes can be invoked automatically because it doesn't have
+    any compulsory arguments.
 
     *NonStdClass1, ..., NonStdClassK* are "non-standard" classes,
      i.e. classes whose constructor has some compulsory arguments. The
      constructor of those non-standard classes can therefore not be
      called automatically (which is why they are set in the
-     *exclude_bases* argument)
+     *exclude_bases* argument and their constructor is explicitely
+     called after the call to *self.deep_construct*)
     
     Attributes *attr1, ..., attrN* are the new attributes defined by
     *AClass*, and *val1, ..., valN* are their default values.
@@ -101,7 +103,7 @@ class Object:
     *none* --
 
     .. [def_attrs] file:///./Object.Object.html#Object.Object.def_attrs
-   .. [init_attrs] file:///Object.Object.html#Object.Object.init_attrs"""
+    .. [init_attrs] file:///Object.Object.html#Object.Object.init_attrs"""
 
 
     #
@@ -133,7 +135,7 @@ class Object:
         listed in *exclude_bases* argument). These constructors are
         called with no arguments.
 
-        [Object].. file:///./Object.Object.html"""
+        .. [Object] file:///./Object.Object.html"""
 
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):

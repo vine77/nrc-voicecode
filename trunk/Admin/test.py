@@ -1,6 +1,6 @@
 """Regression testing script"""
 
-import os, posixpath
+import os, natlink, posixpath
 import auto_test, debug, EdSim, util
 
 def usage():
@@ -48,3 +48,10 @@ if (__name__ == '__main__'):
         execfile(opts['f'])
         auto_test.run(args)
 
+
+    #
+    # Loading VoiceDictation caused a connection to NatSpeak.
+    # Need to disconnect otherwise the DOS window hangs up after script
+    # terminates.
+    #
+    natlink.natDisconnect()

@@ -17,6 +17,8 @@ class SourceBuff(Object):
     *INT cur_pos=0* -- Cursor position (in number of chars) in the buffer
     *INT visible_start=None* -- Start position (in number of chars) of the visible portion of the source buffer
     *INT visible_end=None* -- End position (in number of chars) of the visible portion of the source buffer
+    *INT selection_start=None* -- Start position (in number of chars) of the current selection
+    *INT selection_end=None* -- End position (in number of chars) of the current selection
     *STR content=None* -- Content of the source buffer
 
     CLASS ATTRIBUTES**
@@ -25,15 +27,17 @@ class SourceBuff(Object):
     value is the programming language associated with that extension
     """
     
-    def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=None, visible_end=None, content=None, **attrs):
+    def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=0, visible_end=0, selection_start=0, selection_end=0, content=None, **attrs):
         self.deep_construct(SourceBuff,
                             {'file_name': file_name, \
                              'language': language, \
                              'cur_pos': cur_pos, \
                              'visible_start': visible_start, \
                              'visible_end': visible_end, \
-                             'content': content},
-                            attrs
+                             'selection_start': selection_start, \
+                             'selection_end': selection_end, \
+                             'content': content}, \
+                            attrs \
                             )
 
         global file_language        
