@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:44:56 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 13 17:17:15 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -30,6 +30,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_new_statement</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_simple_for</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_simple_while</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">comparison_operator</SPAN> = <SPAN CLASS="VariableValue">65536</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_class_body</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionSearch instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_class_definition</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_subclass</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
@@ -41,9 +42,9 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">joins_identifier</SPAN> = <SPAN CLASS="VariableValue">32</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">letters_and_digits</SPAN> = <SPAN CLASS="VariableValue">16</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_backslash</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_bang</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_close_paren</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_close_quote</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_colon</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_comma</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_dot</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_function_of</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
@@ -56,8 +57,9 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_before</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_off</SPAN> = <SPAN CLASS="VariableValue">8</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_on</SPAN> = <SPAN CLASS="VariableValue">4</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_spaces</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">normal_spacing</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">pre_or_postfix</SPAN> = <SPAN CLASS="VariableValue">16384</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">pre_or_postfix</SPAN> = <SPAN CLASS="VariableValue">32768</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_class_body</SPAN> = <SPAN CLASS="VariableValue">actions_py.ActionPyInsertInBody instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_class_definition</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_empty_dictionary</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
@@ -70,7 +72,8 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_old_class_body</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionSearch instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_old_function_body</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionSearch instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">py_simple_for</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_or_binary</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_operator</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_or_binary</SPAN> = <SPAN CLASS="VariableValue">16384</SPAN></SPAN>
 </PRE>
 <HR>
 <TABLE ALIGN="LEFT">

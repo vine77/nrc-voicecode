@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:30:13 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 13 17:13:22 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -21,12 +21,13 @@
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="config_helpers.PunctuationSet.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">PunctuationSet</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="config_helpers.SinglePunctuation.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SinglePunctuation</SPAN></A>(<A CLASS="DocLink" HREF="config_helpers.PunctuationSet.html">PunctuationSet</A>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_backspacing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_backspacing</SPAN></A>(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">max_count=5</SPAN>, <SPAN CLASS="Argument">primary='back space'</SPAN>, <SPAN CLASS="Argument">alternate='delete backwards'</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # add CSCs for repeatable backspacing commands.</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_escaped_characters"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_escaped_characters</SPAN></A>(<SPAN CLASS="Argument">alias_set</SPAN>, <SPAN CLASS="Argument">back_slash='back slash'</SPAN>, <SPAN CLASS="Argument">alphabet='abcdefghijklmnopqrstuvwxyz'</SPAN>, <SPAN CLASS="Argument">name_map={'z': 'zulu', 'x': 'xray', 'y': 'yankee', 'v': 'victor', 'w': 'whiskey', 't': 'tango', 'u': 'uniform', 'r': 'romeo', 's': 'sierra', 'p': 'papa', 'q': 'quebec', 'n': 'november', 'o': 'oscar', 'l': 'lima', 'm': 'mike', 'j': 'juliett', 'k': 'kilo', 'h': 'hotel', 'i': 'india', 'f': 'foxtrot', 'g': 'golf', 'd': 'delta', 'e': 'echo', 'b': 'bravo', 'c': 'charlie', 'a': 'alpha'}</SPAN>, <SPAN CLASS="Argument">cap='cap'</SPAN>, <SPAN CLASS="Argument">language=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # define LSAs for characters escaped with backslashes</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_escaped_characters"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_escaped_characters</SPAN></A>(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">back_slash='back slash'</SPAN>, <SPAN CLASS="Argument">alphabet='abcdefghijklmnopqrstuvwxyz'</SPAN>, <SPAN CLASS="Argument">name_map={'z': 'zulu', 'x': 'xray', 'y': 'yankee', 'v': 'victor', 'w': 'whiskey', 't': 'tango', 'u': 'uniform', 'r': 'romeo', 's': 'sierra', 'p': 'papa', 'q': 'quebec', 'n': 'november', 'o': 'oscar', 'l': 'lima', 'm': 'mike', 'j': 'juliett', 'k': 'kilo', 'h': 'hotel', 'i': 'india', 'f': 'foxtrot', 'g': 'golf', 'd': 'delta', 'e': 'echo', 'b': 'bravo', 'c': 'charlie', 'a': 'alpha'}</SPAN>, <SPAN CLASS="Argument">cap='cap'</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # define CSCs for characters escaped with backslashes</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_repeats"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_repeats</SPAN></A>(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">max_count=10</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>, <SPAN CLASS="Argument">again=None</SPAN>, <SPAN CLASS="Argument">time='time'</SPAN>, <SPAN CLASS="Argument">times='times'</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # add CSCs for repeating commands.</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Config\\config_helpers.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">dictionary</SPAN> <SPAN CLASS="VariableName">alpha_bravo</SPAN> = <SPAN CLASS="VariableValue">{'a': 'alpha', 'b': 'bravo', 'c': 'charlie', 'd': 'delta', ...}</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">binary_operator</SPAN> = <SPAN CLASS="VariableValue">4096</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">comparison_operator</SPAN> = <SPAN CLASS="VariableValue">65536</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">end_sentence</SPAN> = <SPAN CLASS="VariableValue">1024</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">gen_braces_pair</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">gen_brackets_pair</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
@@ -43,9 +44,9 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">joins_identifier</SPAN> = <SPAN CLASS="VariableValue">32</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">letters_and_digits</SPAN> = <SPAN CLASS="VariableValue">16</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_backslash</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_bang</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_close_paren</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_close_quote</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_colon</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_comma</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_dot</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">like_function_of</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
@@ -58,9 +59,11 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_before</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_off</SPAN> = <SPAN CLASS="VariableValue">8</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_space_on</SPAN> = <SPAN CLASS="VariableValue">4</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">no_spaces</SPAN> = <SPAN CLASS="VariableValue">3</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">normal_spacing</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">pre_or_postfix</SPAN> = <SPAN CLASS="VariableValue">16384</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_or_binary</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">pre_or_postfix</SPAN> = <SPAN CLASS="VariableValue">32768</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_operator</SPAN> = <SPAN CLASS="VariableValue">8192</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">unary_or_binary</SPAN> = <SPAN CLASS="VariableValue">16384</SPAN></SPAN>
 </PRE><H2 ID="add_backspacing" CLASS="Function">add_backspacing(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">max_count=5</SPAN>, <SPAN CLASS="Argument">primary='back space'</SPAN>, <SPAN CLASS="Argument">alternate='delete backwards'</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>)</H2>
 <P>add CSCs for repeatable backspacing commands.</P>
 
@@ -95,8 +98,8 @@ through max_count
 None for ContAny()
 
 </DL>
-<H2 ID="add_escaped_characters" CLASS="Function">add_escaped_characters(<SPAN CLASS="Argument">alias_set</SPAN>, <SPAN CLASS="Argument">back_slash='back slash'</SPAN>, <SPAN CLASS="Argument">alphabet='abcdefghijklmnopqrstuvwxyz'</SPAN>, <SPAN CLASS="Argument">name_map={'z': 'zulu', 'x': 'xray', 'y': 'yankee', 'v': 'victor', 'w': 'whiskey', 't': 'tango', 'u': 'uniform', 'r': 'romeo', 's': 'sierra', 'p': 'papa', 'q': 'quebec', 'n': 'november', 'o': 'oscar', 'l': 'lima', 'm': 'mike', 'j': 'juliett', 'k': 'kilo', 'h': 'hotel', 'i': 'india', 'f': 'foxtrot', 'g': 'golf', 'd': 'delta', 'e': 'echo', 'b': 'bravo', 'c': 'charlie', 'a': 'alpha'}</SPAN>, <SPAN CLASS="Argument">cap='cap'</SPAN>, <SPAN CLASS="Argument">language=None</SPAN>)</H2>
-<P>define LSAs for characters escaped with backslashes</P>
+<H2 ID="add_escaped_characters" CLASS="Function">add_escaped_characters(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">back_slash='back slash'</SPAN>, <SPAN CLASS="Argument">alphabet='abcdefghijklmnopqrstuvwxyz'</SPAN>, <SPAN CLASS="Argument">name_map={'z': 'zulu', 'x': 'xray', 'y': 'yankee', 'v': 'victor', 'w': 'whiskey', 't': 'tango', 'u': 'uniform', 'r': 'romeo', 's': 'sierra', 'p': 'papa', 'q': 'quebec', 'n': 'november', 'o': 'oscar', 'l': 'lima', 'm': 'mike', 'j': 'juliett', 'k': 'kilo', 'h': 'hotel', 'i': 'india', 'f': 'foxtrot', 'g': 'golf', 'd': 'delta', 'e': 'echo', 'b': 'bravo', 'c': 'charlie', 'a': 'alpha'}</SPAN>, <SPAN CLASS="Argument">cap='cap'</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>)</H2>
+<P>define CSCs for characters escaped with backslashes</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -104,9 +107,9 @@ None for ContAny()
 <DL>
 
 <DT>
-<EM>LSAliasSet alias_set</EM>
-<DD>set to which to add the language-specific
-aliases 
+<EM>CSCmdSet commands</EM>
+<DD>set to which to add the context-sensitive
+commands
 <DT>
 <EM>STR</EM> back_slash
 <DD>spoken form for the backslash
@@ -123,9 +126,9 @@ the military alphabet), or None to omit
 <DD>spoken form indicating that the letter should be
 capitalized, or None to omit capitalized forms
 <DT>
-<EM>STR</EM> language
-<DD>language to which the LSAs will be specific, or
-None to make them language-independent
+<EM>Context</EM> context
+<DD>the context in which the CSCs should apply, or
+None for ContAny()
 
 </DL>
 <H2 ID="add_repeats" CLASS="Function">add_repeats(<SPAN CLASS="Argument">commands</SPAN>, <SPAN CLASS="Argument">max_count=10</SPAN>, <SPAN CLASS="Argument">context=None</SPAN>, <SPAN CLASS="Argument">again=None</SPAN>, <SPAN CLASS="Argument">time='time'</SPAN>, <SPAN CLASS="Argument">times='times'</SPAN>)</H2>
