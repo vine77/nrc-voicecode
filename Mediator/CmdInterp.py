@@ -41,20 +41,28 @@ class CmdInterp(OwnerObject):
     *NewMediatorObject mediator* -- reference to the parent mediator
     which owns this CmdInterp instance
 
-    *{STR: [[* (Context] *, FCT)]} cmd_index={}* -- index of CSCs. Key
+    {STR: [[(Context , FCT)]} *cmd_index={}* -- index of CSCs. Key
      is the spoken form of the command, value is a list of contextual
      meanings. A contextual meaning is a pair of a *context object*
      and an *action function* to be fired if the context applies.
 
-    *[SymDict] known_symbols* -- dictionary of known symbols
+    [SymDict] *known_symbols* -- dictionary of known symbols
     
-    *{STR: {STR: STR}}* language_specific_aliases = {} -- Key is the name of
+    {STR: {STR: STR}} *language_specific_aliases = {}* -- Key is the name of
      a programming language (None means all languages). Value is a
      dictionary of written forms over spoken form keys 
      specific to a language.
 
-    *BOOL disable_dlg_select_symbol_matches = None* -- If true, then
+    BOOL *disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
+    
+    BOOL *add_sr_entries_for_LSAs_and_CSCs* -- if *TRUE*, then add 
+    SR entries for the LSAs and CSCs when they are added. If *FALSE*, 
+    assume that these entries were already added by an previous instance
+    of the mediator. This is mostly used for regression testing purposes
+    where we create a new mediator in each test, and don't want to waste
+    CPU time adding the same LSAs and CSCs over and over again.
+
 
     
     CLASS ATTRIBUTES**
@@ -97,7 +105,8 @@ class CmdInterp(OwnerObject):
                              'known_symbols':
                              SymDict.SymDict(pickle_fname = symdict_pickle_file), 
                              'language_specific_aliases': {},
-                             'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches},
+                             'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
+                             'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
         self.name_parent('mediator')
 
@@ -878,13 +887,10 @@ class CmdInterp(OwnerObject):
 
         return choices[0]
 
-    def index_csc(self, acmd, add_voc_entry=1):
+    def index_csc(self, acmd):
         """Add a new csc to the command interpreter's command dictionary
 
         [CSCmd] *acmd* is the command to be indexed.
-
-        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-         for the CSC's spoken forms
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
@@ -917,7 +923,8 @@ class CmdInterp(OwnerObject):
                 #
 #                print '-- CmdInterp.index_csc: spoken form \'%s\' indexed for first time. Adding to SR vocabulary' % a_spoken_form
                 self.cmd_index[a_spoken_form] = [acmd]
-                if not os.environ.has_key('VCODE_NOSPEECH') and add_voc_entry:
+                if (not os.environ.has_key('VCODE_NOSPEECH')
+                   and self.add_sr_entries_for_LSAs_and_CSCs):
                     sr_interface.addWord(a_spoken_form)
 # we had some problems in regression testing because the individual
 # words in a spoken form were unknown, so now we add the individual
@@ -929,22 +936,19 @@ class CmdInterp(OwnerObject):
 # so we may want to come up with an alternate solution in the future
                     
                     all_words = string.split(a_spoken_form)
-                    if len(all_words) > 1:
-                        for word in all_words:
-                            sr_interface.addWord(word)
+                    if (len(all_words) > 1 and 
+                       self.add_sr_entries_for_LSAs_and_CSCs):
+                       for word in all_words:
+                           sr_interface.addWord(word)
 
-    def add_csc(self, acmd, add_voc_entry=1):
+    def add_csc(self, acmd):
         """Add a new Context Sensitive Command. (synonym for index_csc)
 
         [CSCmd] *acmd* is the command to add.
 
-        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-        for the CSC's spoken forms
-        
-
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-        self.index_csc(acmd, add_voc_entry)
+        self.index_csc(acmd)
 
 
     def add_lsa(self, spoken_forms, meanings):
@@ -992,7 +996,8 @@ class CmdInterp(OwnerObject):
                 #
                 # Add LSA to the SR vocabulary
                 #
-                sr_interface.addWord(entry)
+                if self.add_sr_entries_for_LSAs_and_CSCs:
+                    sr_interface.addWord(entry)
 # we had some problems in regression testing because the individual
 # words in a spoken form were unknown, so now we add the individual
 # words in a multiple-word spoken form
@@ -1003,7 +1008,8 @@ class CmdInterp(OwnerObject):
 # so we may want to come up with an alternate solution in the future
 
                 all_words = string.split(spoken_as)
-                if len(all_words) > 1:
+                if (len(all_words) > 1 and
+                    self.add_sr_entries_for_LSAs_and_CSCs):
                     for word in all_words:
                         sr_interface.addWord(word)
 

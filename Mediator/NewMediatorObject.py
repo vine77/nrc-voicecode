@@ -575,7 +575,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['print_abbreviations'] = self.print_abbreviations
 
     def reset(self, config_file = None, symdict_pickle_fname = None,
-        symbol_match_dlg = None):
+        symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1):
         """reset the mediator object to continue regression testing with
         a fresh interpreter
 
@@ -589,7 +589,13 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
         testing.  If None, use current setting.
-        """
+        
+        *BOOL add_sr_entries_for_LSAs_and_CSCs=1* -- see [CmdInterp] attribute 
+        by the same name.
+        
+        ..[CmdInterp] file:///./CmdInterp.CmdInterp.html"""
+        
+        self.interp.add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
@@ -894,18 +900,14 @@ class NewMediatorObject(Object.OwnerObject):
         """
         return self.editors.app_instance(instance_name)
 
-    def add_csc(self, acmd, add_voc_entry=1):
+    def add_csc(self, acmd):
         """Add a new Context Sensitive Command.
 
-        [CSCmd] *acmd* is the command to add.
-
-        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-        for the CSC's spoken forms
-        
+        [CSCmd] *acmd* is the command to add.      
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-        self.interp.add_csc(acmd, add_voc_entry)
+        self.interp.add_csc(acmd)
 
 
     def add_lsa(self, spoken_forms, meanings):
