@@ -3,44 +3,45 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 19 18:20:59 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 19 18:25:38 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SB_ServiceLineManip</title>
+<title>Class ResMgrStd</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SB_ServiceLineManip - Provides line numbering services.</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="sb_services.html">sb_services</A></P>
+<H1 CLASS="ClassName">class ResMgrStd</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="ResMgr.html">ResMgr</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sb_services.SB_ServiceLineManip<BR>
-&nbsp;&nbsp;<A HREF="sb_services.SB_Service.html">sb_services.SB_Service</A><BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">ResMgr.ResMgrStd<BR>
+&nbsp;&nbsp;<A HREF="ResMgr.ResMgr.html">ResMgr.ResMgr</A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_ServiceLineManip</SPAN>(<A CLASS="DocLink" HREF="sb_services.SB_Service.html">SB_Service</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.beginning_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.beginning_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the beginning of line at position <EM>pos</EM></SPAN>
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.end_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.end_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the end of line at position <EM>pos</EM></SPAN>
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.goto_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.goto_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>)<SPAN CLASS="OneLiner"> # Go to a particular line in a buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.line_num_of"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.line_num_of</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.line_num_of_old"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.line_num_of_old</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)
-    <A CLASS="DocLink" HREF="#sb_services.SB_ServiceLineManip.number_lines"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_ServiceLineManip.number_lines</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)<SPAN CLASS="OneLiner"> # Assign numbers to lines in a string.</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ResMgrStd</SPAN>(<A CLASS="DocLink" HREF="ResMgr.ResMgr.html">ResMgr</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStd.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgrStd.after_interp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStd.after_interp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgrStd.before_interp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStd.before_interp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgrStd.interpret_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStd.interpret_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">result</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgrStd.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStd.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from ResMgr.ResMgr</SPAN>
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgr.interpret_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.interpret_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">result</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgr.interpreter"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.interpreter</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return a reference to the mediator's current CmdInterp object</SPAN>
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgr.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from sb_services.SB_Service</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_Service.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -54,140 +55,175 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
-Some [SourceBuff] subclasses may decide to use the editor's
-line manipulation capabilities instead of the ones provided by
-this class.</P>
+implementation of ResMgr including the standard processing of 
+dictation utterances.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 <P>
-*none*-- </P>
-<P>
-CLASS ATTRIBUTES**</P>
-
-<DL>
-
-<DT>
 <EM>none</EM>
-<DD>
-</DL>
-<P>
-..[SourceBuff] SourceBuff.SourceBuff.html</P>
-<H2 ID="sb_services.SB_ServiceLineManip.beginning_of_line" CLASS="Method">sb_services.SB_ServiceLineManip.beginning_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
-<P>Returns the position of the beginning of line at position <EM>pos</EM></P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> pos
-<DD>Position for which we want to know the beginning of line.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> beg_pos
-<DD>Position of the beginning of the line
-
-</DL>
-<H2 ID="sb_services.SB_ServiceLineManip.end_of_line" CLASS="Method">sb_services.SB_ServiceLineManip.end_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
-<P>Returns the position of the end of line at position <EM>pos</EM></P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> pos
-<DD>Position for which we want to know the end of line.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> end_pos
-<DD>Position of the end of the line
-
-</DL>
-<H2 ID="sb_services.SB_ServiceLineManip.goto_line" CLASS="Method">sb_services.SB_ServiceLineManip.goto_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>)</H2>
-<P>Go to a particular line in a buffer.</P>
-
-<P>
-<EM>INT linenum</EM> is the line number.</P>
-<P>
-<EM>INT where</EM> indicates if the cursor should go at the end
- (*where &gt; 0*) or at the beginning (*where &lt; 0*) of the line.
 </P>
-<H2 ID="sb_services.SB_ServiceLineManip.line_num_of" CLASS="Method">sb_services.SB_ServiceLineManip.line_num_of(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)</H2>
+<H2 ID="ResMgr.ResMgrStd.after_interp" CLASS="Method">ResMgr.ResMgrStd.after_interp(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
+hook for any additional post-interpretation processing needed by
+a subclass (e.g. to store buffer states to allow correction)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgrStd.before_interp" CLASS="Method">ResMgr.ResMgrStd.before_interp(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)</H2>
+<P>None</P>
 
-Returns the line number for a particular cursor position</P>
+<P>
+hook for any additional pre-interpretation processing needed by
+a subclass (e.g. to store buffer states to allow correction)</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>INT</EM> position
-<DD>The position.  (defaults to the current position)
+<EM>STR initial_buffer</EM>
+<DD>the name of the initial buffer which was
+active at recognition-starting
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT line_num</EM>
-<DD>The line number of that position
-
-</DL>
-<H2 ID="sb_services.SB_ServiceLineManip.line_num_of_old" CLASS="Method">sb_services.SB_ServiceLineManip.line_num_of_old(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)</H2>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgrStd.interpret_dictation" CLASS="Method">ResMgr.ResMgrStd.interpret_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">result</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
-
-Returns the line number for a particular cursor position</P>
+interpret the result of recognition by a dictation grammar,
+and store the relevant information to allow for correction.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>INT</EM> position
-<DD>The position.  (defaults to the current position)
+<EM>SpokenUtterance result</EM>
+<DD>a SpokenUtterance object
+representing the recognition results
+<DT>
+<EM>STR initial_buffer</EM>
+<DD>the name of the initial buffer which was
+active at recognition-starting
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgrStd.rename_buffer_cbk" CLASS="Method">ResMgr.ResMgrStd.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback which notifies us that the given editor
+instance has renamed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>INT line_num</EM>
-<DD>The line number of that position
+<EM>STR</EM> old_buff_name
+<DD>old name of the buffer 
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgr.__init__" CLASS="Method">ResMgr.ResMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>RecogStartMgr</EM> recog_mgr
+<DD>the parent RecogStartMgr object, 
+which provides information about editor application instances, as
+well as access to the CmdInterp interpreter object
+<DT>
+<EM>STR</EM> instance_name
+<DD>the name of the editor instance
 
 </DL>
-<H2 ID="sb_services.SB_ServiceLineManip.number_lines" CLASS="Method">sb_services.SB_ServiceLineManip.number_lines(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)</H2>
-<P>Assign numbers to lines in a string.</P>
+<H2 ID="ResMgr.ResMgr.interpret_dictation" CLASS="Method">ResMgr.ResMgr.interpret_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">result</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)</H2>
+<P>None</P>
 
 <P>
-Used mainly for the purpose of doing a printout of the buffer
-content around the cursor (usually during regression testing).</P>
+interpret the result of recognition by a dictation grammar,
+and store the relevant information to allow for correction.</P>
 <P>
-<EM>STR astring</EM> is the string in question.</P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SpokenUtterance result</EM>
+<DD>a SpokenUtterance object
+representing the recognition results
+<DT>
+<EM>STR initial_buffer</EM>
+<DD>the name of the initial buffer which was
+active at recognition-starting
+</DL>
 <P>
-<EM>INT startnum</EM> is the number of the first line in <EM>astring</EM></P>
+<STRONG>OUTPUTS</STRONG></P>
 <P>
-Returns a list of pairs <EM>[(INT, STR)]</EM> where first entry is
-the line number and the second entry is the line.</P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgr.interpreter" CLASS="Method">ResMgr.ResMgr.interpreter(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>return a reference to the mediator's current CmdInterp object</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="ResMgr.ResMgr.rename_buffer_cbk" CLASS="Method">ResMgr.ResMgr.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback which notifies us that the given editor
+instance has renamed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> old_buff_name
+<DD>old name of the buffer 
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

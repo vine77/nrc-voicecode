@@ -2100,7 +2100,8 @@ if ($voiceGripOS eq 'win') {
 
     factory = sr_grammars.WinGramFactoryDummy()
     app = EdSim.EdSim(multiple = 1, instance_reporting = 1)
-    manager = GramMgr.WinGramMgr(factory, app = app, recog_mgr = None,
+    manager = GramMgr.WinGramMgr(factory, app = app, 
+        instance_name = None, recog_mgr = None,
         global_grammars = global_grammars, exclusive = exclusive)
     w = 5
     w2 = 7
