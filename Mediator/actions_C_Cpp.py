@@ -22,7 +22,7 @@
 
 """Action functions for C language """
 
-from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClause, ActionTypeText
+from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClause, ActionTypeText, ActionCompound
 
 import whrandom
 import string
@@ -50,10 +50,12 @@ class ActionHeaderWrapper(Action):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
-        unique_str = str(string.upper(string.replace(app.curr_buffer_name(),'.','_'))) + \
-                     str(whrandom.randint(10**6,(10**7)-1))
+        unique_str = str(string.upper(string.replace(app.curr_buffer_name(),'.','_')))
+        # SN removing the random part for now, unless someone really likes it...
+        # + \
+        # str(whrandom.randint(10**6,(10**7)-1))
         before_string  = '#ifndef ' + unique_str + '\n' + '#define ' + unique_str + '\n\n'
-        after_string = '\n#endif\n'
+        after_string = '\n\n\n#endif\n'
         app.insert_indent(before_string, after_string)
 
 
@@ -136,12 +138,12 @@ c_simple_while = \
     ActionInsert(code_bef='while (', code_after=')\n{\n\t\n}',
                  docstring = """Insert template code for a simple C while loop""")
 
-c_simple_do_while = \
-    ActionInsert(code_bef='do\n{\n\t', code_after='\n} while ()\n',
-                 docstring = """Insert template code for a simple C do-while loop""")
+c_do_while = \
+    ActionInsert(code_bef='do\n{\n\t', code_after='\n} while ();\n',
+                 docstring = """Insert template code for a C/C++ do-while loop""")
 
 c_goto_body = \
-    ActionSearch(regexp=r'\)\s*\{[ \t]*\n',
+    ActionSearch(regexp=r'\{[ \t]*\n',
                  docstring="""Move cursor to the body of a C compound statement""")
 
 cpp_class_definition = \
@@ -149,6 +151,14 @@ cpp_class_definition = \
                   code_after='\r\t{\n\n\tpublic:\n\t\nprivate:\n\t\n}',
                   docstring = """Insert template code for a C++ class""",
                   expect="class")
+
+cpp_template_definition = \
+     ActionInsert(code_bef='template <',
+#                  code_after='>\nclass \r\t{\n\n\tpublic:\n\t\nprivate:\n\t\n}',
+                  # implementing it without the class stuff lets us use 'define class' to insert the class stuff...
+                  code_after='>\n',
+                  docstring = """Insert template code for a C++ class template""",
+                  expect="template")
 
 cpp_subclass = \
     ActionInsert(code_bef=': ', code_after='',
@@ -176,20 +186,30 @@ c_function_body = \
     ActionSearch(regexp=r'\{\s*',
                  docstring = """Moves cursor to the body of a C/C++ method or function""")
 
+#### NOTE: this doesn't work well if you're in a {} pair (e.g. 'if ... then new statement')
+# we need different behavior when there's a } before a ; -- insert BEFORE the }
 c_new_statement = \
-                ActionInsertNewClause(
-#    end_of_clause_regexp='([;{]|(#.*$)|(#.*\\n))', 
+                ActionCompound(
+    (ActionInsertNewClause(
+    #    end_of_clause_regexp='([;{]|(#.*$)|(#.*\\n))', 
                                       end_of_clause_regexp = "([;{]\\s*($|\\n)|#.*($|\\n))",
-                                      where = 1, direction = 1,
+                                      start_of_next_clause_regexp = "\\}",
+                                      where = 100, direction = 1,
                                       add_lines = 0,
-                                      code_bef='', code_after=';\n',
+                                      code_bef='', code_after='\n',
                                       back_indent_by=0,
                                       include_current_line = 1,
-                                      docstring = """Start a new C/C++ statement on next line""")
+                                      docstring = """Start a new C/C++ statement on next line"""),
+     ActionInsert(code_after=";"),
+     ActionSearch(";", direction=1, where=-1)))
 
 c_new_statement_above = \
                       ActionInsertNewClause(
     end_of_clause_regexp = r"(;.*\n)|(\{.*\n)|(\}.*\n)|(#.*($|\n))",
+    # since we always insert after the found symbol (e.g. }) we don't
+    # need to worry about start_of_next_clause_regexp the way we do
+    # for c_new_statement
+    # start_of_next_clause_regexp = "[\\}\\{]",
     where = 1, direction = -1,
     add_lines = 1,
     code_bef='\t', code_after=';',
@@ -213,7 +233,7 @@ c_else = \
                 ActionInsertNewClause(end_of_clause_regexp='\}', 
                                       where = 1, direction = 1,
                                       add_lines = 1,
-                                      code_bef='\nelse\n{\t', code_after='\n}',
+                                      code_bef='\nelse\n{\n\t', code_after='\n}',
                                       back_indent_by=0,
                                       docstring='else clause of a C conditional')
 
