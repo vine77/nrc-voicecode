@@ -101,8 +101,9 @@ def find_pydoc_path(names=None):
 	names = ['pydoc.py', 'pdoc.py']
     for name in names:
 	for directory in sys.path:
-	    if name in os.listdir(directory):
-		return os.path.join(directory, name)
+	    if os.path.exists(directory):
+		if name in os.listdir(directory):
+		    return os.path.join(directory, name)
     return None
 
 def quit():
