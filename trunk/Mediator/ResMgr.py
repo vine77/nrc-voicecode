@@ -377,9 +377,9 @@ class ResMgrStd(ResMgr):
             debug.trace('ResMgrStd._std_interp', 'about to call before')
             before(app, initial_buffer = initial_buffer)
         interp = self.interpreter()
-        words = result.words()
-        interpreted = interp.interpret_cmd_tuples(words, app, 
+        interpreted = interp.interpret_cmd_from_utterance(result, app, 
             initial_buffer = initial_buffer, clear_state = clear_state)
+
         if after:
             debug.trace('ResMgrStd._std_interp', 'about to call after')
             after(app, initial_buffer = initial_buffer)

@@ -34,6 +34,7 @@ import SymDict
 import symbol_formatting
 import sr_interface
 import WordTrie
+import SpokenUtterance
 
 from SpacingState import *
 
@@ -1630,14 +1631,13 @@ class CmdInterp(OwnerObject):
         # need to restore the SymBuilderFactory
         return self.builder_factory.restore_state(formatting)
         
-    def interpret_massaged(self, cmd, app, initial_buffer = None,
+    def interpret_massaged(self, utterance, app, initial_buffer = None,
             clear_state = 0):
-        """Interprets a natural language command and executes
+
+        """Interprets a natural language utterance and executes
         corresponding instructions.
 
-        *[(STR, STR)]* cmd -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
+        *SpokenUtterance* utterance -- The utterance
 
         *AppState app* -- the AppState interface to the editor
         
@@ -1649,6 +1649,7 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
          """
+        cmd = utterance.normalized_written_spoken_forms()
         trace('CmdInterp.interpret_massaged', 'command=%s' % cmd)
         spoken_list = map(lambda word: word[0], cmd)
 #        spoken_list = map(lambda word: process_initials(word[0]), cmd)
@@ -1938,6 +1939,10 @@ class CmdInterp(OwnerObject):
         
         """Interprets a natural language command and executes
         corresponding instructions.
+        
+        NOTE: DO NOT USE THIS FUNCTION IN PRODUCTION CODE. IT'S ONLY THERE
+        AS A CONVENIENCE FOR REGRESSION TESTS THAT WANT TO INTERPRET A 
+        COMMAND WITHOUT HAVING TO GENERATE AN ACTUAL SPOKEN UTTERANCE.
 
         *[STR] cmd* -- The command. It is a list of written\spoken words.
 
@@ -1951,22 +1956,22 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
         """
-        trace('CmdInterp.interpret_NL_cmd', 'pre-massaged cmd=%s' % cmd)
-        cmd = self.massage_command(cmd)
-        trace('CmdInterp.interpret_NL_cmd', 'post-massaged cmd=%s' % cmd)
-        self.interpret_massaged(cmd, app, initial_buffer =
-            initial_buffer, clear_state = clear_state)
+        written_spoken_words = []
+        for a_word in cmd:
+           written_spoken_words.append((a_word, a_word))
+        utterance = SpokenUtterance.MockSpokenUtterance(written_spoken_words)
+        return self.interpret_cmd_from_utterance(utterance, app, initial_buffer = None,
+            clear_state = 0)
 
-    def interpret_cmd_tuples(self, cmd, app, initial_buffer = None,
-            clear_state = 0):
+
+    def interpret_cmd_from_utterance(self, utterance, app, initial_buffer = None,
+                                     clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
         **INPUTS**
 
-        *[(STR, STR)]* cmd -- The command to be massaged. It's a list of
-         tuples of (spoken_form, written_form), with the written form
-         already cleaned for VoiceCode.
+        *SpokenUtterance utterance* -- The utterance to be interpreted.
         
         *AppState app* -- the AppState interface to the editor
         
@@ -1982,36 +1987,11 @@ class CmdInterp(OwnerObject):
 
         *none*
         """
-        cmd = self.massage_command_tuples(cmd)
-        return self.interpret_massaged(cmd, app,
+
+        return self.interpret_massaged(utterance, app,
             initial_buffer = initial_buffer, clear_state = clear_state)
 
-    def massage_command_tuples(self, command_tuples):
-        """Massages a command to prepare it for interpretation.
-
-        Makes sure to substitute special characters (e.g. {Spacebar})
-        in the written form of words in the command. Also, makes sure
-        that the spoken forms are all lowercase, and contain no
-        multiple, leading or trailing blanks.
-        
-        **INPUTS**
-        
-        *[(STR, STR)]* cmd -- The command to be massaged. It's a list of
-         tuples of (spoken_form, written_form), with the written form
-         already cleaned for VoiceCode.
-        
-        **OUTPUTS**
-        
-        *[(STR, STR)]* -- The massaged command
-        """
-        mod_command = []
-        trace('CmdInterp.massage_command_tuples', 
-            'pre-massaged cmd=%s' % command_tuples)
-        for a_word in command_tuples:
-            spoken, written = a_word
-            spoken = sr_interface.clean_spoken_form(spoken)
-            mod_command.append((spoken, written))
-        return mod_command
+       
 
     def massage_command(self, command):
         """Massages a command to prepare it for interpretation.
