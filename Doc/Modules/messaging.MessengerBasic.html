@@ -7,27 +7,27 @@
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class Messenger</title>
+<title>Class MessengerBasic</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class Messenger</H1>
+<H1 CLASS="ClassName">class MessengerBasic</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="messaging.html">messaging</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">messaging.Messenger<BR>
-&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">messaging.MessengerBasic<BR>
+&nbsp;&nbsp;<A HREF="messaging.Messenger.html">messaging.Messenger</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">Messenger</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#messaging.Messenger.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)
-    <A CLASS="DocLink" HREF="#messaging.Messenger.send_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.send_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)<SPAN CLASS="OneLiner"> # Sends a message to the external editor.</SPAN>
-    <A CLASS="DocLink" HREF="#messaging.Messenger.wrong_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.wrong_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">received</SPAN>, <SPAN CLASS="Argument">expected</SPAN>, <SPAN CLASS="Argument">just_name=1</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessengerBasic</SPAN>(<A CLASS="DocLink" HREF="messaging.Messenger.html">Messenger</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">packager</SPAN>, <SPAN CLASS="Argument">transporter</SPAN>, <SPAN CLASS="Argument">encoder</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#messaging.MessengerBasic.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)
+    <A CLASS="DocLink" HREF="#messaging.MessengerBasic.send_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.send_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)<SPAN CLASS="OneLiner"> # Sends a message to the external editor.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -35,18 +35,79 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from messaging.Messenger</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#messaging.Messenger.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)
+    <A CLASS="DocLink" HREF="#messaging.Messenger.send_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.send_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)<SPAN CLASS="OneLiner"> # Sends a message to the external editor.</SPAN>
+    <A CLASS="DocLink" HREF="#messaging.Messenger.wrong_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.Messenger.wrong_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">received</SPAN>, <SPAN CLASS="Argument">expected</SPAN>, <SPAN CLASS="Argument">just_name=1</SPAN>)
+
 </PRE><H2>Description</H2><P>
-abstract base class for transporting messages betweeen external 
-editor and mediator, through some network communication pipe.</P>
+This class transports messages betweeen external editor and
+mediator, through some network communication pipe.</P>
+<P>
+The class uses a three layer messaging protocol. The layers are:</P>
+
+<DL>
+
+<DT>
+<EM>Message transport</EM>
+<DD>This layer is responsible for carrying
+ bytes across the network.<P>
+ This is implemented by class <A HREF="messenger.MessTransporter.html">MessTransporter</A></P>
+
+<DT>
+<EM>Message encoding</EM>
+<DD>This layer is responsible for encoding the
+ semantic content of the message into a string.<P>
+ This is implemented by class <A HREF="messenger.MessEncoder.html">MessEncoder</A></P>
+
+<DT>
+<EM>Message packaging</EM>
+<DD>This layer is responsible for packaging an
+ encoded message (produced using the <EM>Message encoding</EM> layer)
+ into a form that can be reliably sent over the net. Also
+ responsible for sending the messages using the *Message
+ Transport* layer.<P>
+ This is implemented by class <A HREF="messenger.MessPackager.html">MessPackager</A></P>
+<P>
+ All three of <A HREF="messenger.MessTransporter.html">MessTransporter</A>, <A HREF="messenger.MessEncoder.html">MessEncoder</A> and <A HREF="messenger.MessPackager.html">MessPackager</A>
+ are abstract classes. This allows [Messenger] to support a
+ variety of different protocols by mixing appropriate concrete
+ subclasses of those.</P>
+
+</DL>
+<P>
+<EM>NOTE:</EM> The functionality for packaging and shipping/receiving of
+ messages are bundled together in [MessagePackager] because
+ packaging generally affects the way you receive a message.</P>
+<P>
+For example, if you package the message as a fixed length string,
+you will receive it by reading that fixed length. If you package it
+as a length prefixed string, you will receive it by first reading
+the length and then reading that many characters.     </P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM></P>
+
+<DL>
+
+<DT>
+<A HREF="messenger.MessPackager.html">MessPackager</A> <EM>packager</EM>
+<DD>Used to package and send messages, or
+receive and unpack them.
+<DT>
+<A HREF="messenger.MessEncoder.html">MessEncoder</A> <EM>encoder</EM>
+<DD>Used to translate a string
+message to a list of attribute/value pairs, and vice versa.
+<DT>
+<A HREF="messenger.MessTransporter.html">MessTransporter</A> <EM>transporter</EM>
+<DD>Transport channel used to carry
+bytes to to/from a connection.
+</DL>
 <P>
 CLASS ATTRIBUTES**</P>
 <P>
 <EM>none</EM> --</P>
-<H2 ID="messaging.Messenger.get_mess" CLASS="Method">messaging.Messenger.get_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)</H2>
+<H2 ID="messaging.MessengerBasic.get_mess" CLASS="Method">messaging.MessengerBasic.get_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -74,7 +135,7 @@ error message.
  from external editor in <EM>(mess_name, {arg:val})</EM> format, or
  None if no message is available.
 </DL>
-<H2 ID="messaging.Messenger.send_mess" CLASS="Method">messaging.Messenger.send_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)</H2>
+<H2 ID="messaging.MessengerBasic.send_mess" CLASS="Method">messaging.MessengerBasic.send_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)</H2>
 <P>Sends a message to the external editor.</P>
 
 <P>
@@ -97,38 +158,6 @@ values for the message to be sent to the editor.
 
 <DT>
 <EM>none</EM> response
-<DD>
-</DL>
-<H2 ID="messaging.Messenger.wrong_message" CLASS="Method">messaging.Messenger.wrong_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">received</SPAN>, <SPAN CLASS="Argument">expected</SPAN>, <SPAN CLASS="Argument">just_name=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Send an error message when received message was not the
-expected one.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-(STR, {STR: STR}) <EM>received</EM>
-<DD>The received message in
-(mess_name, {arg_name: arg_val} format.
-<DT>
-STR <EM>expected</EM>
-<DD>Name of the message that was expected. 
-<DT>
-BOOL <EM>just_name</EM>
-<DD>If <EM>true</EM> just print the name of the
-received message. Don't print argument values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
 <DD>
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
@@ -251,6 +280,91 @@ Attributes are only set if they already exist in
 <EM>{STR: ANY}</EM> attrs
 <DD>dictionary with attribute name as the keys and
  default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="messaging.Messenger.get_mess" CLASS="Method">messaging.Messenger.get_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Gets a message from the external editor.
+<STRONG>NOTE:</STRONG> get_mess may block if no message is available.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[STR] <EM>expect</EM>
+<DD>If not <EM>None</EM>, then make sure the
+message's name is listed in <EM>expect</EM>. If not, send an
+error message.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+(STR, {STR: STR}) name_argvals_mess
+<DD>The message retrieved
+ from external editor in <EM>(mess_name, {arg:val})</EM> format, or
+ None if no message is available.
+</DL>
+<H2 ID="messaging.Messenger.send_mess" CLASS="Method">messaging.Messenger.send_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)</H2>
+<P>Sends a message to the external editor.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>mess_name</EM>
+<DD>Identifier indicating what kind of message this is.
+<DT>
+{STR: STR} <EM>mess_argvals</EM>
+<DD>Dictionary of arguments and
+values for the message to be sent to the editor.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM> response
+<DD>
+</DL>
+<H2 ID="messaging.Messenger.wrong_message" CLASS="Method">messaging.Messenger.wrong_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">received</SPAN>, <SPAN CLASS="Argument">expected</SPAN>, <SPAN CLASS="Argument">just_name=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Send an error message when received message was not the
+expected one.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+(STR, {STR: STR}) <EM>received</EM>
+<DD>The received message in
+(mess_name, {arg_name: arg_val} format.
+<DT>
+STR <EM>expected</EM>
+<DD>Name of the message that was expected. 
+<DT>
+BOOL <EM>just_name</EM>
+<DD>If <EM>true</EM> just print the name of the
+received message. Don't print argument values.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

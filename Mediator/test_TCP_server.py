@@ -41,7 +41,7 @@ def create_tcp_mess(sock):
     packager = messaging.MessPackager_FixedLenSeq()
     transporter = messaging.MessTransporter_Socket(sock=sock)
     encoder = messaging.MessEncoderWDDX()
-    msgr = messaging.Messenger(packager, transporter, encoder)
+    msgr = messaging.MessengerBasic(packager, transporter, encoder)
     
     return msgr
 
@@ -288,7 +288,7 @@ class ExternalEdSim(Object.Object):
         packager = messaging.MessPackager_FixedLenSeq()
         transporter = messaging.MessTransporter_Socket(sock=a_socket)
         encoder = messaging.MessEncoderWDDX()
-        self.vc_listen_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
+        self.vc_listen_msgr = messaging.MessengerBasic(packager=packager, transporter=transporter, encoder=encoder)
 
         trace('test_TCP_server.open_vc_listener_conn',
               'sending name of editor')
@@ -346,7 +346,7 @@ class ExternalEdSim(Object.Object):
         packager = messaging.MessPackager_FixedLenSeq()
         transporter = messaging.MessTransporter_Socket(sock=a_socket)
         encoder = messaging.MessEncoderWDDX()
-        self.vc_talk_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
+        self.vc_talk_msgr = messaging.MessengerBasic(packager=packager, transporter=transporter, encoder=encoder)
         
 
         trace('test_TCP_server.open_vc_talker_conn', 'sending ID')

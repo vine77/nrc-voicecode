@@ -3,28 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:32:45 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:33:13 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SourceBuffCookie</title>
+<title>Class InterThreadEvent</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
+<H1 CLASS="ClassName">class InterThreadEvent</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.InterThreadEvent<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">InterThreadEvent</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <A CLASS="DocLink" HREF="#tcp_server.InterThreadEvent.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.InterThreadEvent.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.InterThreadEvent.notify"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.InterThreadEvent.notify</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # send the message, and return asynchronously</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -33,19 +34,35 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-SourceBuffCookie itself is simply a dummy class which acts as a
-placeholder.  Its only purpose is to serve as ostensible return or 
-argument type for various pure virtual SourceBuff functions.  The
-actual return or argument type will be a subclass of
-SourceBuffCookie which will vary with SourceBuff subclass.</P>
+abstract interface for sending a dataless message between threads.
+Particular implementations may use win32 events or wxPython custom
+events.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 <P>
-<EM>None</EM></P>
+<EM>none</EM></P>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
-<EM>None</EM>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_server.InterThreadEvent.__init__" CLASS="Method">tcp_server.InterThreadEvent.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+abstract base class so no arguments
+</P>
+<H2 ID="tcp_server.InterThreadEvent.notify" CLASS="Method">tcp_server.InterThreadEvent.notify(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>send the message, and return asynchronously</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
 </P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>

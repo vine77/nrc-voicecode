@@ -3,28 +3,37 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:32:45 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:33:13 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SourceBuffCookie</title>
+<title>Class NewConnListThread</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
+<H1 CLASS="ClassName">class NewConnListThread</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
-&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.NewConnListThread<BR>
+&nbsp;&nbsp;<A HREF="tcp_server.ListenNewConnThread.html">tcp_server.ListenNewConnThread</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;threading.Thread<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">NewConnListThread</SPAN>(<A CLASS="DocLink" HREF="tcp_server.ListenNewConnThread.html">ListenNewConnThread</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.NewConnListThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">port</SPAN>, <SPAN CLASS="Argument">new_socks</SPAN>, <SPAN CLASS="Argument">new_socks_lock</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.NewConnListThread.log_new_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.NewConnListThread.log_new_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ListenNewConnThread</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenNewConnThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">port</SPAN>, <SPAN CLASS="Argument">event</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenNewConnThread.log_new_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenNewConnThread.log_new_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenNewConnThread.notify_main"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenNewConnThread.notify_main</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenNewConnThread.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenNewConnThread.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start listening for new connections.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -32,21 +41,139 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from threading.Thread</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__bootstrap</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__delete</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">group=None</SPAN>, <SPAN CLASS="Argument">target=None</SPAN>, <SPAN CLASS="Argument">name=None</SPAN>, <SPAN CLASS="Argument">args=()</SPAN>, <SPAN CLASS="Argument">kwargs={}</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__stop</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread._set_daemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.getName</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.isAlive</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.isDaemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.join</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">timeout=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.run</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setDaemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">daemonic</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.start</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
+
 </PRE><H2>Description</H2><P>
-SourceBuffCookie itself is simply a dummy class which acts as a
-placeholder.  Its only purpose is to serve as ostensible return or 
-argument type for various pure virtual SourceBuff functions.  The
-actual return or argument type will be a subclass of
-SourceBuffCookie which will vary with SourceBuff subclass.</P>
+Listens for new socket connections on a port number
+and use an InterThreadEvent object to
+notify the main thread about the new connection.</P>
+<P>
+Adds each new socket to a list of uninitialised connections.</P>
+<P>
+This version is used for new talker sockets, because they may not
+come in in the same order as the previously connected new listener
+sockets, so you have to look through the whole list anyway.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>None</EM></P>
+
+<DL>
+
+<DT>
+[socket] <EM>new_socks</EM>
+<DD>List on which to add any new connection.
+<DT>
+[lock] <EM>new_socks_lock</EM>
+<DD>Lock on the new connection list.
+</DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.NewConnListThread.log_new_conn" CLASS="Method">tcp_server.NewConnListThread.log_new_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)</H2>
+<P>None</P>
+
 <P>
-<EM>None</EM>
+Logs a newly received socket connection, so that main event
+loop can later shake hands with it.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>socket client_socket</EM>
+<DD>Newly received socket connection
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.ListenNewConnThread.log_new_conn" CLASS="Method">tcp_server.ListenNewConnThread.log_new_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Logs a newly received socket connection, so that main event
+loop can later shake hands with it.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>socket client_socket</EM>
+<DD>Newly received socket connection
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.ListenNewConnThread.notify_main" CLASS="Method">tcp_server.ListenNewConnThread.notify_main(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+notify the main thread that there is a new connection waiting
+for a handshake, and return asynchronously.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
 </P>
+<H2 ID="tcp_server.ListenNewConnThread.run" CLASS="Method">tcp_server.ListenNewConnThread.run(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Start listening for new connections.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

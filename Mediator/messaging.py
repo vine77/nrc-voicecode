@@ -24,10 +24,101 @@
 import re, sys, types
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
 from debug import trace
+import Queue
+import time
+import select
 
 import debug, Object
 
 class Messenger(Object.Object):
+   
+    """abstract base class for transporting messages betweeen external 
+    editor and mediator, through some network communication pipe.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    CLASS ATTRIBUTES**
+    
+    *none* --
+
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(Messenger, 
+                            {
+                            }, 
+                            args_super, 
+                            {})
+
+
+    def wrong_message(self, received, expected, just_name=1):
+        
+        """Send an error message when received message was not the
+        expected one.
+        
+        **INPUTS**
+        
+        (STR, {STR: STR}) *received* -- The received message in
+        (mess_name, {arg_name: arg_val} format.
+        
+        STR *expected* -- Name of the message that was expected. 
+
+        BOOL *just_name* -- If *true* just print the name of the
+        received message. Don't print argument values.
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if just_name:
+            args = ''
+        else:
+            args = ', %s' % repr(received[1])
+        sys.stderr.write("ERROR: Wrong message.\n\n   Received: '%s'%s\n\nExpected one of: %s\n\n" % (received[0], args, repr(expected)))
+
+
+
+
+    def send_mess(self, mess_name, mess_argvals={}):
+        
+        """Sends a message to the external editor.
+
+        **INPUTS**
+
+        STR *mess_name* -- Identifier indicating what kind of message this is.
+        
+        {STR: STR} *mess_argvals* -- Dictionary of arguments and
+        values for the message to be sent to the editor.
+                
+        **OUTPUTS**
+
+        *none* response -- 
+        """
+	debug.virtual('Messenger.send_mess')
+
+    def get_mess(self, expect=None):
+        """Gets a message from the external editor.
+	**NOTE:** get_mess may block if no message is available.
+        
+        **INPUTS**
+        
+        [STR] *expect* -- If not *None*, then make sure the
+        message's name is listed in *expect*. If not, send an
+        error message.
+
+        **OUTPUTS**
+        
+        (STR, {STR: STR}) name_argvals_mess -- The message retrieved
+         from external editor in *(mess_name, {arg:val})* format, or
+	 None if no message is available."""
+
+	debug.virtual('Messenger.get_mess')
+
+
+class MessengerBasic(Messenger):
    
     """This class transports messages betweeen external editor and
     mediator, through some network communication pipe.
@@ -88,8 +179,8 @@ class Messenger(Object.Object):
     .. [MessEncoder] file:///./messenger.MessEncoder.html
     .. [MessPackager] file:///./messenger.MessPackager.html"""
     
-    def __init__(self, packager, encoder, transporter, **args_super):
-        self.deep_construct(Messenger, 
+    def __init__(self, packager, transporter, encoder, **args_super):
+        self.deep_construct(MessengerBasic, 
                             {'packager': packager,
                              'encoder': encoder,
                              'transporter': transporter}, 
@@ -98,32 +189,6 @@ class Messenger(Object.Object):
 
 
 
-
-    def wrong_message(self, received, expected, just_name=1):
-        
-        """Send an error message when received message was not the
-        expected one.
-        
-        **INPUTS**
-        
-        (STR, {STR: STR}) *received* -- The received message in
-        (mess_name, {arg_name: arg_val} format.
-        
-        STR *expected* -- Name of the message that was expected. 
-
-        BOOL *just_name* -- If *true* just print the name of the
-        received message. Don't print argument values.
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        if just_name:
-            args = ''
-        else:
-            args = ', %s' % repr(received[1])
-        sys.stderr.write("ERROR: Wrong message.\n\n   Received: '%s'%s\n\nExpected one of: %s\n\n" % (received[0], args, repr(expected)))
 
 
     def send_mess(self, mess_name, mess_argvals={}):
@@ -151,6 +216,7 @@ class Messenger(Object.Object):
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
+	**NOTE:** get_mess may block if no message is available.
         
         **INPUTS**
         
@@ -161,7 +227,8 @@ class Messenger(Object.Object):
         **OUTPUTS**
         
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
-         from external editor in *(mess_name, {arg:val})* format."""
+         from external editor in *(mess_name, {arg:val})* format, or
+	 None if no message is available."""
 
         trace('get_mess', 'expecting %s' % repr(expect))
         
@@ -179,6 +246,79 @@ class Messenger(Object.Object):
         return name_argvals_mess
         
 
+class MixedMessenger(Messenger):
+   
+    """A class which sends messages through another Messenger (usually 
+    MessengerBasic), but retrieves messages from a Queue.
+
+    **INSTANCE ATTRIBUTES**
+
+    [Messenger] *sender* -- Used to package and send messages
+
+    Queue *receiver* -- Used to get unpacked messages
+        
+
+    CLASS ATTRIBUTES**
+    
+    *none* --
+
+    """
+    
+    def __init__(self, sender, receiver, **args_super):
+        self.deep_construct(MixedMessenger, 
+                            {'sender': sender,
+                             'receiver': receiver},
+                            args_super, 
+                            {})
+
+    def send_mess(self, mess_name, mess_argvals={}):
+        
+        """Sends a message to the external editor.
+
+        **INPUTS**
+
+        STR *mess_name* -- Identifier indicating what kind of message this is.
+        
+        {STR: STR} *mess_argvals* -- Dictionary of arguments and
+        values for the message to be sent to the editor.
+                
+        **OUTPUTS**
+
+        *none* response -- 
+        """
+
+	self.sender.send_mess(mess_name, mess_argvals)
+
+    def get_mess(self, expect=None):
+        """Gets a message from the external editor.
+	**NOTE:** In this version, get_mess won't block, but will return 
+	None if no message is available.
+        
+        **INPUTS**
+        
+        [STR] *expect* -- If not *None*, then make sure the
+        message's name is listed in *expect*. If not, send an
+        error message.
+
+        **OUTPUTS**
+        
+        (STR, {STR: STR}) name_argvals_mess -- The message retrieved
+         from external editor in *(mess_name, {arg:val})* format, or
+	 None if no message is available."""
+
+
+        trace('get_mess', 'expecting %s' % repr(expect))
+        
+	try:
+	    name_argvals_mess = self.receiver.get(block=0)
+	except Queue.Empty:
+	    return None
+
+        if expect != None and (not (name_argvals_mess[0] in expect)):
+            self.wrong_message(name_argvals_mess, expect)
+
+        return name_argvals_mess
+        
 
 class MessPackager(Object.Object):
     """'Shipping and receiving department' for messages.
@@ -612,15 +752,20 @@ class MessTransporter_Socket(MessTransporter):
     **INSTANCE ATTRIBUTES**
     
     *socket sock*-- The socket connection used to transport the bytes.
-    
+
+    *FLOAT sleep* -- number of seconds to sleep if before checking again
+    if the socket has no data, or None to check continuously until the
+    requested number of bytes are received.
+   
     CLASS ATTRIBUTES**
             
     *none* -- 
     """
     
-    def __init__(self, sock, **args_super):
+    def __init__(self, sock, sleep = None, **args_super):
         self.deep_construct(MessTransporter_Socket, \
-                            {'sock': sock}, \
+                            {'sock': sock,
+			     'sleep': sleep}, \
                             args_super, \
                             {})
 
@@ -662,12 +807,30 @@ class MessTransporter_Socket(MessTransporter):
 
         a_string = ''
         while len(a_string) < num_bytes:
+	    if self.sleep:
+		while not self.data_available():
+		    time.sleep(self.sleep)
             chunk = self.sock.recv(num_bytes - len(a_string))
             if chunk == '':
                 raise RuntimeError, "socket connection broken"
             a_string = a_string + chunk
 
         return a_string         
+
+    def data_available(self):
+	"""check whether the input socket has data
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the select.select indicates that the socket
+	has data
+	"""
+	data, dummy, dummy2 = select.select([self.sock], [], [], timeout = 0)
+	return len(data) != 0
 
 
 
