@@ -176,7 +176,7 @@ class Messenger(Object.Object):
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
-	**NOTE:** get_mess may block if no message is available.
+        **NOTE:** get_mess may block if no message is available.
         
         **INPUTS**
         
@@ -282,7 +282,7 @@ class MessengerBasic(Messenger):
         *none* response -- 
         """
 
-        trace('send_mess', 'mess_name=\'%s\'' % mess_name)
+        trace('send_mess', 'self=%s, mess_name=\'%s\'' % (self, mess_name))
         if mess_argvals == None:
             tmp_args = {}
         else:
@@ -295,7 +295,7 @@ class MessengerBasic(Messenger):
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
-	**NOTE:** get_mess may block if no message is available.
+        **NOTE:** get_mess may block if no message is available.
         
         **INPUTS**
         
@@ -307,9 +307,9 @@ class MessengerBasic(Messenger):
         
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format, or
-	 None if no message is available."""
+         None if no message is available."""
 
-        trace('get_mess', 'expecting %s' % repr(expect))
+        trace('get_mess', 'self=%s, expecting %s' % (self, repr(expect)))
         
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
@@ -367,13 +367,12 @@ class MixedMessenger(Messenger):
 
         *none* response -- 
         """
-
         self.sender.send_mess(mess_name, mess_argvals)
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
-	**NOTE:** In this version, get_mess won't block, but will return 
-	None if no message is available.
+        **NOTE:** In this version, get_mess won't block, but will return 
+        None if no message is available.
         
         **INPUTS**
         
@@ -387,8 +386,7 @@ class MixedMessenger(Messenger):
          from external editor in *(mess_name, {arg:val})* format, or
 	 None if no message is available."""
 
-
-        trace('get_mess', 'expecting %s' % repr(expect))
+        trace('get_mess', 'self=%s, expecting %s' % (self, repr(expect)))        
         
         try:
             name_argvals_mess = self.receiver.get(block=0)

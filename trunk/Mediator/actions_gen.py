@@ -23,6 +23,7 @@
 
 import copy, exceptions, os, re
 import Object, vc_globals
+from debug import trace
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -383,7 +384,7 @@ class ActionInsert(Action):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
-#        print '-- ActionInsert.execute: self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after)
+        trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
         app.insert_indent(self.code_bef, self.code_after)
 
 

@@ -39,9 +39,7 @@ import regression
 
 ..[MediatorObject] file:///./MediatorObject.MediatorObject.html"""
 
-# to_configure = None
 
-# no longer used: [MediatorObject] *to_configure* -- When configuring a mediator object, we temporarily assign it to this global variable so that it be accessible from the various configuration function.
 
 
 def disconnect_from_sr(disconnect, save_speech_files):

@@ -723,7 +723,7 @@ class SourceBuff(OwnerObject):
         if range == None:
             range = self.get_selection()
             trace('SourceBuff.insert_indent',
-                'got selection ... range= %d, %d' % range)
+                'got selection ... range=%s' % repr(range))
         range = self.make_valid_range(range)          
 
         trace('SourceBuff.insert_indent', '** inserting code_bef')    
@@ -1095,7 +1095,9 @@ class SourceBuff(OwnerObject):
            Returns *None* if no occurence was found. Otherwise,
            returns a match object."""
 
-#        print '-- SourceBuff.search_for: called'
+        trace('SourceBuff.search_for', 
+              "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s" %
+               (regexp, direction, num, where, unlogged))
         success = None
 
         #

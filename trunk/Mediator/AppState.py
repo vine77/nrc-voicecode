@@ -2073,8 +2073,8 @@ class AppState(OwnerObject):
         INT *save* -- *-1* -> don't save the buffer
                       *0* -> query user if buffer needs saving
                       *1* -> save without querying user
-
-        **Note: The default value of save is -1 (don't save buffers),
+  
+       **Note: The default value of save is -1 (don't save buffers),
         unlike that for close_buffer and close_all_buffers.  The
         regression test should call editor.init_for_test once 
         with save = 0 before the tests begin, to allow the user to save.
@@ -2109,7 +2109,7 @@ class AppState(OwnerObject):
         *none* -- 
         """
 
-#        print '-- AppState.close_all_buffers: called'
+        debug.trace('AppState.close_all_buffers', '** called')
         for a_buff_name in self.open_buffers.keys():
             self.close_buffer(a_buff_name, save)
 

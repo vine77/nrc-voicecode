@@ -43,12 +43,16 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-#                       'DictWinGramNL': 1
+#                        'get_mess':1, 
+#                         'send_mess': 1,                    
+#                       'DictWinGramNL': 1,
+#                       'SelectWinGramNL.gotResultsObject': 1,
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
 #                      'init_simulator_regression': 1,
 #                      'RecogStartMgr': 1,
+#                      'RSMInfrastructure': 1,
 #                      'WinGramMgr': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1
 #                      'synchronize': 1,
@@ -58,15 +62,23 @@ debug.config_traces(status="on",
 #                      'goto_cbk': 1,
 #                      'listen_one_transaction': 1
 #                                    'SourceBuff.on_change': 1
-#                                   'get_mess':1, 
-#                                   'send_mess': 1,
 #                                   'AppState.synchronize_with_app': 1,
-#                                   'SourceBuff': 1,
+#                          'AppState.close_all_buffers': 1,
+#                         'SourceBuff': 1,
 #                                   'SourceBuffMessaging.line_num_of': 1,
 #                                    'delete_instance_cbk': 1,
 #                                    'listen_one_transaction': 1,
 #                                    'close_app_cbk': 1,
-#                                    'AppState': 1
+#                                    'AppState': 1,
+#                       'sr_interface': 1,
+#                       'sim_commands.say': 1,
+#                       'got': 1,
+#                       'RecogStartGram.gotBegin': 1,
+#                       'DictWinGramNL.gotResultsObject': 1,
+#                       'SelectWinGramNL.gotResultsObject': 1,
+#                       'sr_interface.CommandDictGrammar': 1,
+#                       'sr_interface.CodeSelectGrammar': 1,
+#                       'SelectWinGram': 1,
                                    },
                                    allow_trace_id_substrings = 1)
 

@@ -36,7 +36,7 @@ c_simple_while = \
                  docstring = """Insert template code for a simple C for loop""")
 
 c_goto_body = \
-    ActionSearch(regexp='\)\s*\{[ \t]*\n*',
+    ActionSearch(regexp='\)\s*\{[ \t]*\n{0,1}',
                  docstring="""Move cursor to the body of a C compound statement""")
 
 cpp_class_definition = \

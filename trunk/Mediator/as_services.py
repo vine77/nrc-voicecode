@@ -48,6 +48,7 @@ variant would have to be cloned and copied to the two classes.
 ..[AppState] file:///./AppState.AppState.html"""
 
 import Object
+from debug import trace
 
 class AS_Service(Object.OwnerObject):
     """Support service for AppState classes.
@@ -121,8 +122,9 @@ class AS_ServiceBreadcrumbs(AS_Service):
         If *pos* not specified, drop breadcrumb at cursor position.
 
         If *buff* not specified either, drop breadcrumb in current buffer
-	"""
+        """
         buff = self.app.find_buff(buffname)
+        
         file_name = buff.file_name()
         if not pos: pos = buff.cur_pos()
         self.breadcrumbs = self.breadcrumbs + [[file_name, pos]]
@@ -188,4 +190,5 @@ class AS_ServiceLangName(AS_Service):
         if self.app.curr_buffer() != None:
             language = self.app.curr_buffer().language
         return language
+
 

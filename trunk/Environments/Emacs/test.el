@@ -11,3 +11,5 @@
 ;;; even if I invoke (debug) explicitly inside vr-output-filter
 ;(setq debug-on-error nil)
 ;(setq debug-on-quit nil)
+
+
