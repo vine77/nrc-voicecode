@@ -112,12 +112,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 # not sure if yet if this is where we should store the utterance
                 words = results.getWords(0)
                 interp = self.interpreter()
-                interp.interpret_NL_cmd(words, self.app)
-                # DCF - comment out temporarily to see if this is the
-                # source of the problem with dictating over selected
-                # text
-#                interp.interpret_NL_cmd(words, self.app,
-#                    initial_buffer = self.buff_name)
+                interp.interpret_NL_cmd(words, self.app,
+                    initial_buffer = self.buff_name)
                 self.app.print_buff_if_necessary(buff_name
                     = self.buff_name)
 

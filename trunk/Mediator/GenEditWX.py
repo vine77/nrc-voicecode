@@ -769,7 +769,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         buff_name = self.frame_active_buffer_name()
         title = self.app_name + ' - '
         if self.instance_string:
-            title = title + '[%s] - ' % self.instance_string
+            title = title + '%s - ' % self.instance_string
         title = title + buff_name
         return title
 

@@ -39,6 +39,9 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
     *TextBuffer, VisibleBuffer, NumberedLines underlying* -- underlying
     TextBuffer (also supporting VisibleBuffer and NumberedLines) 
+
+    *STR f_name* -- name of the corresponding file, if different from
+    the buffer name
   
     [SB_ServiceLang] *lang_srv* -- Language service used to know the
     programming language of a source file.
@@ -53,7 +56,8 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
     
     """
     
-    def __init__(self, underlying_buffer, change_specification = 0, **attrs):
+    def __init__(self, underlying_buffer, change_specification = 0, 
+        f_name = None, **attrs):
         """
 	Create the SourceBuffTB object
 
@@ -71,7 +75,8 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
                          'state_srv': sb_services.SB_ServiceFullState(buff=self)})
         self.deep_construct(SourceBuffTB,
-                            {'underlying': underlying_buffer},
+                            {'underlying': underlying_buffer,
+                             'f_name': f_name},
                             attrs
                             )
         self.add_owned_list(['state_srv', 'indent_srv', 'line_srv',
@@ -110,7 +115,33 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
             return
         self.on_change(start, end, text, program_initiated)
 
+    def name_file(self, new_file_name):
+        """changes the filename
+
+        **INPUTS**
+
+        *STR new_file_name* -- the new name
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.f_name = new_file_name
+
     def file_name(self):
+        """Returns the name of the file being displayed in a buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *STR* -- the name of the file
+        """        
+        if self.f_name != None:
+            return self.f_name
         return self.buff_name
 
     def language_name(self):
