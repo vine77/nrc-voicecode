@@ -22,16 +22,33 @@
 """Interface to the Emacs editor."""
 
 import as_services, AppStateMessaging, SourceBuffEmacs
+
+import sr_interface
+
+# used for keybd_event
+import win32api
+import win32con
+
 from debug import trace
 
         
 class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     """Interface to the Emacs editor.
+
+    **INSTANCE ATTRIBUTES**
+
+    *AS_ServiceBreadcrumbs breadcrumbs_srv* -- service handling
+    breadcrumb-related functions
+
+    *BOOL use_ignored_key* -- flag indicating whether we should send the
+    new ignored key message before recog_begin
     """
 
-    def __init__(self, **attrs):
+    def __init__(self, use_ignored_key = 0, **attrs):
         self.deep_construct(AppStateEmacs, 
-                            {'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)},
+                            {'breadcrumbs_srv': 
+                              as_services.AS_ServiceBreadcrumbs(app=self),
+                             'use_ignored_key': use_ignored_key},
 #                            {'breadcrumbs_srv': None},
                             attrs, new_default = {'app_name': 'emacs'})
 #        self.breadcrumbs_srv = as_services.AS_ServiceBreadcrumbs(app=self)                            
@@ -71,6 +88,58 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def config_from_external(self):
         pass
         
+
+    def recog_begin(self, window_id, block = 0):
+        """Invoked at the beginning of a recognition event.
+
+        The editor then returns telling VoiceCode whether or not the user
+        is allowed to speak into window *window_id*.
+
+        **INPUTS**
+        
+        INT *window_id* -- The ID of the window that was active when
+        the recognition began.                
+
+	*BOOL block* -- true if the speech engine can detect recog_end
+	events reliably.  If so, and if the editor is capable of doing so, 
+        the editor may (at its discretion) also stop responding to user
+        input until method [recog_end()] is invoked.  This is to
+        prevent a bunch of problems that can arise if the user types
+        while VoiceCode is still processing an utterance. In such
+        cases, the results of the utterance interpretation can be
+        unpredictable, especially when it comes to correction.
+
+	**NOTE:** However, if block is false, the editor **MUST NOT**
+	stop responding, because the mediator will not be able to use
+	recog_end to tell it to resume responding to user input.  
+
+	Also, the editor must provide a way for the user to re-enable
+	input manually, in case the mediator crashes.  If it cannot do
+	so, it should not stop responding, regardless of the value of
+	block.
+
+        **OUTPUTS**
+        
+        BOOL *can_talk* -- *true* iif editor allows user to speak into window
+        with ID *window_id*
+        
+        .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
+
+        if self.multiple_windows() and self.use_ignored_key:
+            self.talk_msgr.send_mess('emacs_prepare_for_ignored_key')
+            response = self.talk_msgr.get_mess(expect = \
+                ['emacs_prepare_for_ignored_key_resp'])
+
+            win32api.keybd_event(win32con.VK_F9, 0x43, 0, 0)
+            win32api.keybd_event(win32con.VK_F9, 0x43, win32con.KEYEVENTF_KEYUP, 0)
+# can't call this from within a gotBegin callback, so we have to
+# simulate this using windows.  Should probably use SendInput, but
+# that's not wrapped by the win32 Python extensions, so let's try this
+# for now
+#            sr_interface.send_keys('{F9}')
+
+        return AppStateMessaging.AppStateMessaging.recog_begin(self, window_id, block = block)
+
         
     #
     # Note: If and when we support Emacs in single shell mode (with process
@@ -82,12 +151,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     #
     
     
-# Multiple windows mode is seriously buggy, so for now, we return 0
-# here.  This doesn't prevent Emacs from opening multiple frames, but it
-# does prevent the mediator from associating new windows (after the
-# first one) with the same instance
-
-# commented out temporarily for testing 
+# Multiple windows mode is basically working now, so we don't need to
+# override this any more
 #    def _multiple_windows_from_app(self):
 #        return 0
     
@@ -104,16 +169,18 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def _is_active_from_app(self):
         return 1
         
-    # Eventually, delete this method and make Emacs respond to the
-    # "suspendable" message with 0 if 'window-system is "w32" and
-    # 1 otherwise
+# Eventually, delete this method and make Emacs respond to the
+# "suspendable" message with 0 if 'window-system is "w32" and
+# 1 otherwise
+#
 # DCF: emacs now handles this message, so we can use the default version
 # from AppStateMessaging
 #    def suspendable(self):
 #        return 0
 
-    # For now, assume that Emacs will not be able to notify of suspension.
-    # Later on, see if there are hooks in Emacs allowing such notification.
+# For now, assume that Emacs will not be able to notify of suspension.
+# Later on, see if there are hooks in Emacs allowing such notification.
+#
 # DCF: emacs now handles this message, so we can use the default version
 # from AppStateMessaging
 #    def suspend_notification(self):

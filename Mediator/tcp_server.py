@@ -297,6 +297,7 @@ class AppStateFactorySimple(AppStateFactory):
 	..[AppState] file:///./AppState.AppState.html"""
 
 
+        kw_args = {}
         if re.match('EdSim', app_name):
             as_class = AS_MessExtEdSim
         elif re.match('EdSimClientIndent', app_name):
@@ -307,14 +308,19 @@ class AppStateFactorySimple(AppStateFactory):
             as_class = AppStateMessaging.AppStateInsertIndentMess
         elif re.match('emacs', app_name):
             as_class = AppStateEmacs.AppStateEmacs
+# comment out the following line to use the old recog_begin scheme
+#            kw_args['use_ignored_key'] = 1
         else:
             print "WARNING: Unknown editor '%s'" % app_name
             print "Connection refused"
             return None
         
-        app = as_class(app_name=app_name, id=id, 
-            listen_msgr=listen_msgr, talk_msgr=talk_msgr,
-            listen_can_block = listen_can_block)
+        kw_args['app_name'] = app_name
+        kw_args['id'] = id
+        kw_args['listen_msgr'] = listen_msgr
+        kw_args['talk_msgr'] = talk_msgr
+        kw_args['listen_can_block'] = listen_can_block
+        app = apply(as_class, (), kw_args)
 #        app.app_name = app_name
         return app
 

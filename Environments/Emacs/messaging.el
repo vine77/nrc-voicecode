@@ -138,13 +138,22 @@
        ;;;
        ;;; Parse the message in a temporary buffer
        ;;;
-       (save-excursion
-         (switch-to-buffer "*VC WDDX Message*") 
-         (erase-buffer)
-         (insert mess)
-         (setq dom (xml-parse-region (point-min) (point-max) (current-buffer)))
- 	 (kill-buffer nil)
+; Using switch-to-buffer sometimes causes a different buffer to be
+; displayed when we return (despite the save-excursion call).
+; Instead, we use with-temp-buffer, which doesn't have that effect.
+; -- DCF
+;       (save-excursion
+;         (switch-to-buffer "*VC WDDX Message*") 
+;         (erase-buffer)
+;         (insert mess)
+;         (setq dom (xml-parse-region (point-min) (point-max) (current-buffer)))
+; 	 (kill-buffer nil)
+;       )
+       (with-temp-buffer
+          (insert mess)
+          (setq dom (xml-parse-region (point-min) (point-max) (current-buffer)))
        )
+
    
        ;;;
        ;;; Convert to a Lisp hash table
