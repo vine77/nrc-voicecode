@@ -114,7 +114,7 @@ def dictate_pseudo_C_Cpp(commands):
 
     # switch - case - default - break
 
-    commands.say(['switch','initial','character','goto','body'])
+    commands.say(['switch','initial','character','go', 'to','body'])
     commands.say(['case','single-quotes','a'])
     commands.say(['after','colon','new','line','some','procedure','with','arguments','jump','out','semi','new','line','break'])
     commands.say(['case','single-quotes','b'])
@@ -136,9 +136,9 @@ def dictate_pseudo_C_Cpp(commands):
                   'with','argument','little','boy'])
     commands.say(['jump','out','jump','out','new','line'])
     commands.say(['catch','ellipsis'])
-    commands.say(['goto','body'])
+    commands.say(['go','to','body'])
     commands.say(['new','statement'])
-    commands.say(['process','exception','parens','little','boy','jump','out','jump','out','','new','paragraph'])
+    commands.say(['process','exception','parens','little','boy','jump','out','jump','out','new','paragraph'])
 
     # do...while
     commands.say(['do','while'])
@@ -205,7 +205,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['define','class','really','great','stuff'])
     commands.say(['with','superclass','important','superclass'])
     commands.say(['private','members'])
-    commands.say(['New-Line','int\\int','foo','semicolon'])
+    commands.say(['new','line','int\\int','foo','semicolon'])
     commands.say(['jump','back','out'])
     commands.say(['new','public','member','new','line','float','pointer','bar','semi','new','line'])
     commands.say(['declare','function','testing','declaration'])

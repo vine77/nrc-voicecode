@@ -634,7 +634,7 @@ class MessPackager_FixedLenSeq(MessPackager):
             # Is this last chunk in the message?
             # 
             mess = mess[self.chunk_len-1:]
-            prefix = (mess == '')
+            prefix = int(mess == '')
             
             a_chunk = "%s%s" % (prefix, a_chunk)
             packed_mess = packed_mess + a_chunk
