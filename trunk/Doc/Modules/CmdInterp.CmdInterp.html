@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:50:44 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:40:31 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -66,11 +66,11 @@ interpreting the commands
 <EM>[SymDict] known_symbols</EM>
 <DD>dictionary of known symbols
 <DT>
-<EM>{STR: [STR]}</EM> language_specific_aliases = {}
+<EM>{STR: {STR: STR}}</EM> language_specific_aliases = {}
 <DD>Key is the name of
  a programming language (None means all languages). Value is a
- list of written form\spoken form words specific to a
- language.
+ dictionary of written forms over spoken form keys 
+ specific to a language.
 <DT>
 <EM>FILE symdict_pickle_file = None</EM>
 <DD>File used to for

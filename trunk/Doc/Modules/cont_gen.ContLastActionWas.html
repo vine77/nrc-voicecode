@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:52:12 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:41:42 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ContLastActionWas</SPAN>(<A CLASS="DocLink" HREF="Context.Context.html">Context</A>):
-    <A CLASS="DocLink" HREF="#cont_gen.ContLastActionWas.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cont_gen.ContLastActionWas.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">type</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # <STRONG>INPUTS</STRONG></SPAN>
+    <A CLASS="DocLink" HREF="#cont_gen.ContLastActionWas.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cont_gen.ContLastActionWas.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">types</SPAN>, <SPAN CLASS="Argument">connector='and'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # <STRONG>INPUTS</STRONG></SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cont_gen.ContLastActionWas.applies</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -40,17 +40,23 @@
 </PRE><H2>Description</H2><P>
 This context applies if the last action application's command history
 was of a certain type</P>
-<H2 ID="cont_gen.ContLastActionWas.__init__" CLASS="Method">cont_gen.ContLastActionWas.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">type</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="cont_gen.ContLastActionWas.__init__" CLASS="Method">cont_gen.ContLastActionWas.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">types</SPAN>, <SPAN CLASS="Argument">connector='and'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P><STRONG>INPUTS</STRONG></P>
 
 
 <DL>
 
 <DT>
-<EM>CLASS</EM> type
-<DD>A class object (not instance). The context applies if
-the last action is an instance of a class that is a descendant (not
-necessarily direct) of class <EM>type</EM>.
+<EM>CLASS</EM> types
+<DD>A list of class objects (not instance). The
+context applies if the last action is an instance of all them
+(or <EM>one of them</EM> if *self.connector == 'or'*).
+<DT>
+<EM>STR</EM> connector='and'
+<DD>If <EM>'and'</EM>, then context applies if
+ last action is an instance of all the classes in <EM>types</EM>. If
+ <EM>'or'</EM>, then context applies if last action is an instance of
+ any of the classes in <EM>types</EM>.
 
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>

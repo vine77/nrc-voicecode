@@ -3,30 +3,28 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:40:40 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:40:42 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class MediatorObject</title>
+<title>Class SourceBuffCookie</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class MediatorObject - Main object for the mediator.</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="MediatorObject.html">MediatorObject</A></P>
+<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">MediatorObject.MediatorObject<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=&lt;CmdInterp.CmdInterp instance at 84f390&gt;</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='e:\\Projects\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN>)<SPAN CLASS="OneLiner"> # Configures a mediator object based on a configuration file.</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)<SPAN CLASS="OneLiner"> # Quit the mediator object</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -35,95 +33,20 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-Typically, there will be one such object for every application
-that is being controlled through a VoiceCode mediator.</P>
+SourceBuffCookie itself is simply a dummy class which acts as a
+placeholder.  Its only purpose is to serve as ostensible return or 
+argument type for various pure virtual SourceBuff functions.  The
+actual return or argument type will be a subclass of
+SourceBuffCookie which will vary with SourceBuff subclass.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-
-<DL>
-
-<DT>
-[AppState] <EM>app = AppState.AppState()</EM>
-<DD>Application being run
-through the mediator.
-<DT>
-[CmdInterp] <EM>interp=CmdInterp.CmdInterp()</EM>
-<DD>Command interpreter used to
-translate pseudo-code to native code.
-<DT>
-[CommandDictGrammar] <EM>mixed_grammar = None</EM>
-<DD>Speech Recognition grammar
-that recognises continuous dictation and forwards the results to the
-<EM>interp</EM> command interpreter.
-<DT>
-[CodeSelectGrammar] code_select_grammar = None
-<DD>Grammar for
-selecting a part of the visible code.
-<DT>
-<EM>INT window</EM> 
-<DD>MSW window handle of the top-level window in which
-to activate the grammars, or 0 to make them global.
-</DL>
 <P>
-CLASS ATTRIBUTES**</P>
+<EM>None</EM></P>
 <P>
-<EM>none</EM> --</P>
+<STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
-..[AppState] AppState.AppState.html
-..[CmdInterp] CmdInterp.CmdInterp.html
-..[CommandDictGrammar] sr_interface.CommandDictGrammar.html
-..[CodeSelectGrammar] sr_interface.CodeSelectGrammar.html</P>
-<H2 ID="MediatorObject.MediatorObject.configure" CLASS="Method">MediatorObject.MediatorObject.configure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='e:\\Projects\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN>)</H2>
-<P>Configures a mediator object based on a configuration file.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> config_file = vc_globals.default_config_file
-<DD>Full path of the config 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="MediatorObject.MediatorObject.quit" CLASS="Method">MediatorObject.MediatorObject.quit(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)</H2>
-<P>Quit the mediator object</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM> clean_sr_voc=0
-<DD>If true, remove all SR entries for known
-symbols.
-<DT>
-<EM>BOOL</EM> save_speech_files = None
-<DD>Indicates whether or not
-speech files should be saved. If <EM>None</EM>, then ask the user.
-<DT>
-<EM>BOOL</EM> disconnect = 1
-<DD>Indicates whether or not to disconnect from
-the SR system.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
+<EM>None</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

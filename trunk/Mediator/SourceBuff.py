@@ -49,6 +49,25 @@ def language_name(file_name):
     return tmp.language_name()
 
 
+class SourceBuffCookie(Object):
+    """abstract class which represents a restore-able SourceBuff state
+
+    SourceBuffCookie itself is simply a dummy class which acts as a
+    placeholder.  Its only purpose is to serve as ostensible return or 
+    argument type for various pure virtual SourceBuff functions.  The
+    actual return or argument type will be a subclass of
+    SourceBuffCookie which will vary with SourceBuff subclass.
+
+    **INSTANCE ATTRIBUTES**
+
+    *None*
+
+    **CLASS ATTRIBUTES**
+
+    *None*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(SourceBuffCookie, {}, attrs)
 
 class SourceBuff(Object):
     """Class representing a source buffer.
@@ -735,7 +754,7 @@ class SourceBuff(Object):
 	**OUTPUTS**
 
 	*SourceBuffCookie* -- state cookie (see above).  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
+	SourceBuffCookie is a dummy class.  The
 	actual return type will vary with SourceBuff subclass.
 	"""
         debug.virtual('SourceBuff.store_current_state')
