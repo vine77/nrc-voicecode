@@ -1,0 +1,999 @@
+-- vr-execute-event-handler: vr-request=("recog_begin" (cl-hash-table-tag string= [0 0 0 0 window_id 0 0 block 0 0 0 0 0 0 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_begin"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_begin", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 window_id 0 0 block 0 0 0 0 0 0 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-recognition-start: invoked
+--** vcode-cmd-recognition-start: window id is: nil-- vr-cmd-frame-activated: invoked, wnd=(nil nil)
+VR Mode: (nil nil) is not an Emacs frame window handle; ignored.
+-- vr-cmd-frame-activated: exiting
+-- vr-cmd-recognition: vr-request=(nil begin)
+recognition begin: current buffer: blah.py vr-buffer:blah.py
+-- vr-cmd-recognition: exiting
+**-- vcode-serialize-message: mess-name="recog_begin_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>1</number></var><var name=\"message_name\"><string>recog_begin_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-recognition-start: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>c:/eclipse/workspace/VCode/Environments/Emacs/blah.py</string></var><var name=\"message_name\"><string>confirm_buffer_exists</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="confirm_buffer_exists", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("confirm_buffer_exists" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-confirm-buffer-exists: invoked
+**-- vcode-serialize-message: mess-name="confirm_buffer_exists_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>0</number></var><var name=\"message_name\"><string>confirm_buffer_exists_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+-- vcode-confirm-buffer-exists: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>c:/eclipse/workspace/VCode/Environments/Emacs/blah.py</string></var><var name=\"message_name\"><string>confirm_buffer_exists</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="confirm_buffer_exists", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("confirm_buffer_exists" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-confirm-buffer-exists: invoked
+**-- vcode-serialize-message: mess-name="confirm_buffer_exists_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>0</number></var><var name=\"message_name\"><string>confirm_buffer_exists_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+-- vcode-confirm-buffer-exists: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"cursor_at\"><number>1</number></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>set_selection</string></var><var name=\"range\"><array length=\"2\"><number>0</number><number>0</number></array></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="set_selection", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("set_selection" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="set_selection"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="set_selection", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(0 0), for-who=emacs
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=1, end=1
+-- vcode-fix-range: invoked, range=(1 1), for-who=emacs
+-- vcode-convert-pos: invoked, pos=1, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=1, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=2, end=2
+--** vcode-fix-positions-in-message: range=(1 1), (vcode-fix-range range fix-for-who)=(2 2)
+-- vcode-cmd-set-selection: invoked
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="set_selection", change-list=((change-is-select "blah.py" 1 1))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 1 1)
+-- vcode-convert-pos: invoked, pos=1, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=1, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="set_selection_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>0</number><number>0</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>set_selection_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>list_open_buffers</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="list_open_buffers", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("list_open_buffers" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-list-open-buffers: invoked
+**-- vcode-serialize-message: mess-name="list_open_buffers_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"0\"></array></var><var name=\"message_name\"><string>list_open_buffers_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+-- vcode-cmd-list-open-buffers: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>0</number><number>0</number></array></var><var name=\"message_name\"><string>insert</string></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"text\"><string>def </string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="insert", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("insert" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(0 0), for-who=emacs
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=1, end=1
+-- vcode-fix-range: invoked, range=(1 1), for-who=emacs
+-- vcode-convert-pos: invoked, pos=1, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=1, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=2, end=2
+--** vcode-fix-positions-in-message: range=(1 1), (vcode-fix-range range fix-for-who)=(2 2)
+-- vcode-cmd-insert: buff-name="blah.py", range=(1 1), text="def ", 
+--** vcode-cmd-insert: upon entry, buffer-name="blah.py", (mark)=1, (point)=1, content=""
+--** vcode-cmd-insert: after kill-region, buffer-name="blah.py", (mark)=1, (point)=1, content=""
+-- vr-report-insert-delete-change: inserted-start=1, inserted-end=5, deleted-len=0
+**-- vr-report-insert-delete-change: current buffer is "blah.py"
+**-- vr-report-insert-delete-change: the-change=(change-is-insert "blah.py" 1 5 0), vr-queued-changes=nil**-- vr-report-insert-delete-change: updated vr-queued-change=((change-is-insert "blah.py" 1 5 0))-- vr-report-insert-delete-change: exited
+--** vcode-cmd-insert: after insert, buffer-name="blah.py", (mark)=nil, (point)=5, content="def "
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="insert", change-list=((change-is-insert "blah.py" 1 5 0))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-insert "blah.py" 1 5 0)
+-- vcode-convert-pos: invoked, pos=1, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=1, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-insert-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="insert_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>insert</string></var><var name=\"text\"><string>def </string></var><var name=\"range\"><array length=\"2\"><number>0</number><number>0</number></array></var><var name=\"buff_name\"><string>blah.py</string></var></struct></array></var><var name=\"message_name\"><string>insert_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>cur_pos</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="cur_pos", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("cur_pos" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-cur-pos: invoked
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-cmd-cur-pos: (point)=5, sending (vcode-convert-pos (point) 'vcode)=4
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="cur_pos_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>4</number></var><var name=\"message_name\"><string>cur_pos_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+-- vcode-cmd-cur-pos: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>0</number><number>4</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>indent</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="indent", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("indent" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(0 4), for-who=emacs
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=1, end=5
+-- vcode-fix-range: invoked, range=(1 5), for-who=emacs
+-- vcode-convert-pos: invoked, pos=1, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=2, end=6
+--** vcode-fix-positions-in-message: range=(1 5), (vcode-fix-range range fix-for-who)=(2 6)
+-- vcode-cmd-indent: invoked
+--** vcode-cmd-indent: indent-start=1, indent-end=5
+**-- vcode-cmd-indent: switched to current buffer="blah.py"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="indent", change-list=nil
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="indent_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"0\"></array></var><var name=\"message_name\"><string>indent_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-indent: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>4</number><number>4</number></array></var><var name=\"message_name\"><string>insert</string></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"text\"><string>(self):
+</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="insert", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("insert" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(4 4), for-who=emacs
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=5, end=5
+-- vcode-fix-range: invoked, range=(5 5), for-who=emacs
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=6, end=6
+--** vcode-fix-positions-in-message: range=(5 5), (vcode-fix-range range fix-for-who)=(6 6)
+-- vcode-cmd-insert: buff-name="blah.py", range=(5 5), text="(self):
+", 
+--** vcode-cmd-insert: upon entry, buffer-name="blah.py", (mark)=nil, (point)=5, content="def "
+--** vcode-cmd-insert: after kill-region, buffer-name="blah.py", (mark)=nil, (point)=5, content="def "
+-- vr-report-insert-delete-change: inserted-start=5, inserted-end=13, deleted-len=0
+**-- vr-report-insert-delete-change: current buffer is "blah.py"
+**-- vr-report-insert-delete-change: the-change=(change-is-insert "blah.py" 5 13 0), vr-queued-changes=nil**-- vr-report-insert-delete-change: updated vr-queued-change=((change-is-insert "blah.py" 5 13 0))-- vr-report-insert-delete-change: exited
+--** vcode-cmd-insert: after insert, buffer-name="blah.py", (mark)=nil, (point)=13, content="def (self):
+"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="insert", change-list=((change-is-insert "blah.py" 5 13 0))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-insert "blah.py" 5 13 0)
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-insert-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="insert_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>insert</string></var><var name=\"text\"><string>(self):
+</string></var><var name=\"range\"><array length=\"2\"><number>4</number><number>4</number></array></var><var name=\"buff_name\"><string>blah.py</string></var></struct></array></var><var name=\"message_name\"><string>insert_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>cur_pos</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="cur_pos", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("cur_pos" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-cur-pos: invoked
+-- vcode-convert-pos: invoked, pos=13, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-cmd-cur-pos: (point)=13, sending (vcode-convert-pos (point) 'vcode)=12
+-- vcode-convert-pos: invoked, pos=13, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="cur_pos_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>12</number></var><var name=\"message_name\"><string>cur_pos_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-cur-pos: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>4</number><number>12</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>indent</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="indent", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("indent" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(4 12), for-who=emacs
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=12, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=5, end=13
+-- vcode-fix-range: invoked, range=(5 13), for-who=emacs
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=13, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=6, end=14
+--** vcode-fix-positions-in-message: range=(5 13), (vcode-fix-range range fix-for-who)=(6 14)
+-- vcode-cmd-indent: invoked
+--** vcode-cmd-indent: indent-start=5, indent-end=13
+**-- vcode-cmd-indent: switched to current buffer="blah.py"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="indent", change-list=nil
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="indent_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"0\"></array></var><var name=\"message_name\"><string>indent_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-indent: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"pos\"><number>4</number></var><var name=\"message_name\"><string>goto</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="goto", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("goto" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "pos"
+--** vcode-fix-positions-in-message: original pos=4
+--** vcode-fix-pos: pos=4 fix-for-who=emacs default-pos=13
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=5
+-- vcode-cmd-goto: invoked
+--** vcode-cmd-goto: buff-name="blah.py", pos=5
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+--** vcode-cmd-goto: after going there, (point)=5, (vcode-convert-pos (point) 'vcode))=4
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="goto", change-list=((change-is-select "blah.py" 5 5))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 5 5)
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="goto_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>4</number><number>4</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>goto_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-goto: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>4</number><number>4</number></array></var><var name=\"message_name\"><string>insert</string></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"text\"><string>popularity</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="insert", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("insert" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(4 4), for-who=emacs
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=5, end=5
+-- vcode-fix-range: invoked, range=(5 5), for-who=emacs
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=6, end=6
+--** vcode-fix-positions-in-message: range=(5 5), (vcode-fix-range range fix-for-who)=(6 6)
+-- vcode-cmd-insert: buff-name="blah.py", range=(5 5), text="popularity", 
+--** vcode-cmd-insert: upon entry, buffer-name="blah.py", (mark)=nil, (point)=5, content="def (self):
+"
+--** vcode-cmd-insert: after kill-region, buffer-name="blah.py", (mark)=nil, (point)=5, content="def (self):
+"
+-- vr-report-insert-delete-change: inserted-start=5, inserted-end=15, deleted-len=0
+**-- vr-report-insert-delete-change: current buffer is "blah.py"
+**-- vr-report-insert-delete-change: the-change=(change-is-insert "blah.py" 5 15 0), vr-queued-changes=nil**-- vr-report-insert-delete-change: updated vr-queued-change=((change-is-insert "blah.py" 5 15 0))-- vr-report-insert-delete-change: exited
+--** vcode-cmd-insert: after insert, buffer-name="blah.py", (mark)=nil, (point)=15, content="def popularity(self):
+"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="insert", change-list=((change-is-insert "blah.py" 5 15 0))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-insert "blah.py" 5 15 0)
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=5, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-insert-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="insert_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>insert</string></var><var name=\"text\"><string>popularity</string></var><var name=\"range\"><array length=\"2\"><number>4</number><number>4</number></array></var><var name=\"buff_name\"><string>blah.py</string></var></struct></array></var><var name=\"message_name\"><string>insert_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>cur_pos</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="cur_pos", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("cur_pos" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-cur-pos: invoked
+-- vcode-convert-pos: invoked, pos=15, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-cmd-cur-pos: (point)=15, sending (vcode-convert-pos (point) 'vcode)=14
+-- vcode-convert-pos: invoked, pos=15, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="cur_pos_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>14</number></var><var name=\"message_name\"><string>cur_pos_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-cur-pos: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>4</number><number>14</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>indent</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="indent", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("indent" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(4 14), for-who=emacs
+-- vcode-convert-pos: invoked, pos=4, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=14, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=5, end=15
+-- vcode-fix-range: invoked, range=(5 15), for-who=emacs
+-- vcode-convert-pos: invoked, pos=5, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=15, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=6, end=16
+--** vcode-fix-positions-in-message: range=(5 15), (vcode-fix-range range fix-for-who)=(6 16)
+-- vcode-cmd-indent: invoked
+--** vcode-cmd-indent: indent-start=5, indent-end=15
+**-- vcode-cmd-indent: switched to current buffer="blah.py"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="indent", change-list=nil
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="indent_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"0\"></array></var><var name=\"message_name\"><string>indent_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-indent: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"pos\"><number>22</number></var><var name=\"message_name\"><string>goto</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="goto", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("goto" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "pos"
+--** vcode-fix-positions-in-message: original pos=22
+--** vcode-fix-pos: pos=22 fix-for-who=emacs default-pos=15
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=23
+-- vcode-cmd-goto: invoked
+--** vcode-cmd-goto: buff-name="blah.py", pos=23
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+--** vcode-cmd-goto: after going there, (point)=23, (vcode-convert-pos (point) 'vcode))=22
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="goto", change-list=((change-is-select "blah.py" 23 23))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 23 23)
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="goto_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>goto_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-goto: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>recog_end</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="recog_end", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("recog_end" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_end"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_end", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-recognition-end: invoked
+-- vr-cmd-recognition: vr-request=(nil end)
+recognition end: current buffer: blah.py vr-buffer:blah.py
+-- vr-cmd-recognition: exiting
+**-- vcode-serialize-message: mess-name="recog_end_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>recog_end_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+-- vcode-cmd-recognition-end: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>list_open_buffers</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="list_open_buffers", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("list_open_buffers" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-list-open-buffers: invoked
+**-- vcode-serialize-message: mess-name="list_open_buffers_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"0\"></array></var><var name=\"message_name\"><string>list_open_buffers_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+-- vcode-cmd-list-open-buffers: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"position\"><number>22</number></var><var name=\"message_name\"><string>line_num_of</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="line_num_of", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("line_num_of" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "position"
+--** vcode-fix-positions-in-message: original pos=22
+--** vcode-fix-pos: pos=22 fix-for-who=emacs default-pos=23
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=23
+-- vcode-cmd-line-num-of: invoked
+**-- vcode-cmd-line-num-of: opoint=23, current buffer="blah.py"**-- vcode-serialize-message: mess-name="line_num_of_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>2</number></var><var name=\"message_name\"><string>line_num_of_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-line-num-of: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"position\"><number>22</number></var><var name=\"message_name\"><string>line_num_of</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="line_num_of", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("line_num_of" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "position"
+--** vcode-fix-positions-in-message: original pos=22
+--** vcode-fix-pos: pos=22 fix-for-who=emacs default-pos=23
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=23
+-- vcode-cmd-line-num-of: invoked
+**-- vcode-cmd-line-num-of: opoint=23, current buffer="blah.py"**-- vcode-serialize-message: mess-name="line_num_of_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>2</number></var><var name=\"message_name\"><string>line_num_of_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-line-num-of: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>active_buffer_name</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="active_buffer_name", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("active_buffer_name" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="active_buffer_name"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="active_buffer_name", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-active-buffer-name: invoked
+**-- vcode-serialize-message: mess-name="active_buffer_name_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><string>blah.py</string></var><var name=\"message_name\"><string>active_buffer_name_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-active-buffer-name: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"block\"><number>0</number></var><var name=\"window_id\"><string></string></var><var name=\"message_name\"><string>recog_begin</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="recog_begin", mess-cont=(cl-hash-table-tag string= [0 0 0 0 window_id 0 0 block 0 0 0 0 0 0 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("recog_begin" (cl-hash-table-tag string= [0 0 0 0 window_id 0 0 block 0 0 0 0 0 0 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_begin"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_begin", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 window_id 0 0 block 0 0 0 0 0 0 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-recognition-start: invoked
+--** vcode-cmd-recognition-start: window id is: nil-- vr-cmd-frame-activated: invoked, wnd=(nil nil)
+VR Mode: (nil nil) is not an Emacs frame window handle; ignored.
+-- vr-cmd-frame-activated: exiting
+-- vr-cmd-recognition: vr-request=(nil begin)
+recognition begin: current buffer: blah.py vr-buffer:blah.py
+-- vr-cmd-recognition: exiting
+**-- vcode-serialize-message: mess-name="recog_begin_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>1</number></var><var name=\"message_name\"><string>recog_begin_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-recognition-start: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>get_visible</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="get_visible", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("get_visible" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_visible"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_visible", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-get-visible: invoked
+**-- vcode-serialize-message: mess-name="get_visible_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"2\"><number>1</number><number>23</number></array></var><var name=\"message_name\"><string>get_visible_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-get-visible: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"pos\"><number>3</number></var><var name=\"message_name\"><string>goto</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="goto", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("goto" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "pos"
+--** vcode-fix-positions-in-message: original pos=3
+--** vcode-fix-pos: pos=3 fix-for-who=emacs default-pos=23
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=3, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=4
+-- vcode-cmd-goto: invoked
+--** vcode-cmd-goto: buff-name="blah.py", pos=4
+-- vcode-convert-pos: invoked, pos=4, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+--** vcode-cmd-goto: after going there, (point)=4, (vcode-convert-pos (point) 'vcode))=3
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="goto", change-list=((change-is-select "blah.py" 4 4))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 4 4)
+-- vcode-convert-pos: invoked, pos=4, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=4, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="goto_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>3</number><number>3</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>goto_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-goto: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>c:/eclipse/workspace/VCode/Environments/Emacs/blah.py</string></var><var name=\"message_name\"><string>confirm_buffer_exists</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="confirm_buffer_exists", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("confirm_buffer_exists" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-confirm-buffer-exists: invoked
+**-- vcode-serialize-message: mess-name="confirm_buffer_exists_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>0</number></var><var name=\"message_name\"><string>confirm_buffer_exists_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+-- vcode-confirm-buffer-exists: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"pos\"><number>22</number></var><var name=\"message_name\"><string>goto</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="goto", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("goto" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 pos 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "pos"
+--** vcode-fix-positions-in-message: original pos=22
+--** vcode-fix-pos: pos=22 fix-for-who=emacs default-pos=4
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=23
+-- vcode-cmd-goto: invoked
+--** vcode-cmd-goto: buff-name="blah.py", pos=23
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+--** vcode-cmd-goto: after going there, (point)=23, (vcode-convert-pos (point) 'vcode))=22
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="goto", change-list=((change-is-select "blah.py" 23 23))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 23 23)
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="goto_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>goto_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-goto: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>c:/eclipse/workspace/VCode/Environments/Emacs/blah.py</string></var><var name=\"message_name\"><string>confirm_buffer_exists</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="confirm_buffer_exists", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("confirm_buffer_exists" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="confirm_buffer_exists", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-confirm-buffer-exists: invoked
+**-- vcode-serialize-message: mess-name="confirm_buffer_exists_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>0</number></var><var name=\"message_name\"><string>confirm_buffer_exists_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+-- vcode-confirm-buffer-exists: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"cursor_at\"><number>1</number></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>set_selection</string></var><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="set_selection", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("set_selection" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="set_selection"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="set_selection", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 range 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(22 22), for-who=emacs
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=23, end=23
+-- vcode-fix-range: invoked, range=(23 23), for-who=emacs
+-- vcode-convert-pos: invoked, pos=23, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=24, end=24
+--** vcode-fix-positions-in-message: range=(23 23), (vcode-fix-range range fix-for-who)=(24 24)
+-- vcode-cmd-set-selection: invoked
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="set_selection", change-list=((change-is-select "blah.py" 23 23))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-select "blah.py" 23 23)
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-select-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="set_selection_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>select</string></var><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"cursor_at\"><number>1</number></var></struct></array></var><var name=\"message_name\"><string>set_selection_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>list_open_buffers</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="list_open_buffers", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("list_open_buffers" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-list-open-buffers: invoked
+**-- vcode-serialize-message: mess-name="list_open_buffers_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"0\"></array></var><var name=\"message_name\"><string>list_open_buffers_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+-- vcode-cmd-list-open-buffers: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var><var name=\"message_name\"><string>insert</string></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"text\"><string>return </string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="insert", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("insert" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(22 22), for-who=emacs
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=23, end=23
+-- vcode-fix-range: invoked, range=(23 23), for-who=emacs
+-- vcode-convert-pos: invoked, pos=23, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=24, end=24
+--** vcode-fix-positions-in-message: range=(23 23), (vcode-fix-range range fix-for-who)=(24 24)
+-- vcode-cmd-insert: buff-name="blah.py", range=(23 23), text="return ", 
+--** vcode-cmd-insert: upon entry, buffer-name="blah.py", (mark)=23, (point)=23, content="def popularity(self):
+"
+--** vcode-cmd-insert: after kill-region, buffer-name="blah.py", (mark)=23, (point)=23, content="def popularity(self):
+"
+-- vr-report-insert-delete-change: inserted-start=23, inserted-end=30, deleted-len=0
+**-- vr-report-insert-delete-change: current buffer is "blah.py"
+**-- vr-report-insert-delete-change: the-change=(change-is-insert "blah.py" 23 30 0), vr-queued-changes=nil**-- vr-report-insert-delete-change: updated vr-queued-change=((change-is-insert "blah.py" 23 30 0))-- vr-report-insert-delete-change: exited
+--** vcode-cmd-insert: after insert, buffer-name="blah.py", (mark)=nil, (point)=30, content="def popularity(self):
+return "
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="insert", change-list=((change-is-insert "blah.py" 23 30 0))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-insert "blah.py" 23 30 0)
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=23, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-insert-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="insert_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>insert</string></var><var name=\"text\"><string>return </string></var><var name=\"range\"><array length=\"2\"><number>22</number><number>22</number></array></var><var name=\"buff_name\"><string>blah.py</string></var></struct></array></var><var name=\"message_name\"><string>insert_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>cur_pos</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="cur_pos", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("cur_pos" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-cur-pos: invoked
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-cmd-cur-pos: (point)=30, sending (vcode-convert-pos (point) 'vcode)=29
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="cur_pos_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>29</number></var><var name=\"message_name\"><string>cur_pos_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-cur-pos: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>22</number><number>29</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>indent</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="indent", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("indent" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(22 29), for-who=emacs
+-- vcode-convert-pos: invoked, pos=22, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=29, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=23, end=30
+-- vcode-fix-range: invoked, range=(23 30), for-who=emacs
+-- vcode-convert-pos: invoked, pos=23, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=24, end=31
+--** vcode-fix-positions-in-message: range=(23 30), (vcode-fix-range range fix-for-who)=(24 31)
+-- vcode-cmd-indent: invoked
+--** vcode-cmd-indent: indent-start=23, indent-end=30
+**-- vcode-cmd-indent: switched to current buffer="blah.py"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="indent", change-list=nil
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="indent_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"0\"></array></var><var name=\"message_name\"><string>indent_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-indent: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>get_selection</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="get_selection", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("get_selection" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_selection"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_selection", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-get-selection: invoked
+**-- vcode-cmd-get-selection: selection=(30 30)
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="get_selection_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"2\"><number>29</number><number>29</number></array></var><var name=\"message_name\"><string>get_selection_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-get-selection: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>29</number><number>29</number></array></var><var name=\"message_name\"><string>insert</string></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"text\"><string>8</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="insert", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("insert" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="insert", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 text buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(29 29), for-who=emacs
+-- vcode-convert-pos: invoked, pos=29, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=29, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=30, end=30
+-- vcode-fix-range: invoked, range=(30 30), for-who=emacs
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=31, end=31
+--** vcode-fix-positions-in-message: range=(30 30), (vcode-fix-range range fix-for-who)=(31 31)
+-- vcode-cmd-insert: buff-name="blah.py", range=(30 30), text="8", 
+--** vcode-cmd-insert: upon entry, buffer-name="blah.py", (mark)=nil, (point)=30, content="def popularity(self):
+return "
+--** vcode-cmd-insert: after kill-region, buffer-name="blah.py", (mark)=nil, (point)=30, content="def popularity(self):
+return "
+-- vr-report-insert-delete-change: inserted-start=30, inserted-end=31, deleted-len=0
+**-- vr-report-insert-delete-change: current buffer is "blah.py"
+**-- vr-report-insert-delete-change: the-change=(change-is-insert "blah.py" 30 31 0), vr-queued-changes=nil**-- vr-report-insert-delete-change: updated vr-queued-change=((change-is-insert "blah.py" 30 31 0))-- vr-report-insert-delete-change: exited
+--** vcode-cmd-insert: after insert, buffer-name="blah.py", (mark)=nil, (point)=31, content="def popularity(self):
+return 8"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="insert", change-list=((change-is-insert "blah.py" 30 31 0))
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vcode-generate-change-hash: a-change=(change-is-insert "blah.py" 30 31 0)
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=30, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-generate-insert-change-hash: exiting
+**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="insert_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"1\"><struct><var name=\"action\"><string>insert</string></var><var name=\"text\"><string>8</string></var><var name=\"range\"><array length=\"2\"><number>29</number><number>29</number></array></var><var name=\"buff_name\"><string>blah.py</string></var></struct></array></var><var name=\"message_name\"><string>insert_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>cur_pos</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="cur_pos", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("cur_pos" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="cur_pos", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-cur-pos: invoked
+-- vcode-convert-pos: invoked, pos=31, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-cmd-cur-pos: (point)=31, sending (vcode-convert-pos (point) 'vcode)=30
+-- vcode-convert-pos: invoked, pos=31, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="cur_pos_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>30</number></var><var name=\"message_name\"><string>cur_pos_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-cur-pos: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"range\"><array length=\"2\"><number>29</number><number>30</number></array></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>indent</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="indent", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("indent" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="indent", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing range
+-- vcode-fix-range: invoked, range=(29 30), for-who=emacs
+-- vcode-convert-pos: invoked, pos=29, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=30, end=31
+-- vcode-fix-range: invoked, range=(30 31), for-who=emacs
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-convert-pos: invoked, pos=31, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+-- vcode-fix-range: exiting with start=31, end=32
+--** vcode-fix-positions-in-message: range=(30 31), (vcode-fix-range range fix-for-who)=(31 32)
+-- vcode-cmd-indent: invoked
+--** vcode-cmd-indent: indent-start=30, indent-end=31
+**-- vcode-cmd-indent: switched to current buffer="blah.py"
+-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd="indent", change-list=nil
+**-- vcode-serialize-changes: current buffer is "blah.py"**-- vr-serialize-changes: just before setting mess-name**-- vcode-serialize-message: mess-name="indent_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"updates\"><array length=\"0\"></array></var><var name=\"message_name\"><string>indent_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "
+**-- vr-send-queued-changes: emptied vr-queued-changes=nil-- vcode-cmd-indent: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>recog_end</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="recog_end", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("recog_end" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_end"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="recog_end", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-recognition-end: invoked
+-- vr-cmd-recognition: vr-request=(nil end)
+recognition end: current buffer: blah.py vr-buffer:blah.py
+-- vr-cmd-recognition: exiting
+**-- vcode-serialize-message: mess-name="recog_end_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>recog_end_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+-- vcode-cmd-recognition-end: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>list_open_buffers</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="list_open_buffers", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("list_open_buffers" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-list-open-buffers: invoked
+**-- vcode-serialize-message: mess-name="list_open_buffers_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"0\"></array></var><var name=\"message_name\"><string>list_open_buffers_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+-- vcode-cmd-list-open-buffers: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"position\"><number>30</number></var><var name=\"message_name\"><string>line_num_of</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="line_num_of", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("line_num_of" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "position"
+--** vcode-fix-positions-in-message: original pos=30
+--** vcode-fix-pos: pos=30 fix-for-who=emacs default-pos=31
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=31
+-- vcode-cmd-line-num-of: invoked
+**-- vcode-cmd-line-num-of: opoint=31, current buffer="blah.py"**-- vcode-serialize-message: mess-name="line_num_of_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>2</number></var><var name=\"message_name\"><string>line_num_of_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-line-num-of: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"position\"><number>30</number></var><var name=\"message_name\"><string>line_num_of</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="line_num_of", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("line_num_of" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="line_num_of", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 position 0] 2)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "position"
+--** vcode-fix-positions-in-message: original pos=30
+--** vcode-fix-pos: pos=30 fix-for-who=emacs default-pos=31
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=30, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=31
+-- vcode-cmd-line-num-of: invoked
+**-- vcode-cmd-line-num-of: opoint=31, current buffer="blah.py"**-- vcode-serialize-message: mess-name="line_num_of_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><number>2</number></var><var name=\"message_name\"><string>line_num_of_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-line-num-of: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"buff_name\"><string>blah.py</string></var><var name=\"message_name\"><string>get_selection</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="get_selection", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("get_selection" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_selection"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="get_selection", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 buff_name 0 0 message_name 0 0 0] 1)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-get-selection: invoked
+**-- vcode-cmd-get-selection: selection=(31 31)
+-- vcode-convert-pos: invoked, pos=31, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+-- vcode-convert-pos: invoked, pos=31, for-who=vcode
+--** vcode-convert-pos: substracting 1 to pos
+**-- vcode-serialize-message: mess-name="get_selection_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"2\"><number>30</number><number>30</number></array></var><var name=\"message_name\"><string>get_selection_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      "
+-- vcode-cmd-get-selection: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>list_open_buffers</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="list_open_buffers", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("list_open_buffers" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="list_open_buffers", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-list-open-buffers: invoked
+**-- vcode-serialize-message: mess-name="list_open_buffers_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><array length=\"0\"></array></var><var name=\"message_name\"><string>list_open_buffers_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "
+-- vcode-cmd-list-open-buffers: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>active_buffer_name</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="active_buffer_name", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("active_buffer_name" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="active_buffer_name"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="active_buffer_name", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 message_name 0 0 0] 0)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+-- vcode-cmd-active-buffer-name: invoked
+**-- vcode-serialize-message: mess-name="active_buffer_name_resp"
+-- vcode-serialize-message: exiting with serialized-mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"value\"><string>blah.py</string></var><var name=\"message_name\"><string>active_buffer_name_resp</string></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         "
+-- vcode-cmd-active-buffer-name: exited
+-- vr-output-filter: exiting**-- vr-output-filter: invoked
+**-- vcode-deserialize-message: (length mess)=1024, mess="1<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data><struct><var name=\"message_name\"><string>goto_line</string></var><var name=\"where\"><number>-1</number></var><var name=\"buff_name\"><string>blah.py</string></var><var name=\"linenum\"><number>0</number></var></struct></data></wddxPacket>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+-- vr-kill-buffer: invoked, (current-buffer)=#<buffer *VC WDDX Message*>-- vr-kill-buffer: exiting
+**-- vcode-deserialize-message: exiting with mess-name="goto_line", mess-cont=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 linenum 0 0 0 buff_name 0 0 message_name 0 0 0] 3)
+, bytes-parsed=1024
+-- vr-execute-event-handler: vr-request=("goto_line" (cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 linenum 0 0 0 buff_name 0 0 message_name 0 0 0] 3))
+**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto_line"
+--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd="goto_line", vr-request-mess=(cl-hash-table-tag string= [0 0 0 0 0 0 0 0 0 linenum 0 0 0 buff_name 0 0 message_name 0 0 0] 3)
+--** vcode-fix-positions-in-message: invoked, fix-for-who=emacs
+--** vcode-fix-positions-in-message: fixing "linenum"
+--** vcode-fix-positions-in-message: original pos=0
+--** vcode-fix-pos: pos=0 fix-for-who=emacs default-pos=nil
+--** vcode-fix-pos: converting pos to appropriate count base
+-- vcode-convert-pos: invoked, pos=0, for-who=emacs
+--** vcode-convert-pos: adding 1 to pos
+--** vcode-fix-positions-in-message: fixed pos=1
+-- vcode-cmd-goto-line: invoked
+--** vcode-cmd-goto-line: buff-name="blah.py", line-num=1, go-where=-1
+Loading debug...
+Loading debug...done
+Entering debugger...
+ [2 times]
+post-command: nil nil *Backtrace*
+-- vr-activate-buffer: buffer=nil-- vcode-set-after-change-functions: current buffer="*Backtrace*"
