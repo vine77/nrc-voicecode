@@ -599,16 +599,6 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
     message to the external editor, instead of using the generic
     SourceBuff implementation of insert_indent in terms of insert and
     indent.
-
-    **NOTE:** This class is used only for test editors.  Real editors 
-    supporting client-side indentation should use SourceBuffMessaging.  
-    Real editors not supporting client-side indentation should use 
-    server-side indentation (see SB_MessExtEdSim in tcp_server.py 
-    for an example).
-
-    Its purpose is to work with clients with an incomplete implementation 
-    of client-side indentation which won't work with the generic 
-    AppState.insert_indent, because indent is implemented as a no-op.
     
     **INSTANCE ATTRIBUTES**
 

@@ -55,7 +55,7 @@ class SymBuilder(Object):
     symbol names word by word
     """
     def __init__(self, **args):
-        self.deep_construct(SymBuilder, {}, args)
+        self.deep_construct(SymBuilder, {'spoken': []}, args)
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol
@@ -71,20 +71,25 @@ class SymBuilder(Object):
         
         *none*
         """
-        debug.virtual('SymBuilder.add_word')
-
-    def add_letter(self, letter):
+        if original:
+            self.spoken.append(original)
+        else:
+            self.spoken.append(word)
+        
+    def add_letter(self, letter, spoken):
         """appends a single letter to the symbol
         
         **INPUTS**
         
-        *STR letter* -- the new word
+        *STR letter* -- the new letter
+        
+        *STR spoken* -- spoken form of the letter
 
         **OUTPUTS**
         
         *none*
         """
-        debug.virtual('SymBuilder.add_letter')
+        self.spoken.append(spoken)
 
     def finish(self):
         """finish building the symbol (allows for SymBuilder subclasses
@@ -189,6 +194,22 @@ class SymBuilder(Object):
         *none*
         """ 
         debug.virtual('SymBuilder.suppress_abbreviation')
+
+    def spoken_form(self):
+        """returns the spoken form of the new symbol
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        
+        debug.trace('SymBuilder.spoken_form', 
+            'joining %s' % repr(self.spoken))
+        return string.join(self.spoken)
 
 class BuilderRegistry(Object):
     """maintains a registry mapping names of concrete subclasses of
@@ -790,18 +811,20 @@ class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
                             {'symbol': ""}, args, 
                             enforce_value = {'default_caps': 'cap'})
 
-    def add_letter(self, letter):
+    def add_letter(self, letter, spoken):
         """appends a single letter to the symbol
         
         **INPUTS**
         
-        *STR letter* -- the new word
+        *STR letter* -- the new letter
+        
+        *STR spoken* -- spoken form of the letter
 
         **OUTPUTS**
         
         *none*
         """
-        self.add_word(letter)
+        self.add_word(letter, original = spoken)
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol
@@ -817,6 +840,7 @@ class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        SymBuilder.add_word(self, word, original)
         if original and not self.abbreviation_state():
             word = original
         self.separator_state() 
@@ -866,18 +890,20 @@ class BuildLowerInterCaps(FixedCaps, ManualSuppression, SymBuilder):
                             enforce_value = {'default_caps': 'cap'})
         self.change_caps('no-caps')
 
-    def add_letter(self, letter):
+    def add_letter(self, letter, spoken):
         """appends a single letter to the symbol
         
         **INPUTS**
         
-        *STR letter* -- the new word
+        *STR letter* -- the new letter
+        
+        *STR spoken* -- spoken form of the letter
 
         **OUTPUTS**
         
         *none*
         """
-        self.add_word(letter)
+        self.add_word(letter, original = spoken)
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol
@@ -893,6 +919,7 @@ class BuildLowerInterCaps(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        SymBuilder.add_word(self, word, original)
         if original and not self.abbreviation_state():
             word = original
         self.separator_state() 
@@ -941,18 +968,20 @@ class BuildRunTogether(FixedCaps, ManualSuppression, SymBuilder):
         self.deep_construct(BuildRunTogether, 
                             {'symbol': ""}, args)
 
-    def add_letter(self, letter):
+    def add_letter(self, letter, spoken):
         """appends a single letter to the symbol
         
         **INPUTS**
         
-        *STR letter* -- the new word
+        *STR letter* -- the new letter
+        
+        *STR spoken* -- spoken form of the letter
 
         **OUTPUTS**
         
         *none*
         """
-        self.add_word(letter)
+        self.add_word(letter, original = spoken)
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol
@@ -968,6 +997,7 @@ class BuildRunTogether(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        SymBuilder.add_word(self, word, original)
         if original and not self.abbreviation_state():
             word = original
         self.separator_state() 
@@ -1030,7 +1060,9 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        SymBuilder.add_word(self, word, original)
         debug.trace('BuildUnder.add_word', 'word = %s' % word)
+        debug.trace('BuildUnder.add_word', 'original = %s' % original)
         self.single = 0
         if original and not self.abbreviation_state():
             word = original
@@ -1048,17 +1080,21 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         self.symbol = self.symbol + word
         debug.trace('BuildUnder.add_word', 'symbol = %s' % repr(self.symbol))
 
-    def add_letter(self, letter):
+    def add_letter(self, letter, spoken):
         """appends a single letter to the symbol
         
         **INPUTS**
         
-        *STR letter* -- the new word
+        *STR letter* -- the new letter
+        
+        *STR spoken* -- spoken form of the letter
+
 
         **OUTPUTS**
         
         *none*
         """
+        SymBuilder.add_letter(self, letter, spoken)
         debug.trace('BuildUnder.add_letter', 
             'letter = %s, symbol = %s' % (letter, repr(self.symbol)))
         if self.single:
