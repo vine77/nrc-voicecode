@@ -2153,13 +2153,11 @@ auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup,
 ##############################################################################
 
 def test_temporary():
-    pass
 
     mediator.init_simulator_regression()
-    test_command("""open_file('blah.py')""")
-    mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    mediator.say(['back', 'indent'])
+    test_command("""open_file('blah.c')""")
+    test_say(['for', 'loop'])
+
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
-# auto_test.add_test('temp', test_temporary, desc='temporary test')
+auto_test.add_test('temp', test_temporary, desc='temporary test')

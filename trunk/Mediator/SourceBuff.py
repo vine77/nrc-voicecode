@@ -679,7 +679,7 @@ class SourceBuff(OwnerObject):
 
         *STR* code_bef -- code to be inserted before new cursor location
         
-        *STR* code_bef -- code to be inserted after new cursor location
+        *STR* code_after -- code to be inserted after new cursor location
 
         *(INT, INT)* range -- code range to be replaced.  If None,
         defaults to the current selection.
@@ -689,28 +689,32 @@ class SourceBuff(OwnerObject):
         *none*
         """
 
-# all subclasses now use an indent server with a different algorithm, or
-# do indenting in the editor, so leaving this non-virtual is misleading
-# -- df
-#
-# Actually, the concrete algorithm below will work with all editors where
-# we do editor-side indentation. I think this will be the majority of cases,
-# so I would like to keep it concrete.
-# -- ad
+        #
+        # Tabs in the code to insert are only useful when using
+        # server-side indentation. This version of insert_indent()
+        # is meant for client-side indentation, so remove them
+        #
+        code_bef = re.sub('\t', '', code_bef)        
+        code_after = re.sub('\t', '', code_after)      
+
 
         trace('SourceBuff.insert_indent',
-              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
+              '... code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
         if range == None:
             range = self.get_selection()
-        range = self.make_valid_range(range)
-    
+        range = self.make_valid_range(range)          
+
+        trace('SourceBuff.insert_indent', '** inserting code_bef')    
         indent_from = range[0]
         self.insert(code_bef, range)
     
+        trace('SourceBuff.insert_indent', '** indenting code_bef')        
         self.indent((indent_from, self.cur_pos()))        
         final_cur_pos = self.cur_pos()
         if code_after != '':
+            trace('SourceBuff.insert_indent', '** inserting code_after')
             self.insert(code_after, (self.cur_pos(), self.cur_pos()))
+            trace('SourceBuff.insert_indent', '** indenting code_after')
             self.indent((final_cur_pos, self.cur_pos()))
             self.goto(final_cur_pos)
 
@@ -1340,7 +1344,8 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
         
-	self.on_change(range[0], range[1], text, 0)
+        trace('SourceBuff.isnert_cbk.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
+        self.on_change(range[0], range[1], text, 0)
 
     def set_selection_cbk(self, range, cursor_at=1):
         

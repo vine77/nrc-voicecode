@@ -60,5 +60,4 @@ default_config_file = os.path.join(config, 'vc_config.py')
 sys.path = [admin] + sys.path
 sys.path = [mediator_dir] + sys.path
 
-print '--** vc_globals.__main__: sys.path=%s' % sys.path
 
