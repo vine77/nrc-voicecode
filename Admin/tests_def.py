@@ -1449,11 +1449,11 @@ def instance_status(manager, instance):
     print "windows: ", windows
     for window in windows:
 	print "window #%d:" % window
-	if manager.shared_window(window):
+	if manager.recog_mgr.shared_window(window):
 	    print "shared"
-	if manager.single_display(window):
+	if manager.recog_mgr.single_display(window):
 	    print "single-window display"
-	instances = manager.known_instances(window)
+	instances = manager.window_instances(window)
 	print "all instances for window:"
 	for app in instances:
 	    print app
@@ -1474,16 +1474,28 @@ def old_new_instance(manager, app_name, app, window = None):
 	    % (app, a)
     return i_name
 
-def set_window(current, window, app_name, app):
-    current.set_info(window.ID(), window.module(), app, app_name)
+def set_window(current, window, app_name, app = None, alt_title = ""):
+    current.set_info(window.ID(), window.module(), app, app_name, alt_title)
 
-def new_instance(manager, current, app_name, title_prefix, app, window = None):
+def start_recog(manager, current):
+    win, title, module = current.window_info()
+    manager.recog_mgr._recognition_starting(win, title, module)
+
+def new_buffer_for_instance(instance, buffer, before = "", after = ""):
+    print 'new buffer %s for instance %d' % (buffer, int(instance))
+    instance.open_file(buffer)
+    b = instance.find_buff(buffer)
+    b.insert_indent(before, after)
+    instance.print_buff_if_necessary()
+
+def new_instance(manager, current, app_name, title_prefix, app, window = None, 
+	alt_title = ""):
     print 'new instance of %s %d' % (app_name, app)
     check = 0
     if window != None:
 	 print 'with window %d' % (window)
 	 check = 1
-	 set_window(current, window, app_name, app)
+	 set_window(current, window, app_name, app, alt_title)
     i_name = manager.new_instance(app_name, title_prefix, app, check)
     a_name = manager.app_name(i_name)
     if a_name != app_name:
@@ -1509,16 +1521,24 @@ class FakeWindow(Object.Object):
     def module(self):
         return self.module_name
 
-class FakeAppState(Object.OwnerObject):
-    def __init__(self, value, buff, shared = 0, multi = 1, active = 1, **attrs):
+class FakeAppState(EdSim.EdSim):
+# uses EdSim to handle buffer related stuff, for rsm_algorithm test,
+# but overrides shared_window, multiple_window, is_active, title_string,
+# so that we can pretend to be a variety of different types of editor
+    def __init__(self, value, buff = None, shared = 0, 
+	    multi = 1, active = 1, title_control = 1, 
+	    safe_active = 1, **attrs):
 	self.deep_construct(FakeAppState, 
 			    {'value': value,
-			     'buff': buff,
 			     'the_title_string': '',
 			     'shared_windows': shared,
 			     'multi': multi,
-			     'active': active
+			     'title_control': title_control,
+			     'active': active,
+			     'safe_active': safe_active
 			    }, attrs)
+	if buff != None:
+	    self.open_file(buff)
     def __str__(self):
         return str(self.value)
     def __int__(self):
@@ -1527,8 +1547,8 @@ class FakeAppState(Object.OwnerObject):
 	return self.shared_windows
     def multiple_windows(self):
 	return self.multi
-    def name(self):
-	return self.buff
+#    def name(self):
+#	return self.buff
     def suspend(self):
 	self.active = 0
     def resume(self):
@@ -1536,11 +1556,13 @@ class FakeAppState(Object.OwnerObject):
     def is_active(self):
 	return self.active
     def is_active_is_safe(self):
-	return 1
+	return self.safe_active
     def set_title_string(self, title):
 	self.the_title_string = title
     def title_string(self):
-	return self.the_title_string 
+	if self.title_control:
+	    return self.the_title_string 
+	return None
     def title_escape_sequence(self, a, b):
 	pass
 
@@ -1668,10 +1690,269 @@ def test_am_dictionaries():
     manager.delete_instance(n)
     manager_state(manager)
 
+def test_rsm_algorithm():
+    g_factory = sr_grammars.WinGramFactoryDummy(silent = 0)
+    GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
+    current = RecogStartMgr.CurrWindowDummy()
+    recog_mgr = RecogStartMgr.RSMDummy(editors = None, GM_factory = GM_factory, 
+      win_info = current)
+    manager = AppMgr.AppMgr(recog_mgr)
+    windows = {}
+    mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
+	editor = 'Emacs')
+    mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
+	editor = 'Vim')
+    mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
+	title_varies = 1)
+    mod_exceed = \
+        KnownTargetModule.DualModeDisplayByTitle(title_regex = '^Exceed$',
+	module_name = 'EXCEED')
+    manager.add_module(mod_Emacs)
+    manager.add_module(mod_Vim)
+    manager.add_module(mod_telnet)
+    manager.add_module(mod_exceed)
 
+    fish_h_before = "void move(float x, y);"
+    fish_h_after = "\n"
+    fish_before = """/* This is a small test buffer for C */
+
+void move(float x, y)
+"""
+    fish_after = """{
+  move_horiz(x);
+  move_vert(y)
+  horiz_pos = 0;
+  this_sym_is_unres = 0;
+  this_sym_is_unres_too = 0;
+  this_sym_has_an_other_abbrev = 0;
+  f_name;
+  f_name2();
+  API_function(1);
+  API_function(2);
+}
+"""
+
+    fowl_before = """import sys
+
+def something(value):
+    print """
+    fowl_after = """value
+
+if __name__ == '__main__':
+    something('nice')
+"""
+
+    dog_before = """#!/usr/local/bin/perl5
+
+
+#
+# Environment variables for voiceGrip 
+#
+$voiceGripHome = $ENV{'VGTWO'};
+$voiceGripOS = $ENV{'VGOS'};
+if ($voiceGripOS eq 'win') {
+    $dirSep = "\\";
+    $curDirCom = 'cd';
+} else {
+    $dirSep = """
+    dog_after = """'/';
+    $curDirCom = 'pwd';
+};
+"""
+
+
+    Emacs = FakeAppState(1, 'a_file.py')
+    another_Emacs = FakeAppState(2, 'poodle.C')
+#    yet_another_Emacs = FakeAppState(4, 'foo.bar')
+    shell_Emacs = FakeAppState(5, 'bug.c', shared = 1, multi = 0,
+	title_control = 0)
+    shell_Emacs2 = FakeAppState(6, 'dog.q', shared = 1, multi = 0,
+        title_control = 0)
+#    Vim = FakeAppState(3, 'tests_def.py')
+    text_Emacs = FakeAppState(7, 'nothing.py', shared = 1, multi = 0,
+        title_control = 0)
+    text_Emacs2 = FakeAppState(8, 'pickle.dll', shared = 1, multi = 0,
+        title_control = 0)
+    xEmacs = FakeAppState(9, '.cshrc', shared = 0, multi = 1)
+    text_Vim = FakeAppState(10, '', shared = 1, multi = 0, safe_active = 0)
+
+    windows[14] = FakeWindow(14, 'EMACS')
+    print 'new instance in window 14'
+    e1 = new_instance(manager, current, 'Emacs', 'Yak', Emacs, windows[14])
+    instance_status(manager, e1)
+    windows[20] = FakeWindow(20, 'EMACS')
+    windows[50] = FakeWindow(50, 'BROWSEUI')
+    print 'new window 20'
+    set_window(current, windows[20], 'Emacs', Emacs)
+    new_buffer_for_instance(Emacs, "fish.C", before = fish_before, 
+	after = fish_after)
+    instance_status(manager, e1)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, e1)
+
+    set_window(current, windows[50], None, alt_title = 'D:\Projects')
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, e1)
+
+    windows[5] = FakeWindow(5, 'TELNET')
+    windows[8] = FakeWindow(8, 'TELNET')
+    print 'new instance in telnet window 5'
+    se1 = new_instance(manager, current, 'Emacs', 'Yak', shell_Emacs, 
+        windows[5])
+    instance_status(manager, se1)
+    manager_state(manager)
+    print 'now specifying window'
+    if manager.specify_window(se1):
+	print 'success'
+    else:
+	print 'failed'
+    instance_status(manager, se1)
+
+    set_window(current, windows[8], None, alt_title = 'ttssh - acappella')
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+    
+    set_window(current, windows[5], 'Emacs', shell_Emacs, 
+	alt_title = 'ttssh - acappella')
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+
+    print 'suspending ', se1
+    shell_Emacs.suspend()
+    set_window(current, windows[5], None, alt_title = 'ttssh - acappella')
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+
+    se2 = new_instance(manager, current, 'Emacs', 'Yak', shell_Emacs2) 
+    instance_status(manager, se2)
+    instance_status(manager, se1)
+    print 'now specifying window'
+    if manager.specify_window(se2):
+	print 'success'
+    else:
+	print 'failed'
+    instance_status(manager, se2)
+    instance_status(manager, se1)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+    instance_status(manager, se2)
+    print 'suspending ', se2
+    shell_Emacs2.suspend()
+
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+    instance_status(manager, se2)
+
+    print 'resuming ', se1
+    shell_Emacs.resume()
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, se1)
+    instance_status(manager, se2)
+
+    windows[15] = FakeWindow(15, 'EXCEED')
+    print 'new Vim instance in exceed window 15'
+    tv1 = new_instance(manager, current, 'Vim', 'Oldie', text_Vim, 
+        windows[15], alt_title = 'xterm - acappella')
+    new_buffer_for_instance(text_Vim, "dog.pl", before = dog_before, 
+	after = dog_after)
+    instance_status(manager, tv1)
+    manager_state(manager)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, tv1)
+
+    print 'suspending ', tv1
+    text_Vim.suspend()
+    set_window(current, windows[15], None, alt_title = 'xterm - acappella')
+
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, tv1)
+
+    print 'new Emacs instance in exceed window 15'
+    te1 = new_instance(manager, current, 'Emacs', 'Yak', text_Emacs, 
+        windows[15], alt_title = 'xterm - acappella')
+    instance_status(manager, te1)
+
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, te1)
+
+    print 'now specifying window'
+    if manager.specify_window(te1):
+	print 'success'
+    else:
+	print 'failed'
+    instance_status(manager, te1)
+
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, te1)
+
+    print 'suspending ', te1
+    text_Emacs.suspend()
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, te1)
+
+    print 'resuming ', tv1
+    text_Vim.resume()
+    set_window(current, windows[15], 'Vim', text_Vim,
+	alt_title = 'xterm - acappella')
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, tv1)
+
+    windows[25] = FakeWindow(25, 'EXCEED')
+    print 'new Emacs instance in exceed window 25'
+    xe1 = new_instance(manager, current, 'Emacs', 'Yak', xEmacs, 
+        windows[25])
+    instance_status(manager, xe1)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, xe1)
+
+    print 'app reports new window (is current)'
+    windows[26] = FakeWindow(26, 'EXCEED')
+    set_window(current, windows[26], 'Emacs', xEmacs)
+    print 'current is', repr(current.window_info())
+    manager.new_window(xe1)
+    instance_status(manager, xe1)
+
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, xe1)
+
+    text_Vim.suspend()
+    set_window(current, windows[15], None, alt_title = 'xterm - acappella')
+    print 'app reports new window (is not current)'
+    print 'current is', repr(current.window_info())
+    manager.new_window(xe1)
+    instance_status(manager, xe1)
+    instance_status(manager, tv1)
+
+    windows[27] = FakeWindow(27, 'EXCEED')
+
+    print 'but now it is'
+    set_window(current, windows[27], 'Emacs', xEmacs)
+    print 'current is', repr(current.window_info())
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, xe1)
 
 auto_test.add_test('am_dictionaries', test_am_dictionaries, 
     'Testing AppMgr dictionary management.')
+
+auto_test.add_test('rsm_algorithm', test_rsm_algorithm, 
+    'Testing RecogStartMgr algorithm.')
 
 ##############################################################################
 # Testing WinGramMgr with dummy grammars
