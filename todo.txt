@@ -71,7 +71,7 @@ Symbol translation
   a real pain for users to define abbrevs for all the symbols they
   compile.
 
-    NOTE: there could be more than one MediatorObject modifying the
+   NOTE: there could be more than one MediatorObject modifying the
    abbreviations file at the same time... how to keep them in sync?
 
    Maybe the Mediator server should handle changes to the abbrevs file
@@ -79,6 +79,9 @@ Symbol translation
    update it. What happens if the thread in question dies? Need to
    have a time out so that the server can unlock the file after a few
    seconds (assume that the update doesn't take long).
+
+   STATUS: Basic VG3 style symbol matching was implemented in SymDict.
+           We now have to use it in the interpreter as described above.
 
 
 Text mode
@@ -169,6 +172,37 @@ different written forms for different languages.
 
 Can wait after 1st release
 ==========================
+
+
+CSCs
+----
+
+-- Alain
+
+The spoken form of CSCs should not be a phrase. For example, the CSC
+"for loop" should have spoken form something like "*for-loop*". This
+would have two advantages:
+
+a) The interpreter's job would be made easier, because any word that's
+not of the form "*XYZ*" or "ABC\XYZ" is considered to be part of a
+natural language symbol.
+
+b) If user really meant the phrase "for loop", not the CSC, he could
+use NatSpeak correction dialog and select "for loop" from the
+selection box, instead of "*for-loop*". One problem here though is
+that the interpreter will then ask if he wants to create a new symbol
+for_loop, which would be a bit of a pain.
+
+Note that even if we eventually allow the spoken form of CSCs to be
+simple grammar rules like: "goto <char> on <num>", we can generate voc
+entries "*goto*", *on*, *1*, *2*, etc... So if the user says "goto
+semicolon on 5", Natspeak would recognise "*goto* *semicolon* *on*
+*5*", which makes it clear that all those words are part of a
+command. This may become very confusing (e.g. there would be 3 voc
+entries for semicolon: "semicolon", ";\semicolon", "*semicolon*".
+
+Hum... need to think some more about this.
+
 
 addWord
 -------

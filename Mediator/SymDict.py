@@ -1,4 +1,6 @@
-# print '-- SymDict.py: imported'
+"""Classes for dealing with programming symbols and their spoken forms.
+"""
+
 
 from Object import Object
 from SourceBuff import SourceBuff
@@ -74,8 +76,89 @@ class SpokenFormInfo(Object):
                             {'symbols': symbols}, \
                             attrs, \
                             {})
+
+class SymbolMatch(Object):
+    
+    """Encapsulates information about a match between a pseudo-symbol
+    and a native symbol.
+            
+    **INSTANCE ATTRIBUTES**
+            
+    *STR pseudo_symbol=None* -- The pseudo symbol (e.g. "a new symbol")
+    
+    *STR native_symbol=None* -- The matched native symbol (e.g. aNewSym)
+    
+    *{STR: STR} word_matches=None* -- Keys are words of
+     *pseudo_symbol* and vallues are the matching segment in
+     *native_symbol*.
+
+    CLASS ATTRIBUTES**
+            
+    *none* -- 
+    """
+    
+    def __init__(self, pseudo_symbol=None, native_symbol=None, word_matches=None, **args_super):
+        self.deep_construct(SymbolMatch, \
+                            {'pseudo_symbol': pseudo_symbol, \
+                             'native_symbol': native_symbol, \
+                             'word_matches': word_matches}, \
+                            args_super, \
+                            {})
+
+
+
+    def score(self):
+        """Returns a score for the match.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *INT score* -- The score takes into account things like:
+        - the likelyhood of the abbreviations (presumably) used in *native_symbol* (not implemented yet)
+        - the length of *native_symbol*
+        """
+        
+        score = len(self.native_symbol)
+        return score
+
+    
+
+    def compare_scores(self, other_match):
+        """Compares the score of a match to that of an other match.
+
+        Note that since the first argument is *self*, this method can
+        be passedas a comparison method to *LIST.sort* method.
+        
+        **INPUTS**
+        
+        *[SymbolMatch]* other_match -- The other match to compare *self* to.
+        
+
+        **OUTPUTS**
+        
+        *INT* compare_flag -- -1 -> *self* has lower score
+                               0 -> *self* has same score
+                               1 -> *self* has higher score
+        """
+
+        self_score = self.score()
+        other_score = other_match.score()
+        if self_score < other_score:
+            compare_flag = -1
+        elif self_score > other_score:
+            compare_flag = 1
+        else:
+            compare_flag = 0
+
+        return compare_flag
+
+
+
 class SymDict(Object):
-    """Symbol dictionary.
+    """Known symbols dictionary.
 
     This class stores information about symbols defined in source files
     that the user is working on.
@@ -83,22 +166,37 @@ class SymDict(Object):
     It has methods for parsing symbols and adding pronounceable
     phrases for those symbols to the Speech Recognition system's vocabulary.
 
+    Also has methods for matching a pseudo symbol to a native symbol
+    (e.g. "a new symbol" -> aNewSym)
+
     **INSTANCE ATTRIBUTES**
 
-    *{STR:* [SymbolInfo] *)}* symbol_info={} -- The key is the symbol and
-     the value is the information about that symbol.
+    *{STR:* [SymbolInfo] *)}* symbol_info={} -- Dictionary of known
+     symbols. Key is the native written form of the symbol and the
+     value is the information about that symbol.
 
-    *{STR:* [SpokenFormInfo] *}* spoken_form_info={} -- The key is a
-     spoken form and the value is the list of symbols with that spoken
-     form.
+    *{STR:* [SpokenFormInfo] *}* spoken_form_info={} -- Dictionary of
+     resolved spoken forms for known symbols. The key is a resolved
+     spoken form and the value is the list of written native symbols
+     with that spoken form.
 
-    *{STR: [STR]}* abbreviations={} -- Dictionary of abbreviations. The
-     key is the abbreviation and the value is a list of poosible expansions.
+    *{STR: [STR]}* abbreviations={} -- Dictionary of
+     abbreviations. The key is the abbreviation and the value is a
+     list of poosible expansions. It contains both resolved and
+     unresolved abbreviations.
 
-    *{STR: None}* unresolved_abbreviations={} -- Dictionary of
+    *{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
      unresolved abbreviations. These are abbreviations that have
      appeared in at least one compiled symbol, yet are neither a word
-     in the speech vocabulary or a known abbreviation.
+     in the speech vocabulary or a known abbreviation. Values are
+     dictionnaries that list the symbols containing the unresolved
+     abbreviation.
+
+    *STR* _cached_symbols_as_one_string=None -- Caches the last value
+     returned by method [symbols_as_one_string]. A value of *None*
+     indicates that the string needs to be regenerated by
+     [symbols_as_one_string].
+
    
     CLASS ATTRIBUTES**
 
@@ -108,10 +206,16 @@ class SymDict(Object):
         
     .. [LangDef] file:///./LangDef.LangDef.html
     .. [SymbolInfo] file:///./SymDict.SymbolInfo.html
-    .. [SpokenFormInfo] file:///./SymDict.SpokenFormInfo.html"""
+    .. [SpokenFormInfo] file:///./SymDict.SpokenFormInfo.html
+    .. [symbols_as_one_string] file:///./SymDict.SymDict.html#symbols_as_one_string"""
 
     def __init__(self, symbol_info={}, spoken_form_info={},
                  abbreviations={}, **attrs):
+
+        # These attributes can't be set at construction time
+        self.decl_attrs({'_cached_symbols_as_one_string': None})
+
+        # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
                             {'spoken_form_info': spoken_form_info, \
                              'symbol_info': symbol_info, \
@@ -120,9 +224,50 @@ class SymDict(Object):
                             attrs)
 
 
+    def symbols_as_one_string(self):
+        """Returns a string that lists all the native known symbols.
+
+        This string is used for matching pseudo-symbols to known
+        native symbols, because it's much faster than looping through
+        keys of *symbol_info*.
+
+        To avoid regenerating this string everytime, the last value
+        returned is cached in [self._cached_symbols_as_one_string]
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *none* --
+
+        .. [self._cached_symbols_as_one_string] file:///./SymDict.SymDict.html
+        """
+        
+        if self._cached_symbols_as_one_string == None:
+            #
+            # Cached value has become stale. Regenerate it.
+            #
+            self._cached_symbols_as_one_string = ''
+            symbol_list = self.symbol_info.keys()
+            symbol_list.sort()
+            for a_symbol in symbol_list:
+                #
+                # Note: symbols must be separated by two spaces because
+                #       re.findall only returns non-overlapping matches.
+                #       But since the regexp used for symbol matching requires
+                #       that there be a space before and after the symbol,
+                #       if two matching symbols were consecutive in
+                #       _cached_symbols_as_one_string, and were separated by
+                #       a single space, only the first symbol would be matched
+                #
+                self._cached_symbols_as_one_string = self._cached_symbols_as_one_string + ' ' + a_symbol + ' '
+            
+        return self._cached_symbols_as_one_string
 
     def print_symbols(self):
-        """Print the content of the symbol dictionary.
+        """Print the content of the symbols dictionary.
         
         **INPUTS**
         
@@ -137,7 +282,9 @@ class SymDict(Object):
         sorted_symbols.sort()        
         for a_symbol in sorted_symbols:
             a_symbol_info = self.symbol_info[a_symbol]
-            print '%s: %s' % (a_symbol, str(a_symbol_info.spoken_forms))                       
+            print '%s: %s' % (a_symbol, str(a_symbol_info.spoken_forms))
+
+        print '_cached_symbols_as_one_string is:\n   %s' % self._cached_symbols_as_one_string
 
     def parse_symbols(self, file_name):
         """Parse symbols from a source file.
@@ -501,6 +648,108 @@ class SymDict(Object):
 
 
 
+    def match_pseudo_symbol(self, pseudo_symbol):        
+        """Returns a prioritized list of all known native symbols that
+        match a given pseudo symbol.
+        
+        **INPUTS**
+        
+        *STR* pseudo_symbol -- The pseudo symbol to be matched. 
+        
+
+        **OUTPUTS**
+        
+        *[* [SymbolMatch] *]* -- Prioritized list of symbol matches.
+
+        
+        .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+
+        #
+        # Find all known native symbols that match *pseudo_symbol*
+        #
+        all_symbols = self.symbols_as_one_string()
+        regexp = self.reg_pseudo_to_native_symbol(pseudo_symbol)
+
+#        print '-- SymDict.match_pseudo_symbol: regexp=%s, all_symbols=\'%s\'' % (regexp.__dict__, all_symbols)
+        
+        raw_matches = regexp.findall(all_symbols)
+
+#        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
+
+        #
+        # Create a list of matches
+        #
+        matches = []
+        for a_match in raw_matches:
+            matches = matches + [SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol=a_match[0], word_matches=a_match[1:])]
+
+        #
+        # Sort the list of matches according to their scores
+        #
+        matches.sort(SymbolMatch.compare_scores)
+        return matches
+  
+
+    def reg_pseudo_to_native_symbol(self, pseudo_symbol):
+        
+        """Returns a compiled regular expression that matches all possible
+        native forms of a pseudo symbol.
+        
+        **INPUTS**
+        
+        *STR* pseudo_symbol -- The pseudo symbol to be matched.
+        
+
+        **OUTPUTS**
+        
+        *regexp* -- The regular expression. This regexp requires that
+        the first character of every word in *pseudo_symbol* be
+        matched. Non alphanumeric characters are allowed between
+        words. Matches for each word in *pseudo_symbol* are put into
+        groups.        
+        """
+
+#        print '-- SymDict.reg_pseudo_to_native_symbol: pseudo_symbol=%s' % pseudo_symbol
+
+        #
+        # Generate string for the regexp.
+        #
+        # The regexp requires the first character of every word to be present.
+        # Separator characters (not alphanums nor spaces) are allowed before
+        # and after words.
+        # 
+        # For example for pseudo symbol "a new symbol", the regexp string
+        # would be:
+        #
+        # ' [^a-zA-Z0-9\s]*((a)[^a-zA-Z0-9\s]*(ne{0,1}w{0,1})[^a-zA-Z0-9\s]*(sy{0,1}m{0,1}b{0,1}o{0,1}l{0,1}))[^a-zA-Z0-9\s]* '
+        #
+        # When matched, the first group corresponds to the whole symbol and
+        # the remaining groups correspond to the segment of the native symbol
+        # matched by each of the words in the pseudo symbol
+        #
+
+        reg_non_alphanums = '[^a-zA-Z0-9\s]*'
+        words = re.split('\s+', pseudo_symbol)
+        regexp_string = ' (' + reg_non_alphanums
+        for a_word in words:
+            regexp_string = regexp_string + '(' + a_word[0]
+            for a_remaining_char in a_word[1:]:
+                regexp_string = regexp_string + a_remaining_char + '{0,1}'
+            regexp_string = regexp_string + ')' + reg_non_alphanums
+        regexp_string = regexp_string +  ') '
+
+
+#        print '-- SymDict.reg_pseudo_to_native_symbol: regexp_string=\'%s\'' % regexp_string
+        
+        #
+        # Compile regexp with flags=1 (i.e. case insensitive match)
+        #
+        regexp = re.compile(regexp_string, 1)
+        
+        return regexp
+
+
+
     def vocabulary_cleanup(self):
         """Removes symbols from the speech recognition vocabulary
         
@@ -540,19 +789,7 @@ class SymDict(Object):
         self.symbol_info = {}
             
 
-    def compilation_test(self, source):
-        """Does a compilation test on file *source*        
-        """
-        print '*** Compiling symbols from file: %s ***' % source
-        self.parse_symbols(source)
-        print 'Parsed symbols are: '
-        self.print_symbols()
-        print '\n\nUnresolved abbreviations are:'
-        sorted_unresolved = config.interp.known_symbols.unresolved_abbreviations.keys()
-        sorted_unresolved.sort()
-        for an_abbreviation in sorted_unresolved:
-            symbol_list = config.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
-            print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
-
-        print '\n*** End of compilation test ***\n'
         
+
+
+

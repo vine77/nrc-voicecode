@@ -1,5 +1,4 @@
-# print '-- MediatorObject.py: imported'
-
+import natlink
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
 """Defines main class for the mediator.
@@ -44,6 +43,7 @@ class MediatorObject(Object.Object):
     
     def __init__(self, interp=CmdInterp.CmdInterp(), \
                        **attrs):
+        natlink.natConnect()        
         self.deep_construct(MediatorObject, \
                             {'interp': interp, \
                              'mixed_grammar': None, \
@@ -67,6 +67,7 @@ class MediatorObject(Object.Object):
         *none* -- 
         """
         global to_configure
+
         
         to_configure = self
         try:

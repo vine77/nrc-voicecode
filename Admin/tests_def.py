@@ -24,6 +24,50 @@ def compilation_test(a_mediator, source):
         
     print '\n*** End of compilation test ***\n'
         
+def symbol_match_test(a_mediator, sources, pseudo_symbols):
+        """Tests pseudo-symbol matching.
+        
+        **INPUTS**
+
+        [MediatorObject] a_mediator -- [MediatorObject] instance to
+        use for the test.
+        
+        *[STR]* sources -- List of source files to be compiled before
+         doing the matches.
+        
+        *[STR]* pseudo_symbols -- List of pseudo-symbols to be matched.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        print '*** Pseudo symbol match test***\n   Source files are: %s\n   Symbols are: %s\n\n' % (sources, pseudo_symbols)
+
+        #
+        # Compile symbols
+        #
+        a_mediator.interp.known_symbols.vocabulary_cleanup()
+        for a_source in sources:
+            a_mediator.interp.known_symbols.parse_symbols(a_source)
+#        print '\n Known symbols are: \n'
+#        a_mediator.interp.known_symbols.print_symbols()
+
+        #
+        # Match the symbols
+        #
+        for a_symbol in pseudo_symbols:
+            matches = a_mediator.interp.known_symbols.match_pseudo_symbol(a_symbol)
+            sys.stdout.write('\'%s\' matches: [' % a_symbol) 
+            if matches:
+                for a_match in matches:
+                    sys.stdout.write('%s, ' % a_match.native_symbol)
+            else: sys.stdout.write('[]')
+            sys.stdout.write(']\n')
+
+        print '\n*** End of Pseudo Symbol Match test ***'
+
         
 def test_SymDict():
     """Self test for SymDict"""
@@ -33,6 +77,8 @@ def test_SymDict():
     
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c')
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'large_buff.py')
+    pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
+    symbol_match_test(a_mediator, [vc_globals.test_data + os.sep + 'large_buff.py'], pseudo_symbols)
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 

@@ -308,7 +308,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 830b10>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 847320>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -323,7 +323,7 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c ***
+*** Compiling symbols from file: D:\VoiceCode\VCode.vg3_trans\Data\TestData\small_buff.c ***
 Parsed symbols are: 
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
@@ -333,6 +333,8 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 void: ['void']
 x: ['x']
 y: ['y']
+_cached_symbols_as_one_string is:
+   None
 
 
 Unresolved abbreviations are:
@@ -341,7 +343,7 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.redundant_trans\Data\TestData\large_buff.py ***
+*** Compiling symbols from file: D:\VoiceCode\VCode.vg3_trans\Data\TestData\large_buff.py ***
 Parsed symbols are: 
 AttributeError: ['attribute error']
 LargeNonObject: ['large non object']
@@ -362,6 +364,7 @@ and: ['and']
 attrs: ['attributes']
 attrs_superclasses: ['attributes superclasses']
 attrs_this_class: ['attributes this class']
+autoTst: ['auto tst']
 auto_test: ['auto test']
 class: ['class']
 code: ['code']
@@ -430,6 +433,8 @@ void: ['void']
 write: ['write']
 x: ['x']
 y: ['y']
+_cached_symbols_as_one_string is:
+   None
 
 
 Unresolved abbreviations are:
@@ -443,11 +448,25 @@ Unresolved abbreviations are:
 'stdout': appears in ['stdout']
 'str': appears in ['str']
 'superclasses': appears in ['attrs_superclasses']
+'tst': appears in ['autoTst']
 'x': appears in ['x']
 'y': appears in ['y']
 
 *** End of compilation test ***
 
+*** Pseudo symbol match test***
+   Source files are: ['D:\\VoiceCode\\VCode.vg3_trans\\Data\\TestData\\large_buff.py']
+   Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
+
+
+'set attribute' matches: [setattr, ]
+'expand variables' matches: [expandvars, ]
+'execute file' matches: [execfile, ]
+'profile Constructor Large Object' matches: [profConstrLargeObj, ]
+'profile construct large object' matches: [profConstrLargeObj, ]
+'auto test' matches: [autoTst, auto_test, ]
+
+*** End of Pseudo Symbol Match test ***
 
 
 *******************************************************************************
@@ -469,9 +488,9 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c']) <<<
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.vg3_trans\Data\TestData\small_buff.c']) <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.vg3_trans\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
@@ -481,6 +500,8 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 void: ['void']
 x: ['x']
 y: ['y']
+_cached_symbols_as_one_string is:
+   None
 
 
 >>> Testing console command: say('for loop horizontal position loop body') <<<
