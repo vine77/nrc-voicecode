@@ -31,9 +31,9 @@ import re
 from Object import Object, OwnerObject
 
 import GramMgr
+import ResMgr
 
 import TargetWindow, KnownTargetModule, WinIDClient
-import ResMgr
 
 class KnownInstance(Object):
     """class which stores data about instances known to RecogStartMgr
@@ -285,6 +285,71 @@ class RecogStartMgr(OwnerObject):
 	*none*
 	"""
         return self.editors.interpreter()
+    
+    def scratch_recent(self, instance, n):
+        """undo the effect of the n most recent dictation utterances into 
+        the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        *INT n* -- number of utterances to undo
+
+        **OUTPUTS**
+
+        *INT* -- number of utterances successfully undone
+        """
+        debug.virtual('RecogStartMgr.scratch_recent')
+
+    def correct_last(self, instance):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.correct_last')
+
+    def correct_recent(self, instance):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.correct_recent')
+
+    def correct_utterance(self, instance_name, utterance_number):
+        """initiate user correction of the utterance with a given
+        utterance number into the given instance
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correction box.  Generally, it should be called
+        only in response to a CorrectUtterance event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.correct_utterance')
 
     def trust_current(self, trust = 1):
         """specifies whether the RecogStartMgr should trust that the current
@@ -682,6 +747,9 @@ class RSMInfrastructure(RecogStartMgr):
     *GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
     objects for new instances
 
+    *ResMgrFactory* res_mgr_factory -- factory to create ResMgr objects
+    for new instances
+
     *BOOL* active -- flag indicating whether the RecogStartMgr is
     active
 
@@ -690,17 +758,21 @@ class RSMInfrastructure(RecogStartMgr):
     *none*
     """
 
-    def __init__(self, GM_factory, **args):
+    def __init__(self, GM_factory, res_mgr_factory = None, **args):
         """
 	**INPUTS**
 
 	*GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
 	objects for new instances
 
+        *ResMgrFactory* res_mgr_factory -- factory for creating new
+        ResMgr objects
+
 	"""
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
                              'GM_factory': GM_factory,
+                             'res_mgr_factory': res_mgr_factory,
                              'grammars': {},
                              'windows': {},
                              'results': {},
@@ -710,7 +782,13 @@ class RSMInfrastructure(RecogStartMgr):
                             args)
         self.add_owned('grammars')
         self.add_owned('results')
+        if self.res_mgr_factory is None:
+            self.res_mgr_factory = ResMgr.ResMgrStdFactory()
         
+    def remove_other_references(self):
+        self.res_mgr_factory = None
+        RecogStartMgr.remove_other_references(self)
+
     def activate(self):
         """activate the RecogStartMgr
 
@@ -931,6 +1009,58 @@ class RSMInfrastructure(RecogStartMgr):
             self.results[instance].interpret_dictation(result,
                 initial_buffer = initial_buffer)
 
+    def correct_last(self, instance):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance):
+            self.results[instance].correct_last()
+
+    def correct_recent(self, instance):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance):
+            self.results[instance].correct_last()
+
+    def correct_utterance(self, instance_name, utterance_number):
+        """initiate user correction of the utterance with a given
+        utterance number into the given instance
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correction box.  Generally, it should be called
+        only in response to a CorrectUtterance event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance_name):
+            self.results[instance_name].correct_utterance(utterance_number)
+
     def reset_results_mgr(self, instance_name = None):
         """resets the ResMgr objects for a given editor, erasing any 
         stored utterance and corresponding editor state information.  
@@ -949,11 +1079,26 @@ class RSMInfrastructure(RecogStartMgr):
         if instance_name != None:
             if self.known_instance(instance_name):
                 self.results[instance_name] = \
-                    ResMgr.ResMgrBasic(recog_mgr = self,
+                    self.res_mgr_factory.new_manager(recog_mgr = self,
                         instance_name = instance_name)
         else:
             for name in self.known_instances():
                 self.reset_results_mgr(name)
+
+    def console(self):
+        """returns a reference to the MediatorConsole which provides the
+        GUI correction interfaces.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.editors.console()
+
   
     def stored_utterances(self, instance_name):
         """queries the ResMgr to see how many dictated utterances have 
@@ -1022,8 +1167,12 @@ class RSMInfrastructure(RecogStartMgr):
         *INT* -- number of utterances actually undone
         """
         try:
+            debug.trace('RSMInfrastructure.scratch_recent', 
+                'instance %s' % instance_name)
             return self.results[instance_name].scratch_recent(n = n)
         except KeyError:
+            debug.trace('RSMInfrastructure.scratch_recent', 
+                'unknown instance %s' % instance_name)
             return 0
 
     def reinterpret_recent(self, instance_name, changed):
@@ -1110,7 +1259,7 @@ class RSMInfrastructure(RecogStartMgr):
         self.grammars[instance] = \
             self.GM_factory.new_manager(app, instance_name = instance, 
                 recog_mgr = self)
-        self.results[instance] = ResMgr.ResMgrBasic(recog_mgr = self,
+        self.results[instance] = self.res_mgr_factory.new_manager(recog_mgr = self,
             instance_name = instance)
         return 1
 
@@ -1829,7 +1978,8 @@ class RSMBasic(RSMInfrastructure):
                 self.GM_factory.new_global_manager(app, 
                     instance_name = instance, 
                     recog_mgr = self, exclusive = exclusive)
-            self.results[instance] = ResMgr.ResMgrBasic(recog_mgr = self,
+            self.results[instance] = \
+                self.res_mgr_factory.new_manager(recog_mgr = self,
                 instance_name = instance)
             self.universal = instance
             return 1

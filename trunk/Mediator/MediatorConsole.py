@@ -29,10 +29,26 @@ GUI windows and dialog boxes
 
 
 """
+class WasForegroundWindow(Object.Object):
+    """abstract base class defining an interface for storing the current
+    foreground window and restoring it to the foreground later
+
+    """
+    def __init__(self, **args):
+        """create an object which stores the current foreground
+        window"""
+        self.deep_construct(WasForegroundWindow, {}, args)
+
+    def restore_to_foreground(self):
+        """restores the window to the foreground"""
+        debug.virtual('WasForegroundWindow.restore_to_foreground')
+
 
 class MediatorConsole(Object.OwnerObject):
     """
     **INSTANCE ATTRIBUTES**
+
+    *NewMediatorObject mediator* -- the mediator which owns this console
 
     **CLASS ATTRIBUTES**
     
@@ -40,9 +56,83 @@ class MediatorConsole(Object.OwnerObject):
     """
     def __init__(self, **attrs):
         self.deep_construct(MediatorConsole,
-                            {
+                            {'mediator': None,
                             },
                             attrs)
+        self.name_parent('mediator')
+
+    def set_mediator(self, mediator):
+        """assigns a parent mediator to the console
+
+        **INPUTS**
+
+        *NewMediatorObject mediator* -- the parent mediator which will
+        own the console
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.mediator = mediator
+
+    def correct_utterance(self, editor_name, utterance, 
+        can_reinterpret, should_adapt = 1):
+        """display a correction box for correction a complete, recent
+        utterance, accept user corrections, allow the user to
+        approve or cancel, and adapt the speech engine.
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *SpokenUtterance utterance* -- the utterance itself
+
+        *BOOL can_reinterpret* -- flag indicating whether the utterance
+        could be reinterpreted upon correction, allowing the correction
+        box to give some visual feedback to the user to indictate this.
+        Whether the utterance can actually be reinterpreted may change
+        between the call to this method and its return, so there is no
+        guarantee that reinterpretation will take place.
+
+        *BOOL should_adapt* -- flag indicating whether correct_utterance
+        should adapt the speech engine according to user corrections (if
+        the user approves), or if the caller will handle that later.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the user made changes and approved them
+        """
+        debug.virtual('MediatorConsole.correct_utterance')
+
+    def store_foreground_window(self):
+        """detect the current foreground window, and store it in a
+        WasForegroundWindow object, so that the window can later
+        be restored to the foreground
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *WasForegroundWindow* -- the object which can be used to restore
+        the window to the foreground
+        """
+        debug.virtual('MediatorConsole.store_foreground_window')
+
+    def raise_active_window(self):
+        """makes the active window (within the current process) the
+        foreground one (for the system)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('MediatorConsole.raise_active_window')
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

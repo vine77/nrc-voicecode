@@ -529,11 +529,16 @@ def test_select_pseudocode():
     #
     # Testing correct commands
     #
-    test_say(['correct', 'index', '=\\equals', '0'])
-    test_command("""goto_line(2)""")
-    test_say(['correct next', 'index', '=\\equals', '0'])
-    test_command("""goto_line(2)""")
-    test_say(['correct previous', 'index', '=\\equals', '0'])
+# DCF: this is silly.  Until we implement correct xyz, these are
+# equivalent to the corresponding select xyz commands, so there is no
+# point in testing them.  Once we implement correct xyz,
+# test_say(['correct',...]) will bring up the correction test, so the
+# old "correct" results for this test won't be right anyway
+#    test_say(['correct', 'index', '=\\equals', '0'])
+#    test_command("""goto_line(2)""")
+#    test_say(['correct next', 'index', '=\\equals', '0'])
+#    test_command("""goto_line(2)""")
+#    test_say(['correct previous', 'index', '=\\equals', '0'])
 
     #
     # Testing selectionn commands
@@ -563,12 +568,17 @@ def test_select_pseudocode():
     #
     # Testing repeated correction in both directions
     #
-    test_command("""goto_line(1)""")
-    test_say(['correct next', 'index', '=\\equals', '0'])
-    test_say(['correct next', 'index', '=\\equals', '0'])
-    test_command("""goto_line(6)""")
-    test_say(['correct previous', 'index', '=\\equals', '0'])
-    test_say(['correct previous', 'index', '=\\equals', '0'])
+# DCF: this is silly.  Until we implement correct xyz, these are
+# equivalent to the corresponding select xyz commands, so there is no
+# point in testing them.  Once we implement correct xyz,
+# test_say(['correct',...]) will bring up the correction test, so the
+# old "correct" results for this test won't be right anyway
+#    test_command("""goto_line(1)""")
+#    test_say(['correct next', 'index', '=\\equals', '0'])
+#    test_say(['correct next', 'index', '=\\equals', '0'])
+#    test_command("""goto_line(6)""")
+#    test_say(['correct previous', 'index', '=\\equals', '0'])
+#    test_say(['correct previous', 'index', '=\\equals', '0'])
     
     #
     # Testing repeated selection in both directions

@@ -227,7 +227,16 @@ class SelectWinGram(WinGram):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *AppState* app -- application to which results will be sent
+    
+    *STR* buff_name -- name of buffer to which to tie this 
+    selection grammar (can also be set by activate)
+
+    *[STR]* select_words -- words (or phrases) which introduces a
+    selection utterance
+
+    *STR* through_word -- word which separates the beginning and end of
+    a range to be selected.
 
     **CLASS ATTRIBUTES**
 
@@ -336,7 +345,6 @@ class SelectWinGram(WinGram):
         #
         # Analyse the verb used by the user in the Select utterance
         #
-
         debug.trace('SelectWinGram.find_closest', 'invoked')
         direction = None
         if re.search('previous', verb, 1):
@@ -403,6 +411,104 @@ class SelectWinGram(WinGram):
             buff_name = self.buff_name)
 
 
+class BasicCorrectionWinGram(WinGram, OwnerObject):
+    """abstract base class for window-specific grammar for basic
+    correction (Scratch That/n, Correct That, Correct Recent)
+
+    **INSTANCE ATTRIBUTES**
+
+    *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+    *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
+    That" and "Scratch n"
+
+    *[STR]* correct_words -- list of synonyms for Correct in "Correct
+    That" and "Correct Recent" 
+
+    *[STR]* recent_words -- list of synonyms for Recent in "Correct Recent"
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, manager, scratch_words = None, correct_words = None,
+        recent_words = None, **attrs):
+        """
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+        *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
+        That" and "Scratch n", or None for the default of 'Scratch'
+
+        *[STR]* correct_words -- list of synonyms for Correct in "Correct
+        That" and "Correct Recent"  or None for the default of 'Correct'
+
+        *[STR]* recent_words -- list of synonyms for 
+        Recent in "Correct Recent" or None for the dfault of 'Recent
+        """
+        self.deep_construct(BasicCorrectionWinGram,
+            {'manager': manager, 
+             'scratch_words': scratch_words,
+             'correct_words': correct_words,
+             'recent_words': recent_words
+            }, attrs)
+        if scratch_words is None:
+            self.scratch_words = ['Scratch']
+        if correct_words is None:
+            self.correct_words = ['Correct']
+        if recent_words is None:
+            self.recent_words = ['Recent']
+        self.name_parent('manager')
+
+    def scratch_recent(self, n = 1):
+        """method which subclass must call when the grammar 
+        recognizes Scratch That/Scratch n, to undo the effect of the 
+        most recent n utterances, if possible.
+
+        **INPUTS**
+
+        *INT n* -- number of utterances to undo
+
+        **OUTPUTS**
+        
+        *INT* -- number of utterances successfully undone
+        """
+        debug.trace('BasicCorrectionWinGram.scratch_recent', 
+            'trying to scratch %d' %n)
+        n_done = self.manager.scratch_recent(n)
+        debug.trace('BasicCorrectionWinGram.scratch_recent', 
+            'actually scratched %d' %n_done)
+        return n_done
+
+
+    def on_correct_last(self):
+        """method which subclass must call when the grammar 
+        recognizes Correct That with nothing selected
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.manager.correct_last()
+
+    def on_correct_recent(self):
+        """method which subclass must call when the grammar 
+        recognizes Correct Recent 
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.manager.correct_recent(self)
 
 
 class WinGramFactory(Object):
@@ -411,7 +517,20 @@ class WinGramFactory(Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *[STR]* select_words -- list of words which can precede the
+    phrase from the visible text in selection grammars
+
+    *STR* through_word -- word for selecting a range with the 
+    selection grammars
+
+    *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
+    That" and "Scratch n" in basic correction grammars
+
+    *[STR]* correct_words -- list of synonyms for Correct in "Correct
+    That" and "Correct Recent"  in basic correction grammars
+
+    *[STR]* recent_words -- *[STR]* correct_words -- list of synonyms for 
+    Recent in "Correct Recent" in basic correction grammars
 
     **CLASS ATTRIBUTES**
 
@@ -421,10 +540,14 @@ class WinGramFactory(Object):
         'go after previous', 'go before',
         'go before next', 'go before previous', 'go next',
         'go previous', 'after next', 'after previous', 'before',
-        'before next', 'before previous', 'correct',
-        'correct next', 'correct previous', 'next', 'previous',
+        'before next', 'before previous', 
+#        'correct', 'correct next', 'correct previous', 
+        'next', 'previous',
         'select', 'select next', 'select previous', 'after'], 
         through_word = 'through',
+        scratch_words = None,
+        correct_words = None,
+        recent_words = None,
         **attrs):
         """
 	**INPUTS**
@@ -435,12 +558,25 @@ class WinGramFactory(Object):
 	*STR* through_word -- word for selecting a range with the 
 	selection grammars
 
+        *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
+        That" and "Scratch n", or None for the default of 'Scratch'
+
+        *[STR]* correct_words -- list of synonyms for Correct in "Correct
+        That" and "Correct Recent"  or None for the default of 'Correct'
+
+        *[STR]* recent_words -- list of synonyms for 
+        Recent in "Correct Recent" or None for the dfault of 'Recent
+
 	**OUTPUTS**
 
 	*none*
 	"""
         self.deep_construct(WinGramFactory,
-            {'select_words' : select_words, 'through_word' : through_word}, 
+            {'select_words' : select_words, 
+             'through_word' : through_word,
+             'scratch_words': scratch_words,
+             'correct_words': correct_words,
+             'recent_words': recent_words}, 
             attrs)
 
     def make_dictation(self, manager, app, buff_name, window = None,
@@ -483,8 +619,7 @@ class WinGramFactory(Object):
 	grammar.  Can also be set later in the activate call to the
 	grammar.
 
-	*BOOL* exclusive -- is grammar exclusive?  (prevents other
-	non-exclusive grammars from getting results)
+	*INT* window -- make grammar specific to a particular window
 
 	*BOOL* exclusive -- is grammar exclusive?  (prevents other
 	non-exclusive grammars from getting results)
@@ -494,6 +629,25 @@ class WinGramFactory(Object):
 	*SelectWinGram* -- new selection grammar
 	"""
         debug.virtual('WinGramFactory.make_selection')
+
+    def make_correction(self, manager, window = None, exclusive = 0):
+        """create a new basic correction grammar
+
+	**INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+	*INT* window -- make grammar specific to a particular window
+
+	*BOOL* exclusive -- is grammar exclusive?  (prevents other
+	non-exclusive grammars from getting results)
+
+	**OUTPUTS**
+
+	*BasicCorrectionWinGram* -- new basic correction grammar
+	"""
+        debug.virtual('WinGramFactory.make_correction')
+    
     
 class DictWinGramDummy(DictWinGram):
     """dummy implementation of window-specific dictation grammar 
@@ -686,6 +840,88 @@ class SelectWinGramDummy(SelectWinGram):
             print "deactivating"
         self.active = 0
 
+class BasicCorrectionWinGramDummy(BasicCorrectionWinGram):
+    """dummy implementation of window-specific basic correction grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* silent -- don't print diagnostics
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, silent = 0, **attrs):
+        self.deep_construct(BasicCorrectionWinGramDummy,
+            {'silent': silent}, attrs)
+        if not self.silent:
+            self.identify_grammar()
+            print "init"
+
+    def __del__(self):
+        if not self.silent:
+            self.identify_grammar()
+            print "del"
+
+    def identify_grammar(self):
+        """print information identifying the grammar by buffer and
+	window
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        if self.window == None:
+            winname = "global"
+        else:
+            winname = "window %d" % self.window
+        print "BasicCorrectionWinGramDummy for window = %s" % winname
+
+    def activate(self):
+        """activates the grammar for recognition
+	tied to the current window.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        if not self.silent:
+            self.identify_grammar()
+            print "activating: ",
+            if self.window == None:
+                print "global ",
+            else:
+                print "%d " % (self.window),
+            if self.exclusive:
+                print "exclusive "
+            print ""
+        self.active = 1
+    
+    def deactivate(self):
+        """disable recognition from this grammar
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        if not self.silent:
+            self.identify_grammar()
+            print "deactivating"
+        self.active = 0
+
+
 class WinGramFactoryDummy(Object):
     """implementation fo WinGramFactory with dummy grammars for
     regression testing.
@@ -762,4 +998,24 @@ class WinGramFactoryDummy(Object):
 	"""
         return SelectWinGramDummy(app = app, buff_name = buff_name, 
             window = window, exclusive = exclusive)
+
+    def make_correction(self, manager, window = None, exclusive = 0):
+        """create a new basic correction grammar
+
+	**INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+	*INT* window -- make grammar specific to a particular window
+
+	*BOOL* exclusive -- is grammar exclusive?  (prevents other
+	non-exclusive grammars from getting results)
+
+	**OUTPUTS**
+
+	*BasicCorrectionWinGram* -- new basic correction grammar
+	"""
+        return BasicCorrectionWinGramDummy(window = window, 
+            exclusive = exclusive)
+    
     

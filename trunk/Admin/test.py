@@ -30,6 +30,10 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 # Uncomment this and add some entries to trace_what if you want to 
 # activate some traces.
 #debug.config_traces(status="on", trace_what={})
+debug.config_traces(status="on", active_traces = {
+#   'CmdInterp': 1
+   }, 
+   allow_trace_id_substrings = 1)
 
 
 #

@@ -116,8 +116,8 @@ class CmdInterp(Object):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *[(STR, STR)] cmd* -- The command, already massaged into a 
-        list of tuples of cleaned spoken_form, written_form
+        *[STR] cmd* -- The command. It is a list of written\spoken words, 
+        with both forms already massaged and cleaned
 
         *AppState app* -- the AppState interface to the editor
         
@@ -308,7 +308,9 @@ class CmdInterp(Object):
 	will be used.
         
         """
+        trace('CmdInterp.interpret_NL_cmd', 'pre-massaged cmd=%s' % cmd)
         cmd = self.massage_command(cmd)
+        trace('CmdInterp.interpret_NL_cmd', 'post-massaged cmd=%s' % cmd)
         self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
 
     def interpret_cmd_tuples(self, cmd, app, initial_buffer = None):
@@ -348,6 +350,8 @@ class CmdInterp(Object):
         *[STR] mod_command* -- The massaged command
         """
         mod_command = []
+        trace('CmdInterp.massage_command_tuples', 
+            'pre-massaged cmd=%s' % command_tuples)
         for a_word in command_tuples:
             spoken, written = a_word
             written = sr_interface.clean_written_form(written, clean_for='vc')

@@ -1052,6 +1052,7 @@ class AppState(OwnerObject):
         if what == None:
             what = []
         if updates == None:
+            self.process_pending_updates()
             updates = self.updates_from_app(what, exclude)
             debug.trace('AppState.synchronize', 
                 'received updates:\n%s\n' % repr(updates))

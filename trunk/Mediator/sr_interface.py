@@ -667,7 +667,9 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*BOOL* -- true if the adaption was accepted
 	"""
-        list = entries(words)
+        list = []
+        for spoken, written in words:
+            list.append(vocabulary_entry(spoken, written, clean_written = 0))
         success = 0
         try:
             success = self.results.correction(list)
@@ -675,7 +677,7 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 # if the ResObj raises an InvalidWord exception, do not set the 
 #         word list
             return 0
-        set_words(words)
+        self.set_words(words)
         return success
 
     def adapt_spoken(self, spoken_forms):

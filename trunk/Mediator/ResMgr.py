@@ -77,6 +77,20 @@ class ResMgr(OwnerObject):
         """
         return self.recog_mgr.interpreter()
 
+    def console(self):
+        """returns a reference to the MediatorConsole which provides the
+        GUI correction interfaces.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.recog_mgr.console()
+    
     def editor(self):
         """return a reference to the editor corresponding to this ResMgr
 
@@ -91,7 +105,8 @@ class ResMgr(OwnerObject):
         """
         return self.recog_mgr.app_instance(self.name)
 
-    def interpret_dictation(self, result, initial_buffer = None):
+    def interpret_dictation(self, result, initial_buffer = None,
+        utterance_number = None):
         """interpret the result of recognition by a dictation grammar,
         and store the relevant information to allow for correction.
 
@@ -102,6 +117,11 @@ class ResMgr(OwnerObject):
 
         *STR initial_buffer* -- the name of the initial buffer which was
         active at recognition-starting
+
+        *INT utterance_number* -- number previously assigned to the
+        utterance, if we are re-interpreting an earlier utterance, or
+        None if result is from a new utterance and should be assigned 
+        a new number
 
         **OUTPUTS**
 
@@ -166,6 +186,34 @@ class ResMgr(OwnerObject):
         re-interpreted may change if the user makes other changes to the 
         """
         debug.virtual('ResMgr.recent_dictation')
+
+    def correct_last(self):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('ResMgr.correct_last')
+
+    def correct_recent(self):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('ResMgr.correct_recent')
 
     def scratch_recent(self, n = 1):
         """undo the effect of the most recent n utterances, if possible.
@@ -283,7 +331,8 @@ class ResMgrStd(ResMgr):
             after(app, initial_buffer = initial_buffer)
         app.print_buff_if_necessary(buff_name = initial_buffer)
 
-    def interpret_dictation(self, result, initial_buffer = None):
+    def interpret_dictation(self, result, initial_buffer = None,
+        utterance_number = None):
         """interpret the result of recognition by a dictation grammar,
         and store the relevant information to allow for correction.
 
@@ -295,10 +344,16 @@ class ResMgrStd(ResMgr):
         *STR initial_buffer* -- the name of the initial buffer which was
         active at recognition-starting
 
+        *INT utterance_number* -- number previously assigned to the
+        utterance, if we are re-interpreting an earlier utterance, or
+        None if result is from a new utterance and should be assigned 
+        a new number
+
         **OUTPUTS**
 
         *none*
         """
+# we don't store utterances, so we can ignore the utterance_number
         app = self.editor()
         debug.trace('ResMgrStd.interpret_dictation', 'about to interpret')
         self._std_interp(result, app, initial_buffer = initial_buffer)
@@ -1117,6 +1172,9 @@ class StateStackBasic(StateStack):
             return 0
         if self.after_utterance is None:
             return 0
+# have to synchronize to ensure that we've processed any pending updates
+# and that "current" is really current.
+        app.synchronize_with_app()
         same = self.after_utterance.compare_with_current(app, 
             ignore_new = self.ignore_new, 
             ignore_deleted = self.ignore_deleted)
@@ -1253,26 +1311,46 @@ class ResMgrBasic(ResMgrStd):
     *INT max_utterances* -- the maximum number of recent dictation utterances 
     to store
 
-    *[SpokenUtterance] utterances* -- queue of recent utterances, sorted with
-    most recent last
+    *CorrectUtteranceEvent correct_evt* -- doorbell used to send an 
+    event to bring up a correction box asynchronously
 
-    *[STR] initial_buffers* -- queue of names of initial buffers 
-    corresponding to the utterances
+    *[SpokenUtterance] utterances* -- stack of recent utterances, sorted with
+    most recent last (technically a queue, since it has finite size and
+    the oldest utterances can be dropped on push to maintain this limit)
+
+    *[STR] initial_buffers* -- stack of names of initial buffers 
+    corresponding to the utterances (technically a queue, since it has 
+    finite size and the oldest utterances can be dropped on push to 
+    maintain this limit)
+
+    *[INT] numbers* -- stack of numbers 
+    corresponding to the utterances (technically a queue, since it has 
+    finite size and the oldest utterances can be dropped on push to 
+    maintain this limit)
+
+    *INT next_number* -- next number to be assigned to the next new
+    utterance
 
     *StateStackBasic states* -- stack representing the state of the editor 
     application before/after recent utterances
     """
-    def __init__(self, max_utterances = 30, **args):
+    def __init__(self, correct_evt, max_utterances = 30, **args):
         self.deep_construct(ResMgrBasic,
                             {
                              'max_utterances': max_utterances,
+                             'correct_evt': correct_evt,
                              'utterances': [],
+                             'numbers': [],
+                             'next_number': 0,
                              'initial_buffers': [],
                              'states': StateStackBasic(max_utterances)
                             },
                             args)
+
+    def remove_other_references(self):
+        self.correct_evt = None
         
-    def store(self, result, initial_buffer):
+    def store(self, result, initial_buffer, number):
         """store the result, along with the editor state before and 
         after interpretation
 
@@ -1280,6 +1358,9 @@ class ResMgrBasic(ResMgrStd):
 
         *SpokenUtterance result* -- a SpokenUtterance object
         representing the recognition results
+
+        *INT number* -- number assigned to the utterance by
+        interpret_dictation
 
         **OUTPUTS**
 
@@ -1291,10 +1372,13 @@ class ResMgrBasic(ResMgrStd):
             debug.trace('ResMgrBasic.store', 'removing the oldest')
             del self.utterances[0]
             del self.initial_buffers[0]
+            del self.numbers[0]
         self.utterances.append(result)
         self.initial_buffers.append(initial_buffer)
+        self.numbers.append(number)
 
-    def interpret_dictation(self, result, initial_buffer = None):
+    def interpret_dictation(self, result, initial_buffer = None,
+        utterance_number = None):
         """interpret the result of recognition by a dictation grammar,
         and store the relevant information to allow for correction.
 
@@ -1305,6 +1389,11 @@ class ResMgrBasic(ResMgrStd):
 
         *STR initial_buffer* -- the name of the initial buffer which was
         active at recognition-starting
+
+        *INT utterance_number* -- number previously assigned to the
+        utterance, if we are re-interpreting an earlier utterance, or
+        None if result is from a new utterance and should be assigned 
+        a new number
 
         **OUTPUTS**
 
@@ -1317,7 +1406,13 @@ class ResMgrBasic(ResMgrStd):
             initial_buffer = initial_buffer, 
             before = self.states.before_interp,
             after = self.states.after_interp)
-        self.store(result, initial_buffer = initial_buffer)
+        if utterance_number is None:
+            self.store(result, initial_buffer = initial_buffer, 
+                number = self.next_number)
+            self.next_number = self.next_number + 1
+        else:
+            self.store(result, initial_buffer = initial_buffer, 
+                number = utterance_number)
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the given editor
@@ -1337,7 +1432,6 @@ class ResMgrBasic(ResMgrStd):
         for i in range(len(self.initial_buffers)):
             if self.initial_buffer[i] == old_buff_name:
                 self.initial_buffer[i] = new_buff_name
-
 
     def stored_utterances(self):
         """tells how many dictated utterances have been stored
@@ -1415,6 +1509,8 @@ class ResMgrBasic(ResMgrStd):
         success = self.states.pop(app, m)
         if success:
             del self.utterances[-m:]
+            del self.initial_buffers[-m:]
+            del self.numbers[-m:]
             return m
         return 0
     
@@ -1464,8 +1560,10 @@ class ResMgrBasic(ResMgrStd):
             return None
         to_do = self.utterances[-m:]
         buffers = self.initial_buffers[-m:]
+        numbers = self.numbers[-m:]
         del self.utterances[-m:]
         del self.initial_buffers[-m:]
+        del self.numbers[-m:]
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'about to reinterpret %s' % repr(to_do))
         for i in range(len(to_do)):
@@ -1475,7 +1573,8 @@ class ResMgrBasic(ResMgrStd):
             debug.trace('ResMgrBasic.reinterpret_recent', 
                 'spoken_forms %s' % repr(utterance.spoken_forms()))
             self.interpret_dictation(utterance,
-                initial_buffer = buffers[i])
+                initial_buffer = buffers[i], 
+                utterance_number = numbers[i])
         return range(m, 0, -1)
 
     def can_reinterpret(self, n):
@@ -1495,6 +1594,207 @@ class ResMgrBasic(ResMgrStd):
             n <= self.states.safe_depth(app):
             return 1
         return 0
+
+    def find_utterance(self, utterance_number):
+        """find current position within the stack of an utterance 
+        with a given utterance number
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *INT* -- depth of this utterance in the stack, or None if not
+        found
+        """
+        for i in range(1, len(self.numbers)+1):
+            if utterance_number == self.numbers[-i]:
+                return i
+        return None
+
+    def correct_utterance(self, utterance_number):
+        """initiate user correction of the utterance with a given
+        utterance number
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correction box.  Generally, it should be called
+        only in response to a CorrectUtterance event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *none*
+        """
+        n = self.find_utterance(utterance_number)
+        if n is None:
+            return
+        self.correct_nth_synchronous(n)
+
+    def correct_nth_synchronous(self, n = 1):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *INT n* -- the depth in the editor state stack of the utterance
+        to be corrected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        console = self.console()
+        if n > self.stored_utterances():
+            return
+        number = self.numbers[-n]
+        utterance = self.utterances[-n]
+        can_reinterpret = self.can_reinterpret(n)
+        if console.correct_utterance(self.name, utterance, 
+            can_reinterpret, should_adapt = 1):
+            nn = self.find_utterance(number)
+            if nn is not None:
+                self.reinterpret_recent(changed = [nn])
+    
+    def correct_nth(self, n = 1):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *INT n* -- the depth in the editor state stack of the utterance
+        to be corrected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if n > self.stored_utterances():
+            return
+        number = self.numbers[-n]
+        self.correct_evt.notify(self.name, number)
+    
+    def was_correct_nth(self, n = 1):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *INT n* -- the depth in the editor state stack of the utterance
+        to be corrected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        console = self.console()
+        if n > self.stored_utterances():
+            return
+        utterance = self.utterances[-n]
+        can_reinterpret = self.can_reinterpret(n)
+        if console.correct_utterance(self.name, n, utterance, 
+            can_reinterpret, should_adapt = 1):
+            print 'okay'
+            print self.reinterpret_recent(changed = [n])
+        else:
+            print 'cancelled'
+    
+    def correct_last(self):
+        """initiate user correction of the most recent dictation utterance 
+        into the given editor, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.correct_nth()
+
+
+class ResMgrFactory(Object):
+    """abstract class defining the interface for a factory to create
+    new ResMgr objects
+
+    """
+    def __init__(self, **args):
+        self.deep_construct(ResMgrFactory, {}, args)
+
+    def new_manager(self, recog_mgr, instance_name):
+        """returns a new ResMgr for the named instance
+
+        **INPUTS**
+
+        *RecogStartMgr recog_mgr* -- the parent recognition starting
+        manager
+
+        *STR instance_name* -- the name of the instance whose results
+        will be managed
+        """
+        debug.virtual('ResMgrFactory.new_manager')
+
+class ResMgrStdFactory(ResMgrFactory):
+    """factory creating ResMgrStd objects
+    """
+    def __init__(self, **args):
+        self.deep_construct(ResMgrStdFactory, {}, args)
+
+    def new_manager(self, recog_mgr, instance_name):
+        """returns a new ResMgr for the named instance
+
+        **INPUTS**
+
+        *RecogStartMgr recog_mgr* -- the parent recognition starting
+        manager
+
+        *STR instance_name* -- the name of the instance whose results
+        will be managed
+        """
+        return ResMgrStd(recog_mgr = recog_mgr, instance_name = instance_name)
+
+class ResMgrBasicFactory(ResMgrFactory):
+    """factory creating ResMgrBasic objects
+
+    **INSTANCE ATTRIBUTES**
+
+    *INT max_utterances* -- the maximum number of recent dictation 
+    utterances each ResMgrBasic should store
+    """
+    def __init__(self, correct_evt, max_utterances = 30, **args):
+        """
+        *INT max_utterances* -- the maximum number of recent dictation 
+        utterances each ResMgrBasic should store
+        """
+        self.deep_construct(ResMgrBasicFactory, 
+                            {'correct_evt': correct_evt,
+                             'max_utterances': max_utterances}, 
+                            args)
+
+    def new_manager(self, recog_mgr, instance_name):
+        """returns a new ResMgr for the named instance
+
+        **INPUTS**
+
+        *RecogStartMgr recog_mgr* -- the parent recognition starting
+        manager
+
+        *STR instance_name* -- the name of the instance whose results
+        will be managed
+        """
+        return ResMgrBasic(recog_mgr = recog_mgr, 
+            instance_name = instance_name, 
+            correct_evt = self.correct_evt,
+            max_utterances = self.max_utterances)
+
    
 # defaults for vim - otherwise ignore
 # vim:sw=4
