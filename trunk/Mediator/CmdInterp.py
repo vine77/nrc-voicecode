@@ -122,7 +122,10 @@ class CmdInterp(Object):
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
         
-	self.on_app.bind_to_buffer(initial_buffer)
+	if initial_buffer == None:
+	    self.on_app.bind_to_buffer(self.on_app.curr_buffer_name())
+	else:
+	    self.on_app.bind_to_buffer(initial_buffer)
 
 	untranslated_words = []
 
@@ -264,7 +267,7 @@ class CmdInterp(Object):
 #             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer().cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer().cur_pos())
 
         # make sure to unbind the buffer before returning
-	self.on_app.bind_to_buffer(None)
+	self.on_app.unbind_from_buffer()
 
         #
         # Notify external editor of the end of recognition

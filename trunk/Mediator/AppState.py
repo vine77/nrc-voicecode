@@ -823,6 +823,8 @@ class AppState(Object):
 	if buff == None:
 	    return 0
         self.bound_buffer_name = buff_name
+	if buff_name == None:
+	    self.bound_buffer_name = self.curr_buffer_name()
 # Here, we don't tell the application to switch to the found buffer, but
 # we do when a CSC calls change_buffer while the AppState is bound.
 # That way, if the user speaks, and then changes the buffer before the
