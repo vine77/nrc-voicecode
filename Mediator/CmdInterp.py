@@ -1630,65 +1630,13 @@ class CmdInterp(OwnerObject):
         # For now, we don't keep track of the SpacingState, so we only
         # need to restore the SymBuilderFactory
         return self.builder_factory.restore_state(formatting)
-        
-    def interpret_massaged(self, utterance, app, initial_buffer = None,
-            clear_state = 0):
 
-        """Interprets a natural language utterance and executes
-        corresponding instructions.
-
-        *SpokenUtterance* utterance -- The utterance
-
-        *AppState app* -- the AppState interface to the editor
-        
-        *[STR] initial_buffer* -- The name of the target buffer at the 
-        start of the utterance.  Some CSCs may change the target buffer of 
-        subsequent parts of the command.  If None, then the current buffer 
-        will be used.
-        
-        *BOOL clear_state* -- if true, clear formatting and spacing
-        *states before interpreting the utterance
-         """
-        cmd = utterance.normalized_written_spoken_forms()
-        trace('CmdInterp.interpret_massaged', 'command=%s' % cmd)
-        spoken_list = map(lambda word: word[0], cmd)
-#        spoken_list = map(lambda word: process_initials(word[0]), cmd)
-        trace('CmdInterp.interpret_massaged', 'spoken=%s' % spoken_list)
-        return self.interpret_spoken(spoken_list, app,
-            initial_buffer = initial_buffer, clear_state = clear_state)
-
-    def interpret_spoken(self, spoken_list, app, initial_buffer = None,
+    def interpret_phrase(self, utterance, app, initial_buffer = None,
             clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *[STR]* spoken_list -- The list of spoken forms in the command
-
-        *AppState app* -- the AppState interface to the editor
-        
-        *[STR] initial_buffer* -- The name of the target buffer at the 
-        start of the utterance.  Some CSCs may change the target buffer of 
-        subsequent parts of the command.  If None, then the current buffer 
-        will be used.
-                
-        *BOOL clear_state* -- if true, clear formatting and spacing
-        *states before interpreting the utterance
-        """
-        trace('CmdInterp.interpret_spoken', 'spoken_list = %s' % spoken_list)
-
-        spoken = string.join(spoken_list)
-        phrase = string.split(spoken)
-        return self.interpret_phrase(phrase, app,
-            initial_buffer = initial_buffer, clear_state = clear_state)
-
-    def interpret_phrase(self, phrase, app, initial_buffer = None,
-            clear_state = 0):
-        """Interprets a natural language command and executes
-        corresponding instructions.
-
-        *[STR]* phrase -- The list of spoken words in the command, without
-        regard to the original boundaries between words as interpreted
-        by the speech engine
+        *SpokenUtterance* utterance -- The utterance.
 
         *AppState app* -- the AppState interface to the editor
         
@@ -1700,9 +1648,9 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
         """
-        trace('CmdInterp.interpret_phrase', 'phrase = %s' % phrase)
+        phrase = utterance.normalized_spoken_phrase()        
 
-        processed_phrase = map(lambda word: process_initials(word), phrase)
+        processed_phrase = utterance.normalized_spoken_phrase()        
 
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
@@ -1987,8 +1935,7 @@ class CmdInterp(OwnerObject):
 
         *none*
         """
-
-        return self.interpret_massaged(utterance, app,
+        return self.interpret_phrase(utterance, app,
             initial_buffer = initial_buffer, clear_state = clear_state)
 
        
