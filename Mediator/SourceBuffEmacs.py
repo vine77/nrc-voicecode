@@ -31,7 +31,7 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
     
     **INSTANCE ATTRIBUTES**
 
-    [SB_ServiceLang] *lang_srv* -- Language service used to know the
+    [SB_ServiceLangMessaging] *lang_srv* -- Language service used to know the
     programming language of a source file.
     
     Note that the *app* attribute (defined in [SourceBuff])
@@ -45,7 +45,7 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
     ..[AppStateEmacs] file:///./AppStateEmacs.AppStateEmacs.html"""
     
     def __init__(self, **attrs):
-        self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self)})
+        self.init_attrs({'lang_srv': sb_services.SB_ServiceLangMessaging(buff=self)})
         self.deep_construct(SourceBuffEmacs,
                             {},
                             attrs

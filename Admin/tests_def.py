@@ -4405,6 +4405,26 @@ def test_emacs_save_buffer():
    
 
 ##############################################################################
+# Checking language of a buffer
+##############################################################################    
+
+def test_language_name_for_file(file_name):
+    testing.init_simulator_regression()
+    commands.open_file(file_name)
+    print "\nLanguage for this file is: %s\n" % commands.app.curr_buffer().language_name()
+     
+
+def test_language_name():
+	test_language_name_for_file("dummy.py")
+	test_language_name_for_file("dummy.c")	
+    
+    
+    
+add_test('language_name', test_language_name,
+         desc='Testing language name of a buffer.')
+
+
+##############################################################################
 # Sending a large message to the client
 ##############################################################################    
     

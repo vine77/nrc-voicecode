@@ -75,8 +75,8 @@ class SourceBuff(OwnerObject):
                              'buff_name': buff_name,
                              'print_nlines': 3},
                             attrs
-                            )
-        self.name_parent('app')        
+                            )                            
+        self.name_parent('app')  
 
     def name(self):
         """returns the name of the buffer

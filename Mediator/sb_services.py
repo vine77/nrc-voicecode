@@ -54,6 +54,18 @@ import debug
 import SourceBuffState
 import sr_interface
 
+class ClientSideImplementation:
+   """Mixin class for client side implementations of SB_Services."""
+ 
+   def __init__(self, **args_super):
+        self.deep_construct(ClientSideImplementation, 
+                            {}, 
+                            args_super, 
+                            {}) 
+   
+   def talk_msgr(self):
+       return self.buff.app.talk_msgr
+
 class SB_Service(Object.OwnerObject):
     """Support service for SourceBuff classes.
 
@@ -80,9 +92,49 @@ class SB_Service(Object.OwnerObject):
                             args_super, 
                             {})
         self.name_parent('buff')
-  
 
 class SB_ServiceLang(SB_Service):
+
+    """Provides services for determining the programming language of a
+    particular buffer.
+
+    This service is implemented completely at the VoiceCode level so
+    that it can be used by [SourceBuff] classes for editors that are
+    not language aware.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.init_attrs({})
+        self.deep_construct(SB_ServiceLang, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def language_name(self):
+        """Returns the name of the language a file is written in
+        
+        **INPUTS**        
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the language
+        """
+        debug.virtual('SB_ServiceLang.language_name')
+
+    def file_language_name(self, fname):                
+        debug.virtual('SB_ServiceLang.file_language_name')
+        
+class SB_ServiceLangServerSide(SB_ServiceLang):
 
     """Provides services for determining the programming language of a
     particular buffer.
@@ -121,8 +173,7 @@ class SB_ServiceLang(SB_Service):
 
         language = None
         fname = self.buff.file_name()
-#        print 'language for file named %s' % repr(fname)
-#        print 'buffer name is %s' % repr(self.buff.name())
+        debug.trace('SB_ServiceLang.language_name', 'fname=%s, self.buff.name()=%s' % (fname, self.buff.name()))
         if fname != None:
             language = self.file_language_name(fname)
         return language
@@ -141,15 +192,50 @@ class SB_ServiceLang(SB_Service):
         return language
 
 
-    def is_language(self, lang):
-        """Check if a source buffer is in a particular language.
+class SB_ServiceLangMessaging(SB_ServiceLang, ClientSideImplementation):
 
-        Outputs *true* if and only if *self.buff* is displaying a file
-        written in programming language *STR lang*.
+    """Provides services for determining the programming language of a
+    particular buffer.
+
+    This version of the service is implemented at the client level.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_ServiceLangMessaging, 
+                            {}, 
+                            args_super, 
+                            {})
+        
+
+    def language_name(self):
+        """Returns the name of the language a file is written in
+        
+        **INPUTS**        
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the language
         """
-        return (self.buff.language == lang)
-
-
+        self.talk_msgr().send_mess('language_name', {})
+        response = self.talk_msgr().get_mess(expect=['language_name_resp'])
+        debug.trace('SB_ServiceLangMessaging.language_name', 'returning %s' % response[1]['value'])
+        return response[1]['value']
+        
+    def file_language_name(self, fname):                
+        self.talk_msgr().send_mess('file_language_name', {'file_name': fname})
+        response = self.talk_msgr().get_mess(expect=['file_language_name_resp'])
+        return response[1]['value']
+        
 
 class SB_ServiceLineManip(SB_Service):
         

@@ -71,7 +71,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         buffer also supports change specification
         """
 
-        self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
+        self.init_attrs({'lang_srv': sb_services.SB_ServiceLangServerSide(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
                         })
