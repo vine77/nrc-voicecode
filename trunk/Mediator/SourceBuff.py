@@ -676,40 +676,45 @@ class SourceBuff(OwnerObject):
         code *STR code_bef* and *str code_after*. Cursor is put right
         after code *STR bef*.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* code_bef -- code to be inserted before new cursor location
+        *STR* code_bef -- code to be inserted before new cursor location
         
-	*STR* code_bef -- code to be inserted after new cursor location
+        *STR* code_bef -- code to be inserted after new cursor location
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
 # all subclasses now use an indent server with a different algorithm, or
 # do indenting in the editor, so leaving this non-virtual is misleading
+# -- df
+#
+# Actually, the concrete algorithm below will work with all editors where
+# we do editor-side indentation. I think this will be the majority of cases,
+# so I would like to keep it concrete.
+# -- ad
 
-#        trace('SourceBuff.insert_indent',
-#              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
-#        if range == None:
-#            range = self.get_selection()
-#        range = self.make_valid_range(range)
-#        
-#        indent_from = range[0]
-#        self.insert(code_bef, range)
-#        
-#        self.indent((indent_from, self.cur_pos()))        
-#        final_cur_pos = self.cur_pos()
-#        if code_after != '':
-#            self.insert(code_after, (self.cur_pos(), self.cur_pos()))
-#            self.indent((final_cur_pos, self.cur_pos()))
-#            self.goto(final_cur_pos)
+        trace('SourceBuff.insert_indent',
+              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
+        if range == None:
+            range = self.get_selection()
+        range = self.make_valid_range(range)
+    
+        indent_from = range[0]
+        self.insert(code_bef, range)
+    
+        self.indent((indent_from, self.cur_pos()))        
+        final_cur_pos = self.cur_pos()
+        if code_after != '':
+            self.insert(code_after, (self.cur_pos(), self.cur_pos()))
+            self.indent((final_cur_pos, self.cur_pos()))
+            self.goto(final_cur_pos)
 
-        debug.virtual('SourceBuff.insert_indent')
 
     def insert(self, text, range = None):
         """Replace text in range with 

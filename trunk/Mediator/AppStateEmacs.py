@@ -56,6 +56,13 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         ..[AppStateEmacs] file:///./AppStateEmacs.AppStateEmacs.html"""
         
         return SourceBuffEmacs.SourceBuffEmacs(app=self, buff_name=buff_name)
+        
+#
+# No need to ask Emacs for updates, because it will notify VCode of changes
+# as they happen.
+#        
+    def updates_from_app(self, what = None, exclude=1):        
+        return []
 
     def config_from_external(self):
         pass

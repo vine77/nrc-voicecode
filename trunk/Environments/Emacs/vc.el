@@ -887,7 +887,7 @@ interactively, sets the current buffer as the target buffer."
 (defun vr-execute-event-handler (handler vr-request)
 
   (let ((vr-changes-caused-by-sr-cmd vr-cmd))
-    (vr-log "**-- vr-execute-event-handler: debug-on-error=%S" debug-on-error)
+    (vr-log "**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S" vr-changes-caused-by-sr-cmd)
     (if debug-on-error
 	;;;
 	;;; If in debug mode, let the debugger intercept errors.
@@ -1270,6 +1270,7 @@ Argument 'change-list is a list of 5ple:
    (repl-start repl-end repl-length buffer-tick repl-text)."
 
   (vr-log "-- vr-serialize-changes: invoked\n")
+  (vr-log "-- vr-serialize-changes: vr-changes-caused-by-sr-cmd=%S\n" vr-changes-caused-by-sr-cmd)
   (let ((mess "") (a-change) (repl-start) (repl-length) (repl-text))
     (if vr-changes-caused-by-sr-cmd
 	;;;
@@ -1721,7 +1722,7 @@ in response to it."
 	  ;;; automatic indentation.
 	  ;;;
 	  (if region-should-be-unindented
-	      (vcode-unindent-region (indent-start 
+	      (vcode-unindent-region indent-start 
 				      (+ indent-start indent-length) 
 				      n-indent-levels)
 	    (indent-region indent-start (+ indent-start indent-length) nil))
@@ -1758,7 +1759,7 @@ in response to it."
 	      (vr-execute-command vr-deferred-deferred-deferred-function)))
  	)
     ;; if the current buffer is not VR-buffer
-    (vr-send-reply "-1")))
+    (vr-send-reply "-1"))
 
    (vr-log "-- vr-cmd-make-changes: exited")
 
@@ -2771,27 +2772,40 @@ to the other"
 	(range) (vr-request) 
 	(indent-start) (indent-end))
 
-	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
-	(vr-log "--** vcode-cmd-indent: range=%S\n" range)
-	(setq indent-start (elt range 0))
-	(setq indent-end (elt range 1))
+;;; IGNORE INDENTATION FOR NOW!!!
+;;;
+; 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
+; 	(vr-log "--** vcode-cmd-indent: range=%S\n" range)
+; 	(setq indent-start (elt range 0))
+; 	(setq indent-end (elt range 1))
 
-        (vr-log "--** vcode-cmd-indent: indent-start=%S, indent-end=%S\n"  indent-start indent-end)
+;         (vr-log "--** vcode-cmd-indent: indent-start=%S, indent-end=%S\n"  indent-start indent-end)
 
-	(setq vr-request (list 1
-			       0
-			       ""
-			       (point)
-			       0
-			       indent-start
-			       (- indent-end indent-start)
-			       mess-name))
-        (vr-log "--** vcode-cmd-indent: vr-request=%S\n" vr-request)
+; 	(setq vr-request (list 1
+; 			       0
+; 			       ""
+; 			       (point)
+; 			       0
+; 			       indent-start
+; 			       (- indent-end indent-start)
+; 			       mess-name))
+;         (vr-log "--** vcode-cmd-indent: vr-request=%S\n" vr-request)
 
-	(vr-cmd-make-changes vr-request)
+; 	(vr-cmd-make-changes vr-request)
+
+;;;
+;;; WHEN ABOVE CODE IS ACTIVATED AND DEBUGGED, REMOVE STATEMENT BELOW
+;;; THE CALL TO VR-CMD-MAKE-CHANGES WILL END UP SENDING A REPLY
+;;; TO VOICECODE SERVER
+    (let ((reply-cont (make-hash-table :test 'string=)) )
+         (cl-puthash "updates" (list) reply-cont)
+         (vr-send-reply (run-hook-with-args 
+		          'vr-serialize-message-hook 
+		          (list "indent_resp" reply-cont)))
     )
-  (vr-log "-- vcode-cmd-indent: exited\n")
   )
+  (vr-log "-- vcode-cmd-indent: exited\n")
+)
 
 (defun vcode-cmd-decr-indent-level (vcode-request)
   (vr-log "-- vcode-cmd-decr-indent-level: NOT IMPLEMENTED YET!!!\n")
@@ -2822,18 +2836,20 @@ to the other"
   "Deindents region from START to END by N-LEVELS levels."
   (let (end-line)
     (vr-log "-- vcode-unindent-region: start=%S, end=%S, n-levels=%S" start end n-levels)
-    (save-excursion
-      (goto-char end)
-      (setq end-line (count-lines 1 (point)))
-      (message "-- end-line=%S\n" end-line)
-      (goto-char start)
-      (while (<= (count-lines 1 (point)) end-line)
- 	(message "-- start of while, current-line=%S" (count-lines 1 (point)))
-  	(vcode-unindent-line n-levels)
-	(next-line 1)
- 	(message "-- end of while, current-line=%S" (count-lines 1 (point)))
-       )
-    )
+
+;;; IGNOE INDENTATION FOR NOW!
+;     (save-excursion
+;       (goto-char end)
+;       (setq end-line (count-lines 1 (point)))
+;       (message "-- end-line=%S\n" end-line)
+;       (goto-char start)
+;       (while (<= (count-lines 1 (point)) end-line)
+;  	(message "-- start of while, current-line=%S" (count-lines 1 (point)))
+;   	(vcode-unindent-line n-levels)
+; 	(next-line 1)
+;  	(message "-- end of while, current-line=%S" (count-lines 1 (point)))
+;        )
+;     )
   )
 )
 
