@@ -613,7 +613,7 @@ class Object:
         .. [EnforcedConstrArg] file:///./Object.EnforcedConstrArg.html
         .. [Object] file:///./Object.Object.html"""
 
-#        print '-- Object.deep_construct: self=%s, this_class=%s, attrs_this_class.keys()=%s, args_super.keys()=%s' % (self, this_class, repr(attrs_this_class.keys()), repr(args_super.keys()))
+#        debug.trace('Object.deep_construct', 'this_class=%s' % this_class)
         
         #
         # Redefine the default value of some ancestor constructor
@@ -657,6 +657,7 @@ class Object:
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
                 try:
+#                    debug.trace('Object.deep_construct', '** invoking constructor of %s with arguments %s' % (a_base, repr(args_super)))
                     apply(a_base.__init__, [self], args_super)
                 except TypeError:
                     msg = "TypeError while initializing base %s of class %s\n" \
@@ -955,8 +956,8 @@ class OwnerObject(Object):
 
         *none*
         """
-        debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
-        debug.trace_call_stack('OwnerObject.cleanup')
+#        debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
+#        debug.trace_call_stack('OwnerObject.cleanup')
         self.remove_other_references()
         debug.trace('OwnerObject.cleanup', 'after remove_other_references')
     

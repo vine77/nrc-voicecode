@@ -840,7 +840,20 @@ class WinGramFactory(Object):
         *SimpleSelection* -- new selection grammar
         """
         debug.virtual('WinGramFactory.make_simple_selection')
+        
+    def make_text_mode(self, window):
+        """Create a new grammar for toggling text-mode on and off.
+        
+        **INPUTS**
 
+        *none*
+
+        **OUTPUTS**
+
+        *TextModeGram* -- the command grammar for toggling text-mode.
+        
+        """
+        debug.virtual('WinGramFactory.make_text_mode')
     
 class DictWinGramDummy(DictWinGram):
     """dummy implementation of window-specific dictation grammar 
@@ -1632,3 +1645,33 @@ class SimpleSelection(WinGram):
             else:
                 self.select_cbk((closest[0], closest[0]))
 
+
+class TextModeTogglingGram(WinGram):
+    """Abstract base class for enabling-disabling text-mode.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(TextModeTogglingGram,
+            {}, attrs)
+
+
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', 'correction', or 'text_mode')
+        """
+        return 'text_mode'
+    

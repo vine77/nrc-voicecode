@@ -702,6 +702,21 @@ class WinGramFactoryNL(WinGramFactory):
             get_visible_cbk = get_visible_cbk,
             get_selection_cbk = get_selection_cbk, 
             select_cbk = select_cbk)
+            
+    def make_text_mode(self, manager, window=None):
+        """Create a new grammar for toggling text-mode on and off.
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *TextModeGram* -- the command grammar for toggling text-mode.
+        
+        """
+        return TextModeTogglingGramNL(manager=manager, window=window)
+            
 
 class ChoiceGramNL(ChoiceGram, GrammarBase):
     """natlink implementation of ChoiceGram
@@ -1327,4 +1342,90 @@ class SimpleSelectionNL(SimpleSelection, SelectGramBase):
                 pass
 
             self.find_closest(verb, ranges)
+
+
+
+class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
+    """natlink implementation of TextModeToggling
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+
+    def __init__(self, window=None, **attrs):
+        self.deep_construct(TextModeTogglingGramNL,
+            {}, attrs, exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.load(self.gram_spec())
+
+
+    def gram_spec(self):
+    
+       return """
+              <text_mode_on> exported = text mode on;
+              <text_mode_off> exported = text mode off;
+
+              """
+    
+    def activate(self):
+        """activates the grammar for toggling text-mode, tied to the current window.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('TextModeTogglingGramNL.activate', 
+            'received activate')
+        if not self.is_active():
+            debug.trace('TextModeTogglingGramNL.activate', 
+                'not already active')
+            window = self.window
+            if window == None:
+                window = 0
+            GrammarBase.activateAll(self, window = window, 
+                exclusive = self.exclusive)
+            self.active = 1
+
+            
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('TextModeTogglingGramNL.activate', 
+            'received deactivate')
+        if self.is_active():
+            debug.trace('TextModeTogglingGramNL.activate', 
+                'was active')
+            GrammarBase.deactivateAll(self)
+            self.active = 0
+            
+    
+    def gotResults_text_mode_on(self, words, full_results):
+        print "Setting text mode on"
+
+    def gotResults_text_mode_off(self, words, full_results):
+        print "Setting text mode off"
+
+
+# Is this needed?
+    def gotResultsObject(self, recog_type, results):
+        if recog_type == 'self':
+            utterance = sr_interface.SpokenUtteranceNL(results)
+            self.results_callback(utterance.words())
 

@@ -180,7 +180,7 @@ class PersistentConfigNewMediator(Object.Object):
     utterances
     """
     def __init__(self, mediator, editor_name, names, 
-        symbol_match_dlg = 1, correction = None, 
+        symbol_match_dlg = 1, correction = None, text_mode_toggling = None,
         bypass_sr_recog = 0, **args):
         """**INPUTS**
 
