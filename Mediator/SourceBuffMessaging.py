@@ -693,7 +693,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
-	"""
+        """
         args = {'linenum': linenum, 'where': where,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('goto_line', args)

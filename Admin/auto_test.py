@@ -27,6 +27,7 @@ regression tests.
 
 import re, sys, time
 import util
+from debug import trace
 
 test_reg = {}
 suite_reg = {'all': ['.*']}
@@ -89,6 +90,7 @@ def run(to_run):
     in *to_run*is either the name of a test or the name of a test suite, or a
     regexp to be matched against test names.
     """
+    trace('auto_test.run', '** to_run=%s' % repr(to_run))
     tests_to_do = {}
     for an_entry in to_run:
         test_suite = expand_suite(an_entry)

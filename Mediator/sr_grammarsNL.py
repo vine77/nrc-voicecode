@@ -47,7 +47,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.deep_construct(DictWinGramNL,
             {}, attrs, exclude_bases = {DictGramBase:1})
         DictGramBase.__init__(self)
-        self.load()
+        self.load(allResults=1)
+#        self.load()
 
     def activate(self):
         """activates the grammar for recognition
@@ -69,7 +70,7 @@ class DictWinGramNL(DictWinGram, DictGramBase):
             if window == None:
                 window = 0
             debug.trace('DictWinGramNL.activate', 
-                'activating, window = %d' % window)
+                'activating, window = %d, exclusive=%s' % (window, self.exclusive))
             DictGramBase.activate(self, window = window, 
                 exclusive = self.exclusive)
             self.active = 1
@@ -115,6 +116,7 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.setContext(before, after)
 
     def gotResultsObject(self, recogType, results):
+            debug.trace('DictWinGramNL.gotResultsObject', 'recogType=%s, results=%s' % (recogType, repr(results)))
             if recogType == 'self':
                 utterance = sr_interface.SpokenUtteranceNL(results)
                 self.on_results(utterance)
@@ -126,6 +128,9 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 #                    initial_buffer = self.buff_name)
 #                self.app.print_buff_if_necessary(buff_name
 #                    = self.buff_name)
+            else:
+                 debug.trace('DictWinGramNL.gotResultsObject, results=%s', repr(results))
+             
 
 class SelectWinGramNL(SelectWinGram, SelectGramBase):
     """natlink implementation of SelectWinGram for window-specific 
@@ -195,7 +200,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 	*none*
 	"""
         if self.is_active():
-            DictGramBase.deactivate(self)
+            SelectGramBase.deactivate(self)
             self.active = 0
 
     def cleanup(self):
@@ -217,7 +222,9 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         return self.buff_name
     
     def gotResultsObject(self,recogType,resObj):
+        debug.trace('SelectWinGramNL.gotResultsObject', '** invoked, resObj=%s' % repr(resObj))
         if recogType == 'self':
+            debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self')        
             # If there are multiple matches in the text we need to scan through
             # the list of choices to find every entry which has the highest.
             

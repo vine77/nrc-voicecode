@@ -1573,6 +1573,7 @@ command was a yank or not."
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-message-handler-hooks)  
+  (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-message-handler-hooks)  
 
   ;;;
   ;;; These ones are currently not handled by VCode, but they probably should
@@ -1699,12 +1700,16 @@ generated while executing VCode request 'vcode-req."
 
 (defun vcode-cmd-set-instance-string (vcode-req)
    (let ((resp-cont (make-hash-table :test 'string=)))
+   (vr-log "--** vcode-cmd-set-instance-string: invoked")
 
    (setq vcode-instance-string (cl-gethash "instance_string" (nth 1 vcode-req)))
    (cl-puthash "value" vcode-instance-string resp-cont)
 
    (setq frame-title-format 
-	 `(multiple-frames "%b" (,vcode-instance-string invocation-name "@" system-name)))
+          `("%b -- " (,vcode-instance-string invocation-name "@" system-name)))
+
+;   (setq frame-title-format 
+;	 `(multiple-frames "%b" (,vcode-instance-string invocation-name "@" system-name)))
 
      (vr-send-reply (run-hook-with-args 
 		   'vr-serialize-message-hook (list "set_instance_string_resp" resp-cont)))
@@ -2037,9 +2042,11 @@ message.
 	(buffer-names nil)
 	(response (make-hash-table :test 'string=)))
 
+    (vr-log "--** vcode-cmd-list-open-buffers: open-buffers=%S\n" open-buffers)
     (while open-buffers
-      (append buffer-names (list (buffer-name (car open-buffers))))
+      (setq buffer-names (append buffer-names (list (buffer-name (car open-buffers)))))
       (setq open-buffers (cdr open-buffers))
+      (vr-log "--** vcode-cmd-list-open-buffers: now, open-buffers=%S, buffer-names=%S\n" open-buffers buffer-names)      
       )
 
     (cl-puthash "value" buffer-names response)
@@ -2274,7 +2281,7 @@ to the other"
 (defun vcode-fix-positions-in-message (message fix-for-who)
    (let ((pos) (range) (default-pos))
      (vr-log "--** vcode-fix-positions-in-message: invoked, fix-for-who=%S\n" fix-for-who) 
-     (dolist (position-field '("pos" "position" "start" "end")) 
+     (dolist (position-field '("pos" "position" "start" "end" "linenum")) 
        (if (is-in-hash position-field message)
 	   (progn
 	     (if (or (string= "pos" position-field) (string= "position" position-field))
@@ -2695,6 +2702,50 @@ change reports it sends to VCode.
     (vr-send-queued-changes)
 
     (vr-log "-- vcode-cmd-goto: exited\n")  
+  )
+)
+
+(defun vcode-cmd-goto-line (vcode-request)
+  (vr-log "-- vcode-cmd-goto-line: invoked\n")
+  (let ((mess-cont (nth 1 vcode-request))
+	(line-num) (go-where) (buff-name) (final-pos))
+    (setq line-num (cl-gethash "linenum" mess-cont))
+    (setq go-where (cl-gethash "where" mess-cont))
+    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (condition-case err     
+	(progn 
+	  (switch-to-buffer buff-name)
+	  (vr-log "--** vcode-cmd-goto-line: buff-name=%S, line-num=%S, go-where=%S\n" buff-name line-num go-where)
+	  (goto-line line-num)
+	  (vr-log "--** vcode-cmd-goto-line: after going there")
+	  (if (= -1 go-where) 
+	      (beginning-of-line)
+	    (end-of-line)
+	  )
+	  (vr-log "--** vcode-cmd-goto-line: after moving to extremity of line")
+	)
+      ('error (error "VR Error: could not go to line %S" line-num))
+    )
+
+    ;;;
+    ;;; Compute final position here instead of inside the 'condition-case 
+    ;;; statement. That way, if there were some errors, we can still
+    ;;; report where the cursor actually went (as opposed to where we 
+    ;;; expected it to go).
+    ;;;
+    (switch-to-buffer buff-name)
+    (vr-log "--** vcode-cmd-goto-line: after going there, (point)=%S, (vcode-convert-pos (point) 'vcode))=%S\n" (point) (vcode-convert-pos (point) 'vcode))
+    (setq final-pos (point))
+
+    ;;;
+    ;;; Cursor changes do not automatically get queued to the change queue.
+    ;;; Need to do so explicitely
+    ;;;
+    (vr-report-goto-select-change buff-name final-pos final-pos)
+
+    (vr-send-queued-changes)
+
+    (vr-log "-- vcode-cmd-goto-line: exited\n")  
   )
 )
 

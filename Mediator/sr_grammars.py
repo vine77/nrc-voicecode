@@ -323,20 +323,21 @@ class SelectWinGram(WinGram):
         """Sort the ranges from earliest to latest, and select the one
         which is closest to the cursor in the proper direction
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* verb -- verb used by the selection
+        *STR* verb -- verb used by the selection
 
         *STR* spoken_form -- The spoken form of the selected code.
 
-	*[(INT, INT)] -- list of ranges of offsets into buffer with the
-	best recognition score
-	"""
+        *[(INT, INT)] -- list of ranges of offsets into buffer with the
+        best recognition score
+        """
         
         #
         # Analyse the verb used by the user in the Select utterance
         #
 
+        debug.trace('SelectWinGram.find_closest', 'invoked')
         direction = None
         if re.search('previous', verb, 1):
             direction = -1

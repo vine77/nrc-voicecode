@@ -871,16 +871,16 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     def open_buffers_from_app(self):
         """retrieve a list of the names of open buffers from the
-	application.
+        application.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
         self.talk_msgr.send_mess('list_open_buffers')
         response = \
             self.talk_msgr.get_mess(expect=['list_open_buffers_resp'])

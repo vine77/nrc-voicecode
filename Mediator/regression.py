@@ -394,7 +394,7 @@ class PersistentConfigNewMediator(Object.Object):
         self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = self.symbol_match_dlg)
         editor = self.mediator().editor_instance(self.editor_name)
-        editor.init_for_test()
+        editor.init_for_test(save=-1)
         interp = self.mediator().interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names)
         commands.bind_methods(self.names)
