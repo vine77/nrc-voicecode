@@ -162,7 +162,7 @@ class WaxEdSimPane(wxPanel):
 	    ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
         self.top_and_bottom=top_and_bottom
-	flags = wxTE_MULTILINE 
+	flags = wxTE_MULTILINE | wxTE_NOHIDESEL 
 	cr_bug = 1
 	if sys.platform == 'win32':
 # allows text longer than 64K
@@ -172,7 +172,7 @@ class WaxEdSimPane(wxPanel):
 #	    cr_bug = 0
         editor =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
 #	    wxDefaultSize, flags)
-	    wxDefaultSize, wxTE_MULTILINE)
+	    wxDefaultSize, wxTE_MULTILINE | wxTE_NOHIDESEL)
         log =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
 	    wxDefaultSize, flags | wxTE_READONLY)
         self.editor = editor
@@ -242,7 +242,7 @@ class WaxEdSimPane(wxPanel):
 	*BOOL* -- true if editor window has the focus
 	"""
 #fudge so that recog mimic works from the command line.
-	return self.parent.is_active()
+#	return self.parent.is_active()
 
 	current = wxWindow_FindFocus()
 	if current.GetId() == self.editor.GetId():
@@ -293,6 +293,7 @@ class WaxEdSimPane(wxPanel):
 	try:
 	    sys.stdout = self.command_log
 	    sys.stderr = self.command_log
+	    self.editor.SetFocus()
 	    try:
 		if self.command_line_interp.runsource(command):
 		    sys.stderr.write('Error: incomplete input\n')
@@ -307,6 +308,7 @@ class WaxEdSimPane(wxPanel):
             # make sure to restore standard output and standard error,
 	    # so that errors in the GUI don't go unreported if the GUI
 	    # crashes
+	    self.command_line.SetFocus()
 	    sys.stdout = stdout
 	    sys.stderr = stderr
 	if self.command_space['quit_flag']:

@@ -100,7 +100,7 @@ class SimpleWaxPanel(wxPanel, Object.OwnerObject):
 	    wxDefaultSize)
 #	    parent.GetClientSize())
 
-	flags = wxTE_MULTILINE 
+	flags = wxTE_MULTILINE | wxTE_NOHIDESEL  
 	cr_bug = 1
 	if sys.platform == 'win32':
 # allows text longer than 64K
@@ -114,7 +114,7 @@ class SimpleWaxPanel(wxPanel, Object.OwnerObject):
         editor = wxTextCtrl(self, ID_EDITOR, "", wxDefaultPosition,
 #	    wxDefaultSize, flags)
 #	    self.GetClientSize(), wxTE_MULTILINE)
-	    wxDefaultSize, wxTE_MULTILINE)
+	    wxDefaultSize, wxTE_MULTILINE | wxTE_NOHIDESEL)
         self.editor = editor
 # because we put the editor in a panel, we need a sizer
 	vbox = wxBoxSizer(wxVERTICAL)

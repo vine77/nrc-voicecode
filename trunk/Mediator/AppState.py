@@ -213,6 +213,7 @@ class AS_UpdOpenBuffer(AS_Update):
                             {})
         
     def apply(self, on_app):
+#	print 'open buffer callback'
         on_app.open_buffer_cbk(self.descr['buff_name'])
 
         
@@ -1611,7 +1612,11 @@ class AppState(OwnerObject):
 
 	*none*
 	"""
+	debug.trace('AppState.close_app_cbk', 
+	    'AppState received close app callback')
 	if self.current_manager() and self.name():
+	    debug.trace('AppState.close_app_cbk', 
+		'sending callback to manager')
 	    self.current_manager().close_app_cbk(self.name(), 
 		unexpected = unexpected)
 
@@ -1730,6 +1735,8 @@ class AppState(OwnerObject):
         #
         # First make sure we don't already have a buffer by that name
         #
+	debug.trace('AppState.open_buffer_cbk', 
+	    'AppState received open buffer callback')
 	if self.current_manager() and self.name():
 	    self.current_manager().open_buffer_cbk(self.name(), buff_name)
         if not self.open_buffers.has_key(buff_name):
