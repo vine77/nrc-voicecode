@@ -400,7 +400,8 @@ class NewMediatorObject(Object.OwnerObject):
 
     def define_config_functions(self, names, exclude = None,
             reset = 0,
-            symdict_pickle_fname = None, symbol_match_dlg = None):
+            symdict_pickle_fname = None, symbol_match_dlg = None, 
+            add_sr_entries_for_LSAs_and_CSCs = 1):
         """Adds the appropriate configuration functions to the  given
         namespace, to allow the configuration file to access the
         appropriate mediator methods.  These functions are generally
@@ -438,12 +439,14 @@ class NewMediatorObject(Object.OwnerObject):
         self.before_interp_config(names, ignore = 'interp' in exclude,
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = sym_dlg)
+            symbol_match_dlg = sym_dlg, 
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
 
 
     def _configure_from_file(self, exclude = None, config_file = None,
         reset = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None):
+        symdict_pickle_fname = None, symbol_match_dlg = None,
+        add_sr_entries_for_LSAs_and_CSCs = 1):
         """private method used by configure and reconfigure to perform
          actual configuration.
 
@@ -479,7 +482,8 @@ class NewMediatorObject(Object.OwnerObject):
         self.define_config_functions(config_dict, exclude,
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = sym_dlg)
+            symbol_match_dlg = sym_dlg,
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
         file = config_file
         if not file:
             file = vc_globals.default_config_file
@@ -527,7 +531,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_prefix'] = self.add_app_prefix
 
     def before_interp_config(self, config_dict, reset = 0, ignore = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None):
+        symdict_pickle_fname = None, symbol_match_dlg = None, 
+        add_sr_entries_for_LSAs_and_CSCs = 1):
         """called by configure to reset or replace the current interpreter 
         (unless reset is false), and add the functions pertaining to
         interpreter configuration to the configuration dictionary.  If
@@ -561,6 +566,8 @@ class NewMediatorObject(Object.OwnerObject):
                sym_dlg = symbol_match_dlg
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
                 symbol_match_dlg = sym_dlg)
+            self.interp.add_sr_entries_for_LSAs_and_CSCs = \
+                add_sr_entries_for_LSAs_and_CSCs
         if ignore:
             config_dict['add_csc'] = do_nothing
             config_dict['add_lsa'] = do_nothing
@@ -595,19 +602,23 @@ class NewMediatorObject(Object.OwnerObject):
         
         ..[CmdInterp] file:///./CmdInterp.CmdInterp.html"""
         
-        self.interp.add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs
+#        self.interp.add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs
+        old_add_entries = self.interp.add_sr_entries_for_LSAs_and_CSCs
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
         self.reconfigure(exclude = ['editors'], config_file =
             config_file, reset = 1, 
             symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = sym_dlg)
+            symbol_match_dlg = sym_dlg, 
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
         self.reset_results_mgr()
+        self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
 
     def reconfigure(self, exclude = None, config_file=None,
         reset = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None):
+        symdict_pickle_fname = None, symbol_match_dlg = None,
+        add_sr_entries_for_LSAs_and_CSCs = 1):
         """reconfigure an existing mediator object.  Unlike configure,
         reconfigure may be called while the mediator object is already
         running.  By default, reconfigure will use the same file used by
@@ -648,7 +659,8 @@ class NewMediatorObject(Object.OwnerObject):
         self._configure_from_file(exclude = exclude, config_file = file,
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = sym_dlg)
+            symbol_match_dlg = sym_dlg, 
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
