@@ -51,7 +51,7 @@ std_small_numbers = std_US_small_numbers
 #
 symbol_files = []
 
-py_std_sym = os.path.join(vc_globals.config, 'py_std_sym.py')
+py_std_sym = os.path.join(vc_globals.test_data, 'test_py_std_sym.py')
 
 symbol_files.append(py_std_sym)
 

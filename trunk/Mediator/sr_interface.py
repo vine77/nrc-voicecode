@@ -213,8 +213,10 @@ def is_user_marked():
     Note: this function is used to detect when standard symbol files should 
     be re-scanned, because a fresh VoiceCode user file has been created
     """
-# don't want to process the word through spoken_written_form
-    if natlink.getWordInfo(marking_word) is None:
+    #
+    # Note: getWordInfo doesn't process the word through spoken_written_form
+    # anymore.
+    if getWordInfo(marking_word) is None:
         return 0
     return 1
 
@@ -261,13 +263,6 @@ def getWordInfo(word, *rest):
     #
     # First, fix the written form of the word
     #
-#    print "word info for raw [%s]" % word
-    spoken, written = spoken_written_form(word)
-#    print "word info for spoken, written [%s, %s]" % (spoken, written)
-    word = vocabulary_entry(spoken, written, clean_written=1)
-#    trace('sr_interface.getWordInfo', 'reformatted word=%s' % word)
-
-#    print "word info for processed [%s]" % word
     try:
        if len(rest) == 0:
            answer = natlink.getWordInfo(word)
@@ -278,7 +273,6 @@ def getWordInfo(word, *rest):
        # NatSpeak
        answer = None       
 
-#    trace('sr_interface.getWordInfo', 'answer is %s' % answer)
     return answer
 
 def word_exists(word):
@@ -288,7 +282,8 @@ def word_exists(word):
 
     *STR* word -- the word
     """
-    if natlink.getWordInfo(word) is None:
+    word_info = getWordInfo(word)    
+    if word_info  is None:    
         return 0
     return 1
 
