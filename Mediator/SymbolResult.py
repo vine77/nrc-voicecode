@@ -70,8 +70,8 @@ class SymbolResult(Object):
         *UtteranceInterpretation in_utter_interp = None* -- Utterance 
         interpretation in which that symbol was heard.
         
-        *BOOL was_reformatted=false* -- indicates wheter or not that symbol result
-        was reformatted by the user through a symbol reformatting dialog.
+        *STR reformatted_to=None* -- alternate form that this symbol was reformatted
+        to.
     
         *[STR] alternate_forms=[]* -- list of alternate formats for the symbol.
         These could be homophonic symbols, or different ways of formatting
@@ -90,7 +90,7 @@ class SymbolResult(Object):
                              'forbidden': forbidden,
                              'was_new': new_symbol,
                              'in_utter_interp': in_utter_interp,
-                             'was_reformatted': 0,
+                             'reformatted_to': None,
                              'alternate_forms': []
                             }, args)
        
@@ -160,6 +160,17 @@ class SymbolResult(Object):
         forbidden matches, or None if none have been generated yet
         """
         return self.forbidden
+ 
+    def reformat_to(self, alt_form):
+       """Changes the written form of the symbol to an alternate form.
+       
+       Note: This does not reinterpret the symbol.
+       
+       **INPUTS**
+       
+       *STR alt_form* -- the alternate form.
+       """
+       self.reformatted_to = alt_form
         
     def cleanup(self):
         self.in_utter_interp = None

@@ -1776,7 +1776,9 @@ class ReformatRecentSymbols(DlgModelViewWX):
         
     def do_choose(self, nth):
         return self.view().do_choose(nth)
-             
+                          
+    def do_cancel(self):
+        return self.view().do_cancel()
        
     def selected_symbol_index(self):
        """returns index (in the list of displayed symbols) of the currently selected
@@ -2072,7 +2074,9 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
        symbol."""
        return self.recent.GetNextSelected(-1)
 
-
+    def do_cancel(self):
+       self.model().on_cancel()
+       
 class ReformatFromRecentWX(DlgModelViewWX):
     """model-view dialog for reformatting one dictated symbol.
 
@@ -2128,6 +2132,28 @@ class ReformatFromRecentWX(DlgModelViewWX):
        form = self.symbol.alternate_forms[nth]
        self.view().set_alternate_form(form)
 
+    def do_choose_nth_form(self, nth):
+       self.view().do_choose_nth_form(nth)
+              
+    def on_choose_alternate_form(self, nth):
+       self.on_select_alternate_form(nth)
+       self.symbol.reformat_to(self.symbol.alternate_forms[nth])
+       
+    def do_cancel(self):
+       self.view().do_cancel()
+       
+    def on_cancel(self):
+       self.symbol.reformat_to(None)         
+
+    def on_ok(self):
+       self.symbol.reformat_to(self.chosen_form())
+       
+    def do_ok(self):
+       self.view().do_ok()
+       
+    def do_type_form(self, form):
+       self.view().do_type_form(form)
+       
 class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, 
                               Object.ChildObject):
     """dialog box for reformatting a single symbol.
@@ -2229,7 +2255,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self, self.on_char)
         
-        EVT_LIST_ITEM_ACTIVATED(self.formats_pick_list, self.formats_pick_list.GetId(), self.on_choose)
+        EVT_LIST_ITEM_ACTIVATED(self.formats_pick_list, self.formats_pick_list.GetId(), self.on_choose_alternate_form)
         self.SetAutoLayout(true)
         self.SetSizer(main_sizer)
         self.Layout()
@@ -2327,7 +2353,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        debug.not_implemented('ReformatFromRecentViewWX.on_double')
 
     def on_ok(self):
-       debug.not_implemented('ReformatFromRecentViewWX.on_ok')
+       self.model().on_ok()
        
     def on_activate(self, event):
        debug.not_implemented('ReformatFromRecentViewWX.on_activate')
@@ -2335,8 +2361,8 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
     def on_char(self):
        debug.not_implemented('ReformatFromRecentViewWX.on_char')
 
-    def on_choose(self, event):
-       debug.not_implemented('ReformatFromRecentViewWX.on_choose')
+    def on_choose_alternate_form(self, event):
+       self.model().on_choose_alternate_form(event.GetIndex())
 
     def displayed_list_of_alternate_forms(self):
        return self.formats_pick_list.GetColumnContents(1)
@@ -2346,11 +2372,26 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        evt = wxWindowsWithHelpers.MockListSelectionEvent(nth)
        return self.on_select_alternate_form(evt)
 
+    def do_choose_nth_form(self, nth):
+       self.formats_pick_list.Select(nth)
+       evt = wxWindowsWithHelpers.MockListSelectionEvent(nth)
+       return self.on_choose_alternate_form(evt)
+
+
     def on_select_alternate_form(self, evt):
        self.model().on_select_alternate_form(evt.GetIndex())
        
     def set_alternate_form(self, written_form):
        self.txt_chosen_form.SetValue(written_form)
+       
+    def do_cancel(self):
+       self.model().on_cancel()
+       
+    def do_ok(self):
+       self.model().on_ok()
+       
+    def do_type_form(self, form):
+       self.set_alternate_form(form)
               
     def cleanup(self):
        self.Destroy()
