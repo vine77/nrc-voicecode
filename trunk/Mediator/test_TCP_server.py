@@ -3,14 +3,17 @@ communicates with VoiceCode through a TCP/IP messaging protocol.
 """
 
 from socket import *
-import threading
-import EdSim, messaging, Object, SourceBuffEdSim
+import os, natlink, sys, threading
+import EdSim, mediator, messaging, Object, SourceBuffEdSim, sim_commands, sr_interface
 
 VC_LISTENER_PORT = 45770
 VC_TALKER_PORT = 45771
 
 
 HOST = gethostname()
+
+
+
 
 def create_tcp_mess(sock):
     """Creates a TCP/IP messenger
@@ -180,7 +183,7 @@ class ListenThread(threading.Thread, Object.Object):
         """
 
         while 1:
-            print '..  polling VoiceCode'
+#            print '--  ListenThread.run: polling VoiceCode'
             try:
                 request = self.xed.vc_talk_msgr.get_mess(expect=['cur_pos', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'start_responding', 'stop_responding'])
                 
@@ -369,14 +372,38 @@ class ExternalEdSim(Object.Object):
         
         *none* -- 
         """
+
+        sr_interface.connect()
+
+        # define some useful local variables
+        home = os.environ['VCODE_HOME']
+        sim_commands.command_space['home'] = home
+        sim_commands.command_space['testdata'] = \
+                  os.path.join(home, 'Data', 'TestData')
+
+        sim_commands.help()
+
+# This needs to be rewritten with select() so that it is non-blocking
+#          while not sim_commands.quit_flag:
+#              cmd = raw_input('Command> ')
+#              mediator.execute_command(cmd)            
         
-        pass
+        sr_interface.disconnect()
+
+        print '-- start_shell: disconnected'
+
+        sys.exit()
 
 
 if __name__ == '__main__':
 
+    sr_interface.connect()
+    window = natlink.getCurrentModule()[2]
+    print '-- __main__: window=%s' % window
+    sr_interface.disconnect()
+
     an_editor = ExternalEdSim()
     an_editor.ed.open_file('blah.py')
     an_editor.connect()
-    an_editor.start_shell()
+#    an_editor.start_shell()
 

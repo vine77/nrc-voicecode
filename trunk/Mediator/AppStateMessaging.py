@@ -208,7 +208,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         *none* -- 
         """
-        
+        print '-- AppStateMessaging.listen_one_transation: called'
         mess = self.listen_msgr.get_mess(expect=['update'])
         mess_name = mess[0]
         mess_cont = mess[1]

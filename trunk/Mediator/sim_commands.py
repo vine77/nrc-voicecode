@@ -299,7 +299,9 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
             print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
             time.sleep(sleep_before_recognitionMimic)
             
+#        print '-- sim_commands.say: invoking recognitionMimic'
         natlink.recognitionMimic(words)
+#        print '-- sim_commands.say: DONE invoking recognitionMimic'        
         
 	if gui_sim:
 	    the_mediator.mixed_grammar.deactivate()

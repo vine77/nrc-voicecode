@@ -7,50 +7,9 @@ To do before 1st release
 Communication protocol
 ----------------------
 
-- Create a server that listens for connections and generates an
-  AppStateMessaging instance in response to them.
-
-- Create an AppStateMessaging class that will use a Messenger instance
-  to communicate with an external editor
-
-- Add SourceBuff.newline_is() method. This will return a list of
-  alternative forms of newline that the editor currently recognises in
-  the given buffer.
-
-  For default implementation will be to return a value
-  AppState.supported_newlines, which the editor will have sent during handshake
-
-- Add SourceBuff.preferred_newline() method. Will return the editor's
-  preferred form for newline in this buffer. Default implementation is
-  to return SourceBuff.newline_is()[0].
-
-- SourceBuff.insert() and SourceBuff.search_for() must substitute \n
-  by the appropriate \n convention in the string they are
-  inserting/searchin for.
-
 - Add a dummy authentification sequence in the handshake part of the
   protocol. For now, this will be ignored, but later on we (i.e. Eric
   Johanssen ;-) can add a true authentification implementation.
-
-- Add an initialisation turn in handshake. The content of this
-  initialisation turn will depend on the editor. It will alow
-  developpers of editor wrapper to support some level of user
-  customisation from the editor end (as opposed to the VoiceCode end).
-
-- During handshake, Editor should tell VoiceCode if it knows how to
-  automatically indent code, or if VoiceCode should do the indentation
-  itself.
-
-  Also, need to merge the funcitonality of SourceBuffIndent into
-  SourceBuff. Basically, SourceBuff indentation methods
-  (insert_indent, indent, etc...) will either use the SourceBuffIndent
-  method or forward the event to the external editor, depending on the
-  value that the external editor provided at handshake time.
-
-  Then, get rid of AppStateIndent.
-
-- During handshake, Editor will also tell VoiceCode about various
-  things it supports (e.g. bidirectionnal selection).
 
 - Make sure that David invokes AppState.recog_start() in the global
   got_begin() callback.
@@ -58,9 +17,11 @@ Communication protocol
 - Implement AppState.recog_indicator so it does something to Dragon's
   recognition indicator.
 
-- Test TCP connection using test_TCP_link.py
-
 - Is SourceBuffIndent and EdSimIndent still needed?
+
+- Implement an XML based messaging protocol. It will be easier to
+  handle at the editor end than Alain's protocol, because there are
+  tons of XML libraries in different langauges out there.
 
 Regression testing
 ------------------
@@ -114,7 +75,6 @@ After reboot I do the following:
 result is displayed
 say(['boost', 'slash', 'graph', 'slash', 'graph', 'traits', '.\\dot', 'H.',
 'P.', 'P.'])
-
 
 
 Performance
@@ -481,11 +441,6 @@ given as arguments be accessible from the mediator).
 Test thorgoughly
 ----------------
 
-GNU copyright
--------------
-
-Put it in all source files.
-
 
 Documentation
 -------------
@@ -509,16 +464,6 @@ Error correction
 ----------------
 
 Can't do without it. David Fox is working on it.
-
-
-Text mode
----------
-
--- Alain
-
-Need to be able to turn CSC interpretation off so that you can dictate
-comments and quoted strings. Maybe that mode could switch on/off
-automatically depending on the current mode.
 
 
 Basic LSAs and CSCs for a few languages
@@ -551,7 +496,7 @@ Select Pseudo-code
      (before|after) is not specied, it would default to say after. If
      (previous|next) is not specified, it would go to the closest one.
 
-  select from (before|after)* (previous|next)* X up to (before|after)*
+  select from (before|after)* (previous|next)* X through (before|after)*
      (previous|next)* Y selects code from X up to Y. Both of X, Y can
      be optionally qualified as above by (previous|next) and
      (before|after).
@@ -566,6 +511,7 @@ that done automatically by VDct?
 If we start using word properties, then we don't need the hack where
 addWord adds redundant spoken form for words that start/end with
 blanks.
+
 
 Symbol compilation
 ------------------
