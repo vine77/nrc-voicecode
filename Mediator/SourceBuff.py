@@ -43,14 +43,16 @@ class SourceBuff(Object):
     
     *AppState app* -- application object containing the buffer
 
-    (STR, INT, INT, INT) *last_search* -- Remember the
-    details of the last regepx search that was done with method
-    *search_for*, so that if the user repeats the same search, we
-    don't end up returning the same occurence over and over. The first
-    3 entries of the tuple correspond to the value that were passed to
-    *search_for* for the following arguments: *regexp*, *direction*,
-    *where*. The last entry correspond to the position where cursor
-    was put after last search.
+    (STR, INT, INT, INT) *last_search* -- Remember the details of the
+    last search or selection that was done with method *search_for* or
+    with *Select Pseudocode*. This is so that if the user repeats the
+    same search or selection, we don't end up returning the same
+    occurence over and over.
+
+    The first 3 entries of the tuple correspond to the value of
+    *regexp*, *direction*,
+    and *where*. The last entry correspond to the position where
+    cursor was put after last search.
     
 
     CLASS ATTRIBUTES**
@@ -126,7 +128,7 @@ class SourceBuff(Object):
 
         **OUTPUTS**
         
-        *INT* distance -- distnace between the two regions of text
+        *INT* distance -- distance between the two regions of text
         """
 
         distance = min(abs(region1_start - region2_start), abs(region1_start - region2_end), abs(region1_end - region2_start), abs(region1_end - region2_end))
@@ -263,6 +265,7 @@ class SourceBuff(Object):
         
         *INT* -- the distance
         """
+#        print '-- SourceBuff.distance_to_selection: start=%s, *opt_end=%s' % (start, opt_end)
         if len(opt_end) > 0:
             end = opt_end[0]
         else:
@@ -281,6 +284,7 @@ class SourceBuff(Object):
 	if start2 == None or end2 == None:
             start2 = self.cur_pos()
             end2 = start2
+#        print '-- SourceBuff.distance_to_selection: start=%s, end=%s, start2=%s, end2=%s' % (start, end, start2, end2)
         return self.region_distance(start, end, start2, end2)
         
     def get_visible(self):
@@ -547,9 +551,7 @@ class SourceBuff(Object):
            otherwise move it before
 
            Returns *None* if no occurence was found. Otherwise,
-           returns a match object.
-           
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
+           returns a match object."""
 
 #        print '-- SourceBuff.search_for: regexp=%s, direction=%s, num=%s, where=%s' % (regexp, direction, num, where)
         success = None
@@ -570,37 +572,13 @@ class SourceBuff(Object):
 #        print '-- SourceBuff.search_for: all_matches_pos=%s' % all_matches_pos
 
         #
-        # Look in the list of matches for the one closest to the cursor
-        # in the right direction
+        # Look in the list of matches for the num'th match closest to
+        # the cursor in the right direction
         #
-        closest_match = None
-        for ii in range(len(all_matches_pos)):
-#            print '-- SourceBuff.search_for: closest_match=%s, self.cur_pos()=%s, ii=%s, all_matches_pos[ii][0]=%s, all_matches_pos[ii][1]=%s' % (closest_match, self.cur_pos(), ii, all_matches_pos[ii][0], all_matches_pos[ii][1])
-
-            if direction < 0:
-                if all_matches_pos[ii][0] >= self.cur_pos():
-                    #
-                    # Searching backward but we have passed cursor.
-                    #
-                    break
-                else:
-                    #
-                    # Searching backward and this is closest occurence
-                    # before cursor yet.
-                    #
-                    if not self.same_as_previous_search(regexp, direction,
-                                                   where, all_matches_pos[ii]):
-                        closest_match = ii
-            elif direction > 0:
-                if all_matches_pos[ii][0] >= self.cur_pos():
-                    #
-                    # Searching forward and we have just passed cursor. So this
-                    # is the closest occurence after cursor
-                    #
-                    if not self.same_as_previous_search(regexp, direction,
-                                                   where, all_matches_pos[ii]):
-                        closest_match = ii
-                        break
+        closest_match = self.closest_occurence_to_cursor(all_matches_pos,
+                                                         regexp=regexp,
+                                                         direction=direction,
+                                                         where=where)
 
 #        print '-- SourceBuff.search_for: closest_match=%s' % closest_match
         new_cur_pos = None
@@ -623,7 +601,8 @@ class SourceBuff(Object):
 #        print '-- SourceBuff.search_for: new_cur_pos=%s' % new_cur_pos
 
         #
-        # Log the search
+        # Log the search so we don't keep bringing back same occurence
+        # if the user repeats the same search.
         #
         self.last_search = (regexp, direction, where, new_cur_pos)
         
@@ -636,6 +615,91 @@ class SourceBuff(Object):
         return success
 
 
+    def closest_occurence_to_cursor(self, occurences, direction=None, regexp=None, where=1):
+        
+        """Determines which occurence of a search pattern (or a
+        *Select Pseudocode* pattern) is closest to the current cursor
+        location.
+
+        If the closest occurence is the one that was previously found for the
+        same search or *Select Pseudocode* operation, take next closest one.
+
+        **INPUTS**
+
+        *(INT, INT)* occurences -- List of occurences (start and end positions).
+        Assumed that they are sorted in increasing order of their start
+        position.
+
+        *INT* direction -- If negative, only consider occurences that are before
+        the cursor. If positive, only consider occurences that are past the
+        cursor. If *None*, consider all occurences whether before or after cursor.
+
+        *STR* regexp -- The regular expression used to generate the
+         list of occurences.
+         
+
+        **OUTPUTS**
+        
+        *INT* closest_index -- Index in *occurences* of the closest
+         occurence. If no such occurence, returns *None*"""
+
+#        print '-- SourceBuff.closest_occurence_to_cursor: occurences=%s, direction=%s, regexp=%s' % (repr(occurences), direction, regexp)
+
+        closest_index = None
+        
+        #
+        # Look in the list of occurences for the one closest to the cursor
+        # in the right direction
+        #
+        shortest_distance = None
+        for ii in range(len(occurences)):
+#            print '-- SourceBuff.closest_occurence_to_cursor: ii=%s, closest_index=%s, self.cur_pos()=%s, occurences[ii][0]=%s, occurences[ii][1]=%s' % (ii, closest_index, self.cur_pos(), occurences[ii][0], occurences[ii][1])
+
+            if direction == None:
+                #
+                # Don't care if closest occurence is before or after cursor
+                #
+                distance = self.region_distance(occurences[ii][0], occurences[ii][1], self.cur_pos(), self.cur_pos())
+                if ((shortest_distance == None or distance < shortest_distance)
+                    and not self.same_as_previous_search(regexp, direction,
+                                                         where, occurences[ii])):
+                    shortest_distance = distance
+                    closest_index = ii
+            elif direction < 0:
+                #
+                # Looking for closest occurence before cursor ...
+                #
+                if occurences[ii][0] >= self.cur_pos():
+                    #
+                    # ... but we have passed cursor.
+                    #
+                    break
+                else:
+                    #
+                    # ... and we haven't passed the cursor. So this is
+                    # closest occurence before cursor yet.
+                    #
+                    if not self.same_as_previous_search(regexp, direction,
+                                                   where, occurences[ii]):
+                        closest_index = ii
+            else:
+                #
+                # Looking for closest occurence after cursor ...
+                #                
+                if occurences[ii][0] >= self.cur_pos():
+                    #
+                    # ... and we have just passed cursor. So this
+                    # is the closest occurence after cursor
+                    #
+                    if not self.same_as_previous_search(regexp, direction,
+                                                   where, occurences[ii]):
+                        closest_index = ii
+                        break
+
+#        print '-- SourceBuff.closest_occurence_to_cursor: returning closest_index=%s' % closest_index                
+        return closest_index
+
+
     def same_as_previous_search(self, regexp, direction, where, match):
         
         """Determines whether a particular match found by *search_for* is the
@@ -643,7 +707,9 @@ class SourceBuff(Object):
         
         **INPUTS**
         
-        *STR* regexp -- The regexp for current *search_for*
+        *STR* regexp -- The regexp for current [search_for]. If
+         *None*, then we are not currently doint a [search_for]
+         operation.
         
         *INT* direction -- Direction of the search 
         
@@ -656,17 +722,98 @@ class SourceBuff(Object):
         
         *BOOL* -- true if this is the same match as last invocation of
         *search_for*
-        """
 
-#        print '-- SourceBuff.same_as_previous_search: self.last_search=%s' % repr(self.last_search)
+        ..[search_for] file:///./SourceBuff.SourceBuff.html#search_for"""
+
         answer = 0
-        if self.last_search != None:
-            if (regexp, direction, where) == self.last_search[0:3]:
-                prev_search_pos = self.last_search[3]
-                if where < 0 and match[0] == prev_search_pos or \
-                   where > 0 and match[1] == prev_search_pos:
-                    answer = 1
-#        print '-- SourceBuff.same_as_previous_search: returning answer=%s' % answer
+        if self.last_search != None and (regexp, direction, where, match) == self.last_search[0:4]:
+                answer = 1
+                    
         return answer
           
+
+
+    def log_search(self, regexp, direction, where, match):
+        """Logs the result of most recent search or selection operation, so
+        that we know not to return the same match if the user repeats it
         
+        **INPUTS**
+        
+        *STR* regexp -- Regular expreesion used for the search.
+        
+        *BOOL* direction -- If negative, then we were looking
+         backwards. Forward if positive. If *None*, then we were doing
+         a *Select Pseudocode* operation and we didn't care about
+         direction.
+        
+        *INT* where -- If positive, then we wanted to put cursor after
+         occurence. Before occurence if negative.
+        
+        *(INT, INT)* match -- Start and end position of the match that was
+        used.
+        
+
+        **OUTPUTS**
+        
+        *none* --
+        """
+        self.last_search = (regexp, direction, where, match)
+
+    def __getitem__(self, key):
+        """Get a character of the buffer using the buff[i] syntax.
+        
+        **INPUTS**
+        
+        *INT* key -- The index of the character to return
+        
+        **OUTPUTS**
+        
+        *CHAR* -- the character at position *key*
+        """
+#        print '-- SourceBuff.__getitem__: caled'
+        return self.content()[key]
+
+    def __setitem__(self, key, value):
+        """Set a character of the buffer using the buff[i] syntax.
+        
+        **INPUTS**
+        
+        *INT* key -- The index of the character to return
+
+        *STR* value -- The string to insert at position *key*
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+#        print '-- SourceBuff.__setitem__: caled'        
+        self.insert(value, (key, key))
+
+    def __getslice__(self, start, end):
+        """Returns a slice of the buffer using the buff[start:end] syntax.
+        
+        **INPUTS**
+        
+        *INT* start, end -- The start and end indices of the slice
+
+        **OUTPUTS**
+        
+        *STR* -- the slice from *start* to *end*
+        """
+#        print '-- SourceBuff.__setitem__: called'        
+        return self.content()[start:end]
+
+    def __getslice__(self, start, end, value):
+        """Sets slice of the buffer using the buff[start:end] = value syntax.
+        
+        **INPUTS**
+        
+        *INT* start, end -- The start and end indices of the slice to be set
+
+        *STR* value -- The string to be inserted in place of the slice.
+
+        **OUTPUTS**
+        
+        """
+#        print '-- SourceBuff.__setitem__: called'        
+        self.insert(value, (start,end))
