@@ -791,11 +791,18 @@ standard_symbols_in([vc_globals.config + os.sep + 'py_std_sym.py'])
 # Define the native syntax of Python
 #
 define_language('python',
-                LangDef(regexp_symbol='[a-zA-Z_][a-zA-Z0-9_]*',
+                # Note: Have to be careful about the start of the symbol so
+                #       it doesn't match:
+                #           - strings that start with a number
+                #           - strings that only contain _ and no alphanums like "__" 
+                #             (not likely to appear in a python file, but the
+                #             user could type it by mistake)
+                #
+                LangDef(regexp_symbol='([a-zA-Z]|_+[a-zA-Z])[a-zA-Z0-9_]*',
                         regexps_no_symbols=['#[^\n]*\n', '"""[\s\S]*?"""',
                                             '"([^"]|\\")*?"',
-                                            '\'([^\']|\\\')*?\'']))
 
+                                            '\'([^\']|\\\')*?\'']))
 #
 # CSCs and LSAs specific to Python
 #

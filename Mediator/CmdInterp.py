@@ -984,7 +984,6 @@ class CmdInterp(OwnerObject):
         """
 
         trace('CmdInterp.chop_symbols', 'command=%s' % command)
-#        print '-- CmdInterp.chop_symbols: command=%s' % command
 #        if not app.translation_is_off:
         return self.chop_construct(command, CmdInterp.is_spoken_symbol, app)
 #        else:
@@ -1415,6 +1414,9 @@ class CmdInterp(OwnerObject):
         self.known_symbols.add_abbreviation(abbreviation, expansions,
             user_added = user_added)
 
+    def clear_standard_symbols_file_list(self):
+        """Clears the list of files defining standard symbols"""
+        self.known_symbols.clear_standard_symbols_file_list()
 
     def standard_symbols_in(self, file_list):
         """Specify source files defining standard symbols"""

@@ -38,6 +38,7 @@ import Object, SymDict, test_pseudo_python
 import util, unit_testing, vc_globals
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
+import test_helpers
 
 from actions_gen import *
 from actions_C_Cpp import *
@@ -47,6 +48,8 @@ from cont_gen import *
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
 small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
+large_buff_py = vc_globals.test_data + os.sep + 'large_buff.py'
+unusual_symbols_py = vc_globals.test_data + os.sep + 'unusual_symbols.py'
 
 # use this only for foreground tests:
 foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
@@ -58,26 +61,6 @@ foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
 ##############################################################################
 # Testing SymDict
 ##############################################################################
-
-def compilation_test(interp, source):
-    
-    """Does a compilation test on file *source*        
-    """
-    print '*** Compiling symbols from file: %s ***' % util.within_VCode(source)
-    interp.cleanup_dictionary()
-    interp.parse_symbols_from_file(source)
-    print '\n\nParsed symbols are: '
-    interp.print_symbols()
-    print 'Unresolved abbreviations are:'
-    unresolved = interp.peek_at_unresolved()
-    sorted_unresolved = unresolved.keys()
-    sorted_unresolved.sort()
-    for an_abbreviation in sorted_unresolved:
-        symbol_list = unresolved[an_abbreviation].keys()
-        symbol_list.sort()
-        print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
-        
-    print '\n*** End of compilation test ***\n'
 
 
 def accept_symbol_match_test(interp, source, symbol_matches):
@@ -167,24 +150,28 @@ def symbol_match_test(interp, sources, pseudo_symbols):
 
         print '\n*** End of Pseudo Symbol Match test ***'
 
+    
         
 def test_SymDict():
     """Self test for SymDict"""
 
+    global small_buff_c, large_buff_py
 
     temp_config = temp_factory.new_config()
     interp = temp_config.interpreter() 
-    compilation_test(interp, vc_globals.test_data + os.sep + 'small_buff.c')
-    compilation_test(interp, vc_globals.test_data + os.sep + 'large_buff.py')
+    test_helpers.compilation_test(interp, small_buff_c)
+    test_helpers.compilation_test(interp, large_buff_py)
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
-    symbol_match_test(interp, [vc_globals.test_data + os.sep + 'large_buff.py'], pseudo_symbols)
+    symbol_match_test(interp, [large_buff_py], pseudo_symbols)
 
     a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])    
-    accept_symbol_match_test(interp, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
+    accept_symbol_match_test(interp, small_buff_c, [a_match])
 
-    temp_config.quit()    
+    temp_config.quit()
 
 add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
+
+
 
 
 ##############################################################################
@@ -195,6 +182,8 @@ add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
 
 def test_CmdInterp_mediator(temp_config):
+
+    global small_buff_c, small_buff_py, large_buff_py
 
 # I don't think this is necessary (or correct -- we do want the mediator
 # to go out of scope) but for regression testing purposes, I'm first
@@ -208,7 +197,7 @@ def test_CmdInterp_mediator(temp_config):
     a_mediator.add_csc(acmd)
     acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
     a_mediator.add_csc(acmd)    
-    app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
+    app.open_file(small_buff_c)
     app.goto(41)
     print '\n\n>>> Testing command interpreter\n\n'
     print '\n>>> Interpreting in a C buffer'    
@@ -235,7 +224,7 @@ def test_CmdInterp_mediator(temp_config):
     app.print_buff()
     
 
-    app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    app.open_file(small_buff_py)
     app.goto(43)
     app.curr_buffer().language = 'python'
     print '\n>>> Interpreting in a Python buffer'    
@@ -271,7 +260,9 @@ add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
 def test_EdSim():
     """Self test for EdSim.py."""
 
-    test_buff = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Data' + os.sep + 'TestData' + os.sep + 'small_buff.c')
+    global small_buff_c, small_buff_py, large_buff_py
+    
+    test_buff = small_buff_c
     sim = EdSim.EdSim()
     test_buff2 = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Data' + os.sep + 'TestData' + os.sep + 'small_buff2.c')
 
@@ -441,10 +432,13 @@ def test_say(utterance, user_input=None, never_bypass_sr_recog=0):
     
 
 def test_mediator_console():
+
+    global small_buff_c, small_buff_py, large_buff_py
+    
     testing.init_simulator_regression()
     test_command("""clear_symbols()    """)
     test_command("""open_file('blah.c')""")
-    file = vc_globals.test_data + os.sep + 'small_buff.c'
+    file = small_buff_c
     commands.print_abbreviations()    
     test_command("""compile_symbols([r'""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
@@ -660,11 +654,14 @@ add_test('v7_select', test_v7_select, desc='testing oddities in select pseudocod
 ##############################################################################
 
 def test_auto_add_abbrevs():
+
+    global small_buff_c, small_buff_py, large_buff_py
+    
     testing.init_simulator_regression()
     
     test_command("""open_file('blah.c')""")
     print repr(vc_globals.test_data)
-    file = vc_globals.test_data + os.sep + 'small_buff.c'    
+    file = small_buff_c
     test_command("""compile_symbols([r'""" + file + """'])""")
     test_command("""print_abbreviations(1)""")    
 
@@ -705,10 +702,54 @@ add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automat
 
 
 ##############################################################################
+# Testing compilation and dictation of unusual symbols
+##############################################################################
+
+
+# Based on number_dictation
+def test_number_dictation_COPY():
+   testing.init_simulator_regression()
+   commands.open_file('blah.py')   
+   commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'], echo_cmd=1)
+   commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+   commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+   commands.say(['select', '04\\oh four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '0\\zero', '.\\point', 'oh', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
+
+
+def test_unusual_symbols():
+
+   global unusual_symbols_py
+
+   testing.init_simulator_regression()
+   test_helpers.compilation_test(testing.mediator().interpreter(), unusual_symbols_py)
+   
+   commands.open_file('blah.py')      
+   
+   print "Next utterance should not match short symbol 'se'"
+   commands.say(['software', 'engineering', 'comma'], echo_cmd=1, user_input="1\n")
+   
+   print "Next utterance should match non-separable symbol 'openlog'"
+   commands.say(['open', 'log'], echo_cmd=1, user_input="1\n")
+   
+#   print "Trying to select 'openlog'"
+#   try:
+#      commands.say(['select', 'openlog\\open log'], echo_cmd=1, never_bypass_sr=1)
+#   except:
+#      print "Select of 'openlog' failed."
+
+
+
+add_test('unusual_symbols', test_unusual_symbols, desc='compilation and dictation of unusual symbols')
+
+
+##############################################################################
 # Testing persistence between VoiceCode sessions
 ##############################################################################
 
 def test_persistence():
+        
+    global small_buff_c, small_buff_py, large_buff_py        
         
     print """As best as I can tell from SF Browse CVS, this test was 
     introduced in revision vcode vcode-0-0-7, and broken before 
@@ -747,7 +788,7 @@ def test_persistence():
     #
     # Compile symbols
     #
-    file = vc_globals.test_data + os.sep + "small_buff.c"
+    file = small_buff_c
     fake_command = "compile_symbols([r'%s'])" % file
     print '\n\n>>> Testing console command: %s\n' % fake_command
     sys.stdout.flush()
@@ -1494,7 +1535,7 @@ add_test('punctuation', test_punctuation, 'testing the various Python CSCs and L
 
 
 ##############################################################################
-# Testing the various Python CSCs and LSAs
+# Testing python support
 ##############################################################################
 def pseudo_python_wrapper():
     test_pseudo_python.test_dictate_from_scratch(testing)
@@ -1506,14 +1547,22 @@ def pseudo_python_editing_wrapper():
     
 add_test('python_editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
 
+def python_compilation_wrapper():
+    test_pseudo_python.test_python_compilation(testing)
+    
+add_test('python_compilation', python_compilation_wrapper, 'testing parsing of python symbols.')
+
 ##############################################################################
 # Testing repetition of last commands
 ##############################################################################
 
 
 def test_repeat_last():
+
+    global small_buff_c, small_buff_py, large_buff_py
+
     testing.init_simulator_regression()    
-    file_name = vc_globals.test_data + os.sep + 'large_buff.py'
+    file_name = large_buff_py
     test_command("""open_file(r'""" + file_name + """')""")
     test_command("""say(['after hyphen'])""")
     test_command("""say(['again'])""")
@@ -1535,9 +1584,12 @@ add_test('repeat_last', test_repeat_last, 'testing repetition of last command')
 
 
 def test_change_direction():
+
+    global small_buff_c, small_buff_py, large_buff_py
+    
     testing.init_simulator_regression()
     
-    file_name = vc_globals.test_data + os.sep + 'large_buff.py'
+    file_name = large_buff_py
     
     test_command("""open_file(r'""" + file_name + """')""")
     
@@ -2852,6 +2904,9 @@ add_test('basic_correction', test_basic_correction,
 # Testing set_text 
 ##############################################################################
 def test_set_text():
+
+    global small_buff_c, small_buff_py, large_buff_py
+    
     testing.init_simulator_regression()
     the_mediator = testing.mediator()
     instance_name = testing.instance_name()
@@ -2859,7 +2914,7 @@ def test_set_text():
         editor = the_mediator.editors.app_instance(instance_name)
     else:
         editor = the_mediator.app
-    commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    commands.open_file(small_buff_py)
     buffer = editor.curr_buffer()
     buffer.set_text('nothing left')
     editor.print_buff_if_necessary()
@@ -3094,6 +3149,9 @@ add_test('number_dictation', test_number_dictation, desc='Test number dictation'
 ##############################################################################
 
 def test_compile_symbols():
+
+   global small_buff_c, small_buff_py, large_buff_py
+
    testing.init_simulator_regression()
    commands.open_file(small_buff_py)
    commands.clear_symbols()
@@ -3149,16 +3207,20 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
+   native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
+
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
-   temp_config = temp_factory.new_config()   
-   temp_config = temp_factory.new_config()         
-   
-   commands.open_file('blah.py')   
- 
+
+   commands.compile_symbols([native_py_file])   
+   commands.open_file('blah.py')
+   commands.say(['regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1) 
+   commands.say(['r\\R.', 'e\\E.'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+   commands.say(['R.', 'E.'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)       
 
    
 #add_test('temp', test_temporary, desc='temporary test')
+
 
 
 ##############################################################################

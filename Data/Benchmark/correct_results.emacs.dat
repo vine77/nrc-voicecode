@@ -8679,17 +8679,16 @@ Heard regular expression equals empty single quotes new statement
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
+  '1': regular_expression (*new*)
+  '2': RegularExpression (*new*)
+  '3': regularExpression (*new*)
+  '4': REGULAR_EXPRESSION (*new*)
+  '5': regularexpression (*new*)
+  '6': REGULAREXPRESSION (*new*)
 
 >  21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
- 23:       re = ''
+ 23:       regular_expression = ''
  24:       <CURSOR>
 
 *** End of source buffer ***
@@ -8706,7 +8705,7 @@ Associate 'a word' with symbol (Enter selection):
   '6': AWORD (*new*)
 
 >  22:       words = re.split('\s+', spoken_form)
- 23:       re = ''
+ 23:       regular_expression = ''
  24:       for a_word in words:
  25:          <CURSOR>
 
@@ -8720,7 +8719,7 @@ Associate 'first' with symbol (Enter selection):
   '2': First (*new*)
   '3': FIRST (*new*)
 
->  23:       re = ''
+>  23:       regular_expression = ''
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          <CURSOR>
@@ -8731,20 +8730,19 @@ Heard rest equals a word at index one colon new statement
 Associate 'rest' with symbol (Enter selection):
 
   '0': no association
-  '1': re
-  '2': rest (*new*)
-  '3': Rest (*new*)
-  '4': REST (*new*)
+  '1': rest (*new*)
+  '2': Rest (*new*)
+  '3': REST (*new*)
 
 >  24:       for a_word in words:
  25:          first = a_word[0]
- 26:          re = a_word[1: ]
+ 26:          rest = a_word[1: ]
  27:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 Heard regular expression this word equals single quotes
-Associate 'regular expression this word' with symbol (Enter selection):
+Associate 'regular_expression this word' with symbol (Enter selection):
 
   '0': no association
   '1': regular_expression_this_word (*new*)
@@ -8756,7 +8754,7 @@ Associate 'regular expression this word' with symbol (Enter selection):
 
 >  24:       for a_word in words:
  25:          first = a_word[0]
- 26:          re = a_word[1: ]
+ 26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '<CURSOR>'
 
 *** End of source buffer ***
@@ -8771,7 +8769,7 @@ Associate 'lower' with symbol (Enter selection):
 
 >  24:       for a_word in words:
  25:          first = a_word[0]
- 26:          re = a_word[1: ]
+ 26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first<CURSOR>)
 
 *** End of source buffer ***
@@ -8785,114 +8783,48 @@ Associate 'upper' with symbol (Enter selection):
   '3': UPPER (*new*)
 
 >  25:          first = a_word[0]
- 26:          re = a_word[1: ]
+ 26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
 Heard if statement not regular expression equal to empty single quotes if body
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
->  26:          re = a_word[1: ]
+ 26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
- 28:          if not re == '':
+ 28:          if not regular_expression == '':
  29:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back slash S.', 'asterisk', 'new', 'statement']
 Heard regular expression equals regular expression plus single quotes back slash S. asterisk new statement
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
-> Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
->  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
- 28:          if not re == '':
- 29:             re = re + '\s*'
+ 27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          if not regular_expression == '':
+ 29:             regular_expression = regular_expression + '\s*'
  30:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
 Heard regular expression equals regular expression plus regular expression this word new statement
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
-> Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
->  28:          if not re == '':
- 29:             re = re + '\s*'
- 30:             re = re + regular_expression_this_word
+ 28:          if not regular_expression == '':
+ 29:             regular_expression = regular_expression + '\s*'
+ 30:             regular_expression = regular_expression + regular_expression_this_word
  31:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['return', 'regular', 'expression']
 Heard return regular expression
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': regular_expression (*new*)
-  '3': RegularExpression (*new*)
-  '4': regularExpression (*new*)
-  '5': REGULAR_EXPRESSION (*new*)
-  '6': regularexpression (*new*)
-  '7': REGULAREXPRESSION (*new*)
-
->  28:          if not re == '':
- 29:             re = re + '\s*'
- 30:             re = re + regular_expression_this_word
- 31:             return re<CURSOR>
+ 28:          if not regular_expression == '':
+ 29:             regular_expression = regular_expression + '\s*'
+ 30:             regular_expression = regular_expression + regular_expression_this_word
+ 31:             return regular_expression<CURSOR>
 
 *** End of source buffer ***
 Saying: ['back indent', 'new statement']
 Heard back indent new statement
- 29:             re = re + '\s*'
- 30:             re = re + regular_expression_this_word
- 31:          return re
+ 29:             regular_expression = regular_expression + '\s*'
+ 30:             regular_expression = regular_expression + regular_expression_this_word
+ 31:          return regular_expression
  32:       <CURSOR>
 
 *** End of source buffer ***
@@ -8915,8 +8847,8 @@ Associate 'this word' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
->  30:             re = re + regular_expression_this_word
- 31:          return re
+>  30:             regular_expression = regular_expression + regular_expression_this_word
+ 31:          return regular_expression
  32:       if not this_word:
  33:          this_word = 'hello<CURSOR>'
 
@@ -9017,6 +8949,47 @@ Associate 'all right' with symbol (Enter selection):
  43:             print 'all_right<CURSOR>'
 
 *** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : python_compilation
+* Description : testing parsing of python symbols.
+*******************************************************************************
+
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\used_to_test_python_parsing.py ***
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
+
+
+Parsed symbols are: 
+ISASYMBOL: ['isasymbol']
+ISASYMBOL2: ['isasymbol 2']
+IS_A_SYMBOL: ['is a symbol']
+IS_A_SYMBOL2: ['is a symbol 2']
+ISasymbol: ['i sasymbol']
+IsASymbol: ['is a symbol']
+IsASymbol2: ['is a symbol 2']
+Is_A_Symbol: ['is a symbol']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
+_isASymbol: ['is a symbol']
+_isASymbol2: ['is a symbol 2']
+_is_a_symbol: ['is a symbol']
+_is_a_symbol2: ['is a symbol 2']
+isASYMBOL: ['is asymbol']
+isASymbol: ['is a symbol']
+isASymbol2: ['is a symbol 2']
+is_a_symbol: ['is a symbol']
+is_a_symbol2: ['is a symbol 2']
+isasymbol: ['isasymbol']
+isasymbol2: ['isasymbol 2']
+not_a_symbol: ['not a symbol']
+_cached_symbols_as_one_string is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  not_a_symbol  is_a_symbol  is_a_symbol2  _is_a_symbol  _is_a_symbol2  isASymbol  isASymbol2  _isASymbol  _isASymbol2  IsASymbol  IsASymbol2  ISASYMBOL  ISASYMBOL2  isasymbol  isasymbol2  IS_A_SYMBOL  IS_A_SYMBOL2  Is_A_Symbol  isASYMBOL  ISasymbol 
+Unresolved abbreviations are:
+'asymbol': appears in ['isASYMBOL']
+'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
+'sasymbol': appears in ['ISasymbol']
+
+*** End of compilation test ***
 
 
 *******************************************************************************
@@ -11823,6 +11796,73 @@ Heard previous one
   1: <CURSOR>almost nobody left
 
 *** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : unusual_symbols
+* Description : compilation and dictation of unusual symbols
+*******************************************************************************
+
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\unusual_symbols.py ***
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
+
+
+Parsed symbols are: 
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
+openlog: ['openlog']
+s: ['s']
+se: ['se']
+_cached_symbols_as_one_string is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
+Unresolved abbreviations are:
+'openlog': appears in ['openlog']
+'s': appears in ['s']
+'se': appears in ['se']
+
+*** End of compilation test ***
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Next utterance should not match short symbol 'se'
+Got command: say(['software', 'engineering', 'comma'],1
+,0,0,)
+Heard software engineering comma
+Associate 'software engineering' with symbol (Enter selection):
+
+  '0': no association
+  '1': software_engineering (*new*)
+  '2': SoftwareEngineering (*new*)
+  '3': softwareEngineering (*new*)
+  '4': SOFTWARE_ENGINEERING (*new*)
+  '5': softwareengineering (*new*)
+  '6': SOFTWAREENGINEERING (*new*)
+
+> *** Start of source buffer ***
+  1: software_engineering, <CURSOR>
+
+*** End of source buffer ***
+Next utterance should match non-separable symbol 'openlog'
+Got command: say(['open', 'log'],1
+,0,0,)
+Heard open log
+Associate 'open log' with symbol (Enter selection):
+
+  '0': no association
+  '1': openlog
+  '2': open_log (*new*)
+  '3': OpenLog (*new*)
+  '4': openLog (*new*)
+  '5': OPEN_LOG (*new*)
+  '6': OPENLOG (*new*)
+
+> *** Start of source buffer ***
+  1: software_engineering, openlog<CURSOR>
+
+*** End of source buffer ***
+
 
 
 *******************************************************************************
