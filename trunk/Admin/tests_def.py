@@ -2788,6 +2788,49 @@ add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup,
     'Testing EdSim allocation and cleanup.')
 
 ##############################################################################
+# Testing manual symbol formatting and styling
+##############################################################################
+
+def test_symbol_formatting():  
+    testing.init_simulator_regression()
+    
+    commands.open_file('blah.py')
+
+    print "Testing styles\n"
+
+    test_say(['ordinary', 'formatting', 'equals', 'one'])
+    commands.say(['new', 'statement'])
+
+    test_say(['lower', 'Hungarian', 'ugly', 'Java', 'convention'])
+    commands.say(['new', 'statement'])
+
+    test_say(['animal', 'equals', 'Hungarian', 'friendly', 'dolphin',
+        'empty', 'function'])
+    commands.say(['new', 'statement'])
+
+    test_say(['\\All-Caps', 'style', 'W.', 'M.', 'user'])
+    commands.say(['new', 'statement'])
+
+    print "Testing manual formatting\n"
+
+    test_say(['no', 'space', 'style', 'W.', 'X.', 'cap', 'python'])
+    commands.say(['new', 'statement'])
+
+    test_say(['send', 'to', '\\Caps-On', 'the', 'boss'])
+    commands.say(['new', 'statement'])
+            
+    test_say(['caps', 'on', 'matters', '\\No-Caps', 'of', 'state'])
+    commands.say(['new', 'statement'])
+
+    test_say(['inter', 'caps', 'fish', '_\\underscore', 'food'])
+    commands.say(['new', 'statement'])
+
+    test_say(['Hungarian', 'notation', '\\No-Caps', 'dog', 'food'])
+    commands.say(['new', 'statement'])
+
+add_test('symbol_formatting', test_symbol_formatting, 
+    'Testing styling and manual formatting of new symbols.')
+##############################################################################
 # Testing basic correction features of ResMgr
 ##############################################################################
 def check_stored_utterances(instance_name, expected):

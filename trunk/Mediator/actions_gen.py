@@ -25,6 +25,7 @@ import copy, exceptions, os, re
 import Object, vc_globals
 import debug
 import sr_interface
+import symbol_formatting
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -46,7 +47,7 @@ class Action(Object.Object):
                             {})
 
 
-    def log_execute(self, app, cont):
+    def log_execute(self, app, cont, state = None):
         """Executes the action and logs it in the application's history.
         
         **INPUTS**
@@ -55,7 +56,8 @@ class Action(Object.Object):
         
         [Context] cont -- The context object that determines the parameters
         of how the action will be executed.
-        
+
+        [InterpState] state -- interface to the interpreter state
 
         **OUTPUTS**
         
@@ -86,7 +88,7 @@ class Action(Object.Object):
         debug.trace('Action.log_execute', 'invoking action log()')        
         action_copy.log(app, cont_copy)
         debug.trace('Action.log_execute', 'invoking action execute()')                
-        action_copy.execute(app, cont)
+        action_copy.execute(app, cont, state = state)
 
 
     def log(self, app, cont):
@@ -107,7 +109,7 @@ class Action(Object.Object):
         app.log_cmd(cont, self)
 
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """Execute the action.
         
         **INPUTS**
@@ -116,6 +118,9 @@ class Action(Object.Object):
         
         [Context] app_cont -- Context of the application that
         determines the parameters of how the action will be executed.
+
+        [InterpState] state -- interface to the interpreter state
+        
                 
         **OUTPUTS**
         
@@ -139,6 +144,65 @@ class Action(Object.Object):
         """
         
         return self.docstring
+
+class ActionStyling(Action):
+    """manually choose the styling for the following symbol
+
+    **INSTANCE ATTRIBUTES**
+
+    *STR builder* -- name of the SymBuilder instance to use to format
+    the next symbol
+    """
+    
+    def __init__(self, builder, **args_super):
+        self.deep_construct(ActionStyling, \
+                            {'builder': builder}, \
+                            args_super, \
+                            {})
+# want to check this at the time when we are configuring the mediator,
+# to prevent errors during recognition
+        if not symbol_formatting.registry.known_builder(builder):
+            raise RuntimeError('Unknown SymBuilder %s' % builder)
+
+    def execute(self, app, cont, state = None):
+        """Execute the action.
+        
+        **INPUTS**
+        
+        [AppState] app -- Application on which to execute the action
+        
+        [Context] app_cont -- Context of the application that
+        determines the parameters of how the action will be executed.
+
+        [InterpState] state -- interface to the interpreter state
+        
+                
+        **OUTPUTS**
+        
+        *none* -- 
+
+        .. [AppState] file:///./AppState.AppState.html"""
+        debug.trace('ActionStyling.execute', 'state is %s' % repr(state))
+        if state:
+            styling = state.styling_state()
+            styling.prefer(self.builder)
+
+    def doc(self):
+        """Returns a documentation string for the action.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        if self.docstring:
+            return self.docstring
+        else:
+            return "Format the next symbol with %s" % self.builder
 
 class ActionRepeatable(Action):
     """Base class for repeatable actions.
@@ -246,7 +310,7 @@ class ActionRepeatLastCmd(Action):
         debug.trace('ActionRepeatLastCmd.log', 'invoked')
         pass
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """Repeats the last command in the command history [self.n_times].
 
         See [Action.execute] for description of arguments.
@@ -265,7 +329,7 @@ class ActionRepeatLastCmd(Action):
 
         debug.trace('ActionRepeatLastCmd.execute', 'self.n_times=%s' % self.n_times)
         for ii in range(self.n_times):
-            last_action.log_execute(app, cont)
+            last_action.log_execute(app, cont, state = state)
 
 
 class ActionRepeatBidirectCmd(Action):
@@ -303,7 +367,7 @@ class ActionRepeatBidirectCmd(Action):
         debug.trace('ActionRepeatBidirectCmd.log', 'invoked')
         pass
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """Repeats the last command in the command history [self.n_times], if
         it was a bidirectional action. It may also change its direction.
 
@@ -329,7 +393,7 @@ class ActionRepeatBidirectCmd(Action):
         #
         # Repeat the last action
         #
-        ActionRepeatLastCmd().log_execute(app, cont)
+        ActionRepeatLastCmd().log_execute(app, cont, state = state)
 
 
 class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
@@ -379,7 +443,7 @@ class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
         #
         self.select_range_no = self.select_range_no - self.direction        
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """Selects a region in a buffer.
 
         See [Action.execute] for description of arguments.
@@ -423,7 +487,7 @@ class ActionInsert(Action):
                             {})
         
         
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -472,7 +536,7 @@ class ActionIncrIndentation(ActionRepeatable):
                             {})
         
         
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -520,7 +584,7 @@ class ActionDecrIndentation(ActionRepeatable):
                             {})
         
         
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -568,7 +632,7 @@ class ActionAutoIndent(Action):
                             {})
         
         
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -639,7 +703,7 @@ class ActionSearch(ActionBidirectional):
                             {})
 
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -741,7 +805,7 @@ class ActionBackspace(ActionRepeatable):
         """        
         return "Backspace %s times." % self.n_times
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -799,7 +863,7 @@ class ActionInsertNewClause(Action):
                             {})
 
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
@@ -870,7 +934,7 @@ class ActionCompileSymbols(Action):
     
                             
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
@@ -912,7 +976,7 @@ class ActionPrintSymbols(Action):
     
                             
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
@@ -948,7 +1012,7 @@ class ActionPrintAbbrevs(Action):
     
                             
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
@@ -982,7 +1046,7 @@ class ActionTypeText(Action):
     def doc(self):
         return 'Sends keystrokes: "%s" to the active window';
                                
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
@@ -1007,7 +1071,7 @@ class ActionSwitchTranslation(Action):
                                 args_super, \
                             {})
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""

@@ -596,6 +596,7 @@ class ManualCaps(Object):
     def __init__(self, **args):
         self.deep_construct(ManualCaps, 
                             {
+                             'ongoing_caps': 'normal',
                              'current_caps': 'normal',
                              'one_word': 0
                             },
@@ -619,7 +620,7 @@ class ManualCaps(Object):
         """
         state = self.current_caps
         if self.one_word:
-            self.current_caps = 'normal'
+            self.current_caps = self.ongoing_caps
         debug.trace('ManualCaps.capitalization_state', 
             'state = %s' % state)
         return state
@@ -645,7 +646,11 @@ class ManualCaps(Object):
         debug.trace('ManualCaps.change_caps', 
             'caps, one_word = %s, %d' % (caps, one_word))
         self.current_caps = caps
-        self.one_word = one_word
+        if one_word:
+            self.one_word = 1
+        else:
+            self.ongoing_caps = caps
+            self.one_word = 0
 
 class ManualSuppression(Object):
     """partially concrete subclass of SymBuilder which maintains
@@ -747,12 +752,14 @@ class FixedCaps(ManualCaps):
     of SymBuilder, so subclasses must inherit from FixedCaps before
     inheriting from SymBuilder
     """
-    def __init__(self, default_caps, **args):
+    def __init__(self, default_caps = None, **args):
         self.deep_construct(FixedCaps, 
                             {
                              'default_caps': default_caps
                             },
                             args)
+        if default_caps is None:
+            self.default_caps = 'normal'
 
     def capitalization_state(self):
         """check the current capitalization state, and reset it to the
@@ -925,6 +932,81 @@ class BuildLowerInterCaps(FixedCaps, ManualSuppression, SymBuilder):
 
 registry.register('std_lower_intercaps', BuildLowerInterCaps)
 
+class BuildRunTogether(FixedCaps, ManualSuppression, SymBuilder):
+    """builds symbols with words run together and no capitalization to
+    separate them (lousy style which no one should ever use, but some
+    libraries do, so we need to be able to dictate it)
+    """
+    def __init__(self, **args):
+        self.deep_construct(BuildRunTogether, 
+                            {'symbol': ""}, args)
+
+    def add_letter(self, letter):
+        """appends a single letter to the symbol
+        
+        **INPUTS**
+        
+        *STR letter* -- the new word
+
+        **OUTPUTS**
+        
+        *none*
+        """
+        self.add_word(letter)
+
+    def add_word(self, word, original = None):
+        """appends a new word to the symbol
+        
+        **INPUTS**
+        
+        *STR word* -- the new word
+
+        *STR original* -- original, unabbreviated version (if word is an
+        abbreviation/substitution) or None if word is not abbreviated
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        if original and not self.abbreviation_state():
+            word = original
+        self.separator_state() 
+        # no separators, but still need to check this once per add_word
+        word = self.capitalize(word, self.capitalization_state())
+        self.symbol = self.symbol + word
+
+    def finish(self):
+        """finish building the symbol (allows for SymBuilder subclasses
+        with fixed suffixes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the final symbol
+        """
+        return self.symbol
+
+    def empty(self):
+        """is the symbol currently empty (i.e. invisible elements like
+        change_capitalization, suppress_separator, or
+        suppress_abbreviation have been processed so far, and there is
+        no fixed prefix or suffix for the symbol)
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is empty
+        """
+        return self.symbol == ""
+
+registry.register('std_run_together', BuildRunTogether)
+
 class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
     """builds symbols with words separated by underscores (but with
     underscores suppressed when one of the adjacent characters is a
@@ -932,8 +1014,7 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
     """
     def __init__(self, **args):
         self.deep_construct(BuildUnder, 
-                            {'symbol': "", 'single': 0}, args, 
-                            enforce_value = {'default_caps': 'normal'})
+                            {'symbol': "", 'single': 0}, args)
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol
@@ -1021,73 +1102,15 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         """
         return self.symbol == ""
 
-registry.register('std_underscore', BuildUnder)
+registry.register('std_underscores', BuildUnder)
 
-class BuildUpperUnder(FixedCaps, ManualSuppression, SymBuilder):
+class BuildUpperUnder(BuildUnder):
     """builds symbols with all-caps words separated by underscores (but with
     underscores suppressed when one of the adjacent characters is a
     digit)
     """
     def __init__(self, **args):
-        self.deep_construct(BuildUpperUnder, 
-                            {'symbol': ""}, args, 
+        self.deep_construct(BuildUpperUnder, {}, args, 
                             enforce_value = {'default_caps': 'all-caps'})
 
-    def add_word(self, word, original = None):
-        """appends a new word to the symbol
-        
-        **INPUTS**
-        
-        *STR word* -- the new word
-
-        *STR original* -- original, unabbreviated version (if word is an
-        abbreviation/substitution) or None if word is not abbreviated
-        
-        **OUTPUTS**
-        
-        *none*
-        """
-        if original and not self.abbreviation_state():
-            word = original
-        state = self.separator_state() 
-        word = self.capitalize(word, self.capitalization_state())
-        if not word:
-            return
-        if state and self.symbol:
-            last_char = self.symbol[-1]
-            first_char = word[0]
-            if not (string.isdigit(last_char) or string.isdigit(first_char)):
-                self.symbol = self.symbol + '_'
-        self.symbol = self.symbol + word
-
-    def finish(self):
-        """finish building the symbol (allows for SymBuilder subclasses
-        with fixed suffixes
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *STR* -- the final symbol
-        """
-        return self.symbol
-
-    def empty(self):
-        """is the symbol currently empty (i.e. invisible elements like
-        change_capitalization, suppress_separator, or
-        suppress_abbreviation have been processed so far, and there is
-        no fixed prefix or suffix for the symbol)
-        
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *BOOL* -- true if the symbol is empty
-        """
-        return self.symbol == ""
-
-registry.register('std_all_caps_underscore', BuildUpperUnder)
+registry.register('std_all_caps_underscores', BuildUpperUnder)
