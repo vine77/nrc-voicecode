@@ -1,0 +1,536 @@
+Todo list for VoiceCode
+=======================
+
+To do before 1st release
+========================
+
+Testing
+-------
+Test redundant translation of symbols NOT JUST LSAs
+
+LSAs
+----
+
+-- Alain
+
+Creation of CSC for redundant translation of LSAs at Mediator level is not necessary anymore because CmdInterp.chop_LSA does the redundant translation directly now.
+
+Module documentation
+--------------------
+Move all module documentation to a new directory Doc/Modules
+
+That way, one can easily erase all Module documentation by doing rm
+Doc/Modules/*.html. When all doc in Doc, can't do that because user
+and installation documentation is in there also.
+
+Interpreter
+-----------
+
+-- Alain
+
+Switch to an interpret_NL_cmd that uses a list of written\spoken words
+instead of a string. That's what we will migrate to in the future anyways.
+
+In the mean time, David can write a preprocessor that will take a
+string and split it into words in some "smart" way.
+
+Standard symbols
+----------------
+
+-- Alain 
+
+Seems to be a bug because the same standard symbols files
+py_std_sym.py keeps getting recompiled many times (seems unnecessary).
+
+Locked SymDict
+--------------
+
+-- Alain
+
+Because the SymDict is persistent, we have to make sure that the
+SymDict used by all the MediatorObject instances are in sync. Otherwise, they might undo each other's changes to the pickled SymDict.
+
+   Solution: when creating a MediatorObject, the Mediator server would
+   pass it a central SymDict instance. This SymDict instance would
+   have a lock, which means that only one MediatorObject instance at a
+   time could update it.
+
+
+Symbol translation
+------------------
+
+-- Alain
+
+
+   d) add_abbreviation: when abbrev has less than 3 characters, then
+      even if the abbrev is added automaticly, then it should add an
+      expansion that consists of the spelled characters. E.g. 'os' ->
+      'O. S.'  Also, add_abbreviation should have an argument
+      user_added=1 which indicates that the abbrev is added by the
+      user in the config file as opposed to being added automaticly by
+      the interpreter. In such cases, the abbrev should be added even if it is
+      too short.
+
+Make actions into objects
+-------------------------
+
+DO BEFORE HAVE DEFINED TOO MANY ACTION FUNCTIONS IN CONFIG FILE (IN
+PARTICULAR BEFORE HEAVY TESTING).
+
+This will be needed in the future for commands like "N times", "do
+that again", "keep doing that", "previous one", "next one", etc...
+
+If actions are just functions, we will be able to repeat them with "N
+times", but or "keep doing that", but we won't be able to modify the
+action with commands like "previous one" etc...
+
+If actions are objects, they can store the values of arguments that
+they were invoked with (e.g. "direction").
+
+
+Symbol compilation
+------------------
+
+Whenever a new file is open, its symbols should be compiled. This will
+be useful in contexts where source files are not on the same machine
+as the mediator (currently, compile_symbols requires that the files
+given as arguments be accessible from the mediator).
+
+
+Test thorgoughly
+----------------
+
+GNU copyright
+-------------
+
+Put it in all source files.
+
+
+Documentation
+-------------
+
+Installation, user, developper
+
+
+Emacs mediator link
+-------------------
+
+Must be implemented
+
+
+Mediator based CachePad
+-----------------------
+
+Jonathan is working on it, but not absolutely necessary for 1st release.
+
+
+Error correction
+----------------
+
+Can't do without it. David Fox is working on it.
+
+
+User/Topic management
+---------------------
+
+Mediator should set NatSpeak so that it uses a special topic (or user
+if the version of NatSpeak doesn't have topics), to avoid polluting
+the user's regular user/topic with automatically generated entries.
+
+
+Text mode
+---------
+
+-- Alain
+
+Need to be able to turn CSC interpretation off so that you can dictate
+comments and quoted strings. Maybe that mode could switch on/off
+automatically depending on the current mode.
+
+
+Basic LSAs and CSCs for a few languages
+---------------------------------------
+
+Just enought to entice people into writing more.
+
+Python, C and what else?
+
+
+getWordInfo
+-----------
+
+-- Alain: this is not absolutely necessary, but it's so easy to do:
+   might as well do it.
+
+In sr_interface.getWordInfo, if no flag is specified, should use
+flag = 1 (i.e. look in backup dictionary).
+
+
+Select Pseudo-code
+------------------
+
+-- Alain
+
+  Should extend the Select grammar so that it allows commands like:
+
+  go (before|after)* (previous|next)* X this would position the cursor
+     before or after the previous or next occurence of X. If
+     (before|after) is not specied, it would default to say after. If
+     (previous|next) is not specified, it would go to the closest one.
+
+  select from (before|after)* (previous|next)* X up to (before|after)*
+     (previous|next)* Y selects code from X up to Y. Both of X, Y can
+     be optionally qualified as above by (previous|next) and
+     (before|after).
+
+
+Interpreter
+-----------
+
+Should it take into account the word property (space adding?) or is
+that done automatically by VDct?
+
+If we start using word properties, then we don't need the hack where addWord adds redundant spoken form for words that start/end with blanks.
+
+Symbol compilation
+------------------
+
+-- Alain
+
+Should add symbols with word info such that a blank space is inserted after it.
+
+
+add_lsa
+-------
+
+-- Alain
+
+Right now, there is no way to edit the word info with add_lsa. In
+particular, this means you can't say whether there should be spaces
+before or after an LSA.
+
+Should modify add_lsa so it allows to specify the word info (full word
+info or just spacing?)
+
+
+-- Alain
+
+In vc_config.py, there are many commands which are implemented as CSCs
+but would be better implemented as LSAs.
+
+-- Alain
+
+At the moment, if the same words mean different things in different
+langauges, you need to define them as two separate add_lsa
+commands. It would be better if a single command allowed you to define
+different written forms for different languages.
+
+
+Can wait after 1st release
+==========================
+
+
+CSCs
+----
+
+-- Alain
+
+The spoken form of CSCs should not be a phrase. For example, the CSC
+"for loop" should have spoken form something like "*for-loop*". This
+would have two advantages:
+
+a) The interpreter's job would be made easier, because any word that's
+not of the form "*XYZ*" or "ABC\XYZ" is considered to be part of a
+natural language symbol.
+
+b) If user really meant the phrase "for loop", not the CSC, he could
+use NatSpeak correction dialog and select "for loop" from the
+selection box, instead of "*for-loop*". One problem here though is
+that the interpreter will then ask if he wants to create a new symbol
+for_loop, which would be a bit of a pain.
+
+Note that even if we eventually allow the spoken form of CSCs to be
+simple grammar rules like: "goto <char> on <num>", we can generate voc
+entries "*goto*", *on*, *1*, *2*, etc... So if the user says "goto
+semicolon on 5", Natspeak would recognise "*goto* *semicolon* *on*
+*5*", which makes it clear that all those words are part of a
+command. This may become very confusing (e.g. there would be 3 voc
+entries for semicolon: "semicolon", ";\semicolon", "*semicolon*".
+
+Hum... need to think some more about this.
+
+
+addWord
+-------
+
+-- Alain (note: this may not be necessary if we use wordinfo to decide
+   if a word should have leading/trailing blanks. In which case, words
+   never need to have leading/trailing blanksin their written forms).
+
+Joel Gould claims that Select XYZ works as long as the written form of
+XYZ doesn't have leading/trailing spaces. So addWord doesn't have to
+add redundant vocabulary entry for words whose written form only
+contains internal spaces. TEST THE CLAIM BEFORE TRYING TO IMPLEMENT
+THIS.
+
+
+-- Alain
+
+   Should be able to qualify a previous Select command. For example, could say:
+
+   - say "Select X"
+   - pause
+   - if the system didn't select the right one, say "previous one" or 
+     "next one" to select the previous or next instance of X
+
+   Other examples of qualifications would be:
+
+   - "select from X" [pause] "up to Y" 
+	can be useful if X and/or Y are
+        long to say and/or you realise in mid command that you don't
+        really know where you want the selection to end
+
+   - "select from X up to Y" [pause] "extend left"
+        useful if didnt select from right instance of X but ended at the right
+        instance of Y
+
+   This could be implemented as follows:
+
+   Every time a SelectXYZ command is recognised, the system would log
+   an entry in the command history describing the arguments of that
+   command.
+
+   There would be a context class ContSelectXYZ that would apply
+   whenever the last CSC in the command history was a SelectXYZ command.
+
+   There would be CSCs with ContSelectXYZ as their context and the
+   appropriate action methods (e.g. change the begining/end of the
+   selection).
+
+   This is a specialised example of command qualification which is described 
+   below
+
+
+Command qualification
+---------------------
+
+It woudl be nice if a command could qualify a previous command. For example, if you say: 
+
+"page down" [pause] "keep doing that" OR
+"page down" [pause] "again 2 times"
+
+the "keep doing that" part means keep doing the previous command and "again 2 times" means do the previous command 2 times. An other example is:
+
+"select XYZ" [pause] "previous one"
+
+here "previous one" means select the previous occurence of XYZ.
+
+Note that this kind of qualification should only apply if specific
+types of commands were dictated last. For example, "previous one" can
+only qualify CSC that are of type *linear_selection* (i.e. selecting
+an item from a linear list, where the concept of a previous and next
+item makes sense). This is because if I say:
+
+"table at index previous one"
+
+I probably mean something like:
+
+table[prev_one]
+
+Similarly, "keep doing that" and "again 2 times" should only apply for commands of type "repeatable".
+
+One way to implement that is to create Context classes that applie
+only if the last CSC in the command history is of a particular type. This also assumes that the Context object is able to find out certain information about what the CSC eventually did. For example, in the example:
+
+"select XYZ [pause] previous one"
+
+the CSC "previous one" needs to know what XYZ was and which occurence
+of it it choose. This means that the logging mechanism has to be sophisticated enough to remember this sort of thing.
+
+
+config.py
+---------
+
+-- Alain
+
+CSCmd should have a __setattr__ method that intercepts sets to the
+*meanning* attribute. It would check to make sure that each entry in
+meanings is OK, i.e. it's a pair with 1st element being a context
+instance and the second being a function pointer.
+
+This would address the common mistake where a user adds the following
+configuration statement.
+
+add_csc(spoken_forms=['for loop'], meanings=[[ContC, c_simple_for]])
+
+i.e. the user forgets to add () after ContC, which means he is making
+the context be the ContC class itself (as opposed to a ContC INSTANCE)
+
+
+add_lsa
+-------
+
+-- Alain
+
+At the moment, whenever you switch language, you need to unload all
+the aliases for that language, and then load those for the new
+languages. It might be more efficient to only unload/load those
+aliases which are not in both languages.
+
+For example, 'not equal to' means the same thing in C and in Python '
+!= '. So no need to unload/reload it. On the other hand, 'with key'
+exists in both Python and Perl, but doesn't mean the same thing ('[]'
+versus '{}'). So in this case, would need to unload/reload.
+
+Need to check first if this optimisation is really needed.
+
+-- Alain
+
+At the moment, LSAs are removed from NatSpeak's vocab everytime you
+change language. That means that NatSpeak looses any adaptation it may
+have done to learn the usage pattern of those LSAs.
+
+It would be better if LSAs stayed in the vocab all the time (including
+after VoiceCode exited), but if NatSpeak recognises an LSA that's not
+the right form for the current langauge, the Interpreter will fix it
+by finding an LSA with same spoken form but for the current language.
+
+
+CSCs
+----
+
+--- Alain
+
+It would be nice if you could associate an action with different contexts (e.g. for word 'equals', associate action type_equal_sign to either C, python, etc.. contexts).
+
+This could be done by making the contextual meaning to have a list of contexts associated with an action:
+
+acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), ContC, type_equal_sign])
+add_csc(acmd)
+
+
+An other approach is to create an OR context that could be instantiated by feeding the various ORed contexts to it. This would be syntactically nasty:
+
+acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContOR(terms=[ContPy(), ContC()]), type_equal_sign])
+add_csc(acmd)
+
+
+Grammar for spoken forms
+------------------------
+
+Instead of having to encode all the spoken forms of a command from
+scratch, it would be better to allow grammar rules instead.
+
+For example instead of:
+
+spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;']
+
+we could have:
+
+spoken_forms=['after* (semi|semicolon|;)', 'go after* (semi|semicolon|;)']
+
+
+Symbol translation
+------------------
+
+-- Alain
+
+  When a word in a symbol doesn't correspond to an in-vocab word or a
+  known abbreviation, we should see if it's a concatenation or such
+  words and/or abbreviations.
+
+  
+What can I say
+--------------
+
+-- Alain
+
+  The mediator console should allow the user to browse through the
+  list of CSCs and LSAs by language and topic.
+
+  The user could even ask to see what LSAs and CSCs are applicable in
+  the current context (actually, CSCs should be sufficient since a CSC
+  is generated automatically for each LSA).
+
+  This feature would use the _doc_ attributes of the Context objects
+  and the action functions.
+
+  Example of subject hierarchy for what can I say
+
+  C
+    - loops
+       for 
+       while
+       repeat
+       etc...
+    - conditionals
+       if
+       then
+       else
+       switch
+       etc...
+    - functions
+       declaring
+       calling
+    - precompiler directives
+       #include
+       etc...
+    etc...
+   Python
+    - loops
+        for
+    etc...
+       
+    
+Abbreviations cleanup
+---------------------
+
+The console should have an abbrev_cleanup command. This would remove
+all abbrevs that are not currently used in at least one known symbol.
+
+That way, the user could compile a list of source files he currently
+cares about and run clean_abbrevs, thus removing abbreviations that
+were generated from old projects that he doesn't care about anymore.
+
+The command would display a list of abbrevs to be removed, giving the
+user a chance to keep some of them if he wanted.
+
+
+Abbreviations definition
+------------------------
+
+After compiling a series of source, system could sort abbrevs in
+decreasing order of their frequency, and then start a dialog allowing
+the user to dictate expansions for them.
+
+This would be useful for batch definition of abbrevs instead of the
+automatic as you go definition.
+
+
+SymDict
+-------
+
+-- Alain
+
+Right now, known symbols are removed from NatSpeak's vocabulary every
+time VoiceCode exits. This means NatSpeak looses all adaptation it may
+do to those symbols.
+
+It would be better to add them with spoken form x_y_z where x, y , z
+are words and leave them in the vocab all the time. That way, the user could still erase symbols relatively easily by listing all the user added symbols and removing the ones with _ in their spoken forms.
+
+Of course, this assumes that DNS will recognise x_y_z when you say "x
+y z" (i.e. tha the _s won't interfere with recognition).
+
+-- Alain
+
+format_as_symbol
+Right now, the order in which the various formats are shown depends on a fixed
+rank specified by the programmer.
+
+It would be better if the rank was dynamic, i.e. it was based on how
+often the user recently accepted a new symbol formatted in that way in
+the current language.
+
+
+SymDict
