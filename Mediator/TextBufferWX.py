@@ -34,7 +34,8 @@ def fix_x_y(value):
 	return value[1], value[2]
     return value
 
-class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
+class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
+	NumberedLines):
     """TextBufferChangeSpecify wrapper for wxTextCtrl
     
     **INSTANCE ATTRIBUTES**
@@ -92,6 +93,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    self.nl, self.crnl)
 	parent = self.underlying.GetParent()
 	ID = self.underlying.GetId()
+#	EVT_TEXT(self.underlying, ID, self._on_evt_text)
 	EVT_TEXT(parent, ID, self._on_evt_text)
       
     def _on_evt_text(self, event):
@@ -114,6 +116,46 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    self._on_change_specification(start, end, text,
 		selection_start, selection_end, self.program_initiated)
 
+    def modified(self):
+	"""has the buffer been modified since the last time it was
+	saved?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the buffer has been modified since the last
+	save (or load)
+	"""
+	return self.underlying.IsModified()
+
+    def save_file(self, f_path):
+	"""save the buffer to a file
+
+	**INPUTS**
+
+	*STR f_path* -- full path of the file
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was saved successfully
+	"""
+	return self.underlying.SaveFile(f_path)
+
+    def load_file(self, f_path):
+	"""load the buffer from a file (erasing the current contents)
+
+	**INPUTS**
+
+	*STR f_path* -- full path of the file
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was loaded successfully
+	"""
+	return self.underlying.LoadFile(f_path)
 
     def range_defaults(self, start = None, end = None):
 	"""translates from TextBuffer defaults for specifying start and
@@ -647,3 +689,6 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    ranges.append((start, end))
 	    start = end + len(self.nl)
 	return ranges
+
+
+

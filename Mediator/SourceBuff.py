@@ -125,6 +125,9 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
+	if program_initiated:
+	    debug.trace('SourceBuff.on_change', 
+		'(%d, %d) "%s" in %s\n' % (start, end, text, self.name()))
 	self.app.on_change(self.name(), start, end, text, program_initiated)
 
     def rename_buffer_cbk(self, new_buff_name):

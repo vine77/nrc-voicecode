@@ -32,7 +32,7 @@ where OPTIONS are
 [-m] [-p] [-i] [--host host] [--listen listen_port] [--talk talk_port]
 
 runs an EdSim editor simulator as a TCP client to the mediator server, using
-UneventfulLoopThis 
+UneventfulLoop
 
 OPTIONS
 -------

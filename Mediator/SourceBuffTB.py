@@ -106,7 +106,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	"""
 # program-initiated changes will already call on_change, so we don't
 # want to report them twice
-	if not program_initiated:
+	if program_initiated:
 	    return
 	self.on_change(start, end, text, program_initiated)
 

@@ -391,7 +391,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	    self.instances[instance].cleanup()
 	    del self.instances[instance]
 
-    def close_app_cbk(self, instance):
+    def close_app_cbk(self, instance, unexpected = 0):
 	"""callback from AppState which indicates that the application has 
 	closed or disconnected from the mediator
 

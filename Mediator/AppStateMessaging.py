@@ -226,13 +226,17 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         *none* -- 
         """
-        print '-- AppStateMessaging.listen_one_transation: called'
+        debug.trace('-- AppStateMessaging.listen_one_transaction', 'called')
         mess = self.listen_msgr.get_mess(expect=['update',
-	    'editor_disconnecting'])
+	    'editor_disconnecting', 'connection_broken'])
         mess_name = mess[0]
+        debug.trace('-- AppStateMessaging.listen_one_transaction', 
+	    'heard %s' % mess_name)
         if mess_name == 'update':
 	    mess_cont = mess[1]
             upd_list = mess_cont['value']
+	    debug.trace('-- AppStateMessaging.listen_one_transaction', 
+		'updates %s' % str(upd_list))
             self.apply_updates(upd_list)
 	elif mess_name == 'editor_disconnecting':
 	    self.close_app_cbk()
@@ -479,6 +483,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         *BOOL* -- true if the editor does close the buffer
         """
 
+#	print 'someone is calling app_close_buffer "%s":' % buff_name
+#	debug.print_call_stack()
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
         response = self.talk_msgr.get_mess(expect=['close_buffer_resp'])
 	success = response[1]['value']

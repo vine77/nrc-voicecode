@@ -41,6 +41,8 @@ from tcp_threads import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#		                    'listen_one_transaction': 1,
+#		                    'SourceBuff.on_change': 1
 #                                   'get_mess':1, 
 #                                   'send_mess': 1,
 #                                   'AppState.synchronize_with_app': 1,
@@ -244,6 +246,10 @@ class AppStateFactorySimple(AppStateFactory):
 	if re.match('EdSim', app_name):
 	    as_class = AS_MessExtEdSim
 	elif re.match('EdSimClientIndent', app_name):
+	    as_class = AppStateMessaging.AppStateInsertIndentMess
+	elif re.match('WaxEdit', app_name):
+	    as_class = AS_MessExtEdSim
+	elif re.match('WaxEditClientIndent', app_name):
 	    as_class = AppStateMessaging.AppStateInsertIndentMess
 	elif re.match('emacs', app_name):
 	    as_class = AppStateEmacs.AppStateEmacs
@@ -1090,7 +1096,8 @@ class ServerMainThread(Object.OwnerObject):
     def remove_other_references(self):
 	"""Perform any cleanup prior to quitting.  Called when the main 
 	thread has exited its event loop.  Subclasses which override
-	this method should be sure to call their parent class's version.
+	this method should be sure to call their parent class's version
+	after doing their own cleanup.
 
 	**INPUTS**
 
@@ -1100,9 +1107,9 @@ class ServerMainThread(Object.OwnerObject):
 
 	*none*
 	"""
-	Object.OwnerObject.remove_other_references(self)
 	for id in self.data_threads.keys():
 	    self.deactivate_data_thread(id)
+	Object.OwnerObject.remove_other_references(self)
 
     def new_listener_thread(self):
         """creates a new ListenNewEditorsThread to monitor 
@@ -1322,8 +1329,9 @@ class ServerMainThread(Object.OwnerObject):
         #
         an_app_state.config_from_external()
 
-	stay_alive = self._new_instance(id, an_app_state, test_client)
+	stay_alive = self._new_instance(id, an_app_state, window, test_client)
 	if stay_alive:
+	    sys.stderr.write("successfully created new MediatorObject instance\n")
 	    self.data_threads[id] = data_thread
 	    return 1
 	else:
@@ -1480,20 +1488,24 @@ class ServerMainThread(Object.OwnerObject):
 	return stay_alive
 
 
-    def process_ready_socks(self, ready_socks):
+    def process_ready_socks(self, ready_socks = None):
         """Processes socket connections that have received new data.
         
         **INPUTS**
 
-        [STR] *ready_socks*  =[] -- List of IDs of sockets which may
-	have messages waiting
+        [STR] *ready_socks* -- List of IDs of sockets which may
+	have messages waiting, or None to check all sockets in
+	data_threads.keys()
         
         **OUTPUTS**
         
         *none* -- 
         """
 
-	for id in ready_socks:
+	socks = ready_socks
+	if ready_socks == None:
+	    socks = self.data_threads.keys()
+	for id in socks:
             an_app_state = self.known_instance(id)
 	    if an_app_state != None:
 		an_app_state.listen_one_transaction()
@@ -1581,7 +1593,8 @@ class ServerOldMediator(ServerMainThread):
     def remove_other_references(self):
 	"""Perform any cleanup prior to quitting.  Called when the main 
 	thread has exited its event loop.  Subclasses which override
-	this method should be sure to call their parent class's version.
+	this method should be sure to call their parent class's version
+	after doing their own cleanup.
 
 	**INPUTS**
 
@@ -1591,7 +1604,6 @@ class ServerOldMediator(ServerMainThread):
 
 	*none*
 	"""
-	ServerMainThread.remove_other_references(self)
 	for id in self.active_meds.keys():
 # except for editors running regression tests, the MediatorObject should
 # own its editor, so quitting the former should cleanup the editor
@@ -1603,8 +1615,9 @@ class ServerOldMediator(ServerMainThread):
 #       are daemon threads which won't prevent the program from
 #       quitting.  We are no longer in the message loop, so any events
 #       they continue to send will be ignored.
+	ServerMainThread.remove_other_references(self)
 
-    def _new_instance(self, id, instance, test_client = 0):
+    def _new_instance(self, id, instance, window, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
         
@@ -1622,10 +1635,16 @@ class ServerOldMediator(ServerMainThread):
 	*BOOL* -- false if the server should exit (because we're done
 	running the test suite)
 	"""
+	sys.stderr.write("new instance\n")
         if test_client and self.test_suite != None:
+	    sys.stderr.write("initializing mediator for regression tests\n")
+	    sys.stderr.flush()
             mediator.init_simulator_regression(on_app=instance)
 	    instance.print_buff_when_changed = 1
             args = [self.test_suite]
+	    sys.stderr.write("terminating\n")
+	    sys.stderr.write("starting regression tests\n")
+	    sys.stderr.flush()
 	    try:
 		auto_test.run(args)
             except messaging.SocketError:
@@ -1653,6 +1672,7 @@ class ServerOldMediator(ServerMainThread):
 #	    sys.stderr.write("returning 0 from _new_instance\n")
 	    return 0
         else:
+	    sys.stderr.write("new instance, not testing: %d\n" % test_client)
             exclusive = 1
             allResults = 0
             mediator.init_simulator(on_app=instance, 
@@ -1750,7 +1770,8 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
                              'evt_new_talk_conn': 
 			         win32event.CreateEvent(None, 0, 0, None),
                              'evt_sockets_ready': 
-			         win32event.CreateEvent(None, 0, 0, None)
+			         win32event.CreateEvent(None, 0, 0, None),
+                             'evt_quit': win32event.CreateEvent(None, 0, 0, None),
                              }, 
                             args_super)
 
@@ -1821,12 +1842,12 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
         TIMEOUT = 200  #msecs
 #        TIMEOUT = 5000  #msecs
         counter = 0
-	events = (self.evt_new_listen_conn, self.evt_new_talk_conn,
-                         self.evt_sockets_ready), 
+	events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
+                         self.evt_sockets_ready, self.evt_quit] 
         while 1:		
-            rc = win32event.MsgWaitForMultipleObjects(
-		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
-                         self.evt_sockets_ready), 
+            rc = win32event.MsgWaitForMultipleObjects(events,
+#		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
+#                         self.evt_sockets_ready), 
 #                         self.evt_sockets_ready, self.evt_quit), 
                         0, # wait for all = false
 			win32event.QS_ALLEVENTS, # type of input
@@ -1861,7 +1882,7 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                self.process_ready_socks(self.data_threads.keys())
+                self.process_ready_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+3:
                 #
@@ -1985,7 +2006,8 @@ class ExtLoopWin32(Object.OwnerObject):
                              'evt_new_talk_conn': 
 			         win32event.CreateEvent(None, 0, 0, None),
                              'evt_sockets_ready': 
-			         win32event.CreateEvent(None, 0, 0, None)
+			         win32event.CreateEvent(None, 0, 0, None),
+                             'evt_quit': win32event.CreateEvent(None, 0, 0, None),
                              }, 
                             args_super)
 	factory = AppStateFactorySimple()
@@ -2061,12 +2083,12 @@ class ExtLoopWin32(Object.OwnerObject):
         TIMEOUT = 200  #msecs
 #        TIMEOUT = 5000  #msecs
         counter = 0
-	events = (self.evt_new_listen_conn, self.evt_new_talk_conn,
-                         self.evt_sockets_ready), 
+	events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
+                         self.evt_sockets_ready, self.evt_quit]
         while 1:		
-            rc = win32event.MsgWaitForMultipleObjects(
-		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
-                         self.evt_sockets_ready), 
+            rc = win32event.MsgWaitForMultipleObjects(events,
+#		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
+#                         self.evt_sockets_ready), 
 #                         self.evt_sockets_ready, self.evt_quit), 
                         0, # wait for all = false
 			win32event.QS_ALLEVENTS, # type of input
@@ -2101,7 +2123,7 @@ class ExtLoopWin32(Object.OwnerObject):
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                self.server.process_ready_socks(self.data_threads.keys())
+                self.server.process_ready_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+3:
                 #

@@ -52,18 +52,18 @@ debug.config_traces(status="on",
 
 def help():
     print """
-Usage: python client_sim.py -h
+Usage: python ClientEdSimWX.py -h
 
 or
 
-python client_sim.py [OPTIONS]
+python ClientEdSimWX.py [OPTIONS]
 
 where OPTIONS are 
 
 [-m] [-i] [--host host] [--listen listen_port] [--talk talk_port]
 
-runs an EdSim editor simulator as a TCP client to the mediator server, using
-UneventfulLoopThis 
+runs an EdSim editor simulator as a TCP client to the mediator server
+using a simple wxPython GUI
 
 OPTIONS
 -------
@@ -229,8 +229,8 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
 
     def remove_other_references(self):
 	self.exiting = 1
-	Object.OwnerObject.remove_other_references(self)
 	self.connect_button.Destroy()
+	Object.OwnerObject.remove_other_references(self)
 #	self.text.Destroy()
 
 class ClientEdSimFrame(wxFrame, Object.OwnerObject):
@@ -396,7 +396,17 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
 	underlying_editor = EdSim.EdSim(multiple = multiple)
 	self.editor = tcp_client.ClientEditorChangeSpec(editor = underlying_editor, 
-	    owner = self, ID = 'dummy')
+	    owner = self, ID = 'dummy', owns_editor = 1)
+
+    def app_closing(self, ID, unexpected = 0):
+	"""method called by ClientEditor when it gets a message from
+	AppState saying that it is closing
+	"""
+# ClientEditor expects this to be defined, but EdSim doesn't ever
+# generate a close_app_cbk, so we don't ever expect to receive this.
+	self.editor.disconnected()
+	self.frame.disconnected()
+
 
     def mediator_closing(self, ID, unexpected = 0):
 	"""method called by editor when it gets a message from the
@@ -455,7 +465,7 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.editor.connected(talk, listen)
+	self.editor.connect(talk, listen)
 
     def hook_data_event(self):
 	"""method by which the frame tells us to hook the 
