@@ -2438,7 +2438,7 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
 
 def test_basic_correction():
     testing.init_simulator_regression()
-    instance_name = testing.editor()
+    instance_name = testing.instance_name()
     if instance_name == None:
         msg = '\n***Using old Mediator object: '
         msg = msg + 'unable to test correction features***\n'
@@ -2721,7 +2721,7 @@ auto_test.add_test('basic_correction', test_basic_correction,
 def test_set_text():
     testing.init_simulator_regression()
     the_mediator = testing.mediator()
-    instance_name = testing.editor()
+    instance_name = testing.instance_name()
     if instance_name: 
         editor = the_mediator.editors.app_instance(instance_name)
     else:
@@ -2754,7 +2754,7 @@ def test_insert_delete_commands():
    test_say(['back space 4'])
    test_say(['back space 5'])
    mediator = testing.mediator()
-   instance_name = testing.editor()
+   instance_name = testing.instance_name()
    if instance_name:
        editor = mediator.editor_instance(instance_name)
    else:
@@ -2776,7 +2776,7 @@ auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insert
 def test_mixed_kbd_and_voice_editing():
     testing.init_simulator_regression()
     commands = testing.namespace()['commands']    
-    instance_name = testing.editor()
+    instance_name = testing.instance_name()
     if instance_name: 
         app = the_mediator.editors.app_instance(instance_name)
     else:
