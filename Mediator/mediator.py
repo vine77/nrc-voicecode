@@ -441,7 +441,7 @@ def simulator_mode(options):
 #
 # print natlink.getCurrentModule()
 
-    setmic('off')
+    sr_interface.set_mic('off')
 
     console_win_handle = natlink.getCurrentModule()[2]
 
@@ -458,7 +458,6 @@ def simulator_mode(options):
     if options['e']:
       sys.stderr = sys.stdout
     try:
-        
       while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()

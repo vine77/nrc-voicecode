@@ -634,6 +634,27 @@ class SymDict(PickledObject.PickledObject):
                 print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
 
+    def peek_at_unresolved(self):
+        """returns a reference to the dictionary of unresolved abbreviations
+	and the symbols containing those abbreviations.
+
+	**NOTE:** This method is intended only for diagnostic testing
+	purpose.  The caller must not modify the dictionary returned
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
+	unresolved abbreviations. These are abbreviations that have
+	appeared in at least one compiled symbol, yet are neither a word
+	in the speech vocabulary or a known abbreviation. Values are
+	dictionnaries that list the symbols containing the unresolved
+	abbreviation.
+	"""
+	return self.unresolved_abbreviations
 
     def parse_standard_symbols(self, add_sr_entries=1):
         """Parse standard symbols for the various programming languages.

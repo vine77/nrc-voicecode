@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 05 10:55:35 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 05 16:22:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -44,6 +44,7 @@
     <A CLASS="DocLink" HREF="#SymDict.SymDict.parse_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.parse_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">contents</SPAN>, <SPAN CLASS="Argument">language_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.parse_symbols_from_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.parse_symbols_from_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a source file.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.parse_symbols_from_files"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.parse_symbols_from_files</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a series of source files</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.peek_at_unresolved"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.peek_at_unresolved</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">show_unresolved=0</SPAN>)<SPAN CLASS="OneLiner"> # Prints the known and unresolved abbreviations.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.print_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Print the content of the symbols dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.reg_pseudo_to_native_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.reg_pseudo_to_native_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
@@ -659,6 +660,34 @@ Parsed symbols are stored in the <EM>symbol_info</EM> and
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="SymDict.SymDict.peek_at_unresolved" CLASS="Method">SymDict.SymDict.peek_at_unresolved(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the dictionary of unresolved abbreviations
+and the symbols containing those abbreviations.</P>
+<P>
+<STRONG>NOTE:</STRONG> This method is intended only for diagnostic testing
+purpose.  The caller must not modify the dictionary returned</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: {STR: 1}}</EM> unresolved_abbreviations={}
+<DD>Dictionary of
+unresolved abbreviations. These are abbreviations that have
+appeared in at least one compiled symbol, yet are neither a word
+in the speech vocabulary or a known abbreviation. Values are
+dictionnaries that list the symbols containing the unresolved
+abbreviation.
+
 </DL>
 <H2 ID="SymDict.SymDict.print_symbols" CLASS="Method">SymDict.SymDict.print_symbols(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Print the content of the symbols dictionary.</P>
