@@ -79,6 +79,7 @@ def run(to_run):
     test_names.sort()
 
     start_time = time.time()
+    end_time = start_time
     
     for a_test_name in test_names:
         [fct, desc] = tests_to_do[a_test_name]

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:11:47 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Jun 06 12:12:27 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,20 +18,35 @@
 <P CLASS="DeclaredIn">Declared in module <A HREF="RecogStartMgr.html">RecogStartMgr</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">RecogStartMgr.RecogStartMgr<BR>
-&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RecogStartMgr</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.app_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.app_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.app_names"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.app_names</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # remove named instance from management</SPAN>
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RecogStartMgr</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr._recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr._recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # activate the RecogStartMgr</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.activate_instance_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.activate_instance_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.app_new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.app_new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.instance_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.instance_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # returns the module associated with the given instance</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # is this instance known?</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the list of known instances</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # is this module known?</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a known window ID?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.known_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.known_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_window=None</SPAN>)<SPAN CLASS="OneLiner"> # add a new application instance</SPAN>
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.set_app_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.set_app_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)<SPAN CLASS="OneLiner"> # fill in the reference to the parent AppMgr</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a shared window?</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a single-window display?</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -39,106 +54,84 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
 </PRE><H2>Description</H2><P>
-abstract class defining basic interface for keeping track of 
-target applications and windows, in order to handle
-recognition-starting callbacks</P>
+abstract class defining interface for an object which receives 
+recognition-starting (or onBegin/gotBegin) callbacks, figures out which
+application and buffer are active, and tells the GramMgr to activate the
+appropriate grammars.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR : [STR]}</EM> instance_names
-<DD>map from editor application name 
-to currently managed instance names
-<DT>
-<EM>{STR : STR}</EM> instance_apps
-<DD>map from editor application instance
-names to the application name
-<DT>
-<EM>{STR : INT}</EM> past_instances
-<DD>map from editor application name 
-to number of current and past instances
-<DT>
-<EM>{INT : STR}</EM> windows
-<DD>map from currently known windows to
-instance names
-<DT>
-<EM>{STR : [INT]}</EM> instance_windows
-<DD>map from instance names to
-currently known windows
-<DT>
-<EM>{STR : AppState}</EM> instances
-<DD>map from instance names to
-corresponding AppState interfaces
-</DL>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="RecogStartMgr.RecogStartMgr.__init__" CLASS="Method">RecogStartMgr.RecogStartMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RecogStartMgr._recognition_starting" CLASS="Method">RecogStartMgr.RecogStartMgr._recognition_starting(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)</H2>
 <P>None</P>
 
+<P>
+private method which a concrete subclass will call to handle
+the recognition starting event.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
+<EM>INT</EM> window
+<DD>window handle (unique identifier) of the current 
+window
+<DT>
+<EM>STR</EM> title
+<DD>title of the window 
+<DT>
+<EM>STR</EM> module
+<DD>filename of the application corresponding to
+this window, or None if the particular subclass of RecogStartMgr
+cannot detect it.  <STRONG>Note</STRONG>: the module may not
+be the name of the editor.  For example, for remote editors, the
+module will generally be the name of the telnet/X server
+program, and any application written in python will show up as PYTHON.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
 <EM>none</EM>
-<DD>(abstract base class)
-
-</DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.app_instances" CLASS="Method">RecogStartMgr.RecogStartMgr.app_instances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>)</H2>
-<P>None</P>
+</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.activate" CLASS="Method">RecogStartMgr.RecogStartMgr.activate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>activate the RecogStartMgr</P>
 
 <P>
-names of application instances being managed
 <STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> app_name
-<DD>list names of instances corresponding only to
-this application name (or list all instances if app_name is
-None)
-</DL>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>[STR]</EM>
-<DD>list of names of applications being managed (e.g.
-"Emacs (Win)", "jEdit")
+<EM>BOOL</EM>
+<DD>true if activated successfully
 
 </DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.app_names" CLASS="Method">RecogStartMgr.RecogStartMgr.app_names(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RecogStartMgr.activate_instance_window" CLASS="Method">RecogStartMgr.RecogStartMgr.activate_instance_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
 <P>
-names of applications being managed
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM> </P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>list of names of applications being managed (e.g.
-"Emacs (Win)", "jEdit")
-
-</DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.delete_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.delete_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
-<P>remove named instance from management</P>
-
+raise instance to front of list of most recently active instances 
+for that window</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -146,14 +139,110 @@ names of applications being managed
 
 <DT>
 <EM>STR</EM> instance
-<DD>name of the application instance to be removed
+<DD>name of the application instance 
+<DT>
+<EM>INT</EM> window
+<DD>window handle of the window
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window and instance are known (otherwise, does
+nothing)
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.add_module" CLASS="Method">RecogStartMgr.RecogStartMgr.add_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)</H2>
+<P>add a new KnownTargetModule object</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>KnownTargetModule</EM> module
+<DD>the new module
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true unless a module of the same name already exists
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.app_new_window" CLASS="Method">RecogStartMgr.RecogStartMgr.app_new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us of a new window for the 
+specified instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.deactivate" CLASS="Method">RecogStartMgr.RecogStartMgr.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+deactivate the RecogStartMgr, and disable all window-specific
+grammars</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="RecogStartMgr.RecogStartMgr.delete_window" CLASS="Method">RecogStartMgr.RecogStartMgr.delete_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RecogStartMgr.delete_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.delete_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by AppMgr to notify RecogStartMgr that an
+editor instance has been deleted</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if instance was known
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.delete_window" CLASS="Method">RecogStartMgr.RecogStartMgr.delete_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -165,14 +254,131 @@ corresponding to an editor application instance.</P>
 <DL>
 
 <DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
 <EM>INT</EM> window
 <DD>window handle of the window
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window and instance are known (otherwise, does
+nothing)
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.instance_module" CLASS="Method">RecogStartMgr.RecogStartMgr.instance_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>returns the module associated with the given instance</P>
+
 <P>
-<EM>none</EM>
-</P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name of the module associated with the instance, or
+None if it is unknown (because the instance has not yet been
+associated with any windows)
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.known_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.known_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>is this instance known?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the instance is known
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.known_instances" CLASS="Method">RecogStartMgr.RecogStartMgr.known_instances(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the list of known instances</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of names of known instances
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.known_module" CLASS="Method">RecogStartMgr.RecogStartMgr.known_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)</H2>
+<P>is this module known?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> module
+<DD>name of the module (executable as seen by the
+local system)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the module name is known
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.known_window" CLASS="Method">RecogStartMgr.RecogStartMgr.known_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>is window a known window ID?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle of the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is a known window 
+
+</DL>
 <H2 ID="RecogStartMgr.RecogStartMgr.known_windows" CLASS="Method">RecogStartMgr.RecogStartMgr.known_windows(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
 <P>None</P>
 
@@ -200,8 +406,33 @@ None)
 <DD>list of window handles
 
 </DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.new_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_window=None</SPAN>)</H2>
-<P>add a new application instance</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.new_instance" CLASS="Method">RecogStartMgr.RecogStartMgr.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by AppMgr to notify RecogStartMgr that a new
+editor instance has been added, and (optionally) to tell it to 
+check if the current window belongs to (or contains) that instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+<DT>
+<EM>BOOL</EM> check_window
+<DD>should we check to see if the
+current window belongs to this instance?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.set_app_mgr" CLASS="Method">RecogStartMgr.RecogStartMgr.set_app_mgr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)</H2>
+<P>fill in the reference to the parent AppMgr</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -209,17 +440,25 @@ None)
 <DL>
 
 <DT>
-<EM>STR</EM> app_name
-<DD>name of the application 
-(e.g. "Emacs (Win)", "jEdit")
+<EM>AppMgr</EM> manager
+<DD>the parent AppMgr
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.shared_window" CLASS="Method">RecogStartMgr.RecogStartMgr.shared_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>is window a shared window?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
 <DT>
-<EM>AppState</EM> app
-<DD>AppState interface corresponding to the new
-instance
-<DT>
-<EM>INT</EM> initial_window
-<DD>window handle of an initial window
-corresponding to the instance
+<EM>INT</EM> window
+<DD>window handle of the window
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -227,17 +466,40 @@ corresponding to the instance
 <DL>
 
 <DT>
-<EM>STR</EM>
-<DD>name of the application instance.  Necessary
-if you want to add windows to the application in the future.
+<EM>BOOL</EM>
+<DD>true if window is a known window  and is shared (or
+shareable).  None if window is unknown
 
 </DL>
-<H2 ID="RecogStartMgr.RecogStartMgr.new_window" CLASS="Method">RecogStartMgr.RecogStartMgr.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RecogStartMgr.single_display" CLASS="Method">RecogStartMgr.RecogStartMgr.single_display(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>is window a single-window display?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle of the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is a known window  and is a
+single-window display.  None if window is unknown
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.specify_window" CLASS="Method">RecogStartMgr.RecogStartMgr.specify_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
 <P>None</P>
 
 <P>
-add a new window to the list of windows corresponding to an
-editor application instance.</P>
+called to indicate that user has manually identified a
+known instance with the current window </P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -246,15 +508,60 @@ editor application instance.</P>
 <DT>
 <EM>STR</EM> instance
 <DD>name of the application instance
-<DT>
-<EM>INT</EM> window
-<DD>window handle of the window
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.window_info" CLASS="Method">RecogStartMgr.RecogStartMgr.window_info(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>find the window id, title, and module of the current window</P>
+
 <P>
-<EM>none</EM>
-</P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(INT, STR, STR)</EM>
+<DD>the window id, title, and module name
+
+</DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.window_instances" CLASS="Method">RecogStartMgr.RecogStartMgr.window_instances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a list of the known instances associated with a given
+window</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>the window handle 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of names of instances associated with the
+window, or None if the window is unknown
+
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -385,6 +692,116 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 
 <HR>
 <TABLE ALIGN="LEFT">

@@ -25,7 +25,8 @@ import os, sys
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 import mediator, MediatorObject, Object, SymDict, test_pseudo_python
 import util, unit_testing, vc_globals
-import RecogStartMgr, GramMgr, sr_grammars
+import AppMgr, RecogStartMgr, GramMgr, sr_grammars
+import KnownTargetModule, TargetWindow, WinIDClient
 
 from actions_gen import *
 from actions_C_Cpp import *
@@ -1402,7 +1403,7 @@ auto_test.add_test('misc_bugs', test_misc_bugs, 'Testing a series of miscellaneo
 
 
 ##############################################################################
-# Testing RecogStartMgr dictionaries
+# Testing AppMgr dictionaries
 ##############################################################################
 
 def manager_state(manager):
@@ -1413,28 +1414,57 @@ def manager_state(manager):
 	print 'application: ', app
 	instances =  manager.app_instances(app)
 	for instance in instances:
+	    sys.stdout.flush()
 	    print 'instance: ', instance
-	    a_name = manager.instance_apps[instance]
+	    a_name = manager.app_name(instance)
 	    if a_name != app:
 		print 'Warning: app names %s and %s do not match' \
 		    % (app, a_name)
 	    windows = manager.known_windows(instance)
+#	    print 'windows is ', repr(windows), type(windows), type([])
 	    for window in windows:
 		print 'window %d' % (window)
-		i_name = manager.windows[window]
-		if i_name != instance:
-		    print 'Warning: instance names %s and %s do not match' \
-		        % (instance, i_name)
+		win_ins = manager.window_instances(window)
+#		print repr(win_ins)
+		if instance not in win_ins:
+		    print 'Warning: instance %s not found in window list' \
+		        % instance
+		sys.stdout.flush()
     print 'known windows', manager.known_windows()
     print '} state'
     print ''
 
-def new_instance(manager, app_name, app, window = None):
+def instance_status(manager, instance):
+    print ''
+    if not manager.known_instance(instance):
+	print "instance %s is unknown" % instance
+	return
+    print "instance %s" % instance
+    module = manager.instance_module(instance)
+    if module != None:
+	print "running in module %s" % module
+    else:
+	print "(unknown module)"
+    windows = manager.known_windows(instance)
+    print "windows: ", windows
+    for window in windows:
+	print "window #%d:" % window
+	if manager.shared_window(window):
+	    print "shared"
+	if manager.single_display(window):
+	    print "single-window display"
+	instances = manager.known_instances(window)
+	print "all instances for window:"
+	for app in instances:
+	    print app
+    print ''
+
+def old_new_instance(manager, app_name, app, window = None):
     print 'new instance of %s %d' % (app_name, app)
     if window != None:
 	 print 'with window %d' % (window)
     i_name = manager.new_instance(app_name, app, window)
-    a_name = manager.instance_apps[i_name]
+    a_name = manager.app_name(i_name)
     if a_name != app_name:
 	print 'Warning: app names %s and %s do not match' \
 	    % (app_name, a_name)
@@ -1444,13 +1474,85 @@ def new_instance(manager, app_name, app, window = None):
 	    % (app, a)
     return i_name
 
-def test_rsm_dictionaries():
-    manager = RecogStartMgr.RecogStartMgr()
+def set_window(current, window, app_name, app):
+    current.set_info(window.ID(), window.module(), app, app_name)
 
-    Emacs = 1
-    another_Emacs = 2
-    yet_another_Emacs = 4
-    Vim = 3
+def new_instance(manager, current, app_name, title_prefix, app, window = None):
+    print 'new instance of %s %d' % (app_name, app)
+    check = 0
+    if window != None:
+	 print 'with window %d' % (window)
+	 check = 1
+	 set_window(current, window, app_name, app)
+    i_name = manager.new_instance(app_name, title_prefix, app, check)
+    a_name = manager.app_name(i_name)
+    if a_name != app_name:
+	print 'Warning: app names %s and %s do not match' \
+	    % (app_name, a_name)
+    a = manager.instances[i_name]
+    if a != app:
+	print 'Warning: AppStates %d and %d do not match' \
+	    % (app, a)
+    return i_name
+
+class FakeWindow(Object.Object):
+    def __init__(self, handle, module, **args):
+	self.deep_construct(FakeWindow,
+	                    {'handle': handle,
+			     'module_name': module
+			    },
+			    args)
+    def __int__(self):
+        return self.handle
+    def ID(self):
+        return self.handle
+    def module(self):
+        return self.module_name
+
+class FakeAppState(Object.OwnerObject):
+    def __init__(self, value, buff, shared = 0, multi = 1, active = 1, **attrs):
+	self.deep_construct(FakeAppState, 
+			    {'value': value,
+			     'buff': buff,
+			     'the_title_string': '',
+			     'shared_windows': shared,
+			     'multi': multi,
+			     'active': active
+			    }, attrs)
+    def __str__(self):
+        return str(self.value)
+    def __int__(self):
+        return self.value
+    def shared_window(self):
+	return self.shared_windows
+    def multiple_windows(self):
+	return self.multi
+    def name(self):
+	return self.buff
+    def suspend(self):
+	self.active = 0
+    def resume(self):
+	self.active = 1
+    def is_active(self):
+	return self.active
+    def is_active_is_safe(self):
+	return 1
+    def set_title_string(self, title):
+	self.the_title_string = title
+    def title_string(self):
+	return self.the_title_string 
+    def title_escape_sequence(self, a, b):
+	pass
+
+def old_test_am_dictionaries():
+    manager = AppMgr.AppMgr()
+
+    Emacs = FakeAppState(1)
+    another_Emacs = FakeAppState(2)
+    yet_another_Emacs = FakeAppState(4)
+    shell_Emacs = FakeAppState(5)
+    shell_Emacs2 = FakeAppState(6)
+    Vim = FakeAppState(3)
     i = new_instance(manager, 'Emacs', Emacs)
     manager_state(manager)
     print 'new window 14'
@@ -1464,7 +1566,7 @@ def test_rsm_dictionaries():
 
     k = new_instance(manager, 'Vim for Windows', Vim)
     print 'delete window 20'
-    manager.delete_window(20)
+    manager.delete_window(i, 20)
     manager_state(manager)
 
     print 'delete instance ' + j
@@ -1480,9 +1582,96 @@ def test_rsm_dictionaries():
     manager.delete_instance(l)
     manager_state(manager)
 
+    m = new_instance(manager, 'Emacs (Exceed)', shell_Emacs,
+	window = 94)
+    n = new_instance(manager, 'Emacs (Exceed)', shell_Emacs2,
+	window = 94)
+    manager_state(manager)
+    manager.delete_window(m, 94)
+    manager_state(manager)
+    manager.delete_instance(m)
+    manager_state(manager)
+    manager.delete_instance(n)
+    manager_state(manager)
 
-auto_test.add_test('rsm_dictionaries', test_rsm_dictionaries, 
-    'Testing RecogStartMgr dictionary management.')
+def test_am_dictionaries():
+    g_factory = sr_grammars.WinGramFactoryDummy(silent = 1)
+    GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
+    current = RecogStartMgr.CurrWindowDummy()
+    recog_mgr = RecogStartMgr.RSMDummy(editors = None, GM_factory = GM_factory, 
+      win_info = current)
+    manager = AppMgr.AppMgr(recog_mgr)
+    windows = {}
+    mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
+	editor = 'Emacs')
+    mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
+	editor = 'Vim')
+    mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
+	title_varies = 1)
+    manager.add_module(mod_Emacs)
+    manager.add_module(mod_Vim)
+    manager.add_module(mod_telnet)
+
+    Emacs = FakeAppState(1, 'a_file.py')
+    another_Emacs = FakeAppState(2, 'poodle.C')
+    yet_another_Emacs = FakeAppState(4, 'foo.bar')
+    shell_Emacs = FakeAppState(5, 'bug.c', shared = 1, multi = 0)
+    shell_Emacs2 = FakeAppState(6, 'dog.q', shared = 1, multi = 0)
+    Vim = FakeAppState(3, 'tests_def.py')
+    i = new_instance(manager, current, 'Emacs', 'Yak', Emacs)
+    manager_state(manager)
+    print 'new window 14'
+    windows[14] = FakeWindow(14, 'EMACS')
+    set_window(current, windows[14], 'Emacs', Emacs)
+    manager.new_window(i)
+    print 'new window 20'
+    manager.app_instance(i).buff = 'dogs.C'
+    windows[20] = FakeWindow(20, 'EMACS')
+    set_window(current, windows[20], 'Emacs', Emacs)
+    manager.new_window(i)
+    manager_state(manager)
+
+    windows[10] = FakeWindow(10, 'EMACS')
+    j = new_instance(manager, current, 'Emacs', 'Yak', another_Emacs, windows[10])
+    manager_state(manager)
+
+    k = new_instance(manager, current, 'Vim for Windows', 'Victor', Vim)
+    print 'delete window 20'
+    manager.delete_window(i, 20)
+    manager_state(manager)
+
+    print 'delete instance ' + j
+    manager.delete_instance(j)
+    windows[7] = FakeWindow(7, 'EMACS')
+    l = new_instance(manager, current, 'Emacs', 'Yak', yet_another_Emacs, windows[7])
+    manager_state(manager)
+    print 'delete instance ' + i
+    manager.delete_instance(i)
+    manager_state(manager)
+    print 'delete instance ' + k
+    manager.delete_instance(k)
+    print 'delete instance ' + l
+    manager.delete_instance(l)
+    manager_state(manager)
+    windows[94] = FakeWindow(94, 'TELNET')
+
+    m = new_instance(manager, current, 'Emacs (Exceed)', 'Yak', shell_Emacs,
+	window = windows[94])
+    shell_Emacs.suspend()
+    n = new_instance(manager, current, 'Emacs (Exceed)', 'Yak', shell_Emacs2,
+	window = windows[94])
+    manager_state(manager)
+    manager.delete_window(m, 94)
+    manager_state(manager)
+    manager.delete_instance(m)
+    manager_state(manager)
+    manager.delete_instance(n)
+    manager_state(manager)
+
+
+
+auto_test.add_test('am_dictionaries', test_am_dictionaries, 
+    'Testing AppMgr dictionary management.')
 
 ##############################################################################
 # Testing WinGramMgr with dummy grammars
