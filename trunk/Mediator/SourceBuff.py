@@ -88,6 +88,24 @@ class SourceBuff(Object):
                             attrs
                             )
 
+    def rename_buffer_cbk(self, new_buff_name):
+        
+        """AppState invokes this method when 
+	AppState.rename_buffer_cbk is called to notify VoiceCode that 
+	an existing text buffer has been renamed
+        
+        **INPUTS**
+
+        STR *new_buff_name* -- new name of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+	self.buff_name = new_buff_name
+
     def file_name(self):
         """Returns the name of the file being displayed in a buffer.
         
@@ -161,7 +179,7 @@ class SourceBuff(Object):
         
         *STR* -- the name of the language
         """
-        return self.lang_srv.language_name()        
+        debug.virtual('SourceBuff.language_name')
 
 
     def drop_breadcrumb(self, pos=None):

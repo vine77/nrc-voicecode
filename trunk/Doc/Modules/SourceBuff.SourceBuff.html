@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:07:29 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Apr 03 17:50:36 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -76,6 +76,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.refresh</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Force a refresh of the buffer</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.refresh_if_necessary</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Refresh buffer if necessary</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.region_distance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.region_distance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">region1_start</SPAN>, <SPAN CLASS="Argument">region1_end</SPAN>, <SPAN CLASS="Argument">region2_start</SPAN>, <SPAN CLASS="Argument">region2_end</SPAN>)<SPAN CLASS="OneLiner"> # Computes the distance between two regions of text</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.restore_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.restore_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.same_as_previous_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.same_as_previous_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)
@@ -919,7 +920,19 @@ print <EM>print_nlines</EM> lines around cursor.
 <DD>distance between the two regions of text
 
 </DL>
-<H2 ID="SourceBuff.SourceBuff.restore_state" CLASS="Method">SourceBuff.SourceBuff.restore_state(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
+<H2 ID="SourceBuff.SourceBuff.rename_buffer_cbk" CLASS="Method">SourceBuff.SourceBuff.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+AppState invokes this method when 
+AppState.rename_buffer_cbk is called to notify VoiceCode that 
+an existing text buffer has been renamed<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+STR <EM>new_buff_name</EM>
+<DD>new name of the buffer.
+</DL>
+<STRONG>OUTPUTS</STRONG><EM>none</EM>..[SourceBuff] SourceBuff.SourceBuff.html<H2 ID="SourceBuff.SourceBuff.restore_state" CLASS="Method">SourceBuff.SourceBuff.restore_state(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
 <P>None</P>
 
 restores the buffer to its state at the time when
