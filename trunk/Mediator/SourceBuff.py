@@ -894,7 +894,7 @@ class SourceBuff(OwnerObject):
         if pos != None:
            self.goto(pos)
         self.search_for(regexp="($|%s)" % self.newline_regexp(), direction=1,
-                        where=-1, ignore_left_of_cursor=1)
+                        where=-1, ignore_left_of_cursor=1, unlogged=1)
 
     def goto_beginning_of_line(self, pos=None):
         """Go to beginning of the line at a particular cursor position.
@@ -906,7 +906,7 @@ class SourceBuff(OwnerObject):
            self.goto(pos)
         
         self.search_for(regexp="(^|%s)" % self.newline_regexp(), direction=-1,
-                        where=1, ignore_right_of_cursor=1)
+                        where=1, ignore_right_of_cursor=1, unlogged=1)
         
     def goto_range(self, range, where):
         """Goes to one extremity of a range

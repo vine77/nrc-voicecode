@@ -633,7 +633,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F4C8B8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F4EDE8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2729,6 +2729,165 @@ were reinterpreted, as expected
 
 
 *******************************************************************************
+* Name        : beg_end_of_line
+* Description : Testing methods for going to the beginning or end of a line.
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
+Heard line one new statement line two new statement line three
+Associate 'line' with symbol (Enter selection):
+
+  '0': no association
+  '1': line (*new*)
+  '2': Line (*new*)
+  '3': LINE (*new*)
+
+> *** Start of source buffer ***
+  1: line1
+  2: line2
+  3: line3<CURSOR>
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: line2
+  3: <CURSOR>line3
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: line2
+  3: <CURSOR>line3
+
+*** End of source buffer ***
+Got command: move_relative(-1,)
+*** Start of source buffer ***
+  1: line1
+  2: line2<CURSOR>
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: <CURSOR>line2
+  3: line3
+
+*** End of source buffer ***
+Got command: move_relative(3,)
+*** Start of source buffer ***
+  1: line1
+  2: lin<CURSOR>e2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: <CURSOR>line2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto(0,)
+*** Start of source buffer ***
+  1: <CURSOR>line1
+  2: line2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: <CURSOR>line1
+  2: line2
+  3: line3
+
+*** End of source buffer ***
+WARNING: source file 'blah2.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
+Heard line one new statement line two new statement line three
+*** Start of source buffer ***
+  1: line1
+  2: line2
+  3: line3<CURSOR>
+
+*** End of source buffer ***
+Got command: goto(0,)
+*** Start of source buffer ***
+  1: <CURSOR>line1
+  2: line2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: line1<CURSOR>
+  2: line2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: line1<CURSOR>
+  2: line2
+  3: line3
+
+*** End of source buffer ***
+Got command: move_relative(1,)
+*** Start of source buffer ***
+  1: line1
+  2: <CURSOR>line2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: line2<CURSOR>
+  3: line3
+
+*** End of source buffer ***
+Got command: move_relative(-3,)
+*** Start of source buffer ***
+  1: line1
+  2: li<CURSOR>ne2
+  3: line3
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: line2<CURSOR>
+  3: line3
+
+*** End of source buffer ***
+Got command: goto(17,)
+*** Start of source buffer ***
+  1: line1
+  2: line2
+  3: line3<CURSOR>
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: line1
+  2: line2
+  3: line3<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : blank_line_context
 * Description : Testing commands that have a special meaning only a a blank line
 *******************************************************************************
@@ -2745,8 +2904,8 @@ Heard for do the following
   2:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['security', 'level', 'equals', 'for', 'your', 'eyes', 'only']
-Heard security level equals for your eyes only
+Saying: ['security', 'level', 'equals', 'for', 'your', 'eyes', 'only', 'new', 'statement', 'back', 'indent']
+Heard security level equals for your eyes only new statement back indent
 Associate 'security level' with symbol (Enter selection):
 
   '0': no association
@@ -2769,7 +2928,178 @@ Associate 'security level' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: for :
-  2:    security_level = for_your_eyes_only<CURSOR>
+  2:    security_level = for_your_eyes_only
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['while', 'loop', 'one', 'do', 'the', 'following']
+Heard while loop one do the following
+*** Start of source buffer ***
+  1: for :
+  2:    security_level = for_your_eyes_only
+  3: while 1:
+  4:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['when', 'equals', 'while', 'processing', 'new', 'statement']
+Heard when equals while processing new statement
+Associate 'when' with symbol (Enter selection):
+
+  '0': no association
+  '1': when (*new*)
+  '2': When (*new*)
+  '3': WHEN (*new*)
+
+> Associate 'while processing' with symbol (Enter selection):
+
+  '0': no association
+  '1': while_processing (*new*)
+  '2': WhileProcessing (*new*)
+  '3': whileProcessing (*new*)
+  '4': WHILE_PROCESSING (*new*)
+  '5': whileprocessing (*new*)
+  '6': WHILEPROCESSING (*new*)
+
+>   2:    security_level = for_your_eyes_only
+  3: while 1:
+  4:    when = while_processing
+  5:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['if', 'condition', 'do', 'the', 'following']
+Heard if condition do the following
+Associate 'condition' with symbol (Enter selection):
+
+  '0': no association
+  '1': condition (*new*)
+  '2': Condition (*new*)
+  '3': CONDITION (*new*)
+
+>   3: while 1:
+  4:    when = while_processing
+  5:    if condition:
+  6:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['check', 'equals', 'if', 'all', 'right', 'without', 'arguments', 'new', 'statement']
+Heard check equals if all right without arguments new statement
+Associate 'check' with symbol (Enter selection):
+
+  '0': no association
+  '1': check (*new*)
+  '2': Check (*new*)
+  '3': CHECK (*new*)
+
+> Associate 'if all right' with symbol (Enter selection):
+
+  '0': no association
+  '1': if_all_right (*new*)
+  '2': IfAllRight (*new*)
+  '3': ifAllRight (*new*)
+  '4': IF_ALL_RIGHT (*new*)
+  '5': ifallright (*new*)
+  '6': IFALLRIGHT (*new*)
+
+>   4:    when = while_processing
+  5:    if condition:
+  6:       check = if_all_right()
+  7:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['back', 'indent', 'back', 'indent']
+Heard back indent back indent
+  4:    when = while_processing
+  5:    if condition:
+  6:       check = if_all_right()
+  7: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['class', 'some', 'class', 'class', 'body']
+Heard class some class class body
+Associate 'some class' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_class (*new*)
+  '2': SomeClass (*new*)
+  '3': someClass (*new*)
+  '4': SOME_CLASS (*new*)
+  '5': someclass (*new*)
+  '6': SOMECLASS (*new*)
+
+>   5:    if condition:
+  6:       check = if_all_right()
+  7: class some_class:
+  8:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['try']
+Heard try
+  6:       check = if_all_right()
+  7: class some_class:
+  8:    try:
+  9:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['flag', 'equals', 'did', 'try', 'new', 'statement']
+Heard flag equals did try new statement
+Associate 'flag' with symbol (Enter selection):
+
+  '0': no association
+  '1': flag (*new*)
+  '2': Flag (*new*)
+  '3': FLAG (*new*)
+
+> Associate 'did try' with symbol (Enter selection):
+
+  '0': no association
+  '1': did_try (*new*)
+  '2': DidTry (*new*)
+  '3': didTry (*new*)
+  '4': DID_TRY (*new*)
+  '5': didtry (*new*)
+  '6': DIDTRY (*new*)
+
+>   7: class some_class:
+  8:    try:
+  9:       flag = did_try
+ 10:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['the', 'next', 'ones', 'still', 'present', 'bugs', 'new', 'statement']
+Heard the next ones still present bugs new statement
+Associate 'the next ones still present bugs' with symbol (Enter selection):
+
+  '0': no association
+  '1': the_next_ones_still_present_bugs (*new*)
+  '2': TheNextOnesStillPresentBugs (*new*)
+  '3': theNextOnesStillPresentBugs (*new*)
+  '4': THE_NEXT_ONES_STILL_PRESENT_BUGS (*new*)
+  '5': thenextonesstillpresentbugs (*new*)
+  '6': THENEXTONESSTILLPRESENTBUGS (*new*)
+
+>   8:    try:
+  9:       flag = did_try
+ 10:       the_next_ones_still_present_bugs
+ 11:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['check', 'if', 'was', 'done', 'without', 'arguments', 'new', 'statement']
+Heard check if was done without arguments new statement
+WARNING: tried to interpret a '1' command without valid context
+Associate 'was done' with symbol (Enter selection):
+
+  '0': no association
+  '1': was_done (*new*)
+  '2': WasDone (*new*)
+  '3': wasDone (*new*)
+  '4': WAS_DONE (*new*)
+  '5': wasdone (*new*)
+  '6': WASDONE (*new*)
+
+>   9:       flag = did_try
+ 10:       the_next_ones_still_present_bugs
+ 11:       checkwas_done()
+ 12:       <CURSOR>
 
 *** End of source buffer ***
 
@@ -3399,6 +3729,7 @@ WARNING: source file 'tmp.py' doesn't exist.
   2: 12345678
   3: 12345678
   4: 12345678
+
 
 *******************************************************************************
 * Name        : looking_at
@@ -9806,24 +10137,24 @@ Heard select a super
   6:     
   7:     def a_method(self, some_argument):
 Heard new super class
-Associate 'new super' with symbol (Enter selection):
+Associate 'new super class' with symbol (Enter selection):
 
   '0': no association
-  '1': new_super (*new*)
-  '2': NewSuper (*new*)
-  '3': newSuper (*new*)
-  '4': NEW_SUPER (*new*)
-  '5': newsuper (*new*)
-  '6': NEWSUPER (*new*)
+  '1': new_super_class (*new*)
+  '2': NewSuperClass (*new*)
+  '3': newSuperClass (*new*)
+  '4': NEW_SUPER_CLASS (*new*)
+  '5': newsuperclass (*new*)
+  '6': NEWSUPERCLASS (*new*)
 
 > *** Start of source buffer ***
   1: # This is a small buffer for testing editing of Python code
   2: 
   3: 
-  4: class AClass(new_superclass <CURSOR>:
-  5:              ):
-  6:     """This is a dummy class"""
-  7:     
+  4: class AClass(ASupernew_super_class<CURSOR>):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, some_argument):
 
 *********************
 *** DONE with edit test: change subclass of existing class ***
@@ -12651,5 +12982,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  475.656999946 secs
+Test suite completed in:  440.093999982 secs
 -----------------------------------------------

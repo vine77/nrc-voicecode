@@ -109,7 +109,6 @@ class CSCmd(Object):
             trace('CSCmd.interpret', 'ameaning=%s, cont=%s, action=%s' % 
                                      (ameaning, cont, action))
             action.log_execute(app, cont)
-#                app.print_buff_content()
             applied = 1
 
         return applied
