@@ -1,6 +1,12 @@
 Todo list for VoiceCode
 =======================
 
+getWordInfo
+-----------
+
+In sr_interface.getWordInfo, if no flag is specified, should use
+flag = 1 (i.e. look in backup dictionary).
+
 Select Pseudo-code
 ------------------
 
