@@ -153,6 +153,34 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         self.main_frame.set_status_text(message)
         return 1
 
+    def starting_tests(self):
+        """method used by NewMediatorObject to notify us that it is
+        about to start regression testing
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.main_frame.starting_tests()
+
+    def finished_tests(self):
+        """method used by NewMediatorObject to notify us that it is
+        done with regression testing
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.main_frame.finished_tests()
+
 
 # Hopefully, raise_active_window and raise_wxWindow are made obsolete by
 # WinSystemMSW, since the former doesn't work consistently, and the latter

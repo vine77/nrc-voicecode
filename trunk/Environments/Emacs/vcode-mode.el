@@ -1083,6 +1083,19 @@ Changes are put in a changes queue `vr-queued-changes.
 "
   (let ()
     (vcode-trace "vcode-execute-command-string" "command-string=%S" command-string)
+    (vr-log "-- vcode-execute-command-string: command-string=%S" command-string)
+    (if unread-command-events
+;        (vcode-trace "vcode-execute-command-string"
+;        "unread-command-events=%S" unread-command-events)
+         (vr-log "-- vcode-execute-command-string: unread-command-events=%S" 
+             unread-command-events)
+    )
+    (if (input-pending-p)
+;        (vcode-trace "vcode-execute-command-string"
+;        "unread-command-events=%S" unread-command-events)
+         (vr-log "-- vcode-execute-command-string: input-pending" )
+    )
+
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -2401,6 +2414,8 @@ a buffer"
       "selected-window is minibuffer? %S"
       (if (window-minibuffer-p (selected-window)) "yes" "no")
     )
+    (vr-log "-- vcode-cmd-recognition-start: input-pending-p is %S" 
+      (input-pending-p))
     (if (numberp window-id)
         (setq window-id (int-to-string window-id)))
     (vr-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
@@ -2417,6 +2432,7 @@ a buffer"
           (setq vcode-frame-activated-necessary)
         )
     )
+
     (if vcode-frame-activated-necessary
 ; tried this just to confirm that keyboard macros don't trigger focus
 ; events (as per the Info file).  They don't, so we still need the
@@ -3654,7 +3670,10 @@ tabs.
     ;;; report where the cursor actually went (as opposed to where we 
     ;;; expected it to go).
     ;;;
-    (switch-to-buffer buff-name)
+;    (switch-to-buffer buff-name)
+    (set-buffer buff-name)
+; what if I change this to set-buffer (essentially, to change buffers,
+; we should issue an explicit call to AppState.change_buffer)
     (setq final-pos (point))
 
     ;;;
@@ -3676,7 +3695,8 @@ tabs.
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (condition-case err     
 	(progn 
-	  (switch-to-buffer buff-name)
+;	  (switch-to-buffer buff-name)
+          (set-buffer buff-name)
 	  (goto-line line-num)
 	  (if (= -1 go-where) 
 	      (beginning-of-line)
@@ -3693,7 +3713,10 @@ tabs.
     ;;; report where the cursor actually went (as opposed to where we 
     ;;; expected it to go).
     ;;;
-    (switch-to-buffer buff-name)
+;    (switch-to-buffer buff-name)
+    (set-buffer buff-name)
+; what if I change this to set-buffer (essentially, to change buffers,
+; we should issue an explicit call to AppState.change_buffer)
     (setq final-pos (point))
 
     ;;;

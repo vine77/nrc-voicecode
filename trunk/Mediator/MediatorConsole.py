@@ -100,6 +100,10 @@ class MediatorConsole(Object.OwnerObject):
 
     *WinSystem win_sys -- WinSystem interface to
     window-system specific functions
+
+    *BOOL* testing -- flag indicating whether we are currently
+    performing regression tests
+
     **CLASS ATTRIBUTES**
     
     *none* 
@@ -120,11 +124,40 @@ class MediatorConsole(Object.OwnerObject):
                              'dismiss_events': [],
                              'win_sys': win_sys,
                              'mediator': None,
+                             'testing': 0,
                              'gram_factory': None
                             },
                             attrs)
         self.name_parent('mediator')
         self.win_sys.set_main_frame_handle(main_frame_handle)
+
+    def starting_tests(self):
+        """method used by NewMediatorObject to notify us that it is
+        about to start regression testing
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        pass
+
+    def finished_tests(self):
+        """method used by NewMediatorObject to notify us that it is
+        done with regression testing
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        pass
 
     def store_foreground_window(self):
         """detect the current foreground window, and store it in a
@@ -383,6 +416,8 @@ class MediatorConsole(Object.OwnerObject):
         *none*
         """
         debug.virtual('MediatorConsole.raise_active_window')
+
+
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

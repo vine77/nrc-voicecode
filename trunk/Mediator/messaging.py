@@ -29,6 +29,7 @@ from debug import trace
 import Queue
 import time
 import select
+import threading
 
 import debug, Object
 
@@ -879,8 +880,14 @@ class MessTransporter_Socket(MessTransporter):
             try:
                 sent = self.sock.send(a_string[totalsent:])
             except socket.error:
+                sys.stderr.write('MessTransporter_Socket.send_string:')
+                sys.stderr.write(' socket connection broken in %s' % \
+                    threading.currentThread().getName())
                 raise SocketError("socket connection broken (sending)")
             if sent == 0:
+                sys.stderr.write('MessTransporter_Socket.send_string:')
+                sys.stderr.write(' no data sent in %s' % \
+                    threading.currentThread().getName())
                 raise SocketError("socket connection broken (sending)")
 #                raise SocketError, "socket connection broken"
             totalsent = totalsent + sent
@@ -913,6 +920,9 @@ class MessTransporter_Socket(MessTransporter):
             except socket.error:
                 chunk = ''
             if chunk == '':
+                sys.stderr.write('MessTransporter_Socket.receive_string:')
+                sys.stderr.write(' no data received in %s' % \
+                    threading.currentThread().getName())
                 raise SocketError("socket connection broken (receiving)")
 #                raise SocketError, "socket connection broken"
             a_string = a_string + chunk
@@ -935,6 +945,9 @@ class MessTransporter_Socket(MessTransporter):
         try:
             data, dummy, dummy2 = select.select([self.sock], [], [], 0)
         except socket.error:
+            sys.stderr.write('MessTransporter_Socket.data_available:')
+            sys.stderr.write(' socket connection broken in %s' % \
+                threading.currentThread().getName())
             raise SocketError("socket connection broken (receiving)")
         return len(data) != 0
 
