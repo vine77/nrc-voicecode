@@ -95,7 +95,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         
         """Haven't figured out how to make WaxEdit block user input"""
 
-        pass
+        return 1
 
     def recog_end(self):
         
