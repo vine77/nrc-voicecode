@@ -109,80 +109,24 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         selection_content = self.get_text(selection_start, selection_end)
         after_content = self.get_text(selection_end)
 
-        before_content = self.content[:selection_start]
-        selection_content = self.content[selection_start:selection_end]
-        after_content = self.content[selection_end:]
+	printed = before_content
+	if selection_content == '':
+	    printed = printed + '<CURSOR>'
+	else:
+	    printed = printed + '<SEL_START>'
+	    printed = printed + selection_content
+	    printed = printed + '<SEL_END>'
+	printed = printed + after_content
 
-	if 0:
-	    printed = before_content
-	    if selection_content == '':
-		printed = printed + '<CURSOR>'
-	    else:
-		printed = printed + '<SEL_START>'
-		printed = printed + selection_content
-		printed = printed + '<SEL_END>'
-	    printed = printed + after_content
-
-	    lines_with_num = self.number_lines(printed, startnum = 1)
+	lines_with_num = self.number_lines(printed, startnum = 1)
         
-	    if from_line == 1:
-		sys.stdout.write("*** Start of source buffer ***\n")
-	    for aline in lines_with_num[from_line-1:to_line]:
-		sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-	    if to_line == len(lines_with_num):
-		sys.stdout.write("\n*** End of source buffer ***\n")
-	    return
-
-
-        sys.stdout.write("*** Start of source buffer ***\n")
-
-        #
-        # Print region before the selection.
-        #
-        curr_line_num = 1
-        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
-        for aline in lines_with_num[:len(lines_with_num)-1]:
-            if curr_line_num >= from_line and curr_line_num <= to_line:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-            curr_line_num = curr_line_num + 1
-            
-        if len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line:
-             lastline = lines_with_num[len(lines_with_num)-1]
-             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
-             curr_line_num = curr_line_num + 1
-        
-        if selection_content == '':
-            sys.stdout.write('<CURSOR>')            
-        else:
-            sys.stdout.write('<SEL_START>')
-
-        #
-        # Print the selection
-        #
-        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                if curr_line_num >= from_line and curr_line_num <= to_line:
-                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-                curr_line_num = curr_line_num + 1
-        if selection_content != '': sys.stdout.write('<SEL_END>')
-
-        #
-        # Print region after the selection
-        #
-        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                if curr_line_num >= from_line and curr_line_num <= to_line:
-                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-                curr_line_num = curr_line_num + 1
-        sys.stdout.write("\n*** End of source buffer ***\n")
-        
-
+	if from_line == 1:
+	    sys.stdout.write("*** Start of source buffer ***\n")
+	for aline in lines_with_num[from_line-1:to_line]:
+	    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+	if to_line == len(lines_with_num):
+	    sys.stdout.write("\n*** End of source buffer ***\n")
+	return
 
     def lines_around_cursor(self):
         """Returns the line numbers of lines around cursor
@@ -200,10 +144,6 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 
         *INT to_line* -- Last line of the window.
         """
-        curr_line = self.line_num_of(self.cur_pos())
-        from_line = self.make_within_range(curr_line - print_window_size)
-        to_line = self.make_within_range(curr_line + print_window_size)
-        return from_line, to_line
 
         curr_line = self.line_num_of(self.cur_pos())
         from_line = curr_line - print_window_size
@@ -242,10 +182,7 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         lines = string.split(self.contents(), '\n')
         line_start_pos = None
         line_end_pos = 0
-# correct
         curr_line = 1
-# incorrect
-        curr_line = 0
         for a_line in lines:
             curr_line = curr_line + 1
             line_start_pos = line_end_pos
