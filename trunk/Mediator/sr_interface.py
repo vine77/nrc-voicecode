@@ -77,10 +77,10 @@ def addWord(word, *rest):
         
     global word_info_flag
 
-    print '-- sr_interface.addWord: adding \'%s\'' % word
+#    print '-- sr_interface.addWord: adding \'%s\'' % word
     if speech_able():
         if getWordInfo(word) == None:
-            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
+#            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
                    
             if len(rest) == 0:
                 natlink.addWord(word, word_info_flag)
@@ -150,8 +150,6 @@ def spoken_written_form(vocabulary_entry):
     return (spoken, written)
     
 
-
-
 def vocabulary_entry(spoken_form, written_form):
     """Creates a vocabulary entry with given spoken and written forms.
 
@@ -167,7 +165,7 @@ def vocabulary_entry(spoken_form, written_form):
     *entry* -- the entry to be added to the SR vocabulary
     """
 
-    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s' % (spoken_form, repr(written_form))
+#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s' % (spoken_form, repr(written_form))
 
     #
     # Substitute blanks in written form

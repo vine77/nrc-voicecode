@@ -10,7 +10,7 @@ class LangDef(Object):
     
     *ANY regexp_symbol=None* -- a regepx that matches a valid symbol
     
-    *ANY regexp_no_symbols=None* -- a regexp that matches portions of
+    *ANY regexps_no_symbols=None* -- a regexp that matches portions of
      code that don't contain symbols (e.g. quoted strings, comments)
     
 
@@ -19,10 +19,10 @@ class LangDef(Object):
     *none* -- 
     """
     
-    def __init__(self, name=None, regexp_symbol=None, regexp_no_symbols=None, **attrs):
+    def __init__(self, name=None, regexp_symbol=None, regexps_no_symbols=None, **attrs):
         self.deep_construct(LangDef, \
                             {'name': name, \
                              'regexp_symbol': regexp_symbol, \
-                             'regexp_no_symbols': regexp_no_symbols}, \
+                             'regexps_no_symbols': regexps_no_symbols}, \
                             attrs, \
                             {})

@@ -522,7 +522,7 @@ class SymDict(Object):
               # This spoken form was added specifically by VoiceCode.
               # Remove it.
               #
-              print '-- SymDict.vocabulary_cleanup: removing word %s' % a_form
+#              print '-- SymDict.vocabulary_cleanup: removing word %s' % a_form
               if not vocabulary_symbols_with_written_form:
                   #
                   # Just remove the spoken form

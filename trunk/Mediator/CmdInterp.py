@@ -1,4 +1,3 @@
-# print '-- CmdInterp.py: imported'
 
 import os, re, string
 
@@ -409,8 +408,9 @@ class CmdInterp(Object):
 
         language = self.on_app.curr_buffer.language
         last_language = self.last_loaded_language
+#        print '-- CmdInterp.load_language_specific_aliases: called, language=%s, last_language=%s' % (language, last_language)
+#        print '-- CmdInterp.load_language_specific_aliases: self.language_specific_aliases[%s]=%s' % (language, self.language_specific_aliases[language])
         if language != last_language:
-            print '-- CmdInterp.load_language_specific_aliases: loading words for language \'%s\'' % language
             #
             # Remove words from previous language
             #

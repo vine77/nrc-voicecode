@@ -1,6 +1,8 @@
 """Define a series of regression tests for VoiceCode"""
 
-import CmdInterp, EdSim, MediatorObject, SymDict
+import sys
+import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict
+
 
 ##############################################################################
 # Testing SymDict
@@ -127,4 +129,140 @@ def test_EdSim():
 auto_test.add_test('EdSim', test_EdSim, desc='self-test for EdSim.py')
 
 
+###############################################################################
+# Testing Object.py
+###############################################################################
 
+class Person1(Object.Object):
+    def __init__(self, name, citizenship=None, **args_super):
+        self.deep_construct(Person1, {'name': name, 'citizenship': citizenship}, args_super)
+
+class Employee1(Person1):
+    def __init__(self, salary=None, **args_super):
+        self.deep_construct(Employee1, {'salary': salary}, args_super)
+
+class MyPerson(Person1):
+    def __init__(self, marital_status=None, **args_super):
+        self.deep_construct(MyPerson, {'marital_status': marital_status}, args_super, new_default={'citizenship': 'Canadian eh?'})
+
+class Canadian(Person1):
+    def __init__(self, **args_super):
+        self.deep_construct(Canadian, {}, args_super, enforce_value={'citizenship': 'Canadian eh?'})
+
+class Person2(Object.Object):
+    def __init__(self, name=None, citizenship=None, init_file=None, **args_super):
+        self.deep_construct(Person2, {'name': name, 'citizenship': citizenship}, args_super)
+        sys.stdout.write('\nPerson2.__init__ received init_file=%s' % init_file)
+
+class AnimatedCharacter:
+    def __init__(self, animation_file, frames_per_sec=40):
+        self.animation_file = animation_file
+        self.frames_per_sec = frames_per_sec
+              
+
+class AnimatedPerson(Person1, AnimatedCharacter):
+    def __init__(self, animation_file, frames_per_sec=40, **args_super):
+        self.deep_construct(AnimatedPerson, {'animation_file': animation_file, 'frames_per_sec': frames_per_sec}, args_super, exclude_bases={AnimatedCharacter: 1})
+        AnimatedCharacter.__init__(self, animation_file, frames_per_sec=frames_per_sec)
+
+def try_attribute(obj, name, operation):
+    """Test setting/getting attributes
+
+    **INPUTS**
+
+    *ANY* obj -- object on which we will get/set attributes 
+
+    *STR* name -- name of attribute to get/set 
+
+    *STR* operation -- *'get'* or *'set'*
+
+    **OUTPUTS**
+
+    *none* -- 
+    """
+    env_py_debug_object = None
+    if os.environ.has_key('PY_DEBUG_OBJECT'): env_py_debug_object =  os.environ['PY_DEBUG_OBJECT']
+    sys.stdout.write("\nTrying to %s the value of attribute '%s', $PY_DEBUG_OBJECT=%s\n   -> " % (operation, name, env_py_debug_object))
+    if (operation == 'set'):
+        code = "obj." + name + " = '999'"
+    else:
+        code = "x = obj." + name
+    x = 0
+    try:
+        exec(code)
+    except AttributeError, exc:
+        sys.stdout.write("Caught AttributeError exception: '%s'" % [exc.__dict__])
+    else:
+        sys.stdout.write("Caught NO AttributeError exception. ")
+        str = "obj.%s=%s, x=%s" % (name, obj.name, x)
+        sys.stdout.write(str)
+    sys.stdout.write("\n\n")
+        
+
+def test_Object():
+
+    obj = Object.SmallObject()
+    sys.stdout.write("Testing exceptions for get/set\n\n")
+    try_attribute(obj, 'name', 'get')
+    try_attribute(obj, 'name', 'set')
+    try_attribute(obj, 'nonexistant', 'get')
+    try_attribute(obj, 'nonexistant', 'set')
+
+    result = Employee1(name='Alain', salary='not enough')    
+    print "Testing inheritance of constructor arguments\n   Employee1(name='Alain', salary='not enough') -> %s\n" % result.__dict__
+
+    #
+    # This raises an exception because we don't give a value for
+    # compulsory argument name, which is inherited from Person.__init__
+    #
+    sys.stdout.write("Omitting an inherited compulsory argument\n   Employee1(salary='not enough') -> ")
+    try:
+        result = Employee1(salary='not enough')
+        print 'Test failed! An exception should have been raised, but wasn\'t\n'
+    except Object.BadConstrCall, mess:
+        print 'Test OK. Correct exception was raised: \'%s\'' % mess
+
+    result = MyPerson(name='Alain')
+    print "\nRedefining default value of *citizenship*\n   MyPerson(name='Alain') -> result=%s" % result.__dict__
+
+    result = MyPerson(name='Alain', citizenship='US citizen')
+    print "\nOverriding redefined default value of *citizenship*\n   MyPerson(name='Alain', citizenship='US citizen') -> result=%s" % result.__dict__    
+
+    result = Canadian(name='Alain')
+    print "\nEnforcing 'Canadian eh?' as the value of *citizenship*\n   Canadian(name='Alain') -> result=%s" % result.__dict__    
+
+    sys.stdout.write("\nTrying to change enforced value 'Canadian eh?' of *citizenship*\n   Canadian(citizenship='US') -> ")
+    try:
+        result = Canadian(citizenship='US')
+        print 'Test failed. EnforcedConstrArg exception should have been raised but wasn\'t'
+    except Object.EnforcedConstrArg, mess:
+        print 'Test OK. EnforcedConstrArg was correctly raised: \'%s\'' % mess
+
+
+    result = Person2(init_file='C:/temp.txt')
+    print "\nClass with private *init_file* attribute*\n   Person2(init_file='C:/temp.txt') -> result=%s" % result.__dict__    
+
+    result = AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat')
+    print "\nSubclassing from non-standard class AnimatedCharacter.*\n   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result=%s" % result.__dict__        
+
+
+auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
+
+###############################################################################
+# Testing mediator.py console
+###############################################################################
+
+def test_command(command):
+    print '\n\n--- Testing console command: %s ---\n' % command
+    mediator.execute_command(command)
+
+def test_mediator_console():
+    mediator.init_simulator()
+    test_command("clear_symbols()")
+    test_command("compile_symbols(['" + vc_globals.test_data + os.sep + "small_buff.c'])")
+    test_command("open_file(' + + vc_globals.test_data + os.sep + blah.c')")
+    test_command("say('for loop horizontal position equal zero after semi horizontal position after equal')")
+    test_command("say('select horizontal position equal zero')")
+    test_command("quit()")
+
+auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')

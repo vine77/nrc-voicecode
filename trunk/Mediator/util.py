@@ -128,7 +128,7 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
             opt_val = an_opt[1]
         opt_dict[opt_name] = opt_val
 
-    print "-- gopt: opt_dict=%s, args=%s" % (str(opt_dict)    , str(args))        
+#    print "-- gopt: opt_dict=%s, args=%s" % (str(opt_dict)    , str(args))        
     return opt_dict, args
 
 

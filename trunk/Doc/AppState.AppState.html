@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 02 16:29:48 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 26 17:16:59 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -37,10 +37,13 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.select"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.select</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.select_region"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.select_region</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)<SPAN CLASS="OneLiner"> # Sets the selection in current buffer to a particular region.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
@@ -61,7 +64,7 @@ being run through the Mediator.</P>
  [SpeechComand] objects that speech commands that have been
  interpreted for that utterance.
 <DT>
-*{STR: * <A HREF="file:///SourceBuff.SourceBuff.html">SourceBuff</A> <EM>} open_buffers={}</EM>
+*{STR: * <A HREF="SourceBuff.SourceBuff.html">SourceBuff</A> <EM>} open_buffers={}</EM>
 <DD>List of source buffers that
  are currently open in the programming environment.
 <DT>
@@ -72,7 +75,7 @@ being run through the Mediator.</P>
 <DD>Name of the active Field. Elements of
  the array refer to a sequence of objects in the user interface
  that lead to the active field.<P>
- If <EM>None</EM>, then the buffer <A HREF="file:///AppState.AppState.html">self.curr_buffer</A> has the focus. </P>
+ If <EM>None</EM>, then the buffer <A HREF="AppState.AppState.html">self.curr_buffer</A> has the focus. </P>
 <P>
  Example: in VisualBasic, it might be: *('menu bar', <CODE>File</CODE>, 'Save
  as', 'file name')*.</P>
@@ -127,7 +130,7 @@ If <EM>buff</EM> not specified either, drop breadcrumb <A HREF="AppState.AppStat
 <P>
 If no such buffer, returns <EM>None</EM>.</P>
 <P>
-If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.</P>
+If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
 <H2 ID="AppState.AppState.focus_is_source" CLASS="Method">AppState.AppState.focus_is_source(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)</H2>
 <P>Check if prog. env. focus is a source buffer</P>
 
@@ -182,7 +185,7 @@ If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.htm
 <P>Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</P>
 
 <P>
-If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.
+If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.
 </P>
 <H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
 <P>Open a file.</P>
@@ -226,24 +229,146 @@ otherwise move it before
 </DL>
 <P>
 Returns 1 if and only if an occurence was found, and 0 otherwise.                          
-        .. [self.curr_buffer] file:///AppState.AppState.html</P>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+        .. [self.curr_buffer] AppState.AppState.html</P>
+<H2 ID="AppState.AppState.select" CLASS="Method">AppState.AppState.select(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Selects from position <EM>INT start</EM> up to <EM>INT end</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.select_region" CLASS="Method">AppState.AppState.select_region(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)</H2>
+<P>Sets the selection in current buffer to a particular region.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> start
+<DD>start of region 
+<DT>
+<EM>INT</EM> end
+<DD>end of region 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
 <P>Build an instance of a class.</P>
 
 <P>
-Make <EM>[Object] self</EM> into an instance of class <EM>CLASS this_class</EM>.</P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an [EnforcedConstrArg]
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
 <P>
-Automatically call constructors of superclasses of
-<EM>this_class</EM> (except for classes listed in *{CLASS: 1}
-exclude_bases*). Constructors are called with no arguments.</P>
-<P>
-Set attributes to the values listed in *{STR: ANY}
-attrs_this_class* and <EM>{STR: ANY} attrs_cupserclasses</EM>. These
-attributes are set even if they do not exist in
-<EM>self.__dict__</EM>.</P>
-<P>
-listed in <EM>exclude_bases</EM> argument). These constructors are
-called with no arguments.</P>
+..[EnforcedConstrArg] Object.html#EnforcedConstrArg
+</P>
 <H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Initialises existing attributes</P>
 

@@ -223,5 +223,7 @@ def define_language(name, definition):
 
     .. [LangDef] file:///./LangDef.LangDef.html"""
 
+    definition.name = name
     SymDict.language_definitions[name] = definition
+
 
