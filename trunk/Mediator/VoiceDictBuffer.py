@@ -225,6 +225,20 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	following the selection (this matches Python's slice convention).
 	"""
 	return self.underlying.getTextSel()
+      
+    def cur_pos(self):
+	"""returns current position (= end of the current selection)
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* -- the offset into the buffer of the current cursor
+	position.
+	"""
+	return self.get_selection()[1]
 
     def set_selection(self, start = None, end = None):
 	"""changes range of current selection

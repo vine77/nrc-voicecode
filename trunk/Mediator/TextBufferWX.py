@@ -27,7 +27,7 @@ from Object import Object
 from TextBuffer import *
 from wxPython.wx import *
 
-class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer):
+class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
     """TextBufferChangeSpecify wrapper for wxTextCtrl
     
     **INSTANCE ATTRIBUTES**
@@ -337,6 +337,20 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer):
 	self.underlying.SetSelection(s, e)
 	self.program_initiated = program_initiated
 
+    def cur_pos(self):
+	"""returns current position  (= end of the current selection)
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* -- the offset into the buffer of the current cursor
+	position.
+	"""
+	return self.get_selection()[1]
+
     def get_visible(self):
 	""" get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
@@ -374,4 +388,79 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer):
 	    start, end = self.internal_to_external(start, end)
 #	print start, end
 	return start, end
+
+    def line_num_of( self, pos = None):
+	"""find line number of position pos
+
+	**INPUTS**
+
+	*INT pos* -- the offset into the buffer of the desired position. 
+	 Defaults to the current position.
+
+	**OUTPUTS**
+
+	*INT* -- corresponding line number (starting with 0)
+	"""
+
+	if pos == None:
+	    pos = self.cur_pos()
+	lines = self.line_range_external(0, pos)
+	return lines[1]
+
+    def position_of_line(self, line = None):
+	"""returns the position of the start of the specified line 
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, returns position of end of buffer.
+
+	**OUTPUTS**
+
+	*INT* -- position of start of that line.
+	"""
+
+	end = None
+	if line == None:
+	    end = self.cur_pos()
+# we don't need lines past the desired line
 	
+	lines = string.split(self.get_text(0, end), '\n')
+	if line == None:
+	    line = len(lines) - 1
+	before = string.join(lines[0:line], '\n')
+	return len(before)
+
+    def line_length(self, line = None):
+	"""returns the length of the specified line
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, returns None.
+
+	**OUTPUTS**
+
+	*INT* -- length of start of that line.
+	"""
+	if line == None:
+	    line = self.line_num_of()
+	elif line > self.underlying.GetNumberOfLines():
+	    return None
+	return self.underlying.GetLineLength(line)
+
+	debug.virtual('NumberedLines.line_length')
+
+    def goto_line(self, line = None):
+	"""moves cursor to start of the specified line
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	pos = self.position_of_line(line)
+	self.set_selection( pos, pos)

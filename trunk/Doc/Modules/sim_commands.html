@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 27 22:09:47 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:52:22 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,10 +29,10 @@
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_error</SPAN>(<SPAN CLASS="Argument">message</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_symbols</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">provoke</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>(<SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say_select"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say_select</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate a <EM>Select XYZ</EM> utterance</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">select</SPAN>(<SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Selects from position <EM>start</EM> to position <EM>end</EM> in current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">show_buff</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Shows content of current source buffer</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Mediator\\sim_commands.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
@@ -100,7 +100,7 @@ clear_abbreviations()
 <LI>a string with the written form of what should be recognised by the
          SR system
          e.g.: say('index not equal to 0')
-<LI>a list of list of words in their written\spoken form (or just
+<LI>a list of words in their written\spoken form (or just
          written if it doesn't have a spoken form different from its
          written form).
          e.g.: say(['index', <CODE> != \not equal to</CODE>, '0'])
@@ -108,22 +108,14 @@ clear_abbreviations()
     In general, it's better to specify <EM>utterance</EM> as a list of
     written\spoken words because it allows to simulate exactly what
     the SR does (e.g. what if the SR recognises an LSA as a sequence
-    of words instead of its written\spoken form?)    Argument <EM>user_input</EM> is a string that will be sent to the
+    of words instead of its written\spoken form?)    Note that if the utterance is a <EM>Select XYZ</EM> utterance, the first item
+    in list <EM>utterances</EM> should be the whole verb used in the select statement.    Example: say(['select previous', <CODE>index</CODE>, <CODE> != \not equal to</CODE>, '0'])
+             NOT
+             say(['select', <CODE>previous</CODE>, <CODE>index</CODE>, <CODE> != \not equal to</CODE>, '0'])    Argument <EM>user_input</EM> is a string that will be sent to the
     mediator console's standard input. Use in automated regression
     testing, if the <EM>say</EM> command requires user additional user input
     (e.g. confirmation of a symbol match).    If argument <EM>bypass_NatLink</EM> is true, the interpretation will be done
-    withouth going through NatLink's recognitionMimic function.
-<H3>say_select([STR] utterrance)
-   Simulates a Select XYZ utterance.</H3>
-   Elements of list <EM>utterance</EM> are the individual NatSpeak vocabulary
-   entries that make the utterance. For vocabulary entries of the form
-   written\spoken form, you must specify both the written and spoken
-   form of the entry.
-<OL>
-
-<LI>say_select(['Select', '!=\not equal to'])
-</OL>
-goto(INT pos)
+    withouth going through NatLink's recognitionMimic function.goto(INT pos)
    Moves cursor to position <EM>pos</EM>goto_line(INT linenum)
    Moves cursor to the beginning of line number <EM>linenum</EM>select(INT start, end)
    Selects from position <EM>start</EM> to position <EM>end</EM> in current buffershow_buff()
@@ -154,8 +146,7 @@ goto(INT pos)
 <EM>STR fname</EM> is the path of the file<H2 ID="say" CLASS="Function">say(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">user_input=None</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>, <SPAN CLASS="Argument">echo_utterance=0</SPAN>)</H2>
 <P>Simulate an utterance <EM>STR utterance</EM></P>
 
-Note that this command will not work with <EM>Select XYZ</EM> utterances.
-For those, you must use the <A HREF="mediator.html#say_select">say_select</A> command.
+
 <DL>
 
 <DT>
@@ -187,18 +178,7 @@ withouth going through NatLink's recognitionMimic function.
 <DD>If true, echo the utterance on STDOUT.
 </DL>
 Examples: say('x not equal to') -&gt; <CODE>x != </CODE>
-          say(['x', <CODE> != \not equal to'] -&gt; 'x != </CODE><H2 ID="say_select" CLASS="Function">say_select(<SPAN CLASS="Argument">utterance</SPAN>)</H2>
-<P>Simulate a <EM>Select XYZ</EM> utterance</P>
-
-Elements of list <EM>utterance</EM> are the individual NatSpeak vocabulary
-entries that make the utterance. For vocabulary entries of the form
-written\spoken form, you must specify both the written and spoken
-form of the entry.
-<OL>
-
-<LI>say_select(['Select', '!=\not equal to'])    
-
-</OL>
+          say(['x', <CODE> != \not equal to'] -&gt; 'x != </CODE>
 
 <HR>
 <TABLE ALIGN="LEFT">

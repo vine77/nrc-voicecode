@@ -497,8 +497,6 @@ class SourceBuff(Object):
 
 
 
-# DCF - fix - never replaces selection, and independent defaults for
-# start and end don't support replacing selection - 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
 
@@ -886,6 +884,10 @@ class SourceBuff(Object):
         *CHAR* -- the character at position *key*
         """
 #        print '-- SourceBuff.__getitem__: caled'
+# conform to Python's convention for negative offsets from the end of
+# the text.
+	if key < 0:
+	    key = key + self.len()
         return self.content()[key]
 
     def __setitem__(self, key, value):
@@ -902,6 +904,10 @@ class SourceBuff(Object):
         *none* -- 
         """
 #        print '-- SourceBuff.__setitem__: caled'        
+# conform to Python's convention for negative offsets from the end of
+# the text.
+	if key < 0:
+	    key = key + self.len()
         self.insert(value, (key, key))
 
     def __getslice__(self, start, end):
@@ -916,6 +922,12 @@ class SourceBuff(Object):
         *STR* -- the slice from *start* to *end*
         """
 #        print '-- SourceBuff.__setitem__: called'        
+# conform to Python's convention for negative offsets from the end of
+# the text.
+	if start < 0:
+	    start = start + self.len()
+	if end < 0:
+	    end = end + self.len()
         return self.content()[start:end]
 
     def __setslice__(self, start, end, value):
@@ -931,4 +943,10 @@ class SourceBuff(Object):
         
         """
 #        print '-- SourceBuff.__setitem__: called'        
+# conform to Python's convention for negative offsets from the end of
+# the text.
+	if start < 0:
+	    start = start + self.len()
+	if end < 0:
+	    end = end + self.len()
         self.insert(value, (start,end))

@@ -142,6 +142,21 @@ class TextBuffer(Object):
 	"""
 	debug.virtual('TextBuffer.get_selection')
 
+    def cur_pos(self):
+	"""returns current position (either the start or end of
+	the current selection, and usually the end)
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* -- the offset into the buffer of the current cursor
+	position.
+	"""
+	debug.virtual('TextBuffer.cur_pos')
+
     def set_selection(self, start = None, end = None):
 	"""changes range of current selection
 
@@ -574,6 +589,95 @@ class VisibleBuffer:
 	*none*
 	"""
 	pass
+
+class NumberedLines(Object):
+    """abstract base class describing additional interfaces for moving
+    by line.
+
+    Note: Generally, a concrete class will inherit from TextBuffer (or a
+    subclass) and NumberedLines.
+    NumberedLines does not inherit from TextBuffer so as to simplify
+    such mix-and-match multiple inheritance.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+    
+    **CLASS ATTRIBUTES**
+    
+    *none*
+    """
+
+    def __init__(self, **args):
+	"""abstract base class - no arguments
+	
+	**INPUTS**
+	
+	*none*
+	"""
+        self.deep_construct(NumberedLines,
+                            {},
+                            args)
+
+    def line_num_of( self, pos = None):
+	"""find line number of position pos
+
+	**INPUTS**
+
+	*INT pos* -- the offset into the buffer of the desired position. 
+	 Defaults to the current position.
+
+	**OUTPUTS**
+
+	*INT* -- corresponding line number (starting with 0)
+	"""
+	debug.virtual('NumberedLines.line_num_of')
+
+    def position_of_line(self, line = None):
+	"""returns the position of the start of the specified line 
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, returns position of end of buffer.
+
+	**OUTPUTS**
+
+	*INT* -- position of start of that line.
+	"""
+
+	debug.virtual('NumberedLines.position_of_line')
+
+    def line_length(self, line = None):
+	"""returns the length of the specified line
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, returns None.
+
+	**OUTPUTS**
+
+	*INT* -- length of start of that line.
+	"""
+
+	debug.virtual('NumberedLines.line_length')
+
+    def goto_line(self, line = None):
+	"""moves cursor to start of the specified line
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is greater than the number of lines, goes to the end of
+	the buffer.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+
+	debug.virtual('NumberedLines.goto_line')
 
 class TextBufferChangeNotify(TextBuffer):
     """abstract class wrapper for text buffers with change notification,
