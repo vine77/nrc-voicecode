@@ -1,10 +1,31 @@
-creating wxMediator
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py --bypass -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished wxMediator init...
-starting...
+Finished ExtLoop init...
+Running ExtLoopWin32...
 Starting server threads...
+Starting message loop...
+New connection
+New connection from emacs
+awaiting corresponding talk connection
+received talk connection
+creating messengers
+configuring from external
+creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -465,7 +486,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x01E52C60>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x0162E740>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -605,6 +626,7 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
+'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -863,10 +885,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2549,7 +2571,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3385,7 +3407,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3459,6 +3481,33 @@ Heard less-than greater-than equal-sign
 
 
 *******************************************************************************
+* Name        : number_dictation
+* Description : Test number dictation
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Heard twenty-three fifty-four
+*** Start of source buffer ***
+  1: 2354<CURSOR>
+
+*** End of source buffer ***
+Heard select 54
+*** Start of source buffer ***
+  1: 23<SEL_START>54<SEL_END>
+
+*** End of source buffer ***
+Heard select 23 54
+*** Start of source buffer ***
+  1: <SEL_START>2354<SEL_END>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : persistence
 * Description : testing persistence between VoiceCode sessions
 *******************************************************************************
@@ -3474,7 +3523,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5490,12 +5539,12 @@ Heard new statement
  90:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['braces', 'variable', ':\\colon', '0', 'value', ':\\colon', '0']
-Heard braces variable colon 0 value colon 0
+Saying: ['braces', 'variable', ':\\colon', '0', 'comma', 'value', ':\\colon', '0']
+Heard braces variable colon 0 comma value colon 0
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0<CURSOR>}
+ 90:             {variable: 0, Value: 0<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
@@ -5503,7 +5552,7 @@ Heard previous colon previous colon
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: <CURSOR>0 Value: 0}
+ 90:             {variable: <CURSOR>0, Value: 0}
 
 *** End of source buffer ***
 Saying: ['after colon']
@@ -5511,7 +5560,7 @@ Heard after colon
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: <CURSOR>0}
+ 90:             {variable: 0, Value: <CURSOR>0}
 
 *** End of source buffer ***
 Saying: ['before previous colon']
@@ -5519,7 +5568,7 @@ Heard before previous colon
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value<CURSOR>: 0}
+ 90:             {variable: 0, Value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['before next colon']
@@ -5527,14 +5576,14 @@ Heard before next colon
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value<CURSOR>: 0}
+ 90:             {variable: 0, Value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             <CURSOR>
 
 *** End of source buffer ***
@@ -5542,7 +5591,7 @@ Saying: ['variable', '=\\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
 Heard variable equals 2 asterisk 3 asterisk 4
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4<CURSOR>
 
 *** End of source buffer ***
@@ -5550,7 +5599,7 @@ Saying: ['previous asterisk', 'previous star']
 Heard previous asterisk previous star
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*<CURSOR>3*4
 
 *** End of source buffer ***
@@ -5558,7 +5607,7 @@ Saying: ['after star']
 Heard after star
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
@@ -5566,7 +5615,7 @@ Saying: ['before previous asterisk']
 Heard before previous asterisk
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
@@ -5574,14 +5623,14 @@ Saying: ['before next star']
 Heard before next star
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             <CURSOR>
 
@@ -5589,7 +5638,7 @@ Heard new statement
 Saying: ['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4']
 Heard variable equals 2 slash 3 slash 4
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4<CURSOR>
 
@@ -5597,7 +5646,7 @@ Heard variable equals 2 slash 3 slash 4
 Saying: ['previous slash', 'previous slash']
 Heard previous slash previous slash
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/<CURSOR>3/4
 
@@ -5605,7 +5654,7 @@ Heard previous slash previous slash
 Saying: ['after slash']
 Heard after slash
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/<CURSOR>4
 
@@ -5613,7 +5662,7 @@ Heard after slash
 Saying: ['before previous slash']
 Heard before previous slash
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3<CURSOR>/4
 
@@ -5621,14 +5670,14 @@ Heard before previous slash
 Saying: ['before next slash']
 Heard before next slash
  89:             variable.Field.Value
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             <CURSOR>
@@ -5636,7 +5685,7 @@ Heard new statement
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', '2', '+\\plus', '3', '+\\plus', '4']
 Heard variable equals 2 plus 3 plus 4
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + 4<CURSOR>
@@ -5644,7 +5693,7 @@ Heard variable equals 2 plus 3 plus 4
 *** End of source buffer ***
 Saying: ['previous plus', 'previous plus']
 Heard previous plus previous plus
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + <CURSOR>3 + 4
@@ -5652,7 +5701,7 @@ Heard previous plus previous plus
 *** End of source buffer ***
 Saying: ['after plus']
 Heard after plus
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + <CURSOR>4
@@ -5660,7 +5709,7 @@ Heard after plus
 *** End of source buffer ***
 Saying: ['before previous plus']
 Heard before previous plus
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3<CURSOR> + 4
@@ -5668,7 +5717,7 @@ Heard before previous plus
 *** End of source buffer ***
 Saying: ['before next plus']
 Heard before next plus
- 90:             {variable: 0 Value: 0}
+ 90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3<CURSOR> + 4
@@ -7340,17 +7389,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> Associate 'Ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
 >   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -7367,18 +7405,7 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-Associate 'Ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
->   7: from EdSim import EdSim
+  7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -7611,14 +7638,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'R. E.' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
->  19:                           attrs)
+ 19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9215,15 +9235,19 @@ Associate 'bug below' with symbol (Enter selection):
   '5': bugbelow (*new*)
   '6': BUGBELOW (*new*)
 
-> Associate 'following one will' with symbol (Enter selection):
+> Associate 'following' with symbol (Enter selection):
 
   '0': no association
-  '1': following_one_will (*new*)
-  '2': FollowingOneWill (*new*)
-  '3': followingOneWill (*new*)
-  '4': FOLLOWING_ONE_WILL (*new*)
-  '5': followingonewill (*new*)
-  '6': FOLLOWINGONEWILL (*new*)
+  '1': following (*new*)
+  '2': Following (*new*)
+  '3': FOLLOWING (*new*)
+
+> Associate 'will' with symbol (Enter selection):
+
+  '0': no association
+  '1': will (*new*)
+  '2': Will (*new*)
+  '3': WILL (*new*)
 
 > Associate 'be inserted at the right level' with symbol (Enter selection):
 
@@ -9238,13 +9262,13 @@ Associate 'bug below' with symbol (Enter selection):
 >  12:             if some_flag:
  13:                do_some_stuff(some_argument)
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following_one_willnot be_inserted_at_the_right_level<CURSOR>)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level<CURSOR>)
  16:            
  17:         try:
  18:             do_some_stuff()
 Heard else do some stuff without arguments
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following_one_willnot be_inserted_at_the_right_level)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level)
  16:             else:
  17:                do_some_stuff()<CURSOR>
  18:            
@@ -9335,7 +9359,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9422,7 +9446,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -10865,7 +10889,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
-Heard index equals 0 new statement
+Heard index equals zero new statement
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -10891,7 +10915,7 @@ Heard index equals 1 new statement
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
-Heard index equals 0 new statement
+Heard index equals zero new statement
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -10912,7 +10936,7 @@ Heard index equals 1 new statement
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
-Heard index equals 0 new statement
+Heard index equals zero new statement
   3: index = 0
   4: index = 1
   5: index = 0
@@ -11206,7 +11230,7 @@ Heard before previous index equals 0
   3: index = 0
   4: index = 1
   5: index = 0
-  
+
 
 >>> Testing console command: say(['select', 'index', '=\\equals', '0'], user_input='None')
 Heard select index equals 0
@@ -11508,7 +11532,10 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  505.649999976 secs
+Test suite completed in:  178.307000041 secs
 -----------------------------------------------
+Message loop ended, cleaning up
+cleanup method is  <bound method ExtLoopWin32NewMediator.cleanup of <__main__.ExtLoopWin32NewMediator instance at 0x011DA8E0>>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+ExtLoopWin32.run returning

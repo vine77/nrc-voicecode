@@ -1191,8 +1191,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['braces', 'variable', ':\\colon', '0', 'value', ':\\colon', '0'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
+    commands.say(['braces', 'variable', ':\\colon', '0', 'comma', 'value', ':\\colon', '0'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['previous colon', 'previous colon'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['after colon'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -2968,6 +2967,27 @@ def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
 
 auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=-1)
 
+
+##############################################################################
+# Number dictation
+##############################################################################
+
+def test_number_dictation():
+   testing.init_simulator_regression()
+   commands.open_file('blah.py')   
+#   commands.say(['twenty-three\\twenty-three', 'comma', 'fifty-four\\fifty-four', 'comma', 'sixty-one\\sixty-one', 'comma', 'twenty-three\\twenty-three', 'fifty-four\\fifty-four'])
+   commands.say(['twenty-three\\twenty-three', 'fifty-four\\fifty-four'])
+   commands.say(['select', '54'], never_bypass_sr_recog=1)   
+   commands.say(['select', '23', '54'], never_bypass_sr_recog=1)   
+
+   
+
+
+
+
+auto_test.add_test('number_dictation', test_number_dictation, desc='Test number dictation')
+
+
 ##############################################################################
 # Voice Commands for compiling symbols
 ##############################################################################
@@ -2983,7 +3003,11 @@ def test_compile_symbols():
    commands.print_symbols()
    
 auto_test.add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
-    
+
+
+##############################################################################
+# Sending a large message to the client
+##############################################################################    
     
 def test_large_messages():
     testing.init_simulator_regression()
@@ -3006,7 +3030,6 @@ def generate_string_of_approx_length(str_len):
          len_to_now = len_to_now + 1
    return the_string
       
-
 
 auto_test.add_test('large_messages', test_large_messages, desc='Send a message that has more than 1024 character (length of a message chunk)')
 

@@ -61,6 +61,7 @@ debug.config_traces(status="on",
 #                        'Action.log_execute': 1,
 #                        'ActionSearch.execute': 1,
 #                        'SourceBuff.search_for': 1,
+#                        'EnglishSmallNumbersSet._add_number': 1,
 #########################################################################
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,

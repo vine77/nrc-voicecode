@@ -31,6 +31,7 @@ from actions_gen import *
 from Object import Object
 import sr_interface
 import debug
+from SpacingState import *
 
 
 # US English military spelling
@@ -1140,3 +1141,76 @@ class PairedQuotes(PairedPunctuation):
                         {self.language: self.written_forms[i]}, 
                         spacing = like_close_quote))
 
+ 
+ 
+class EnglishSmallNumbersSet(Object):
+    """Class for generating LSAs for translating English 2-digit numbers.
+    
+    This is a stop-gap measure. Eventually, we will have a grammar that
+    allows natural dictation of larger numbers. For now, the user will 
+    have to dictate such numbers by uttering a sequence of 2-diti numbers 
+    (e.g. say "twenty fifty" to type 2050).
+
+    **INSTANCE ATTRIBUTES**
+
+    [STR] *words_0_to_19* -- List of words used for numbers between 0 and 19.
+    
+    [STR] *words_multiples_of_10* -- List of words used for multiples of 10
+
+    """
+    def __init__(self, **args):
+        debug.trace('EnglishSmallNumbersSet.__init__', 'invoked')        
+        self.deep_construct(EnglishSmallNumbersSet,
+                            {'words_0_19': ['zero', 'one', 'two', 'three', 'four', 'five', 'six',
+                                            'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+                                            'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+                                            'eighteen', 'nineteen'],
+                             'words_multiples_of_10': ['ten', 'twenty', 'thirty', 'fourty', 'fifty', 
+                                                       'sixty', 'seventy', 'eighty', 'ninety']}, 
+                              args)
+        debug.trace('EnglishSmallNumbersSet.__init__', 'exited')                              
+                              
+    def _add_number(self, aliases, number):        
+        written = "%s" % number
+        
+        if number < 20:
+           spoken = self.words_0_19[number]
+        else:
+           how_many_multiples_of_ten = int(number/10)
+           tens_word = self.words_multiples_of_10[how_many_multiples_of_ten - 1]
+           
+           how_many_units = number - how_many_multiples_of_ten*10           
+           if how_many_units > 0:
+              units_word = "-%s" % self.words_0_19[how_many_units]
+           else:
+              units_word = ""
+           
+           spoken = "%s%s" % (tens_word, units_word)                             
+                                    
+                                                   
+        aliases.add_lsa(LSAlias([spoken], 
+                        {None: written}, like_dot))        
+        
+    def create(self, interp):
+        """Add LSAs for dictation of English 2-digit numbers.
+        
+        **INPUTS**
+        
+        *CmdInterp interp* -- command interpreter (or NewMediatorObject,
+        which will forward to the interpreter) to which to add the LSAs
+        and CSCs
+        """
+
+        if not interp:
+            return
+            
+        aliases = LSAliasSet('US small numbers', 
+                             description = 'dictating 2-digit numbers.')                             
+        
+                                     
+        for number in range(99):
+           self._add_number(aliases, number)
+           
+                   
+        interp.add_lsa_set(aliases)
+        
