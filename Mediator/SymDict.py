@@ -1302,7 +1302,7 @@ class SymDict(Object):
         # Check if word might be a pluralised word
         #
         word_length = len(word)
-        if word[word_length-1] == 's':
+        if word_length and word[word_length-1] == 's':
             single_form = word[0:word_length-1]
         else:
             single_form = word

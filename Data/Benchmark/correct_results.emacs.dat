@@ -1,7 +1,22 @@
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
+
+C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Finished wxMediator init...
 starting...
 Starting server threads...
@@ -619,7 +634,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02170440>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0203BAF8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -635,13 +650,16 @@ Subclassing from non-standard class AnimatedCharacter.*
 *******************************************************************************
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
 Parsed symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -656,7 +674,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
@@ -666,6 +684,7 @@ Unresolved abbreviations are:
 
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\large_buff.py ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -675,6 +694,7 @@ LargeObject: ['large object']
 Object: ['object']
 SmallNonObject: ['small non object']
 SmallObject: ['small object']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 __bases__: ['bases']
 __dict__: ['dict', 'dictionary']
 __init__: ['init', 'initial', 'initialize']
@@ -751,16 +771,14 @@ try_attribute: ['try attribute']
 write: ['write']
 x: ['x']
 _cached_symbols_as_one_string is:
-    autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
-'non': appears in ['LargeNonObject', 'SmallNonObject', 'profConstrLargeNonObj', 'profConstrSmallNonObj', 'profGetLargeNonObj', 'profGetSmallNonObj', 'profSetLargeNonObj', 'profSetSmallNonObj']
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
-'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -770,6 +788,7 @@ Unresolved abbreviations are:
 
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -782,8 +801,10 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 *** Accept symbol match test. source='%VCODE_HOME%\Data\TestData\small_buff.c' ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -798,7 +819,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 Unresolved abbreviations are:
@@ -813,6 +834,7 @@ Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres',
 After accepting those symbols, known symbols are:
 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -827,7 +849,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 Unresolved abbreviations are:
@@ -837,6 +859,7 @@ Unresolved abbreviations are:
 *** End of accept symbol match test ***
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
 *******************************************************************************
@@ -1018,14 +1041,15 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -1040,7 +1064,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -1435,6 +1459,7 @@ List of unresolved abbreviations
 >>> Testing console command: print_symbols()
 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -1449,7 +1474,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ',\\comma'], user_input='None')
@@ -1463,6 +1488,7 @@ Heard this symbol is unresolved too comma
 >>> Testing console command: print_symbols()
 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -1477,7 +1503,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -1688,6 +1714,7 @@ Associate 'file name' with symbol (Enter selection):
 >>> Testing console command: print_symbols()
 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -1702,7 +1729,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -2704,7 +2731,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2796,10 +2823,12 @@ Heard next one
   3: 
   4: 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Before compiling symbols, symbols are:
 
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 _cached_symbols_as_one_string is:
-   
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 Heard compile symbols
 Compiling symbols for None
 Done compiling symbols
@@ -2812,6 +2841,7 @@ After compiling symbols, symbols are:
 
 AClass: ['a class']
 ASuper: ['a super']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 a_method: ['a method']
 class: ['class']
 def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
@@ -2819,7 +2849,7 @@ print: ['print']
 self: ['self']
 x: ['x']
 _cached_symbols_as_one_string is:
-    class  AClass  ASuper  def  a_method  self  x  print 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  class  AClass  ASuper  def  a_method  self  x  print 
 
 
 *******************************************************************************
@@ -3350,6 +3380,8 @@ WARNING: source file 'tmp.py' doesn't exist.
 
 >>> Testing console command: clear_symbols()    
 
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -3539,11 +3571,12 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -3558,7 +3591,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'], user_input='None')
@@ -3714,14 +3747,16 @@ As best as I can tell from SF Browse CVS, this test was
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -3736,7 +3771,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.
@@ -3746,12 +3781,14 @@ _cached_symbols_as_one_string is:
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
 >>> Testing console command: print_symbols()
 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -7073,6 +7110,7 @@ LSA_consumes: ['lsa consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 __init__: ['init', 'initial', 'initialize']
 _untranslated_text_end: ['untranslated text end']
 _untranslated_text_start: ['untranslated text start']
@@ -7228,7 +7266,7 @@ write: ['write']
 written: ['written']
 written_as: ['written as']
 _cached_symbols_as_one_string is:
-    import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
 CSCmd: ['cs cmd', 'cs command']
@@ -7241,6 +7279,7 @@ LSA_consumes: ['lsa consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 __init__: ['init', 'initial', 'initialize']
 _untranslated_text_end: ['untranslated text end']
 _untranslated_text_start: ['untranslated text start']
@@ -7396,7 +7435,7 @@ write: ['write']
 written: ['written']
 written_as: ['written as']
 _cached_symbols_as_one_string is:
-    import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -8099,8 +8138,9 @@ Associate 'all right' with symbol (Enter selection):
 
 >>> Dictating Python when only standard symbols are known <<<
 
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 _cached_symbols_as_one_string is:
-   
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -8989,6 +9029,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.py'
 AClass: ['a class']
 ASuper: ['a super']
 SomeOtherClass: ['some other class']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 a_method: ['a method']
 a_method_with_no_arguments: ['a method with no arguments', 'a method with number arguments']
 class: ['class']
@@ -9005,7 +9046,7 @@ some_variable: ['some variable']
 try: ['try']
 yet_another_method: ['yet another method']
 _cached_symbols_as_one_string is:
-    class  AClass  ASuper  def  a_method  self  some_argument  some_variable  some_array  if  do_some_stuff  do_some_more  try  a_method_with_no_arguments  pass  SomeOtherClass  some_other_method  yet_another_method 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  class  AClass  ASuper  def  a_method  self  some_argument  some_variable  some_array  if  do_some_stuff  do_some_more  try  a_method_with_no_arguments  pass  SomeOtherClass  some_other_method  yet_another_method 
 
 *********************
 *** Executing edit test: insert an import statement in middle of a file ***
@@ -9586,11 +9627,12 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
@@ -9605,7 +9647,7 @@ void: ['void']
 x: ['x']
 y: ['y']
 _cached_symbols_as_one_string is:
-    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
 >>> Testing console command: say(['index', '!=\\not equal to', '0\\zero'], user_input='0
@@ -9673,7 +9715,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11914,6 +11956,7 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  581.610000014 secs
+Test suite completed in:  324.27699995 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'

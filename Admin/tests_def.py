@@ -3155,10 +3155,10 @@ def test_temporary():
    temp_config = temp_factory.new_config()         
    
    commands.open_file('blah.py')   
-   commands.say(['hello', 'world'], never_bypass_sr_recog=1, user_input="0\n0\n")
+ 
 
    
-# add_test('temp', test_temporary, desc='temporary test')
+#add_test('temp', test_temporary, desc='temporary test')
 
 
 ##############################################################################
