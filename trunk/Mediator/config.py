@@ -4,11 +4,16 @@ MODULE VARIABLES
 
 [CmdInterp] interp -- the VoiceCode command interpreter (NOTE: because *CmdInterp.py* imports *vc_globals.py*, this variable is initialised in *CmdInterp.py* to avoid circular reference)
 
-.. [CmdInterp] file:///./CmdInterp.CmdInterp"""
+[CommandDictGrammar] mixed_grammar -- the SR grammar that recognises mixed continuous dictation and command utterances.
 
-import CmdInterp, EdSim, SourceBuff, SymDict, vc_globals
+.. [CmdInterp] file:///./CmdInterp.CmdInterp
+.. [CommandDictGrammar] file:///./sr_interface.CommandDictGrammar.html"""
+
+import CmdInterp, EdSim, SourceBuff, sr_interface, SymDict, vc_globals
 
 interp = CmdInterp.CmdInterp(app=EdSim.EdSim())
+mixed_grammar = sr_interface.CommandDictGrammar(interpreter=interp)
+code_select_grammar = sr_interface.CodeSelectGrammar(app=interp.app)
 
 def add_csc(acmd):
     """Add a new Context Sensitive Command.

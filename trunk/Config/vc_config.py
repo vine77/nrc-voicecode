@@ -14,6 +14,9 @@
 #
 #       which provides better error reporting.
 #
+import natlink
+from natlinkutils import *
+
 from CSCmd import CSCmd
 from LangDef import LangDef
 from config import *
@@ -22,6 +25,7 @@ from actions_gen import *
 from actions_C_Cpp import *
 from actions_py import *
 
+if (__name__ == '__main__'): natlink.natConnect()
 
 ###############################################################################
 # Associate file extensions to programming languages
@@ -178,3 +182,4 @@ acmd = CSCmd(spoken_forms=['in'], meanings=[[ContPy(), lambda app, cont: app.ins
 add_csc(acmd)
 
 
+if (__name__ == '__main__'): natlink.natDisconnect()

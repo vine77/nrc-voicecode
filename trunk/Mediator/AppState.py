@@ -250,3 +250,24 @@ class AppState(Object):
         """
         debug.not_implemented('AppState.open_file')
 
+
+
+
+    def select_region(self, start, end):
+        """Sets the selection in current buffer to a particular region.
+        
+        **INPUTS**
+        
+        *INT* start -- start of region 
+        
+        *INT* end -- end of region 
+
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.curr_buffer.selection_start = start
+        self.curr_buffer.selection_end = end
+        self.goto(start)
