@@ -19,9 +19,6 @@
 #
 ##############################################################################
 
-import sys
-import Object, vc_globals
-import debug
 
 """Defines abstract interface for certain window-system specific tasks
 
@@ -29,6 +26,11 @@ import debug
 
 
 """
+
+import sys
+import Object, vc_globals
+import debug
+
 class WasForegroundWindow(Object.Object):
     """abstract base class defining an interface for storing the current
     foreground window and restoring it to the foreground later

@@ -363,18 +363,22 @@ class ActionInsert(Action):
         
     **INSTANCE ATTRIBUTES**
         
-    *ANY code_bef=''* -- undocumented
-    *ANY code_after=''* -- undocumented
+    *STR code_bef=''* -- code to be inserted before the cursor
+    *STR code_after=''* -- code to be inserted after the cursor
+    *INT spacing=0* -- spacing flags governing spacing before and after
+    code_bef, from SpacingState (CURRENTLY IGNORED)
+
     
     CLASS ATTRIBUTES**
     
     *none* -- 
     """
         
-    def __init__(self, code_bef='', code_after='', **args_super):
+    def __init__(self, code_bef='', code_after='', spacing = 0, **args_super):
         self.deep_construct(ActionInsert, \
                             {'code_bef': code_bef, \
-                             'code_after': code_after}, \
+                             'code_after': code_after,
+                             'spacing': spacing}, \
                             args_super, \
                             {})
         

@@ -1196,7 +1196,7 @@ class SourceBuff(OwnerObject):
         **INPUTS**
 
         *STR* char_exp -- a regular expression assumed to match one
-        character (e.g. "a", ".", "\s", "\S", "[A-Za-z]"
+        character (e.g. "a", ".", "\s", "\S", "[A-Za-z]")
 
         *INT* direction -- if positive, search forward, otherwise
         search backward
