@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:10:41 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:34:01 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -30,9 +30,13 @@
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.heard_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.heard_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">gram_type=None</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.pop_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.pop_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.push_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.push_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dismiss_event</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_gram_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_gram_factory</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.show_correction_box"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.show_correction_box</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.show_recent_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.show_recent_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
 
@@ -69,6 +73,11 @@ speech grammars to dialog boxes
 <EM>INT main_frame_handle</EM>
 <DD>the window-system specific ID for the
 main frame of the mediator application
+<DT>
+*[DismissModalEvent] dismiss_events
+<DD>a stack of
+DismissModalEvents, one  for each modal dialog box currently shown
+on top of the console.
 <DT>
 *WinSystem win_sys
 <DD>WinSystem interface to
@@ -117,8 +126,10 @@ window-system specific functions
 <P>None</P>
 
 <P>
+Store the current foreground window,
 display a correct recent dialog box for to allow the user to 
-select a recent utterance to correct</P>
+select a recent utterance to correct.  Finally, restore
+the original window to the foreground</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -140,17 +151,21 @@ undone and re-interpreted, or None if no utterances are stored.
 <DL>
 
 <DT>
-<EM>BOOL</EM>
-<DD>true if the user made changes and approved them
+<EM>[INT]</EM>
+<DD>the utterance numbers of 
+those utterances which were corrected by the user, or None if
+none were corrected
 
 </DL>
 <H2 ID="MediatorConsole.MediatorConsole.correct_utterance" CLASS="Method">MediatorConsole.MediatorConsole.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
+Store the current foreground window,
 display a correction box for correction of a complete, recent
 utterance, accept user corrections, allow the user to
-approve or cancel, and adapt the speech engine.</P>
+approve or cancel, and adapt the speech engine.  Finally, restore
+the original window to the foreground</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -190,8 +205,9 @@ the user approves), or if the caller will handle that later.
 <P>None</P>
 
 <P>
-dismisses any modal dialog boxes which the console has
-running</P>
+dismisses the topmost modal dialog box currently shown by the
+console.  Control will return to the next topmost dialog, 
+which is expected to return as well, and so on down the line</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -230,6 +246,47 @@ representing the recognition results
 <EM>STR gram_type</EM>
 <DD>type of grammar 
 ('dictation', <CODE>selection</CODE>, or 'correction')
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="MediatorConsole.MediatorConsole.pop_modal" CLASS="Method">MediatorConsole.MediatorConsole.pop_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+pops a DismissModalEvent off the stack after the
+corresponding modal dialog has returned</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if there was a modal dialog on the stack
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.push_modal" CLASS="Method">MediatorConsole.MediatorConsole.push_modal(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dismiss_event</SPAN>)</H2>
+<P>None</P>
+
+<P>
+push a DismissModalEvent onto the stack before showing the
+corresponding modal dialog</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>DismissModalEvent dismiss_event</EM>
+<DD>DismissModalEvent which can be used
+to dismiss the modal dialog
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -287,6 +344,81 @@ own the console
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="MediatorConsole.MediatorConsole.show_correction_box" CLASS="Method">MediatorConsole.MediatorConsole.show_correction_box(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correction box for correction of a complete, recent
+utterance, accept user corrections, allow the user to
+approve or cancel, and adapt the speech engine.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>SpokenUtterance utterance</EM>
+<DD>the utterance itself
+<DT>
+<EM>BOOL can_reinterpret</EM>
+<DD>flag indicating whether the utterance
+could be reinterpreted upon correction, allowing the correction
+box to give some visual feedback to the user to indictate this.
+Whether the utterance can actually be reinterpreted may change
+between the call to this method and its return, so there is no
+guarantee that reinterpretation will take place.
+<DT>
+<EM>BOOL should_adapt</EM>
+<DD>flag indicating whether correct_utterance
+should adapt the speech engine according to user corrections (if
+the user approves), or if the caller will handle that later.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the user made changes and approved them
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.show_recent_utterances" CLASS="Method">MediatorConsole.MediatorConsole.show_recent_utterances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correct recent dialog box for to allow the user to 
+select a recent utterance to correct</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>[(SpokenUtterance, BOOL)] utterances</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>the utterance numbers of 
+those utterances which were corrected by the user, or None if
+none were corrected
+
+</DL>
 <H2 ID="MediatorConsole.MediatorConsole.store_foreground_window" CLASS="Method">MediatorConsole.MediatorConsole.store_foreground_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
