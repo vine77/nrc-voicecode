@@ -492,13 +492,13 @@ class TempConfigNewMediatorFactory(Object.Object):
         *TempConfigNewMediator* --  the TempConfigNewMediator object
         """
         interp = None
-        if self.pickled_interp:
+        if not skip_config and self.pickled_interp:
             interp = cPickle.loads(self.pickled_interp)
         a_mediator = \
-            NewMediatorObject.NewMediatorObject(symbol_match_dlg = \
-                self.symbol_match_dlg)
+            NewMediatorObject.NewMediatorObject(interp = interp, 
+                symbol_match_dlg = self.symbol_match_dlg)
         if not skip_config:
-            a_mediator.configure()
+            a_mediator.configure(testing = 1)
         if editor == None:
             app = EdSim.EdSim()
         else:

@@ -291,6 +291,25 @@ class MediatorConsole(Object.OwnerObject):
 # the dialog should do this when control returns to it on dismissal of
 # the dialog
 
+    
+    def copy_user_config(self, target, directory):
+        """prompt the user for the sample user configuration file to
+        copy to the target path, and copy the file
+
+        **INPUTS**
+
+        *STR target* -- the path of the default user configuration file
+
+        *STR directory* -- the initial directory in which to look for a
+        sample configuration file to copy
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a file was selected and copied to the target
+        path
+        """
+        debug.virtual('MediatorConsole.copy_user_config')
+
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
         """Store the current foreground window,

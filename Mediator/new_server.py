@@ -28,6 +28,7 @@ import vc_globals
 import NewMediatorObject
 import tcp_server
 
+import exceptions
 import natlink, os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 
@@ -116,6 +117,12 @@ debug.config_traces(status="on",
 VC_LISTEN_PORT = 45770
 VC_TALK_PORT = 45771
 
+class ConfigFailed(exceptions.RuntimeError):
+    """
+    exception raised when mediator configuration fails
+    """
+    pass
+
 class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
     """implementation of ExtLoopWin32 for ServerNewMediator 
 
@@ -187,7 +194,10 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
-        self.the_mediator.configure()
+        okay = self.the_mediator.configure()
+        if not okay:
+            sys.stderr.write('Mediator configuration failed...exiting\n')
+            raise ConfigFailed()
 #        print self.the_mediator.server
         sys.stderr.write('Finished ExtLoop init...\n')
         sys.stderr.flush()
@@ -217,9 +227,12 @@ def run_new_server(test_suite=None, profile_prefix = None,
 
     sys.stderr.write('running ExtLoopWin32NewMediator with ServerNewMediator\n')
     print 'running ExtLoopWin32NewMediator with ServerNewMediator'
-    a_loop = ExtLoopWin32NewMediator(test_suite = test_suite, 
-        profile_prefix = profile_prefix, 
-        bypass_sr_recog = bypass_sr_recog) 
+    try:
+        a_loop = ExtLoopWin32NewMediator(test_suite = test_suite, 
+            profile_prefix = profile_prefix, 
+            bypass_sr_recog = bypass_sr_recog) 
+    except:
+        return
 
     sys.stderr.write('Running ExtLoopWin32...\n')
     a_loop.run()

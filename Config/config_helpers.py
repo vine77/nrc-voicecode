@@ -227,7 +227,7 @@ class PunctuationSet(Object):
         **INPUTS**
 
         *STR name* -- name of the LSAliasSet to use when adding LSAs.  The
-        suffix " navigation" will be added to generat the name of the CSCmdSet
+        suffix " navigation" will be added to generate the name of the CSCmdSet
         when adding punctuation navigation 
 
         *STR language* -- language of the punctuation LSAs, or None to

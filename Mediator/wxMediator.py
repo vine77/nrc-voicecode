@@ -411,7 +411,12 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
-        self.the_mediator.configure()
+        okay = self.the_mediator.configure()
+        if not okay:
+            sys.stderr.write('Mediator configuration failed...exiting\n')
+            self.should_prompt_save_speech_files(0)
+            self.main_frame().close_window()
+            return
 #        print self.the_mediator.server
         sys.stderr.write('Finished wxMediator init...\n')
         sys.stderr.flush()

@@ -483,13 +483,14 @@ def test_no_config_file():
         print "Trying to confugure using non-existant file '%s'\n" % non_existant_file
         a_mediator.configure(user_config_file = non_existant_file)
         print "ERROR: Exception was NOT properly raised!"
-    except NewMediatorObject.VCodeInexistantConfigFile:
+#    except NewMediatorObject.VCodeInexistantConfigFile:
+    except:
         print "Exception was properly raised!"
 
-auto_test.add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
-
-
-
+# auto_test.add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
+# DCF: I've now modified NMO so that it prompts the user to create a
+# configuration file, so this test no longer produces the expected
+# exception
 
 
 ###############################################################################
@@ -553,6 +554,10 @@ def test_select_pseudocode():
 #
 # AD: It's not really silly. It was meant to test that "correct XYZ" is a valid
 #     part of the SelectPseudoCode grammar. But never mind.
+# DCF:  Yes, it is.  Having correct XYZ without an actual implementation would
+# only confuse users - when they say correct XYZ, it would be recognized 
+# and the text would be selected, but no correction box 
+# would appear - and they would assume this is a bug.  
 #
 #    test_say(['correct', 'index', '=\\equals', '0'])
 #    test_command("""goto_line(2)""")

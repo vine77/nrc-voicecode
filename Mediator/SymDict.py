@@ -37,7 +37,7 @@ import traceback
 language_definitions={}
 
 #
-# Minium lenght for an abbreviation (short abbreviations tend to introduce
+# Minium length for an abbreviation (short abbreviations tend to introduce
 # too many false spoken forms, which bloats the SR's vocabulary)
 #
 min_abbreviation_len = 2
@@ -384,8 +384,8 @@ class SymDict(PickledObject.PickledObject):
      spoken form and the value is the list of written native symbols
      with that spoken form.
 
-    *{STR: [STR]}* abbreviations={} -- Dictionary of
-     abbreviations. The key is the abbreviation and the value is a
+    *{STR: [STR]}* expansions={} -- Dictionary of
+     expansions of abbreviations. The key is the abbreviation and the value is a
      list of possible expansions. It contains both resolved and
      unresolved abbreviations.
 
@@ -433,7 +433,7 @@ class SymDict(PickledObject.PickledObject):
         self.decl_attrs({'_cached_symbols_as_one_string': '',
                          'spoken_form_info': {},
                          'symbol_info': {},
-                         'abbreviations': {},
+                         'expansions': {},
                          'standard_symbol_sources': [],
                          'sr_symbols_cleansed': 1,
                          'unresolved_abbreviations': {},
@@ -522,22 +522,22 @@ class SymDict(PickledObject.PickledObject):
                 #
                 sr_interface.addWord(expansions[ii])                
 
-            if self.abbreviations.has_key(abbreviation):
-                trace( 'SymDict.add_abbreviation', 'existing expansions are: %s' % self.abbreviations[abbreviation])
+            if self.expansions.has_key(abbreviation):
+                trace( 'SymDict.add_abbreviation', 'existing expansions are: %s' % self.expansions[abbreviation])
             
                 #
                 # Add new expansions for existing abbreviation
                 #
                 for an_expansion in expansions:
-                    if not an_expansion in self.abbreviations[abbreviation]:
-                        self.abbreviations[abbreviation] = self.abbreviations[abbreviation] + [an_expansion]
+                    if not an_expansion in self.expansions[abbreviation]:
+                        self.expansions[abbreviation] = self.expansions[abbreviation] + [an_expansion]
             else:
                 #
                 # Create new abbreviation entry
                 #
-                self.abbreviations[abbreviation] = expansions
+                self.expansions[abbreviation] = expansions
 
-            trace('SymDict.add_abbreviation', 'after update, expansions are: %s' % self.abbreviations[abbreviation])
+            trace('SymDict.add_abbreviation', 'after update, expansions are: %s' % self.expansions[abbreviation])
 
             #
             # Regenerate spoken forms of symbols containing that abbreviation
@@ -632,10 +632,10 @@ class SymDict(PickledObject.PickledObject):
         """Prints the known and unresolved abbreviations."""
 
         print 'List of abbreviations\n'
-        sorted_abbreviations = self.abbreviations.keys()
+        sorted_abbreviations = self.expansions.keys()
         sorted_abbreviations.sort()
         for an_abbreviation in sorted_abbreviations:
-            print '\'%s\' expands to %s' % (an_abbreviation, self.abbreviations[an_abbreviation])
+            print '\'%s\' expands to %s' % (an_abbreviation, self.expansions[an_abbreviation])
 
         if show_unresolved:
             print '\n\nList of unresolved abbreviations\n'
@@ -1069,16 +1069,16 @@ class SymDict(PickledObject.PickledObject):
             single_form = word
         
         expansions = [word]
-        if self.abbreviations.has_key(word):
+        if self.expansions.has_key(word):
             #
             # word is a known abbreviation. Add expansions.
             #
-            expansions = expansions + self.abbreviations[word]            
-        elif self.abbreviations.has_key(single_form):
+            expansions = expansions + self.expansions[word]            
+        elif self.expansions.has_key(single_form):
             #
             # word is the plural of an abbreviation
             #
-            expansions = map(lambda an_expansion: pluralize(an_expansion), self.abbreviations[single_form])
+            expansions = map(lambda an_expansion: pluralize(an_expansion), self.expansions[single_form])
         else:
             #
             # Word is not a known abbreviation nor plural of a known
@@ -1541,8 +1541,8 @@ class SymDict(PickledObject.PickledObject):
             self.symbol_info = {}
             for an_unresolved in self.unresolved_abbreviations.keys():
 #                print '-- SymDict.cleanup: removing unresolved abbreviation %s' % an_unresolved
-                if self.abbreviations.has_key(an_unresolved):
-                    del self.abbreviations[an_unresolved]
+                if self.expansions.has_key(an_unresolved):
+                    del self.expansions[an_unresolved]
             self.unresolved_abbreviations = {}
 
         #
@@ -1578,7 +1578,7 @@ class SymDict(PickledObject.PickledObject):
         *none* -- 
         """
         
-        self.abbreviations = {}
+        self.expansions = {}
 
         #
         # Remove SR vocabulary words that correspond to unresolved abbrevs
