@@ -1,0 +1,109 @@
+<HTML>
+<HEAD>
+<TITLE>VoiceCode User Manual</TITLE>
+</HEAD>
+
+<BODY   BGCOLOR="#ffffff">
+
+
+<MAP NAME="banner_top">
+    <AREA SHAPE="rect" COORDS="588,14,620,40" HREF="http://www.iit.nrc.ca/english.html">
+    <AREA SHAPE="rect" COORDS="538,14,583,37" HREF="http://www.nrc.ca/corporate/english/">
+    <AREA SHAPE="rect" COORDS="86,4,421,37" HREF="http://www.iit.nrc.ca/II_public/index.html">
+</MAP>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+<tr>
+<td valign="bottom" align="left">
+<IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_top.jpg" width="620" height="37" alt="II Group Banner" USEMAP="#banner_top"
+ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voicecode.gif" width="230" height="50" alt="II VoiceGrip"></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+
+
+<H1><FONT COLOR="#400080">VoiceCode User manual</FONT></H1>
+
+
+VoiceCode is currently at the prototype stage. It cannot be used in an
+actual operational setting. You can however test some of the
+functionality of the system by running it in simulation mode. This
+simulation mode allows you to dictate code and see the result of those
+operations.
+
+<P>
+
+To run VoiceCode in simulation mode, just type:
+
+<PRE>
+cd %VCODE_HOME%\Mediator
+python mediator.py -s
+</PRE>
+
+VoiceCode will then prompt your for commands and execute them. After
+executing each command, the content of the simulator's current buffer
+will be output to the screen. The tag <EM><CURSOR></EM> is used to
+denote the position of the cursor.
+
+<P>
+
+The available commands are:
+
+<PRE>
+openfile(STR fname)
+   Opens file with path name *fname* in the editor simulator
+
+say(STR utterance)
+   Interprets string *utterance* as though it had been said by a user.
+
+   When called in this way, the system will simulate a recognition
+   event using NatLink's <EM>recognitionMimic</EM> function.
+
+say(STR utterance, bypass_NatLink=1)
+   Same as above, except that the interpretation process will bypass
+   NatLink's <EM>recognitionMimic</EM> function.
+
+goto(INT pos)
+   Moves cursor to position *pos*
+
+gotoline(INT linenum)
+   Moves cursor to the beginning of line number *linenum*
+
+showbuff()
+   Prints the content of the current buffer
+
+listen()
+   Throws the mediator into a dictation loop. It will listen for
+   dictation utterances and interpret and execute any part of the
+   utterance that corresponds to a Context Sensitive Command.
+
+   Once in 'listen' mode, you cannot type console commands until you
+   have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
+   window.
+
+quit()
+   Quit the simulator. 
+
+   Note that if you don't quit using this command
+   (e.g. <EM>Ctrl-C</EM>), your DOS window will hang up.
+
+</PRE>
+
+
+<hr>
+<center>
+<TABLE  border="1" >
+    <tr><td><font size=2>
+    [<A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/">VoiceCode Home</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/contact.html">Contact</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/pbvResources.html">PBV Resources</A> |
+    <A HREF="http://www.iit.nrc.ca/english.html">IIT</A> |
+    <A HREF="http://www.nrc.ca/corporate/english/">NRC</A> |
+    <A HREF="mailto:alain.desilets@nrc.ca">Feedback</A> ]
+    </FONT></td>
+   </tr>
+</table>
+</center>
+
+
+</BODY>
+</HTML>
