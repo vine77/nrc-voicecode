@@ -1520,12 +1520,12 @@ class CmdInterp(OwnerObject):
         # need to restore the SymBuilderFactory
         return self.builder_factory.restore_state(formatting)
 
-    def interpret_phrase(self, utterance, app, initial_buffer = None,
+    def interpret_phrase(self, interp_phrase, app, initial_buffer = None,
             clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *SpokenUtterance* utterance -- The utterance.
+        *InterpretedPhrase* interp_phrase-- The utterance.
 
         *AppState app* -- the AppState interface to the editor
         
@@ -1537,9 +1537,10 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
         """
-        phrase = utterance.normalized_spoken_phrase()        
+        utterance = interp_phrase.utterance
+        phrase_str = utterance.normalized_spoken_phrase()        
 
-        processed_phrase = utterance.normalized_spoken_phrase()        
+#        processed_phrase = utterance.normalized_spoken_phrase()        
 
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
@@ -1556,16 +1557,14 @@ class CmdInterp(OwnerObject):
         # left
         #
 
-        while len(phrase) > 0:
+        while len(phrase_str) > 0:
             trace('CmdInterp.interpret_phrase', 
-                'now, phrase = %s' % phrase)
-            trace('CmdInterp.interpret_phrase', 
-                'processed phrase = %s' % processed_phrase)
+                'now, phrase_str = %s' % phrase_str)
                 
             #
             # Identify leading CSC, LSA, symbol and ordinary word
             #
-            possible_CSCs = self.chop_CSC_phrase(processed_phrase, app)
+            possible_CSCs = self.chop_CSC_phrase(phrase_str, app)
 
             aliases = self.language_specific_aliases
             language = app.active_language()
@@ -1573,18 +1572,18 @@ class CmdInterp(OwnerObject):
             LSA_consumes = 0
             if aliases.has_key(language):
                 chopped_LSA, LSA_consumes = \
-                    self.chop_LSA_phrase(processed_phrase, aliases[language])
+                    self.chop_LSA_phrase(phrase_str, aliases[language])
             chopped_generic_LSA, generic_LSA_consumes = \
-                self.chop_LSA_phrase(processed_phrase, aliases[None])
+                self.chop_LSA_phrase(phrase_str, aliases[None])
 
             if LSA_consumes < generic_LSA_consumes:
                 chopped_LSA = chopped_generic_LSA
                 LSA_consumes = generic_LSA_consumes
 
             chopped_symbol, symbol_consumes = \
-                self.chop_symbol_phrase(processed_phrase)
+                self.chop_symbol_phrase(phrase_str)
 
-            chopped_word = phrase[0]
+            chopped_word = phrase_str[0]
             word_consumes = 1
 
             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
@@ -1614,10 +1613,10 @@ class CmdInterp(OwnerObject):
             csc_applies = 0
 
             CSC_consumes = self.apply_CSC(app, possible_CSCs,
-                processed_phrase, most_definite, symbols, utterance)
+                phrase_str, most_definite, symbols, interp_phrase)
+
             if CSC_consumes:
-                phrase = phrase[CSC_consumes:]
-                processed_phrase = processed_phrase[CSC_consumes:]
+                phrase_str = phrase_str[CSC_consumes:]
                 head_was_translated = 1
                 symbols.reset()
 
@@ -1630,18 +1629,17 @@ class CmdInterp(OwnerObject):
                 
                 preceding_symbol = not symbols.empty()
                 if not chopped_LSA.interp_now(preceding_symbol):
-                    spoken_form = processed_phrase[:LSA_consumes]
+                    spoken_form = phrase_str[:LSA_consumes]
                     symbols.add_alias(chopped_LSA, string.join(spoken_form))
                 else:
 # flush untranslated words before inserting LSA
                     if preceding_symbol:
-                        self.match_untranslated_text(symbols, app, utterance)
+                        self.match_untranslated_text(symbols, app, interp_phrase)
                     action = actions_gen.ActionInsert(code_bef = \
                         chopped_LSA.written(), code_after = '')
                     action.log_execute(app, None, self.state_interface)
 
-                phrase = phrase[LSA_consumes:]
-                processed_phrase = processed_phrase[LSA_consumes:]
+                phrase_str = phrase_str[LSA_consumes:]
                 head_was_translated = 1
 
 
@@ -1660,8 +1658,7 @@ class CmdInterp(OwnerObject):
                       'processing leading symbol=\'%s\'' % chopped_symbol)
                 symbols.add_symbol(chopped_symbol)
 
-                phrase = phrase[symbol_consumes:]
-                processed_phrase = processed_phrase[symbol_consumes:]
+                phrase_str = phrase_str[symbol_consumes:]
                 head_was_translated = 1
                                          
                    
@@ -1675,8 +1672,7 @@ class CmdInterp(OwnerObject):
                       'processing leading word=\'%s\'' % chopped_word)
                 symbols.add_word(chopped_word)
 
-                phrase = phrase[word_consumes:]
-                processed_phrase = processed_phrase[word_consumes:]
+                phrase_str = phrase_str[word_consumes:]
                 head_was_translated = 1
 
             #
@@ -1684,7 +1680,7 @@ class CmdInterp(OwnerObject):
             #
             # Check if it marked the end of some untranslated text
             #
-            if (len(phrase) == 0) and not symbols.empty():
+            if (len(phrase_str) == 0) and not symbols.empty():
                 #
                 # A CSC or LSA was translated, or we reached end of the
                 # command, thus marking the end of a sequence of untranslated
@@ -1693,14 +1689,14 @@ class CmdInterp(OwnerObject):
                 #
                 trace('CmdInterp.interpret_phrase',
                       'found the end of some untranslated text')
-                self.match_untranslated_text(symbols, app, utterance)
+                self.match_untranslated_text(symbols, app, interp_phrase)
 
             if trace_is_active('CmdInterp.interpret_phrase'):
                 untranslated_text = string.join(symbols.words())
                 trace('CmdInterp.interpret_phrase',
                       'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
-        interpreted = InterpretedPhrase(phrase, symbols.inserted_symbols(), utterance)
+        interp_phrase.symbol_results = symbols.inserted_symbols()
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
 
@@ -1708,10 +1704,10 @@ class CmdInterp(OwnerObject):
         # Notify external editor of the end of recognition
         #
         app.recog_end()
-        return interpreted
+        return interp_phrase
 
     def apply_CSC(self, app, possible_CSCs, spoken_list,
-        most_definite, symbols, from_utterance):
+        most_definite, symbols, interp_phrase):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
@@ -1731,14 +1727,15 @@ class CmdInterp(OwnerObject):
         *SymbolConstruction symbols* -- object storing information
         related to any pending untranslated symbols
         
-        *SpokenUtterance* from_utterance -- utterance that the CSC was
-        interpreted from.
+        *InterpretedPhras* interp_phrase -- phrase that the CSC was interpreted
+        from.
         
         **OUTPUTS**
 
         *INT* -- the number of words actually consumed (0 if no CSC
         consuming more than most_definite applies)
         """
+        from_utterance = interp_phrase.utterance
         preceding_symbol = not symbols.empty()
         for match in possible_CSCs:
             meanings, CSC_consumes = match
@@ -1768,7 +1765,7 @@ class CmdInterp(OwnerObject):
             csc_applies = 1
 # flush untranslated words before executing action
             if preceding_symbol:
-                self.match_untranslated_text(symbols, app, from_utterance)
+                self.match_untranslated_text(symbols, app, interp_phrase)
             action.log_execute(app, context, self.state_interface)
             return CSC_consumes
         return 0
@@ -1827,7 +1824,8 @@ class CmdInterp(OwnerObject):
 
         *none*
         """
-        return self.interpret_phrase(utterance, app,
+        phrase = InterpretedPhrase(utterance.words(), [], utterance)
+        return self.interpret_phrase(phrase, app,
             initial_buffer = initial_buffer, clear_state = clear_state)
 
        
@@ -1856,7 +1854,7 @@ class CmdInterp(OwnerObject):
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
-    def match_untranslated_text(self, symbols, app, utterance):
+    def match_untranslated_text(self, symbols, app, interp_phrase):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -1867,11 +1865,15 @@ class CmdInterp(OwnerObject):
         
         *SymbolConstruction symbols* -- object storing information
         related to any pending untranslated symbols
+        
+        *InterpretedPhrase interp_phrase8 -- The phrase that the untranslated
+        text is matched from.
 
         **OUTPUTS**
         
         *none* -- 
         """
+        utterance = interp_phrase.utterance
         phrase = map(SpokenUtterance.remove_periods_from_initials, symbols.words())
         untranslated_text = string.join(phrase)
         spoken_form = untranslated_text
