@@ -502,6 +502,7 @@ class ActionInsert(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
         debug.trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
+
         inserted = app.insert_indent(self.code_bef, self.code_after)
         if state:
             styling_state = state.styling_state()
@@ -688,18 +689,23 @@ class ActionSearch(ActionBidirectional):
 
     *INT* num=1 -- Search for *num*th occurence.
     
+    *BOOL* include_current_line -- if true, include the entire
+    current line in the search (start at end of line if going
+    backwards, start at beginning of line if going forwards)
+
     CLASS ATTRIBUTES**
         
     *none* -- 
     """
         
     def __init__(self, regexp=None, num=1, where=1, 
-                 unlogged = 0,
+                 include_current_line=0, unlogged = 0,
                  **args_super):
         self.deep_construct(ActionSearch, 
                             {'regexp': regexp, 
                              'num': num, 
                              'where': where,
+                             'include_current_line': include_current_line,
                              'unlogged': 0}, 
                             args_super, 
                             {})
@@ -712,11 +718,9 @@ class ActionSearch(ActionBidirectional):
 
         debug.trace('ActionSearch.execute', 'called, app=%s' % app)
         return app.search_for(regexp=self.regexp, direction=self.direction,
-                       num=self.num, where=self.where,
-                       unlogged  = self.unlogged)
-
-
-
+                              num=self.num, where=self.where,
+                              include_current_line = self.include_current_line,
+                              unlogged  = self.unlogged)
 
     def doc(self):
         """See [Action.doc].
@@ -993,6 +997,9 @@ class ActionInsertNewClause(Action):
     INT *direction = 1* -- If > 0, then search forward for the occurence of *end_of_clause_regexp*,
     otherwise search backwards.
         
+    *BOOL* include_current_line -- if true, include the entire
+    current line in the search (start at end of line if going
+    backwards, start at beginning of line if going forwards)
     
     CLASS ATTRIBUTES**
         
@@ -1000,7 +1007,8 @@ class ActionInsertNewClause(Action):
     """
         
     def __init__(self, end_of_clause_regexp, code_bef='',
-                 code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1, 
+                 code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1,
+                 include_current_line = 0,
                  **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
@@ -1010,7 +1018,8 @@ class ActionInsertNewClause(Action):
                              'add_lines': add_lines, 
                              'code_bef': code_bef, 
                              'code_after': code_after,
-                             'back_indent_by': back_indent_by}, 
+                             'back_indent_by': back_indent_by,
+                             'include_current_line': include_current_line}, 
                             args_super, 
                             {})
 
@@ -1030,6 +1039,7 @@ class ActionInsertNewClause(Action):
 
         app.search_for(regexp=self.end_of_clause_regexp, 
                        where = self.where, direction = self.direction,
+                       include_current_line = self.include_current_line,
                        unlogged=1)
         debug.trace('ActionInsertNewClause.execute',
             'after search, pos = %d' % app.cur_pos())
