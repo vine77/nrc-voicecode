@@ -324,7 +324,7 @@ sent."
    "invoked, (current-buffer)=%S" (current-buffer))
 
    (setq py-smart-indentation nil) 
-   (setq py-indent-offset 3)
+   (setq py-indent-offset 4)
    (setq tab-width 999)
    (auto-fill-mode 0)
 ; DCF - tracing indentation problems (at Alain's suggestion)
