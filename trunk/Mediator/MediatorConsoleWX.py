@@ -1520,10 +1520,11 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
 
     **INSTANCE ATTRIBUTES**
 
-    *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+    *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
     dictation utterances (or all available if < n), sorted most recent 
     last, each with a corresponding utterance number and a flag 
-    indicating if the utterance can be undone and re-interpreted.
+    indicating if the utterance can be undone and re-interpreted,
+    as well as a list of symbols that they contain.
 
     *BOOL first* -- flag indicating whether this is the first time the
     dialog has been activated.
@@ -1539,13 +1540,13 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
     def __init__(self, console, parent, utterances, 
                  gram_factory, pos = None, **args): 
        self.deep_construct(ReformatRecentSymbolsModel, 
-                           {},
+                           {'utterances': utterances},
                            args)
        self.setView(ReformatRecentSymbolsViewWX(console, parent, utterances, 
                                                 gram_factory, pos))
 
     def displayed_utterances(self):
-        return []
+        return self.view.displayed_utterances()
 
 class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture, 
                               Object.OwnerObject):
@@ -1554,10 +1555,11 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
     **INSTANCE ATTRIBUTES**
 
-    *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+    *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
     dictation utterances (or all available if < n), sorted most recent 
     last, each with a corresponding utterance number and a flag 
-    indicating if the utterance can be undone and re-interpreted.
+    indicating if the utterance can be undone and re-interpreted, and a 
+    list of symbols they contain.
 
     *BOOL first* -- flag indicating whether this is the first time the
     window has been activated.
@@ -1580,10 +1582,10 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *wxWindow parent* -- the parent wxWindow
 
-        *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+        *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
         dictation utterances (or all available if < n), sorted most 
         recent last, with corresponding flags indicating if the utterance 
-        can be undone and re-interpreted
+        can be undone and re-interpreted, and a list of symbols they contain.
 
         *{INT: BOOL} corrected* -- set of utterances which have been
         corrected, counted from most recent = 1
@@ -1593,25 +1595,25 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *(INT, INT) pos* -- position of the box in pixels
         """
-#        use_pos = pos
-#        if pos is None:
-#            use_pos = wxDefaultPosition
-#        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
-#            (600, 400),
-#            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-#        possible_capture.__init__(self)
-#        self.deep_construct(CorrectRecentWX,
-#                            {
-#                             'console': console,
-#                             'utterances': utterances,
-#                             'gram_factory': gram_factory,
-#                             'first': 1,
-#                             'nth_event': CorrectNthEventWX(self),
-#                             'corrected': {},
-#                             'correct_n_gram': None,
-#                            }, args, 
-#                            exclude_bases = {possible_capture:1, wxDialog: 1}
-#                           )
+        use_pos = pos
+        if pos is None:
+            use_pos = wxDefaultPosition
+        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
+            (600, 400),
+            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        possible_capture.__init__(self)
+        self.deep_construct(CorrectRecentWX,
+                            {
+                             'console': console,
+                             'utterances': utterances,
+                             'gram_factory': gram_factory,
+                             'first': 1,
+                             'nth_event': CorrectNthEventWX(self),
+                             'corrected': {},
+                             'correct_n_gram': None,
+                            }, args, 
+                            exclude_bases = {possible_capture:1, wxDialog: 1}
+                           )
 #        self.name_parent('console')
 #        self.add_owned('correct_n_gram')
 #        if gram_factory:
@@ -1704,6 +1706,9 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 #        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 #        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
 #        self.hook_events()
+
+    def displayed_utterances(self):
+        return []
 
 
 
