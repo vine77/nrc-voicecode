@@ -567,8 +567,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         **INPUTS**
         
         (INT, INT) *range* -- Start and end position of text to be
-        replaced by the insertion. If end of range is None, default to 
-        the end of the buffer.
+        replaced by the insertion. 
 
         STR *text* -- Text to be inserted
 
@@ -610,12 +609,9 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
                 'no cache - ignoring callback')
             pass
         else:
-            range_non_nil = [range[0], range[1]]
-            if range_non_nil[1] == None:
-               range_non_nil[1] = len(self._get_cache('get_text')) - 1        
             old_text = self.get_text()
-            self._put_cache('get_text', old_text[:range_non_nil[0]] + text + \
-                     old_text[range_non_nil[1]:])
+            self._put_cache('get_text', old_text[:range[0]] + text + \
+                     old_text[range[1]:])
 
         self.uncache_data_after_buffer_change(what_changed = 'get_text')
         
