@@ -26,11 +26,17 @@ class SourceBuff(Object):
     """
     
     def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=None, visible_end=None, content=None, **attrs):
+        self.deep_construct(SourceBuff,
+                            {'file_name': file_name, \
+                             'language': language, \
+                             'cur_pos': cur_pos, \
+                             'visible_start': visible_start, \
+                             'visible_end': visible_end, \
+                             'content': content},
+                            attrs
+                            )
 
         global file_language        
-        Object.__init__(self)
-        self.def_attrs({'file_name': file_name, 'language': language, 'cur_pos': cur_pos, 'visible_start': visible_start, 'visible_end': visible_end, 'content': content})
-        self.init_attrs(attrs)
 
         #
         # Set the language name if it hasn't been set already

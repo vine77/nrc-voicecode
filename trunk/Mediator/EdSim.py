@@ -22,9 +22,7 @@ class EdSim(AppState):
     """
     
     def __init__(self, **attrs):
-        AppState.__init__(self)
-        self.def_attrs({})
-        self.init_attrs(attrs)
+        self.deep_construct(EdSim, {}, attrs)
 
     def move_to(self, pos, f_name=None):
         """Move cursor to position *INT pos* of buffer *STR f_name*.

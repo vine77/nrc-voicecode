@@ -1,9 +1,24 @@
 import auto_test, exceptions, os, posixpath, profile, sys
 
 class Object:
-    """A base class for objects with safe attribute access methods
+    """A base class for all VoiceCode objects
 
-    This class defines a safe *__setattr__* method, which raise an
+    This class implements various useful behaviors for generic
+    objects, such as:
+
+    - safe attribute setting
+    - deep constructor
+    - pretty printing???
+    
+
+    **SAFE ATTRIBUTE SETTING***
+
+    When getting the value of an attribute, Python will issue an
+    *AttributeError* if that attribute doesn't exist. However, it
+    doesn't do that when trying to set the value of an inexistant
+    attribute.
+
+    The [Object] class defines a safe *__setattr__* method, which raise an
     exception when trying to set the value of an inexistant attribute.
 
     For performance reasons, these safe attribute setting methods are
@@ -20,48 +35,58 @@ class Object:
     - when *$PY_DEBUG_OBJECT=0*, the performance of attribute *sets* is the same for Object and non-Object instances
     - when *$PY_DEBUG_OBJECT=1*, attribute *sets* are slower by a factor of about 15 for Object instances than for non-Object instances
 
-    **TEMPLATE CONSTRUCTOR**
 
-    Constructors for each of the subclasses of *Object* are
-    responsible for adding an entry in *self.__dict__* corresponding
-    to the attributes defined by that class (otherwise those
-    attributes will be considered as undefined by the safe
-    *__setattr__* method)
+    **DEEP CONSTRUCTORS**
 
-    You can do this using the [def_attrs] method.
+    By default, when constructing an instance of a class, Python does
+    not call the constructor of all the ancestor classes. This means
+    that the constructor of each class must set the values of the
+    attributes defined by all of its ancestors, otherwise reading the
+    value of an ancestor attribute (or setting it when
+    *PY_DEBUG_OBJECT=1*) results in an *AttributeError*. This also
+    means that subclasses cannot inherit default values of ancestor
+    attributes from their ancestor classes.
+    
+    The [Object] class defines a method [deep_construct], which can be
+    used to create "standard" constructors which allow you to:
 
-    Note however that Python does not automatically invoke the
-    constructor of every superclass of a class, so your constructor
-    should do this explicitly. Below is a template constructor.
+    - automatically invoke the constructor of any superclass that has a "standard" constructor
+    - initialise the value of any attribute (including ones defined by ancestor classe) by specifying its value as a named argument
+    - leaving the value of any attribute (including ones defined by ancestor classe) at a consistent default value, by not specifying its value as a named argument.
+    - inherit default attribute values from ancestor classes
+
+    Below is a template for such a standard constructor.
 
     Example:
 
-       class AClass(Super1, ..., SuperN):
+       class AClass(StdClass1, ..., StdClassN, NonStdClass1, ..., NonStdClassK):
           def __init__(self, attr1=val1, ..., attrN=valN, **attrs):
-             Super1.__init__(self)
-             ...
-             SuperN.__init__(self)
-             self.def_attrs({'attr1': attr1, ..., 'attrN': attrN}
-             self.init_attrs(attrs)
+              
+             self.deep_construct(AClass, {'attr1': val1, ..., 'attrN': valN}, attrs, exclude_bases={NonStdClass1: 1, ..., NonStdClassK: 1})
+             
+             <Code for explicitely calling NonStdClass1.__init__, ..., NonStdClassK.__init__ with appropriate arguments>
+             
+             <Any other initialisation that can't be done automatically
+              through *self.deep_construct*>
 
-    Where *attr1, ..., attrN* are the new attributes defined by
-    *AClass*, and *val1, ..., valN* are their default values. 
-                         
-    This guarantees that in the end, you have an instance of *AClass*
-    with *all* attributes (i.e. attributes for this class and all superclasses)
-    defined and set to their default values.
+    Here, *StdClass1, ..., StdClassN* are "standard" classes, that is
+    classes that have standard constructor. The constructor of those
+    classes can be invoked automatically because it doesn't require
+    any arguments.
 
-    Note the use of dictionary *attrs*. This dictionary collects
-    additional attribute names and values which are then passed to
-    method [init_attrs] to initialise attributes defined by
-    superclasses of *AClass*. Thus if *AClass* is a subclass of
-    *Super1* and if *Super1* defines attribute *blah*, then you can
-    construct an instance of *AClass* with *blah=1* using the statement:
+    *NonStdClass1, ..., NonStdClassK* are "non-standard" classes,
+     i.e. classes whose constructor has some compulsory arguments. The
+     constructor of those non-standard classes can therefore not be
+     called automatically (which is why they are set in the
+     *exclude_bases* argument)
+    
+    Attributes *attr1, ..., attrN* are the new attributes defined by
+    *AClass*, and *val1, ..., valN* are their default values.
 
-    *x = AClass(blah=1)*
-
-    without the constructor of *AClass* having to know explicitly
-    about attribute *blah*.
+    The argument *{STR: ANY} **attrs* collects any named arguments fed
+    to the constructor which don't correspond to an attribute defined
+    by this class. These will be used to set the values of attributes
+    defined in ancestor classes.
                        
     Note that the file *Admin/python.el* contains an Emacs macro
     *py-obclass* which automatically types this kind of template code
@@ -90,31 +115,61 @@ class Object:
 
     def __init__(self):
         pass
-    
-    def def_attrs(self, attrs):
-        """Define new attributes for *self*
 
-        Attributes are set even if they do not exist in
+    def deep_construct(self, this_class , attrs_this_class, attrs_superclasses, exclude_bases={}):
+        """Build an instance of a class.
+
+        Make *[Object] self* into an instance of class *CLASS this_class*.
+
+        Automatically call constructors of superclasses of
+        *this_class* (except for classes listed in *{CLASS: 1}
+        exclude_bases*). Constructors are called with no arguments.
+        
+        Set attributes to the values listed in *{STR: ANY}
+        attrs_this_class* and *{STR: ANY} attrs_cupserclasses*. These
+        attributes are set even if they do not exist in
         *self.__dict__*.
+        
+        listed in *exclude_bases* argument). These constructors are
+        called with no arguments.
 
-        **INPUTS**
+        [Object].. file:///./Object.Object.html"""
 
-        *{STR: ANY}* attrs -- dictionary with attribute name as the keys and
-         default values as the values.
+        for a_base in this_class.__bases__:
+            if not exclude_bases.has_key(a_base):
+                a_base.__init__(self)
 
-        **OUTPUTS**
-
-        *none* -- 
-        """
-        for an_attr_def in attrs.items():
+        for an_attr_def in attrs_this_class.items():
             self.__dict__[an_attr_def[0]] = an_attr_def[1]        
+
+        for an_attr_def in attrs_superclasses.items():
+            self.__dict__[an_attr_def[0]] = an_attr_def[1]        
+
+    
+#      def def_attrs(self, attrs):
+#          """Define new attributes for *self*
+
+#          Attributes are set even if they do not exist in
+#          *self.__dict__*.
+
+#          **INPUTS**
+
+#          *{STR: ANY}* attrs -- dictionary with attribute name as the keys and
+#           default values as the values.
+
+#          **OUTPUTS**
+
+#          *none* -- 
+#          """
+#          for an_attr_def in attrs.items():
+#              self.__dict__[an_attr_def[0]] = an_attr_def[1]        
 
     def init_attrs(self, attrs):
         """Initialises existing attributes
 
         Attributes are only set if they already exist in
          *self.__dict__*. Otherwise, an *AttributeError* exception is
-         raised.
+         raised (provided PY_DEBUG_OBJECT=1).
         
         **INPUTS**
 

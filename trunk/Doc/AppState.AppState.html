@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 19 12:01:58 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu May 25 13:03:04 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -40,7 +40,7 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.def_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.def_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
@@ -211,38 +211,32 @@ move it before.</P>
 <P>
 Returns 1 if and only if an occurence was found, and 0 otherwise.               
 If <EM>f_name</EM> is <EM>None</EM>, <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
-<H2 ID="Object.Object.def_attrs" CLASS="Method">Object.Object.def_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
 
 <P>
-Attributes are set even if they do not exist in
+Make <EM>[Object] self</EM> into an instance of class <EM>CLASS this_class</EM>.</P>
+<P>
+Automatically call constructors of superclasses of
+<EM>this_class</EM> (except for classes listed in *{CLASS: 1}
+exclude_bases*). Constructors are called with no arguments.</P>
+<P>
+Set attributes to the values listed in *{STR: ANY}
+attrs_this_class* and <EM>{STR: ANY} attrs_cupserclasses</EM>. These
+attributes are set even if they do not exist in
 <EM>self.__dict__</EM>.</P>
 <P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
+listed in <EM>exclude_bases</EM> argument). These constructors are
+called with no arguments.</P>
 <P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
+[Object].. file:///./Object.Object.html</P>
 <H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Initialises existing attributes</P>
 
 <P>
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised.</P>
+ raised (provided PY_DEBUG_OBJECT=1).</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

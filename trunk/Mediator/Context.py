@@ -19,10 +19,10 @@ class Context(Object):
     """
     
     def __init__(self, doc_string=None, doc_topics=[], **attrs):
-        Object.__init__(self)
-        self.def_attrs({'doc_string': doc_string, 'doc_topics': doc_topics})
-        self.init_attrs(attrs)
-
+        self.deep_construct(Context,
+                            {'doc_string': doc_string,\
+                             'doc_topics': doc_topics},
+                            attrs)
 
 
     def applies(self, app):        

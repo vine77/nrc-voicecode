@@ -6,8 +6,7 @@ class ContC(Context):
     """This context applies if current source buffer is in C."""
     
     def __init__(self, **attrs):
-        Context.__init__(self)
-        self.init_attrs(attrs)
+        self.deep_construct(ContC, {}, attrs)
 
     def applies(self, app):
         buff = app.curr_buffer
@@ -18,8 +17,7 @@ class ContPy(Context):
     """This context applies if current source buffer is in Python."""
     
     def __init__(self, **attrs):
-        Context.__init__(self)
-        self.init_attrs(attrs)
+        self.deep_construct(ContPy, {}, attrs)
 
     def applies(self, app):
         buff = app.curr_buffer

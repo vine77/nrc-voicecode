@@ -54,12 +54,16 @@ class AppState(Object):
     
     def __init__(self, app_name=None, rec_utterances=[], open_buffers={},\
                  curr_dir=None, active_field=None, curr_buffer=None, breadcrumbs = [], **attrs):
-        Object.__init__(self)
-        self.def_attrs({'app_name': app_name, 'rec_utterances': rec_utterances, \
-                        'open_buffers': open_buffers, 'curr_dir': curr_dir, \
-                        'active_field': active_field, \
-                        'curr_buffer': curr_buffer, 'breadcrumbs': breadcrumbs})
-        self.init_attrs(attrs)
+        self.deep_construct(AppState, \
+                            {'app_name': app_name,\
+                             'rec_utterances': rec_utterances, \
+                             'open_buffers': open_buffers,\
+                             'curr_dir': curr_dir, \
+                             'active_field': active_field, \
+                             'curr_buffer': curr_buffer,\
+                             'breadcrumbs': breadcrumbs},
+                            attrs)
+
 
 
 
