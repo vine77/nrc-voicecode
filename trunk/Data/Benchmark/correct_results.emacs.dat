@@ -38,14 +38,14 @@ Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
 *** Start of source buffer ***
-  1: dictated_in_buffer_2<CURSOR>
+  1: dictated_in_buffer2<CURSOR>
 
 *** End of source buffer ***
 Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
 *** Start of source buffer ***
-  1: dictated_in_buffer_2dictated_in_buffer_2<CURSOR>
+  1: dictated_in_buffer2dictated_in_buffer2<CURSOR>
 
 *** End of source buffer ***
 Got simulated kbd event: type_text({Esc}xdelete-other-window{Enter},)
@@ -647,7 +647,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0219DED0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CB9EB0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -801,12 +801,12 @@ Unresolved abbreviations are:
 
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
-'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
-'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
-'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
-'profile Constructor Large Object' matches: [profConstrLargeObj, profile_constructor_large_object, ProfileConstructorLargeObject, profileConstructorLargeObject, PROFILE_CONSTRUCTOR_LARGE_OBJECT, profileconstructorlargeobject, PROFILECONSTRUCTORLARGEOBJECT, ]
-'profile construct large object' matches: [profConstrLargeObj, profile_construct_large_object, ProfileConstructLargeObject, profileConstructLargeObject, PROFILE_CONSTRUCT_LARGE_OBJECT, profileconstructlargeobject, PROFILECONSTRUCTLARGEOBJECT, ]
-'auto test' matches: [auto_test, autoTst, AutoTest, autoTest, AUTO_TEST, autotest, AUTOTEST, ]
+'set attribute' matches: [setattr, ]
+'expand variables' matches: [expandvars, ]
+'execute file' matches: [execfile, ]
+'profile Constructor Large Object' matches: [profConstrLargeObj, ]
+'profile construct large object' matches: [profConstrLargeObj, ]
+'auto test' matches: [auto_test, autoTst, ]
 
 *** End of Pseudo Symbol Match test ***
 
@@ -1965,7 +1965,7 @@ List of unresolved abbreviations
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
 Heard application programming interface function comma
 *** Start of source buffer ***
-  1: this_sym_is_unres, this_sym_is_unres_too, f_name, API_function, <CURSOR>
+  1: this_sym_is_unres, this_sym_is_unres_too, f_name, application_programming_interface_function, <CURSOR>
 
 *** End of source buffer ***
 
@@ -1978,7 +1978,6 @@ List of abbreviations
 'addr' expands to ['address']
 'alnum' expands to ['alpha numeric']
 'alt' expands to ['alternate', 'alternative']
-'api' expands to ['application programming interface']
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
@@ -2661,65 +2660,65 @@ WARNING: source file 'blah1.py' doesn't exist.
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: line_3<CURSOR>
+  1: line1
+  2: line2
+  3: line3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: <CURSOR>line_3
+  1: line1
+  2: line2
+  3: <CURSOR>line3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: <CURSOR>line_3
+  1: line1
+  2: line2
+  3: <CURSOR>line3
 
 *** End of source buffer ***
 Got command: move_relative(-1,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2<CURSOR>
-  3: line_3
+  1: line1
+  2: line2<CURSOR>
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: <CURSOR>line_2
-  3: line_3
+  1: line1
+  2: <CURSOR>line2
+  3: line3
 
 *** End of source buffer ***
 Got command: move_relative(3,)
 *** Start of source buffer ***
-  1: line_1
-  2: lin<CURSOR>e_2
-  3: line_3
+  1: line1
+  2: lin<CURSOR>e2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: <CURSOR>line_2
-  3: line_3
+  1: line1
+  2: <CURSOR>line2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto(0,)
 *** Start of source buffer ***
-  1: <CURSOR>line_1
-  2: line_2
-  3: line_3
+  1: <CURSOR>line1
+  2: line2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: <CURSOR>line_1
-  2: line_2
-  3: line_3
+  1: <CURSOR>line1
+  2: line2
+  3: line3
 
 *** End of source buffer ***
 WARNING: source file 'blah2.py' doesn't exist.
@@ -2730,72 +2729,72 @@ WARNING: source file 'blah2.py' doesn't exist.
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: line_3<CURSOR>
+  1: line1
+  2: line2
+  3: line3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto(0,)
 *** Start of source buffer ***
-  1: <CURSOR>line_1
-  2: line_2
-  3: line_3
+  1: <CURSOR>line1
+  2: line2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line_1<CURSOR>
-  2: line_2
-  3: line_3
+  1: line1<CURSOR>
+  2: line2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line_1<CURSOR>
-  2: line_2
-  3: line_3
+  1: line1<CURSOR>
+  2: line2
+  3: line3
 
 *** End of source buffer ***
 Got command: move_relative(1,)
 *** Start of source buffer ***
-  1: line_1
-  2: <CURSOR>line_2
-  3: line_3
+  1: line1
+  2: <CURSOR>line2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2<CURSOR>
-  3: line_3
+  1: line1
+  2: line2<CURSOR>
+  3: line3
 
 *** End of source buffer ***
 Got command: move_relative(-3,)
 *** Start of source buffer ***
-  1: line_1
-  2: lin<CURSOR>e_2
-  3: line_3
+  1: line1
+  2: li<CURSOR>ne2
+  3: line3
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2<CURSOR>
-  3: line_3
+  1: line1
+  2: line2<CURSOR>
+  3: line3
 
 *** End of source buffer ***
-Got command: goto(20,)
+Got command: goto(17,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: line_3<CURSOR>
+  1: line1
+  2: line2
+  3: line3<CURSOR>
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: line_1
-  2: line_2
-  3: line_3<CURSOR>
+  1: line1
+  2: line2
+  3: line3<CURSOR>
 
 *** End of source buffer ***
 
@@ -8087,21 +8086,21 @@ Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols
 Heard from module context sensitive command import symbols context sensitive command new statement
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
-  6: from CSCmd import CSCmd
+  6: from context_sensitive_command import context_sensitive_command
   7: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
   5: from cont_gen import ContC, ContPy
-  6: from CSCmd import CSCmd
+  6: from context_sensitive_command import context_sensitive_command
   7: from EdSim import EdSim
   8: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 Heard from module object import symbol object new statement
-  6: from CSCmd import CSCmd
+  6: from context_sensitive_command import context_sensitive_command
   7: from EdSim import EdSim
   8: from Object import Object
   9: <CURSOR>
@@ -9191,13 +9190,13 @@ Heard do some more stuff with arguments some argument
  10:             do_some_stuff(some_array)
  11:             do_some_more()
  12:             if some_flag:
- 13:                do_some_stuff(some_argument<CURSOR>)
+ 13:                do_some_more_stuff(some_argument<CURSOR>)
  14:            
  15:         try:
  16:             do_some_stuff()
 Heard else do some stuff again with arguments some other argument
  12:             if some_flag:
- 13:                do_some_stuff(some_argument)
+ 13:                do_some_more_stuff(some_argument)
  14:             else:
  15:                do_some_stuff_again(some_other_argument<CURSOR>)
  16:            
@@ -9205,15 +9204,15 @@ Heard else do some stuff again with arguments some other argument
  18:             do_some_stuff()
 Heard bug below dot following one will not be inserted at the right level
  12:             if some_flag:
- 13:                do_some_stuff(some_argument)
+ 13:                do_some_more_stuff(some_argument)
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following_1_willnot be_inserted_at_the_right_level<CURSOR>)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level<CURSOR>)
  16:            
  17:         try:
  18:             do_some_stuff()
 Heard else do some stuff without arguments
  14:             else:
- 15:                do_some_stuff_again(some_other_argumentbug_below.following_1_willnot be_inserted_at_the_right_level)
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following1willnot be_inserted_at_the_right_level)
  16:             else:
  17:                do_some_stuff()<CURSOR>
  18:            
@@ -11506,7 +11505,7 @@ Got command: say(['software', 'engineering', 'comma'],1
 ,0,0,)
 Heard software engineering comma
 *** Start of source buffer ***
-  1: software_engineering, <CURSOR>
+  1: se, <CURSOR>
 
 *** End of source buffer ***
 Next utterance should match non-separable symbol 'openlog'
@@ -11514,7 +11513,7 @@ Got command: say(['open', 'log'],1
 ,0,0,)
 Heard open log
 *** Start of source buffer ***
-  1: software_engineering, openlog<CURSOR>
+  1: se, openlog<CURSOR>
 
 *** End of source buffer ***
 
@@ -11643,6 +11642,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1469.523 secs
+Test suite completed in:  1375.42800009 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6

@@ -14,7 +14,8 @@
 text_mode_toggling(on_spoken_as=['text mode on', 'nat text on',
                                  'natural text on', 'code mode off', 'coding mode off',
                                  'alternative test text mode on'],
-                   off_spoken_as=['text mode off', 'code mode on', 'coding mode on',
+                   off_spoken_as=['text mode off', 'nat text off',
+                                  'natural text off', 'code mode on', 'coding mode on',
                                  'alternative test text mode off'],
                    off_sets_nat_text_to=1)
 

@@ -128,7 +128,7 @@ class LSAlias(Object):
         for language, written_as in meanings.items():
             self.meanings[language] = written_as
 
-class AliasMeaning(DeferInterp, SymDict.SymElement):
+class AliasMeaning(DeferInterp):
     """underlying object used by CmdInterp to store the data associated 
     with an LSAlias meaning
 
@@ -475,6 +475,41 @@ class LSAliasSet(Object):
         return 1
 
 
+class SymAlias(SymDict.SymElement):
+    """an LSAlias as an element of a symbol 
+
+    **INSTANCE ATTRIBUTES**
+
+    *AliasMeaning alias* -- the data structure containing the alias
+
+    *STR spoken_form* -- spoken form 
+    """
+    def __init__(self, alias, spoken_form, **args):
+        self.deep_construct(SymAlias,
+                            {
+                             'alias': alias,
+                             'spoken_form': spoken_form
+                            },
+                            args)
+
+    def add_to(self, builder):
+        """Add alias's written form to the symbol builder
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        written = self.alias.written()
+        match = re.match(r'([a-zA-Z])\.{0,1}$', written)
+        if match:
+            builder.add_letter(string.lower(match.group(1)))
+        else:
+            builder.add_word(self.alias.written())
+
 class SymWord(SymDict.SymElement):
     """a word as an element of a symbol 
 
@@ -504,7 +539,11 @@ class SymWord(SymDict.SymElement):
 
         *none*
         """
-        builder.add_word(self.word, self.original)
+        match = re.match(r'([a-zA-Z])\.{0,1}$', self.word)
+        if match:
+            builder.add_letter(string.lower(match.group(1)))
+        else:
+            builder.add_word(self.word, self.original)
 
 class CapsModifier(SymDict.SymElement):
     """a symbol element which modifies the capitalization of subsequent
@@ -745,7 +784,8 @@ class CmdInterp(OwnerObject):
         
         """
         trace('CmdInterp.interpret_massaged', 'command=%s' % cmd)
-        spoken_list = map(lambda word: process_initials(word[0]), cmd)
+        spoken_list = map(lambda word: word[0], cmd)
+#        spoken_list = map(lambda word: process_initials(word[0]), cmd)
         trace('CmdInterp.interpret_massaged', 'spoken=%s' % spoken_list)
         self.interpret_spoken(spoken_list, app, initial_buffer = initial_buffer)
 
@@ -787,12 +827,16 @@ class CmdInterp(OwnerObject):
         """
         trace('CmdInterp.interpret_phrase', 'phrase = %s' % phrase)
 
+        processed_phrase = map(lambda word: process_initials(word), phrase)
+
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
         else:
             app.bind_to_buffer(initial_buffer)
 
         untranslated_words = []
+
+        builder = None
 
 # flag indicating whether untranslated words consists of an exact match
 # of the spoken form to an existing symbol
@@ -810,24 +854,24 @@ class CmdInterp(OwnerObject):
             #
             # Identify leading CSC, LSA, symbol and ordinary word
             #
-            possible_CSCs = self.chop_CSC_phrase(phrase, app)
+            possible_CSCs = self.chop_CSC_phrase(processed_phrase, app)
 
             aliases = self.language_specific_aliases
             language = app.active_language()
             chopped_LSA = ""
             LSA_consumes = 0
             if aliases.has_key(language):
-                chopped_LSA, LSA_consumes = self.chop_LSA_phrase(phrase, 
-                    aliases[language])
+                chopped_LSA, LSA_consumes = \
+                    self.chop_LSA_phrase(processed_phrase, aliases[language])
             chopped_generic_LSA, generic_LSA_consumes = \
-                self.chop_LSA_phrase(phrase, aliases[None])
+                self.chop_LSA_phrase(processed_phrase, aliases[None])
 
             if LSA_consumes < generic_LSA_consumes:
                 chopped_LSA = chopped_generic_LSA
                 LSA_consumes = generic_LSA_consumes
 
             chopped_symbol, symbol_consumes = \
-                self.chop_symbol_phrase(phrase)
+                self.chop_symbol_phrase(processed_phrase)
 
             chopped_word = phrase[0]
             word_consumes = 1
@@ -858,12 +902,15 @@ class CmdInterp(OwnerObject):
             #
             csc_applies = 0
 
-            CSC_consumes = self.apply_CSC(app, possible_CSCs, phrase, 
-                most_definite, untranslated_words, exact_symbol)
+            CSC_consumes = self.apply_CSC(app, possible_CSCs, processed_phrase, 
+                most_definite, builder, untranslated_words, 
+                exact_symbol)
             if CSC_consumes:
                 phrase = phrase[CSC_consumes:]
+                processed_phrase = processed_phrase[CSC_consumes:]
                 head_was_translated = 1
                 untranslated_words = []
+                builder = None
                 exact_symbol = 0
 
             if not head_was_translated and LSA_consumes == most_definite:
@@ -872,20 +919,27 @@ class CmdInterp(OwnerObject):
                 #
                 trace('CmdInterp.interpret_phrase', 'processing leading LSA=\'%s\'' % chopped_LSA)
                 preceding_symbol = 0
-                if untranslated_words:
+                if builder and not builder.empty():
                     preceding_symbol = 1
                 if not chopped_LSA.interp_now(preceding_symbol):
                     untranslated_words.append(chopped_LSA.written())
+                    spoken_form = processed_phrase[:LSA_consumes]
+                    element = SymAlias(chopped_LSA, spoken_form)
+                    if not builder:
+                        builder = self.new_builder(app)
+                    element.add_to(builder)
                 else:
 # flush untranslated words before inserting LSA
-                    if untranslated_words:
-                        self.match_untranslated_text(untranslated_words, app, 
-                            exact_symbol)
+                    if builder:
+                        self.match_untranslated_text(builder, 
+                            untranslated_words, app, exact_symbol)
                         untranslated_words = []
+                        builder = None
                         exact_symbol = 0
                     actions_gen.ActionInsert(code_bef=chopped_LSA.written(), 
                         code_after='').log_execute(app, None)
                 phrase = phrase[LSA_consumes:]
+                processed_phrase = processed_phrase[LSA_consumes:]
                 head_was_translated = 1
 
 
@@ -906,8 +960,17 @@ class CmdInterp(OwnerObject):
                 else:
                     exact_symbol = 1
                 untranslated_words.append(chopped_symbol)
+                if not builder:
+                    builder = self.new_builder(app)
+                spoken_list = string.split(chopped_symbol)
+                trace('CmdInterp.interpret_phrase', 
+                    'symbol breaks into %s' % repr(spoken_list))
+                for word in spoken_list:
+                    word_element = self.make_word_element(word)
+                    word_element.add_to(builder)
 
                 phrase = phrase[symbol_consumes:]
+                processed_phrase = processed_phrase[symbol_consumes:]
                 head_was_translated = 1
                                          
                    
@@ -918,9 +981,15 @@ class CmdInterp(OwnerObject):
                 # it as untranslated text.
                 #                 
                 trace('CmdInterp.interpret_phrase', 'processing leading word=\'%s\'' % chopped_word)
-                untranslated_words.append( chopped_word)
+                untranslated_words.append(process_initials(chopped_word))
                 exact_symbol = 0
+                if not builder:
+                    builder = self.new_builder(app)
+                word_element = self.make_word_element(chopped_word)
+                word_element.add_to(builder)
+
                 phrase = phrase[word_consumes:]
+                processed_phrase = processed_phrase[word_consumes:]
                 head_was_translated = 1
 
             #
@@ -936,8 +1005,9 @@ class CmdInterp(OwnerObject):
                 # symbol.
                 #
                 trace('CmdInterp.interpret_phrase', 'found the end of some untranslated text')
-                self.match_untranslated_text(untranslated_words, app,
-                    exact_symbol)
+                self.match_untranslated_text(builder, 
+                    untranslated_words, app, exact_symbol)
+                builder = None
                 untranslated_words = []
                 exact_symbol = 0
 
@@ -956,7 +1026,7 @@ class CmdInterp(OwnerObject):
         app.recog_end()
 
     def apply_CSC(self, app, possible_CSCs, spoken_list,
-        most_definite, untranslated_words, exact_symbol):
+        most_definite, builder, untranslated_words, exact_symbol):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
@@ -972,6 +1042,9 @@ class CmdInterp(OwnerObject):
         *INT most_definite* -- the most words which would be consumed by
         those constructs which definitely apply (i.e. LSAs in the
         current language and known symbols)
+
+        *SymBuilder builder* -- symbol builder for any
+        untranslated words
 
         *[STR] untranslated_words -- list of untranslated words which
         would need to be flushed before the CSC
@@ -1016,8 +1089,8 @@ class CmdInterp(OwnerObject):
             csc_applies = 1
 # flush untranslated words before executing action
             if untranslated_words:
-                self.match_untranslated_text(untranslated_words, 
-                    app, exact_symbol)
+                self.match_untranslated_text(builder, 
+                    untranslated_words, app, exact_symbol)
             action.log_execute(app, context)
             return CSC_consumes
         return 0
@@ -1118,8 +1191,8 @@ class CmdInterp(OwnerObject):
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
-    def match_untranslated_text(self, untranslated_words, app,
-        exact_symbol = 0):
+    def match_untranslated_text(self, builder, 
+        untranslated_words, app, exact_symbol = 0):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -1127,6 +1200,12 @@ class CmdInterp(OwnerObject):
         *[STR]* untranslated_words -- list of untranslated words
 
         *AppState* app -- editor into which the command was spoken
+
+        *SymBuilder builder* -- symbol builder for any
+        untranslated words
+
+        *[STR] untranslated_words -- list of untranslated words which
+        would need to be flushed before the CSC
 
         *BOOL* exact_symbol -- true if the untranslated text was an
         exact match for the spoken form of a symbol
@@ -1151,24 +1230,6 @@ class CmdInterp(OwnerObject):
             actions_gen.ActionInsert(code_bef=written_symbol, code_after='').log_execute(app, None)                            
             return
 
-#        trace('CmdInterp.match_untranslated_text', 'symbols are: %s' % self.known_symbols.print_symbols())
-#        print '-- CmdInterp.match_untranslated_text: untranslated_text=\'%s\'' % (untranslated_text);
-#        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
-        
-        a_match = re.match('(\s*)([\s\S]*)\s*$', untranslated_text)
-        text_no_spaces = a_match.group(2)
-#          #
-#          # Remove dots after single characters
-#          # Not really necessary because the symbol matching ignores non
-#          # alphanums?
-#          #
-#          text_no_spaces = re.sub('(^|\s)([a-zA-Z])\.', '\1\2', text_no_spaces)
-        
-        leading_spaces = a_match.group(1)
-
-        trace('CmdInterp.match_untranslated_text', 'text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces))
-                
-        #
         # Match untranslated text to new known symbol or a known symbol with
         # unresolved spoken forms.
         #
@@ -1176,19 +1237,53 @@ class CmdInterp(OwnerObject):
         # form of a known symbol or if it's a number
         #
         reg = '[\d\s]+'
-        num_match = re.match(reg, text_no_spaces)
+        num_match = re.match(reg, untranslated_text)
         if num_match:
             untranslated_text = re.sub('\s', '', untranslated_text)        
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
             return
+
         symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
         trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
         if symbol_matches:
             self.dlg_select_symbol_match(untranslated_text, 
                 symbol_matches, app)
         else:
-            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
+            symbol = builder.finish()
+            actions_gen.ActionInsert(code_bef=symbol, code_after='').log_execute(app, None)                
         
+
+    def new_builder(self, app):
+        """create a new SymBuilder object to generate new
+        symbols
+
+        **INPUTS**
+
+        *AppState app* -- the AppState interface to the editor
+
+        **OUTPUTS**
+
+        *SymBuilder* -- the new symbol builder
+        """
+        # eventually, this should be context-dependent, but for now,
+        # just return the simplest case
+        return SymDict.BuildUnder()
+
+    def make_word_element(self, word):
+        """creates a SymWord symbol element corresponding to a word
+
+        **INPUTS**
+
+        *STR word* -- the original, unabbreviated form of the word
+
+        **OUTPUTS**
+
+        *SymWord* -- the new symbol element
+        """
+        trace('CmdInterp.make_word_element', 'word = %s' % repr(word))
+        abbreviations = self.known_symbols.preferred_abbreviations(word)
+        trace('CmdInterp.make_word_element', 'abbreviations = %s' % repr(abbreviations))
+        return SymWord(abbreviations[0], original = word)
 
     def enable_symbol_match_dlg(self, enable = 1):
         """enables or disables the symbol match dialog
@@ -1884,6 +1979,6 @@ def process_initials(spoken):
 
     *STR* -- spoken form, but with 'A.' -> 'a', etc.
     """
-    if re.match('[A-Z]\.', spoken):
+    if re.match('[A-Z]\.$', spoken):
         return string.lower(spoken[0])
     return spoken

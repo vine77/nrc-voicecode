@@ -26,7 +26,7 @@
 from Object import Object, OwnerObject
 import sb_services, SourceBuff
 from LangDef import LangDef
-import auto_test, CmdInterp, PickledObject, sr_interface, vc_globals
+import auto_test, PickledObject, sr_interface, vc_globals
 import WordTrie
 import DictConverter
 import util
@@ -248,6 +248,19 @@ class SymBuilder(Object):
         """
         debug.virtual('SymBuilder.add_word')
 
+    def add_letter(self, letter):
+        """appends a single letter to the symbol
+        
+        **INPUTS**
+        
+        *STR letter* -- the new word
+
+        **OUTPUTS**
+        
+        *none*
+        """
+        debug.virtual('SymBuilder.add_letter')
+
     def finish(self):
         """finish building the symbol (allows for SymBuilder subclasses
         with fixed suffixes
@@ -261,6 +274,22 @@ class SymBuilder(Object):
         *STR* -- the final symbol
         """
         debug.virtual('SymBuilder.finish')
+
+    def empty(self):
+        """is the symbol currently empty (i.e. invisible elements like
+        change_capitalization, suppress_separator, or
+        suppress_abbreviation have been processed so far, and there is
+        no fixed prefix or suffix for the symbol)
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is empty
+        """
+        debug.virtual('SymBuilder.empty')
 
 
     def change_caps(self, caps, one_word = 1):
@@ -348,7 +377,7 @@ class ManualCaps(Object):
     of SymBuilder, so subclasses must inherit from ManualCaps before
     inheriting from SymBuilder
     """
-    def __init__(self, default_caps, **args):
+    def __init__(self, **args):
         self.deep_construct(ManualCaps, 
                             {
                              'current_caps': 'normal',
@@ -487,7 +516,7 @@ class ManualSuppression(Object):
         self.use_abbrev = 1
         return state
 
-class FixedCaps(Object):
+class FixedCaps(ManualCaps):
     """subclass of ManualCaps for symbol builders which use a 
     fixed default capitalization state 
 
@@ -532,6 +561,19 @@ class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
                             {'symbol': ""}, args, 
                             enforce_value = {'default_caps': 'cap'})
 
+    def add_letter(self, letter):
+        """appends a single letter to the symbol
+        
+        **INPUTS**
+        
+        *STR letter* -- the new word
+
+        **OUTPUTS**
+        
+        *none*
+        """
+        self.add_word(letter)
+
     def add_word(self, word, original = None):
         """appends a new word to the symbol
         
@@ -567,6 +609,22 @@ class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
         """
         return self.symbol
 
+    def empty(self):
+        """is the symbol currently empty (i.e. invisible elements like
+        change_capitalization, suppress_separator, or
+        suppress_abbreviation have been processed so far, and there is
+        no fixed prefix or suffix for the symbol)
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is empty
+        """
+        return self.symbol == ""
+
 
 class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
     """builds symbols with words separated by underscores (but with
@@ -575,7 +633,7 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
     """
     def __init__(self, **args):
         self.deep_construct(BuildUnder, 
-                            {'symbol': ""}, args, 
+                            {'symbol': "", 'single': 0}, args, 
                             enforce_value = {'default_caps': 'normal'})
 
     def add_word(self, word, original = None):
@@ -592,18 +650,47 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        trace('BuildUnder.add_word', 'word = %s' % word)
+        self.single = 0
         if original and not self.abbreviation_state():
             word = original
         state = self.separator_state() 
         word = self.capitalize(word, self.capitalization_state())
+        trace('BuildUnder.add_word', 'now, word = %s' % word)
+        trace('BuildUnder.add_word', 'symbol = %s' % repr(self.symbol))
         if not word:
             return
         if state and self.symbol:
             last_char = self.symbol[-1]
             first_char = word[0]
-            if not (string.isdigit(last_char) or string.isdigit(first_char)):
+            if not (last_char.isdigit() or first_char.isdigit()):
                 self.symbol = self.symbol + '_'
         self.symbol = self.symbol + word
+        trace('BuildUnder.add_word', 'symbol = %s' % repr(self.symbol))
+
+    def add_letter(self, letter):
+        """appends a single letter to the symbol
+        
+        **INPUTS**
+        
+        *STR letter* -- the new word
+
+        **OUTPUTS**
+        
+        *none*
+        """
+        trace('BuildUnder.add_letter', 
+            'letter = %s, symbol = %s' % (letter, repr(self.symbol)))
+        if self.single:
+            self.abbreviation_state()
+            state = self.separator_state() 
+            letter = self.capitalize(letter, self.capitalization_state())
+            self.symbol = self.symbol + letter
+            trace('BuildUnder.add_letter', 
+                'letter = %s, symbol = %s' % (letter, repr(self.symbol)))
+        else:
+            self.add_word(letter)
+        self.single = 1
 
     def finish(self):
         """finish building the symbol (allows for SymBuilder subclasses
@@ -618,6 +705,22 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         *STR* -- the final symbol
         """
         return self.symbol
+
+    def empty(self):
+        """is the symbol currently empty (i.e. invisible elements like
+        change_capitalization, suppress_separator, or
+        suppress_abbreviation have been processed so far, and there is
+        no fixed prefix or suffix for the symbol)
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is empty
+        """
+        return self.symbol == ""
 
 class BuildUpperUnder(FixedCaps, ManualSuppression, SymBuilder):
     """builds symbols with all-caps words separated by underscores (but with
@@ -669,6 +772,22 @@ class BuildUpperUnder(FixedCaps, ManualSuppression, SymBuilder):
         *STR* -- the final symbol
         """
         return self.symbol
+
+    def empty(self):
+        """is the symbol currently empty (i.e. invisible elements like
+        change_capitalization, suppress_separator, or
+        suppress_abbreviation have been processed so far, and there is
+        no fixed prefix or suffix for the symbol)
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is empty
+        """
+        return self.symbol == ""
 
 
 #############################################################################
@@ -947,6 +1066,12 @@ class SymDict(OwnerObject):
     pseudo symbol. Very short symbols tend to cause too many false positive
     matches, and in any case, they are easy to dictate by spelling (in fact
     the easiest way to dictate a short symbol is to spell it).
+
+    [INT] *min_chars_run_together=3* -- Minimum number of characters
+    for each run-together word that an abbreviation found by match_pseudo_symbol
+    must have in order to be accepted as an approximate match to a
+    pseudo symbol. 
+   
    
     CLASS ATTRIBUTES**
 
@@ -976,7 +1101,8 @@ class SymDict(OwnerObject):
                          'abbrev_sources': [],
                          'unresolved_abbreviations': {},
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
-                         'min_chars_for_approx_match': 4})
+                         'min_chars_for_approx_match': 4,
+                         'min_chars_run_together': 3})
         
         self.deep_construct(SymDict,
                             {'sym_file': sym_file,
@@ -1435,6 +1561,22 @@ class SymDict(OwnerObject):
         self.acronyms[acronym] = 1
         spoken = sr_interface.spoken_acronym(acronym)
         self._add_corresponding_expansion(acronym, spoken)
+
+    def preferred_abbreviations(self, word):
+        """returns the preferred abbreviations for the given word
+
+        **INPUTS**
+
+        *STR word* -- the original word
+
+        **OUTPUTS**
+
+        *[STR]* -- list of abbreviations
+        """
+        try:
+            return self.abbreviations[word]
+        except KeyError:
+            return [word]
 
     def symbols_as_one_string(self):
         """Returns a string that lists all the native known symbols.
@@ -2310,21 +2452,25 @@ class SymDict(OwnerObject):
         return definition
 
 
-    def _remove_short_symbols(self, pseudo_symbol, native_matches):
-       """Remove from *native_matches*, those symbols that match *pseudd_symbol*
-       but are too short.
+    def _remove_short_symbols(self, pseudo_symbol, words, native_matches):
+       """Remove from *native_matches*, those symbols that match 
+       *pseudo_symbol* but are too short, or otherwise deemed not
+       significant.
        **INPUTS**
 
        *STR pseudo_symbol* -- The pseudo symbol that was matched.
-       
-       *[[STR]] native_matches* -- List of native symbol matches for *pseudo_symbol*.
-       Each entry of the list is itself a list returned by a regexp match. The first
-       entry of every such list is the matched native symbol.
-      
+
+       *[STR] words* -- words in the pseudo symbol
+
+       *Iterator over Match objects native_matches* -- iterator of
+       re.MatchObjects corresponding to native symbol matches for 
+       *pseudo_symbol*.
+       The first entry of every such list is the matched native symbol.
        
        **OUTPUTS**
        
-       *[STR] good_matches* -- list of native matches that are long enough."""
+       *[MatchObject] good_matches* -- list of native matches that are 
+       deemed significant."""
        
        #
        # In case the word is spelled like "S. I. G."
@@ -2335,10 +2481,34 @@ class SymDict(OwnerObject):
        
        good_matches = []
        for a_match in native_matches:
-          native_sym = a_match[0]
-          if (len(native_sym) >= self.min_chars_for_approx_match or
-              native_sym == pseudo_symbol):
+          native_sym = a_match.group(0)
+          if native_sym == pseudo_symbol:
               good_matches.append(a_match)
+              continue
+          if len(native_sym) < self.min_chars_for_approx_match:
+              continue
+          groups = a_match.groups()
+# this test looks at how many characters come from each word when
+# abbreviations are run together.  It is designed to eliminate false
+# matches like "do some more stuff" -> "do_some_stuff" (because "so"
+# contains the first two characters of "some" and "me" contains the
+# first and last characters of "more")
+          run_together = 0
+          for i in range(1, len(groups)-1):
+              end = a_match.end(i)
+              next_start = a_match.start(i+1)
+              if end == next_start: # words run together
+                  if len(groups[i]) < self.min_chars_run_together and \
+                          groups[i] != words[i-1]:
+                      run_together = 1
+                      break
+                  if len(groups[i+1]) < self.min_chars_run_together and \
+                          groups[i+1] != words[i]:
+                      run_together = 1
+                      break
+          if not run_together:
+              good_matches.append(a_match)
+
        return good_matches
              
        
@@ -2390,24 +2560,27 @@ class SymDict(OwnerObject):
 
 #        print '-- SymDict.match_pseudo_symbol: regexp=%s, all_symbols=\'%s\'' % (regexp.__dict__, all_symbols)
         
-        raw_matches = regexp.findall(all_symbols)
+        raw_matches = regexp.finditer(all_symbols)
 
 #        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
 
-        good_matches = self._remove_short_symbols(pseudo_symbol, raw_matches)
+        good_matches = self._remove_short_symbols(pseudo_symbol, words,
+            raw_matches)
 
         #
         # Create a list of matches to known symbols
         #
         matches = []
         for a_match in good_matches:
-            matches = matches + [SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol=a_match[0], words=words, word_matches=a_match[1:])]
+            native_symbol = string.strip(a_match.group(0))
+            matches = matches + [SymbolMatch(pseudo_symbol = pseudo_symbol,
+                native_symbol = native_symbol, words = words, 
+                word_matches = a_match.groups()[1:])]
 
 
-        #
-        # Add list of possible new symbols
-        #
-        matches = matches + self.format_as_symbol(pseudo_symbol, words)
+# new symbols are now generated by a SymBuilder object in
+# CmdInterp
+#        matches = matches + self.format_as_symbol(pseudo_symbol, words)
 
         #
         # Sort the list of matches according to their scores
