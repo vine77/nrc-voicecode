@@ -1,3 +1,8 @@
+
+# This symbol is here because it is homophonic with auto_test. Just checking
+# to make sure that symbol match works with homophonic symbols.
+autoTst = 0
+
 import auto_test, exceptions, os, posixpath, profile, sys
 
 class Object:

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Sep 29 10:16:36 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 06 15:06:18 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -14,7 +14,7 @@
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SymDict - Symbol dictionary.</H1>
+<H1 CLASS="ClassName">class SymDict - Known symbols dictionary.</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="SymDict.html">SymDict</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SymDict.SymDict<BR>
@@ -26,14 +26,16 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SymDict</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbol_info={}</SPAN>, <SPAN CLASS="Argument">spoken_form_info={}</SPAN>, <SPAN CLASS="Argument">abbreviations={}</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.add_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.add_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbol</SPAN>)<SPAN CLASS="OneLiner"> # Add a symbol to the dictionary</SPAN>
-    <A CLASS="DocLink" HREF="#SymDict.SymDict.compilation_test"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.compilation_test</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">source</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.expand_possible_forms"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.expand_possible_forms</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">partial_forms</SPAN>, <SPAN CLASS="Argument">further_extensions</SPAN>)<SPAN CLASS="OneLiner"> # Returns a list of possible spoken forms for a symbol.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.expand_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.expand_word</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">symbol</SPAN>)<SPAN CLASS="OneLiner"> # Expands a word from a symbol to its possible spoken forms.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.get_language_definition"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.get_language_definition</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Gets the definition of the language associated with a source file.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.get_spoken_forms"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.get_spoken_forms</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbol</SPAN>)<SPAN CLASS="OneLiner"> # Returns a list of possible spoken forms for a symbol.</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.match_pseudo_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.match_pseudo_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pseudo_symbol</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.parse_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.parse_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a source file.</SPAN>
-    <A CLASS="DocLink" HREF="#SymDict.SymDict.print_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Print the content of the symbol dictionary.</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.print_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Print the content of the symbols dictionary.</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.reg_pseudo_to_native_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.reg_pseudo_to_native_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pseudo_symbol</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.strip_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.strip_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">source</SPAN>, <SPAN CLASS="Argument">language_definition</SPAN>)<SPAN CLASS="OneLiner"> # Removes all parts of a source file that don't contain symbols.</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.symbols_as_one_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.symbols_as_one_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a string that lists all the native known symbols.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.vocabulary_cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.vocabulary_cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Removes symbols from the speech recognition vocabulary</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -49,29 +51,44 @@ that the user is working on.</P>
 It has methods for parsing symbols and adding pronounceable
 phrases for those symbols to the Speech Recognition system's vocabulary.</P>
 <P>
+Also has methods for matching a pseudo symbol to a native symbol
+(e.g. "a new symbol" -&gt; aNewSym)</P>
+<P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
 <EM>{STR:</EM> <A HREF="SymDict.SymbolInfo.html">SymbolInfo</A> <EM>)}</EM> symbol_info={}
-<DD>The key is the symbol and
- the value is the information about that symbol.
+<DD>Dictionary of known
+ symbols. Key is the native written form of the symbol and the
+ value is the information about that symbol.
 <DT>
 <EM>{STR:</EM> <A HREF="SymDict.SpokenFormInfo.html">SpokenFormInfo</A> <EM>}</EM> spoken_form_info={}
-<DD>The key is a
- spoken form and the value is the list of symbols with that spoken
- form.
+<DD>Dictionary of
+ resolved spoken forms for known symbols. The key is a resolved
+ spoken form and the value is the list of written native symbols
+ with that spoken form.
 <DT>
 <EM>{STR: [STR]}</EM> abbreviations={}
-<DD>Dictionary of abbreviations. The
- key is the abbreviation and the value is a list of poosible expansions.
+<DD>Dictionary of
+ abbreviations. The key is the abbreviation and the value is a
+ list of poosible expansions. It contains both resolved and
+ unresolved abbreviations.
 <DT>
-<EM>{STR: None}</EM> unresolved_abbreviations={}
+<EM>{STR: {STR: 1}}</EM> unresolved_abbreviations={}
 <DD>Dictionary of
  unresolved abbreviations. These are abbreviations that have
  appeared in at least one compiled symbol, yet are neither a word
- in the speech vocabulary or a known abbreviation.
+ in the speech vocabulary or a known abbreviation. Values are
+ dictionnaries that list the symbols containing the unresolved
+ abbreviation.
+<DT>
+<EM>STR</EM> _cached_symbols_as_one_string=None
+<DD>Caches the last value
+ returned by method <A HREF="SymDict.SymDict.html#symbols_as_one_string">symbols_as_one_string</A>. A value of <EM>None</EM>
+ indicates that the string needs to be regenerated by
+ <A HREF="SymDict.SymDict.html#symbols_as_one_string">symbols_as_one_string</A>.
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>
@@ -105,12 +122,6 @@ CLASS ATTRIBUTES**</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="SymDict.SymDict.compilation_test" CLASS="Method">SymDict.SymDict.compilation_test(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">source</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Does a compilation test on file <EM>source</EM>        
-</P>
 <H2 ID="SymDict.SymDict.expand_possible_forms" CLASS="Method">SymDict.SymDict.expand_possible_forms(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">partial_forms</SPAN>, <SPAN CLASS="Argument">further_extensions</SPAN>)</H2>
 <P>Returns a list of possible spoken forms for a symbol.</P>
 
@@ -226,6 +237,30 @@ written in.
 <DD>returns a list of spoken forms
 
 </DL>
+<H2 ID="SymDict.SymDict.match_pseudo_symbol" CLASS="Method">SymDict.SymDict.match_pseudo_symbol(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pseudo_symbol</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Returns a prioritized list of all known native symbols that
+match a given pseudo symbol.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> pseudo_symbol
+<DD>The pseudo symbol to be matched. 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[</EM> <A HREF="SymDict.SymbolMatch.html">SymbolMatch</A> <EM>]</EM>
+<DD>Prioritized list of symbol matches.
+</DL>
 <H2 ID="SymDict.SymDict.parse_symbols" CLASS="Method">SymDict.SymDict.parse_symbols(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
 <P>Parse symbols from a source file.</P>
 
@@ -236,7 +271,7 @@ Parsed symbols are stored in the <EM>symbol_info</EM> and
 <EM>spoken_forms2symbol</EM> attributes.
 </P>
 <H2 ID="SymDict.SymDict.print_symbols" CLASS="Method">SymDict.SymDict.print_symbols(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Print the content of the symbol dictionary.</P>
+<P>Print the content of the symbols dictionary.</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -255,6 +290,35 @@ Parsed symbols are stored in the <EM>symbol_info</EM> and
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="SymDict.SymDict.reg_pseudo_to_native_symbol" CLASS="Method">SymDict.SymDict.reg_pseudo_to_native_symbol(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pseudo_symbol</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Returns a compiled regular expression that matches all possible
+native forms of a pseudo symbol.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> pseudo_symbol
+<DD>The pseudo symbol to be matched.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>regexp</EM>
+<DD>The regular expression. This regexp requires that
+the first character of every word in <EM>pseudo_symbol</EM> be
+matched. Non alphanumeric characters are allowed between
+words. Matches for each word in <EM>pseudo_symbol</EM> are put into
+groups.        
+
 </DL>
 <H2 ID="SymDict.SymDict.strip_source" CLASS="Method">SymDict.SymDict.strip_source(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">source</SPAN>, <SPAN CLASS="Argument">language_definition</SPAN>)</H2>
 <P>Removes all parts of a source file that don't contain symbols.</P>
@@ -283,6 +347,29 @@ language that <EM>source</EM> is written in.
 <EM>STR</EM> stripped_source
 <DD>source stripped of all non-symbols chunks
 </DL>
+<H2 ID="SymDict.SymDict.symbols_as_one_string" CLASS="Method">SymDict.SymDict.symbols_as_one_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns a string that lists all the native known symbols.</P>
+
+<P>
+This string is used for matching pseudo-symbols to known
+native symbols, because it's much faster than looping through
+keys of <EM>symbol_info</EM>.</P>
+<P>
+To avoid regenerating this string everytime, the last value
+returned is cached in <A HREF="SymDict.SymDict.html">self._cached_symbols_as_one_string</A></P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM> --</P>
 <H2 ID="SymDict.SymDict.vocabulary_cleanup" CLASS="Method">SymDict.SymDict.vocabulary_cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Removes symbols from the speech recognition vocabulary</P>
 
