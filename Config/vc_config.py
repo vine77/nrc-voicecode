@@ -714,7 +714,8 @@ ctrl_structures = CSCmdSet('control structures',
     description = 'commands for dictation and navigation of control structures')
 
 acmd = CSCmd(spoken_forms=['for', 'for loop'],
-             meanings={ContC(): c_simple_for, ContPy(): py_simple_for,
+             meanings={ContC(): c_simple_for, 
+                       ContBlankLine('python'): py_simple_for,
                        ContPerl(): c_simple_for},
              docstring='for loop')
 ctrl_structures.add_csc(acmd)

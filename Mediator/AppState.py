@@ -697,10 +697,10 @@ class AppState(OwnerObject):
     'delete', 'goto', 'goto_line', 
     'goto_end_of_line', 'goto_beginning_of_line',
     'goto_range', 'move_relative_line',
-    'move_relative_page', 'search_for', 'log_search',
+    'move_relative_page', 'search_for', 'log_search', 'looking_at', 
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',
-    'newline_conventions', 'pref_newline_convention',
+    'newline_conventions', 'pref_newline_convention', 'newline_regexp', 
     'language_name', 'file_name', 'backspace']
 
     def __getattr__( self, name):

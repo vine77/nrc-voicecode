@@ -39,11 +39,13 @@ import util, unit_testing, vc_globals
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
+import debug
 
 from actions_gen import *
 from actions_C_Cpp import *
 from actions_py import *
 from cont_gen import *
+from exceptions import Exception
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
@@ -3267,6 +3269,46 @@ def test_compile_symbols():
    commands.print_symbols()
    
 add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
+
+
+##############################################################################
+# Testing commands that have a special meaning only a a blank line
+##############################################################################    
+
+
+def test_blank_line_context():
+   testing.init_simulator_regression()   
+      
+   commands.open_file('blah1.py')      
+   commands.say(['for', 'do', 'the', 'following'] , user_input="0\n", echo_utterance=1)   
+   commands.say(['security', 'level', 'equals', 'for', 'your', 'eyes', 'only'] , user_input="1\n1\n", echo_utterance=1)   
+   
+add_test('blank_line_context', test_blank_line_context, 'Testing commands that have a special meaning only a a blank line')
+
+
+##############################################################################
+# Testing AppState looking_at method
+##############################################################################    
+
+
+def test_looking_at():
+   testing.init_simulator_regression()   
+      
+   try:   
+      commands.open_file('blah1.py')
+      test_word = 'hello'      
+      commands.say([test_word] , user_input="0\n", echo_utterance=1)
+      assert not commands.app.looking_at(test_word), \
+             "Thought we were looking at '%s' when we weren't." % test_word
+      commands.goto_beginning_of_line()
+      assert commands.app.looking_at(test_word), \
+             "Thought we weren't looking at '%s' when we were." % test_word 
+   except Exception, err:
+      test_helpers.failed_test_assertion(err)
+
+   commands.goto_end_of_line()
+   
+add_test('looking_at', test_looking_at, 'Testing the looking at method.')
 
 
 ##############################################################################

@@ -21,6 +21,11 @@
 
 import util
 
+def failed_test_assertion(err):
+   print "\n\n>>> Test assertion failed with exception:"
+   print err 
+   print "\n\n"    
+
 def compilation_test(interp, source):
     
     """Does a compilation test on file *source*        
@@ -40,3 +45,4 @@ def compilation_test(interp, source):
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
         
     print '\n*** End of compilation test ***\n'
+    
