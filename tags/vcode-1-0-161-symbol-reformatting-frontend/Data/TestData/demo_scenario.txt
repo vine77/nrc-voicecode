@@ -1,0 +1,109 @@
+    Scenario for a demo of VoiceCode
+    ================================
+
+Last modified: 2003-12-02
+
+
+- Open file Data/TestData/large_buff.py
+
+- Compile the symbols
+  
+- some good existing symbols to use
+  * prof_test ("profile test")
+  * init_attrs ("init attributes")
+  * profConstrSmallObj ("profile constructor small object")
+
+- go to the end of large_buff.py and start dictating there
+
+
+0. Correction
+   ----------
+
+The first time you have to do a correction, show the correction infrastructure.
+
+Point out that:
+
+- uses smart undo-redo
+
+- automatically adapts so that it won't make the same mistake again (hopefully)
+
+
+1. Code templates
+   --------------
+
+Dictate a simple class with a single method.
+
+- Didn't have to pause anywhere in particular
+  ... But could have
+
+- Some stuff gets typed automatically (eg: self and list of arguments of 
+  method)
+
+- simple navigation with "do the following", "new statement" etc...
+
+- automatic indentation
+
+- show context sensitivity by saying "if check if okay then do"
+  The first if gets interpreted as an if statement because it's at the 
+  beginning of a line, but the second if is interpreted as being part of
+  a new symbol.
+
+
+2. Symbol dictation
+   ----------------
+
+- Dictate some new and some known symbols with different formattings:
+   * prof_test
+   * profCOnstrSmallObj)
+
+- Dictate a new symbol
+
+- Dictate a new class name within a "define method" utterance, and show that
+  the class was automatically formatted using CapitalHungarian formatting
+
+
+3. Local navigation by punctuation
+   -----------------------------
+
+- Navigate by different punctuation marks
+
+- Show how you can qualify the search with 
+   * "previous one"
+   * "next one"
+
+- Show how you can repeat the commands
+   * "again"
+   * "again 2 times"
+
+- Point out that there are other repeatable commands
+
+
+4. Local navigation by PseudoCode
+   ------------------------------
+
+-  move to a line by selecting parts of it
+
+- then insert a new statement above it
+
+
+5. Global navigation by switch buffer
+   ----------------------------------
+
+- Make sure at least two buffers opened
+
+- "Emacs switch buffer", "select buffer name", "newline"
+
+
+6. Multiple ways of saying the same thing
+   --------------------------------------
+
+- "class some class"
+- "define class some class"
+- "class definition some class"
+
+
+7. Language sensitivity
+   --------------------
+
+Dictate same class definition in C and Python files and show the difference. 
+
