@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -713,6 +713,73 @@ class ActionAutoIndent(Action):
         return the_doc    
 
 
+class ActionDeleteCurrentLine(ActionRepeatable):
+    """Delete line at cursor.
+
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+        
+    def __init__(self, **args_super):
+        self.deep_construct(ActionDeleteCurrentLine, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return """Delete line at cursor."""
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        debug.trace('ActionDeleteCurrentLine.execute', "** invoked")
+        return app.delete_line()
+
+
+
+class ActionPaging(ActionBidirectionalRepeat):
+    """Move up or down a page.
+
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+        
+    def __init__(self, direction, n_times, **args_super):
+        self.deep_construct(ActionPaging, 
+                            {"direction": direction, "n_times": n_times}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return """move up or down the page"""
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        debug.trace('ActionPaging.execute', "** paging in direction %s, %s times" % (self.direction, self.n_times))
+        return app.move_relative_page(self.direction, self.n_times)
+
+
 class ActionSearch(ActionBidirectional):
     """Moves cursor to occurence of a regular expression.
         
@@ -1392,6 +1459,110 @@ class ActionTypeText(Action):
         .. [Action.execute] file:///./Action.Action.html#execute"""
         
         sr_interface.send_keys(self.key_strokes)
+
+class ActionDeleteSelectedText(Action):
+    """Delete selected text.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionDeleteSelectedText, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Delete selected text';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        app.delete(app.get_selection())
+
+class ActionCopySelectedText(Action):
+    """Copies selected text.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionCopySelectedText, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Copy selected text';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        debug.trace('ActionCopySelectedText.execute', '** INVOKED')
+        app.copy_selection()
+
+class ActionCutSelectedText(Action):
+    """Cuts selected text.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionCutSelectedText, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Cuts selected text';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        app.cut_selection()
+
+
+class ActionPasteClipboard(Action):
+    """Paste content of clipboard into current buffer.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionPasteClipboard, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Paste content of clipboard into current buffer';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        debug.trace('ActionPasteClipboard.execute', '** INVOKED')
+        app.paste()
 
 class ActionSwitchTranslation(Action):
     """Turns translation on/off

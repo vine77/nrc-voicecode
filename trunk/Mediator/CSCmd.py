@@ -60,7 +60,8 @@ class CSCmd(Object):
     .. [Context] file:///./Context.Context.html
     .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, spoken_forms=[], meanings={}, docstring=None, **attrs):
+    def __init__(self, spoken_forms=[], meanings={}, docstring=None, 
+                 generate_discrete_cmd = 0, **attrs):
         """
         **INPUTS**
 
@@ -69,12 +70,18 @@ class CSCmd(Object):
         *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
         possible contextual meanings for this command. Key is a context
         and value is an action object to be fired if that context applies.
+        
+        *BOOL generate_discrete_cmd* -- If true, then generate a discrete command
+        for the CSC. Use this for commands like "copy that" whose spoken form
+        is already a NatSpeak command, but whose behaviour must be different
+        in NatSpeak.
 
         *STR docstring* -- string documentating the command
         """
         self.deep_construct(CSCmd,
                             {'spoken_forms': spoken_forms,
                              'meanings': CSCmdDict(meanings),
+                             'generate_discrete_cmd': generate_discrete_cmd
                             },
                             attrs)
 

@@ -1902,7 +1902,7 @@ def test_change_direction():
     test_command("""say(['again'])""")
     test_command("""say(['previous one'])""")
     test_command("""say(['previous one'])""")
-    test_command("""say(['next one'])""")
+    test_command("""say(['next', 'one'])""")
     
 add_test('change_direction', test_change_direction, 'testing changing direction of last command')
 
@@ -3752,6 +3752,23 @@ def test_insert_delete_commands():
    test_say(['select', 'additional'], never_bypass_sr_recog=1)
    test_say(['back space 2'])
 
+   commands.open_file(large_buff_py)
+   commands.goto_line(5)
+   test_say(['delete', 'that', 'line'])
+   test_say(['do', 'that', 'again'])
+   test_say(['delete', 'that', 'line', '2', 'times'])
+   
+   test_say(['select', 'base', 'class'])
+   test_say(['delete', 'that'])
+
+   test_say(['select', 'various', 'useful'])
+   test_say(['copy', 'that'])
+   test_say(['paste', 'that'])
+   
+   test_say(['select', 'safe', 'attribute'])
+   test_say(['cut', 'that'])
+   test_say(['paste', 'that'])
+
 add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
 
@@ -4413,6 +4430,32 @@ def test_syntax_navigation():
 add_test('syntax_navigation', test_syntax_navigation, 
     desc='testing navigation by syntax in C')    
 
+
+##############################################################################
+# Testing navigation within buffer with page up/down etc.
+##############################################################################
+
+def test_navigation_within_buffer():
+    testing.init_simulator_regression()    
+    commands.open_file(large_buff_py)
+    print "saying page down"
+
+    commands.say(['page', 'down'])
+    commands.say(['do', 'that', 'again'])   
+    commands.say(['again', 'two', 'times']) 
+
+    commands.say(['page', 'up'])
+    commands.say(['do', 'that', 'again'])   
+    commands.say(['again', 'two', 'times']) 
+    
+   
+# This test does not work yet... Fix it later. Don't forget to uncomment
+# the statements that say:
+#    add_csc_set(navigation_within_buffer)
+# in user_config.py, vc_config.py and sample_config.py
+#
+# add_test('navigation_within_buffer', test_navigation_within_buffer, 
+#    desc='testing navigation commands like page up/down etc.')    
 
 ##############################################################################
 # Testing special cases for the symbol matching algorithm

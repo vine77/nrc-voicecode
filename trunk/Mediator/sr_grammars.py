@@ -717,6 +717,39 @@ class SymbolReformattingWinGram(WinGram):
         self.manager.reformat_recent()
 
 
+class DiscreteCSCsAndLSAsWinGram(WinGram):
+    """abstract base class for window-specific grammar for recognising
+       discrete LSAs and CSCs.
+
+    **INSTANCE ATTRIBUTES**
+
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        """
+        **INPUTS**
+
+        """
+        self.deep_construct(DiscreteCSCsAndLSAsWinGram,
+            {}, 
+            attrs)                        
+
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', 'correction', or 'reformatting')
+        """
+        return 'discrete_lsa_csc'
+
 
 class WinGramFactory(Object):
     """abstract base class for a factory which returns 

@@ -932,6 +932,21 @@ class SourceBuff(OwnerObject):
         *none*
         """
         debug.virtual('SourceBuff.delete')
+
+    def delete_line(self):
+        """Delete line at cursor.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('SourceBuff.delete_line', "self.beginning_of_line()=%s, self.end_of_line()=%s" %
+                    (self.beginning_of_line(), self.end_of_line()))
+        self.delete((self.beginning_of_line(), self.end_of_line()+1))
         
     def backspace(self, n_times):
         """Delete a number of spaces before the cursor.
@@ -954,9 +969,21 @@ class SourceBuff(OwnerObject):
         *none*
         """
         debug.virtual('SourceBuff.backspace')
+                
+
+    def copy_selection(self):
+        """Copy the selected text"""
+        debug.virtual('SourceBuff.copy_selection')     
+        
+    def cut_selection(self):
+        """Cut the selected text"""
+        debug.virtual('SourceBuff.cut_selection')
+           
+    def paste(self):
+        """Paste content of clipboard into buffer"""
+        debug.virtual('SourceBuff.paste')
         
     def goto(self, pos):
-
         """Moves the cursor to position *INT pos* of source buffer
         (and make selection empty)
         """

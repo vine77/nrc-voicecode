@@ -320,6 +320,59 @@ class ContBlankLine(Context):
         return "BlankLine"
 
 
+class ContTextIsSelected(Context):
+    """This context applies if there is some text selected."""
+
+    def __init__(self, **attrs):        
+        self.deep_construct(ContTextIsSelected, {},
+                            attrs)
+       
+    def _applies(self, app, preceding_symbol = 0):
+        (start, end) = app.get_selection()
+        if start != end:
+           return True
+        else:
+           return False
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "immediate"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "ContTextIsSelected"
+
+
 
 class ContAnyEvenOff(Context):
     """This context always applies, EVEN IF translation is off."""

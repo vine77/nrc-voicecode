@@ -396,7 +396,6 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('move_relative_page', args)
         response = self.app.talk_msgr.get_mess(expect=['move_relative_page_resp'])
-
         self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
@@ -539,7 +538,6 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
 
         *none*
         """
-        
         #
         # Ask external editor to delete the region
         #
@@ -581,6 +579,34 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         self.app.apply_upd_descr(response[1]['updates'])        
         self.app.update_response = 0
         
+    def copy_selection(self):
+        """Copy the selected text"""
+        trace('SourceBuffMessaging.copy_selection', '** invoked on buffer %s' % self.name())
+        self.app.talk_msgr.send_mess('copy_selection', {'buff_name': self.name()})
+        response = self.app.talk_msgr.get_mess(expect=['copy_selection_resp'])
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0            
+        
+    def cut_selection(self):
+        """Cut the selected text"""
+        self.app.talk_msgr.send_mess('cut_selection', {'buff_name': self.name()})
+        response = self.app.talk_msgr.get_mess(expect=['cut_selection_resp'])
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0        
+        
+    def paste(self):
+        """Paste content of clipboard into current buffer"""
+        trace('SourceBuffMessaging.paste', '** invoked')
+        self.app.talk_msgr.send_mess('paste', {'buff_name': self.name()})
+        response = self.app.talk_msgr.get_mess(expect=['paste_resp'])
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0        
+        
+
+       
     def goto(self, pos):
 
         """Moves the cursor to position *INT pos* of source buffer
