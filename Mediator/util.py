@@ -96,7 +96,6 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
         opt_name = an_opt[0]
         a_match = re.match('^(-*)(.*)$', opt_name)
         opt_name = a_match.groups()[1]
-        print "a_match.groups()=%s, opt_name=%s" % (str(a_match.groups()), opt_name)
         if (a_match.groups()[0] == '-'):
             #
             # getopt.getopt returns None as the value for short options

@@ -1,0 +1,28 @@
+"""Context objects which are not tied to a specific language"""
+
+from Context import Context
+
+class ContC(Context):
+    """This context applies if current source buffer is in C."""
+    
+    def __init__(self, **attrs):
+        Context.__init__(self)
+        self.init_attrs(attrs)
+
+    def applies(self, app):
+        buff = app.curr_buffer
+        return (buff != None and  buff.language == 'C')
+
+
+class ContPy(Context):
+    """This context applies if current source buffer is in Python."""
+    
+    def __init__(self, **attrs):
+        Context.__init__(self)
+        self.init_attrs(attrs)
+
+    def applies(self, app):
+        buff = app.curr_buffer
+        return (buff != None and  buff.language == 'python')
+
+
