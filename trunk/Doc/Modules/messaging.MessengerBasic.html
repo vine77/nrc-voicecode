@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 01 21:03:33 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:38 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,7 +27,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessengerBasic</SPAN>(<A CLASS="DocLink" HREF="messaging.Messenger.html">Messenger</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">packager</SPAN>, <SPAN CLASS="Argument">transporter</SPAN>, <SPAN CLASS="Argument">encoder</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#messaging.MessengerBasic.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">expect=None</SPAN>)
-    <A CLASS="DocLink" HREF="#messaging.MessengerBasic.send_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.send_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)<SPAN CLASS="OneLiner"> # Sends a message to the external editor.</SPAN>
+    <A CLASS="DocLink" HREF="#messaging.MessengerBasic.send_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessengerBasic.send_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals=None</SPAN>)<SPAN CLASS="OneLiner"> # Sends a message to the external editor.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -135,7 +135,7 @@ error message.
  from external editor in <EM>(mess_name, {arg:val})</EM> format, or
  None if no message is available.
 </DL>
-<H2 ID="messaging.MessengerBasic.send_mess" CLASS="Method">messaging.MessengerBasic.send_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals={}</SPAN>)</H2>
+<H2 ID="messaging.MessengerBasic.send_mess" CLASS="Method">messaging.MessengerBasic.send_mess(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mess_name</SPAN>, <SPAN CLASS="Argument">mess_argvals=None</SPAN>)</H2>
 <P>Sends a message to the external editor.</P>
 
 <P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jul 06 11:19:48 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:37:03 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,9 +24,9 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerMainThread</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_factory</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_talk_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_talk_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
@@ -36,6 +36,7 @@
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.process_ready_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.process_ready_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ready_socks</SPAN>)<SPAN CLASS="OneLiner"> # Processes socket connections that have received new data.</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -77,19 +78,17 @@ listen_one_transaction on the appropriate AppStateMessaging.
 AppStateMessaging will also get messages from the editor off of the
 queue when it synchronizes with the editor at recognition starting</P>
 <P>
-Much of the above behaviour depends on a set of virtual 
-functions which will be implemented by a concrete subclass of
-ServerMainThread.  In particular, the mechanism by which 
-InterThreadEvent and SocketHasDataEvent events ensure that the main 
-mediator message loop calls the appropriate methods of ServerMainThread
-will vary from one concrete subclass to another.  A necessary
-consequence of this fact is that ServerMainThread relies on
-virtual functions to create the subsidiary threads.</P>
+The communication between the subsidiary threads and the main
+thread requires the event objects described above and a message loop 
+which receives messages from these event objects and calls the proper 
+ServerMainThread methods.  Some subclasses of ServerMainThread
+(ServerOldMediatorWin32Evt) supply these events themselves, and 
+have an internal message loop.  Others require an external object,
+which owns ServerMainThread (directly or indirectly), to supply the 
+event objects and the message loop.  the events to be </P>
 <P>
-Even more drastically, in some cases ServerMainThread will contain the 
-main message loop of the mediator, while in others, the message loop
-which routes the events to the appropriate ServerMainThread methods
-will reside in the GUI console.</P>
+This flexibility means that ServerMainThread relies on
+virtual functions to create the subsidiary threads.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
@@ -135,6 +134,10 @@ listens for new connections on the VC_TALK port.
 {STR : ListenAndQueueMsgsThread} <EM>data_threads</EM>
 <DD>map from unique 
 socket IDs to threads which poll for data from the listen messenger
+<DT>
+<EM>AppStateFactory editor_factory</EM>
+<DD>factory for creating new
+AppStateMessaging instances
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -179,42 +182,32 @@ AppStateMessaging <EM>instance</EM>
 running the test suite)
 
 </DL>
-<H2 ID="tcp_server.ServerMainThread._start_other_threads" CLASS="Method">tcp_server.ServerMainThread._start_other_threads(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.data_event" CLASS="Method">tcp_server.ServerMainThread.data_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
 <P>None</P>
 
 <P>
-private method called to start the secondary threads which
-monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
-with the main thread by means of InterThreadEvent objects, to
-let the main thread know to initialize them.</P>
-<P>
-These tasks are handled by separate threads because they can
-block.   The secondary threads do not do the initialization
-directly because that involves invoking some natlink methods, 
-and Natlink does not behave well outside of the main thread.</P>
+virtual method which supplies a data_event for ServerMainThread 
+subclasses </P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>InterThreadEvent</EM> listener_evt
-<DD>event object for the
-ListenNewEditorsThread to use to notify the main thread that a
-new editor has connected on the VC_LISTEN port, and that
-handshake_listen_socks should be called
-<DT>
-<EM>InterThreadEvent</EM> talker_evt
-<DD>event object for the
-NewConnListThread to use to notify the main thread that a
-new talker connection has been established on the VC_TALK port, 
-and that handshake_talk_socks should be called
+STR <EM>id</EM>
+<DD>The unique ID of the listen socket
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM> 
-</P>
+
+<DL>
+
+<DT>
+<EM>SocketHasDataEvent</EM>
+<DD>the data event which will allow the
+data thread to ensure that process_ready_socks is called.
+
+</DL>
 <H2 ID="tcp_server.ServerMainThread.handshake_listen_socks" CLASS="Method">tcp_server.ServerMainThread.handshake_listen_socks(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Invoked when a new socket connection was opened on VC_LISTEN port.</P>
 
@@ -458,6 +451,42 @@ have messages waiting
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="tcp_server.ServerMainThread.start_other_threads" CLASS="Method">tcp_server.ServerMainThread.start_other_threads(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called to start the secondary threads which
+monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
+with the main thread by means of InterThreadEvent objects, to
+let the main thread know to initialize them.</P>
+<P>
+These tasks are handled by separate threads because they can
+block.   The secondary threads do not do the initialization
+directly because that involves invoking some natlink methods, 
+and Natlink does not behave well outside of the main thread.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>InterThreadEvent</EM> listener_evt
+<DD>event object for the
+ListenNewEditorsThread to use to notify the main thread that a
+new editor has connected on the VC_LISTEN port, and that
+handshake_listen_socks should be called
+<DT>
+<EM>InterThreadEvent</EM> talker_evt
+<DD>event object for the
+NewConnListThread to use to notify the main thread that a
+new talker connection has been established on the VC_TALK port, 
+and that handshake_talk_socks should be called
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM> 
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 01 21:03:33 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:38 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,6 +28,7 @@
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.SocketError.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SocketError</SPAN></A>(<A CLASS="DocLink" HREF="exceptions.RuntimeError.html">RuntimeError</A>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messarg2int"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messarg2int</SPAN></A>(<SPAN CLASS="Argument">messarg</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Converts a message argument to an int.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messarg2intlist"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messarg2intlist</SPAN></A>(<SPAN CLASS="Argument">messarg</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Converts a message argument to a list of integers.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messenger_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messenger_factory</SPAN></A>(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a messenger from proper compenents</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\messaging.pyc'</SPAN></SPAN>
 </PRE><H2 ID="messarg2int" CLASS="Function">messarg2int(<SPAN CLASS="Argument">messarg</SPAN>)</H2>
 <P>Converts a message argument to an int.</P>
@@ -72,7 +73,24 @@ None | [INT] <EM>as_intlist</EM>
 <DD>The message argument converted a list of ints.
 
 </DL>
+<H2 ID="messenger_factory" CLASS="Function">messenger_factory(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>)</H2>
+<P>Creates a messenger from proper compenents</P>
 
+<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>socket sock</EM>
+<DD>Socket to use for creating the messenger
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+[Messenger] <EM>a_messenger</EM>
+<DD>The created [Messenger] instance
+</DL>
+..[Messenger] messaging.Messenger.html
 <HR>
 <TABLE ALIGN="LEFT">
 <TR><TD>

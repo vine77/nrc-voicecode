@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jul 06 17:47:58 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -17,11 +17,13 @@
 <H1 CLASS="ModuleName">Module tcp_client</H1>
 <PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.ClientConnection.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientConnection</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.ClientEditor.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientEditor</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # abstract base class for handling messages to and from the client editor</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.ClientEditorChangeSpec.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientEditorChangeSpec</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.ClientEditorChangeSpec.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientEditorChangeSpec</SPAN></A>(<A CLASS="DocLink" HREF="tcp_client.ClientEditor.html">ClientEditor</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.ClientMainThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientMainThread</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.DummyDataEvent.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DummyDataEvent</SPAN></A>(<A CLASS="DocLink" HREF="thread_communication.SocketHasDataEvent.html">SocketHasDataEvent</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_client.UneventfulLoop.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">UneventfulLoop</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # class for running the EdSim editor simulator as a TCP client</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_LISTENER_PORT</SPAN> = <SPAN CLASS="VariableValue">45770</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_TALKER_PORT</SPAN> = <SPAN CLASS="VariableValue">45771</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\tcp_client.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\tcp_client.py'</SPAN></SPAN>
 </PRE><H2>Description</H2><P>
 classes for creating VoiceCode TCP/IP client as a counterpart to 
 AppStateMessaging and communicating with it via the ServerMainThread classes in tcp_server.py

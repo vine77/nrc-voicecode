@@ -3,38 +3,30 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SB_UpdSetSelection</title>
+<title>Class UneventfulLoop</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SB_UpdSetSelection - Update class for setting the selection.</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="AppState.html">AppState</A></P>
+<H1 CLASS="ClassName">class UneventfulLoop - class for running the EdSim editor simulator as a TCP client</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_client.html">tcp_client</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">AppState.SB_UpdSetSelection<BR>
-&nbsp;&nbsp;<A HREF="AppState.SB_Update.html">AppState.SB_Update</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="AppState.AS_Update.html">AppState.AS_Update</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_client.UneventfulLoop<BR>
+&nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_UpdSetSelection</SPAN>(<A CLASS="DocLink" HREF="AppState.SB_Update.html">SB_Update</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdSetSelection.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.SB_UpdSetSelection.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdSetSelection.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a set selection update on a specific buffer.</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.SB_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update on the appropriate source buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_VE_map"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_VE_map</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Update the V-E map to take into account this buffer update.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a buffer update on a specific buffer.</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.on_buff_named</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of the buffer on which to do the update.</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">UneventfulLoop</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+    <A CLASS="DocLink" HREF="#tcp_client.UneventfulLoop.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.UneventfulLoop.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">multiple=0</SPAN>, <SPAN CLASS="Argument">print_buff=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.UneventfulLoop.mediator_closing</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.UneventfulLoop.run</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -42,25 +34,43 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.AS_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">descr</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AS_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
+Since EdSim has no user-interface, we don't need an event loop.
+Instead, we just have a loop to poll for
+messages from the server.</P>
+<P>
+As with test_TCP_server, we exit once the connection has been
+closed.</P>
+<P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-*none*-- </P>
-<P>
-CLASS ATTRIBUTES**</P>
 
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD>
+ClientConnection <EM>connection</EM>
+<DD>the connection to the mediator
+server
+<DT>
+ClientEditorChangeSpec <EM>editor</EM>
+<DD>the client wrapper for the EdSim 
+instance
 </DL>
-<H2 ID="AppState.SB_UpdSetSelection.apply_to_buff" CLASS="Method">AppState.SB_UpdSetSelection.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
-<P>Carry out a set selection update on a specific buffer.</P>
+<P>
+<STRONG>CLASS ATTRIBUTES</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_client.UneventfulLoop.__init__" CLASS="Method">tcp_client.UneventfulLoop.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">multiple=0</SPAN>, <SPAN CLASS="Argument">print_buff=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -68,72 +78,14 @@ CLASS ATTRIBUTES**</P>
 <DL>
 
 <DT>
-[SourceBuff] <EM>on_buff</EM>
-<DD>The buffer on which to do the update. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
+<EM>BOOL multiple</EM>
+<DD>should this EdSim allow for multiple open
+buffers?
 <DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppState.SB_Update.apply" CLASS="Method">AppState.SB_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update on the appropriate source buffer.</P>
+<EM>BOOL print_buff</EM>
+<DD>should this EdSim call print_buff whenever
+the buffer changes?
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-[AppState] <EM>on_app</EM> --</P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM> --</P>
-<P>
-..[AppState] AppState.AppState.html</P>
-<H2 ID="AppState.SB_Update.apply_to_VE_map" CLASS="Method">AppState.SB_Update.apply_to_VE_map(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Update the V-E map to take into account this buffer update.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[AppState] <EM>on_app</EM>
-<DD>Application on which the update is being done.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppState.SB_Update.apply_to_buff" CLASS="Method">AppState.SB_Update.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
-<P>Carry out a buffer update on a specific buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[SourceBuff] <EM>on_buff</EM>
-<DD>The buffer on which to do the update. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
@@ -265,19 +217,116 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppState.AS_Update.apply" CLASS="Method">AppState.AS_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update.</P>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
-<P>
-[AppState] <EM>on_app</EM> --</P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
-<EM>none</EM> --</P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
 <P>
-..[AppState] AppState.AppState.html</P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 
 <HR>
 <TABLE ALIGN="LEFT">
