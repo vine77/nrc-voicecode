@@ -33,7 +33,7 @@ The following variables are defined in this module
 
 """
 
-import os
+import os, sys
 
 #
 # Various directories
@@ -44,8 +44,8 @@ admin = os.path.join(home, 'Admin')
 unit_tests_dir = os.path.join(admin, 'UnitTests')
 
 config = os.path.join(home, 'Config')
-
 data = os.path.join(home, 'Data')
+mediator_dir = os.path.join(home, 'Mediator')
 state = os.path.join(data, 'State')
 tmp = os.path.join(data, 'Tmp')
 test_data = os.path.join(data, 'TestData')
@@ -55,3 +55,10 @@ doc = os.path.join(home, 'Doc')
 doc_modules = os.path.join(doc, 'Modules')
 
 default_config_file = os.path.join(config, 'vc_config.py')
+
+# Add some paths to $PYTHONPATH
+sys.path = [admin] + sys.path
+sys.path = [mediator_dir] + sys.path
+
+print '--** vc_globals.__main__: sys.path=%s' % sys.path
+

@@ -22,6 +22,8 @@
 """A VoiceCode server that uses TCP/IP based messaging protocol to communicate with external editors.
 """
 
+import vc_globals
+
 import natlink, os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 

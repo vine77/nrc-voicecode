@@ -1,6 +1,7 @@
 """This script implements a simple editor (based on EdSim) that
 communicates with VoiceCode through a TCP/IP messaging protocol.
 """
+import vc_globals
 
 from socket import *
 import os, natlink, sys, threading
