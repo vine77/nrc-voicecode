@@ -1,0 +1,117 @@
+*******************************************************************************
+* Name        : mixed_mode_editing
+* Description : Testing mixed mode (kbd + voice) editing
+*******************************************************************************
+
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
+*** Start of source buffer ***
+  1: <CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  2: # WARNING: the mediator is now running foreground tests, which may
+  3: # change the contents of the foreground window.  Unless you want your
+  4: # own files corrupted, this editor window MUST remain in the foreground 
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: <CURSOR># This is a small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto(472,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #<CURSOR> This is a small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got simulated kbd event: move_cursor_by_kbd(Right,10,)
+Got command: say(['hello'],0
+,0,0,)
+Heard hello
+Associate 'hello' with symbol (Enter selection):
+
+  '0': no association
+  '1': hello (*new*)
+  '2': Hello (*new*)
+  '3': HELLO (*new*)
+
+>   6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is ahello<CURSOR> small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: <CURSOR># This is ahello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto(472,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #<CURSOR> This is ahello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got simulated kbd event: set_selection_by_kbd(Right,10,)
+Got command: say(['hello'],0
+,0,0,)
+Heard hello
+Associate 'hello' with symbol (Enter selection):
+
+  '0': no association
+  '1': hello (*new*)
+  '2': Hello (*new*)
+  '3': HELLO (*new*)
+
+>   6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hello<CURSOR>hello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto_line(10,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: <CURSOR>
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got simulated kbd event: stype_text(, hi,)
+Got simulated kbd event: move_cursor_by_kbd(Left,5,)
+Got command: say(['next', 'comma'],None,0,0,)
+Heard next comma
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: , <CURSOR>hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got command: goto_line(10,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: <CURSOR>, hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got simulated kbd event: stype_text( hello ,)
+Got command: say(['select', 'hello'],0
+,1,0,)
+Heard select hello
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10:  <SEL_START>hello<SEL_END> , hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+
+
