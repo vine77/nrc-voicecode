@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Apr 03 23:02:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -30,12 +30,12 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AppState.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.apply_updates"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.apply_updates</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">updates</SPAN>)<SPAN CLASS="OneLiner"> # Applies a list of updates returned by the external application.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bind_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bind_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Binds the AppState to a particular buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.change_app_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_app_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_all_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_all_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to close all buffers known to VoiceCode</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # close a buffer</SPAN>
@@ -243,39 +243,6 @@ method for a description of buffer binding).</P>
 </DL>
 <P>
 AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="AppState.AppState.app_change_buffer" CLASS="Method">AppState.AppState.app_change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>Changes the external application's active buffer.</P>
-
-<P>
-This variant only changes the buffer in the external
-application. It does not resynchronise VoiceCode with external
-application.</P>
-<P>
-This should NOT bind the <EM>AppState</EM> to the new buffer. This
-should be done only by [change_buffer].</P>
-<P>
-See [curr_buffer_name] for a description of buffer binding.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Name of the buffer to switch to.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if buff_name exists and the external application
-successfully switches to it
-</DL>
-<P>
-AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.app_close_buffer" CLASS="Method">AppState.AppState.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>Ask the editor to close a buffer.</P>
 
@@ -397,6 +364,39 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[curr_buffer_name] AppState.AppState.html#curr_buffer_name</P>
+<H2 ID="AppState.AppState.change_app_buffer" CLASS="Method">AppState.AppState.change_app_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>Changes the external application's active buffer.</P>
+
+<P>
+This variant only changes the buffer in the external
+application. It does not resynchronise VoiceCode with external
+application.</P>
+<P>
+This should NOT bind the <EM>AppState</EM> to the new buffer. This
+should be done only by [change_buffer].</P>
+<P>
+See [curr_buffer_name] for a description of buffer binding.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Name of the buffer to switch to.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if buff_name exists and the external application
+successfully switches to it
+</DL>
+<P>
+AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.change_buffer" CLASS="Method">AppState.AppState.change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Changes the active buffer.</P>
 

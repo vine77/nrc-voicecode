@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:48 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:10:44 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,16 +15,13 @@
 
 
 <H1 CLASS="ModuleName">Module sim_commands</H1>
-<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">change_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_abbreviations</SPAN>()</SPAN>
+<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_abbreviations</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_symbols</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">close_buffer</SPAN>(<SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">compile_symbols</SPAN>(<SPAN CLASS="Argument">file_list</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">getmic</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to position <EM>INT pos</EM> of the current buffer</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto_line</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">list_buffers</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">make_position_visible</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
@@ -147,9 +144,7 @@ clear_abbreviations()
    vocabulary word nor a known abbreviation).print_error(STR message):
    Prints an error to stderrprint_symbols()
    Prints the list of symbols in the known symbols dictionaryprovoke()
-   causes an error deliberatelysave()
-   Save the current filesave_as(filename, no_prompt=0)
-   Save the current file
+   causes an error deliberately
 <H3>quit()
    Quit the simulator.</H3>
    Note that if you don't quit using this command

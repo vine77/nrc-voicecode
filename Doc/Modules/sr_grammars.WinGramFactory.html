@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:54 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Nov 20 13:10:21 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramFactory</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -59,7 +59,7 @@ no arguments: abstract base class
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammars.WinGramFactory.make_dictation" CLASS="Method">sr_grammars.WinGramFactory.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)</H2>
+<H2 ID="sr_grammars.WinGramFactory.make_dictation" CLASS="Method">sr_grammars.WinGramFactory.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)</H2>
 <P>create a new dictation grammar</P>
 
 <P>
@@ -68,11 +68,8 @@ no arguments: abstract base class
 <DL>
 
 <DT>
-<EM>CmdInterp</EM> interp
-<DD>interpreter to which to forward results
-<DT>
 <EM>AppState</EM> app
-<DD>application which is the target of the grammar
+<DD>application to which to forward results
 <DT>
 <EM>STR</EM> buff_name
 <DD>name of the buffer corresponding to this

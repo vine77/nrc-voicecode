@@ -140,7 +140,7 @@ class AS_ServiceBreadcrumbs(AS_Service):
 #        print '-- as_services.SBServiceBreadcrumbs.pop_breadcrumb:  self.breadcrumbs=%s' % self.breadcrumbs       
         stacklen = len(self.breadcrumbs)
         lastbuff, lastpos = self.breadcrumbs[stacklen - num]
-        self.breadcrumbs = self.breadcrumbs[:stacklen - num]
+        self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
         if gothere:
             self.app.goto(lastpos, f_name=lastbuff)
 

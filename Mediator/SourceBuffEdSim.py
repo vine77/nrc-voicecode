@@ -82,7 +82,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
             
 
     def file_name(self):
-        return self.name()
+        return self.app.only_buffer_name
 
     def language_name(self):
         """Returns the name of the language a file is written in

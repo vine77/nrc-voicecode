@@ -34,9 +34,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     
     **INSTANCE ATTRIBUTES**
 
-    *BOOL* multiple -- does the instance support multiple buffers?
-
-    *STR* active_buffer_name -- name of the currently active buffer
+    *SourceBuffEdSim* only_buffer -- THE buffer
+    
+    *STR* only_buffer_name -- its name 
 
     [AS_ServiceBreadcrumbs] *breadcrumbs_srv* -- The VoiceCode level
     breadcrumbs service used by EdSim.
@@ -48,15 +48,14 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     buffer_methods = AppState.AppState.buffer_methods[:]
     buffer_methods.append('print_buff')
     
-    def __init__(self, multiple = 0, **attrs):
+    def __init__(self, **attrs):
         self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
         self.deep_construct(EdSim,
-                            {'active_buffer_name': "",
-			    'multiple': multiple},
+                            {'only_buffer': None,
+                             'only_buffer_name': ""},
                             attrs)
-        self.open_buffers[self.active_buffer_name] = \
-	    SourceBuffEdSim.SourceBuffEdSim(app = self, 
-	    buff_name = self.active_buffer_name, language =None)
+	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name = "", language =None)
+        self.open_buffers[self.only_buffer_name] = self.only_buffer
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -135,7 +134,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-	return self.active_buffer_name
+	return self.only_buffer_name
 
     def app_change_buffer(self, buff_name=None):
 	"""Changes the external application's active buffer.
@@ -164,7 +163,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    self.active_buffer_name = buff_name
 	    return 1
 	return 0
-     
+    
 
     def drop_breadcrumb(self, buffname=None, pos=None):
 
@@ -204,16 +203,17 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 # If the file was not opened successfully, treat it as an empty file
 # (contrary to the docstring for tell_editor_to_open_file) because
 # otherwise the regression testing gets messed up.
-	if not self.multiple_buffers() and self.curr_buffer_name() != None:
-	    name = self.curr_buffer_name()
-	    self.close_buffer(name, 0)
+	if self.curr_buffer_name() != None:
+	    del self.open_buffers[self.curr_buffer_name()]
 
-	self.active_buffer_name = file_name
-        self.open_buffers[self.active_buffer_name] = \
+        self.only_buffer =  \
             SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name=file_name,
                                             initial_contents = source)
+	self.only_buffer_name = file_name
+        self.open_buffers[file_name] = self.only_buffer               
 
-        return self.active_buffer_name
+
+        return self.only_buffer.name()
 
     def query_buffer_from_app(self, buff_name):
 	"""query the application to see if a buffer by the name of buff_name 
@@ -291,8 +291,8 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    self.curr_dir = path
 	old_name = self.curr_buffer_name()
 	if not old_name or old_name != f_path:
-	    self.active_buffer_name = f_path
-	    self.open_buffers[f_path] = self.open_buffers[old_name]
+	    self.only_buffer_name = f_path
+	    self.open_buffers[f_path] = self.only_buffer
 	    del self.open_buffers[old_name]
 	return f_path
 
@@ -308,7 +308,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-	return self.multiple
+	return 0
 
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
@@ -344,7 +344,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	buff = self.find_buff(buff_name)
 	if buff == None:
 	    return 0
-	self.active_buffer_name = None
+	self.only_buffer_name = None
 	del self.open_buffers[buff_name]
 	return 1
         

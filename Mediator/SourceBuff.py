@@ -1011,9 +1011,7 @@ class SourceBuff(Object):
         while 1:
            a_match = reobject.search(self.get_text(), pos)
            if a_match and pos < len(self.get_text()):
-# this allows for overlapping matches - ugh
-#               pos = a_match.start() + 1
-               pos = a_match.end()
+               pos = a_match.start() + 1
                all_matches_pos = all_matches_pos + [(a_match.start(), a_match.end())]               
            else:
                break
@@ -1055,7 +1053,7 @@ class SourceBuff(Object):
             self.goto(new_cur_pos)
             success = 1
         else:
-            success = 0
+            succses = 0
             
         return success
 
@@ -1095,9 +1093,7 @@ class SourceBuff(Object):
         # in the right direction
         #
         shortest_distance = None
-#	print self.cur_pos()
         for ii in range(len(occurences)):
-#	    print ii, occurences[ii]
 
             if direction == None:
                 #
@@ -1113,9 +1109,7 @@ class SourceBuff(Object):
                 #
                 # Looking for closest occurence before cursor ...
                 #
-#                if occurences[ii][0] >= self.cur_pos():
-# make sure the entire match is before the cursor	
-                if occurences[ii][1] > self.cur_pos():
+                if occurences[ii][0] >= self.cur_pos():
                     #
                     # ... but we have passed cursor.
                     #
