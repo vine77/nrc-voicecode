@@ -1,10 +1,31 @@
-creating wxMediator
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished wxMediator init...
-starting...
+Finished ExtLoop init...
+Running ExtLoopWin32...
 Starting server threads...
+Starting message loop...
+New connection
+New connection from emacs
+awaiting corresponding talk connection
+received talk connection
+creating messengers
+configuring from external
+creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -283,10 +304,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -329,7 +350,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2675410>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1ae7460>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -468,6 +489,7 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
+'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -726,10 +748,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2473,7 +2495,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3330,7 +3352,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3414,12 +3436,12 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 27669e0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 1b2bb18> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3567,7 +3589,7 @@ Associate 'function' with symbol (Enter selection):
   '2': Function (*new*)
   '3': FUNCTION (*new*)
 
->   5:    if Index|variable|Index|Value:
+  5:    if Index|variable|Index|Value:
   6:       Index = 0;variable = 0;
   7:       Index.Function()
   8:       <CURSOR>
@@ -3590,7 +3612,7 @@ Associate 'python' with symbol (Enter selection):
   '2': Python (*new*)
   '3': PYTHON (*new*)
 
->   7:       Index.Function()
+  7:       Index.Function()
   8:       variable = [0...10]
   9:       #!Python
  10:       <CURSOR>
@@ -3621,7 +3643,7 @@ Associate 'field' with symbol (Enter selection):
   '2': Field (*new*)
   '3': FIELD (*new*)
 
->  10:       #!Python
+ 10:       #!Python
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
  13:          <CURSOR>
@@ -3676,7 +3698,7 @@ Associate 'list' with symbol (Enter selection):
   '2': List (*new*)
   '3': LIST (*new*)
 
->  16:             Function(0)
+ 16:             Function(0)
  17:             Function()
  18:             List[0]
  19:             <CURSOR>
@@ -3707,7 +3729,7 @@ Associate 'dictionary' with symbol (Enter selection):
   '2': Dictionary (*new*)
   '3': DICTIONARY (*new*)
 
->  19:             List[0]
+ 19:             List[0]
  20:             List[]
  21:             Dictionary{0}
  22:             <CURSOR>
@@ -3722,7 +3744,7 @@ Associate 'head' with symbol (Enter selection):
   '2': Head (*new*)
   '3': HEAD (*new*)
 
->  20:             List[]
+ 20:             List[]
  21:             Dictionary{0}
  22:             <Head>
  23:             <CURSOR>
@@ -3760,7 +3782,7 @@ Associate 'string' with symbol (Enter selection):
   '2': Message (*new*)
   '3': MESSAGE (*new*)
 
->  23:             <Head>
+ 23:             <Head>
  24:             <>
  25:             String = 'Message'
  26:             <CURSOR>
@@ -7089,7 +7111,7 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: <CURSOR>
 
@@ -7117,7 +7139,7 @@ Associate 'natural link' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: <CURSOR>
@@ -7136,7 +7158,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '6': actionsccpp (*new*)
   '7': ACTIONSCCPP (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
@@ -7167,7 +7189,7 @@ Associate 'application state' with symbol (Enter selection):
   '6': applicationstate (*new*)
   '7': APPLICATIONSTATE (*new*)
 
->   2: import auto_test, natlink, vc_globals
+  2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: <CURSOR>
@@ -7209,7 +7231,7 @@ Associate 'context python' with symbol (Enter selection):
   '6': contextpython (*new*)
   '7': CONTEXTPYTHON (*new*)
 
->   3: from actions_C_Cpp import all
+  3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: <CURSOR>
@@ -7239,7 +7261,7 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
   '6': contextsensitivecmd (*new*)
   '7': CONTEXTSENSITIVECMD (*new*)
 
->   4: from AppState import AppState
+  4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: <CURSOR>
@@ -7269,7 +7291,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
->   5: from cont_gen import ContC, ContPy
+  5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
   8: <CURSOR>
@@ -7296,7 +7318,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
->   7: from EdSim import EdSim
+  7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -7314,7 +7336,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
->   8: from Object import Object
+  8: from Object import Object
   9: import EdSim, SymDict
  10: import sr_interface
  11: <CURSOR>
@@ -7406,7 +7428,7 @@ Associate 'un translated text end' with symbol (Enter selection):
   '6': untranslatedtextend (*new*)
   '7': UNTRANSLATEDTEXTEND (*new*)
 
->  11: class CmdInterp(Object):
+ 11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       <CURSOR>
@@ -7529,14 +7551,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'R. E.' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
->  19:                           attrs)
+ 19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -7695,7 +7710,7 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
->  34:       elif this_word == hi:
+ 34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -7710,7 +7725,7 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
->  35:          this_word = greetings
+ 35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -7809,7 +7824,7 @@ Associate 'O. S.' with symbol (Enter selection):
   '2': System (*new*)
   '3': SYSTEM (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: <CURSOR>
 
@@ -7846,7 +7861,7 @@ Associate 'auto test' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: <CURSOR>
@@ -7864,7 +7879,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '5': actionsccpp (*new*)
   '6': ACTIONSCCPP (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
@@ -7883,7 +7898,7 @@ Associate 'application state' with symbol (Enter selection):
   '5': applicationstate (*new*)
   '6': APPLICATIONSTATE (*new*)
 
->   2: import auto_test, natural_link, vc_globals
+  2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: from application_state import application_state
   5: <CURSOR>
@@ -7921,7 +7936,7 @@ Associate 'context generic' with symbol (Enter selection):
   '5': contextpython (*new*)
   '6': CONTEXTPYTHON (*new*)
 
->   3: from actions_ccpp import all
+  3: from actions_ccpp import all
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: <CURSOR>
@@ -7939,7 +7954,7 @@ Associate 'context sensitive command' with symbol (Enter selection):
   '5': contextsensitivecommand (*new*)
   '6': CONTEXTSENSITIVECOMMAND (*new*)
 
->   4: from application_state import application_state
+  4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: <CURSOR>
@@ -7957,7 +7972,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '5': edsimulator (*new*)
   '6': EDSIMULATOR (*new*)
 
->   5: from context_generic import context_c, context_python
+  5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: <CURSOR>
@@ -7972,7 +7987,7 @@ Associate 'object' with symbol (Enter selection):
   '2': Object (*new*)
   '3': OBJECT (*new*)
 
->   6: from context_sensitive_command import context_sensitive_command
+  6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: from object import object
   9: <CURSOR>
@@ -7990,7 +8005,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
   '5': symboldictionary (*new*)
   '6': SYMBOLDICTIONARY (*new*)
 
->   7: from ed_simulator import ed_simulator
+  7: from ed_simulator import ed_simulator
   8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: <CURSOR>
@@ -8008,7 +8023,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
->   8: from object import object
+  8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: <CURSOR>
@@ -8138,7 +8153,7 @@ Associate 'un translated text end' with symbol (Enter selection):
   '5': untranslatedtextend (*new*)
   '6': UNTRANSLATEDTEXTEND (*new*)
 
->  11: class command_interpreter(object):
+ 11: class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:       <CURSOR>
@@ -8327,7 +8342,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  21:    def spoken_form_regular_expression(self, spoken_form):
+ 21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
  23:       re = ''
  24:       <CURSOR>
@@ -8360,7 +8375,7 @@ Associate 'first' with symbol (Enter selection):
   '2': First (*new*)
   '3': FIRST (*new*)
 
->  23:       re = ''
+ 23:       re = ''
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          <CURSOR>
@@ -8376,7 +8391,7 @@ Associate 'rest' with symbol (Enter selection):
   '3': Rest (*new*)
   '4': REST (*new*)
 
->  24:       for a_word in words:
+ 24:       for a_word in words:
  25:          first = a_word[0]
  26:          re = a_word[1: ]
  27:          <CURSOR>
@@ -8424,7 +8439,7 @@ Associate 'upper' with symbol (Enter selection):
   '2': Upper (*new*)
   '3': UPPER (*new*)
 
->  25:          first = a_word[0]
+ 25:          first = a_word[0]
  26:          re = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          <CURSOR>
@@ -8473,7 +8488,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+ 27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          if not re == '':
  29:             re = re + '\s*'
  30:             <CURSOR>
@@ -8503,7 +8518,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  28:          if not re == '':
+ 28:          if not re == '':
  29:             re = re + '\s*'
  30:             re = re + regular_expression_this_word
  31:             <CURSOR>
@@ -8585,7 +8600,7 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
->  34:       elif this_word == hi:
+ 34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -8600,7 +8615,7 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
->  35:          this_word = greetings
+ 35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -8684,7 +8699,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -8773,7 +8788,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -10234,7 +10249,7 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: index = 0
   2: <CURSOR>
 
@@ -10826,125 +10841,6 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
-Heard define class command interpreter sub class of object class body
-Associate 'command interpreter' with symbol (Enter selection):
-
-  '0': no association
-  '1': command_interpreter (*new*)
-  '2': CommandInterpreter (*new*)
-  '3': commandInterpreter (*new*)
-  '4': COMMAND_INTERPRETER (*new*)
-  '5': commandinterpreter (*new*)
-  '6': COMMANDINTERPRETER (*new*)
-
-> Associate 'object' with symbol (Enter selection):
-
-  '0': no association
-  '1': object (*new*)
-  '2': Object (*new*)
-  '3': OBJECT (*new*)
-
-> *** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    <CURSOR>
-
-*** End of source buffer ***
-Saying: ['define', 'method', 'initialize']
-Heard define method initialize
-Associate 'initialize' with symbol (Enter selection):
-
-  '0': no association
-  '1': initialize (*new*)
-  '2': Initialize (*new*)
-  '3': INITIALIZE (*new*)
-
-> *** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    def initialize<CURSOR>(self):
-  3:       
-
-*** End of source buffer ***
-Saying: ['method', 'body']
-Heard method body
-*** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    def initialize(self):
-  3:       <CURSOR>
-
-*** End of source buffer ***
-Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form']
-Heard define method spoken form regular expression add argument spoken form
-Associate 'spoken form regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': spoken_form_regular_expression (*new*)
-  '2': SpokenFormRegularExpression (*new*)
-  '3': spokenFormRegularExpression (*new*)
-  '4': SPOKEN_FORM_REGULAR_EXPRESSION (*new*)
-  '5': spokenformregularexpression (*new*)
-  '6': SPOKENFORMREGULAREXPRESSION (*new*)
-
-> Associate 'spoken form' with symbol (Enter selection):
-
-  '0': no association
-  '1': spoken_form (*new*)
-  '2': SpokenForm (*new*)
-  '3': spokenForm (*new*)
-  '4': SPOKEN_FORM (*new*)
-  '5': spokenform (*new*)
-  '6': SPOKENFORM (*new*)
-
-> *** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    def initialize(self):
-  3:       def spoken_form_regular_expression(self, spoken_form<CURSOR>):
-  4:          
-
-*** End of source buffer ***
-Saying: ['back indent']
-Heard back indent
-*** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    def initialize(self):
-  3:    <CURSOR>def spoken_form_regular_expression(self, spoken_form):
-  4:          
-
-*** End of source buffer ***
-Saying: ['method', 'body']
-Heard method body
-*** Start of source buffer ***
-  1: class command_interpreter(object):
-  2:    def initialize(self):
-  3:    def spoken_form_regular_expression(self, spoken_form):
-  4:          <CURSOR>
-
-*** End of source buffer ***
-Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
-Heard for loop a word in list words loop body
-Associate 'a word' with symbol (Enter selection):
-
-  '0': no association
-  '1': a_word (*new*)
-  '2': AWord (*new*)
-  '3': aWord (*new*)
-  '4': A_WORD (*new*)
-  '5': aword (*new*)
-  '6': AWORD (*new*)
-
-> Associate 'words' with symbol (Enter selection):
-
-  '0': no association
-  '1': words (*new*)
-  '2': Words (*new*)
-  '3': WORDS (*new*)
-
->   2:    def initialize(self):
-  3:    def spoken_form_regular_expression(self, spoken_form):
-  4:       for a_word in words:
-  5:          <CURSOR>
-
-*** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
 Heard if statement not regular expression equal to empty single quotes if body
 Associate 'regular expression' with symbol (Enter selection):
@@ -10957,10 +10853,9 @@ Associate 'regular expression' with symbol (Enter selection):
   '5': regularexpression (*new*)
   '6': REGULAREXPRESSION (*new*)
 
->   3:    def spoken_form_regular_expression(self, spoken_form):
-  4:       for a_word in words:
-  5:          if not regular_expression == '':
-  6:             <CURSOR>
+> *** Start of source buffer ***
+  1: if not regular_expression == '':
+  2:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
@@ -10975,33 +10870,37 @@ Associate 'regular_expression this word' with symbol (Enter selection):
   '5': regularexpressionthisword (*new*)
   '6': REGULAREXPRESSIONTHISWORD (*new*)
 
->   4:       for a_word in words:
-  5:          if not regular_expression == '':
-  6:             regular_expression = regular_expression + regular_expression_this_word
-  7:             <CURSOR>
+*** Start of source buffer ***
+  1: if not regular_expression == '':
+  2:    regular_expression = regular_expression + regular_expression_this_word
+  3:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['back indent']
-Heard back indent
-  4:       for a_word in words:
-  5:          if not regular_expression == '':
-  6:             regular_expression = regular_expression + regular_expression_this_word
-  7:          <CURSOR>
+Heard else clause some variable
+Associate 'some variable' with symbol (Enter selection):
 
-*** End of source buffer ***
-Saying: ['return', 'regular', 'expression', 'new', 'statement']
-Heard return regular expression new statement
-  5:          if not regular_expression == '':
-  6:             regular_expression = regular_expression + regular_expression_this_word
-  7:          return regular_expression
-  8:       <CURSOR>
+  '0': no association
+  '1': some_variable (*new*)
+  '2': SomeVariable (*new*)
+  '3': someVariable (*new*)
+  '4': SOME_VARIABLE (*new*)
+  '5': somevariable (*new*)
+  '6': SOMEVARIABLE (*new*)
+
+>   2:    regular_expression = regular_expression + regular_expression_this_word
+  3: 
+  4: else:
+  5:    some variable<CURSOR>
 
 *** End of source buffer ***
 
 
 
 -----------------------------------------------
-Test suite completed in:  1328.58999991 secs
+Test suite completed in:  1062.227 secs
 -----------------------------------------------
+Message loop ended, cleaning up
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c38150>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+ExtLoopWin32.run returning
