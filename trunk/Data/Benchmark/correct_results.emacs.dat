@@ -8,6 +8,80 @@ Starting foreground tests...
 
 
 *******************************************************************************
+* Name        : emacs_split_window
+* Description : Testing dictation into Emacs with two buffers displayed in same window.
+*******************************************************************************
+
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
+*** Start of source buffer ***
+  1: <CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  2: # WARNING: the mediator is now running foreground tests, which may
+  3: # change the contents of the foreground window.  Unless you want your
+  4: # own files corrupted, this editor window MUST remain in the foreground 
+Got command: say(['dictated', 'in', 'foreground', 'buffer'],0
+,0,0,)
+Heard dictated in foreground buffer
+Associate 'dictated in foreground buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': dictated_in_foreground_buffer (*new*)
+  '2': DictatedInForegroundBuffer (*new*)
+  '3': dictatedInForegroundBuffer (*new*)
+  '4': DICTATED_IN_FOREGROUND_BUFFER (*new*)
+  '5': dictatedinforegroundbuffer (*new*)
+  '6': DICTATEDINFOREGROUNDBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: dictated in foreground buffer<CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  2: # WARNING: the mediator is now running foreground tests, which may
+  3: # change the contents of the foreground window.  Unless you want your
+  4: # own files corrupted, this editor window MUST remain in the foreground 
+Got simulated kbd event: type_text({Esc}xsplit-window-vertically{Enter},)
+Got simulated kbd event: type_text({Esc}xother-window{Enter},)
+Got command: open_file(buf2.py,)
+WARNING: source file 'buf2.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Got command: say(['dictated', 'in', 'buffer', 'two'],0
+,0,0,)
+Heard dictated in buffer two
+Associate 'dictated in buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': dictated_in_buffer (*new*)
+  '2': DictatedInBuffer (*new*)
+  '3': dictatedInBuffer (*new*)
+  '4': DICTATED_IN_BUFFER (*new*)
+  '5': dictatedinbuffer (*new*)
+  '6': DICTATEDINBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: dictated in buffer2<CURSOR>
+
+*** End of source buffer ***
+Got command: say(['dictated', 'in', 'buffer', 'two'],0
+,0,0,)
+Heard dictated in buffer two
+Associate 'dictated in buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': dictated_in_buffer (*new*)
+  '2': DictatedInBuffer (*new*)
+  '3': dictatedInBuffer (*new*)
+  '4': DICTATED_IN_BUFFER (*new*)
+  '5': dictatedinbuffer (*new*)
+  '6': DICTATEDINBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: dictated in buffer2dictated in buffer2<CURSOR>
+
+*** End of source buffer ***
+Got simulated kbd event: type_text({Esc}xdelete-other-window{Enter},)
+
+
+*******************************************************************************
 * Name        : mixed_mode_editing
 * Description : Testing mixed mode (kbd + voice) editing
 *******************************************************************************

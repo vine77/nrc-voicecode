@@ -421,10 +421,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
+        debug.trace('AppStateMessaging.apply_upd_descr', '** invoked')
         for a_descr in upd_descr_list:
+            debug.trace('AppStateMessaging.apply_upd_descr', '** a_descr=%s' % a_descr)        
             the_update = AppState.create_update(a_descr)
             the_update.apply(self)
-
+        debug.trace('AppStateMessaging.apply_upd_descr', '** exiting')
 
     def app_active_buffer_name(self):
         
