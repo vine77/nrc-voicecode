@@ -55,7 +55,8 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-#################################                        
+#                         'ActionEmacsListBuffers.execute': 1,
+#                         'ContEmacs._applies': 1,
 #                         'CmdInterp._cmd_spoken_forms': 1,
 #                         'DictThroughCmdWinGramNL._gram_spec': 1,
 #                         'DictThroughCmdWinGramNL': 1,
@@ -66,6 +67,7 @@ debug.config_traces(status="on",
 #                         'DictWinGram.on_results': 1,
 #                         'ResMgrStd.interpret_dictation': 1,
 #                         'interpret_dictation': 1,
+#################################                        
 #                        'StandardFunctionCallsHelper.add_function_name': 1,
 #                        'ActionFuncCallWithParens.__init__': 1,
 #                        'SymDict.add_symbol': 1,
@@ -453,7 +455,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
     quitting
     """
     def __init__(self, test_suite = None, profile_prefix = None,
-        bypass_sr_recog = 0, **args):
+        bypass_sr_recog = 0, num_words_training=0, **args):
         """
         **INPUTS**
 
@@ -506,7 +508,8 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                     test_or_suite = test_suite,
                     global_grammars = 1, exclusive = 1,
                     profile_prefix = profile_prefix,
-                    bypass_sr_recog = bypass_sr_recog)
+                    bypass_sr_recog = bypass_sr_recog,
+                    num_words_training = num_words_training)
         except:
 # if at all possible, NMO.__init__ should to construct the
 # mediator in a legal state, so that we can safely call
@@ -921,7 +924,8 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
 
 ##############################################################################
-def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0):
+def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0,
+        num_words_training = 0,):
     """Start a ServerNewMediator/ServerMainThread with external message 
     loop using wxWindows events and the new NewMediatorObject
     """
@@ -930,7 +934,8 @@ def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0):
     sys.stderr.flush()
     app = wxMediatorServer(test_suite = test_suite, 
         profile_prefix = profile_prefix, 
-        bypass_sr_recog = bypass_sr_recog)
+        bypass_sr_recog = bypass_sr_recog,
+        num_words_training = num_words_training)
     sys.stderr.flush()
     app.run()
 #    sys.stderr.write("run_ext_server finishing\n")
@@ -970,7 +975,7 @@ OPTIONS
 
 if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 't=', None, 'bypass', 0,
-        'p=', None])
+        'p=', None, 'train=', 0])
     
 #    sr_interface.connect()
 
@@ -986,7 +991,8 @@ if __name__ == '__main__':
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
     run(test_suite=opts['t'], profile_prefix = opts['p'],
-        bypass_sr_recog = opts['bypass'])
+        bypass_sr_recog = opts['bypass'], 
+        num_words_training = int(opts['train']))
 
 
 

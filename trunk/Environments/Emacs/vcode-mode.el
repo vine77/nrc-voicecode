@@ -25,7 +25,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Buffer List*"))
 
 
 ;;; Change this if you want to see more traces
@@ -310,7 +310,7 @@ sent."
   (setq debug-on-quit t)
  
   (vcode-close-all-buffers)
-  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Buffer List*"))
   (vcode-configure-for-regression-testing t)
   (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)
@@ -3415,32 +3415,30 @@ change reports it sends to VCode.
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
 
+        ;;;
+        ;;; We wrap this in an exception catching block in case we try
+        ;;; to dictate text in a read-only buffer like "*Buffer List*"
+        (condition-case err
+           (progn
+	     (set-buffer buff-name)
 
-	(set-buffer buff-name)
+	     (kill-region delete-start delete-end)
 
-;	(vcode-trace "vcode-cmd-insert-indent" "buffer=%S"
-;            (buffer-substring (point-min) (point-max)))
-;	(vcode-trace "vcode-cmd-insert-indent" "(point)=%S,
-;	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, \n
-;            code-bef=%S, code-after = %S\n" 
-;	    (point) (mark) range delete-start delete-end code-bef
-;            code-after)
+	     (vcode-trace "vcode-cmd-insert-indent" "after kill-region")
 
-	(kill-region delete-start delete-end)
-
-	(vcode-trace "vcode-cmd-insert-indent" "after kill-region")
-
-        (vcode-execute-command-string code-bef)
-	(vcode-trace "vcode-cmd-insert-indent" "after before, buffer=%S"
-            (buffer-substring (point-min) (point-max)))
+	     (vcode-execute-command-string code-bef)
+	     (vcode-trace "vcode-cmd-insert-indent" "after before, buffer=%S"
+			  (buffer-substring (point-min) (point-max)))
 
 
-	(save-excursion
+	     (save-excursion
+	       (vcode-execute-command-string code-after)
+	     )
 
-	  (vcode-execute-command-string code-after)
+	     (set-mark nil)
+	   )
+           ('error (message "VCode Error: executing insert_indent"))
 	)
-
-	(set-mark nil)
 
 	(vr-deprecated-send-queued-changes)
     )

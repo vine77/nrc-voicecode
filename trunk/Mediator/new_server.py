@@ -148,7 +148,7 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
         Object.OwnerObject.remove_other_references(self)
 
     def __init__(self, test_suite = None, profile_prefix = None, 
-        bypass_sr_recog = 0, **args_super):
+        bypass_sr_recog = 0, num_words_training = 0, **args_super):
         """
         **INPUTS**
 
@@ -184,7 +184,8 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
                 test_or_suite = test_suite,
                 global_grammars = 1, exclusive = 1,
                 profile_prefix = profile_prefix, 
-                bypass_sr_recog = bypass_sr_recog)
+                bypass_sr_recog = bypass_sr_recog,
+                num_words_training = num_words_training)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
@@ -219,7 +220,7 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 # start test standalone server
 ##############################################################################
 def run_new_server(test_suite=None, profile_prefix = None, 
-    bypass_sr_recog = 0, extra_opts = None):
+    bypass_sr_recog = 0, num_words_training=0, extra_opts = None):
     """Start a ServerNewMediator/ServerMainThread with external message 
     loop using win32event and the new NewMediatorObject
     """
@@ -229,7 +230,8 @@ def run_new_server(test_suite=None, profile_prefix = None,
     try:
         a_loop = ExtLoopWin32NewMediator(test_suite = test_suite, 
             profile_prefix = profile_prefix, 
-            bypass_sr_recog = bypass_sr_recog) 
+            bypass_sr_recog = bypass_sr_recog,
+            num_words_training = num_words_training) 
     except:
         return
 
@@ -276,7 +278,7 @@ OPTIONS
 
 if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 't=', None, '0', None,
-    'bypass', 0, 'p=', None])
+    'bypass', 0, 'p=', None, 'train=', 0])
     non_exclusive_opts = ['0']
     
 #    sr_interface.connect()
@@ -299,7 +301,9 @@ if __name__ == '__main__':
             pass
 
     run_new_server(test_suite=opts['t'], profile_prefix = opts['p'],
-        bypass_sr_recog = opts['bypass'], extra_opts = extra_opts)
+        bypass_sr_recog = opts['bypass'], 
+        num_words_training = int(opts['train']), 
+        extra_opts = extra_opts)
 
 #    sys.stderr.write("run finished\n")
 

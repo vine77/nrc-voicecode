@@ -183,7 +183,7 @@ class PersistentConfigNewMediator(Object.Object):
     """
     def __init__(self, mediator, editor_name, names, 
         symbol_match_dlg = 1, correction = None, text_mode_toggling = None,
-        bypass_sr_recog = 0, **args):
+        bypass_sr_recog = 0, num_words_training = 0, **args):
         """**INPUTS**
 
         *{STR:ANY} names* -- the namespace dictionary in which the
@@ -212,7 +212,8 @@ class PersistentConfigNewMediator(Object.Object):
                              'correction': correction,
                              'editor_name': editor_name,
                              'symbol_match_dlg': symbol_match_dlg,
-                             'bypass_sr_recog': bypass_sr_recog
+                             'bypass_sr_recog': bypass_sr_recog,
+                             'num_words_training': num_words_training,
                             }, args)
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression

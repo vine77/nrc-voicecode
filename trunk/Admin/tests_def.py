@@ -4355,6 +4355,56 @@ def test_sym_matching():
 add_test('symbol_matching', test_sym_matching, desc='Test special cases for the symbol matching algorithm.')
 
 ##############################################################################
+# Switching to another buffer by voice
+##############################################################################    
+
+def test_emacs_do_switch_buffer():
+    testing.init_simulator_regression()
+    commands.open_file('dummy.py')
+    commands.say(['class', 'dummy'], echo_cmd=1)
+    commands.open_file('test.py')
+    commands.say(['emacs', 'switch', 'to', 'buffer'], echo_cmd=1)
+    commands.say(['select', 'dummy', ], echo_cmd=1)    
+    commands.say(['new', 'line'], echo_cmd=1)    
+    commands.app.print_buff()
+    
+def	test_emacs_do_invalid_dictation_in_buffer_list():  
+    commands.open_file('dummy.py')
+    commands.say(['emacs', 'switch', 'to', 'buffer'], echo_cmd=1)
+    commands.say(['select', 'dummy', ], echo_cmd=1)        
+    commands.say(['hello'], echo_cmd=1)     
+    commands.app.print_buff()  
+    
+def test_emacs_switch_buffer():
+	test_emacs_do_switch_buffer()
+	test_emacs_do_invalid_dictation_in_buffer_list()
+    
+    
+    
+add_test('switch_buffer', test_emacs_switch_buffer,
+         foreground=1, desc='Switching to an other buffer in Emacs.')
+   
+##############################################################################
+# Saving a buffer by voice in Emacs
+##############################################################################    
+
+def test_emacs_save_buffer():
+    testing.init_simulator_regression()
+    file_name = os.path.join(vc_globals.tmp, 'dummy.py')
+    try:
+       os.path.remove(file_name)
+    except Exception:
+       pass
+    commands.open_file(file_name)
+    commands.say(['class', 'dummy'], echo_cmd=1)
+    commands.say(['emacs', 'save', 'buffer'], echo_cmd=1)
+    commands.open_file(file_name)
+    
+#add_test('save_buffer', test_emacs_save_buffer,
+#         foreground=1, desc='Saving a buffer by voice in Emacs.')
+   
+
+##############################################################################
 # Sending a large message to the client
 ##############################################################################    
     

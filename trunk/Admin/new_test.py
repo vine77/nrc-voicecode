@@ -115,7 +115,8 @@ if (__name__ == '__main__'):
     opts, args = util.gopt(('d', None, 
         'bypass', None,
         'h', None, 
-        'p=', None))
+        'p=', None,
+        'train=', 0))
 
     if (opts['h']) or len(args) == 0:
         usage()
@@ -127,7 +128,8 @@ if (__name__ == '__main__'):
                 test_or_suite = args[0],
                 global_grammars = 1, exclusive = 1, 
                 profile_prefix = opts['p'],
-                bypass_sr_recog = opts['bypass'])
+                bypass_sr_recog = opts['bypass'],
+                num_words_training = int(opts['train']))
         sys.stderr.write('Configuring the mediator...\n')
         if the_mediator.configure():
             sys.stderr.write('Finished configuring...\n')

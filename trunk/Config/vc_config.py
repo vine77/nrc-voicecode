@@ -50,7 +50,9 @@ from CmdInterp import LSAlias, CapitalizationWord
 from CmdInterp import LSAliasSet, CSCmdSet, CapitalizationWordSet
 from LangDef import LangDef
 from cont_gen import *
+from cont_emacs import *
 from actions_gen import *
+from actions_emacs import *
 from actions_C_Cpp import *
 from actions_py import *
 from actions_perl import *
@@ -1224,6 +1226,27 @@ c_preprocessor.add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
 ###############################################################################
 # Emacs specific stuff
 ###############################################################################
+
+emacs_ctrl = CSCmdSet(name = 'emacs control',
+    description = 'commands to control Emacs')
+acmd = CSCmd(spoken_forms=['emacs list buffers', 'emacs switch to buffer', 
+                           'emacs switch buffer'], 
+             meanings={ContEmacs(): ActionEmacsListBuffers()}, 
+             docstring='open the Emacs buffer list.')
+emacs_ctrl.add_csc(acmd)
+acmd = CSCmd(spoken_forms=['new line', 'enter', 'choose that'], 
+             meanings={cont_emacs_in_selection_buff: ActionTypeText("{Enter}")}, 
+             docstring='types "enter" in an Emacs selection buffer (e.g. *Buffer List*).')
+emacs_ctrl.add_csc(acmd)             
+acmd = CSCmd(spoken_forms=['emacs save file', 'emacs save buffer'], 
+             meanings={ContEmacs(): ActionTypeText("{Esc}xsave-buffer{Enter}")}, 
+             docstring='Save the current Emacs buffer.')
+emacs_ctrl.add_csc(acmd)             
+acmd = CSCmd(spoken_forms=['emacs find file', 'emacs open file'], 
+             meanings={ContEmacs(): ActionTypeText("{Esc}xdired{Enter}")}, 
+             docstring='opens an Emacs dired buffer.')
+emacs_ctrl.add_csc(acmd)             
+
 
 
 ######################################################################
