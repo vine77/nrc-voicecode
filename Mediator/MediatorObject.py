@@ -97,6 +97,9 @@ class MediatorObject(Object.Object):
     [CodeSelectGrammar] code_select_grammar = None -- Grammar for
     selecting a part of the visible code.
 
+    *INT window*  -- MSW window handle of the top-level window in which
+    to activate the grammars, or 0 to make them global.
+
     CLASS ATTRIBUTES**
     
     *none* --
@@ -106,18 +109,23 @@ class MediatorObject(Object.Object):
     ..[CommandDictGrammar] file:///./sr_interface.CommandDictGrammar.html
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
-    def __init__(self, interp=CmdInterp.CmdInterp(), \
+    def __init__(self, interp=CmdInterp.CmdInterp(), window = 0, \
                        **attrs):
 #        print '-- MediatorObject.__init__: called'        
         sr_interface.connect('off')        
         self.deep_construct(MediatorObject, \
                             {'interp': interp, \
                              'mixed_grammar': None, \
-                             'code_select_grammar': None}, \
+                             'code_select_grammar': None,
+			     'window': window}, \
                             attrs, \
                             {})
-        self.mixed_grammar = sr_interface.CommandDictGrammar(interpreter=self.interp)
-        self.code_select_grammar = sr_interface.CodeSelectGrammar(interpreter=self.interp)
+        self.mixed_grammar = \
+	    sr_interface.CommandDictGrammar(interpreter=self.interp, 
+	        window = window)
+        self.code_select_grammar = \
+	    sr_interface.CodeSelectGrammar(interpreter=self.interp,
+		window = window)
 
 
     def configure(self, config_file=vc_globals.default_config_file):
@@ -139,9 +147,11 @@ class MediatorObject(Object.Object):
         if sr_interface.speech_able():
 #            print '-- MediatorObject.configure: loading grammars'
             to_configure.mixed_grammar.load()
-            to_configure.mixed_grammar.activate(0)
+	    if self.window == 0:
+		to_configure.mixed_grammar.activate(self.window)
             to_configure.code_select_grammar.load_with_verbs()
-            to_configure.code_select_grammar.activate()                
+	    if self.window == 0:
+		to_configure.code_select_grammar.activate(self.window)                
         
         try:
             execfile(config_file)

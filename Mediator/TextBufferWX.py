@@ -351,6 +351,19 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	"""
 	return self.get_selection()[1]
 
+    def len(self):
+	"""returns length of buffer
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* -- the length of the buffer
+	"""
+	return len(self.contents_internal)
+
     def get_visible(self):
 	""" get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not

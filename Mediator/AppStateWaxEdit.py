@@ -24,7 +24,7 @@
 import os, posixpath, re, sys
 import auto_test, debug
 import AppState
-from SourceBuffAppState import SourceBuffAppState
+from SourceBuffTB import SourceBuffTB
 
 class AppStateWaxEdit(AppState.AppState):
     """This class is a an AppState wrapper on top of WaxEdit.
@@ -40,28 +40,65 @@ class AppStateWaxEdit(AppState.AppState):
 
     *WaxEdit* the_editor -- The WaxEdit editor wrapped into *self*.
     
-    **CLASSS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
     """
     buffer_methods = AppState.AppState.buffer_methods[:]
     buffer_methods.append('print_buff')
     
-    def __init__(self, **attrs):
-        self.deep_construct(AppStateWaxEdit, {}, attrs)
+    def __init__(self, editor, **attrs):
+        self.deep_construct(AppStateWaxEdit, {'the_editor': editor}, attrs)
+      
+    def active_field(self):
+	"""indicates what part of the editor has the focus.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*(STR)* -- Name of the active Field. Elements of
+	the array refer to a sequence of objects in the user interface
+	that lead to the active field.
+
+	If *None*, then the buffer [self.curr_buffer] has the focus. 
+
+	Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
+	as', 'file name')*.
+
+	Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
+	where find-buffer is the name of the command that was invoked and
+	buffer-name refers to the argument that is being asked for.
+	"""
+	if not self.the_editor.is_active():
+	    return ('inactive')
+	if self.the_editor.editor_has_focus():
+	    return None
+	return ('unknown')
 
     def open_file(self, name, lang=None):
         """Open a file.
 
         Open file with name *STR name* and written in language *STR lang*.        
         """
-        self.the_editor.open_file(name)
-        self.curr_buffer =  SourceBuffAppState(app = self, file_name=name, language=lang, \
-	    initial_contents = source)
+        try:
+            source_file = open(name, 'rw')
+            source = source_file.read()
+            source_file.close()
+        except Exception, err:
+            source = ''
+	# WaxEdit only supports one open buffer at a time
+	if self.curr_buffer:
+	    del self.open_buffers[self.curr_buffer.file_name]
+        self.curr_buffer =  SourceBuffTB(app = self, file_name=name, \
+	    underlying_buffer = self.the_editor.editor_buffer(),
+	    language=lang)
+	self.the_editor.editor_buffer().set_text(source)
 
         self.open_buffers[name] = self.curr_buffer
-
-
+        
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
 
