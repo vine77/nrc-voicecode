@@ -142,6 +142,20 @@ class TextBuffer(Object):
 	"""
 	debug.virtual('TextBuffer.get_selection')
 
+    def len(self):
+	"""returns length of buffer 
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* -- the length of the buffer
+	"""
+	debug.virtual('TextBuffer.len')
+
+
     def cur_pos(self):
 	"""returns current position (either the start or end of
 	the current selection, and usually the end)

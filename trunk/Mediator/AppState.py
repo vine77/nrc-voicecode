@@ -77,19 +77,6 @@ class AppState(Object):
     
     *STR curr_dir=None* -- Current directory for the programming environment
     
-    *(STR) active_field=None* -- Name of the active Field. Elements of
-     the array refer to a sequence of objects in the user interface
-     that lead to the active field.
-
-     If *None*, then the buffer [self.curr_buffer] has the focus. 
-
-     Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
-     as', 'file name')*.
-
-     Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
-     where find-buffer is the name of the command that was invoked and
-     buffer-name refers to the argument that is being asked for.
-
     SourceBuff curr_buffer=None -- Current source buffer
 
     *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
@@ -122,7 +109,7 @@ class AppState(Object):
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'delete', 'goto', 'goto_line', 'move_relative_line',
     'move_relative_page', 'search_for',
-    'refresh_if_needed', 'refresh']
+    'refresh_if_necessary', 'refresh']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:
@@ -130,7 +117,7 @@ class AppState(Object):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
-                 active_field=None, curr_buffer=None, max_history=100,
+                 curr_buffer=None, max_history=100,
                  **attrs):
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
@@ -138,7 +125,6 @@ class AppState(Object):
                              'rec_utterances': [], 
                              'open_buffers': {},
                              'curr_dir': curr_dir, 
-                             'active_field': active_field,
                              'curr_buffer': curr_buffer,
                              'max_history': max_history, 
                              'translation_is_off': translation_is_off},
@@ -158,6 +144,31 @@ class AppState(Object):
 	left end of the selection"""
 	debug.virtual('AppState.bidirectional_selection')
 
+    def active_field(self):
+	"""indicates what part of the editor has the focus.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*(STR)* -- Name of the active Field. Elements of
+	the array refer to a sequence of objects in the user interface
+	that lead to the active field.
+
+	If *None*, then the buffer [self.curr_buffer] has the focus. 
+
+	Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
+	as', 'file name')*.
+
+	Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
+	where find-buffer is the name of the command that was invoked and
+	buffer-name refers to the argument that is being asked for.
+	"""
+	return None
+
+
     def focus_is_source(self, lang_name):
         """Check if prog. env. focus is a source buffer
 
@@ -165,8 +176,8 @@ class AppState(Object):
         is a source buffer written in language *STR lang_name*.
         """
 
-        if (self.active_field != None):
-            answer = (lang_name == None) or (self.curr_buffer.is_languaage(lang_name))
+        if (self.active_field() != None):
+            answer = (lang_name == None) or (self.curr_buffer.is_language(lang_name))
         return answer
 
     def find_buff(self, buff_name=None):

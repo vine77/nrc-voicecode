@@ -398,24 +398,37 @@ class CommandDictGrammar(DictGramBase):
     [CmdInterp] *interpreter*-- Command interpreter used to and execute the
     recognised dictation utterances.
 
+    *INT window* -- MSW window handle of the window which must be in the
+    foreground for the grammar to be activated, or 0 to make the grammar
+    global
+
     CLASS ATTRIBUTES**
     
     *none* -- 
     """
     
-    def __init__(self, interpreter=None, **attrs):
+    def __init__(self, interpreter=None, window = 0, **attrs):
 #          self.deep_construct(CommandDictGrammar, \
 #                              {'interpreter': interpreter}, \
 #                              attrs, \
 #                              {DictGramBase: 1})
         self.__dict__['interpreter'] = interpreter
         DictGramBase.__init__(self)
+	self.window = window
         self.state = None
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
 #        print '-- CommandDictGrammar.gotBegin: called'
-        pass
+#	print moduleInfo
+	if self.window == 0:
+	    pass
+#	    self.activate()
+	elif self.interpreter.on_app.active_field() == None:
+	    self.activate(self.window)
+	else:
+	    self.deactivate()
+        
         
     def gotResults(self, words):
         #
@@ -440,14 +453,19 @@ class CodeSelectGrammar(SelectGramBase):
     [CmdInterp] *interpreter=None*-- Command interpreter used to and execute the
     recognised dictation utterances.
 
+    *INT window* -- MSW window handle of the window which must be in the
+    foreground for the grammar to be activated, or 0 to make the grammar
+    global
+
     CLASS ATTRIBUTES**
     
     *none* -- 
     """
 
-    def __init__(self, interpreter=None):
+    def __init__(self, interpreter=None, window = 0):
         DictGramBase.__init__(self)
         self.interpreter = interpreter
+	self.window = window
         self.isActive = 0
 
     def load_with_verbs(self):
@@ -464,7 +482,23 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
-        self.setSelectText(self.interpreter.on_app.curr_buffer.contents())
+#	print moduleInfo
+	vis_start, vis_end = self.interpreter.on_app.curr_buffer.get_visible()
+	self.vis_start = vis_start
+#	print vis_start, vis_end
+	visible = \
+	    self.interpreter.on_app.curr_buffer.get_text(vis_start, vis_end)
+	self.setSelectText(visible)
+#	print visible[0:50]
+	if self.window == 0:
+#	    self.activate()
+	    self.setSelectText(visible)
+	elif self.interpreter.on_app.active_field() == None:
+	    self.activate(self.window)
+	    self.setSelectText(visible)
+	else:
+	    self.deactivate()
+        
 
 # NOT NEEDED ANYMORE. gotResultsObject HANDLES THE SELECTION.
 #      def gotResults(self, words, startPos, endPos):
@@ -533,7 +567,9 @@ class CodeSelectGrammar(SelectGramBase):
                     # to the candidate selection ranges.
                     #
                     region = resObj.getSelectInfo(self.gramObj, i)
-                    self.ranges.append(region)
+		    true_region = (region[0] + self.vis_start,
+		      region[1] + self.vis_start)
+                    self.ranges.append(true_region)
                     
         except natlink.OutOfRange:
             #

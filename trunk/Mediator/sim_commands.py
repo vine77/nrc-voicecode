@@ -135,6 +135,8 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
+# I think we can get by without CmdInterp, EdSim, MediatorObject
+# import sr_interface, util, vc_globals
 
 # I'm not sure which of these contexts and actions are necessary for 
 # sim_commands, as opposed to the rest of mediator.py, so I've just left them
@@ -152,6 +154,8 @@ from actions_py import *
 quit_flag = 0
 the_mediator = None
 
+gui_sim = 0
+
 # local name space for user command-line commands
 command_space = {}
 
@@ -166,7 +170,8 @@ def open_file(fname):
     global the_mediator
     the_mediator.interp.on_app.open_file(fname)
     the_mediator.interp.known_symbols.parse_symbols(fname)
-    show_buff()
+    the_mediator.interp.on_app.curr_buffer.refresh_if_necessary()
+# show_buff()
 
 def compile_symbols(file_list):
     global the_mediator
@@ -250,7 +255,14 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 
 
 #        print '-- mediator.say: words=%s' % words
+	global gui_sim
+	if gui_sim:
+	    the_mediator.mixed_grammar.activate()
+	    the_mediator.code_select_grammar.activate()
         natlink.recognitionMimic(words)
+	if gui_sim:
+	    the_mediator.mixed_grammar.deactivate()
+	    the_mediator.code_select_grammar.deactivate()
 
     #
     # Redirect stdin back to what it was
@@ -285,7 +297,7 @@ def select(start, end):
 def show_buff():
     """Shows content of current source buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.curr_buffer.print_buff()
+    the_mediator.interp.on_app.curr_buffer.refresh_if_necessary()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""

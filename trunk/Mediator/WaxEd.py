@@ -31,7 +31,6 @@ import TextBufferWX
 import wxCmdPrompt
 import wxAutoSplitterWindow
 from wxPython.wx import *
-import WaxEdit
 
 ID_EXIT = 101
 ID_DICTATED=102
@@ -42,9 +41,14 @@ ID_FOCUS_EDITOR = 108
 ID_PANE = 120
 ID_PROMPT = 130
 ID_COMMAND_LINE = 140
+ID_PUSH_ME = 110
 
+def error(string):
+    """test capture of output to standard error"""
 
-class WaxEdSimPane(wxPanel):
+    sys.stderr.write(string)
+
+class WaxEditPane(wxPanel):
 
     """main panel containing the GUI controls
 
@@ -87,17 +91,19 @@ class WaxEdSimPane(wxPanel):
 
     """
 
-    def __init__(self, parent, ID, title, command_space = None):
+    def __del__(self):
+        print 'pane breaking'
+
+    def __init__(self, parent, ID, title):
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize,
-	    name = title)
+	name = title)
         self.parent = parent
 
-# dictionary to provide local name space for user commands
-	self.command_space = {}
-	if command_space != None:
-	    self.command_space = command_space
-
         self.vbox = wxBoxSizer(wxVERTICAL)
+
+	self.button = wxButton(self, ID_PUSH_ME, "Push me")
+        self.button_line= wxBoxSizer(wxHORIZONTAL)
+        self.button_line.Add(self.button, 0, wxALL, 4)
 
         top_and_bottom = wxAutoSplitterWindow.wxFixedFocusSplitter(self,
 	    ID_SPLITTER, 1)
@@ -113,6 +119,7 @@ class WaxEdSimPane(wxPanel):
 	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
+        self.vbox.Add(self.button_line, 0, wxEXPAND | wxALL, 4)
         self.vbox.Add(top_and_bottom, 1, wxEXPAND | wxALL, 4)
         self.vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
 
@@ -125,6 +132,8 @@ class WaxEdSimPane(wxPanel):
 	    style =wxTE_PROCESS_ENTER)
 
         self.command_line = command_line
+# dictionary to provide local name space for user commands
+	self.command_space = {}
 # provide extra access for testing - get rid of this in the end
 	self.command_space['the_pane'] = self
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
@@ -141,36 +150,6 @@ class WaxEdSimPane(wxPanel):
         self.vbox.Fit(self)
         self.vbox.SetSizeHints(self)
         self.most_recent_focus = editor
-
-    def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUT**
-
-	*TextBufferWX* -- the TextBufferWX
-	"""
-	return self.wax_text_buffer
-
-    def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
-#fudge so that recog mimic works from the command line.
-	return self.parent.is_active()
-	current = wxWindow_FindFocus()
-	if current.GetId() == self.editor.GetId():
-	    return 1
-	return 0
     
     def p_focus(self, event):
         current = wxWindow_FindFocus()
@@ -208,6 +187,9 @@ class WaxEdSimPane(wxPanel):
 	size of the parent splitter window, top_and_bottom, is known
 	"""
 	self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
+# I don't think this is necessary or correct any more, now that we
+# handle focus events hierarchically
+#	self.parent.most_recent_focus=self.editor
     
     def focus_editor(self, event):
         self.editor.SetFocus()
@@ -215,10 +197,18 @@ class WaxEdSimPane(wxPanel):
         self.command_line.SetFocus()
     def on_editor_change(self, start, end, text, selection_start,
         selection_end, buffer, program_initiated):
-	pass
+        w, h = self.GetSizeTuple()
+        w2, h2 = self.top_and_bottom.GetSizeTuple()
+        we, he = self.editor.GetSizeTuple()
+        wl, hl = self.log.GetSizeTuple()
+        msg = "Change: %d %d %s" % (start, end, text)
+        msg = msg + "Height self %d split %d top %d bottom %d" \
+                % (h, h2, he, hl)
+        self.parent.update_status_bar(msg)
 
 
-class WaxEdSimFrame(wxFrame):
+
+class WaxEditFrame(wxFrame):
     """the main frame and its contents
 
     **CLASS ATTRIBUTES**
@@ -227,7 +217,7 @@ class WaxEdSimFrame(wxFrame):
 
     **INSTANCE ATTRIBUTES**
 
-    *WaxEdSim* pane -- panel containing the controls
+    *WaxEditPane* pane -- panel containing the controls
 
     *wxWindow* most_recent_focus -- subwindow which had the focus most
     recently.  Used to restore focus to this window when the user
@@ -236,11 +226,10 @@ class WaxEdSimFrame(wxFrame):
     others -- the various menus
     """
 
-    def __init__(self, parent, ID, title, command_space = None):
+    def __init__(self, parent, ID, title):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
         wxSize(1000, 600))
 
-	self.activated = 0
         file_menu=wxMenu()
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
@@ -260,41 +249,13 @@ class WaxEdSimFrame(wxFrame):
         self.SetMenuBar(menuBar)
         EVT_MENU(self,ID_EXIT,self.quit_now)
 
-        self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
-	    command_space = command_space)
+        self.pane = WaxEditPane(self, ID_PANE, "WaxEdPanel")
 	self.most_recent_focus=self.pane
 	EVT_SET_FOCUS(self, self.on_focus)
     
         EVT_MENU(self,ID_FOCUS_EDITOR,self.pane.focus_editor)
         EVT_MENU(self,ID_FOCUS_COMMAND,self.pane.focus_command_line)
         EVT_ACTIVATE(self, self.on_activate) 
-
-    def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUT**
-
-	*TextBufferWX* -- the TextBufferWX
-	"""
-	return self.pane.editor_buffer()
-
-    def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
-	if not self.is_active():
-	    return 0
-	return self.pane.editor_has_focus()
 
     def on_focus(self, event):
 	if self.most_recent_focus == 0:
@@ -320,26 +281,13 @@ class WaxEdSimFrame(wxFrame):
         current = wxWindow_FindFocus()
         if event.GetActive():
 # window is being activated
-	    self.activated=1
             if not current:
                 self.most_recent_focus.SetFocus()
         else:
             self.most_recent_focus = current
-	    self.activated=0
-    def is_active(self):
-	"""indicates whether the editor frame is active
 
-	**INPUTS**
 
-	*none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true if frame window is active
-	"""
-	return self.activated
-
-class WaxEdSim(wxApp, WaxEdit.WaxEdit):
+class WaxEdit(wxApp):
     """application class
 
     **CLASS ATTRIBUTES**
@@ -348,72 +296,18 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 
     **INSTANCE ATTRIBUTES**
 
-    *WaxEdSimFrame* frame -- the main frame window of the class
-    *{STR:ANY}* command_space -- a namespace (dictionary) in which to
-    execute commands from the command line
+    *WaxEditFrame* frame -- the main frame window of the class
     """
-    def __init__(self, command_space = None, dummy = 0):
-        """
-	**INPUTS**
-
-	*INT* dummy -- passed on to wxApp: don't know what this does,
-	but it always seems to be set to zero
-
-	*{STR:ANY}* command_space -- a namespace (dictionary) in which to
-	execute commands from the command line
-	"""
-	self.command_space = command_space
-        wxApp.__init__(self, dummy)
 
     def OnInit(self):
-        frame = WaxEdSimFrame(NULL, -1, "WaxEdit", 
-	    command_space = self.command_space)
+        frame = WaxEditFrame(NULL, -1, "WaxEdit")
         frame.Show(true)
         frame.pane.initial_show()
         self.SetTopWindow(frame)
-	self.frame = frame
         return true
 
-    def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUT**
-
-	*TextBufferWX* -- the TextBufferWX
-	"""
-	return self.frame.editor_buffer()
-
-    def is_active(self):
-	"""indicates whether the editor frame is active
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true if frame window is active
-	"""
-	return self.frame.is_active()
-
-    def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
-	return self.frame.editor_has_focus()
-
 def run():
-    app=WaxEdSim()
+    app=WaxEdit(0)
     app.MainLoop()
 
 if __name__ =='__main__':

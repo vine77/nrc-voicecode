@@ -199,7 +199,7 @@ class WaxEditPane(wxPanel):
 	self.command_line.SetFocus()
     def on_recog_start(self, buffer, window_matches):
 #        return
-#	self.command_log.log_message('recog starting')
+	self.command_log.log_message('recog starting')
 #	print 'recog start'
 	if window_matches and self.parent.activated:
 #	    print '(parent is activated, window matches)'
@@ -350,6 +350,7 @@ class WaxEditPane(wxPanel):
 	"""
 	self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
 	self.voice_buffer.activate()
+	print natlink.getCurrentModule()
 # I don't think this is necessary or correct any more, now that we
 # handle focus events hierarchically
 #	self.parent.most_recent_focus=self.editor
@@ -557,6 +558,7 @@ class SpyGrammar(GrammarBase):
 def run():
     try:
 	app=WaxEdit(0)
+	print natlink.getCurrentModule()
 	app.MainLoop()
     finally:
 	natlink.natDisconnect()

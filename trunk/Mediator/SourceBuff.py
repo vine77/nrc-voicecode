@@ -589,7 +589,7 @@ class SourceBuff(Object):
 	debug.virtual('SourceBuff.goto_line')
 
                 
-    def refresh_if_needed(self):
+    def refresh_if_necessary(self):
 	"""Refresh buffer if necessary"""
 # note: this method is included primarily for the benefit of EdSim,
 # which, being a line editor, needs to refresh its display by reprinting

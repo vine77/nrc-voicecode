@@ -42,10 +42,9 @@ class SourceBuffTB(SourceBuff):
     
     """
     
-    def __init__(self, app, underlying_buffer, **attrs):
+    def __init__(self, underlying_buffer, **attrs):
         self.deep_construct(SourceBuffTB,
-                            {'app': app,
-			    'underlying': underlying_buffer},
+                            {'underlying': underlying_buffer},
                             attrs
                             )
 
@@ -105,7 +104,7 @@ class SourceBuffTB(SourceBuff):
 
 	*none*
 	"""
-	self.underlying.set_selection(range)
+	self.underlying.set_selection(range[0], range[1])
 
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
@@ -228,8 +227,13 @@ class SourceBuffTB(SourceBuff):
 	*none*
 	"""
         
-        debug.virtual('insert_indent')
-        
+	if range == None:
+	    range = self.get_selection()
+	range = self.make_valid_range(range)
+	self.insert(code_bef, range=range)
+	self.app.drop_breadcrumb()
+	self.insert(code_after)
+	self.app.pop_breadcrumbs()
         
     def insert(self, text, range = None):
         """Replace text in range with 
@@ -266,7 +270,7 @@ class SourceBuffTB(SourceBuff):
 	*none*
 	"""
 
-        debug.virtual('indent')
+	pass
 
     def delete(self, range = None):
         """Delete text in a source buffer range.
