@@ -1278,7 +1278,7 @@ py_std_func_calls.add_function_name(['square root'], 'sqrt')
 py_std_func_calls.add_function_name(['hyperbolic sine', 'sine H.'],
     'sinh')
 py_std_func_calls.add_function_name(['hyperbolic cosine', 'cosine H.', 
-    'cos H.'], 'sinh')
+    'cos H.'], 'cosh')
 py_std_func_calls.add_function_name(['hyperbolic tangent', 'tan H.'],
     'tanh')
 
@@ -1578,7 +1578,7 @@ c_reserved_words.add_lsa(LSAlias(['asm', 'assembly', 'A. S. M.'],
         {'C': 'asm '})) # this is compiler-dependent... :-(
 c_reserved_words.add_lsa(LSAlias(['auto', 'automatic'],
         {'C': 'auto '}))
-c_reserved_words.add_lsa(LSAlias(['char','care'],
+c_reserved_words.add_lsa(LSAlias(['char'],
         {'C': 'char '}))
 # the 'class' keyword prevents us from using 'class' as a CSC for defining a new class!
 c_reserved_words.add_lsa(LSAlias(['class'],
@@ -1645,7 +1645,7 @@ c_reserved_words.add_lsa(LSAlias(['void'],
         {'C': 'void '}))
 c_reserved_words.add_lsa(LSAlias(['volatile'],
         {'C': 'volatile '}))
-c_reserved_words.add_lsa(LSAlias(['wchar_t','wide char','wide care'],
+c_reserved_words.add_lsa(LSAlias(['wchar_t','wide char type'],
         {'C': 'wchar_t '}))
 
 

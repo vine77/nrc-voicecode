@@ -56,8 +56,10 @@ capitalize_rules(0)
 symbol_files = []
 
 py_std_sym = os.path.join(vc_globals.config, 'py_std_sym.py')
-
 symbol_files.append(py_std_sym)
+
+C_Cpp_std_sym = os.path.join(vc_globals.config, 'C_Cpp_std_sym.cpp')
+symbol_files.append(C_Cpp_std_sym)
 
 standard_symbols_in(symbol_files)
 
@@ -88,9 +90,11 @@ abbrev_files = []
 
 std_abbrevs = os.path.join(vc_globals.config, 'std_abbrevs.py')
 py_abbrevs = os.path.join(vc_globals.config, 'py_abbrevs.py')
+C_Cpp_abbrevs = os.path.join(vc_globals.config, 'C_Cpp_abbrevs.py')
 
 abbrev_files.append(std_abbrevs)
 abbrev_files.append(py_abbrevs)
+abbrev_files.append(C_Cpp_abbrevs)
 
 abbreviations_in(abbrev_files)
 
