@@ -435,21 +435,23 @@ class DictWinGramDummy(DictWinGram):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *BOOL* silent -- don't print diagnostics
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, silent = 0, **attrs):
 	self.deep_construct(DictWinGramDummy,
-	    {}, attrs)
-	self.identify_grammar()
-	print "init"
+	    {'silent': silent}, attrs)
+	if not self.silent:
+	    self.identify_grammar()
+	    print "init"
 
     def __del__(self):
-	self.identify_grammar()
-	print "del"
+	if not self.silent:
+	    self.identify_grammar()
+	    print "del"
 
     def identify_grammar(self):
         """print information identifying the grammar by buffer and
@@ -486,9 +488,10 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	self.identify_grammar()
-	print "setting context: before = [%s], after = [%s]" % (before,
-	    after)
+	if not self.silent:
+	    self.identify_grammar()
+	    print "setting context: before = [%s], after = [%s]" % (before,
+		after)
 
     def activate(self):
 	"""activates the grammar for recognition
@@ -502,15 +505,16 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	self.identify_grammar()
-	print "activating: ",
-	if self.window == None:
-	    print "global ",
-	else:
-	    print "%d " % (self.window),
-	if self.exclusive:
-	    print "exclusive "
-	print ""
+	if not self.silent:
+	    self.identify_grammar()
+	    print "activating: ",
+	    if self.window == None:
+		print "global ",
+	    else:
+		print "%d " % (self.window),
+	    if self.exclusive:
+		print "exclusive "
+	    print ""
 	self.active = 1
     
     def deactivate(self):
@@ -524,35 +528,38 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	self.identify_grammar()
+	if not self.silent:
+	    self.identify_grammar()
+	    print "deactivating"
 	self.active = 0
-	print "deactivating"
 
 class SelectWinGramDummy(SelectWinGram):
     """dummy implementation of window-specific selection grammar 
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *BOOL* silent -- don't print diagnostics
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, silent = 0, **attrs):
 	"""
 	**INPUTS**
 
 	*none*
 	"""
 	self.deep_construct(SelectWinGramDummy,
-	    {}, attrs)
-	self.identify_grammar()
-	print "init"
+	    {'silent': silent}, attrs)
+	if not self.silent:
+	    self.identify_grammar()
+	    print "init"
 
     def __del__(self):
-	self.identify_grammar()
-	print "del"
+	if not self.silent:
+	    self.identify_grammar()
+	    print "del"
 
     def identify_grammar(self):
         """print information identifying the grammar by buffer and
@@ -586,16 +593,17 @@ class SelectWinGramDummy(SelectWinGram):
 	*none*
 	"""
 	self.buff_name = buff_name
-	self.identify_grammar()
 	self.active = 1
-	print "activating: ",
-	if self.window == None:
-	    print "global ",
-	else:
-	    print "%d " % (self.window),
-	if self.exclusive:
-	    print "exclusive "
-	print ""
+	if not self.silent:
+	    self.identify_grammar()
+	    print "activating: ",
+	    if self.window == None:
+		print "global ",
+	    else:
+		print "%d " % (self.window),
+	    if self.exclusive:
+		print "exclusive "
+	    print ""
     
     def deactivate(self):
 	"""disable recognition from this grammar
@@ -608,9 +616,10 @@ class SelectWinGramDummy(SelectWinGram):
 
 	*none*
 	"""
-	self.identify_grammar()
+	if not self.silent:
+	    self.identify_grammar()
+	    print "deactivating"
 	self.active = 0
-	print "deactivating"
 
 class WinGramFactoryDummy(Object):
     """implementation fo WinGramFactory with dummy grammars for
@@ -618,13 +627,13 @@ class WinGramFactoryDummy(Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *BOOL* silent -- don't print diagnostics
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, silent = 0, **attrs):
 	"""no arguments: abstract base class
 	**INPUTS**
 

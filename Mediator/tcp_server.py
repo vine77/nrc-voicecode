@@ -27,7 +27,7 @@ import SocketServer, string, sys, threading, time, whrandom, win32event
 
 import AppStateEmacs, AppStateMessaging, auto_test, debug, mediator 
 import messaging, Object
-import RecogStartMgr, SourceBuffMessaging, sb_services
+import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 
 
@@ -547,14 +547,14 @@ class ServerSingleThread(Object.Object):
 
         ###################################################################
         #
-        # When the RecogStartMgr is functional, the code below will be used.
+        # When the AppMgr is functional, the code below will be used.
         #
         ###################################################################
         #
         # Tell the recognition start manager about this new editor instance
         #
         # window = self.new_listen_socks[listen_sock][1]
-        # self.recog_mgr.new_instance(an_app_state.app_name, an_app_state, window)
+        # self.apps.new_instance(an_app_state.app_name, an_app_state, window)
 
 
         ###################################################################

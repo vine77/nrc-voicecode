@@ -331,7 +331,163 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    self.open_buffers[f_path] = self.open_buffers[old_name]
 	    del self.open_buffers[old_name]
 	return f_path
+      
+    def is_active(self):
+	"""is the editor application active (not suspended)?
 
+	Usually true, except for remote editors running in a (Unix)
+	shell.  GUI editors tend to minimize instead of suspending, so
+	their process should still be active.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor is active (i.e. has not been suspended)
+	"""
+	return 1
+
+    def is_active_is_safe(self):
+	"""can is_active safely be queried, without blocking?
+
+	For example, Emacs provides a suspend-hook and a
+	suspend-resume-hook, so a properly written AppStateEmacs can
+	set a flag on suspend and clear it on resume, and will therefore
+	be able to respond to is_active without querying Emacs.
+
+	Also, except for remote editors running in a (Unix)
+	shell, this is usually true.  GUI editors tend to minimize 
+	instead of suspending, so their process should still be active.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if is_active can be queried without blocking,
+	even if the editor has been suspended. 
+	"""
+	return 1
+
+    def shared_window(self):
+        """is the editor running in a window which could be shared with
+	another editor instance (because it is a shell window,
+	and this instance could be suspended or closed)
+
+	Usually false for GUI editors.
+
+	Note: remote editors running in a remote display
+	which appears as a single window to be local operating system 
+	(X servers in single window mode, VNC) will also appear to be
+	shared windows.  However, the mediator will perform a separate 
+	check to detect this, so for remote editors which do not share windows 
+	on the remote system, AppState.shared_window should report
+	false.
+	
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor is running in a potentially shared window
+	"""
+	return 0
+
+    def set_title_string(self, title):
+        """specifies the identifier string for this editor instance.  If the 
+	editor is capable of setting the window title to include this string, 
+	it should (and then should return this string when the
+	title_string method is called.  
+
+	**INPUTS**
+
+	*STR* -- the identifying string to be included in the
+	window title if possible.
+
+	**OUTPUTS**
+	
+	*none*
+	"""
+# can't set the title on an instance-specific basis, so ignore
+	pass
+
+    def title_string(self):
+        """returns the identifier string for this editor instance (which 
+	should be a substring of the window title)
+
+	Note: multiple windows of remote editors running in a remote display
+	which appears as a single window to be local operating system 
+	(X servers in single window mode, VNC) will not be able to set 
+	the overall title.  
+	However, the mediator will perform a 
+	separate check to detect this, so remote editors which support
+	identifying title strings should still return the appropriate
+	string.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*STR* -- the identifying string, or None if the editor was not given 
+	such a string or cannot set the window title.
+	"""
+# can't set the title on an instance-specific basis
+	return None
+
+    def title_escape_sequence(self, before = "", after = ""):
+	"""gives the editor a (module-dependent) hint about the escape
+	sequence which can be used to set the module's window title, if
+	any.  If the editor has its own mechanism for setting the window
+	title, it should simply ignore this method.  
+
+	**INPUTS**
+
+	*STR* before -- the escape sequence to be sent before the string
+	to place in the window title, or the empty string if there is no
+	escape sequence
+
+	*STR* after -- the escape sequence which terminates the window
+	title value
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# can't set the title on an instance-specific basis, so ignore
+	pass
+
+    def multiple_windows(self):
+        """does editor support multiple windows per instance?
+
+	Note: the purpose of this function is to allow the RecogStartMgr
+	to determine whether a previously unknown window could belong to
+	this known instance.  Therefore, Emacs running in text mode 
+	should return false, even though it can have (sub-)windows in 
+	a single frame.  
+	
+	Note: multiple windows of remote editors running in a remote display
+	which appears as a single window to be local operating system 
+	(X servers in single window mode, VNC) will not appear to the mediator 
+	as having separate windows.  However, the mediator will perform a 
+	separate check to detect this, so remote editors which support
+	multiple windows should return true, regardless of the remote
+	display method.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor supports opening multiple editor windows.  
+	"""
+	return 0
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
