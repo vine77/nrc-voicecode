@@ -173,8 +173,8 @@ class ListenThread(threading.Thread, Object.Object):
 	        {'value': buff.get_visible()})            
 
         elif action == 'make_position_visible':
-            self.xed.vc_talk_msgr.send_mess('make_position_visible_resp', 
-	        {'updates': self.upd_curpos_sel(buff_name)})
+	    buff.make_position_visible()
+            self.xed.vc_talk_msgr.send_mess('make_position_visible_resp')
 
         elif action == 'len':
             self.xed.vc_talk_msgr.send_mess('len', 
@@ -215,26 +215,31 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('get_visible_resp', 
 	        {'value': buff.get_visible()})
         elif action == 'recog_begin':
+	    window_id = messaging.messarg2int(args['window_id'])
+	    block = messaging.messarg2int(args['block'])
+	    value = self.xed.ed.recog_begin(window_id = window_id, 
+		block = block)
             self.xed.vc_talk_msgr.send_mess('recog_begin_resp', 
-	        {'value': 1}) 
+	        {'value': value}) 
         elif action == 'recog_end':
             #
             # *recog_end* is invoked at the end of an utterance.
             # print the updated buffer content.
             #
+	    value = self.xed.ed.recog_end()
             self.xed.vc_talk_msgr.send_mess('recog_end_resp')
             self.xed.ed.refresh()
         elif action == 'open_file':
             trace('test_TCP_server.execute_request',
                   'action=\'open_file\'')
-            self.xed.ed.open_file(file_name=args['file_name'])            
+            new_buff_name = self.xed.ed.open_file(file_name=args['file_name'])            
             self.xed.vc_talk_msgr.send_mess('open_file_resp', 
-	        {'buff_name': args['file_name']})
+	        {'buff_name': new_buff_name})
         elif action == 'close_buffer':
             trace('test_TCP_server.execute_request',
                   'action=\'close_buffer\'')
-	    success = self.xed.ed.close_buffer(buff_name=args['buff_name'], 
-		save=['save'])
+	    success = self.xed.ed.app_close_buffer(buff_name=args['buff_name'], 
+		save = messaging.messarg2int(args['save']))
             self.xed.vc_talk_msgr.send_mess('close_buffer_resp',
 		{'value': success})
         elif action == 'mediator_closing' or action == 'terminating':

@@ -213,7 +213,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
 	*none*
 	"""
-        self.talk_msgr.send_mess('mediator_closing', {})
+        self.talk_msgr.send_mess('mediator_closing')
 # this message has no response, otherwise we might block waiting for it
 # if the external editor had hung, crashed, or been disconnected
 

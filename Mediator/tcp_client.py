@@ -351,20 +351,34 @@ class ClientEditor(Object.OwnerObject):
 
     *[STR] expect* -- list of commands expected from the mediator
 
+    *[{STR:ANY}] awaiting_response* -- list of responses to a
+    mediator-initiated change, or None if we are not in the middle of a
+    mediator-initiated change
+
+    *owner* -- the owner of the ClientEditor, which should be notified
+    if the mediator sends a 'mediator_closing' or 'terminating' message
+
+    *STR ID* -- unique ID of this ClientEditor, so that it can identify
+    itself during callbacks to its owner
+
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **args):
+    def __init__(self, owner, **args):
 	self.deep_construct(ClientEditor,
 	                    {
 			     'talk_msgr': None,
 			     'listen_msgr': None,
 			     'editor': editor,
+			     'owner': owner,
+			     'ID': ID,
 			     'msg_map': {},
-			     'expect': []
+			     'expect': [],
+			     'awaiting_response': None,
 			    },
 			    args)
+	self.name_parent('owner')
 	self.expect=['recog_begin', 'recog_end', 'cur_pos', 
 	    'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 
 	    'set_selection', 'get_text', 'make_position_visible', 'len', 
@@ -412,8 +426,25 @@ class ClientEditor(Object.OwnerObject):
 	
     def on_change(self, start, end, text, selection_start,
 	selection_end, buff_name, program_initiated):
-	pass
-     
+	updates = {'range': (start, end), 'buff_name': buff_name}
+	if text == "":
+	    updates['action'] = 'delete'
+	else:
+	    updates['action'] = 'insert'
+	    updates['text'] = text
+	if program_initiated:
+	    if self.awaiting_response == None:
+		err = 'error: ClientEditor received program_initiated '
+		err = err + 'change callback:\n'
+		err = err + '(%d, %d), [%s], %s' % (start, end, text, buff_name)
+		err = err + '\nbut awaiting_response was None'
+		sys.stderr.write(err)
+	    else:
+		self.awaiting_response.append(updates)
+	else:
+	    update_list = [updates] + self.sel_update(buff_name)
+	    self.talk_msgr.send_mess('update', {'value': update_list})
+
     def mediator_cmd(self):
 	"""method to call when the main thread receives a message
 	from the data thread that a command from the mediator is waiting
@@ -503,16 +534,13 @@ class ClientEditor(Object.OwnerObject):
 	    'buff_name': buff_name})
 
         return updates
-     
-
-
         
     def cmd_set_selection(self, arguments):
 	buff_name = arguments['buff_name']
 	range = arguments['range']
 	cursor_at = arguments['cursor_at']
 	self.editor.set_selection(range, cursor_at, buff_name = buff_name)
-	updates =  self.sel_updates(buff_name)
+	updates =  self.sel_update(buff_name)
 	self.listen_msgr.send_mess('set_selection_resp',
 	    {'updates': updates})
 
@@ -524,15 +552,143 @@ class ClientEditor(Object.OwnerObject):
  
     def cmd_set_text(self, arguments):
 	buff_name = arguments['buff_name']
+	text = arguments['text']
+	start = arguments['start']
+	end = arguments['end']
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.set_text(text, start = start, end = end, 
+	    buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('set_text_resp', 
+	    {'updates': updates})
+
+    def cmd_make_position_visible(self, arguments):
+	buff_name = arguments['buff_name']
+	self.editor.make_position_visible(buff_name = buff_name)
+	self.listen_msgr.send_mess('make_position_visible_resp') 
+
+    def cmd_len(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.len(buff_name = buff_name)
+	self.listen_msgr.send_mess('len', {'value': value})
+
+    def cmd_insert(self, arguments):
+	buff_name = arguments['buff_name']
+	text = arguments['text']
 	range = arguments['range']
-	cursor_at = arguments['cursor_at']
-	self.editor.set_text(range, cursor_at, buff_name = buff_name)
-	self.listen_msgr.send_mess('set_text_resp')
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.insert(text, range, buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('insert_resp', 
+	    {'updates': updates})
 
+    def cmd_delete(self, arguments):
+	buff_name = arguments['buff_name']
+	range = arguments['range']
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.delete(range, buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('delete_resp', 
+	    {'updates': updates})
+    
+    def cmd_goto(self, arguments):
+	buff_name = arguments['buff_name']
+	pos = arguments['pos']
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.goto(pos, buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('goto_resp', 
+	    {'updates': updates})
+    
+    def cmd_get_visible(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.get_visible(buff_name = buff_name)
+	self.listen_msgr.send_mess('get_visible_resp', {'value': value})
 
+    def cmd_language_name(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.language_name(buff_name = buff_name)
+	self.listen_msgr.send_mess('language_name_resp', {'value': value})
 
+    def cmd_newline_conventions(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.newline_conventions(buff_name = buff_name)
+	self.listen_msgr.send_mess('newline_conventions_resp', {'value': value})
 
-  	
+    def cmd_pref_newline_convention(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.pref_newline_convention(buff_name = buff_name)
+	self.listen_msgr.send_mess('pref_newline_convention_resp', 
+	    {'value': value})
+
+    def cmd_open_file(self, arguments):
+	file_name = arguments['file_name']
+	new_buff_name = self.editor.open_file(file_name = file_name)
+	self.listen_msgr.send_mess('language_name_resp', 
+	    {'buff_name': new_buff_name})
+
+    def cmd_close_buffer(self, arguments):
+	buff_name = arguments['buff_name']
+	save = messaging.messarg2int(arguments['save'])
+	success = self.editor.app_close_buffer(buff_name, save)
+	self.listen_msgr.send_mess('close_buffer_resp', {'value': success})
+
+    def cmd_terminating(self, arguments):
+	self.cmd_mediator_closing(arguments)
+
+    def cmd_mediator_closing(self, arguments):
+	self.owner.mediator_closing(self.ID)
+
+    def cmd_update(self, arguments):
+	debug.virtual('ClientEditor.cmd_update')
+
+class ClientEditorChangeSpec(Object.OwnerObject):
+    """implementation of ClientEditor for an editor which supports change
+    specification events for all user-initiated changes
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, editor, **args):
+	self.deep_construct(ClientEditor,
+	                    {
+			    },
+			    args, new_default = {'editor': editor})
+
+    def cmd_update(self, arguments):
+# editor supports change specification events for all user-initiated
+# changes.  Therefore, on_change will already handle updates, except for
+# selection and current buffer changes, so those are the only ones we
+# need to send here
+	updates = debug.virtual('ClientEditor.cmd_update')
+	updates =  self.sel_update(buff_name)
+	self.listen_msgr.send_mess('updates',
+	    {'value': updates})
 
 
 class ClientMainThread(Object.OwnerObject):
