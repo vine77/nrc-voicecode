@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 10 13:25:11 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:12:14 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,15 +29,10 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenForNewListenersThread</SPAN>(<A CLASS="DocLink" HREF="tcp_server.ListenForConnThread.html">ListenForConnThread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForNewListenersThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ListenForConnThread</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">port</SPAN>, <SPAN CLASS="Argument">new_socks</SPAN>, <SPAN CLASS="Argument">new_socks_lock</SPAN>, <SPAN CLASS="Argument">raise_event</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenForConnThread.log_new_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.log_new_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenForConnThread.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start listening for new connections.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from threading.Thread</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__bootstrap</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -55,10 +50,15 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.start</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ListenForConnThread</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">port</SPAN>, <SPAN CLASS="Argument">new_socks</SPAN>, <SPAN CLASS="Argument">new_socks_lock</SPAN>, <SPAN CLASS="Argument">raise_event</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ListenForConnThread.log_new_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.log_new_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ListenForConnThread.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenForConnThread.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start listening for new connections.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -66,6 +66,51 @@
 *none*-- </P>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.ListenForConnThread.log_new_conn" CLASS="Method">tcp_server.ListenForConnThread.log_new_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Logs a newly received socket connection, so that main event
+loop can later shake hands with it.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>socket client_socket</EM>
+<DD>Newly received socket connection
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.ListenForConnThread.run" CLASS="Method">tcp_server.ListenForConnThread.run(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Start listening for new connections.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
 
 <DL>
 
@@ -193,51 +238,6 @@ Attributes are only set if they already exist in
 <EM>{STR: ANY}</EM> attrs
 <DD>dictionary with attribute name as the keys and
  default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="tcp_server.ListenForConnThread.log_new_conn" CLASS="Method">tcp_server.ListenForConnThread.log_new_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">client_socket</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Logs a newly received socket connection, so that main event
-loop can later shake hands with it.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>socket client_socket</EM>
-<DD>Newly received socket connection
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="tcp_server.ListenForConnThread.run" CLASS="Method">tcp_server.ListenForConnThread.run(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Start listening for new connections.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 10 13:23:43 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:15:21 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -224,7 +224,12 @@ containing this buffer.<STRONG>INPUTS</STRONG>        <EM>none</EM><STRONG>OUTPU
 <H2 ID="SourceBuff.SourceBuff.backspace" CLASS="Method">SourceBuff.SourceBuff.backspace(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)</H2>
 <P>Delete a number of spaces before the cursor.</P>
 
-<STRONG>INPUTS</STRONG>
+If possible, the editor should simulate backspace keys, so as to
+ensure that the effect of this command is identical to manual
+backspacing.However, if this is not possible, it can simulate backspacing as
+closely as possible, or use BackspaceMixIn to do server-side
+backspacing, or perform the equivalent algorithm on the client
+side.<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>

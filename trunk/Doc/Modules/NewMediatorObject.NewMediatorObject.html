@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 10 13:26:08 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:13:21 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -40,7 +40,7 @@
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)<SPAN CLASS="OneLiner"> # initiate user selection of a recent utterance to correct</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.define_config_functions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.define_config_functions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
-    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.delete_editor_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.delete_editor_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.delete_editor_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.delete_editor_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.editor_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.editor_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.interpreter"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.interpreter</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return a reference to the mediator's current CmdInterp object</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.new_app_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.new_app_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -58,6 +58,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.standard_symbols_in</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>)<SPAN CLASS="OneLiner"> # Compile symbols defined in a series of source files</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.stored_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.stored_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.trust_current_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.trust_current_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -155,6 +156,10 @@ is false)
 <EM>BOOL test_next</EM>
 <DD>flag to indicate that the mediator should run
 regression tests using the next editor to connect
+<DT>
+<EM>BOOL testing</EM>
+<DD>flag indicating that the mediator is currently
+running regression tests.
 <DT>
 <EM>STR config_file</EM>
 <DD>file which was used to configure the mediator.
@@ -598,13 +603,16 @@ dialog/prompt.  Normally disabled except during regression
 testing.  If None, use current setting.
 </DL>
 <STRONG>OUTPUTS</STRONG><EM>none</EM> 
-<H2 ID="NewMediatorObject.NewMediatorObject.delete_editor_cbk" CLASS="Method">NewMediatorObject.NewMediatorObject.delete_editor_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
+<H2 ID="NewMediatorObject.NewMediatorObject.delete_editor_cbk" CLASS="Method">NewMediatorObject.NewMediatorObject.delete_editor_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
 <P>None</P>
 
 callback from the application manager indicating that
 an editor closed or disconnected from the mediator<STRONG>INPUTS</STRONG>
 <DL>
 
+<DT>
+<EM>STR app_name</EM>
+<DD>name of the editor 
 <DT>
 <EM>STR instance_name</EM>
 <DD>name of the application instance
@@ -929,6 +937,24 @@ VoiceCode, or when it notifies VoiceCode of a new window.<STRONG>INPUTS</STRONG>
 <DD>1 if RSM should trust that the current
 window corresponds to the editor when the editor first connects to
 VoiceCode, or when it notifies VoiceCode of a new window.
+</DL>
+<STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="NewMediatorObject.NewMediatorObject.user_message" CLASS="Method">NewMediatorObject.NewMediatorObject.user_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
+<P>None</P>
+
+displays a user message via the appropriate channel
+(e.g. stdout, or a MediatorConsole status line, or an 
+editor-specific status line if supported.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR message</EM>
+<DD>the message
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor from which the message
+originated, or None if it is not associated with a specific
+editor.
 </DL>
 <STRONG>OUTPUTS</STRONG><EM>none</EM>
 <H2 ID="NewMediatorObject.NewMediatorObject.window_info" CLASS="Method">NewMediatorObject.NewMediatorObject.window_info(<SPAN CLASS="Argument">self</SPAN>)</H2>

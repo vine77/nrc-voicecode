@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 24 23:25:52 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:10:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,7 +32,7 @@
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.add_prefix"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.add_prefix</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>)<SPAN CLASS="OneLiner"> # add a title prefix for an editor application</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>)
-    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # names of application corresponding to an instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # name of application corresponding to an instance</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_names"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_names</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
@@ -63,6 +63,7 @@
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.stored_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.stored_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.suspend_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.suspend_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.trust_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.trust_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
@@ -337,7 +338,7 @@ None)
 
 </DL>
 <H2 ID="AppMgr.AppMgr.app_name" CLASS="Method">AppMgr.AppMgr.app_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
-<P>names of application corresponding to an instance</P>
+<P>name of application corresponding to an instance</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -1079,6 +1080,31 @@ VoiceCode, or when it notifies VoiceCode of a new window.</P>
 <DD>1 if RSM should trust that the current
 window corresponds to the editor when the editor first connects to
 VoiceCode, or when it notifies VoiceCode of a new window.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppMgr.AppMgr.user_message" CLASS="Method">AppMgr.AppMgr.user_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+sends a user message up the chain to the NewMediatorObject to
+be displayed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR message</EM>
+<DD>the message
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor from which the message
+originated, or None if it is not associated with a specific
+editor.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

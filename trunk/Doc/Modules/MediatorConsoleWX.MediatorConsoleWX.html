@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 04 18:18:59 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:13:50 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -33,6 +33,7 @@
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.push_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.push_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # makes the given wxWindow the foreground one (for the system)</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -57,10 +58,12 @@
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.heard_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.heard_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">gram_type=None</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_gram_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_gram_factory</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -265,6 +268,37 @@ foreground one (for the system)</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.user_message" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.user_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+displays a user message (usually on a MediatorConsole status 
+line, but Natspeak-style tooltips might also be a possibility)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR message</EM>
+<DD>the message
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor from which the message
+originated, or None if it is not associated with a specific
+editor.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the MediatorConsole implementation has a means
+of displaying user messages 
+
+</DL>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>
 
@@ -679,6 +713,35 @@ running</P>
 (or if there wasn't one to start with)
 
 </DL>
+<H2 ID="MediatorConsole.MediatorConsole.heard_utterance" CLASS="Method">MediatorConsole.MediatorConsole.heard_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">gram_type=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from mediator to provide feedback to the user 
+that an utterance was heard</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the instance whose grammar
+recognized the utterance
+<DT>
+<EM>[(STR, STR)]</EM> words
+<DD>list of spoken, written forms 
+representing the recognition results
+<DT>
+<EM>STR gram_type</EM>
+<DD>type of grammar 
+('dictation', <CODE>selection</CODE>, or 'correction')
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="MediatorConsole.MediatorConsole.raise_active_window" CLASS="Method">MediatorConsole.MediatorConsole.raise_active_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -750,6 +813,37 @@ be restored to the foreground</P>
 <EM>WasForegroundWindow</EM>
 <DD>the object which can be used to restore
 the window to the foreground
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.user_message" CLASS="Method">MediatorConsole.MediatorConsole.user_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+displays a user message (usually on a MediatorConsole status 
+line, but Natspeak-style tooltips might also be a possibility)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR message</EM>
+<DD>the message
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor from which the message
+originated, or None if it is not associated with a specific
+editor.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the MediatorConsole implementation has a means
+of displaying user messages 
 
 </DL>
 
