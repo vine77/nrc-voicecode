@@ -768,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02111B18>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01ADD7C8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3472,6 +3472,16 @@ Heard new statement return size of promised tax cuts
   9:         
 
 *** End of source buffer ***
+AD: TEST BELOW PRODUCES FAULTY OUTPUT... SYMBOL excess
+SHOULD NOT APPEAR IN LIST OF SYMBOLS BECAUSE IT WAS A MISRECOGNIZED
+THAT WAS REINTERPRETED
+
+Recent interpreted symbols were: 
+   written as: 'excess', spoken as: '['excess']'
+   written as: 'success', spoken as: '['success']'
+   written as: 'RedBook', spoken as: '['red', 'book']'
+   written as: 'act_out', spoken as: '['act', 'out']'
+   written as: 'size_of_promised_tax_cuts', spoken as: '['size', 'of', 'promised', 'tax', 'cuts']'
 Removing item sz_of_prom_tax_cuts from list ['size_of_promised_tax_cuts'], with a max number of occurences of None
 Returning ['size_of_promised_tax_cuts']
   4: success = 1
@@ -10181,6 +10191,35 @@ Heard catch exceptions
 
 
 *******************************************************************************
+* Name        : recent_symbols_retrieval
+* Description : Test retrieval of recently dictated symbols.
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Before dictation
+Recent interpreted symbols were: 
+
+
+>>> Testing console command: say(['class', 'some', 'class', 'inherits', 'from', 'some', 'other', 'class'], user_input='0
+0
+')
+Heard class some class inherits from some other class
+*** Start of source buffer ***
+  1: class SomeClass(some_other_class<CURSOR>):
+  2:     
+
+*** End of source buffer ***
+After dictation
+Recent interpreted symbols were: 
+   written as: 'SomeClass', spoken as: '['some', 'class']'
+   written as: 'some_other_class', spoken as: '['some', 'other', 'class']'
+
+
+*******************************************************************************
 * Name        : redundant_translation
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
@@ -13177,9 +13216,37 @@ Heard new statement
 
 ..
 ----------------------------------------------------------------------
-Ran 2 tests in 0.071s
+Ran 2 tests in 0.060s
 
 OK
+
+*** Starting acceptance tests:
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['some', 'symbol'], user_input='None')
+Heard some symbol
+*** Start of source buffer ***
+  1: some_symbol<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['reformat', 'recent'], user_input='None')
+RSMInfrastructure.reformat_recent invoked... this will eventually display the reformat recent dialog, but it doesn't work yet
+NOTE: This test doesn't actually work. For some reason, the dialog is not invoked.
+
+
+But 'reformat recent' DOES display the dialog when I say it in interactive mode.
+
+
+Presumably because the event loop is different in testing mode than in interactive mode. Need to fix that someday.
+
 
 
 *******************************************************************************
@@ -13464,12 +13531,13 @@ Heard select previous index equals zero
 
 ...
 ----------------------------------------------------------------------
-Ran 3 tests in 0.030s
+Ran 3 tests in 0.020s
 
 OK
 
 
 
 -----------------------------------------------
-Test suite completed in:  830.444000006 secs
+Test suite completed in:  718.532999992 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6
