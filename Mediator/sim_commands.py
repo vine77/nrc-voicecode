@@ -145,6 +145,7 @@ quit()
 import natlink
 import os, profile, re, string, sys, time
 import vc_globals
+from cStringIO import StringIO
 
 from debug import trace
 
@@ -625,16 +626,20 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             # Create temporary user input file
             #
             old_stdin = sys.stdin
-            temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
-            temp_file = open(temp_file_name, 'w')
+            temp_file = None
+            if 0:
+                temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
+                temp_file = open(temp_file_name, 'w')
 #        print 'temp file opened for writing'
-            sys.stdout.flush()
-            temp_file.write(user_input)
-            temp_file.close()
-            temp_file = open(temp_file_name, 'r')
+                sys.stdout.flush()
+                temp_file.write(user_input)
+                temp_file.close()
+                temp_file = open(temp_file_name, 'r')
 #        print 'temp file opened for reading'
+                sys.stdin = temp_file
+            else:
+                sys.stdin = StringIO(user_input)
             sys.stdout.flush()
-            sys.stdin = temp_file
             
         if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH') \
             or (self.bypass_for_dictation and not selection):
@@ -709,7 +714,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         #
         if user_input:
             sys.stdin = old_stdin
-            temp_file.close()
+            if temp_file is not None:
+                temp_file.close()
 
     def goto(self, pos):
         """Goes to position *INT pos* of the current buffer"""
