@@ -1955,7 +1955,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         b_sizer.Add(self.okb, 0, 0)
         b_sizer.Add(self.cancelb, 0, 0)
         main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
-        self.okb.SetDefault()
+
 # note: neither of these handlers gets called if a child control 
 # has the focus.
 # I thought they would be called if the focused control didn't have a

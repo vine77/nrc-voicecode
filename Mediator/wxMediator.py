@@ -56,8 +56,9 @@ import WinSystemMSW
 debug.config_traces(status="on", 
                     active_traces={
 #################################  
-                    'ReformatRecentSymbolsView.on_choose': 1,
-                    'ReformatRecentSymbolsView.on_recent_char': 1,
+                    'reformat_recent': 1,
+#                    'ReformatRecentSymbolsView.on_choose': 1,
+#                    'ReformatRecentSymbolsView.on_recent_char': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
