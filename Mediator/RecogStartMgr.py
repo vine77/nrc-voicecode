@@ -1010,6 +1010,7 @@ class RSMInfrastructure(RecogStartMgr):
         """
         debug.trace('RSMInfrastructure.interpret_dictation', 
             'instance = %s, result = %s' % (instance, repr(result.words())))
+        print "Heard %s" % repr(result.words())
         if self.known_instance(instance):
             debug.trace('RSMInfrastructure.interpret_dictation', 
                 'known instance')

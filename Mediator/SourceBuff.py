@@ -867,7 +867,10 @@ class SourceBuff(OwnerObject):
         
         *none*
         """
-        self.delete((self.cur_pos() - n_times, self.cur_pos()))
+        bs_string = ""
+        for ii in range(n_times):
+           bs_string = "%s%s" % (bs_string, chr(8))
+        self.insert(bs_string)
         
     def goto(self, pos):
 
