@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:10:21 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 08 13:03:53 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,10 +24,10 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffState</SPAN>(<A CLASS="DocLink" HREF="SourceBuff.SourceBuffCookie.html">SourceBuffCookie</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">fname</SPAN>, <SPAN CLASS="Argument">contents</SPAN>, <SPAN CLASS="Argument">selection</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">contents</SPAN>, <SPAN CLASS="Argument">selection</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffState.SourceBuffState.contents"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.contents</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns stored contents</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffState.SourceBuffState.get_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.get_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves range of stored selection.  </SPAN>
-    <A CLASS="DocLink" HREF="#SourceBuffState.SourceBuffState.name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns fname</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuffState.SourceBuffState.name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffState.SourceBuffState.name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns buff_name</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -48,8 +48,8 @@
 <DL>
 
 <DT>
-<EM>STR</EM> fname
-<DD>filename of buffer
+<EM>STR</EM> buff_name
+<DD>name of buffer
 <DT>
 <EM>STR</EM> text
 <DD>copy of the buffer contents
@@ -91,7 +91,7 @@ selection.  end is the offset into the buffer of the character
 following the selection (this matches Python's slice convention).
 </P>
 <H2 ID="SourceBuffState.SourceBuffState.name" CLASS="Method">SourceBuffState.SourceBuffState.name(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns fname</P>
+<P>returns buff_name</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>

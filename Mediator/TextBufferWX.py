@@ -258,7 +258,8 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	t = string.replace(text, self.nl, self.crnl)
 	self.contents_internal = before_internal + t + after_internal
 	self.program_initiated = 1
-	self.set_selection(s, e)
+#	self.set_selection(s, e)
+	self.underlying.SetSelection(st, en)
 	self.underlying.WriteText(text)
 	self.make_position_visible()
 	selection_start, selection_end = self.get_selection()

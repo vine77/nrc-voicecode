@@ -39,6 +39,15 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
     *TextBuffer, VisibleBuffer, NumberedLines underlying* -- underlying
     TextBuffer (also supporting VisibleBuffer and NumberedLines) 
+  
+    [SB_ServiceLang] *lang_srv* -- Language service used to know the
+    programming language of a source file.
+
+    [SB_ServiceLineManip] *line_srv* -- Service for manipulating lines.
+
+    [SB_ServiceIndent] *indent_srv* -- Code indentation service.
+
+    [SB_ServiceFullState] *state_srv* -- Buffer state save/restore service. 
     
     CLASS ATTRIBUTES**
     
@@ -48,10 +57,12 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3),
-                         'line_srv': sb_services.SB_ServiceLineManip(buff=self)})
+                         'line_srv': sb_services.SB_ServiceLineManip(buff=self),
+			 'state_srv': sb_services.SB_ServiceFullState(buff=self)})
         self.deep_construct(SourceBuffTB,
                             {'underlying': underlying_buffer},
                             attrs
+                            )
     def cleanup(self):
         """method to cleanup circular references by cleaning up 
 	any children, and then removing the reference to the parent
@@ -67,8 +78,9 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         self.lang_srv.cleanup()
 	self.line_srv.cleanup()
 	self.indent_srv.cleanup()
+	self.state_srv.cleanup()
 	SourceBuffNonCached.SourceBuffNonCached.cleanup(self)
-                            )
+
     def file_name(self):
         return self.buff_name
 
@@ -445,12 +457,12 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	SourceBuff
 
 	"""
-	return SourceBuffState.SourceBuffState
+	return self.state_srv._state_cookie_class()
 	
     def store_current_state(self):
 	"""stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
-	Store_current_state returns a "cookie" which can be passed to
+	store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
 	of the cookie will depend on the specific subclass of
 	SourceBuff.  In the most straightforward implementation, it 
@@ -479,10 +491,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*SourceBuffState* -- state cookie (see above)
 	"""
-	cookie = SourceBuffState.SourceBuffState(file_name = self.file_name, 
-	    contents = self.contents(), selection =
-	    self.get_selection())
-	return cookie
+	return self.state_srv.store_current_state()
 
     def restore_state(self, cookie):
 	"""restores the buffer to its state at the time when
@@ -501,12 +510,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if restore was successful
 
 	"""
-	if not self.valid_cookie(cookie):
-	    return 0
-	self.set_text(cookie.contents())
-	self.set_selection(cookie.get_selection())
-	self.print_buff_if_necessary()
-	return 1
+	return self.state_srv.restore_state(cookie)
 
 
     def compare_with_current(self, cookie, selection = 0):
@@ -527,14 +531,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if state is the same, false if it is not, or
 	it cannot be determined due to expiration of the cookie
 	"""
-	if not self.valid_cookie(cookie):
-	    return 0
-# unable to make comparison, so treat as false
-	if self.contents() != cookie.contents():
-	    return 0
-	if not selection:
-	    return 1
-	return self.get_selection() == cookie.get_selection()
+	return self.state_srv.compare_with_current(cookie, selection)
 	
     def valid_cookie(self, cookie):
 	"""checks whether a state cookie is valid or expired.
@@ -550,19 +547,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if cookie is valid (i.e. restore_state should be
 	able to work)
 	"""
-# this is not intended to be a complete test.  Basically, valid_cookie
-# is more important for SourceBuffs which have an internal undo-stack or
-# change history.  In the case, however, given the brute force implementation of
-# SourceBuffState, there isn't really much point in trying to detect whether 
-# the caller has forged a cookie.
-
-# do make sure that it is at least a subclass of SourceBuffState,
-# otherwise other cookie-related SourceBuffTB methods will fail
-	if not issubclass(cookie.__class__, self._state_cookie_class):
-	    return 0
-
-	return self.file_name == cookie.name()
-
+	return self.state_srv.valid_cookie(cookie)
 
     def newline_conventions(self):
         

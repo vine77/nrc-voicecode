@@ -193,7 +193,7 @@ class WaxEdSimPane(wxPanel):
 	self.command_space['the_pane'] = self
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
-	self.command_line_interp = code.InteractiveInterpreter(command_space)
+	self.command_line_interp = code.InteractiveInterpreter(self.command_space)
 
         self.prompt_line.Add(self.prompt, 0, wxALL, 4)
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
@@ -291,7 +291,7 @@ class WaxEdSimPane(wxPanel):
 #		    in sys.modules[self.__class__.__module__].__dict__, \
 #		    self.command_space
                 #	  exec command in self.command_space
-	        print self.command_space['quit_flag']
+#	        print self.command_space['quit_flag']
 	    except Exception, err:
 	        traceback.print_exc()
 	finally:
