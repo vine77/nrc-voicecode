@@ -338,3 +338,14 @@ def bell(length=3):
 # is redirected by regression testing
     sys.__stderr__.write(bell_string)
     sys.__stderr__.flush()
+
+# AD: Uncomment once we have upgraded to wxPython 2.5.    
+#import wx
+#def wxPython_is_unicode_build():
+#   if 'unicode' in wx.PlatformInfo:
+#      print "wxPython was built in Unicode mode"
+#      return True
+#   else:
+#      print "wxPython was built in ANSI mode"
+#      return False
+

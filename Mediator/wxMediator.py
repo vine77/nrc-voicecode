@@ -53,7 +53,7 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", 
+debug.config_traces(status="off", 
                     active_traces={
 #################################  
                     'reformat_recent': 1,

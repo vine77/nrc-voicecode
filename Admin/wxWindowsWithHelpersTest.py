@@ -33,18 +33,22 @@ class wxListCtrlTestDlg(wxDialogWithHelpers):
         self.list.SetStringItem(1,2, "item 1-2")
         
         EVT_LIST_ITEM_SELECTED(self.list, self.list.GetId(), self.on_list_ctrl_selected)
+        EVT_LIST_ITEM_ACTIVATED(self.list, self.list.GetId(), self.on_list_ctrl_item_activated)
         EVT_CHAR(self.list, self.on_list_char)
         
         self.list_ctrl_item_selected = None
         self.last_key_pressed = {}
         self.last_item_selected = {}
+        self.last_list_item_activated = None
         
     def on_button(self, event):
         self.button_was_clicked = true
 
     def on_list_ctrl_selected(self, event):
-#        print '-- on_list_ctrl_selected: invoked'
         self.list_ctrl_item_selected = event
+
+    def on_list_ctrl_item_activated(self, event):
+        self.last_list_item_activated = event.GetIndex()
         
     def on_list_char(self, event):
         self.last_key_pressed[self.list] = event.GetKeyCode()
@@ -107,6 +111,17 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg.list.Select(1)
        self.assert_(self.dlg.list_ctrl_item_selected != None,
                     "Selection of a list ctrl item did not invoke appropriate callback method.")
+           
+    # AD: Reactivate this test when we upgrade to wxPython 2.5 (ActivateNth does
+    #     not work with wxPython < 2.5)         
+    def ___test_ActivateNth(self):
+       self.assert_equals(None,
+                          self.dlg.last_list_item_activated,
+                          "List started out with an activated item")                          
+       self.dlg.list.ActivateNth(1)
+       self.assert_equals(1,
+                          self.dlg.last_list_item_activated,
+                          "Activating an element of the list did not invoke proper event handler")                          
                     
     def test_SendKey(self):
        self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) == None, 
