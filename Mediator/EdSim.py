@@ -56,7 +56,7 @@ class EdSim(AppState.AppState):
 	    language =None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
 
-    def curr_buffer_name(self):
+    def curr_buffer_name_from_app(self):
 
 	"""return the name of the current buffer
 
