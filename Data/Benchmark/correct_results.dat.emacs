@@ -340,7 +340,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 19ccac0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a65cd0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1897,7 +1897,8 @@ Associate 'popularity' with symbol (Enter selection):
 4 stored utterances, as expected
 
 
-WARNING: 0 recently dictated utterances (expected 4)
+4 recently dictated utterances, as expected
+
 
 ***Testing scratch that***
 
@@ -1906,29 +1907,13 @@ scratching 1
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
-  3:             re<CURSOR>turn 8
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: (New file)
-  3: Using the CPython shell
-*** Start of source buffer ***
-  1: <CURSOR>
+  3:       return 8<CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
-  3:       <CURSOR>      
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: (New file)
-  3: Using the CPython shell
-*** Start of source buffer ***
-  1: <CURSOR>
+  3:       <CURSOR>
 
 *** End of source buffer ***
 scratch 1 succeeded as expected
@@ -1939,18 +1924,12 @@ scratch 1 succeeded as expected
 3 recently dictated utterances, as expected
 
 
-WARNING: status of utterance 1 was 0 (expected 1)
-
-WARNING: status of utterance 2 was 0 (expected 1)
-
-WARNING: status of utterance 3 was 0 (expected 1)
-
 ***Moving cursor manually***
 
 *** Start of source buffer ***
   1: <CURSOR>class clown(student):
   2:    def popularity(self):
-  3:             
+  3:       
 
 *** End of source buffer ***
 
@@ -1958,19 +1937,24 @@ WARNING: status of utterance 3 was 0 (expected 1)
 
 scratching 1
 
-WARNING: scratch 1 failed unexpectedly
+*** Start of source buffer ***
+  1: class clown(student):
+  2:    def popularity(self):
+  3:       <CURSOR>
 
-3 stored utterances, as expected
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class clown(student):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+scratch 1 succeeded as expected
+
+2 stored utterances, as expected
 
 
-3 recently dictated utterances, as expected
+2 recently dictated utterances, as expected
 
-
-WARNING: status of utterance 1 was 0 (expected 1)
-
-WARNING: status of utterance 2 was 0 (expected 1)
-
-WARNING: status of utterance 3 was 0 (expected 1)
 
 
 >>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'B.'], user_input='0
@@ -1990,39 +1974,33 @@ Associate 'grades' with symbol (Enter selection):
   '2': B (*new*)
 
 > *** Start of source buffer ***
-  1: def grades(self):
-  2:    return B<CURSOR>class clown(student):
-  3:    def popularity(self):
-  4:             
+  1: class clown(student):
+  2:    def grades(self):
+  3:       return B<CURSOR>
 
 *** End of source buffer ***
 
-4 stored utterances, as expected
+3 stored utterances, as expected
 
 
-4 recently dictated utterances, as expected
+3 recently dictated utterances, as expected
 
-
-WARNING: status of utterance 2 was 0 (expected 1)
-
-WARNING: status of utterance 3 was 0 (expected 1)
-
-WARNING: status of utterance 4 was 0 (expected 1)
 
 
 >>> Testing console command: say(['select', 'clown'], user_input='None')
 *** Start of source buffer ***
-  1: def grades(self):
-  2:    return Bclass <SEL_START>clown<SEL_END>(student):
-  3:    def popularity(self):
-  4:             
+  1: class <SEL_START>clown<SEL_END>(student):
+  2:    def grades(self):
+  3:       return B
 
 *** End of source buffer ***
 
 ***Manually changing text
 
 *** Start of source buffer ***
-  1: president<CURSOR>
+  1: class president<CURSOR>(student):
+  2:    def grades(self):
+  3:       return B
 
 *** End of source buffer ***
 
@@ -2114,39 +2092,18 @@ utterance 2 was changed
 utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: blahblah.py has auto save data; consider M-x recover-file
-*** Start of source buffer ***
-  1: <CURSOR>
+  1: class cloud(student):
+  2:    fine method popularityreturn 8<CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
   1: class cloud(student):
-  2:       fine method popularityretur<CURSOR>n 8
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: blahblah.py has auto save data; consider M-x recover-file
-*** Start of source buffer ***
-  1: <CURSOR>
+  2:    fine method popularity<CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
   1: class cloud(student):
-  2:       fine method popular<CURSOR>ity
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: blahblah.py has auto save data; consider M-x recover-file
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
-  2:    <CURSOR>   
+  2:    <CURSOR>
 
 *** End of source buffer ***
 Associate 'popularity' with symbol (Enter selection):
@@ -2182,15 +2139,86 @@ were reinterpreted, as expected
 4 recently dictated utterances, as expected
 
 
-WARNING: status of utterance 3 was 0 (expected 1)
-
-WARNING: status of utterance 4 was 0 (expected 1)
-
 ***Testing correction of another recent utterance***
 
+detecting changes
+utterance 4: change = {'cloud': 'clown'}
+word cloud being replaced with clown
+utterance 4 was changed 
+utterance 4 was corrected
+about to reinterpret
+*** Start of source buffer ***
+  1: class cloud(student):
+  2:    def popularity(self):
+  3:       return 8<CURSOR>
 
-can't correct error 4 utterances ago
-because can_reinterpret returned false
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class cloud(student):
+  2:    def popularity(self):
+  3:       <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class cloud(student):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class cloud(student<CURSOR>):
+  2:    
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Associate 'clown' with symbol (Enter selection):
+
+  '0': no association
+  '1': clown (*new*)
+  '2': Clown (*new*)
+  '3': CLOWN (*new*)
+
+> Associate 'student' with symbol (Enter selection):
+
+  '0': no association
+  '1': student (*new*)
+  '2': Student (*new*)
+  '3': STUDENT (*new*)
+
+> *** Start of source buffer ***
+  1: class clown(student<CURSOR>):
+  2:    
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class clown(student):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+Associate 'popularity' with symbol (Enter selection):
+
+  '0': no association
+  '1': popularity (*new*)
+  '2': Popularity (*new*)
+  '3': POPULARITY (*new*)
+
+> *** Start of source buffer ***
+  1: class clown(student):
+  2:    def popularity(self):
+  3:       <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class clown(student):
+  2:    def popularity(self):
+  3:       return 8<CURSOR>
+
+*** End of source buffer ***
+
+all utterances from 4 to the present
+were reinterpreted, as expected
 
 
 ***Testing state***
@@ -2202,14 +2230,10 @@ because can_reinterpret returned false
 4 recently dictated utterances, as expected
 
 
-WARNING: status of utterance 3 was 0 (expected 1)
-
-WARNING: status of utterance 4 was 0 (expected 1)
-
 
 >>> Testing console command: say(['new', 'line'], user_input='')
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class clown(student):
   2:    def popularity(self):
   3:       return 8
   4:    <CURSOR>
@@ -2219,7 +2243,7 @@ WARNING: status of utterance 4 was 0 (expected 1)
 
 >>> Testing console command: say(['back indent'], user_input='')
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class clown(student):
   2:    def popularity(self):
   3:       return 8
   4: <CURSOR>
@@ -2237,7 +2261,7 @@ Associate 'excess' with symbol (Enter selection):
   '3': EXCESS (*new*)
 
 > *** Start of source buffer ***
-  1: class cloud(student):
+  1: class clown(student):
   2:    def popularity(self):
   3:       return 8
   4: excess = 0<CURSOR>
@@ -2247,7 +2271,7 @@ Associate 'excess' with symbol (Enter selection):
 ***Manually changing text
 
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class clown(student):
   2:    def popularity(self):
   3:       return 8
   4: excess<CURSOR>
@@ -2274,7 +2298,7 @@ reinterpretation failed, as expected
 ***Fixing error manually***
 
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class clown(student):
   2:    def popularity(self):
   3:       return 8
   4: <CURSOR>
@@ -2346,38 +2370,16 @@ Associate 'results' with symbol (Enter selection):
 
 scratching 1
 
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: blahblah.py has auto save data; consider M-x recover-file
-  3: Using the CPython shell
-  4: -- vcode-trace: buf=#<buffer *Messages*>
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
   2:    def popularity(self):
-  3:             return 8
-  4:          excess = 1<CURSOR>
-  5:          results[0] = 0
+  3:       return 8
+  4: excess = 1
+  5: results[0] = 0<CURSOR>
 
 *** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>Wrote c:/eclipse/workspace/VCode/Environments/Emacs/ignorethisfile.tmp
-  2: blahblah.py has auto save data; consider M-x recover-file
-  3: Using the CPython shell
-  4: -- vcode-trace: buf=#<buffer *Messages*>
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
   2:    def popularity(self):
-  3:             return 8
-  4:      <CURSOR>    excess = 1
-  5:          
+  3:       return 8
+  4: excess = 1
+  5: <CURSOR>
 
 *** End of source buffer ***
 scratch 1 succeeded as expected
@@ -2391,15 +2393,55 @@ scratch 1 succeeded as expected
 9 recently dictated utterances, as expected
 
 
-WARNING: status of utterance 1 was 0 (expected 1)
-
-WARNING: status of utterance 2 was 0 (expected 1)
-
 ***Testing correction after scratch that***
 
+detecting changes
+utterance 2: change = {'excess': 'access'}
+word excess being replaced with access
+utterance 2 was changed 
+utterance 2 was corrected
+about to reinterpret
+  2:    def popularity(self):
+  3:       return 8
+  4: excess = 1
+  5: <CURSOR>
 
-can't correct error 2 utterances ago
-because can_reinterpret returned false
+*** End of source buffer ***
+  2:    def popularity(self):
+  3:       return 8
+  4: excess = 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: class clown(student):
+  2:    def popularity(self):
+  3:       return 8
+  4: <CURSOR>
+
+*** End of source buffer ***
+Associate 'access' with symbol (Enter selection):
+
+  '0': no association
+  '1': access (*new*)
+  '2': Access (*new*)
+  '3': ACCESS (*new*)
+
+>   2:    def popularity(self):
+  3:       return 8
+  4: access = 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+  2:    def popularity(self):
+  3:       return 8
+  4: access = 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+
+all utterances from 2 to the present
+were reinterpreted, as expected
 
 
 ***Testing state***
@@ -2410,10 +2452,6 @@ because can_reinterpret returned false
 
 9 recently dictated utterances, as expected
 
-
-WARNING: status of utterance 1 was 0 (expected 1)
-
-WARNING: status of utterance 2 was 0 (expected 1)
 
 
 *******************************************************************************
@@ -2498,6 +2536,42 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
  16:     - pretty printing???
  17:     
  18: 
+
+
+*******************************************************************************
+* Name        : compile_symbols
+* Description : Testing voice command for compiling symbols
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+*** Start of source buffer ***
+  1: <CURSOR># This is a small test buffer for Python
+  2: 
+  3: 
+  4: 
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Before compiling symbols, symbols are:
+
+_cached_symbols_as_one_string is:
+   
+*** Start of source buffer ***
+  1: <CURSOR># This is a small test buffer for Python
+  2: 
+  3: 
+  4: 
+After compiling symbols, symbols are:
+
+AClass: ['a class']
+ASuper: ['a super']
+a_method: ['a method']
+class: ['class']
+def: ['def', 'definition', 'default', 'define', 'defined', 'deaf']
+print: ['print']
+self: ['self']
+x: ['x']
+_cached_symbols_as_one_string is:
+    class  AClass  ASuper  def  a_method  self  x  print 
 
 
 *******************************************************************************
@@ -2889,6 +2963,26 @@ EdSim.__del__
 
 
 *******************************************************************************
+* Name        : large_messages
+* Description : Send a message that has more than 1024 character (length of a message chunk)
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+WARNING: source file 'tmp.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+111: 12345678
+112: 12345678
+113: 12345678
+114: 1234567<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : mediator_console
 * Description : testing mediator console commands
 *******************************************************************************
@@ -3170,7 +3264,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 2126a30> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 1aaa938> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -8134,7 +8228,7 @@ SelectWinGramDummy for buffer None, window 14
 init
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14]
 window #14:
 all instances for window:
@@ -8152,13 +8246,13 @@ new buffer fish.C for instance 1
   7:   horiz_pos = 0;
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14]
 window #14:
 all instances for window:
 emacs(0)
 
-starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'EMACS')
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer None, window 20
 init
 DictWinGramDummy for buffer = 'fish.C', window 20
@@ -8174,7 +8268,7 @@ DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14, 20]
 window #14:
 all instances for window:
@@ -8183,10 +8277,10 @@ window #20:
 all instances for window:
 emacs(0)
 
-starting recognition in  (50, 'D:\\Projects', 'BROWSEUI')
+starting recognition in  (50, 'D:\\Projects', 'browseui')
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14, 20]
 window #14:
 all instances for window:
@@ -8219,24 +8313,24 @@ init
 success
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
 all instances for window:
 emacs(1)
 
-starting recognition in  (8, 'ttssh - acappella', 'TELNET')
+starting recognition in  (8, 'ttssh - acappella', 'telnet')
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
 all instances for window:
 emacs(1)
 
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 DictWinGramDummy for buffer = 'bug.c', window 5
 init
 SelectWinGramDummy for buffer 'bug.c', window 5
@@ -8247,7 +8341,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 activating:  5  
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8255,14 +8349,14 @@ all instances for window:
 emacs(1)
 
 suspending  emacs(1)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8277,7 +8371,7 @@ windows:  []
 
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8290,7 +8384,7 @@ init
 success
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8300,7 +8394,7 @@ emacs(1)
 
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8308,7 +8402,7 @@ all instances for window:
 emacs(2)
 emacs(1)
 
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 DictWinGramDummy for buffer = 'dog.q', window 5
 init
 SelectWinGramDummy for buffer 'dog.q', window 5
@@ -8323,7 +8417,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8333,7 +8427,7 @@ emacs(1)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8342,7 +8436,7 @@ emacs(2)
 emacs(1)
 
 suspending  emacs(2)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'dog.q', window 5
 deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
@@ -8353,7 +8447,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8363,7 +8457,7 @@ emacs(1)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8372,7 +8466,7 @@ emacs(2)
 emacs(1)
 
 resuming  emacs(1)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -8385,7 +8479,7 @@ DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8395,7 +8489,7 @@ emacs(2)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8420,7 +8514,7 @@ new buffer dog.pl for instance 10
 *** End of source buffer ***
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8443,7 +8537,7 @@ window 5
 known windows [15, 14, 5, 20]
 } state
 
-starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'EXCEED')
+starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 DictWinGramDummy for buffer = 'dog.pl', window 15
 init
 SelectWinGramDummy for buffer 'dog.pl', window 15
@@ -8456,7 +8550,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8464,14 +8558,14 @@ all instances for window:
 Vim(0)
 
 suspending  Vim(0)
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8486,7 +8580,7 @@ instance emacs(3)
 (unknown module)
 windows:  []
 
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
@@ -8502,7 +8596,7 @@ init
 success
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8510,7 +8604,7 @@ all instances for window:
 emacs(3)
 Vim(0)
 
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 DictWinGramDummy for buffer = 'nothing.py', window 15
 init
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -8525,7 +8619,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8534,7 +8628,7 @@ emacs(3)
 Vim(0)
 
 suspending  emacs(3)
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -8545,7 +8639,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8554,7 +8648,7 @@ emacs(3)
 Vim(0)
 
 resuming  Vim(0)
-starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'EXCEED')
+starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
@@ -8569,7 +8663,7 @@ DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8584,13 +8678,13 @@ SelectWinGramDummy for buffer None, window 25
 init
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25]
 window #25:
 all instances for window:
 emacs(4)
 
-starting recognition in  (25, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+starting recognition in  (25, 'emacs - (Yak 4) - .cshrc', 'exceed')
 DictWinGramDummy for buffer = '.cshrc', window 25
 init
 SelectWinGramDummy for buffer '.cshrc', window 25
@@ -8601,19 +8695,19 @@ DictWinGramDummy for buffer = '.cshrc', window 25
 activating:  25  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25]
 window #25:
 all instances for window:
 emacs(4)
 
 app reports new window (is current)
-current is (26, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 26
 init
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -8622,7 +8716,7 @@ window #26:
 all instances for window:
 emacs(4)
 
-starting recognition in  (26, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+starting recognition in  (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 DictWinGramDummy for buffer = '.cshrc', window 26
 init
 SelectWinGramDummy for buffer '.cshrc', window 26
@@ -8633,7 +8727,7 @@ DictWinGramDummy for buffer = '.cshrc', window 26
 activating:  26  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -8643,10 +8737,10 @@ all instances for window:
 emacs(4)
 
 app reports new window (is not current)
-current is (15, 'xterm - acappella', 'EXCEED')
+current is (15, 'xterm - acappella', 'exceed')
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -8657,7 +8751,7 @@ emacs(4)
 
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -8666,8 +8760,8 @@ Vim(0)
 emacs(3)
 
 but now it is
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 27
 init
 DictWinGramDummy for buffer = '.cshrc', window 27
@@ -8680,7 +8774,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 activating:  27  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -8694,7 +8788,7 @@ emacs(4)
 
 new universal instance of WaxEdit 12
 now it is on WaxEdit
-starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'PYTHON')
+starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'python')
 SelectWinGramDummy for buffer None, global
 init
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -8713,8 +8807,8 @@ instance WaxEdit(0)
 windows:  []
 
 but now it is
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer 'large_buff.py', global
 activating:  global  exclusive 
 
@@ -8729,7 +8823,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 deactivating
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -8755,8 +8849,8 @@ del
 DictWinGramDummy for buffer = 'large_buff.py', global
 del
 and now the WaxEdit is gone
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer '.cshrc', window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
@@ -8765,7 +8859,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 activating:  27  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -8791,7 +8885,7 @@ SelectWinGramDummy for buffer None, window 14
 init
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14]
 window #14:
 all instances for window:
@@ -8809,13 +8903,13 @@ new buffer fish.C for instance 1
   7:   horiz_pos = 0;
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14]
 window #14:
 all instances for window:
 emacs(0)
 
-starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'EMACS')
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer None, window 20
 init
 DictWinGramDummy for buffer = 'fish.C', window 20
@@ -8831,7 +8925,7 @@ DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14, 20]
 window #14:
 all instances for window:
@@ -8840,10 +8934,10 @@ window #20:
 all instances for window:
 emacs(0)
 
-starting recognition in  (50, 'D:\\Projects', 'BROWSEUI')
+starting recognition in  (50, 'D:\\Projects', 'browseui')
 
 instance emacs(0)
-running in module EMACS
+running in module emacs
 windows:  [14, 20]
 window #14:
 all instances for window:
@@ -8859,7 +8953,7 @@ SelectWinGramDummy for buffer None, window 5
 init
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8881,24 +8975,24 @@ now specifying window
 failed
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
 all instances for window:
 emacs(1)
 
-starting recognition in  (8, 'ttssh - acappella', 'TELNET')
+starting recognition in  (8, 'ttssh - acappella', 'telnet')
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
 all instances for window:
 emacs(1)
 
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 DictWinGramDummy for buffer = 'bug.c', window 5
 init
 SelectWinGramDummy for buffer 'bug.c', window 5
@@ -8909,7 +9003,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 activating:  5  
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8917,14 +9011,14 @@ all instances for window:
 emacs(1)
 
 suspending  emacs(1)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8939,7 +9033,7 @@ windows:  []
 
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8952,7 +9046,7 @@ init
 success
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8962,7 +9056,7 @@ emacs(1)
 
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8970,7 +9064,7 @@ all instances for window:
 emacs(2)
 emacs(1)
 
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 DictWinGramDummy for buffer = 'dog.q', window 5
 init
 SelectWinGramDummy for buffer 'dog.q', window 5
@@ -8985,7 +9079,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -8995,7 +9089,7 @@ emacs(1)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -9004,7 +9098,7 @@ emacs(2)
 emacs(1)
 
 suspending  emacs(2)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'dog.q', window 5
 deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
@@ -9015,7 +9109,7 @@ DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -9025,7 +9119,7 @@ emacs(1)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -9034,7 +9128,7 @@ emacs(2)
 emacs(1)
 
 resuming  emacs(1)
-starting recognition in  (5, 'ttssh - acappella', 'TELNET')
+starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -9047,7 +9141,7 @@ DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
 
 instance emacs(1)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -9057,7 +9151,7 @@ emacs(2)
 
 
 instance emacs(2)
-running in module TELNET
+running in module telnet
 windows:  [5]
 window #5:
 shared
@@ -9082,7 +9176,7 @@ new buffer dog.pl for instance 10
 *** End of source buffer ***
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9105,7 +9199,7 @@ window 5
 known windows [15, 14, 5, 20]
 } state
 
-starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'EXCEED')
+starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 DictWinGramDummy for buffer = 'dog.pl', window 15
 init
 SelectWinGramDummy for buffer 'dog.pl', window 15
@@ -9118,7 +9212,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9126,14 +9220,14 @@ all instances for window:
 Vim(0)
 
 suspending  Vim(0)
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9147,7 +9241,7 @@ SelectWinGramDummy for buffer None, window 15
 init
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9155,7 +9249,7 @@ all instances for window:
 emacs(3)
 Vim(0)
 
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 DictWinGramDummy for buffer = 'nothing.py', window 15
 init
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -9170,7 +9264,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9182,7 +9276,7 @@ now specifying window
 failed
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9190,7 +9284,7 @@ all instances for window:
 emacs(3)
 Vim(0)
 
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -9203,7 +9297,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9212,7 +9306,7 @@ emacs(3)
 Vim(0)
 
 suspending  emacs(3)
-starting recognition in  (15, 'xterm - acappella', 'EXCEED')
+starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -9223,7 +9317,7 @@ DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 
 instance emacs(3)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9232,7 +9326,7 @@ emacs(3)
 Vim(0)
 
 resuming  Vim(0)
-starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'EXCEED')
+starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
@@ -9247,7 +9341,7 @@ DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9262,13 +9356,13 @@ SelectWinGramDummy for buffer None, window 25
 init
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25]
 window #25:
 all instances for window:
 emacs(4)
 
-starting recognition in  (25, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+starting recognition in  (25, 'emacs - (Yak 4) - .cshrc', 'exceed')
 DictWinGramDummy for buffer = '.cshrc', window 25
 init
 SelectWinGramDummy for buffer '.cshrc', window 25
@@ -9279,19 +9373,19 @@ DictWinGramDummy for buffer = '.cshrc', window 25
 activating:  25  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25]
 window #25:
 all instances for window:
 emacs(4)
 
 app reports new window (is current)
-current is (26, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 26
 init
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -9300,7 +9394,7 @@ window #26:
 all instances for window:
 emacs(4)
 
-starting recognition in  (26, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+starting recognition in  (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 DictWinGramDummy for buffer = '.cshrc', window 26
 init
 SelectWinGramDummy for buffer '.cshrc', window 26
@@ -9311,7 +9405,7 @@ DictWinGramDummy for buffer = '.cshrc', window 26
 activating:  26  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -9321,10 +9415,10 @@ all instances for window:
 emacs(4)
 
 app reports new window (is not current)
-current is (15, 'xterm - acappella', 'EXCEED')
+current is (15, 'xterm - acappella', 'exceed')
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26]
 window #25:
 all instances for window:
@@ -9335,7 +9429,7 @@ emacs(4)
 
 
 instance Vim(0)
-running in module EXCEED
+running in module exceed
 windows:  [15]
 window #15:
 shared
@@ -9344,8 +9438,8 @@ Vim(0)
 emacs(3)
 
 but now it is
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 27
 init
 DictWinGramDummy for buffer = '.cshrc', window 27
@@ -9358,7 +9452,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 activating:  27  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -9372,7 +9466,7 @@ emacs(4)
 
 new universal instance of WaxEdit 12
 now it is on WaxEdit
-starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'PYTHON')
+starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'python')
 SelectWinGramDummy for buffer None, global
 init
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -9391,8 +9485,8 @@ instance WaxEdit(0)
 windows:  []
 
 but now it is
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer 'large_buff.py', global
 activating:  global  exclusive 
 
@@ -9407,7 +9501,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 deactivating
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -9433,8 +9527,8 @@ del
 DictWinGramDummy for buffer = 'large_buff.py', global
 del
 and now the WaxEdit is gone
-current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
-starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
+current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
+starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer '.cshrc', window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
@@ -9443,7 +9537,7 @@ DictWinGramDummy for buffer = '.cshrc', window 27
 activating:  27  
 
 instance emacs(4)
-running in module EXCEED
+running in module exceed
 windows:  [25, 26, 27]
 window #25:
 all instances for window:
@@ -10038,24 +10132,13 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 * Description : temporary test
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-*** Start of source buffer ***
-  1: <CURSOR># This is a small test buffer for Python
-  2: 
-  3: 
-  4: 
-*** Start of source buffer ***
-  1: nothing left<CURSOR>
-
-*** End of source buffer ***
 
 
 
 -----------------------------------------------
-Test suite completed in:  798.308000088 secs
+Test suite completed in:  893.825999975 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bba298>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bbe9e0>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

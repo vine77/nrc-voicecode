@@ -259,6 +259,12 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vcode-cmd-set-text" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 
+;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
+;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vcode-try-parsing-message" 1 vcode-traces-on)
+;(cl-puthash "vr-output-filter" 1 vcode-traces-on)
+
+
 ; DCF - tracing indentation problems (at Alain's suggestion)
 (cl-puthash "code-config-py-mode-for-regresion-testing" 1 vcode-traces-on)
 
@@ -1029,7 +1035,7 @@ Changes are put in a changes queue `vr-queued-changes.
 (defun vr-execute-event-handler (handler vr-request)
   (let ((vr-changes-caused-by-sr-cmd (nth 0 vr-request))
 	(vr-request-mess (nth 1 vr-request)))
-    (vr-log "**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S\n" vr-changes-caused-by-sr-cmd)
+    (vcode-trace "vr-execute-event-handler" "vr-changes-caused-by-sr-cmd=%S, handler=%S\n" vr-changes-caused-by-sr-cmd handler)
 
     ;;;
     ;;; Fix the message arguments that refer to buffer positions
@@ -1046,13 +1052,21 @@ Changes are put in a changes queue `vr-queued-changes.
 	;;;
 	;;; If in debug mode, let the debugger intercept errors.
 	;;;
-	(apply handler (list vr-request)) 
+        (progn
+	    (vcode-trace "vr-execute-event-handler" "Executing handler in debug mode\n")
+  	    (apply handler (list vr-request)) 
+	    (vcode-trace "vr-execute-event-handler" "Finished executing handler in debug mode\n")
+        )
 
       ;;; 
       ;;; Not debug mode. We intercept errors ourself.
       ;;;
       (condition-case err
-	  (apply handler (list vr-request))
+          (progn 
+	    (vcode-trace "vr-execute-event-handler" "Executing handler in NON-debug mode\n")
+	    (apply handler (list vr-request))
+	    (vcode-trace "vr-execute-event-handler" "Finished Executing handler in NON-debug mode\n")
+	  )
 	('error 
 	 (progn
 	   (message (format "Error executing VR request %s"
@@ -1066,33 +1080,64 @@ Changes are put in a changes queue `vr-queued-changes.
     )
 )
 
+
+(defun  vcode-try-parsing-message (possibly-incomplete-mess)
+  (let ((parsed nil) (idx))
+
+    (condition-case err
+	(progn
+	  (vcode-trace "vcode-try-parsing-message" 
+		       "trying to parse possibly-incomplete-mess=%S\n" 
+		       possibly-incomplete-mess)
+   
+	  (setq parsed 
+		(run-hook-with-args 
+		 'vr-deserialize-message-hook vr-reading-string))
+	  (setq idx (elt parsed 1))
+	  (setq vr-reading-string 
+		(if (< idx (1- (length vr-reading-string)))
+		    (substring vr-reading-string (1+ idx))
+		  ""))
+	  (vcode-trace "vcode-try-parsing-message" "parsing worked, idx=%S, vr-reading-string=%S\n" idx vr-reading-string)
+
+	 )
+      ('error
+	    (vcode-trace "vcode-try-parsing-message" "parsing failed\n")
+      )
+    )
+    (vcode-trace "vcode-try-parsing-message" "exiting\n")
+    parsed
+  )
+)
 		
 (defun vr-output-filter (p s)
+  (vcode-trace "vr-output-filter" "invoked\n")
   (setq vr-reading-string (concat vr-reading-string s))
-  (while (> (length vr-reading-string) 0)
-    (let* ((handler) 
-	   (parsed (condition-case err
- 		       (run-hook-with-args 
-			   'vr-deserialize-message-hook vr-reading-string)
-		     ('end-of-file (error "Invalid VR command received: %s"
-					  vr-reading-string))))
-	   (vr-request (elt parsed 0))
-	   (idx (elt parsed 1))
-	   (vr-cmd (elt vr-request 0)))
-      (setq vr-reading-string 
-	    (if (< idx (1- (length vr-reading-string)))
-		(substring vr-reading-string (1+ idx))
-	       ""))
-
-      (setq handler (cl-gethash vr-cmd vr-message-handler-hooks))
-      (if handler
-	  (vr-execute-event-handler handler vr-request)
-
- 	;; The VR process should fail gracefully if an expected
- 	;; reply does not arrive...
- 	(error "Unknown VR request: %s" vr-request))
+  (vcode-trace "vr-output-filter" "invoked\n")
+  (let* ((handler) (parsed) (vr-request) (vr-cmd))
+    
+    (vcode-trace "vr-output-filter" "** trying to parse message\n")
+    (setq parsed (vcode-try-parsing-message vr-reading-string))
+    (vcode-trace "vr-output-filter" "** done parsing message, parsed=%S\n" 
+		 parsed)
+    
+    (if parsed
+	(progn
+	  (setq vr-request (elt parsed 0))
+	  (setq vr-cmd  (elt vr-request 0))
+	  (setq handler (cl-gethash vr-cmd vr-message-handler-hooks))
+	  (if handler
+	      (vr-execute-event-handler handler vr-request)
+  	      ;;;
+	      ;;; Process should degrade gracefully if an unknown command is 
+	      ;;; received
+	      ;;;
+	    (error "VCode Error: Received unknown command %S\n" vr-cmd)
+	    )
+	  )
+      )
     )
-  )
+  (vcode-trace "vr-output-filter" "exited\n")
 )
      
 
@@ -1879,6 +1924,8 @@ VoiceCode server."
   "Deserializes a string message received from the VoiceCode server 
 into a LISP data structure."
 
+  (vcode-trace "vcode-deserialize-message" "mess=%S" mess)
+
   (let ((unpack-result) (unpacked-mess) (bytes-parsed) 
 	(mess-name) (mess-cont))
 
@@ -1889,12 +1936,15 @@ into a LISP data structure."
     (setq unpacked-mess (elt unpack-result 0))
     (setq bytes-parsed (elt unpack-result 1))
 
+    (vcode-trace "vcode-deserialize-message" "unpacked-mess=%S" unpacked-mess)
+
     ;;;
     ;;; Then decode it
     ;;; 
     (setq mess (vcode-decode-mess unpacked-mess ))
     (setq mess-name (elt mess 0))
     (setq mess-cont (elt mess 1))
+    (vcode-trace "vcode-deserialize-message" "mess-name=%S, mess-cont=%S" mess-name mess-cont)
     (list (list mess-name mess-cont) bytes-parsed)
   )
 )
