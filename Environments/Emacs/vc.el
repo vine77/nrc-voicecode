@@ -1551,7 +1551,7 @@ which is the list representing the command and its arguments."
 	(setq vr-resynchronize-buffer nil))))
   t)
 
-(defun 	vr-func-is-bound-to-a-key (func)
+(defun vr-func-is-bound-to-a-key (func)
   ;;;
   ;;; For now, just handle self-insert characters and \n
   ;;; It might make more sense in the future to lookup all the key
@@ -2792,7 +2792,6 @@ to the other"
 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
 	(setq repl-start (elt range 0))
 	(setq repl-end (elt range 1))
-
         (vr-log "--** vcode-cmd-insert: text='%S', range=%S, repl-start=%S, repl-end=%S\n" text range repl-start repl-end)
 
 	(setq vr-request (list repl-start
