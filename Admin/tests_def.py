@@ -442,7 +442,7 @@ def test_say(utterance, user_input=None):
 def test_mediator_console():
     mediator.init_simulator_regression()
     test_command("""clear_symbols()    """)
-    test_command("""open_file('D:/blah.c')""")
+    test_command("""open_file('blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'
     mediator.print_abbreviations()    
     test_command("""compile_symbols(['""" + file + """'])""")
@@ -466,7 +466,7 @@ def test_select_pseudocode():
 
     
     mediator.init_simulator_regression()
-    test_command("""open_file('D:/blah.py')""")
+    test_command("""open_file('blah.py')""")
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
     test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')    
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
@@ -576,7 +576,7 @@ auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing me
 def test_auto_add_abbrevs():
     mediator.init_simulator_regression()
     
-    test_command("""open_file('D:/blah.c')""")
+    test_command("""open_file('blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
     test_command("""compile_symbols(['""" + file + """'])""")
     test_command("""print_abbreviations(1)""")    
@@ -2153,7 +2153,7 @@ def test_temporary():
     pass
 
     mediator.init_simulator_regression()
-    test_command("""open_file('D:/blah.py')""")
+    test_command("""open_file('blah.py')""")
     mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['back', 'indent'])

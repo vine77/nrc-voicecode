@@ -2017,8 +2017,8 @@ command was a yank or not."
 ;;;  (cl-puthash 'make_position_visible 'vcode-cmd-make-position-visible vr-message-handler-hooks)
   (cl-puthash 'move_relative_page 'vcode-cmd-move-relative-page vr-message-handler-hooks)  
   (cl-puthash 'insert 'vcode-cmd-insert vr-message-handler-hooks)  
-;;;  (cl-puthash 'insert_indent 'vcode-cmd-insert-indent vr-message-handler-hooks)  
   (cl-puthash 'indent 'vcode-cmd-indent vr-message-handler-hooks)  
+  (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-message-handler-hooks)  
 
@@ -2388,7 +2388,7 @@ Argument 'change-list is a list of 5ple:
     (setq file-name (cl-gethash "file_name" mess-cont))
     (vr-log "**-- vcode-cmd-open-file: file-name=%s\n" file-name)
     (find-file (substitute-in-file-name file-name))
-    (cl-puthash "buffer_id" (buffer-name) response)
+    (cl-puthash "buff_name" (buffer-name) response)
     (vr-log "**-- vcode-cmd-open-file: after find-file\n")
     (vr-send-reply
      (run-hook-with-args 
@@ -2461,12 +2461,13 @@ Argument 'change-list is a list of 5ple:
   (vr-log "-- vcode-cmd-close-buffer: invoked\n")
   (let ((mess-cont (elt vcode-request 1))
 	(response (make-hash-table :test 'string=))
-	(buff-name) (buff))
+	(buff-name) (buff) (save))
 
     (cl-puthash "value" 1 response)
 
     (setq buff-name (cl-gethash "buff_name" mess-cont))
     (setq buff (get-buffer "buff_name"))
+    (setq save (cl-gethash "save" mess-cont))
 
     (if (not buff)
        ;;; 'buff_name is not the name of a buffer. Maybe the name
@@ -2475,12 +2476,16 @@ Argument 'change-list is a list of 5ple:
       )
 
     (if buff
-	(kill-buffer buff-name)
-      ;;; No such buffer
-      (ding) 
-      (message (format "VR Mode: could not close buffer \"%S\"" buff-name))
+        (progn 
+           ;;; Don't know of a way to kill a buffer without asking for a save
+           ;;; So just save it.
+           (if (not (eq 0 save)) (save-buffer))
+           (kill-buffer buff-name)
+	)
+      (ding)
+      (message (format "VR Mode: could not close buffer \"%S\" buff-name"))
       (cl-puthash "value" 0 response)
-      )
+    )
 
     (vr-send-reply
      (run-hook-with-args 
@@ -2807,29 +2812,42 @@ to the other"
   (vr-log "-- vcode-cmd-indent: exited\n")
 )
 
+
 (defun vcode-cmd-decr-indent-level (vcode-request)
   (vr-log "-- vcode-cmd-decr-indent-level: NOT IMPLEMENTED YET!!!\n")
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
 	(range) (vr-request) 
-	(indent-start) (indent-end))
+	(indent-start) (indent-end) 
+        (reply-cont (make-hash-table :test 'string=)))
 
-	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
-	(setq indent-start (elt range 0))
-	(setq indent-end (elt range 1))
-	(setq vr-request (list 1
-			       0
-			       ""
-			       (point)
-			       0
-			       indent-start
-			       (- indent-end indent-start)
-			       1
-			       ??? est-ce que mess-name est a la bonne
-			       ??? position pour vr-request?
-			       mess-name))
+;;; FORGET ABOUT AUTO INDENT FOR NOW!!
+; 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
+; 	(setq indent-start (elt range 0))
+; 	(setq indent-end (elt range 1))
+; 	(setq vr-request (list 1
+; 			       0
+; 			       ""
+; 			       (point)
+; 			       0
+; 			       indent-start
+; 			       (- indent-end indent-start)
+; 			       1
+; 			       ??? est-ce que mess-name est a la bonne
+; 			       ??? position pour vr-request?
+; 			       mess-name))
 
-  )
+;;;
+;;; WHEN AUTO INDENTATION IS ACTUALLY IMPLEMENTED, REMOVE STATEMENT BELOW
+;;; THE CALL TO VR-CMD-MAKE-CHANGES WILL END UP SENDING A REPLY
+;;; TO VOICECODE SERVER
+    (let ((reply-cont (make-hash-table :test 'string=)) )
+         (cl-puthash "updates" (list) reply-cont)
+         (vr-send-reply (run-hook-with-args 
+		          'vr-serialize-message-hook 
+		          (list "indent_resp" reply-cont)))
+    )
+  )    
 )
 
 (defun vcode-unindent-region (start end n-levels)

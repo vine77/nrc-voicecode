@@ -31,7 +31,7 @@ def dictate_pseudo_python():
     sr_interface.addWord(sr_interface.vocabulary_entry('aliases', 'aliases'))
     sr_interface.addWord(sr_interface.vocabulary_entry('globals', 'globals'))
 
-    mediator.open_file('D:/blah.py')
+    mediator.open_file('blah.py')
         
     mediator.say(['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
