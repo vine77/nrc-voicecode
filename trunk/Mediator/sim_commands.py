@@ -185,39 +185,51 @@ sleep_before_recognitionMimic = 0
 def help():
     print __doc__
 
-def open_file(fname):
+def echo_command(cmd_name, *args):
+   echo_msg = "Got command: %s(" % cmd_name
+   for an_arg in args:
+      echo_msg = echo_msg + "%s," % an_arg
+   echo_msg = echo_msg + ")"
+   print echo_msg
+
+def open_file(fname, echo_cmd=0):
     """Open a file with name in current buffer.
 
     *STR fname* is the path of the file"""
 
     global the_mediator
+    if echo_cmd: echo_command('open_file', fname)
     the_mediator.app.open_file(fname)
     the_mediator.interp.parse_symbols_from_file(fname)
     the_mediator.app.curr_buffer().print_buff_if_necessary()
 # show_buff()
 
-def list_buffers():
+def list_buffers(echo_cmd=0):
     global the_mediator
+    if echo_cmd: echo_command('list_buffers')
     print the_mediator.app.open_buffers_from_app()
 
 
-def change_buffer(buff_name):
+def change_buffer(buff_name, echo_cmd=0):
     global the_mediator
+    if echo_cmd: echo_command('change_buffer', buff_name)
     if the_mediator.app.change_buffer(buff_name):
         show_buff()
     else:
         print 'unknown buffer'
 
-def close_buffer(buff_name, save = 0):
+def close_buffer(buff_name, save = 0, echo_cmd=0):
     global the_mediator
+    if echo_cmd: echo_command('close_buffer', buff_name, save = 0)
     the_mediator.app.close_buffer(buff_name, save)
 
-def save():
+def save(echo_cmd=0):
     """save current buffer"""
     global the_mediator
+    if echo_cmd: echo_command('save')
     the_mediator.app.save_file()
 
-def save_as(fname, no_prompt = 0):
+def save_as(fname, no_prompt = 0, echo_cmd=0):
     """save current buffer
 
     *STR fname* is the path of the file
@@ -226,9 +238,10 @@ def save_as(fname, no_prompt = 0):
     an existing file"""
 
     global the_mediator
+    if echo_cmd: echo_command('save_as', fname, no_prompt = 0)
     the_mediator.app.save_file(fname, no_prompt = no_prompt)
 
-def compile_symbols(file_list):
+def compile_symbols(file_list, echo_cmd=0):
     global the_mediator
     
     the_mediator.interp.parse_symbols_from_files(file_list)
@@ -240,7 +253,7 @@ def compile_symbols(file_list):
     the_mediator.interp.known_symbols.pickle()
 
     
-def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
+def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0, echo_cmd=0):
     """Simulate an utterance *STR utterance*
 
     *STR utterance* -- The utterance. This can be a string with the
@@ -269,10 +282,10 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
     """
     
     global the_mediator, sleep_before_recognitionMimic
+    if echo_cmd: echo_command('say', utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0)
 
     trace('sim_commands.say', 'utterance=%s, never_bypass_sr_recog=%s' % (utterance, never_bypass_sr_recog))
 
-#    print 'Saying: %s' % utterance
     sys.stdout.flush()
     if echo_utterance:
         print 'Saying: %s' % utterance
@@ -292,12 +305,13 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
         sys.stdin = temp_file
 
     if self.bypass_sr_recog and not never_bypass_sr_recog:
-        trace('sim_commands.say', 'bypassing natlink')
+        trace('sim_commands.say', 'bypassing NatSpeak')
         sys.stdout.flush()
         print "Heard  %s" % repr(utterance)
         the_mediator.interp.interpret_NL_cmd(utterance, the_mediator.app)
         show_buff()        
     else:
+        trace('sim_commands.say', 'NOT bypassing NatSpeak')    
         if util.islist(utterance) or util.istuple(utterance):
             words = []
             #
@@ -345,86 +359,101 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
         sys.stdin = old_stdin
         temp_file.close()
 
-def goto(pos):
+def goto(pos, echo_cmd=0):
     """Goes to position *INT pos* of the current buffer"""
     global the_mediator
+    if echo_cmd: echo_command('goto', pos)
+    print "Got command: goto(%s)" % pos
     the_mediator.app.goto(pos)
     show_buff()
 
-def goto_line(linenum):
+def goto_line(linenum, echo_cmd=0):
     """Goes to line number *INT linenum* of current source buffer"""
     global the_mediator    
+    if echo_cmd: echo_command('goto_line', linenum)
+    print "Got command: goto_line(%s)" % linenum    
     the_mediator.app.goto_line(linenum)
     show_buff()
 
-def make_position_visible(pos):
+def make_position_visible(pos, echo_cmd=0):
     global the_mediator    
+    if echo_cmd: echo_command('make_position_visible', pos)
     the_mediator.app.make_position_visible(pos)
     show_buff()
 
-def select(start, end):
+def select(start, end, echo_cmd=0):
     """Selects from position *start* to position *end* in current buffer"""
     global the_mediator    
+    if echo_cmd: echo_command('select', start, end)
     the_mediator.app.set_selection((start, end))
     show_buff()
     
-def show_buff():
+def show_buff(echo_cmd=0):
     """Shows content of current source buffer"""
     global the_mediator    
+    if echo_cmd: echo_command('show_buff', )
     the_mediator.app.curr_buffer().print_buff_if_necessary()
 
-def move(steps):
+def move(steps, echo_cmd=0):
     """Moves cursor by *INT steps* (can be negative)"""
     global the_mediator        
+    if echo_cmd: echo_command('move', steps)
     the_mediator.app.move_relative(steps)
     show_buff()
 
-
-
-def listen():
+def listen(echo_cmd=0):
+    if echo_cmd: echo_command('listen', )
     natlink.setMicState('on')
     natlink.waitForSpeech(0)
     natlink.setMicState('off')
 
-def print_error(message):
+def print_error(message, echo_cmd=0):
+    if echo_cmd: echo_command('print_error')
     sys.stderr.write(message)
 
-def provoke():
+def provoke(echo_cmd=0):
+    if echo_cmd: echo_command('provoke')
     print slidjf
 
-def print_symbols():
+def print_symbols(echo_cmd=0):
     global the_mediator
+    if echo_cmd: echo_command('print_symbols')
     the_mediator.interp.known_symbols.print_symbols()
 
-def print_abbreviations(show_unresolved=1):
+def print_abbreviations(show_unresolved=1, echo_cmd=0):
     global the_mediator
+    if echo_cmd: echo_command('print_abbreviations', show_unresolved=1)
     the_mediator.interp.known_symbols.print_abbreviations(show_unresolved)
 
-def clear_symbols():
+def clear_symbols(echo_cmd=0):
     #
     # Remove symbols from the Speech Recognition vocabulary
     #
     global the_mediator
+    if echo_cmd: echo_command('clear_symbols')
 
     the_mediator.interp.cleanup()
 
-def clear_abbreviations():
+def clear_abbreviations(echo_cmd=0):
     #
     # Remove abbreviations from the symbol dictionary
     #
     global the_mediator        
+    if echo_cmd: echo_command('clear_abbreviations')
     the_mediator.interp.known_symbols.abbreviations_cleanup()
 
-def signal_quitting(quitting = 1):
+def signal_quitting(quitting = 1, echo_cmd=0):
 # default for signal_quitting.  Other classes which copy their name
 # space will have to redefine, because otherwise, quit will set the flag
 # in the original namespace, leaving the copy unchanged
     global quit_flag
+    if echo_cmd: echo_command('signal_quitting', quitting = 1)
     quit_flag = quitting
 
 
-def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
+def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1, echo_cmd=0):
 #    global the_mediator
+    if echo_cmd: echo_command('quit', clean_sr_voc, save_speech_files, disconnect)
 
 #     if the_mediator:
 #         the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
@@ -434,10 +463,12 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     disconnect_flag = disconnect
     signal_quitting()
 
-def getmic():
+def getmic(echo_cmd=0):
+    if echo_cmd: echo_command('getmic')
     return sr_interface.get_mic()
 
-def setmic(state):
+def setmic(state, echo_cmd=0):
+    if echo_cmd: echo_command('setmic')
     sr_interface.set_mic(state)
 
 class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
@@ -517,33 +548,45 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def help(self):
         print self.help_string
 
-    def open_file(self, fname):
+    def echo_command(self, cmd_name, *args):
+       echo_msg = "Got command: %s(" % cmd_name
+       for an_arg in args:
+           echo_msg = echo_msg + "%s," % an_arg
+       echo_msg = echo_msg + ")"
+       print echo_msg
+
+    def open_file(self, fname, echo_cmd=0):
         """Open a file with name in current buffer.
 
         *STR fname* is the path of the file"""
 
+        if echo_cmd: self.echo_command('open_file', fname)
         self.app.open_file(fname)
         self.interp.parse_symbols_from_file(fname)
         self.app.curr_buffer().print_buff_if_necessary()
 # show_buff()
 
-    def list_buffers(self):
+    def list_buffers(self, echo_cmd=0):
+        if self.echo_cmd: echo_command('list_buffers')
         print self.app.open_buffers_from_app()
 
-    def change_buffer(self, buff_name):
+    def change_buffer(self, buff_name, echo_cmd=0):
+        if echo_cmd: self.echo_command('change_buffer', buff_name)
         if self.app.change_buffer(buff_name):
             self.show_buff()
         else:
             print 'unknown buffer'
 
-    def close_buffer(self, buff_name, save = 0):
+    def close_buffer(self, buff_name, save = 0, echo_cmd=0):
+        if echo_cmd: self.echo_command('close_buffer', buff_name, save)
         self.app.close_buffer(buff_name, save)
 
-    def save(self):
+    def save(self, echo_cmd=0):
         """save current buffer"""
+        if echo_cmd: self.echo_command('save')
         self.app.save_file()
 
-    def save_as(self, fname, no_prompt = 0):
+    def save_as(self, fname, no_prompt = 0, echo_cmd=0):
         """save current buffer
 
         *STR fname* is the path of the file
@@ -551,9 +594,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         *BOOL no_prompt* -- If true, don't prompt before overwriting
         an existing file"""
 
+        if echo_cmd: self.echo_command('save_as', fname, no_prompt)
         self.app.save_file(fname, no_prompt = no_prompt)
 
-    def compile_symbols(self, file_list):
+    def compile_symbols(self, file_list, echo_cmd=0):
+        if echo_cmd: self.echo_command('compile_symbols', file_list)
         self.interp.parse_symbols_from_files(file_list)
         print '>>> Known symbols are: '; self.interp.print_symbols()
 
@@ -562,7 +607,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         #
         self.interp.known_symbols.pickle()
 
-    def utterance_spoken_forms(self, utterance):
+    def utterance_spoken_forms(self, utterance, echo_cmd=0):
         spoken_forms = []
         for a_word in utterance:
            spoken, written = sr_interface.spoken_written_form(a_word)
@@ -570,7 +615,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         return spoken_forms
 
         
-    def say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
+    def say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0, echo_cmd=0):
         """Simulate an utterance *STR utterance*
 
         *STR utterance* -- The utterance. This can be a string with the
@@ -602,6 +647,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         
         global sleep_before_recognitionMimic
 
+        if echo_cmd: self.echo_command('say', utterance, user_input, never_bypass_sr_recog, echo_utterance)
+
         trace('sim_commands.say', 'utterance=%s' % utterance)
 
 #    print 'Saying: %s' % utterance
@@ -630,8 +677,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             sys.stdout.flush()
             
         if self.bypass_sr_recog and not never_bypass_sr_recog:
-            trace('sim_commands.say', 'bypassing natlink')
-#        print 'bypass'
+            trace('sim_commands.say', 'bypassing NatSpeak')
             utterance = self.utterance_spoken_forms(utterance)
             sys.stdout.flush()
             if util.islist(utterance) or util.istuple(utterance):
@@ -657,6 +703,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             self.app.recog_end()
             self.show_buff()        
         else:
+            trace('sim_commands.say', 'NOT bypassing NatSpeak')
             if util.islist(utterance) or util.istuple(utterance):
                 words = []
                 #
@@ -707,75 +754,92 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             if temp_file is not None:
                 temp_file.close()
 
-    def goto(self, pos):
+    def goto(self, pos, echo_cmd=0):
         """Goes to position *INT pos* of the current buffer"""
+        if echo_cmd: self.echo_command('goto', pos)
         self.app.goto(pos)
         self.show_buff()
 
-    def goto_line(self, linenum):
+    def goto_line(self, linenum, echo_cmd=0):
         """Goes to line number *INT linenum* of current source buffer"""
+        if echo_cmd: self.echo_command('goto_line', linenum)
         self.app.goto_line(linenum)
         self.show_buff()
 
-    def make_position_visible(self, pos):
+    def make_position_visible(self, pos, echo_cmd=0):
+        if echo_cmd: self.echo_command('make_position_visible', pos)
         self.app.make_position_visible(pos)
         self.show_buff()
 
-    def select(self, start, end):
+    def select(self, start, end, echo_cmd=0):
         """Selects from position *start* to position *end* in current buffer"""
+        if echo_cmd: self.echo_command('select', start, end)
         self.app.set_selection((start, end))
         self.show_buff()
         
-    def show_buff(self):
+    def show_buff(self, echo_cmd=0):
         """Shows content of current source buffer"""
+        if echo_cmd: self.echo_command('show_buff')
         self.app.curr_buffer().print_buff_if_necessary()
 
-    def move(self, steps):
+    def move(self, steps, echo_cmd=0):
         """Moves cursor by *INT steps* (can be negative)"""
+        if echo_cmd: self.echo_command('move', steps)
         self.app.move_relative(steps)
         self.show_buff()
 
-    def listen(self):
+    def listen(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('listen')
         natlink.setMicState('on')
         natlink.waitForSpeech(0)
         natlink.setMicState('off')
 
-    def print_error(self, message):
+    def print_error(self, message, echo_cmd=0):
+        if echo_cmd: self.echo_command('print_error', message)
         sys.stderr.write(message)
 
-    def provoke(self):
+    def provoke(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('provoke')
         print slidjf
 
-    def print_symbols(self):
+    def print_symbols(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('print_symbols')
         self.interp.known_symbols.print_symbols()
 
-    def print_abbreviations(self, show_unresolved=1):
+    def print_abbreviations(self, show_unresolved=1, echo_cmd=0):
+        if echo_cmd: self.echo_command('print_abbreviations', show_unresolved)
         self.interp.known_symbols.print_abbreviations(show_unresolved)
 
-    def clear_symbols(self):
+    def clear_symbols(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('clear_symbols')
         #
         # Remove symbols from the Speech Recognition vocabulary
         #
         self.interp.cleanup()
 
-    def clear_abbreviations(self):
+    def clear_abbreviations(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('clear_abbreviations')
         #
         # Remove abbreviations from the symbol dictionary
         #
         self.interp.abbreviations_cleanup()
 
-    def signal_quitting(self, quitting = 1):
+    def signal_quitting(self, quitting = 1, echo_cmd=0):
+        if echo_cmd: self.echo_command('signal_quitting', quitting)
         self.names['quit_flag'] = quitting
         self.copy_flags()
 
-    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
+    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1, echo_cmd=0):
+        if echo_cmd: self.echo_command('quit', clean_sr_voc, save_speech_files, disconnect)
         self.clean_sr_voc = clean_sr_voc
         self.save_speech_files = save_speech_files
         self.disconnect_flag = disconnect
         self.signal_quitting()
 
-    def getmic(self):
+    def getmic(self, echo_cmd=0):
+        if echo_cmd: self.echo_command('getmic')
         return sr_interface.get_mic()
 
-    def setmic(self, state):
+    def setmic(self, state, echo_cmd=0):
+        if echo_cmd: self.echo_command('setmic', state)
         sr_interface.set_mic(state)

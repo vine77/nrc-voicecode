@@ -30,6 +30,8 @@ import EdSim
 import sr_interface
 import traceback
 import cPickle
+import time
+import AppStateEmacs
 
 """Classes and methods used to set up the MediatorObject or 
 NewMediatorObject for the next new regression test
@@ -492,7 +494,14 @@ class PersistentConfigNewMediator(Object.Object):
        
        # For now, this factory method always returns a MS-Windows style 
        # simulator for all editors.
-       return KbdEventSimWindowsStyle()
+#       if isinstance(app, AppStateEmacs.AppStateEmacs):
+# Temporarily disable creation of Emacs style kbd simulator.
+       if 0:
+          debug.trace('PersistentConfigNewMediator.kbd_event_sim_factory', 'Emacs style')       
+          return KbdEventSimEmacs()
+       else:
+          debug.trace('PersistentConfigNewMediator.kbd_event_sim_factory', 'Windows style')
+          return KbdEventSimWindowsStyle()
 
 class TempConfig(Object.Object):
     """abstract base class which hides the details of the internal
@@ -753,22 +762,73 @@ class KbdEventSimWindowsStyle(KbdEventSim):
                             args_super, 
                             {})
                             
-    def move_cursor_by_kbd(self, direction, num_steps):
+    def echo_kbd_event(self, evt_name, *args):
+       echo_msg = "Got simulated kbd event: %s(" % evt_name
+       for an_arg in args:
+           echo_msg = echo_msg + "%s," % an_arg
+       echo_msg = echo_msg + ")"
+       print echo_msg
+    
+                            
+    def move_cursor_by_kbd(self, direction, num_steps, echo_evt=1):
+        if echo_evt: self.echo_kbd_event('move_cursor_by_kbd', direction, num_steps)
         string_to_send = ''
         move_with_key = "{%s" % direction
         string_to_send = '%s %d}' % (move_with_key, num_steps)
         sr_interface.send_keys(string_to_send, 1)
         
-                            
-    def set_selection_by_kbd(self, direction, length):    
+                        
+    def set_selection_by_kbd(self, direction, length, echo_evt=1):    
+        if echo_evt: self.echo_kbd_event('set_selection_by_kbd', direction, length)
         string_to_send = ''
-        move_with_key = '{Shift+%s' % direction
+        move_with_key = '{Shift+Ext%s' % direction
         string_to_send = '%s %d}' % (move_with_key, length)
         sr_interface.send_keys(string_to_send, 1)
         
-    def type_text(self, text):
-        sr_interface.send_keys(text, )
+        
+    def type_text(self, text, echo_evt=1):
+        if echo_evt: self.echo_kbd_event('stype_text', text)
+        sr_interface.send_keys(text)
 
+
+class KbdEventSimEmacs (KbdEventSimWindowsStyle):
+    """Class for simulating keyboard user actions (e.g. typing text, 
+    changing selection) for Emacs.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *none*
+
+    **CLASS ATTRIBUTES**
+        
+    *none*
+
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(KbdEventSimEmacs, 
+                            {}, 
+                            args_super, 
+                            {})
+                                                                               
+    def set_selection_by_kbd(self, direction, length, echo_evt=1):    
+        """For Emacs, sending {Shift+Right} and {Shift+Left} from NatSpeak do not change the 
+        selection. This is true whether it's done by VoiceCode or a NatSpeak macro.
+        
+        Rather than trying to figure out why that is, we use native Emacs key sequences for 
+        changing the selection.
+        """
+        if echo_evt: self.echo_kbd_event('set_selection_by_kbd', direction, length)
+#        sr_interface.send_keys('{Esc}xset-mark-command{Enter}', 1)
+#        sr_interface.send_keys('{Esc}xset-mark{Enter}', 1)
+        sr_interface.send_keys('{Ctrl+Space}', 1)
+        self.move_cursor_by_kbd(direction, length, echo_evt=0)
+        time.sleep(5)
+        
+        
+    def type_text(self, text, echo_evt=1):
+        if echo_evt: self.echo_kbd_event('stype_text', text)
+        sr_interface.send_keys(text)
 
 
 
