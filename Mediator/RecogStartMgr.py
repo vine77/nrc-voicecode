@@ -125,8 +125,8 @@ class RecogStartMgr(Object):
 	"""
 	if instance == None:
 	    all_handles = []
-	    for name, handles in self.instance_windows:
-		all_handles.extend(handles)
+	    for name in self.instance_windows.keys():
+		all_handles.extend(self.instance_windows[name])
 	    return all_handles
 
 	if instance not in self.instance_windows.keys():
@@ -148,7 +148,7 @@ class RecogStartMgr(Object):
 	*none*
 	"""
 	if self.instance_windows.has_key(instance):
-	    if window not in self.windows:
+	    if window not in self.windows.keys():
 		self.windows[window] = instance
 		self.instance_windows[instance].append(window)
 	    
@@ -175,9 +175,10 @@ class RecogStartMgr(Object):
 	    self.instance_names[app_name] = []
 	    self.past_instances[app_name] = 0
 	n = self.past_instances[app_name]
-	new_name = self.app_name + "(%d)" % (n)
+	new_name = app_name + "(%d)" % (n)
 	self.past_instances[app_name] = n + 1
 	self.instances[new_name] = app
+	self.instance_names[app_name].append(new_name)
 	self.instance_windows[new_name] = []
 	self.instance_apps[new_name] = app_name
 	if initial_window != None:
@@ -201,11 +202,10 @@ class RecogStartMgr(Object):
 	    app_name = self.instance_apps[instance]
 	    del self.instance_apps[instance]
 	    instance_names = self.instance_names[app_name]
-	    for i in range(instance_names):
+	    for i in range(len(instance_names)):
 		if instance_names[i] == instance:
 		    del instance_names[i]
 		    break
-	    del self.windows[window]
 	    windows = self.instance_windows[instance]
 	    for window in windows:
 		del self.windows[window]
@@ -227,7 +227,7 @@ class RecogStartMgr(Object):
 	if self.windows.has_key(window):
 	    instance = self.windows[window]
 	    windows = self.instance_windows[instance]
-	    for i in range(windows):
+	    for i in range(len(windows)):
 		if windows[i] == window:
 		    del windows[i]
 		    break

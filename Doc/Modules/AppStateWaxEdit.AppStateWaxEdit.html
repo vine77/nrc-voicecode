@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 17:46:47 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Nov 20 13:10:06 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,6 +28,7 @@
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.curr_buffer_name_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.curr_buffer_name_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return the name of the current buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -51,6 +52,7 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.get_history"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.get_history</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.set_default_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_default_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)
@@ -144,6 +146,23 @@ left end of the selection
 <EM>STR</EM> 
 <DD>current buffer
 
+</DL>
+<H2 ID="AppStateWaxEdit.AppStateWaxEdit.multiple_buffers" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple open buffers?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports having multiple buffers open 
+at the same time
 </DL>
 <H2 ID="AppStateWaxEdit.AppStateWaxEdit.open_file" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)</H2>
 <P>Open a file.</P>
@@ -464,6 +483,23 @@ recent command in the application's command history.
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="AppState.AppState.multiple_buffers" CLASS="Method">AppState.AppState.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple open buffers?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports having multiple buffers open 
+at the same time
 </DL>
 <H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
 <P>Open a file.</P>

@@ -183,7 +183,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8f6eb0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8d5fc0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1891,7 +1891,7 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 9c4860> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 95ccb0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -6626,6 +6626,94 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
  17:     
  18: 
  19:     **SAFE ATTRIBUTE SETTING***
+
+
+*******************************************************************************
+* Name        : rsm_dictionaries
+* Description : Testing RecogStartMgr dictionary management.
+*******************************************************************************
+
+new instance of Emacs 1
+
+state {
+application:  Emacs
+instance:  Emacs(0)
+known windows []
+} state
+
+new window 14
+new window 20
+
+state {
+application:  Emacs
+instance:  Emacs(0)
+window 14
+window 20
+known windows [14, 20]
+} state
+
+new instance of Emacs 2
+with window 10
+
+state {
+application:  Emacs
+instance:  Emacs(0)
+window 14
+window 20
+instance:  Emacs(1)
+window 10
+known windows [14, 20, 10]
+} state
+
+new instance of Vim for Windows 3
+delete window 20
+
+state {
+application:  Vim for Windows
+instance:  Vim for Windows(0)
+application:  Emacs
+instance:  Emacs(0)
+window 14
+instance:  Emacs(1)
+window 10
+known windows [14, 10]
+} state
+
+delete instance Emacs(1)
+new instance of Emacs 4
+with window 7
+
+state {
+application:  Vim for Windows
+instance:  Vim for Windows(0)
+application:  Emacs
+instance:  Emacs(0)
+window 14
+instance:  Emacs(2)
+window 7
+known windows [14, 7]
+} state
+
+delete instance Emacs(0)
+
+state {
+application:  Vim for Windows
+instance:  Vim for Windows(0)
+application:  Emacs
+instance:  Emacs(2)
+window 7
+known windows [7]
+} state
+
+delete instance Vim for Windows(0)
+delete instance Emacs(2)
+
+state {
+application:  Vim for Windows
+application:  Emacs
+known windows []
+} state
+
 
 
 *******************************************************************************
