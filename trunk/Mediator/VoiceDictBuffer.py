@@ -57,7 +57,7 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
     """
 
     def __init__(self, **args):
-	"""
+        """
 	
 	**INPUTS**
 	
@@ -65,25 +65,25 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	"""
         self.deep_construct(VoiceDictBuffer,
                             {'underlying': natlink.DictObj(),
-			    'was_activated': 0,
-			    'activated': 0,
-			    'dict_globally': 0,
-			    'program_initiated': 0,
-			    'window_handle': 0},
+                            'was_activated': 0,
+                            'activated': 0,
+                            'dict_globally': 0,
+                            'program_initiated': 0,
+                            'window_handle': 0},
                             args)
     
         self.underlying.setBeginCallback(self._on_begin)
-	self.underlying.setChangeCallback(self._on_voice_change)
+        self.underlying.setChangeCallback(self._on_voice_change)
 
     def __del__(self):
         self.underlying.deactivate()
         self.underlying.setChangeCallback(None)
         self.underlying.setBeginCallback(None)
-#	print 'dying'
-	self.underlying = None
+#        print 'dying'
+        self.underlying = None
 
     def _on_begin(self, app_and_window):
-	"""private method.  Should only be called by callback from
+        """private method.  Should only be called by callback from
 	underlying DictObj.
 
 	**INPUTS**
@@ -92,22 +92,22 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	full path to module of active application, title of active
 	window, window handle of active window
 	"""
-	print '_on_begin', app_and_window
-	sys.stdout.flush()
-	match = 1
-	if self.window_handle and \
-	    self.window_handle != app_and_window[2]:
-	    match = 0
-	    
-#	print '_on_begin'
-#	self.set_lock(1)
-	if match:
-	    self._on_recog_start(match)
-#	self.set_lock(0)
+        print '_on_begin', app_and_window
+        sys.stdout.flush()
+        match = 1
+        if self.window_handle and \
+            self.window_handle != app_and_window[2]:
+            match = 0
+            
+#        print '_on_begin'
+#        self.set_lock(1)
+        if match:
+            self._on_recog_start(match)
+#        self.set_lock(0)
 
     def _on_voice_change(self, start, end, text, selection_start,
-	selection_end):
-	"""private method.  Should only be called by callback from
+        selection_end):
+        """private method.  Should only be called by callback from
 	underlying DictObj.
 
 	**INPUTS**
@@ -121,19 +121,19 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	*INT* selection_start, *INT* selection_end --
 	the selection range after insertion
 	"""
-	self.set_lock(1)
-#	print 'VDB._on_voice_change - %d %d %s %d %d %d' % \
-#	  (start, end, text, selection_start,
-#	    selection_end, self.program_initiated)
-	self._on_change_specification(start, end, text, selection_start,
-	    selection_end, self.program_initiated)
-	self.set_lock(0)
+        self.set_lock(1)
+#        print 'VDB._on_voice_change - %d %d %s %d %d %d' % \
+#          (start, end, text, selection_start,
+#            selection_end, self.program_initiated)
+        self._on_change_specification(start, end, text, selection_start,
+            selection_end, self.program_initiated)
+        self.set_lock(0)
 
     def get_length(self):
-	return self.underlying.getLength()
+        return self.underlying.getLength()
 
     def range_defaults(self, start = None, end = None):
-	"""translates from TextBuffer defaults for specifying start and
+        """translates from TextBuffer defaults for specifying start and
 	end of a range to the appropriate values for DictObj
 	
 	**INPUTS**
@@ -151,18 +151,18 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	"""
 
 # note: this uses internal positions
-	if (start == None):
-	  s = 0
-	else:
-	  s = start
-	if (end == None):
-	  e = self.get_length()
-	else:
-	  e = end
-	return s, e
+        if (start == None):
+          s = 0
+        else:
+          s = start
+        if (end == None):
+          e = self.get_length()
+        else:
+          e = end
+        return s, e
 
     def set_text(self, text, start = None, end = None):
-	"""changes a portion of the buffer
+        """changes a portion of the buffer
 
 	**INPUTS**
 
@@ -179,19 +179,19 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	s, e = self.range_defaults(start, end)
-#	print 'VDB.set_text ', s, e, text
-	self.program_initiated = 1
-	self.underlying.setText(text, s, e)
+        s, e = self.range_defaults(start, end)
+#        print 'VDB.set_text ', s, e, text
+        self.program_initiated = 1
+        self.underlying.setText(text, s, e)
 # DictObj, unlike CDgnDictCustom, appears to send change events only on
 # internally initiated changes
-	selection_start, selection_end = self.get_selection()
-	self._on_change_specification(s, e, text, selection_start,
-	    selection_end, self.program_initiated)
-	self.program_initiated = 0
+        selection_start, selection_end = self.get_selection()
+        self._on_change_specification(s, e, text, selection_start,
+            selection_end, self.program_initiated)
+        self.program_initiated = 0
 
     def get_text(self, start = None, end = None):
-	"""retrieves a portion of the buffer
+        """retrieves a portion of the buffer
 
 	**INPUTS**
 
@@ -206,11 +206,11 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*STR* -- contents of specified range of the buffer
 	"""
-	s, e = self.range_defaults(start, end)
-	return self.underlying.getText(s, e)
+        s, e = self.range_defaults(start, end)
+        return self.underlying.getText(s, e)
 
     def get_selection(self):
-	"""retrieves range of current selection
+        """retrieves range of current selection
 
 	**INPUTS**
 
@@ -224,10 +224,10 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	return self.underlying.getTextSel()
+        return self.underlying.getTextSel()
       
     def cur_pos(self):
-	"""returns current position (= end of the current selection)
+        """returns current position (= end of the current selection)
 
 	**INPUTS**
 
@@ -238,10 +238,10 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	*INT* -- the offset into the buffer of the current cursor
 	position.
 	"""
-	return self.get_selection()[1]
+        return self.get_selection()[1]
 
     def set_selection(self, start = None, end = None):
-	"""changes range of current selection
+        """changes range of current selection
 
 	**INPUTS**
 
@@ -256,12 +256,12 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
         *none*
 	"""
-	s, e = self.range_defaults(start, end)
-#	print 'vdb.set_selection ', s, e
-	self.underlying.setTextSel(s, e)
+        s, e = self.range_defaults(start, end)
+#        print 'vdb.set_selection ', s, e
+        self.underlying.setTextSel(s, e)
 
     def activate(self, dict_globally = 0):
-	"""activates the speech buffer for dictation, either globally or
+        """activates the speech buffer for dictation, either globally or
 	tied to the current window.
 
 	**INPUTS**
@@ -276,29 +276,29 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-#	Note: NaturallySpeaking's window-specific dictation is 
-#	more general, but requires specifying a MS Windows window
-#	handle, and I haven't figured out yet how to abstract the window
-#	ID to handle other operating systems or speech engines which
-#	may specify the window differently, so I figured that the
-#	current window would be good enough to start.
+#        Note: NaturallySpeaking's window-specific dictation is 
+#        more general, but requires specifying a MS Windows window
+#        handle, and I haven't figured out yet how to abstract the window
+#        ID to handle other operating systems or speech engines which
+#        may specify the window differently, so I figured that the
+#        current window would be good enough to start.
 #
-#	Also note that, for the same reason, the default behavior
-#	activate is different from that of NaturallySpeaking (either
-#	Natlink DictObj, or SDK CDgnDictCustom)
+#        Also note that, for the same reason, the default behavior
+#        activate is different from that of NaturallySpeaking (either
+#        Natlink DictObj, or SDK CDgnDictCustom)
     
-	window_handle = 0
-	if (not dict_globally):
-	    app_and_window = natlink.getCurrentModule()
-	    window_handle = app_and_window[2]
-	self.window_handle = window_handle 
-	self.dict_globally = dict_globally
-	self.underlying.activate(window_handle)
-	self.was_activated = 1
-	self.activated = 1
+        window_handle = 0
+        if (not dict_globally):
+            app_and_window = natlink.getCurrentModule()
+            window_handle = app_and_window[2]
+        self.window_handle = window_handle 
+        self.dict_globally = dict_globally
+        self.underlying.activate(window_handle)
+        self.was_activated = 1
+        self.activated = 1
     
     def deactivate(self):
-	"""disable dictation into the SpeechBuffer
+        """disable dictation into the SpeechBuffer
 
 	**INPUTS**
 
@@ -308,11 +308,11 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	self.underlying.deactivate()
-	self.activated = 0
+        self.underlying.deactivate()
+        self.activated = 0
 
     def reactivate(self):
-	"""reactivate dictation using the same window (or globally).
+        """reactivate dictation using the same window (or globally).
 	This method should not be called, unless the buffer has
 	previously been activated and then deactivate.
 	
@@ -327,15 +327,15 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	if not self.activated:
-	    if self.was_activated:
-		self.underlying.activate(self.window_handle)
-		self.activated = 1
-	    else:
-		self.activate(dict_globally = 0)
+        if not self.activated:
+            if self.was_activated:
+                self.underlying.activate(self.window_handle)
+                self.activated = 1
+            else:
+                self.activate(dict_globally = 0)
 
     def has_been_activated(self):
-	"""indicates whether the activate method has been invoked, or
+        """indicates whether the activate method has been invoked, or
 	whether it needs to be called to activate dictation.
 
 	**INPUTS**
@@ -349,12 +349,12 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	call to reactivate (instead of a new call to activate)."""
 
         # note: if the activation condition (specific window, or globally
-	# active) is lost when deactivate is called, has_been_activated
-	# should return false
-	return self.was_activated
+        # active) is lost when deactivate is called, has_been_activated
+        # should return false
+        return self.was_activated
 
     def is_active(self):
-	"""indicates whether dictation into the SpeechBuffer is currently 
+        """indicates whether dictation into the SpeechBuffer is currently 
 	active (activated globally, or activated with the current
 	window)
 
@@ -367,16 +367,16 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	*BOOL* -- returns true iff dictation into the buffer is 
 	currently active.
 	"""
-	if self.is_activated():
-	    if is_global():
-		return 1
-	    app_and_window = natlink.getCurrentModule()
-	    if app_and_window[2] == self.window_handle:
-		return 1
-	return 0
+        if self.is_activated():
+            if is_global():
+                return 1
+            app_and_window = natlink.getCurrentModule()
+            if app_and_window[2] == self.window_handle:
+                return 1
+        return 0
 
     def is_activated(self):
-	"""indicates whether the  SpeechBuffer is currently activated or
+        """indicates whether the  SpeechBuffer is currently activated or
 	deactivated (not whether it is active)
 
 	**INPUTS**
@@ -390,10 +390,10 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 	but that window is not active, is_activated will still return
 	true.  To see if dictation is active now, use is_active.
 	"""
-	return self.activated
+        return self.activated
 
     def is_global(self):
-	"""tells whether the buffer (when activated) is activated
+        """tells whether the buffer (when activated) is activated
 	globally.
 
 	**INPUTS**
@@ -404,10 +404,10 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*BOOL* -- is buffer set for global dictation.
 	"""
-	return self.dict_globally
+        return self.dict_globally
 
     def set_lock(self, state):
-	"""locks/unlocks changes to the contents of a hidden speech 
+        """locks/unlocks changes to the contents of a hidden speech 
 	buffer, to ensure consistency between multiple get operations.
 	When the buffer is
 	locked, all speech-initiated changes to the buffer will be 
@@ -421,10 +421,10 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	self.underlying.setLock(state)
+        self.underlying.setLock(state)
 
     def set_visible(self, range = (0, -1)):
-	"""tells the SpeechBufferSelection the current visible range
+        """tells the SpeechBufferSelection the current visible range
 	which should be available to Select XYZ.
 	
 	**INPUTS**
@@ -439,14 +439,14 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	start, end = range
-	if end < start:
-	    self.underlying.setVisibleText(0)
-	else:
-	    self.underlying.setVisibleText(start, end)
+        start, end = range
+        if end < start:
+            self.underlying.setVisibleText(0)
+        else:
+            self.underlying.setVisibleText(start, end)
 
     def get_visible(self):
-	"""returns the current visible range
+        """returns the current visible range
 	which should be available to Select XYZ.  If ta concrete
 	subclass of SpeechBufferSelection does not support returning the
 	current visible range, then get_visible should return None.
@@ -465,8 +465,8 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
 
 	*none*
 	"""
-	start, end = self.underlying.getVisibleText()
-	if end > self.get_length():
-	    end = -1
-	return start, end
+        start, end = self.underlying.getVisibleText()
+        if end > self.get_length():
+            end = -1
+        return start, end
 

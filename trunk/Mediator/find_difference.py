@@ -50,16 +50,16 @@ def find_difference(old, new):
     shorter = min(len(old), len(new))
     longer = max(len(old), len(new))
     for i in range(shorter):
-	if old[i] != new[i]: break
+        if old[i] != new[i]: break
     else:
 # we reached the end of the shorter sequence
-#  	print 'extra ', shorter, longer, repr(new[shorter:])
-	return shorter, longer, new[shorter:]
+#        print 'extra ', shorter, longer, repr(new[shorter:])
+        return shorter, longer, new[shorter:]
 # otherwise
 #    print 'difference at ', i
     rest = shorter - i
     for j in range(rest):
-	if old[-1-j] != new[-1-j]: break
+        if old[-1-j] != new[-1-j]: break
 #    print 'full', i, len(old) - j - 1, repr(new[i:-j-1])
     return i, len(old)-j-1, new[i:-j-1]
     
@@ -110,16 +110,16 @@ def find_count(s, sub, count = 1, start = None, end = None):
     """
     first, last = start, end
     if first == None:
-	first = 0
+        first = 0
     if last == None:
-	last = len(s)
+        last = len(s)
     for i in range(count - 1):
-	found = string.find(s, sub, first, last)
-	if found == -1:
-	    return found
-	first = found + len(sub)
+        found = string.find(s, sub, first, last)
+        if found == -1:
+            return found
+        first = found + len(sub)
     return string.find(s, sub, first, last)
-		
+                
     
     
 def rfind_count(s, sub, count = 1, start = None, end = None):
@@ -144,14 +144,14 @@ def rfind_count(s, sub, count = 1, start = None, end = None):
     """
     first, last = start, end
     if first == None:
-	first = 0
+        first = 0
     if last == None:
-	last = len(s)
+        last = len(s)
     for i in range(count - 1):
-	found = string.rfind(s, sub, first, last)
-	if found == -1:
-	    return found
-	last = found
+        found = string.rfind(s, sub, first, last)
+        if found == -1:
+            return found
+        last = found
     return string.rfind(s, sub, first, last)
-		
+                
     

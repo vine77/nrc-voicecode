@@ -58,11 +58,11 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs, new_default = {'app_name': 'GenEdit'}
                             )
-	self.add_owned('breadcrumbs_srv')
-	self.the_editor.set_app_control(self)
+        self.add_owned('breadcrumbs_srv')
+        self.the_editor.set_app_control(self)
 
-	for buff_name in self.open_buffers_from_app():
-	    self.open_buffers[buff_name] = self.new_compatible_sb(buff_name)
+        for buff_name in self.open_buffers_from_app():
+            self.open_buffers[buff_name] = self.new_compatible_sb(buff_name)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -83,11 +83,11 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-	underlying_buffer = self.the_editor.editor_buffer(buff_name)
-	if not underlying_buffer:
-	    return None
-	return SourceBuffTB.SourceBuffTB(underlying_buffer, app=self, 
-	    buff_name=buff_name, change_specification = 1)
+        underlying_buffer = self.the_editor.editor_buffer(buff_name)
+        if not underlying_buffer:
+            return None
+        return SourceBuffTB.SourceBuffTB(underlying_buffer, app=self, 
+            buff_name=buff_name, change_specification = 1)
 
         
     def recog_begin(self, window_id, block = 0):
@@ -104,7 +104,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
     def mediator_closing(self):
 
-	"""method called to inform AppState that the mediator is
+        """method called to inform AppState that the mediator is
 	closing.    Internal editors should exit.  They may prompt the
 	user to save modified files, but must not allow the user to
 	cancel and leave the editor running.  External editors should
@@ -123,7 +123,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
 	*none*
 	"""
-	self.close_all_buffers()
+        self.close_all_buffers()
 
     def updates_from_app(self, what=[], exclude=1):
         
@@ -151,7 +151,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
     def app_active_buffer_name(self):
         
-	"""Returns the file name of the buffer currently active in the
+        """Returns the file name of the buffer currently active in the
 	external application.
 
         Note that this may or may not be the same the buffer that
@@ -168,10 +168,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
         file:///./AppState.AppState.html#curr_buffer_name"""        
       
-	return self.the_editor.app_active_buffer_name()
+        return self.the_editor.app_active_buffer_name()
 
     def app_change_buffer(self, buff_name):
-	"""Changes the external application's active buffer.
+        """Changes the external application's active buffer.
 
         This variant only changes the buffer in the external
         application. It does not resynchronise VoiceCode with external
@@ -193,10 +193,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
             
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-	return self.the_editor.app_change_buffer(buff_name)
+        return self.the_editor.app_change_buffer(buff_name)
         
     def active_field(self):
-	"""indicates what part of the editor has the focus.
+        """indicates what part of the editor has the focus.
 
 	**INPUTS**
 
@@ -217,11 +217,11 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	where find-buffer is the name of the command that was invoked and
 	buffer-name refers to the argument that is being asked for.
 	"""
-	if not self.the_editor.is_active():
-	    return ('inactive')
-	if self.the_editor.editor_has_focus():
-	    return None
-	return ('unknown')
+        if not self.the_editor.is_active():
+            return ('inactive')
+        if self.the_editor.editor_has_focus():
+            return None
+        return ('unknown')
 
     def drop_breadcrumb(self, buffname=None, pos=None):
 
@@ -256,21 +256,21 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
         ..[AppState.tell_editor_to_open_file()] file:///./AppState.AppState.html#tell_editor_to_open_file"""
 
 
-	old_buff_name = self.curr_buffer_name()
-	buff_name = self.the_editor.open_file(file_name)
-	if buff_name:
-	    if not self.multiple_buffers():
+        old_buff_name = self.curr_buffer_name()
+        buff_name = self.the_editor.open_file(file_name)
+        if buff_name:
+            if not self.multiple_buffers():
 # if editor doesn't support multiple buffers, it will already have
 # closed the old one, but will not have issued a close buffer callback, 
 # so we need to do so
-		if old_buff_name != None: 
-		    self.close_buffer_cbk(old_buff_name)
-	    self._new_source_buffer(buff_name)
+                if old_buff_name != None: 
+                    self.close_buffer_cbk(old_buff_name)
+            self._new_source_buffer(buff_name)
 
         return buff_name
 
     def query_buffer_from_app(self, buff_name):
-	"""query the application to see if a buffer by the name of buff_name 
+        """query the application to see if a buffer by the name of buff_name 
 	exists.
 
         **INPUTS**
@@ -281,11 +281,11 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
 	*BOOL* -- does the buffer exist?
 	"""
-#	print 'querying ', buff_name
-	return buff_name in self.open_buffers_from_app()
+#        print 'querying ', buff_name
+        return buff_name in self.open_buffers_from_app()
 
     def open_buffers_from_app(self):
-	"""retrieve a list of the names of open buffers from the
+        """retrieve a list of the names of open buffers from the
 	application.
 
         **INPUTS**
@@ -296,9 +296,9 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
 	*[STR]* -- list of the names of open buffers
 	"""
-	buffers = self.the_editor.open_buffers()
-#	print 'buffers: ', buffers
-	return buffers
+        buffers = self.the_editor.open_buffers()
+#        print 'buffers: ', buffers
+        return buffers
         
     def app_save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
@@ -318,27 +318,27 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	failed
 
         """
-	f_path = full_path
-	quiet = no_prompt
-	old_name = self.curr_buffer_name()
-	new_buff_name = self.the_editor.save_file(old_name, f_path, quiet)
+        f_path = full_path
+        quiet = no_prompt
+        old_name = self.curr_buffer_name()
+        new_buff_name = self.the_editor.save_file(old_name, f_path, quiet)
 #         try:
 #             source_file = open(name, 'rw')
 #             source = source_file.read()
 #             source_file.close()
 #         except Exception, err:
-# 	    return
-	if new_buff_name == None:
-	    return None
-	if not old_name or old_name != new_buff_name:
+#            return
+        if new_buff_name == None:
+            return None
+        if not old_name or old_name != new_buff_name:
 # buffer has been renamed.  add a new reference to the open_buffers map,
 # and then delete the old one
-	    self.open_buffers[new_buff_name] = self.open_buffers[old_name]
-	    del self.open_buffers[old_name]
-	return new_buff_name
+            self.open_buffers[new_buff_name] = self.open_buffers[old_name]
+            del self.open_buffers[old_name]
+        return new_buff_name
       
     def is_active(self):
-	"""is the editor application active (not suspended)?
+        """is the editor application active (not suspended)?
 
 	Usually true, except for remote editors running in a (Unix)
 	shell.  GUI editors tend to minimize instead of suspending, so
@@ -352,10 +352,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is active (i.e. has not been suspended)
 	"""
-	return 1
+        return 1
 
     def is_active_is_safe(self):
-	"""can is_active safely be queried, without blocking?
+        """can is_active safely be queried, without blocking?
 
 	For example, Emacs provides a suspend-hook and a
 	suspend-resume-hook, so a properly written AppStateEmacs can
@@ -375,7 +375,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	*BOOL* -- true if is_active can be queried without blocking,
 	even if the editor has been suspended. 
 	"""
-	return 1
+        return 1
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
@@ -400,7 +400,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is running in a potentially shared window
 	"""
-	return 0
+        return 0
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
@@ -417,8 +417,8 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*none*
 	"""
-	self.instance_string = title
-	self.the_editor.set_instance_string(title)
+        self.instance_string = title
+        self.the_editor.set_instance_string(title)
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -442,10 +442,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	*STR* -- the identifying string, or None if the editor was not given 
 	such a string or cannot set the window title.
 	"""
-	return self.instance_string
+        return self.instance_string
 
     def title_escape_sequence(self, before = "", after = ""):
-	"""gives the editor a (module-dependent) hint about the escape
+        """gives the editor a (module-dependent) hint about the escape
 	sequence which can be used to set the module's window title, if
 	any.  If the editor has its own mechanism for setting the window
 	title, it should simply ignore this method.  
@@ -464,7 +464,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	*none*
 	"""
 # we can set the title ourselves, so ignore
-	pass
+        pass
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
@@ -491,10 +491,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports opening multiple editor windows.  
 	"""
-	return self.the_editor.multiple_windows()
+        return self.the_editor.multiple_windows()
 
     def multiple_buffers(self):
-      	"""does editor support multiple open buffers?
+        """does editor support multiple open buffers?
 
 	**INPUTS**
 
@@ -504,10 +504,10 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-	return self.the_editor.multiple_buffers()
+        return self.the_editor.multiple_buffers()
 
     def bidirectional_selection(self):
-      	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
 	**INPUTS**
 
@@ -517,7 +517,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-	return 0
+        return 0
 
     def app_close_buffer(self, buff_name, save=0):
         """Close a buffer.
@@ -536,17 +536,17 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-#	print 'ASGE: someone is trying to close buffer "%s"' % buff_name
-	buff = self.find_buff(buff_name)
-	if buff == None:
-	    return 0
-	if self.is_bound_to_buffer() == buff_name:
-	    self.unbind_from_buffer()
-	success = self.the_editor.app_close_buffer(buff_name, save)
-	if success:
-	    self.open_buffers[buff_name].cleanup()
-	    del self.open_buffers[buff_name]
-	    return 1
-	else:
-	   return 0
+#        print 'ASGE: someone is trying to close buffer "%s"' % buff_name
+        buff = self.find_buff(buff_name)
+        if buff == None:
+            return 0
+        if self.is_bound_to_buffer() == buff_name:
+            self.unbind_from_buffer()
+        success = self.the_editor.app_close_buffer(buff_name, save)
+        if success:
+            self.open_buffers[buff_name].cleanup()
+            del self.open_buffers[buff_name]
+            return 1
+        else:
+           return 0
 

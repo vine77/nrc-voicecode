@@ -41,7 +41,7 @@ class MediatorConsole(Object.OwnerObject):
     def __init__(self, **attrs):
         self.deep_construct(MediatorConsole,
                             {
-			    },
+                            },
                             attrs)
 
 # defaults for vim - otherwise ignore

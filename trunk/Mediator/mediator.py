@@ -92,21 +92,21 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
     print the_mediator
     if the_mediator:
         the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-	    save_speech_files=save_speech_files, disconnect=disconnect)
+            save_speech_files=save_speech_files, disconnect=disconnect)
 
 def new_cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None, 
-	disconnect = 1):
+        disconnect = 1):
     the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-	save_speech_files=save_speech_files, disconnect=disconnect)
+        save_speech_files=save_speech_files, disconnect=disconnect)
 
 def new_simulator(symdict_pickle_fname=None,
-		   disable_dlg_select_symbol_matches = None,
-		   window = 0, exclusive = 0,
-		   allResults = 0,
-		   on_app = None, owns_app = 1,
-		   mic_change = None,
-		   owner = None, id = None
-		  ):
+                   disable_dlg_select_symbol_matches = None,
+                   window = 0, exclusive = 0,
+                   allResults = 0,
+                   on_app = None, owns_app = 1,
+                   mic_change = None,
+                   owner = None, id = None
+                  ):
 
     """
     Creates, configures, and returns a local [MediatorObject] instance 
@@ -166,11 +166,11 @@ def new_simulator(symdict_pickle_fname=None,
         on_app = EdSim.EdSim()
     
     try:
-	sr_interface.connect('off', mic_change_callback = mic_change)
+        sr_interface.connect('off', mic_change_callback = mic_change)
     except natlink.UnknownName:
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
-	sr_interface.disconnect()
-	return None
+        sr_interface.disconnect()
+        return None
 #        cleanup()        
         
     if sr_interface.speech_able:
@@ -189,18 +189,18 @@ def new_simulator(symdict_pickle_fname=None,
 #        if the_mediator:
 #            the_mediator.quit(save_speech_files=0, disconnect=0)            
         
-	interp = \
-	    CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
-		disable_dlg_select_symbol_matches = \
-		    disable_dlg_select_symbol_matches)
+        interp = \
+            CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+                disable_dlg_select_symbol_matches = \
+                    disable_dlg_select_symbol_matches)
         the_mediator = MediatorObject.MediatorObject(app = on_app,
-	    interp = interp,
-	    window = window, 
-	    owns_app = owns_app,
-	    exclusive = exclusive, 
-	    allResults = allResults, 
-	    owner = owner,
-	    id = id)
+            interp = interp,
+            window = window, 
+            owns_app = owns_app,
+            exclusive = exclusive, 
+            allResults = allResults, 
+            owner = owner,
+            id = id)
 
         #
         # Read the symbol dictionary from file
@@ -214,7 +214,7 @@ def new_simulator(symdict_pickle_fname=None,
         # Configure the mediator
         #
         the_mediator.configure()
-	return the_mediator
+        return the_mediator
 
     return None
 
@@ -241,13 +241,13 @@ def new_simulator(symdict_pickle_fname=None,
 
 
 def init_simulator(symdict_pickle_fname=None,
-		   disable_dlg_select_symbol_matches = None,
-		   window = 0, exclusive = 0,
-		   allResults = 0,
-		   on_app = None, owns_app = 1,
-		   mic_change = None,
-		   owner = None, id = None
-		  ):
+                   disable_dlg_select_symbol_matches = None,
+                   window = 0, exclusive = 0,
+                   allResults = 0,
+                   on_app = None, owns_app = 1,
+                   mic_change = None,
+                   owner = None, id = None
+                  ):
 
     """
     Creates a global [MediatorObject] instance *the_mediator*, and configures it.
@@ -308,7 +308,7 @@ def init_simulator(symdict_pickle_fname=None,
         on_app = EdSim.EdSim()
     
     try:
-	sr_interface.connect('off', mic_change_callback = mic_change)
+        sr_interface.connect('off', mic_change_callback = mic_change)
     except natlink.UnknownName:
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         cleanup()        
@@ -329,18 +329,18 @@ def init_simulator(symdict_pickle_fname=None,
         if the_mediator:
             the_mediator.quit(save_speech_files=0, disconnect=0)            
         
-	interp = \
-	    CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
-		disable_dlg_select_symbol_matches = \
-		    disable_dlg_select_symbol_matches)
+        interp = \
+            CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+                disable_dlg_select_symbol_matches = \
+                    disable_dlg_select_symbol_matches)
         the_mediator = MediatorObject.MediatorObject(app = on_app,
-	    interp = interp,
-	    window = window, 
-	    owns_app = owns_app,
-	    exclusive = exclusive, 
-	    allResults = allResults, 
-	    owner = owner,
-	    id = id)
+            interp = interp,
+            window = window, 
+            owns_app = owns_app,
+            exclusive = exclusive, 
+            allResults = allResults, 
+            owner = owner,
+            id = id)
 
         #
         # Read the symbol dictionary from file
@@ -409,7 +409,7 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
                    window=0, owns_app = 0, exclusive=1, allResults=0, 
                    disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)
-		   
+                   
 
     the_mediator.app.print_buff_when_changed = 1
     
@@ -417,8 +417,8 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
 def execute_command(cmd):
 #    print '-- mediator.execute_command: cmd=%s' % cmd
     try:
-	exec cmd in sim_commands.__dict__, sim_commands.command_space
-	#	  exec command in sim_commands and command_space
+        exec cmd in sim_commands.__dict__, sim_commands.command_space
+        #	  exec command in sim_commands and command_space
     except Exception, err:
         traceback.print_exc()
 
@@ -461,21 +461,21 @@ def simulator_mode(options):
     #
     
     if options['e']:
-	sys.stderr = sys.stdout
+        sys.stderr = sys.stdout
     try:
-	while (not sim_commands.quit_flag):
-	    sys.stdout.write('Command> ')
-	    cmd = sys.stdin.readline()
-	    execute_command(cmd)                
+        while (not sim_commands.quit_flag):
+            sys.stdout.write('Command> ')
+            cmd = sys.stdin.readline()
+            execute_command(cmd)                
     finally:
-	if options['e']:
-	    sys.stderr = sys.__stderr__
+        if options['e']:
+            sys.stderr = sys.__stderr__
 
 def new_execute_command(cmd, names):
 #    print '-- mediator.execute_command: cmd=%s' % cmd
     try:
-	exec cmd in names
-	#	  exec command in sim_commands and command_space
+        exec cmd in names
+        #	  exec command in sim_commands and command_space
     except Exception, err:
         traceback.print_exc()
 
@@ -513,11 +513,11 @@ def new_simulator_mode(options):
     names['testdata'] = os.path.join(home, 'Data', 'TestData')
 
     the_mediator = new_simulator(window = console_win_handle,
-	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-	disable_dlg_select_symbol_matches = 1) 
+        symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+        disable_dlg_select_symbol_matches = 1) 
 
     commands = sim_commands.SimCmdsObj(the_mediator.app, 
-	the_mediator.interp, names)
+        the_mediator.interp, names)
 # add bound methods of the commands SimCmdsObj instance, corresponding
 # to the functions in the sim_commands module, to this 
 # namespace 
@@ -528,17 +528,17 @@ def new_simulator_mode(options):
 
 
     if options['e']:
-	sys.stderr = sys.stdout
+        sys.stderr = sys.stdout
     try:
-	while (not names['quit_flag']):
-	    sys.stdout.write('Command> ')
-	    cmd = sys.stdin.readline()
-	    new_execute_command(cmd, names)                
+        while (not names['quit_flag']):
+            sys.stdout.write('Command> ')
+            cmd = sys.stdin.readline()
+            new_execute_command(cmd, names)                
     finally:
-	new_cleanup(the_mediator, commands.clean_sr_voc, 
-	    commands.save_speech_files, commands.disconnect_flag)
-	if options['e']:
-	    sys.stderr = sys.__stderr__
+        new_cleanup(the_mediator, commands.clean_sr_voc, 
+            commands.save_speech_files, commands.disconnect_flag)
+        if options['e']:
+            sys.stderr = sys.__stderr__
 
 def run(options):
     """run simulator from within a Python shell
@@ -559,8 +559,8 @@ def run(options):
  
     if opts['h']:
         print __doc__
-	print sim_commands.__doc__
-	return
+        print sim_commands.__doc__
+        return
 
     if opts['t']:
         #
@@ -576,7 +576,7 @@ new_simulator_mode(opts)""")
 #        simulator_mode(opts)
 
 #    cleanup(sim_commands.clean_sr_voc_flag, 
-#	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
+#        sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
         
 if (__name__ == '__main__'):
     

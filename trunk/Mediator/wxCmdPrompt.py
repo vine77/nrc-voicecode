@@ -31,7 +31,7 @@ from wxPython.wx import *
 # versions, and the workaround will still work then)
 def fix_x_y(value):
     if len(value) == 3:
-	return value[1], value[2]
+        return value[1], value[2]
     return value
 
 class wxCmdPromptWithHistory(CmdPromptWithHistory):
@@ -58,7 +58,7 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
     *none* --
     """
     def __init__(self, underlying, **args):
-	"""
+        """
 	**INPUTS**
 
 	*wxTextCtrl* underlying -- existing wxTextCtrl.  Must have
@@ -66,17 +66,17 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 	(not wxTE_MULTILINE)
 	"""
 
-	self.deep_construct(wxCmdPromptWithHistory,
-	    {"stored": "",
-	    "stored_selection": (0, 0),
-	    "text": underlying},
-	    args)
+        self.deep_construct(wxCmdPromptWithHistory,
+            {"stored": "",
+            "stored_selection": (0, 0),
+            "text": underlying},
+            args)
 
-	EVT_TEXT_ENTER(self.text, self.text.GetId(), self._on_command_enter)
-	EVT_CHAR(self.text, self._on_command_char)
+        EVT_TEXT_ENTER(self.text, self.text.GetId(), self._on_command_enter)
+        EVT_CHAR(self.text, self._on_command_char)
 
     def _on_command_char(self, key_event):
-	"""internal command to handle wxWindows key events
+        """internal command to handle wxWindows key events
 
 	**INPUTS**
 
@@ -88,23 +88,23 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 	*none*
 	"""
     
-	code = key_event.GetKeyCode()
-	if code == WXK_UP:
-	    new_buffer = self.previous()
-	    if new_buffer != None:
-		self.text.SetValue(new_buffer)
-		self.text.SetInsertionPointEnd()
-	elif code == WXK_DOWN:
-	    new_buffer = self.next()
-	    if new_buffer != None:
-		self.text.SetValue(new_buffer)
-		self.text.SetInsertionPointEnd()
-	else:
+        code = key_event.GetKeyCode()
+        if code == WXK_UP:
+            new_buffer = self.previous()
+            if new_buffer != None:
+                self.text.SetValue(new_buffer)
+                self.text.SetInsertionPointEnd()
+        elif code == WXK_DOWN:
+            new_buffer = self.next()
+            if new_buffer != None:
+                self.text.SetValue(new_buffer)
+                self.text.SetInsertionPointEnd()
+        else:
 # ignore other keys, allowing the default wxTextCtrl processing to proceed
-	    key_event.Skip()
+            key_event.Skip()
 
     def _on_command_enter(self, event):
-	"""internal command to handle wxWindows 
+        """internal command to handle wxWindows 
 	wxEVT_COMMAND_TEXT_ENTER events
 
 	**INPUTS**
@@ -115,12 +115,12 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
 	*none*
 	"""
-	command = self.text.GetValue()
-	self.text.SetValue("")
-	self._on_command(command)
+        command = self.text.GetValue()
+        self.text.SetValue("")
+        self._on_command(command)
 
     def save_edited(self):
-	"""store partially edited new command.
+        """store partially edited new command.
 
 	**INPUT**
 
@@ -130,11 +130,11 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
 	*none*
 	"""
-	self.stored = self.text.GetValue()
-	self.stored_selection = self.text.GetSelection()
+        self.stored = self.text.GetValue()
+        self.stored_selection = self.text.GetSelection()
 
     def restore_edited(self):
-	"""restore previously saved partially edited new command.
+        """restore previously saved partially edited new command.
 
 	**INPUT**
 
@@ -144,12 +144,12 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
 	*none*
 	"""
-	self.text.SetValue(self.stored)
-	self.text.SetSelection(self.stored_selection[0],
-	    self.stored_selection[1])
+        self.text.SetValue(self.stored)
+        self.text.SetSelection(self.stored_selection[0],
+            self.stored_selection[1])
 
     def edited(self):
-	"""contents of saved command line past the last command in the
+        """contents of saved command line past the last command in the
 	stack, if it has previously been saved. 
 	Unlike restore_edited, this method returns only the string
 	contents in the saved command line.
@@ -163,10 +163,10 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 	*STR* -- partial command previously stored with save_edited, 
 	or None if there is none.
 	"""
-	return self.stored
+        return self.stored
 
     def in_progress(self):
-	"""contents of command line currently being edited (not the one
+        """contents of command line currently being edited (not the one
 	stored by save_edited)
 	A concrete subclass of CmdPromptWithHistory must define this method.
       
@@ -178,7 +178,7 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
 	*STR* -- partial command currently being edited
 	"""
-	return self.text.GetValue()
+        return self.text.GetValue()
 
 
 class wxCmdLog(CmdLog):
@@ -193,7 +193,7 @@ class wxCmdLog(CmdLog):
     *none* --
     """
     def __init__(self, underlying_text, **args):
-	"""
+        """
 	**INPUTS**
 
 	*wxTextCtrl* underlying_text - underlying wxTextCtrl log window.
@@ -204,7 +204,7 @@ class wxCmdLog(CmdLog):
                             args)
   
     def write(self, string):
-	"""log output/message.  Must be implemented by concrete subclass
+        """log output/message.  Must be implemented by concrete subclass
 
 	**INPUTS**
 
@@ -215,21 +215,21 @@ class wxCmdLog(CmdLog):
 
 	*none*
 	"""
-	self.log.AppendText(string)
-#	self.log.SetScrollPos(wxVERTICAL, self.log.GetScrollRange(wxVERTICAL), 1)
-	p = self.log.GetLastPosition()
-	width, height = self.log.GetClientSizeTuple()
-	char_height = self.log.GetCharHeight()
-	line_height = height/char_height
-	x, y = fix_x_y(self.log.PositionToXY(p))
-	y = y- line_height
-	p = self.log.XYToPosition(x, y)
-	self.log.ShowPosition(p)
+        self.log.AppendText(string)
+#        self.log.SetScrollPos(wxVERTICAL, self.log.GetScrollRange(wxVERTICAL), 1)
+        p = self.log.GetLastPosition()
+        width, height = self.log.GetClientSizeTuple()
+        char_height = self.log.GetCharHeight()
+        line_height = height/char_height
+        x, y = fix_x_y(self.log.PositionToXY(p))
+        y = y- line_height
+        p = self.log.XYToPosition(x, y)
+        self.log.ShowPosition(p)
 
-#	self.log.ShowPosition(self.log.GetLastPosition())
+#        self.log.ShowPosition(self.log.GetLastPosition())
 
     def flush(self):
-	"""flush any buffered output to the command log.
+        """flush any buffered output to the command log.
 	Must be implemented by concrete subclass.
 	This interface allows CmdLog to be used to capture
 	standard output.
@@ -245,5 +245,5 @@ class wxCmdLog(CmdLog):
 	"""
 # I don't think that wxTextCtrl is buffered, and
 # write already does ShowPosition	
-	pass
+        pass
 

@@ -83,14 +83,14 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
         *STR* -- the name of the language
         """
-	self.app.talk_msgr.send_mess('language_name',
-	    {'buff_name': self.name()})
+        self.app.talk_msgr.send_mess('language_name',
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['language_name_resp'])
         return response[1]['value']
 
 
     def _cur_pos_from_app(self):
-	"""retrieves current position of cursor from external editor.
+        """retrieves current position of cursor from external editor.
 
 	**INPUTS**
 
@@ -101,13 +101,13 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	self.app.talk_msgr.send_mess('cur_pos',
-	    {'buff_name': self.name()})
+        self.app.talk_msgr.send_mess('cur_pos',
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['cur_pos_resp'])
         return messaging.messarg2int(response[1]['value'])
 
     def _get_selection_from_app(self):
-	"""retrieves range of current selection from external editor.
+        """retrieves range of current selection from external editor.
 
 	**INPUTS**
 
@@ -122,15 +122,15 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	following the selection (this matches Python's slice convention).
 	"""
 
-	self.app.talk_msgr.send_mess('get_selection',
-	    {'buff_name': self.name()})
+        self.app.talk_msgr.send_mess('get_selection',
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['get_selection_resp'])
         range = messaging.messarg2intlist(response[1]['value'])
         return range
         
 
     def set_selection(self, range, cursor_at = 1):
-	"""sets range of current selection, in the external editor.
+        """sets range of current selection, in the external editor.
 
         Also sets the position to beginning or end of the selection.
 
@@ -155,8 +155,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         # Set the selection and get updates from the editor
         #
         args = {'range': range, 'cursor_at': cursor_at,
-	    'buff_name': self.name()}
-	self.app.talk_msgr.send_mess('set_selection', args)
+            'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('set_selection', args)
         response = self.app.talk_msgr.get_mess(expect=['set_selection_resp'])
 
         #
@@ -167,7 +167,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.app.update_response = 0
 
     def _get_text_from_app(self, start = None, end = None):
-	"""retrieves a portion of the buffer
+        """retrieves a portion of the buffer
 
 	**INPUTS**
 
@@ -186,15 +186,15 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 #        print '-- SourceBuffMessaging._get_text_from_app: start=%s, end=%s' % (start, end)
         
         args = {'start': start, 'end': end,
-	    'buff_name': self.name()}
-	self.app.talk_msgr.send_mess('get_text', args)
+            'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('get_text', args)
         response = self.app.talk_msgr.get_mess(expect=['get_text_resp'])
         
         return response[1]['value']
         
 
     def _get_visible_from_app(self):
-	""" get start and end offsets of the currently visible region of
+        """ get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
 	visible (matching Python's slice convention)
 
@@ -206,14 +206,14 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 	*INT* (start, end)
 	"""
-	self.app.talk_msgr.send_mess('get_visible',
-	    {'buff_name': self.name()})
+        self.app.talk_msgr.send_mess('get_visible',
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['get_visible_resp'])
         return messaging.messarg2intlist(response[1]['value'])        
         
 
     def make_position_visible(self):
-	"""scroll buffer (if necessary) so that the current position
+        """scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
@@ -226,7 +226,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	"""
 
         args = {'buff_name': self.name()}
-	self.app.talk_msgr.send_mess('make_position_visible', args)
+        self.app.talk_msgr.send_mess('make_position_visible', args)
         response = self.app.talk_msgr.get_mess(expect=['make_position_visible_resp'])
 
 #        self.app.update_response = 1
@@ -234,7 +234,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 #        self.app.update_response = 0
         
     def line_num_of(self, position = None):
-	"""
+        """
         Returns the line number for a particular cursor position
         
         **INPUTS**
@@ -247,13 +247,13 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         """
         
         args = {'position': position, 'buff_name': self.name()}
-	self.app.talk_msgr.send_mess('line_num_of', args)
+        self.app.talk_msgr.send_mess('line_num_of', args)
         response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
 
         return messaging.messarg2int(response[1]['value'])
 
     def _len_from_app(self):
-	"""return length of buffer in characters.
+        """return length of buffer in characters.
 
 	**INPUTS**
 
@@ -263,7 +263,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 	*INT* length 
 	"""
-	self.app.talk_msgr.send_mess('len', {'buff_name': self.name()})
+        self.app.talk_msgr.send_mess('len', {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['len_resp'])
 
         return messaging.messarg2int(response[1]['value'])
@@ -285,7 +285,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         """
         
         self.app.talk_msgr.send_mess('newline_conventions',
-	    {'buff_name': self.name()})
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['newline_conventions_resp'])
         return response[1]['value']
 
@@ -305,7 +305,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         """
 
         self.app.talk_msgr.send_mess('pref_newline_convention',
-	    {'buff_name': self.name()})
+            {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['pref_newline_convention_resp'])
         return response[1]['value']
 
@@ -324,7 +324,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         args = {'pos': pos, 'buff_name': self.name()}
         self.app.talk_msgr.send_mess('beginning_of_line', args)
         response = \
-	    self.app.talk_msgr.get_mess(expect=['beginning_of_line_resp'])
+            self.app.talk_msgr.get_mess(expect=['beginning_of_line_resp'])
 
         return messaging.messarg2int(response[1]['value'])
         
@@ -345,7 +345,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         args = {'pos': pos, 'buff_name': self.name()}
         self.app.talk_msgr.send_mess('end_of_line', args)
         response = \
-	    self.app.talk_msgr.get_mess(expect=['end_of_line_resp'])
+            self.app.talk_msgr.get_mess(expect=['end_of_line_resp'])
 
         return messaging.messarg2int(response[1]['value'])
 
@@ -364,7 +364,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         *none* -- 
         """
         args = {'direction': direction, 'num': num,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('move_relative_page', args)
         response = self.app.talk_msgr.get_mess(expect=['move_relative_page_resp'])
 
@@ -471,7 +471,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 #        print '-- SourceBuffMessaging.insert: text=%s, range=%s' % (text, range)
         
         args = {'text': text, 'range': range,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('insert', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_resp'])        
         self.app.update_response = 1
@@ -496,7 +496,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         # Ask external editor to delete the region
         #
         args = {'range': range,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('delete', args)
         response = self.app.talk_msgr.get_mess(expect=['delete_resp'])
 
@@ -515,7 +515,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         # Ask external editor to delete the region
         #
         args = {'pos': pos,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('goto', args)
         response = self.app.talk_msgr.get_mess(expect=['goto_resp'])
 
@@ -532,7 +532,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
         args = {'linenum': linenum, 'where': where,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('goto_line', args)
         response = self.app.talk_msgr.get_mess(expect=['goto_line_resp'])
 
@@ -565,7 +565,7 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(SourceBuffInsertIndentMess, {}, args)
+        self.deep_construct(SourceBuffInsertIndentMess, {}, args)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -592,7 +592,7 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
 # Subclasses for particular editors which use mediator-based indentation 
 # can always override this choice.
         args = {'code_bef': code_bef, 'code_after': code_after, 'range': range,
-	    'buff_name': self.name()}
+            'buff_name': self.name()}
         self.app.talk_msgr.send_mess('insert_indent', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_indent_resp'])        
         self.app.update_response = 1

@@ -76,7 +76,7 @@ def accept_symbol_match_test(interp, source, symbol_matches):
     """Does a test on SymDict.accept_symbol_match.
     """
     print '\n\n*** Accept symbol match test. source=\'%s\' ***' \
-	% util.within_VCode(source)
+        % util.within_VCode(source)
     interp.cleanup()            
     interp.parse_symbols_from_file(source)
     print 'Parsed symbols are: '
@@ -129,9 +129,9 @@ def symbol_match_test(interp, sources, pseudo_symbols):
         *none* -- 
         """
 
-	strsources = []
-	for source in sources:
-	    strsources.append(util.within_VCode(source))
+        strsources = []
+        for source in sources:
+            strsources.append(util.within_VCode(source))
 
         print '*** Pseudo symbol match test***\n   Source files are: %s\n   Symbols are: %s\n\n' % (strsources, pseudo_symbols)
 
@@ -220,7 +220,7 @@ def test_CmdInterp_mediator(temp_mediator):
     #
     print '>>> Interpreting: %s' % ['for loop', 'loop body']
     interp.interpret_NL_cmd(['for loop', 'loop body'],
-	app)
+        app)
 
     #
     # Test if spoken form of CSC is recognised as multiple vocabulary entries
@@ -1439,25 +1439,25 @@ def manager_state(manager):
     print 'state {'
     apps = manager.app_names()
     for app in apps:
-	print 'application: ', app
-	instances =  manager.app_instances(app)
-	for instance in instances:
-	    sys.stdout.flush()
-	    print 'instance: ', instance
-	    a_name = manager.app_name(instance)
-	    if a_name != app:
-		print 'Warning: app names %s and %s do not match' \
-		    % (app, a_name)
-	    windows = manager.known_windows(instance)
-#	    print 'windows is ', repr(windows), type(windows), type([])
-	    for window in windows:
-		print 'window %d' % (window)
-		win_ins = manager.window_instances(window)
-#		print repr(win_ins)
-		if instance not in win_ins:
-		    print 'Warning: instance %s not found in window list' \
-		        % instance
-		sys.stdout.flush()
+        print 'application: ', app
+        instances =  manager.app_instances(app)
+        for instance in instances:
+            sys.stdout.flush()
+            print 'instance: ', instance
+            a_name = manager.app_name(instance)
+            if a_name != app:
+                print 'Warning: app names %s and %s do not match' \
+                    % (app, a_name)
+            windows = manager.known_windows(instance)
+#            print 'windows is ', repr(windows), type(windows), type([])
+            for window in windows:
+                print 'window %d' % (window)
+                win_ins = manager.window_instances(window)
+#                print repr(win_ins)
+                if instance not in win_ins:
+                    print 'Warning: instance %s not found in window list' \
+                        % instance
+                sys.stdout.flush()
     print 'known windows', manager.known_windows()
     print '} state'
     print ''
@@ -1465,26 +1465,26 @@ def manager_state(manager):
 def instance_status(manager, instance):
     print ''
     if not manager.known_instance(instance):
-	print "instance %s is unknown" % instance
-	return
+        print "instance %s is unknown" % instance
+        return
     print "instance %s" % instance
     module = manager.instance_module(instance)
     if module != None:
-	print "running in module %s" % module
+        print "running in module %s" % module
     else:
-	print "(unknown module)"
+        print "(unknown module)"
     windows = manager.known_windows(instance)
     print "windows: ", windows
     for window in windows:
-	print "window #%d:" % window
-	if manager.recog_mgr.shared_window(window):
-	    print "shared"
-	if manager.recog_mgr.single_display(window):
-	    print "single-window display"
-	instances = manager.window_instances(window)
-	print "all instances for window:"
-	for app in instances:
-	    print app
+        print "window #%d:" % window
+        if manager.recog_mgr.shared_window(window):
+            print "shared"
+        if manager.recog_mgr.single_display(window):
+            print "single-window display"
+        instances = manager.window_instances(window)
+        print "all instances for window:"
+        for app in instances:
+            print app
     print ''
 
 def set_window(current, window, app_name, app = None, alt_title = ""):
@@ -1502,22 +1502,22 @@ def new_buffer_for_instance(instance, buffer, before = "", after = ""):
     instance.print_buff_if_necessary()
 
 def new_instance(manager, current, app, window = None, 
-	alt_title = ""):
+        alt_title = ""):
     print 'new instance of %s %d' % (app.app_name, app)
     check = 0
     if window != None:
-	 print 'with window %d' % (window)
-	 check = 1
-	 set_window(current, window, app.app_name, app, alt_title)
+         print 'with window %d' % (window)
+         check = 1
+         set_window(current, window, app.app_name, app, alt_title)
     i_name = manager.new_instance(app, check)
     a_name = manager.app_name(i_name)
     if a_name != app.app_name:
-	print 'Warning: app names %s and %s do not match' \
-	    % (app.app_name, a_name)
+        print 'Warning: app names %s and %s do not match' \
+            % (app.app_name, a_name)
     a = manager.instances[i_name]
     if a != app:
-	print 'Warning: AppStates %d and %d do not match' \
-	    % (app, a)
+        print 'Warning: AppStates %d and %d do not match' \
+            % (app, a)
     return i_name
 
 def new_universal_instance(manager, current, app, exclusive = 1):
@@ -1525,21 +1525,21 @@ def new_universal_instance(manager, current, app, exclusive = 1):
     i_name = manager.new_universal_instance(app, exclusive)
     a_name = manager.app_name(i_name)
     if a_name != app.app_name:
-	print 'Warning: app names %s and %s do not match' \
-	    % (app.app_name, a_name)
+        print 'Warning: app names %s and %s do not match' \
+            % (app.app_name, a_name)
     a = manager.instances[i_name]
     if a != app:
-	print 'Warning: AppStates %d and %d do not match' \
-	    % (app, a)
+        print 'Warning: AppStates %d and %d do not match' \
+            % (app, a)
     return i_name
 
 class FakeWindow(Object.Object):
     def __init__(self, handle, module, **args):
-	self.deep_construct(FakeWindow,
-	                    {'handle': handle,
-			     'module_name': module
-			    },
-			    args)
+        self.deep_construct(FakeWindow,
+                            {'handle': handle,
+                             'module_name': module
+                            },
+                            args)
     def __int__(self):
         return self.handle
     def ID(self):
@@ -1552,45 +1552,45 @@ class FakeAppState(EdSim.EdSim):
 # but overrides shared_window, multiple_window, is_active, title_string,
 # so that we can pretend to be a variety of different types of editor
     def __init__(self, value, buff = None, shared = 0, 
-	    multi = 1, active = 1, title_control = 1, 
-	    safe_active = 1, **attrs):
-	self.deep_construct(FakeAppState, 
-			    {'value': value,
-			     'the_title_string': '',
-			     'shared_windows': shared,
-			     'multi': multi,
-			     'title_control': title_control,
-			     'active': active,
-			     'safe_active': safe_active
-			    }, attrs)
-	if buff != None:
-	    self.open_file(buff)
+            multi = 1, active = 1, title_control = 1, 
+            safe_active = 1, **attrs):
+        self.deep_construct(FakeAppState, 
+                            {'value': value,
+                             'the_title_string': '',
+                             'shared_windows': shared,
+                             'multi': multi,
+                             'title_control': title_control,
+                             'active': active,
+                             'safe_active': safe_active
+                            }, attrs)
+        if buff != None:
+            self.open_file(buff)
     def __str__(self):
         return str(self.value)
     def __int__(self):
         return self.value
     def shared_window(self):
-	return self.shared_windows
+        return self.shared_windows
     def multiple_windows(self):
-	return self.multi
+        return self.multi
 #    def name(self):
-#	return self.buff
+#        return self.buff
     def suspend(self):
-	self.active = 0
+        self.active = 0
     def resume(self):
-	self.active = 1
+        self.active = 1
     def is_active(self):
-	return self.active
+        return self.active
     def is_active_is_safe(self):
-	return self.safe_active
+        return self.safe_active
     def set_instance_string(self, instance_string):
-	self.the_instance_string = instance_string
+        self.the_instance_string = instance_string
     def instance_string(self):
-	if self.title_control:
-	    return self.the_instance_string 
-	return None
+        if self.title_control:
+            return self.the_instance_string 
+        return None
     def title_escape_sequence(self, a, b):
-	pass
+        pass
 
 def old_test_am_dictionaries():
     manager = AppMgr.AppMgr()
@@ -1631,9 +1631,9 @@ def old_test_am_dictionaries():
     manager_state(manager)
 
     m = new_instance(manager, 'Emacs (Exceed)', shell_Emacs,
-	window = 94)
+        window = 94)
     n = new_instance(manager, 'Emacs (Exceed)', shell_Emacs2,
-	window = 94)
+        window = 94)
     manager_state(manager)
     manager.delete_window(m, 94)
     manager_state(manager)
@@ -1644,18 +1644,18 @@ def old_test_am_dictionaries():
 
 def test_am_dictionaries():
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 1)
-    GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
+    GM_factory = GramMgr.WinGramMgrFactory(g_factory)
     current = RecogStartMgr.CurrWindowDummy()
     recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, GM_factory = GM_factory, 
       win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
     mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
-	editor = 'emacs')
+        editor = 'emacs')
     mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
-	editor = 'Vim')
+        editor = 'Vim')
     mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
-	title_varies = 1)
+        title_varies = 1)
     manager.add_module(mod_Emacs)
     manager.add_module(mod_Vim)
     manager.add_module(mod_telnet)
@@ -1706,10 +1706,10 @@ def test_am_dictionaries():
     windows[94] = FakeWindow(94, 'TELNET')
 
     m = new_instance(manager, current, shell_Emacs,
-	window = windows[94])
+        window = windows[94])
     shell_Emacs.suspend()
     n = new_instance(manager, current, shell_Emacs2,
-	window = windows[94])
+        window = windows[94])
     manager_state(manager)
     manager.delete_window(m, 94)
     manager_state(manager)
@@ -1720,22 +1720,22 @@ def test_am_dictionaries():
 
 def test_rsm_algorithm(trust = 0):
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 0)
-    GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
+    GM_factory = GramMgr.WinGramMgrFactory(g_factory)
     current = RecogStartMgr.CurrWindowDummy()
     recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, 
-	GM_factory = GM_factory, 
-	trust_current_window = trust, win_info = current)
+        GM_factory = GM_factory, 
+        trust_current_window = trust, win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
     mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
-	editor = 'emacs')
+        editor = 'emacs')
     mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
-	editor = 'Vim')
+        editor = 'Vim')
     mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
-	title_varies = 1)
+        title_varies = 1)
     mod_exceed = \
         KnownTargetModule.DualModeDisplayByTitle(title_regex = '^Exceed$',
-	module_name = 'EXCEED')
+        module_name = 'EXCEED')
     manager.add_module(mod_Emacs)
     manager.add_module(mod_Vim)
     manager.add_module(mod_telnet)
@@ -1797,7 +1797,7 @@ if ($voiceGripOS eq 'win') {
     another_Emacs = FakeAppState(2, 'poodle.C', app_name = 'emacs')
 #    yet_another_Emacs = FakeAppState(4, 'foo.bar', app_name = 'emacs')
     shell_Emacs = FakeAppState(5, 'bug.c', app_name = 'emacs', shared = 1, multi = 0,
-	title_control = 0)
+        title_control = 0)
     shell_Emacs2 = FakeAppState(6, 'dog.q', app_name = 'emacs', shared = 1, multi = 0,
         title_control = 0)
 #    Vim = FakeAppState(3, 'tests_def.py')
@@ -1818,7 +1818,7 @@ if ($voiceGripOS eq 'win') {
     print 'new window 20'
     set_window(current, windows[20], Emacs.app_name, Emacs)
     new_buffer_for_instance(Emacs, "fish.C", before = fish_before, 
-	after = fish_after)
+        after = fish_after)
     instance_status(manager, e1)
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
@@ -1838,9 +1838,9 @@ if ($voiceGripOS eq 'win') {
     manager_state(manager)
     print 'now specifying window'
     if manager.specify_window(se1):
-	print 'success'
+        print 'success'
     else:
-	print 'failed'
+        print 'failed'
     instance_status(manager, se1)
 
     set_window(current, windows[8], None, alt_title = 'ttssh - acappella')
@@ -1849,7 +1849,7 @@ if ($voiceGripOS eq 'win') {
     instance_status(manager, se1)
     
     set_window(current, windows[5], shell_Emacs.app_name, shell_Emacs, 
-	alt_title = 'ttssh - acappella')
+        alt_title = 'ttssh - acappella')
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
     instance_status(manager, se1)
@@ -1866,9 +1866,9 @@ if ($voiceGripOS eq 'win') {
     instance_status(manager, se1)
     print 'now specifying window'
     if manager.specify_window(se2):
-	print 'success'
+        print 'success'
     else:
-	print 'failed'
+        print 'failed'
     instance_status(manager, se2)
     instance_status(manager, se1)
     print 'starting recognition in ', repr(current.window_info())
@@ -1895,7 +1895,7 @@ if ($voiceGripOS eq 'win') {
     tv1 = new_instance(manager, current, text_Vim, 
         windows[15], alt_title = 'xterm - acappella')
     new_buffer_for_instance(text_Vim, "dog.pl", before = dog_before, 
-	after = dog_after)
+        after = dog_after)
     instance_status(manager, tv1)
     manager_state(manager)
     print 'starting recognition in ', repr(current.window_info())
@@ -1921,9 +1921,9 @@ if ($voiceGripOS eq 'win') {
 
     print 'now specifying window'
     if manager.specify_window(te1):
-	print 'success'
+        print 'success'
     else:
-	print 'failed'
+        print 'failed'
     instance_status(manager, te1)
 
     print 'starting recognition in ', repr(current.window_info())
@@ -1939,7 +1939,7 @@ if ($voiceGripOS eq 'win') {
     print 'resuming ', tv1
     text_Vim.resume()
     set_window(current, windows[15], text_Vim.app_name, text_Vim,
-	alt_title = 'xterm - acappella')
+        alt_title = 'xterm - acappella')
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
     instance_status(manager, tv1)
@@ -2032,7 +2032,7 @@ def activate_for(manager, buffer, window):
 def new_buffer(manager, buffer, window = None, before = "", after = ""):
     print 'new buffer %s' % (buffer)
     if window != None:
-	 print 'with window %d' % (window)
+         print 'with window %d' % (window)
     manager.app.open_file(buffer)
     b = manager.app.find_buff(buffer)
     b.insert_indent(before, after)
@@ -2101,8 +2101,8 @@ if ($voiceGripOS eq 'win') {
 
     factory = sr_grammars.WinGramFactoryDummy()
     app = EdSim.EdSim(multiple = 1, instance_reporting = 1)
-    manager = GramMgr.WinGramMgr(factory, None, app = app,
-	global_grammars = global_grammars, exclusive = exclusive)
+    manager = GramMgr.WinGramMgr(factory, app = app, recog_mgr = None,
+        global_grammars = global_grammars, exclusive = exclusive)
     w = 5
     w2 = 7
     new_buffer(manager, 'fish.C', w, fish_before, fish_after)
@@ -2128,6 +2128,8 @@ if ($voiceGripOS eq 'win') {
     app.close_all_buffers(-1)
     print 'cleanup app'
     app.cleanup()
+    print 'cleanup manager'
+    manager.cleanup()
     print 'test ending - expect dels of manager, app'
 
 def test_gram_manager():
@@ -2157,7 +2159,7 @@ def test_EdSim_alloc_cleanup():
     temporary = temp_factory.new_mediator(editor = editor, skip_config = 1)
     del editor
 #     a_mediator = MediatorObject.MediatorObject(app =
-# 	EdSim.EdSim(instance_reporting = 1),
+#        EdSim.EdSim(instance_reporting = 1),
 #         interp=CmdInterp.CmdInterp())
     test_CmdInterp_mediator(temporary)
 
@@ -2167,7 +2169,7 @@ def test_EdSim_alloc_cleanup():
     temporary = temp_factory.new_mediator(editor = editor, skip_config = 1)
     del editor
 #     a_mediator = MediatorObject.MediatorObject(app =
-# 	EdSim.EdSim(multiple = 1, instance_reporting = 1),
+#        EdSim.EdSim(multiple = 1, instance_reporting = 1),
 #         interp=CmdInterp.CmdInterp())
     test_CmdInterp_mediator(temporary)
     
@@ -2182,6 +2184,5 @@ auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup,
 def test_temporary():
 
     testing.init_simulator_regression()
-#    test_command("open_file('%s')" % small_buff_c)
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')

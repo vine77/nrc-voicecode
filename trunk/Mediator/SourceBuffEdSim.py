@@ -67,36 +67,36 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
-			 'state_srv':
-			 sb_services.SB_ServiceFullState(buff = self)})
+                         'state_srv':
+                         sb_services.SB_ServiceFullState(buff = self)})
 
         self.deep_construct(SourceBuffEdSim,
                             {'pos': init_pos, 
                              'selection': init_selection, 
                              'content': initial_contents, 
-			     'global_selection': global_selection,
+                             'global_selection': global_selection,
                              'indent_level': indent_level,
                              'indent_to_curr_level': indent_to_curr_level,
-			     'instance_reporting': instance_reporting }, 
+                             'instance_reporting': instance_reporting }, 
                             attrs
                             )
 
-	self.add_owned_list(['state_srv', 'indent_srv', 'line_srv', 'lang_srv'])
+        self.add_owned_list(['state_srv', 'indent_srv', 'line_srv', 'lang_srv'])
 
-	if self.instance_reporting:
-	    print 'SourceBuff.__init__:', util.within_VCode(self.name())
-	self.pos = self.make_within_range(self.pos)
-	if not self.selection:
-	    self.selection = (self.pos, self.pos)
-	s, e = self.get_selection()
-	if (s < e):
-	    self.selection = (self.pos, self.pos)
+        if self.instance_reporting:
+            print 'SourceBuff.__init__:', util.within_VCode(self.name())
+        self.pos = self.make_within_range(self.pos)
+        if not self.selection:
+            self.selection = (self.pos, self.pos)
+        s, e = self.get_selection()
+        if (s < e):
+            self.selection = (self.pos, self.pos)
             
 
     def __del__(self):
-	"destructor"
-	if self.instance_reporting:
-	    print 'SourceBuff.__del__:', util.within_VCode(self.name())
+        "destructor"
+        if self.instance_reporting:
+            print 'SourceBuff.__del__:', util.within_VCode(self.name())
 
     def rename_buffer_cbk(self, new_buff_name):
         
@@ -114,12 +114,12 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-	if self.instance_reporting:
-	    print 'SourceBuff.rename_buffer_cbk:', self.name(), new_buff_name
-	self.SourceBuffNonCached.rename_buffer_cbk(new_buff_name)
+        if self.instance_reporting:
+            print 'SourceBuff.rename_buffer_cbk:', self.name(), new_buff_name
+        self.SourceBuffNonCached.rename_buffer_cbk(new_buff_name)
       
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**INPUTS**
@@ -132,9 +132,9 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	"""
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
-	if self.instance_reporting:
-	    print 'SourceBuff.remove_other_references:', util.within_VCode(self.name())
-	SourceBuffNonCached.SourceBuffNonCached.remove_other_references(self)
+        if self.instance_reporting:
+            print 'SourceBuff.remove_other_references:', util.within_VCode(self.name())
+        SourceBuffNonCached.SourceBuffNonCached.remove_other_references(self)
 
     def file_name(self):
         return self.name()
@@ -154,51 +154,51 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         return self.lang_srv.language_name()
 
     def cur_pos(self):
-	return self.pos
+        return self.pos
 
     def get_selection(self):
         if self.selection == None:
             self.selection = (self.cur_pos(), self.cur_pos())
-	return self.selection
+        return self.selection
     
     def set_selection(self, range, cursor_at = 1):
-	start, end = self.make_valid_range(range)
-	self.selection = (start, end)
-	self.pos = end
+        start, end = self.make_valid_range(range)
+        self.selection = (start, end)
+        self.pos = end
 
     def get_text(self, start = None, end = None):
-	if start == None:
-	    start = 0
-	if end == None:
-	    end = self.len()
-	start, end = self.make_valid_range((start, end))
-	return self.content[ start: end]
+        if start == None:
+            start = 0
+        if end == None:
+            end = self.len()
+        start, end = self.make_valid_range((start, end))
+        return self.content[ start: end]
     
     def set_text(self, text, start = None, end = None):
-	if start == None:
-	    start = 0
-	if end == None:
-	    end = self.len()
-	start, end = self.make_valid_range((start, end))
-	before = self.content[0:start]
+        if start == None:
+            start = 0
+        if end == None:
+            end = self.len()
+        start, end = self.make_valid_range((start, end))
+        before = self.content[0:start]
         after = self.content[end:]
         self.content = before + text + after
-	self.goto(start + len(text))
-	self.on_change(start, end, text, 1)
+        self.goto(start + len(text))
+        self.on_change(start, end, text, 1)
 
     def get_visible(self):
-	if self.global_selection:
-	    return (0, self.len())
-	top, bottom = self.lines_around_cursor()
+        if self.global_selection:
+            return (0, self.len())
+        top, bottom = self.lines_around_cursor()
         lines = string.split(self.contents(), '\n')
-	s = 0
-	for line in lines[0: top -1]:
-	    s = s + len(line) + 1
-	e = s
-	for line in lines[top: bottom -1]:
-	    e = e + len(line) + 1
-	e = e + len(lines[bottom])
-	return s, e
+        s = 0
+        for line in lines[0: top -1]:
+            s = s + len(line) + 1
+        e = s
+        for line in lines[top: bottom -1]:
+            e = e + len(line) + 1
+        e = e + len(lines[bottom])
+        return s, e
 
     def make_position_visible(self):
         pass
@@ -219,7 +219,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
 
     def len(self):
-	return len(self.content)
+        return len(self.content)
 
     def beginning_of_line(self, pos):
         """Returns the position of the beginning of line at position *pos*
@@ -253,10 +253,10 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     def print_buff_if_necessary(self):
         """Always print content of buffer after changes, even if we are not
         using EdSim for regression testing."""
-	self.print_buff()
+        self.print_buff()
 
     def refresh(self):
-	self.print_buff()
+        self.print_buff()
         
     def move_relative_page(self, direction=1, num=1):
         """Moves up or down a certain number of pages
@@ -293,15 +293,15 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 
-	if range == None:
-	    range = self.get_selection()
-	range = self.make_valid_range(range)
-	start, end = range
-	before = self.get_text(0,start)
-	after = self.get_text(end)
-	self.content = before + text + after
-	self.goto(start + len(text))
-	self.on_change(start, end, text, 1)
+        if range == None:
+            range = self.get_selection()
+        range = self.make_valid_range(range)
+        start, end = range
+        before = self.get_text(0,start)
+        after = self.get_text(end)
+        self.content = before + text + after
+        self.goto(start + len(text))
+        self.on_change(start, end, text, 1)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -394,15 +394,15 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 
-	if range == None:
-	    range = self.get_selection()
-	range = self.make_valid_range(range)
-	start, end = range
-	before = self.content[0:start]
+        if range == None:
+            range = self.get_selection()
+        range = self.make_valid_range(range)
+        start, end = range
+        before = self.content[0:start]
         after = self.content[end:]
         self.content = before + after
         self.goto(start)
-	self.on_change(start, end, "", 1)
+        self.on_change(start, end, "", 1)
 
         
     def goto(self, pos):
@@ -411,9 +411,9 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	(and make selection empty) 
         """
         
-	pos = self.make_within_range(pos)
-	self.pos = pos
-	self.selection = (pos, pos)
+        pos = self.make_within_range(pos)
+        self.pos = pos
+        self.selection = (pos, pos)
 
 
 
@@ -429,7 +429,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         self.line_srv.goto_line(linenum, where)
 
     def _state_cookie_class(self):
-	"""returns the class object for the type of cookie used by
+        """returns the class object for the type of cookie used by
 	store_current_state.
 
 	**INPUTS**
@@ -442,10 +442,10 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	SourceBuff
 
 	"""
-	return self.state_srv._state_cookie_class()
-	
+        return self.state_srv._state_cookie_class()
+        
     def store_current_state(self):
-	"""stores the current state of the buffer, including both the
+        """stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
 	store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
@@ -476,10 +476,10 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
 	*SourceBuffState* -- state cookie (see above)
 	"""
-	return self.state_srv.store_current_state()
+        return self.state_srv.store_current_state()
 
     def restore_state(self, cookie):
-	"""restores the buffer to its state at the time when
+        """restores the buffer to its state at the time when
 	the cookie was returned by store_current_state.  Both the
 	contents and the selection will be restored.  However, other
 	data, such as the search history, may not.  The restore
@@ -495,11 +495,11 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if restore was successful
 
 	"""
-	return self.state_srv.restore_state(cookie)
+        return self.state_srv.restore_state(cookie)
 
 
     def compare_with_current(self, cookie, selection = 0):
-	"""compares the current buffer state to its state at the time when
+        """compares the current buffer state to its state at the time when
 	the cookie was returned by store_current_state.  By default,
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to the cookie has
@@ -516,10 +516,10 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if state is the same, false if it is not, or
 	it cannot be determined due to expiration of the cookie
 	"""
-	return self.state_srv.compare_with_current(cookie, selection)
-	
+        return self.state_srv.compare_with_current(cookie, selection)
+        
     def valid_cookie(self, cookie):
-	"""checks whether a state cookie is valid or expired.
+        """checks whether a state cookie is valid or expired.
 	If the state corresponding to the cookie has
 	been lost, valid_cookie will return false.
 
@@ -532,7 +532,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if cookie is valid (i.e. restore_state should be
 	able to work)
 	"""
-	return self.state_srv.valid_cookie(cookie)
+        return self.state_srv.valid_cookie(cookie)
 
     def newline_conventions(self):
         

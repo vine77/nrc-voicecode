@@ -276,8 +276,8 @@ def full_split(path):
 def find_common(a, b):
     n = min(len(a), len(b))
     for i in range(n):
-	if a[i] != b[i]:
-	    return i
+        if a[i] != b[i]:
+            return i
     return n
 
 def remove_common(first, second):
@@ -296,10 +296,10 @@ def relative_name(path, head, prefix=''):
     common = common_path(path, head)
     whole_head = full_split(head)
     if (whole_head != common):
-	return path
+        return path
     p = []
     if (prefix != ''):
-	p.append(prefix)
+        p.append(prefix)
     p.extend(remove_common(path,head))
     return apply(os.path.join, p)
 
@@ -307,4 +307,4 @@ def within_VCode(path):
 #    return relative_name(path, vc_globals.home)
     return relative_name(path, vc_globals.home, prefix = '%VCODE_HOME%')
 #    return relative_name(path, vc_globals.home, 
-#	prefix = os.path.basename(vc_globals.home))
+#        prefix = os.path.basename(vc_globals.home))

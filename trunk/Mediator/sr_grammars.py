@@ -22,7 +22,7 @@
 """abstract interfaces for dictation and selection grammars
 """
 
-from Object import Object
+from Object import Object, OwnerObject
 import debug
 
 import CmdInterp, AppState
@@ -46,12 +46,12 @@ class WinGram(Object):
     *none*
     """
     def __init__(self, window = None, exclusive = 0, **attrs):
-	self.deep_construct(WinGram,
-	    {'window' : window, 'exclusive' : exclusive, 
-	    'active' : 0}, attrs)
+        self.deep_construct(WinGram,
+            {'window' : window, 'exclusive' : exclusive, 
+            'active' : 0}, attrs)
 
     def activate(self):
-	"""activates the grammar for recognition
+        """activates the grammar for recognition
 	tied to the current window.
 
 	**INPUTS**
@@ -62,10 +62,10 @@ class WinGram(Object):
 
 	*none*
 	"""
-	debug.virtual('WinGram.activate')
+        debug.virtual('WinGram.activate')
     
     def deactivate(self):
-	"""disable recognition from this grammar
+        """disable recognition from this grammar
 
 	**INPUTS**
 
@@ -75,10 +75,10 @@ class WinGram(Object):
 
 	*none*
 	"""
-	debug.virtual('WinGram.deactivate')
+        debug.virtual('WinGram.deactivate')
 
     def window(self):
-	"""window to which the grammar is specific (or None for 
+        """window to which the grammar is specific (or None for 
 	a global grammar)
 
 	**INPUTS**
@@ -89,10 +89,10 @@ class WinGram(Object):
 
 	*INT* -- window handle (None indicates global)
 	"""
-	return self.window
+        return self.window
 
     def is_exclusive(self):
-	"""is the grammar exclusive?
+        """is the grammar exclusive?
 
 	**INPUTS**
 
@@ -102,10 +102,10 @@ class WinGram(Object):
 
 	*BOOL* -- exclusive?
 	"""
-	return self.exclusive
+        return self.exclusive
 
     def is_active(self):
-	"""indicates whether the grammar is active for recognition 
+        """indicates whether the grammar is active for recognition 
 
 	**INPUTS**
 
@@ -115,10 +115,10 @@ class WinGram(Object):
 
 	*BOOL* -- returns true iff the grammar is active
 	"""
-	return self.active
+        return self.active
 
     def is_global(self):
-	"""tells whether the grammar is global
+        """tells whether the grammar is global
 
 	**INPUTS**
 
@@ -129,14 +129,14 @@ class WinGram(Object):
 	*BOOL* -- is grammar set for global (window-independent)
 	recognition.
 	"""
-	return self.window == None
+        return self.window == None
 
-class DictWinGram(WinGram):
+class DictWinGram(WinGram, OwnerObject):
     """abstract base class for window-specific dictation grammar interfaces
 
     **INSTANCE ATTRIBUTES**
 
-    *CmdInterp* interp -- interpreter to which to forward results
+    *WinGramMgr* manager -- the grammar manager which owns this grammar
 
     *AppState* app -- application which is the target of the grammar
 
@@ -148,12 +148,25 @@ class DictWinGram(WinGram):
 
     *none*
     """
-    def __init__(self, interp, app, buff_name = None, **attrs):
-	self.deep_construct(DictWinGram,
-	    {'interp': interp, 'app': app,'buff_name': buff_name}, attrs)
+    def __init__(self, manager, app, buff_name = None, **attrs):
+        self.deep_construct(DictWinGram,
+            {'manager': manager, 'app': app,'buff_name': buff_name}, attrs)
+        self.name_parent('manager')
 
+    def interpreter(self):
+        """return a reference to the mediator's current CmdInterp object
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        return self.manager.interpreter()
     def set_context(self, before = "", after = ""):
-	"""set the context to improve dictation accuracy
+        """set the context to improve dictation accuracy
 
 	**INPUTS**
 
@@ -168,7 +181,7 @@ class DictWinGram(WinGram):
 
 	*none*
 	"""
-	debug.virtual('DictWinGram.set_context')
+        debug.virtual('DictWinGram.set_context')
 
 
 class SelectWinGram(WinGram):
@@ -184,7 +197,7 @@ class SelectWinGram(WinGram):
     """
     def __init__(self, app, buff_name = None, select_words = ['select'],
         through_word = 'through', **attrs):
-	"""
+        """
 	**INPUTS**
 
 	*AppState* app -- application to which results will be sent
@@ -192,13 +205,23 @@ class SelectWinGram(WinGram):
 	*STR* buff_name -- name of buffer to which to tie this 
 	selection grammar (can also be set by activate)
 	"""
-	self.deep_construct(SelectWinGram,
-	    {'app': app,'buff_name' : buff_name, 
-	    'select_words' : select_words, 'through_word' : through_word}, 
-	    attrs)
+        self.deep_construct(SelectWinGram,
+            {'app': app,'buff_name' : buff_name, 
+            'select_words' : select_words, 'through_word' : through_word}, 
+            attrs)
+
+    def cleanup(self):
+        """SelectWinGram has a reference to an AppState instance, but no
+	circular references, so strictly speaking it is only necessary
+	for the grammar manager to delete its reference to the grammar.
+	However, a dummy cleanup method allows us to avoid the need for
+	a custom cleanup method for GramMgr.
+	"""
+# not necessary, but can't hurt
+        self.app = None
 
     def _set_visible(self, visible):
-	"""internal call to set the currently visible range.
+        """internal call to set the currently visible range.
 
 	**INPUTS**
 
@@ -208,10 +231,10 @@ class SelectWinGram(WinGram):
 
 	*none*
 	"""
-	debug.virtual('SelectWinGram._set_visible')
+        debug.virtual('SelectWinGram._set_visible')
 
     def find_visible(self):
-	"""find the currently visible range for self.buff_name
+        """find the currently visible range for self.buff_name
 	and checks with buffer for the currently visible range.
 
 	**INPUTS**
@@ -222,15 +245,15 @@ class SelectWinGram(WinGram):
 
 	*none*
 	"""
-	self.buff_name = buff_name
-	vis_start, vis_end = self.app.get_visible(buff_name = buff_name)
-	self.vis_start = vis_start
-	visible = \
-	    self.app.get_text(vis_start, vis_end, buff_name = buff_name)
-	self._set_visible(visible)
+        self.buff_name = buff_name
+        vis_start, vis_end = self.app.get_visible(buff_name = buff_name)
+        self.vis_start = vis_start
+        visible = \
+            self.app.get_text(vis_start, vis_end, buff_name = buff_name)
+        self._set_visible(visible)
 
     def activate(self, buff_name):
-	"""activates the grammar for recognition tied to the current window,
+        """activates the grammar for recognition tied to the current window,
 	and checks with buffer for the currently visible range.
 
 	**INPUTS**
@@ -241,7 +264,7 @@ class SelectWinGram(WinGram):
 
 	*none*
 	"""
-	debug.virtual('SelectWinGram.activate')
+        debug.virtual('SelectWinGram.activate')
 
 
     def buffer_name(self):
@@ -256,10 +279,10 @@ class SelectWinGram(WinGram):
 	*STR* -- name of buffer currently used by this selection grammar.
 	"""
 
-	return self.buff_name
+        return self.buff_name
     
     def find_closest(self, verb, spoken_form, ranges):
-	"""Sort the ranges from earliest to latest, and select the one
+        """Sort the ranges from earliest to latest, and select the one
         which is closest to the cursor in the proper direction
 
 	**INPUTS**
@@ -271,54 +294,54 @@ class SelectWinGram(WinGram):
 	*[(INT, INT)] -- list of ranges of offsets into buffer with the
 	best recognition score
 	"""
-	
-	#
-	# Analyse the verb used by the user in the Select utterance
-	#
+        
+        #
+        # Analyse the verb used by the user in the Select utterance
+        #
 
-	direction = None
-	if re.search('previous', verb, 1):
-	    direction = -1
-	if re.search('next', verb, 1):                
-	    direction = 1
+        direction = None
+        if re.search('previous', verb, 1):
+            direction = -1
+        if re.search('next', verb, 1):                
+            direction = 1
 
-	mark_selection = 1
-	if re.search('go', verb, 1) or re.search('before', verb, 1) or \
-	   re.search('after', verb, 1):
-	    mark_selection = 0
+        mark_selection = 1
+        if re.search('go', verb, 1) or re.search('before', verb, 1) or \
+           re.search('after', verb, 1):
+            mark_selection = 0
 
-	where = 1
-	if re.search('before', verb, 1):
-	    where = -1
-	if re.search('after', verb, 1):
-	    where = 1
+        where = 1
+        if re.search('before', verb, 1):
+            where = -1
+        if re.search('after', verb, 1):
+            where = 1
 
 
 
-	#
-	ranges.sort()
-	closest_range_index = \
-	    self.app.closest_occurence_to_cursor(ranges, 
-		regexp=spoken_form, 
-		direction=direction, where=where, 
-		buff_name = self.buff_name)
+        #
+        ranges.sort()
+        closest_range_index = \
+            self.app.closest_occurence_to_cursor(ranges, 
+                regexp=spoken_form, 
+                direction=direction, where=where, 
+                buff_name = self.buff_name)
 
-	#
-	# Mark selection and/or move cursor  to the appropriate end of
-	# the selection.
-	#
-	if mark_selection:
-	    a = actions_gen.ActionSelect(range = \
-		ranges[closest_range_index],
-		buff_name = self.buff_name,
-		cursor_at=where)
-	    a.log_execute(self.app, None)
-	else:
-	    if where > 0:
-		pos = ranges[closest_range_index][1]
-	    else:
-		pos = ranges[closest_range_index][0]
-	    self.app.goto(pos, buff_name = self.buff_name)
+        #
+        # Mark selection and/or move cursor  to the appropriate end of
+        # the selection.
+        #
+        if mark_selection:
+            a = actions_gen.ActionSelect(range = \
+                ranges[closest_range_index],
+                buff_name = self.buff_name,
+                cursor_at=where)
+            a.log_execute(self.app, None)
+        else:
+            if where > 0:
+                pos = ranges[closest_range_index][1]
+            else:
+                pos = ranges[closest_range_index][0]
+            self.app.goto(pos, buff_name = self.buff_name)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 
@@ -326,17 +349,17 @@ class SelectWinGram(WinGram):
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the print_buff_if_necessary message.
 
-	self.app.print_buff_if_necessary(buff_name = self.buff_name)
+        self.app.print_buff_if_necessary(buff_name = self.buff_name)
 
-	#
-	# Log the selected occurence so that if the user repeats the
-	# same Select Pseudocode operation we don't end up selecting
-	# the same occurence again
-	#
-	self.app.log_search(regexp=spoken_form, 
-	    direction=direction, where=where, 
-	    match=ranges[closest_range_index],
-	    buff_name = self.buff_name)
+        #
+        # Log the selected occurence so that if the user repeats the
+        # same Select Pseudocode operation we don't end up selecting
+        # the same occurence again
+        #
+        self.app.log_search(regexp=spoken_form, 
+            direction=direction, where=where, 
+            match=ranges[closest_range_index],
+            buff_name = self.buff_name)
 
 
 
@@ -354,15 +377,15 @@ class WinGramFactory(Object):
     *none*
     """
     def __init__(self, select_words = ['go', 'go after next', 
-	'go after previous', 'go before',
-	'go before next', 'go before previous', 'go next',
-	'go previous', 'after next', 'after previous', 'before',
-	'before next', 'before previous', 'correct',
-	'correct next', 'correct previous', 'next', 'previous',
-	'select', 'select next', 'select previous', 'after'], 
-	through_words = 'through',
-	**attrs):
-	"""
+        'go after previous', 'go before',
+        'go before next', 'go before previous', 'go next',
+        'go previous', 'after next', 'after previous', 'before',
+        'before next', 'before previous', 'correct',
+        'correct next', 'correct previous', 'next', 'previous',
+        'select', 'select next', 'select previous', 'after'], 
+        through_words = 'through',
+        **attrs):
+        """
 	**INPUTS**
 
 	*[STR]* select_words -- list of words which can precede the
@@ -375,17 +398,18 @@ class WinGramFactory(Object):
 
 	*none*
 	"""
-	self.deep_construct(WinGramFactory,
-	    {'select_words' : select_words, 'through_word' : through_word}, 
-	    attrs)
+        self.deep_construct(WinGramFactory,
+            {'select_words' : select_words, 'through_word' : through_word}, 
+            attrs)
 
-    def make_dictation(self, interp, app, buff_name, window = None,
-	exclusive = 0):
-	"""create a new dictation grammar
+    def make_dictation(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new dictation grammar
 
 	**INPUTS**
 
-	*CmdInterp* interp -- interpreter to which to forward results
+	*WinGramMgr* manager -- the grammar manager which will own the new
+	grammar
 
 	*AppState* app -- application which is the target of the grammar
 
@@ -402,11 +426,11 @@ class WinGramFactory(Object):
 
 	*DictWinGram* -- new dictation grammar
 	"""
-	debug.virtual('WinGramFactory.make_dictation')
+        debug.virtual('WinGramFactory.make_dictation')
     
     def make_selection(self, app, window = None, buff_name = None,
-	exclusive = 0):
-	"""create a new selection grammar
+        exclusive = 0):
+        """create a new selection grammar
 
 	**INPUTS**
 
@@ -428,7 +452,7 @@ class WinGramFactory(Object):
 
 	*SelectWinGram* -- new selection grammar
 	"""
-	debug.virtual('WinGramFactory.make_selection')
+        debug.virtual('WinGramFactory.make_selection')
     
 class DictWinGramDummy(DictWinGram):
     """dummy implementation of window-specific dictation grammar 
@@ -442,16 +466,16 @@ class DictWinGramDummy(DictWinGram):
     *none*
     """
     def __init__(self, silent = 0, **attrs):
-	self.deep_construct(DictWinGramDummy,
-	    {'silent': silent}, attrs)
-	if not self.silent:
-	    self.identify_grammar()
-	    print "init"
+        self.deep_construct(DictWinGramDummy,
+            {'silent': silent}, attrs)
+        if not self.silent:
+            self.identify_grammar()
+            print "init"
 
     def __del__(self):
-	if not self.silent:
-	    self.identify_grammar()
-	    print "del"
+        if not self.silent:
+            self.identify_grammar()
+            print "del"
 
     def identify_grammar(self):
         """print information identifying the grammar by buffer and
@@ -465,15 +489,15 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	if self.window == None:
-	    winname = "global"
-	else:
-	    winname = "window %d" % self.window
-	print "DictWinGramDummy for buffer = %s, %s" % \
-	    (repr(self.buff_name), winname)
+        if self.window == None:
+            winname = "global"
+        else:
+            winname = "window %d" % self.window
+        print "DictWinGramDummy for buffer = %s, %s" % \
+            (repr(self.buff_name), winname)
 
     def set_context(self, before = "", after = ""):
-	"""set the context to improve dictation accuracy
+        """set the context to improve dictation accuracy
 
 	**INPUTS**
 
@@ -488,13 +512,13 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	if not self.silent:
-	    self.identify_grammar()
-	    print "setting context: before = [%s], after = [%s]" % (before,
-		after)
+        if not self.silent:
+            self.identify_grammar()
+            print "setting context: before = [%s], after = [%s]" % (before,
+                after)
 
     def activate(self):
-	"""activates the grammar for recognition
+        """activates the grammar for recognition
 	tied to the current window.
 
 	**INPUTS**
@@ -505,20 +529,20 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	if not self.silent:
-	    self.identify_grammar()
-	    print "activating: ",
-	    if self.window == None:
-		print "global ",
-	    else:
-		print "%d " % (self.window),
-	    if self.exclusive:
-		print "exclusive "
-	    print ""
-	self.active = 1
+        if not self.silent:
+            self.identify_grammar()
+            print "activating: ",
+            if self.window == None:
+                print "global ",
+            else:
+                print "%d " % (self.window),
+            if self.exclusive:
+                print "exclusive "
+            print ""
+        self.active = 1
     
     def deactivate(self):
-	"""disable recognition from this grammar
+        """disable recognition from this grammar
 
 	**INPUTS**
 
@@ -528,10 +552,10 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	if not self.silent:
-	    self.identify_grammar()
-	    print "deactivating"
-	self.active = 0
+        if not self.silent:
+            self.identify_grammar()
+            print "deactivating"
+        self.active = 0
 
 class SelectWinGramDummy(SelectWinGram):
     """dummy implementation of window-specific selection grammar 
@@ -545,21 +569,21 @@ class SelectWinGramDummy(SelectWinGram):
     *none*
     """
     def __init__(self, silent = 0, **attrs):
-	"""
+        """
 	**INPUTS**
 
 	*none*
 	"""
-	self.deep_construct(SelectWinGramDummy,
-	    {'silent': silent}, attrs)
-	if not self.silent:
-	    self.identify_grammar()
-	    print "init"
+        self.deep_construct(SelectWinGramDummy,
+            {'silent': silent}, attrs)
+        if not self.silent:
+            self.identify_grammar()
+            print "init"
 
     def __del__(self):
-	if not self.silent:
-	    self.identify_grammar()
-	    print "del"
+        if not self.silent:
+            self.identify_grammar()
+            print "del"
 
     def identify_grammar(self):
         """print information identifying the grammar by buffer and
@@ -573,15 +597,15 @@ class SelectWinGramDummy(SelectWinGram):
 
 	*none*
 	"""
-	if self.window == None:
-	    winname = "global"
-	else:
-	    winname = "window %d" % self.window
-	print "SelectWinGramDummy for buffer %s, %s" % \
-	    (repr(self.buff_name), winname)
+        if self.window == None:
+            winname = "global"
+        else:
+            winname = "window %d" % self.window
+        print "SelectWinGramDummy for buffer %s, %s" % \
+            (repr(self.buff_name), winname)
 
     def activate(self, buff_name):
-	"""activates the grammar for recognition tied to the current window,
+        """activates the grammar for recognition tied to the current window,
 	and checks with buffer for the currently visible range.
 
 	**INPUTS**
@@ -592,21 +616,21 @@ class SelectWinGramDummy(SelectWinGram):
 
 	*none*
 	"""
-	self.buff_name = buff_name
-	self.active = 1
-	if not self.silent:
-	    self.identify_grammar()
-	    print "activating: ",
-	    if self.window == None:
-		print "global ",
-	    else:
-		print "%d " % (self.window),
-	    if self.exclusive:
-		print "exclusive "
-	    print ""
+        self.buff_name = buff_name
+        self.active = 1
+        if not self.silent:
+            self.identify_grammar()
+            print "activating: ",
+            if self.window == None:
+                print "global ",
+            else:
+                print "%d " % (self.window),
+            if self.exclusive:
+                print "exclusive "
+            print ""
     
     def deactivate(self):
-	"""disable recognition from this grammar
+        """disable recognition from this grammar
 
 	**INPUTS**
 
@@ -616,10 +640,10 @@ class SelectWinGramDummy(SelectWinGram):
 
 	*none*
 	"""
-	if not self.silent:
-	    self.identify_grammar()
-	    print "deactivating"
-	self.active = 0
+        if not self.silent:
+            self.identify_grammar()
+            print "deactivating"
+        self.active = 0
 
 class WinGramFactoryDummy(Object):
     """implementation fo WinGramFactory with dummy grammars for
@@ -634,7 +658,7 @@ class WinGramFactoryDummy(Object):
     *none*
     """
     def __init__(self, silent = 0, **attrs):
-	"""
+        """
 	**INPUTS**
 
 	*none*
@@ -643,14 +667,17 @@ class WinGramFactoryDummy(Object):
 
 	*none*
 	"""
-	self.deep_construct(WinGramFactoryDummy,
-	    {}, attrs)
+        self.deep_construct(WinGramFactoryDummy,
+            {}, attrs)
 
-    def make_dictation(self, interp, app, buff_name, window = None,
-	exclusive = 0):
-	"""create a new dictation grammar
+    def make_dictation(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new dictation grammar
 
 	**INPUTS**
+
+	*WinGramMgr* manager -- the grammar manager which will own the new
+	grammar
 
 	*AppState* app -- application to which to forward results
 
@@ -667,13 +694,13 @@ class WinGramFactoryDummy(Object):
 
 	*DictWinGram* -- new dictation grammar
 	"""
-	return DictWinGramDummy(interp = interp, app = app, 
-	    buff_name = buff_name, window = window, exclusive =
-	    exclusive)
+        return DictWinGramDummy(manager = manager, app = app, 
+            buff_name = buff_name, window = window, exclusive =
+            exclusive)
     
     def make_selection(self, app, window = None, buff_name = None,
-	exclusive = 0):
-	"""create a new selection grammar
+        exclusive = 0):
+        """create a new selection grammar
 
 	**INPUTS**
 
@@ -692,6 +719,6 @@ class WinGramFactoryDummy(Object):
 
 	*SelectWinGram* -- new selection grammar
 	"""
-	return SelectWinGramDummy(app = app, buff_name = buff_name, 
-	    window = window, exclusive = exclusive)
+        return SelectWinGramDummy(app = app, buff_name = buff_name, 
+            window = window, exclusive = exclusive)
     

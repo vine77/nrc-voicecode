@@ -39,13 +39,13 @@ class InterThreadEvent(Object.Object):
     *none*
     """
     def __init__(self, **args):
-	"""abstract base class so no arguments
+        """abstract base class so no arguments
 	"""
-	self.deep_construct(InterThreadEvent,
-			    {},
-			    args)
+        self.deep_construct(InterThreadEvent,
+                            {},
+                            args)
     def notify(self):
-	"""send the message, and return asynchronously
+        """send the message, and return asynchronously
 
 	**INPUTS**
 
@@ -55,7 +55,7 @@ class InterThreadEvent(Object.Object):
 
 	*none*
 	"""
-	debug.virtual('InterThreadEvent.notify')
+        debug.virtual('InterThreadEvent.notify')
 
 class SocketHasDataEvent(Object.Object):
     """abstract interface for sending a message from to the main thread 
@@ -76,13 +76,13 @@ class SocketHasDataEvent(Object.Object):
     *none*
     """
     def __init__(self, **args):
-	"""abstract base class so no arguments
+        """abstract base class so no arguments
 	"""
-	self.deep_construct(SocketHasDataEvent,
-			    {},
-			    args)
+        self.deep_construct(SocketHasDataEvent,
+                            {},
+                            args)
     def notify(self):
-	"""send the message, and return asynchronously
+        """send the message, and return asynchronously
 
 	**INPUTS**
 
@@ -92,5 +92,5 @@ class SocketHasDataEvent(Object.Object):
 
 	*none*
 	"""
-	debug.virtual('SocketHasDataEvent.notify')
+        debug.virtual('SocketHasDataEvent.notify')
 

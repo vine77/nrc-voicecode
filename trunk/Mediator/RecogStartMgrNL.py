@@ -42,13 +42,13 @@ class RecogStartGram(GrammarBase):
     """
 
     def initialize(self, callback = None):
-	self.callback = callback
+        self.callback = callback
         self.load(self.gramSpec)
 #        self.activateAll()
 
     def gotBegin(self, module_info):
-	if self.callback != None:
-	    self.callback(module_info)
+        if self.callback != None:
+            self.callback(module_info)
 
 class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     """abstract class defining interface for an object which receives 
@@ -72,18 +72,18 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     def __init__(self, **args):
         self.deep_construct(RecogStartMgr,
                             {'start_gram': RecogStartGram(),
-			    },
+                            },
                             args)
-	start_gram.initialize(self.starting)
-	
+        start_gram.initialize(self.starting)
+        
     def remove_other_references(self):
-	self.deactivate()
-	self.start_gram.unload()
-	del self.start_gram
-	RSMBasic.cleanup(self)
+        self.deactivate()
+        self.start_gram.unload()
+        del self.start_gram
+        RSMBasic.cleanup(self)
 
     def parse_module_info(self, module_info):
-	"""rearrange natlink's module_info in our format
+        """rearrange natlink's module_info in our format
 	
 	**INPUTS**
 
@@ -94,13 +94,13 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	module_path, title, handle = module_info
-	module = os.path.basename(module_path)
-	module = os.path.splitext(module)[0]
-	return handle, title, module
+        module_path, title, handle = module_info
+        module = os.path.basename(module_path)
+        module = os.path.splitext(module)[0]
+        return handle, title, module
 
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -110,10 +110,10 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	return parse_module_info(natlink.getCurrentModule())
+        return parse_module_info(natlink.getCurrentModule())
 
     def starting(self, module_info):
-	self._recognition_starting(self.parse_module_info(module_info))
+        self._recognition_starting(self.parse_module_info(module_info))
 
 
 # defaults for vim - otherwise ignore

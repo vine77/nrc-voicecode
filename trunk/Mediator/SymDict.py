@@ -442,7 +442,7 @@ class SymDict(PickledObject.PickledObject):
         self.deep_construct(SymDict,
                             {'pickle_fname': pickle_fname},
                             attrs)
-	self.init_from_file()
+        self.init_from_file()
 
 #        print '-- SymDict.__init__: returning self.__dict__=%s' % self.__dict__
 
@@ -654,7 +654,7 @@ class SymDict(PickledObject.PickledObject):
 	dictionnaries that list the symbols containing the unresolved
 	abbreviation.
 	"""
-	return self.unresolved_abbreviations
+        return self.unresolved_abbreviations
 
     def parse_standard_symbols(self, add_sr_entries=1):
         """Parse standard symbols for the various programming languages.
@@ -724,7 +724,7 @@ class SymDict(PickledObject.PickledObject):
 
             language_name = self.get_language_by_filename(file_name)
 #            print '-- SymDict.parse_symbols: language_name=%s' % language_name
-	    self.parse_symbols(source, language_name)
+            self.parse_symbols(source, language_name)
                 
     def parse_symbols(self, contents, language_name, add_sr_entries=1):
         """Parse symbols from a string representing the contents of a 
@@ -743,22 +743,22 @@ class SymDict(PickledObject.PickledObject):
 
 #            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
 
-	language_definition = self.get_language_definition(language_name)
+        language_definition = self.get_language_definition(language_name)
 #            print '-- SymDict.parse_symbols: language_definition.name=%s' % language_definition.name
-	stripped_contents = self.strip_source(contents, language_definition)
+        stripped_contents = self.strip_source(contents, language_definition)
 
             #
             # Parse symbols from the first chunk
             #
-	while stripped_contents != '':
-	    a_match = re.search('(' + \
-		language_definition.regexp_symbol + ')', stripped_contents)
-	    if a_match:
-		self.add_symbol(a_match.group(1), 
-		    add_sr_entries=add_sr_entries)
-		stripped_contents = stripped_contents[a_match.end()+1:]
-	    else:
-		stripped_contents = ''
+        while stripped_contents != '':
+            a_match = re.search('(' + \
+                language_definition.regexp_symbol + ')', stripped_contents)
+            if a_match:
+                self.add_symbol(a_match.group(1), 
+                    add_sr_entries=add_sr_entries)
+                stripped_contents = stripped_contents[a_match.end()+1:]
+            else:
+                stripped_contents = ''
                 
     def strip_source(self, source, language_definition):
         """Removes all parts of a source file that don't contain symbols.
@@ -1147,7 +1147,7 @@ class SymDict(PickledObject.PickledObject):
         """
 
         language_name = self.lang_name_srv.file_language_name(file_name)
-	return language_name
+        return language_name
 
             
     def get_language_definition_by_filename(self, file_name):
@@ -1171,7 +1171,7 @@ class SymDict(PickledObject.PickledObject):
         definition = None
         
         language_name = self.get_language_by_filename(file_name)
-	return self.get_language_definition(language_name)
+        return self.get_language_definition(language_name)
 
     def get_language_definition(self, language_name):
         """Gets the definition of the language associated with a source file.

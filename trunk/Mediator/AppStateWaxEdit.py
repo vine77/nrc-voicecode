@@ -61,11 +61,11 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs, new_default = {'app_name': 'WaxEdit'}
                             )
-	self.add_owned('breadcrumbs_srv')
+        self.add_owned('breadcrumbs_srv')
         self.open_buffers[self.active_buffer_name] =  \
-	    SourceBuffTB(app = self, buff_name="", \
-	    underlying_buffer = self.the_editor.editor_buffer(),
-	    language=None, change_specification = 1)
+            SourceBuffTB(app = self, buff_name="", \
+            underlying_buffer = self.the_editor.editor_buffer(),
+            language=None, change_specification = 1)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -87,7 +87,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
         return SourceBuffTB.SourceBuffTB(app=self, buff_name=buff_name,
-	    change_specification = 1)
+            change_specification = 1)
 
         
     def recog_begin(self, window_id, block = 0):
@@ -104,7 +104,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
     def mediator_closing(self):
 
-	"""method called to inform AppState that the mediator is
+        """method called to inform AppState that the mediator is
 	closing.    Internal editors should exit.  They may prompt the
 	user to save modified files, but must not allow the user to
 	cancel and leave the editor running.  External editors should
@@ -123,7 +123,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
 	*none*
 	"""
-	self.close_all_buffers()
+        self.close_all_buffers()
 
     def updates_from_app(self, what=[], exclude=1):
         
@@ -152,7 +152,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
     def app_active_buffer_name(self):
         
-	"""Returns the file name of the buffer currently active in the
+        """Returns the file name of the buffer currently active in the
 	external application.
 
         Note that this may or may not be the same the buffer that
@@ -169,10 +169,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         file:///./AppState.AppState.html#curr_buffer_name"""        
       
-	return self.active_buffer_name
+        return self.active_buffer_name
 
     def app_change_buffer(self, buff_name=None):
-	"""Changes the external application's active buffer.
+        """Changes the external application's active buffer.
 
         This variant only changes the buffer in the external
         application. It does not resynchronise VoiceCode with external
@@ -195,12 +195,12 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         file:///./AppState.AppState.html#curr_buffer_name"""
 
         if self.query_buffer_from_app(buff_name):
-	    self.active_buffer_name = buff_name
-	    return 1
-	return 0
+            self.active_buffer_name = buff_name
+            return 1
+        return 0
         
     def active_field(self):
-	"""indicates what part of the editor has the focus.
+        """indicates what part of the editor has the focus.
 
 	**INPUTS**
 
@@ -221,11 +221,11 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	where find-buffer is the name of the command that was invoked and
 	buffer-name refers to the argument that is being asked for.
 	"""
-	if not self.the_editor.is_active():
-	    return ('inactive')
-	if self.the_editor.editor_has_focus():
-	    return None
-	return ('unknown')
+        if not self.the_editor.is_active():
+            return ('inactive')
+        if self.the_editor.editor_has_focus():
+            return None
+        return ('unknown')
 
     def drop_breadcrumb(self, buffname=None, pos=None):
 
@@ -261,32 +261,32 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
 
         buff_name = None                
-	path, short = os.path.split(file_name)
-	if path:
-	    self.curr_dir = path
-	else:
-	    path = self.curr_dir
-	    file_name = os.path.join(path, short)
-	success = self.the_editor.open_file_in_buffer(file_name)
+        path, short = os.path.split(file_name)
+        if path:
+            self.curr_dir = path
+        else:
+            path = self.curr_dir
+            file_name = os.path.join(path, short)
+        success = self.the_editor.open_file_in_buffer(file_name)
         
-	# WaxEdit only supports one open buffer at a time
-	if success:
-	    if self.curr_buffer_name() != None:
-		name = self.curr_buffer_name()
-		self.close_buffer(name, 0)
+        # WaxEdit only supports one open buffer at a time
+        if success:
+            if self.curr_buffer_name() != None:
+                name = self.curr_buffer_name()
+                self.close_buffer(name, 0)
             self.open_buffers[file_name] = SourceBuffTB(app = self, 
-		buff_name=file_name, 
-		underlying_buffer = self.the_editor.editor_buffer(),
-		indent_level=3, indent_to_curr_level=1,
-		change_specification = 1)
-	    self.active_buffer_name = file_name
-	    self.the_editor.set_name(short)
+                buff_name=file_name, 
+                underlying_buffer = self.the_editor.editor_buffer(),
+                indent_level=3, indent_to_curr_level=1,
+                change_specification = 1)
+            self.active_buffer_name = file_name
+            self.the_editor.set_name(short)
             buff_name = self.active_buffer_name
 
         return buff_name
 
     def query_buffer_from_app(self, buff_name):
-	"""query the application to see if a buffer by the name of buff_name 
+        """query the application to see if a buffer by the name of buff_name 
 	exists.
 
         **INPUTS**
@@ -297,10 +297,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
 	*BOOL* -- does the buffer exist?
 	"""
-	return buff_name in self.open_buffers_from_app()
+        return buff_name in self.open_buffers_from_app()
 
     def open_buffers_from_app(self):
-	"""retrieve a list of the names of open buffers from the
+        """retrieve a list of the names of open buffers from the
 	application.
 
         **INPUTS**
@@ -311,7 +311,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
 	*[STR]* -- list of the names of open buffers
 	"""
-	return self.open_buffers.keys()
+        return self.open_buffers.keys()
 
         
     def app_save_file(self, full_path = None, no_prompt = 0):
@@ -332,39 +332,39 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	failed
 
         """
-	f_path = full_path
-	quiet = no_prompt
-	if not f_path:
-	    f_path = self.curr_buffer_name()
-	    quiet = 1
-	if not quiet and f_path != self.curr_buffer_name():
-	    if not os.path.exists(f_path):
-		quiet = 1
-	success = self.the_editor.save_file(f_path, quiet)
+        f_path = full_path
+        quiet = no_prompt
+        if not f_path:
+            f_path = self.curr_buffer_name()
+            quiet = 1
+        if not quiet and f_path != self.curr_buffer_name():
+            if not os.path.exists(f_path):
+                quiet = 1
+        success = self.the_editor.save_file(f_path, quiet)
 #         try:
 #             source_file = open(name, 'rw')
 #             source = source_file.read()
 #             source_file.close()
 #         except Exception, err:
-# 	    return
-	# WaxEdit only supports one open buffer at a time
-	if not success:
-	    return None
-	path, short = os.path.split(f_path)
-	if path:
-	    self.curr_dir = path
-	old_name = self.curr_buffer_name()
-	if not old_name or old_name != f_path:
-	    self.active_buffer_name = f_path
+#            return
+        # WaxEdit only supports one open buffer at a time
+        if not success:
+            return None
+        path, short = os.path.split(f_path)
+        if path:
+            self.curr_dir = path
+        old_name = self.curr_buffer_name()
+        if not old_name or old_name != f_path:
+            self.active_buffer_name = f_path
 # buffer has been renamed.  add a new reference to the open_buffers map,
 # and then delete the old one
-	    self.open_buffers[f_path] = self.open_buffers[old_name]
-	    del self.open_buffers[old_name]
-	self.the_editor.set_name(short)
-	return f_path
+            self.open_buffers[f_path] = self.open_buffers[old_name]
+            del self.open_buffers[old_name]
+        self.the_editor.set_name(short)
+        return f_path
       
     def is_active(self):
-	"""is the editor application active (not suspended)?
+        """is the editor application active (not suspended)?
 
 	Usually true, except for remote editors running in a (Unix)
 	shell.  GUI editors tend to minimize instead of suspending, so
@@ -378,10 +378,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is active (i.e. has not been suspended)
 	"""
-	return 1
+        return 1
 
     def is_active_is_safe(self):
-	"""can is_active safely be queried, without blocking?
+        """can is_active safely be queried, without blocking?
 
 	For example, Emacs provides a suspend-hook and a
 	suspend-resume-hook, so a properly written AppStateEmacs can
@@ -401,7 +401,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	*BOOL* -- true if is_active can be queried without blocking,
 	even if the editor has been suspended. 
 	"""
-	return 1
+        return 1
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
@@ -426,7 +426,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is running in a potentially shared window
 	"""
-	return 0
+        return 0
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
@@ -443,8 +443,8 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*none*
 	"""
-	self.instance_string = title
-	self.the_editor.set_instance_string(title)
+        self.instance_string = title
+        self.the_editor.set_instance_string(title)
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -468,10 +468,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	*STR* -- the identifying string, or None if the editor was not given 
 	such a string or cannot set the window title.
 	"""
-	return self.instance_string
+        return self.instance_string
 
     def title_escape_sequence(self, before = "", after = ""):
-	"""gives the editor a (module-dependent) hint about the escape
+        """gives the editor a (module-dependent) hint about the escape
 	sequence which can be used to set the module's window title, if
 	any.  If the editor has its own mechanism for setting the window
 	title, it should simply ignore this method.  
@@ -490,7 +490,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	*none*
 	"""
 # we can set the title ourselves, so ignore
-	pass
+        pass
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
@@ -517,10 +517,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports opening multiple editor windows.  
 	"""
-	return 0
+        return 0
 
     def multiple_buffers(self):
-      	"""does editor support multiple open buffers?
+        """does editor support multiple open buffers?
 
 	**INPUTS**
 
@@ -530,10 +530,10 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-	return 0
+        return 0
 
     def bidirectional_selection(self):
-      	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
 	**INPUTS**
 
@@ -543,7 +543,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-	return 0
+        return 0
 
     def app_close_buffer(self, buff_name, save=0):
         """Close a buffer.
@@ -562,12 +562,12 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-	buff = self.find_buff(buff_name)
-	if buff == None:
-	    return 0
-	if self.is_bound_to_buffer() == buff_name:
-	    self.unbind_from_buffer()
-	self.open_buffers[buff_name].cleanup()
-	del self.open_buffers[buff_name]
-	return 1
+        buff = self.find_buff(buff_name)
+        if buff == None:
+            return 0
+        if self.is_bound_to_buffer() == buff_name:
+            self.unbind_from_buffer()
+        self.open_buffers[buff_name].cleanup()
+        del self.open_buffers[buff_name]
+        return 1
 

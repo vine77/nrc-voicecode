@@ -38,7 +38,7 @@ class WaxEdit:
     *none*
     """
     def mic_change(self, state):
-	"""function to receive microphone state change callbacks
+        """function to receive microphone state change callbacks
 
 	**INPUTS**
 
@@ -52,7 +52,7 @@ class WaxEdit:
 # no-op by default, can be overridden
 
     def is_active(self):
-	"""indicates whether the editor frame is active
+        """indicates whether the editor frame is active
 
 	**INPUTS**
 
@@ -62,10 +62,10 @@ class WaxEdit:
 
 	*BOOL* -- true if frame window is active
 	"""
-	debug.virtual('WaxEdit.is_active')
+        debug.virtual('WaxEdit.is_active')
 
     def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
+        """indicates whether the editor window has the focus
 
 	**INPUTS**
 
@@ -74,11 +74,11 @@ class WaxEdit:
 	**OUTPUTS**
 	*BOOL* -- true if editor window has the focus
 	"""
-	debug.virtual('WaxEdit.editor_has_focus')
+        debug.virtual('WaxEdit.editor_has_focus')
 
 
     def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
+        """returns a reference to the TextBufferWX embedded in the GUI
 
 	**INPUTS**
 
@@ -88,11 +88,11 @@ class WaxEdit:
 
 	*TextBufferWX* -- the TextBufferWX
 	"""
-	debug.virtual('WaxEdit.editor_buffer')
+        debug.virtual('WaxEdit.editor_buffer')
 
 
     def open_file_in_buffer(self, name):
-	"""opens a new file in the existing TextBufferWX
+        """opens a new file in the existing TextBufferWX
 
 	**INPUTS**
 
@@ -103,10 +103,10 @@ class WaxEdit:
 	*BOOL* -- true on success (otherwise the existing file is left
 	there)
 	"""
-	debug.virtual('WaxEdit.open_file_in_buffer')
+        debug.virtual('WaxEdit.open_file_in_buffer')
 
     def save_file(self, full_path, no_prompt = 0):
-	"""Saves the file in the existing TextBufferWX
+        """Saves the file in the existing TextBufferWX
 
 	**INPUTS**
 
@@ -120,7 +120,7 @@ class WaxEdit:
 	*BOOL* -- true on success (otherwise the existing file is left
 	there)
 	"""
-	debug.virtual('WaxEdit.save_file')
+        debug.virtual('WaxEdit.save_file')
 
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
@@ -134,7 +134,7 @@ class WaxEdit:
 
 	*none*
 	"""
-	debug.virtual('WaxEdit.set_instance_string')
+        debug.virtual('WaxEdit.set_instance_string')
   
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
@@ -147,10 +147,10 @@ class WaxEdit:
 
 	*none*
 	"""
-	debug.virtual('WaxEdit.set_name')
+        debug.virtual('WaxEdit.set_name')
 
     def run(self, app_control):
-	"""starts the message loop.  Note: this function does not
+        """starts the message loop.  Note: this function does not
 	return until the GUI exits.
 
 	**INPUTS**
@@ -162,10 +162,10 @@ class WaxEdit:
 
 	*none*
 	"""
-	debug.virtual('WaxEdit.run')
+        debug.virtual('WaxEdit.run')
 
     def set_change_callback(self, change_callback = None):
-	"""changes the callback to a new function
+        """changes the callback to a new function
 
 	**INPUTS**
       
@@ -189,5 +189,5 @@ class WaxEdit:
 
 	*none*
 	"""
-	debug.virtual('WaxEdit.set_change_callback')
+        debug.virtual('WaxEdit.set_change_callback')
 

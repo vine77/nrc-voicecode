@@ -95,7 +95,7 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
 #    print the_mediator
     if sim_commands.the_mediator:
         sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-	    save_speech_files=save_speech_files, disconnect=disconnect)
+            save_speech_files=save_speech_files, disconnect=disconnect)
 
 def simulator_mode(options):
     """Start mediator in console mode.
@@ -124,10 +124,10 @@ def simulator_mode(options):
     app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
 
     mediator.init_simulator(on_app = app, 
-#	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-	symdict_pickle_fname = None,
-	disable_dlg_select_symbol_matches = 1, window = window,
-	mic_change = editor_app.mic_change)
+#        symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+        symdict_pickle_fname = None,
+        disable_dlg_select_symbol_matches = 1, window = window,
+        mic_change = editor_app.mic_change)
 #    print sim_commands.the_mediator
         
     #
@@ -156,7 +156,7 @@ if (__name__ == '__main__'):
   
     if opts['h']:
         print __doc__
-	print sim_commands.__doc__
+        print sim_commands.__doc__
 
     elif opts['t']:
         #
@@ -171,4 +171,4 @@ simulator_mode(opts)""")
         simulator_mode(opts)
 
     cleanup(sim_commands.clean_sr_voc_flag, 
-	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
+        sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)

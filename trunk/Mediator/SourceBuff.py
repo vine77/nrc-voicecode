@@ -84,7 +84,7 @@ class SourceBuff(OwnerObject):
         self.init_attrs({'last_search': None})
         self.deep_construct(SourceBuff,
                             {'app': app,
-			     'buff_name': buff_name,
+                             'buff_name': buff_name,
                              'print_nlines': 3},
                             attrs
                             )
@@ -100,10 +100,10 @@ class SourceBuff(OwnerObject):
         **OUTPUTS**
         
         STR -- name of the buffer."""
-	return self.buff_name
+        return self.buff_name
         
     def on_change(self, start, end, text, program_initiated):
-	"""method which should be called after the contents of a buffer
+        """method which should be called after the contents of a buffer
 	is changed.  If the SourceBuff represents a buffer in an 
 	external editor which does not support change notification, then 
 	on_change may only be called for mediator-initiated changes 
@@ -125,10 +125,10 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
-	if program_initiated:
-	    debug.trace('SourceBuff.on_change', 
-		'(%d, %d) "%s" in %s\n' % (start, end, text, self.name()))
-	self.app.on_change(self.name(), start, end, text, program_initiated)
+        if program_initiated:
+            debug.trace('SourceBuff.on_change', 
+                '(%d, %d) "%s" in %s\n' % (start, end, text, self.name()))
+        self.app.on_change(self.name(), start, end, text, program_initiated)
 
     def rename_buffer_cbk(self, new_buff_name):
         """AppState invokes this method when 
@@ -145,7 +145,7 @@ class SourceBuff(OwnerObject):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-	self.buff_name = new_buff_name
+        self.buff_name = new_buff_name
 
     def file_name(self):
         """Returns the name of the file being displayed in a buffer.
@@ -195,7 +195,7 @@ class SourceBuff(OwnerObject):
 
 
     def application(self):
-	"""returns the AppState object of the application
+        """returns the AppState object of the application
 	containing this buffer.
 
         **INPUTS**        
@@ -206,7 +206,7 @@ class SourceBuff(OwnerObject):
 
 	*AppState* -- application object containing the buffer
         """
-	return self.app
+        return self.app
 
     def drop_breadcrumb(self, pos=None):
 
@@ -227,7 +227,7 @@ class SourceBuff(OwnerObject):
         
         If *pos* not specified, drop breadcrumb at cursor position.
 	"""
-	self.application.drop_breadcrumb(buffname = self.file_name(), pos = pos)
+        self.application.drop_breadcrumb(buffname = self.file_name(), pos = pos)
 
 
     def language_name(self):
@@ -276,7 +276,7 @@ class SourceBuff(OwnerObject):
         return distance
 
     def cur_pos(self):
-	"""retrieves current position of cursor .  Note: the current
+        """retrieves current position of cursor .  Note: the current
 	position should coincide with either the start or end of the
 	selection.  
 
@@ -289,7 +289,7 @@ class SourceBuff(OwnerObject):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	debug.virtual('SourceBuff.cur_pos')
+        debug.virtual('SourceBuff.cur_pos')
 
 
     def get_selection(self):
@@ -310,10 +310,10 @@ class SourceBuff(OwnerObject):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	debug.virtual('SourceBuff.get_selection')	
+        debug.virtual('SourceBuff.get_selection')	
 
     def bidirectional_selection(self):
-	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
 	**INPUTS**
 
@@ -323,10 +323,10 @@ class SourceBuff(OwnerObject):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-	return self.app.bidirectional_selection()
+        return self.app.bidirectional_selection()
 
     def goto_end_of_selection(self, end = 1):
-	"""moves cursor to one end of the selection, clearing the
+        """moves cursor to one end of the selection, clearing the
 	selection.
 
 	**INPUTS**
@@ -337,11 +337,11 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
-	target = self.get_selection()[end]
-	self.goto(target)
+        target = self.get_selection()[end]
+        self.goto(target)
 
     def set_selection(self, range, cursor_at = 1):
-	"""sets range of current selection, and sets the position to 
+        """sets range of current selection, and sets the position to 
 	beginning or end of the selection.
 
 	**INPUTS**
@@ -360,10 +360,10 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('SourceBuff.set_selection')
+        debug.virtual('SourceBuff.set_selection')
 
     def get_text(self, start = None, end = None):
-	"""retrieves a portion of the buffer
+        """retrieves a portion of the buffer
 
 	**INPUTS**
 
@@ -378,10 +378,10 @@ class SourceBuff(OwnerObject):
 
 	*STR* -- contents of specified range of the buffer
 	"""
-	debug.virtual('SourceBuff.get_text')
+        debug.virtual('SourceBuff.get_text')
 
     def set_text(self, text, start = None, end = None):
-	"""changes a portion of the buffer
+        """changes a portion of the buffer
 
 	**INPUTS**
 
@@ -398,11 +398,11 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('SourceBuff.set_text')
+        debug.virtual('SourceBuff.set_text')
         
 
     def contents(self):
-	"""retrieves entire contents of the buffer
+        """retrieves entire contents of the buffer
     
 	**INPUTS**
 
@@ -412,7 +412,7 @@ class SourceBuff(OwnerObject):
 
 	*STR* contents 
 	"""
-	return self.get_text()
+        return self.get_text()
 
     def distance_to_selection(self, start, *opt_end):
         """Computes the distance of a region to the current selection.
@@ -437,19 +437,19 @@ class SourceBuff(OwnerObject):
             tmp = end
             end = start
             start = tmp            
-	start2, end2 = self.get_selection()
+        start2, end2 = self.get_selection()
         # make sure start2 < end2
         if start2 > end2:
             tmp = end2
             start2 = end2
             end2 = tmp        
-	if start2 == None or end2 == None:
+        if start2 == None or end2 == None:
             start2 = self.cur_pos()
             end2 = start2
         return self.region_distance(start, end, start2, end2)
         
     def get_visible(self):
-	""" get start and end offsets of the currently visible region of
+        """ get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
 	visible (matching Python's slice convention)
 
@@ -461,10 +461,10 @@ class SourceBuff(OwnerObject):
 
 	*INT* (start, end)
 	"""
-	debug.virtual('SourceBuff.get_visible')
+        debug.virtual('SourceBuff.get_visible')
 
     def make_position_visible(self):
-	"""scroll buffer (if necessary) so that the current position
+        """scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
@@ -473,10 +473,10 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('SourceBuff.make_position_visible')
+        debug.virtual('SourceBuff.make_position_visible')
     
     def line_num_of(self, position = None):
-	"""
+        """
         Returns the line number for a particular cursor position
         
         **INPUTS**
@@ -514,7 +514,7 @@ class SourceBuff(OwnerObject):
         result = []
 
         if (astring != ''):
-	    lineno = startnum                
+            lineno = startnum                
             for aline in lines:
                 result[len(result):] = [(lineno, aline)]
                 lineno = lineno + 1
@@ -524,7 +524,7 @@ class SourceBuff(OwnerObject):
 
 
     def len(self):
-	"""return length of buffer in characters.
+        """return length of buffer in characters.
 
 	**INPUTS**
 
@@ -534,7 +534,7 @@ class SourceBuff(OwnerObject):
 
 	*INT* length 
 	"""
-	debug.virtual('SourceBuff.len')
+        debug.virtual('SourceBuff.len')
 
     def make_valid_range(self, range):
         """Makes sure a region is increasing and within the buffer's range.
@@ -550,16 +550,16 @@ class SourceBuff(OwnerObject):
 
 #        print '-- SourceBuff.make_valid_range: range=%s' % repr(range)
         
-	start, end = range        
+        start, end = range        
         if start == None: start = 0
         if end == None: end = self.len() - 1
-	if end < start:
+        if end < start:
             tmp = end
             end = start
             start = tmp
-	start = self.make_within_range(start)
-	end = self.make_within_range(end)
-	return start, end
+        start = self.make_within_range(start)
+        end = self.make_within_range(end)
+        return start, end
   
     def make_within_range(self, position):
         """Makes sure a position is within the buffer's range.
@@ -575,7 +575,7 @@ class SourceBuff(OwnerObject):
         *INT* position -- The possibly corrected position
         """
 
-	length = self.len()
+        length = self.len()
         if position < 0:
             position = 0
 # cursor can be after last character in the buffer
@@ -628,7 +628,7 @@ class SourceBuff(OwnerObject):
 	*none*
 	"""
         pos = self.cur_pos()+rel_movement
-	self.goto(pos)
+        self.goto(pos)
 
     def move_relative_line(self, direction=1, num=1):
         """Moves up or down a certain number of lines
@@ -827,11 +827,11 @@ class SourceBuff(OwnerObject):
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
-	debug.virtual('SourceBuff.goto_line')
+        debug.virtual('SourceBuff.goto_line')
 
                 
     def print_buff_if_necessary(self):
-	"""Prints content of current buffer if necessary.
+        """Prints content of current buffer if necessary.
 
         This method serves two purposes:
 
@@ -847,11 +847,11 @@ class SourceBuff(OwnerObject):
         
 
     def refresh(self):
-	"""Force a refresh of the buffer"""
-	debug.virtual('SourceBuff.refresh')
+        """Force a refresh of the buffer"""
+        debug.virtual('SourceBuff.refresh')
 
     def _state_cookie_class(self):
-	"""returns the class object for the type of cookie used by
+        """returns the class object for the type of cookie used by
 	store_current_state.
 
 	**INPUTS**
@@ -865,9 +865,9 @@ class SourceBuff(OwnerObject):
 
 	"""
         debug.virtual('SourceBuff._state_cookie_class')
-	
+        
     def store_current_state(self):
-	"""stores the current state of the buffer, including both the
+        """stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
 	Store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
@@ -903,7 +903,7 @@ class SourceBuff(OwnerObject):
         debug.virtual('SourceBuff.store_current_state')
 
     def restore_state(self, cookie):
-	"""restores the buffer to its state at the time when
+        """restores the buffer to its state at the time when
 	the cookie was returned by store_current_state.  Both the
 	contents and the selection will be restored.  However, other
 	data, such as the search history, may not.  The restore
@@ -924,7 +924,7 @@ class SourceBuff(OwnerObject):
         debug.virtual('SourceBuff.restore_state')
 
     def compare_with_current(self, cookie, selection = 0):
-	"""compares the current buffer state to its state at the time when
+        """compares the current buffer state to its state at the time when
 	the cookie was returned by store_current_state.  By default,
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to the cookie has
@@ -947,7 +947,7 @@ class SourceBuff(OwnerObject):
 
 
     def valid_cookie(self, cookie):
-	"""checks whether a state cookie is valid or expired.
+        """checks whether a state cookie is valid or expired.
 	If the state corresponding to the cookie has
 	been lost, valid_cookie will return false.
 
@@ -1150,9 +1150,9 @@ class SourceBuff(OwnerObject):
         # in the right direction
         #
         shortest_distance = None
-#	print self.cur_pos()
+#        print self.cur_pos()
         for ii in range(len(occurences)):
-#	    print ii, occurences[ii]
+#            print ii, occurences[ii]
 
             if direction == None:
                 #
@@ -1325,7 +1325,7 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
         
-	self.on_change(range[0], range[1], "", 0)
+        self.on_change(range[0], range[1], "", 0)
 
     def insert_cbk(self, range, text):
         
@@ -1370,7 +1370,7 @@ class SourceBuff(OwnerObject):
         
         *none* -- 
         """
-	pass
+        pass
 
     def goto_cbk(self, pos):
         
@@ -1388,7 +1388,7 @@ class SourceBuff(OwnerObject):
         
         *none* -- 
         """
-	pass
+        pass
 
     def print_buff(self, from_line=None, to_line=None):
         """Prints buffer to STDOUT.

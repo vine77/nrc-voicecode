@@ -28,7 +28,7 @@ from Object import Object
 import AppState, AppStateCached, messaging, SourceBuffMessaging
 
 
-	
+        
 class AppStateMessaging(AppStateCached.AppStateCached):
     
     """Application state for an external editor communicating through
@@ -52,16 +52,16 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     
     def __init__(self, listen_msgr=None, talk_msgr=None, id=None, **attrs):
         self.init_attrs({'multiple_buffer_support' : 0,
-	    'bidirectional_selection_support' : 0})        
+            'bidirectional_selection_support' : 0})        
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
                              'listen_msgr': listen_msgr,
                              'talk_msgr': talk_msgr
-			    },
+                            },
                             attrs)
-	self.multiple_buffer_support =  self._multiple_buffers_from_app()
-	self.bidirectional_selection_support = \
-	    self._bidirectional_selection_from_app()
+        self.multiple_buffer_support =  self._multiple_buffers_from_app()
+        self.bidirectional_selection_support = \
+            self._bidirectional_selection_from_app()
         self.init_cache()
 
 
@@ -143,7 +143,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
 
         self.talk_msgr.send_mess('recog_begin', {'window_id': window_id, 
-	    'block': block})
+            'block': block})
         response = self.talk_msgr.get_mess(expect=['recog_begin_resp'])
         return messaging.messarg2int(response[1]['value'])
 
@@ -191,7 +191,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         response = self.talk_msgr.get_mess(expect=['recog_end_resp'])
 
     def mediator_closing(self):
-	"""method called to inform AppState that the mediator is
+        """method called to inform AppState that the mediator is
 	closing.    Internal editors should exit.  They may prompt the
 	user to save modified files, but must not allow the user to
 	cancel and leave the editor running.  External editors should
@@ -228,24 +228,24 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         """
         debug.trace('-- AppStateMessaging.listen_one_transaction', 'called')
         mess = self.listen_msgr.get_mess(expect=['update',
-	    'editor_disconnecting', 'connection_broken'])
+            'editor_disconnecting', 'connection_broken'])
         mess_name = mess[0]
         debug.trace('-- AppStateMessaging.listen_one_transaction', 
-	    'heard %s' % mess_name)
+            'heard %s' % mess_name)
         if mess_name == 'update':
-	    mess_cont = mess[1]
+            mess_cont = mess[1]
             upd_list = mess_cont['value']
-	    debug.trace('-- AppStateMessaging.listen_one_transaction', 
-		'updates %s' % str(upd_list))
+            debug.trace('-- AppStateMessaging.listen_one_transaction', 
+                'updates %s' % str(upd_list))
             self.apply_updates(upd_list)
-	elif mess_name == 'editor_disconnecting':
-	    debug.trace('AppStateMessaging.listen_one_transaction',
-		'received editor_disconnecting')
-	    self.close_app_cbk()
-	elif mess_name == 'connection_broken':
-	    debug.trace('AppStateMessaging.listen_one_transaction',
-		'data thread sent connection')
-	    self.close_app_cbk(unexpected = 1)
+        elif mess_name == 'editor_disconnecting':
+            debug.trace('AppStateMessaging.listen_one_transaction',
+                'received editor_disconnecting')
+            self.close_app_cbk()
+        elif mess_name == 'connection_broken':
+            debug.trace('AppStateMessaging.listen_one_transaction',
+                'data thread sent connection')
+            self.close_app_cbk(unexpected = 1)
 
 
     def updates_from_app(self, what = None, exclude=1):
@@ -270,9 +270,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
-	if what == None:
-	    what = []
-	self.talk_msgr.send_mess('updates')
+        if what == None:
+            what = []
+        self.talk_msgr.send_mess('updates')
         response = self.talk_msgr.get_mess(expect=['updates'])
 
         #
@@ -302,20 +302,20 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     def app_active_buffer_name(self):
         
-	"""Reads the file name of the active buffer, directly from the
+        """Reads the file name of the active buffer, directly from the
 	external application.
 
 	**OUTPUTS**
 
 	*STR* -- file name of app's active buffer"""
 
-	self.talk_msgr.send_mess('active_buffer_name')
+        self.talk_msgr.send_mess('active_buffer_name')
         response = self.talk_msgr.get_mess(expect=['active_buffer_name_resp'])
         return response[1]['value']                
 
 
     def multiple_buffers(self):
-      	"""does editor support multiple open buffers?
+        """does editor support multiple open buffers?
 
 	**INPUTS**
 
@@ -326,10 +326,10 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
 
-	return self.multiple_buffer_support
+        return self.multiple_buffer_support
         
     def _multiple_buffers_from_app(self):
-      	"""does editor support multiple open buffers?
+        """does editor support multiple open buffers?
 
         Retrieve this information directly from the external editor.
 
@@ -342,12 +342,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
 
-	self.talk_msgr.send_mess('multiple_buffers')
+        self.talk_msgr.send_mess('multiple_buffers')
         response = self.talk_msgr.get_mess(expect=['multiple_buffers_resp'])
         return response[1]['value']                
         
     def bidirectional_selection(self):
-      	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
         Get this value directly from the external editor
 
@@ -360,10 +360,10 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
 
-	return self.bidirectional_selection_support
+        return self.bidirectional_selection_support
 
     def _bidirectional_selection_from_app(self):
-      	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
         Get this value directly from the external editor
 
@@ -376,7 +376,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
 
-	self.talk_msgr.send_mess('bidirectional_selection')
+        self.talk_msgr.send_mess('bidirectional_selection')
         response = self.talk_msgr.get_mess(expect=['bidirectional_selection_resp'])
         return response[1]['value']                
 
@@ -400,9 +400,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         #
         self.talk_msgr.send_mess('open_file', {'file_name': file_name})
         response = self.talk_msgr.get_mess(expect=['open_file_resp'])
-	buff_name = response[1]['buff_name']
+        buff_name = response[1]['buff_name']
 
-	return buff_name
+        return buff_name
 
     def app_save_file(self, full_path = None, no_prompt = 0):
         """Tell the external editor to save the current buffer.
@@ -425,17 +425,17 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         # Tell external editor to save the file
         #
         self.talk_msgr.send_mess('save_file', 
-	    {'full_path': full_path,
-	     'no_prompt': no_prompt
-	    })
+            {'full_path': full_path,
+             'no_prompt': no_prompt
+            })
         response = self.talk_msgr.get_mess(expect=['save_file_resp'])
-	buff_name = response[1]['buff_name']
+        buff_name = response[1]['buff_name']
 
-	return buff_name
+        return buff_name
         
         
     def query_buffer_from_app(self, buff_name):
-	"""query the application to see if a buffer by the name of buff_name 
+        """query the application to see if a buffer by the name of buff_name 
 	exists.
 
         **INPUTS**
@@ -448,12 +448,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	"""
         self.talk_msgr.send_mess('confirm_buffer_exists', {'buff_name': buff_name})
         response = \
-	    self.talk_msgr.get_mess(expect=['confirm_buffer_exists_resp'])
-	buffer_exists = response[1]['value']
-	return buffer_exists
+            self.talk_msgr.get_mess(expect=['confirm_buffer_exists_resp'])
+        buffer_exists = response[1]['value']
+        return buffer_exists
 
     def open_buffers_from_app(self):
-	"""retrieve a list of the names of open buffers from the
+        """retrieve a list of the names of open buffers from the
 	application.
 
         **INPUTS**
@@ -466,9 +466,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	"""
         self.talk_msgr.send_mess('list_open_buffers')
         response = \
-	    self.talk_msgr.get_mess(expect=['list_open_buffers_resp'])
-	open_buffers = response[1]['value']
-	return open_buffers
+            self.talk_msgr.get_mess(expect=['list_open_buffers_resp'])
+        open_buffers = response[1]['value']
+        return open_buffers
 
     def app_close_buffer(self, buff_name, save=0):
         """Ask the editor to close a buffer.
@@ -487,12 +487,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         *BOOL* -- true if the editor does close the buffer
         """
 
-#	print 'someone is calling app_close_buffer "%s":' % buff_name
-#	debug.print_call_stack()
+#        print 'someone is calling app_close_buffer "%s":' % buff_name
+#        debug.print_call_stack()
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
         response = self.talk_msgr.get_mess(expect=['close_buffer_resp'])
-	success = response[1]['value']
-	return success
+        success = response[1]['value']
+        return success
 
 
 
@@ -547,5 +547,5 @@ class AppStateInsertIndentMess(AppStateMessaging):
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
         return SourceBuffMessaging.SourceBuffInsertIndentMess(app=self, 
-	    buff_name=buff_name)
+            buff_name=buff_name)
 

@@ -96,9 +96,9 @@ def cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None,
 #    sim_commands.quit(clean_sr_voc=clean_sr_voc)
 #    if sim_commands.the_mediator:
 #        sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-#	    save_speech_files=save_speech_files, disconnect=disconnect)
+#            save_speech_files=save_speech_files, disconnect=disconnect)
     the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-	save_speech_files=save_speech_files, disconnect=disconnect)
+        save_speech_files=save_speech_files, disconnect=disconnect)
 
 def simulator_mode(options):
     """Start mediator in console mode.
@@ -138,10 +138,10 @@ def simulator_mode(options):
     editor_app.got_window()
 
     the_mediator = mediator.new_simulator(on_app = app, owns_app = 0,
-	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-#	symdict_pickle_fname = None,
-	disable_dlg_select_symbol_matches = 1, window = window,
-	mic_change = editor_app.mic_change)
+        symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+#        symdict_pickle_fname = None,
+        disable_dlg_select_symbol_matches = 1, window = window,
+        mic_change = editor_app.mic_change)
         
 
 # get actual namespace used by panel (which is a copy of the names we
@@ -173,7 +173,7 @@ def simulator_mode(options):
 
     print 'gui exited'
     cleanup(the_mediator, commands.clean_sr_voc, 
-	commands.save_speech_files, commands.disconnect_flag)
+        commands.save_speech_files, commands.disconnect_flag)
         
 if (__name__ == '__main__'):
     
@@ -183,7 +183,7 @@ if (__name__ == '__main__'):
   
     if opts['h']:
         print __doc__
-	print sim_commands.__doc__
+        print sim_commands.__doc__
 
     elif opts['t']:
         #

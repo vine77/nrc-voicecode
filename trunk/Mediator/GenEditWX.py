@@ -56,7 +56,7 @@ class SingleBufferWindow:
     *none*
     """
     def editor_window(self):
-	"""returns a reference to the editor window
+        """returns a reference to the editor window
 
 	**INPUTS**
 
@@ -66,10 +66,10 @@ class SingleBufferWindow:
 
 	*wxTextCtrl* -- the editor window
 	"""
-	debug.virtual('SingleBufferWindow.editor_window')
+        debug.virtual('SingleBufferWindow.editor_window')
 
     def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
+        """returns a reference to the TextBufferWX embedded in the GUI
 
 	**INPUTS**
 
@@ -79,10 +79,10 @@ class SingleBufferWindow:
 
 	*TextBufferWX* -- the TextBufferWX
 	"""
-	debug.virtual('SingleBufferWindow.editor_buffer')
+        debug.virtual('SingleBufferWindow.editor_buffer')
 
     def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
+        """indicates whether the editor window has the focus
 
 	**INPUTS**
 
@@ -91,13 +91,13 @@ class SingleBufferWindow:
 	**OUTPUTS**
 	*BOOL* -- true if editor window has the focus
 	"""
-	current = wxWindow_FindFocus()
-	if current and current.GetId() == self.editor_window().GetId():
-	    return 1
-	return 0
+        current = wxWindow_FindFocus()
+        if current and current.GetId() == self.editor_window().GetId():
+            return 1
+        return 0
 
     def current_font(self):
-	"""find the current font for the text buffers in this window
+        """find the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -107,10 +107,10 @@ class SingleBufferWindow:
 
 	*wxFont* -- the current font
 	"""
-	return self.editor_window().GetFont()
+        return self.editor_window().GetFont()
 
     def set_font(self, font):
-	"""sets the current font for the text buffers in this window
+        """sets the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -120,17 +120,17 @@ class SingleBufferWindow:
 
 	*none*
 	"""
-	self.editor_window().SetFont(font)
+        self.editor_window().SetFont(font)
 
 class EditorBuilder(Object.Object):
     """mix-in class for creating the editor buffer window and its
     TextBufferWX wrapper
     """
     def __init__( self, **args):
-	self.deep_construct(EditorBuilder, {}, args)
+        self.deep_construct(EditorBuilder, {}, args)
 
     def build_editor_buffer(self, parent, use_rich = 0):
-	"""builds an editor window
+        """builds an editor window
 	
 	**INPUTS**
 	
@@ -144,17 +144,17 @@ class EditorBuilder(Object.Object):
 	*(wxTextCtrl, TextBufferWX)* -- the editor window and its
 	TextBufferWX wrapper
 	"""
-	debug.virtual('EditorBuilder.build_editor_buffer')
+        debug.virtual('EditorBuilder.build_editor_buffer')
 
 class EditorBuilderBasic(EditorBuilder):
     """mix-in class for creating the editor buffer window and its
     TextBufferWX wrapper
     """
     def __init__(self, **args):
-	self.deep_construct(EditorBuilderBasic, {}, args)
+        self.deep_construct(EditorBuilderBasic, {}, args)
 
     def build_editor_buffer(self, parent, use_rich = 0):
-	"""builds an editor window
+        """builds an editor window
 	
 	**INPUTS**
 	
@@ -168,25 +168,25 @@ class EditorBuilderBasic(EditorBuilder):
 	*(wxTextCtrl, TextBufferWX)* -- the editor window and its
 	TextBufferWX wrapper
 	"""
-	flags = wxTE_MULTILINE | wxTE_NOHIDESEL  
-	cr_bug = 0
-	if sys.platform == 'win32':
-	    cr_bug = 1
-	    if use_rich:
+        flags = wxTE_MULTILINE | wxTE_NOHIDESEL  
+        cr_bug = 0
+        if sys.platform == 'win32':
+            cr_bug = 1
+            if use_rich:
 # allows text longer than 64K
-		flags = flags | wxTE_RICH
-		cr_bug = 0
+                flags = flags | wxTE_RICH
+                cr_bug = 0
 # rich text uses \r only for new lines, so offsets into internal and 
 # external buffers are the same
 
-	ID_EDITOR = wxNewId()
-	editor = wxTextCtrl(parent, ID_EDITOR, "", wxDefaultPosition,
-	    wxDefaultSize, flags)
-#	    self.GetClientSize(), wxTE_MULTILINE)
-#	    wxDefaultSize, wxTE_MULTILINE | wxTE_NOHIDESEL)
-	wax_text_buffer = \
-	    TextBufferWX.TextBufferWX(editor, carriage_return_bug = cr_bug)
-	return editor, wax_text_buffer
+        ID_EDITOR = wxNewId()
+        editor = wxTextCtrl(parent, ID_EDITOR, "", wxDefaultPosition,
+            wxDefaultSize, flags)
+#            self.GetClientSize(), wxTE_MULTILINE)
+#            wxDefaultSize, wxTE_MULTILINE | wxTE_NOHIDESEL)
+        wax_text_buffer = \
+            TextBufferWX.TextBufferWX(editor, carriage_return_bug = cr_bug)
+        return editor, wax_text_buffer
     
 class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
     Object.OwnerObject):
@@ -212,7 +212,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
     may not be in a sane state)
     """
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**INPUTS**
@@ -225,19 +225,19 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 	"""
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
-	self.closing = 1
-	self.wax_text_buffer = None
-	self.editor = None
-	Object.OwnerObject.remove_other_references(self)
+        self.closing = 1
+        self.wax_text_buffer = None
+        self.editor = None
+        Object.OwnerObject.remove_other_references(self)
 
     def initial_show(self):
-	"""**NOTE:** the parent frame must call this method when it 
+        """**NOTE:** the parent frame must call this method when it 
 	is initially shown.
 	"""
-	pass
+        pass
     
     def __init__(self, parent, ID, use_rich = 0, **args):
-	"""
+        """
 	**INPUTS**
 
 	*WaxFrame, wxWindow parent* -- the parent frame window to the panel
@@ -248,28 +248,28 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 	standard text control or a rich edit control on Windows
 
 	"""
-	self.deep_construct(WaxPanel,
-	                    {'wax_text_buffer': None,
-			     'parent': parent,
-			     'editor': None,
-			     'closing': 0
-			    },
-			    args,
-			    exclude_bases = {wxPanel: 1, SingleBufferWindow: 1}
-			   )
+        self.deep_construct(WaxPanel,
+                            {'wax_text_buffer': None,
+                             'parent': parent,
+                             'editor': None,
+                             'closing': 0
+                            },
+                            args,
+                            exclude_bases = {wxPanel: 1, SingleBufferWindow: 1}
+                           )
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, 
-	    wxDefaultSize)
-	self.name_parent('parent')
+            wxDefaultSize)
+        self.name_parent('parent')
 
-	vbox = wxBoxSizer(wxVERTICAL)
-	self.prepend(vbox)
+        vbox = wxBoxSizer(wxVERTICAL)
+        self.prepend(vbox)
 
-	editor, buffer = self.add_editor_buffer(vbox, use_rich = use_rich)
+        editor, buffer = self.add_editor_buffer(vbox, use_rich = use_rich)
 
         self.editor = editor
         self.wax_text_buffer = buffer
 
-	self.append(vbox)
+        self.append(vbox)
 
 
         self.SetAutoLayout(1)
@@ -278,7 +278,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
         vbox.SetSizeHints(self)
 
     def add_editor_buffer(self, vbox, use_rich = 0):
-	"""builds an editor window (and, optionally, other associated
+        """builds an editor window (and, optionally, other associated
 	controls) and adds it (them) to the panel and sizer
 	
 	**INPUTS**
@@ -300,10 +300,10 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 	*(wxTextCtrl, TextBufferWX)* -- the editor window and its
 	TextBufferWX wrapper
 	"""
-	debug.virtual('WaxPanel.add_editor_buffer')
+        debug.virtual('WaxPanel.add_editor_buffer')
 
     def prepend(self, vbox):
-	""" allows subclasses to add additional controls to the panel
+        """ allows subclasses to add additional controls to the panel
 	above the editor window
 
 	**Note:** the additional controls should have the panel (self)
@@ -320,10 +320,10 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
 	*none*
 	"""
-	pass
+        pass
     
     def append(self, vbox):
-	""" allows subclasses to add additional controls to the panel
+        """ allows subclasses to add additional controls to the panel
 	below the editor window
 
 	**Note:** the additional controls should have the panel (self)
@@ -340,10 +340,10 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
 	*none*
 	"""
-	pass
+        pass
 
     def editor_window(self):
-	"""returns a reference to the editor window
+        """returns a reference to the editor window
 
 	**INPUTS**
 
@@ -353,10 +353,10 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
 	*wxTextCtrl* -- the editor window
 	"""
-	return self.editor
+        return self.editor
 
     def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
+        """returns a reference to the TextBufferWX embedded in the GUI
 
 	**INPUTS**
 
@@ -366,7 +366,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
 	*TextBufferWX* -- the TextBufferWX
 	"""
-	return self.wax_text_buffer
+        return self.wax_text_buffer
 
 class SimpleWaxPanel(WaxPanel):
     """concrete implementation for a main panel containing only
@@ -381,14 +381,14 @@ class SimpleWaxPanel(WaxPanel):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxPanel,
-	                    {
-			    },
-			    args
-			   )
+        self.deep_construct(SimpleWaxPanel,
+                            {
+                            },
+                            args
+                           )
 
     def add_editor_buffer(self, vbox, use_rich = 0):
-	"""builds an editor window (and, optionally, other associated
+        """builds an editor window (and, optionally, other associated
 	controls) and adds it (them) to the panel and sizer
 	
 	**INPUTS**
@@ -410,12 +410,12 @@ class SimpleWaxPanel(WaxPanel):
 	*(wxTextCtrl, TextBufferWX)* -- the editor window and its
 	TextBufferWX wrapper
 	"""
-	editor, buffer = \
-	    self.build_editor_buffer(parent = self, use_rich = use_rich)
+        editor, buffer = \
+            self.build_editor_buffer(parent = self, use_rich = use_rich)
 
 # because we put the editor in a panel, we need a sizer
-	vbox.Add(editor, 1, wxGROW)
-	return editor, buffer
+        vbox.Add(editor, 1, wxGROW)
+        return editor, buffer
 
 class WaxCmdPanel(WaxPanel):
     """concrete implementation for a main panel containing a command
@@ -450,25 +450,25 @@ class WaxCmdPanel(WaxPanel):
 # have to pre-declare these attributes, because add_editor_buffer, which
 # sets their values, is executed from the WaxPanel constructor before
 # deep_construct would get around to declaring them
-	self.decl_attrs(
-			{
-			 'top_and_bottom': None, 
-			 'prompt_text': prompt_text,
-			 'command_space': copy.copy(command_space),
-	                 'command_log': None, 
-			 'command_line': None, 
-			 'log': None, 
-			 'command_line_interp': None
-			}
-	               )
-	self.deep_construct(WaxCmdPanel,
-	                    {},
-			    args
-			   )
+        self.decl_attrs(
+                        {
+                         'top_and_bottom': None, 
+                         'prompt_text': prompt_text,
+                         'command_space': copy.copy(command_space),
+                         'command_log': None, 
+                         'command_line': None, 
+                         'log': None, 
+                         'command_line_interp': None
+                        }
+                       )
+        self.deep_construct(WaxCmdPanel,
+                            {},
+                            args
+                           )
 
 
     def add_editor_buffer(self, vbox, use_rich = 0):
-	"""builds an editor window (and, optionally, other associated
+        """builds an editor window (and, optionally, other associated
 	controls) and adds it (them) to the panel and sizer
 	
 	**INPUTS**
@@ -490,77 +490,77 @@ class WaxCmdPanel(WaxPanel):
 	*(wxTextCtrl, TextBufferWX)* -- the editor window and its
 	TextBufferWX wrapper
 	"""
-	ID_SPLITTER = wxNewId()
-	top_and_bottom = wxAutoSplitterWindow.wxFixedFocusSplitter(self,
-	    ID_SPLITTER, 1)
+        ID_SPLITTER = wxNewId()
+        top_and_bottom = wxAutoSplitterWindow.wxFixedFocusSplitter(self,
+            ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
 
-#	print top_and_bottom
+#        print top_and_bottom
 
-	editor, buffer = \
-	    self.build_editor_buffer(parent = top_and_bottom, 
-	    use_rich = use_rich)
+        editor, buffer = \
+            self.build_editor_buffer(parent = top_and_bottom, 
+            use_rich = use_rich)
 
-	flags = wxTE_MULTILINE | wxTE_READONLY
-	if use_rich:
+        flags = wxTE_MULTILINE | wxTE_READONLY
+        if use_rich:
 # allows text longer than 64K
-	    flags = flags | wxTE_RICH
+            flags = flags | wxTE_RICH
 
-	ID_LOG = wxNewId()
+        ID_LOG = wxNewId()
         log = wxTextCtrl(top_and_bottom, ID_LOG, "", wxDefaultPosition,
-	    wxDefaultSize, flags)
+            wxDefaultSize, flags)
 
         self.log = log
-	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
+        self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
 
-	ID_PROMPT = wxNewId()
+        ID_PROMPT = wxNewId()
         self.prompt = wxStaticText(self, ID_PROMPT, "&Command")
 
-	ID_COMMAND_LINE = wxNewId()
+        ID_COMMAND_LINE = wxNewId()
         command_line = wxTextCtrl(self, ID_COMMAND_LINE, 
             "", wxDefaultPosition, wxDefaultSize,
-	    style =wxTE_PROCESS_ENTER)
+            style =wxTE_PROCESS_ENTER)
         self.command_line = command_line
 
         self.prompt_line.Add(self.prompt, 0, wxALL, 4)
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
 
-#	EVT_SET_FOCUS(self, self.on_focus)
-#	EVT_SET_FOCUS(self.prompt, self.p_focus)
+#        EVT_SET_FOCUS(self, self.on_focus)
+#        EVT_SET_FOCUS(self.prompt, self.p_focus)
 
 
-	if self.command_space == None:
-	    self.command_space = {}
+        if self.command_space == None:
+            self.command_space = {}
 
 # provide extra access for testing 
-	self.command_space['the_pane'] = self
-	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
-	    command_callback = self.on_command_enter)
+        self.command_space['the_pane'] = self
+        self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
+            command_callback = self.on_command_enter)
 
-	self.command_line_interp = \
-	    code.InteractiveInterpreter(self.command_space)
+        self.command_line_interp = \
+            code.InteractiveInterpreter(self.command_space)
 
 
 # because we put the editor in a panel, we need a sizer
         vbox.Add(top_and_bottom, 1, wxEXPAND | wxALL, 4)
         vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
 
-	self.top_and_bottom = top_and_bottom
-#	print self.top_and_bottom
+        self.top_and_bottom = top_and_bottom
+#        print self.top_and_bottom
 
-	return editor, buffer
+        return editor, buffer
 
     def initial_show(self):
-	"""create editor and log windows.  This is done here, rather
+        """create editor and log windows.  This is done here, rather
 	than in __init__ because this is the first time that the actual
 	size of the parent splitter window, top_and_bottom, is known
 	"""
-	self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
+        self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
     
     def simulate_command(self, command):
-	"""simulate a command being entered on the command line
+        """simulate a command being entered on the command line
 
 	**INPUTS**
 
@@ -570,10 +570,10 @@ class WaxCmdPanel(WaxPanel):
 
 	*none*
 	"""
-	self.on_command_enter(self.command_line, command)
-	
+        self.on_command_enter(self.command_line, command)
+        
     def on_command_enter(self, command_line, command):
-	"""handler for Enter pressed in the command line
+        """handler for Enter pressed in the command line
 
 	**INPUTS**
 
@@ -585,37 +585,37 @@ class WaxCmdPanel(WaxPanel):
 
 	*none*
 	"""
-	self.command_log.log_command(command)
-	stdout = sys.stdout
-	stderr = sys.stderr
+        self.command_log.log_command(command)
+        stdout = sys.stdout
+        stderr = sys.stderr
         # capture standard output and standard error from exec and redirect them
-	# to the command log
-	self.command_space['quit_flag'] = 0
-	try:
-	    sys.stdout = self.command_log
-	    sys.stderr = self.command_log
-	    self.editor.SetFocus()
-	    try:
-		if self.command_line_interp.runsource(command):
-		    sys.stderr.write('Error: incomplete input\n')
-#	        exec command \
-#		    in sys.modules[self.__class__.__module__].__dict__, \
-#		    self.command_space
+        # to the command log
+        self.command_space['quit_flag'] = 0
+        try:
+            sys.stdout = self.command_log
+            sys.stderr = self.command_log
+            self.editor.SetFocus()
+            try:
+                if self.command_line_interp.runsource(command):
+                    sys.stderr.write('Error: incomplete input\n')
+#                exec command \
+#                    in sys.modules[self.__class__.__module__].__dict__, \
+#                    self.command_space
                 #	  exec command in self.command_space
-	    except Exception, err:
-	        traceback.print_exc()
+            except Exception, err:
+                traceback.print_exc()
 
-	finally:
+        finally:
             # make sure to restore standard output and standard error,
-	    # so that errors in the GUI don't go unreported if the GUI
-	    # crashes
-	    self.command_line.SetFocus()
-	    sys.stdout = stdout
-	    sys.stderr = stderr
+            # so that errors in the GUI don't go unreported if the GUI
+            # crashes
+            self.command_line.SetFocus()
+            sys.stdout = stdout
+            sys.stderr = stderr
 
-#	print self.command_space['quit_flag']
-	if self.command_space['quit_flag']:
-	    self.parent.quit_now(None)
+#        print self.command_space['quit_flag']
+        if self.command_space['quit_flag']:
+            self.parent.quit_now(None)
 
 
 class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
@@ -644,7 +644,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     others -- the various menus
     """
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**INPUTS**
@@ -658,11 +658,11 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
 
-	self.closing = 1
-	GenEdit.GenEditFrameActivateEvent.remove_other_references(self)
+        self.closing = 1
+        GenEdit.GenEditFrameActivateEvent.remove_other_references(self)
 
     def __init__(self, ID, size, parent = None, **args):
-	"""constructor for the base WaxEditFrame class
+        """constructor for the base WaxEditFrame class
 
 	**INPUTS**
 
@@ -674,30 +674,30 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	single-frame applications)
 	"""
 
-	self.deep_construct( WaxFrameBase,
-			    {'closing': 0,
-			     'ID': ID
-			    }, args,
-			    exclude_bases = {wxFrame: 1},
-			    enforce_value = {'ID': ID}
-			   )
+        self.deep_construct( WaxFrameBase,
+                            {'closing': 0,
+                             'ID': ID
+                            }, args,
+                            exclude_bases = {wxFrame: 1},
+                            enforce_value = {'ID': ID}
+                           )
         wxFrame.__init__(self, parent, self.ID, self.app_name, 
-	    wxDefaultPosition, size)
+            wxDefaultPosition, size)
 
         file_menu=wxMenu()
-	ID_OPEN_FILE = wxNewId()
-	ID_SAVE_FILE = wxNewId()
-	ID_SAVE_AS = wxNewId()
-	ID_EXIT = wxNewId()
-	ID_CLOSE_MENU = wxNewId()
-#	print ID_OPEN_FILE
+        ID_OPEN_FILE = wxNewId()
+        ID_SAVE_FILE = wxNewId()
+        ID_SAVE_AS = wxNewId()
+        ID_EXIT = wxNewId()
+        ID_CLOSE_MENU = wxNewId()
+#        print ID_OPEN_FILE
         file_menu.Append(ID_OPEN_FILE,"&Open...","Open a file")
         file_menu.Append(ID_SAVE_FILE,"&Save","Save current file")
         file_menu.Append(ID_SAVE_AS,"Save &As...","Save current file")        
         file_menu.Append(ID_CLOSE_MENU,"&Close","Close window")
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
-	ID_CHOOSE_FONT = wxNewId()
+        ID_CHOOSE_FONT = wxNewId()
         format_menu = wxMenu()
         format_menu.Append(ID_CHOOSE_FONT, "&Font...")        
 
@@ -722,7 +722,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         EVT_ACTIVATE(self, self.OnActivate) 
 
     def show(self, initial = 0):
-	"""show the window corresponding to this frame
+        """show the window corresponding to this frame
 
 	**INPUTS**
 
@@ -732,27 +732,27 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*none*
 	"""
-	self.Show(1)
-	if initial:
-	    self.initial_show()
+        self.Show(1)
+        if initial:
+            self.initial_show()
 
     def initial_show(self):
-	"""**NOTE:** the application must call this method when the
+        """**NOTE:** the application must call this method when the
 	frame is initially shown.
 	"""
-	pass
+        pass
 
     def OnActivate(self, event):
-	if self.closing:
-	    return
+        if self.closing:
+            return
         if event.GetActive():
 # window is being activated
-	    self.on_activate(1)
+            self.on_activate(1)
         else:
-	    self.on_activate(0)
+            self.on_activate(0)
 
     def full_title(self):
-	"""constructs the full title for the frame from the app_name,
+        """constructs the full title for the frame from the app_name,
 	instance_string, if any, and buffer name
 
 	**INPUTS**
@@ -763,15 +763,15 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*STR* -- the title string
 	"""
-	buff_name = self.frame_active_buffer_name()
-	title = self.app_name + ' - '
-	if self.instance_string:
-	    title = title + '[%s] - ' % self.instance_string
-	title = title + buff_name
-	return title
+        buff_name = self.frame_active_buffer_name()
+        title = self.app_name + ' - '
+        if self.instance_string:
+            title = title + '[%s] - ' % self.instance_string
+        title = title + buff_name
+        return title
 
     def update_title(self):
-	"""update the window title of the frame reflect a new buffer name 
+        """update the window title of the frame reflect a new buffer name 
 	
 	**INPUTS**
 
@@ -781,10 +781,10 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*none*
 	"""
-	self.SetTitle(self.full_title())
+        self.SetTitle(self.full_title())
     
     def close_window(self):
-	"""close the window corresponding to this frame
+        """close the window corresponding to this frame
 
 	**NOTE:** The owner must call the frame's cleanup method before
 	calling this method to close the actual GUI frame
@@ -797,62 +797,62 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*none*
 	"""
-	if not self.closing:
+        if not self.closing:
 # this should never happen, but if it does, report the error and make
 # the best of it
-	    msg = 'frame received close_window without prior cleanup\n'
-	    debug.critical_warning(msg)
-	    debug.print_call_stack()
-	    self.cleanup()
-	self.Close()
+            msg = 'frame received close_window without prior cleanup\n'
+            debug.critical_warning(msg)
+            debug.print_call_stack()
+            self.cleanup()
+        self.Close()
 
     def close_now(self, event):
-	"""handler for Close menu item
+        """handler for Close menu item
 	"""
-	self.Close()
+        self.Close()
 
     def quit_now(self, event):
 # owner will be responsible for prompting for the user to save files,
 # and calling cleanup for this frame (and all others)
-#	print 'quit_now'
-	self.owner.on_exit(self.frame_ID)
+#        print 'quit_now'
+        self.owner.on_exit(self.frame_ID)
     
     def on_close(self, event):
 # after the owner has cleaned up the frame (on exit), go ahead and close
-#	print 'on_close'
-	if self.closing:
-#	    print 'closing'
-	    event.Skip()
-	    return
+#        print 'on_close'
+        if self.closing:
+#            print 'closing'
+            event.Skip()
+            return
 
 # otherwise, notify the owner, which will be responsible for 
 # prompting for the user to save files.
-	proceed = self.owner.on_frame_close(self.frame_ID)
-#	print 'proceed = ', proceed
+        proceed = self.owner.on_frame_close(self.frame_ID)
+#        print 'proceed = ', proceed
 # Unless the user cancels closing the frame, the owner will
 # call cleanup for this frame, so it will be safe to close the frame
-	if proceed:
-	    event.Skip()
+        if proceed:
+            event.Skip()
     
     def open_file_dialog(self, init_dir):
-	file_path = None
+        file_path = None
         dlg = wxFileDialog(self, "Edit File", init_dir, "", "*.*",
- 	    wxOPEN | wxCHANGE_DIR)
+            wxOPEN | wxCHANGE_DIR)
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-	dlg.Destroy()
-	return file_path
+        dlg.Destroy()
+        return file_path
 
     def on_open_file(self, event):
 # this is somewhat roundabout, but it allows us to get the proper
 # initial directory for the Save As dialog box, and ensure that AppState
 # gets an open buffer callback
-#	print 'on_open'
-	self.owner.open_file(user_initiated = 1)
+#        print 'on_open'
+        self.owner.open_file(user_initiated = 1)
 
     def save_as_dialog(self, buff_name, init_dir):
-	"""prompts for a filename under which to save the file, and
+        """prompts for a filename under which to save the file, and
 	confirms overwriting
 
 	**INPUTS**
@@ -868,31 +868,31 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	*STR* -- the specified path, or None if the user cancelled 
 	"""
         dlg = wxFileDialog(self, "Save File", init_dir,  "", "*.*",
-	    wxSAVE | wxCHANGE_DIR | wxOVERWRITE_PROMPT)
-	file_path = None
+            wxSAVE | wxCHANGE_DIR | wxOVERWRITE_PROMPT)
+        file_path = None
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-	dlg.Destroy()
-	return file_path
+        dlg.Destroy()
+        return file_path
 
     def on_save_as(self, event):
-#	print 'on_save_as'
-	buff_name = self.frame_active_buffer_name()
+#        print 'on_save_as'
+        buff_name = self.frame_active_buffer_name()
 # this is somewhat roundabout, but it allows us to get the proper
 # initial directory for the Save As dialog box, and ensure that AppState
 # gets a rename buffer callback
-	self.owner.save_file(buff_name, ask_for_new_name = 1,
-	    user_initiated = 1)
+        self.owner.save_file(buff_name, ask_for_new_name = 1,
+            user_initiated = 1)
 
     def on_save(self, event):
-#	print 'on_save'
-	buff_name = self.frame_active_buffer_name()
-	self.owner.save_file(buff_name, user_initiated = 1)
+#        print 'on_save'
+        buff_name = self.frame_active_buffer_name()
+        self.owner.save_file(buff_name, user_initiated = 1)
 
    
     def prompt_to_save(self, buff_name):
-	"""prompts the user to save the current buffer before closing it, 
+        """prompts the user to save the current buffer before closing it, 
 	or cancel.  Note: prompt_to_save should save if the user so
 	indicates, and update the entry in self.filenames corresponding
 	to the buffer, but should not close the buffer, because
@@ -908,20 +908,20 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	without saving, false if the user asked for the action causing
 	the buffer closing to be cancelled.
 	"""
-	answer = wxMessageBox("Save changes to document %s?" % buff_name, 
-		"Save Changes", 
-		wxICON_EXCLAMATION | wxYES_NO | wxCANCEL | wxYES_DEFAULT, 
-		self)
-	if answer == wxCANCEL:
-	    return 0
-	if answer == wxYES:
-	    new_buff_name = self.owner.save_file(buff_name, rename_buff = 0)
-	    if not new_buff_name:
-		return 0
-	return 1
+        answer = wxMessageBox("Save changes to document %s?" % buff_name, 
+                "Save Changes", 
+                wxICON_EXCLAMATION | wxYES_NO | wxCANCEL | wxYES_DEFAULT, 
+                self)
+        if answer == wxCANCEL:
+            return 0
+        if answer == wxYES:
+            new_buff_name = self.owner.save_file(buff_name, rename_buff = 0)
+            if not new_buff_name:
+                return 0
+        return 1
  
     def current_font(self):
-	"""find the current font for the text buffers in this window
+        """find the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -931,10 +931,10 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*wxFont* -- the current font
 	"""
-	debug.virtual('WaxFrameBase.current_font')
+        debug.virtual('WaxFrameBase.current_font')
 
     def set_font(self, font):
-	"""sets the current font for the text buffers in this window
+        """sets the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -944,12 +944,12 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	*none*
 	"""
-	debug.virtual('WaxFrameBase.set_font')
+        debug.virtual('WaxFrameBase.set_font')
 
     def choose_font(self, event):
         current_font = self.current_font()
         current_font_data = wxFontData()
-	current_font_data.SetInitialFont(current_font)
+        current_font_data.SetInitialFont(current_font)
         dlg = wxFontDialog(self, current_font_data)
 # the line below passed the return value (None?) of SetInitialFont to the
 # dialog
@@ -957,8 +957,8 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         dlg.ShowModal()
         chosen_font = dlg.GetFontData().GetChosenFont()
         if chosen_font:
-	    self.set_font(chosen_font)
-	dlg.Destroy()            
+            self.set_font(chosen_font)
+        dlg.Destroy()            
 
 class WaxFrame(WaxFrameBase):
     """partially concrete class for frame containing a WaxPanel
@@ -976,32 +976,32 @@ class WaxFrame(WaxFrameBase):
     others -- the various menus
     """
     def __init__(self, init_buff_name = "", **args):
-	self.deep_construct( WaxFrame,
-			    {'pane': None,
-			     'curr_buffer_name': init_buff_name
-			    }, args
-			   ),
-	ID_PANE = wxNewId()
-	self.pane = self.add_pane(ID = ID_PANE)
-	self.add_owned('pane')
+        self.deep_construct( WaxFrame,
+                            {'pane': None,
+                             'curr_buffer_name': init_buff_name
+                            }, args
+                           ),
+        ID_PANE = wxNewId()
+        self.pane = self.add_pane(ID = ID_PANE)
+        self.add_owned('pane')
 
     def add_pane(self, ID):
-	"""create the actual WaxPanel for the frame
+        """create the actual WaxPanel for the frame
 
 	**INPUTS**
 
 	*wxWindowId ID* -- the ID of the panel
 	"""
-	debug.virtual('WaxPane.add_pane')
+        debug.virtual('WaxPane.add_pane')
 
     def initial_show(self):
-	"""**NOTE:** the application must call this method when the
+        """**NOTE:** the application must call this method when the
 	frame is initially shown.
 	"""
-	self.pane.initial_show()
+        self.pane.initial_show()
 
     def frame_active_buffer_name(self):
-      	"""Returns the name of the buffer currently active in this
+        """Returns the name of the buffer currently active in this
 	frame.
 
         **INPUTS**
@@ -1012,10 +1012,10 @@ class WaxFrame(WaxFrameBase):
 
 	*STR* -- buffer name of current buffer, or None if there is none
         """
-	return self.curr_buffer_name
+        return self.curr_buffer_name
     
     def open_buffers(self):
-	"""retrieve a list of the names of open buffers associated with
+        """retrieve a list of the names of open buffers associated with
 	contained by this frame.
 
         **INPUTS**
@@ -1026,10 +1026,10 @@ class WaxFrame(WaxFrameBase):
 
 	*[STR]* -- list of the names of open buffers
 	"""
-	return [self.curr_buffer_name]
+        return [self.curr_buffer_name]
 
     def rename_buffer(self, buff_name, new_buff_name):
-	"""notifies the frame that one of its buffers has been renamed
+        """notifies the frame that one of its buffers has been renamed
 
 	**INPUTS**
 
@@ -1042,14 +1042,14 @@ class WaxFrame(WaxFrameBase):
 	*BOOL* -- false if the old buff_name was unknown, or the new
 	name is already present
 	"""
-	if self.curr_buffer_name == buff_name:
-	    self.curr_buffer_name = new_buff_name
-	    return 1
-	else:
-	    return 0
+        if self.curr_buffer_name == buff_name:
+            self.curr_buffer_name = new_buff_name
+            return 1
+        else:
+            return 0
     
     def switch_to_buffer(self, buff_name):
-	"""Puts this frame in the foreground (if it isn't already), and
+        """Puts this frame in the foreground (if it isn't already), and
 	changes the active buffer to buff_name
 
         **INPUTS**
@@ -1061,13 +1061,13 @@ class WaxFrame(WaxFrameBase):
         *BOOL* -- true if buff_name exists and the external application
 	successfully switches to it
         """
-	if buff_name == self.curr_buffer_name:
-	    self.SetFocus()
-	    return 1
-	return 0
+        if buff_name == self.curr_buffer_name:
+            self.SetFocus()
+            return 1
+        return 0
 
     def delete_buffer(self, buff_name):
-	"""delete a buffer 
+        """delete a buffer 
 
 	**INPUTS**
 
@@ -1078,10 +1078,10 @@ class WaxFrame(WaxFrameBase):
 	*none*
 	"""
 # for frames with only one buffer, this is a no-op
-	pass
+        pass
  
     def remove_buffer(self, buff_name):
-	"""remove a buffer from the list of belong to this frame.  
+        """remove a buffer from the list of belong to this frame.  
 
 	**Note:** this method only removes the buffer from GenEditFrame's
 	records, it does not destroy the underlying GUI buffer or the
@@ -1096,10 +1096,10 @@ class WaxFrame(WaxFrameBase):
 	*none*
 	"""
 # for frames with only one buffer, this is a no-op
-	pass
+        pass
 
     def current_font(self):
-	"""find the current font for the text buffers in this window
+        """find the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -1109,10 +1109,10 @@ class WaxFrame(WaxFrameBase):
 
 	*wxFont* -- the current font
 	"""
-	return self.pane.current_font()
+        return self.pane.current_font()
 
     def set_font(self, font):
-	"""sets the current font for the text buffers in this window
+        """sets the current font for the text buffers in this window
 
 	**INPUTS**
 
@@ -1122,10 +1122,10 @@ class WaxFrame(WaxFrameBase):
 
 	*none*
 	"""
-	self.pane.set_font(font)
+        self.pane.set_font(font)
     
     def editor_buffer(self, buff_name):
-	"""returns a reference to the TextBufferWX embedded in the GUI
+        """returns a reference to the TextBufferWX embedded in the GUI
 
 	**INPUTS**
 
@@ -1135,13 +1135,13 @@ class WaxFrame(WaxFrameBase):
 
 	*TextBufferWX* -- the TextBufferWX
 	"""
-	if buff_name == self.frame_active_buffer_name():
-	    return self.pane.editor_buffer()
-	else:
-	    return None
+        if buff_name == self.frame_active_buffer_name():
+            return self.pane.editor_buffer()
+        else:
+            return None
 
     def editor_has_focus(self):
-	"""indicates whether the editor window has the focus
+        """indicates whether the editor window has the focus
 
 	**INPUTS**
 
@@ -1150,7 +1150,7 @@ class WaxFrame(WaxFrameBase):
 	**OUTPUTS**
 	*BOOL* -- true if editor window has the focus
 	"""
-	return self.pane.editor_has_focus()
+        return self.pane.editor_has_focus()
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
@@ -1167,19 +1167,19 @@ class SimpleWaxFrame(WaxFrame):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct( SimpleWaxFrame,
-			    {
-			    }, args
-			   ),
+        self.deep_construct( SimpleWaxFrame,
+                            {
+                            }, args
+                           ),
 
     def add_pane(self, ID):
-	"""create the actual WaxPanel for the frame
+        """create the actual WaxPanel for the frame
 
 	**INPUTS**
 
 	*wxWindowId ID* -- the ID of the panel
 	"""
-	return SimpleWaxPanel(parent = self, ID = ID)
+        return SimpleWaxPanel(parent = self, ID = ID)
 
 class WaxCmdFrame(WaxFrame):
     """frame containing a WaxCmdPanel
@@ -1197,28 +1197,28 @@ class WaxCmdFrame(WaxFrame):
     others -- the various menus
     """
     def __init__(self, command_space = None, **args):
-	self.decl_attrs(
-			{
-			 'command_space': command_space,
-			}
-	               )
-	self.deep_construct( WaxCmdFrame,
-			    {
-			    }, args
-			   ),
+        self.decl_attrs(
+                        {
+                         'command_space': command_space,
+                        }
+                       )
+        self.deep_construct( WaxCmdFrame,
+                            {
+                            }, args
+                           ),
 
     def add_pane(self, ID):
-	"""create the actual WaxPanel for the frame
+        """create the actual WaxPanel for the frame
 
 	**INPUTS**
 
 	*wxWindowId ID* -- the ID of the panel
 	"""
-	return WaxCmdPanel(parent = self, ID = ID, 
-	    command_space = self.command_space)
+        return WaxCmdPanel(parent = self, ID = ID, 
+            command_space = self.command_space)
 
     def simulate_command(self, command):
-	"""simulate a command being entered on the command line
+        """simulate a command being entered on the command line
 
 	**INPUTS**
 
@@ -1228,8 +1228,8 @@ class WaxCmdFrame(WaxFrame):
 
 	*none*
 	"""
-	self.pane.simulate_command(command)
-	
+        self.pane.simulate_command(command)
+        
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

@@ -47,23 +47,23 @@ class WaxEdSimPanel(WaxCmdPanel):
     *wxBitmapButton mic_button*
     """
     def remove_other_references(self):
-	self.green_light = None
-	self.grey_light = None
-	self.dark_grey_light = None
-	WaxCmdPanel.remove_other_references(self)
+        self.green_light = None
+        self.grey_light = None
+        self.dark_grey_light = None
+        WaxCmdPanel.remove_other_references(self)
 
     def __init__(self, **args):
-	self.decl_attrs({'green_light': None,
-		         'grey_light': None,
-		         'dark_grey_light': None,
-			 'mic_button': None
-			})
-	self.deep_construct(WaxEdSimPanel, 
+        self.decl_attrs({'green_light': None,
+                         'grey_light': None,
+                         'dark_grey_light': None,
+                         'mic_button': None
+                        })
+        self.deep_construct(WaxEdSimPanel, 
                             {
-			    }, args)
+                            }, args)
     
     def prepend(self, vbox):
-	""" allows subclasses to add additional controls to the panel
+        """ allows subclasses to add additional controls to the panel
 	above the editor window
 
 	**Note:** the additional controls should have the panel (self)
@@ -82,37 +82,37 @@ class WaxEdSimPanel(WaxCmdPanel):
 	"""
         button_line = wxBoxSizer(wxHORIZONTAL)
 
-	self.green_light = wxBitmap("bitmaps/green.bmp", wxBITMAP_TYPE_BMP)
-#	self.grey_light = wxBitmap("bitmaps/yellow.bmp", wxBITMAP_TYPE_BMP)
-	self.grey_light = wxBitmap("bitmaps/grey.bmp", wxBITMAP_TYPE_BMP)
-	self.dark_grey_light = wxBitmap("bitmaps/darkgrey.bmp", wxBITMAP_TYPE_BMP)
-	ID_MIC_BUTTON = wxNewId()
-	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
-	    wxDefaultPosition, 
-	    (self.grey_light.GetWidth()+10,self.grey_light.GetHeight()+10))
+        self.green_light = wxBitmap("bitmaps/green.bmp", wxBITMAP_TYPE_BMP)
+#        self.grey_light = wxBitmap("bitmaps/yellow.bmp", wxBITMAP_TYPE_BMP)
+        self.grey_light = wxBitmap("bitmaps/grey.bmp", wxBITMAP_TYPE_BMP)
+        self.dark_grey_light = wxBitmap("bitmaps/darkgrey.bmp", wxBITMAP_TYPE_BMP)
+        ID_MIC_BUTTON = wxNewId()
+        self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
+            wxDefaultPosition, 
+            (self.grey_light.GetWidth()+10,self.grey_light.GetHeight()+10))
 
-	ID_MIC_LABEL = wxNewId()
-	mic_label = wxStaticText(self, ID_MIC_LABEL, "Microphone: ")
+        ID_MIC_LABEL = wxNewId()
+        mic_label = wxStaticText(self, ID_MIC_LABEL, "Microphone: ")
 
-	button_line.Add(mic_label, 0, wxALIGN_CENTER)
-	button_line.Add(self.mic_button, 0)
-	EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
+        button_line.Add(mic_label, 0, wxALIGN_CENTER)
+        button_line.Add(self.mic_button, 0)
+        EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
 
-	vbox.Add(button_line, 0)
+        vbox.Add(button_line, 0)
 
     def on_mic_button(self, event):
-	"""handler for button press events from the microphone button
+        """handler for button press events from the microphone button
 	"""
-	current = self.command_space['getmic']()
-	if current == 'off':
-	    self.command_space['setmic']('on')
-	    self.editor_window().SetFocus()
-	else:
-	    self.command_space['setmic']('off')
-	    self.editor_window().SetFocus()
+        current = self.command_space['getmic']()
+        if current == 'off':
+            self.command_space['setmic']('on')
+            self.editor_window().SetFocus()
+        else:
+            self.command_space['setmic']('off')
+            self.editor_window().SetFocus()
 
     def update_mic_button(self, state = None):
-	"""update the microphone button to reflect the state of the
+        """update the microphone button to reflect the state of the
 	microphone
 
 	**INPUTS**
@@ -124,20 +124,20 @@ class WaxEdSimPanel(WaxCmdPanel):
 
 	*none*
 	"""
-	if state == None:
-	    state = self.command_space['getmic']()
-	if state == 'on':
-	    self.mic_button.SetBitmapLabel(self.green_light)
-	    self.mic_button.Refresh()
-	elif state == 'off':
-	    self.mic_button.SetBitmapLabel(self.grey_light)
-	    self.mic_button.Refresh()
-	else:
-	    self.mic_button.SetBitmapLabel(self.dark_grey_light)
-	    self.mic_button.Refresh()
+        if state == None:
+            state = self.command_space['getmic']()
+        if state == 'on':
+            self.mic_button.SetBitmapLabel(self.green_light)
+            self.mic_button.Refresh()
+        elif state == 'off':
+            self.mic_button.SetBitmapLabel(self.grey_light)
+            self.mic_button.Refresh()
+        else:
+            self.mic_button.SetBitmapLabel(self.dark_grey_light)
+            self.mic_button.Refresh()
 
     def access_command_space(self):
-	"""returns a reference to the command_space namespace being
+        """returns a reference to the command_space namespace being
 	used by the panel, allowing access and modifications to that
 	namespace after construction of WaxEdSim
 
@@ -149,10 +149,10 @@ class WaxEdSimPanel(WaxCmdPanel):
 
 	*{STR:ANY}* -- the namespace dictionary 
 	"""
-	return self.command_space
+        return self.command_space
 
     def mic_change(self, state):
-	"""function to receive microphone state change callbacks
+        """function to receive microphone state change callbacks
 
 	**INPUTS**
 
@@ -162,7 +162,7 @@ class WaxEdSimPanel(WaxCmdPanel):
 
 	*none*
 	"""
-	self.update_mic_button(state)
+        self.update_mic_button(state)
 
 class WaxEdSimFrameMixIn(Object.Object):
     """mix-in class which adds a menus and menu items specific to
@@ -170,7 +170,7 @@ class WaxEdSimFrameMixIn(Object.Object):
     **INSTANCE ATTRIBUTES**
     """
     def __init__(self, **args):
-	"""**NOTE:** some of the tasks which would normally be done 
+        """**NOTE:** some of the tasks which would normally be done 
 	in __init__ if this were a subclass of WaxFrameBasic, rather than a 
 	mix-in, are instead performed in finish_construction.  
 	This is to ensure that those tasks are done after
@@ -179,11 +179,11 @@ class WaxEdSimFrameMixIn(Object.Object):
 	call finish_construction after its deep_construct has called 
 	WaxFrameBasic's __init__ method.
 	"""
-	self.deep_construct(WaxEdSimFrameMixIn, 
-    	                    {}, args)
+        self.deep_construct(WaxEdSimFrameMixIn, 
+                            {}, args)
 
     def finish_construction(self):
-	"""Finish constructing the frame, by adding menu items
+        """Finish constructing the frame, by adding menu items
 	menus
 	
 	**NOTE:** this task would normally be done 
@@ -204,22 +204,22 @@ class WaxEdSimFrameMixIn(Object.Object):
 	*none*
 	"""
         ID_CONF_SCRIPT = wxNewId()
-	file_menu = self.get_menu_by_name('File')
-#	print file_menu
-	config_item = self.make_menu_item( file_menu, ID_CONF_SCRIPT, 
-	    "&Config Script", 
-	    help_string = "Execute a python configuration script for the environment (ex: a demo file)")
-	self.insert_item_before_label(config_item, file_menu, 'Save')
-	EVT_MENU(self,ID_CONF_SCRIPT,self.on_execute_file)
+        file_menu = self.get_menu_by_name('File')
+#        print file_menu
+        config_item = self.make_menu_item( file_menu, ID_CONF_SCRIPT, 
+            "&Config Script", 
+            help_string = "Execute a python configuration script for the environment (ex: a demo file)")
+        self.insert_item_before_label(config_item, file_menu, 'Save')
+        EVT_MENU(self,ID_CONF_SCRIPT,self.on_execute_file)
 
     def on_execute_file(self, event):
-	self.owner.execute_file()
+        self.owner.execute_file()
 
     def execute_file(self, f_path):
-	self.simulate_command("execfile(r'%s')" % f_path)
+        self.simulate_command("execfile(r'%s')" % f_path)
 
     def execute_file_dlg(self, init_dir):
-	"""prompt the user for the filename of a python script to
+        """prompt the user for the filename of a python script to
 	execute in the command_space
 
 	**INPUTS**
@@ -227,16 +227,16 @@ class WaxEdSimFrameMixIn(Object.Object):
 	*STR* init_dir -- the initial directory for the dialog box
 	"""
         dlg = wxFileDialog(self, "Execute Script File", init_dir, "",
- 	    "*.*", wxOPEN)
+            "*.*", wxOPEN)
         answer = dlg.ShowModal()
-	file_path = None
+        file_path = None
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-	dlg.Destroy()
-	return file_path
+        dlg.Destroy()
+        return file_path
 
     def mic_change(self, state):
-	"""function to receive microphone state change callbacks
+        """function to receive microphone state change callbacks
 
 	**INPUTS**
 
@@ -246,10 +246,10 @@ class WaxEdSimFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	self.pane.mic_change(state)
+        self.pane.mic_change(state)
 
     def update_mic_button(self, state = None):
-	"""update the microphone button to reflect the state of the
+        """update the microphone button to reflect the state of the
 	microphone
 
 	**INPUTS**
@@ -261,7 +261,7 @@ class WaxEdSimFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	self.pane.update_mic_button(state)
+        self.pane.update_mic_button(state)
 
 class WaxEdSimFrame(WaxEdSimFrameMixIn, WaxCmdFrame):
     """frame containing a WaxEdSimPanel
@@ -275,14 +275,14 @@ class WaxEdSimFrame(WaxEdSimFrameMixIn, WaxCmdFrame):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(WaxEdSimFrame,
-			    {
-			    }, args
-			   ),
+        self.deep_construct(WaxEdSimFrame,
+                            {
+                            }, args
+                           ),
         self.finish_construction()
 
     def access_command_space(self):
-	"""returns a reference to the command_space namespace being
+        """returns a reference to the command_space namespace being
 	used by the panel, allowing access and modifications to that
 	namespace after construction of WaxEdSim
 
@@ -294,17 +294,17 @@ class WaxEdSimFrame(WaxEdSimFrameMixIn, WaxCmdFrame):
 
 	*{STR:ANY}* -- the namespace dictionary 
 	"""
-	return self.pane.access_command_space()
+        return self.pane.access_command_space()
 
     def add_pane(self, ID):
-	"""create the actual WaxPanel for the frame
+        """create the actual WaxPanel for the frame
 
 	**INPUTS**
 
 	*wxWindowId ID* -- the ID of the panel
 	"""
-	return WaxEdSimPanel(parent = self, ID = ID, 
-	    command_space = self.command_space)
+        return WaxEdSimPanel(parent = self, ID = ID, 
+            command_space = self.command_space)
 
 class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
     """mix-in for concrete simulator console version of 
@@ -317,20 +317,20 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
     *STR app_name* -- the name of the application
     """
     def __init__(self, app, **args):
-	self.deep_construct(SimConsole, 
-	                    {'app': app
-			    }, args)
-	self.name_parent('app')
+        self.deep_construct(SimConsole, 
+                            {'app': app
+                            }, args)
+        self.name_parent('app')
     
     def execute_file(self):
-	frame = self.active_frame()
-	init_dir = self.curr_dir
-	f_path = frame.execute_file_dlg(init_dir)
-	if f_path:
-	    frame.execute_file(f_path)
+        frame = self.active_frame()
+        init_dir = self.curr_dir
+        f_path = frame.execute_file_dlg(init_dir)
+        if f_path:
+            frame.execute_file(f_path)
     
     def access_command_space(self):
-	"""returns a reference to the command_space namespace being
+        """returns a reference to the command_space namespace being
 	used by the panel, allowing access and modifications to that
 	namespace after construction of WaxEdSim
 
@@ -342,11 +342,11 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
 
 	*{STR:ANY}* -- the namespace dictionary 
 	"""
-	frame = self.active_frame()
-	return frame.access_command_space()
+        frame = self.active_frame()
+        return frame.access_command_space()
 
     def mic_change(self, state):
-	"""function to receive microphone state change callbacks
+        """function to receive microphone state change callbacks
 
 	**INPUTS**
 
@@ -356,11 +356,11 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
 
 	*none*
 	"""
-	for frame in self.frames.values():
-	    frame.mic_change(state)
+        for frame in self.frames.values():
+            frame.mic_change(state)
 
     def update_mic_button(self, state = None):
-	"""update the microphone button to reflect the state of the
+        """update the microphone button to reflect the state of the
 	microphone
 
 	**INPUTS**
@@ -372,9 +372,9 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
 
 	*none*
 	"""
-	for frame in self.frames.values():
-	    frame.update_mic_button(state)
-	
+        for frame in self.frames.values():
+            frame.update_mic_button(state)
+        
 class WaxEdSimConsole(SimConsole):
     """concrete simulator console version of 
     GenEditSingle (GenEditFrames)
@@ -388,16 +388,16 @@ class WaxEdSimConsole(SimConsole):
 
     """
     def __init__(self, frame_size = None, 
-	command_space = None, **args):
-	self.decl_attrs({'frame_size': frame_size,
-			 'initial_cmd_space': command_space})
-	if frame_size == None:
-	    self.frame_size = (1000, 600)
-	self.deep_construct(WaxEdSimConsole, 
-	                    {}, args)
+        command_space = None, **args):
+        self.decl_attrs({'frame_size': frame_size,
+                         'initial_cmd_space': command_space})
+        if frame_size == None:
+            self.frame_size = (1000, 600)
+        self.deep_construct(WaxEdSimConsole, 
+                            {}, args)
 
     def new_frame(self, buff_name):
-	"""creates a new frame of the appropriate concrete class
+        """creates a new frame of the appropriate concrete class
 	open buffer and new window callbacks to the AppState interface
 
 	**NOTE:** when adding a new frame with a buffer, you should call
@@ -412,10 +412,10 @@ class WaxEdSimConsole(SimConsole):
 	*INT* -- ID of the new frame, or None if the frame was not 
 	added successfully
 	"""
-	return WaxEdSimFrame(owner = self, app_name = self.app_name,
-		ID = wxNewId(), size = self.frame_size, 
-		init_buff_name = buff_name, 
-		command_space = self.initial_cmd_space)
+        return WaxEdSimFrame(owner = self, app_name = self.app_name,
+                ID = wxNewId(), size = self.frame_size, 
+                init_buff_name = buff_name, 
+                command_space = self.initial_cmd_space)
 
 class WaxEdSim(wxApp, Object.OwnerObject):
     """application class for the WaxEdSim console
@@ -439,36 +439,36 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 	*{STR:ANY}* command_space -- a namespace (dictionary) in which to
 	execute commands from the command line
 	"""
-	self.decl_attrs({
-			 'console': None,
-			 'editor': None
-			}
-		       )
+        self.decl_attrs({
+                         'console': None,
+                         'editor': None
+                        }
+                       )
 
-	self.deep_construct(WaxEdSim, 
+        self.deep_construct(WaxEdSim, 
                             {
-			     'command_space': command_space,
-			     'splash': None
-			    },
-			    args,
-			    exclude_bases = {wxApp:1}
-			   )
+                             'command_space': command_space,
+                             'splash': None
+                            },
+                            args,
+                            exclude_bases = {wxApp:1}
+                           )
         wxApp.__init__(self, 1, 'simcrash')
 #        wxApp.__init__(self, 0)
-	self.add_owned('console')
-	self.add_owned('editor')
+        self.add_owned('console')
+        self.add_owned('editor')
 
     def OnInit(self):
-	self.console = WaxEdSimConsole(app = self, app_name = 'WaxEdSim',
-	    command_space = self.command_space, curr_dir =
-	    vc_globals.test_data)
-	frame = self.console.active_frame()
+        self.console = WaxEdSimConsole(app = self, app_name = 'WaxEdSim',
+            command_space = self.command_space, curr_dir =
+            vc_globals.test_data)
+        frame = self.console.active_frame()
         self.SetTopWindow(frame)
-	self.editor = AppStateGenEdit.AppStateGenEdit(self.console)
+        self.editor = AppStateGenEdit.AppStateGenEdit(self.console)
         return true
 
     def access_command_space(self):
-	"""returns a reference to the command_space namespace being
+        """returns a reference to the command_space namespace being
 	used by the panel, allowing access and modifications to that
 	namespace after construction of WaxEdSim
 
@@ -480,10 +480,10 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 
 	*{STR:ANY}* -- the namespace dictionary 
 	"""
-	return self.console.access_command_space()
+        return self.console.access_command_space()
 
     def mic_change(self, state):
-	"""function to receive microphone state change callbacks
+        """function to receive microphone state change callbacks
 
 	**INPUTS**
 
@@ -493,11 +493,11 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.console.mic_change(state)
+        self.console.mic_change(state)
 
 
     def update_mic_button(self, state = None):
-	"""update the microphone button to reflect the state of the
+        """update the microphone button to reflect the state of the
 	microphone
 
 	**INPUTS**
@@ -509,24 +509,24 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.console.update_mic_button(state)
+        self.console.update_mic_button(state)
 
     def got_window(self):
-	"""called by gui_sim to indicate that it has the window handle
+        """called by gui_sim to indicate that it has the window handle
 	of the frame, and we can safely put up the splash screen
 	"""
-	return
+        return
 # oops - wxPython doesn't wrap wxSplashScreen -- would have to do this
 # manually
 
-#	frame = self.console.active_frame()
-#	bmp = wxBitmap("bitmaps/WaxEdSim.bmp", wxBITMAP_TYPE_BMP)
-#	flags = wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_NO_TIMEOUT 
-#	self.splash = wxSplashWindow(bmp, flags, 1, frame, -1)
-#	wxYield()
+#        frame = self.console.active_frame()
+#        bmp = wxBitmap("bitmaps/WaxEdSim.bmp", wxBITMAP_TYPE_BMP)
+#        flags = wxSPLASH_CENTRE_ON_PARENT | wxSPLASH_NO_TIMEOUT 
+#        self.splash = wxSplashWindow(bmp, flags, 1, frame, -1)
+#        wxYield()
  
     def run(self):
-	"""starts the message loop.  Note: this function does not
+        """starts the message loop.  Note: this function does not
 	return until the GUI exits.
 
 	**INPUTS**
@@ -537,12 +537,12 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	if self.splash:
-	    self.splash.Close()
-	    self.splash = None
-	self.update_mic_button()
-	self.MainLoop()
-	self.cleanup()
+        if self.splash:
+            self.splash.Close()
+            self.splash = None
+        self.update_mic_button()
+        self.MainLoop()
+        self.cleanup()
 
 def no_mic_getmic():
     return 'off'

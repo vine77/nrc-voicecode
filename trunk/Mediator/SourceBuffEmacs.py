@@ -49,7 +49,7 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffMessaging):
                             {},
                             attrs
                             )
-	self.add_owned('lang_srv')
+        self.add_owned('lang_srv')
 
     def language_name(self):
         """Returns the name of the language a file is written in.

@@ -66,7 +66,7 @@ class CmdInterp(Object):
     def __init__(self, symdict_pickle_file=None,
                  disable_dlg_select_symbol_matches = None, **attrs):
         
-	"""
+        """
 	**INPUTS**
 
 	*FILE symdict_pickle_file = None* -- File used to for
@@ -88,7 +88,7 @@ class CmdInterp(Object):
         self.deep_construct(CmdInterp,
                             {'cmd_index': {}, 
                              'known_symbols':
-			     SymDict.SymDict(pickle_fname = symdict_pickle_file), 
+                             SymDict.SymDict(pickle_fname = symdict_pickle_file), 
                              'language_specific_aliases': {},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches},
                             attrs)
@@ -127,12 +127,12 @@ class CmdInterp(Object):
         
         trace('CmdInterp.interpret_NL_cmd', 'cmd=%s' % cmd)
         
-	if initial_buffer == None:
-	    app.bind_to_buffer(app.curr_buffer_name())
-	else:
-	    app.bind_to_buffer(initial_buffer)
+        if initial_buffer == None:
+            app.bind_to_buffer(app.curr_buffer_name())
+        else:
+            app.bind_to_buffer(initial_buffer)
 
-	untranslated_words = []
+        untranslated_words = []
 
         cmd = self.massage_command(cmd)
         
@@ -141,23 +141,23 @@ class CmdInterp(Object):
         # left
         #
         while len(cmd) > 0:
-	     trace('CmdInterp.interpret_NL_cmd', 'now, cmd=%s' % cmd)
+             trace('CmdInterp.interpret_NL_cmd', 'now, cmd=%s' % cmd)
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
              #
              chopped_CSC, CSC_consumes, cmd_without_CSC = \
-	         self.chop_CSC(cmd, app)
+                 self.chop_CSC(cmd, app)
              chopped_LSA, LSA_consumes, cmd_without_LSA = \
-	         self.chop_LSA(cmd, app)
+                 self.chop_LSA(cmd, app)
              chopped_symbol, symbol_consumes, cmd_without_symbol = \
-	         self.chop_symbol(cmd, app)
+                 self.chop_symbol(cmd, app)
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
-	     trace('CmdInterp.interpret_NL_cmd', 
-	     'chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
+             trace('CmdInterp.interpret_NL_cmd', 
+             'chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
 #             print '-- CmdInterp.interpret_NL_cmd: chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes)
              head_was_translated = 0
 
@@ -192,11 +192,11 @@ class CmdInterp(Object):
                      csc_applies = aCSC.applies(app)
                      if (csc_applies):
 # flush untranslated words before executing action
-		         if untranslated_words:
-			     self.match_untranslated_text(untranslated_words, 
-				 app)
-			     untranslated_words = []
-			 aCSC.interpret(app)
+                         if untranslated_words:
+                             self.match_untranslated_text(untranslated_words, 
+                                 app)
+                             untranslated_words = []
+                         aCSC.interpret(app)
                          break
                  if csc_applies:
                      #
@@ -222,9 +222,9 @@ class CmdInterp(Object):
                  trace('CmdInterp.interpret_NL_cmd', 'processing leading LSA=\'%s\'' % chopped_LSA)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
 # flush untranslated words before inserting LSA
-		 if untranslated_words:
-		     self.match_untranslated_text(untranslated_words, app)
-		     untranslated_words = []
+                 if untranslated_words:
+                     self.match_untranslated_text(untranslated_words, app)
+                     untranslated_words = []
                  actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
                  cmd = cmd_without_LSA
                  head_was_translated = 1
@@ -243,7 +243,7 @@ class CmdInterp(Object):
                  #
                  trace('CmdInterp.interpret_NL_cmd', 'processing leading symbol=\'%s\'' % chopped_symbol)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading symbol=\'%s\'' % chopped_symbol                     
-		 untranslated_words.append( chopped_symbol)
+                 untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
                  head_was_translated = 1
                                           
@@ -256,7 +256,7 @@ class CmdInterp(Object):
                  #                 
                  trace('CmdInterp.interpret_NL_cmd', 'processing leading word=\'%s\'' % chopped_word)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading word=\'%s\'' % chopped_word                                                  
-		 untranslated_words.append( chopped_word)
+                 untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
                  head_was_translated = 1
 
@@ -275,7 +275,7 @@ class CmdInterp(Object):
                  trace('CmdInterp.interpret_NL_cmd', 'found the end of some untranslated text')
 #                 print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
                  self.match_untranslated_text(untranslated_words, app)
-	 	 untranslated_words = []
+                 untranslated_words = []
 
              if untranslated_words:
                  untranslated_text = string.join(untranslated_words)
@@ -285,7 +285,7 @@ class CmdInterp(Object):
 #             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos())
 
         # make sure to unbind the buffer before returning
-	app.unbind_from_buffer()
+        app.unbind_from_buffer()
 
         #
         # Notify external editor of the end of recognition
@@ -370,13 +370,13 @@ class CmdInterp(Object):
 #            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
                 self.dlg_select_symbol_match(untranslated_text, 
-		    symbol_matches, app)
-	    else:
+                    symbol_matches, app)
+            else:
                 actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
-#		app.insert_indent(untranslated_text, '')
-	else:
+#                app.insert_indent(untranslated_text, '')
+        else:
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
-#	    app.insert_indent(untranslated_text, '')
+#            app.insert_indent(untranslated_text, '')
         
 
     def dlg_select_symbol_match(self, untranslated_text, symbol_matches, app):
@@ -444,10 +444,10 @@ class CmdInterp(Object):
             #
             actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(app, None)            
 #            app.insert_indent(chosen_match.native_symbol, '')
-	else:
+        else:
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
-#	    app.insert_indent(untranslated_text, '')
-	
+#            app.insert_indent(untranslated_text, '')
+        
             
 
     def chop_CSC(self, cmd, app):
@@ -679,19 +679,19 @@ class CmdInterp(Object):
         # See if spoken_form is in the list of active LSAs
         #
 
-	aliases = self.language_specific_aliases
-	language = app.active_language()
+        aliases = self.language_specific_aliases
+        language = app.active_language()
         trace('CmdInterp.is_spoken_LSA', 'language=%s' % language)
 #        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
         
         if aliases.has_key(language):
-	    if aliases[language].has_key(spoken_form):
-		written_LSA = aliases[language][spoken_form]
+            if aliases[language].has_key(spoken_form):
+                written_LSA = aliases[language][spoken_form]
 # check common LSAs for all languages, if we haven't found a
 # language-specific one
-	if written_LSA == None and aliases.has_key(None):
-	    if aliases[None].has_key(spoken_form):
-		written_LSA = aliases[None][spoken_form]
+        if written_LSA == None and aliases.has_key(None):
+            if aliases[None].has_key(spoken_form):
+                written_LSA = aliases[None][spoken_form]
 
         return written_LSA
         
@@ -752,9 +752,10 @@ class CmdInterp(Object):
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-        global regexp_is_dirty
-
-        regexp_is_dirty = 1
+# DCF: this doesn't seem to be used anywhere else
+#        global regexp_is_dirty
+#
+#        regexp_is_dirty = 1
 
         for a_spoken_form in acmd.spoken_forms:
             #
@@ -784,7 +785,7 @@ class CmdInterp(Object):
                     sr_interface.addWord(a_spoken_form)
 
     def add_csc(self, acmd, add_voc_entry=1):
-	"""Add a new Context Sensitive Command. (synonym for index_csc)
+        """Add a new Context Sensitive Command. (synonym for index_csc)
 
 	[CSCmd] *acmd* is the command to add.
 
@@ -794,11 +795,11 @@ class CmdInterp(Object):
 
 	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-	self.index_csc(acmd, add_voc_entry)
+        self.index_csc(acmd, add_voc_entry)
 
 
     def add_lsa(self, spoken_forms, meanings):
-	"""Add a language specific word.
+        """Add a language specific word.
 
 	These words get added and removed dynamically from the SR
 	vocabulary, depending on the language of the active buffer.
@@ -823,29 +824,29 @@ class CmdInterp(Object):
 	
 	*none* -- 
 	"""
-	
+        
 #    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
-	
+        
 
-	for a_meaning in meanings.items():
-	    language, written_as = a_meaning
-	    for spoken_as in spoken_forms:
-		clean_spoken = sr_interface.clean_spoken_form(spoken_as)
-		entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-		vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
-		
-		if not self.language_specific_aliases.has_key(language):
-		    self.language_specific_aliases[language] = {}
+        for a_meaning in meanings.items():
+            language, written_as = a_meaning
+            for spoken_as in spoken_forms:
+                clean_spoken = sr_interface.clean_spoken_form(spoken_as)
+                entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+                vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
+                
+                if not self.language_specific_aliases.has_key(language):
+                    self.language_specific_aliases[language] = {}
 
-		self.language_specific_aliases[language][clean_spoken] = written_as
+                self.language_specific_aliases[language][clean_spoken] = written_as
 
-		#
-		# Add LSA to the SR vocabulary
-		#
-		sr_interface.addWord(entry)
-	    
+                #
+                # Add LSA to the SR vocabulary
+                #
+                sr_interface.addWord(entry)
+            
     def add_abbreviation(self, abbreviation, expansions, user_added = 1):
-	"""Add an abbreviation to VoiceCode's abbreviations dictionary.
+        """Add an abbreviation to VoiceCode's abbreviations dictionary.
 
 	**INPUTS**
 
@@ -858,20 +859,20 @@ class CmdInterp(Object):
 
 	*none* -- 
 	"""
-	self.known_symbols.add_abbreviation(abbreviation, expansions)
+        self.known_symbols.add_abbreviation(abbreviation, expansions)
 
 
     def standard_symbols_in(self, file_list):
-	"""Compile symbols defined in a series of source files"""
+        """Compile symbols defined in a series of source files"""
 
 #    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
 
-	for a_file in file_list:
-	    if not a_file in self.known_symbols.standard_symbol_sources:
-		self.known_symbols.standard_symbol_sources = self.known_symbols.standard_symbol_sources + [a_file]
+        for a_file in file_list:
+            if not a_file in self.known_symbols.standard_symbol_sources:
+                self.known_symbols.standard_symbol_sources = self.known_symbols.standard_symbol_sources + [a_file]
 
     def print_abbreviations(self):
-	self.known_symbols.print_abbreviations()
+        self.known_symbols.print_abbreviations()
 
     def peek_at_unresolved(self):
         """returns a reference to the dictionary of unresolved 
@@ -894,7 +895,7 @@ class CmdInterp(Object):
 	dictionnaries that list the symbols containing the unresolved
 	abbreviation.
 	"""
-	return self.known_symbols.peek_at_unresolved()
+        return self.known_symbols.peek_at_unresolved()
 
     def accept_symbol_match(self, the_match):
         """Accepts a match between a pseudo symbol and its native form.
@@ -916,7 +917,7 @@ class CmdInterp(Object):
         *none* --
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
-	return self.known_symbols.accept_symbol_match(the_match)
+        return self.known_symbols.accept_symbol_match(the_match)
 
     def match_pseudo_symbol(self, pseudo_symbol):        
         """Returns a prioritized list of all known native symbols that
@@ -933,7 +934,7 @@ class CmdInterp(Object):
 
         
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
-	return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
+        return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
 
     def cleanup(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
@@ -953,7 +954,7 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-	self.known_symbols.cleanup(clean_sr_voc=0, clean_symdict=1, resave=1)
+        self.known_symbols.cleanup(clean_sr_voc=0, clean_symdict=1, resave=1)
 
     def abbreviations_cleanup(self):
         """Removes all known abbreviations from the symbols dictionary.
@@ -967,7 +968,7 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-	self.known_symbols.abbreviations_cleanup()
+        self.known_symbols.abbreviations_cleanup()
       
     def parse_standard_symbols(self, add_sr_entries=1):
         """Parse standard symbols for the various programming languages.
@@ -982,8 +983,8 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-	self.known_symbols.parse_standard_symbols(add_sr_entries =
-	    add_sr_entries)
+        self.known_symbols.parse_standard_symbols(add_sr_entries =
+            add_sr_entries)
     
     def parse_symbols_from_files(self, file_list, add_sr_entries=1):
         """Parse symbols from a series of source files
@@ -999,8 +1000,8 @@ class CmdInterp(Object):
         *none* --
         """
 
-	self.known_symbols.parse_symbols_from_files(file_list, 
-	    add_sr_entries = add_sr_entries)
+        self.known_symbols.parse_symbols_from_files(file_list, 
+            add_sr_entries = add_sr_entries)
 
 
     def parse_symbols_from_file(self, file_name, add_sr_entries=1):
@@ -1012,8 +1013,8 @@ class CmdInterp(Object):
         """
 
 #        print '-- SymDict.parse_symbols: file_name=%s' % file_name
-	self.known_symbols.parse_symbols_from_file(file_name, 
-	    add_sr_entries = add_sr_entries)
+        self.known_symbols.parse_symbols_from_file(file_name, 
+            add_sr_entries = add_sr_entries)
                 
     def parse_symbols(self, contents, language_name, add_sr_entries=1):
         """Parse symbols from a string representing the contents of a 
@@ -1026,8 +1027,8 @@ class CmdInterp(Object):
 
         *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
         """
-	self.known_symbols.parse_symbols(contents, language_name,
-	    add_sr_entries = add_sr_entries)
+        self.known_symbols.parse_symbols(contents, language_name,
+            add_sr_entries = add_sr_entries)
 
     def print_symbols(self):
         """Print the content of the symbols dictionary.
@@ -1041,9 +1042,9 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-	self.known_symbols.print_symbols()
+        self.known_symbols.print_symbols()
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
-	self.known_symbols.print_abbreviations()
+        self.known_symbols.print_abbreviations()
 

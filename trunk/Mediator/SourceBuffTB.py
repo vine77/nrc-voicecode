@@ -69,19 +69,19 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
-			 'state_srv': sb_services.SB_ServiceFullState(buff=self)})
+                         'state_srv': sb_services.SB_ServiceFullState(buff=self)})
         self.deep_construct(SourceBuffTB,
                             {'underlying': underlying_buffer},
                             attrs
                             )
-	self.add_owned_list(['state_srv', 'indent_srv', 'line_srv',
-	    'lang_srv'])
-	if change_specification:
-	    self.underlying.set_change_callback(self.on_underlying_change)
+        self.add_owned_list(['state_srv', 'indent_srv', 'line_srv',
+            'lang_srv'])
+        if change_specification:
+            self.underlying.set_change_callback(self.on_underlying_change)
 
     def on_underlying_change(self, start, end, text, selection_start,
-	selection_end, buffer, program_initiated):
-	"""method called by the underlying buffer to signal a change
+        selection_end, buffer, program_initiated):
+        """method called by the underlying buffer to signal a change
 
 	**INPUTS**
 
@@ -106,9 +106,9 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	"""
 # program-initiated changes will already call on_change, so we don't
 # want to report them twice
-	if program_initiated:
-	    return
-	self.on_change(start, end, text, program_initiated)
+        if program_initiated:
+            return
+        self.on_change(start, end, text, program_initiated)
 
     def file_name(self):
         return self.buff_name
@@ -127,7 +127,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         return self.lang_srv.language_name()    
 
     def cur_pos(self):
-	"""retrieves current position of cursor .  Note: the current
+        """retrieves current position of cursor .  Note: the current
 	position should coincide with either the start or end of the
 	selection.  
 
@@ -140,11 +140,11 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	return self.underlying.cur_pos()
+        return self.underlying.cur_pos()
 
 
     def get_selection(self):
-	"""retrieves range of current selection.  Note: the current
+        """retrieves range of current selection.  Note: the current
 	position should coincide with either the start or end of the
 	selection. 
 
@@ -160,10 +160,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	return self.underlying.get_selection()
+        return self.underlying.get_selection()
 
     def set_selection(self, range, cursor_at = 1):
-	"""sets range of current selection, and sets the position to 
+        """sets range of current selection, and sets the position to 
 	beginning or end of the selection.
 
 	**INPUTS**
@@ -182,10 +182,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
-	self.underlying.set_selection(range[0], range[1])
+        self.underlying.set_selection(range[0], range[1])
 
     def get_text(self, start = None, end = None):
-	"""retrieves a portion of the buffer
+        """retrieves a portion of the buffer
 
 	**INPUTS**
 
@@ -200,10 +200,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*STR* -- contents of specified range of the buffer
 	"""
-	return self.underlying.get_text(start, end)
+        return self.underlying.get_text(start, end)
       
     def set_text(self, text, start = None, end = None):
-	"""changes a portion of the buffer.  Note: this is a low level
+        """changes a portion of the buffer.  Note: this is a low level
 	interface.  Usually, higher level interfaces like insert and
 	delete are preferable.
 
@@ -222,11 +222,11 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
-	self.underlying.set_text(text, start, end)
-	self.on_change(start, end, text, 1)
+        self.underlying.set_text(text, start, end)
+        self.on_change(start, end, text, 1)
 
     def get_visible(self):
-	""" get start and end offsets of the currently visible region of
+        """ get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
 	visible (matching Python's slice convention)
 
@@ -238,10 +238,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*INT* (start, end)
 	"""
-	return self.underlying.get_visible()
+        return self.underlying.get_visible()
 
     def make_position_visible(self):
-	"""scroll buffer (if necessary) so that the current position
+        """scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
@@ -252,10 +252,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
-	self.underlying.make_position_visible()
+        self.underlying.make_position_visible()
     
     def line_num_of(self, position = None):
-	"""
+        """
         Returns the line number for a particular cursor position
         
         **INPUTS**
@@ -267,10 +267,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         *INT line_num* -- The line number of that position
         """
         
-	return self.underlying.line_num_of(position)
+        return self.underlying.line_num_of(position)
       
     def len(self):
-	"""return length of buffer in characters.
+        """return length of buffer in characters.
 
 	**INPUTS**
 
@@ -280,7 +280,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*INT* length 
 	"""
-	return self.underlying.len()
+        return self.underlying.len()
 
     def beginning_of_line(self, pos):
         """Returns the position of the beginning of line at position *pos*
@@ -327,13 +327,13 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         *none* -- 
         """
         
-	range = self.underlying.get_visible()
-	first, last = self.underlying.line_nums_of_range(range)
-	height = last -first + 1
-	if direction < 0:
-	    num = - num
-	current = self.underlying.line_num_of()
-	self.underlying.goto_line(current + num)
+        range = self.underlying.get_visible()
+        first, last = self.underlying.line_nums_of_range(range)
+        height = last -first + 1
+        if direction < 0:
+            num = - num
+        current = self.underlying.line_num_of()
+        self.underlying.goto_line(current + num)
        
     def insert(self, text, range = None):
         """Replace text in range with 
@@ -351,12 +351,12 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 
-	if range == None:
-	    start, end = self.get_selection()
-	else:
-	    start, end = self.make_valid_range(range)
-	self.underlying.set_text(text, start, end)
-	self.on_change(start, end, text, 1)
+        if range == None:
+            start, end = self.get_selection()
+        else:
+            start, end = self.make_valid_range(range)
+        self.underlying.set_text(text, start, end)
+        self.on_change(start, end, text, 1)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -448,12 +448,12 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
-	if range == None:
-	    start, end = self.get_selection()
-	else:
-	    start, end = self.make_valid_range(range)
-	self.underlying.set_text('', start, end)
-	self.on_change(start, end, '', 1)
+        if range == None:
+            start, end = self.get_selection()
+        else:
+            start, end = self.make_valid_range(range)
+        self.underlying.set_text('', start, end)
+        self.on_change(start, end, '', 1)
         
     def goto(self, pos):
 
@@ -461,7 +461,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	(and make selection empty)
         """
 
-	self.underlying.set_selection(pos, pos)
+        self.underlying.set_selection(pos, pos)
 
     def goto_line(self, linenum, where=-1):
         """Go to a particular line in a buffer.
@@ -471,15 +471,15 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
-	self.underlying.goto_line(linenum, where)
+        self.underlying.goto_line(linenum, where)
 
     def refresh(self):
-	"""Force a refresh of the buffer"""
-	self.underlying.refresh()
+        """Force a refresh of the buffer"""
+        self.underlying.refresh()
 
 
     def _state_cookie_class(self):
-	"""returns the class object for the type of cookie used by
+        """returns the class object for the type of cookie used by
 	store_current_state.
 
 	**INPUTS**
@@ -492,10 +492,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	SourceBuff
 
 	"""
-	return self.state_srv._state_cookie_class()
-	
+        return self.state_srv._state_cookie_class()
+        
     def store_current_state(self):
-	"""stores the current state of the buffer, including both the
+        """stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
 	store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
@@ -526,10 +526,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*SourceBuffState* -- state cookie (see above)
 	"""
-	return self.state_srv.store_current_state()
+        return self.state_srv.store_current_state()
 
     def restore_state(self, cookie):
-	"""restores the buffer to its state at the time when
+        """restores the buffer to its state at the time when
 	the cookie was returned by store_current_state.  Both the
 	contents and the selection will be restored.  However, other
 	data, such as the search history, may not.  The restore
@@ -545,11 +545,11 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if restore was successful
 
 	"""
-	return self.state_srv.restore_state(cookie)
+        return self.state_srv.restore_state(cookie)
 
 
     def compare_with_current(self, cookie, selection = 0):
-	"""compares the current buffer state to its state at the time when
+        """compares the current buffer state to its state at the time when
 	the cookie was returned by store_current_state.  By default,
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to the cookie has
@@ -566,10 +566,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if state is the same, false if it is not, or
 	it cannot be determined due to expiration of the cookie
 	"""
-	return self.state_srv.compare_with_current(cookie, selection)
-	
+        return self.state_srv.compare_with_current(cookie, selection)
+        
     def valid_cookie(self, cookie):
-	"""checks whether a state cookie is valid or expired.
+        """checks whether a state cookie is valid or expired.
 	If the state corresponding to the cookie has
 	been lost, valid_cookie will return false.
 
@@ -582,7 +582,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if cookie is valid (i.e. restore_state should be
 	able to work)
 	"""
-	return self.state_srv.valid_cookie(cookie)
+        return self.state_srv.valid_cookie(cookie)
 
     def newline_conventions(self):
         
