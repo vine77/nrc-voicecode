@@ -176,10 +176,13 @@ class ResMgr(OwnerObject):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        each with a corresponding identifying number and a flag indicating 
+        if the utterance can be undone and re-interpreted, 
+        or None if no utterances are stored.
+
+        The utterance number is unique, within a given editor instance.
 
         Note:  These utterances should not be stored permanently, nor
         should they be modified except as part of the correction
@@ -236,28 +239,23 @@ class ResMgr(OwnerObject):
         intervening utterances), making the appropriate changes to the
         editor buffers.
 
-        **Note:** additional dictation into the editor will increment
-        the indices of specific utterances, so the mediator must not
-        allow dictation into the editor between the call to 
-        recent_dictation to get the utterances and the call to 
-        reinterpret_recent.
-
         **Note:** this method does not perform adaption of the changed
         utterances.  The caller should do that itself.
 
         **INPUTS**
 
-        *[INT] changed* -- the indices into the stack of recent
-        utterances of those utterances which were corrected by the user
+        *[INT] changed* -- the utterance numbers of 
+        those utterances which were corrected by the user
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
 
         **OUTPUTS**
 
-        *[INT]* -- the indices of the utterances actually reinterpreted
-        (including intervening ones), sorted with the oldest first, or 
-        None if no utterances could be reinterpreted
+        *[INT]* -- the indices onto the stack of recent utterances 
+        actually reinterpreted (including intervening ones), sorted 
+        with the oldest first, or None if no utterances could be 
+        reinterpreted
         """
         debug.virtual('ResMgr.reinterpret_recent')
    
@@ -410,10 +408,13 @@ class ResMgrStd(ResMgr):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        each with a corresponding identifying number and a flag indicating 
+        if the utterance can be undone and re-interpreted, 
+        or None if no utterances are stored.
+
+        The utterance number is unique, within a given editor instance.
 
         Note:  These utterances should not be stored permanently, nor
         should they be modified except as part of the correction
@@ -447,28 +448,23 @@ class ResMgrStd(ResMgr):
         intervening utterances), making the appropriate changes to the
         editor buffers.
 
-        **Note:** additional dictation into the editor will increment
-        the indices of specific utterances, so the mediator must not
-        allow dictation into the editor between the call to 
-        recent_dictation to get the utterances and the call to 
-        reinterpret_recent.
-
         **Note:** this method does not perform adaption of the changed
         utterances.  The caller should do that itself.
 
         **INPUTS**
 
-        *[INT] changed* -- the indices into the stack of recent
-        utterances of those utterances which were corrected by the user
+        *[INT] changed* -- the utterance numbers of 
+        those utterances which were corrected by the user
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
 
         **OUTPUTS**
 
-        *[INT]* -- the indices of the utterances actually reinterpreted
-        (including intervening ones), sorted with the oldest first, or 
-        None if no utterances could be reinterpreted
+        *[INT]* -- the indices onto the stack of recent utterances 
+        actually reinterpreted (including intervening ones), sorted 
+        with the oldest first, or None if no utterances could be 
+        reinterpreted
         """
 # no information stored, but subclasses will need to
 # define this
@@ -1516,10 +1512,13 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        each with a corresponding identifying number and a flag indicating 
+        if the utterance can be undone and re-interpreted, 
+        or None if no utterances are stored.
+
+        The utterance number is unique, within a given editor instance.
 
         Note:  These utterances should not be stored permanently, nor
         should they be modified except as part of the correction
@@ -1555,8 +1554,8 @@ class ResMgrBasic(ResMgrStd):
         utterances = []
         for i in range(m, 0, -1):
             debug.trace('ResMgrBasic.recent_dictation', 
-                'adding %s, safe = %d' % (self.utterances[-i], i <= safe))
-            utterances.append((self.utterances[-i], i <= safe))
+                'adding %s, number = %d, safe = %d' % (self.utterances[-i], self.numbers[-i], i <= safe))
+            utterances.append((self.utterances[-i], self.numbers[-i], i <= safe))
         return utterances
    
     def scratch_recent(self, n = 1):
@@ -1594,27 +1593,29 @@ class ResMgrBasic(ResMgrStd):
         **Note:** this method does not perform adaption of the changed
         utterances.  The caller should do that itself.
 
-        **Note:** additional dictation into the editor will increment
-        the indices of specific utterances, so the mediator must not
-        allow dictation into the editor between the call to 
-        recent_dictation to get the utterances and the call to 
-        reinterpret_recent.
-
         **INPUTS**
 
-        *[INT] changed* -- the indices into the stack of recent
-        utterances of those utterances which were corrected by the user
+        *[INT] changed* -- the utterance numbers of 
+        those utterances which were corrected by the user
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
 
         **OUTPUTS**
 
-        *[INT]* -- the indices of the utterances actually reinterpreted
-        (including intervening ones), sorted with the oldest first, or 
-        None if no utterances could be reinterpreted
+        *[INT]* -- the indices onto the stack of recent utterances 
+        actually reinterpreted (including intervening ones), sorted 
+        with the oldest first, or None if no utterances could be 
+        reinterpreted
         """
-        n = max(changed)
+        possible = []
+        i_possible = []
+        for j in changed:
+            i = self.find_utterance(j)
+            if i is not None:
+                possible.append(j)
+                i_possible.append(i)
+        n = max(i_possible)
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'max changed = %d' % n)
         app = self.editor()
@@ -1627,8 +1628,12 @@ class ResMgrBasic(ResMgrStd):
         m = min(m, n)
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'so popping %d' % m)
+# with ResMgrBasic, we must undo all utterances back to the first one to
+# be reinterpreted
         if not self.states.pop(app, m):
             return None
+# and then reinterpret all those utterances.
+# First, pop information about those utterances off the top of the stack
         to_do = self.utterances[-m:]
         buffers = self.initial_buffers[-m:]
         numbers = self.numbers[-m:]
@@ -1646,6 +1651,7 @@ class ResMgrBasic(ResMgrStd):
             self.interpret_dictation(utterance,
                 initial_buffer = buffers[i], 
                 utterance_number = numbers[i])
+# this will place the information back on the stack
         return range(m, 0, -1)
 
     def can_reinterpret(self, n):
@@ -1730,9 +1736,10 @@ class ResMgrBasic(ResMgrStd):
         can_reinterpret = self.can_reinterpret(n)
         if console.correct_utterance(self.name, utterance, 
             can_reinterpret, should_adapt = 1):
-            nn = self.find_utterance(number)
-            if nn is not None:
-                self.reinterpret_recent(changed = [nn])
+            self.reinterpret_recent(changed = [number])
+#            nn = self.find_utterance(number)
+#            if nn is not None:
+#                self.reinterpret_recent(changed = [nn])
     
     def correct_nth(self, n = 1):
         """initiate user correction of the most recent dictation utterance 
@@ -1786,7 +1793,15 @@ class ResMgrBasic(ResMgrStd):
         """
         console = self.console()
         utterances = self.recent_dictation()
-        console.correct_recent(self.name, utterances)
+        if utterances:
+            i_changed = console.correct_recent(self.name, utterances)
+            print "phrases changed were: ", i_changed
+            if i_changed:
+                changed = []
+                for i in i_changed:
+                    changed.append(utterances[-i][1])
+                print "corresponding utterance numbers were: ", changed
+                self.reinterpret_recent(changed)
     
     def correct_last(self):
         """initiate user correction of the most recent dictation utterance 

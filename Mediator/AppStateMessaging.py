@@ -346,7 +346,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
             return 0
         elif mess_name == 'connection_broken':
             debug.trace('AppStateMessaging.listen_one_transaction',
-                'data thread sent connection')
+                'data thread sent connection broken')
             if not self.closing:
               self.closing = 1
               self.close_app_cbk(unexpected = 1)

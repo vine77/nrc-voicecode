@@ -274,10 +274,13 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        each with a corresponding identifying number and a flag indicating 
+        if the utterance can be undone and re-interpreted, 
+        or None if no utterances are stored.
+
+        The utterance number is unique, within a given editor instance.
 
         Note:  These utterances should not be stored permanently, nor
         should they be modified except as part of the correction
@@ -304,35 +307,28 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         return self.recog_mgr.scratch_recent(instance_name, n = n)
 
     def reinterpret_recent(self, instance_name, changed):
-        """undo the effect of one or more recent utterances into the
-        specified editor, if possible, and reinterpret these utterances
-        (and possibly any intervening utterances), making the
-        appropriate changes to the editor buffers.
-
-        **Note:** additional dictation into the editor will increment
-        the indices of specific utterances, so the mediator must not
-        allow dictation into the editor between the call to 
-        recent_dictation to get the utterances and the call to 
-        reinterpret_recent.
+        """undo the effect of one or more recent utterances, if
+        possible, and reinterpret these utterances (and possibly any
+        intervening utterances), making the appropriate changes to the
+        editor buffers.
 
         **Note:** this method does not perform adaption of the changed
         utterances.  The caller should do that itself.
 
         **INPUTS**
 
-        *STR instance_name* -- the editor 
-
-        *[INT] changed* -- the indices into the stack of recent
-        utterances of those utterances which were corrected by the user
+        *[INT] changed* -- the utterance numbers of 
+        those utterances which were corrected by the user
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
 
         **OUTPUTS**
 
-        *[INT]* -- the indices of the utterances actually reinterpreted
-        (including intervening ones), sorted with the oldest first, or 
-        None if no utterances could be reinterpreted
+        *[INT]* -- the indices onto the stack of recent utterances 
+        actually reinterpreted (including intervening ones), sorted 
+        with the oldest first, or None if no utterances could be 
+        reinterpreted
         """
         return self.recog_mgr.reinterpret_recent(instance_name, changed)
    

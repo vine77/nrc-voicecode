@@ -773,7 +773,7 @@ class GenEditBuffers(GenEdit):
                 self.app_control.curr_buffer_name_cbk(buff_name)
 
     def open_file_new_buffer(self, file_name, new_buff_name,
-            user_initiated = 0):
+            user_initiated = 0, file_exists = 1):
         """opens a new file.  Depending on the subclass of 
         GenEditBuffers, this may open a new frame, or hide the 
         previously visible buffer in the same frame.
@@ -785,7 +785,7 @@ class GenEditBuffers(GenEdit):
         **INPUTS**
 
         *STR file_name*  -- the full path of the file to open, or None
-        to create a new, empty buffer
+        to create a new, empty buffer with no filename
 
         *STR new_buff_name*  -- the name which will be given to the new
         buffer
@@ -795,6 +795,10 @@ class GenEditBuffers(GenEdit):
         In the latter case, it will not invoke the parent AppState's 
         open buffer callback, because AppState.open_file invokes 
         the callback itself. 
+
+        *BOOL file_exists* -- indicates whether the specified file
+        exists (this allows us to specify a filename for an initially
+        empty buffer)
 
         **OUTPUTS**
 
@@ -884,12 +888,16 @@ class GenEditBuffers(GenEdit):
         new_buff_name = self.generate_buffer_name(short)
 #        print 'new buffer name is "%s"' % new_buff_name
         file_or_none = file_name
+        file_exists = 1
         if not os.path.exists(file_name):
-            file_or_none = None
+# don't throw away the filename, just warn open_file_new_buffer that it
+# the file doesn't exist
+#            file_or_none = None
+            file_exists = 0
 #        print 'before ofnb: buffers = ', self.buffers.keys()
 #        print 'file_or_none is ', file_or_none
         success = self.open_file_new_buffer(file_or_none, new_buff_name,
-            user_initiated)
+            user_initiated, file_exists = file_exists)
 #        print 'after ofnb: buffers = ', self.buffers.keys()
         if not success:
             return None
@@ -1857,9 +1865,10 @@ class GenEditFrames(GenEditBuffers):
         init_dir = self.curr_dir
         try:
             old_file_name = self.filenames[buff_name]
-            path, short = os.path.split(old_file_name)
-            if path:
-                init_dir = path
+            if old_file_name is not None:
+                path, short = os.path.split(old_file_name)
+                if path:
+                    init_dir = path
         except KeyError:
             pass
         return frame.save_as_dialog(buff_name, init_dir)
@@ -2222,7 +2231,7 @@ class GenEditSingle(GenEditFrames):
         self.only_ID = ID
 
     def open_file_new_buffer(self, file_name, new_buff_name,
-            user_initiated = 0):
+            user_initiated = 0, file_exists = 1):
         """opens a new file.  Depending on the subclass of 
         GenEditBuffers, this may open a new frame, or hide the 
         previously visible buffer in the same frame.
@@ -2245,6 +2254,10 @@ class GenEditSingle(GenEditFrames):
         open buffer callback, because AppState.open_file invokes 
         the callback itself. 
 
+        *BOOL file_exists* -- indicates whether the specified file
+        exists (this allows us to specify a filename for an initially
+        empty buffer)
+
         **OUTPUTS**
 
         *BOOL* -- true if the file was opened successfully.
@@ -2260,7 +2273,7 @@ class GenEditSingle(GenEditFrames):
 # refers to a scratch buffer which will be eliminated if we are
 # successful.  Therefore, we don't want any change events associated
 # with that old buffer name.
-        if file_name == None:
+        if not file_exists or file_name == None:
             clear_buffer(buffer)
             success = 1
         else:
@@ -2324,7 +2337,7 @@ class GenEditSimple(GenEditFrames):
             frame.show(initial = 1)
 
     def open_file_new_buffer(self, file_name, new_buff_name,
-            user_initiated = 0):
+            user_initiated = 0, file_exists = 1):
         """opens a new file and returns the corresponding
         TextBufferChangeSpec.  Depending on the subclass of 
         GenEditBuffers, this may open a new frame, or hide the 
@@ -2348,6 +2361,10 @@ class GenEditSimple(GenEditFrames):
         open buffer callback, because AppState.open_file invokes 
         the callback itself. 
 
+        *BOOL file_exists* -- indicates whether the specified file
+        exists (this allows us to specify a filename for an initially
+        empty buffer)
+
         **OUTPUTS**
 
         *BOOL* -- true if the file was opened successfully.
@@ -2358,7 +2375,7 @@ class GenEditSimple(GenEditFrames):
         frame = self.new_frame(buff_name = new_buff_name,
             instance_string = self.instance_string)
         buffer = frame.editor_buffer(new_buff_name)
-        if file_name == None:
+        if not file_exists or file_name == None:
 # unnecessary, since it is a new frame with a new buffer 
 #            buffer.set_text("")
             success = 1

@@ -1374,11 +1374,11 @@ speech server"
           `("%b -- " (, invocation-name "@" system-name)))
     (vr-activate-buffer nil)
     (if vr-host
-	(vr-sentinel nil "finished\n")
 ; DCF - I think this is left over from vr-mode.  We should send an
 ; editor_disconnecting message (not just a string)
 ;      (vr-send-cmd "exit")
         (vcode-disconnecting))
+	(vr-sentinel nil "finished\n")
     (vcode-set-after-change-functions nil)
     (run-hooks 'vr-mode-cleanup-hook)
     )
@@ -1388,7 +1388,7 @@ speech server"
 (defun vcode-disconnecting ()
     "sends editor_disconnecting message to the mediator"
   (let ((empty-resp (make-hash-table :test 'string=)))
-    (vr-send-reply 
+    (vr-send-cmd 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "editor_disconnecting" empty-resp)))
     )

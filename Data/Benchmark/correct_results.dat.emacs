@@ -1,31 +1,10 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
-running ExtLoopWin32NewMediator with ServerNewMediator
-running ExtLoopWin32NewMediator with ServerNewMediator
+creating wxMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished ExtLoop init...
-Running ExtLoopWin32...
+Finished wxMediator init...
+starting...
 Starting server threads...
-Starting message loop...
-New connection
-New connection from emacs
-awaiting corresponding talk connection
-received talk connection
-creating messengers
-configuring from external
-creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -304,10 +283,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -350,7 +329,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a111c8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2444970>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -489,7 +468,6 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
-'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -748,10 +726,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2495,7 +2473,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3352,7 +3330,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3436,12 +3414,12 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 1ba12f8> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 27a7f20> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7551,7 +7529,14 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
- 19:                           attrs)
+Associate 'R. E.' with symbol (Enter selection):
+
+  '0': no association
+  '1': re
+  '2': Re (*new*)
+  '3': RE (*new*)
+
+>  19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9254,7 +9239,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9343,7 +9328,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11386,10 +11371,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 -----------------------------------------------
-Test suite completed in:  767.524000049 secs
+Test suite completed in:  1333.14999998 secs
 -----------------------------------------------
-Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c38320>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-ExtLoopWin32.run returning

@@ -55,6 +55,44 @@ wxEVT_DISMISS_MODAL = wxNewEventType()
 
 wxID_DISMISS_MODAL = wxNewId()
 
+wxID_CORRECT_NEXT = wxNewId()
+wxID_CORRECT_PREV = wxNewId()
+wxID_CORRECT_MORE = wxNewId()
+wxID_DISCARD_CORRECTION = wxNewId()
+
+class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
+    """implementation of DismissModalEvent using a Python Event flag.  
+    The dialog must check this flag periodically
+
+    **INSTANCE ATTRIBUTES**
+
+    *threading.Event bye* -- threading.Event object whose state will be
+    set to true if the dialog box should cancel.  
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, bye, **args):
+        self.deep_construct(DismissModalFlagTimerWX,
+                            {'bye': bye},
+                            args)
+
+    def dismiss(self):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.bye.set()
+        wxWakeUpIdle()
+
+
 
 class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     """
@@ -63,15 +101,6 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     *wxFrame main_frame* -- the main frame window of the console, which
     will be the parent for most modal dialogs
 
-    *[wxDialog] modal_dialogs* -- stack of modal dialog boxes currently
-    active
-
-    *[threading.Event] dismiss_events* -- stack of threading.Event objects 
-    used to signal the modal dialog boxes to close.  Each dialog box
-    must have an idle event which checks the state of the Event object
-    and closes, returning wxID_DISMISS_MODAL, if the Event's state
-    becomes true.
-
     **CLASS ATTRIBUTES**
     
     *none* 
@@ -79,8 +108,6 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     def __init__(self, main_frame, **attrs):
         self.deep_construct(MediatorConsoleWX,
                             {'main_frame': main_frame,
-                             'modal_dialogs': [],
-                             'dismiss_events': []
                             },
                             attrs, 
                             enforce_value = {'main_frame_handle':
@@ -159,84 +186,25 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             else:
                 break
 
-
-    def already_modal(self):
-        """does the console already have a modal dialog running?
-
+    def show_modal_dialog(self, dialog):
+        """shows a dismissable modal dialog box, and handles the push/pop modal 
+        bookkeeping
+        
         **INPUTS**
-
-        *none*
-
+        
+        *Dismissable, OwnerObject dialog* -- the dialog to show
+        
         **OUTPUTS**
         
-        *BOOL* -- true if a modal dialog is active
+        *INT* -- the return code from ShowModal 
         """
-        if self.modal_dialogs:
-            return 1
-        return 0
+        bye = dialog.dismiss_event()
+        self.push_modal(bye)
+        answer = dialog.ShowModal()
+        self.pop_modal()
+        return answer
 
-    def push_modal(self, dialog, event):
-        """push a modal dialog box onto the stack before calling
-        ShowModal
-
-        **INPUTS**
-
-        *wxDialog* -- the dialog
-
-        *threading.Event bye* -- threading.Event object whose state will be
-        set to true if the dialog box should cancel
-
-        **OUTPUTS**
-
-        *none*
-        """
-        self.modal_dialogs.append(dialog)
-        self.dismiss_events.append(event)
-
-    def pop_modal(self):
-        """pops  a modal dialog box off the top of the stack
-
-        **INPUTS**
-
-        **OUTPUTS**
-
-        *BOOL* -- true if there was a modal dialog on the stack
-        """
-        if self.already_modal():
-            del self.modal_dialogs[-1]
-            del self.dismiss_events[-1]
-            return 1
-        return 0
-
-    def dismiss_modal(self):
-        """dismisses any modal dialog boxes which the console has
-        running
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-        
-        *BOOL* -- true if the modal dialog box was sucessfully dismissed
-        (or if there wasn't one to start with)
-        """
-        if not self.already_modal():
-            return 1
-# this doesn't work because of a bug in wxPython (events posted to
-# modal dialog boxes which were started from a custom event handler
-# don't get processed until the modal dialog box closes), so we'll need
-# another solution
-#        dismiss_event = GenericEventWX(wxEVT_DISMISS_MODAL)
-#        wxPostEvent(self.modal_dialogs[-1], dismiss_event)
-        bye = self.dismiss_events[-1]
-        bye.set()
-        print 'setting'
-        wxWakeUpIdle()
-        print 'waking up'
-        return 1
-
-    def correct_utterance(self, editor_name, utterance, 
+    def show_correction_box(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
         """display a correction box for correction a complete, recent
         utterance, accept user corrections, allow the user to
@@ -265,21 +233,14 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         """
         original = utterance.words()
         validator = CorrectionValidatorSpoken(utterance = utterance)
-        editor_window = self.store_foreground_window()
-        bye = threading.Event()
         box = CorrectionBoxWX(self, self.main_frame, utterance, validator, 
-            can_reinterpret, self.gram_factory, bye = bye)
+            can_reinterpret, self.gram_factory)
 #        app = wxGetApp()
 #        evt = wxActivateEvent(0, true)
 #        app.ProcessEvent(evt)
-        self.push_modal(box, bye)
-        answer = box.ShowModal()
-        self.pop_modal()
+        answer = self.show_modal_dialog(box)
         box.cleanup()
         box.Destroy()
-#        print answer, utterance.spoken_forms()
-#        win32gui.SetForegroundWindow(current_handle)
-        editor_window.restore_to_foreground()
         if answer == wxID_OK:
             if should_adapt:
                 utterance.adapt_spoken(utterance.spoken_forms())
@@ -288,7 +249,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             utterance.set_words(original)
             return 0
 
-    def correct_recent(self, editor_name, utterances):
+    def show_recent_utterances(self, editor_name, utterances):
         """display a correct recent dialog box for to allow the user to 
         select a recent utterance to correct
 
@@ -296,34 +257,33 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         *STR editor_name* -- name of the editor instance
 
-        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+        dictation utterances (or all available if < n), sorted most recent 
+        last, each with a corresponding utterance number and a flag 
+        indicating if the utterance can be undone and re-interpreted.
 
         **OUTPUTS**
 
-        *BOOL* -- true if the user made changes and approved them
+        *[INT]* -- the utterance numbers of 
+        those utterances which were corrected by the user, or None if
+        none were corrected
         """
-        editor_window = self.store_foreground_window()
-        bye = threading.Event()
+        originals = map(lambda u: u[0].words(), utterances)
         box = CorrectRecentWX(self, self.main_frame, utterances, 
-            self.gram_factory, bye = bye)
-        self.push_modal(box, bye)
-        answer = box.ShowModal()
-        self.pop_modal()
+            self.gram_factory)
+        answer = self.show_modal_dialog(box)
+        changed = box.changed()  
         box.cleanup()
         box.Destroy()
-        editor_window.restore_to_foreground()
         if answer == wxID_OK:
-            print 'answer was OK'
-            return 1
+#            print 'answer was OK'
+            return changed
         else:
-            print 'answer was cancel'
-            return 0
+#            print 'answer was cancel'
+            return None
 
 
-class ByeByeMixIn(Object.OwnerObject):
+class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
     """mix-in for a dialog box with an idle handler which checks a 
     threading.Event object to see if it should simulate being dismissed.
 
@@ -331,26 +291,27 @@ class ByeByeMixIn(Object.OwnerObject):
 
     *threading.Event bye* -- threading.Event object whose state will be
     set to true if the dialog box should cancel.  The mix-in
-    has an an idle event which checks the state of the Event object
+    has a timer event which checks the state of the Event object
     and calls on_dismiss if the Event's state
     becomes true.  The dialog box should then call EndModal with return
     value wxID_DISMISS_MODAL.
     """
-    def __init__(self, bye, **args):
+    def __init__(self, **args):
         """
-        **INPUTS**
-
-        *threading.Event bye* -- threading.Event object whose state will be
-        set to true if the dialog box should cancel.  
         """
-        ID_TIMER = wxNewId()
+        ID_DISMISS_FLAG_TIMER = wxNewId()
         self.deep_construct(ByeByeMixIn,
                             {
-                             'bye': bye,
-                             'timer': wxTimer(self, ID_TIMER)
+                             'bye': threading.Event(),
+                             'timer': wxTimer(self, ID_DISMISS_FLAG_TIMER)
                             }, args)
-        EVT_TIMER(self, ID_TIMER, self.check_dismiss_flag)
+        EVT_TIMER(self, ID_DISMISS_FLAG_TIMER, self.check_dismiss_flag)
         self.timer.Start(50)
+# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# which were started from a custom event handler are created from within
+# an idle event, so no other idle events get processed until 
+# the modal dialog box closes), so we'll need
+# another solution
 #        EVT_IDLE(wxGetApp(), self.check_dismiss_flag)
 #        EVT_IDLE(self, self.check_dismiss_flag)
 
@@ -358,9 +319,33 @@ class ByeByeMixIn(Object.OwnerObject):
 #        print 'disconnecting event?'
         self.timer.Stop()
         self.timer = None
+# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# which were started from a custom event handler are created from within
+# an idle event, so no other idle events get processed until 
+# the modal dialog box closes), so we'll need
+# another solution
 #        wxGetApp().Disconnect(-1, -1, wxEVT_IDLE)
 #        print self.Disconnect(-1, -1, wxEVT_IDLE)
 
+    def dismiss_event(self):
+        """returns a DismissModalEvent which can be used to dismiss the
+        dialog
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *DismissModalEvent* -- the event
+        """
+        return DismissModalFlagTimerWX(self.bye)
+
+# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# which were started from a custom event handler are created from within
+# an idle event, so no other idle events get processed until 
+# the modal dialog box closes), so we'll need
+# another solution
     def check_dismiss_flag_idle(self, event):
 #        print 'idle'
         if self.bye.isSet():
@@ -377,7 +362,6 @@ class ByeByeMixIn(Object.OwnerObject):
 
     def on_dismiss(self):
         debug.virtual('ByeByeMixIn.on_dismiss')
-
 
 class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
     """dialog box for correcting misrecognized dictation results
@@ -436,7 +420,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         if pos is None:
             use_pos = wxDefaultPosition
         wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
-            (600, 400))
+            (600, 400), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         self.deep_construct(CorrectionBoxWX,
                             {
                              'console': console,
@@ -475,7 +459,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         init_value = string.join(self.utterance.spoken_forms())
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
             wxDefaultSize, style = wxTE_NOHIDESEL, validator = validator)
-        s.Add(self.text, 0, wxEXPAND | wxALL)
+#        s.Add(self.text, 0, wxEXPAND | wxALL)
         middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
 # three rows, two columns, 5 pixels between rows and columns
         number_sizer = wxBoxSizer(wxVERTICAL)
@@ -529,8 +513,12 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         button_sizer.Add(cancel_button, 0, wxALL)
         button_sizer.Add(self.playback_button, 0, wxALL)
         EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
-        s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
         ok_button.SetDefault()
+# optionally, add additional buttons
+        extra_button_sizer = wxBoxSizer(wxHORIZONTAL)
+        if self.more_buttons(extra_button_sizer):
+            s.Add(extra_button_sizer, 0, wxEXPAND | wxALL, 10)
+        s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
 #        print 'ids', ok_button.GetId(), wxID_OK
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
         EVT_ACTIVATE(self, self.on_activate)
@@ -542,7 +530,21 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
+        s.Fit(self)
 #        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
+
+    def more_buttons(self, button_sizer):
+        """optionally, add additional buttons
+
+        **INPUTS**
+
+        *wxBoxSizer button_sizer* -- the box sizer for the button row
+
+        **OUTPUTS**
+
+        *BOOL* -- true if more buttons were added
+        """
+        return 0
 
     def on_dismiss(self):
         self.EndModal(wxID_DISMISS_MODAL)
@@ -550,7 +552,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
     def on_playback(self, event):
         ok = self.utterance.playback()
         if not ok:
-            self.playback_button.Disable()
+            self.playback_button.Enable(0)
         self.text.SetFocus()
 
     def get_text(self):
@@ -695,6 +697,99 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                 self.console.win_sys.raise_main_frame()
                 if self.choices:
                     self.choice_list.SetSelection(1, 0)
+
+
+class CorrectNextPrevWX(CorrectionBoxWX):
+    """subclass of CorrectionBoxWX which adds the option of correcting 
+    the next or previous utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL first_utterance* -- indicates if this utterance is the first 
+    stored utterance, in which case the option to correct the previous 
+    utterance should be disabled.
+
+    *BOOL last_utterance* -- indicates if this utterance is the most 
+    recent utterance, in which case the option to correct the next 
+    utterance should be disabled.
+    """
+    def __init__(self, first_utterance = 0, last_utterance = 0, **args):
+        self.decl_attrs({'first_utterance': first_utterance,
+                              'last_utterance': last_utterance})
+        self.deep_construct(CorrectNextPrevWX, {}, args)
+
+    def more_buttons(self, button_sizer):
+        """optionally, add additional buttons
+
+        **INPUTS**
+
+        *wxBoxSizer button_sizer* -- the box sizer for the button row
+
+        **OUTPUTS**
+
+        *BOOL* -- true if more buttons were added
+        """
+        CorrectionBoxWX.more_buttons(self, button_sizer)
+        correct_previous = wxButton(self, wxNewId(), "Previous Phrase", 
+            wxDefaultPosition, wxDefaultSize)
+        correct_next = wxButton(self, wxNewId(), "Next Phrase", 
+            wxDefaultPosition, wxDefaultSize)
+        if self.first_utterance:
+            correct_previous.Enable(0)
+        if self.last_utterance:
+            correct_next.Enable(0)
+        button_sizer.Add(correct_previous, 0, wxALL)
+        button_sizer.Add(correct_next, 0, wxALL)
+        EVT_BUTTON(self, correct_previous.GetId(), 
+            self.on_correct_previous)
+        EVT_BUTTON(self, correct_next.GetId(), 
+            self.on_correct_next)
+        return 1
+    def on_correct_previous(self, event):
+        if self.Validate() and self.TransferDataFromWindow():
+            self.EndModal(wxID_CORRECT_PREV)
+    def on_correct_next(self, event):
+        if self.Validate() and self.TransferDataFromWindow():
+            self.EndModal(wxID_CORRECT_NEXT)
+
+class CorrectFromRecentWX(CorrectNextPrevWX):
+    """subclass of CorrectNextPrevWX which adds the option of returning to
+    the correct recent dialog box for additional corrections, or after
+    discarding changes 
+    """
+    def __init__(self, **args):
+        self.deep_construct(CorrectFromRecentWX, {}, args)
+
+    def more_buttons(self, button_sizer):
+        """optionally, add additional buttons
+
+        **INPUTS**
+
+        *wxBoxSizer button_sizer* -- the box sizer for the button row
+
+        **OUTPUTS**
+
+        *BOOL* -- true if more buttons were added
+        """
+        CorrectNextPrevWX.more_buttons(self, button_sizer)
+        more_correction = wxButton(self, wxNewId(), "More Correction", 
+            wxDefaultPosition, wxDefaultSize)
+        discard_changes = wxButton(self, wxNewId(), "Discard Changes", 
+            wxDefaultPosition, wxDefaultSize)
+        EVT_BUTTON(self, more_correction.GetId(), 
+            self.on_more_correction)
+        EVT_BUTTON(self, discard_changes.GetId(), 
+            self.on_discard_changes)
+        button_sizer.Add(more_correction, 0, wxALL)
+        button_sizer.Add(discard_changes, 0, wxALL)
+        return 1
+
+    def on_more_correction(self, event):
+        if self.Validate() and self.TransferDataFromWindow():
+            self.EndModal(wxID_CORRECT_MORE)
+
+    def on_discard_changes(self, event):
+        self.EndModal(wxID_DISCARD_CORRECTION)
 
 
 
@@ -931,16 +1026,19 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-    utterances (or all available if < n), sorted most recent last, 
-    with corresponding flags indicating if the utterance can be 
-    undone and re-interpreted, or None if no utterances are stored.
+    *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+    dictation utterances (or all available if < n), sorted most recent 
+    last, each with a corresponding utterance number and a flag 
+    indicating if the utterance can be undone and re-interpreted.
 
     *BOOL first* -- flag indicating whether this is the first time the
     window has been activated.
 
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
+
+    *WinGramFactory gram_factory* -- the grammar factory used to add
+    speech grammars to the dialog box
 
     *ChoiceGram correct_n_gram* -- ChoiceGram supporting "Correct n"
     """
@@ -954,10 +1052,13 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
 
         *wxWindow parent* -- the parent wxWindow
 
-        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
+        dictation utterances (or all available if < n), sorted most 
+        recent last, with corresponding flags indicating if the utterance 
+        can be undone and re-interpreted
+
+        *{INT: BOOL} corrected* -- set of utterances which have been
+        corrected, counted from most recent = 1
 
         *WinGramFactory gram_factory* -- the grammar factory used to add
         speech grammars to the dialog box
@@ -974,7 +1075,9 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                             {
                              'console': console,
                              'utterances': utterances,
+                             'gram_factory': gram_factory,
                              'first': 1,
+                             'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
                             exclude_bases = {wxDialog: 1}
@@ -999,7 +1102,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         recent.InsertColumn(1, "Spoken phrase")
         phrases = map(lambda x: string.join(x[0].spoken_forms()),
             utterances)
-        can_reinterpret = map(lambda x: x[1], utterances)
+        can_reinterpret = map(lambda x: x[2], utterances)
         index = range(len(phrases), 0, -1)
         bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
         yes = wxBitmap(os.path.join(bitpath, 'small_plus.bmp'), wxBITMAP_TYPE_BMP)
@@ -1025,7 +1128,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         s.Add(recent, 1, wxEXPAND | wxALL)
         okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
         cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+#        EVT_BUTTON(self, okb.GetId(), self.on_ok)
         b_sizer = wxBoxSizer(wxHORIZONTAL)
         b_sizer.Add(okb, 0, 0)
         b_sizer.Add(cancelb, 0, 0)
@@ -1057,10 +1160,19 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         q = s.GetMinSize()
         s.Fit(self)
         s.SetMinSize(wxSize(q.GetWidth(), 0))
+        self.resize_last_column()
         last = len(self.phrases)-1
         self.recent.EnsureVisible(last)
         self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+    def resize_last_column(self):
+        list_client_size = self.recent.GetClientSize()
+        n_cols = self.recent.GetColumnCount()
+        rest = 0
+        for col in range(n_cols -1):
+            rest = rest + self.recent.GetColumnWidth(col)
+        self.recent.SetColumnWidth(n_cols - 1, list_client_size.width - rest)
+
     def focus_recent(self):
         self.recent.SetFocus()
 
@@ -1069,17 +1181,80 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         print 'on_choose, %d' %i
         self.chose_from_list(i)
 
-    def chose_from_list(self, i):
-        i = len(self.phrases) - i
-        str = 'You chose item %d: "%s"' % (i, self.phrases[-i])
-        m = wxMessageDialog(self, str, style = wxOK)
-        m.ShowModal()
-        m.Destroy()
-        self.focus_recent()
+    def correct_nth(self, n):
+        """display a correction box for correction a complete, recent
+        utterance, accept user corrections, and allow the user to
+        approve or cancel.
 
-    def on_ok(self, event):
-        print 'hit ok'
-        event.Skip()
+        **INPUTS**
+
+        *INT n* -- correct nth most recent utterance
+
+        **OUTPUTS**
+
+        *STR* -- string indicating the outcome of the correction dialog:
+        allowed values are 'ok', 'cancel', 'next', 'previous', 'more',
+        'discard'
+        """
+        u = self.utterances[-n]
+        utterance = u[0]
+        can_reinterpret = u[2]
+        validator = CorrectionValidatorSpoken(utterance = utterance)
+        box = CorrectFromRecentWX(console = self.console, parent = self, 
+            utterance = utterance, validator = validator, 
+            can_reinterpret = can_reinterpret, gram_factory = self.gram_factory,
+            last_utterance = (n == 1), 
+            first_utterance = (n == len(self.utterances)))
+        answer = self.console.show_modal_dialog(box)
+        box.cleanup()
+        box.Destroy()
+        if answer == wxID_OK:
+            return 'ok'
+        elif answer == wxID_CANCEL:
+            return 'cancel'
+        elif answer == wxID_CORRECT_NEXT:
+            return 'next'
+        elif answer == wxID_CORRECT_PREV:
+            return 'previous'
+        elif answer == wxID_CORRECT_MORE:
+            return 'more'
+        elif answer == wxID_DISCARD_CORRECTION:
+            return 'discard'
+# shouldn't happen, but ...
+        return None
+
+    def chose_from_list(self, i):
+        n = len(self.phrases) - i
+        original_words = self.utterances[-n][0].words()
+        answer = self.correct_nth(n)
+        if answer == 'cancel':
+            self.EndModal(wxID_CANCEL)
+            return
+        if answer == 'discard':
+            self.utterances[-n][0].set_words(original_words)
+            self.focus_recent()
+            return
+        self.corrected[n] = 1
+        self.phrases[i] = string.join(self.utterances[i][0].spoken_forms())
+        self.recent.SetStringItem(i, 1, self.phrases[i])
+        self.resize_last_column()
+        if answer == 'next':
+            self.chose_from_list(i + 1)
+        elif answer == 'previous':
+            self.chose_from_list(i - 1)
+        elif answer == 'ok':
+            if self.Validate() and self.TransferDataFromWindow():
+                self.EndModal(wxID_OK)
+        self.focus_recent()
+        return
+#        str = 'You chose item %d: "%s"' % (n, self.phrases[-n])
+#        m = wxMessageDialog(self, str, style = wxOK)
+#        m.ShowModal()
+#        m.Destroy()
+
+#    def on_ok(self, event):
+#        print 'hit ok'
+#        event.Skip()
 
     def on_char(self, event):
         k = event.GetKeyCode()
@@ -1108,9 +1283,29 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
             if event.GetActive():
                 if self.correct_n_gram:
                     self.correct_n_gram.activate(len(self.phrases), 
-                        self.GetHandle(), self.chose_from_list)
+                        self.GetHandle(), self.chose_by_voice)
                 self.first = 0
                 self.console.raise_wxWindow(self)
+
+    def chose_by_voice(self, n):
+        i = len(self.phrases) - n
+        self.chose_from_list(i)
+
+    def changed(self):
+        """reports which utterances have been corrected
+
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+
+        *[INT]* -- the indices of those utterances which have been 
+        corrected by the user, counted from most recent = 1, or 
+        None if none were corrected
+        """
+        return self.corrected.keys()
+
 
 
 # defaults for vim - otherwise ignore
