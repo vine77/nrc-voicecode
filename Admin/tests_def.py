@@ -3211,12 +3211,8 @@ def test_temporary():
 
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
-
-   commands.compile_symbols([native_py_file])   
    commands.open_file('blah.py')
-   commands.say(['regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1) 
-   commands.say(['r\\R.', 'e\\E.'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-   commands.say(['R.', 'E.'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)       
+   commands.say(['new', 'symbol'])
 
    
 #add_test('temp', test_temporary, desc='temporary test')

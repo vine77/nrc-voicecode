@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+import util
 import exceptions, string, sys, traceback, types
 
 """Functions for debugging purposes."""
@@ -149,7 +150,11 @@ def trace(trace_id, message):
     # config_traces() to change trace_fct after import, we will still be
     # invoking the old trace_fct(), not the new one.
     #
-    trace_fct(trace_id, message)
+    if util.isfunction(message):
+       mess_string = message()
+    else: 
+       mess_string = message
+    trace_fct(trace_id, mess_string)
 
 def config_traces(print_to=None, status=None, active_traces=None,
                   allow_trace_id_substrings=None):
