@@ -587,7 +587,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
 
         Examples: say('x not equal to') -> 'x != '
-        	  say(['x', ' != \\not equal to'] -> 'x != '
+                  say(['x', ' != \\not equal to'] -> 'x != '
         """
         
         global sleep_before_recognitionMimic

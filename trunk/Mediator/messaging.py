@@ -59,49 +59,49 @@ class LightSleeper(Object.Object):
     """
     def __init__(self, wakeup_event, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*threading.Event wakeup_event* -- the underlying threading.Event
-	which supplies the wait method and can be checked upon wakeup to see
-	if the wait method timed out, or was stopped early.
+        *threading.Event wakeup_event* -- the underlying threading.Event
+        which supplies the wait method and can be checked upon wakeup to see
+        if the wait method timed out, or was stopped early.
 
-	**NOTE:** if the creator wants to be able to wake up a thread
-	sleeping with this object's sleep method, it must retain a
-	reference to the wakeup_event object
-	"""
+        **NOTE:** if the creator wants to be able to wake up a thread
+        sleeping with this object's sleep method, it must retain a
+        reference to the wakeup_event object
+        """
         self.deep_construct(LightSleeper,
                             {'wakeup_event': wakeup_event}, args)
     
     def sleep(self, timeout):
         """allows the calling thread to sleep for a given number of
-	seconds, or until another thread sets the wakeup_event,
-	whichever comes first.
+        seconds, or until another thread sets the wakeup_event,
+        whichever comes first.
 
-	**INPUTS**
+        **INPUTS**
 
-	*FLOAT timeout* -- the timeout in seconds, or None to wait
-	indefinitely for the wakeup_event
+        *FLOAT timeout* -- the timeout in seconds, or None to wait
+        indefinitely for the wakeup_event
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.wakeup_event.wait(timeout)
 
     def was_woken(self):
         """checks to see if the wakeup_event is set.  Note: since other
-	threads may also be waiting on the same event, LightSleeper does
-	not clear the wakeup_event.  Unless another thread does so,
-	subsequent calls to sleep will terminate immediately
+        threads may also be waiting on the same event, LightSleeper does
+        not clear the wakeup_event.  Unless another thread does so,
+        subsequent calls to sleep will terminate immediately
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the wakeup_event is set
-	"""
+        *BOOL* -- true if the wakeup_event is set
+        """
         return self.wakeup_event.isSet()
 
 
@@ -188,7 +188,7 @@ class Messenger(Object.Object):
         
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format, or
-	 None if no message is available."""
+         None if no message is available."""
 
         debug.virtual('Messenger.get_mess')
 
@@ -384,7 +384,7 @@ class MixedMessenger(Messenger):
         
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format, or
-	 None if no message is available."""
+         None if no message is available."""
 
         trace('get_mess', 'self=%s, expecting %s' % (self, repr(expect)))        
         
@@ -922,15 +922,15 @@ class MessTransporter_Socket(MessTransporter):
     def data_available(self):
         """check whether the input socket has data
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the select.select indicates that the socket
-	has data
-	"""
+        *BOOL* -- true if the select.select indicates that the socket
+        has data
+        """
 # poll by using timeout = 0
         try:
             data, dummy, dummy2 = select.select([self.sock], [], [], 0)

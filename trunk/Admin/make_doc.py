@@ -91,7 +91,7 @@ def find_pydoc_path(names=None):
     **INPUTS**
 
     *[STR]* names -- list of possible names for the script (defaults to
-	['pydoc.py', 'pdoc.py']
+        ['pydoc.py', 'pdoc.py']
 
     **OUTPUTS**
 

@@ -49,53 +49,53 @@ class WinIDClient(Object):
     def __init__(self, **args):
         """abstract base class, so no arguments
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
     
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(WinIDClient,
                             {'window': None},
                             args)
     def local_window(self):
         """return the local window corresponding to the client
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the window handle of the local window corresponding to
-	the client, or None if the client has not yet been identified
-	with a local window
-	"""
+        *INT* -- the window handle of the local window corresponding to
+        the client, or None if the client has not yet been identified
+        with a local window
+        """
         return self.window
 
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object for a
-	SingleWindowDisplay.
+        SingleWindowDisplay.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	*STR* instance -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *STR* instance -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
         debug.virtual('WinIDClient.new_window')
 
 # defaults for vim - otherwise ignore

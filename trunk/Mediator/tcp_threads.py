@@ -102,16 +102,16 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 
     def message_queue(self):
         """returns a reference to the message queue in which the thread
-	puts completed messages
+        puts completed messages
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*Queue.Queue* -- the message queue
-	"""
+        *Queue.Queue* -- the message queue
+        """
         return self.completed_msgs
 
     def get_mess(self):
@@ -119,27 +119,27 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         
         **INPUTS**
 
-	*none*
+        *none*
         
         **OUTPUTS**
         
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format.
          from external editor in *(mess_name, {arg:val})* format, or
-	 None if no message is available."""
+         None if no message is available."""
 
         return self.underlying.get_mess()
         
     def notify_main(self):
         """notify the main thread that there is a new message waiting in 
-	the Queue, and return asynchronously.
-	
-	**INPUTS**
+        the Queue, and return asynchronously.
+        
+        **INPUTS**
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.event.notify()
 
     def run(self):
@@ -213,14 +213,14 @@ class ListenNewConnThread(threading.Thread, Object.Object):
         
     def notify_main(self):
         """notify the main thread that there is a new connection waiting
-	for a handshake, and return asynchronously.
-	
-	**INPUTS**
+        for a handshake, and return asynchronously.
+        
+        **INPUTS**
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.event.notify()
 
     def run(self):

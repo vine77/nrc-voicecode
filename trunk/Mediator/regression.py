@@ -104,36 +104,36 @@ class PersistentConfig(Object.Object):
     def init_simulator_regression(symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
 
-	**NOTE:**  This method must also ensure that the namespace in
-	which the regression test definitions are/will be run with
-	execfile contains an object called commands with the
-	sim_commands commands as attributes.  commands can be a
-	reference to the sim_commands module, if a global old
-	MediatorObject is used, or an object with methods.
+        **NOTE:**  This method must also ensure that the namespace in
+        which the regression test definitions are/will be run with
+        execfile contains an object called commands with the
+        sim_commands commands as attributes.  commands can be a
+        reference to the sim_commands module, if a global old
+        MediatorObject is used, or an object with methods.
 
-	**INPUTS**
+        **INPUTS**
 
-	STR *symdict_pickle_fname=None* -- Name of the file containing the
-	persistent version of the symbols dictionnary.
+        STR *symdict_pickle_fname=None* -- Name of the file containing the
+        persistent version of the symbols dictionnary.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('PersistentConfig.init_simulator_regression')
 
     def execute_command(self, command):
         """execute a command in the proper namespace, trapping any
-	exceptions and printing the traceback
+        exceptions and printing the traceback
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR command*
+        *STR command*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('PersistentConfig.execute_command')
 
 class PersistentConfigOldMediator(Object.Object):
@@ -150,10 +150,10 @@ class PersistentConfigOldMediator(Object.Object):
     def __init__(self, names, **args):
         """**INPUTS**
 
-	*{STR:ANY} names* -- the namespace dictionary in which the
-	regression test definitions file, tests_def, has been (or will be) 
-	run with execfile
-	"""
+        *{STR:ANY} names* -- the namespace dictionary in which the
+        regression test definitions file, tests_def, has been (or will be) 
+        run with execfile
+        """
         self.deep_construct(PersistentConfigOldMediator, 
                             {
                              'names': names
@@ -223,36 +223,36 @@ class PersistentConfigOldMediator(Object.Object):
     def init_simulator_regression(self, symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
 
-	**INPUTS**
+        **INPUTS**
 
-	STR *symdict_pickle_fname=None* -- Name of the file containing the
-	persistent version of the symbols dictionnary.
+        STR *symdict_pickle_fname=None* -- Name of the file containing the
+        persistent version of the symbols dictionnary.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         mediator.init_simulator_regression(symdict_pickle_fname = \
             symdict_pickle_fname)
         self.names['commands'] = sim_commands
     
     def execute_command(self, command):
         """execute a command in the proper namespace, trapping any
-	exceptions and printing the traceback
+        exceptions and printing the traceback
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR command*
+        *STR command*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # right now, this method doesn't detect quit_flag, because neither
 # does mediator.execute_command
         try:
             exec command in sim_commands.__dict__, sim_commands.command_space
-            #	  exec command in sim_commands and command_space
+            #  exec command in sim_commands and command_space
         except Exception, err:
             traceback.print_exc()
 
@@ -282,9 +282,9 @@ class PersistentConfigNewMediator(Object.Object):
         symbol_match_dlg = 1, correction = None, **args):
         """**INPUTS**
 
-	*{STR:ANY} names* -- the namespace dictionary in which the
-	regression test definitions file, tests_def, has been (or will be) 
-	run with execfile
+        *{STR:ANY} names* -- the namespace dictionary in which the
+        regression test definitions file, tests_def, has been (or will be) 
+        run with execfile
 
         *NewMediatorObject the_mediator* -- the existing mediator, which will be
         reset by the init_simulator_regression method
@@ -297,7 +297,7 @@ class PersistentConfigNewMediator(Object.Object):
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
-	"""
+        """
         self.deep_construct(PersistentConfigNewMediator, 
                             {
                              'the_mediator': mediator,
@@ -369,22 +369,22 @@ class PersistentConfigNewMediator(Object.Object):
     def init_simulator_regression(self, symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
 
-	**NOTE:**  This method must also ensure that the namespace in
-	which the regression test definitions are/will be run with
-	execfile contains an object called commands with the
-	sim_commands commands as attributes.  commands can be a
-	reference to the sim_commands module, if a global old
-	MediatorObject is used, or an object with methods.
+        **NOTE:**  This method must also ensure that the namespace in
+        which the regression test definitions are/will be run with
+        execfile contains an object called commands with the
+        sim_commands commands as attributes.  commands can be a
+        reference to the sim_commands module, if a global old
+        MediatorObject is used, or an object with methods.
 
-	**INPUTS**
+        **INPUTS**
 
-	STR *symdict_pickle_fname=None* -- Name of the file containing the
-	persistent version of the symbols dictionnary.
+        STR *symdict_pickle_fname=None* -- Name of the file containing the
+        persistent version of the symbols dictionnary.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # thought this would fix problems with tests_def.no_sr_user, but
 # disconnecting still unloads all existing grammars and re-connecting
 # doesn't re-load them.
@@ -402,16 +402,16 @@ class PersistentConfigNewMediator(Object.Object):
 
     def execute_command(self, command):
         """execute a command in the proper namespace, trapping any
-	exceptions and printing the traceback
+        exceptions and printing the traceback
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR command*
+        *STR command*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # right now, this method doesn't detect quit_flag, because neither
 # does mediator.execute_command
         try:
@@ -429,24 +429,24 @@ class TempConfig(Object.Object):
 
     def mediator(self):
         """returns a reference to the TempConfig's MediatorObject or
-	NewMediatorObject 
-	"""
+        NewMediatorObject 
+        """
         debug.virtual('TempConfig.mediator')
 
     def interpreter(self):
         """returns a reference to the MediatorObject's CmdInterp object
-	"""
+        """
         debug.virtual('TempConfig.interpreter')
 
     def editor(self):
         """returns a reference to the MediatorObject's internal 
-	AppState (usually EdSim) editor 
-	"""
+        AppState (usually EdSim) editor 
+        """
         debug.virtual('TempConfig.editor')
 
     def quit(self):
         """cleanup the underlying MediatorObject
-	"""
+        """
         debug.virtual('TempConfig.quit')
 
 
@@ -461,11 +461,11 @@ class TempConfigFactory(Object.Object):
     def new_config(self, editor = None):
         """create a new TempConfig object
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState editor* -- the internal test editor to use, or None to
-	create a new EdSim instance
-	"""
+        *AppState editor* -- the internal test editor to use, or None to
+        create a new EdSim instance
+        """
         debug.virtual('TempConfigFactory.new_config')
 
 class TempConfigOldMediator(Object.Object):
@@ -483,24 +483,24 @@ class TempConfigOldMediator(Object.Object):
 
     def mediator(self):
         """returns a reference to the TempConfigOldMediator's MediatorObject or
-	NewMediatorObject 
-	"""
+        NewMediatorObject 
+        """
         return self.the_mediator
 
     def interpreter(self):
         """returns a reference to the MediatorObject's CmdInterp object
-	"""
+        """
         return self.the_mediator.interp
 
     def editor(self):
         """returns a reference to the MediatorObject's internal 
-	AppState (usually EdSim) editor 
-	"""
+        AppState (usually EdSim) editor 
+        """
         return self.the_mediator.app
 
     def quit(self):
         """cleanup the underlying MediatorObject
-	"""
+        """
         self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
             disconnect=0)
         self.the_mediator = None
@@ -514,18 +514,18 @@ class TempConfigOldMediatorFactory(Object.Object):
     def new_config(self, editor = None, skip_config = 0):
         """create a new TempConfig object
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState editor* -- the internal test editor to use, or None to
-	create a new EdSim instance
+        *AppState editor* -- the internal test editor to use, or None to
+        create a new EdSim instance
 
-	*BOOL skip_config* -- flag allowing you to create a
-	MediatorObject without configuring it 
+        *BOOL skip_config* -- flag allowing you to create a
+        MediatorObject without configuring it 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TempConfigOldMediator* --  the TempConfigOldOldMediator object
-	"""
+        *TempConfigOldMediator* --  the TempConfigOldOldMediator object
+        """
         if editor == None:
             app = EdSim.EdSim()
         else:
@@ -556,24 +556,24 @@ class TempConfigNewMediator(Object.Object):
 
     def mediator(self):
         """returns a reference to the TempConfig's MediatorObject or
-	NewMediatorObject 
-	"""
+        NewMediatorObject 
+        """
         return self.the_mediator
 
     def interpreter(self):
         """returns a reference to the MediatorObject's CmdInterp object
-	"""
+        """
         return self.the_mediator.interpreter()
 
     def editor(self):
         """returns a reference to the MediatorObject's internal 
-	AppState (usually EdSim) editor 
-	"""
+        AppState (usually EdSim) editor 
+        """
         return self.the_editor
 
     def quit(self):
         """cleanup the underlying MediatorObject
-	"""
+        """
         self.the_editor = None
         self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
             disconnect=0)
@@ -595,18 +595,18 @@ class TempConfigNewMediatorFactory(Object.Object):
     def new_config(self, editor = None, skip_config = 0):
         """create a new TempConfig object
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState editor* -- the internal test editor to use, or None to
-	create a new EdSim instance
+        *AppState editor* -- the internal test editor to use, or None to
+        create a new EdSim instance
 
-	*BOOL skip_config* -- flag allowing you to create a
-	MediatorObject without configuring it 
+        *BOOL skip_config* -- flag allowing you to create a
+        MediatorObject without configuring it 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TempConfigNewMediator* --  the TempConfigNewMediator object
-	"""
+        *TempConfigNewMediator* --  the TempConfigNewMediator object
+        """
         a_mediator = \
             NewMediatorObject.NewMediatorObject(symbol_match_dlg = \
                 self.symbol_match_dlg)

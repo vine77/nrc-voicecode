@@ -44,20 +44,20 @@ class wxAutoSplitterWindow(wxSplitterWindow, Object):
         wxDefaultSize, style = wxSP_3D, name = "splitterWindow", **args):
         """initialize: same arguments as wxSplitterWindow
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxWindow* parent -- parent window
+        *wxWindow* parent -- parent window
 
-	*wxWindowID* ID
+        *wxWindowID* ID
 
-	*wxPoint* point -- position of window
+        *wxPoint* point -- position of window
 
-	*wxSize* size -- size of window
+        *wxSize* size -- size of window
 
-	*INT* style
+        *INT* style
 
-	*STR* name
-	"""
+        *STR* name
+        """
 
         self.deep_construct(wxAutoSplitterWindow, {"previous_split":0,
             "split_mode": wxSPLIT_HORIZONTAL}, args, exclude_bases =
@@ -80,16 +80,16 @@ class wxAutoSplitterWindow(wxSplitterWindow, Object):
         event.Skip()
     def restore_split(self):
         """restores splitter sash to previous location, re-splitting the
-	window if one half has been hidden.
+        window if one half has been hidden.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
     
         if not self.IsSplit():
             first = self.GetWindow1()
@@ -105,12 +105,12 @@ class wxAutoSplitterWindow(wxSplitterWindow, Object):
 
     def unsplit(self, event):
         """event handler for UNSPLIT event
-	
-	**INPUTS**
-	
-	*wxSplitterEvent* event
-	
-	"""
+        
+        **INPUTS**
+        
+        *wxSplitterEvent* event
+        
+        """
         self.previous_split = self.GetSashPosition()
         self.split_mode = self.GetSplitMode()
         event.Skip()
@@ -118,10 +118,10 @@ class wxAutoSplitterWindow(wxSplitterWindow, Object):
     def save_previous_split(self, event):
         """event handler for EVT_SPLITTER_SASH_POS_CHANGED event
 
-	**INPUTS**
+        **INPUTS**
     
-	*wxSplitterEvent* event
-	"""
+        *wxSplitterEvent* event
+        """
         self.previous_split = event.GetSashPosition()
         self.split_mode = self.GetSplitMode()
         event.Skip()
@@ -142,15 +142,15 @@ class wxFixedFocusSplitter(wxAutoSplitterWindow):
     def __init__(self, parent, ID, fixed_focus = 1, **args):
         """initialize: same arguments as wxAutoSplitterWindow
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxWindow* parent -- parent window
+        *wxWindow* parent -- parent window
 
-	*wxWindowID* ID
+        *wxWindowID* ID
 
-	*INT* fixed_focus -- which window (1 or 2) should accept the focus
-	on an EVT_SET_FOCUS event
-	"""
+        *INT* fixed_focus -- which window (1 or 2) should accept the focus
+        on an EVT_SET_FOCUS event
+        """
 
 # initialize base class
         args["parent"] = parent
@@ -161,12 +161,12 @@ class wxFixedFocusSplitter(wxAutoSplitterWindow):
 
     def on_focus(self, event):
         """event handler for SET_FOCUS event
-	
-	**INPUTS**
-	
-	*wxFocusEvent* event
-	
-	"""
+        
+        **INPUTS**
+        
+        *wxFocusEvent* event
+        
+        """
         if ( self.fixed_focus == 2):
             second = self.GetWindow2()
             if second and second.IsShown():
@@ -178,16 +178,16 @@ class wxFixedFocusSplitter(wxAutoSplitterWindow):
 
     def set_default_focus(self, fixed_focus):
         """changes the window which will receive focus on SET_FOCUS.
-	Note: set_default_focus only changes the default to be used on
-	the next SET_FOCUS event.  It does not update the current focus.
+        Note: set_default_focus only changes the default to be used on
+        the next SET_FOCUS event.  It does not update the current focus.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* fixed_focus -- which window (1 or 2) should accept the focus
-	on an EVT_SET_FOCUS event
+        *INT* fixed_focus -- which window (1 or 2) should accept the focus
+        on an EVT_SET_FOCUS event
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.fixed_focus = fixed_focus

@@ -476,8 +476,8 @@ class SB_ServiceIndent(SB_Service):
         if self.indent_level != None:
             code_bef = self.replace_tabs(code_bef)
             code_after = self.replace_tabs(code_after)
-    	    debug.trace('SB_ServiceIndent.insert_indent',
-	            'after replacing tabs with spaces, code_bef="%s", code_after="%s"' % (code_bef, code_after))
+            debug.trace('SB_ServiceIndent.insert_indent',
+                    'after replacing tabs with spaces, code_bef="%s", code_after="%s"' % (code_bef, code_after))
             
 
         #

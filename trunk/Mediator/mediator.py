@@ -417,7 +417,7 @@ def execute_command(cmd):
 #    print '-- mediator.execute_command: cmd=%s' % cmd
     try:
         exec cmd in sim_commands.__dict__, sim_commands.command_space
-        #	  exec command in sim_commands and command_space
+        #  exec command in sim_commands and command_space
     except Exception, err:
         traceback.print_exc()
 
@@ -474,7 +474,7 @@ def new_execute_command(cmd, names):
 #    print '-- mediator.execute_command: cmd=%s' % cmd
     try:
         exec cmd in names
-        #	  exec command in sim_commands and command_space
+        #  exec command in sim_commands and command_space
     except Exception, err:
         traceback.print_exc()
 

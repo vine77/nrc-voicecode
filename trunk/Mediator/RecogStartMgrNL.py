@@ -86,16 +86,16 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
 
     def parse_module_info(self, module_info):
         """rearrange natlink's module_info in our format
-	
-	**INPUTS**
+        
+        **INPUTS**
 
-	*(STR, STR, INT)* -- the module name, window title, and window
-	handle
+        *(STR, STR, INT)* -- the module name, window title, and window
+        handle
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
-	"""
+        *(INT, STR, STR)* -- the window id, title, and module name
+        """
         module_path, title, handle = module_info
         module = os.path.basename(module_path)
         module = os.path.splitext(module)[0]
@@ -105,15 +105,15 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     def window_info(self):
         """find the window id, title, and module of the current window
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        *(INT, STR, STR)* -- the window id, title, and module name.  The
         module name should be converted to all lowercase
-	"""
+        """
         return self.parse_module_info(natlink.getCurrentModule())
 
     def starting(self, module_info):

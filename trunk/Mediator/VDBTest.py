@@ -334,7 +334,7 @@ class WaxEditPane(wxPanel):
                 exec command \
                     in sys.modules[self.__class__.__module__].__dict__, \
                     self.command_space
-                #	  exec command in self.command_space
+                #  exec command in self.command_space
             except Exception, err:
                 traceback.print_exc()
         finally:
@@ -345,9 +345,9 @@ class WaxEditPane(wxPanel):
             sys.stderr = stderr
     def initial_show(self):
         """create editor and log windows.  This is done here, rather
-	than in __init__ because this is the first time that the actual
-	size of the parent splitter window, top_and_bottom, is known
-	"""
+        than in __init__ because this is the first time that the actual
+        size of the parent splitter window, top_and_bottom, is known
+        """
         self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
         self.voice_buffer.activate()
         print natlink.getCurrentModule()
@@ -454,14 +454,14 @@ class WaxEditFrame(wxFrame):
     def update_status_bar(self, m):
         """change the message in the status bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* m -- new message
+        *STR* m -- new message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.SetStatusText(m)
         return
     def quit_now(self, event):

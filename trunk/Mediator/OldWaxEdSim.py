@@ -221,26 +221,26 @@ class WaxEdSimPane(wxPanel):
     def editor_buffer(self):
         """returns a reference to the TextBufferWX embedded in the GUI
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUT**
+        **OUTPUT**
 
-	*TextBufferWX* -- the TextBufferWX
-	"""
+        *TextBufferWX* -- the TextBufferWX
+        """
         return self.wax_text_buffer
 
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
+        **OUTPUTS**
+        *BOOL* -- true if editor window has the focus
+        """
 #fudge so that recog mimic works from the command line.
 #        return self.parent.is_active()
 
@@ -300,7 +300,7 @@ class WaxEdSimPane(wxPanel):
 #                exec command \
 #                    in sys.modules[self.__class__.__module__].__dict__, \
 #                    self.command_space
-                #	  exec command in self.command_space
+                #  exec command in self.command_space
 #                print self.command_space['quit_flag']
             except Exception, err:
                 traceback.print_exc()
@@ -316,9 +316,9 @@ class WaxEdSimPane(wxPanel):
     
     def initial_show(self):
         """create editor and log windows.  This is done here, rather
-	than in __init__ because this is the first time that the actual
-	size of the parent splitter window, top_and_bottom, is known
-	"""
+        than in __init__ because this is the first time that the actual
+        size of the parent splitter window, top_and_bottom, is known
+        """
         self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
     
     def focus_editor(self, event):
@@ -335,28 +335,28 @@ class WaxEdSimPane(wxPanel):
     def set_change_callback(self, change_callback = None):
         """changes the callback to a new function
 
-	**INPUTS**
+        **INPUTS**
       
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name, *BOOL* program_initiated)
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *STR* buff_name, *BOOL* program_initiated)
 
-	The arguments to the change callback specify the character offsets
-	of the start and end of the changed region (before the change),
-	the text with which this region was replaced, the start and end
-	of the selected region (after the change), the name of the
-	buffer reporting the change, and whether the change was
-	program-initiated or editor-initiated.
+        The arguments to the change callback specify the character offsets
+        of the start and end of the changed region (before the change),
+        the text with which this region was replaced, the start and end
+        of the selected region (after the change), the name of the
+        buffer reporting the change, and whether the change was
+        program-initiated or editor-initiated.
 
-	Note the difference between this change_callback and the
-	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  
+        Note the difference between this change_callback and the
+        TextBufferWX one: here the name of the buffer is returned,
+        rather than a reference to the underlying TextBufferWX.  
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.change_callback = change_callback
 
 
@@ -384,8 +384,8 @@ class WaxEdSimFrame(wxFrame):
 
     def cleanup(self):
         """necessary because of circular references: 
-	child contains reference to parent.  Note: quit_now calls
-	cleanup"""
+        child contains reference to parent.  Note: quit_now calls
+        cleanup"""
         self.exiting = 1
         try:
             self.pane.cleanup()
@@ -449,19 +449,19 @@ class WaxEdSimFrame(wxFrame):
 
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
-	displayed in the title bar
+        displayed in the title bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
 
-	"""
+        """
         self.the_instance_string = instance_string
         self.update_title()
         return 1
@@ -469,21 +469,21 @@ class WaxEdSimFrame(wxFrame):
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of current file
+        *STR* name -- name of current file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.name = name
         self.update_title()
 
     def update_title(self):
         """update the window title to reflect the file name as well as
-	the title string
-	"""
+        the title string
+        """
         title = self.title
         if self.instance_string:
             title = title + ' ' + self.instance_string
@@ -494,26 +494,26 @@ class WaxEdSimFrame(wxFrame):
     def editor_buffer(self):
         """returns a reference to the TextBufferWX embedded in the GUI
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUT**
+        **OUTPUT**
 
-	*TextBufferWX* -- the TextBufferWX
-	"""
+        *TextBufferWX* -- the TextBufferWX
+        """
         return self.pane.editor_buffer()
 
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
+        **OUTPUTS**
+        *BOOL* -- true if editor window has the focus
+        """
         if not self.is_active():
             return 0
         return self.pane.editor_has_focus()
@@ -532,14 +532,14 @@ class WaxEdSimFrame(wxFrame):
     def update_status_bar(self, m):
         """change the message in the status bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* m -- new message
+        *STR* m -- new message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.SetStatusText(m)
         return
     def quit_now(self, event):
@@ -556,7 +556,7 @@ class WaxEdSimFrame(wxFrame):
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-# hack to get CmdInterp to scan for symbols	    
+# hack to get CmdInterp to scan for symbols    
             self.pane.command_space['open_file'](file_path)
 #            self.app_control.open_file(file_path)
         dlg.Destroy()
@@ -625,14 +625,14 @@ class WaxEdSimFrame(wxFrame):
     def is_active(self):
         """indicates whether the editor frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         return self.activated
 
 class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
@@ -650,14 +650,14 @@ class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
     """
     def __init__(self, command_space = None, dummy = 0):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*INT* dummy -- passed on to wxApp: don't know what this does,
-	but it always seems to be set to zero
+        *INT* dummy -- passed on to wxApp: don't know what this does,
+        but it always seems to be set to zero
 
-	*{STR:ANY}* command_space -- a namespace (dictionary) in which to
-	execute commands from the command line
-	"""
+        *{STR:ANY}* command_space -- a namespace (dictionary) in which to
+        execute commands from the command line
+        """
         self.command_space = command_space
         wxApp.__init__(self, dummy)
 
@@ -673,45 +673,45 @@ class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
     def editor_buffer(self):
         """returns a reference to the TextBufferWX embedded in the GUI
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUT**
+        **OUTPUT**
 
-	*TextBufferWX* -- the TextBufferWX
-	"""
+        *TextBufferWX* -- the TextBufferWX
+        """
         return self.frame.editor_buffer()
 
     def open_file_in_buffer(self, name):
         """opens a new file in the existing TextBufferWX
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true on success (otherwise the existing file is left
-	there)
-	"""
+        *BOOL* -- true on success (otherwise the existing file is left
+        there)
+        """
         return self.frame.editor_buffer().underlying.LoadFile(name)
     
     def save_file(self, full_path, no_prompt = 0):
         """Saves the file in the existing TextBufferWX
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	*BOOL no_prompt* -- if true, don't prompt before overwriting
-	an existing file.
+        *BOOL no_prompt* -- if true, don't prompt before overwriting
+        an existing file.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true on success (otherwise the existing file is left
-	there)
-	"""
+        *BOOL* -- true on success (otherwise the existing file is left
+        there)
+        """
         if not no_prompt:
             answer = wxMessageBox("Replace file %s?" % (full_path), 
                 "Save File", wxYES_NO, self.frame)
@@ -723,39 +723,39 @@ class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
     def is_active(self):
         """indicates whether the editor frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         return self.frame.is_active()
 
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
+        **OUTPUTS**
+        *BOOL* -- true if editor window has the focus
+        """
         return self.frame.editor_has_focus()
 
     def mic_change(self, state):
         """function to receive microphone state change callbacks
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+        *STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.frame.mic_change(state)
 
 
@@ -764,43 +764,43 @@ class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
       
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
-	displayed in the title bar
+        displayed in the title bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         return self.frame.set_instance_string(instance_string)
       
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of current file
+        *STR* name -- name of current file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.frame.set_name(name)
     def run(self, app_control):
         """starts the message loop.  Note: this function does not
-	return until the GUI exits.
+        return until the GUI exits.
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppStateWaxEdit app_control* -- reference to corresponding 
-	AppState interface
+        *AppStateWaxEdit app_control* -- reference to corresponding 
+        AppState interface
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.frame.app_control = app_control
         self.update_mic_button()
         self.MainLoop()

@@ -86,16 +86,16 @@ class InstanceSpace:
     def bind_to_space(self, names, methods):
         """add bound copies of specified methods to the given dictionary
 
-	**NOTE:** bind_to_space doesn't check that the named methods are
-	actually methods
+        **NOTE:** bind_to_space doesn't check that the named methods are
+        actually methods
 
-	**INPUTS**
+        **INPUTS**
 
-	*{STR:ANY} names* -- dictionary into which to insert the  bound
-	methods
+        *{STR:ANY} names* -- dictionary into which to insert the  bound
+        methods
 
-	*[STR] methods* -- the list of method names to insert
-	"""
+        *[STR] methods* -- the list of method names to insert
+        """
         for method in methods:
             names[method] = getattr(self, method)
             

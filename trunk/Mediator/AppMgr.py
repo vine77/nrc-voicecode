@@ -50,27 +50,27 @@ class InstanceInfo(Object):
     def name(self):
         """return name of instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	**STR** -- the instance name
-	"""
+        **STR** -- the instance name
+        """
         return self.instance_name
 
     def application(self):
         """return name of application
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	**STR** -- the application name
-	"""
+        **STR** -- the application name
+        """
         return self.application_name
 
 class AppMgr(OwnerObject, AppState.AppCbkHandler):
@@ -120,15 +120,15 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def __init__(self, recog_mgr, mediator = None, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*RecogStartMgr* recog_mgr -- reference to a RecogStartMgr object
-	
-	*NewMediatorObject* mediator -- reference to the mediator which owns
-	this AppMgr, or None if this AppMgr is used only for testing
-	purposes and has no mediator to notify of callbacks from the
-	applications
-	"""
+        *RecogStartMgr* recog_mgr -- reference to a RecogStartMgr object
+        
+        *NewMediatorObject* mediator -- reference to the mediator which owns
+        this AppMgr, or None if this AppMgr is used only for testing
+        purposes and has no mediator to notify of callbacks from the
+        applications
+        """
         self.deep_construct(AppMgr,
                             {
                              'mediator': mediator,
@@ -158,17 +158,17 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def app_instances(self, app_name = None):
         """names of application instances being managed
-	**INPUTS**
-	
-	*STR* app_name -- list names of instances corresponding only to
-	this application name (or list all instances if app_name is
-	None)
+        **INPUTS**
+        
+        *STR* app_name -- list names of instances corresponding only to
+        this application name (or list all instances if app_name is
+        None)
 
-	**OUTPUTS**
-	
-	*[STR]* -- list of names of applications being managed (e.g.
-	"Emacs (Win)", "jEdit")
-	"""
+        **OUTPUTS**
+        
+        *[STR]* -- list of names of applications being managed (e.g.
+        "Emacs (Win)", "jEdit")
+        """
         if app_name == None:
             all_instances = []
             for application in self.app_names():
@@ -181,14 +181,14 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         return self.mediator.interpreter()
     
     def console(self):
@@ -397,21 +397,21 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
     def add_prefix(self, app_name, title_prefix):
         """add a title prefix for an editor application
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* app_name -- name of the editor application
+        *STR* app_name -- name of the editor application
 
-	*STR* title_prefix  -- a unique string for each application, 
-	used as the prefix of the title string (which is in turn 
-	included as a substring of the window title, if the editor 
-	can do so).  The prefix should be entirely alphabetic and
-	contain no spaces or punctuation.
+        *STR* title_prefix  -- a unique string for each application, 
+        used as the prefix of the title string (which is in turn 
+        included as a substring of the window title, if the editor 
+        can do so).  The prefix should be entirely alphabetic and
+        contain no spaces or punctuation.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- false if app_name was already known, or prefix wasn't
-	unique
-	"""
+        *BOOL* -- false if app_name was already known, or prefix wasn't
+        unique
+        """
 
         if app_name in self.title_prefixes.keys():
             return 0
@@ -423,29 +423,29 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         
     def app_names(self):
         """names of applications being managed
-	**INPUTS**
-	
-	*none* 
+        **INPUTS**
+        
+        *none* 
 
-	**OUTPUTS**
-	
-	*[STR]* -- list of names of applications being managed (e.g.
-	"Emacs (Win)", "jEdit")
-	"""
+        **OUTPUTS**
+        
+        *[STR]* -- list of names of applications being managed (e.g.
+        "Emacs (Win)", "jEdit")
+        """
         return self.instance_names.keys()
 
     def app_name(self, instance):
         """name of application corresponding to an instance
 
-	**INPUTS**
-	
-	*STR* instance -- name of the application instance
+        **INPUTS**
+        
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
-	
-	*STR* -- name of corresponding application, or None if the
-	instance is unknown
-	"""
+        **OUTPUTS**
+        
+        *STR* -- name of corresponding application, or None if the
+        instance is unknown
+        """
         if not self.instance_data.has_key(instance):
             return None
         return self.instance_data[instance].application()
@@ -453,90 +453,90 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
     def add_module(self, module):
         """add a new KnownTargetModule object to the RecogStartMgr
 
-	**INPUTS**
+        **INPUTS**
 
-	*KnownTargetModule* module -- the new module
+        *KnownTargetModule* module -- the new module
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true unless a module of the same name already exists
-	"""
+        *BOOL* -- true unless a module of the same name already exists
+        """
         self.recog_mgr.add_module(module)
 
     def trust_current(self, trust = 1):
         """specifies whether the RecogStartMgr should trust that the current
-	window corresponds to the editor when the editor first connects to
-	VoiceCode, or when it notifies VoiceCode of a new window.
+        window corresponds to the editor when the editor first connects to
+        VoiceCode, or when it notifies VoiceCode of a new window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* trust -- 1 if RSM should trust that the current
-	window corresponds to the editor when the editor first connects to
-	VoiceCode, or when it notifies VoiceCode of a new window.
+        *BOOL* trust -- 1 if RSM should trust that the current
+        window corresponds to the editor when the editor first connects to
+        VoiceCode, or when it notifies VoiceCode of a new window.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.recog_mgr.trust_current(trust)
         
     def known_window(self, window):
         """is window a known window ID?
 
-	**INPUTS**
+        **INPUTS**
     
-	*INT* window -- window handle of the window
+        *INT* window -- window handle of the window
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if window is a known window associated with one or more
-	editor instances
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if window is a known window associated with one or more
+        editor instances
+        """
         return self.recog_mgr.known_window(window)
 
     def known_windows(self, instance = None):
         """list of windows known to be associated with  a particular
-	named application instance.
+        named application instance.
 
-	**INPUTS**
+        **INPUTS**
     
-	*STR* instance -- list names of windows corresponding to this
-	instance name (or list all known windows if instance is
-	None)
+        *STR* instance -- list names of windows corresponding to this
+        instance name (or list all known windows if instance is
+        None)
 
-	**OUTPUTS**
-	
-	*[INT]* -- list of window handles
-	"""
+        **OUTPUTS**
+        
+        *[INT]* -- list of window handles
+        """
         return self.recog_mgr.known_windows(instance)
 
     def window_info(self):
         """find the window id, title, and module of the current window
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
-	"""
+        *(INT, STR, STR)* -- the window id, title, and module name
+        """
         return self.recog_mgr.window_info()
 
     def _add_new_instance(self, app):
         """private method called internally to do the work of
-	new_instance, except for notifying the recog_mgr.
+        new_instance, except for notifying the recog_mgr.
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* app --  AppState interface corresponding to the new
-	instance
+        *AppState* app --  AppState interface corresponding to the new
+        instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of the application instance.  Necessary
-	if you want to add windows to the application in the future.
-	"""
+        *STR* -- name of the application instance.  Necessary
+        if you want to add windows to the application in the future.
+        """
         app_name = app.app_name
         if app_name not in self.app_names():
             self.instance_names[app_name] = []
@@ -561,25 +561,25 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
             window_info = None):
         """add a new application instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* app --  AppState interface corresponding to the new
-	instance
+        *AppState* app --  AppState interface corresponding to the new
+        instance
 
-	*BOOL* check_window -- should we check to see if the
-	current window belongs to this instance?
+        *BOOL* check_window -- should we check to see if the
+        current window belongs to this instance?
 
-	*(INT, STR, STR) window_info*  -- window id, title, and module of 
-	the current window as detected by the TCP server when it
-	originally processed the new editor connection, or None to let
-	RSM.new_instance check now.  Ignored unless check_window is
-	true.
+        *(INT, STR, STR) window_info*  -- window id, title, and module of 
+        the current window as detected by the TCP server when it
+        originally processed the new editor connection, or None to let
+        RSM.new_instance check now.  Ignored unless check_window is
+        true.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of the application instance.  Necessary
-	if you want to add windows to the application in the future.
-	"""
+        *STR* -- name of the application instance.  Necessary
+        if you want to add windows to the application in the future.
+        """
         new_name = self._add_new_instance(app)
         self.recog_mgr.new_instance(new_name, check_window, window_info)
 #        print repr(self.app_instance(new_name))
@@ -589,18 +589,18 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         exclusive = 1):
         """add a new application instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* app --  AppState interface corresponding to the new
-	instance
+        *AppState* app --  AppState interface corresponding to the new
+        instance
 
-	*BOOL* exclusive -- use exclusive grammars?
+        *BOOL* exclusive -- use exclusive grammars?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of the application instance.  Necessary
-	if you want to add windows to the application in the future.
-	"""
+        *STR* -- name of the application instance.  Necessary
+        if you want to add windows to the application in the future.
+        """
         new_name = self._add_new_instance(app)
         if self.recog_mgr.new_universal_instance(new_name, exclusive):
             return new_name
@@ -613,14 +613,14 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         from management.  (because the call comes from the mediator, we
         don't need to send a delete_editor_cbk to the mediator)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance to be removed
+        *STR* instance -- name of the application instance to be removed
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.instances.has_key(instance):
             app_name = self.instance_data[instance].application()
             self.instance_names[app_name].remove(instance)
@@ -631,16 +631,16 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def close_app_cbk(self, instance, unexpected = 0):
         """callback from AppState which indicates that the application has 
-	closed or disconnected from the mediator
+        closed or disconnected from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance to be removed
+        *STR* instance -- name of the application instance to be removed
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.known_instance(instance):
             if self.mediator:
                 self.mediator.delete_editor_cbk(self.app_name(instance), 
@@ -649,18 +649,18 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has closed a buffer
+        has closed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         # this should call NewMediatorObject, unless all buffer-specific
         # information is stored under AppMgr.  Since I haven't decided
         # yet where that information will be stored, do nothing for now
@@ -668,18 +668,18 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def open_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has opened a new buffer 
+        has opened a new buffer 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was opened
+        *STR* buff_name -- name of the buffer which was opened
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         # this should call NewMediatorObject, unless all buffer-specific
         # information is stored under AppMgr.  Since I haven't decided
         # yet where that information will be stored, do nothing for now
@@ -687,18 +687,18 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def curr_buff_name_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the current
-	buffer has changed
+        buffer has changed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the newly current buffer 
+        *STR* buff_name -- name of the newly current buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # I don't think we ever need to do anything with this call (it is only
 # included in AppState for completeness of ClientEditor)
         pass
@@ -706,20 +706,20 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
         """callback from AppState which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         # this should also call NewMediatorObject, unless all buffer-specific
         # information is stored under AppMgr.  For now, that is the
         # case.
@@ -727,16 +727,16 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def new_window(self, instance):
         """called when the editor notifies us of a new window for the 
-	specified instance
+        specified instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window is added
-	"""
+        *BOOL* -- true if window is added
+        """
         if self.known_instance(instance): 
 #            print 'am new window'
 #            print instance, self.app_instance(instance)
@@ -747,14 +747,14 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         """called when the editor notifies us that its process is about
         to be suspended
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
 # AppStateMessaging keeps track of the state of the editor -- AppState
 # calls this callback only for the benefit of client editor
         pass
@@ -763,30 +763,30 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         """called when the editor notifies us that its process has 
         resumed after having been suspended 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
 # AppStateMessaging keeps track of the state of the editor -- AppState
 # calls this callback only for the benefit of client editor
         pass
     
     def specify_window(self, instance):
         """called to indicate that user has manually identified a
-	known instance with the current window 
+        known instance with the current window 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window is added
-	"""
+        *BOOL* -- true if window is added
+        """
 # we still want to check for consistency
 #        print 'app specify'
         if not self.known_instance(instance):
@@ -796,19 +796,19 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def delete_window(self, instance, window):
         """remove window from list of known windows
-	corresponding to an editor application instance.
+        corresponding to an editor application instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
     
-	*INT* window -- window handle of the window
+        *INT* window -- window handle of the window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window and instance are known (otherwise, does
-	nothing)
-	"""
+        *BOOL* -- true if window and instance are known (otherwise, does
+        nothing)
+        """
         if self.known_instance(instance): 
             return self.recog_mgr.delete_window(instance, window)
         return 0
@@ -816,46 +816,46 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
     def known_instance(self, instance):
         """checks whether a specific instance name is known
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the instance
+        *STR* instance -- name of the instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if an instance by that name is being managed
-	"""
+        *BOOL* -- true if an instance by that name is being managed
+        """
         return self.instances.has_key(instance)
 
     def window_instances(self, window):
         """returns the list of known instances corresponding to a given
-	window handle, in the order of most recent activation
+        window handle, in the order of most recent activation
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle 
+        *INT* window -- the window handle 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- list of names of instances associated with the
-	window, or None if the window is unknown
-	"""
+        *[STR]* -- list of names of instances associated with the
+        window, or None if the window is unknown
+        """
         return self.recog_mgr.window_instances(window)
  
     def app_instance(self, instance):
         """return a reference to the AppState object corresponding to a
-	particular instance. **Note:** Use only temporarily.  Storing 
-	this reference is unsafe, and may lead to mediator crashes on 
-	calls to its methods, and to failure to free resources.
+        particular instance. **Note:** Use only temporarily.  Storing 
+        this reference is unsafe, and may lead to mediator crashes on 
+        calls to its methods, and to failure to free resources.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*AppState* -- temporary reference to the corresponding AppState
-	object
-	"""
+        *AppState* -- temporary reference to the corresponding AppState
+        object
+        """
         if not self.instances.has_key(instance):
             return None
         return self.instances[instance]
@@ -863,40 +863,40 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
     def instance_module(self, instance):
         """returns the module associated with the given instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- the name of the instance
+        *STR* instance -- the name of the instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the name of the module associated with the instance, or
-	None if it is unknown (because the instance has not yet been
-	associated with any windows)
-	"""
+        *STR* -- the name of the module associated with the instance, or
+        None if it is unknown (because the instance has not yet been
+        associated with any windows)
+        """
         if self.known_instance(instance): 
             return self.recog_mgr.instance_module(instance)
         return None
      
     def _assign_ID_client(self, module_name, window, title):
         """check if there is a WinIDClient not yet assigned to a window.
-	If so, attempt to assign it to the specified window, and return
-	a TargetWindow object.
+        If so, attempt to assign it to the specified window, and return
+        a TargetWindow object.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* module_name -- the name of the module corresponding to the
-	window
+        *STR* module_name -- the name of the module corresponding to the
+        window
 
-	*INT* window -- the window handle of the window
+        *INT* window -- the window handle of the window
 
-	*STR* title -- the title of the window
+        *STR* title -- the title of the window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- an object of subclass of TargetWindow managed
-	by the unassigned WinIDClient, or None if there is no unassigned 
-	client, or the given window is not managed by that client.
-	"""
+        *TargetWindow* -- an object of subclass of TargetWindow managed
+        by the unassigned WinIDClient, or None if there is no unassigned 
+        client, or the given window is not managed by that client.
+        """
 # WinIDClient support is not yet implemented
         return None
 

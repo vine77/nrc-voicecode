@@ -59,16 +59,16 @@ class CSCmd(Object):
     def applies(self, app):
         """test whether any of its contexts applies, and returns
 
-	**INPUTS**
+        **INPUTS**
 
         [AppState] app is the application into which the command was spoken.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*meaning* -- meaning if a Context applies,
-	otherwise None
+        *meaning* -- meaning if a Context applies,
+        otherwise None
 
-	"""
+        """
         
         #
         # Try each of the contextual meanings in turn until find one that

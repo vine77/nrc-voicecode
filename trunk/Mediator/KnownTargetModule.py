@@ -53,19 +53,19 @@ class KnownTargetModule(Object):
     def __init__(self, module_name, title_escape = None, **args):
         """
 
-	**INPUTS**
+        **INPUTS**
     
-	*STR* module_name -- name of the module, as detected by
-	RecogStartMgr
+        *STR* module_name -- name of the module, as detected by
+        RecogStartMgr
 
-	*(STR, STR)* title_escape -- the escape sequences to be sent before 
-	and after the the string to place in the window title, or None
-	if there is no known escape sequence
+        *(STR, STR)* title_escape -- the escape sequences to be sent before 
+        and after the the string to place in the window title, or None
+        if there is no known escape sequence
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(KnownTargetModule, 
                             {'module_name': string.lower(module_name),
                              'title_escape': title_escape
@@ -75,141 +75,141 @@ class KnownTargetModule(Object):
     def name(self):
         """return the name of the module
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of the module
-	"""
+        *STR* -- name of the module
+        """
         return self.module_name
     
     def dedicated(self):
         """is this module dedicated to a specific (local) editor, or is it a
-	(local or remote) shell in which many programs can be run?
+        (local or remote) shell in which many programs can be run?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window dedicated to a specific editor
-	"""
+        *BOOL* -- is window dedicated to a specific editor
+        """
         debug.virtual('KnownTargetModule.dedicated')
 
     def editor(self):
         """if dedicated, returns VoiceCode's name for the corresponding
-	editor
+        editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- VoiceCode's internal name for the editor corresponding
-	to this module (or None if not dedicated)
-	"""
+        *STR* -- VoiceCode's internal name for the editor corresponding
+        to this module (or None if not dedicated)
+        """
         debug.virtual('KnownTargetModule.editor')
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         debug.virtual('KnownTargetModule.single_window')
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         debug.virtual('KnownTargetModule.variable_title')
 
     def title_escape_sequence(self):
         """returns the escape sequence which can be used to set the 
-	module's window title, if any.  
+        module's window title, if any.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(STR, STR)* title_escape -- the escape sequences to be sent before 
-	and after the the string to place in the window title.  If
-	there is no known escape sequence, both strings will be set to
-	the empty string.
-	"""
+        *(STR, STR)* title_escape -- the escape sequences to be sent before 
+        and after the the string to place in the window title.  If
+        there is no known escape sequence, both strings will be set to
+        the empty string.
+        """
         if self.title_escape == None:
             return ("", "")
         return self.title_escape
 
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
         debug.virtual('KnownTargetModule.new_window')
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         debug.virtual('KnownTargetModule.verify_new_instance')
         
 class LocalInterpreter(KnownTargetModule):
@@ -229,102 +229,102 @@ class LocalInterpreter(KnownTargetModule):
     """
     def __init__(self, title_varies = 0, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* title_varies -- can the title of the window be changed?
+        *BOOL* title_varies -- can the title of the window be changed?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(LocalInterpreter, 
                             {'title_varies': title_varies}, args)
 
     def dedicated(self):
         """is this module dedicated to a specific (local) editor, or is it a
-	(local or remote) shell in which many programs can be run?
+        (local or remote) shell in which many programs can be run?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window dedicated to a specific editor
-	"""
+        *BOOL* -- is window dedicated to a specific editor
+        """
         return 0
 
     def editor(self):
         """if dedicated, returns VoiceCode's name for the corresponding
-	editor
+        editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- VoiceCode's internal name for the editor corresponding
-	to this module (or None if not dedicated)
-	"""
+        *STR* -- VoiceCode's internal name for the editor corresponding
+        to this module (or None if not dedicated)
+        """
         return None
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return 0
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         return self.title_varies
 
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance_name -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance_name -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
         return TargetWindow.SharedWindow(window = window, 
             module = self.name(), 
             instance = instance_name, 
@@ -333,23 +333,23 @@ class LocalInterpreter(KnownTargetModule):
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.variable_title():
             app = editors.app_instance(instance)
             s = app.instance_string()
@@ -379,101 +379,101 @@ class RemoteShell(KnownTargetModule):
     """
     def __init__(self, title_varies = 0, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* title_varies -- can the title of the window be changed?
+        *BOOL* title_varies -- can the title of the window be changed?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(RemoteShell, {'title_varies': title_varies}, args)
 
     def dedicated(self):
         """is this module dedicated to a specific (local) editor, or is it a
-	(local or remote) shell in which many programs can be run?
+        (local or remote) shell in which many programs can be run?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window dedicated to a specific editor
-	"""
+        *BOOL* -- is window dedicated to a specific editor
+        """
         return 0
 
     def editor(self):
         """if dedicated, returns VoiceCode's name for the corresponding
-	editor
+        editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- VoiceCode's internal name for the editor corresponding
-	to this module (or None if not dedicated)
-	"""
+        *STR* -- VoiceCode's internal name for the editor corresponding
+        to this module (or None if not dedicated)
+        """
         return None
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return 0
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         return self.title_varies
 
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance_name -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance_name -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
         return TargetWindow.SharedWindow(window = window, 
             module = self.name(), 
             instance = instance_name, 
@@ -482,23 +482,23 @@ class RemoteShell(KnownTargetModule):
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.variable_title():
             app = editors.app_instance(instance)
             s = app.instance_string()
@@ -528,75 +528,75 @@ class DedicatedModule(KnownTargetModule):
     """
     def __init__(self, editor, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* editor -- VoiceCode's internal name for the editor to
-	which this module is dedicated
+        *STR* editor -- VoiceCode's internal name for the editor to
+        which this module is dedicated
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(DedicatedModule, {'editor_name': editor}, args)
 
     def dedicated(self):
         """is this module dedicated to a specific (local) editor, or is it a
-	(local or remote) shell in which many programs can be run?
+        (local or remote) shell in which many programs can be run?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window dedicated to a specific editor
-	"""
+        *BOOL* -- is window dedicated to a specific editor
+        """
         return 1
 
     def editor(self):
         """if dedicated, returns VoiceCode's name for the corresponding
-	editor
+        editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- VoiceCode's internal name for the editor corresponding
-	to this module (or None if not dedicated)
-	"""
+        *STR* -- VoiceCode's internal name for the editor corresponding
+        to this module (or None if not dedicated)
+        """
         return self.editor_name
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return 0
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
 # for dedicated windows, we will query the editor to see if the title
 # can vary
         return 1
@@ -604,29 +604,29 @@ class DedicatedModule(KnownTargetModule):
 
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance_name -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance_name -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
         single = self.single_display(window, title)
         return TargetWindow.DedicatedWindow(window = window, 
             module = self.name(), instance = instance_name, 
@@ -634,23 +634,23 @@ class DedicatedModule(KnownTargetModule):
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.variable_title():
             app = editors.app_instance(instance)
 #            print 'verify new instance'
@@ -684,43 +684,43 @@ class RemoteDisplay(KnownTargetModule):
     """
     def __init__(self, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(RemoteDisplay, {}, args)
 
     def dedicated(self):
         """is this module dedicated to a specific (local) editor, or is it a
-	(local or remote) shell in which many programs can be run?
+        (local or remote) shell in which many programs can be run?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window dedicated to a specific editor
-	"""
+        *BOOL* -- is window dedicated to a specific editor
+        """
         return 0
 
     def editor(self):
         """if dedicated, returns VoiceCode's name for the corresponding
-	editor
+        editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- VoiceCode's internal name for the editor corresponding
-	to this module (or None if not dedicated)
-	"""
+        *STR* -- VoiceCode's internal name for the editor corresponding
+        to this module (or None if not dedicated)
+        """
         return None
 
 
@@ -739,95 +739,95 @@ class SingleWindowDisplay(RemoteDisplay):
     """
     def __init__(self, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(SingleWindowDisplay, {}, args)
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return 1
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         return 0
     
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
 # SingleWindowDisplay needs a  subwindow identification client, which
 # will act as the window factory
         return None
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
 # should never be called when single_display is true, but just in case
         return None
                 
@@ -849,73 +849,73 @@ class MultiWindowDisplay(RemoteDisplay):
     """
     def __init__(self, title_varies = 1, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* title_varies -- can the title of the window be changed?
+        *BOOL* title_varies -- can the title of the window be changed?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(MultiWindowDisplay, 
                             {'title_varies': title_varies}, args)
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return 0
 
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         debug.virtual('KnownTargetModule.variable_title')
     
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
 # without an instance, we can't distinguish between dedicated and shared
 # windows, so we can't create the appropriate TargetWindow
         if instance_name == None or not editors.known_instance(instance_name):
@@ -934,23 +934,23 @@ class MultiWindowDisplay(RemoteDisplay):
     
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.variable_title():
             app = editors.app_instance(instance)
             s = app.instance_string()
@@ -980,41 +980,41 @@ class DualModeDisplay(RemoteDisplay):
     """
     def __init__(self, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(DualModeDisplay, {}, args)
     
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.
-	**Note:** the caller should first check single_display.  If it
-	returns true, then the module cannot act as a window factory.
-	Instead, the subwindow identification client will play that role.
-	**Also note:** some subclasses will be unable to create a new
-	window without an initial instance.
+        **Note:** the caller should first check single_display.  If it
+        returns true, then the module cannot act as a window factory.
+        Instead, the subwindow identification client will play that role.
+        **Also note:** some subclasses will be unable to create a new
+        window without an initial instance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- the window handle (unique identifier) of the
-	window
+        *INT* window -- the window handle (unique identifier) of the
+        window
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- the application manager
-	 
-	*STR* instance -- the name of the initial instance belonging to
-	the window, or None if there is none initially
+        *AppMgr* editors -- the application manager
+         
+        *STR* instance -- the name of the initial instance belonging to
+        the window, or None if there is none initially
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TargetWindow* -- a new TargetWindow object, or None
-	if the module is unable to create one
-	"""
+        *TargetWindow* -- a new TargetWindow object, or None
+        if the module is unable to create one
+        """
 # if this is a single-window display, we need a subwindow identification
 # client to create a TargetWindow object
         if self.single_display(window, title):
@@ -1037,23 +1037,23 @@ class DualModeDisplay(RemoteDisplay):
 
     def verify_new_instance(self, window, title, instance, editors):
         """attempt to verify whether the window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.single_display(window, title):
             return None
         if self.variable_title():
@@ -1088,22 +1088,22 @@ class DualModeDisplayByTitle(DualModeDisplay):
     """
     def __init__(self, title_regex, title_varies = 1, **args):
         """ 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title_regex -- regular expression compared against the window
-	title to see if this remote display is running in single-window mode
-	**Note:** If the title must be an exact match, title_regex
-	should include ^ and $ explicitly to require matches only at the
-	beginning and end of the title string.  (?i) can be used to
-	specify a case-insensitive search.
+        *STR* title_regex -- regular expression compared against the window
+        title to see if this remote display is running in single-window mode
+        **Note:** If the title must be an exact match, title_regex
+        should include ^ and $ explicitly to require matches only at the
+        beginning and end of the title string.  (?i) can be used to
+        specify a case-insensitive search.
 
-	*BOOL* title_varies -- can the title of the window be changed (when
-	in multi-window mode?
+        *BOOL* title_varies -- can the title of the window be changed (when
+        in multi-window mode?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(DualModeDisplayByTitle, 
                             {'title_regex': title_regex,
                              'title_varies': title_varies},
@@ -1111,19 +1111,19 @@ class DualModeDisplayByTitle(DualModeDisplay):
 
     def single_display(self, window, title):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         if re.search(self.title_regex, title) == None:
             return 0
         return 1
@@ -1131,15 +1131,15 @@ class DualModeDisplayByTitle(DualModeDisplay):
     def variable_title(self):
         """can an editor running in this module change the window title?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the module allows the editor to change the
-	window title
-	"""
+        *BOOL* -- true if the module allows the editor to change the
+        window title
+        """
         return self.title_varies
 
 

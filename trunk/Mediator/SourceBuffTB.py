@@ -61,16 +61,16 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
     def __init__(self, underlying_buffer, change_specification = 0, 
         f_name = None, **attrs):
         """
-	Create the SourceBuffTB object
+        Create the SourceBuffTB object
 
-	**INPUTS**
+        **INPUTS**
 
-	*TextBuffer, VisibleBuffer, NumberedLines underlying_buffer* -- 
-	underlying TextBuffer (also supporting VisibleBuffer and NumberedLines) 
+        *TextBuffer, VisibleBuffer, NumberedLines underlying_buffer* -- 
+        underlying TextBuffer (also supporting VisibleBuffer and NumberedLines) 
 
-	*BOOL change_specification* -- tells whether the underlying
-	buffer also supports change specification
-	"""
+        *BOOL change_specification* -- tells whether the underlying
+        buffer also supports change specification
+        """
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
@@ -93,27 +93,27 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         selection_end, buffer, program_initiated):
         """method called by the underlying buffer to signal a change
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of the changed region
-	
-	*INT* end -- end of the changed region
-	
-	*STR* text -- new text for the changed region
+        *INT* start -- start of the changed region
+        
+        *INT* end -- end of the changed region
+        
+        *STR* text -- new text for the changed region
 
-	*INT* selection_start -- start of selection after change
+        *INT* selection_start -- start of selection after change
 
-	*INT* selection_end -- end of selection after change
+        *INT* selection_end -- end of selection after change
 
-	*TextBufferChangeSpecify* buffer -- underlying buffer
-	
-	*BOOL* program_initiated -- true if the change was initiated by
-	a program call to the buffer's methods
+        *TextBufferChangeSpecify* buffer -- underlying buffer
+        
+        *BOOL* program_initiated -- true if the change was initiated by
+        a program call to the buffer's methods
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # program-initiated changes will already call on_change, so we don't
 # want to report them twice
         if program_initiated:
@@ -183,95 +183,95 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
 
     def set_selection(self, range, cursor_at = 1):
         """sets range of current selection, and sets the position to 
-	beginning or end of the selection.
+        beginning or end of the selection.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- offsets into buffer of the start and end
-	of the selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
+        *(INT, INT)* range -- offsets into buffer of the start and end
+        of the selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
 
-	*INT* cursor_at -- indicates whether the cursor should be
-	placed at the left (0) or right (1) end of the selection.  Note:
+        *INT* cursor_at -- indicates whether the cursor should be
+        placed at the left (0) or right (1) end of the selection.  Note:
         cursor_at is ignored unless the application supports this
-	choice, as indicated by bidirectional_selection.  
-	Most Windows applications do not.
+        choice, as indicated by bidirectional_selection.  
+        Most Windows applications do not.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.underlying.set_selection(range[0], range[1])
 
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region returned.
-	Defaults to start of buffer.
+        *INT start* is the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
+        *STR* -- contents of specified range of the buffer
+        """
         return self.underlying.get_text(start, end)
       
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer.  Note: this is a low level
-	interface.  Usually, higher level interfaces like insert and
-	delete are preferable.
+        interface.  Usually, higher level interfaces like insert and
+        delete are preferable.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* is the new text.
-	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
+        *STR text* is the new text.
+        
+        *INT start* is the offset into the buffer of the text to the
+        replaced.  Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the text to be replaced (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         start, end = self.make_valid_range((start, end))
         self.underlying.set_text(text, start, end)
         self.on_change(start, end, text, 1)
 
     def get_visible(self):
         """ get start and end offsets of the currently visible region of
-	the buffer.  End is the offset of the first character not
-	visible (matching Python's slice convention)
+        the buffer.  End is the offset of the first character not
+        visible (matching Python's slice convention)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end)
-	"""
+        *INT* (start, end)
+        """
         return self.underlying.get_visible()
 
     def make_position_visible(self):
         """scroll buffer (if necessary) so that the current position
-	is visible
+        is visible
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.underlying.make_position_visible()
     
     def line_num_of(self, position = None):
@@ -292,14 +292,14 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
     def len(self):
         """return length of buffer in characters.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* length 
-	"""
+        *INT* length 
+        """
         return self.underlying.len()
 
     def beginning_of_line(self, pos):
@@ -359,17 +359,17 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         """Replace text in range with 
         with text
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* -- new text
+        *STR text* -- new text
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         if range == None:
             start, end = self.get_selection()
@@ -386,34 +386,34 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         code *STR code_bef* and *str code_after*. Cursor is put right
         after code *STR bef*.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* code_bef -- code to be inserted before new cursor location
+        *STR* code_bef -- code to be inserted before new cursor location
         
-	*STR* code_bef -- code to be inserted after new cursor location
+        *STR* code_bef -- code to be inserted after new cursor location
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         
         self.indent_srv.insert_indent(code_bef, code_after, range)
 
     def indent(self, range = None):
         """Indent code in a source buffer region.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         self.indent_srv.indent(range)
 
@@ -459,15 +459,15 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
     def delete(self, range = None):
         """Delete text in a source buffer range.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- code range to be deleted.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be deleted.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if range == None:
             start, end = self.get_selection()
         else:
@@ -478,7 +478,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
     def goto(self, pos):
 
         """Moves the cursor to position *INT pos* of source buffer
-	(and make selection empty)
+        (and make selection empty)
         """
 
         self.underlying.set_selection(pos, pos)
@@ -490,7 +490,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
-	"""
+        """
         self.underlying.goto_line(linenum, where)
 
     def refresh(self):
@@ -500,52 +500,52 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
 
     def _state_cookie_class(self):
         """returns the class object for the type of cookie used by
-	store_current_state.
+        store_current_state.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*CLASS* -- class of state cookies corresponding to this
-	SourceBuff
+        *CLASS* -- class of state cookies corresponding to this
+        SourceBuff
 
-	"""
+        """
         return self.state_srv._state_cookie_class()
         
     def store_current_state(self):
         """stores the current state of the buffer, including both the
-	contents and the current selection, for subsequent restoration.
-	store_current_state returns a "cookie" which can be passed to
-	restore_state or compare_with_current.  The type and attributes
-	of the cookie will depend on the specific subclass of
-	SourceBuff.  In the most straightforward implementation, it 
-	may include a copy of the entire contents of the
-	buffer and the selection.  In other cases, particularly when the
-	editor or SourceBuff provides an internal undo stack, it may simply be a
-	reference to a point in this stack.
-	
-	Important Notes:
-	
+        contents and the current selection, for subsequent restoration.
+        store_current_state returns a "cookie" which can be passed to
+        restore_state or compare_with_current.  The type and attributes
+        of the cookie will depend on the specific subclass of
+        SourceBuff.  In the most straightforward implementation, it 
+        may include a copy of the entire contents of the
+        buffer and the selection.  In other cases, particularly when the
+        editor or SourceBuff provides an internal undo stack, it may simply be a
+        reference to a point in this stack.
+        
+        Important Notes:
+        
         You should only pass the cookie to methods of
-	the SAME SourceBuff object from which it came.  Generally,
-	cookies can not be pickled and retrieved.
+        the SAME SourceBuff object from which it came.  Generally,
+        cookies can not be pickled and retrieved.
 
-	The type of cookie will vary with the concrete subclass 
-	of SourceBuff.  The corresponding class object is 
-	returned by _state_cookie_class.  However, external callers
-	should not depend on the type, attributes, or methods 
-	of the cookie.
+        The type of cookie will vary with the concrete subclass 
+        of SourceBuff.  The corresponding class object is 
+        returned by _state_cookie_class.  However, external callers
+        should not depend on the type, attributes, or methods 
+        of the cookie.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*SourceBuffState* -- state cookie (see above)
-	"""
+        *SourceBuffState* -- state cookie (see above)
+        """
         return self.state_srv.store_current_state()
 
     def restore_state(self, cookie):
@@ -556,7 +556,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         data, such as the search history, may not.  The restore
         operation can fail, which will be indicated by a return value of
         0, so the caller should always check the return value.
-	
+        
         **INPUTS**
 
         *SourceBuffState cookie* -- see above.
@@ -571,62 +571,62 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
 
     def compare_states(self, first_cookie, second_cookie, selection = 0):
         """compares the buffer states at the times when
-	two cookies were returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to either cookie has
-	been lost, compare_states will return false.
+        two cookies were returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to either cookie has
+        been lost, compare_states will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
         store_current_state.  Note that SourceBuffCookie is a dummy 
         type, not an actual class.  The actual type will vary with 
         SourceBuff subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if states are the same, false if they are not, or
-	it cannot be determined due to expiration of either cookie
-	"""
+        *BOOL* -- true if states are the same, false if they are not, or
+        it cannot be determined due to expiration of either cookie
+        """
         return self.state_srv.compare_states(first_cookie,
             second_cookie, selection)
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
-	the cookie was returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to the cookie has
-	been lost, compare_with_current will return false.
+        the cookie was returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see store_current_state.
+        *SourceBuffState cookie* -- see store_current_state.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if state is the same, false if it is not, or
-	it cannot be determined due to expiration of the cookie
-	"""
+        *BOOL* -- true if state is the same, false if it is not, or
+        it cannot be determined due to expiration of the cookie
+        """
         return self.state_srv.compare_with_current(cookie, selection)
         
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
-	If the state corresponding to the cookie has
-	been lost, valid_cookie will return false.
+        If the state corresponding to the cookie has
+        been lost, valid_cookie will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see store_current_state. 
+        *SourceBuffState cookie* -- see store_current_state. 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if cookie is valid (i.e. restore_state should be
-	able to work)
-	"""
+        *BOOL* -- true if cookie is valid (i.e. restore_state should be
+        able to work)
+        """
         return self.state_srv.valid_cookie(cookie)
 
     def newline_conventions(self):

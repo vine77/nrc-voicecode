@@ -637,24 +637,24 @@ class SymDict(PickledObject.PickledObject):
 
     def peek_at_unresolved(self):
         """returns a reference to the dictionary of unresolved abbreviations
-	and the symbols containing those abbreviations.
+        and the symbols containing those abbreviations.
 
-	**NOTE:** This method is intended only for diagnostic testing
-	purpose.  The caller must not modify the dictionary returned
+        **NOTE:** This method is intended only for diagnostic testing
+        purpose.  The caller must not modify the dictionary returned
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
-	unresolved abbreviations. These are abbreviations that have
-	appeared in at least one compiled symbol, yet are neither a word
-	in the speech vocabulary or a known abbreviation. Values are
-	dictionnaries that list the symbols containing the unresolved
-	abbreviation.
-	"""
+        *{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
+        unresolved abbreviations. These are abbreviations that have
+        appeared in at least one compiled symbol, yet are neither a word
+        in the speech vocabulary or a known abbreviation. Values are
+        dictionnaries that list the symbols containing the unresolved
+        abbreviation.
+        """
         return self.unresolved_abbreviations
 
     def parse_standard_symbols(self, add_sr_entries=1):
@@ -730,12 +730,12 @@ class SymDict(PickledObject.PickledObject):
                 
     def parse_symbols(self, contents, language_name, add_sr_entries=1):
         """Parse symbols from a string representing the contents of a 
-	source file.
+        source file.
 
         *STR* contents -- the contents of the source file
 
-	*STR* language_name -- the name of the language of the source
-	file
+        *STR* language_name -- the name of the language of the source
+        file
 
         *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
         
@@ -1142,9 +1142,9 @@ class SymDict(PickledObject.PickledObject):
 
         **OUTPUTS**
         
-	*STR* -- name of the language.  Returns *None* if there doesn'
-	t exist a proper language definition, or if can't tell what 
-	language the source file is written in.
+        *STR* -- name of the language.  Returns *None* if there doesn'
+        t exist a proper language definition, or if can't tell what 
+        language the source file is written in.
 
         """
 
@@ -1355,7 +1355,7 @@ class SymDict(PickledObject.PickledObject):
 
 #        print '-- SymDict.reg_pseudo_to_native_symbol: words=%s' % words
         trace('SymDict.reg_pseudo_to_native_symbol', 
-	    'words = %s' % repr(words))
+            'words = %s' % repr(words))
 
         #
         # Generate string for the regexp.
@@ -1378,7 +1378,7 @@ class SymDict(PickledObject.PickledObject):
         regexp_string = ' (' + reg_non_alphanums
         for a_word in words:
             trace('SymDict.reg_pseudo_to_native_symbol',
-	        'a_word=%s' % a_word)
+                'a_word=%s' % a_word)
             if len(a_word) > 0:
                 regexp_string = regexp_string + '(' + a_word[0]
                 for a_remaining_char in a_word[1:]:
@@ -1388,7 +1388,7 @@ class SymDict(PickledObject.PickledObject):
 
 
         trace('SymDict.reg_pseudo_to_native_symbol', 
-	    'regexp_string="%s"' % regexp_string)
+            'regexp_string="%s"' % regexp_string)
         
         #
         # Compile regexp with flags=IGNORECASE (i.e. case insensitive match)

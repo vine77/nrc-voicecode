@@ -100,8 +100,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         INT *window_id* -- The ID of the window that was active when
         the recognition began.                
 
-	*BOOL block* -- true if the speech engine can detect recog_end
-	events reliably.  If so, and if the editor is capable of doing so, 
+        *BOOL block* -- true if the speech engine can detect recog_end
+        events reliably.  If so, and if the editor is capable of doing so, 
         the editor may (at its discretion) also stop responding to user
         input until method [recog_end()] is invoked.  This is to
         prevent a bunch of problems that can arise if the user types
@@ -109,14 +109,14 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         cases, the results of the utterance interpretation can be
         unpredictable, especially when it comes to correction.
 
-	**NOTE:** However, if block is false, the editor **MUST NOT**
-	stop responding, because the mediator will not be able to use
-	recog_end to tell it to resume responding to user input.  
+        **NOTE:** However, if block is false, the editor **MUST NOT**
+        stop responding, because the mediator will not be able to use
+        recog_end to tell it to resume responding to user input.  
 
-	Also, the editor must provide a way for the user to re-enable
-	input manually, in case the mediator crashes.  If it cannot do
-	so, it should not stop responding, regardless of the value of
-	block.
+        Also, the editor must provide a way for the user to re-enable
+        input manually, in case the mediator crashes.  If it cannot do
+        so, it should not stop responding, regardless of the value of
+        block.
 
         **OUTPUTS**
         
@@ -194,25 +194,25 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
-	sequence which can be used to set the module's window title, if
-	any.  If the editor has its own mechanism for setting the window
-	title, it should simply ignore this method.  
+        sequence which can be used to set the module's window title, if
+        any.  If the editor has its own mechanism for setting the window
+        title, it should simply ignore this method.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* before -- the escape sequence to be sent before the string
-	to place in the window title, or the empty string if there is no
-	escape sequence
+        *STR* before -- the escape sequence to be sent before the string
+        to place in the window title, or the empty string if there is no
+        escape sequence
 
-	*STR* after -- the escape sequence which terminates the window
-	title value
+        *STR* after -- the escape sequence which terminates the window
+        title value
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
-	"""
+        """
 # for right now at least, Emacs doesn't handle this message, so we
 # should just return the same value set by the earlier call to
 # set_instance_string

@@ -46,188 +46,188 @@ class SpokenUtterance(OwnerObject):
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- list of spoken forms from the utterance
-	"""
+        *[STR]* -- list of spoken forms from the utterance
+        """
         debug.virtual('SpokenUtterance.spoken_forms')
 
     def words(self):
         """returns list of words (as (spoken, written) 2-tuples) 
-	from the utterance.
+        from the utterance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
-	
-	"""
+        *[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
+        
+        """
         debug.virtual('SpokenUtterance.words')
       
     def adapt(self, words):
         """changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
+        subsequent correction boxes can display the corrected list, and
+        informs the speech engine of the corrected list of words, so
+        it can adapt.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
+        *[(STR, STR)]* -- corrected list of words 
+        (as (spoken, written) 2-tuples) 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the adaption was accepted
-	"""
+        *BOOL* -- true if the adaption was accepted
+        """
         debug.virtual('SpokenUtterance.adapt')
 
     def adapt_spoken(self, spoken_forms):
         """changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
+        subsequent correction boxes can display the corrected list, and
+        informs the speech engine of the corrected list of words, so
+        it can adapt.
 
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
+        *[STR]* spoken_forms -- corrected list of spoken forms 
+        (written forms will be assumed to be identical)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the adaption was accepted
-	"""
+        *BOOL* -- true if the adaption was accepted
+        """
         debug.virtual('SpokenUtterance.adapt_spoken')
 
     def set_words(self, words):
         """changes the stored list of words (after correction) so that 
-	subsequent correction boxes can display the corrected list.
-	The results object is unaffected.
+        subsequent correction boxes can display the corrected list.
+        The results object is unaffected.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
+        *[(STR, STR)]* -- corrected list of words 
+        (as (spoken, written) 2-tuples) 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
+        *none*
 
-	"""
+        """
         debug.virtual('SpokenUtterance.set_words')
 
     def set_spoken(self, spoken_forms):
         """changes the stored list of words (after correction) so that 
-	subsequent correction boxes can display the corrected list.
-	The results object is unaffected.
+        subsequent correction boxes can display the corrected list.
+        The results object is unaffected.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
+        *[STR]* spoken_forms -- corrected list of spoken forms 
+        (written forms will be assumed to be identical)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
+        *none*
 
-	"""
+        """
         debug.virtual('SpokenUtterance.set_spoken')
 
     def playback_available(self):
         """indicates whether playback of the utterance is available.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if playback is available, false if it is not
-	(because utterance wasn't actually spoken, or speech data has 
-	been lost, or because the implementation doesn't support
-	playback)
-	"""
+        *BOOL* -- true if playback is available, false if it is not
+        (because utterance wasn't actually spoken, or speech data has 
+        been lost, or because the implementation doesn't support
+        playback)
+        """
         debug.virtual('SpokenUtterance.playback_available')
       
 
     def playback(self):
         """plays back recorded utterance.
 
-	Playback is synchronous.  It will handle turning the microphone
-	off and back on again (if necessary)
+        Playback is synchronous.  It will handle turning the microphone
+        off and back on again (if necessary)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true unless playback was unavailable, or 
-	there was an error in playback (e.g.  another program had 
-	control of the audio device)
-	"""
+        *BOOL* -- true unless playback was unavailable, or 
+        there was an error in playback (e.g.  another program had 
+        control of the audio device)
+        """
         debug.virtual('SpokenUtterance.playback')
       
     def can_be_adapted(self):
         """indicates whether the utterance can be corrected for adaption
-	of the speech engine.  Utterances for which there was no speech
-	information or for which the speech information has been lost or
-	discarded may not be adaptable.
+        of the speech engine.  Utterances for which there was no speech
+        information or for which the speech information has been lost or
+        discarded may not be adaptable.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the speech information is available for adaption.
-	"""
+        *BOOL* -- true if the speech information is available for adaption.
+        """
         debug.virtual('SpokenUtterance.can_be_adapted')
       
     def alternatives_available(self):
         """returns number of recognition alternatives available 
-	(for the whole utterance), or -1 if the number
-	is unknown.
+        (for the whole utterance), or -1 if the number
+        is unknown.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- number of recognition alternatives available (including
-	the original), or -1 if the number is unknown (NaturallySpeaking
-	doesn't indicate the total number, but simply lets you keep
-	asking for the next one until it runs out.
-	"""
+        *INT* -- number of recognition alternatives available (including
+        the original), or -1 if the number is unknown (NaturallySpeaking
+        doesn't indicate the total number, but simply lets you keep
+        asking for the next one until it runs out.
+        """
         debug.virtual('SpokenUtterance.alternatives_available')
 
     def alternatives(self, n):
         """returns the best recognition alternatives available 
-	(for the whole utterance) including the original.  
-	Will not return more than n alternatives, but may return fewer
-	(if the speech engine has not provided that many).
+        (for the whole utterance) including the original.  
+        Will not return more than n alternatives, but may return fewer
+        (if the speech engine has not provided that many).
 
-	Note: the first alternative in the list will not be identical
-	to the output of words(), if the phrase has previously been
-	corrected with set_words.
+        Note: the first alternative in the list will not be identical
+        to the output of words(), if the phrase has previously been
+        corrected with set_words.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* n -- number of alternatives requested
+        *INT* n -- number of alternatives requested
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[[(STR, STR)]]* -- list of list of words (as (spoken, written) 
-	2-tuples) 
-	
-	"""
+        *[[(STR, STR)]]* -- list of list of words (as (spoken, written) 
+        2-tuples) 
+        
+        """
         debug.virtual('SpokenUtterance.words')
       

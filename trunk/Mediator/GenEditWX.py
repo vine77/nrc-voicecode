@@ -602,7 +602,7 @@ class WaxCmdPanel(WaxPanel):
 #                exec command \
 #                    in sys.modules[self.__class__.__module__].__dict__, \
 #                    self.command_space
-                #	  exec command in self.command_space
+                #  exec command in self.command_space
             except Exception, err:
                 traceback.print_exc()
 

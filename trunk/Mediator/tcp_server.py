@@ -181,7 +181,7 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
         If *pos* not specified, drop breadcrumb at cursor position.
 
         If *buff* not specified either, drop breadcrumb in current buffer
-	"""
+        """
         self.breadcrumbs_srv.drop_breadcrumb(buff_name, pos)
 
 
@@ -219,20 +219,20 @@ class AppStateFactory(Object.Object):
     def new_instance(self, app_name, id, listen_msgr, talk_msgr,
         listen_can_block = 0):
         """create a new AppState of the subclass appropriate to the given
-	app_name.
+        app_name.
 
-	**INPUTS**
-	    
-	STR *app_name* -- Name of the editor for which we want to
-	create an [AppStateMessaging].
+        **INPUTS**
+            
+        STR *app_name* -- Name of the editor for which we want to
+        create an [AppStateMessaging].
 
-	STR *id* -- Unique ID of external editor connected to the [AppState]
-	
-	[Messenger] *listen_msgr* -- [Messenger] instance to use for the
-	VC listener side of the connection.
+        STR *id* -- Unique ID of external editor connected to the [AppState]
+        
+        [Messenger] *listen_msgr* -- [Messenger] instance to use for the
+        VC listener side of the connection.
 
-	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
-	VC talker side of the connection.
+        [Messenger] *talk_msgr* -- [Messenger] instance to use for the
+        VC talker side of the connection.
       
         *BOOL listen_can_block* -- flag indicating that the listen_msgr to
         can block on get_mess if there is no message waiting.  This flag is
@@ -240,12 +240,12 @@ class AppStateFactory(Object.Object):
         servers should be set up so that listen_msgr avoids blocking and 
         simply return None if there are no messages.
 
-	**OUTPUTS**
-	
-	*AppStateMessaging* -- the new AppStateMessaging representing the
-	editor instance 
+        **OUTPUTS**
+        
+        *AppStateMessaging* -- the new AppStateMessaging representing the
+        editor instance 
 
-	..[AppState] file:///./AppState.AppState.html"""
+        ..[AppState] file:///./AppState.AppState.html"""
 
         debug.virtual('AppStateFactory.new_instance')
 
@@ -269,20 +269,20 @@ class AppStateFactorySimple(AppStateFactory):
     def new_instance(self, app_name, id, listen_msgr, talk_msgr,
         listen_can_block = 0):
         """create a new AppState of the subclass appropriate to the given
-	app_name.
+        app_name.
 
-	**INPUTS**
-	    
-	STR *app_name* -- Name of the editor for which we want to
-	create an [AppStateMessaging].
+        **INPUTS**
+            
+        STR *app_name* -- Name of the editor for which we want to
+        create an [AppStateMessaging].
 
-	STR *id* -- Unique ID of external editor connected to the [AppState]
-	
-	[Messenger] *listen_msgr* -- [Messenger] instance to use for the
-	VC listener side of the connection.
+        STR *id* -- Unique ID of external editor connected to the [AppState]
+        
+        [Messenger] *listen_msgr* -- [Messenger] instance to use for the
+        VC listener side of the connection.
 
-	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
-	VC talker side of the connection.
+        [Messenger] *talk_msgr* -- [Messenger] instance to use for the
+        VC talker side of the connection.
         
         *BOOL listen_can_block* -- flag indicating that the listen_msgr to
         can block on get_mess if there is no message waiting.  This flag is
@@ -290,14 +290,14 @@ class AppStateFactorySimple(AppStateFactory):
         servers should be set up so that listen_msgr avoids blocking and 
         simply return None if there are no messages.
 
-	**OUTPUTS**
+        **OUTPUTS**
     
-	**OUTPUTS**
-	
-	*AppStateMessaging* -- the new AppStateMessaging representing the
-	editor instance 
+        **OUTPUTS**
+        
+        *AppStateMessaging* -- the new AppStateMessaging representing the
+        editor instance 
 
-	..[AppState] file:///./AppState.AppState.html"""
+        ..[AppState] file:///./AppState.AppState.html"""
 
 
         kw_args = {}
@@ -691,8 +691,8 @@ class ServerSingleThread(Object.Object):
         
         socket *talk_sock* -- The talk socket
 
-	BOOL *test_client* -- flag indicating whether or not the client
-	is expecting to be used for regression testing
+        BOOL *test_client* -- flag indicating whether or not the client
+        is expecting to be used for regression testing
         
 
         **OUTPUTS**
@@ -999,7 +999,7 @@ class ServerSingleThread(Object.Object):
         TIMEOUT = 200  #msecs
 #        TIMEOUT = 5000  #msecs
         counter = 0
-        while 1:		
+        while 1:
             rc = win32event.MsgWaitForMultipleObjects(
                         (self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit), 
@@ -1187,18 +1187,18 @@ class ServerMainThread(Object.OwnerObject):
       
     def remove_other_references(self):
         """Perform any cleanup prior to quitting.  Called when the main 
-	thread has exited its event loop.  Subclasses which override
-	this method should be sure to call their parent class's version
-	after doing their own cleanup.
+        thread has exited its event loop.  Subclasses which override
+        this method should be sure to call their parent class's version
+        after doing their own cleanup.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         for id in self.data_threads.keys():
             self.deactivate_data_thread(id)
         Object.OwnerObject.remove_other_references(self)
@@ -1219,7 +1219,7 @@ class ServerMainThread(Object.OwnerObject):
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -1228,14 +1228,14 @@ class ServerMainThread(Object.OwnerObject):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         debug.virtual('ServerMainThread.data_event')
 
     def new_data_thread(self, id, listen_sock, connection_ending,
         testing = 0):
         """creates a new ListenAndQueueMsgsThread to monitor the
-	listen_sock
+        listen_sock
         
         **INPUTS**
 
@@ -1243,19 +1243,19 @@ class ServerMainThread(Object.OwnerObject):
         
         socket *listen_sock* -- The listen socket
 
-	Event *connection_ending* -- threading.Event 
-	used to signal to the data thread that the connection is 
-	ending, or the server is quitting
+        Event *connection_ending* -- threading.Event 
+        used to signal to the data thread that the connection is 
+        ending, or the server is quitting
 
-	*BOOL testing* -- indicates whether we are running in regression
-	testing mode
+        *BOOL testing* -- indicates whether we are running in regression
+        testing mode
         
         **OUTPUTS**
         
         [ListenAndQueueMsgsThread] -- the new threading.Thread object
 
         ..[ListenAndQueueMsgsThread] 
-	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
+        file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
         data_event = self.data_event(id)
         return self.new_data_thread_given_event(id, listen_sock, data_event, 
             connection_ending, testing = testing)
@@ -1263,7 +1263,7 @@ class ServerMainThread(Object.OwnerObject):
     def new_data_thread_given_event(self, id, listen_sock, data_event,
             connection_ending, testing = 0):
         """creates a new ListenAndQueueMsgsThread to monitor the
-	listen_sock
+        listen_sock
         
         **INPUTS**
 
@@ -1271,22 +1271,22 @@ class ServerMainThread(Object.OwnerObject):
         
         socket *listen_sock* -- The listen socket
 
-	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
-	to pass to the new thread
+        SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
+        to pass to the new thread
 
-	Event *connection_ending* -- threading.Event 
-	used to signal to the data thread that the connection is 
-	ending, or the server is quitting
+        Event *connection_ending* -- threading.Event 
+        used to signal to the data thread that the connection is 
+        ending, or the server is quitting
 
-	*BOOL testing* -- indicates whether we are running in regression
-	testing mode
+        *BOOL testing* -- indicates whether we are running in regression
+        testing mode
         
         **OUTPUTS**
         
         [ListenAndQueueMsgsThread] -- the new threading.Thread object
 
         ..[ListenAndQueueMsgsThread] 
-	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
+        file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
         sleeper = messaging.LightSleeper(connection_ending)
         sleepy_time = 0.05
         if testing:
@@ -1301,21 +1301,21 @@ class ServerMainThread(Object.OwnerObject):
       
     def deactivate_data_thread(self, id):
         """method to deactivate the data thread associated with a 
-	given socket id.  **Note:** if the thread is daemonic (will not
-	prevent the mediator process from ending), and the particular 
-	thread class used doesn't provide a way to kill the thread, 
-	this method may simply ensure that no messages from that thread
-	are processed.
+        given socket id.  **Note:** if the thread is daemonic (will not
+        prevent the mediator process from ending), and the particular 
+        thread class used doesn't provide a way to kill the thread, 
+        this method may simply ensure that no messages from that thread
+        are processed.
 
-	**INPUTS**
+        **INPUTS**
 
         STR *id* -- The unique identifier assigned by VoiceCode to
         the socket pair.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # we don't currently have a perfect way of deactivating the thread before 
 # it puts any more messages on the Queue.  However,
 # process_ready_socks does check to see if the id's it receives in the
@@ -1331,43 +1331,43 @@ class ServerMainThread(Object.OwnerObject):
 
     def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
-	package_sock_pair
+        package_sock_pair
         
         **INPUTS**
         
         STR *id* -- The unique ID of the listen socket
 
-	AppStateMessaging *instance*  -- the new instance
+        AppStateMessaging *instance*  -- the new instance
 
-	*(INT, STR, STR) window_info* -- the window id, title, and module name
-	of the external editor, or None if not detected yet
+        *(INT, STR, STR) window_info* -- the window id, title, and module name
+        of the external editor, or None if not detected yet
 
-	BOOL *test_client* -- flag indicating whether or not the client
-	is expecting to be used for regression testing
+        BOOL *test_client* -- flag indicating whether or not the client
+        is expecting to be used for regression testing
         
         **OUTPUTS**
         
-	*BOOL* -- true if the instance should be added to our list.
-	false if we failed to create a new instance, or if we created
-	it, but it should be destroyed because it has run
-	the test suite and the server should exit 
-	"""
+        *BOOL* -- true if the instance should be added to our list.
+        false if we failed to create a new instance, or if we created
+        it, but it should be destroyed because it has run
+        the test suite and the server should exit 
+        """
         debug.virtual('ServerMainThread._new_instance')
         
     def known_instance(self, id):
         """returns a reference to the AppStateMessaging instance 
-	associated with  the given ID
+        associated with  the given ID
         **INPUTS**
         
         STR *id* -- The unique ID of the listen socket
 
         **OUTPUTS**
 
-	*AppStateMessaging* -- the corresponding instance, or None if
-	the id is unknown
+        *AppStateMessaging* -- the corresponding instance, or None if
+        the id is unknown
         
         *none*
-	"""
+        """
         debug.virtual('ServerMainThread.known_instance')
 
     def possible_editor_cleanup(self, app):
@@ -1414,19 +1414,19 @@ class ServerMainThread(Object.OwnerObject):
 
         STR *app_name* -- Name of the external editor.
 
-	*(INT, STR, STR) window_info* -- the window id, title, and module name
+        *(INT, STR, STR) window_info* -- the window id, title, and module name
         
         socket *listen_sock* -- The listen socket
         
         socket *talk_sock* -- The talk socket
         
-	BOOL *test_client* -- flag indicating whether or not the client
-	is expecting to be used for regression testing
+        BOOL *test_client* -- flag indicating whether or not the client
+        is expecting to be used for regression testing
 
         **OUTPUTS**
         
-	*BOOL* -- false if the server should exit (because we're done
-	running the test suite)
+        *BOOL* -- false if the server should exit (because we're done
+        running the test suite)
 
         ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""        
         
@@ -1568,8 +1568,8 @@ class ServerMainThread(Object.OwnerObject):
 
         **OUTPUTS**
         
-	*BOOL* -- false if the server should exit (because we're done
-	running the test suite)
+        *BOOL* -- false if the server should exit (because we're done
+        running the test suite)
         """
 
         stay_alive = 1
@@ -1633,8 +1633,8 @@ class ServerMainThread(Object.OwnerObject):
         **INPUTS**
 
         [STR] *ready_socks* -- List of IDs of sockets which may
-	have messages waiting, or None to check all sockets in
-	data_threads.keys()
+        have messages waiting, or None to check all sockets in
+        data_threads.keys()
         
         **OUTPUTS**
         
@@ -1651,26 +1651,26 @@ class ServerMainThread(Object.OwnerObject):
 
     def start_other_threads(self, listener_evt, talker_evt):
         """method called to start the secondary threads which
-	monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
+        monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
         with the main thread by means of InterThreadEvent objects, to
-	let the main thread know to initialize them.
+        let the main thread know to initialize them.
 
-	These tasks are handled by separate threads because they can
-	block.   The secondary threads do not do the initialization
-	directly because that involves invoking some natlink methods, 
-	and Natlink does not behave well outside of the main thread.
+        These tasks are handled by separate threads because they can
+        block.   The secondary threads do not do the initialization
+        directly because that involves invoking some natlink methods, 
+        and Natlink does not behave well outside of the main thread.
         
         **INPUTS**
         
-	*InterThreadEvent* listener_evt -- event object for the
-	ListenNewEditorsThread to use to notify the main thread that a
-	new editor has connected on the VC_LISTEN port, and that
-	handshake_listen_socks should be called
-	
-	*InterThreadEvent* talker_evt -- event object for the
-	NewConnListThread to use to notify the main thread that a
-	new talker connection has been established on the VC_TALK port, 
-	and that handshake_talk_socks should be called
+        *InterThreadEvent* listener_evt -- event object for the
+        ListenNewEditorsThread to use to notify the main thread that a
+        new editor has connected on the VC_LISTEN port, and that
+        handshake_listen_socks should be called
+        
+        *InterThreadEvent* talker_evt -- event object for the
+        NewConnListThread to use to notify the main thread that a
+        new talker connection has been established on the VC_TALK port, 
+        and that handshake_talk_socks should be called
 
         **OUTPUTS**
         
@@ -1749,18 +1749,18 @@ class ServerOldMediator(ServerMainThread):
 
     def remove_other_references(self):
         """Perform any cleanup prior to quitting.  Called when the main 
-	thread has exited its event loop.  Subclasses which override
-	this method should be sure to call their parent class's version
-	after doing their own cleanup.
+        thread has exited its event loop.  Subclasses which override
+        this method should be sure to call their parent class's version
+        after doing their own cleanup.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         for id in self.active_meds.keys():
 # except for editors running regression tests, the MediatorObject should
 # own its editor, so quitting the former should cleanup the editor
@@ -1776,24 +1776,24 @@ class ServerOldMediator(ServerMainThread):
 
     def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
-	package_sock_pair
+        package_sock_pair
         
         **INPUTS**
         
         STR *id* -- The unique ID of the listen socket
 
-	AppStateMessaging *instance*  -- the new instance
+        AppStateMessaging *instance*  -- the new instance
 
-	BOOL *test_client* -- flag indicating whether or not the client
-	is expecting to be used for regression testing
+        BOOL *test_client* -- flag indicating whether or not the client
+        is expecting to be used for regression testing
 
         **OUTPUTS**
         
-	*BOOL* -- true if the instance should be added to our list.
-	false if we failed to create a new instance, or if we created
-	it, but it should be destroyed because it has run
-	the test suite and the server should exit 
-	"""
+        *BOOL* -- true if the instance should be added to our list.
+        false if we failed to create a new instance, or if we created
+        it, but it should be destroyed because it has run
+        the test suite and the server should exit 
+        """
         sys.stderr.write("new instance\n")
         window = window_info[0]
         if test_client and self.test_suite != None:
@@ -1851,7 +1851,7 @@ class ServerOldMediator(ServerMainThread):
 
     def known_instance(self, id):
         """returns a reference to the AppStateMessaging instance 
-	associated with  the given ID
+        associated with  the given ID
     
         **INPUTS**
         
@@ -1859,32 +1859,32 @@ class ServerOldMediator(ServerMainThread):
 
         **OUTPUTS**
 
-	*AppStateMessaging* -- the corresponding instance, or None if
-	the id is unknown
+        *AppStateMessaging* -- the corresponding instance, or None if
+        the id is unknown
         
         *none*
-	"""
+        """
         if self.active_meds.has_key(id):
             return self.active_meds[id].app
         return None
     
     def delete_instance_cbk(self, id, unexpected = 0):
         """callback to let MediatorObject notify us that the
-	corresponding external editor has exited or disconnected from
-	the mediator.  Only used with the old MediatorObject
+        corresponding external editor has exited or disconnected from
+        the mediator.  Only used with the old MediatorObject
 
-	**INPUTS**
+        **INPUTS**
 
         STR *id* -- The unique identifier assigned by VoiceCode to
         that socket pair.
       
- 	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.active_meds.has_key(id):
             self.deactivate_data_thread(id)
             self._destroy_mediator(id)
@@ -1925,24 +1925,24 @@ class ServerOldMediator(ServerMainThread):
 
     def old_quit(self):
         """have ServerOldMediator quit the event loop
-	"""
+        """
 # ServerOldMediator actually doesn't know anything about the event loop,
 # so we have to define this in a subclass
         debug.virtual('ServerOldMediator.old_quit')
 
     def _destroy_mediator(self, id):
         """private method to destroy the old MediatorObject
-	corresponding to the given id
+        corresponding to the given id
 
-	**INPUTS**
+        **INPUTS**
 
         STR *id* -- The unique identifier assigned by VoiceCode to
         that mediator.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.active_meds[id].quit(clean_sr_voc=0, save_speech_files=0, 
             disconnect=0)
         del self.active_meds[id]
@@ -1977,7 +1977,7 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -1986,15 +1986,15 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
 
 
     def run(self):
         """Start the server
         This method calls runs 2 threads that raise Win32 events respectively 
-	when:
+        when:
 
         - a request for a new connections on VC_LISTEN port is
           received (*self.evt_new_listen_conn* event).
@@ -2002,10 +2002,10 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
         - a request for a new connections on VC_PORT port is received
           (*self.evt_new_talk_conn* event)
 
-	It also runs an additional thread for each connected editor,
-	once both the listen and talk sockets have been created and
-	packaged by package_sock_pair, which uses the
-	self.evt_sockets_ready event.
+        It also runs an additional thread for each connected editor,
+        once both the listen and talk sockets have been created and
+        packaged by package_sock_pair, which uses the
+        self.evt_sockets_ready event.
 
         These events (plus *self.evt_quit*) are handled inside an
         event loop run by this method.
@@ -2045,7 +2045,7 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
         events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit] 
         try:
-            while 1:		
+            while 1:
                 rc = win32event.MsgWaitForMultipleObjects(events,
 #                        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 
@@ -2119,7 +2119,7 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
 
     def old_quit(self):
         """have ServerOldMediator quit the event loop
-	"""
+        """
         win32event.SetEvent(self.evt_quit)            
 
 
@@ -2138,7 +2138,7 @@ class DataEvtSource(Object.Object):
                             args_super)
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -2147,8 +2147,8 @@ class DataEvtSource(Object.Object):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         debug.virtual('DataEvtSource.data_event')
 
 class DataEvtSourceWin32(Object.Object):
@@ -2166,7 +2166,7 @@ class DataEvtSourceWin32(Object.Object):
                             args_super)
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -2175,8 +2175,8 @@ class DataEvtSourceWin32(Object.Object):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
 
 
@@ -2201,7 +2201,7 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -2210,13 +2210,13 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         return self.owner.data_event(id)
 
     def old_quit(self):
         """have ServerOldMediator quit the event loop
-	"""
+        """
         win32event.SetEvent(self.evt_quit)            
 
 class ExtLoopWin32(Object.OwnerObject):
@@ -2264,7 +2264,7 @@ class ExtLoopWin32(Object.OwnerObject):
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -2273,15 +2273,15 @@ class ExtLoopWin32(Object.OwnerObject):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
 
     def run(self):
         """Start the server as well as the ExtLoopWin32 message loop.
 
-	The server will run 2 threads that raise Win32 events respectively 
-	when:
+        The server will run 2 threads that raise Win32 events respectively 
+        when:
 
         - a request for a new connections on VC_LISTEN port is
           received (*self.evt_new_listen_conn* event).
@@ -2289,10 +2289,10 @@ class ExtLoopWin32(Object.OwnerObject):
         - a request for a new connections on VC_PORT port is received
           (*self.evt_new_talk_conn* event)
 
-	It will also runs an additional thread for each connected editor,
-	once both the listen and talk sockets have been created and
-	packaged by package_sock_pair, which uses the
-	self.evt_sockets_ready event.
+        It will also runs an additional thread for each connected editor,
+        once both the listen and talk sockets have been created and
+        packaged by package_sock_pair, which uses the
+        self.evt_sockets_ready event.
 
         These events (plus *self.evt_quit*) are handled inside an
         event loop run by this method.
@@ -2337,7 +2337,7 @@ class ExtLoopWin32(Object.OwnerObject):
         try:
             sys.stderr.write('Starting message loop...\n')
             try:
-                while 1:		
+                while 1:
                     rc = win32event.MsgWaitForMultipleObjects(events,
 #                        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 
@@ -2484,18 +2484,18 @@ class ServerNewMediator(ServerMainThread):
 
     def remove_other_references(self):
         """Perform any cleanup prior to quitting.  Called when the main 
-	thread has exited its event loop.  Subclasses which override
-	this method should be sure to call their parent class's version
-	after doing their own cleanup.
+        thread has exited its event loop.  Subclasses which override
+        this method should be sure to call their parent class's version
+        after doing their own cleanup.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.data_events = None
         ServerMainThread.remove_other_references(self)
 
@@ -2515,21 +2515,21 @@ class ServerNewMediator(ServerMainThread):
 
     def set_mediator(self, mediator):
         """provides the server with a reference to the new
-	MediatorObject, for new_instance callbacks
+        MediatorObject, for new_instance callbacks
 
-	**INPUTS**
+        **INPUTS**
 
-	*NewMediatorObject mediator* -- the mediator
+        *NewMediatorObject mediator* -- the mediator
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.mediator = mediator
     
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
-	subclasses 
+        subclasses 
         
         **INPUTS**
 
@@ -2538,8 +2538,8 @@ class ServerNewMediator(ServerMainThread):
         **OUTPUTS**
         
         *SocketHasDataEvent* -- the data event which will allow the
-	data thread to ensure that process_ready_socks is called.
-	"""
+        data thread to ensure that process_ready_socks is called.
+        """
         return self.data_events.data_event(id)
 
     def possible_editor_cleanup(self, app):
@@ -2562,27 +2562,27 @@ class ServerNewMediator(ServerMainThread):
 
     def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
-	package_sock_pair
+        package_sock_pair
         
         **INPUTS**
         
         STR *id* -- The unique ID of the listen socket
 
-	AppStateMessaging *instance*  -- the new instance
+        AppStateMessaging *instance*  -- the new instance
 
-	*(INT, STR, STR) window_info* -- the window id, title, and module name
-	of the external editor, or None if not detected yet
+        *(INT, STR, STR) window_info* -- the window id, title, and module name
+        of the external editor, or None if not detected yet
 
-	BOOL *test_client* -- flag indicating whether or not the client
-	is expecting to be used for regression testing
+        BOOL *test_client* -- flag indicating whether or not the client
+        is expecting to be used for regression testing
 
         **OUTPUTS**
         
-	*BOOL* -- true if the instance should be added to our list.
-	false if we failed to create a new instance, or if we created
-	it, but it should be destroyed because it has run
-	the test suite and the server should exit 
-	"""
+        *BOOL* -- true if the instance should be added to our list.
+        false if we failed to create a new instance, or if we created
+        it, but it should be destroyed because it has run
+        the test suite and the server should exit 
+        """
         instance_name = self.mediator.new_editor(instance, server = 1,
             check_window = 1, window_info = window_info, 
             test_editor = test_client)
@@ -2595,18 +2595,18 @@ class ServerNewMediator(ServerMainThread):
 
     def known_instance(self, id):
         """returns a reference to the AppStateMessaging instance 
-	associated with  the given ID
+        associated with  the given ID
         **INPUTS**
         
         STR *id* -- The unique ID of the listen socket
 
         **OUTPUTS**
 
-	*AppStateMessaging* -- the corresponding instance, or None if
-	the id is unknown
+        *AppStateMessaging* -- the corresponding instance, or None if
+        the id is unknown
         
         *none*
-	"""
+        """
         try:
             return self.editors[id]
         except KeyError:
@@ -2614,21 +2614,21 @@ class ServerNewMediator(ServerMainThread):
 
     def delete_instance_cbk(self, instance_name, unexpected = 0):
         """callback from NewMediatorObject to notify us that the
-	corresponding external editor has exited or disconnected from
-	the mediator.
+        corresponding external editor has exited or disconnected from
+        the mediator.
 
-	**INPUTS**
+        **INPUTS**
 
         STR *id* -- The unique identifier assigned by VoiceCode to
         that socket pair.
       
- 	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('ServerNewMediator.delete_instance_cbk', 
             'server received delete instance callback')
         try:
@@ -2661,26 +2661,26 @@ class ServerNewMediator(ServerMainThread):
 
     def start_other_threads(self, listener_evt, talker_evt):
         """method called to start the secondary threads which
-	monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
+        monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
         with the main thread by means of InterThreadEvent objects, to
-	let the main thread know to initialize them.
+        let the main thread know to initialize them.
 
-	These tasks are handled by separate threads because they can
-	block.   The secondary threads do not do the initialization
-	directly because that involves invoking some natlink methods, 
-	and Natlink does not behave well outside of the main thread.
+        These tasks are handled by separate threads because they can
+        block.   The secondary threads do not do the initialization
+        directly because that involves invoking some natlink methods, 
+        and Natlink does not behave well outside of the main thread.
         
         **INPUTS**
         
-	*InterThreadEvent* listener_evt -- event object for the
-	ListenNewEditorsThread to use to notify the main thread that a
-	new editor has connected on the VC_LISTEN port, and that
-	handshake_listen_socks should be called
-	
-	*InterThreadEvent* talker_evt -- event object for the
-	NewConnListThread to use to notify the main thread that a
-	new talker connection has been established on the VC_TALK port, 
-	and that handshake_talk_socks should be called
+        *InterThreadEvent* listener_evt -- event object for the
+        ListenNewEditorsThread to use to notify the main thread that a
+        new editor has connected on the VC_LISTEN port, and that
+        handshake_listen_socks should be called
+        
+        *InterThreadEvent* talker_evt -- event object for the
+        NewConnListThread to use to notify the main thread that a
+        new talker connection has been established on the VC_TALK port, 
+        and that handshake_talk_socks should be called
 
         **OUTPUTS**
         

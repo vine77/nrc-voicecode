@@ -66,11 +66,11 @@ class TextBuffer(Object):
 
     def __init__(self, **args):
         """abstract base class - no arguments
-	
-	**INPUTS**
-	
-	*none*
-	"""
+        
+        **INPUTS**
+        
+        *none*
+        """
         self.deep_construct(TextBuffer,
                             {},
                             args)
@@ -78,115 +78,115 @@ class TextBuffer(Object):
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* is the new text.
-	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
+        *STR text* is the new text.
+        
+        *INT start* is the offset into the buffer of the text to the
+        replaced.  Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the text to be replaced (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('TextBuffer.set_text')
 
     def get_length(self):
         """returns the length of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* number of characters in the buffer"""
+        *INT* number of characters in the buffer"""
         debug.virtual('TextBuffer.get_length')
          
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region returned.
-	Defaults to start of buffer.
+        *INT start* is the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
+        *STR* -- contents of specified range of the buffer
+        """
         debug.virtual('TextBuffer.get_text')
 
     def get_selection(self):
         """retrieves range of current selection
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
-	
-	**OUTPUTS**
+        *none*
+        
+        **OUTPUTS**
 
-	*INT* (start, end)
+        *INT* (start, end)
 
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
         debug.virtual('TextBuffer.get_selection')
 
     def len(self):
         """returns length of buffer 
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the length of the buffer
-	"""
+        *INT* -- the length of the buffer
+        """
         debug.virtual('TextBuffer.len')
 
 
     def cur_pos(self):
         """returns current position (either the start or end of
-	the current selection, and usually the end)
+        the current selection, and usually the end)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the offset into the buffer of the current cursor
-	position.
-	"""
+        *INT* -- the offset into the buffer of the current cursor
+        position.
+        """
         debug.virtual('TextBuffer.cur_pos')
 
     def set_selection(self, start = None, end = None):
         """changes range of current selection
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region to be selected.
-	Defaults to start of buffer.
+        *INT start* is the start of the region to be selected.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be selected (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be selected (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         debug.virtual('TextBuffer.set_selection')
 
 class SpeechBuffer:
@@ -214,20 +214,20 @@ class SpeechBuffer:
 
     def activate(self, dict_globally = 0):
         """activates the speech buffer for dictation, either globally or
-	tied to the current window.
+        tied to the current window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL* dict_globally -- if true, activate globally, otherwise
-	note the current window and activate only when it is the active window.
-	Additional conditions can be placed on the activation by
-	activating or deactivating manually or on recognition starting
-	(see SpeechBufferRecogStart below)
+        *BOOL* dict_globally -- if true, activate globally, otherwise
+        note the current window and activate only when it is the active window.
+        Additional conditions can be placed on the activation by
+        activating or deactivating manually or on recognition starting
+        (see SpeechBufferRecogStart below)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 #        Note: NaturallySpeaking's window-specific dictation is 
 #        more general, but requires specifying a MS Windows window
 #        handle, and I haven't figured out yet how to abstract the window
@@ -243,48 +243,48 @@ class SpeechBuffer:
     def deactivate(self):
         """disable dictation into the SpeechBuffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SpeechBuffer.deactivate')
 
     def reactivate(self):
         """reactivate dictation using the same window (or globally).
-	This method should not be called, unless the buffer has
-	previously been activated and then deactivate.
-	
-	Otherwise, its effect is undefined (although the concrete
-	subclass of SpeechBuffer should still attempt to do something
-	sensible)
+        This method should not be called, unless the buffer has
+        previously been activated and then deactivate.
+        
+        Otherwise, its effect is undefined (although the concrete
+        subclass of SpeechBuffer should still attempt to do something
+        sensible)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SpeechBuffer.reactivate')
 
     def has_been_activated(self):
         """indicates whether the activate method has been invoked, or
-	whether it needs to be called to activate dictation.
+        whether it needs to be called to activate dictation.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- returns true if activate was previously called, and
-	the SpeechBuffer is still active, or can be reactivated with a
-	call to reactivate (instead of a new call to activate)."""
+        *BOOL* -- returns true if activate was previously called, and
+        the SpeechBuffer is still active, or can be reactivated with a
+        call to reactivate (instead of a new call to activate)."""
 
         # note: if the activation condition (specific window, or globally
         # active) is lost when deactivate is called, has_been_activated
@@ -293,49 +293,49 @@ class SpeechBuffer:
 
     def is_active(self):
         """indicates whether dictation into the SpeechBuffer is currently 
-	active (activated globally, or activated with the current
-	window)
+        active (activated globally, or activated with the current
+        window)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- returns true iff dictation into the buffer is 
-	currently active.
-	"""
+        *BOOL* -- returns true iff dictation into the buffer is 
+        currently active.
+        """
         debug.virtual('SpeechBuffer.is_active')
 
     def is_activated(self):
         """indicates whether the  SpeechBuffer is currently activated or
-	deactivated (not whether it is active)
+        deactivated (not whether it is active)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- returns true iff the buffer is currently activated.
-	Note that if the buffer was activated for a specific window,
-	but that window is not active, is_activated will still return
-	true.  To see if dictation is active now, use is_active.
-	"""
+        *BOOL* -- returns true iff the buffer is currently activated.
+        Note that if the buffer was activated for a specific window,
+        but that window is not active, is_activated will still return
+        true.  To see if dictation is active now, use is_active.
+        """
         debug.virtual('SpeechBuffer.is_activated')
 
     def is_global(self):
         """tells whether the buffer (when activated) is activated
-	globally.
+        globally.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is buffer set for global dictation.
-	"""
+        *BOOL* -- is buffer set for global dictation.
+        """
         debug.virtual('SpeechBuffer.is_global')
 
 class SpeechBufferRecogStart(SpeechBuffer):
@@ -345,8 +345,8 @@ class SpeechBufferRecogStart(SpeechBuffer):
     **INSTANCE ATTRIBUTES**
 
     *FCT* recog_start_callback --
-	recog_start_callback( *SpeechBuffer* buffer, *BOOL*
-	window_matches)
+        recog_start_callback( *SpeechBuffer* buffer, *BOOL*
+        window_matches)
     callback which indicates the start of recognition.  This callback
     can activate or deactivate the SpeechBuffer (allowing more specific
     activation conditions than just the active window).  If necessary
@@ -365,32 +365,32 @@ class SpeechBufferRecogStart(SpeechBuffer):
     """
     def __init__(self, recog_start_callback = None, **args):
         """abstract class initialization, but does common handling of
-	the recog_start_callback
+        the recog_start_callback
 
-	**INPUTS**
+        **INPUTS**
 
-	*FCT* recog_start_callback -- recog_start_callback(
-	*SpeechBuffer* buffer, *BOOL* window_matches) 
-	callback which indicates the start of
-	recognition.  
-	
-	This callback can activate or deactivate the
-	SpeechBuffer (allowing more specific activation conditions than
-	just the active window).  
+        *FCT* recog_start_callback -- recog_start_callback(
+        *SpeechBuffer* buffer, *BOOL* window_matches) 
+        callback which indicates the start of
+        recognition.  
+        
+        This callback can activate or deactivate the
+        SpeechBuffer (allowing more specific activation conditions than
+        just the active window).  
 
-	If necessary it should also update the
-	state of the internal SpeechBuffer to match the corresponding
-	editor buffer.  (This is necessary if the SpeechBuffer is not
-	immediately updated whenever the editor buffer changes).
+        If necessary it should also update the
+        state of the internal SpeechBuffer to match the corresponding
+        editor buffer.  (This is necessary if the SpeechBuffer is not
+        immediately updated whenever the editor buffer changes).
 
-	If the SpeechBuffer is set to be active only when a specific
-	window is active, window_matches will return true only if this
-	is the case.
+        If the SpeechBuffer is set to be active only when a specific
+        window is active, window_matches will return true only if this
+        is the case.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(SpeechBufferRecogStart,
                             {'recog_start_callback':
                             recog_start_callback},
@@ -400,33 +400,33 @@ class SpeechBufferRecogStart(SpeechBuffer):
     def set_recog_start_callback(self, recog_start_callback = None):
         """changes the callback to a new function
 
-	**INPUTS**
+        **INPUTS**
 
-	*FCT* recog_start_callback -- recog_start_callback(
-	*SpeechBuffer* buffer, *BOOL* window_matches) 
-	callback which indicates the start of
-	recognition.  This callback can activate or deactivate the
-	SpeechBuffer (allowing more specific activation conditions than
-	just the active window).  If necessary it should also update the
-	state of the internal SpeechBuffer to match the corresponding
-	editor buffer.  (This is necessary if the SpeechBuffer is not
-	immediately updated whenever the editor buffer changes).
+        *FCT* recog_start_callback -- recog_start_callback(
+        *SpeechBuffer* buffer, *BOOL* window_matches) 
+        callback which indicates the start of
+        recognition.  This callback can activate or deactivate the
+        SpeechBuffer (allowing more specific activation conditions than
+        just the active window).  If necessary it should also update the
+        state of the internal SpeechBuffer to match the corresponding
+        editor buffer.  (This is necessary if the SpeechBuffer is not
+        immediately updated whenever the editor buffer changes).
 
-	If the SpeechBuffer is set to be active only when a specific
-	window is active, window_matches will return true only if this
-	is the case.
+        If the SpeechBuffer is set to be active only when a specific
+        window is active, window_matches will return true only if this
+        is the case.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.recog_start_callback = recog_start_callback
 
     def _on_recog_start(self, window_matches):
         """internal function which triggers the
-	recog_start_callback.  Only the concrete subclass of
-	SpeechBufferRecogStart implementing the change notification 
-	should call this function"""
+        recog_start_callback.  Only the concrete subclass of
+        SpeechBufferRecogStart implementing the change notification 
+        should call this function"""
         if self.recog_start_callback:
             self.recog_start_callback(self, window_matches)
             # note: recog_start_callback is an attribute of 
@@ -452,19 +452,19 @@ class LockableSpeechBuffer:
     
     def set_lock(self, state):
         """locks/unlocks changes to the contents of a hidden speech 
-	buffer, to ensure consistency between multiple get operations.
-	When the buffer is
-	locked, all speech-initiated changes to the buffer will be 
-	deferred until it is unlocked.  No speech should be lost.
-	
-	**INPUTS**
+        buffer, to ensure consistency between multiple get operations.
+        When the buffer is
+        locked, all speech-initiated changes to the buffer will be 
+        deferred until it is unlocked.  No speech should be lost.
+        
+        **INPUTS**
 
-	*INT* state
+        *INT* state
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
 
 class SelectionBuffer:
@@ -495,42 +495,42 @@ class SelectionBuffer:
 
     def set_visible(self, range = (0, -1)):
         """tells the SpeechBufferSelection the current visible range
-	which should be available to Select XYZ.
-	
-	**INPUTS**
+        which should be available to Select XYZ.
+        
+        **INPUTS**
 
-	*(INT, INT)* range --  character range which the buffer should
-	is visible and therefore selectable.  If the end of the range is
-	less than the start (as in the default), the entire buffer will 
-	be considered visible.  Select xyz can be disabled by setting
-	the range to (0, 0)
-	
-	**OUTPUTS**
+        *(INT, INT)* range --  character range which the buffer should
+        is visible and therefore selectable.  If the end of the range is
+        less than the start (as in the default), the entire buffer will 
+        be considered visible.  Select xyz can be disabled by setting
+        the range to (0, 0)
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SelectionBuffer.set_visible')
 
     def get_visible(self):
         """returns the current visible range
-	which should be available to Select XYZ.  If ta concrete
-	subclass of SpeechBufferSelection does not support returning the
-	current visible range, then get_visible should return None.
-	
-	**INPUTS**
+        which should be available to Select XYZ.  If ta concrete
+        subclass of SpeechBufferSelection does not support returning the
+        current visible range, then get_visible should return None.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* range --  visible character range.  None means ehat
-	the concrete implementation of SpeechBufferSelection does not
-	support reporting the current visible range.  An empty range
-	means that Select xyz is disabled.  A range of (0, -1) means the
-	entire buffer is visible.  
+        *(INT, INT)* range --  visible character range.  None means ehat
+        the concrete implementation of SpeechBufferSelection does not
+        support reporting the current visible range.  An empty range
+        means that Select xyz is disabled.  A range of (0, -1) means the
+        entire buffer is visible.  
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SelectionBuffer.get_visible')
 
     
@@ -560,48 +560,48 @@ class VisibleBuffer:
 
     def get_visible(self):
         """ get start and end offsets of the currently visible region of
-	the buffer.  End is the offset of the first character not
-	visible (matching Python's slice convention)
+        the buffer.  End is the offset of the first character not
+        visible (matching Python's slice convention)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end)
-	"""
+        *INT* (start, end)
+        """
         debug.virtual('VisibleBuffer.get_visible')
 
     def make_position_visible(self, position = None):
         """scroll buffer (if necessary) so that  the specified position
-	is visible.  Position defaults to the current cursor position.
-	Note: if a particular subclass of VisibleBuffer cannot support
-	this method, it should just leave it as a no-op.
+        is visible.  Position defaults to the current cursor position.
+        Note: if a particular subclass of VisibleBuffer cannot support
+        this method, it should just leave it as a no-op.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* position
+        *INT* position
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
 
     def refresh(self):
         """force a refresh of the buffer.
-	Note: if a particular subclass of VisibleBuffer cannot support
-	this method, it should just leave it as a no-op.
+        Note: if a particular subclass of VisibleBuffer cannot support
+        this method, it should just leave it as a no-op.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
       
 class StoreableTextBuffer(Object):
@@ -625,43 +625,43 @@ class StoreableTextBuffer(Object):
     
     def modified(self):
         """has the buffer been modified since the last time it was
-	saved?
+        saved?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the buffer has been modified since the last
-	save (or load)
-	"""
+        *BOOL* -- true if the buffer has been modified since the last
+        save (or load)
+        """
         debug.virtual('StoreableTextBuffer.modified')
 
     def save_file(self, f_path):
         """save the buffer to a file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR f_path* -- full path of the file
+        *STR f_path* -- full path of the file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the file was saved successfully
-	"""
+        *BOOL* -- true if the file was saved successfully
+        """
         debug.virtual('StoreableTextBuffer.save_file')
 
     def load_file(self, f_path):
         """load the buffer from a file (erasing the current contents)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR f_path* -- full path of the file
+        *STR f_path* -- full path of the file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the file was loaded successfully
-	"""
+        *BOOL* -- true if the file was loaded successfully
+        """
         debug.virtual('StoreableTextBuffer.load_file')
 
 
@@ -687,11 +687,11 @@ class NumberedLines(Object):
 
     def __init__(self, **args):
         """abstract base class - no arguments
-	
-	**INPUTS**
-	
-	*none*
-	"""
+        
+        **INPUTS**
+        
+        *none*
+        """
         self.deep_construct(NumberedLines,
                             {},
                             args)
@@ -699,156 +699,156 @@ class NumberedLines(Object):
     def line_num_of( self, pos = None):
         """find line number of position pos
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT pos* -- the offset into the buffer of the desired position. 
-	 Defaults to the current position.
+        *INT pos* -- the offset into the buffer of the desired position. 
+         Defaults to the current position.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- corresponding line number (starting with 0)
-	"""
+        *INT* -- corresponding line number (starting with 0)
+        """
         debug.virtual('NumberedLines.line_num_of')
       
     def line_nums_of_range(self, range = None):
         """find line numbers of a range of positions
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT) range* -- range of character offsets into the buffer. 
-	 Defaults to the current selection.
+        *(INT, INT) range* -- range of character offsets into the buffer. 
+         Defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding pair of line numbers (starting with 0)
-	"""
+        *(INT, INT)* -- corresponding pair of line numbers (starting with 0)
+        """
 
         debug.virtual('NumberedLines.line_nums_of_range')
 
     def lines(self):
         """return number of lines in the buffer
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUT**
-	
-	*int* -- number of lines in the buffer (incomplete lines are
-	counted, so this is always > 0
-	"""
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUT**
+        
+        *int* -- number of lines in the buffer (incomplete lines are
+        counted, so this is always > 0
+        """
         debug.virtual('NumberedLines.lines')
 
     def range_of_line(self, line = None):
         """returns the character range corresponding to the specified line 
-	(not including the newline)
+        (not including the newline)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, last line is used.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, last line is used.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- offsets into the buffer of the start and end of
-	the line.
-	"""
+        *(INT, INT)* -- offsets into the buffer of the start and end of
+        the line.
+        """
         debug.virtual('NumberedLines.range_of_line')
 
     def range_of_lines(self, first_line, last_line):
         """returns the character range corresponding to the specified range
-	of lines (not including the final newline)
+        of lines (not including the final newline)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT first_line, second_line* -- line numbers (starting with 0)
+        *INT first_line, second_line* -- line numbers (starting with 0)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- offsets into the buffer of the start and end of
-	the range of lines.
-	"""
+        *(INT, INT)* -- offsets into the buffer of the start and end of
+        the range of lines.
+        """
         debug.virtual('NumberedLines.range_of_lines')
     
     def ranges_of_lines(self, first_line, last_line):
         """returns a list of the character ranges corresponding to the 
-	specified range of lines (not including the final newline of
-	each line)
+        specified range of lines (not including the final newline of
+        each line)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT first_line, second_line* -- line numbers (starting with 0)
+        *INT first_line, second_line* -- line numbers (starting with 0)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[(INT, INT), ...]* -- offsets into the buffer of the start and end of
-	the each line in the range of lines.
-	"""
+        *[(INT, INT), ...]* -- offsets into the buffer of the start and end of
+        the each line in the range of lines.
+        """
         debug.virtual('NumberedLines.ranges_of_lines')
 
     def get_line(self, line = None):
         """returns the contents of the specified line 
-	(not including the newline)
-	**INPUTS**
+        (not including the newline)
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, last line is used.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, last line is used.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- offsets into the buffer of the start and end of
-	the line.
-	"""
+        *(INT, INT)* -- offsets into the buffer of the start and end of
+        the line.
+        """
         start, end = self.range_of_line(line)
         return self.get_text(start, end)
 
     def position_of_line(self, line = None, where = -1):
         """returns the position of the start or end of the specified line 
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, returns position of end of buffer.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, returns position of end of buffer.
 
         *INT where* indicates whether the position of the end
          (*where > 0*) or at the beginning (*where < 0*) of the line
-	 should be returned.
+         should be returned.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- position of start/end of that line.
-	"""
+        *INT* -- position of start/end of that line.
+        """
         debug.virtual('NumberedLines.position_of_line')
 
     def line_length(self, line = None):
         """returns the length of the specified line
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, returns None.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, returns None.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- length of start of that line.
-	"""
+        *INT* -- length of start of that line.
+        """
 
         debug.virtual('NumberedLines.line_length')
 
     def goto_line(self, line = None, where = -1):
         """Go to a particular line in a buffer.
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is greater than the number of lines, goes to the end of
-	the buffer.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is greater than the number of lines, goes to the end of
+        the buffer.
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         debug.virtual('NumberedLines.goto_line')
 
@@ -892,13 +892,13 @@ class TextBufferChangeNotify(TextBuffer):
     def __init__(self, notification_callback=None, **args):
         """
 
-	**INPUTS**
+        **INPUTS**
 
-	*FCT* notification_callback --
-	  notification_callback( *TextBufferChangeNotify* buffer,
-	*BOOL* user_initiated) 
-	see TextBufferChangeNotify documentation for details.
-	"""
+        *FCT* notification_callback --
+          notification_callback( *TextBufferChangeNotify* buffer,
+        *BOOL* user_initiated) 
+        see TextBufferChangeNotify documentation for details.
+        """
     
         self.deep_construct(TextBufferChangeNotify,
                             {'notification_callback':notification_callback}, 
@@ -907,26 +907,26 @@ class TextBufferChangeNotify(TextBuffer):
     def set_change_notification_callback(self, notification_callback = None):
         """changes the callback to a new function
 
-	**INPUTS**
+        **INPUTS**
 
-	*FCT* notification_callback --
-	notification_callback( *TextBufferChangeNotify* buffer,
-	*BOOL* program_initiated)
-	function to be called on change to
-	the underlying buffer.  
-	see TextBufferChangeNotify documentation for details.
+        *FCT* notification_callback --
+        notification_callback( *TextBufferChangeNotify* buffer,
+        *BOOL* program_initiated)
+        function to be called on change to
+        the underlying buffer.  
+        see TextBufferChangeNotify documentation for details.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.notification_callback = notification_callback
 
     def _on_change(self, program_initiated):
         """internal function which triggers the
-	notification_callback.  Only the concrete subclass of
-	TextBufferChangeNotify implementing the change notification 
-	should call this function"""
+        notification_callback.  Only the concrete subclass of
+        TextBufferChangeNotify implementing the change notification 
+        should call this function"""
         if self.notification_callback:
             self.notification_callback(self, program_initiated)
             # note: notification_callback is an attribute of 
@@ -962,15 +962,15 @@ class TextBufferChangeSpecify(TextBuffer):
     def __init__(self, change_callback=None, **args):
         """
 
-	**INPUTS**
+        **INPUTS**
 
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start,
-	*INT* selection_end, TextBufferChangeSpecify buffer,
-	*BOOL* program_initiated) 
-	see TextBufferChangeSpecify documentation for details.
-	"""
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start,
+        *INT* selection_end, TextBufferChangeSpecify buffer,
+        *BOOL* program_initiated) 
+        see TextBufferChangeSpecify documentation for details.
+        """
     
         self.deep_construct(TextBufferChangeSpecify,
                             {'change_callback':change_callback}, args)
@@ -978,45 +978,45 @@ class TextBufferChangeSpecify(TextBuffer):
     def set_change_callback(self, change_callback = None):
         """changes the callback to a new function
 
-	**INPUTS**
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
-	see TextBufferChangeSpecify documentation for details.
-	-- function to be called on change to
-	the underlying buffer.  
-	see TextBufferChangeSpecify documentation for details.
+        **INPUTS**
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
+        see TextBufferChangeSpecify documentation for details.
+        -- function to be called on change to
+        the underlying buffer.  
+        see TextBufferChangeSpecify documentation for details.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.change_callback = change_callback
 
     def get_change_callback(self):
         """return change callback function (used by wrappers like
-	TextBufferCRToNL)
+        TextBufferCRToNL)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
-	"""
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
+        """
         return self.change_callback
     
     def _on_change_specification(self, start, end, text,
         selection_start, selection_end, program_initiated):
         """internal function which triggers the
-	change_callback.  Only the concrete subclass of 
-	TextBufferChangeSpecify implementing change specification
-	should call this function"""
+        change_callback.  Only the concrete subclass of 
+        TextBufferChangeSpecify implementing change specification
+        should call this function"""
 #        print 'hi there'
 #        print repr(self.change_callback)
 #        print 'changeSpec._on_change_specification ', start, end, text, \
@@ -1066,21 +1066,21 @@ class TextBufferSpecifyFromNotify(TextBufferChangeSpecify):
     def __init__(self, change_notification, **args):
         """
 
-	**INPUTS**
+        **INPUTS**
 
-	*TextBufferChangeNotify* change_notification
-	 - underlying buffer to provide change notification and rest of
-	   services
+        *TextBufferChangeNotify* change_notification
+         - underlying buffer to provide change notification and rest of
+           services
 
-	[Inherited from TextBufferChangeSpecify: 
+        [Inherited from TextBufferChangeSpecify: 
 
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *TextBufferChangeSpecify* buffer, *BOOL* program_initiated) 
 
-	see TextBufferChangeSpecify documentation for details.]
-	"""
+        see TextBufferChangeSpecify documentation for details.]
+        """
     
         self.deep_construct(TextBufferSpecifyFromNotify,
                             {'change_notification':change_notification,
@@ -1092,9 +1092,9 @@ class TextBufferSpecifyFromNotify(TextBufferChangeSpecify):
     
     def _on_change_translator(self, internal, program_initiated):
         """private method which handles change notification callbacks
-	from the underlying TextBufferChangeNotify object and translates
-	to change specification callbacks.  Should not be called
-	manually."""
+        from the underlying TextBufferChangeNotify object and translates
+        to change specification callbacks.  Should not be called
+        manually."""
 
         contents = self.change_notification.get_text()
         if self.change_callback:
@@ -1110,7 +1110,7 @@ class TextBufferSpecifyFromNotify(TextBufferChangeSpecify):
 
     def __getattr__(self, name):
         """delegates unknown attributes (including methods) to the underlying
-	TextBufferChangeNotify object"""
+        TextBufferChangeNotify object"""
         return getattr(self.change_notification, name)
 
 # no-op versions of these functions are defined in TextBuffer, so
@@ -1126,17 +1126,17 @@ class TextBufferSpecifyFromNotify(TextBufferChangeSpecify):
 
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
-	- see TextBuffer"""
+        - see TextBuffer"""
         return self.change_notification.get_text(start, end)
 
     def get_selection(self):
         """retrieves range of current selection
-	- see TextBuffer"""
+        - see TextBuffer"""
         return self.change_notification.get_selection()
 
     def set_selection(self, start = None, end = None):
         """changes range of current selection
-	- see TextBuffer"""
+        - see TextBuffer"""
         return self.change_notification.set_selection(start, end)
 
 # this WOULD be delegated automatically, but we don't want it to.
@@ -1183,12 +1183,12 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def __init__(self, underlying, **args):
         """
-	initializes the wrapper
+        initializes the wrapper
 
-	**INPUTS**
+        **INPUTS**
 
-	*TextBufferChangeSpecify* underlying -- underlying buffer 
-	"""
+        *TextBufferChangeSpecify* underlying -- underlying buffer 
+        """
     
         self.deep_construct(TextBufferCRToNL,
                             {'underlying':underlying,
@@ -1211,20 +1211,20 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
     
     def range_defaults(self, start = None, end = None):
         """converts TextBuffer range defaults to actual offsets.  Uses
-	external offsets, which must be converted to internal with
-	external_to_internal.
+        external offsets, which must be converted to internal with
+        external_to_internal.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- external offset of start of range, or None for
-	beginning of buffer
-	*INT* end -- external offset of end of range, or None for
-	end of buffer
+        *INT* start -- external offset of start of range, or None for
+        beginning of buffer
+        *INT* end -- external offset of end of range, or None for
+        end of buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- actual character range (external offsets)
-	"""
+        *(INT, INT)* -- actual character range (external offsets)
+        """
         if (start == None):
             s = 0
         else:
@@ -1237,17 +1237,17 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def line_range_internal(self, start, end):
         """find line numbers of a range of internal positions within
-	contents_internal
+        contents_internal
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- character offset into contents_internal of start of range
-	*INT* end  -- character offset into contents_internal of end of range
+        *INT* start -- character offset into contents_internal of start of range
+        *INT* end  -- character offset into contents_internal of end of range
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding range of line numbers
-	"""
+        *(INT, INT)* -- corresponding range of line numbers
+        """
         first = len(string.split(self.contents_internal[0:start], self.crnl)) -1
         range = self.contents_internal[start:end]
         n = len(string.split(range, self.crnl)) -1
@@ -1257,17 +1257,17 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
     
     def line_range_external(self, start, end):
         """find line numbers of a range of external positions within
-	contents_external
+        contents_external
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- character offset into contents_external of start of range
-	*INT* end  -- character offset into contents_external of end of range
+        *INT* start -- character offset into contents_external of start of range
+        *INT* end  -- character offset into contents_external of end of range
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding range of line numbers
-	"""
+        *(INT, INT)* -- corresponding range of line numbers
+        """
         first = len(string.split(self.contents_external[0:start], self.nl)) -1
         range = self.contents_external[start:end]
         n = len(string.split(range, self.nl)) -1
@@ -1276,34 +1276,34 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def line_num_of_internal(self, internal):
         """find line number of an internal position within
-	contents_internal
+        contents_internal
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* internal -- internal character offset into
-	contents_internal
+        *INT* internal -- internal character offset into
+        contents_internal
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- corresponding line number
-	"""
+        *INT* -- corresponding line number
+        """
         return len(string.split(self.contents_internal[0:pos], self.crnl)) -1
     
     def external_to_internal(self, start, end):
         """converts a range of external positions (NL only) to
-	internal positions (in the underlying
-	buffer which uses CR-LF)
+        internal positions (in the underlying
+        buffer which uses CR-LF)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of range (external)
-	*INT* end -- end of range (external)
+        *INT* start -- start of range (external)
+        *INT* end -- end of range (external)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding character range 
-	internally, using CR-LF
-	"""
+        *(INT, INT)* -- corresponding character range 
+        internally, using CR-LF
+        """
         lines = self.line_range_external(start, end)
         s = start +lines[0]*self.delta_width
         e = end +lines[1]*self.delta_width
@@ -1311,18 +1311,18 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def internal_to_external(self, start, end):
         """converts a range of internal positions (in the underlying
-	buffer which uses CR-LF) to external positions (NL only)
+        buffer which uses CR-LF) to external positions (NL only)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of range (internal)
-	*INT* end -- end of range (internal)
+        *INT* start -- start of range (internal)
+        *INT* end -- end of range (internal)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding character range 
-	externally, assuming only newlines
-	"""
+        *(INT, INT)* -- corresponding character range 
+        externally, assuming only newlines
+        """
         lines = self.line_range_internal(start, end)
         s = start -lines[0]*self.delta_width
         e = end -lines[1]*self.delta_width
@@ -1331,11 +1331,11 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
     def _on_change_filter(self, start, end, text,
         selection_start, selection_end, buffer, program_initiated):
         """private method which handles change specification
-	callbacks from the underlying TextBufferChangeSpecify object, 
-	updating our internal copy of the buffer and translating character 
-	ranges to get rid of CR-NL.
-	Should not be called manually.
-	"""
+        callbacks from the underlying TextBufferChangeSpecify object, 
+        updating our internal copy of the buffer and translating character 
+        ranges to get rid of CR-NL.
+        Should not be called manually.
+        """
 
         old = self.contents_internal[start:end]
 #        print 'cr._on_change_filter old: [%s] new: [%s]' % (old, text)
@@ -1374,7 +1374,7 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def __getattr__(self, name):
         """delegates unknown attributes (including methods) to the underlying
-	TextBufferChangeNotify object"""
+        TextBufferChangeNotify object"""
         return getattr(self.underlying, name)
 
 # no-op versions of these functions are defined in
@@ -1395,20 +1395,20 @@ class TextBufferCRToNL(TextBufferChangeSpecify):
 
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
-	- see TextBuffer"""
+        - see TextBuffer"""
 # avoid translation by using contents_external directly
         s, e = self.range_defaults(start, end)
         return self.contents_external[s:e]
 
     def get_selection(self):
         """retrieves range of current selection
-	- see TextBuffer"""
+        - see TextBuffer"""
         selection_start, selection_end = self.underlying.get_selection()
         return self.internal_to_external(selection_start, selection_end)
 
     def set_selection(self, start = None, end = None):
         """changes range of current selection
-	- see TextBuffer"""
+        - see TextBuffer"""
         s, e = self.range_defaults(start,end)
 #        print 'cr.set_selection (ext)', s, e
         s, e = self.external_to_internal(s, e)
@@ -1446,13 +1446,13 @@ class SelectionTextBufferCRToNL(TextBufferCRToNL):
 
     def __init__(self, **args):
         """
-	initializes the wrapper
+        initializes the wrapper
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	"""
+        """
     
         self.deep_construct(SelectionTextBufferCRToNL,
                             {},
@@ -1461,20 +1461,20 @@ class SelectionTextBufferCRToNL(TextBufferCRToNL):
 
     def set_visible(self, range = (0, -1)):
         """tells the SpeechBufferSelection the current visible range
-	which should be available to Select XYZ.
-	
-	**INPUTS**
+        which should be available to Select XYZ.
+        
+        **INPUTS**
 
-	*(INT, INT)* range --  character range which the buffer should
-	is visible and therefore selectable.  If the end of the range is
-	less than the start (as in the default), the entire buffer will 
-	be considered visible.  Select xyz can be disabled by setting
-	the range to (0, 0)
-	
-	**OUTPUTS**
+        *(INT, INT)* range --  character range which the buffer should
+        is visible and therefore selectable.  If the end of the range is
+        less than the start (as in the default), the entire buffer will 
+        be considered visible.  Select xyz can be disabled by setting
+        the range to (0, 0)
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         s, e = range
         if e >= s:
             s, e = self.external_to_internal(s, e)
@@ -1483,24 +1483,24 @@ class SelectionTextBufferCRToNL(TextBufferCRToNL):
             
     def get_visible(self):
         """returns the current visible range
-	which should be available to Select XYZ.  If ta concrete
-	subclass of SpeechBufferSelection does not support returning the
-	current visible range, then get_visible should return None.
-	
-	**INPUTS**
+        which should be available to Select XYZ.  If ta concrete
+        subclass of SpeechBufferSelection does not support returning the
+        current visible range, then get_visible should return None.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* range --  visible character range.  None means ehat
-	the concrete implementation of SpeechBufferSelection does not
-	support reporting the current visible range.  An empty range
-	means that Select xyz is disabled.  A range of (0, -1) means the
-	entire buffer is visible.  
+        *(INT, INT)* range --  visible character range.  None means ehat
+        the concrete implementation of SpeechBufferSelection does not
+        support reporting the current visible range.  An empty range
+        means that Select xyz is disabled.  A range of (0, -1) means the
+        entire buffer is visible.  
 
-	*none*
-	"""
+        *none*
+        """
         s, e = self.underlying.get_visible(s, e)
         if e >= s:
             s, e = self.internal_to_external(s, e)

@@ -47,16 +47,16 @@ class GramMgr(OwnerObject):
 
     def __init__(self, recog_mgr, app, instance_name, **args):
         """constructor
-	
-	**INPUTS**
+        
+        **INPUTS**
 
-	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-	grammar manager
-	
-	*AppState* app -- the application to which the buffers belong
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
+        
+        *AppState* app -- the application to which the buffers belong
 
         *STR instance_name* -- the name of this AppState instance 
-	"""
+        """
         self.deep_construct(GramMgr,
                             {'recog_mgr': recog_mgr, 'app': app,
                              'instance_name': instance_name},
@@ -94,18 +94,18 @@ class GramMgr(OwnerObject):
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if old_buff_name == new_buff_name:
             return
         for window, buffer_grammars in self.dict_grammars.items():
@@ -120,14 +120,14 @@ class GramMgr(OwnerObject):
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         return self.recog_mgr.interpreter()
     
     def interpret_dictation(self, result, initial_buffer = None):
@@ -196,144 +196,144 @@ class GramMgr(OwnerObject):
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**NOTE:** subclasses must call their parent class's 
-	remove_other_references method, after performing their own duties.
-	Also, a class inheriting from two OwnerObject classes MUST
-	define remove_other_references and call both subclasses'
-	versions
+        **NOTE:** subclasses must call their parent class's 
+        remove_other_references method, after performing their own duties.
+        Also, a class inheriting from two OwnerObject classes MUST
+        define remove_other_references and call both subclasses'
+        versions
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
         self.deactivate_all()
 
     def activate(self, buffer, window):
         """activate grammars for a buffer displayed in a particular
-	window, and deactivate all other buffer/window-specific grammars
+        window, and deactivate all other buffer/window-specific grammars
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.activate')
     
     def deactivate_all(self, window = None):
         """de-activate all buffer-specific grammars which would be
-	active in window, or all grammars if window is omitted.
+        active in window, or all grammars if window is omitted.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window --
-	identifier of current window.  If grammars are window-specific,
-	then only grammars associated with that window need be
-	explicitly de-activated.  If window is omitted, de-activate all
-	grammars.
-	
-	**OUTPUTS**
+        *INT* window --
+        identifier of current window.  If grammars are window-specific,
+        then only grammars associated with that window need be
+        explicitly de-activated.  If window is omitted, de-activate all
+        grammars.
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.deactivate_all')
 
     def new_buffer(self, buffer, window = None):
         """add grammars for new buffer/window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle.
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle.
 
-	Note: if grammars are window-specific, and window is omitted, 
-	then new_buffer may not be created until activate is called.
+        Note: if grammars are window-specific, and window is omitted, 
+        then new_buffer may not be created until activate is called.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.new_buffer')
 
     def new_window(self, window):
         """add a new window
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle.
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.new_window')
 
     def delete_window(self, window):
         """clean up and destroy all grammars for a window which 
-	has been deleted.
+        has been deleted.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         debug.virtual('GramMgr.delete_window')
 
     def buffer_closed(self, buffer):
         """clean up and destroy all grammars for a buffer which 
-	has been closed.
+        has been closed.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.buffer_closed')
     
     def using_global(self):
         """checks whether GramMgr creates global grammars, rather than 
-	window-specific ones
+        window-specific ones
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the GramMgr produces global grammars
-	"""
+        *BOOL* -- true if the GramMgr produces global grammars
+        """
         debug.virtual('GramMgr.using_global')
 
     
@@ -351,47 +351,47 @@ class GramMgrFactory(Object):
     """
     def __init__(self, **args):
         """abstract class, no arguments
-	"""
+        """
         self.deep_construct(GramMgrFactory, {}, args)
 
     def new_manager(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* editor -- AppState object for which to manage
-	grammars
+        *AppState* editor -- AppState object for which to manage
+        grammars
 
         *STR instance_name* -- the name of this AppState instance 
 
-	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-	grammar manager
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgrFactory.new_manager')
 
     def new_global_manager(self, editor, instance_name, 
         recog_mgr, exclusive = 1):
         """creates a new GramMgr using global grammars (regardless of
-	the value of self.global_grammars)
+        the value of self.global_grammars)
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* editor -- AppState object for which to manage
-	grammars
+        *AppState* editor -- AppState object for which to manage
+        grammars
 
         *STR instance_name* -- the name of this AppState instance 
 
-	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-	grammar manager
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgrFactory.new_global_manager')
 
 
@@ -429,15 +429,15 @@ class GramMgrDictContext(GramMgr):
     def find_context(self, buffer):
         """Find context for dictation grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buffer* -- name of the current buffer
+        *STR buffer* -- name of the current buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	(STR, STR) -- (two-word) context before and after the current
-	selection
-	"""
+        (STR, STR) -- (two-word) context before and after the current
+        selection
+        """
 #  find dictation context
         current = self.app.cur_pos(buff_name = buffer)
         selection = self.app.get_selection(buff_name = buffer)
@@ -494,22 +494,22 @@ class WinGramMgr(GramMgrDictContext):
     def __init__(self, factory, global_grammars = 0, 
         exclusive = 0, correction = None, **args):
         """
-	
-	**INPUTS**
-	
-	*WinGramFactory* factory -- factory which will supply WinGramMgr
-	with new window-specific dictation and selection grammars.
+        
+        **INPUTS**
+        
+        *WinGramFactory* factory -- factory which will supply WinGramMgr
+        with new window-specific dictation and selection grammars.
 
-	*BOOL* global_grammars -- use global grammars, instead of
-	window-specific ones (only for testing purposes)
+        *BOOL* global_grammars -- use global grammars, instead of
+        window-specific ones (only for testing purposes)
 
-	*BOOL* exclusive -- use exclusive grammars which prevent 
-	non-exclusive grammars from getting results (only for testing purposes)
+        *BOOL* exclusive -- use exclusive grammars which prevent 
+        non-exclusive grammars from getting results (only for testing purposes)
 
         *STR* correction -- string indicating the type of correction
         which is available: 'basic' or 'advanced', or None if no 
         correction is available
-	"""
+        """
         self.deep_construct(WinGramMgr,
                             {'factory': factory, 
                             'global_grammars': global_grammars,
@@ -526,22 +526,22 @@ class WinGramMgr(GramMgrDictContext):
     
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**NOTE:** subclasses must call their parent class's 
-	remove_other_references method, after performing their own duties.
-	Also, a class inheriting from two OwnerObject classes MUST
-	define remove_other_references and call both subclasses'
-	versions
+        **NOTE:** subclasses must call their parent class's 
+        remove_other_references method, after performing their own duties.
+        Also, a class inheriting from two OwnerObject classes MUST
+        define remove_other_references and call both subclasses'
+        versions
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
         self.deactivate_all()
@@ -549,21 +549,21 @@ class WinGramMgr(GramMgrDictContext):
 
     def activate(self, buffer, window):
         """activate grammars for a buffer displayed in a particular
-	window, and deactivate all other buffer/window-specific grammars
+        window, and deactivate all other buffer/window-specific grammars
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if not self.dict_grammars.has_key(window):
             self.new_window(window)
 # this also creates a new dictation grammar and selection grammar
@@ -605,18 +605,18 @@ class WinGramMgr(GramMgrDictContext):
     
     def _deactivate_all_window(self, window):
         """de-activate all buffer-specific grammars which would be
-	active in window
+        active in window
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window --
-	identifier of current window.  Only grammars associated with 
-	that window will be explicitly de-activated.  
-	
-	**OUTPUTS**
+        *INT* window --
+        identifier of current window.  Only grammars associated with 
+        that window will be explicitly de-activated.  
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.dict_grammars.has_key(window):
             self.sel_grammars[window].deactivate()
             if self.correction:
@@ -626,20 +626,20 @@ class WinGramMgr(GramMgrDictContext):
 
     def deactivate_all(self, window = None):
         """de-activate all buffer-specific grammars which would be
-	active in window, or all grammars if window is omitted.
+        active in window, or all grammars if window is omitted.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window --
-	identifier of current window.  If grammars are window-specific,
-	then only grammars associated with that window need be
-	explicitly de-activated.  If window is omitted, de-activate all
-	grammars.
-	
-	**OUTPUTS**
+        *INT* window --
+        identifier of current window.  If grammars are window-specific,
+        then only grammars associated with that window need be
+        explicitly de-activated.  If window is omitted, de-activate all
+        grammars.
+        
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if window == None or self.global_grammars:
             for a_window in self.dict_grammars.keys():
                 self._deactivate_all_window(a_window)
@@ -649,22 +649,22 @@ class WinGramMgr(GramMgrDictContext):
     def new_buffer(self, buffer, window = None):
         """add grammars for new buffer/window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle.
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle.
 
-	Note: if window is omitted, 
-	then new_buffer may not be created until activate is called.
+        Note: if window is omitted, 
+        then new_buffer may not be created until activate is called.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if window != None:
             if not self.dict_grammars.has_key(window):
                 self.new_window(window, buffer)
@@ -681,36 +681,36 @@ class WinGramMgr(GramMgrDictContext):
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('GramMgr.rename_buffer_cbk')
 
     def new_window(self, window, buffer = None):
         """add a new window
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle.
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if not self.dict_grammars.has_key(window):
             self.dict_grammars[window] = {}
         if not self.sel_grammars.has_key(window):
@@ -732,19 +732,19 @@ class WinGramMgr(GramMgrDictContext):
 
     def delete_window(self, window):
         """clean up and destroy all grammars for a window which 
-	has been deleted.
+        has been deleted.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- 
-	number identifying the current window  displaying
-	the buffer.  In Microsoft Windows, this will be the window
-	handle
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.sel_grammars.has_key(window):
             self._deactivate_all_window(window)
             del self.sel_grammars[window]
@@ -758,16 +758,16 @@ class WinGramMgr(GramMgrDictContext):
 
     def buffer_closed(self, buffer):
         """clean up and destroy all grammars for a buffer which 
-	has been closed.
+        has been closed.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buffer -- name of buffer
+        *STR* buffer -- name of buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         for a_window in self.dict_grammars.keys():
             buffers = self.dict_grammars[a_window]
             if buffers.has_key(buffer):
@@ -776,17 +776,17 @@ class WinGramMgr(GramMgrDictContext):
 
     def using_global(self):
         """checks whether GramMgr creates global grammars, rather than 
-	window-specific ones
+        window-specific ones
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the global_grammars flag has been set to
-	produce global grammars
-	"""
+        *BOOL* -- true if the global_grammars flag has been set to
+        produce global grammars
+        """
         return self.global_grammars
 
 class WinGramMgrFactory(GramMgrFactory):
@@ -814,23 +814,23 @@ class WinGramMgrFactory(GramMgrFactory):
     def __init__(self, gram_factory, global_grammars = 0,
         exclusive = 0, correction = None, **args):
         """create a GramMgrFactory which creates WinGramMgr objects for
-	new editors
+        new editors
 
-	**INPUTS**
+        **INPUTS**
 
-	*WinGramFactory* gram_factory -- factory which will supply each
-	WinGramMgr with new window-specific dictation and selection grammars.
+        *WinGramFactory* gram_factory -- factory which will supply each
+        WinGramMgr with new window-specific dictation and selection grammars.
 
-	*BOOL* global_grammars -- use global grammars, instead of
-	window-specific ones (only for testing purposes)
+        *BOOL* global_grammars -- use global grammars, instead of
+        window-specific ones (only for testing purposes)
 
-	*BOOL* exclusive -- use exclusive grammars which prevent 
-	non-exclusive grammars from getting results (only for testing purposes)
+        *BOOL* exclusive -- use exclusive grammars which prevent 
+        non-exclusive grammars from getting results (only for testing purposes)
 
         *STR* correction -- string indicating the type of correction
         which is available: 'basic' or 'advanced', or None if no 
         correction is available
-	"""
+        """
         self.deep_construct(WinGramMgrFactory, 
                             {'gram_factory': gram_factory,
                              'global_grammars': global_grammars,
@@ -840,36 +840,36 @@ class WinGramMgrFactory(GramMgrFactory):
 
     def using_global(self):
         """checks whether the GramMgr objects created by the factory use
-	global grammars, rather than window-specific ones
+        global grammars, rather than window-specific ones
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the factory has been set to produce GramMgr
-	objects with the global_grammars flag set
-	"""
+        *BOOL* -- true if the factory has been set to produce GramMgr
+        objects with the global_grammars flag set
+        """
         return self.global_grammars
 
     def new_manager(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* editor -- AppState object for which to manage
-	grammars
+        *AppState* editor -- AppState object for which to manage
+        grammars
 
         *STR instance_name* -- the name of this AppState instance 
     
-	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-	grammar manager
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('WinGramMgrFactory.new_manager', 
             'new manager: global = ' + str(self.global_grammars))
         return WinGramMgr(app = editor, instance_name = instance_name,
@@ -881,22 +881,22 @@ class WinGramMgrFactory(GramMgrFactory):
     def new_global_manager(self, editor, instance_name, recog_mgr, 
         exclusive = 1):
         """creates a new GramMgr using global grammars (regardless of
-	the value of self.global_grammars)
+        the value of self.global_grammars)
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* editor -- AppState object for which to manage
-	grammars
+        *AppState* editor -- AppState object for which to manage
+        grammars
 
         *STR instance_name* -- the name of this AppState instance 
     
-	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-	grammar manager
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('WinGramMgrFactory.new_global_manager', 
             'new global manager')
         return WinGramMgr(app = editor, instance_name = instance_name,

@@ -70,18 +70,18 @@ class CmdInterp(OwnerObject):
                  None, **attrs):
         
         """
-	**INPUTS**
+        **INPUTS**
 
-	*FILE symdict_pickle_file = None* -- File used to for
-	reading/writing the symbol dictionary. If *None*, then don't
-	read/write the symbol dictionary from/to file.
+        *FILE symdict_pickle_file = None* -- File used to for
+        reading/writing the symbol dictionary. If *None*, then don't
+        read/write the symbol dictionary from/to file.
 
-	*BOOL disable_dlg_select_symbol_matches = None* -- If true, then
-	do not prompt the user for confirmation of new symbols.
+        *BOOL disable_dlg_select_symbol_matches = None* -- If true, then
+        do not prompt the user for confirmation of new symbols.
 
         *NewMediatorObject mediator* -- reference to the parent mediator
         which owns this CmdInterp instance
-	"""
+        """
 
         #
         # These attributes can't be set at construction time
@@ -162,9 +162,9 @@ class CmdInterp(OwnerObject):
         *AppState app* -- the AppState interface to the editor
         
         *[STR] initial_buffer* -- The name of the target buffer at the 
-	start of the utterance.  Some CSCs may change the target buffer of 
-	subsequent parts of the command.  If None, then the current buffer 
-	will be used.
+        start of the utterance.  Some CSCs may change the target buffer of 
+        subsequent parts of the command.  If None, then the current buffer 
+        will be used.
         
         """
         trace('CmdInterp.interpret_NL_cmd', 'cmd=%s' % cmd)
@@ -343,9 +343,9 @@ class CmdInterp(OwnerObject):
         *AppState app* -- the AppState interface to the editor
         
         *[STR] initial_buffer* -- The name of the target buffer at the 
-	start of the utterance.  Some CSCs may change the target buffer of 
-	subsequent parts of the command.  If None, then the current buffer 
-	will be used.
+        start of the utterance.  Some CSCs may change the target buffer of 
+        subsequent parts of the command.  If None, then the current buffer 
+        will be used.
         
         """
         trace('CmdInterp.interpret_NL_cmd', 'pre-massaged cmd=%s' % cmd)
@@ -364,9 +364,9 @@ class CmdInterp(OwnerObject):
         *AppState app* -- the AppState interface to the editor
         
         *[STR] initial_buffer* -- The name of the target buffer at the 
-	start of the utterance.  Some CSCs may change the target buffer of 
-	subsequent parts of the command.  If None, then the current buffer 
-	will be used.
+        start of the utterance.  Some CSCs may change the target buffer of 
+        subsequent parts of the command.  If None, then the current buffer 
+        will be used.
         
         """
         cmd = self.massage_command_tuples(cmd)
@@ -503,8 +503,8 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
 
-	*STR* untranslated_text -- untranslated form of the text which
-	matched
+        *STR* untranslated_text -- untranslated form of the text which
+        matched
         
         *[SymbolMatch]* symbol_matches -- List of possible matches.
         
@@ -920,13 +920,13 @@ class CmdInterp(OwnerObject):
     def add_csc(self, acmd, add_voc_entry=1):
         """Add a new Context Sensitive Command. (synonym for index_csc)
 
-	[CSCmd] *acmd* is the command to add.
+        [CSCmd] *acmd* is the command to add.
 
-	*BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-	for the CSC's spoken forms
-	
+        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+        for the CSC's spoken forms
+        
 
-	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
+        .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
         self.index_csc(acmd, add_voc_entry)
 
@@ -934,29 +934,29 @@ class CmdInterp(OwnerObject):
     def add_lsa(self, spoken_forms, meanings):
         """Add a language specific word.
 
-	These words get added and removed dynamically from the SR
-	vocabulary, depending on the language of the active buffer.
+        These words get added and removed dynamically from the SR
+        vocabulary, depending on the language of the active buffer.
 
-	A redundant CSC is also added to allow translation of the LSA at
-	the level of the Mediator, in cases where NatSpeak prefers to
-	recognise the LSA as dictated text instead of a spoken/written
-	word (this often happens if the spoken form looks to much like
-	dictated text, e.g. "is not equal to").
-	
-	**INPUTS**
-	
-	*STR* spoken_forms -- List of spoken form of the word.
+        A redundant CSC is also added to allow translation of the LSA at
+        the level of the Mediator, in cases where NatSpeak prefers to
+        recognise the LSA as dictated text instead of a spoken/written
+        word (this often happens if the spoken form looks to much like
+        dictated text, e.g. "is not equal to").
+        
+        **INPUTS**
+        
+        *STR* spoken_forms -- List of spoken form of the word.
 
-	*{STR: STR}* meanings -- Dictionary of language specific
-	 meanings. Key is the language name and value is the written form
-	 of the LSA for that langugage. If language name is *None*, then
-	 it means that this LSA applies for all languages (I know, it
-	 doesn't make much sense syntactically).
-	
-	**OUTPUTS**
-	
-	*none* -- 
-	"""
+        *{STR: STR}* meanings -- Dictionary of language specific
+         meanings. Key is the language name and value is the written form
+         of the LSA for that langugage. If language name is *None*, then
+         it means that this LSA applies for all languages (I know, it
+         doesn't make much sense syntactically).
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
         
 #    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
         
@@ -995,17 +995,17 @@ class CmdInterp(OwnerObject):
     def add_abbreviation(self, abbreviation, expansions, user_added = 1):
         """Add an abbreviation to VoiceCode's abbreviations dictionary.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* abbreviation -- the abbreviation 
+        *STR* abbreviation -- the abbreviation 
 
-	*[STR]* expansions -- list of possible expansions
+        *[STR]* expansions -- list of possible expansions
 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none* -- 
-	"""
+        *none* -- 
+        """
         self.known_symbols.add_abbreviation(abbreviation, expansions,
             user_added = user_added)
 
@@ -1024,25 +1024,25 @@ class CmdInterp(OwnerObject):
 
     def peek_at_unresolved(self):
         """returns a reference to the dictionary of unresolved 
-	abbreviations maintained by the SymDict, and the symbols 
-	containing those abbreviations.
+        abbreviations maintained by the SymDict, and the symbols 
+        containing those abbreviations.
 
-	**NOTE:** This method is intended only for diagnostic testing
-	purpose.  The caller must not modify the dictionary returned
+        **NOTE:** This method is intended only for diagnostic testing
+        purpose.  The caller must not modify the dictionary returned
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
-	unresolved abbreviations. These are abbreviations that have
-	appeared in at least one compiled symbol, yet are neither a word
-	in the speech vocabulary or a known abbreviation. Values are
-	dictionnaries that list the symbols containing the unresolved
-	abbreviation.
-	"""
+        *{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
+        unresolved abbreviations. These are abbreviations that have
+        appeared in at least one compiled symbol, yet are neither a word
+        in the speech vocabulary or a known abbreviation. Values are
+        dictionnaries that list the symbols containing the unresolved
+        abbreviation.
+        """
         return self.known_symbols.peek_at_unresolved()
 
     def accept_symbol_match(self, the_match):
@@ -1167,12 +1167,12 @@ class CmdInterp(OwnerObject):
                 
     def parse_symbols(self, contents, language_name, add_sr_entries=1):
         """Parse symbols from a string representing the contents of a 
-	source file.
+        source file.
 
         *STR* contents -- the contents of the source file
 
-	*STR* language_name -- the name of the language of the source
-	file
+        *STR* language_name -- the name of the language of the source
+        file
 
         *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
         """
