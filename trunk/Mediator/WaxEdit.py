@@ -90,6 +90,19 @@ class WaxEdit:
 	"""
 	debug.virtual('WaxEdit.editor_buffer')
     
+    def set_name(self, name):
+        """sets the filename to name (usually indicated in the title bar)
+
+	**INPUTS**
+
+	*STR* name -- name of current file
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('WaxEdit.set_name')
+
     def run(self, app_control):
 	"""starts the message loop.  Note: this function does not
 	return until the GUI exits.
