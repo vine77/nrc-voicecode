@@ -180,7 +180,7 @@ def open_file(fname):
     global the_mediator
     the_mediator.interp.on_app.open_file(fname)
     the_mediator.interp.known_symbols.parse_symbols(fname)
-    the_mediator.interp.on_app.curr_buffer.refresh_if_necessary()
+    the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
 # show_buff()
 
 def compile_symbols(file_list):
@@ -307,7 +307,7 @@ def select(start, end):
 def show_buff():
     """Shows content of current source buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.curr_buffer.refresh_if_necessary()
+    the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""

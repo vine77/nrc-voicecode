@@ -899,7 +899,7 @@ class CommandDictGrammar(DictGramBase):
 	    self.last = SpokenUtteranceNL(results)
 	    words = results.getWords(0)
 	    self.interpreter.interpret_NL_cmd(words)
-	    self.interpreter.on_app.curr_buffer.refresh_if_necessary()
+	    self.interpreter.on_app.curr_buffer().refresh_if_necessary()
         
 #    def gotResults(self, words):
         #
@@ -962,11 +962,11 @@ class CodeSelectGrammar(SelectGramBase):
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
 #	print moduleInfo
-	vis_start, vis_end = self.interpreter.on_app.curr_buffer.get_visible()
+	vis_start, vis_end = self.interpreter.on_app.curr_buffer().get_visible()
 	self.vis_start = vis_start
 #	print vis_start, vis_end
 	visible = \
-	    self.interpreter.on_app.curr_buffer.get_text(vis_start, vis_end)
+	    self.interpreter.on_app.curr_buffer().get_text(vis_start, vis_end)
 	self.setSelectText(visible)
 #	print visible[0:50]
 	if self.window == 0:
@@ -1057,7 +1057,7 @@ class CodeSelectGrammar(SelectGramBase):
             # which is closest to the cursor
             #
             self.ranges.sort()
-            closest_range_index = self.interpreter.on_app.curr_buffer.closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)           
+            closest_range_index = self.interpreter.on_app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)           
 
             #
             # Mark selection and/or move cursor  to the appropriate end of
@@ -1071,21 +1071,21 @@ class CodeSelectGrammar(SelectGramBase):
                     pos = self.ranges[closest_range_index][1]
                 else:
                     pos = self.ranges[closest_range_index][0]
-                self.interpreter.on_app.curr_buffer.goto(pos)
+                self.interpreter.on_app.curr_buffer().goto(pos)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 
 # every change to the buffer.  Other editors will usually refresh
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the refresh_if_necessary message.
-            self.interpreter.on_app.curr_buffer.refresh_if_necessary()
+            self.interpreter.on_app.curr_buffer().refresh_if_necessary()
 
             #
             # Log the selected occurence so that if the user repeats the
             # same Select Pseudocode operation we don't end up selecting
             # the same occurence again
             #
-            self.interpreter.on_app.curr_buffer.log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
+            self.interpreter.on_app.curr_buffer().log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
 
     def selection_spoken_form(self, resObj):
 
