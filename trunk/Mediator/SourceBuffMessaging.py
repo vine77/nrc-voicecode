@@ -354,7 +354,6 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         response = self.app.talk_msgr.get_mess(expect=['set_text_resp'])
         
         self.app.update_response = 1
-        trace('SourceBuffMessaging.set_text', '** received updates: %s' % repr(response[1]['updates']))
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
 

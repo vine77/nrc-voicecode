@@ -816,6 +816,7 @@ class BufferStatesBasic(BufferStates):
 # we have to check all our cookies first, so that we don't restore some
 # buffers before realizing that others can't be restored,
 # leaving the editor in a mixed up state
+
         if not self.valid_cookies(app, ignore_deleted = 1):
             return 0
 
