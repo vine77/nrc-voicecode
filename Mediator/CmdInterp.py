@@ -1101,6 +1101,8 @@ class CmdInterp(OwnerObject):
         while len(phrase) > 0:
             trace('CmdInterp.interpret_phrase', 
                 'now, phrase = %s' % phrase)
+            trace('CmdInterp.interpret_phrase', 
+                'processed phrase = %s' % processed_phrase)
 
             #
             # Identify leading CSC, LSA, symbol and ordinary word

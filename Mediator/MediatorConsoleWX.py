@@ -817,8 +817,8 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 # doesn't work on Win NT
 #                self.console.raise_wxWindow(self)
                 self.console.win_sys.raise_main_frame()
-                if self.choices:
-                    self.choice_list.SetSelection(1, 0)
+#                if self.choices:
+#                    self.choice_list.SetSelection(0, 0)
 
 
 class CorrectNextPrevWX(CorrectionBoxWX):

@@ -1045,13 +1045,14 @@ def test_SymDict_storage():
             print "\nThese differences could be due to a change to"
             print "the persistent SymDict format without a corresponding"
             print "increment in current_version in SymDict.py.  They could"
-            print "also be due to changes to the input files py_abbrevs.py"
-            print "and selected_py_sym.py in"
+            print "also be due to changes to the algorithm for generating"
+            print "spoken forms for known symbols, or to the input files"
+            print "py_abbrevs.py and selected_py_sym.py in"
             print util.within_VCode(vc_globals.test_data) 
             print incr_version
             print "\nIf these differences are simply due to changes"
-            print "in the input files, then you must verify the new"
-            print "stored symdict.dict in "
+            print "in the input files or the algorithms, then you must"
+            print "verify the new stored symdict.dict in "
             print util.within_VCode(vc_globals.test_data) 
             print "manually, and then copy it to current_symdict.dict"
             print "in the same directory."

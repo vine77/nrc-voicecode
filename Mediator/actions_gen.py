@@ -453,7 +453,9 @@ class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
         
         
         debug.trace('ActionNavigateByPseudoCode.execute', 'invoked')
-        self.select_range_no = self.select_range_no + self.direction
+        new_index = self.select_range_no + self.direction
+        if new_index >= 0 and new_index < len(self.possible_ranges):
+            self.select_range_no  = new_index
         if self.mark_selection:
             app.set_selection(range=self.possible_ranges[self.select_range_no], 
                               cursor_at=self.cursor_at, buff_name=self.buff_name)
