@@ -1103,7 +1103,8 @@ class SymDict(OwnerObject):
         if show_unresolved:
             print '\n\nList of unresolved abbreviations\n'
             sorted_unresolved = self.unresolved_abbreviations.keys()
-            sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
+            sorted_unresolved.sort()
+#            sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
             for an_abbreviation in sorted_unresolved:
                 symbol_list = self.unresolved_abbreviations[an_abbreviation].keys()
                 symbol_list.sort()
@@ -1973,8 +1974,8 @@ class SymDict(OwnerObject):
         # Check if word might be a pluralised word
         #
         word_length = len(word)
-        if word_length and word[word_length-1] == 's':
-            single_form = word[0:word_length-1]
+        if word_length > 1 and word[-1] == 's':
+            single_form = word[0:-1]
         else:
             single_form = word
         
@@ -2040,6 +2041,14 @@ class SymDict(OwnerObject):
         if not word_exists:
             word_exists = self.std_word_exists
 
+# some versions of natspeak define "non", etc. without hyphens.  For
+# consistency, we prefer the hyphenated versions for common
+# hyphenated words
+        hyphenated = word + '-'
+        hyphenated_pron = \
+            sr_interface.vocabulary_entry(word, hyphenated)
+        if self.common_hyphenated.has_key(word):
+            return [hyphenated]
         if word_exists(word):
             expansions = [word]
             if len(word) == 1 and word[0].isalpha():
@@ -2047,11 +2056,7 @@ class SymDict(OwnerObject):
                 spoken = sr_interface.spoken_acronym(acronym)
                 expansions.append(spoken)
             return expansions
-        hyphenated = word + '-'
-        hyphenated_pron = \
-            sr_interface.vocabulary_entry(word, hyphenated)
-        if self.common_hyphenated.has_key(word) or \
-            word_exists(word, hyphenated):
+        if word_exists(word, hyphenated):
             return [hyphenated]
         if len(word) > 1:
             capped =  word.capitalize()

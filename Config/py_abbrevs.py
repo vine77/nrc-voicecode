@@ -29,6 +29,8 @@ add_alt_abbreviations('A. to L.', ['atol'])
 add_alt_abbreviations('ascii', ['asc'])
 add_alt_abbreviations('background', ['bg'])
 
+add_alt_abbreviations('dialog', ['dlg'])
+
 add_alt_abbreviations('file pointer', ['fp'])
 add_alt_abbreviations('foreground', ['fg'])
 
