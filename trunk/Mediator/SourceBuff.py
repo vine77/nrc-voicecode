@@ -8,27 +8,25 @@ from Object import Object
 
 file_language = {'c': 'C', 'h': 'C', 'py': 'python'}
 
-def language_name(self, file_name):
+def language_name(file_name):
     """Returns the name of the language a file is written in
     
     **INPUTS**
     
     *STR* file_name -- name of the file 
     
-
     **OUTPUTS**
 
     *STR* -- the name of the language
     """
     global file_language
 
-    language = None
-    if file_name != None:
-	a_match = re.match('^.*?\.([^\.]*)$', file_name)
-	extension = a_match.group(1)
-	if file_language.has_key(extension):
-	    language =  file_language[extension]
-    return language
+    #
+    # Create a temporary SourceBuff instance and return its language 
+    #
+    tmp = SourceBuff(None, file_name=file_name)
+    return tmp.language_name()
+
 
 
 class SourceBuff(Object):
@@ -40,8 +38,20 @@ class SourceBuff(Object):
     **INSTANCE ATTRIBUTES**
     
     *STR file_name=None* -- Name of the source file loaded into buffer
+    
     *STR language=None* -- Name of language of the source file
+    
     *AppState app* -- application object containing the buffer
+
+    (STR, INT, INT, INT) *last_search* -- Remember the
+    details of the last regepx search that was done with method
+    *search_for*, so that if the user repeats the same search, we
+    don't end up returning the same occurence over and over. The first
+    3 entries of the tuple correspond to the value that were passed to
+    *search_for* for the following arguments: *regexp*, *direction*,
+    *where*. The last entry correspond to the position where cursor
+    was put after last search.
+    
 
     CLASS ATTRIBUTES**
     
@@ -50,11 +60,12 @@ class SourceBuff(Object):
     """
     
     def __init__(self, app, file_name=None, language=None, **attrs):
+        self.init_attrs({'last_search': None})        
         self.deep_construct(SourceBuff,
-                            {'app': app, \
-			     'file_name': file_name, \
-                             'language': language}, \
-                            attrs \
+                            {'app': app,
+			     'file_name': file_name,
+                             'language': language},
+                            attrs
                             )
 
 
@@ -62,7 +73,7 @@ class SourceBuff(Object):
         # Set the language name if it hasn't been set already
         #
         if self.language == None and self.file_name != None:
-            self.language = self.language_name(file_name)
+            self.language = self.language_name()
             
 
 
@@ -70,13 +81,10 @@ class SourceBuff(Object):
     # Note: this method can be called even if *self* is not an actual
     #       class.
     #
-    def language_name(self, file_name):
+    def language_name(self):
         """Returns the name of the language a file is written in
         
-        **INPUTS**
-        
-        *STR* file_name -- name of the file 
-        
+        **INPUTS**        
 
         **OUTPUTS**
 
@@ -84,9 +92,9 @@ class SourceBuff(Object):
         """
         global file_language
 
-        language = None
-        if file_name != None:
-            a_match = re.match('^.*?\.([^\.]*)$', file_name)
+        language = self.language
+        if language == None and self.file_name != None:
+            a_match = re.match('^.*?\.([^\.]*)$', self.file_name)
             extension = a_match.group(1)
             if file_language.has_key(extension):
                 language =  file_language[extension]
@@ -138,7 +146,7 @@ class SourceBuff(Object):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	pass
+	debug.virtual('SourceBuff.cur_pos')
 
 
     def get_selection(self):
@@ -158,7 +166,7 @@ class SourceBuff(Object):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	pass
+	debug.virtual('SourceBuff.get_selection')	
 
     def bidirectional_selection(self):
 	"""does editor support selections with cursor at left?
@@ -208,7 +216,7 @@ class SourceBuff(Object):
 
 	*none*
 	"""
-	pass
+	debug.virtual('SourceBuff.set_selection')
 
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
@@ -226,7 +234,7 @@ class SourceBuff(Object):
 
 	*STR* -- contents of specified range of the buffer
 	"""
-	pass
+	debug.virtual('SourceBuff.get_text')
 
     def contents(self):
 	"""retrieves entire contents of the buffer
@@ -259,8 +267,18 @@ class SourceBuff(Object):
             end = opt_end[0]
         else:
             end = start
+        # make sure start < end and start2 < end2
+        if start > end:
+            tmp = end
+            end = start
+            start = tmp            
 	start2, end2 = self.get_selection()
-	if not (start2 and end2):
+        # make sure start2 < end2
+        if start2 > end2:
+            tmp = end2
+            start2 = end2
+            end2 = tmp        
+	if start2 == None or end2 == None:
             start2 = self.cur_pos()
             end2 = start2
         return self.region_distance(start, end, start2, end2)
@@ -278,7 +296,7 @@ class SourceBuff(Object):
 
 	*INT* (start, end)
 	"""
-	pass
+	debug.virtual('SourceBuff.get_visible')
 
     def make_position_visible(self, position = None):
 	"""scroll buffer (if necessary) so that  the specified position
@@ -293,7 +311,7 @@ class SourceBuff(Object):
 
 	*none*
 	"""
-	pass
+	debug.virtual('SourceBuff.make_position_visible')
     
     def line_num_of(self, position = None):
 	"""
@@ -308,7 +326,7 @@ class SourceBuff(Object):
         *INT line_num* -- The line number of that position
         """
         
-	pass
+	debug.virtual('SourceBuff.line_num_of')
 
     def number_lines(self, astring, startnum=1):
         """Assign numbers to lines in a string.
@@ -350,7 +368,7 @@ class SourceBuff(Object):
 
 	*INT* length 
 	"""
-	pass
+	debug.virtual('SourceBuff.len')
 
     def make_valid_range(self, range):
         """Makes sure a region is increasing and within the buffer's range.
@@ -405,7 +423,7 @@ class SourceBuff(Object):
 
 	*none*
 	"""
-        pos = self.make_within_range(self.cur_pos()+rel_movement)
+        pos = self.cur_pos()+rel_movement
 	self.goto(pos)
         
 
@@ -488,9 +506,6 @@ class SourceBuff(Object):
 
         """Moves the cursor to position *INT pos* of source buffer
 	(and make selection empty)
-
-        If *f_name* is *None*, use [self.curr_buffer].
-
         """
         
         debug.virtual('goto')
@@ -503,12 +518,25 @@ class SourceBuff(Object):
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
-	pass
+	debug.virtual('SourceBuff.goto_line')
                 
+    def refresh_if_needed(self):
+	"""Refresh buffer if necessary"""
+# note: this method is included primarily for the benefit of EdSim,
+# which, being a line editor, needs to refresh its display by reprinting
+# several lines of context around the current cursor position.  Most
+# other editors will automatically refresh the screen on any change, so
+# they need not override this default (no-op) behavior.
+	debug.virtual('SourceBuff.refresh_if_needed')
+
+    def refresh(self):
+	"""Force a refresh of the buffer"""
+	debug.virtual('SourceBuff.refresh')
+
     def search_for(self, regexp, direction=1, num=1, where=1):
         
         """Moves cursor to the next occurence of regular expression
-           *STR regexp* in buffer with file name *STR f_name*.
+           *STR regexp* in buffer.
 
            *INT* direction -- if positive, search forward, otherwise
             search backward
@@ -518,25 +546,127 @@ class SourceBuff(Object):
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
 
-           *STR* f_name -- name of the file in buffer where the search
-            should be done. If *None*, use [self.curr_buffer].
-
            Returns *None* if no occurence was found. Otherwise,
            returns a match object.
+           
         .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+#        print '-- SourceBuff.search_for: regexp=%s, direction=%s, num=%s, where=%s' % (regexp, direction, num, where)
+        success = None
         
-        debug.virtual('search_for')
+        #
+        # Find position of all matches
+        #
+        reobject = re.compile(regexp)        
+        pos = 0; all_matches_pos = []
+        while 1:
+           a_match = reobject.search(self.get_text(), pos)
+           if a_match and pos < len(self.get_text()):
+               pos = a_match.start() + 1
+               all_matches_pos = all_matches_pos + [(a_match.start(), a_match.end())]               
+           else:
+               break
 
-    def refresh_if_needed(self):
-	"""Refresh buffer if necessary"""
-# note: this method is included primarily for the benefit of EdSim,
-# which, being a line editor, needs to refresh its display by reprinting
-# several lines of context around the current cursor position.  Most
-# other editors will automatically refresh the screen on any change, so
-# they need not override this default (no-op) behavior.
-	pass
+#        print '-- SourceBuff.search_for: all_matches_pos=%s' % all_matches_pos
 
-    def refresh(self):
-	"""Force a refresh of the buffer"""
-	pass
+        #
+        # Look in the list of matches for the one closest to the cursor
+        # in the right direction
+        #
+        closest_match = None
+        for ii in range(len(all_matches_pos)):
+#            print '-- SourceBuff.search_for: closest_match=%s, self.cur_pos()=%s, ii=%s, all_matches_pos[ii][0]=%s, all_matches_pos[ii][1]=%s' % (closest_match, self.cur_pos(), ii, all_matches_pos[ii][0], all_matches_pos[ii][1])
 
+            if direction < 0:
+                if all_matches_pos[ii][0] >= self.cur_pos():
+                    #
+                    # Searching backward but we have passed cursor.
+                    #
+                    break
+                else:
+                    #
+                    # Searching backward and this is closest occurence
+                    # before cursor yet.
+                    #
+                    if not self.same_as_previous_search(regexp, direction,
+                                                   where, all_matches_pos[ii]):
+                        closest_match = ii
+            elif direction > 0:
+                if all_matches_pos[ii][0] >= self.cur_pos():
+                    #
+                    # Searching forward and we have just passed cursor. So this
+                    # is the closest occurence after cursor
+                    #
+                    if not self.same_as_previous_search(regexp, direction,
+                                                   where, all_matches_pos[ii]):
+                        closest_match = ii
+                        break
+
+#        print '-- SourceBuff.search_for: closest_match=%s' % closest_match
+        new_cur_pos = None
+        if closest_match != None:
+            if direction > 0:
+                the_match_index = closest_match + num - 1
+                if the_match_index >= len(all_matches_pos):
+                    the_match_index = len(all_matches_pos) - 1
+            else:
+                the_match_index = closest_match - num + 1
+                if the_match_index < 0:
+                    the_match_index = 0
+
+#            print '-- SourceBuff.search_for: the_match_index=%s' % the_match_index                                      
+            if where > 0:
+                new_cur_pos = all_matches_pos[the_match_index][1]
+            else:
+                new_cur_pos = all_matches_pos[the_match_index][0]
+
+#        print '-- SourceBuff.search_for: new_cur_pos=%s' % new_cur_pos
+
+        #
+        # Log the search
+        #
+        self.last_search = (regexp, direction, where, new_cur_pos)
+        
+        if new_cur_pos != None:
+            self.goto(new_cur_pos)
+            success = 1
+        else:
+            succses = 0
+            
+        return success
+
+
+    def same_as_previous_search(self, regexp, direction, where, match):
+        
+        """Determines whether a particular match found by *search_for* is the
+        same as the one found by its last invocation.
+        
+        **INPUTS**
+        
+        *STR* regexp -- The regexp for current *search_for*
+        
+        *INT* direction -- Direction of the search 
+        
+        *INT* where -- Put cursor at end or start of occurence
+                
+        *(INT, INT)* match -- Star and end position of the match
+        
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if this is the same match as last invocation of
+        *search_for*
+        """
+
+#        print '-- SourceBuff.same_as_previous_search: self.last_search=%s' % repr(self.last_search)
+        answer = 0
+        if self.last_search != None:
+            if (regexp, direction, where) == self.last_search[0:3]:
+                prev_search_pos = self.last_search[3]
+                if where < 0 and match[0] == prev_search_pos or \
+                   where > 0 and match[1] == prev_search_pos:
+                    answer = 1
+#        print '-- SourceBuff.same_as_previous_search: returning answer=%s' % answer
+        return answer
+          
+        

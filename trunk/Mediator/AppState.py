@@ -71,10 +71,15 @@ class AppState(Object):
 
     SourceBuff curr_buffer=None -- Current source buffer
 
+    *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
+     the stack is a couple where the first entry is the name of the
+     source buffer and the second is the position in that buffer where
+     the crumb was dropped.    
+
     *BOOL* translation_is_off -- If true, then translation of CSCs and
      LSAs isturned off for that applications. Everything should be
      typed as dictated text, except for commands that turn the
-     translation back on.
+     translation back on (NOT IMPLEMENTED FOR NOW).
 
     **CLASS ATTRIBUTES**
     
@@ -101,6 +106,7 @@ class AppState(Object):
     def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
                  active_field=None, curr_buffer=None, 
                  **attrs):
+        self.init_attrs({'breadcrumbs': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
                              'rec_utterances': [], 
@@ -123,7 +129,7 @@ class AppState(Object):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-	pass
+	debug.virtual('AppState.bidirectional_selection')
 
     def focus_is_source(self, lang_name):
         """Check if prog. env. focus is a source buffer
@@ -161,13 +167,10 @@ class AppState(Object):
         *INT pos* is the position where to drop the crumb. *STR
          buffname* is the name of the source buffer.
         
-        If *pos* not specified, drop breadcrumb at position
-        [self.cur_pos] of buffer.
+        If *pos* not specified, drop breadcrumb at cursor position.
 
-        If *buff* not specified either, drop breadcrumb [self.curr_buffer].
+        If *buff* not specified either, drop breadcrumb in current buffer
 	"""
-	pass
-
         buff = self.find_buff(buffname)
         buffname = buff.file_name
         if not pos: pos = buff.cur_pos
@@ -182,7 +185,6 @@ class AppState(Object):
         if *BOOL gothere* is true, then move cursor to the last popped
         breadcrumb.
         """
-	pass
         stacklen = len(self.breadcrumbs)
         lastbuff, lastpos = self.breadcrumbs[stacklen - num]
         self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
@@ -217,3 +219,4 @@ class AppState(Object):
         if self.curr_buffer != None:
             language = self.curr_buffer.language
         return language
+

@@ -68,11 +68,6 @@ def cleanup(clean_sr_voc=0):
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
-def setmic(state):
-    if sr_interface.speech_able():
-        sr_interface.connect()
-        natlink.setMicState(state)
-
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
 
@@ -164,9 +159,11 @@ def simulator_mode(options):
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
 
-    open_file('blah.py')
-    say(['between parens', '1'])
-    say(['back out of parens'])
+#      open_file('blah.py')
+#      say(['for', 'index', 'equals', '0', 'loop body'])
+#      say(['for', 'index', 'equals', '0', 'loop body'])
+#      move(-50)
+#      say_select(['select', 'index', '=\\equals', '0'])
 
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')

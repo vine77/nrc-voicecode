@@ -4,6 +4,21 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+BUG in Select PseudoCode
+------------------------
+
+This:
+
+open_file('blah.py')
+say(['for', 'index', 'equals', '0', 'loop body'])
+say(['for', 'index', 'equals', '0', 'loop body'])
+move(-50)
+say_select(['select', 'index', '=\\equals', '0'])
+
+ends up selecting second occurence of 'index = 0' instead of the first
+(which is closest to the cursor).
+
+
 BUGS in pseudo python
 ---------------------
 
@@ -20,22 +35,9 @@ making it so slow.
 Division of labour between EdSim, AppState and SourceBuff
 ---------------------------------------------------------
 
-Figure out what should go in EdSim and what should go in SourceBuff
-and what should go in AppState.
-
-I think all methods in SourceBuff should have an equivalent in
-AppState (and EdSim) that would have an additional f_name
-argument. These methods would just invoke the corresponding SourceBuff
-method. Conversely, all methods in AppState and EdSim that affect a
-SourceBuff should have a corresponding method in SourceBuff.
-
 print_buff: and its supporting methods (number_line etc...) should be
 implemented at the level of SourceBuff, not SourceBuffEdSim (could
 be useful for debugging purposes).
-
-breadcrumbs: implement at the AppState level.
-
-search_for: and related data structures and methods: move to AppState.
 
 
 "Not what I said" correction
