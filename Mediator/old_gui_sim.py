@@ -59,6 +59,7 @@ import natlink
 import os, profile, re, string, sys
 import traceback
 import vc_globals
+import mediator
 
 # we need the module object, so we must import the whole module
 import sim_commands
@@ -87,90 +88,15 @@ from actions_py import *
 
 the_mediator = None
 
+
 def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
-    global the_mediator, console_win_handle
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
-    if the_mediator:
-        the_mediator.quit(clean_sr_voc=clean_sr_voc, 
+#    print the_mediator
+    if sim_commands.the_mediator:
+        sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 	    save_speech_files=save_speech_files, disconnect=disconnect)
 
-def init_simulator(app, symdict_pickle_fname=None, 
-    disable_dlg_select_symbol_matches = None, window = 0, exclusive = 0,
-    allResults = 0, editor_app = None):
-
-#    print '-- gui_sim.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
-    
-    global the_mediator
-
-    if editor_app:
-	mic_change = editor_app.mic_change
-
-    try:
-        sr_interface.connect('off', mic_change_callback = mic_change)
-    except natlink.UnknownName:
-        print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
-        cleanup()        
-        
-    if sr_interface.speech_able:
-        if symdict_pickle_fname == None and the_mediator != None:
-            #
-            # Remove symbols from NatSpeak's dictionary 
-            #
-            the_mediator.interp.cleanup(resave=0)
-
-        #
-        # It could be that the_mediator has previously been initiated (e.g. if
-        # we are running multiple regression tests). If so, must unload the
-        # SR grammars otherwise they will continue to exist and to recognise
-        # utterances.
-        #
-        if the_mediator:
-            the_mediator.quit(save_speech_files=0, disconnect=0)            
-            
-            
-        the_mediator = MediatorObject.MediatorObject(app = app, interp=CmdInterp.CmdInterp(), window = window, exclusive=exclusive, allResults=allResults)
-
-        #
-        # Read the symbol dictionary from file
-        #
-        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
-        the_mediator.interp.known_symbols.init_from_file()
-
-        #
-        # Configure the mediator
-        #
-        the_mediator.configure()
-
-    #
-    # Possibly disable the symbol selection dialog
-    #
-    the_mediator.interp.disable_dlg_select_symbol_matches = disable_dlg_select_symbol_matches
-
-    # define global variables accessible to the simulator commands
-    # through the sim_commands module namespace
-
-    sim_commands.the_mediator = the_mediator
-    sim_commands.gui_sim = 1
-
-    # define some useful local variables
-    home = os.environ['VCODE_HOME']
-    sim_commands.__dict__['home'] = home
-    sim_commands.__dict__['testdata'] = \
-        os.path.join(home, 'Data', 'TestData')
-
-def execute_command(cmd):
-#    print '-- mediator.execute_command: cmd=%s' % cmd
-    try:
-	exec cmd in sim_commands.__dict__, sim_commands.command_space
-	#	  exec command in sim_commands and command_space
-    except Exception, err:
-	traceback.print_exc()
-#    else:
-#        if the_mediator.app.curr_buffer:
-#            the_mediator.app.curr_buffer.print_buff()
-
-        
 def simulator_mode(options):
     """Start mediator in console mode.
 
@@ -187,7 +113,7 @@ def simulator_mode(options):
     *none* -- 
     """
 
-    global the_mediator
+#    global the_mediator
 
     setmic('off')
 
@@ -197,11 +123,12 @@ def simulator_mode(options):
     print module_info
     app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
 
-    
-    init_simulator(app = app, 
-	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+    mediator.init_simulator(on_app = app, 
+#	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+	symdict_pickle_fname = None,
 	disable_dlg_select_symbol_matches = 1, window = window,
-	editor_app = editor_app)
+	mic_change = editor_app.mic_change)
+#    print sim_commands.the_mediator
         
     #
     # For better error reporting, you can type some instructions here
