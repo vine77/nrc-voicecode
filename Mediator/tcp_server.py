@@ -29,6 +29,8 @@ import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
 import RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 
+from debug import trace
+
 
 #
 # Port numbers for the communication link
@@ -123,8 +125,6 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
                             {})
 
     def new_compatible_sb(self, buff_name):
-#        print '-- AS_MessExtEdSim.new_compatible_sb: buff_name=%s' %
-#        buff_name
         buff = SB_MessExtEdSim(app=self, buff_name=buff_name)
         return buff
         
@@ -274,7 +274,7 @@ class ListenForConnThread(threading.Thread, Object.Object):
             # Accept a new connection
             (client_socket, address) = server_socket.accept()
 
-            print '-- ListenForConnThread.run: got new connection on port=%s' % self.port
+            trace('ListenForConnThread.run', 'got new connection on port=%s' % self.port)
             
             #
             # Log it and Raise Win32 event to notify the main event loop that
@@ -405,13 +405,11 @@ class CheckReadySocksThread(threading.Thread, Object.Object):
             to_check = self.socks_to_check.keys()
             if len(to_check) > 0:
                 self.ready_socks_lock.acquire()                
-#		print '-- CheckReadySocksThread.run: self.ready_socks=%s' % id(self.ready_socks)
                 (new_ready_socks, dum1,dum2) = select.select(to_check, [], [], 0)
 		self.ready_socks.extend(new_ready_socks)
-#		print '-- CheckReadySocksThread.run: after select, id(self.ready_socks)=%s, self.ready_socks=%s' % (id(self.ready_socks), repr(self.ready_socks))
                 self.ready_socks_lock.release()
                 if len(self.ready_socks) > 0:
-                    print '-- CheckReadySocksThread.run: some sockets are ready'
+                    trace('CheckReadySocksThread.run', 'some sockets are ready')
                     win32event.SetEvent(self.raise_event)
 
             # When debuggin, increase sleep time if you want to see things
@@ -532,10 +530,7 @@ class ServerSingleThread(Object.Object):
         
         *none* -- 
 
-        ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""
-
-        print '-- ServerSingleThread.package_sock_pair: called'
-        
+        ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""        
         
         listen_msgr = messenger_factory(listen_sock)
         talk_msgr = messenger_factory(talk_sock)        
@@ -629,18 +624,14 @@ class ServerSingleThread(Object.Object):
         # Create a temporary messenger for handshaking
         #
         a_messenger = messenger_factory(most_rec_sock)
-       
-        print '-- ServerSingleThread.handshake_listen_socks: self=%s, getting app_name' % self
-        
+               
         #
         # Get the external application name
         #
         a_messenger.send_mess('send_app_name')
         mess = a_messenger.get_mess(expect=['app_name'])
         app_name = mess[1]['value']
-        
-        print '-- ServerSingleThread.handshake_listen_socks: self=%s, sending ID' % self
-        
+                
         #
         # Assign a random ID to the external editor, and send it on the socket
         # connection.
@@ -648,11 +639,6 @@ class ServerSingleThread(Object.Object):
         id = '%s_%s' % (app_name, repr(whrandom.random()))
         a_messenger.send_mess('your_id_is', {'value': id})
         a_messenger.get_mess(expect=['ok'])
-
-        print '**-- ServerSingleThread.handshake_listen_socks: assigned id=%s' % id
-
-
-        print '**-- ServerSingleThread.handshake_listen_socks: self=%s, storing new sock' % self
         
         #
         # Assign window, id and app_name to the last socket in the list of
@@ -679,11 +665,7 @@ class ServerSingleThread(Object.Object):
         *none* -- 
         """
 
-        print '-- SeverSingleThread.handshake_talk_conn: self=%s, started' % self
-
-        print '-- SeverSingleThread.handshake_talk_conn: self=%s, getting ID' % self
-
-        self.new_socks_lock.acquire()
+	self.new_socks_lock.acquire()
 
         #
         # Loop through list of new VC_TALK sockets, handshake with them
@@ -707,13 +689,11 @@ class ServerSingleThread(Object.Object):
             #
             # Find the corresponding VC_LISTEN socket
             #
-            print '-- ServerSingleThread.handshake_talk_conn: looking for matching listen connection, id=%s, self.new_listen_socks=%s' % (id, repr(self.new_listen_socks))
             found = None
             jj = 0
             while jj < len(self.new_listen_socks):
                 (listen_sock, listen_data) = self.new_listen_socks[jj]
                 (a_listen_id, app_name, window) = listen_data
-                print '**-- ServerSingleThread.handshake_talk_conn: jj=%s, a_listen_id=%s, app_name=%s' % (jj, a_listen_id, app_name)
                 if a_listen_id == id:
                     #
                     # Found it. Remove the two sockets from the list of
@@ -728,13 +708,8 @@ class ServerSingleThread(Object.Object):
                 
             if found != None:
                 self.package_sock_pair(id, app_name, window, listen_sock, talk_sock)
-                
-#        print '-- SeverSingleThread.handshake_talk_conn: self=%s, acquiring lock' % self
-        
+                        
         self.new_socks_lock.release()        
-
-#        print '-- SeverSingleThread.handshake_talk_conn: self=%s, done'% self
-
 
 
     def process_ready_socks(self):
@@ -750,7 +725,7 @@ class ServerSingleThread(Object.Object):
         *none* -- 
         """
 
-        print '-- ServerSingleThread.process_ready_socks: self.ready_socks=%s' % id(self.ready_socks)
+        trace('ServerSingleThread.process_ready_socks', 'self.ready_socks=%s' % id(self.ready_socks))
 
         self.ready_socks_lock.acquire()
 
@@ -856,14 +831,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # A new VC_LISTEN connection was opened
                 #
-                print '-- ServerSingleThread.run: got evt_new_listen_conn'
+                trace('ServerSingleThread.run', 'got evt_new_listen_conn')
                 self.handshake_listen_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+1:
                 #
                 # A new VC_TALK connection was opened
                 #
-                print '-- ServerSingleThread.run: got evt_new_talk_conn'
+                trace('ServerSingleThread.run', 'got evt_new_talk_conn')
                 self.handshake_talk_socks()
 
                 
@@ -871,14 +846,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # Some of the active VC_LISTEN sockets have received data
                 #
-                print '-- ServerSingleThread.run: got evt_sockets_ready'
+                trace('ServerSingleThread.run', 'got evt_sockets_ready')
                 self.process_ready_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+3:
                 #
                 # Server is shutting down. Exit the event loop.
                 #
-                print '-- ServerSingleThread.run: got evt_quit'
+                trace('ServerSingleThread.run', 'got evt_quit')
                 break
                 
             elif rc == win32event.WAIT_OBJECT_0+4:
@@ -886,7 +861,7 @@ class ServerSingleThread(Object.Object):
                 # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
                 # Note: this must be done for COM and other windowsy
                 #   things to work.
-#                print '-- ServerSingleThread.run: forwarding unknown message'
+#                trace('ServerSingleThread.run', 'forwarding unknown message')
                 if pythoncom.PumpWaitingMessages():
                     break # wm_quit
                 
@@ -896,7 +871,7 @@ class ServerSingleThread(Object.Object):
                 #   or just feel good to be alive.
                 # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
                 pass
-#                print '-- ServerSingleThread.run: nothing to do, counter=%s' % counter
+#                trace('ServerSingleThread.run', 'nothing to do, counter=%s' % counter)
             else:
                 raise RuntimeError( "unexpected win32wait return value")
 
@@ -907,15 +882,11 @@ def run_server(test_suite=None):
     """Start a single thread, single process server.
     """
 
-    print '-- start_server_singlethread: called'
-
     a_server = ServerSingleThread()
     a_server.test_suite = test_suite
         
     a_server.run()
     
-    print '-- start_server_multiprocesses: done'
-
 
 
 def help():
@@ -946,7 +917,6 @@ OPTIONS
 if __name__ == '__main__':
 
 
-#    print '-- tcp_server.__main__: started'
     opts, args = util.gopt(['h', None, 't=', None])
 
     if opts['t'] != None:        

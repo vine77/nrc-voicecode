@@ -23,6 +23,7 @@
 
 import re, sys, types
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
+from debug import trace
 
 import debug, Object
 
@@ -141,12 +142,10 @@ class Messenger(Object.Object):
         *none* response -- 
         """
 
-        print '-- send_mess: mess_name=\'%s\'' % (mess_name)
-#        print '-- send_mess: mess_argvals=%s' % repr(mess_argvals)
+        trace('send_mess', 'mess_name=\'%s\'' % (mess_name))
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
         pkd_mess = self.packager.pack_mess(unpkd_mess)
         self.packager.send_packed_mess(pkd_mess, self.transporter)
-#        print '--- send_mess: DONE sending message'
 
 
     def get_mess(self, expect=None):
@@ -163,13 +162,12 @@ class Messenger(Object.Object):
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format."""
 
-        print '-- get_mess: expecting %s' % repr(expect)
+        trace('get_mess', 'expecting %s' % repr(expect))
         
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-        print '-- get_mess: received message name=\'%s\'' % name_argvals_mess[0]
-#        print '-- get_mess: received message args=%s' % repr(name_argvals_mess[1])
+#        trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
@@ -331,7 +329,7 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         ..[MessTransporter] file:///./messaging.MessTransporter.html"""
 
-#        print '-- send_packed_mess: pkd_mess="%s"' % pkd_mess
+        trace('send_packed_mess', 'pkd_mess="%s"' % pkd_mess)
         
         #
         # Nothing particular about how such messages need to be sent.
@@ -352,8 +350,6 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         .. [MessTransporter] file:///./messaging.MessTransporter.html"""
 
-#        print '-- get_packed_mess: started'
-
         #
         # Read the fixed length messages until we get one that starts with 1
         #
@@ -362,10 +358,8 @@ class MessPackager_FixedLenSeq(MessPackager):
         while not (last_chunk == '1'):
             a_chunk = transporter.receive_string(self.chunk_len)
             pkd_message = pkd_message + a_chunk
-#            print '-- get_packed_mess: read len(a_chunk)=%s, a_chunk=\'%s\'' % (len(a_chunk), a_chunk)
             last_chunk = a_chunk[0]
 
-#        print '-- get_packed_mess: done, pkd_message=\'%s\'' % pkd_message
         
         return pkd_message
 
@@ -384,12 +378,8 @@ class MessPackager_FixedLenSeq(MessPackager):
         *STR packed_mess* -- The packed message
         """
 
-#        print '-- pack_mess: started'
-#        print '-- pack_mess: mess=\'%s\'' % mess
         packed_mess = ''
-        while not mess == '':
-#            print '-- pack_mess: start loop body'
-            
+        while not mess == '':            
             #
             # Make sure you leave room for the single character prefix
             #
@@ -400,9 +390,7 @@ class MessPackager_FixedLenSeq(MessPackager):
             # right
             #
             num_padding = (self.chunk_len - 1) - len(a_chunk)
-#            print '-- pack_mess: before padding, num_padding=%s, a_chunk="%s"' % (num_padding, a_chunk)
             a_chunk = a_chunk + self.large_white_space[:num_padding]
-#            print '-- pack_mess: after padding, a_chunk="%s"' %a_chunk
                                   
             #
             # Is this last chunk in the message?
@@ -411,11 +399,8 @@ class MessPackager_FixedLenSeq(MessPackager):
             prefix = (mess == '')
             
             a_chunk = "%s%s" % (prefix, a_chunk)
-#            print '-- pack_mess: after prefixing, a_chunk="%s"' %a_chunk
             packed_mess = packed_mess + a_chunk
 
-
-#        print '-- pack_mess: done'
         return packed_mess
             
 
@@ -433,16 +418,12 @@ class MessPackager_FixedLenSeq(MessPackager):
         *STR unpacked_mess* -- The message unpacked to a raw string.
         """
 
-#        print '-- unpack_mess: started'
-#        print '-- unpack_mess: invoked with \'%s\'' % mess
         unpacked_mess = ''
         while mess != '':
             a_chunk = mess[:self.chunk_len]
-#            print '-- unpack_mess: a_chunk=\'%s\'' % a_chunk
             unpacked_mess = unpacked_mess + a_chunk[1:]
             mess = mess[self.chunk_len:]
 
-#        print '-- MessPackager_FixedLenSeq.unpack_mess: done'            
         return unpacked_mess
 
 
@@ -648,18 +629,13 @@ class MessTransporter_Socket(MessTransporter):
         
         *none* -- 
         """
-#        print '-- send_string: sending started'
-#        print '-- send_string: sending \'%s\''% a_string
         mess_len = len(a_string)
         totalsent = 0
         while totalsent < mess_len:
-#            print '-- send_string: sending "%s"' % a_string[totalsent:]
             sent = self.sock.send(a_string[totalsent:])
             if sent == 0:
                 raise RuntimeError, "socket connection broken"
             totalsent = totalsent + sent
-
-#        print '-- send_string: done'           
         
 
     def receive_string(self, num_bytes):
@@ -675,7 +651,6 @@ class MessTransporter_Socket(MessTransporter):
         STR *a_string* -- The received string
         """
 
-#        print '-- receive_string: started'
         a_string = ''
         while len(a_string) < num_bytes:
             chunk = self.sock.recv(num_bytes - len(a_string))
@@ -683,7 +658,6 @@ class MessTransporter_Socket(MessTransporter):
                 raise RuntimeError, "socket connection broken"
             a_string = a_string + chunk
 
-#        print '-- receive_string: received \'%s\'' % a_string
         return a_string         
 
 
@@ -783,7 +757,6 @@ class MessEncoderWDDX(MessEncoder):
         message name, second element is message arguments in
         *(name, {arg:val})* format.  """
 
-#        print '-- MessEncoderWDDX.decode: str_mess=\'%s\'' % str_mess
         mess_argvals = self.unmarshaller.loads(str_mess)
 
         #
@@ -951,10 +924,8 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-#        print '-- encode: started'
         stringified = self.encode_data_item(mess_argvals)
         str_mess = '%s %s' % (mess_name, stringified)
-#        print '-- encode: done'
         
         return str_mess
 
@@ -979,7 +950,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         .. [MessEncoder] file:///./messaging.MessEncoder.html
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-#        print '-- encode_data_item: item=\'%s\'' % repr(item)
+        trace('encode_data_item', 'item=\'%s\'' % repr(item))
 
         #
         # Convert numbers and 'None' to strings
@@ -989,14 +960,14 @@ class MessEncoder_LenPrefArgs(Object.Object):
             isinstance(item, types.FloatType) or
             item == None):
             item = repr(item)
-#            print '-- encode_data_item: item=\'%s\' converted to string from a number type' % repr(item)
+            trace('encode_data_item', 'item=\'%s\' converted to string from a number type' % repr(item))
         
 
         if isinstance(item, types.StringType):
             #
             # Data item is just a string
             #
-#            print '-- encode_data_item: item=\'%s\' is a string' % repr(item)
+            trace('encode_data_item', 'item=\'%s\' is a string' % repr(item))
             delims = ('<', '>')
             str_item = item
         elif isinstance(item, types.ListType) or isinstance(item, types.TupleType):
@@ -1029,7 +1000,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         str_item = "%s%s%s%s" % (len(str_item), delims[0], str_item, delims[1])
 
-#        print '-- encode_data_item: string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item)
+        trace('encode_data_item', 'string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item))
 
         return str_item
                 
@@ -1055,8 +1026,6 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-#        print '-- decode: started'
-
         #
         # Parse the name and description of the message
         #
@@ -1067,17 +1036,12 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Decode the message's description
         #
-#        print '-- decode: decoding the value'
 #        try:
         (rest, argvals) = self.decode_data_item(descr)
         if not re.match('^\s*$', rest):
             self.malformed_message(mess, 'd')
 #        except Exception, err:
 #            self.malformed_message(mess, 'd')
-
-#        print '-- decode: done decoding the value'
-
-#        print '-- decode: ended'
         
         return (mess_name, argvals)
 
@@ -1107,7 +1071,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Get type and length of the data item
         #
-#        print '-- decode_data_item: str_item=\'%s\'' % str_item
+        trace('decode_data_item', 'str_item=\'%s\'' % str_item)
         a_match = re.match('\s*(\d+)\s*([<\\[{])', str_item)
         length = int(float(a_match.group(1)))
         delim_open = a_match.group(2)
@@ -1119,7 +1083,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         descr = str_item[:length]
         str_item = str_item[length:]
 
-#        print '-- decode_data_item: descr=\'%s\'' % descr
+        trace('decode_data_item', 'descr=\'%s\'' % descr)
         
         #
         # Decode appropriate data type, depending on delimiter
@@ -1137,7 +1101,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Read past the closing delimiter
         #
-#        print '-- decode_data_item: looking for closing delimiter in \'%s\'' % str_item
+        trace('decode_data_item', 'looking for closing delimiter in \'%s\'' % str_item)
         a_match = re.match('\s*%s\s*' % delim_close, str_item)
         str_item = str_item[a_match.end():]
         
@@ -1219,7 +1183,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         # Parse description until it's all blanks
         #
         while not re.match('^\s*$', descr):
-#            print '-- decode_dict_descr: descr=\'%s\'' % descr
+            trace('decode_dict_descr', 'descr=\'%s\'' % descr)
 
             #
             # Parse the key and value

@@ -62,3 +62,49 @@ def what_class(instance):
         is_class = type(instance)
 
     return is_class
+
+
+###############################################################################
+# Managing trace printing
+###############################################################################
+
+def dont_print_trace(trace_id, message, insert_nl=1):
+    """Just ignore traces. Used for greater efficiency."""
+    pass
+
+def print_trace(trace_id, message, insert_nl=1):
+    global to_be_traced, trace_file
+    if to_be_traced.has_key(trace_id):
+        trace_file.write('-- %s: %s' % (trace_id, message))
+        if insert_nl:
+            trace_file.write('\n')
+
+
+trace = dont_print_trace
+trace_file = sys.stdout
+to_be_traced = {}
+
+def config_traces(print_to=None, status=None, trace_what=None):
+    """Configures what traces are printed, and where"""
+
+    global trace, trace_file, to_be_traced
+
+    #
+    # trace is a function that we set on the fly. It's never defined explicitly
+    # through a *def* statement
+    #
+    if status:
+        if status == 'on':
+            trace = print_trace
+        else:
+            trace = dont_print_trace
+
+    if print_to:
+        trace_file = print_to
+
+    if trace_what:
+        to_be_traced = trace_what
+
+        
+
+    
