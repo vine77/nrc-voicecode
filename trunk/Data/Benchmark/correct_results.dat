@@ -333,7 +333,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 18e6a20>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 198ee98>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -734,9 +734,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:/blah.c')
+>>> Testing console command: open_file('blah.c')
 
-WARNING: source file 'D:/blah.c' doesn't exist.
+WARNING: source file 'blah.c' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2313,9 +2313,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:/blah.c')
+>>> Testing console command: open_file('blah.c')
 
-WARNING: source file 'D:/blah.c' doesn't exist.
+WARNING: source file 'blah.c' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2591,7 +2591,7 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at bcb660> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 194e6b0> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -5860,7 +5860,7 @@ written: ['written']
 written_as: ['written as']
 _cached_symbols_as_one_string is:
     import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
-WARNING: source file 'D:/blah.py' doesn't exist.
+WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -6506,7 +6506,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
-WARNING: source file 'D:/blah.py' doesn't exist.
+WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -8894,9 +8894,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:/blah.py')
+>>> Testing console command: open_file('blah.py')
 
-WARNING: source file 'D:/blah.py' doesn't exist.
+WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -9554,5 +9554,5 @@ Associate 'index' with symbol (Enter selection):
 
 
 -----------------------------------------------
-Test suite completed in:  663.373999953 secs
+Test suite completed in:  608.184000015 secs
 -----------------------------------------------
