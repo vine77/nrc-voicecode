@@ -26,6 +26,7 @@ import re
 import string
 import natlink
 from natlinkutils import *
+import debug
 from debug import trace, trace_call_stack
 
 import SpokenUtterance
@@ -267,6 +268,7 @@ def getWordInfo(word, flag = None):
        # In case the word's spelling is not allowed by
        # NatSpeak
        print "WARNING: error trying to get info from vocabulary word '%s'" % word
+       debug.print_call_stack()
        answer = None       
 
     return answer
