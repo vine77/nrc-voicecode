@@ -37,15 +37,16 @@ class wxListCtrlTestDlg(wxDialogWithHelpers):
         
         self.list_ctrl_item_selected = None
         self.last_key_pressed = {}
+        self.last_item_selected = {}
         
     def on_button(self, event):
         self.button_was_clicked = true
 
     def on_list_ctrl_selected(self, event):
+#        print '-- on_list_ctrl_selected: invoked'
         self.list_ctrl_item_selected = event
         
     def on_list_char(self, event):
-        print "\n-- on_list_char: invoked, event=%s, event.GetKeyCode()=%s\n" % (event, event.GetKeyCode())
         self.last_key_pressed[self.list] = event.GetKeyCode()
         
     def last_key_pressed_for_widget(self, widget):
@@ -53,6 +54,12 @@ class wxListCtrlTestDlg(wxDialogWithHelpers):
         if self.last_key_pressed.has_key(widget):
            last_key = self.last_key_pressed[widget]
         return last_key
+
+    def last_item_selected_for_widget(self, widget):
+        last_item = None
+        if self.last_item_selected.has_key(widget):
+           last_item = self.last_item_selected[widget]
+        return last_item
 
 class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
         
@@ -82,6 +89,16 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg.list.Select(1)
        self.assert_(self.dlg.list_ctrl_item_selected != None,
                     "Selection of a list ctrl item did not invoke appropriate callback method.")
+                    
+    def test_SendKey(self):
+       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) == None, 
+                   "List control already had a key pressed into it from the start.")
+       self.dlg.list.SendKey(WXK_DOWN)
+       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) != None, 
+                   "Pressing a key on list item did not invoke appropriate event handler.")
+       self.assert_equals(WXK_DOWN, self.dlg.last_key_pressed_for_widget(self.dlg.list), 
+                    "Wrong key received by event handler.")
+    
        
 class wxDialogWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
         
@@ -107,27 +124,5 @@ class wxDialogWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg.button.Click()
        self.assert_(self.dlg.button_was_clicked,
                     "button was not clicked.")
-              
-    #AD: Test failing for now. Somehow, the event handler receives the wrong key (GetKeyCode()=0)
-    def ______test_PressKey(self):
-       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) == None, 
-                   "Dialog already had a key pressed into it from the start.")
-    
-       self.dlg.PressKey(WXK_DOWN, self.dlg.list)
-       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) != None, 
-                   "Pressing a key on list item did not invoke appropriate event handler.")
-       self.assert_equals(WXK_DOWN, self.dlg.last_key_pressed_for_widget(self.dlg.list), 
-                    "Wrong key received by event handler.")
-       
-    #AD: Test failing for now. Somehow, the event handler receives the wrong key (GetKeyCode()=0)
-    def ______test_list_SendKey(self):
-       print "\n-- test_list_SendKey\n"
-       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) == None, 
-                   "List control already had a key pressed into it from the start.")
-       self.dlg.list.SendKey(WXK_DOWN)
-       print "\n-- test_list_SendKey: after SendKey\n"
-       self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) != None, 
-                   "Pressing a key on list item did not invoke appropriate event handler.")
-       self.assert_equals(WXK_DOWN, self.dlg.last_key_pressed_for_widget(self.dlg.list), 
-                    "Wrong key received by event handler.")
+
     

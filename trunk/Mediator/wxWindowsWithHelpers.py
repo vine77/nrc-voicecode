@@ -28,38 +28,14 @@ Among other things, those helper methods are useful for unit testing GUIs
 from wxPython.wx import *
 import debug
 
-
-class Mock_wxKeyEvent(wxKeyEvent):
-   """Use this to simulate the event of a user pressing a key.
-   
-   Need to use this instead of wxKeyEvent, because you can't manually
-   set the key of a wxKeyEvent.  
-   """
-   def __init__(self, event_type, keycode):
-      wxKeyEvent.__init__(self, event_type)
-      self.overriden_keycode = keycode
-      
-   def GetKeyCode(self):
-      """For some reason, wxKeyEvent.GetKeyCode() does not return the 
-      value of self.overriden_keycode. So override it so it does"""
-      
-      # AD: Hum... for some strange reason, the Mock_wxKeyEvent
-      #     starts out with proper value of GetKeyCode(), but once
-      #     it gets passed to an event handler through ProcessEvent(),
-      #     it is received as an event with GetKeyCode() = 0
-      return self.overriden_keycode
-
-
 class CanBeSentKeys:
     def __init__(self):
        pass
        
     def SendKey(self, key_code):
-        key_event = Mock_wxKeyEvent(wxEVT_CHAR, key_code)
-        print "\n-- SendKey: key_event=%s, key_code=%s, key_event.GetKeyCode()=%s" % (key_event, key_code, key_event.GetKeyCode())
-        print "\n-- SendKey: Calling ProcessEvent"
+        key_event = wxKeyEvent(wxEVT_CHAR)
+        key_event.m_keyCode = key_code
         self.ProcessEvent(key_event)
-        print "\n-- SendKey: Done with ProcessEvent"
 
 
 class wxButtonWithHelpers(wxButton):
@@ -111,6 +87,20 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
           contents.append(self.GetCellContentsString(row_num, col_num))
        return contents
        
+    def ActivateNth(self, nth):
+       """activates the nth item in the list and invokes the appropriate 
+       event handler.
+       
+       Note: This  is not the same as self.Select(nth), because the later
+       changes the selection without invoking the selection event handler.
+       """   
+       self.Select(nth)
+#>       evt = MockListSelectionEvent(nth)
+       evt = wxListEvent(wxEVT_LIST_ITEM_ACTIVATED, self.GetId())
+       print '-- ActivateNth: invoking ProcessEvent'
+       self.ProcessEvent(evt)
+       print '-- ActivateNth: DONE with ProcessEvent'
+              
     def HandleUpOrDownArrow(self, keycode):
        """Invoke this with an up or down arrow character to move cursor
        up or down the list.
@@ -165,12 +155,7 @@ class wxDialogWithHelpers(wxDialog):
         """
         button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, button.GetId())
         button.ProcessEvent(button_event)
-        
-    def PressKey(self, key_code, into_widget):
-        key_event = wxKeyEvent(wxEVT_CHAR)
-        key_event.m_keycode = key_code
-        into_widget.ProcessEvent(key_event)
-  
+          
        
 # defaults for vim - otherwise ignore
 # vim:sw=4

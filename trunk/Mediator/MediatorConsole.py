@@ -503,9 +503,34 @@ class MediatorConsole(Object.OwnerObject):
 class DlgModelView(Object.OwnerObject):
     """Symbol Model-View class for implementing dialogs.
     
-    NOTE: Currently, this class is a bit messy because it needs
-          to be backward compatible with legacy dialogs that implemented
-          the model and the view layer in a same class.
+    This uses a simple model-view architecture for dialogs. This
+    allows a cleaner separation between business logic and the
+    rendering of the dialog, and also, it makes automated unit
+    testing easier.
+    
+    The view is responsible solely for:
+      - rendering data graphically upon request from the model
+      - intercepting user event and dispatching them to the model
+      - note that the view is NOT responsible for coordinating the 
+        content of the various fields it displays
+      - responding to requests from the model regarding what it is
+        currently displaying in a particular field (for assertions in
+        unit testing)
+      - programmatically simulating user events upon request from the
+        model (for unit testing)
+      
+    The model is responsible for:
+      - sending rendering requests to the view
+      - responding to requets from the view made in response to
+      - coordinating the content of the various fields of the view 
+        so that they are always in sync
+      - requesting the view to simulate user events (for regression
+        testing)
+
+    By convention, any method whose name looks like do_X, is a method
+    which is meant to programmatically simulate user action X. Any
+    method whose name looks like on_X is a method which is invoked
+    when the user does action X.
     
     **INSTANCE ATTRIBUTES**
 
@@ -584,6 +609,35 @@ class DlgModelView(Object.OwnerObject):
 
 class ViewLayer(Object.OwnerObject):
     """class for implementing view layer of model-view dialogs.
+
+    This uses a simple model-view architecture for dialogs. This
+    allows a cleaner separation between business logic and the
+    rendering of the dialog, and also, it makes automated unit
+    testing easier.
+    
+    The view is responsible solely for:
+      - rendering data graphically upon request from the model
+      - intercepting user event and dispatching them to the model
+      - note that the view is NOT responsible for coordinating the 
+        content of the various fields it displays
+      - responding to requests from the model regarding what it is
+        currently displaying in a particular field (for assertions in
+        unit testing)
+      - programmatically simulating user events upon request from the
+        model (for unit testing)
+      
+    The model is responsible for:
+      - sending rendering requests to the view
+      - responding to requets from the view made in response to
+      - coordinating the content of the various fields of the view 
+        so that they are always in sync
+      - requesting the view to simulate user events (for regression
+        testing)
+
+    By convention, any method whose name looks like do_X, is a method
+    which is meant to programmatically simulate user action X. Any
+    method whose name looks like on_X is a method which is invoked
+    when the user does action X.
         
     **INSTANCE ATTRIBUTES**
 
