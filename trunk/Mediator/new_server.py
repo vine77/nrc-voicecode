@@ -46,6 +46,9 @@ debug.config_traces(status="on",
                     active_traces={
 #                       'NewMediatorObject': 1,
 #                       'PersistentConfigNewMediator': 1,
+#                       'TempConfig': 1,
+#                       'CmdInterp': 1,
+#                       'SymDict': 1,
 #                       'RecogStartGram': 1,
 #                       'RecogStartMgr': 1,
 #                       'RecogStartMgrNL': 1,
@@ -144,7 +147,7 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 # NewMediatorObject)
 #        print 'about to quit the mediator'
         self.the_server = None
-        self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
+        self.the_mediator.quit(save_speech_files=0, 
             disconnect=1)
         Object.OwnerObject.remove_other_references(self)
 

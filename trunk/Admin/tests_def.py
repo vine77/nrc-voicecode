@@ -3131,16 +3131,16 @@ def test_number_dictation():
    commands.open_file('blah.py')   
    commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'], echo_cmd=1)
    
-# Works for DFC, but not for Alain
+# Works for DCF (Natspeak 7), but not for Alain (Natspeak 5?)
 #   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
 #   app.print_buff()
 
-# Works for DCF but not for Alain
+# Works for DCF (Natspeak 7) but not for Alain (Natspeak 5?)
 #   commands.say(['select', 'twenty', 'three', 'fifty', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
 #   app.print_buff()
 
-# This works for Alain, how about DFC?
-   commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+# This works for Alain (Natspeak 5), but not for DCF (Natspeak 7)
+#   commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
 #   app.print_buff()
    
 # (this fails with badWord, because there is no word '2354' in the

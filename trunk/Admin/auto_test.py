@@ -391,7 +391,7 @@ class TestSuite(Object):
         suite = TestSuite()
         for name in self.background:
             suite.add_test(name, self.tests[name], 
-                desc = self.descriptions[name], background = 1)
+                desc = self.descriptions[name], foreground = 0)
         return suite
 
 class SuiteFactory(Object):

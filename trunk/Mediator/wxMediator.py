@@ -495,8 +495,8 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         self.the_server = None
         debug.trace('wxMediator.remove_other_references',
             'about to quit the mediator')
-        self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
-            disconnect=1)
+        self.the_mediator.quit(save_speech_files=0, 
+            disconnect=1, console_closed = 1)
    
         debug.trace('wxMediator.remove_other_references',
             'done quitting the mediator')
