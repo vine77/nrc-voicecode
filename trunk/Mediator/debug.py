@@ -135,6 +135,10 @@ trace_file = sys.stdout
 to_be_traced = {}
 activate_trace_id_substrings = 0
 
+
+def tracing(trace_id):
+    return trace_is_active(trace_id)
+
 def trace_is_active(trace_id):
     global to_be_traced, activate_trace_id_substrings
 #    print '-- debug.trace_is_active: trace_id=%s' % trace_id

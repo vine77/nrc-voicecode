@@ -503,8 +503,8 @@ class NewMediatorObject(Object.OwnerObject):
             user_config_file = user_config_file,
             exclude = exclude, testing = testing)
         # Generate and cache the grammar specifcations
-        self.interp.gram_spec_spoken_cmd('known_spoken_cmd')
-        self.interp.gram_spec_spoken_symbol('known_spoken_symbol')
+#        self.interp.gram_spec_spoken_cmd('known_spoken_cmd')
+#        self.interp.gram_spec_spoken_symbol('known_spoken_symbol')
         
         # Comment this out if you want to generate training material
         # Actually, need to invoke these AFTER CSC, etc... have been

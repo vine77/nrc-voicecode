@@ -177,7 +177,9 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
             except messaging.WokenUp:
                 break
 
-            debug.trace('ListenAndQueueMsgsThread.run', '** data=%s' % repr(data))                
+            if debug.tracing('ListenAndQueueMsgsThread.run'):
+                debug.trace('ListenAndQueueMsgsThread.run', 
+                    '** data=%s' % repr(data))                
             if data:
                 debug.trace('ListenAndQueueMsgsThread.run', '** sending notification message that data was received.')
                 self.completed_msgs.put(data)

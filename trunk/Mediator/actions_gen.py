@@ -710,7 +710,7 @@ class ActionSearch(ActionBidirectional):
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
         debug.trace('ActionSearch.execute', 'called, app=%s' % app)
-        app.search_for(regexp=self.regexp, direction=self.direction,
+        return app.search_for(regexp=self.regexp, direction=self.direction,
                        num=self.num, where=self.where,
                        unlogged  = self.unlogged)
 
@@ -775,6 +775,118 @@ class ActionSearchBidirectionalRepeat(ActionSearch, ActionBidirectionalRepeat):
         .. [Action.doc] file:///./actions_gen.Action.html#doc
         """        
         return ActionSearch.doc(self) + """ (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one')."""
+
+class FakeActionSearchOrLookback(ActionSearch, ActionBidirectionalRepeat):
+    """Moves cursor to occurence of a regular expression, using
+    lookback_search for backwards searches (only valid for simple
+    regular expressions) but search_for for forward searches.
+
+    Contrarily to [ActionSearch], this class of search can be repeated
+    or qualified by subsequent commands (e.g. 'again 3 times',
+    'previous one').
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+
+    ..[ActionSearch] file:///./actions_gen.ActionSearch.html#ActionSearch"""
+        
+    def __init__(self, extra_space = 0, **args_super):
+        self.deep_construct(ActionSearchOrLookback, 
+                            {'extra_space': extra_space}, 
+                            args_super, 
+                            {})
+        if extra_space:
+            space = '[ \t]{0,1}'
+            if self.where > 0:
+                self.regexp = self.regexp + space
+            else:
+                self.regexp = space + self.regexp 
+
+class ActionSearchOrLookback(ActionSearch, ActionBidirectionalRepeat):
+    """Moves cursor to occurence of a regular expression, using
+    lookback_search for backwards searches (only valid for simple
+    regular expressions) but search_for for forward searches.
+
+    Contrarily to [ActionSearch], this class of search can be repeated
+    or qualified by subsequent commands (e.g. 'again 3 times',
+    'previous one').
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+
+    ..[ActionSearch] file:///./actions_gen.ActionSearch.html#ActionSearch"""
+        
+    def __init__(self, extra_space = 0, **args_super):
+        self.deep_construct(ActionSearchOrLookback, 
+                            {'extra_space': extra_space}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return ActionSearch.doc(self) + """ (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one')."""
+
+    def skip_space(self, buff):
+        if self.where == 1:
+            if buff.looking_at('[ \t]'):
+                buff.move_relative(1)
+                return 1
+        else:
+            pos = buff.cur_pos()
+            if pos and buff.looking_at('[ \t]', pos - 1):
+                buff.move_relative(-1)
+                return 1
+        return 0
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        buff = app.find_buff()
+        if debug.tracing('ActionSearchOrLookback.execute'):
+            debug.trace('ActionSearchOrLookback.execute',
+                            'pos = %d' % buff.cur_pos())
+        if self.direction > 0:
+            best_match = buff.search_for_match(regexp = self.regexp, 
+                direction = self.direction, num = self.num, 
+                where = self.where)
+            if debug.tracing('ActionSearchOrLookback.execute'):
+                if best_match:
+                    debug.trace('ActionSearchOrLookback.execute',
+                        'best_match = %d, %d' % best_match)
+                else:
+                    debug.trace('ActionSearchOrLookback.execute',
+                        'no match found')
+        else:
+            best_match = buff.lookback_search(regexp = self.regexp, 
+                num = self.num, where = self.where, unlogged = 1)
+        alt_pos = None
+        if best_match:
+            new_cur_pos = buff.pos_extremity(best_match, self.where)
+            buff.goto(new_cur_pos)
+            if self.extra_space:
+                if self.skip_space(buff):
+                    alt_pos = buff.cur_pos()
+
+        buff.log_search(self.regexp, self.direction, self.where,
+            best_match, alt_pos = alt_pos)
+        if best_match:
+            return 1
+        return 0
 
 
 class ActionBackspace(ActionRepeatable):
@@ -970,10 +1082,24 @@ class ActionCompileSymbols(Action):
     *none* -- 
     """
 
-    def __init__(self, buff_name=None, **args_super):
-        self.deep_construct(ActionCompileSymbols, \
-                            {'buff_name': buff_name}, \
-                                args_super, \
+    def __init__(self, buff_name=None, alt_contents = None, language = None, 
+            **args_super):
+        """
+        **INPUTS**
+
+        *STR* buff_name -- name of the buffer
+
+        *STR* alt_contents -- alternative string to use instead of the
+        contents of the buffer
+
+        *STR* language -- if alt_contents is specified, then so must the
+        language.  Otherwise, this parameter is ignored.
+        """
+        self.deep_construct(ActionCompileSymbols, 
+                            {'buff_name': buff_name,
+                             'language': language, 
+                             'alt_contents': alt_contents}, 
+                                args_super, 
                             {})
                             
     def doc(self):
@@ -986,15 +1112,22 @@ class ActionCompileSymbols(Action):
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
         
-        buffer = app.find_buff(self.buff_name)
         manager = app.current_manager()
-        if manager:
-           interpreter = manager.interpreter()
-           interpreter.user_message("Compiling symbols for %s"
-               % buffer.name(), instance = app.name())
-           interpreter.parse_symbols(buffer.contents(), buffer.language_name())
-           interpreter.user_message("Done compiling symbols", 
-               instance = app.name())
+        if not manager:
+            return
+        interpreter = manager.interpreter()
+        if self.alt_contents and self.language:
+            contents = self.alt_contents
+            language = self.language
+        else:
+            buffer = app.find_buff(self.buff_name)
+            contents = buffer.contents()
+            language = buffer.language_name()
+        interpreter.user_message("Compiling symbols for %s" % self.buff_name, 
+            instance = app.name())
+        interpreter.parse_symbols(contents, language)
+        interpreter.user_message("Done compiling symbols", 
+                instance = app.name())
 
 
 class ActionPrintSymbols(Action):

@@ -173,7 +173,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
       
         return self.active_buffer_name
 
-    def app_change_buffer(self, buff_name=None):
+    def app_change_buffer(self, buff_name):
         """Changes the external application's active buffer.
 
         This variant only changes the buffer in the external

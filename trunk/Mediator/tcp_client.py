@@ -650,7 +650,11 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         mediator via ClientEditor) or user-initiated
         """
         updates = {'range': (start, end), 'buff_name': buff_name}
-        if text == "":
+        if start is end is None:
+            del updates['range']
+            updates['action'] = 'buff_contents'
+            updates['text'] = text
+        elif text == "":
             updates['action'] = 'delete'
         else:
             updates['action'] = 'insert'

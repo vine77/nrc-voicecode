@@ -25,7 +25,7 @@ import socket
 import re, sys, types
 import copy
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
-from debug import trace
+from debug import trace, tracing
 import Queue
 import time
 import select
@@ -284,12 +284,14 @@ class MessengerBasic(Messenger):
         """
 
         trace_id = 'send_mess.%s' % mess_name
-        trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
+        if tracing(trace_id):
+            trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
         if mess_argvals == None:
             tmp_args = {}
         else:
             tmp_args = copy.copy(mess_argvals)
-        trace(trace_id, 'mess_argvals=\'%s\'' % tmp_args)        
+        if tracing(trace_id):
+            trace(trace_id, 'mess_argvals=\'%s\'' % tmp_args)        
         unpkd_mess = self.encoder.encode(mess_name, tmp_args)
         pkd_mess = self.packager.pack_mess(unpkd_mess)        
         self.packager.send_packed_mess(pkd_mess, self.transporter)
@@ -322,8 +324,10 @@ class MessengerBasic(Messenger):
                 (repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
-        trace('get_mess.%s' % name_argvals_mess[0], 
-              'got one of %s! It was: %s' % (repr(expect), repr(name_argvals_mess)))
+        if tracing('get_mess.%s' % name_argvals_mess[0]):
+            trace('get_mess.%s' % name_argvals_mess[0], 
+                  'got one of %s! It was: %s' \
+                  % (repr(expect), repr(name_argvals_mess)))
         
         return name_argvals_mess
         
@@ -396,6 +400,11 @@ class MixedMessenger(Messenger):
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
+
+        if tracing('get_mess.%s' % name_argvals_mess[0]):
+            trace('get_mess.%s' % name_argvals_mess[0], 
+                  'got one of %s! It was: %s' \
+                  % (repr(expect), repr(name_argvals_mess)))
 
         return name_argvals_mess
         
@@ -553,7 +562,8 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         ..[MessTransporter] file:///./messaging.MessTransporter.html"""
 
-        trace('send_packed_mess', 'pkd_mess="%s"' % pkd_mess)
+        if tracing('send_packed_mess'):
+            trace('send_packed_mess', 'pkd_mess="%s"' % pkd_mess)
         
         #
         # Nothing particular about how such messages need to be sent.
@@ -916,7 +926,8 @@ class MessTransporter_Socket(MessTransporter):
 #                    time.sleep(self.sleep)
             try:
                 chunk = self.sock.recv(num_bytes - len(a_string))
-                trace('receive_string', 'read chunk=\'%s\'' % chunk);
+                if tracing('receive_string'):
+                    trace('receive_string', 'read chunk=\'%s\'' % chunk);
             except socket.error:
                 chunk = ''
             if chunk == '':
@@ -1048,8 +1059,9 @@ class MessEncoderWDDX(MessEncoder):
         message name, second element is message arguments in
         *(name, {arg:val})* format.  """
 
-        trace('messaging.MessEncoderWDDX.decode',
-              'decoding str_mess="%s"' % str_mess)
+        if tracing('messaging.MessEncoderWDDX.decode'):
+            trace('messaging.MessEncoderWDDX.decode',
+                  'decoding str_mess="%s"' % str_mess)
         
         mess_argvals = self.unmarshaller.loads(str_mess)
 
@@ -1095,10 +1107,12 @@ def messarg_is_None(messarg):
         # while MessEncoderWDDX encodes it as the empty string, and
         # EmacsLisp's nil value gets encoded as an empty list.
         # 
-        trace('messarg_is_None', 'messarg=%s, returning 1' % messarg)       
+        if tracing('messarg_is_None'):
+            trace('messarg_is_None', 'messarg=%s, returning 1' % messarg)       
         return 1
     else:
-        trace('messarg_is_None', 'messarg=%s, returning 0' % messarg)           
+        if tracing('messarg_is_None'):
+            trace('messarg_is_None', 'messarg=%s, returning 0' % messarg)
         return 0
 
 

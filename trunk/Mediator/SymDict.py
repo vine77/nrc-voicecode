@@ -30,7 +30,7 @@ import auto_test, PickledObject, sr_interface, vc_globals
 import WordTrie
 import DictConverter
 import util
-from debug import trace
+from debug import trace, tracing
 import debug
 import StringIO
 import math
@@ -103,7 +103,8 @@ class SymbolInfo(Object):
             self.spoken_forms.extend(spoken_forms)
             
     def add_spoken_forms(self, spoken_forms):
-        trace('SymbolInfo.add_spoken_forms', 'spoken_forms=%s' % repr(spoken_forms))
+        if tracing('SymbolInfo.add_spoken_forms'):
+            trace('SymbolInfo.add_spoken_forms', 'spoken_forms=%s' % repr(spoken_forms))
         for form in spoken_forms:
             if not (form in self.spoken_forms):
                 self.spoken_forms.append(form)
@@ -163,7 +164,8 @@ class SymbolMatch(Object):
     """
     
     def __init__(self, pseudo_symbol=None, native_symbol=None, words=None, word_matches=None, is_new=0, fmt_rank=10, **args_super):
-        trace('SymbolMatch.__init__', 'word_matches=%s' % repr(word_matches))
+        if tracing('SymbolMatch.__init__'):
+            trace('SymbolMatch.__init__', 'word_matches=%s' % repr(word_matches))
         self.deep_construct(SymbolMatch, \
                             {'pseudo_symbol': pseudo_symbol, \
                              'native_symbol': native_symbol, \
@@ -725,8 +727,9 @@ class SymDict(OwnerObject):
         else:
             self.expansions[abbreviation] = [expansion]
         if self.unresolved_abbreviations.has_key(abbreviation):
-            trace('SymDict._add_corresponding_expansion', 
-                    '%s was previously unresolved' % abbreviation)
+            if tracing('SymDict._add_corresponding_expansion'):
+                trace('SymDict._add_corresponding_expansion', 
+                        '%s was previously unresolved' % abbreviation)
             if abbreviation[ - 1] == 's':
                 single = abbreviation[:  - 1]
             else:
@@ -739,8 +742,9 @@ class SymDict(OwnerObject):
                 self._remove_spoken_forms(symbols, abbreviation)
                 
             for a_symbol in symbols:
-                trace('SymDict._add_corresponding_expansion', 
-                    'updating forms for %s' % a_symbol)
+                if tracing('SymDict._add_corresponding_expansion'):
+                    trace('SymDict._add_corresponding_expansion', 
+                        'updating forms for %s' % a_symbol)
                 spoken_forms = self.get_spoken_forms(a_symbol)
                 self.add_symbol(a_symbol, spoken_forms)
 
@@ -1677,7 +1681,8 @@ class SymDict(OwnerObject):
         .. [get_spoken_forms] file:///./SymDict.SymDict.html#get_spoken_forms
         .. [add_abbreviation] file:///./SymDict.SymDict.html#add_abbreviation"""
         
-        trace('SymDict.add_symbol', 'symbol=%s' % symbol)
+        if tracing('SymDict.add_symbol'):
+            trace('SymDict.add_symbol', 'symbol=%s' % symbol)
 
         spoken_forms = user_supplied_spoken_forms[:]
         
@@ -1690,7 +1695,8 @@ class SymDict(OwnerObject):
             
             self.tentative_symbols[symbol] = tentative
 
-            trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
+            if tracing('SymDict.add_symbol'):
+                trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
 
             #
             # Add the symbol to the string used for symbol matching
@@ -2195,10 +2201,12 @@ class SymDict(OwnerObject):
         global language_definitions
         definition = None
         
-        debug.trace('SymDict.get_language_definition', 'language_definitions=%s, language_name=%s' % (language_definitions, language_name))
+        if tracing('SymDict.get_language_definition'):
+            debug.trace('SymDict.get_language_definition', 'language_definitions=%s, language_name=%s' % (language_definitions, language_name))
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]
-        debug.trace('SymDict.get_language_definition', 'returning definition=%s' % definition)            
+        if tracing('SymDict.get_language_definition'):
+            debug.trace('SymDict.get_language_definition', 'returning definition=%s' % definition)            
         return definition
     
     def _score_symbol_matches(self, pseudo_symbol, words, native_matches):
@@ -2291,28 +2299,34 @@ class SymDict(OwnerObject):
 
        word_groups = native_match.groups('')[1:]
        for word, matched_text in zip(words, word_groups):
-           trace('SymDict._score_symbol_match',
-               'word = %s, matched text = %s' % (word, repr(matched_text)))
+           if tracing('SymDict._score_symbol_match'):
+               trace('SymDict._score_symbol_match',
+                   'word = %s, matched text = %s' % (word, repr(matched_text)))
            s = self.reg_word_to_native(word, map_letter = lambda x:"(%s)" % x)
            word_match = re.match(s, matched_text, re.IGNORECASE)
-           trace('SymDict._score_symbol_match',
-               'word_match = %s' % word_match)
+           if tracing('SymDict._score_symbol_match'):
+               trace('SymDict._score_symbol_match',
+                   'word_match = %s' % word_match)
            factor = self._score_word_match(word, word_match)
-           trace('SymDict._score_symbol_match',
-               'word factor = %f' % factor)
+           if tracing('SymDict._score_symbol_match'):
+               trace('SymDict._score_symbol_match',
+                   'word factor = %f' % factor)
            if factor < 0:
                forbidden = 1
                raw_confidence = raw_confidence * (1. + factor)
-               trace('SymDict._score_symbol_match',
-                   'raw_confidence now = %f' % raw_confidence)
+               if tracing('SymDict._score_symbol_match'):
+                   trace('SymDict._score_symbol_match',
+                       'raw_confidence now = %f' % raw_confidence)
            else:
                doubt = doubt / (1. + factor/word_factor)
-               trace('SymDict._score_symbol_match',
-                   'doubt now = %f' % doubt)
+               if tracing('SymDict._score_symbol_match'):
+                   trace('SymDict._score_symbol_match',
+                       'doubt now = %f' % doubt)
 
        confidence = raw_confidence * (1. - doubt)
-       trace('SymDict._score_symbol_match',
-           'forbidden, confidence = %d, %f' % (forbidden, confidence))
+       if tracing('SymDict._score_symbol_match'):
+           trace('SymDict._score_symbol_match',
+               'forbidden, confidence = %d, %f' % (forbidden, confidence))
        
        # add code here to modify confidence based on multi-word
        # criteria (e.g. short abbreviations run together, or
@@ -2379,8 +2393,9 @@ class SymDict(OwnerObject):
        factor = 1 - k_prefix/len(whole_match)
 #       factor = 1 - k_prefix/math.pow(len(whole_match), p_prefix)
 #           factor = float(len(whole_match))/len(word)
-       trace('SymDict._score_word_match',
-           'prefix factor = %f' % factor)
+       if tracing('SymDict._score_word_match'):
+           trace('SymDict._score_word_match',
+               'prefix factor = %f' % factor)
        if word[-1] == 's' and whole_match[-1] != 's':
            factor = factor - 1.
        return factor
@@ -2408,8 +2423,9 @@ class SymDict(OwnerObject):
        after_weak = 0
        penalty = 0.
        norm = 0.
-       trace('SymDict._score_word_missing_letters',
-           'letter matches = %s' % letter_matches)
+       if tracing('SymDict._score_word_missing_letters'):
+           trace('SymDict._score_word_missing_letters',
+               'letter matches = %s' % letter_matches)
        last_letter = ""
        for letter, letter_match in letter_matches:
            consonant = not is_vowel(letter)
@@ -2440,15 +2456,17 @@ class SymDict(OwnerObject):
                else:
                    penalty = penalty + 0.5
            last_letter = letter
-       trace('SymDict._score_word_missing_letters',
-           'penalty, norm = %f, %f' % (penalty, norm))
+       if tracing('SymDict._score_word_missing_letters'):
+           trace('SymDict._score_word_missing_letters',
+               'penalty, norm = %f, %f' % (penalty, norm))
        penalty = penalty/norm
        # extra penalty for singular abbreviations of plural words
        if word[-1] == 's' and word_match.group()[-1] != 's':
            penalty = penalty + 1.0
        factor = 1. - penalty
-       trace('SymDict._score_word_missing_letters',
-           'factor = 1 - penalty/norm = %f' % factor)
+       if tracing('SymDict._score_word_missing_letters'):
+           trace('SymDict._score_word_missing_letters',
+               'factor = 1 - penalty/norm = %f' % factor)
        return factor
        
     def _score_abbrev(self, word, whole_match):
@@ -2814,8 +2832,9 @@ class SymDict(OwnerObject):
         
 
 #        print '-- SymDict.reg_pseudo_to_native_symbol: words=%s' % words
-        trace('SymDict.reg_pseudo_to_native_symbol', 
-            'words = %s' % repr(words))
+        if tracing('SymDict.reg_pseudo_to_native_symbol'): 
+            trace('SymDict.reg_pseudo_to_native_symbol', 
+                'words = %s' % repr(words))
 
         #
         # Generate string for the regexp.
@@ -2837,8 +2856,9 @@ class SymDict(OwnerObject):
         reg_non_alphanums = '[^a-zA-Z0-9\s]*'
         regexp_string = ' (' + reg_non_alphanums
         for a_word in words:
-            trace('SymDict.reg_pseudo_to_native_symbol',
-                'a_word=%s' % a_word)
+            if tracing('SymDict.reg_pseudo_to_native_symbol'): 
+                trace('SymDict.reg_pseudo_to_native_symbol',
+                    'a_word=%s' % a_word)
             if len(a_word) > 0:
                 regexp_string = regexp_string + '(' + \
                     self.reg_word_to_native(a_word)
@@ -2846,8 +2866,9 @@ class SymDict(OwnerObject):
         regexp_string = regexp_string +  ') '
 
 
-        trace('SymDict.reg_pseudo_to_native_symbol', 
-            'regexp_string="%s"' % regexp_string)
+        if tracing('SymDict.reg_pseudo_to_native_symbol'): 
+            trace('SymDict.reg_pseudo_to_native_symbol', 
+                'regexp_string="%s"' % regexp_string)
         
         #
         # Compile regexp with flags=IGNORECASE (i.e. case insensitive match)
@@ -2879,8 +2900,9 @@ class SymDict(OwnerObject):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
-        trace('SymDict.accept_symbol_match', 
-            'the_match.__dict__=%s' % (the_match.__dict__))
+        if tracing('SymDict.accept_symbol_match'):
+            trace('SymDict.accept_symbol_match', 
+                'the_match.__dict__=%s' % (the_match.__dict__))
 #        print '-- SymDict.accept_symbol_match: the_match.words=%s, the_match.word_matches=%s' % (the_match.words, the_match.word_matches)        
         
         #

@@ -1493,12 +1493,10 @@ class StateStackBasic(StateStack):
         if self.max_depth > 0 and len(self.states) > self.max_depth:
             del self.states[0]
             del self.initial_buffers[0]
-            del self.final_buffers[0]
-            del self.cross_buffer[0]
-            del self.pos_after[0]
-            del self.sel_after[0]
-# However, since we remove the bottom of all stacks here, we must *not* do so 
-# after interpretation
+#            del self.final_buffers[0]
+#            del self.cross_buffer[0]
+#            del self.pos_after[0]
+#            del self.sel_after[0]
 
     def _delete_invalid_states(self, n):
         """private method which deletes all but the last n entries
@@ -1593,9 +1591,12 @@ class StateStackBasic(StateStack):
         self.final_buffers.append(final_buffer)
         self.pos_after.append(None)
         self.sel_after.append(None)
+        if self.max_depth > 0 and len(self.final_buffers) > self.max_depth:
+            del self.final_buffers[0]
+            del self.cross_buffer[0]
+            del self.pos_after[0]
+            del self.sel_after[0]
         self.check_stacks()
-# _push has already removed the bottom of the stack if necessary, so we
-# don't do so here
 
     def _push_single_buffer(self, pos, selection):
         """push supplementary information about a single buffer utterance
@@ -1613,9 +1614,12 @@ class StateStackBasic(StateStack):
         self.final_buffers.append(self.initial_buffers[-1])
         self.pos_after.append(pos)
         self.sel_after.append(selection)
+        if self.max_depth > 0 and len(self.final_buffers) > self.max_depth:
+            del self.final_buffers[0]
+            del self.cross_buffer[0]
+            del self.pos_after[0]
+            del self.sel_after[0]
         self.check_stacks()
-# _push has already removed the bottom of the stack if necessary, so we
-# don't do so here
 
     def safe_depth_preliminaries(self, app):
         """does preliminary checks for the full safe_depth/safe_reinterp_depth 

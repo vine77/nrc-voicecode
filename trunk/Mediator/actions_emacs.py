@@ -25,6 +25,7 @@ from actions_gen import *
 import debug
 import sr_interface
 import time
+import string
 
 class ActionEmacsListBuffers(Action):
     """open the Emacs buffer list.
@@ -70,9 +71,22 @@ class ActionEmacsListBuffers(Action):
         #     With everything I tried, if you start out with a single
         #     window layout, you eventually ended up with a 2 windows
         #     layout.
-        ActionTypeText(key_strokes='{Esc}xswitch-to-buffer{Enter}{Tab}{Esc}v').execute(app, cont, state)                
-        app.synchronize_with_app()
-        ActionCompileSymbols("*Completions*").execute(app=app, cont=cont, state=state)
+
+        buffer_names = app.list_all_buffers()
+        key_strokes='{Esc}xswitch-to-buffer{Enter}{Tab}{Esc}v'
+        ActionTypeText(key_strokes = key_strokes).execute(app, cont, state)
+        time.sleep(1)
+        contents = string.join(buffer_names, '\n')
+        ActionCompileSymbols("*Completions*", alt_contents = contents,
+            langauge = 'file_names').execute(app=app, cont=cont, state=state)
+        return
+# Emacs should already have switched, but we need to tell the mediator
+# to re-bind to this buffer
+        debug.trace('ActionEmacsListBuffers.execute',
+            'before change_buffer, buffer is %s' % app.curr_buffer_name())
+        success = app.change_buffer('*Completions*')
+        debug.trace('ActionEmacsListBuffers.execute',
+            'after change_buffer, success = %d, buffer is %s' % success, app.curr_buffer_name())
 
 
     def doc(self):

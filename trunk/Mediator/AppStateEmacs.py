@@ -30,7 +30,7 @@ import time
 import win32api
 import win32con
 
-from debug import trace
+from debug import trace, tracing
 
         
 class AppStateEmacs(AppStateMessaging.AppStateMessaging):
@@ -238,10 +238,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def pop_breadcrumbs(self, num=1, gothere=1):
         self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
 
-    def app_change_buffer(self, buff_name=None):
+    def app_change_buffer(self, buff_name):
         """Changes the external application's active buffer. 
-        If *buff_name* is *None*, starts a speech-enabled dialog
-        allowing the user to select it.
 
         **INPUTS**
         
@@ -254,5 +252,29 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         """
         self.talk_msgr.send_mess('change_buff', {'buff_name': buff_name})
         response = self.talk_msgr.get_mess(expect=['change_buff_resp'])
-        return messaging.messarg2int(response[1]['value'])
+        value = messaging.messarg2int(response[1]['value'])
+        if tracing('AppStateEmacs.app_change_buffer'):
+            trace('AppStateEmacs.app_change_buffer', 
+                'response was %d' % value)
+        return value
+
+
+    def list_all_buffers(self):
+        """retrieve a list of the names of all open buffers from 
+        Emacs, including scratch buffers and buffers not VoiceCode
+        enabled.  Do NOT call find_buff with buffers from this list!!!
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[STR]* -- list of the names of open buffers
+        """
+        self.talk_msgr.send_mess('list_all_buffers')
+        response = \
+            self.talk_msgr.get_mess(expect=['list_all_buffers_resp'])
+        open_buffers = response[1]['value']
+        return open_buffers
         

@@ -402,36 +402,29 @@ class PunctuationSet(Object):
                ['%s %s' % (self.next_word, spoken),
                 '%s %s' % (self.after_word, spoken),
                 '%s %s %s' % (self.after_word, self.next_word, spoken)],
-               meanings = {context: ActionSearchBidirectionalRepeat(
-                                      regexp = expression + r'[ \t]{0,1}',
-                                      ignore_left_of_cursor=1)},
+               meanings = {context: ActionSearchOrLookback(regexp =
+                   expression, extra_space = 1)},
                docstring='go after next %s' % spoken)
             debug.trace('PunctuationSet._add_navigation', 'command.meanings=%s, command.spoken_forms=%s' % (command.meanings, repr(command.spoken_forms)))
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.next_word, spoken), 
                 '%s %s' % (self.before_word, spoken)],
-               meanings = {context: ActionSearchBidirectionalRepeat(
-                                      regexp = r'[ \t]{0,1}' + expression, 
-                                      where = -1, ignore_left_of_cursor=1)},
+               meanings = {context: ActionSearchOrLookback(regexp =
+                   expression, where = -1, extra_space = 1)},
                docstring='go before next %s' % spoken)
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s' % (self.prev_word, spoken), 
                 '%s %s %s' % (self.after_word, self.prev_word, spoken)],
-               meanings = {context: ActionSearchBidirectionalRepeat(
-                                      regexp = expression + r'[ \t]{0,1}', 
-                                      ignore_right_of_cursor=1,
-                                      direction = -1)},
+               meanings = {context: ActionSearchOrLookback(regexp =
+                   expression, direction = -1, extra_space = 1)},
                docstring='go after previous %s' % spoken)
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.prev_word, spoken)],
-               meanings = {context: 
-                            ActionSearchBidirectionalRepeat(
-                              regexp = r'[ \t]{0,1}' + expression, 
-                              where = -1, direction = -1,
-                              ignore_right_of_cursor=1)},
+               meanings = {context: ActionSearchOrLookback(regexp =
+                   expression, direction = -1, where = -1, extra_space = 1)},
                docstring='go before previous %s' % spoken)
             commands.add_csc(command)
         debug.trace('PunctuationSet._add_navigation', 'exited')
@@ -751,11 +744,9 @@ class PairedPunctuation(PunctuationSet):
                 spoken_forms.append("%s %s" % (self.out_of, spoken))
                 
             command = CSCmd(spoken_forms,
-               meanings = {context: 
-                            ActionSearchBidirectionalRepeat(
-                              regexp = close_escaped + r'[ \t]{0,1}',
-                              ignore_left_of_cursor=1)},
-               docstring=doc)
+                meanings = {context: ActionSearchOrLookback(regexp =
+                close_escaped, extra_space = 1)},
+                docstring=doc)
             commands.add_csc(command)
             if self.back:
                 back_spoken_forms = []
@@ -764,11 +755,8 @@ class PairedPunctuation(PunctuationSet):
                 for spoken_form in spoken_forms:
                     back_spoken_forms.append(self.back + " " + spoken_form)
                 command = CSCmd(back_spoken_forms,
-                   meanings = {context: 
-                                 ActionSearchBidirectionalRepeat(
-                                     regexp = r'[ \t]{0,1}' + open_escaped,
-                                     ignore_right_of_cursor = 1,
-                                     direction = -1, where = -1)},
+                meanings = {context: ActionSearchOrLookback(regexp =
+                   open_escaped, direction = -1, where = -1, extra_space = 1)},
                    docstring=doc)
                 commands.add_csc(command)
 
