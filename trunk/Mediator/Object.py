@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import auto_test, exceptions, os, posixpath, profile, sys
+import exceptions, os, posixpath, profile, sys
 import types
 import traceback
 import debug
