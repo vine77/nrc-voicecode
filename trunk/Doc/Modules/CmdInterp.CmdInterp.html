@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:53:52 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:51 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -212,12 +212,16 @@ particular kind of construct (e.g. CSC, LSA, symbol)</P>
 <DD>The words in the NL command (in their written\spoken
 form).
 <DT>
-<EM>METHOD</EM> construct_check
-<DD>Method used to check wether a
- string corresponds to the type of construct we are looking
- for. Its signature should be: <EM>construct_check(self, STR) returns BOOL</EM>
-<STRONG>OUTPUTS</STRONG>
+<EM>METHOD</EM> construct_check(self, STR) returns STR
+<DD>Method used
+ to check wether a string corresponds to the type of construct
+ we are looking for. For LSA and symbol constructs, it returns
+ the construct's written form. For CSCs, it returns its spoken
+ form. If the string doesn't correspond to the proper construtct,
+ it returns <EM>None</EM>.
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>(chopped_construct, consumed, rest)</EM></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:53:22 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:02 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,8 +15,11 @@
 
 
 <H1 CLASS="ModuleName">Module make_doc</H1>
-<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#fix_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">fix_references</SPAN></A>(<SPAN CLASS="Argument">doc_dir</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # For some reason, internal references must be specified as:</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.testing\\Admin\\make_doc.py'</SPAN></SPAN>
+<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_pydoc_path"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_pydoc_path</SPAN></A>(<SPAN CLASS="Argument">names=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # search through the python import path for the pydoc script</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#fix_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">fix_references</SPAN></A>(<SPAN CLASS="Argument">doc_dir</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # For some reason, internal references must be specified as:</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN></A>()</SPAN><SPAN CLASS="OneLiner"> # central quitting routine</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">runme</SPAN>()</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Admin\\make_doc.py'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">None</SPAN> <SPAN CLASS="VariableName">regs_file_name</SPAN> = <SPAN CLASS="VariableValue">None</SPAN></SPAN>
 </PRE><H2>Description</H2><P>
 Usage: python make_doc.py files</P>
@@ -25,6 +28,29 @@ files: names of .py files for which to refresh the documentation. If files is no
 <P>
 Example: python make_doc.py Object.py
 </P>
+<H2 ID="find_pydoc_path" CLASS="Function">find_pydoc_path(<SPAN CLASS="Argument">names=None</SPAN>)</H2>
+<P>search through the python import path for the pydoc script</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> names
+<DD>list of possible names for the script (defaults to
+    ['pydoc.py', 'pdoc.py']
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>full path of the script, or None if it couldn't be found.
+
+</DL>
 <H2 ID="fix_references" CLASS="Function">fix_references(<SPAN CLASS="Argument">doc_dir</SPAN>)</H2>
 <P>For some reason, internal references must be specified as:</P>
 
@@ -47,6 +73,18 @@ the file unless they are started from the Doc directory.</P>
 <P>
 To deal with this problem, <EM>fix_internal_references</EM> substitutes
  and  for a null string in all the Doc/*.html files.   
+</P>
+<H2 ID="quit" CLASS="Function">quit()</H2>
+<P>central quitting routine</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
 </P>
 
 <HR>

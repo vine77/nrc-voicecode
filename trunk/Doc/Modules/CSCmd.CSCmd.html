@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:55:49 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:48 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,8 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CSCmd</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CSCmd.CSCmd.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms=[]</SPAN>, <SPAN CLASS="Argument">meanings=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CSCmd.CSCmd.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms=[]</SPAN>, <SPAN CLASS="Argument">meanings={}</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#CSCmd.CSCmd.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CSCmd.CSCmd.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the documentation for that CSC.</SPAN>
     <A CLASS="DocLink" HREF="#CSCmd.CSCmd.interpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CSCmd.CSCmd.interpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Executes the command if any of its contexts applies.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -49,16 +50,36 @@ application where it was typed.</P>
 <DD>list of alternatives ways that this
  command can be spoken out. They can be regular expressions.
 <DT>
-<EM>meanings=[[</EM> <A HREF="Context.Context.html">Context</A> <EM>, FCT]]</EM>
-<DD>list of possible contextual
-  meanings for this command. Each element is a pair with 1st
-  element being a context and the 2nd element being an action
-  function to be fired if that context applies.
+*meanings=*{* <A HREF="Context.Context.html">Context</A> *: * <A HREF="Action.Action.html">Action</A> <EM>}</EM>
+<DD>Dictionary of
+possible contextual meanings for this command. Key is a context
+and value is an action object to be fired if that context applies.
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>
 <P>
 <EM>none</EM> --</P>
+<H2 ID="CSCmd.CSCmd.doc" CLASS="Method">CSCmd.CSCmd.doc(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns the documentation for that CSC.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="CSCmd.CSCmd.interpret" CLASS="Method">CSCmd.CSCmd.interpret(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
 <P>Executes the command if any of its contexts applies.</P>
 
