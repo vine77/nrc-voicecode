@@ -1,17 +1,3 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
-
-C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -641,7 +627,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0206CFF0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D39650>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -782,6 +768,7 @@ Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
+'non': appears in ['LargeNonObject', 'SmallNonObject', 'profConstrLargeNonObj', 'profConstrSmallNonObj', 'profGetLargeNonObj', 'profGetSmallNonObj', 'profSetLargeNonObj', 'profSetSmallNonObj']
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
@@ -1048,10 +1035,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'N:\\DavidFox\\Code\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2763,7 +2750,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3592,7 +3579,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3714,28 +3701,28 @@ Heard new statement below
   3: below_when_empty_buffer
 
 *** End of source buffer ***
-Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'non', 'empty', 'buffer']
-Heard below when at first line of non empty buffer
-Associate 'below when at first line of non empty buffer' with symbol (Enter selection):
+Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'a', 'buffer']
+Heard below when at first line of a buffer
+Associate 'below when at first line of a buffer' with symbol (Enter selection):
 
   '0': no association
-  '1': below_when_at_first_line_of_non_empty_buffer (*new*)
-  '2': BelowWhenAtFirstLineOfNonEmptyBuffer (*new*)
-  '3': belowWhenAtFirstLineOfNonEmptyBuffer (*new*)
-  '4': BELOW_WHEN_AT_FIRST_LINE_OF_NON_EMPTY_BUFFER (*new*)
-  '5': belowwhenatfirstlineofnonemptybuffer (*new*)
-  '6': BELOWWHENATFIRSTLINEOFNONEMPTYBUFFER (*new*)
+  '1': below_when_at_first_line_of_a_buffer (*new*)
+  '2': BelowWhenAtFirstLineOfABuffer (*new*)
+  '3': belowWhenAtFirstLineOfABuffer (*new*)
+  '4': BELOW_WHEN_AT_FIRST_LINE_OF_A_BUFFER (*new*)
+  '5': belowwhenatfirstlineofabuffer (*new*)
+  '6': BELOWWHENATFIRSTLINEOFABUFFER (*new*)
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer<CURSOR>
+  2: below_when_at_first_line_of_a_buffer<CURSOR>
   3: below_when_empty_buffer
 
 *** End of source buffer ***
-Got command: goto(69,)
+Got command: goto(61,)
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_empty_buffer<CURSOR>
 
 *** End of source buffer ***
@@ -3743,46 +3730,46 @@ Saying: ['new', 'statement', 'below']
 Heard new statement below
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_empty_buffer
   4: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
-Heard below when at last character of non empty buffer
-Associate 'below when at last character of non empty buffer' with symbol (Enter selection):
+Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'a', 'buffer']
+Heard below when at last character of a buffer
+Associate 'below when at last character of a buffer' with symbol (Enter selection):
 
   '0': no association
-  '1': below_when_at_last_character_of_non_empty_buffer (*new*)
-  '2': BelowWhenAtLastCharacterOfNonEmptyBuffer (*new*)
-  '3': belowWhenAtLastCharacterOfNonEmptyBuffer (*new*)
-  '4': BELOW_WHEN_AT_LAST_CHARACTER_OF_NON_EMPTY_BUFFER (*new*)
-  '5': belowwhenatlastcharacterofnonemptybuffer (*new*)
-  '6': BELOWWHENATLASTCHARACTEROFNONEMPTYBUFFER (*new*)
+  '1': below_when_at_last_character_of_a_buffer (*new*)
+  '2': BelowWhenAtLastCharacterOfABuffer (*new*)
+  '3': belowWhenAtLastCharacterOfABuffer (*new*)
+  '4': BELOW_WHEN_AT_LAST_CHARACTER_OF_A_BUFFER (*new*)
+  '5': belowwhenatlastcharacterofabuffer (*new*)
+  '6': BELOWWHENATLASTCHARACTEROFABUFFER (*new*)
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_empty_buffer
-  4: below_when_at_last_character_of_non_empty_buffer<CURSOR>
+  4: below_when_at_last_character_of_a_buffer<CURSOR>
 
 *** End of source buffer ***
 Got command: goto_line(2,)
 *** Start of source buffer ***
   1: 
-  2: <CURSOR>below_when_at_first_line_of_non_empty_buffer
+  2: <CURSOR>below_when_at_first_line_of_a_buffer
   3: below_when_empty_buffer
-  4: below_when_at_last_character_of_non_empty_buffer
+  4: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'below']
 Heard new statement below
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: <CURSOR>
   4: below_when_empty_buffer
-  5: below_when_at_last_character_of_non_empty_buffer
+  5: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['below', 'when', 'on', 'middle', 'line', 'of', 'buffer']
@@ -3799,39 +3786,39 @@ Associate 'below when on middle line of buffer' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer<CURSOR>
   4: below_when_empty_buffer
-  5: below_when_at_last_character_of_non_empty_buffer
+  5: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Got command: goto_line(3,)
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: <CURSOR>below_when_on_middle_line_of_buffer
   4: below_when_empty_buffer
-  5: below_when_at_last_character_of_non_empty_buffer
+  5: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer<CURSOR>
   4: below_when_empty_buffer
-  5: below_when_at_last_character_of_non_empty_buffer
+  5: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'below']
 Heard new statement below
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
   4: <CURSOR>
   5: below_when_empty_buffer
-  6: below_when_at_last_character_of_non_empty_buffer
+  6: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'end', 'of', 'line']
@@ -3848,43 +3835,43 @@ Associate 'below when at end of line' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
   4: below_when_at_end_of_line<CURSOR>
   5: below_when_empty_buffer
-  6: below_when_at_last_character_of_non_empty_buffer
+  6: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Got command: goto_line(3,)
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: <CURSOR>below_when_on_middle_line_of_buffer
   4: below_when_at_end_of_line
   5: below_when_empty_buffer
-  6: below_when_at_last_character_of_non_empty_buffer
+  6: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: <CURSOR>below_when_on_middle_line_of_buffer
   4: below_when_at_end_of_line
   5: below_when_empty_buffer
-  6: below_when_at_last_character_of_non_empty_buffer
+  6: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'below']
 Heard new statement below
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
   4: <CURSOR>
   5: below_when_at_end_of_line
   6: below_when_empty_buffer
-  7: below_when_at_last_character_of_non_empty_buffer
+  7: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'beginning', 'of', 'line']
@@ -3901,18 +3888,18 @@ Associate 'below when at beginning of line' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
   4: below_when_at_beginning_of_line<CURSOR>
   5: below_when_at_end_of_line
   6: below_when_empty_buffer
-  7: below_when_at_last_character_of_non_empty_buffer
+  7: below_when_at_last_character_of_a_buffer
 
 *** End of source buffer ***
 Got command: goto(10,)
 *** Start of source buffer ***
   1: 
-  2: below_whe<CURSOR>n_at_first_line_of_non_empty_buffer
+  2: below_whe<CURSOR>n_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
   4: below_when_at_beginning_of_line
   5: below_when_at_end_of_line
@@ -3920,7 +3907,7 @@ Saying: ['new', 'statement', 'below']
 Heard new statement below
 *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: <CURSOR>
   4: below_when_on_middle_line_of_buffer
   5: below_when_at_beginning_of_line
@@ -3939,7 +3926,7 @@ Associate 'below when at middle of a line' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: 
-  2: below_when_at_first_line_of_non_empty_buffer
+  2: below_when_at_first_line_of_a_buffer
   3: below_when_at_middle_of_a_line<CURSOR>
   4: below_when_on_middle_line_of_buffer
   5: below_when_at_beginning_of_line
@@ -3987,27 +3974,27 @@ Heard new statement above
   3: 
 
 *** End of source buffer ***
-Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'non-', 'empty', 'buffer']
-Heard above when at first line of non hyphen empty buffer
-Associate 'above when at first line of non hyphen empty buffer' with symbol (Enter selection):
+Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'a', 'buffer']
+Heard above when at first line of a buffer
+Associate 'above when at first line of a buffer' with symbol (Enter selection):
 
   '0': no association
-  '1': above_when_at_first_line_of_non_hyphen_empty_buffer (*new*)
-  '2': AboveWhenAtFirstLineOfNonHyphenEmptyBuffer (*new*)
-  '3': aboveWhenAtFirstLineOfNonHyphenEmptyBuffer (*new*)
-  '4': ABOVE_WHEN_AT_FIRST_LINE_OF_NON_HYPHEN_EMPTY_BUFFER (*new*)
-  '5': abovewhenatfirstlineofnonhyphenemptybuffer (*new*)
-  '6': ABOVEWHENATFIRSTLINEOFNONHYPHENEMPTYBUFFER (*new*)
+  '1': above_when_at_first_line_of_a_buffer (*new*)
+  '2': AboveWhenAtFirstLineOfABuffer (*new*)
+  '3': aboveWhenAtFirstLineOfABuffer (*new*)
+  '4': ABOVE_WHEN_AT_FIRST_LINE_OF_A_BUFFER (*new*)
+  '5': abovewhenatfirstlineofabuffer (*new*)
+  '6': ABOVEWHENATFIRSTLINEOFABUFFER (*new*)
 
 > *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer<CURSOR>
+  1: above_when_at_first_line_of_a_buffer<CURSOR>
   2: above_when_empty_buffer
   3: 
 
 *** End of source buffer ***
-Got command: goto(76,)
+Got command: goto(61,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_empty_buffer
   3: <CURSOR>
 
@@ -4015,46 +4002,46 @@ Got command: goto(76,)
 Saying: ['new', 'statement', 'above']
 Heard new statement above
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_empty_buffer
   3: <CURSOR>
   4: 
 
 *** End of source buffer ***
-Saying: ['above', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
-Heard above when at last character of non empty buffer
-Associate 'above when at last character of non empty buffer' with symbol (Enter selection):
+Saying: ['above', 'when', 'at', 'last', 'character', 'of', 'a', 'buffer']
+Heard above when at last character of a buffer
+Associate 'above when at last character of a buffer' with symbol (Enter selection):
 
   '0': no association
-  '1': above_when_at_last_character_of_non_empty_buffer (*new*)
-  '2': AboveWhenAtLastCharacterOfNonEmptyBuffer (*new*)
-  '3': aboveWhenAtLastCharacterOfNonEmptyBuffer (*new*)
-  '4': ABOVE_WHEN_AT_LAST_CHARACTER_OF_NON_EMPTY_BUFFER (*new*)
-  '5': abovewhenatlastcharacterofnonemptybuffer (*new*)
-  '6': ABOVEWHENATLASTCHARACTEROFNONEMPTYBUFFER (*new*)
+  '1': above_when_at_last_character_of_a_buffer (*new*)
+  '2': AboveWhenAtLastCharacterOfABuffer (*new*)
+  '3': aboveWhenAtLastCharacterOfABuffer (*new*)
+  '4': ABOVE_WHEN_AT_LAST_CHARACTER_OF_A_BUFFER (*new*)
+  '5': abovewhenatlastcharacterofabuffer (*new*)
+  '6': ABOVEWHENATLASTCHARACTEROFABUFFER (*new*)
 
 > *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_empty_buffer
-  3: above_when_at_last_character_of_non_empty_buffer<CURSOR>
+  3: above_when_at_last_character_of_a_buffer<CURSOR>
   4: 
 
 *** End of source buffer ***
 Got command: goto_line(2,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: <CURSOR>above_when_empty_buffer
-  3: above_when_at_last_character_of_non_empty_buffer
+  3: above_when_at_last_character_of_a_buffer
   4: 
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'above']
 Heard new statement above
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: <CURSOR>
   3: above_when_empty_buffer
-  4: above_when_at_last_character_of_non_empty_buffer
+  4: above_when_at_last_character_of_a_buffer
   5: 
 
 *** End of source buffer ***
@@ -4071,39 +4058,39 @@ Associate 'above when on middle line of buffer' with symbol (Enter selection):
   '6': ABOVEWHENONMIDDLELINEOFBUFFER (*new*)
 
 > *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer<CURSOR>
   3: above_when_empty_buffer
-  4: above_when_at_last_character_of_non_empty_buffer
+  4: above_when_at_last_character_of_a_buffer
   5: 
 
 *** End of source buffer ***
 Got command: goto_line(3,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: <CURSOR>above_when_empty_buffer
-  4: above_when_at_last_character_of_non_empty_buffer
+  4: above_when_at_last_character_of_a_buffer
   5: 
 
 *** End of source buffer ***
 Got command: goto_end_of_line(None,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_empty_buffer<CURSOR>
-  4: above_when_at_last_character_of_non_empty_buffer
+  4: above_when_at_last_character_of_a_buffer
   5: 
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'above']
 Heard new statement above
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: <CURSOR>
   4: above_when_empty_buffer
-  5: above_when_at_last_character_of_non_empty_buffer
+  5: above_when_at_last_character_of_a_buffer
   6: 
 
 *** End of source buffer ***
@@ -4120,43 +4107,43 @@ Associate 'above when at end of line' with symbol (Enter selection):
   '6': ABOVEWHENATENDOFLINE (*new*)
 
 > *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_at_end_of_line<CURSOR>
   4: above_when_empty_buffer
-  5: above_when_at_last_character_of_non_empty_buffer
+  5: above_when_at_last_character_of_a_buffer
   6: 
 
 *** End of source buffer ***
 Got command: goto_line(3,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: <CURSOR>above_when_at_end_of_line
   4: above_when_empty_buffer
-  5: above_when_at_last_character_of_non_empty_buffer
+  5: above_when_at_last_character_of_a_buffer
   6: 
 
 *** End of source buffer ***
 Got command: goto_beginning_of_line(None,)
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: <CURSOR>above_when_at_end_of_line
   4: above_when_empty_buffer
-  5: above_when_at_last_character_of_non_empty_buffer
+  5: above_when_at_last_character_of_a_buffer
   6: 
 
 *** End of source buffer ***
 Saying: ['new', 'statement', 'above']
 Heard new statement above
 *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: <CURSOR>
   4: above_when_at_end_of_line
   5: above_when_empty_buffer
-  6: above_when_at_last_character_of_non_empty_buffer
+  6: above_when_at_last_character_of_a_buffer
 Saying: ['above', 'when', 'at', 'beginning', 'of', 'line']
 Heard above when at beginning of line
 Associate 'above when at beginning of line' with symbol (Enter selection):
@@ -4170,15 +4157,15 @@ Associate 'above when at beginning of line' with symbol (Enter selection):
   '6': ABOVEWHENATBEGINNINGOFLINE (*new*)
 
 > *** Start of source buffer ***
-  1: above_when_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_at_beginning_of_line<CURSOR>
   4: above_when_at_end_of_line
   5: above_when_empty_buffer
-  6: above_when_at_last_character_of_non_empty_buffer
+  6: above_when_at_last_character_of_a_buffer
 Got command: goto(10,)
 *** Start of source buffer ***
-  1: above_when<CURSOR>_at_first_line_of_non_hyphen_empty_buffer
+  1: above_when<CURSOR>_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_at_beginning_of_line
   4: above_when_at_end_of_line
@@ -4186,7 +4173,7 @@ Saying: ['new', 'statement', 'above']
 Heard new statement above
 *** Start of source buffer ***
   1: <CURSOR>
-  2: above_when_at_first_line_of_non_hyphen_empty_buffer
+  2: above_when_at_first_line_of_a_buffer
   3: above_when_on_middle_line_of_buffer
   4: above_when_at_beginning_of_line
 Saying: ['above', 'when', 'at', 'middle', 'of', 'a', 'line']
@@ -4203,7 +4190,7 @@ Associate 'above when at middle of a line' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1: above_when_at_middle_of_a_line<CURSOR>
-  2: above_when_at_first_line_of_non_hyphen_empty_buffer
+  2: above_when_at_first_line_of_a_buffer
   3: above_when_on_middle_line_of_buffer
   4: above_when_at_beginning_of_line
 
@@ -4263,7 +4250,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -10247,7 +10234,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -10335,7 +10322,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12634,5 +12621,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  331.707000017 secs
+Test suite completed in:  1238.75099993 secs
 -----------------------------------------------
