@@ -129,7 +129,7 @@ def init_simulator(app, symdict_pickle_fname=None,
             the_mediator.quit(save_speech_files=0, disconnect=0)            
             
             
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=app), window = window, exclusive=exclusive, allResults=allResults)
+        the_mediator = MediatorObject.MediatorObject(app = app, interp=CmdInterp.CmdInterp(), window = window, exclusive=exclusive, allResults=allResults)
 
         #
         # Read the symbol dictionary from file
@@ -167,8 +167,8 @@ def execute_command(cmd):
     except Exception, err:
 	traceback.print_exc()
 #    else:
-#        if the_mediator.interp.on_app.curr_buffer:
-#            the_mediator.interp.on_app.curr_buffer.print_buff()
+#        if the_mediator.app.curr_buffer:
+#            the_mediator.app.curr_buffer.print_buff()
 
         
 def simulator_mode(options):

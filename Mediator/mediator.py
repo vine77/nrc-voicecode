@@ -181,7 +181,9 @@ def init_simulator(symdict_pickle_fname=None,
         if the_mediator:
             the_mediator.quit(save_speech_files=0, disconnect=0)            
         
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=on_app), window=window, exclusive=exclusive, allResults=allResults)
+        the_mediator = MediatorObject.MediatorObject(app = on_app,
+	    interp=CmdInterp.CmdInterp(), window=window, 
+	    exclusive=exclusive, allResults=allResults)
 
         #
         # Read the symbol dictionary from file
@@ -231,7 +233,7 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
 #    print '-- mediator.init_simulator_regression: on_app=%s' % on_app
 
     if the_mediator and on_app == None:
-        on_app = the_mediator.interp.on_app
+        on_app = the_mediator.app
     
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
                    window=0, exclusive=1, allResults=0, reuse_mediator=1,
@@ -240,7 +242,7 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
     #
     # Make sure to reinitialise the external editor.
     #
-    the_mediator.interp.on_app.init_for_test()
+    the_mediator.app.init_for_test()
     
 
 def execute_command(cmd):
