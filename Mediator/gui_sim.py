@@ -71,9 +71,8 @@ from sim_commands import *
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, MediatorObject, sr_interface, util, vc_globals
-import OldWaxEdit
-import OldWaxEdSim
-import AppStateWaxEdit
+import AppStateGenEdit
+import WaxEdSim
 from CSCmd import CSCmd
 
 # for actions that span different languages
@@ -92,7 +91,6 @@ the_mediator = None
 def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
-#    print the_mediator
     if sim_commands.the_mediator:
         sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 	    save_speech_files=save_speech_files, disconnect=disconnect)
@@ -113,22 +111,22 @@ def simulator_mode(options):
     *none* -- 
     """
 
-#    global the_mediator
 
     setmic('off')
 
-    editor_app = OldWaxEdSim.WaxEdSim(command_space= sim_commands.__dict__)
+    command_space = copy.copy(sim_commands.__dict__)
+    editor_app = WaxEdSim.WaxEdSim(command_space= sim_commands.__dict__)
     module_info = natlink.getCurrentModule()
     window = module_info[2]
     print module_info
-    app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
+    app = editor_app.editor
+    editor_app.got_window()
 
-    mediator.init_simulator(on_app = app, 
+    mediator.init_simulator(on_app = app, owns_app = 0,
 #	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
 	symdict_pickle_fname = None,
 	disable_dlg_select_symbol_matches = 1, window = window,
 	mic_change = editor_app.mic_change)
-#    print sim_commands.the_mediator
         
     #
     # For better error reporting, you can type some instructions here
@@ -141,7 +139,7 @@ def simulator_mode(options):
     open_file(file_name)
     
 
-    editor_app.run(app_control = app)
+    editor_app.run()
     print 'gui exited'
         
 if (__name__ == '__main__'):

@@ -89,12 +89,14 @@ class GenEdit(Object.OwnerObject):
 	self.deep_construct(GenEdit,
 	                    {'app_control': None},
 			    args)
-        self.name_parent('app_control')
-# note: app_control is a reference to a parent object, which must
+        self.add_grandparent('app_control')
+# note: app_control is a reference to a (grand)parent object, which must
 # be deleted so that that object can be deleted.  However, since
 # AppState is usually considered an interface to an editor, it does not
 # "own" GenEdit and its cleanup method won't call GenEdit's.
-# Therefore, GenEdit must call cleanup itself when the user tells it to exit
+# Therefore, unless a subclass of GenEdit is also an owner object and
+# has an owner, GenEdit must call cleanup itself when the user
+# tells it to exit
 	
     def set_app_control(self, app_control):
 	"""method called by app_control's (AppStateGenEdit.) __init__ 
@@ -1061,6 +1063,7 @@ class GenEditFrame(Object.OwnerObject):
     def __init__(self, **args):
 	self.deep_construct(GenEditFrame,
 	                    {'frame_ID': None}, args)
+
     def set_frame_ID(self, ID):
 	"""set the frame ID, which the frame will use to identify itself
 	to its owner in callbacks
@@ -1333,7 +1336,7 @@ class GenEditFrame(Object.OwnerObject):
 	debug.virtual('GenEditFrame.editor_buffer')
 
 
-class GenEditFrameWithBuffers(GenEditFrame, Object.OwnerObject):
+class GenEditFrameWithBuffers(GenEditFrame):
     """partial implementation of GenEditFrame which keeps track of
     buffers belonging to this frame
 
@@ -1561,14 +1564,11 @@ class GenEditFrames(GenEditBuffers):
 
 	**INPUTS**
 
-	*GenEditFrame frame* -- the new frame 
-
 	*STR buff_name* -- the name of the initial buffer for the frame
 
 	**OUTPUTS**
 
-	*INT* -- ID of the new frame, or None if the frame was not 
-	added successfully
+	*GenEditFrame frame* -- the new frame 
 	"""
 	debug.virtual('GenEditFrames.new_frame')
 
@@ -1679,6 +1679,7 @@ class GenEditFrames(GenEditBuffers):
 	    frame.on_activate(0)
 # cleanup the frame
 	    frame.cleanup()
+	    frame.close_window()
 	    del self.frames[ID]
 
 
@@ -1864,7 +1865,8 @@ class GenEditFrames(GenEditBuffers):
 # notify the owner
 #	print 'notifying owner'
 #	sys.stdout.flush()
-	self.app_control.close_app_cbk()
+	if self.app_control:
+	    self.app_control.close_app_cbk()
 #	print 'done notifying owner'
 #	sys.stdout.flush()
 
@@ -1885,8 +1887,9 @@ class GenEditFrames(GenEditBuffers):
 #	    sys.stdout.flush()
 	    del self.frames[ID]
 
-# cleanup self
-	self.cleanup()
+# cleanup self, unless we have an owner which will do so for us
+	if self.owned_by() == None:
+	    self.cleanup()
 
 	return 1
 
@@ -2004,7 +2007,7 @@ class GenEditFrames(GenEditBuffers):
 	for frame in self.frames.values():
 	    frame.set_instance_string()
   
-class ActivateEventMixIn(Object.OwnerObject):
+class ActivateEventMixIn(Object.Object):
     """mix-in which implements GenEditFrames.is_active and active_frame_ID
 
     **CLASS ATTRIBUTES**

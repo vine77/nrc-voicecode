@@ -89,16 +89,20 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
     global the_mediator
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
+    print the_mediator
     if the_mediator:
         the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 	    save_speech_files=save_speech_files, disconnect=disconnect)
 
 
 def init_simulator(symdict_pickle_fname=None,
-                   disable_dlg_select_symbol_matches = None,
-                   window=0, exclusive=0, allResults=0,
-                   reuse_mediator=0, on_app=None, owns_app = 1, owner =
-		   None, id = None):
+		   disable_dlg_select_symbol_matches = None,
+		   window = 0, exclusive = 0,
+		   allResults = 0,
+		   on_app = None, owns_app = 1,
+		   mic_change = None,
+		   owner = None, id = None
+		  ):
 
     """
     Creates a global [MediatorObject] instance *the_mediator*, and configures it.
@@ -124,16 +128,15 @@ def init_simulator(symdict_pickle_fname=None,
     [AppState] *on_app=None* -- [AppState] instance to use for the
     mediator. If *None*, then use a new [EdSim] instance.
 
-    BOOL *reuse_mediator* -- If *true*, then reuse the existing
-    mediator (if any), instead of creating one from scratch (useful
-    when regression testing using an external editor instead of EdSim).
-
     [AppState] *on_app* -- Attach this [AppState] to the meditor
     instead of generating a new one from scratch (useful when
     regression testing using an external editor instead of EdSim).
 
     *BOOL owns_app* -- create mediator with owns_app flag (see
     MediatorObject)
+
+    *FCT* mic_change_callback -- mic_change_callback(*STR* mic_state)
+    (optional) function to be called when the microphone state changes.
 
     *ServerMainThread owner* -- server which owns this mediator, or
     None.  Note: if owner is set, the id field MUST be provided.
@@ -160,7 +163,7 @@ def init_simulator(symdict_pickle_fname=None,
         on_app = EdSim.EdSim()
     
     try:
-        sr_interface.connect('off')
+	sr_interface.connect('off', mic_change_callback = mic_change)
     except natlink.UnknownName:
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         cleanup()        
@@ -170,7 +173,6 @@ def init_simulator(symdict_pickle_fname=None,
             #
             # Remove symbols from NatSpeak's dictionary 
             #
-            pass
             the_mediator.interp.cleanup(resave=0)
 
         #
@@ -183,9 +185,12 @@ def init_simulator(symdict_pickle_fname=None,
             the_mediator.quit(save_speech_files=0, disconnect=0)            
         
         the_mediator = MediatorObject.MediatorObject(app = on_app,
-	    interp=CmdInterp.CmdInterp(), window=window, 
+	    interp = CmdInterp.CmdInterp(), 
+	    window = window, 
 	    owns_app = owns_app,
-	    exclusive=exclusive, allResults=allResults, owner = owner,
+	    exclusive = exclusive, 
+	    allResults = allResults, 
+	    owner = owner,
 	    id = id)
 
         #
@@ -208,6 +213,7 @@ def init_simulator(symdict_pickle_fname=None,
     # through the sim_commands module namespace
 
     sim_commands.the_mediator = the_mediator
+#    print sim_commands.the_mediator
 
     # define some useful local variables
     home = os.environ['VCODE_HOME']
@@ -249,7 +255,6 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
     
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
                    window=0, owns_app = 0, exclusive=1, allResults=0, 
-		   reuse_mediator=1,
                    disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)
 		   
 
@@ -265,7 +270,7 @@ def execute_command(cmd):
         traceback.print_exc()
 
         
-def simulator_mode(options, console_win_handle):
+def simulator_mode(options):
     """Start mediator in console mode.
 
     Useful for debugging purposes when using the mediator separately from
@@ -283,7 +288,15 @@ def simulator_mode(options, console_win_handle):
 
     global the_mediator
 
+#
+# Handle of the DOS window in which mediator is running
+#
+# print natlink.getCurrentModule()
+
     setmic('off')
+
+    console_win_handle = natlink.getCurrentModule()[2]
+
     init_simulator(window = console_win_handle, symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', disable_dlg_select_symbol_matches = 1)
     
     #
@@ -327,24 +340,18 @@ def run(options):
         print __doc__
 	print sim_commands.__doc__
 	return
-#
-# Handle of the DOS window in which mediator is running
-#
-    sr_interface.connect()
-# print natlink.getCurrentModule()
-    console_win_handle = natlink.getCurrentModule()[2]
 
     if opts['t']:
         #
         # Run mediator using an editor simulator, in profiling mode
         #
         profile.run("""
-simulator_mode(opts, console_win_handle)""")
+simulator_mode(opts)""")
     elif opts['s']:
         #
         # Run mediator using an editor simulator
         #
-        simulator_mode(opts, console_win_handle)
+        simulator_mode(opts)
 
     cleanup(sim_commands.clean_sr_voc_flag, 
 	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)

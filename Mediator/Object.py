@@ -781,20 +781,34 @@ class OwnerObject(Object):
 			     'owned_objects': []},
 			    attrs)
 
+    def owned_by(self):
+        """returns the name of the parent attribute
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*STR* -- name of the parent, or None if none
+	"""
+	return self.parent_name
+
     def name_parent(self, parent = None):
 	"""specify the name of the attribute containing a reference to 
 	this object's parent.
 
 	**INPUTS**
 
-	*STR owned* -- name of the parent, or None if none
+	*STR parent* -- name of the parent, or None if none
 
 	**OUTPUTS**
 
 	*none*
 	"""
+	if self.parent_name != None:
+	    raise RuntimeError('OwnerObject named a second parent')
 	self.parent_name = parent
-
 
     def add_grandparent(self, grandparent):
 	"""specify the name of the attribute containing a reference to 
@@ -804,7 +818,7 @@ class OwnerObject(Object):
 
 	**INPUTS**
 
-	*STR owned* -- names of owned attributes
+	*STR grandparent* -- names of owned attributes
 
 	**OUTPUTS**
 
@@ -844,6 +858,12 @@ class OwnerObject(Object):
 	"""additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
+	**NOTE:** subclasses must call their parent class's 
+	remove_other_references method, after performing their own duties.
+	Also, a class inheriting from two OwnerObject classes MUST
+	define remove_other_references and call both subclasses'
+	versions
+
 	**INPUTS**
 
 	*none*
@@ -853,7 +873,7 @@ class OwnerObject(Object):
 	*none*
 	"""
 # subclasses must call their parent class's remove_other_references
-# function, after performing their own duties
+# method, after performing their own duties
 	pass
 
     def _cleanup_object(self, object):

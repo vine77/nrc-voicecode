@@ -423,8 +423,16 @@ def clear_abbreviations():
     global the_mediator        
     the_mediator.interp.known_symbols.abbreviations_cleanup()
 
+def signal_quitting(quitting = 1):
+# default for signal_quitting.  Other classes which copy their name
+# space will have to redefine, because otherwise, quit will set the flag
+# in the original namespace, leaving the copy unchanged
+    global quit_flag
+    quit_flag = quitting
+
+
 def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
-    global quit_flag, the_mediator
+#    global the_mediator
 
 #     if the_mediator:
 #         the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
@@ -432,7 +440,7 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     clean_sr_voc_flag = clean_sr_voc
     save_speech_files_flag = save_speech_files
     disconnect_flag = disconnect
-    quit_flag = 1            
+    signal_quitting()
 
 def getmic():
     if sr_interface.speech_able():

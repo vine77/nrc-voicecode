@@ -185,6 +185,7 @@ class wxFrameMenuMixIn(Object):
 	successfully inserted
 	"""
 	index = self.find_item_index_by_label(menu, label)
+#	print 'index ', index
 	if index == None:
 	    return 0
 	menu.Insert(index, menu_item)

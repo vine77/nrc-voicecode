@@ -122,7 +122,7 @@ class SingleBufferWindow:
 	"""
 	self.editor_window().SetFont(font)
 
-class EditorBuilder(Object.OwnerObject):
+class EditorBuilder(Object.Object):
     """mix-in class for creating the editor buffer window and its
     TextBufferWX wrapper
     """
@@ -188,152 +188,8 @@ class EditorBuilderBasic(EditorBuilder):
 	    TextBufferWX.TextBufferWX(editor, carriage_return_bug = cr_bug)
 	return editor, wax_text_buffer
     
-class OldSimpleWaxPanel(wxPanel, SingleBufferWindow, Object.OwnerObject):
-    """simple main panel containing only a single text buffer 
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-
-    **INSTANCE ATTRIBUTES**
-
-    *TextBufferWX* wax_text_buffer -- editor interface with change
-    specification, so that we can keep track of changes to the editor
-    buffer.
-
-    *wxTextControl* editor -- underlying text control for editor window
-
-    *BOOL* closing -- true if panel is closing (used to ensure that
-    event handlers don't continue to call other methods when the panel
-    may not be in a sane state)
-    """
-    def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-# subclasses must call their parent class's remove_other_references
-# function, after performing their own duties
-	self.closing = 1
-	self.wax_text_buffer = None
-	self.editor = None
-	Object.OwnerObject.remove_other_references(self)
-
-    def __init__(self, parent, ID, use_rich = 0, **args):
-	"""
-	**INPUTS**
-
-	*wxWindow parent* -- the parent window to the frame
-
-	*INT ID* -- the ID of the panel
-
-	*BOOL use_rich* -- flag indicating whether we should use a
-	standard text control or a rich edit control on Windows
-	"""
-	self.deep_construct(OldSimpleWaxPanel,
-	                    {'wax_text_buffer': None,
-			     'editor': None,
-			     'closing': 0
-			    },
-			    args,
-			    exclude_bases = {wxPanel: 1, SingleBufferWindow: 1}
-			   )
-        wxPanel.__init__(self, parent, ID, wxDefaultPosition, 
-	    wxDefaultSize)
-
-	vbox = wxBoxSizer(wxVERTICAL)
-	self.prepend(vbox)
-
-	editor, buffer = build_editor_buffer(self, use_rich = use_rich)
-
-        self.editor = editor
-        self.wax_text_buffer = buffer
-
-# because we put the editor in a panel, we need a sizer
-	vbox.Add(self.editor, 1, wxGROW)
-
-	self.append(vbox)
-
-
-        self.SetAutoLayout(1)
-        self.SetSizer(vbox)
-        vbox.Fit(self)
-        vbox.SetSizeHints(self)
-
-    def prepend(self, vbox):
-	""" allows subclasses to add additional controls to the panel
-	above the editor window
-
-	**Note:** the additional controls should have the panel (self)
-	as a parent.  If any cleanup is necessary (apart from the
-	automatic destruction of the controls when the panel exits), it 
-	must be added to the subclass's remove_other_references method.
-
-	**INPUTS**
-
-	*wxBoxSizer vbox* -- the vertical box sizer to which the
-	controls should be added.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	pass
-    
-    def append(self, vbox):
-	""" allows subclasses to add additional controls to the panel
-	below the editor window
-
-	**Note:** the additional controls should have the panel (self)
-	as a parent.  If any cleanup is necessary (apart from the
-	automatic destruction of the controls when the panel exits), it 
-	must be added to the subclass's remove_other_references method.
-
-	**INPUTS**
-
-	*wxBoxSizer vbox* -- the vertical box sizer to which the
-	controls should be added.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	pass
-
-    def editor_window(self):
-	"""returns a reference to the editor window
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*wxTextCtrl* -- the editor window
-	"""
-	return self.editor
-
-    def editor_buffer(self):
-	"""returns a reference to the TextBufferWX embedded in the GUI
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUT**
-
-	*TextBufferWX* -- the TextBufferWX
-	"""
-	return self.wax_text_buffer
-
-class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow):
+class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
+    Object.OwnerObject):
     """abstract base class for a main panel containing 
     a single text buffer 
 
@@ -349,15 +205,11 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow):
 
     *wxTextControl* editor -- underlying text control for editor window
 
+    *WaxFrame, wxWindow parent* -- the parent frame window to the panel
+
     *BOOL* closing -- true if panel is closing (used to ensure that
     event handlers don't continue to call other methods when the panel
     may not be in a sane state)
-
-    *STR* prompt_text -- text of prompt, as printed in log window
-    (ignored if no command line)
-
-    *{STR: ANY}* command_space -- local name space for user commands
-    entered at the command line (ignored if no command line)
     """
     def remove_other_references(self):
 	"""additional cleanup to ensure that this object's references to
@@ -384,12 +236,11 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow):
 	"""
 	pass
     
-    def __init__(self, parent, ID, use_rich = 0, command_space = None,
-	prompt_text = 'Command> ', **args):
+    def __init__(self, parent, ID, use_rich = 0, **args):
 	"""
 	**INPUTS**
 
-	*wxWindow parent* -- the parent frame window to the panel
+	*WaxFrame, wxWindow parent* -- the parent frame window to the panel
 
 	*INT ID* -- the ID of the panel
 
@@ -399,9 +250,8 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow):
 	"""
 	self.deep_construct(WaxPanel,
 	                    {'wax_text_buffer': None,
+			     'parent': parent,
 			     'editor': None,
-			     'prompt_text': prompt_text,
-			     'command_space': command_space,
 			     'closing': 0
 			    },
 			    args,
@@ -409,6 +259,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow):
 			   )
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, 
 	    wxDefaultSize)
+	self.name_parent('parent')
 
 	vbox = wxBoxSizer(wxVERTICAL)
 	self.prepend(vbox)
@@ -579,6 +430,11 @@ class WaxCmdPanel(WaxPanel):
     *wxAutoSplitterWindow* top_and_bottom -- parent window of editor and
     log windows, with adjustable sash
 
+    *STR* prompt_text -- text of prompt, as printed in log window
+
+    *{STR: ANY}* command_space -- local name space for user commands
+    entered at the command line 
+
     *wxCmdLog* command_log -- handler to prove editable command-line 
     with history, and log
 
@@ -590,18 +446,21 @@ class WaxCmdPanel(WaxPanel):
     *wxTextControl* log -- text control for log window to display
     output, error messages, and command history
 
-    *STR* prompt_text -- text of prompt, as printed in log window
+    *FCT()* old_quit -- pre-existing quit function
     """
-    def __init__(self, **args):
+    def __init__(self, command_space = None, prompt_text = 'Command> ', **args):
 # have to pre-declare these attributes, because add_editor_buffer, which
 # sets their values, is executed from the WaxPanel constructor before
 # deep_construct would get around to declaring them
 	self.decl_attrs(
 			{
 			 'top_and_bottom': None, 
+			 'prompt_text': prompt_text,
+			 'command_space': copy.copy(command_space),
 	                 'command_log': None, 
 			 'command_line': None, 
 			 'log': None, 
+			 'old_quit': None,
 			 'command_line_interp': None
 			}
 	               )
@@ -609,6 +468,7 @@ class WaxCmdPanel(WaxPanel):
 	                    {},
 			    args
 			   )
+
 
     def add_editor_buffer(self, vbox, use_rich = 0):
 	"""builds an editor window (and, optionally, other associated
@@ -638,7 +498,7 @@ class WaxCmdPanel(WaxPanel):
 	    ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
 
-	print top_and_bottom
+#	print top_and_bottom
 
 	editor, buffer = \
 	    self.build_editor_buffer(parent = top_and_bottom, 
@@ -676,9 +536,14 @@ class WaxCmdPanel(WaxPanel):
 
 	if self.command_space == None:
 	    self.command_space = {}
+	try:
+	    self.old_quit = self.command_space['quit']
+	except KeyError:
+	    pass
 
-# provide extra access for testing - get rid of this in the end
+# provide extra access for testing 
 	self.command_space['the_pane'] = self
+	self.command_space['quit'] = self.quit
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
 
@@ -691,9 +556,14 @@ class WaxCmdPanel(WaxPanel):
         vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
 
 	self.top_and_bottom = top_and_bottom
-	print self.top_and_bottom
+#	print self.top_and_bottom
 
 	return editor, buffer
+
+    def quit(self):
+	if self.old_quit:
+	    (self.old_quit)()
+	self.command_space['quit_flag'] = 1
 
     def initial_show(self):
 	"""create editor and log windows.  This is done here, rather
@@ -702,6 +572,19 @@ class WaxCmdPanel(WaxPanel):
 	"""
 	self.top_and_bottom.SplitHorizontally(self.editor, self.log, 0)
     
+    def simulate_command(self, command):
+	"""simulate a command being entered on the command line
+
+	**INPUTS**
+
+	*STR* command -- the command to simulate
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.on_command_enter(self.command_line, command)
+	
     def on_command_enter(self, command_line, command):
 	"""handler for Enter pressed in the command line
 
@@ -742,6 +625,7 @@ class WaxCmdPanel(WaxPanel):
 	    sys.stdout = stdout
 	    sys.stderr = stderr
 
+#	print self.command_space['quit_flag']
 	if self.command_space['quit_flag']:
 	    self.parent.quit_now(None)
 
@@ -789,7 +673,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	self.closing = 1
 	GenEdit.GenEditFrameActivateEvent.remove_other_references(self)
 
-    def __init__(self, ID, size, parent = None, command_space = None, **args):
+    def __init__(self, ID, size, parent = None, **args):
 	"""constructor for the base WaxEditFrame class
 
 	**INPUTS**
@@ -804,7 +688,6 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
 	self.deep_construct( WaxFrameBase,
 			    {'closing': 0,
-			     'command_space': command_space,
 			     'ID': ID
 			    }, args,
 			    exclude_bases = {wxFrame: 1},
@@ -926,7 +809,9 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	if not self.closing:
 # this should never happen, but if it does, report the error and make
 # the best of it
-	    debug.critical_warning('frame received close_window without prior cleanup')
+	    msg = 'frame received close_window without prior cleanup\n'
+	    debug.critical_warning(msg)
+	    debug.print_call_stack()
 	    self.cleanup()
 	self.Close()
 
@@ -1283,18 +1168,13 @@ class SimpleWaxFrame(WaxFrame):
 
     **INSTANCE ATTRIBUTES**
 
-    *SimpleWaxPanel* pane -- panel containing the controls
-
-    *STR* curr_buffer_name -- name of the current (and only) buffer
-
-    others -- the various menus
+    *none*
     """
     def __init__(self, **args):
 	self.deep_construct( SimpleWaxFrame,
 			    {
 			    }, args
 			   ),
-	self.add_owned('pane')
 
     def add_pane(self, ID):
 	"""create the actual WaxPanel for the frame
@@ -1314,18 +1194,22 @@ class WaxCmdFrame(WaxFrame):
 
     **INSTANCE ATTRIBUTES**
 
-    *WaxCmdPanel* pane -- panel containing the controls
-
-    *STR* curr_buffer_name -- name of the current (and only) buffer
+    *{STR: ANY}* command_space -- local name space for user commands
+    entered at the command line (ignored by subclasses without command
+    lines)
 
     others -- the various menus
     """
-    def __init__(self, **args):
+    def __init__(self, command_space = None, **args):
+	self.decl_attrs(
+			{
+			 'command_space': command_space,
+			}
+	               )
 	self.deep_construct( WaxCmdFrame,
 			    {
 			    }, args
 			   ),
-	self.add_owned('pane')
 
     def add_pane(self, ID):
 	"""create the actual WaxPanel for the frame
@@ -1336,6 +1220,20 @@ class WaxCmdFrame(WaxFrame):
 	"""
 	return WaxCmdPanel(parent = self, ID = ID, 
 	    command_space = self.command_space)
+
+    def simulate_command(self, command):
+	"""simulate a command being entered on the command line
+
+	**INPUTS**
+
+	*STR* command -- the command to simulate
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.pane.simulate_command(command)
+	
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
