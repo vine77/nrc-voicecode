@@ -121,8 +121,9 @@ class SB_ServiceLang(SB_Service):
 
         language = None
         fname = self.buff.file_name()
-#        print 'language for "%s"' % fname
-        if  fname != None:
+#        print 'language for file named %s' % repr(fname)
+#        print 'buffer name is %s' % repr(self.buff.name())
+        if fname != None:
             language = self.file_language_name(fname)
         return language
 

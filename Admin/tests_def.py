@@ -2815,13 +2815,10 @@ Press Enter now:
 
 def notify_user_that_editor_can_be_in_background():
     util.bell()
-    sys.stderr.write("""You can now safely use your computer.
-    
-Press Enter to proceed with the rest of the tests.
-> """)
+    sys.stderr.write("""You can now safely use your computer.\n""")
     sys.stderr.flush()
     
-    dummy = raw_input()
+#    dummy = raw_input()
    
 
 def test_mixed_kbd_and_voice_editing():
@@ -2942,10 +2939,11 @@ def test_temporary():
    commands = testing.namespace()['commands']
    commands.open_file('toto.py')
 
-   commands.say(['if', 'do', 'the', 'following'])
-   commands.say(['if', 'do', 'the', 'following'])   
-   commands.say(['new', 'statement', 'back', 'indent'])
-   commands.say(['else'])
+   instance_name  = testing.instance_name ()
+   app = testing.editor()
+   s = "abcdefghijklmnopqrstuvwxyz\n" * 100
+   buff = app.curr_buffer()
+   buff.insert_indent(s, "")
 
    
 #auto_test.add_test('temp', test_temporary, desc='temporary test')

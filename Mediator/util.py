@@ -319,11 +319,11 @@ def within_VCode(path):
 def bell(length=3):
     """Plays a bell sound for a time proportional to INT length.
     
-    Note: This function doesn't seem to work if the output of the script 
+    Note: This function doesn't seem work if the output of the script 
     is redirected to a file."""
     
     bell_string = ''
     for ii in range(length):
        bell_string = bell_string + '\a'
-    sys.stderr.write(bell_string)
-    sys.stderr.flush()
+    sys.__stderr__.write(bell_string)
+    sys.__stderr__.flush()

@@ -55,6 +55,8 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'ListenAndQueueMsgsThread': 1,
+#                        'sim_commands.say': 1,
 #                        'SB_ServiceFullState': 1,
 #                        'create_update': 1,
 #                        'StateStackBasic': 1,
@@ -148,6 +150,8 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
 
     *STR app_name* -- the application name
 
+    *BOOL* testing -- true if we are in the middle of regression testing
+
     *BOOL* closing -- true if frame is closing (used to ensure that
     event handlers don't continue to call other methods when the frame
     may not be in a sane state)
@@ -159,6 +163,7 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                             {
                              'parent': parent,
                              'app_name': 'VoiceCode',
+                             'testing': 0,
                              'closing': 0
                             }, 
                             args,
@@ -185,6 +190,56 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         menuBar.Append(file_menu,"&File");
         self.CreateStatusBar()
         self.SetMenuBar(menuBar)
+
+    def enable_menus(self, enable = 1):
+        """enables or disables all menus
+
+        **INPUTS**
+
+        *BOOL* enable -- enable menus or disable them?
+
+        **OUTPUTS**
+
+        *none*
+        """
+        bar = self.GetMenuBar()
+        count = bar.GetMenuCount()
+        for i in range(count):
+            bar.EnableTop(i, enable)
+
+    def starting_tests(self):
+        """notifies the frame that regression testing is about to start
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+# disable menus during testing, because their message loop seems to interfere
+# with the natlink message loop which waits for recognitionMimic to
+# finish
+        self.enable_menus(0)
+        self.testing = 1
+        self.parent.starting_tests()
+
+    def finished_tests(self):
+        """notifies the frame that regression testing has finished
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        self.testing = 0
+        if not self.closing:
+            self.enable_menus(1)
+            self.parent.finished_tests()
 
     def set_status_text(self, text):
         self.SetStatusText(text)
@@ -294,6 +349,8 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
     STR *test_suite=None* -- name of regression test suite to run
 
+    *BOOL* testing -- true if we are in the middle of regression testing
+
     *BOOL quitting* -- flag indicating that we are in the process of
     quitting
     """
@@ -316,6 +373,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                              'the_server': None,
                              'test_suite': test_suite,
                              'the_mediator': None,
+                             'testing': 0,
                              'quitting':0
                             }, 
                             args, exclude_bases = {wxApp: 1})
@@ -364,6 +422,35 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         self.main_frame().show(1)
         self.hook_events()
 #        wxApp.__init__(self, 1, "crash.wxMediator")
+
+    def starting_tests(self):
+        """notifies the frame that regression testing is about to start
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+# disable menus during testing, because their message loop seems to interfere
+# with the natlink message loop which waits for recognitionMimic to
+# finish
+        self.testing = 1
+
+    def finished_tests(self):
+        """notifies the frame that regression testing has finished
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        self.testing = 0
 
     def main_frame(self):
         """returns a reference to the main frame of the wxMediator
@@ -579,7 +666,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         *BOOL* -- true if the user didn't cancel (or wasn't prompted)
         """
         exiting = 1
-        if prompt:
+        if prompt and not self.testing:
             exiting = self.prompt_save_speech_files(self.frame)
         debug.trace('wxMediator.quit_now', 'exiting is %d' % exiting)
         if not exiting:
@@ -596,6 +683,8 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 # close when the frame does, allowing us to perform our own cleanup when
 # control returns from MainLoop to our run method
 
+        if self.testing:
+            self.the_mediator.cancel_testing()
         debug.trace('wxMediator.quit_now', 'returning')
         return 1
 

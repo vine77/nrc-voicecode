@@ -156,6 +156,25 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         OwnerObject.remove_other_references(self)
 
+    def cancel_testing(self):
+        """cancel a regression test if one is running, and return to the
+        main message loop.  If no regression test is running, this
+        method will have no effect.
+
+        Note: This is an experimental method which may not work.  Even
+        if it does, its effect is asynchronous, and there may be a
+        substantial delay before the test ceases.  
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.mediator.cancel_testing()
+
     def app_instances(self, app_name = None):
         """names of application instances being managed
         **INPUTS**

@@ -375,8 +375,7 @@ class PersistentConfigNewMediator(Object.Object):
 
         *AppState* -- the editor instance
         """
-        editors = self.mediator().editors
-        return editors.known_instance(self.instance_name())
+        return self.mediator().editor_instance(self.instance_name())
 
     def mediator(self):
         """returns a reference to the MediatorObject (or
@@ -452,7 +451,7 @@ class PersistentConfigNewMediator(Object.Object):
         editor.init_for_test()
         interp = self.mediator().interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names,
-            bypass_sr_recog = self.bypass_sr_recog)
+            bypass_sr_recog = self.bypass_sr_recog, testing = 1)
         commands.bind_methods(self.names)
         self.names['commands'] = commands
 

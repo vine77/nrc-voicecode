@@ -28,12 +28,14 @@ appropriate grammars.
 import debug
 import string
 import re
+import sys
 from Object import Object, OwnerObject
 
 import GramMgr
 import ResMgr
 
 import TargetWindow, KnownTargetModule, WinIDClient
+import messaging
 
 class KnownInstance(Object):
     """class which stores data about instances known to RecogStartMgr
@@ -1047,8 +1049,15 @@ class RSMInfrastructure(RecogStartMgr):
         if self.known_instance(instance):
             debug.trace('RSMInfrastructure.interpret_dictation', 
                 'known instance')
-            self.results[instance].interpret_dictation(result,
-                initial_buffer = initial_buffer)
+            try:
+                self.results[instance].interpret_dictation(result,
+                    initial_buffer = initial_buffer)
+            except messaging.SocketError:
+                debug.trace('RSMInfrastructure.interpret_dictation', 
+                    'socket error while interpreting dictation')
+                self.editors.close_app_cbk(instance, unexpected = 1)
+                debug.trace('RSMInfrastructure.interpret_dictation', 
+                    'closed editor %s' % instance)
 
     def correct_last(self, instance):
         """initiate user correction of the most recent dictation utterance 
@@ -2133,13 +2142,45 @@ class RSMBasic(RSMInfrastructure):
 
         *none*
         """
-        dictation_allowed = app.recog_begin(None)
-        app.synchronize_with_app()
-        buff_name = app.curr_buffer_name()
-        if app.active_field() == None and dictation_allowed:
-            self.grammars[instance_name].activate(buff_name, -1)
+        try:
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'about to call recog_begin')
+            dictation_allowed = app.recog_begin(None)
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'recog_begin returned %d' % dictation_allowed)
+            app.synchronize_with_app()
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'synchronized')
+            buff_name = app.curr_buffer_name()
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'buff_name is %s' % buff_name)
+            active_field = app.active_field()
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'active field is %s' % active_field)
+            dictation_allowed = dictation_allowed and \
+                (active_field == None)
+        except messaging.SocketError:
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'Socket Error during synch')
+            self.grammars[instance_name].activate_sink(-1)
+            debug.trace('RSMInfrastructure._activate_universal_grammars',
+                'activated dictation sink')
         else:
-            self.grammars[instance_name].deactivate_all()
+            if dictation_allowed:
+                debug.trace('RSMInfrastructure._activate_universal_grammars',
+                    'activating dictation grammar')
+                self.grammars[instance_name].activate(buff_name, -1)
+            else:
+                msg = "recog_begin returned false unexpectedly during\n"
+                msg = msg + "regression tests.  Will abort test\n"
+                sys.stderr.write(msg)
+                self.grammars[instance_name].activate_sink(-1)
+                debug.trace('RSMInfrastructure._activate_universal_grammars',
+                    'activated dictation sink')
+                self.editors.cancel_testing()
+#                debug.trace('RSMInfrastructure._activate_universal_grammars',
+#                    'deactivating dictation grammar')
+#                self.grammars[instance_name].deactivate_all()
         others = []
         if self.known_window(window):
             others = self.windows[window].instance_names()

@@ -158,6 +158,8 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         
         *none* -- 
         """
+        debug.trace('ListenAndQueueMsgsThread.run', 
+            'thread %s starting' % threading.currentThread().getName())
         while 1:
             try: 
                 debug.trace('ListenAndQueueMsgsThread.run', '** getting a message')

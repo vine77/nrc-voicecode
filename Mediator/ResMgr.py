@@ -2060,6 +2060,8 @@ class ResMgrBasic(ResMgrStd):
             initial_buffer = initial_buffer, 
             before = self.states.before_interp,
             after = self.states.after_interp)
+        debug.trace('ResMgrBasic.interpret_dictation', 
+            'storing result and states')
         if utterance_number is None:
             self.store(result, initial_buffer = initial_buffer, 
                 number = self.next_number)
@@ -2067,6 +2069,8 @@ class ResMgrBasic(ResMgrStd):
         else:
             self.store(result, initial_buffer = initial_buffer, 
                 number = utterance_number)
+        debug.trace('ResMgrBasic.interpret_dictation', 
+            'returning')
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the given editor

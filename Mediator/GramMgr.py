@@ -216,6 +216,24 @@ class GramMgr(OwnerObject):
 # method, after performing their own duties
         self.deactivate_all()
 
+    def activate_sink(self, window):
+        """activate dummy dictation grammar as a sink to intercept
+        an utterance directed to a disconnected editor, and
+        deactivate all other buffer/window-specific grammars
+
+        **INPUTS**
+
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('GramMgr.activate_sink')
+    
     def activate(self, buffer, window):
         """activate grammars for a buffer displayed in a particular
         window, and deactivate all other buffer/window-specific grammars
@@ -423,8 +441,11 @@ class GramMgrDictContext(GramMgr):
         *none*
         """
         name = self.name()
-        self.recog_mgr.interpret_dictation(name, result,
-            initial_buffer = initial_buffer)
+# buffer == 0 is used for special dictation sinks whose results are
+# ignored
+        if initial_buffer != 0:
+            self.recog_mgr.interpret_dictation(name, result,
+                initial_buffer = initial_buffer)
 
     def find_context(self, buffer):
         """Find context for dictation grammar
@@ -603,6 +624,33 @@ class WinGramMgr(GramMgrDictContext):
 
         self.dict_grammars[window][buffer].activate()
     
+    def activate_sink(self, window):
+        """activate dummy dictation grammar as a sink to intercept
+        an utterance directed to a disconnected editor, and
+        deactivate all other buffer/window-specific grammars
+
+        **INPUTS**
+
+        *INT* window -- 
+        number identifying the current window  displaying
+        the buffer.  In Microsoft Windows, this will be the window
+        handle
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.deactivate_all()
+        a_window = window
+        if self.global_grammars:
+            a_window = None
+# use an initial_buffer "name" of 0, so that when we get results back we know to
+# ignore them, rather than passing them on 
+        self.dict_grammars[window][0] = \
+            self.factory.make_dictation(self, self.app, 0, 
+                window = a_window, exclusive = self.exclusive)
+        self.dict_grammars[window][0].activate()
+
     def _deactivate_all_window(self, window):
         """de-activate all buffer-specific grammars which would be
         active in window

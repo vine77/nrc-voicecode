@@ -637,6 +637,10 @@ class AppState(OwnerObject):
     
     *INT* max_history=100 --  Maximum length of the command history.
 
+    *BOOL* alive -- flag indicating whether an external editor is still
+    connected (cleared to signal SimCmdsObj.say that a results callback
+    failed because the editor had disconnected unexpectedly)
+
     *BOOL* translation_is_off -- If true, then translation of CSCs and
      LSAs isturned off for that applications. Everything should be
      typed as dictated text, except for commands that turn the
@@ -717,6 +721,7 @@ class AppState(OwnerObject):
                              'open_buffers': {},
                              'bound_buffer_name': None,
                              'max_history': max_history, 
+                             'alive': 1,
                              'translation_is_off': translation_is_off,
                              'print_buff_when_changed': print_buff_when_changed},
                             attrs)
@@ -813,6 +818,7 @@ class AppState(OwnerObject):
         self.change_callback = change_callback
 
     def remove_other_references(self):
+        self.alive = 0
         self.change_callback = None
         OwnerObject.remove_other_references(self)
 

@@ -20,6 +20,7 @@
 ##############################################################################
 
 import sys
+import messaging
 import string
 import debug
 #import traceback
@@ -880,6 +881,33 @@ class NewMediatorObject(Object.OwnerObject):
 # NewMediatorObject will be running the internal editor, so it should
 # know when it exits and should call our cleanup method
 
+    def cancel_testing(self):
+        """cancel a regression test if one is running, and return to the
+        main message loop.  If no regression test is running, this
+        method will have no effect.
+
+        Note: This is an experimental method which may not work.  Even
+        if it does, its effect is asynchronous, and there may be a
+        substantial delay before the test ceases.  It is primarily intended to
+        allow the user to exit the mediator by closing the GUI wxMediator 
+        console in the middle of a test which would otherwise not return
+        to the main message loop until it finished.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.testing:
+            try:
+                self.test_space['commands'].should_exit = 1
+            except:
+                sys.stderr.write("No SimCmdsObj in test_space" + \
+                    "- unable to cancel test\n")
+
     def _new_test_editor(self, app, server = 1, check_window = 1, 
             window_info = None):
         """private method to a new editor application instance and run
@@ -939,12 +967,26 @@ class NewMediatorObject(Object.OwnerObject):
              self.symbol_match_dlg_regression, 
              pickled_interp = self.pickled_interp)
         self.testing = 1
-        auto_test.run(self.test_args, profile_prefix = self.profile_prefix)
-        self.testing = 0
-        app.mediator_closing()
-        self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
-        self.editors.delete_instance(instance_name)
-        return 1
+        if self.console():
+            self.console().starting_tests()
+        try:
+            try:
+                auto_test.run(self.test_args, 
+                    profile_prefix = self.profile_prefix)
+                self.testing = 0
+                app.mediator_closing()
+            except messaging.SocketError:
+                sys.stdout.write('**** Test editor disconnected unexpectedly')
+                pass
+        finally:
+            self.testing = 0
+            if self.console():
+                self.console().finished_tests()
+            del self.test_space['testing']
+            del self.test_space['temp_factory']
+            self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
+            self.editors.delete_instance(instance_name)
+            return 1
 
     def new_editor(self, app, server = 1, check_window = 1, 
             window_info = None, test_editor = 0):

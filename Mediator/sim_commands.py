@@ -142,6 +142,7 @@ quit()
    (e.g. *Ctrl-C*), your DOS window will hang up.   
 """
 
+import mediator_exceptions
 import natlink
 import os, profile, re, string, sys, time
 import vc_globals
@@ -151,6 +152,7 @@ from debug import trace
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
+from messaging import SocketError
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
 import Object
@@ -501,9 +503,17 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
     *BOOL* bypass_sr_recog -- Indicates that, for profiling
     purposes, we should bypass natlink for dictation utterances
+
+    *BOOL* testing -- is this SimCmdsObj being used for regression
+    testing?
+
+    *BOOL* should_exit -- flag set by NewMediatorObject to tell
+    SimCmdsObj that it should raise a CancelTesting exception before the next
+    recognitionMimic
     """
     help_string = __doc__
-    def __init__(self, app, interp, names, bypass_sr_recog = 0, **args):
+    def __init__(self, app, interp, names, bypass_sr_recog = 0, 
+          testing = 0, **args):
         self.deep_construct(SimCmdsObj,
                             {
                              'app': app,
@@ -511,9 +521,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                              'names': names,
                              'quit_flag': 0,
                              'clean_sr_voc' : 0,
+                             'testing': testing,
                              'save_speech_files' : None,
                              'bypass_sr_recog': bypass_sr_recog,
-                             'disconnect_flag': 1
+                             'disconnect_flag': 1,
+                             'should_exit': 0
                             }, args, 
                             exclude_bases = {InstanceSpace.InstanceSpace: 1})
     
@@ -647,6 +659,9 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         """
         
         global sleep_before_recognitionMimic
+        if self.should_exit:
+            trace('sim_commands.say', 'cancelling testing')
+            raise mediator_exceptions.CancelTesting()
 
         if echo_cmd: self.echo_command('say', utterance, user_input, never_bypass_sr_recog, echo_utterance)
 
@@ -677,78 +692,93 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 sys.stdin = StringIO(user_input)
             sys.stdout.flush()
             
-        if self.bypass_sr_recog and not never_bypass_sr_recog:
-            trace('sim_commands.say', 'bypassing NatSpeak')
-            sys.stdout.flush()
-            if util.islist(utterance) or util.istuple(utterance):
-                spoken = self.utterance_spoken_forms(utterance)
-            else:        
-                utterance = re.split('\s+', utterance)
-                spoken = utterance
+        try:
+            if self.bypass_sr_recog and not never_bypass_sr_recog:
+                trace('sim_commands.say', 'bypassing NatSpeak')
+                sys.stdout.flush()
+                if util.islist(utterance) or util.istuple(utterance):
+                    spoken = self.utterance_spoken_forms(utterance)
+                else:        
+                    utterance = re.split('\s+', utterance)
+                    spoken = utterance
 
-            print "Heard %s" % string.join(spoken)
-            self.app.recog_begin(None)
-            self.app.synchronize_with_app()
-            
-#            self.app.recog_begin(window_id=None, block = 0)
-            self.interp.interpret_NL_cmd(utterance, self.app)
-            self.app.recog_end()
-            self.show_buff()        
-        else:
-            trace('sim_commands.say', 'NOT bypassing NatSpeak')
-            if util.islist(utterance) or util.istuple(utterance):
-                words = []
-                #
-                # Clean up the written form in case user didn't type
-                # special characters in the form that the SR expects
-                # (e.g. '\n' instead of '{Enter}'
-                #
-                for a_word in utterance:
+                print "Heard %s" % string.join(spoken)
+                dictation_allowed = self.app.recog_begin(None)
+                self.app.synchronize_with_app()
+                buff_name = self.app.curr_buffer_name()
+                active_field = self.app.active_field()
+                dictation_allowed = dictation_allowed and \
+                    (active_field == None)
+                if self.testing and not dictation_allowed:
+                    trace('sim_commands.say', 'cancelling testing')
+                    raise mediator_exceptions.CancelTesting()
+
+                self.interp.interpret_NL_cmd(utterance, self.app)
+                self.app.recog_end()
+                self.show_buff()        
+            else:
+                trace('sim_commands.say', 'NOT bypassing NatSpeak')
+                if util.islist(utterance) or util.istuple(utterance):
+                    words = []
+                    #
+                    # Clean up the written form in case user didn't type
+                    # special characters in the form that the SR expects
+                    # (e.g. '\n' instead of '{Enter}'
+                    #
+                    for a_word in utterance:
 # don't want to clean any more
-                    spoken, written = sr_interface.spoken_written_form(a_word, 
-                        clean_written = 0, clean_spoken = 0)
-                    if spoken != written:
+                        spoken, written = sr_interface.spoken_written_form(a_word, 
+                            clean_written = 0, clean_spoken = 0)
+                        if spoken != written:
 # don't want to do this any more
 #                        written = sr_interface.clean_written_form(written, clean_for='sr')
-                        words = words + [sr_interface.vocabulary_entry(spoken, written)]
-                    else:
-                        words = words + [written]
-            else:        
-                words = re.split('\s+', utterance)
+                            words = words + [sr_interface.vocabulary_entry(spoken, written)]
+                        else:
+                            words = words + [written]
+                else:        
+                    words = re.split('\s+', utterance)
 
 
-            trace('mediator.say', 'words=%s' % words)
+                trace('mediator.say', 'words=%s' % words)
 #            for word in words:
 #                print word, natlink.getWordInfo(word)
 #        print '-- mediator.say: words=%s' % words
-            sys.stdout.flush()
+                sys.stdout.flush()
 
 
-            #
-            # During interactive sessions, may need to pause a few seconds before
-            # doing *recognitionMimic*, to give user time to switch to the editor
-            # window.
-            #
-            if sleep_before_recognitionMimic:
-                print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
-                time.sleep(sleep_before_recognitionMimic)
-                
-            trace('sim_commands.say', 'invoking recognitionMimic')
+                #
+                # During interactive sessions, may need to pause a few seconds before
+                # doing *recognitionMimic*, to give user time to switch to the editor
+                # window.
+                #
+                if sleep_before_recognitionMimic:
+                    print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
+                    time.sleep(sleep_before_recognitionMimic)
+                    
+                trace('sim_commands.say', 'invoking recognitionMimic')
 #        print '-- sim_commands.say: invoking recognitionMimic'
-            sys.stdout.flush()
+                sys.stdout.flush()
 #            print words
-            natlink.recognitionMimic(words)
-            trace('sim_commands.say', 'DONE invoking recognitionMimic')
+                natlink.recognitionMimic(words)
+                     
+                trace('sim_commands.say', 'DONE invoking recognitionMimic')
 #        print '-- sim_commands.say: DONE invoking recognitionMimic'        
+                if not self.app.alive:
+                    raise \
+                        SocketError("socket connection broken during callbacks")
+                if self.should_exit:
+                    trace('sim_commands.say', 'cancelling testing')
+                    raise mediator_exceptions.CancelTesting()
+                
+        finally:
             sys.stdout.flush()
-            
-        #
-        # Redirect stdin back to what it was
-        #
-        if user_input:
-            sys.stdin = old_stdin
-            if temp_file is not None:
-                temp_file.close()
+            #
+            # Redirect stdin back to what it was
+            #
+            if user_input:
+                sys.stdin = old_stdin
+                if temp_file is not None:
+                    temp_file.close()
 
     def goto(self, pos, echo_cmd=0):
         """Goes to position *INT pos* of the current buffer"""
