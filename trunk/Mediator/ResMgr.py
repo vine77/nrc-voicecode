@@ -1565,7 +1565,7 @@ class StateStackBasic(StateStack):
             debug.trace('StateStackBasic.safe_depth_preliminaries',
                  'called from thread %s' %
                  threading.currentThread().getName())
-#            debug.print_call_stack()
+            debug.trace_call_stack('StateStackBasic.safe_depth_preliminaries')
 # have to synchronize to ensure that we've processed any pending updates
 # and that "current" is really current.
         debug.trace('StateStackBasic.safe_depth_preliminaries', 

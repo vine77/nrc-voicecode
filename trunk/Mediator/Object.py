@@ -954,7 +954,7 @@ class OwnerObject(Object):
         *none*
         """
         debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
-#        debug.print_call_stack()
+        debug.trace_call_stack('OwnerObject.cleanup')
         self.remove_other_references()
         debug.trace('OwnerObject.cleanup', 'after remove_other_references')
     

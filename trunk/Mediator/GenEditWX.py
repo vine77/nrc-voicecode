@@ -821,7 +821,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 # the best of it
             msg = 'frame received close_window without prior cleanup\n'
             debug.critical_warning(msg)
-            debug.print_call_stack()
+            debug.trace_call_stack('WaxFrameBase.close_window')
             self.cleanup()
         debug.trace('WaxFrameBase.close_window', 'calling self.Close')
         self.Close()

@@ -266,6 +266,7 @@ class ListenThread(threading.Thread, Object.Object):
 
         while 1:
             try:
+                debug.trace('ListenThread.run', 'listening for a message')
                 request = \
                     self.xed.vc_talk_msgr.get_mess(expect = ['recog_begin', 
                     'recog_end', 'cur_pos', 'confirm_buffer_exists', 

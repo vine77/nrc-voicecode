@@ -1810,7 +1810,7 @@ class GenEditFrames(GenEditBuffers):
         the buffer closing to be cancelled.
         """
         frame = self.corresponding_frame(buff_name)
-#        debug.print_call_stack()
+        debug.trace_call_stack('GenEditFrames.prompt_to_save')
         return frame.prompt_to_save(buff_name)
 
     def overwrite_prompt(self, buff_name, full_path):

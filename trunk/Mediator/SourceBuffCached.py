@@ -347,7 +347,6 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         *none* -- 
         """
-#        debug.print_call_stack()
         if self.cache['newline_conventions'] == None:
             self.cache['newline_conventions'] = self._newline_conventions_from_app()
         return self.cache['newline_conventions']

@@ -146,7 +146,6 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         #
         # Set the selection and get updates from the editor
         #
-        trace('SourceBuffMessaging.set_selection', '** range=%s, cursor_at=%s' % (repr(range), cursor_at))
         args = {'range': range, 'cursor_at': cursor_at,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('set_selection', args)
@@ -204,6 +203,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         *none*
         """
         
+        trace('SourceBuffMessaging.set_text', '** invoked')
         args = {'text': text, 'start': start, 'end': end,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('set_text', args)

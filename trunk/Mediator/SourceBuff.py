@@ -1247,8 +1247,11 @@ class SourceBuff(OwnerObject):
            returns a match object."""
 
         trace('SourceBuff.search_for', 
-              "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s" %
-               (regexp, direction, num, where, unlogged))
+              "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s, self.cur_pos()=%s" %
+               (regexp, direction, num, where, unlogged, self.cur_pos()))
+               
+        trace('SourceBuff.search_for', '** self.contents()=%s' % self.contents())
+                       
         success = None
 
         #
