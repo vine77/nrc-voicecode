@@ -89,7 +89,7 @@ def add_suite(name, *patterns):
 def tests_names_by_priority_and_name(tests_to_do):
     test_priorities_and_names = []
     for a_test in tests_to_do.items():
-       test_priorities_and_names.append(a_test[1][2], a_test[0])
+       test_priorities_and_names.append((a_test[1][2], a_test[0]))
     test_priorities_and_names.sort()
     sorted_test_names = []
     for a_test_priority_and_name in test_priorities_and_names: 
