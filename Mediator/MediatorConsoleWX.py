@@ -221,7 +221,8 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         if pos is None:
             self.Center()
         s = wxBoxSizer(wxVERTICAL)
-        intro = wxStaticText(self, wxNewId(), "&Correct the text",
+        intro = wxStaticText(self, wxNewId(), 
+            "&Correct the text (use spoken forms)",
             wxDefaultPosition, wxDefaultSize)
         init_value = string.join(self.utterance.spoken_forms())
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
@@ -245,7 +246,15 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
              wxDefaultSize, self.choices, wxLB_SINGLE)
         EVT_LISTBOX(self, ID_CHOICES, self.on_chosen)
-        middle_sizer.AddMany([(0, 0), #spacer
+        yes = wxBitmap("bitmaps/plus.bmp")
+        no = wxBitmap("bitmaps/minus.bmp")
+        if can_reinterpret: 
+            which = yes
+        else:
+            which = no
+        maybe = wxStaticBitmap(self, wxNewId(), which,
+            wxDefaultPosition, wxDefaultSize)
+        middle_sizer.AddMany([maybe,
                               (intro, 0, wxEXPAND),
                               (0, 0), #spacer
                               (self.text, 0, wxEXPAND),
@@ -261,8 +270,15 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
             wxDefaultSize)
         cancel_button = wxButton(self, wxID_CANCEL, "Cancel", 
             wxDefaultPosition, wxDefaultSize)
+        self.playback_button = wxButton(self, wxNewId(), "Playback", 
+            wxDefaultPosition, wxDefaultSize)
+        if not utterance.playback_available():
+            self.playback_button.Enable(0)
+
         button_sizer.Add(ok_button, 0, wxALL)
         button_sizer.Add(cancel_button, 0, wxALL)
+        button_sizer.Add(self.playback_button, 0, wxALL)
+        EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
         s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
         ok_button.SetDefault()
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
@@ -273,6 +289,11 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
+
+    def on_playback(self, event):
+        ok = self.utterance.playback()
+        if not ok:
+            self.playback_button.Disable()
 
     def on_char_text(self, event):
         k = event.GetKeyCode()

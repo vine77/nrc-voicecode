@@ -125,6 +125,9 @@ class NewMediatorObject(Object.OwnerObject):
     as a server, and for invoking the correction dialog boxes.  May be
     None if the mediator is not running in GUI mode
 
+    *CLASS* wave_playback -- class constructor for a concrete
+    subclass of WavePlayback, or None if no playback is available
+
     *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
     event to bring up the correction box asynchronously.
 
@@ -160,6 +163,7 @@ class NewMediatorObject(Object.OwnerObject):
     def __init__(self, interp = None,
                  server = None,
                  console = None,
+                 wave_playback = None,
                  correct_evt = None,
                  test_args = None,
                  test_space = None, global_grammars = 0, exclusive = 0, 
@@ -205,6 +209,9 @@ class NewMediatorObject(Object.OwnerObject):
 	underlying GUI.  May be None if the mediator is not running in 
 	GUI mode.
 
+        *CLASS* wave_playback -- class constructor for a concrete
+        subclass of WavePlayback, or None if no playback is available
+
         *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
         event to bring up the correction box asynchronously.
 
@@ -232,6 +239,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'server': server,
                              'external_editors': {},
                              'the_console': console,
+                             'wave_playback': wave_playback,
                              'correct_evt': correct_evt,
                              'interp': interp,
                              'test_args': test_args,
@@ -281,7 +289,7 @@ class NewMediatorObject(Object.OwnerObject):
             correct_words = ["Correct"]
         grammar_factory = \
             sr_grammarsNL.WinGramFactoryNL(correct_words = correct_words, 
-                recent_words = [])
+                recent_words = [], wave_playback = self.wave_playback)
 # suppress Correct That if there is no console
 # suppress Correct Recent for now, because it isn't implemented yet 
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
@@ -445,7 +453,7 @@ class NewMediatorObject(Object.OwnerObject):
         try:
             execfile(file, config_dict)
         except Exception, err:
-            print 'ERROR: in configuration file %s.\n' % config_file
+            print 'ERROR: in configuration file %s.\n' % file
             raise err
 
 # if successful, store file name so the reconfigure method can reuse it

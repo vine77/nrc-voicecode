@@ -184,7 +184,7 @@ class ClientConnection(Object.Object):
 	"""
 
         a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        a_socket.connect(host, listen_port)
+        a_socket.connect((host, listen_port))
         
         #
         # Create a messenger
@@ -254,7 +254,7 @@ class ClientConnection(Object.Object):
         # Open the socket
         #
         a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        a_socket.connect(host, talk_port)
+        a_socket.connect((host, talk_port))
 
         debug.trace('ClientConnection.open_vc_talker_conn', 'socket opened')
         
@@ -976,7 +976,10 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def cmd_get_text(self, arguments):
         buff_name = arguments['buff_name']
-        value = self.editor.get_text(buff_name = buff_name)
+        start = messaging.messarg2int(arguments['start'])
+        end = messaging.messarg2int(arguments['end'])
+        value = self.editor.get_text(start = start, end = end, 
+            buff_name = buff_name)
         self.send_response('get_text_resp', value)
  
     def cmd_set_text(self, arguments):

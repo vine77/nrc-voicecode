@@ -863,6 +863,19 @@ class CmdInterp(Object):
                 self.cmd_index[a_spoken_form] = [acmd]
                 if not os.environ.has_key('VCODE_NOSPEECH') and add_voc_entry:
                     sr_interface.addWord(a_spoken_form)
+# we had some problems in regression testing because the individual
+# words in a spoken form were unknown, so now we add the individual
+# words in a multiple-word spoken form
+
+# This allows for redundant translation, avoiding
+# the problems in regression testing.  However,
+# this presumably makes Natspeak recognition of the CSC/LSA worse, 
+# so we may want to come up with an alternate solution in the future
+                    
+                    all_words = string.split(a_spoken_form)
+                    if len(all_words) > 1:
+                        for word in all_words:
+                            sr_interface.addWord(word)
 
     def add_csc(self, acmd, add_voc_entry=1):
         """Add a new Context Sensitive Command. (synonym for index_csc)
@@ -924,6 +937,20 @@ class CmdInterp(Object):
                 # Add LSA to the SR vocabulary
                 #
                 sr_interface.addWord(entry)
+# we had some problems in regression testing because the individual
+# words in a spoken form were unknown, so now we add the individual
+# words in a multiple-word spoken form
+
+# This allows for redundant translation, avoiding
+# the problems in regression testing.  However,
+# this presumably makes Natspeak recognition of the CSC/LSA worse, 
+# so we may want to come up with an alternate solution in the future
+
+                all_words = string.split(spoken_as)
+                if len(all_words) > 1:
+                    for word in all_words:
+                        sr_interface.addWord(word)
+
             
     def add_abbreviation(self, abbreviation, expansions, user_added = 1):
         """Add an abbreviation to VoiceCode's abbreviations dictionary.

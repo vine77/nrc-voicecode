@@ -41,6 +41,7 @@ import win32gui
 
 from wxPython.wx import *
 
+from WavePlaybackWX import WavePlaybackWX
 from thread_communication_WX import *
 
 
@@ -284,7 +285,8 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
         correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
-                console = console, correct_evt = correct_evt,
+                console = console, wave_playback = WavePlaybackWX, 
+                correct_evt = correct_evt,
                 test_args = [test_suite],
                 test_space = test_space, global_grammars = 1, exclusive = 1)
 #        print self.the_mediator.server
