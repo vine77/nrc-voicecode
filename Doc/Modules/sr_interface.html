@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:37:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 05 10:57:11 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,6 +27,7 @@
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#deleteWord"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">deleteWord</SPAN></A>(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Delete a word from NatSpeak's vocabulary.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">disconnect</SPAN></A>()</SPAN><SPAN CLASS="OneLiner"> # Dicsconnects from SR system.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">getWordInfo</SPAN>(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#get_mic"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">get_mic</SPAN></A>()</SPAN><SPAN CLASS="OneLiner"> # checks the current microphone state</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#openUser"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">openUser</SPAN></A>(<SPAN CLASS="Argument">user_name</SPAN>, <SPAN CLASS="Argument">create_if_not_exist=0</SPAN>, <SPAN CLASS="Argument">create_using_model=None</SPAN>, <SPAN CLASS="Argument">create_using_topic=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a user, maybe create it if it doesn't exist.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">saveUser</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Saves the current user</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#set_mic"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">set_mic</SPAN></A>(<SPAN CLASS="Argument">mic_state</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # turns microphone on or off (connecting first, if necessary).</SPAN>
@@ -234,6 +235,18 @@ have ben added by the real Vocabulary Builder)</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="get_mic" CLASS="Function">get_mic()</H2>
+<P>checks the current microphone state</P>
+
+
+<DL>
+
+<DT>
+<EM>STR</EM> mic_state
+<DD><EM>'on'</EM> or <EM>'off'</EM>. State to put the mic in
+after connection.
+
 </DL>
 <H2 ID="openUser" CLASS="Function">openUser(<SPAN CLASS="Argument">user_name</SPAN>, <SPAN CLASS="Argument">create_if_not_exist=0</SPAN>, <SPAN CLASS="Argument">create_using_model=None</SPAN>, <SPAN CLASS="Argument">create_using_topic=None</SPAN>)</H2>
 <P>Open a user, maybe create it if it doesn't exist.</P>

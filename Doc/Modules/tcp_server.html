@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 31 13:26:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 05 10:57:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,11 +26,13 @@
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ListenForNewTalkersThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenForNewTalkersThread</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ListenForConnThread.html">ListenForConnThread</A>)</SPAN><SPAN CLASS="OneLiner"> # Listens for new connections on the VC_TALK port.</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.SB_MessExtEdSim.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_MessExtEdSim</SPAN></A>(<A CLASS="DocLink" HREF="SourceBuffMessaging.SourceBuffMessaging.html">SourceBuffMessaging</A>)</SPAN><SPAN CLASS="OneLiner"> # Communicates with an external [EdSim] through a messaging link.</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerMainThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerMainThread</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerNewMediator.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerNewMediator</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ServerMainThread.html">ServerMainThread</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerOldMediator.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerOldMediator</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ServerMainThread.html">ServerMainThread</A>)</SPAN><SPAN CLASS="OneLiner"> # partial implementation of ServerMainThread using the old MediatorObject</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerOldMediatorExtLoop.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerOldMediatorExtLoop</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ServerOldMediator.html">ServerOldMediator</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerOldMediatorIntLoop.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerOldMediatorIntLoop</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ServerOldMediator.html">ServerOldMediator</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerSingleThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerSingleThread</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Implements a TCP/IP based VoiceCode server.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#parse_module_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">parse_module_info</SPAN></A>(<SPAN CLASS="Argument">module_info</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # rearrange natlink's module_info in our format</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">prompt_for_cmd</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#run_ext_server"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">run_ext_server</SPAN></A>(<SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">extra_opts=None</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#run_int_server"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">run_int_server</SPAN></A>(<SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">extra_opts=None</SPAN>)</SPAN>
@@ -39,10 +41,33 @@
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#vc_authentification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">vc_authentification</SPAN></A>(<SPAN CLASS="Argument">messenger</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Authentifies a VoiecCode user.</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_LISTEN_PORT</SPAN> = <SPAN CLASS="VariableValue">45770</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_TALK_PORT</SPAN> = <SPAN CLASS="VariableValue">45771</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\tcp_server.py'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\tcp_server.pyc'</SPAN></SPAN>
 </PRE><H2>Description</H2><P>
 A VoiceCode server that uses TCP/IP based messaging protocol to communicate with external editors.
 </P>
+<H2 ID="parse_module_info" CLASS="Function">parse_module_info(<SPAN CLASS="Argument">module_info</SPAN>)</H2>
+<P>rearrange natlink's module_info in our format</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(STR, STR, INT)</EM>
+<DD>the module name, window title, and window
+handle
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(INT, STR, STR)</EM>
+<DD>the window id, title, and module name
+
+</DL>
 <H2 ID="run_ext_server" CLASS="Function">run_ext_server(<SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">extra_opts=None</SPAN>)</H2>
 <P></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 02 16:05:30 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 05 10:55:40 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,70 +27,8 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimFrame</SPAN>(<A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimFrameMixIn.html">WaxEdSimFrameMixIn</A>, <A CLASS="DocLink" HREF="GenEditWX.WaxCmdFrame.html">WaxCmdFrame</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrame.access_command_space"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrame.access_command_space</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrame.add_pane"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrame.add_pane</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)<SPAN CLASS="OneLiner"> # create the actual WaxPanel for the frame</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditFrameWithBuffers</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owner</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrameWithBuffers.on_activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.on_activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)<SPAN CLASS="OneLiner"> # event handler for activation and deactivation events</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrameWithBuffers.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)<SPAN CLASS="OneLiner"> # update the title to reflect the new instance string</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.misc.wxObjectPtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.GetClassName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxFrameBase</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.OnActivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">size</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # constructor for the base WaxEditFrame class</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.choose_font</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.close_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.close_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # close the window corresponding to this frame</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.current_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.current_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the current font for the text buffers in this window</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.full_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.full_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.initial_show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.initial_show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_close</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_open_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_save</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_save_as</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.open_file_dialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.prompt_to_save"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.prompt_to_save</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.quit_now</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.save_as_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.save_as_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.set_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.set_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)<SPAN CLASS="OneLiner"> # sets the current font for the text buffers in this window</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)<SPAN CLASS="OneLiner"> # show the window corresponding to this frame</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # update the window title of the frame reflect a new buffer name </SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxFrameMenuMixIn.wxFrameMenuMixIn</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)<SPAN CLASS="OneLiner"> # returns the wxMenuItem with a given label in a given menu </SPAN>
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)<SPAN CLASS="OneLiner"> # returns the index of a given label in a given menu </SPAN>
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu_item</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">before</SPAN>)<SPAN CLASS="OneLiner"> # insert a new menu into the menu bar before a menu with a given name</SPAN>
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>)<SPAN CLASS="OneLiner"> # return a list of the labels from a list of menu items</SPAN>
-    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent_menu</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">help_string=None</SPAN>, <SPAN CLASS="Argument">checkable=0</SPAN>, <SPAN CLASS="Argument">sub_menu=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new menu item to insert into a given parent menu</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxEvtHandlerPtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.AddPendingEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Connect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Disconnect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.ProcessEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr._setOORInfo</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxTopLevelWindowPtr</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.Create</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -108,10 +46,8 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxTopLevelWindowPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxCmdFrame</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxCmdFrame.add_pane"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.add_pane</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)<SPAN CLASS="OneLiner"> # create the actual WaxPanel for the frame</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxCmdFrame.simulate_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.simulate_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # simulate a command being entered on the command line</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxFrame</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditFrame</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
@@ -134,6 +70,51 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.switch_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.switch_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # update the window title of the frame reflect a new buffer name </SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxFrame</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_buff_name=''</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.add_pane"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.add_pane</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)<SPAN CLASS="OneLiner"> # create the actual WaxPanel for the frame</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.current_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.current_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the current font for the text buffers in this window</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.frame_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.frame_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.initial_show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.initial_show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.open_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.open_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.remove_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.remove_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # remove a buffer from the list of belong to this frame.  </SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.rename_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.rename_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)<SPAN CLASS="OneLiner"> # notifies the frame that one of its buffers has been renamed</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.set_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.set_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)<SPAN CLASS="OneLiner"> # sets the current font for the text buffers in this window</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.switch_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.switch_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from WaxEdSim.WaxEdSimFrameMixIn</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.execute_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">f_path</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.execute_file_dlg"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.execute_file_dlg</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.finish_construction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.finish_construction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.mic_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.mic_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)<SPAN CLASS="OneLiner"> # function to receive microphone state change callbacks</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.on_execute_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.update_mic_button"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.update_mic_button</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxFrameMenuMixIn.wxFrameMenuMixIn</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)<SPAN CLASS="OneLiner"> # returns the wxMenuItem with a given label in a given menu </SPAN>
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)<SPAN CLASS="OneLiner"> # returns the index of a given label in a given menu </SPAN>
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu_item</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">before</SPAN>)<SPAN CLASS="OneLiner"> # insert a new menu into the menu bar before a menu with a given name</SPAN>
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>)<SPAN CLASS="OneLiner"> # return a list of the labels from a list of menu items</SPAN>
+    <A CLASS="DocLink" HREF="#wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent_menu</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">help_string=None</SPAN>, <SPAN CLASS="Argument">checkable=0</SPAN>, <SPAN CLASS="Argument">sub_menu=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new menu item to insert into a given parent menu</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditFrameWithBuffers</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owner</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrameWithBuffers.on_activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.on_activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)<SPAN CLASS="OneLiner"> # event handler for activation and deactivation events</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrameWithBuffers.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameWithBuffers.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)<SPAN CLASS="OneLiner"> # update the title to reflect the new instance string</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditFrameActivateEvent</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameActivateEvent.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrameActivateEvent.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrameActivateEvent.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether this frame is active</SPAN>
@@ -149,6 +130,32 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
     <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxEvtHandlerPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.AddPendingEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Connect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.Disconnect</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.GetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.ProcessEvent</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetEvtHandlerEnabled</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetNextHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr._setOORInfo</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.misc.wxObjectPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.Destroy</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.GetClassName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.misc.wxObjectPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxCmdFrame</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxCmdFrame.add_pane"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.add_pane</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)<SPAN CLASS="OneLiner"> # create the actual WaxPanel for the frame</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxCmdFrame.simulate_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxCmdFrame.simulate_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # simulate a command being entered on the command line</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxFramePtr</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFramePtr.Command</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -313,31 +320,27 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxFrame</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_buff_name=''</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.add_pane"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.add_pane</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)<SPAN CLASS="OneLiner"> # create the actual WaxPanel for the frame</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.current_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.current_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the current font for the text buffers in this window</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.frame_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.frame_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.initial_show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.initial_show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.open_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.open_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.remove_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.remove_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # remove a buffer from the list of belong to this frame.  </SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.rename_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.rename_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)<SPAN CLASS="OneLiner"> # notifies the frame that one of its buffers has been renamed</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.set_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.set_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)<SPAN CLASS="OneLiner"> # sets the current font for the text buffers in this window</SPAN>
-    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrame.switch_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrame.switch_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.frames.wxFrame</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.frames.wxFrame.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from WaxEdSim.WaxEdSimFrameMixIn</SPAN>
-    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.execute_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">f_path</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.execute_file_dlg"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.execute_file_dlg</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.finish_construction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.finish_construction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.on_execute_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimFrameMixIn.update_mic_button"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimFrameMixIn.update_mic_button</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from GenEditWX.WaxFrameBase</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.OnActivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">size</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # constructor for the base WaxEditFrame class</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.choose_font</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.close_now"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.close_now</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.close_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.close_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # close the window corresponding to this frame</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.current_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.current_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the current font for the text buffers in this window</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.full_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.full_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.initial_show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.initial_show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_close</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_open_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_save</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.on_save_as</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.open_file_dialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.prompt_to_save"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.prompt_to_save</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.quit_now</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.save_as_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.save_as_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.set_font"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.set_font</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)<SPAN CLASS="OneLiner"> # sets the current font for the text buffers in this window</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)<SPAN CLASS="OneLiner"> # show the window corresponding to this frame</SPAN>
+    <A CLASS="DocLink" HREF="#GenEditWX.WaxFrameBase.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.WaxFrameBase.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # update the window title of the frame reflect a new buffer name </SPAN>
 
 </PRE><H2>Description</H2><P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -348,6 +351,27 @@
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="WaxEdSim.WaxEdSimFrame.access_command_space" CLASS="Method">WaxEdSim.WaxEdSimFrame.access_command_space(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the command_space namespace being
+used by the panel, allowing access and modifications to that
+namespace after construction of WaxEdSim</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR:ANY}</EM>
+<DD>the namespace dictionary 
+
+</DL>
 <H2 ID="WaxEdSim.WaxEdSimFrame.add_pane" CLASS="Method">WaxEdSim.WaxEdSimFrame.add_pane(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)</H2>
 <P>create the actual WaxPanel for the frame</P>
 
@@ -361,606 +385,6 @@
 <DD>the ID of the panel
 
 </DL>
-<H2 ID="GenEdit.GenEditFrameWithBuffers.on_activate" CLASS="Method">GenEdit.GenEditFrameWithBuffers.on_activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
-<P>event handler for activation and deactivation events</P>
-
-<P>
-A concrete subclass of GenEditFrameActivateEvent must call this
-handler when this frame is activated or deactivated, so that it can
-inform its owner.  For subclasses which query for the active
-frame instead of storing the state, calling this method is
-optional</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL active</EM>
-<DD>whether this is an activate or deactivate event.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.GenEditFrameWithBuffers.set_instance_string" CLASS="Method">GenEdit.GenEditFrameWithBuffers.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
-<P>update the title to reflect the new instance string</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> instance_string
-<DD>string to include as part of the title
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.__init__" CLASS="Method">GenEditWX.WaxFrameBase.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">size</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
-<P>constructor for the base WaxEditFrame class</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxWindowID ID</EM>
-<DD>the wxWindows ID for the frame window
-<DT>
-<EM>wxSize or (INT, INT) size</EM>
-<DD>initial size for the frame
-<DT>
-<EM>wxWindow parent</EM>
-<DD>the parent window, if any (usually not for
-single-frame applications)
-
-</DL>
-<H2 ID="GenEditWX.WaxFrameBase.close_window" CLASS="Method">GenEditWX.WaxFrameBase.close_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>close the window corresponding to this frame</P>
-
-<P>
-<STRONG>NOTE:</STRONG> The owner must call the frame's cleanup method before
-calling this method to close the actual GUI frame</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.current_font" CLASS="Method">GenEditWX.WaxFrameBase.current_font(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>find the current font for the text buffers in this window</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxFont</EM>
-<DD>the current font
-
-</DL>
-<H2 ID="GenEditWX.WaxFrameBase.full_title" CLASS="Method">GenEditWX.WaxFrameBase.full_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-constructs the full title for the frame from the app_name,
-instance_string, if any, and buffer name</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the title string
-
-</DL>
-<H2 ID="GenEditWX.WaxFrameBase.initial_show" CLASS="Method">GenEditWX.WaxFrameBase.initial_show(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-<STRONG>NOTE:</STRONG> the application must call this method when the
-frame is initially shown.
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.prompt_to_save" CLASS="Method">GenEditWX.WaxFrameBase.prompt_to_save(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-prompts the user to save the current buffer before closing it, 
-or cancel.  Note: prompt_to_save should save if the user so
-indicates, and update the entry in self.filenames corresponding
-to the buffer, but should not close the buffer, because
-open_file could still fail.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the user saved or told WaxEdit to proceed
-without saving, false if the user asked for the action causing
-the buffer closing to be cancelled.
-
-</DL>
-<H2 ID="GenEditWX.WaxFrameBase.remove_other_references" CLASS="Method">GenEditWX.WaxFrameBase.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.save_as_dialog" CLASS="Method">GenEditWX.WaxFrameBase.save_as_dialog(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)</H2>
-<P>None</P>
-
-<P>
-prompts for a filename under which to save the file, and
-confirms overwriting</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer (used to find the
-corresponding frame over which to pop up the Save As dialog)
-<DT>
-<EM>STR init_dir</EM>
-<DD>the path of the initial directory for the Save
-As dialog
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the specified path, or None if the user cancelled 
-
-</DL>
-<H2 ID="GenEditWX.WaxFrameBase.set_font" CLASS="Method">GenEditWX.WaxFrameBase.set_font(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)</H2>
-<P>sets the current font for the text buffers in this window</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxFont font</EM>
-<DD>the desired font
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.show" CLASS="Method">GenEditWX.WaxFrameBase.show(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)</H2>
-<P>show the window corresponding to this frame</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM> initial
-<DD>is this the initial time the frame is shown?
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEditWX.WaxFrameBase.update_title" CLASS="Method">GenEditWX.WaxFrameBase.update_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>update the window title of the frame reflect a new buffer name </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
-<P>returns the wxMenuItem with a given label in a given menu </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu menu</EM>
-<DD>the menu
-<DT>
-<EM>STR label</EM>
-<DD>label of the item within that menu
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenuItem</EM>
-<DD>the item, or None if not found
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
-<P>returns the index of a given label in a given menu </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu menu</EM>
-<DD>the menu
-<DT>
-<EM>STR label</EM>
-<DD>label of the item within that menu
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM>
-<DD>the index of the item, or None if not found
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
-<P>None</P>
-
-<P>
-finds a menu by name and returns the menu (menubar.FindMenu
-finds the index by name)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR title</EM>
-<DD>title of the menu
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu</EM>
-<DD>the menu, or None, if the menu is not found.
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu_item</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
-<P>None</P>
-
-<P>
-insert a new menu item into a menu before the item with a given 
-label</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenuItem menu_item</EM>
-<DD>new menu to insert
-<DT>
-<EM>wxMenu menu</EM>
-<DD>new menu to insert
-<DT>
-<EM>STR label</EM>
-<DD>label of the existing menu item before which to insert 
-the new item
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the existing item is found and the new item is
-successfully inserted
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">before</SPAN>)</H2>
-<P>insert a new menu into the menu bar before a menu with a given name</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu menu</EM>
-<DD>new menu to insert
-<DT>
-<EM>STR title</EM>
-<DD>title of the new menu
-<DT>
-<EM>STR before</EM>
-<DD>title of the existing menu before which to insert 
-the new menu
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the before menu is found and the new menu is
-successfully inserted
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>)</H2>
-<P>return a list of the labels from a list of menu items</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu menu</EM>
-<DD>the menu
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>the list of labels representing 
-the contents of that menu
-
-</DL>
-<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent_menu</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">help_string=None</SPAN>, <SPAN CLASS="Argument">checkable=0</SPAN>, <SPAN CLASS="Argument">sub_menu=None</SPAN>)</H2>
-<P>create a new menu item to insert into a given parent menu</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenu parent_menu</EM>
-<DD>the menu into which the item is about to
-be inserted
-<DT>
-<EM>INT ID</EM>
-<DD>the wxPython ID for the item (if -1, the item will
-be a separator)
-<DT>
-<EM>STR text</EM>
-<DD>text of the menu item
-<DT>
-<EM>STR help_string</EM>
-<DD>help string for the item
-<DT>
-<EM>BOOL checkable</EM>
-<DD>is the item checkable
-<DT>
-<EM>wxMenu sub_menu</EM>
-<DD>does the item introduce a sub_menu?
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxMenuItem</EM>
-<DD>the new item
-
-</DL>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-<P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="GenEditWX.WaxCmdFrame.add_pane" CLASS="Method">GenEditWX.WaxCmdFrame.add_pane(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)</H2>
-<P>create the actual WaxPanel for the frame</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>wxWindowId ID</EM>
-<DD>the ID of the panel
-
-</DL>
-<H2 ID="GenEditWX.WaxCmdFrame.simulate_command" CLASS="Method">GenEditWX.WaxCmdFrame.simulate_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
-<P>simulate a command being entered on the command line</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> command
-<DD>the command to simulate
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="GenEdit.GenEditFrame.close_window" CLASS="Method">GenEdit.GenEditFrame.close_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>close the window corresponding to this frame</P>
 
@@ -1346,199 +770,6 @@ successfully switches to it
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GenEdit.GenEditFrameActivateEvent.is_active" CLASS="Method">GenEdit.GenEditFrameActivateEvent.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>indicates whether this frame is active</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if frame window is active
-
-</DL>
-<H2 ID="GenEdit.GenEditFrameActivateEvent.on_activate" CLASS="Method">GenEdit.GenEditFrameActivateEvent.on_activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
-<P>event handler for activation and deactivation events</P>
-
-<P>
-A concrete subclass of GenEditFrameActivateEvent must call this
-handler when this frame is activated or deactivated, so that it can
-inform its owner.  </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL active</EM>
-<DD>whether this is an activate or deactivate event.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
-<P>attempt to call cleanup on object</P>
-
-<P>
-<STRONG>INPUTS*</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>OwnerObject object</EM>
-<DD>note: class of object is the expected
-class, but _cleanup_object doesn't assume this is correct, nor
-does it check whether the object is a subclass of
-OwnerObject, only that it is a class instance and that it
-has a cleanup attribute
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>reason for error (or None if no error).
-
-</DL>
-<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's grandparent (or great-grandparent, etc.)
-(Actually, any other reference which needs to be del'ed but not
-cleaned up)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR grandparent</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append a new attribute name to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append new attribute names to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR] owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's parent.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR parent</EM>
-<DD>name of the parent, or None if none
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the name of the parent attribute</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>name of the parent, or None if none
-
-</DL>
-<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
-remove_other_references method, after performing their own duties.
-Also, a class inheriting from two OwnerObject classes MUST
-define remove_other_references and call both subclasses'
-versions</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="GenEditWX.WaxFrame.add_pane" CLASS="Method">GenEditWX.WaxFrame.add_pane(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)</H2>
 <P>create the actual WaxPanel for the frame</P>
 
@@ -1751,6 +982,136 @@ STR <EM>buff_name</EM>
 successfully switches to it
 
 </DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="WaxEdSim.WaxEdSimFrameMixIn.__init__" CLASS="Method">WaxEdSim.WaxEdSimFrameMixIn.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
@@ -1804,6 +1165,23 @@ WaxFrameBasic's __init__ method.</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="WaxEdSim.WaxEdSimFrameMixIn.mic_change" CLASS="Method">WaxEdSim.WaxEdSimFrameMixIn.mic_change(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)</H2>
+<P>function to receive microphone state change callbacks</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> state
+<DD>new state ('on', <CODE>off</CODE>, <CODE>sleeping</CODE>, 'disabled')
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="WaxEdSim.WaxEdSimFrameMixIn.update_mic_button" CLASS="Method">WaxEdSim.WaxEdSimFrameMixIn.update_mic_button(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)</H2>
 <P>None</P>
 
@@ -1820,6 +1198,675 @@ microphone</P>
 <DD>new state ('on', <CODE>off</CODE>, <CODE>sleeping</CODE>, 'disabled'),
 or None to have update_mic_button check the state
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_by_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
+<P>returns the wxMenuItem with a given label in a given menu </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu menu</EM>
+<DD>the menu
+<DT>
+<EM>STR label</EM>
+<DD>label of the item within that menu
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenuItem</EM>
+<DD>the item, or None if not found
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.find_item_index_by_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
+<P>returns the index of a given label in a given menu </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu menu</EM>
+<DD>the menu
+<DT>
+<EM>STR label</EM>
+<DD>label of the item within that menu
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>the index of the item, or None if not found
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.get_menu_by_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
+<P>None</P>
+
+<P>
+finds a menu by name and returns the menu (menubar.FindMenu
+finds the index by name)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR title</EM>
+<DD>title of the menu
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu</EM>
+<DD>the menu, or None, if the menu is not found.
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_item_before_label(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu_item</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">label</SPAN>)</H2>
+<P>None</P>
+
+<P>
+insert a new menu item into a menu before the item with a given 
+label</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenuItem menu_item</EM>
+<DD>new menu to insert
+<DT>
+<EM>wxMenu menu</EM>
+<DD>new menu to insert
+<DT>
+<EM>STR label</EM>
+<DD>label of the existing menu item before which to insert 
+the new item
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the existing item is found and the new item is
+successfully inserted
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.insert_menu(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">before</SPAN>)</H2>
+<P>insert a new menu into the menu bar before a menu with a given name</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu menu</EM>
+<DD>new menu to insert
+<DT>
+<EM>STR title</EM>
+<DD>title of the new menu
+<DT>
+<EM>STR before</EM>
+<DD>title of the existing menu before which to insert 
+the new menu
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the before menu is found and the new menu is
+successfully inserted
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.list_item_labels(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">menu</SPAN>)</H2>
+<P>return a list of the labels from a list of menu items</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu menu</EM>
+<DD>the menu
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>the list of labels representing 
+the contents of that menu
+
+</DL>
+<H2 ID="wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item" CLASS="Method">wxFrameMenuMixIn.wxFrameMenuMixIn.make_menu_item(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent_menu</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">help_string=None</SPAN>, <SPAN CLASS="Argument">checkable=0</SPAN>, <SPAN CLASS="Argument">sub_menu=None</SPAN>)</H2>
+<P>create a new menu item to insert into a given parent menu</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenu parent_menu</EM>
+<DD>the menu into which the item is about to
+be inserted
+<DT>
+<EM>INT ID</EM>
+<DD>the wxPython ID for the item (if -1, the item will
+be a separator)
+<DT>
+<EM>STR text</EM>
+<DD>text of the menu item
+<DT>
+<EM>STR help_string</EM>
+<DD>help string for the item
+<DT>
+<EM>BOOL checkable</EM>
+<DD>is the item checkable
+<DT>
+<EM>wxMenu sub_menu</EM>
+<DD>does the item introduce a sub_menu?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxMenuItem</EM>
+<DD>the new item
+
+</DL>
+<H2 ID="GenEdit.GenEditFrameWithBuffers.on_activate" CLASS="Method">GenEdit.GenEditFrameWithBuffers.on_activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
+<P>event handler for activation and deactivation events</P>
+
+<P>
+A concrete subclass of GenEditFrameActivateEvent must call this
+handler when this frame is activated or deactivated, so that it can
+inform its owner.  For subclasses which query for the active
+frame instead of storing the state, calling this method is
+optional</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL active</EM>
+<DD>whether this is an activate or deactivate event.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditFrameWithBuffers.set_instance_string" CLASS="Method">GenEdit.GenEditFrameWithBuffers.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
+<P>update the title to reflect the new instance string</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance_string
+<DD>string to include as part of the title
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditFrameActivateEvent.is_active" CLASS="Method">GenEdit.GenEditFrameActivateEvent.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether this frame is active</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if frame window is active
+
+</DL>
+<H2 ID="GenEdit.GenEditFrameActivateEvent.on_activate" CLASS="Method">GenEdit.GenEditFrameActivateEvent.on_activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
+<P>event handler for activation and deactivation events</P>
+
+<P>
+A concrete subclass of GenEditFrameActivateEvent must call this
+handler when this frame is activated or deactivated, so that it can
+inform its owner.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL active</EM>
+<DD>whether this is an activate or deactivate event.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's grandparent (or great-grandparent, etc.)
+(Actually, any other reference which needs to be del'ed but not
+cleaned up)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR grandparent</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR parent</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the name of the parent attribute</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the parent, or None if none
+
+</DL>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
+remove_other_references method, after performing their own duties.
+Also, a class inheriting from two OwnerObject classes MUST
+define remove_other_references and call both subclasses'
+versions</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxCmdFrame.add_pane" CLASS="Method">GenEditWX.WaxCmdFrame.add_pane(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)</H2>
+<P>create the actual WaxPanel for the frame</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxWindowId ID</EM>
+<DD>the ID of the panel
+
+</DL>
+<H2 ID="GenEditWX.WaxCmdFrame.simulate_command" CLASS="Method">GenEditWX.WaxCmdFrame.simulate_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
+<P>simulate a command being entered on the command line</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> command
+<DD>the command to simulate
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.__init__" CLASS="Method">GenEditWX.WaxFrameBase.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">size</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>constructor for the base WaxEditFrame class</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxWindowID ID</EM>
+<DD>the wxWindows ID for the frame window
+<DT>
+<EM>wxSize or (INT, INT) size</EM>
+<DD>initial size for the frame
+<DT>
+<EM>wxWindow parent</EM>
+<DD>the parent window, if any (usually not for
+single-frame applications)
+
+</DL>
+<H2 ID="GenEditWX.WaxFrameBase.close_now" CLASS="Method">GenEditWX.WaxFrameBase.close_now(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)</H2>
+<P>None</P>
+
+<P>
+handler for Close menu item
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.close_window" CLASS="Method">GenEditWX.WaxFrameBase.close_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>close the window corresponding to this frame</P>
+
+<P>
+<STRONG>NOTE:</STRONG> The owner must call the frame's cleanup method before
+calling this method to close the actual GUI frame</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.current_font" CLASS="Method">GenEditWX.WaxFrameBase.current_font(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>find the current font for the text buffers in this window</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxFont</EM>
+<DD>the current font
+
+</DL>
+<H2 ID="GenEditWX.WaxFrameBase.full_title" CLASS="Method">GenEditWX.WaxFrameBase.full_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+constructs the full title for the frame from the app_name,
+instance_string, if any, and buffer name</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the title string
+
+</DL>
+<H2 ID="GenEditWX.WaxFrameBase.initial_show" CLASS="Method">GenEditWX.WaxFrameBase.initial_show(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>NOTE:</STRONG> the application must call this method when the
+frame is initially shown.
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.prompt_to_save" CLASS="Method">GenEditWX.WaxFrameBase.prompt_to_save(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+prompts the user to save the current buffer before closing it, 
+or cancel.  Note: prompt_to_save should save if the user so
+indicates, and update the entry in self.filenames corresponding
+to the buffer, but should not close the buffer, because
+open_file could still fail.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the user saved or told WaxEdit to proceed
+without saving, false if the user asked for the action causing
+the buffer closing to be cancelled.
+
+</DL>
+<H2 ID="GenEditWX.WaxFrameBase.remove_other_references" CLASS="Method">GenEditWX.WaxFrameBase.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.save_as_dialog" CLASS="Method">GenEditWX.WaxFrameBase.save_as_dialog(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)</H2>
+<P>None</P>
+
+<P>
+prompts for a filename under which to save the file, and
+confirms overwriting</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer (used to find the
+corresponding frame over which to pop up the Save As dialog)
+<DT>
+<EM>STR init_dir</EM>
+<DD>the path of the initial directory for the Save
+As dialog
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the specified path, or None if the user cancelled 
+
+</DL>
+<H2 ID="GenEditWX.WaxFrameBase.set_font" CLASS="Method">GenEditWX.WaxFrameBase.set_font(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">font</SPAN>)</H2>
+<P>sets the current font for the text buffers in this window</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxFont font</EM>
+<DD>the desired font
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.show" CLASS="Method">GenEditWX.WaxFrameBase.show(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)</H2>
+<P>show the window corresponding to this frame</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> initial
+<DD>is this the initial time the frame is shown?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEditWX.WaxFrameBase.update_title" CLASS="Method">GenEditWX.WaxFrameBase.update_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>update the window title of the frame reflect a new buffer name </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
