@@ -30,6 +30,22 @@ import string
 import sr_interface
 import re
 
+def remove_periods_from_initials(spoken):
+     """strips the period from initials
+
+     **INPUTS**
+   
+     *STR spoken* -- spoken form
+
+     **OUTPUTS**
+  
+     *STR* -- spoken form, but with 'A.' -> 'a', etc.
+     """
+     if re.match('[A-Z]\.$', spoken):
+         return string.lower(spoken[0])
+     return spoken
+
+
 class SpokenUtterance(OwnerObject):
     """defines an abstract interface for manipulating the speech
     information associated with a single user utterance
@@ -298,9 +314,7 @@ class SpokenUtterance(OwnerObject):
   
         *STR* -- spoken form, but with 'A.' -> 'a', etc.
         """
-        if re.match('[A-Z]\.$', spoken):
-            return string.lower(spoken[0])
-        return spoken
+        return remove_periods_from_initials(spoken)
 
       
 class MockSpokenUtterance(SpokenUtterance):
