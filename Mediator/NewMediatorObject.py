@@ -96,18 +96,15 @@ class NewMediatorObject(Object.OwnerObject):
     [AppMgr] *editors* -- class which manages editor instances and whe
     their corresponding AppState interfaces.
 
-    *BOOL owns_editors* -- does the MediatorObject own the application 
-    manager?  If so, it should call editors.cleanup() and then delete it 
-    when it quits.  Normally, this should be true, except if the mediator 
-    is created for regression testing purposes with an editor which is 
-    reused by the next test.
-
     [CmdInterp] *interp=CmdInterp.CmdInterp()* -- Command interpreter used to
     translate pseudo-code to native code.
 
-    [ServerMainThread] *server* -- Server to listen for connections
+    [ServerNewMediator] *server* -- Server to listen for connections
     from new editors, or None if the mediator should operate only with
     an internal test editor
+
+    *{STR: BOOL} external_editors* -- set of instance names
+    of all external editors connected to the mediator via the server
 
     [MediatorConsole] *console* -- GUI console for viewing mediator
     status, allowing the user to close the mediator when it is running
@@ -126,8 +123,8 @@ class NewMediatorObject(Object.OwnerObject):
     *BOOL test_next* -- flag to indicate that the mediator should run
     regression tests using the next editor to connect
 
-    *STR config_file* -- file which was used to configure the mediator,
-    and which will be the default to use if reconfigure is called
+    *STR config_file* -- file which was used to configure the mediator.
+    This file will also be the default to use if reconfigure is called
     (usually only by init_simulator_regression during regression tests)
 
     **CLASS ATTRIBUTES**
@@ -136,21 +133,58 @@ class NewMediatorObject(Object.OwnerObject):
 
     ..[AppMgr] file:///./AppMgr.AppMgr.html
     ..[CmdInterp] file:///./CmdInterp.CmdInterp.html
-    ..[ServerSingleThread] file:///./ServerSingleThread.tcp_server.html
+    ..[ServerNewMediator] file:///./ServerNewMediator.tcp_server.html
     """
     
     def __init__(self, interp = None,
-      		 editors = None,
-		 owns_editors = 1, 
 		 server = None,
 		 console = None,
 		 test_suite = 0, global_grammars = 0, exclusive = 0, 
                  **attrs):
+	"""creates the NewMediatorObject
+
+	**NOTE:** the caller must also call configure before calling
+	other methods, or starting the server.
+    
+	**INPUTS**
+
+	*CmdInterp interp* -- the command interpreter, or None to have
+	NewMediatorObject create one
+
+	*ServerNewMediator server* -- the TCP server which will listen 
+	for new connections from external editors, or None if we are running
+	only with internal editors.  The caller must create the server,
+	but NewMediatorObject will always own it.  The application which
+	creates NewMediatorObject must start the server but only after
+	NewMediatorObject has been configured, and should then delete
+	its reference to the server.
+
+	*MediatorConsole console* -- GUI console for viewing mediator
+	status, allowing the user to close the mediator when it is running
+	as a server, and for invoking the correction dialog boxes.  Since
+	console is an interface to an underlying GUI, NewMediatorObject
+	does not own it, and will not clean up either it or the
+	underlying GUI.  May be None if the mediator is not running in 
+	GUI mode.
+
+	*STR test_suite* -- suite of tests to run (see auto_test.py), or
+	None
+
+	*BOOL global_grammars* -- should this instance use global grammars for 
+	regression testing (ignored if test_suite is None)
+
+	*BOOL exclusive* -- should this instance use exclusive grammars for 
+	regression testing (ignored if test_suite is None)
+
+	*BOOL test_next* -- flag to indicate that the mediator should run
+	regression tests using the next editor to connect
+	"""
+
         sr_interface.connect('off')        
         self.deep_construct(NewMediatorObject,
-                            {'editors': editors,
-			     'owns_editors': owns_editors,
-			     'server': server,
+                            {'editors': None,
+			     'server': None,
+			     'external_editors': {},
 			     'console': console,
 			     'interp': interp,
 			     'test_suite': test_suite,
@@ -165,6 +199,10 @@ class NewMediatorObject(Object.OwnerObject):
 	    self.new_interpreter()
 	if self.editors == None:
 	    self.new_app_mgr()
+	if server:
+	    server.set_mediator(self)
+	self.add_owned('server')
+	self.add_owned('editors')
 
     def new_app_mgr(self):
 	"""create a new AppMgr if one was not supplied to  the
@@ -265,6 +303,9 @@ class NewMediatorObject(Object.OwnerObject):
 	    exclude = []
 	config_dict = {}
 	self.define_config_functions(config_dict, exclude)
+	file = config_file
+	if not file:
+	    file = vc_globals.default_config_file
         try:
             execfile(config_file, config_dict)
         except Exception, err:
@@ -372,27 +413,15 @@ class NewMediatorObject(Object.OwnerObject):
 	    file = self.config_file
 	self._configure_from_file(exclude = exclude, config_file = file)
 
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
 
-    def run(self):
-	"""starts the mediator
-
-	**NOTE:** make sure to configure the mediator before calling run
-
-	**NOTE:** the behavior of this method varies drastically
-	depending on the server attribute:
-	
-        (1) If there is no server, but there is a GUI console, this
-	method will return so that the GUI can start its message loop.
-	
-        (2) If there is no server and no GUI console, this
-	method will run the EdSim (internal) editor simulator, which 
-	prompts for commands indefinitely.
-
-        (3) If there is a server, this method will call its run method.  
-	If the server has an internal message loop, that method will not 
-	return until the server has quit, so neither will this method.  
-	If the server has no internal message loop, then this method
-	will return so that the GUI start its message loop.
+	**NOTE:** subclasses must call their parent class's 
+	remove_other_references method, after performing their own duties.
+	Also, a class inheriting from two OwnerObject classes MUST
+	define remove_other_references and call both subclasses'
+	versions
 
 	**INPUTS**
 
@@ -402,34 +431,13 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*none*
 	"""
-	if self.server == None:
-	    if self.console != None:
-		return
-	    self.run_simulator()
-	    return
-	if self.test_suite != None:
-	    self.test_next = 1
-	self.server.run()
+# subclasses must call their parent class's remove_other_references
+# method, after performing their own duties
+        self.interp.cleanup()
 
-    def run_simulator(self):
-	"""runs the editor simulator (EdSim).  This method is used only
-	if there is neither a server for external editors nor a GUI
-	console.
+# for now, don't disconnect from sr_interface -- let the creator do that
 
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	if self.test_suite:
-#	    run tests
-	    pass
-	else:
-#	    run simulator in interactive mode
-	    pass
+	Object.OwnerObject.remove_other_references(self)
 
     def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
         """Quit the mediator object
@@ -453,16 +461,84 @@ class NewMediatorObject(Object.OwnerObject):
         # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
         # but don't save SymDict to file (we want the symbols and
         # abbreviations to still be there when we come back.
+# DCF: contrary to this comment, this *will* save the symbol dictionary, 
+# at least according to current defaults for CmdInterp.cleanup
         #
         self.interp.cleanup(clean_sr_voc=clean_sr_voc)
     
+	if self.editors:
+	    self.editors.cleanup()
+	    self.editors = None
+
         if sr_interface.speech_able():
             disconnect_from_sr(disconnect, save_speech_files)
-
-	if self.owns_editors and self.editors:
-	    self.editors.cleanup()
-	    del self.app
                 
+    def delete_editor_cbk(self, instance_name, unexpected = 0):
+	"""callback from the application manager indicating that
+	an editor closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR instance_name* -- name of the application instance
+
+	*BOOL unexpected* -- for external editors, was the editor
+	connection broken unexpectedly, or did the editor notify the
+	mediator that it was going to close/disconnect?
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# for now, all editor instance-specific data is stored under AppMgr,
+# except for external editors, for which we have the instance name in 
+# external_editors and the server has a reference to the
+# AppStateMessaging interface.
+#
+# once we add correction, we may have other instance-specific objects 
+# which we will need to clean up.
+	try:
+	    del self.external_editors[instance_name]
+	    self.server.delete_instance_cbk(instance_name, 
+		unexpected = unexpected)
+	except KeyError:
+	    pass
+# Note: if we have no server, we should quit when the last internal
+# editor exits.  However, the application which creates
+# NewMediatorObject will be running the internal editor, so it should
+# know when it exits and should call our cleanup method
+
+    def new_editor(self, app, server = 1, check_window = 1, 
+	    window_info = None):
+	"""add a new editor application instance
+
+	**INPUTS**
+
+	*AppState* app --  AppState interface corresponding to the new
+	instance
+
+	*BOOL* server -- true if this editor instance is connected to the 
+	mediator via the server.
+
+	*BOOL* check_window -- should we check to see if the
+	current window belongs to this instance?
+
+	*(INT, STR, STR) window_info*  -- window id, title, and module of 
+	the current window as detected by the TCP server when it
+	originally processed the new editor connection, or None to let
+	RSM.new_instance check now.  Ignored unless check_window is
+	true.
+
+	**OUTPUTS**
+
+	*STR* -- name of the application instance.  Necessary
+	if you want to add windows to the application in the future.
+	"""
+	instance_name = self.editors.new_instance(app, 
+	    check_window = check_window, window_info = window_info)
+	if server:
+	    self.external_editors[instance_name] = 1
+	return instance_name
+
     def add_csc(self, acmd, add_voc_entry=1):
 	"""Add a new Context Sensitive Command.
 

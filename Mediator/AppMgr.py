@@ -79,6 +79,9 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     **INSTANCE ATTRIBUTES**
 
+    *NewMediatorObject* mediator -- reference to the mediator which owns
+    this AppMgr
+
     *RecogStartMgr* recog_mgr -- reference to a RecogStartMgr object
 
     *{STR : [STR]}* instance_names -- map from editor application name 
@@ -115,20 +118,29 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	'Walther']
     unknown_app_prefixes.reverse()
 
-    def __init__(self, recog_mgr, **args):
+    def __init__(self, recog_mgr, mediator = None, **args):
 	"""
 	**INPUTS**
 
 	*RecogStartMgr* recog_mgr -- reference to a RecogStartMgr object
 	
+	*NewMediatorObject* mediator -- reference to the mediator which owns
+	this AppMgr, or None if this AppMgr is used only for testing
+	purposes and has no mediator to notify of callbacks from the
+	applications
 	"""
         self.deep_construct(AppMgr,
-                            {'instance_names': {}, 
-			    'instances': {}, 'instance_data': {},
-			    'title_prefixes': {},
-			    'recog_mgr': recog_mgr,
-			    'past_instances' : {}},
+                            {
+			     'mediator': mediator,
+			     'instance_names': {}, 
+			     'instances': {}, 
+			     'instance_data': {},
+			     'title_prefixes': {},
+			     'recog_mgr': recog_mgr,
+			     'past_instances' : {}
+			    },
                             args)
+	self.name_parent('mediator')
 	self.add_owned_list(['recog_mgr', 'instances'])
 	self.recog_mgr.set_app_mgr(self)
 	self.recog_mgr.activate()
@@ -371,9 +383,9 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 #	print repr(self.app_instance(new_name))
 	return new_name
 
-
-    def delete_instance(self, instance):
-	"""remove named instance from management
+    def _delete_instance(self, instance):
+	"""private method to do the work of removing named instance 
+	from management, except for notifying the mediator
 
 	**INPUTS**
 
@@ -391,6 +403,21 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	    self.instances[instance].cleanup()
 	    del self.instances[instance]
 
+    def delete_instance(self, instance):
+	"""remove named instance from management
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+# for now at least, this does the same thing as close_app_cbk
+	if self.instances.has_key(instance):
+	    self.close_app_cbk(instance)
+
     def close_app_cbk(self, instance, unexpected = 0):
 	"""callback from AppState which indicates that the application has 
 	closed or disconnected from the mediator
@@ -403,8 +430,9 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
 	*none*
 	"""
-# for now at least, this does the same thing as delete_instance
-	self.delete_instance(instance)
+	if self.mediator:
+	    self.mediator.delete_editor_cbk(instance, unexpected = unexpected)
+	self._delete_instance(instance)
 
     def close_buffer_cbk(self, instance, buff_name):
 	"""callback from AppState which notifies us that the application

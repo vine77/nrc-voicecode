@@ -136,6 +136,21 @@ class WaxEdSimPanel(WaxCmdPanel):
 	    self.mic_button.SetBitmapLabel(self.dark_grey_light)
 	    self.mic_button.Refresh()
 
+    def access_command_space(self):
+	"""returns a reference to the command_space namespace being
+	used by the panel, allowing access and modifications to that
+	namespace after construction of WaxEdSim
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR:ANY}* -- the namespace dictionary 
+	"""
+	return self.command_space
+
     def mic_change(self, state):
 	"""function to receive microphone state change callbacks
 
@@ -220,6 +235,19 @@ class WaxEdSimFrameMixIn(Object.Object):
 	dlg.Destroy()
 	return file_path
 
+    def mic_change(self, state):
+	"""function to receive microphone state change callbacks
+
+	**INPUTS**
+
+	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.pane.mic_change(state)
+
     def update_mic_button(self, state = None):
 	"""update the microphone button to reflect the state of the
 	microphone
@@ -252,6 +280,21 @@ class WaxEdSimFrame(WaxEdSimFrameMixIn, WaxCmdFrame):
 			    }, args
 			   ),
         self.finish_construction()
+
+    def access_command_space(self):
+	"""returns a reference to the command_space namespace being
+	used by the panel, allowing access and modifications to that
+	namespace after construction of WaxEdSim
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR:ANY}* -- the namespace dictionary 
+	"""
+	return self.pane.access_command_space()
 
     def add_pane(self, ID):
 	"""create the actual WaxPanel for the frame
@@ -286,6 +329,22 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
 	if f_path:
 	    frame.execute_file(f_path)
     
+    def access_command_space(self):
+	"""returns a reference to the command_space namespace being
+	used by the panel, allowing access and modifications to that
+	namespace after construction of WaxEdSim
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR:ANY}* -- the namespace dictionary 
+	"""
+	frame = self.active_frame()
+	return frame.access_command_space()
+
     def mic_change(self, state):
 	"""function to receive microphone state change callbacks
 
@@ -394,8 +453,8 @@ class WaxEdSim(wxApp, Object.OwnerObject):
 			    args,
 			    exclude_bases = {wxApp:1}
 			   )
-#        wxApp.__init__(self, 1, 'simcrash')
-        wxApp.__init__(self, 0)
+        wxApp.__init__(self, 1, 'simcrash')
+#        wxApp.__init__(self, 0)
 	self.add_owned('console')
 	self.add_owned('editor')
 
@@ -407,6 +466,21 @@ class WaxEdSim(wxApp, Object.OwnerObject):
         self.SetTopWindow(frame)
 	self.editor = AppStateGenEdit.AppStateGenEdit(self.console)
         return true
+
+    def access_command_space(self):
+	"""returns a reference to the command_space namespace being
+	used by the panel, allowing access and modifications to that
+	namespace after construction of WaxEdSim
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR:ANY}* -- the namespace dictionary 
+	"""
+	return self.console.access_command_space()
 
     def mic_change(self, state):
 	"""function to receive microphone state change callbacks
@@ -476,11 +550,16 @@ def no_mic_setmic(state):
     pass
 
 def run():
+    """run for testing without mediator or speech engine"""
     command_space = {}
     command_space['quit_flag'] = 0
     command_space['getmic'] = no_mic_getmic
     command_space['setmic'] = no_mic_setmic
+    command_space['setmic'] = no_mic_setmic
     app=WaxEdSim(command_space = command_space)
+    command_space['changed'] = 'too late'
+    actual_space = app.access_command_space()
+    actual_space['late-change'] = 'should be possible'
     app.MainLoop()
 
 if __name__ =='__main__':

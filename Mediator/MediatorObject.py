@@ -393,6 +393,8 @@ class MediatorObject(Object.Object):
         # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
         # but don't save SymDict to file (we want the symbols and
         # abbreviations to still be there when we come back.
+# DCF: contrary to this comment, this *will* save the symbol dictionary, 
+# at least according to current defaults for CmdInterp.cleanup
         #
         self.interp.cleanup(clean_sr_voc=clean_sr_voc)
     

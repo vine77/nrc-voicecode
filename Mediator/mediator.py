@@ -94,6 +94,146 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
         the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 	    save_speech_files=save_speech_files, disconnect=disconnect)
 
+def new_simulator(symdict_pickle_fname=None,
+		   disable_dlg_select_symbol_matches = None,
+		   window = 0, exclusive = 0,
+		   allResults = 0,
+		   on_app = None, owns_app = 1,
+		   mic_change = None,
+		   owner = None, id = None
+		  ):
+
+    """
+    Creates, configures, and returns a local [MediatorObject] instance 
+
+    **NOTE:** Unlike init_simulator, this function cannot be used to quit,
+    re-create and reconfigure an existing mediator
+
+    **INPUTS**
+
+    STR *symdict_pickle_fname=None* -- Name of the file containing the
+    persistent version of the symbols dictionnary.
+    
+    BOOL *disable_dlg_select_symbol_matches = None* -- If *true*,
+    disable the dialog for confirming new symbol matches with the
+    user.
+    
+    STR *window=None* -- Window handle of application associated with
+    the mediator. The mediator listens only when this window is
+    active. If *window=None*, then mediator is not associated with a
+    particular window and it will always listen for utterances.
+    
+    BOOL *exclusive=0* -- See [MediatorObject.exclusive] for details.
+    
+    BOOL *allResults=0* -- See [MediatorObject.allResults] for details.
+
+    [AppState] *on_app=None* -- [AppState] instance to use for the
+    mediator. If *None*, then use a new [EdSim] instance.
+
+    [AppState] *on_app* -- Attach this [AppState] to the meditor
+    instead of generating a new one from scratch (useful when
+    regression testing using an external editor instead of EdSim).
+
+    *BOOL owns_app* -- create mediator with owns_app flag (see
+    MediatorObject)
+
+    *FCT* mic_change_callback -- mic_change_callback(*STR* mic_state)
+    (optional) function to be called when the microphone state changes.
+
+    *ServerMainThread owner* -- server which owns this mediator, or
+    None.  Note: if owner is set, the id field MUST be provided.
+
+    STR *id* -- The unique identifier assigned by the server to
+    this MediatorObject
+    
+    **OUTPUT**
+
+    *none*
+
+    ..[AppState] file:///./AppState.AppState.html
+    ..[EdSim] file:///./EdSim.EdSim.html
+    ..[MediatorObject] file:///./MediatorObject.MediatorObject.html
+    ..[MediatorObject.allResults] file:///./MediatorObject.MediatorObject.html
+    ..[MediatorObject.exclusive] file:///./MediatorObject.MediatorObject.html
+    """
+
+    if on_app == None:
+        on_app = EdSim.EdSim()
+    
+    try:
+	sr_interface.connect('off', mic_change_callback = mic_change)
+    except natlink.UnknownName:
+        print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
+	sr_interface.disconnect()
+	return None
+#        cleanup()        
+        
+    if sr_interface.speech_able:
+#   new_simulator doesn't have a pre-existing mediator (it is not used
+#   for re-initialization, so init_simulator_regression cannot call
+#   new_simulator the way it calls init_simulator)
+#        if symdict_pickle_fname == None and the_mediator != None:
+            #
+            # Remove symbols from NatSpeak's dictionary 
+            #
+#            the_mediator.interp.cleanup(resave=0)
+
+#   new_simulator doesn't have a pre-existing mediator (it is not used
+#   for re-initialization, so init_simulator_regression cannot call
+#   new_simulator the way it calls init_simulator)
+#        if the_mediator:
+#            the_mediator.quit(save_speech_files=0, disconnect=0)            
+        
+	interp = \
+	    CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+		disable_dlg_select_symbol_matches = \
+		    disable_dlg_select_symbol_matches)
+        the_mediator = MediatorObject.MediatorObject(app = on_app,
+	    interp = interp,
+	    window = window, 
+	    owns_app = owns_app,
+	    exclusive = exclusive, 
+	    allResults = allResults, 
+	    owner = owner,
+	    id = id)
+
+        #
+        # Read the symbol dictionary from file
+        #
+# DCF: this is now done automatically by passing the pickle filename to
+# the CmdInterp constructor
+#        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
+#        the_mediator.interp.known_symbols.init_from_file()
+
+        #
+        # Configure the mediator
+        #
+        the_mediator.configure()
+	return the_mediator
+
+    return None
+
+
+    #
+    # Possibly disable the symbol selection dialog
+    #
+# DCF: this is now done by passing the argument to the CmdInterp
+# constructor
+#    the_mediator.interp.disable_dlg_select_symbol_matches = disable_dlg_select_symbol_matches
+
+    # define global variables accessible to the simulator commands
+    # through the sim_commands module namespace
+
+#    sim_commands.the_mediator = the_mediator
+#    print sim_commands.the_mediator
+
+    # define some useful local variables
+# if you want this stuff, you'll have to do it elsewhere
+#    home = os.environ['VCODE_HOME']
+#    sim_commands.command_space['home'] = home
+#    sim_commands.command_space['testdata'] = \
+#        os.path.join(home, 'Data', 'TestData')
+
 
 def init_simulator(symdict_pickle_fname=None,
 		   disable_dlg_select_symbol_matches = None,
@@ -184,8 +324,12 @@ def init_simulator(symdict_pickle_fname=None,
         if the_mediator:
             the_mediator.quit(save_speech_files=0, disconnect=0)            
         
+	interp = \
+	    CmdInterp.CmdInterp(symdict_pickle_filename = symdict_pickle_fname, 
+		disable_dlg_select_symbol_matches = \
+		    disable_dlg_select_symbol_matches)
         the_mediator = MediatorObject.MediatorObject(app = on_app,
-	    interp = CmdInterp.CmdInterp(), 
+	    interp = interp,
 	    window = window, 
 	    owns_app = owns_app,
 	    exclusive = exclusive, 
@@ -196,8 +340,10 @@ def init_simulator(symdict_pickle_fname=None,
         #
         # Read the symbol dictionary from file
         #
-        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
-        the_mediator.interp.known_symbols.init_from_file()
+# DCF: this is now done automatically by passing the pickle filename to
+# the CmdInterp constructor
+#        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
+#        the_mediator.interp.known_symbols.init_from_file()
 
         #
         # Configure the mediator
@@ -207,7 +353,9 @@ def init_simulator(symdict_pickle_fname=None,
     #
     # Possibly disable the symbol selection dialog
     #
-    the_mediator.interp.disable_dlg_select_symbol_matches = disable_dlg_select_symbol_matches
+# DCF: this is now done by passing the argument to the CmdInterp
+# constructor
+#    the_mediator.interp.disable_dlg_select_symbol_matches = disable_dlg_select_symbol_matches
 
     # define global variables accessible to the simulator commands
     # through the sim_commands module namespace

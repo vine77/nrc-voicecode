@@ -445,8 +445,6 @@ class WaxCmdPanel(WaxPanel):
 
     *wxTextControl* log -- text control for log window to display
     output, error messages, and command history
-
-    *FCT()* old_quit -- pre-existing quit function
     """
     def __init__(self, command_space = None, prompt_text = 'Command> ', **args):
 # have to pre-declare these attributes, because add_editor_buffer, which
@@ -460,7 +458,6 @@ class WaxCmdPanel(WaxPanel):
 	                 'command_log': None, 
 			 'command_line': None, 
 			 'log': None, 
-			 'old_quit': None,
 			 'command_line_interp': None
 			}
 	               )
@@ -536,14 +533,9 @@ class WaxCmdPanel(WaxPanel):
 
 	if self.command_space == None:
 	    self.command_space = {}
-	try:
-	    self.old_quit = self.command_space['quit']
-	except KeyError:
-	    pass
 
 # provide extra access for testing 
 	self.command_space['the_pane'] = self
-	self.command_space['quit'] = self.quit
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
 
@@ -559,11 +551,6 @@ class WaxCmdPanel(WaxPanel):
 #	print self.top_and_bottom
 
 	return editor, buffer
-
-    def quit(self):
-	if self.old_quit:
-	    (self.old_quit)()
-	self.command_space['quit_flag'] = 1
 
     def initial_show(self):
 	"""create editor and log windows.  This is done here, rather
@@ -603,6 +590,7 @@ class WaxCmdPanel(WaxPanel):
 	stderr = sys.stderr
         # capture standard output and standard error from exec and redirect them
 	# to the command log
+	self.command_space['quit_flag'] = 0
 	try:
 	    sys.stdout = self.command_log
 	    sys.stderr = self.command_log
@@ -701,10 +689,12 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	ID_SAVE_FILE = wxNewId()
 	ID_SAVE_AS = wxNewId()
 	ID_EXIT = wxNewId()
+	ID_CLOSE_MENU = wxNewId()
 #	print ID_OPEN_FILE
         file_menu.Append(ID_OPEN_FILE,"&Open...","Open a file")
         file_menu.Append(ID_SAVE_FILE,"&Save","Save current file")
         file_menu.Append(ID_SAVE_AS,"Save &As...","Save current file")        
+        file_menu.Append(ID_CLOSE_MENU,"&Close","Close window")
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
 	ID_CHOOSE_FONT = wxNewId()
@@ -724,6 +714,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
         self.SetMenuBar(menuBar)
         EVT_MENU(self, ID_EXIT, self.quit_now)
+        EVT_MENU(self, ID_CLOSE_MENU, self.close_now)
         EVT_MENU(self, ID_OPEN_FILE, self.on_open_file)
         EVT_MENU(self, ID_SAVE_FILE,self.on_save)
         EVT_MENU(self, ID_SAVE_AS,self.on_save_as)        
@@ -813,6 +804,11 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 	    debug.critical_warning(msg)
 	    debug.print_call_stack()
 	    self.cleanup()
+	self.Close()
+
+    def close_now(self, event):
+	"""handler for Close menu item
+	"""
 	self.Close()
 
     def quit_now(self, event):

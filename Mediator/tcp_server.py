@@ -294,6 +294,23 @@ def vc_authentification(messenger):
 
     pass
 
+def parse_module_info(module_info):
+    """rearrange natlink's module_info in our format
+    
+    **INPUTS**
+
+    *(STR, STR, INT)* -- the module name, window title, and window
+    handle
+
+    **OUTPUTS**
+
+    *(INT, STR, STR)* -- the window id, title, and module name
+    """
+    module_path, title, handle = module_info
+    module = os.path.basename(module_path)
+    module = os.path.splitext(module)[0]
+    return handle, title, module
+
 
 ##############################################################################
 # Classes for version of the server in which any calls to/from natlink
@@ -607,7 +624,7 @@ class ServerSingleThread(Object.Object):
 
         STR *app_name* -- Name of the external editor.
 
-        STR *window* -- Window handle for the external editor.
+        STR *window* -- window handle for the external editor.
         
         socket *listen_sock* -- The listen socket
         
@@ -1032,23 +1049,28 @@ class ServerMainThread(Object.OwnerObject):
     **INSTANCE ATTRIBUTES**
 
     [Queue] *new_listen_socks* -- Queue from which to get any new connections.
-    Each item is [(socket, (STR, STR, STR, BOOL))] 
+    Each item is [(socket, (STR, STR, (INT, STR, STR), BOOL))] 
     a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
     port, and data about that socket. The data is itself a 4ple
     consisting of: (a) identifier of external editor, (b) name of the
-    external editor, (c) window handle of the external editor, and (d)
-    a flag indicating whether the client is expecting to be used for
+    external editor, (c) another tuple, consisting of window handle, title, 
+    and module name of the active window, assumed to be the external editor, 
+    and (d) a flag indicating whether the client is expecting to be used for
     regression testing. 
 
-    *[(socket, [None, None, None])] new_talk_socks* -- the socket
+    *[(socket, (None, None, None, None))] new_talk_socks* -- the socket
     element of each 2ple is a new (uninitialised) socked
      on the VC_TALK port.  The data part of the 2ple is useless.
 
-    [(socket, (STR, STR, STR))] *pending_listen_socks=[]* -- Each entry is
+    [(socket, (STR, STR, (INT, STR, STR), BOOL)] 
+    *pending_listen_socks=[]* -- Each entry is
     a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
-    port, and data about that socket. The data is itself a 3ple
+    port, and data about that socket. The data is itself a 4ple
     consisting of: (a) identifier of external editor, (b) name of the
-    external editor and (c) window handle of the external editor.
+    external editor, (c) another tuple, consisting of window handle, title, 
+    and module name of the active window, assumed to be the external editor, 
+    and (d) a flag indicating whether the client is expecting to be used for
+    regression testing. 
     Socks on the pending_listen_socks list have been through
     handshaking, but have not yet been packaged with corresponding
     talk_socks.
@@ -1114,43 +1136,6 @@ class ServerMainThread(Object.OwnerObject):
 	for id in self.data_threads.keys():
 	    self.deactivate_data_thread(id)
 	Object.OwnerObject.remove_other_references(self)
-
-    def new_listener_thread(self):
-        """creates a new ListenNewEditorsThread to monitor 
-	for new connections on the VC_LISTEN port.
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*[ListenNewEditorsThread]* -- Thread that
-	listens for new connections on the VC_LISTEN port.
-
-	..[ListenForNewListenersThread] 
-	file:///./tcp_server.ListenForNewListenersThread.html
-	"""
-	debug.virtual('ServerMainThread.new_listener_thread')
-
-    def new_talker_thread(self):
-        """creates a new NewConnListThread to monitor 
-	for new connections on the VC_TALK port.
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*[NewConnListThread]* -- Thread that
-	listens for new connections on the VC_TALK port.
-
-	..[NewConnListThread] 
-	file:///./tcp_server.NewConnListThread.html
-	"""
-	debug.virtual('ServerMainThread.new_listener_thread')
-
 
     def data_event(self, id):
 	"""virtual method which supplies a data_event for ServerMainThread 
@@ -1258,8 +1243,13 @@ class ServerMainThread(Object.OwnerObject):
 # as long as the caller also removes the corresponding mediator, this
 # may be sufficient.
 	self.connection_ending[id].set()
+	del self.connection_ending[id]
+	try:
+	    del self.data_threads[id]
+	except KeyError:
+	    pass
 
-    def _new_instance(self, id, instance, test_client = 0):
+    def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
         
@@ -1269,13 +1259,18 @@ class ServerMainThread(Object.OwnerObject):
 
 	AppStateMessaging *instance*  -- the new instance
 
+	*(INT, STR, STR) window_info* -- the window id, title, and module name
+	of the external editor, or None if not detected yet
+
 	BOOL *test_client* -- flag indicating whether or not the client
 	is expecting to be used for regression testing
-
+        
         **OUTPUTS**
         
-	*BOOL* -- false if the server should exit (because we're done
-	running the test suite)
+	*BOOL* -- true if the instance should be added to our list.
+	false if we failed to create a new instance, or if we created
+	it, but it should be destroyed because it has run
+	the test suite and the server should exit 
 	"""
 	debug.virtual('ServerMainThread._new_instance')
         
@@ -1295,7 +1290,7 @@ class ServerMainThread(Object.OwnerObject):
 	"""
 	debug.virtual('ServerMainThread.known_instance')
 
-    def package_sock_pair(self, id, app_name, window, 
+    def package_sock_pair(self, id, app_name, window_info, 
 	listen_sock, talk_sock, test_client = 0):
         
         """Packages a listen and talk socket into an
@@ -1308,7 +1303,7 @@ class ServerMainThread(Object.OwnerObject):
 
         STR *app_name* -- Name of the external editor.
 
-        STR *window* -- Window handle for the external editor.
+	*(INT, STR, STR) window_info* -- the window id, title, and module name
         
         socket *listen_sock* -- The listen socket
         
@@ -1345,7 +1340,8 @@ class ServerMainThread(Object.OwnerObject):
         #
         an_app_state.config_from_external()
 
-	stay_alive = self._new_instance(id, an_app_state, window, test_client)
+	stay_alive = self._new_instance(id, an_app_state, window_info, 
+	    test_client)
 	if stay_alive:
 	    sys.stderr.write("successfully created new MediatorObject instance\n")
 	    self.data_threads[id] = data_thread
@@ -1360,7 +1356,12 @@ class ServerMainThread(Object.OwnerObject):
 #	    sys.stderr.write("deleted our reference to data thread\n")
 	    an_app_state.cleanup()
 #	    sys.stderr.write("cleaned up app_state\n")
-	    return 0
+	    if test_client and self.test_suite != None:
+# only if it was a test client and we ran the test suite should we quit now
+		return 0
+# with a regular client, we should still continue to run 
+# even if we fail to create a new instance
+            return 1
 	
     def handshake_listen_socks(self):
         """Invoked when a new socket connection was opened on VC_LISTEN port.
@@ -1378,7 +1379,7 @@ class ServerMainThread(Object.OwnerObject):
         #
         # Get window handle of active application.
         #
-        window = natlink.getCurrentModule()[2]
+        window_info = parse_module_info(natlink.getCurrentModule())
 
 
         #
@@ -1421,10 +1422,10 @@ class ServerMainThread(Object.OwnerObject):
 	test_client = messaging.messarg2int(mess[1]['value'])
         
         #
-        # Assign window, id and app_name to the last socket in the list of
+        # Assign window_info, id and app_name to the last socket in the list of
         # new listen sockets
         #
-	most_rec_data = (id, app_name, window, test_client)
+	most_rec_data = (id, app_name, window_info, test_client)
         
 # using this lock shouldn't be necessary, since only
 # handshake_talk_socks is the only other one accessing
@@ -1481,13 +1482,13 @@ class ServerMainThread(Object.OwnerObject):
             jj = 0
             while jj < len(self.pending_listen_socks):
                 (listen_sock, listen_data) = self.pending_listen_socks[jj]
-                (a_listen_id, app_name, window, test_client) = listen_data
+                (a_listen_id, app_name, window_info, test_client) = listen_data
                 if a_listen_id == id:
                     #
                     # Found it. Remove the two sockets from the list of
                     # new connections.
                     #
-                    found = (listen_sock, app_name, window, test_client)
+                    found = (listen_sock, app_name, window_info, test_client)
                     del self.pending_listen_socks[jj]
                     del self.new_talk_socks[ii]
                     break
@@ -1496,7 +1497,7 @@ class ServerMainThread(Object.OwnerObject):
                 
             if found != None:
                 stay_alive = self.package_sock_pair(id, app_name, 
-		    window, listen_sock, talk_sock, test_client)
+		    window_info, listen_sock, talk_sock, test_client)
                         
         self.new_socks_lock.release()        
 #	if stay_alive == 0:
@@ -1637,7 +1638,7 @@ class ServerOldMediator(ServerMainThread):
 #       they continue to send will be ignored.
 	ServerMainThread.remove_other_references(self)
 
-    def _new_instance(self, id, instance, window, test_client = 0):
+    def _new_instance(self, id, instance, window_info, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
         
@@ -1652,10 +1653,13 @@ class ServerOldMediator(ServerMainThread):
 
         **OUTPUTS**
         
-	*BOOL* -- false if the server should exit (because we're done
-	running the test suite)
+	*BOOL* -- true if the instance should be added to our list.
+	false if we failed to create a new instance, or if we created
+	it, but it should be destroyed because it has run
+	the test suite and the server should exit 
 	"""
 	sys.stderr.write("new instance\n")
+	window = window_info[0]
         if test_client and self.test_suite != None:
 	    sys.stderr.write("initializing mediator for regression tests\n")
 	    sys.stderr.flush()
@@ -1699,7 +1703,6 @@ class ServerOldMediator(ServerMainThread):
 	        disable_dlg_select_symbol_matches=1, window=window, 
 		exclusive = exclusive, allResults = allResults, 
 		owns_app = 1, owner = self, id = id)
-
 
 	    self.active_meds[id] = mediator.the_mediator
 	    mediator.the_mediator = None
@@ -1772,7 +1775,7 @@ class ServerOldMediator(ServerMainThread):
 	debug.virtual('ServerOldMediator.old_quit')
 
     def _destroy_mediator(self, id):
-	"""private method to destroy one the old MediatorObject
+	"""private method to destroy the old MediatorObject
 	corresponding to the given id
 
 	**INPUTS**
@@ -1790,7 +1793,7 @@ class ServerOldMediator(ServerMainThread):
 	
 class ServerOldMediatorIntLoop(ServerOldMediator):
     """concrete subclass of ServerOldMediator(ServerMainThread) which uses 
-    win32event events to communicate with an internal Windows
+    win32event events to communicate with an internal windows
     message loop.
 
     **INSTANCE ATTRIBUTES**
@@ -2217,6 +2220,173 @@ class ExtLoopWin32(Object.OwnerObject):
 #	sys.stderr.write("done cleaning up server from ext loop\n")
 	    self.server = None
 #	sys.stderr.write("server = None")
+
+
+class ServerNewMediator(ServerMainThread):
+    """implementation of ServerMainThread designed to work with the 
+    new design of MediatorObject (currently called NewMediatorObject)
+
+    **INSTANCE ATTRIBUTES**
+
+    *DataEvtSource data_events* -- object which provides data events
+    for the data threads for new connections
+
+    {STR : AppStateMessaging} *editors* -- map from unique socket IDs
+    to AppStateMessaging interfaces to external edtiors.
+
+    {STR : STR} *editor_names* -- map from AppMgr-assigned instance
+    names to unique socket IDs
+    """
+    def __init__(self, data_events, **args):
+	self.deep_construct(ServerNewMediator,
+			    {
+			     'mediator': None,
+			     'data_events': data_events,
+			     'editors': {},
+			     'editor_names': {}
+			    }, args)
+	self.name_parent('mediator')
+
+    def set_mediator(self, mediator):
+	"""provides the server with a reference to the new
+	MediatorObject, for new_instance callbacks
+
+	**INPUTS**
+
+	*NewMediatorObject mediator* -- the mediator
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.mediator = mediator
+    
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	return self.data_events.data_event(id)
+
+    def _new_instance(self, id, instance, window_info, test_client = 0):
+        """add a new AppStateMessaging.  Called internally by
+	package_sock_pair
+        
+        **INPUTS**
+        
+        STR *id* -- The unique ID of the listen socket
+
+	AppStateMessaging *instance*  -- the new instance
+
+	*(INT, STR, STR) window_info* -- the window id, title, and module name
+	of the external editor, or None if not detected yet
+
+	BOOL *test_client* -- flag indicating whether or not the client
+	is expecting to be used for regression testing
+
+        **OUTPUTS**
+        
+	*BOOL* -- true if the instance should be added to our list.
+	false if we failed to create a new instance, or if we created
+	it, but it should be destroyed because it has run
+	the test suite and the server should exit 
+	"""
+	instance_name = self.mediator.new_editor(app, server = 1,
+	    check_window = 1, window_info = window_info)
+	if instance_name == None:
+	    return 0
+	else:
+	    self.editors[id] = app
+	    self.editors[instance_name] = id
+	    return 1
+
+    def known_instance(self, id):
+	"""returns a reference to the AppStateMessaging instance 
+	associated with  the given ID
+        **INPUTS**
+        
+        STR *id* -- The unique ID of the listen socket
+
+        **OUTPUTS**
+
+	*AppStateMessaging* -- the corresponding instance, or None if
+	the id is unknown
+        
+        *none*
+	"""
+	try:
+	    return self.editors[id]
+	except KeyError:
+	    return None
+
+    def delete_instance_cbk(self, instance_name, unexpected = 0):
+        """callback from NewMediatorObject to notify us that the
+	corresponding external editor has exited or disconnected from
+	the mediator.
+
+	**INPUTS**
+
+        STR *id* -- The unique identifier assigned by VoiceCode to
+        that socket pair.
+      
+ 	*BOOL unexpected* -- 1 if the editor broke the connection
+	without first sending an editor_disconnecting message
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.trace('ServerNewMediator.delete_instance_cbk', 
+	    'server received delete instance callback')
+	try:
+	    id = self.editor_names[instance_name]
+	except KeyError:
+	    return
+	self.deactivate_data_thread(id)
+	del self.editors[id]
+	del self.editor_names[instance_name]
+
+    def start_other_threads(self, listener_evt, talker_evt):
+        """method called to start the secondary threads which
+	monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
+        with the main thread by means of InterThreadEvent objects, to
+	let the main thread know to initialize them.
+
+	These tasks are handled by separate threads because they can
+	block.   The secondary threads do not do the initialization
+	directly because that involves invoking some natlink methods, 
+	and Natlink does not behave well outside of the main thread.
+        
+        **INPUTS**
+        
+	*InterThreadEvent* listener_evt -- event object for the
+	ListenNewEditorsThread to use to notify the main thread that a
+	new editor has connected on the VC_LISTEN port, and that
+	handshake_listen_socks should be called
+	
+	*InterThreadEvent* talker_evt -- event object for the
+	NewConnListThread to use to notify the main thread that a
+	new talker connection has been established on the VC_TALK port, 
+	and that handshake_talk_socks should be called
+
+        **OUTPUTS**
+        
+        *none* 
+        """
+	if not self.mediator:
+	    msg = "can't start ServerNewMediator until you've set its mediator\n"
+	    raise RuntimeError(msg)
+	return self.start_other_threads(listener_evt, talker_evt)
+
+        
 
 
 
