@@ -714,7 +714,7 @@ class ActionInsertNewClause(Action):
     """
         
     def __init__(self, end_of_clause_regexp, code_bef='',
-                 code_after='', add_lines=1, back_indent_by=1, where = 1, **args_super):
+                 code_after='', add_lines=1, back_indent_by=1, where = -1, **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
                             {'end_of_clause_regexp': end_of_clause_regexp, 
@@ -732,23 +732,22 @@ class ActionInsertNewClause(Action):
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
         
-        trace('ActionInsertNewClause.execute', 
-            'app.cur_pos = %d' % app.cur_pos())
         app.search_for(regexp=self.end_of_clause_regexp, where =
             self.where)
-        trace('ActionInsertNewClause.execute', 
-            'after search, app.cur_pos = %d' % app.cur_pos())
 
-        trace('ActionInsertNewClause.execute', 
-            'add_lines = %d' % self.add_lines)
         for ii in range(self.add_lines):
             app.insert_indent(code_bef='\n', code_after='')
 
-        if self.back_indent_by > 0:
-        	app.decr_indent_level(levels=self.back_indent_by)
+	    #
+	    # Client-side automatic indentation is usually smart enough to know
+	    # if a new clause should be backindented or not. 
+	    # But our language-indenpendant server-side indentation needs to be 
+	    # told more explicitely. 
+	    #
+        if self.back_indent_by > 0 and app.curr_buffer().uses_server_side_indent():
+            app.decr_indent_level(levels=self.back_indent_by)
+
             
-        trace('ActionInsertNewClause.execute', 
-            'insert actual code')
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
 
 
@@ -793,7 +792,6 @@ class ActionCompileSymbols(Action):
                  instance = app.name())
            except AttributeError:
              print 'compile symbols command not supported with old Mediator'
-
 
 
 

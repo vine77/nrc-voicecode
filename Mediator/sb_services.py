@@ -424,7 +424,7 @@ class SB_ServiceIndent(SB_Service):
                             {'indent_level': indent_level,
                              'indent_to_curr_level': indent_to_curr_level},
                             attrs
-                            )                    
+                            )                                                
     
     def insert_indent(self, code_bef, code_after, range = None):
         

@@ -326,6 +326,10 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
 	
 
         self.indent_srv.insert_indent(code_bef, code_after, range)
+        
+        
+    def uses_server_side_indent(self):
+       return 1
 
     def indent(self, range = None):
         """Indent code in a source buffer region.

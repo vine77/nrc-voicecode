@@ -272,9 +272,9 @@ in the 'vr-log-buff-name buffer.")
 
 ; Until we know that the new mechanism for fixing the selected-frame
 ; problem works, these traces should be left on - DCF
-(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
-(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
+;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
 
 
 
