@@ -89,7 +89,36 @@ class WaxEdit:
 	*TextBufferWX* -- the TextBufferWX
 	"""
 	debug.virtual('WaxEdit.editor_buffer')
-    
+
+    def open_file_in_buffer(self, name):
+	"""opens a new file in the existing TextBufferWX
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true on success (otherwise the existing file is left
+	there)
+	"""
+	debug.virtual('WaxEdit.open_file_in_buffer')
+
+    def save_file(self, full_path):
+	"""Saves the file in the existing TextBufferWX
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true on success (otherwise the existing file is left
+	there)
+	"""
+	debug.virtual('WaxEdit.save_file')
+
+
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
 
