@@ -25,7 +25,8 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Completions*"))
+(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"
+"\*Completions\*"))
 
 
 ;;; Change this if you want to see more traces
@@ -266,6 +267,13 @@ in the 'vr-deprecated-log-buff-name buffer.")
 
 ;(cl-puthash  "vcode-merge-or-prepend-change" 1 vcode-traces-on)
 
+;(cl-puthash  "vcode-generate-raw-change-description" 1 vcode-traces-on)
+;(cl-puthash  "vr-deprecated-output-filter" 1 vcode-traces-on)
+;(cl-puthash  "vr-deprecated-serialize-message" 1 vcode-traces-on)
+;(cl-puthash  "vr-deprecated-send-reply" 1 vcode-traces-on)
+;(cl-puthash  "vcode-cmd-change-buff" 1 vcode-traces-on)
+		
+
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
 
@@ -489,6 +497,13 @@ reply when done.")
 process the command."
 )
 
+(defvar vcode-cached-buffers (make-hash-table :test 'eq)
+"Table of flags indicating for which VoiceCode-enabled buffers 
+we have already sent an initial buffer_contents update.  
+These buffers should be cached, so from now on we can just send 
+insert and delete updates.  The keys of the hash are buffer objects"
+)
+
 (defconst vr-deprecated-nonlocal-exit-commands
   '(exit-minibuffer minibuffer-complete-and-exit)
   "These commands never exit and can't be executed in the make-changes
@@ -587,6 +602,7 @@ expanded, since they often make it go out of sync."
 (defun vr-deprecated-kill-buffer ()
   (if (vr-deprecated-activate-buffer-p (current-buffer))
       (progn
+        (cl-remhash (current-buffer) vcode-cached-buffers)
 	(run-hooks 'vr-deprecated-send-kill-buffer-hook)
 	)
     )
@@ -879,9 +895,18 @@ executing.
     (if (vr-deprecated-activate-buffer-p (current-buffer))
 	(progn 
 	  (vcode-trace "vcode-report-insert-delete-change" "inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
-	  (setq the-change
+          (if (and (cl-gethash (current-buffer) vcode-cached-buffers)
+                   (not (string= (buffer-name (current-buffer))
+                        "*Completions*")))
+              (setq the-change
 		(vcode-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
-		)
+	      )
+              (setq the-change
+		(vcode-generate-raw-change-description 'change-is-contents 
+                    (list (buffer-name)))
+	      )
+              (cl-puthash (current-buffer) t vcode-cached-buffers)
+          )
 	  
 	  (vcode-trace "vcode-report-insert-delete-change" "the-change=%S" the-change)
 	  
@@ -924,40 +949,60 @@ Changes are put in a changes queue `vcode-queued-changes.
     (vcode-trace "vcode-generate-raw-change-description" "change-type=%S, change-data=%S" change-type change-data)
     (if (eq 'change-is-select change-type)
 	  (setq change-desc (list change-type change-data))
-      (setq buff-name (nth 0 change-data))
-      (setq inserted-start (nth 1 change-data))
-      (setq inserted-end (nth 2 change-data))
-      (setq deleted-length (nth 3 change-data))	
-      (setq deleted-start inserted-start)
+      (if (eq 'change-is-insert change-type)
+          (progn
+              (setq buff-name (nth 0 change-data))
+              (setq inserted-start (nth 1 change-data))
+              (setq inserted-end (nth 2 change-data))
+              (setq deleted-length (nth 3 change-data))	
+              (setq deleted-start inserted-start)
 ; Emacs never calls the after-change-functions with a third argument of
 ; nil, so the following only applies to the direct call to 
 ; vcode-generate-raw-change-description from
 ; vcode-generate-whole-buffer-changes?  - DCF
 ; Yes - AD
-      (if deleted-length
-	  (setq deleted-end (+ deleted-start deleted-length))
-	(setq deleted-end nil)
-      )
-      (vcode-trace "vcode-generate-raw-change-description" 
+              (if deleted-length
+                  (setq deleted-end (+ deleted-start deleted-length))
+                (setq deleted-end nil)
+              )
+              (vcode-trace "vcode-generate-raw-change-description" 
 		   "buff-name=%S, inserted-end=%S, deleted-length=%S, deleted-start=%S, deleted-end=%S"
 		   buff-name inserted-end deleted-length deleted-start 
 		   deleted-end)
-      (save-excursion
-	(set-buffer buff-name)
+              (save-excursion
+                (set-buffer buff-name)
 ; shouldn't this be set-buffer?  -- DCF
 ;	(switch-to-buffer buff-name)
 ;;; AD: We use 'buffer-substring-no-properties because VCode wouldn't know
 ;;;     what to do with character properties like font, color, etc...
 ;;;
-	(setq inserted-text (buffer-substring-no-properties 
+                (setq inserted-text (buffer-substring-no-properties 
 			     inserted-start inserted-end))
 
-      )
+              )
 
-      (vcode-trace "vcode-generate-raw-change-description" "** inserted-text=%S" inserted-text)
-      (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
-      (vcode-trace "vcode-generate-raw-change-description" "** EXITING with change-desc=%S" change-desc)
+              (vcode-trace "vcode-generate-raw-change-description" "** inserted-text=%S" inserted-text)
+              (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
+              (vcode-trace "vcode-generate-raw-change-description" "** EXITING with change-desc=%S" change-desc)
+          )
+          (progn
+              (vcode-trace "vcode-generate-raw-change-description"
+                    "change is contents")
+              (save-excursion
+                (setq buff-name (nth 0 change-data))
+                (set-buffer buff-name)
+                (setq inserted-text (buffer-substring-no-properties 
+			     (point-min) (point-max)))
+              )
+              (vcode-trace "vcode-generate-raw-change-description"
+                    "found contents")
+              (setq change-desc (list 'change-is-contents 
+                (list buff-name inserted-text)))
+          )
+      )
     )
+    (vcode-trace "vcode-generate-raw-change-description"
+"change-type=%S, change-desc=%S" change-type change-desc)
     change-desc
   )
 )
@@ -1173,7 +1218,7 @@ Changes are put in a changes queue `vcode-queued-changes.
   (let ((change-message nil))
     (vcode-trace "vcode-send-queued-changes" "vcode-queued-changes=%S" vcode-queued-changes)
 
-    (vcode-filter-queued-changes)
+;    (vcode-filter-queued-changes)
     (vcode-trace "vcode-send-queued-changes" "after vcode-filter-queued-changes, vcode-queued-changes=%S" vcode-queued-changes)
 
     (setq change-message
@@ -1254,6 +1299,13 @@ whole content of the buffer."
 	    (vcode-generate-raw-change-description  
 	     'change-is-select (list buff-name (nth 0 selection) 
 				     (nth 1 selection))))
+; this is incorrect: This range is the new range, which correctly
+; retrieves the complete contents of the buffer.  However, in order to 
+; ensure that VoiceCode replaces the entire contents of its cache, the 
+; change message would need to include the OLD start and end of the
+; buffer.  A better way is to use the new buffer contents action instead
+; of insert.
+; - DCF
       (setq change-list (cons change change-list))      
     )
     (vcode-trace "vcode-generate-whole-buffer-changes" "buff-name=%S, returning change=%S" buff-name change)
@@ -1352,6 +1404,8 @@ whole content of the buffer."
 	  (setq vr-deprecated-request (elt parsed 0))
 	  (setq vr-deprecated-cmd  (elt vr-deprecated-request 0))
 	  (setq handler (cl-gethash vr-deprecated-cmd vr-deprecated-message-handler-hooks))
+          (vcode-trace "vr-deprecated-output-filter" 
+            "received request %S" vr-deprecated-cmd)
 	  (if handler
 	      (vr-deprecated-execute-event-handler handler vr-deprecated-request)
   	      ;;;
@@ -1372,6 +1426,8 @@ whole content of the buffer."
       (progn
 	(if (integerp msg)
 	    (setq msg (int-to-string msg)))
+        (vcode-trace "vr-deprecated-send-reply" "sending reply %S..."
+(substring msg 0 20))
 	(if vr-deprecated-log-send
 	    (vr-deprecated-log "<- r %s\n" msg))
 ;;; Alain what does that do? Should it be part of vr-deprecated-serialize-message?
@@ -1623,6 +1679,8 @@ instructions.
    vr-deprecated.exe" 
 
   (let ((mess-name (car message)) (mess-content (cdr message)) (cmd))
+    (vcode-trace "vr-deprecated-serialize-message" "mess-name is %S"
+mess-name)
     (cond
 
      ;;; Alain: Later on, put conditions for all the messages that vr-deprecated.exe
@@ -2181,6 +2239,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'updates 'vcode-cmd-updates vr-deprecated-message-handler-hooks)
   (cl-puthash 'confirm_buffer_exists 'vcode-cmd-confirm-buffer-exists vr-deprecated-message-handler-hooks)
   (cl-puthash 'list_open_buffers 'vcode-cmd-list-open-buffers vr-deprecated-message-handler-hooks)
+  (cl-puthash 'list_all_buffers 'vcode-cmd-list-all-buffers vr-deprecated-message-handler-hooks)
   (cl-puthash 'close_buffer 'vcode-cmd-close-buffer vr-deprecated-message-handler-hooks)
   (cl-puthash 'file_name 'vcode-cmd-file-name vr-deprecated-message-handler-hooks)
   (cl-puthash 'language_name 'vcode-cmd-language-name vr-deprecated-message-handler-hooks)
@@ -2661,6 +2720,22 @@ a buffer"
   )
 )
 
+;;;
+;;; Generate a hash table describing a buffer contents change
+;;;
+(defun vcode-generate-contents-change-hash (a-change)
+  (let ((buff-name (nth 0 a-change))
+	(text (nth 1 a-change))
+	(contents-change-hash (make-hash-table :test 'string=)))
+
+    (cl-puthash "action" "buff_contents" contents-change-hash)
+    (cl-puthash "buff_name" buff-name contents-change-hash)
+    (cl-puthash "text" text contents-change-hash)
+
+    contents-change-hash
+  )
+)
+
 ; obsolete - replaced with vcode-pos-select-change-hash
 (defun vcode-generate-select-change-hash (a-change)
   (let ((buff-name (nth 0 a-change))
@@ -2699,7 +2774,11 @@ a buffer"
     (vcode-trace "vcode-generate-change-hash" "a-change=%S" a-change)
     (if (eq (nth 0 a-change) 'change-is-insert)
 	(setq a-change-hash (vcode-generate-insert-change-hash (nth 1 a-change)))
+        (if (eq (nth 0 a-change) 'change-is-contents)
+           (setq a-change-hash (vcode-generate-contents-change-hash (nth
+1 a-change)))
       (setq a-change-hash (vcode-generate-pos-select-change-hash (nth 1 a-change)))
+        )
     )
     a-change-hash
 )
@@ -2876,6 +2955,21 @@ message.
     (vr-deprecated-send-reply
      (run-hook-with-args 
       'vr-deprecated-serialize-message-hook (list "list_open_buffers_resp" response))
+    )
+  )
+)
+
+(defun vcode-cmd-list-all-buffers (vcode-request)
+  (let ((mess-cont (elt vcode-request 1)) 
+	(buffer-names nil)
+	(response (make-hash-table :test 'string=)))
+
+    (setq buffer-names 
+        (mapcar (lambda (buff) (buffer-name buff)) (buffer-list)))
+    (cl-puthash "value" buffer-names response)
+    (vr-deprecated-send-reply
+     (run-hook-with-args 
+      'vr-deprecated-serialize-message-hook (list "list_all_buffers_resp" response))
     )
   )
 )
@@ -3331,7 +3425,8 @@ buffer"
 
     (save-excursion
       (set-buffer buff-name)
-      (cl-puthash "value" (buffer-substring start end) resp-cont)
+      (cl-puthash "value" (buffer-substring-no-properties start end) resp-cont)
+      (cl-puthash (current-buffer) t vcode-cached-buffers)
     )
 
     (vr-deprecated-send-reply 
@@ -3390,7 +3485,7 @@ buffer"
     (cl-puthash "value" lang-name resp-cont)
     (vr-deprecated-send-reply 
         (run-hook-with-args 'vr-deprecated-serialize-message-hook 
-			    (list "language_name_resp" resp-cont)))
+			    (list "file_language_name_resp" resp-cont)))
 
   )   
 )
@@ -4088,11 +4183,13 @@ change reports it sends to VCode.
         (response (make-hash-table :test 'string=)))
     (setq buff-name (cl-gethash "buff_name" mess-cont nil))
     (setq success 1)
+    (vcode-trace "vcode-cmd-change-buff" "buff-name is %S" buff-name)
     (if (not buff-name) 
 	(vcode-switch-buffer-dlg)
       (condition-case
 	  (switch-to-buffer buff-name)
-	('error (setq success 0))
+	('error (progn (setq success 0) (vcode-trace "vcode-cmd-change-buff"
+"error switching to buffer %S" buff-name)))
       )
     )
     (cl-puthash "value" success response)

@@ -78,6 +78,7 @@ def use_update_class(action):
         
     use_class = {'curr_buffer': AS_UpdCurrBufferName,
                  'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
+                 'buff_contents': SB_UpdBuffContents,
                  'pos_selection': SB_UpdPosSelection,
                  'close_buff': AS_UpdCloseBuffer,
                  'open_buff': AS_UpdOpenBuffer,
@@ -421,6 +422,39 @@ class SB_UpdInsert(SB_Update):
         """
         range = messaging.messarg2inttuple(self.descr['range'])
         on_buff.insert_cbk(range=range, text=self.descr['text'])
+
+class SB_UpdBuffContents(SB_Update):
+    """Update class for receipt of the complete buffer contents
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_UpdBuffContents,
+                            {}, 
+                            args_super, 
+                            {})
+
+    def apply_to_buff(self, on_buff):
+        
+        """Carry out a buffer contents update on a specific buffer.
+        
+        **INPUTS**
+        
+        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        on_buff.contents_cbk(text=self.descr['text'])
         
 class SB_UpdPosSelection(SB_Update):
     """Update class for setting both the cursor position and the current
@@ -700,6 +734,7 @@ class AppState(OwnerObject):
     'goto_end_of_line', 'goto_beginning_of_line',
     'goto_range', 'move_relative_line',
     'move_relative_page', 'search_for', 'log_search', 'looking_at', 
+    'lookback_search', 'search_for_match',
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',
     'newline_conventions', 'pref_newline_convention', 'newline_regexp', 
@@ -840,7 +875,10 @@ class AppState(OwnerObject):
 
         *INT* start -- start of the modified range
 
-        *INT* end -- end of the modified range. If None, default to the end of the buffer.
+        *INT* end -- end of the modified range.
+
+        If both start and end are None, this is a buffer contents
+        update (which may or may not reflect an actual change)
 
         *STR* text -- the new text replacing this range
 
@@ -1103,7 +1141,7 @@ class AppState(OwnerObject):
 
     def curr_buffer_name(self):
         
-        """Returns the file name of the buffer that VoiceCode
+        """Returns the name of the buffer that VoiceCode
         currently operates on.
 
         This may or may not be the same as the active buffer in the
@@ -1134,8 +1172,10 @@ class AppState(OwnerObject):
         # If not, use the editor's active buffer.
         #
         buff_name = self.is_bound_to_buffer()
+        debug.trace('AppState.curr_buffer_name', 'bound buffer is %s' % buff_name)
         if buff_name == None:
             buff_name = self.app_active_buffer_name()
+            debug.trace('AppState.curr_buffer_name', 'app buffer is %s' % buff_name)
 
         return buff_name
 
@@ -1263,11 +1303,9 @@ class AppState(OwnerObject):
         return 0
 
 
-    def app_change_buffer(self, buff_name=None):
+    def app_change_buffer(self, buff_name):
 
         """Changes the external application's active buffer. 
-        If *buff_name* is *None*, starts a speech-enabled dialog
-        allowing the user to select it.
 
         This variant only changes the buffer in the external
         application. It does not resynchronise VoiceCode with external

@@ -94,7 +94,8 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
            gram_spec = gram_spec + \
                        self.interpreter().gram_spec_spoken_symbol("known_spoken_symbol", not self.generate_sym_gram)   
         
-        debug.trace('DictThroughCmdWinGramNL._gram_spec', 'returning "%s"' % gram_spec)
+        if debug.tracing('DictThroughCmdWinGramNL._gram_spec'):
+            debug.trace('DictThroughCmdWinGramNL._gram_spec', 'returning "%s"' % gram_spec)
                        
         return gram_spec        
                 
@@ -203,8 +204,9 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
 #                self.app.print_buff_if_necessary(buff_name
 #                    = self.buff_name)
             else:
-                 debug.trace('DictThroughCmdWinGramNL.gotResultsObject, results=%s', 
-                     repr(results))
+                 if debug.tracing('DictThroughCmdWinGramNL.gotResultsObject'):
+                     debug.trace('DictThroughCmdWinGramNL.gotResultsObject',
+                         'results=%s' % repr(results))
 
 
 class DictWinGramNL(DictWinGram, DictGramBase):
@@ -335,8 +337,9 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 #                self.app.print_buff_if_necessary(buff_name
 #                    = self.buff_name)
             else:
-                 debug.trace('DictWinGramNL.gotResultsObject, results=%s', 
-                     repr(results))
+                 if debug.tracing('DictWinGramNL.gotResultsObject'):
+                     debug.trace('DictWinGramNL.gotResultsObject', 
+                         'results=%s' % repr(results))
              
 
 
@@ -389,7 +392,8 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
         *none*
         """
-        debug.trace('SelectWinGramNL._set_visible', 'visible=%s' % visible)
+        if debug.tracing('SelectWinGramNL._set_visible'):
+            debug.trace('SelectWinGramNL._set_visible', 'visible=%s' % visible)
         SelectGramBase.setSelectText(self, visible)
 
     def activate(self, buff_name):
@@ -475,7 +479,8 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         #
                         region = resObj.getSelectInfo(self.gramObj, i)
 
-                        debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
+                        if debug.tracing('SelectWinGramNL.gotResultsObject'):
+                            debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
                         true_region = (region[0] + self.vis_start,
                           region[1] + self.vis_start)
                         #

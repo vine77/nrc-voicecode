@@ -23,7 +23,7 @@
 to the buffer"""
 
 import debug
-from debug import trace
+from debug import trace, tracing
 
 from SourceBuffCookie import SourceBuffCookie
 
@@ -32,6 +32,7 @@ from SourceBuffCached import SourceBuffCached
 from LeakyStack import *
 
 from Object import Object
+import find_difference
 
 class ReverseBufferChange(Object):
     """object representing the inverse of a change to a contiguous region of a
@@ -351,14 +352,16 @@ class SourceBuffWithDiffs(SourceBuffCached):
 
         *none*
         """
-        debug.trace('SourceBuffWithDiffs._push_change',
-            'change to buff %s: old text "%s", replaced range = %s' \
-            % (self.name(), change.old_text, repr(change.range)))
+        if tracing('SourceBuffWithDiffs._push_change'):
+            debug.trace('SourceBuffWithDiffs._push_change',
+                'change to buff %s: old text "%s", replaced range = %s' \
+                % (self.name(), change.old_text, repr(change.range)))
         dropped = self.change_history.push(change)
         if dropped:
-            debug.trace('SourceBuffWithDiffs._push_change',
-                'dropped old text "%s", replaced range = %s' \
-                % (dropped.old_text, repr(dropped.range)))
+            if tracing('SourceBuffWithDiffs._push_change'):
+                debug.trace('SourceBuffWithDiffs._push_change',
+                    'dropped old text "%s", replaced range = %s' \
+                    % (dropped.old_text, repr(dropped.range)))
 # level of the dropped change was:
             dropped_level = self.change_history.lowest()
             debug.trace('SourceBuffWithDiffs._push_change',
@@ -454,9 +457,6 @@ class SourceBuffWithDiffs(SourceBuffCached):
         """External editor invokes that callback to notify VoiceCode
         of a deletion event.
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
         
         (INT, INT) *range* -- Start and end pos of range to be deleted
@@ -488,8 +488,9 @@ class SourceBuffWithDiffs(SourceBuffCached):
 # calling SourceBuffCached.delete_cbk
                 deleted = self.cache['get_text'][range[0]:range[1]]
 # don't record deletions of nothing
-                debug.trace('SourceBuffWithDiffs.delete_cbk',
-                    'deleted text "%s"' % deleted)
+                if tracing('SourceBuffWithDiffs.delete_cbk'):
+                    debug.trace('SourceBuffWithDiffs.delete_cbk',
+                        'deleted text "%s"' % deleted)
                 if deleted:
 # for the reverse diff, we need the range of the new text
 # The start of the new text is the same as the start of the old text,
@@ -508,9 +509,6 @@ class SourceBuffWithDiffs(SourceBuffCached):
         """External editor invokes that callback to notify VoiceCode
         of a deletion event.
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
                 
         (INT, INT) *range* -- Start and end position of text to be
@@ -523,9 +521,10 @@ class SourceBuffWithDiffs(SourceBuffCached):
         
         *none* -- 
         """
-        debug.trace('SourceBuffWithDiffs.insert_cbk',
-            'buff %s: replacing range %s with "%s"' \
-            % (self.name(), repr(range), text))
+        if tracing('SourceBuffWithDiffs.insert_cbk'):
+            debug.trace('SourceBuffWithDiffs.insert_cbk',
+                'buff %s: replacing range %s with "%s"' \
+                % (self.name(), repr(range), text))
         if self.undoing:
             debug.trace('SourceBuffWithDiffs.insert_cbk',
                 'in process of undoing')
@@ -548,8 +547,9 @@ class SourceBuffWithDiffs(SourceBuffCached):
                 if range_non_nil[1] == None:
                    range_non_nil[1] = len(self._get_cache('get_text')) - 1
                 replaced = self.cache['get_text'][range_non_nil[0]:range_non_nil[1]]
-                debug.trace('SourceBuffWithDiffs.insert_cbk',
-                    'replaced text "%s"' % replaced)
+                if tracing('SourceBuffWithDiffs.insert_cbk'):
+                    debug.trace('SourceBuffWithDiffs.insert_cbk',
+                        'replaced text "%s"' % replaced)
 # don't record non-changes
                 if replaced != text:
 # for the reverse diff, we need the range of the new text
@@ -563,6 +563,44 @@ class SourceBuffWithDiffs(SourceBuffCached):
                     self._push_change(reverse)
 
         SourceBuffCached.insert_cbk(self, range, text)
+
+    def contents_cbk(self, text):
+        
+        """External editor invokes that callback to inform VoiceCode
+        of the buffer contents.
+
+        **INPUTS**
+                
+        STR *text* -- Text to be inserted
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        if self._not_cached('get_text'):               
+# if we don't have the buffer contents cached, we don't know what text 
+# was replaced, so we can't create a reverse diff, and all our previous
+# change_history is invalid
+            debug.trace('SourceBuffWithDiffs.contents_cbk',
+                'not cached')
+
+# if the text isn't cached, then the stacks should already be clear,
+# but just for good measure
+            self.clear_stacks()
+            if self.undoing:
+                # this should REALLY never happen, but if it does,
+                # there is no good way to handle it
+                msg = 'WARNING: SourceBuffWithDiffs.contents_cbk called\n'
+                msg = msg + 'while undoing changes, with NO CACHED TEXT.\n'
+                msg = msg +'.  Please report this as a bug\n'
+                debug.critical_warning(msg)
+            SourceBuffCached.contents_cbk(self, text)
+            return
+        
+# otherwise, treat this as an insert callback
+        start, end, change = \
+               find_difference.find_difference(self.cache['get_text'], text)
+        self.insert_cbk(range = (start, end), text = change)
 
     def _state_cookie_class(self):
         """returns the class object for the type of cookie used by
@@ -688,9 +726,10 @@ class SourceBuffWithDiffs(SourceBuffCached):
                 text = change.old_text
                 start, end = change.range
                 self.accumulated = []
-                debug.trace('SourceBuffWithDiffs.restore_state',
-                    'popped text "%s", range = (%d, %d)' \
-                    % (text, start, end))
+                if tracing('SourceBuffWithDiffs.restore_state'):
+                    debug.trace('SourceBuffWithDiffs.restore_state',
+                        'popped text "%s", range = (%d, %d)' \
+                        % (text, start, end))
                 self.set_text(text, start = start, end = end)
 # the callback should clear this if we got the expected change.
 # if it didn't, then we're in trouble.  Since we don't have a forward
@@ -701,8 +740,9 @@ class SourceBuffWithDiffs(SourceBuffCached):
                 accumulated_text = self.accumulated[0].text
                 accumulated_range = self.accumulated[0].range
                 if text != accumulated_text:
-                    debug.trace('SourceBuffWithDiffs.restore_state',
-                       'text "%s" != expected "%s"' % (accumulated_text, text))
+                    if tracing('SourceBuffWithDiffs.restore_state'):
+                        debug.trace('SourceBuffWithDiffs.restore_state',
+                           'text "%s" != expected "%s"' % (accumulated_text, text))
                     break
                 if change.range != accumulated_range:
                     debug.trace('SourceBuffWithDiffs.restore_state',

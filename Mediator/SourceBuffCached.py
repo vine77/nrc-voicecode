@@ -24,7 +24,7 @@ buffer is slow"""
 
 
 import debug
-from debug import trace
+from debug import trace, tracing
 
 import SourceBuff
 import util
@@ -143,10 +143,12 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
            self.cache[name] = value
            
     def _put_cache_multiple(self, names, values):
-        trace('SourceBuffCached._put_cache_multiple', 'names=%s, values=%s' % (repr(names), repr(values)))
+        if tracing('SourceBuffCached._put_cache_multiple'):
+            trace('SourceBuffCached._put_cache_multiple', 'names=%s, values=%s' % (repr(names), repr(values)))
         for ii in range(len(names)):
-          trace('SourceBuffCached._put_cache_multiple', '** ii=%s: caching values[ii]=%s for element named names[ii]=%s' % (ii, repr(values[ii]), repr(names[ii])))
-          self._put_cache(names[ii], values[ii])
+            if tracing('SourceBuffCached._put_cache_multiple'):
+                trace('SourceBuffCached._put_cache_multiple', '** ii=%s: caching values[ii]=%s for element named names[ii]=%s' % (ii, repr(values[ii]), repr(names[ii])))
+            self._put_cache(names[ii], values[ii])
            
     def _get_cache(self, name):
         if self.use_cache:
@@ -158,9 +160,11 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         debug.trace('SourceBuffCached._get_cache_multiple', 'names=%s' % repr(names))
         values = []
         for a_name in names:
-           values.append(self._get_cache(a_name))
-           trace('SourceBuffCached._get_cache_multiple', '** after a_name=%s, values=%s' % (a_name, repr(values)))
-        debug.trace('SourceBuffCached._get_cache_multiple', 'returning values=%s' % repr(values))
+            values.append(self._get_cache(a_name))
+            if tracing('SourceBuffCached._get_cache_multiple'):
+                trace('SourceBuffCached._get_cache_multiple', '** after a_name=%s, values=%s' % (a_name, repr(values)))
+        if tracing('SourceBuffCached._get_cache_multiple'):
+            trace('SourceBuffCached._get_cache_multiple', 'returning values=%s' % repr(values))
         return values
 
     def _get_cache_element(self, elt_name, get_from_app_method):
@@ -217,7 +221,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
               self._put_cache_multiple(elt_names, values_from_app)
            values = self._get_cache_multiple(elt_names)
            
-        debug.trace('SourceBuffCached._get_cache_element_multiple', 'returning values=%s' % repr(values))
+        if tracing('SourceBuffCached._get_cache_element_multiple'):
+            debug.trace('SourceBuffCached._get_cache_element_multiple', 'returning values=%s' % repr(values))
         return values
         
 
@@ -370,8 +375,10 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             end = start
             start = tmp
             
-        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, text[start:end]="%s"' % (start, end, text[start:end]))
-        trace('SourceBuffCached.get_text', '** before returning, len(text)=%s, text="%s"' % (len(text), text))
+        if tracing('SourceBuffCached.get_text'):
+            trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, text[start:end]="%s"' % (start, end, text[start:end]))
+        if tracing('SourceBuffCached.get_text'):
+            trace('SourceBuffCached.get_text', '** before returning, len(text)=%s, text="%s"' % (len(text), text))
 
         return text[start:end]
 
@@ -513,10 +520,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         """External editor invokes that callback to notify VoiceCode
         of a deletion event.
-
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
+      
         **INPUTS**
         
         (INT, INT) *range* -- Start and end pos of range to be deleted
@@ -560,9 +564,6 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         """External editor invokes that callback to notify VoiceCode
         of an insertion event.
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
         
         (INT, INT) *range* -- Start and end position of text to be
@@ -575,11 +576,17 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         *none* -- 
         """
-        trace('SourceBuffCached.insert_cbk.short', 
-            'range=%s, len(text) = %d, text="%s..."' \
-            % (range, len(text), text[0:60]))
-        trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
-        trace('SourceBuffCached.insert_cbk', '** upon entry, self._get_cache("cur_pos")=%s, self._get_cache("get_text")="%s"' % (self._get_cache("cur_pos"), self._get_cache("get_text")))        
+        if tracing('SourceBuffCached.insert_cbk.short'):
+            trace('SourceBuffCached.insert_cbk.short', 
+                'range=%s, len(text) = %d, text="%s..."' \
+                % (range, len(text), text[0:60]))
+        if tracing('SourceBuffCached.insert_cbk'):
+            trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
+            trace('SourceBuffCached.insert_cbk', 
+                ('** upon entry, self._get_cache("cur_pos")=%s,' +
+                 ' self._get_cache("get_text")=%s') % \
+                (self._get_cache("cur_pos"), 
+                repr(self._get_cache("get_text"))))
 
 #        if range == None:
 #            range = self.get_selection()
@@ -612,7 +619,54 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
 
         self.uncache_data_after_buffer_change(what_changed = 'get_text')
         
-        trace('SourceBuffCached.insert_cbk', '** upon exit, self._get_cache("cur_pos")=%s, self._get_cache("get_text")="%s"' % (self._get_cache("cur_pos"), self._get_cache("get_text")))
+        if tracing('SourceBuffCached.insert_cbk'):
+            trace('SourceBuffCached.insert_cbk', 
+                ('** upon exits, self._get_cache("cur_pos")=%s,' +
+                 ' self._get_cache("get_text")=%s') % \
+                (self._get_cache("cur_pos"), 
+                repr(self._get_cache("get_text"))))
+
+    def contents_cbk(self, text):
+        """External editor invokes that callback to inform VoiceCode
+        of the complete contents of the buffer.
+        
+        **INPUTS**
+        
+        STR *text* -- Up-to-date contents of the buffer
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        if tracing('SourceBuffCached.contents_cbk.short'):
+            trace('SourceBuffCached.contents_cbk.short', 
+                'len(text) = %d, text="%s..."' \
+                % (len(text), text[0:60]))
+        if tracing('SourceBuffCached.contents_cbk'):
+            trace('SourceBuffCached.contents_cbk', 'range=%s, text=\'%s\'' % (range, text))
+            trace('SourceBuffCached.contents_cbk', 
+                ('** upon entry, self._get_cache("cur_pos")=%s,' +
+                 ' self._get_cache("get_text")=%s') % \
+                (self._get_cache("cur_pos"), 
+                repr(self._get_cache("get_text"))))
+
+        SourceBuff.SourceBuff.contents_cbk(self, text)
+        if self._not_cached('get_text'):
+# if contents are not cached, cache them
+            self._put_cache('get_text', text)
+            self.uncache_data_after_buffer_change(what_changed = 'get_text')
+            if tracing('SourceBuffCached.contents_cbk'):
+                trace('SourceBuffCached.contents_cbk', 
+                    ('** upon exit, self._get_cache("cur_pos")=%s,' +
+                     ' self._get_cache("get_text")=%s') % \
+                    (self._get_cache("cur_pos"), 
+                    repr(self._get_cache("get_text"))))
+        else:
+# otherwise, treat this as an insert_cbk
+            start, end, change = \
+                find_difference.find_difference(self.cache['get_text'], text)
+            self.insert_cbk(range = (start, end), text = change)
+        
 
     def pos_selection_cbk(self, pos, selection):
         """External editor invokes that callback to notify VoiceCode

@@ -102,7 +102,10 @@ class SourceBuff(OwnerObject):
 
         *INT* start -- start of the modified range
 
-        *INT* end -- end of the modified range. If None, default to the end of the buffer.
+        *INT* end -- end of the modified range.
+
+        If both start and end are None, this is a buffer contents
+        update (which may or may not reflect an actual change)
 
         *STR* text -- the new text replacing this range
 
@@ -1349,9 +1352,83 @@ class SourceBuff(OwnerObject):
             pos = pos + d
         raise IndexError()
 
-    def looking_at(self, regexp):
-       return re.match(regexp,
-                       self.get_text(start = self.cur_pos()))
+    def looking_at(self, regexp, pos = None):
+       r = re.compile(regexp)
+       if pos is None:
+           pos = self.cur_pos()
+       return r.match(self.get_text(), pos)
+
+    def lookback_search(self, regexp, num=1, where=1, unlogged = 0):
+        """A simplified search which steps back through the file one
+        character at a time, and checks whether the regexp matches at
+        that character position.  When a match is found, the cursor is
+        moved to that position.  This may be faster than a general
+        reverse regexp search when you are far from the beginning of the
+        buffer.  Note that the match location may not be the same as
+        search_for.  For example, a regexp of ' *x' would match the
+        first 'x' before the cursor, effectively ignoring the ' *'.
+        Also, expressions containing newlines may not match reliably if
+        regexp_newline has both single and multi-character alternatives.
+
+        **INPUTS**
+
+        *STR regexp* -- simple regular expression, starting with a fixed
+        string
+
+        *INT* num -- number of occurences to search for
+
+        *INT* where -- if positive, move cursor after the occurence,
+        otherwise move it before
+           
+        *BOOL* unlogged -- if true, don't log the results of this
+        search (used for searches done by mediator without user-initiation)
+
+        **OUTPUTS**
+
+        *(INT, INT)* -- returns the range corresponding to the match,
+        or None if none was found
+        """
+
+        success = None
+
+        #
+        # Change the \n in the regexp so they match any of the forms
+        # recognised by the editor in this buffer
+        #
+        regexp = re.sub('\n', self.newline_regexp(), regexp)
+
+        #
+        # Find position of all matches
+        #
+
+        text = self.get_text()
+        best_match = None
+        l = self.len()
+        
+        pos = self.cur_pos() - 1
+        a_match = self.looking_at(regexp, pos)
+        while pos >= 0:
+            a_match = self.looking_at(regexp, pos)
+            if a_match:
+                num = num - 1
+                if num == 0:
+                    best_match = a_match.span()
+# even if this is the same as the previous search, allow it unless we
+# find a better one next time around
+                    if not self.same_as_previous_search(regexp, -1,
+                          where, a_match.span()):
+                        break
+                    num = 1
+            pos = pos - 1
+
+        if best_match:
+            new_cur_pos = self.pos_extremity(best_match, where)
+            self.goto(new_cur_pos)
+
+        if not unlogged:
+            self.log_search(regexp, direction, where, best_match)
+
+        return best_match
 
     def search_for(self, regexp, direction=1, num=1, where=1,
                    unlogged = 0):
@@ -1370,13 +1447,48 @@ class SourceBuff(OwnerObject):
            *BOOL* unlogged -- if true, don't log the results of this
            search (used for searches done by mediator without user-initiation)
 
-           Returns *None* if no occurence was found. Otherwise,
-           returns a match object."""
+           **OUTPUTS**
+           
+           *BOOL* -- true if a match was found
+           """
 
         trace('SourceBuff.search_for', 
               "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s, self.cur_pos()=%s" %
                (regexp, direction, num, where, unlogged, self.cur_pos()))               
                        
+        best_match = self.search_for_match(regexp, direction =
+            direction, num = num, where = where)
+
+        if not unlogged:
+            self.log_search(regexp, direction, where, best_match)
+                   
+        if best_match is None:
+            return 0
+        
+        new_cur_pos = self.pos_extremity(best_match, where)
+        self.goto(new_cur_pos)
+        return 1    
+
+    def search_for_match(self, regexp, direction=1, num=1, where=1):
+        
+        """Finds the next occurence of regular expression
+           *STR regexp* in buffer, and returns the range corresponding
+           to the match
+
+           *INT* direction -- if positive, search forward, otherwise
+            search backward
+
+           *INT* num -- number of occurences to search for
+
+           *INT* where -- if positive, move cursor after the occurence,
+           otherwise move it before
+           
+           **OUTPUTS**
+           
+           *(INT, INT)* -- returns the range corresponding to the match,
+           or None if none was found
+           """
+
         success = None
 
         #
@@ -1396,76 +1508,72 @@ class SourceBuff(OwnerObject):
         l = self.len()
         
         if direction > 0:
-            trace('SourceBuff.search_for', 'searching forward')
+            trace('SourceBuff.search_for_match', 'searching forward')
             pos = self.cur_pos()
             count = 0
             while pos < l:
-                trace('SourceBuff.search_for', 
+                trace('SourceBuff.search_for_match', 
                    'searching from pos %d' % pos)
                 a_match = reobject.search(text, pos)
                 if not a_match:
-                    trace('SourceBuff.search_for', 
+                    trace('SourceBuff.search_for_match', 
                         'no more matches after cursor')
                     break
                 count = count + 1
                 if count >= num:
-                    trace('SourceBuff.search_for', 'found the one')
+                    trace('SourceBuff.search_for_match', 'found the one')
+# even if this is the same as the previous search, allow it unless we
+# find a better one
+                    best_match = a_match.span()
                     if not self.same_as_previous_search(regexp, direction,
                           where, a_match.span()):
-                        best_match = a_match.span()
+                        trace('SourceBuff.search_for_match', 'not same')
                         break
-                trace('SourceBuff.search_for', 
+                    trace('SourceBuff.search_for_match', 'same')
+                trace('SourceBuff.search_for_match', 
                    'found match from %d to %d' % a_match.span())
 #DCF: no overlapping matches
                 pos = a_match.end()
 #DCF:  ... but if we get a zero length match (e.g. '$' matching end of line), 
 # then we will continue to get the same match unless we advance the position
                 if a_match.start() == a_match.end():
-                    trace('SourceBuff.search_for', 
+                    trace('SourceBuff.search_for_match', 
                         'zero length match, better increment position anyway')
                     pos = pos + 1
 
         else:
             pos = 0
             matches = []
-            trace('SourceBuff.search_for', 'searching backwards')
+            trace('SourceBuff.search_for_match', 'searching backwards')
             while pos < l:
-                trace('SourceBuff.search_for', 
+                trace('SourceBuff.search_for_match', 
                     'searching from pos %d' % pos)
                 a_match = reobject.search(text, pos)
                 if not a_match or a_match.end() > self.cur_pos():
-                    trace('SourceBuff.search_for', 
+                    trace('SourceBuff.search_for_match', 
                         'no more matches before cursor')
                     break
                 matches.append(a_match.span())
-                trace('SourceBuff.search_for', 
+                trace('SourceBuff.search_for_match', 
                    'found match from %d to %d' % a_match.span())
 #DCF: no overlapping matches
                 pos = a_match.end()
 #DCF:  ... but if we get a zero length match (e.g. '$' matching end of line), 
 # then we will continue to get the same match unless we advance the position
                 if a_match.start() == a_match.end():
-                    trace('SourceBuff.search_for', 
+                    trace('SourceBuff.search_for_match', 
                         'zero length match, better increment position anyway')
                     pos = pos + 1
             if num <= len(matches):
                 a_match = matches[-num]
                 if not self.same_as_previous_search(regexp, direction,
                       where, a_match):
+                    trace('SourceBuff.search_for_match', 'not same')
                     best_match = a_match
                 elif num < len(matches):
                     best_match = matches[-(num + 1)]
 
-        if not unlogged:
-            self.log_search(regexp, direction, where, best_match)
-                   
-        if best_match is None:
-            return 0
-        
-        new_cur_pos = self.pos_extremity(best_match, where)
-        self.goto(new_cur_pos)
-        return 1    
-
+        return best_match
 
     def closest_occurence_to_cursor(self, occurences, 
                                     ignore_overlapping_with_cursor=0,
@@ -1608,7 +1716,8 @@ class SourceBuff(OwnerObject):
         debug.trace('SourceBuff.ignore_occurence', '** NOT ignoring')                                    
         return 0
 
-    def same_as_previous_search(self, regexp, direction, where, match):
+    def same_as_previous_search(self, regexp, direction, where, match,
+        pos = None):
         
         """Determines whether a particular match found by *search_for* is the
         same as the one found by its last invocation.
@@ -1623,7 +1732,7 @@ class SourceBuff(OwnerObject):
         
         *INT* where -- Put cursor at end or start of occurence
                 
-        *(INT, INT)* match -- Star and end position of the match
+        *(INT, INT)* match -- Start and end position of the match
         
 
         **OUTPUTS**
@@ -1658,12 +1767,22 @@ class SourceBuff(OwnerObject):
         # of that occurence using a command like: "before that" or "after that"
         #
         answer = 0
-        if (self.last_search != None and
-            match == self.last_search[3] and            
-            regexp == self.last_search[0] and
-            where == self.last_search[2] and
-            self.cur_pos() == self.pos_extremity(self.last_search[3], self.last_search[2])):
-                answer = 1
+        if self.last_search != None:
+            last_regexp, last_direction, last_where, \
+                last_match, last_alt_pos =  self.last_search
+            trace('SourceBuff.same_as_previous_search', 
+                'last reg = %s, where = %d, range = %s, pos = %s' % \
+                (last_regexp, last_where, last_match, last_alt_pos))
+            trace('SourceBuff.same_as_previous_search', 
+                'reg = %s, where = %d, range = %s, pos = %s' % \
+                (regexp, where, match, self.cur_pos()))
+            if match == last_match and regexp == last_regexp and \
+                    where == last_where:
+                pos = last_alt_pos
+                if pos is None:
+                    pos = self.pos_extremity(last_match, last_where)
+                if self.cur_pos() == pos:
+                    answer = 1
 
         return answer
           
@@ -1687,7 +1806,7 @@ class SourceBuff(OwnerObject):
             answer = range[0]
         return answer
 
-    def log_search(self, regexp, direction, where, match):
+    def log_search(self, regexp, direction, where, match, alt_pos = None):
         """Logs the result of most recent search or selection operation, so
         that we know not to return the same match if the user repeats it
         
@@ -1705,13 +1824,15 @@ class SourceBuff(OwnerObject):
         
         *(INT, INT)* match -- Start and end position of the match that was
         used.
-        
+
+        *INT* alt_pos -- if not None, alternative position to use
+        for comparisons, instead of match[where > 0]
 
         **OUTPUTS**
         
         *none* --
         """
-        self.last_search = (regexp, direction, where, match)
+        self.last_search = (regexp, direction, where, match, alt_pos)
 
     #
     # Callback methods. These are invoked by the external editor to notify
@@ -1721,9 +1842,6 @@ class SourceBuff(OwnerObject):
         """External editor invokes that callback to notify VoiceCode
         of a deletion event.
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
         
         (INT, INT) *range* -- Start and end pos of range to be deleted
@@ -1739,11 +1857,8 @@ class SourceBuff(OwnerObject):
     def insert_cbk(self, range, text):
         
         """External editor invokes that callback to notify VoiceCode
-        of a deletion event.
-
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
+        of an insertion event.
+    
         **INPUTS**
         
         (INT, INT) *range* -- Start and end position of text to be
@@ -1759,6 +1874,23 @@ class SourceBuff(OwnerObject):
         
         trace('SourceBuff.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         self.on_change(range[0], range[1], text, 0)
+
+    def contents_cbk(self, text):
+        
+        """External editor invokes that callback to inform VoiceCode
+        of the complete contents of the buffer.
+        
+        **INPUTS**
+        
+        STR *text* -- Up-to-date contents of the buffer
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        trace('SourceBuff.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
+        self.on_change(None, None, text, 0)
 
     def pos_selection_cbk(self, pos, selection):
         """External editor invokes that callback to notify VoiceCode
@@ -1795,10 +1927,12 @@ class SourceBuff(OwnerObject):
         # Figure out the text before/within/after the selection
         #
         selection_start, selection_end = self.get_selection()
+        swapped = 0
+        start_string = "<SEL_START>"
+        end_string = "<SEL_END>"
         if selection_start > selection_end:
-           tmp = selection_end
-           selection_end = selection_start
-           selection_start = tmp
+            selection_end, selection_start = selection_start, selection_end
+            start_string, end_string = end_string, start_string
            
         debug.trace('SourceBuff.print_buff',
             'self.name()=%s, selection_start, selection_end = %d, %d' % \

@@ -131,7 +131,7 @@ class SB_ServiceLang(SB_Service):
         """
         debug.virtual('SB_ServiceLang.language_name')
 
-    def file_language_name(self, fname):                
+    def file_language_name(self, file_name):                
         debug.virtual('SB_ServiceLang.file_language_name')
         
 class SB_ServiceLangServerSide(SB_ServiceLang):
@@ -172,15 +172,16 @@ class SB_ServiceLangServerSide(SB_ServiceLang):
         """
 
         language = None
-        fname = self.buff.file_name()
-        debug.trace('SB_ServiceLang.language_name', 'fname=%s, self.buff.name()=%s' % (fname, self.buff.name()))
-        if fname != None:
-            language = self.file_language_name(fname)
+        file_name = self.buff.file_name()
+        debug.trace('SB_ServiceLang.language_name', 
+            'file_name=%s, self.buff.name()=%s' % (file_name, self.buff.name()))
+        if file_name != None:
+            language = self.file_language_name(file_name)
         return language
 
-    def file_language_name(self, fname):
+    def file_language_name(self, file_name):
         language = None
-        a_match = re.match('^.*?\.([^\.]*)$', fname)
+        a_match = re.match('^.*?\.([^\.]*)$', file_name)
         extension = ""
         if a_match:
             extension = a_match.group(1)
@@ -226,13 +227,16 @@ class SB_ServiceLangMessaging(SB_ServiceLang, ClientSideImplementation):
 
         *STR* -- the name of the language
         """
-        self.talk_msgr().send_mess('language_name', {})
+        self.talk_msgr().send_mess('language_name', 
+            {'buff_name': self.buff.name()})
         response = self.talk_msgr().get_mess(expect=['language_name_resp'])
-        debug.trace('SB_ServiceLangMessaging.language_name', 'returning %s' % response[1]['value'])
+        debug.trace('SB_ServiceLangMessaging.language_name', 
+            'returning %s' % response[1]['value'])
         return response[1]['value']
         
-    def file_language_name(self, fname):                
-        self.talk_msgr().send_mess('file_language_name', {'file_name': fname})
+    def file_language_name(self, file_name):                
+        self.talk_msgr().send_mess('file_language_name', 
+            {'file_name': file_name})
         response = self.talk_msgr().get_mess(expect=['file_language_name_resp'])
         return response[1]['value']
         

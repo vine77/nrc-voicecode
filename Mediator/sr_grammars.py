@@ -249,8 +249,9 @@ class WinGram(GramCommon, OwnerObject):
         *STR* -- the message
         """
         s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
-        debug.trace('WinGram.format_utterance_message', 
-            "Full utterance was %s" % repr(words))
+        if debug.tracing('WinGram.format_utterance_message'):
+            debug.trace('WinGram.format_utterance_message', 
+                "Full utterance was %s" % repr(words))
         return s
         
 class DictWinGram(WinGram):
@@ -341,8 +342,9 @@ class DictWinGram(WinGram):
 
         *none*
         """
-        debug.trace('DictWinGram.on_results', 'results.words()=%s, self.results_callback=%s, self.manager=%s' % 
-                    (repr(results.words()), self.results_callback, self.manager))
+        if debug.tracing('DictWinGram.on_results'):
+            debug.trace('DictWinGram.on_results', 'results.words()=%s, self.results_callback=%s, self.manager=%s' % 
+                        (repr(results.words()), self.results_callback, self.manager))
         self.results_callback(results.words())
         self.manager.interpret_dictation(results, \
             initial_buffer = self.buff_name)
@@ -512,7 +514,8 @@ class SelectWinGram(WinGram):
                 ignore_overlapping_with_cursor=0,
                 buff_name = self.buff_name)
                 
-        debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' % (repr(ranges), closest_range_index))
+        if debug.tracing('SelectWinGram.find_closest'):
+            debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' % (repr(ranges), closest_range_index))
         if closest_range_index == None:
             return
 
@@ -1672,10 +1675,11 @@ class SimpleSelection(WinGram):
             self.visible = self.get_visible_cbk()
             self.selection = self.get_selection_cbk()
             self._set_visible(self.visible)
-            debug.trace('SimpleSelection.recognition_starting', 
-                'visible = "%s"' % self.visible)
-            debug.trace('SimpleSelection.recognition_starting', 
-                'selection = %d, %d' % self.selection)
+            if debug.tracing('SimpleSelection.recognition_starting'):
+                debug.trace('SimpleSelection.recognition_starting', 
+                    'visible = "%s"' % self.visible)
+                debug.trace('SimpleSelection.recognition_starting', 
+                    'selection = %d, %d' % self.selection)
 
     def activate(self, window):
         """activates the grammar for recognition tied to the current window,

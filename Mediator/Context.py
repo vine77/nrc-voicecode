@@ -133,10 +133,18 @@ class Context(Object):
         if position != newpos:
             msg = "Warning: context %s" % self + \
                   "\ndidn't restore the cursor position\n"
+            msg = msg + 'old position, selection were %d, (%d, %d)\n' \
+                % ((position,) + selection)
+            msg = msg + 'new position, selection were %d, (%d, %d)\n' \
+                % ((newpos,) + newsel)
             sys.stderr.write(msg)
         if selection != newsel:
             msg = "Warning: context %s" % self + \
                   "\ndidn't restore the selection\n"
+            msg = msg + 'old position, selection were %d, (%d, %d)\n' \
+                % ((position,) + selection)
+            msg = msg + 'new position, selection were %d, (%d, %d)\n' \
+                % ((newpos,) + newsel)
             sys.stderr.write(msg)
         app.set_selection(selection, cursor_at)
         return answer

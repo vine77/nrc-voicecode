@@ -1129,7 +1129,7 @@ class SymbolConstruction(Object):
     the symbols already created during interpretation of this
     utterance
 
-    *BOOL exact_symbol* -- true with the words which have been added
+    *BOOL exact_symbol* -- true if the words which have been added
     so far form an exact symbol match
 
     *BOOL allow_inexact* -- if true, allow inexact matches to the
