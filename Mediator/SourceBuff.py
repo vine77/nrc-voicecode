@@ -1083,6 +1083,25 @@ class SourceBuff(OwnerObject):
         debug.virtual('SourceBuff.compare_selection_with_current')
 
 
+    def get_state_pos_selection(self, cookie):
+        """retrieves the position and selection from a given state
+        cookie.  
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *(INT, (INT, INT))* -- position and selection at the time the
+        cookie was created by store_current_state, or None if the cookie
+        is invalid (usually because the state corresponding to the cookie 
+        has been lost).
+        """
+        debug.virtual('SourceBuff.get_state_pos_selection')
+
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
         If the state corresponding to the cookie has
@@ -1758,17 +1777,28 @@ class BackspaceMixIn(Object):
         start = max(0, start)
         self.delete(range = (start, end))
         
-class SourceBuffWithServices(sb_mixins.WithKbdService, SourceBuff):
+class SourceBuffWithServices(sb_mixins.WithKbdService,
+    sb_mixins.WithStateService, SourceBuff):
     """partial implementation of SourceBuff using sb_mixins to implement
     some methods using mixins
 
     Mixins included currently are:
 
     WithKbdService
+    WithStateService*
+    
+    *Note: this is temporary, only until we get the diff-based state
+    system implemented.  Then SourceBuffNonCached will use
+    WithStateService, but most concrete subclasses of SourceBuffCached 
+    will not.
     """
     
     def __init__(self, **attrs):
         self.deep_construct(SourceBuffWithServices,
                             {}, attrs
                             )
+    def remove_other_references(self):
+        sb_mixins.WithKbdService.remove_other_references(self)
+        sb_mixins.WithStateService.remove_other_references(self)
+        SourceBuff.remove_other_references(self)
 

@@ -968,7 +968,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         
     def cmd_set_selection(self, arguments):
         buff_name = arguments['buff_name']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         cursor_at = messaging.messarg2int(arguments['cursor_at'])
         self.editor.set_selection(range, cursor_at, buff_name = buff_name)
         updates =  self.pos_selection_update(buff_name)
@@ -1030,7 +1030,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def cmd_indent(self, arguments):
         buff_name = arguments['buff_name']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:
@@ -1045,7 +1045,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def cmd_insert(self, arguments):
         buff_name = arguments['buff_name']
         text = arguments['text']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:
@@ -1061,7 +1061,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         buff_name = arguments['buff_name']
         code_bef = arguments['code_bef']
         code_after = arguments['code_after']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:
@@ -1095,7 +1095,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def cmd_delete(self, arguments):
         buff_name = arguments['buff_name']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:
@@ -1110,7 +1110,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def cmd_incr_indent_level(self, arguments):
         buff_name = arguments['buff_name']
         levels = arguments['levels']
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:
@@ -1125,7 +1125,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def cmd_decr_indent_level(self, arguments):
         buff_name = arguments['buff_name']
         levels = messaging.messarg2int(arguments['levels'])
-        range = messaging.messarg2intlist(arguments['range'])
+        range = messaging.messarg2inttuple(arguments['range'])
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:

@@ -2253,13 +2253,28 @@ Emacs has set 'vcode-app-id to a non nil value."
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "buff_name" (buffer-name) mess-cont)
      (cl-puthash "action" "close_buff" mess-cont)
-     (vr-send-cmd 
-       (run-hook-with-args 
-	 'vr-serialize-message-hook (list "updates" mess-cont)))
+; DCF - try this instead
+     (vr-send-cmd
+       (vcode-serialize-updates (list mess-cont)))
+       
+; DCF - AppStateMessaging is not expecting this format
+;     (vr-send-cmd (list 'updates mess-cont))
+;       (run-hook-with-args 
+;	 'vr-serialize-message-hook (list "updates" mess-cont)))
    )
 )
 
 (defun vcode-send-activate-buffer ()
+   "Sends a message to VCode server to tell it that Emacs has voice activated
+a buffer"
+   (let ((mess-cont (make-hash-table :test 'string=)))
+     (cl-puthash "buff_name" (buffer-name) mess-cont)
+     (cl-puthash "action" "curr_buffer" mess-cont)
+     (vr-send-cmd (list 'updates mess-cont))
+   )
+)
+
+(defun vcode-send-deactivate-buffer ()
    "Sends a message to VCode server to tell it that Emacs has voice deactivated
 a buffer"
    (let ((mess-cont (make-hash-table :test 'string=)))
@@ -2268,6 +2283,7 @@ a buffer"
      (vr-send-cmd (list 'updates mess-cont))
    )
 )
+
 
 (defun vcode-cmd-suspendable (vcode-request)
    (let ((resp-cont (make-hash-table :test 'string=)))
@@ -2488,6 +2504,23 @@ a buffer"
       (setq a-change-hash (vcode-generate-pos-select-change-hash (nth 1 a-change)))
     )
     a-change-hash
+)
+
+(defun vcode-serialize-updates (update-hash-list)
+  "Creates an Emacs-initiated updates message to be sent to VCode 
+  speech server.
+
+Argument 'change-list is a list of hashes representing updates to be
+sent.
+
+"
+
+  (let ((mess-name "updates") (mess-key "value") 
+        (mess-cont (make-hash-table :test 'string=)))
+    (cl-puthash mess-key update-hash-list mess-cont)
+
+    (run-hook-with-args 
+      'vr-serialize-message-hook (list mess-name mess-cont)))
 )
 
 (defun vcode-serialize-changes (change-list)

@@ -52,8 +52,6 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
 
     [SB_ServiceIndent] *indent_srv* -- Code indentation service.
 
-    [SB_ServiceFullState] *state_srv* -- Buffer state save/restore service.
-
     CLASS ATTRIBUTES**
 
     *none*
@@ -68,9 +66,8 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
         
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
-                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
-                         'state_srv':
-                         sb_services.SB_ServiceFullState(buff = self)})
+                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1)
+                         })
 
         self.deep_construct(SourceBuffEdSim,
                             {'pos': init_pos, 
@@ -83,7 +80,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
                             attrs
                             )
 
-        self.add_owned_list(['state_srv', 'indent_srv', 'line_srv', 'lang_srv'])
+        self.add_owned_list(['indent_srv', 'line_srv', 'lang_srv'])
 
         if self.instance_reporting:
             print 'SourceBuff.__init__:', util.within_VCode(self.name())
@@ -431,138 +428,6 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
         """
 
         self.line_srv.goto_line(linenum, where)
-
-    def _state_cookie_class(self):
-        """returns the class object for the type of cookie used by
-        store_current_state.
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *CLASS* -- class of state cookies corresponding to this
-        SourceBuff
-
-        """
-        return self.state_srv._state_cookie_class()
-        
-    def store_current_state(self):
-        """stores the current state of the buffer, including both the
-        contents and the current selection, for subsequent restoration.
-        store_current_state returns a "cookie" which can be passed to
-        restore_state or compare_with_current.  The type and attributes
-        of the cookie will depend on the specific subclass of
-        SourceBuff.  In the most straightforward implementation, it 
-        may include a copy of the entire contents of the
-        buffer and the selection.  In other cases, particularly when the
-        editor or SourceBuff provides an internal undo stack, it may simply be a
-        reference to a point in this stack.
-        
-        Important Notes:
-        
-        You should only pass the cookie to methods of
-        the SAME SourceBuff object from which it came.  Generally,
-        cookies can not be pickled and retrieved.
-
-        The type of cookie will vary with the concrete subclass 
-        of SourceBuff.  The corresponding class object is 
-        returned by _state_cookie_class.  However, external callers
-        should not depend on the type, attributes, or methods 
-        of the cookie.
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *SourceBuffState* -- state cookie (see above)
-        """
-        return self.state_srv.store_current_state()
-
-    def restore_state(self, cookie):
-        """restores the buffer to its state at the time when
-        the cookie was returned by store_current_state.  Both the
-        contents and the selection will be restored.  However, other
-        data, such as the search history, may not.  The restore
-        operation can fail, which will be indicated by a return value of
-        0, so the caller should always check the return value.
-        
-        **INPUTS**
-
-        *SourceBuffState cookie* -- see above.
-
-        **OUTPUTS**
-
-        *BOOL* -- true if restore was successful
-
-        """
-        debug.trace('SourceBuffEdSim.restore_state', 
-            '%s calling state server' % self.name())
-        return self.state_srv.restore_state(cookie)
-      
-    def compare_states(self, first_cookie, second_cookie, selection = 0):
-        """compares the buffer states at the times when
-        two cookies were returned by store_current_state.  By default,
-        only the buffer contents are compared, not the selection, unless
-        selection == 1.  If the state corresponding to either cookie has
-        been lost, compare_states will return false.
-
-        **INPUTS**
-
-        *SourceBuffCookie* first_cookie, second_cookie -- see 
-        store_current_state.  Note that SourceBuffCookie is a dummy 
-        type, not an actual class.  The actual type will vary with 
-        SourceBuff subclass.
-
-        *BOOL* selection -- compare selection as well as contents
-
-        **OUTPUTS**
-
-        *BOOL* -- true if states are the same, false if they are not, or
-        it cannot be determined due to expiration of either cookie
-        """
-        return self.state_srv.compare_states(first_cookie,
-            second_cookie, selection)
-
-
-    def compare_with_current(self, cookie, selection = 0):
-        """compares the current buffer state to its state at the time when
-        the cookie was returned by store_current_state.  By default,
-        only the buffer contents are compared, not the selection, unless
-        selection == 1.  If the state corresponding to the cookie has
-        been lost, compare_with_current will return false.
-
-        **INPUTS**
-
-        *SourceBuffState cookie* -- see store_current_state.
-
-        *BOOL* selection -- compare selection as well as contents
-
-        **OUTPUTS**
-
-        *BOOL* -- true if state is the same, false if it is not, or
-        it cannot be determined due to expiration of the cookie
-        """
-        return self.state_srv.compare_with_current(cookie, selection)
-        
-    def valid_cookie(self, cookie):
-        """checks whether a state cookie is valid or expired.
-        If the state corresponding to the cookie has
-        been lost, valid_cookie will return false.
-
-        **INPUTS**
-
-        *SourceBuffState cookie* -- see store_current_state. 
-
-        **OUTPUTS**
-
-        *BOOL* -- true if cookie is valid (i.e. restore_state should be
-        able to work)
-        """
-        return self.state_srv.valid_cookie(cookie)
 
     def newline_conventions(self):
         

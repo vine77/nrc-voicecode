@@ -498,7 +498,7 @@ class BufferStates(OwnerObject):
         self.deep_construct(BufferStates, {}, args)
     
     def known_buffer(self, buff_name):
-        """returns the state cookie associated with a given buff_name
+        """does the state have a cookie for a buffer with a given buff_name?
 
         **INPUTS**
 
@@ -572,12 +572,15 @@ class BufferStates(OwnerObject):
         """
         debug.virtual('BufferStates.rename_buffer_cbk')
 
-    def compare_with_current(self, app, ignore_new = 1, ignore_deleted = 0):
+    def compare_with_current(self, app, selection = 0, 
+        ignore_new = 1, ignore_deleted = 0):
         """compares the stored state to the current one.
         
         **INPUTS**
 
         *AppState app* -- the editor whose states should be compared
+
+        *BOOL* selection -- compare selection as well as contents
 
         *BOOL ignore_new* -- should we ignore new buffers (ones in the
         current state but not in the stored state)?
@@ -591,6 +594,33 @@ class BufferStates(OwnerObject):
         it cannot be determined due to expiration of cookies
         """
         debug.virtual('BufferStates.compare_with_current')
+
+    def changed_buffers(self, app, selection = 0, 
+        ignore_new = 1, ignore_deleted = 0):
+        """reports which buffers have changed between the stored state 
+        and the current one.
+        
+        **INPUTS**
+
+        *AppState app* -- the editor whose states should be compared
+
+        *BOOL* selection -- compare selection as well as contents
+
+        *BOOL ignore_new* -- should we ignore new buffers (ones in the
+        current state but not in the stored state)?
+
+        *BOOL ignore_deleted* -- should we ignore buffers which no
+        longer exist in the current state?
+
+        **OUTPUTS**
+
+        *[STR]* -- list of names of affected buffers.  Note: if no
+        buffers have been changed, an empty list will be returned, but
+        if any cookies have expired or are invalid, changed_buffers will
+        return None.  The caller should be careful to distinguish 
+        between these two cases
+        """
+        debug.virtual('BufferStates.changed_buffers')
 
     def restore_state(self, app, buffers = None):
         """restores the editor to its stored state
@@ -676,7 +706,7 @@ class BufferStatesBasic(BufferStates):
                 self.cookies[buff_name] = buffer.store_current_state()
 
     def known_buffer(self, buff_name):
-        """returns the state cookie associated with a given buff_name
+        """does the state have a cookie for a buffer with a given buff_name?
 
         **INPUTS**
 
@@ -768,12 +798,15 @@ class BufferStatesBasic(BufferStates):
         except KeyError:
             pass
 
-    def compare_with_current(self, app, ignore_new = 1, ignore_deleted = 0):
+    def compare_with_current(self, app, selection = 0,
+        ignore_new = 1, ignore_deleted = 0):
         """compares the stored state to the current one.
         
         **INPUTS**
 
         *AppState app* -- the editor whose states should be compared
+
+        *BOOL* selection -- compare selection as well as contents
 
         *BOOL ignore_new* -- should we ignore new buffers (ones in the
         current state but not in the stored state)?
@@ -799,9 +832,61 @@ class BufferStatesBasic(BufferStates):
                 if ignore_deleted:
                     continue
                 return 0
-            if not buffer.compare_with_current(self.cookies[buff_name]):
+            if not buffer.compare_with_current(self.cookies[buff_name],
+                selection = selection):
                 return 0
         return 1
+
+    def changed_buffers(self, app, selection = 0, 
+        ignore_new = 1, ignore_deleted = 0):
+        """reports which buffers have changed between the stored state 
+        and the current one.
+        
+        **INPUTS**
+
+        *AppState app* -- the editor whose states should be compared
+
+        *BOOL* selection -- compare selection as well as contents
+
+        *BOOL ignore_new* -- should we ignore new buffers (ones in the
+        current state but not in the stored state)?
+
+        *BOOL ignore_deleted* -- should we ignore buffers which no
+        longer exist in the current state?
+
+        **OUTPUTS**
+
+        *[STR]* -- list of names of affected buffers.  Note: if no
+        buffers have been changed, an empty list will be returned, but
+        if any cookies have expired or are invalid, changed_buffers will
+        return None.  The caller should be careful to distinguish 
+        between these two cases
+        """
+        changed = []
+# add new buffers to changed list, unless we are ignoring new buffers
+        if not ignore_new:
+            current_buffers = app.open_buffers_from_app()
+            for buff_name in current_buffers:
+                if not self.known_buffer(buff_name):
+                    changed.append(buff_name)
+
+        for buff_name in self.known_buffers():
+            cookie = self.cookies[buff_name]
+            buffer = app.find_buff(buff_name)
+# add deleted buffers to changed list, unless we are ignoring deleted buffers
+            if not buffer:
+                if not ignore_deleted:
+                    changed.append(buff_name)
+                continue
+            if not buffer.valid_cookie(cookie):
+# but return None if any known and undeleted buffers lack a valid cookie
+                return None
+# now, the buffer should still exist and the cookie should be valid, so a 
+# comparison should only fail if the buffer was indeed changed
+            if not buffer.compare_with_current(cookie, selection = selection):
+                changed.append(buff_name)
+
+        return changed
 
     def restore_state(self, app, buffers = None):
         """restores the editor to its stored state
@@ -960,6 +1045,21 @@ class StateStack(OwnerObject):
         """
         debug.virtual('StateStack.safe_depth')
 
+    def safe_reinterp_depth(self, app):
+        """returns the number of entries in the stack which can be
+        safely restored and then reinterpreted
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *INT* -- the depth in the state stack to which we can
+        safely restore the editor and then reinterpret the undone utterances
+        """
+        debug.virtual('StateStack.safe_reinterp_depth')
+
     def undo_manual_changes(self, app):
         """restores the editor to its state just after the most recent 
         dictated utterance, but prior to any subsequent manual changes.
@@ -1003,6 +1103,28 @@ class StateStack(OwnerObject):
         """
         debug.virtual('StateStack.can_restore')
 
+    def can_reinterpret(self, app, n):
+        """can we safely restore the editor to its nth most recent
+        stored state (popping n entries off our stack), and then
+        reinterpret the corresponding utterances?
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we can safely restore to that state, and then
+        reinterpret the undone utterances
+        """
+        debug.virtual('StateStack.can_reinterpret')
+
     def pop(self, app, n):
         """restores the editor to its nth most recent stored state, if
         this can be done safely, popping n entries off our stack.
@@ -1037,7 +1159,9 @@ class StateStack(OwnerObject):
         """
         debug.virtual('StateStack.rename_buffer_cbk')
 
-class StateStackBasic(StateStack):
+class OldStateStackBasic(StateStack):
+# note: this implementation is not actually safe, and may cause reinterpreted
+# utterances to insert text in the wrong place
     """implementation of StateStack using BufferStatesBasic
 
     **INSTANCE ATTRIBUTES**
@@ -1124,10 +1248,37 @@ class StateStackBasic(StateStack):
                 ignore_deleted = self.ignore_deleted):
 # if the current state doesn't match that after the (previous) most
 # recent utterance, then the rest of the stack is invalid, so clear it
-            self.states = []
+            self._clear()
         self.after_utterance = None
         current = BufferStatesBasic(app)
         self._push(current)
+
+    def _clear(self):
+        """private method to clear the stack(s)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.states = []
+
+    def _pop_states(self, n):
+        """private method to pop the last n states off the stack 
+        (without restoring them)
+
+        **INPUTS**
+
+        *INT n* -- number of states to pop
+
+        **OUTPUTS**
+
+        *none*
+        """
+        del self.states[-n:]
 
     def _push(self, state):
         """private method to push a state onto the stack, removing an
@@ -1137,6 +1288,9 @@ class StateStackBasic(StateStack):
 
         *BufferStateBasic state* -- the state to push onto the stack
 
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
         **OUTPUTS**
 
         *none*
@@ -1144,6 +1298,24 @@ class StateStackBasic(StateStack):
         self.states.append(state)
         if self.max_depth > 0 and len(self.states) > self.max_depth:
             del self.states[0]
+
+    def _delete_invalid_states(self, n):
+        """private method which deletes all but the last n entries
+        from the state stack and all corresponding stacks.
+
+        **INPUTS**
+
+        *INT n* -- the number of states to LEAVE on the stack
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we were not between before_interp and
+        after_interp and could safely delete these entries
+        """
+        if self.after_utterance is None:
+            return 0
+        del self.states[0:-n]
+        return 1
 
     def after_interp(self, app, initial_buffer = None):
         """method which must be called after interpretation of a
@@ -1230,9 +1402,27 @@ class StateStackBasic(StateStack):
                 debug.trace('StateStackBasic.safe_depth', 
                     'cookie at %d no longer valid, deleting' % n)
 # if the cookies aren't valid, we might as well delete those states
-                del self.states[0:-(n-1)]
+                self._delete_invalid_states(n-1)
                 return n-1
         return len(self.states)
+
+    def safe_reinterp_depth(self, app):
+        """returns the number of entries in the stack which can be
+        safely restored and then reinterpreted
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *INT* -- the depth in the state stack to which we can
+        safely restore the editor and then reinterpret the undone utterances
+        """
+        return self.safe_depth(app)
+# note: this is not actually safe, and may cause reinterpreted
+# utterances to insert text in the wrong place, but it is the
+# best this implementation can do
 
     def undo_manual_changes(self, app):
         """restores the editor to its state just after the most recent 
@@ -1287,6 +1477,31 @@ class StateStackBasic(StateStack):
             return 1
         return 0
 
+    def can_reinterpret(self, app, n):
+        """can we safely restore the editor to its nth most recent
+        stored state (popping n entries off our stack), and then
+        reinterpret the corresponding utterances?
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we can safely restore to that state, and then
+        reinterpret the undone utterances
+        """
+        return self.can_restore(app, n)
+# note: this is not actually safe, and may cause reinterpreted
+# utterances to insert text in the wrong place, but it is the
+# best this implementation can do
+
     def old_pop(self, app, n):
         """restores the editor to its nth most recent stored state, if
         this can be done safely, popping n - 1 entries off our stack.
@@ -1325,7 +1540,6 @@ class StateStackBasic(StateStack):
                 temporary.restore_state(app)
                 return 0
         self.after_utterance = self.states[-n]
-        del self.states[-n:]
         return 1
 
     def pop(self, app, n):
@@ -1388,7 +1602,7 @@ class StateStackBasic(StateStack):
                 temporary.restore_state(app)
                 return 0
         self.after_utterance = self.states[-n]
-        del self.states[-n:]
+        self._pop_states(n)
         return 1
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
@@ -1407,6 +1621,687 @@ class StateStackBasic(StateStack):
         """
         for state in self.states:
             state.rename_buffer_cbk(old_buff_name, new_buff_name)
+
+class StateStackBasic(StateStack):
+    """implementation of StateStack using BufferStatesBasic
+
+    **INSTANCE ATTRIBUTES**
+
+    *[BufferStatesBasic] states* -- the stack of stored editor states
+    before each utterance
+
+    *[STR] initial_buffers* -- stack of initial buffers for each utterance
+
+    *[BOOL] cross_buffer* -- stack of flags for each utterance,
+    indicating which ones were cross-buffer utterances (ones which
+    affected the state, position, or selection of any buffer other than 
+    their initial_buffer)
+
+    *[INT] pos_after* -- stack of positions in the initial buffer 
+    after each utterance
+
+    *[(INT, INT)] sel_after* -- stack of selections in the initial
+    buffer after each utterance
+
+    *BufferStatesBasic after_utterance* -- the state of the editor after
+    the most recent utterance
+
+    *INT max_depth* -- maximum depth of the stack
+
+    *BOOL ignore_new* -- should we ignore new buffers (ones in the
+    current state but not in the stored state) when comparing states,
+    and simply restore the states of the stored buffers?
+
+    *BOOL ignore_deleted* -- should we ignore buffers which no
+    longer exist in the current state, and simply restore the states of
+    the buffers which still exist?
+    """
+    def __init__(self, max_depth, ignore_new = 1, ignore_deleted = 0, **args):
+        """
+        **INPUTS**
+
+        *INT max_depth* -- maximum depth of the stack, or -1 to allow an
+        unlimited stack
+
+        *BOOL ignore_new* -- should we ignore new buffers (ones in the
+        current state but not in the stored state) when comparing states,
+        and simply restore the states of the stored buffers?
+
+        *BOOL ignore_deleted* -- should we ignore buffers which no
+        longer exist in the current state, and simply restore the states of
+        the buffers which still exist?
+        """
+        self.deep_construct(StateStackBasic, 
+                            {
+                             'states': [],
+                             'initial_buffers': [],
+                             'cross_buffer': [],
+                             'pos_after': [],
+                             'sel_after': [],
+                             'after_utterance': None,
+                             'max_depth': max_depth,
+                             'ignore_new': ignore_new,
+                             'ignore_deleted': ignore_deleted
+                            }, args)
+        self.add_owned('states')
+
+    def before_interp(self, app, initial_buffer = None):
+        """method which must be called before interpretation of a
+        dictation utterance to store editor state (or compare with the
+        state stored after the previous utterance).
+
+        This method will compare the state after the most recent dictation 
+        utterance to the current state.  If they do not match,
+        before_interp will clear the stack.  Then, it will push the 
+        current state onto the stack.
+
+        After this method returns, the top of the stack will be the 
+        editor state before the utterance is interpreted.
+
+        **NOTE:** To maintain the integrity of the StateStack, before_interp
+        MUST be called before every dictation utterance which is stored in
+        the utterance stack, after_interp MUST be called after the utterance
+        and before any other updates (besides those in direct response to
+        the interpretation) from the editor are processed, and no other
+        methods of StateStack may be called between the calls to
+        before_interp and after_interp.
+            
+        **INPUTS**
+
+        *AppState app* -- the editor into which the user is dictating
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.after_utterance and \
+            not self.after_utterance.compare_with_current(app, 
+                ignore_new = self.ignore_new,
+                ignore_deleted = self.ignore_deleted):
+# if the current state doesn't match that after the (previous) most
+# recent utterance, then the rest of the stack is invalid, so clear it
+                self._clear()
+        self.after_utterance = None
+        current = BufferStatesBasic(app)
+        if initial_buffer is None:
+            initial_buffer = app.curr_buffer_name()
+        self._push(current, initial_buffer)
+
+    def _clear(self):
+        """private method to clear the stack(s)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.states = []
+        self.initial_buffers = []
+        self.pos_after = []
+        self.sel_after = []
+        self.cross_buffer = []
+
+    def _pop_states(self, n):
+        """private method to pop the last n states off the stack 
+        (without restoring them)
+
+        **INPUTS**
+
+        *INT n* -- number of states to pop
+
+        **OUTPUTS**
+
+        *none*
+        """
+        del self.states[-n:]
+        del self.initial_buffers[-n:]
+        del self.cross_buffer[-n:]
+        del self.pos_after[-n:]
+        del self.sel_after[-n:]
+
+    def check_stacks(self):
+        """check that all the stacks are the same height
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        d = len(self.states)
+        if len(self.initial_buffers) != d:
+            debug.trace('StateStackBasic.check_stacks',
+                '%d states but %d initial_buffers' % \
+                (d, len(self.initial_buffers)))
+        if len(self.cross_buffer) != d:
+            debug.trace('StateStackBasic.check_stacks',
+                '%d states but %d cross_buffer' % \
+                (d, len(self.cross_buffer)))
+        if len(self.pos_after) != d:
+            debug.trace('StateStackBasic.check_stacks',
+                '%d states but %d pos_after' % \
+                (d, len(self.pos_after)))
+        if len(self.sel_after) != d:
+            debug.trace('StateStackBasic.check_stacks',
+                '%d states but %d sel_after' % \
+                (d, len(self.sel_after)))
+
+    def _push(self, state, initial_buffer):
+        """private method to push a state onto the stack, removing an
+        element from the bottom if the depth exceeds max_depth
+
+        **INPUTS**
+
+        *BufferStateBasic state* -- the state to push onto the stack
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.check_stacks()
+        self.states.append(state)
+        self.initial_buffers.append(initial_buffer)
+# we only push new entries onto the states and initial_buffers stack here,
+# so after_interp must push new entries onto the rest
+        if self.max_depth > 0 and len(self.states) > self.max_depth:
+            del self.states[0]
+            del self.initial_buffers[0]
+            del self.cross_buffer[0]
+            del self.pos_after[0]
+            del self.sel_after[0]
+# However, since we remove the bottom of all stacks here, we must *not* do so 
+# after interpretation
+
+    def _delete_invalid_states(self, n):
+        """private method which deletes all but the last n entries
+        from the state stack and all corresponding stacks.
+
+        **INPUTS**
+
+        *INT n* -- the number of states to LEAVE on the stack
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we were not between before_interp and
+        after_interp and could safely delete these entries
+        """
+        if self.after_utterance is None:
+            return 0
+        del self.states[0:-n]
+        del self.initial_buffers[0:-n]
+        del self.cross_buffer[0:-n]
+        del self.pos_after[0:-n]
+        del self.sel_after[0:-n]
+        self.check_stacks()
+        return 1
+
+    def after_interp(self, app, initial_buffer = None):
+        """method which must be called after interpretation of a
+        dictation utterance to store editor state.
+
+        This method will store the current state, but not on the stack.
+
+        **NOTE:** To maintain the integrity of the StateStack, before_interp
+        MUST be called before every dictation utterance which is stored in
+        the utterance stack, after_interp MUST be called after the utterance
+        and before any other updates (besides those in direct response to
+        the interpretation) from the editor are processed, and no other
+        methods of StateStack may be called between the calls to
+        before_interp and after_interp.
+        
+        **INPUTS**
+
+        *AppState app* -- the editor into which the user is dictating
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        current = BufferStatesBasic(app)
+        self.after_utterance = current
+
+        if initial_buffer is None:
+            initial_buffer = app.curr_buffer_name()
+        buffer = app.find_buff(initial_buffer)
+        if not buffer:
+            self._push_cross_buffer()
+            debug.trace('StateStackBasic.after_interp', 
+                    'buffer %s not found (so cross-buffer utterance)' \
+                    % initial_buffer)
+            return
+
+        before = self.states[-1]
+        changed = before.changed_buffers(app, selection = 1, 
+            ignore_new = 0, ignore_deleted = 0)
+        if len(changed) > 1 \
+            or (len(changed) == 1 and changed[0] != initial_buffer):
+            debug.trace('StateStackBasic.after_interp', 
+                    'initial, changed buffers are %s, %s' \
+                    % (initial_buffer, repr(changed)))
+            self._push_cross_buffer()
+            return
+        cookie = current.cookie(initial_buffer)
+        pos, sel = buffer.get_state_pos_selection(cookie)
+        self._push_single_buffer(pos, sel)
+
+    def _push_cross_buffer(self):
+        """push supplementary information about a cross_buffer utterance
+        onto the appropriate stacks
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.cross_buffer.append(1)
+        self.pos_after.append(None)
+        self.sel_after.append(None)
+        self.check_stacks()
+# _push has already removed the bottom of the stack if necessary, so we
+# don't do so here
+
+    def _push_single_buffer(self, pos, selection):
+        """push supplementary information about a single buffer utterance
+        onto the appropriate stacks
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.cross_buffer.append(0)
+        self.pos_after.append(pos)
+        self.sel_after.append(selection)
+        self.check_stacks()
+# _push has already removed the bottom of the stack if necessary, so we
+# don't do so here
+
+    def safe_depth_preliminaries(self, app):
+        """does preliminary checks for the full safe_depth/safe_reinterp_depth 
+        checks, including synchronizing VoiceCode with the editor
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the state stack is not empty, we are not in
+        between before_interp and after_interp, and the buffer has not
+        changed since after the last utterance
+        """
+        if len(self.states) == 0:
+            debug.trace('StateStackBasic.safe_depth_preliminaries', 'empty stack')
+            return 0
+        if self.after_utterance is None:
+            debug.trace('StateStackBasic.safe_depth_preliminaries', 
+                'no state after utterance')
+            return 0
+        if debug.trace_is_active('StateStackBasic.safe_depth_preliminaries'):
+            debug.trace('StateStackBasic.safe_depth_preliminaries',
+                 'called from thread %s' %
+                 threading.currentThread().getName())
+#            debug.print_call_stack()
+# have to synchronize to ensure that we've processed any pending updates
+# and that "current" is really current.
+        debug.trace('StateStackBasic.safe_depth_preliminaries', 
+            'about to synchronize')
+        app.synchronize_with_app()
+        debug.trace('StateStackBasic.safe_depth_preliminaries', 
+            'just synchronized, about to compare')
+        same = self.after_utterance.compare_with_current(app, 
+            ignore_new = self.ignore_new, 
+            ignore_deleted = self.ignore_deleted)
+        if not same:
+            debug.trace('StateStackBasic.safe_depth_preliminaries', 'not same')
+            return 0
+        return 1
+
+    def safe_depth(self, app):
+        """returns the number of entries in the stack which can be
+        safely restored
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *INT* -- the depth in the state stack to which we can
+        safely restore the editor
+        """
+        if not self.safe_depth_preliminaries(app):
+            return 0
+        debug.trace('StateStackBasic.safe_depth', 'same as after_utterance')
+        self.check_stacks()
+# in this implementation, we clear the stack whenever the state before
+# the next dictation utterance doesn't match the state after
+# the previous utterance.  Therefore, the only thing left to check is
+# whether the states in the stack have valid cookies
+        for n in range(1, len(self.states) + 1):
+            if not self.states[-n].valid_cookies(app, 
+                ignore_deleted = self.ignore_deleted):
+                debug.trace('StateStackBasic.safe_depth', 
+                    'cookie at %d no longer valid, deleting' % n)
+# if the cookies aren't valid, we might as well delete those states
+                self._delete_invalid_states(n-1)
+                return n-1
+        return len(self.states)
+
+
+    def safe_reinterp_depth(self, app):
+        """returns the number of entries in the stack which can be
+        safely restored and then reinterpreted
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *INT* -- the depth in the state stack to which we can
+        safely restore the editor and then reinterpret the undone utterances
+        """
+        if not self.safe_depth_preliminaries(app):
+            return 0
+        debug.trace('StateStackBasic.safe_reinterp_depth', 
+            'same as after_utterance')
+        self.check_stacks()
+# in this implementation, we don't allow reinterpretation of 
+#
+# (1) any  cross-buffer utterances, or 
+# 
+# (2) any single-buffer utterance whose buffer no longer exists
+#
+# (3) any single-buffer utterances for which the position and selection 
+# in that buffer were changed after that utterance was interpreted and 
+# before the next utterance with the same initial buffer (if any)
+
+# To enforce the third condition, we need to work backwards through the
+# state stack, keeping track of which utterances most recently started in 
+# each buffer.  We do this with the most_recent_utterance map
+        most_recent_utterance = {}
+
+        for n in range(1, len(self.states) + 1):
+#           first check for valid cookies
+            if not self.states[-n].valid_cookies(app, 
+                ignore_deleted = self.ignore_deleted):
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                    'cookie at %d no longer valid, deleting' % n)
+#               if the cookies aren't valid, we might as well delete 
+#               those states
+                self._delete_invalid_states(n-1)
+                return n - 1
+#           next, check if the utterance was a cross-buffer utterance
+            if self.cross_buffer[-n]:
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                    'cross-buffer utterance at %d' % n)
+                return n - 1
+#           otherwise, for single-buffer utterances, check that the
+#           buffer still exists
+            buff_name = self.initial_buffers[-n]
+            debug.trace('StateStackBasic.safe_reinterp_depth', 
+                    'buffer %s for utterance at %d' % (buff_name, n))
+            buffer = app.find_buff(buff_name)
+            if buffer is None:
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                    'deleted buffer %s for utterance at %d' % (buff_name, n))
+                return n - 1
+#           and finally, check against most_recent_utterance
+            try:
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                        'utterance %d with initial buffer %s' \
+                        % (n, buff_name))
+                next = most_recent_utterance[buff_name]
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                        'next utterance in same buffer is %d' % next)
+                this_cookie = self.states[-n].cookie(buff_name)
+                pos = self.pos_after[-n]
+                sel = self.sel_after[-n]
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                        'pos, sel = %d, %s' % (pos, repr(sel)))
+                next_cookie = self.states[-next].cookie(buff_name)
+                next_pos, next_sel = \
+                    buffer.get_state_pos_selection(next_cookie)
+                debug.trace('StateStackBasic.safe_reinterp_depth', 
+                        'next pos, sel = %d, %s' % (next_pos, repr(next_sel)))
+                if pos != next_pos or sel != next_sel:
+                    debug.trace('StateStackBasic.safe_reinterp_depth', 
+                        'pos in %s changed\n from %d to %d' \
+                        % (buff_name, n, next))
+                    return n - 1
+            except KeyError:
+                pass
+# update most_recent_utterance
+            most_recent_utterance[buff_name] = n
+        return len(self.states)
+
+    def undo_manual_changes(self, app):
+        """restores the editor to its state just after the most recent 
+        dictated utterance, but prior to any subsequent manual changes.
+        (Any new buffers will not be removed, nor will buffers deleted
+        since the utterance be restored).
+
+        **NOTE:** use this method with extreme caution, as the
+        StateStack provides no means to redo these changes, and the 
+        user may not expect manual changes to vanish.
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we successfully restored to that state
+        """
+        debug.trace('StateStackBasic.undo_manual_changes', 'invoked')
+        if self.after_utterance is None:
+            return 0
+        return self.after_utterance.restore_state(app)
+
+    def can_restore(self, app, n):
+        """can we safely restore the editor to its nth most recent
+        stored state (popping n entries off our stack)?
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we can safely restore to that state
+        """
+        if n < 1:
+            return 0
+        if len(self.states) < n:
+            return 0
+        safe = self.safe_depth(app)
+        if safe >= n:
+            return 1
+        return 0
+
+    def can_reinterpret(self, app, n):
+        """can we safely restore the editor to its nth most recent
+        stored state (popping n entries off our stack), and then
+        reinterpret the corresponding utterances?
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we can safely restore to that state, and then
+        reinterpret the undone utterances
+        """
+        if n < 1:
+            return 0
+        if len(self.states) < n:
+            return 0
+        safe = self.safe_reinterp_depth(app)
+        if safe >= n:
+            return 1
+        return 0
+
+
+    def old_pop(self, app, n):
+        """restores the editor to its nth most recent stored state, if
+        this can be done safely, popping n - 1 entries off our stack.
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        *BOOL* -- true if we sucessfully restored the editor to that state
+        """
+        debug.trace('StateStackBasic.pop', 'called with n = %d' % n)
+        if not self.can_restore(app, n):
+            debug.trace('StateStack.pop', 'unable to restore')
+            return 0
+        temporary = BufferStatesBasic(app)
+        if not self.undo_manual_changes(app):
+            warning = \
+                'StateStack.pop: unexpected failure to restore state\n'
+            debug.critical_warning(warning)
+            temporary.restore_state(app)
+            return 0
+        for i in range(1, n+1):
+            debug.trace('StateStack.pop', 'popping %d' % i)
+            if not self.states[-i].restore_state(app):
+# since we checked cookies in can_restore, this shouldn't happen, but
+# if it does, un-restore the state before returning 0 to signal failure
+                warning = \
+                    'StateStack.pop: unexpected failure to restore state\n'
+                debug.critical_warning(warning)
+                temporary.restore_state(app)
+                return 0
+        self.after_utterance = self.states[-n]
+        self._pop_states(n)
+        return 1
+
+    def pop(self, app, n):
+        """restores the editor to its nth most recent stored state, if
+        this can be done safely, popping n - 1 entries off our stack.
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        *BOOL* -- true if we sucessfully restored the editor to that state
+        """
+        debug.trace('StateStackBasic.pop', 'called with n = %d' % n)
+        if not self.can_restore(app, n):
+            debug.trace('StateStack.pop', 'unable to restore')
+            return 0
+        temporary = BufferStatesBasic(app)
+# create a map from buffer names to the oldest BufferStatesBasic which
+# knows about that buffer
+        buff_indices = {}
+        for i in range(1, n+1):
+            for buff in self.states[-i].known_buffers():
+                buff_indices[buff] = i
+        which_buffers = []
+        for buff in  self.after_utterance.known_buffers():
+            if not buff_indices.has_key(buff):
+                which_buffers.append(buff)
+        if which_buffers:
+            if not self.after_utterance.restore_state(app, buffers =
+                which_buffers):
+# since we checked cookies in can_restore, this shouldn't happen, but
+# if it does, un-restore the state before returning 0 to signal failure
+                warning = \
+                    'StateStack.pop: unexpected failure to restore state\n'
+                debug.critical_warning(warning)
+                temporary.restore_state(app)
+                return 0
+        for i in range(1, n+1):
+            debug.trace('StateStack.pop', 'popping %d' % i)
+            which_buffers = []
+            for buff in self.states[-i].known_buffers():
+                if buff_indices[buff] == i:
+                    which_buffers.append(buff)
+# only restore those buffers for which we aren't later going to restore an
+# earlier state.  This makes restores more efficient by avoiding multiple 
+# restores of the same buffer.
+            if not self.states[-i].restore_state(app, buffers =
+                which_buffers):
+# since we checked cookies in can_restore, this shouldn't happen, but
+# if it does, un-restore the state before returning 0 to signal failure
+                warning = \
+                    'StateStack.pop: unexpected failure to restore state\n'
+                debug.critical_warning(warning)
+                temporary.restore_state(app)
+                return 0
+        self.after_utterance = self.states[-n]
+        self._pop_states(n)
+        return 1
+
+    def rename_buffer_cbk(self, old_buff_name, new_buff_name):
+        """callback which notifies us that the editor
+        has renamed a buffer
+
+        **INPUTS**
+
+        *STR* old_buff_name -- old name of the buffer 
+
+        *STR* new_buff_name -- new name of the buffer 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for state in self.states:
+            state.rename_buffer_cbk(old_buff_name, new_buff_name)
+        for i in range(self.initial_buffers):
+            if self.initial_buffers[i] == old_buff_name:
+                self.initial_buffers[i] = new_buff_name
 
 class ResMgrBasic(ResMgrStd):
     """implementation of ResMgrStd providing services necessary for
@@ -1616,7 +2511,7 @@ class ResMgrBasic(ResMgrStd):
             debug.trace('ResMgrBasic.recent_dictation',
                  'called from thread %s' %
                  threading.currentThread().getName())
-        safe = self.states.safe_depth(self.editor())
+        safe = self.states.safe_reinterp_depth(self.editor())
         debug.trace('ResMgrBasic.recent_dictation', 
             'call %d' % call_count)
         if debug.trace_is_active('ResMgrBasic.recent_dictation'):
@@ -1695,7 +2590,7 @@ class ResMgrBasic(ResMgrStd):
         n = min(n, self.stored_utterances())
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'max changed and stored = %d\n' % n)
-        m = self.states.safe_depth(self.editor())
+        m = self.states.safe_reinterp_depth(self.editor())
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'safe depth = %d' % m)
         m = min(m, n)
@@ -1741,7 +2636,7 @@ class ResMgrBasic(ResMgrStd):
         """
         app = self.editor()
         if n <= self.stored_utterances() and \
-            n <= self.states.safe_depth(app):
+            n <= self.states.safe_reinterp_depth(app):
             return 1
         return 0
 

@@ -107,6 +107,9 @@ def create_update(upd_descr):
 
     upd_class = use_update_class(upd_descr['action'])
     upd_object = upd_class(descr=upd_descr)
+    debug.trace('AppState.create_update', 
+        '%s with attributes %s' % (upd_class.__name__, 
+        repr(upd_object.__dict__)))
     return upd_object
 
 
@@ -380,7 +383,7 @@ class SB_UpdDelete(SB_Update):
         
         *none* -- 
         """
-        range = messaging.messarg2intlist(self.descr['range'])
+        range = messaging.messarg2inttuple(self.descr['range'])
         range = on_buff.make_valid_range(range)
         on_buff.delete_cbk(range=range)
 
@@ -416,7 +419,7 @@ class SB_UpdInsert(SB_Update):
         
         *none* -- 
         """
-        range = messaging.messarg2intlist(self.descr['range'])        
+        range = messaging.messarg2inttuple(self.descr['range'])
         on_buff.insert_cbk(range=range, text=self.descr['text'])
         
 class SB_UpdPosSelection(SB_Update):
@@ -455,7 +458,7 @@ class SB_UpdPosSelection(SB_Update):
 # the situation where one update is received by itself and
 # we don't know whether the other property has also changed
         pos = messaging.messarg2int(self.descr['pos'])
-        selection = messaging.messarg2intlist(self.descr['selection'])
+        selection = messaging.messarg2inttuple(self.descr['selection'])
         on_buff.pos_selection_cbk(pos = pos, selection = selection)
 # here, we don't necessarily guarantee that pos coincides with one end
 # of the range, at least not for now - DCF.

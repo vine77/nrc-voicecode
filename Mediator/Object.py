@@ -709,8 +709,25 @@ class Object:
 
         *none* -- 
         """
-        for an_attr_init in attrs.items():
-            setattr(self, an_attr_init[0], an_attr_init[1])
+        for key, value in attrs.items():
+            setattr(self, key, value)
+       
+    def possibly_init_attrs(self, attrs):
+        """Initialises existing attributes, unless those attributes
+        already exist
+        
+        **INPUTS**
+
+        *{STR: ANY}* attrs -- dictionary with attribute name as the keys and
+         default values as the values.
+
+        **OUTPUTS**
+
+        *none* -- 
+        """
+        for key, value in attrs.items():
+            if not self.__dict__.has_key(key):
+                setattr(self, key, value)
 
 # DCF: ChildObject is obsolete.  Use OwnerObject instead.
 class ChildObject(Object):
@@ -777,10 +794,11 @@ class OwnerObject(Object):
     *none* --
     """
     def __init__(self, **attrs):
+        self.possibly_init_attrs({'parent_name': None,
+                                  'grandparents': [],
+                                  'owned_objects': []})
         self.deep_construct(OwnerObject,
-                            {'parent_name': None,
-                             'grandparents': [],
-                             'owned_objects': []},
+                            {},
                             attrs)
 
     def owned_by(self):
