@@ -103,7 +103,8 @@ def connect(mic_state=None):
     
     if speech_able():
         if not sr_is_connected:
-            natlink.natConnect()
+# 1 means use threads -- needed for GUI apps
+            natlink.natConnect(1)
             sr_is_connected = 1            
             openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
         if mic_state:
@@ -418,6 +419,16 @@ class CommandDictGrammar(DictGramBase):
         self.state = None
         self.isActive = 0
 
+    def deactivate(self):
+	DictGramBase.deactivate(self)
+	self.isActive = 0
+
+    def activate(self, window = 0, exclusive = None):
+	if self.isActive:
+	    return
+	DictGramBase.activate(self, window = window, exclusive = exclusive)
+	self.isActive = 1
+
     def gotBegin(self, moduleInfo):
 #        print '-- CommandDictGrammar.gotBegin: called'
 #	print moduleInfo
@@ -425,7 +436,8 @@ class CommandDictGrammar(DictGramBase):
 	    pass
 #	    self.activate()
 	elif self.interpreter.on_app.active_field() == None:
-	    self.activate(self.window)
+	    if not self.isActive:
+		self.activate(window = self.window)
 	else:
 	    self.deactivate()
         
