@@ -3165,8 +3165,7 @@ add_test('number_dictation', test_number_dictation, desc='Test number dictation'
 ##############################################################################
 
 def test_new_statement():
-   testing.init_simulator_regression()
-   temp_config = temp_factory.new_config()   
+   testing.init_simulator_regression()   
       
    commands.open_file('blah1.py')
       
@@ -3219,12 +3218,12 @@ def test_new_statement():
 
    commands.goto(commands.app.len(), echo_cmd=1)   
    commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
-   commands.say(['bug', 'above', 'when', 'at', 'last', 
+   commands.say(['above', 'when', 'at', 'last', 
                  'character', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
                  
    commands.goto_line(2, echo_cmd=1)
    commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
-   commands.say(['bug', 'above', 'when', 'on', 'middle', 
+   commands.say(['above', 'when', 'on', 'middle', 
                  'line', 'of', 'buffer'], user_input='1\n', echo_utterance=1)
 
    commands.goto_line(3, echo_cmd=1)
@@ -3245,8 +3244,7 @@ def test_new_statement():
    commands.say(['above', 'when', 'at', 'middle', 
                  'of', 'a', 'line'], user_input='1\n', echo_utterance=1)
 
-# goto_beginning_of_line() doesn't work correctly in above tests                
-#add_test('new_statement', test_new_statement, desc='Test creation of new statements above/below current line')   
+add_test('new_statement', test_new_statement, desc='Test creation of new statements above/below current line')   
 
    
 
@@ -3318,11 +3316,33 @@ def test_temporary():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
       
-   commands.open_file('blah.py')
+   commands.open_file('blah1.py')
+      
+#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)   
+#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['out', 'of', 'quotes'] , user_input="0\n", echo_utterance=1)
+   
+#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)   
+#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['out', 'of', 'parens'] , user_input="0\n", echo_utterance=1)
+   
+#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)   
+#   commands.say(['between', 'quotes'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['back', 'out', 'of', 'quotes'] , user_input="0\n", echo_utterance=1)
 
-   commands.say(['hello', 'world', 'new', 'statement'] , user_input="0\n", echo_utterance=1)      
-   commands.say(['hello', 'world', 'two', 'new', 'statement'] , user_input="0\n", echo_utterance=1)         
-   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)   
+#   commands.say(['between', 'parens'] , user_input="0\n", echo_utterance=1)
+#   commands.say(['jump', 'back', 'out'] , user_input="0\n", echo_utterance=1)
+
+#   commands.say(['function', 'between', 'parens', 'one'] , user_input="1\n", echo_utterance=1)
+#   commands.say(['before', 'previous', 'paren'] , user_input="0\n", echo_utterance=1)   
+
+   commands.say(['function', 'between', 'parens', 'one'] , user_input="1\n", echo_utterance=1)
+   commands.say(['before', 'next', 'paren'] , user_input="0\n", echo_utterance=1)   
 
    
 #add_test('temp', test_temporary, desc='temporary test')

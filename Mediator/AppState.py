@@ -1569,9 +1569,6 @@ class AppState(OwnerObject):
 
         .. [self.curr_buffer] file:///AppState.AppState.html
         """
-
-#        print '-- AppState.find_buff: buff_name=%s' % buff_name
-
         if (buff_name == None):
             buff_name = self.curr_buffer_name()
             
