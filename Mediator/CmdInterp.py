@@ -415,14 +415,15 @@ class CmdInterp(OwnerObject):
         self.deep_construct(CmdInterp,
                             {'mediator': mediator,
                              'cmd_index': {}, 
-                             'known_symbols':
-                             SymDict.SymDict(sym_file = sym_file), 
+                             'known_symbols': None,
                              'language_specific_aliases': {},
                              'lsa_spacing': {},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
         self.name_parent('mediator')
+        self.add_owned('known_symbols')
+        self.known_symbols = SymDict.SymDict(sym_file = sym_file, interp = self)
 
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance
@@ -437,6 +438,28 @@ class CmdInterp(OwnerObject):
         *none*
         """
         self.mediator = mediator
+
+    def input_error(self, message, fatal = 0):
+        """sends a message to NewMediatorObject indicating that a
+        serious error occurred while trying to read SymDict information 
+        from the persistent dictionary file.  If a GUI is available, the
+        message should be displayed in a dialog box before the rest of
+        the GUI and server starts.  Otherwise, the message should be
+        sent to stderr
+
+        **INPUTS**
+
+        *STR message* -- the message to display
+
+        *BOOL fatal* -- if true, the error is fatal and the mediator
+        should clean up and exit the user has confirmed seeing it
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.mediator:
+            self.mediator.input_error(message, fatal = fatal)
 
     def user_message(self, message, instance = None):
         """sends a user message up the chain to the NewMediatorObject to

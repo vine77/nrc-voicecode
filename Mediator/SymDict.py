@@ -23,7 +23,7 @@
 """
 
 
-from Object import Object
+from Object import Object, OwnerObject
 import sb_services, SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, PickledObject, sr_interface, vc_globals
@@ -32,6 +32,7 @@ from debug import trace
 import debug
 
 import copy, cPickle, exceptions, os, re, string, sys
+import shutil
 import stat
 import time
 import os.path
@@ -367,8 +368,10 @@ class SymbolMatch(Object):
         return compare_flag
 
 
+class ErrorReadingPersistDict(RuntimeError):
+    pass
 
-class SymDict(Object):
+class SymDict(OwnerObject):
     """Known symbols dictionary.
 
     This class stores information about symbols defined in source files
@@ -381,6 +384,8 @@ class SymDict(Object):
     (e.g. "a new symbol" -> aNewSym)
 
     **INSTANCE ATTRIBUTES**
+
+    *CmdInterp interp* -- reference to the parent CmdInterp
 
     *{STR:* [SymbolInfo] *)}* symbol_info={} -- Dictionary of known
      symbols. Key is the native written form of the symbol and the
@@ -445,7 +450,7 @@ class SymDict(Object):
     [SB_ServiceLang] *lang_name_srv* -- Service used by SymDict to
     determine a buffer's programming language.
     
-    [INT] *min_chars_for_approx_match=3* -- Minimum number of characters that a
+    [INT] *min_chars_for_approx_match=4* -- Minimum number of characters that a
     native symbol must have in order to be matched approximately to a
     pseudo symbol. Very short symbols tend to cause too many false positive
     matches, and in any case, they are easy to dictate by spelling (in fact
@@ -462,7 +467,7 @@ class SymDict(Object):
     .. [SpokenFormInfo] file:///./SymDict.SpokenFormInfo.html
     .. [symbols_as_one_string] file:///./SymDict.SymDict.html#symbols_as_one_string"""
 
-    def __init__(self, sym_file = None, 
+    def __init__(self, sym_file = None, interp = None, 
                  **attrs):
 
         # These attributes can't be set at construction time
@@ -476,14 +481,16 @@ class SymDict(Object):
                          'abbrev_sources': [],
                          'unresolved_abbreviations': {},
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
-                         'min_chars_for_approx_match': 3})
+                         'min_chars_for_approx_match': 4})
         
         # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
                             {'sym_file': sym_file,
+                             'interp': interp,
                              'from_file': 0,
                              'file_time': None},
                             attrs)
+        self.name_parent('interp')
         self.from_file = self.init_from_file()
 
 #        print '-- SymDict.__init__: returning self.__dict__=%s' % self.__dict__
@@ -508,6 +515,14 @@ class SymDict(Object):
         if file is None:
             return
         try:
+            backup = None
+            if os.path.exists(file):
+                backup, ext = os.path.splitext(file)
+                if ext == '.bak':
+                    backup = file + '.bak'
+                else:
+                    backup = backup + '.bak'
+                shutil.copyfile(file, backup)
             db = shelve.open(file, "n")
         except:
             msg = 'WARNING: error creating SymDict state file %s\n' % file
@@ -530,6 +545,8 @@ class SymDict(Object):
             traceback.print_exc()
             db.close()
             os.remove(file)
+            if backup:
+                shutil.copyfile(backup, file)
             return
 
         db.close()
@@ -1850,6 +1867,40 @@ class SymDict(Object):
             
 
 
+    def _failed_read(self, msg, fatal = 0):
+        """private method to rename a persistent SymDict file if we fail 
+        to read it.
+
+        **INPUTS**
+
+        *STR msg* -- reason for failure
+
+        *BOOL fatal* -- true if the error is fatal
+
+        **OUTPUTS**
+        """
+        file = self.sym_file
+        backup = file + '.failed'
+        msg = msg + 'We are renaming it to \n%s\n' % backup \
+            + 'so that it will not recur next time you run the mediator\n'
+        if fatal:
+            msg = msg \
+                + '\nHowever, if you proceed without correcting this\n' \
+                + 'problem, you will lose all persistent known symbols\n' \
+                + 'and abbreviation preferences.\n'
+        msg = msg + '\nIf this error occurred following an update to a\n' \
+                  + 'new version of VoiceCode, please submit a bug report.\n'
+        shutil.copyfile(file, backup)
+        os.remove(file)
+        if self.interp:
+            sys.stderr.write('preview: ')
+            sys.stderr.write(msg)
+            self.interp.input_error(msg, fatal)
+        else:
+            sys.stderr.write(msg)
+            if fatal:
+                raise RuntimeError()
+
     def init_from_file(self):
         """Initialises the symbol dictionary from a persistent version
         stored on file.
@@ -1866,41 +1917,44 @@ class SymDict(Object):
         file
         """
 
-        if self.sym_file is None:
+        file = self.sym_file
+        if file is None:
             return 0
-        if not os.path.exists(self.sym_file):
+        if not os.path.exists(file):
             return 0
         try:
-            db = shelve.open(self.sym_file, "r")
+            db = shelve.open(file, "r")
         except:
-            msg = 'WARNING: Failed to open symbol dictionary file %s\n' \
-                % self.sym_file
-            sys.stderr.write(msg)
+            msg = 'WARNING: Failed to open symbol dictionary file\n%s\n' \
+                % file
+            self._failed_read(msg, fatal = 1)
             return 0
         try:
-            version = db['version']
-        except KeyError:
-            version = 1
-        if version != current_version:
-            msg = 'unknown version %d of the symbol dictionary file %s' % \
-                (version, self.sym_file)
-            raise RuntimeError(msg)
-        try:
-            values = {}
-            fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
-                'alt_abbreviations', 'unresolved_abbreviations']
-            for field in fields:
-                values[field] = db[field]
-        except:
-            msg = 'WARNING: error reading %s from symbol dictionary file %s\n' \
-                % (field, self.sym_file)
-            traceback.print_exc()
-            sys.stderr.write(msg)
+            try:
+                version = db['version']
+            except KeyError:
+                version = 1
+            if version != current_version:
+                msg = 'unknown version %d of the symbol dictionary file\n%s\n' % \
+                    (version, self.sym_file)
+                self._failed_read(msg, fatal = 1)
+                raise ErrorReadingPersistDict()
+            try:
+                values = {}
+                fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
+                    'alt_abbreviations', 'unresolved_abbreviations']
+                for field in fields:
+                    values[field] = db[field]
+            except:
+                msg = 'WARNING: error reading %s from symbol dictionary file\n%s\n' \
+                    % (field, self.sym_file)
+                self._failed_read(msg, fatal = 1)
+                raise ErrorReadingPersistDict()
+        except ErrorReadingPersistDict:
             db.close()
             return 0
 
         db.close()
-        version
         self.symbol_info = values['symbol_info']
         self.spoken_form_info = values['spoken_form_info']
         self.abbreviations = values['abbreviations'] 

@@ -1086,7 +1086,7 @@ class ExtLoopWin32(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *ServerOldMediator* -- the underlying server
+        *ServerMainThread* -- the underlying server
         """
         debug.virtual('ExtLoopWin32.server')
 

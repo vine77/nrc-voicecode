@@ -180,6 +180,9 @@ class NewMediatorObject(Object.OwnerObject):
     use vc_globals.sym_state_file for interactive use, but no file
     for regression testing.
 
+    BOOL *construction_failed* -- indicates whether there has been a
+    fatal error during construction of the mediator.
+
     **CLASS ATTRIBUTES**
     
     *none* --
@@ -299,7 +302,8 @@ class NewMediatorObject(Object.OwnerObject):
                              'foreground_testing': 0, 
                              'pickled_interp': None,
                              'config_file': None,
-                             'user_config_file': None
+                             'user_config_file': None,
+                             'construction_failed': 0
                             },
                             attrs,
                             {})
@@ -323,6 +327,12 @@ class NewMediatorObject(Object.OwnerObject):
             tests_def_fname = os.path.join(vc_globals.admin, 'tests_def.py')
             execfile(tests_def_fname, self.test_space)        
             self.test_suite = tests.create_suite(self.test_or_suite)
+            if not self.test_suite:
+                msg = "Unknown test or suite %s\n" % self.test_or_suite
+                sys.stderr.write(msg)
+                self.construction_failed = 1
+                return
+
         if self.test_suite or temporary:
             user = 'VCTest'
         else:
@@ -476,6 +486,8 @@ class NewMediatorObject(Object.OwnerObject):
 
 #        print 'Mediator configure:\n'
 #        print traceback.extract_stack()
+        if self.construction_failed:
+            return 0
         exclude = None
         if exclude_interp:
             exclude = ['interp']
@@ -939,7 +951,8 @@ class NewMediatorObject(Object.OwnerObject):
             self.the_console.cleanup()
             self.the_console = None
 
-        self.interp.save_dictionary()
+        if self.interp:
+            self.interp.save_dictionary()
 
         if self.server:
             self.server.mediator_closing()
@@ -1519,6 +1532,37 @@ class NewMediatorObject(Object.OwnerObject):
         """
         self.editors.correct_recent(instance_name)
     
+    def input_error(self, message, fatal = 0):
+        """called by CmdInterp to indicate that a serious error 
+        occurred while trying to read SymDict information from the 
+        persistent dictionary file.  
+        
+        The message will be displayed in a dialog box, if the GUI
+        console is available, or printed to stderr.
+
+        NOTE: This method should not be called by
+        other object, nor should it be called after CmdInterp has been
+        initiated.
+
+        **INPUTS**
+
+        *STR message* -- the message to display
+
+        *BOOL fatal* -- if true, the error is fatal and the mediator
+        should clean up and exit once the user has confirmed seeing it
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.console():
+            self.console().message_box(message)
+        else:
+            sys.stderr.write(message)
+            sys.stderr.write('\n')
+        if fatal:
+            self.construction_failed = 1
+
     def user_message(self, message, instance = None):
         """displays a user message via the appropriate channel
         (e.g. stdout, or a MediatorConsole status line, or an 
