@@ -782,14 +782,21 @@ class SourceBuff(Object):
 	debug.virtual('SourceBuff.goto_line')
 
                 
-    def refresh_if_necessary(self):
-	"""Refresh buffer if necessary"""
-# note: this method is included primarily for the benefit of EdSim,
-# which, being a line editor, needs to refresh its display by reprinting
-# several lines of context around the current cursor position.  Most
-# other editors will automatically refresh the screen on any change, so
-# they need not override this default (no-op) behavior.
-	pass
+    def print_buff_if_necessary(self):
+	"""Prints content of current buffer if necessary.
+
+        This method serves two purposes:
+
+        - When regression testing an external editor, it is used to display
+        the content of the buffer of the external editor whenever it has
+        changed
+
+        - When using the EdSim line-based editor, it refreshes the printout
+        of the current content after each change."""
+
+        if self.app.print_buff_when_changed:
+            self.print_buff()
+        
 
     def refresh(self):
 	"""Force a refresh of the buffer"""

@@ -1483,7 +1483,7 @@ auto_test.add_test('rsm_dictionaries', test_rsm_dictionaries,
 def activate_for(manager, buffer, window):
     print 'activating buffer %s for window %d' % (buffer, window)
     manager.app.change_buffer(buffer)
-    manager.app.refresh_if_necessary()
+    manager.app.print_buff_if_necessary()
     manager.activate(buffer, window)
 
 def new_buffer(manager, buffer, window = None, before = "", after = ""):

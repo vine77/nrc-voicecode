@@ -84,11 +84,6 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
 
     def decr_indent_level(self, levels=1, range=None):
         self.indent_srv.decr_indent_level(levels=levels, range=range)
-
-    def refresh_if_necessary(self):
-	self.app.talk_msgr.send_mess('refresh_if_necessary')
-        self.app.talk_msgr.get_mess(expect=['refresh_if_necessary_resp'])
-        self.print_buff()
         
     def line_num_of(self, position = None):
 	return self.lines_srv.line_num_of(position)
@@ -589,7 +584,7 @@ class ServerSingleThread(Object.Object):
         # Run regression test?
         #
         if self.test_suite != None:
-            print '-- ServerSingleThread.package_sock_pair: running regression test suite %s' % self.test_suite
+	    an_app_state.print_buff_when_changed = 1
             args = [self.test_suite]
             auto_test.run(args)
 

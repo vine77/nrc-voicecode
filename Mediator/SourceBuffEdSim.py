@@ -217,7 +217,9 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         """
         return self.line_srv.end_of_line(pos)
 
-    def refresh_if_necessary(self):
+    def print_buff_if_necessary(self):
+        """Always print content of buffer after changes, even if we are not
+        using EdSim for regression testing."""
 	self.print_buff()
 
     def refresh(self):

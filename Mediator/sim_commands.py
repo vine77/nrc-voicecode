@@ -189,7 +189,7 @@ def open_file(fname):
     global the_mediator
     the_mediator.app.open_file(fname)
     the_mediator.interp.known_symbols.parse_symbols(fname)
-    the_mediator.app.curr_buffer().refresh_if_necessary()
+    the_mediator.app.curr_buffer().print_buff_if_necessary()
 # show_buff()
 
 def list_buffers():
@@ -362,7 +362,7 @@ def select(start, end):
 def show_buff():
     """Shows content of current source buffer"""
     global the_mediator    
-    the_mediator.app.curr_buffer().refresh_if_necessary()
+    the_mediator.app.curr_buffer().print_buff_if_necessary()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""

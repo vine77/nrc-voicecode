@@ -455,6 +455,10 @@ class AppState(Object):
      typed as dictated text, except for commands that turn the
      translation back on (NOT IMPLEMENTED FOR NOW).
 
+     *BOOL* print_buff_when_changed=0 -- If true, then print the content
+     of the current buffer whenever it changes (used mostly for regression
+     testing external editor).
+
     STR *bound_buffer_name=None* -- Name of the buffer that VoiceCode
     is currently bound to operate on. If *None*, use editor's active
     buffer. See [curr_buffer_name] method for a description of buffer
@@ -478,7 +482,7 @@ class AppState(Object):
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'delete', 'goto', 'goto_line', 'move_relative_line',
     'move_relative_page', 'search_for',
-    'refresh_if_necessary', 'refresh', 'incr_indent_level',
+    'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff']
 
     def __getattr__( self, name):
@@ -487,7 +491,7 @@ class AppState(Object):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0,
-                 max_history=100, **attrs):
+                 max_history=100, print_buff_when_changed=0, **attrs):
         
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
@@ -496,7 +500,8 @@ class AppState(Object):
                              'open_buffers': {},
 			     'bound_buffer_name': None,
                              'max_history': max_history, 
-                             'translation_is_off': translation_is_off},
+                             'translation_is_off': translation_is_off,
+                             'print_buff_when_changed': print_buff_when_changed},
                             attrs)
 
     def recog_begin(self, window_id):
