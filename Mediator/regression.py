@@ -57,6 +57,21 @@ class PersistentConfig(Object.Object):
         return mediator.the_mediator
 
     def editor(self):
+        """returns a reference to the editor instance being used
+        for regression testing
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *AppState* -- the editor instance
+        """
+        debug.virtual('PersistentConfig.editor')
+
+
+    def instance_name(self):
         """returns the instance name of the editor instance being used
         for regression testing, if we are using NewMediatorObject,
         otherwise None
@@ -70,7 +85,7 @@ class PersistentConfig(Object.Object):
         *STR* -- the name of the editor instance, or None if we are
         using the old MediatorObject
         """
-        debug.virtual('PersistentConfig.editor')
+        debug.virtual('PersistentConfig.instance_name')
 
     def correction_available(self):
         """indicates whether correction features are available, so that
@@ -176,6 +191,20 @@ class PersistentConfigOldMediator(Object.Object):
         return mediator.the_mediator
 
     def editor(self):
+        """returns a reference to the editor instance being used
+        for regression testing
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *AppState* -- the editor instance
+        """
+        return self.mediator().app
+
+    def instance_name(self):
         """returns the instance name of the editor instance being used
         for regression testing, if we are using NewMediatorObject,
         otherwise None
@@ -317,7 +346,7 @@ class PersistentConfigNewMediator(Object.Object):
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
 
-    def editor(self):
+    def instance_name(self):
         """returns the instance name of the editor instance being used
         for regression testing
             
@@ -330,6 +359,21 @@ class PersistentConfigNewMediator(Object.Object):
         *STR* -- the name of the editor instance
         """
         return self.editor_name
+
+    def editor(self):
+        """returns a reference to the editor instance being used
+        for regression testing
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *AppState* -- the editor instance
+        """
+        editors = self.mediator().editors
+        return editors.known_instance(self.instance_name())
 
     def mediator(self):
         """returns a reference to the MediatorObject (or
