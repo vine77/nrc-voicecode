@@ -308,6 +308,18 @@ class BuilderRegistry(Object):
 # module-global registry
 registry = BuilderRegistry()
 
+class SymBuilderFactoryState(Object):
+    """
+    Data used to store and restore the state of SymBuilderFactory
+    """
+    def __init__(self, next_builder, expected_type, **args):
+        self.deep_construct(SymBuilderFactoryState,
+                            {
+                             'next_builder': next_builder,
+                             'expected_type': expected_type
+                            },
+                            args)
+        
 class SymBuilderFactory(Object):
     """object factory which manages explicit requests for particular
     SymBuilder classes as well as preferences based on the type of
@@ -460,6 +472,50 @@ class SymBuilderFactory(Object):
         else:
             self.next_builder = None
 
+    def get_state(self):
+        """
+        Returns the data needed to restore the factory to its present
+        state.  The caller should not rely on any particular structure
+        of the data, and should only use it by passing it back to
+        restore_state.
+
+        ** INPUTS **
+
+        *none*
+
+        ** OUTPUTS **
+
+        *SymBuilderFactoryState* -- the state, which can be passed
+        back to restore_state
+        """
+        debug.trace('SymBuilderFactory.get_state',
+                    'next_builder = %s, expected_type = %s' \
+                    % (self.next_builder, self.expected_type))
+        return SymBuilderFactoryState(self.next_builder,
+                                      self.expected_type)
+
+    def restore_state(self, state):
+        """
+        Restores SymBuilderFactory to the previously stored state.  If
+        the previous state cannot be restored, then the state is
+        cleared.
+
+        ** INPUTS **
+
+        *SymBuilderFactoryState state* -- the state data previously
+        returned by get_state
+
+        ** OUTPUTS **
+
+        *BOOL* -- true if the state was successfully restored
+        (otherwise the state is cleared)
+        """
+        debug.trace('SymBuilderFactory.restore_state',
+                    'next_builder = %s, expected_type = %s' \
+                    % (state.next_builder, state.expected_type))
+        self.prefer(state.next_builder)
+        self.expect(state.expected_type)
+   
     def clear(self):
         """clear expectations and preferences for the next identifier
 

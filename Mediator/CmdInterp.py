@@ -907,7 +907,23 @@ class SymStyling(OwnerObject):
         *none*
         """
         return self.builder_factory.clear()
-
+    
+class StoredInterpState(Object):
+    """
+    An object storing the data needed to restore the state of the
+    interpreter (e.g. formatting and spacing information).  Note:
+    this object is intended to be used only by CmdInterp (as
+    contrasted with InterpState which is an interface allowing
+    CSC's to manipulate the current state).  It can be retrieved
+    and stored by classes outside CmdInterp, using the get_state
+    method of CmdInterp, but only in order to pass the same object
+    back to the interpret_ methods.
+    """
+    def __init__(self, formatting_state, **args):
+        self.deep_construct(StoredInterpState,
+                            {'formatting_state': formatting_state}, args) 
+        
+    
 class SymbolResult(Object):
     """
     class representing a portion of an utterance translated as a
@@ -1062,14 +1078,6 @@ class InterpretedPhrase(Object):
         """
         return self.original_phrase
     
-        
-        
-        
-        
-        
-        
-    
-
 class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
     
@@ -1225,7 +1233,48 @@ class CmdInterp(OwnerObject):
             regexp = regexp + regexp_this_word
         return regexp
 
-    def interpret_massaged(self, cmd, app, initial_buffer = None):
+    def get_state(self):
+        """
+        Returns an object containing the data needed to restore the
+        interpreter to the present state (e.g. spacing and
+        formatting_state information).  Note: the StoredInterpState
+        object returned should not be modified, and should only be
+        used by passing it back to the restore_state
+
+        ** INPUTS **
+
+        *none*
+
+        ** OUTPUTS **
+
+        *StoredInterpState* -- the state information, to be passed
+        back to restore_state
+        """
+        formatting = self.builder_factory.get_state()
+        return StoredInterpState(formatting)
+
+    def restore_state(self, state):
+        """
+        Restores the interpreter to a previously state (including
+        spacing and formatting information) obtained from get_state.
+
+        ** INPUTS **
+
+        *StoredInterpState state* -- the state, previously returned by
+        get_state
+
+        ** OUTPUTS **
+
+        *BOOL* -- true if the state was successfully restored
+        (otherwise it is cleared)
+        """
+        formatting = state.formatting_state
+        # For now, we don't keep track of the SpacingState, so we only
+        # need to restore the SymBuilderFactory
+        return self.builder_factory.restore_state(formatting)
+        
+    def interpret_massaged(self, cmd, app, initial_buffer = None,
+            clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
@@ -1240,15 +1289,18 @@ class CmdInterp(OwnerObject):
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
         
-        """
+        *BOOL clear_state* -- if true, clear formatting and spacing
+        *states before interpreting the utterance
+         """
         trace('CmdInterp.interpret_massaged', 'command=%s' % cmd)
         spoken_list = map(lambda word: word[0], cmd)
 #        spoken_list = map(lambda word: process_initials(word[0]), cmd)
         trace('CmdInterp.interpret_massaged', 'spoken=%s' % spoken_list)
         return self.interpret_spoken(spoken_list, app,
-            initial_buffer = initial_buffer)
+            initial_buffer = initial_buffer, clear_state = clear_state)
 
-    def interpret_spoken(self, spoken_list, app, initial_buffer = None):
+    def interpret_spoken(self, spoken_list, app, initial_buffer = None,
+            clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
@@ -1260,16 +1312,19 @@ class CmdInterp(OwnerObject):
         start of the utterance.  Some CSCs may change the target buffer of 
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
-        
+                
+        *BOOL clear_state* -- if true, clear formatting and spacing
+        *states before interpreting the utterance
         """
         trace('CmdInterp.interpret_spoken', 'spoken_list = %s' % spoken_list)
 
         spoken = string.join(spoken_list)
         phrase = string.split(spoken)
         return self.interpret_phrase(phrase, app,
-            initial_buffer = initial_buffer)
+            initial_buffer = initial_buffer, clear_state = clear_state)
 
-    def interpret_phrase(self, phrase, app, initial_buffer = None):
+    def interpret_phrase(self, phrase, app, initial_buffer = None,
+            clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
@@ -1283,7 +1338,9 @@ class CmdInterp(OwnerObject):
         start of the utterance.  Some CSCs may change the target buffer of 
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
-        
+
+        *BOOL clear_state* -- if true, clear formatting and spacing
+        *states before interpreting the utterance
         """
         trace('CmdInterp.interpret_phrase', 'phrase = %s' % phrase)
 
@@ -1296,12 +1353,9 @@ class CmdInterp(OwnerObject):
 
         untranslated_words = []
 
-# eventually, we will want to allow expectations and possibly explicit
-# formatting commands to persist across utterances if the buffer and
-# cursor position have not changed.  However, that requires a system for
-# detecting these changes, which doesn't exist yet, so for now we just
-# reset the state when we start interpreting a new utterance
-        self.styling_state.clear()
+        if clear_state:
+            self.styling_state.clear()
+        
         builder = None
         current_preferences = None
 
@@ -1615,7 +1669,8 @@ class CmdInterp(OwnerObject):
         return 0
 
 
-    def interpret_NL_cmd(self, cmd, app, initial_buffer = None):
+    def interpret_NL_cmd(self, cmd, app, initial_buffer = None,
+            clear_state = 0):
         
         """Interprets a natural language command and executes
         corresponding instructions.
@@ -1628,14 +1683,18 @@ class CmdInterp(OwnerObject):
         start of the utterance.  Some CSCs may change the target buffer of 
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
-        
+                
+        *BOOL clear_state* -- if true, clear formatting and spacing
+        *states before interpreting the utterance
         """
         trace('CmdInterp.interpret_NL_cmd', 'pre-massaged cmd=%s' % cmd)
         cmd = self.massage_command(cmd)
         trace('CmdInterp.interpret_NL_cmd', 'post-massaged cmd=%s' % cmd)
-        self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
+        self.interpret_massaged(cmd, app, initial_buffer =
+            initial_buffer, clear_state = clear_state)
 
-    def interpret_cmd_tuples(self, cmd, app, initial_buffer = None):
+    def interpret_cmd_tuples(self, cmd, app, initial_buffer = None,
+            clear_state = 0):
         """Interprets a natural language command and executes
         corresponding instructions.
 
@@ -1651,6 +1710,9 @@ class CmdInterp(OwnerObject):
         start of the utterance.  Some CSCs may change the target buffer of 
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
+        
+        *BOOL clear_state* -- if true, clear formatting and spacing
+        *states before interpreting the utterance
 
         **OUTPUTS**
 
@@ -1658,7 +1720,7 @@ class CmdInterp(OwnerObject):
         """
         cmd = self.massage_command_tuples(cmd)
         return self.interpret_massaged(cmd, app,
-            initial_buffer = initial_buffer)
+            initial_buffer = initial_buffer, clear_state = clear_state)
 
     def massage_command_tuples(self, command_tuples):
         """Massages a command to prepare it for interpretation.
