@@ -3,31 +3,26 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:26:49 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:40:05 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Module WaxEdSim</title>
+<title>Module new_gui_sim</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ModuleName">Module WaxEdSim</H1>
-<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.SimConsole.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimConsole</SPAN></A>(<A CLASS="DocLink" HREF="GenEdit.ActivateEventMixIn.html">ActivateEventMixIn</A>, <A CLASS="DocLink" HREF="GenEdit.GenEditSingle.html">GenEditSingle</A>)</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSim.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSim</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.wx.wxApp.html">wxApp</A>, <A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimBase.html">WaxEdSimBase</A>)</SPAN><SPAN CLASS="OneLiner"> # application class for the WaxEdSim console</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimBase.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimBase</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # base class for the wxApp application class for the WaxEdSim console</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimConsole.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimConsole</SPAN></A>(<A CLASS="DocLink" HREF="WaxEdSim.SimConsole.html">SimConsole</A>)</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimFrame.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimFrame</SPAN></A>(<A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimFrameMixIn.html">WaxEdSimFrameMixIn</A>, <A CLASS="DocLink" HREF="GenEditWX.WaxCmdFrame.html">WaxCmdFrame</A>)</SPAN><SPAN CLASS="OneLiner"> # frame containing a WaxEdSimPanel</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimFrameMixIn.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimFrameMixIn</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN>
-<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimPanel.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimPanel</SPAN></A>(<A CLASS="DocLink" HREF="GenEditWX.WaxCmdPanel.html">WaxCmdPanel</A>)</SPAN><SPAN CLASS="OneLiner"> # GUI editor simulator panel</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">no_mic_getmic</SPAN>()</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">no_mic_setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">run</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # run for testing without mediator or speech engine</SPAN>
+<H1 CLASS="ModuleName">Module new_gui_sim</H1>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="new_gui_sim.wxMediatorSim.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">wxMediatorSim</SPAN></A>(<A CLASS="DocLink" HREF="WaxEdSim.WaxEdSimBase.html">WaxEdSimBase</A>, <A CLASS="DocLink" HREF="wxMediator.wxMediator.html">wxMediator</A>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">run</SPAN></A>()</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">FALSE</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">None</SPAN> <SPAN CLASS="VariableName">NULL</SPAN> = <SPAN CLASS="VariableValue">None</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">TRUE</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_LISTEN_PORT</SPAN> = <SPAN CLASS="VariableValue">45770</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_TALK_PORT</SPAN> = <SPAN CLASS="VariableValue">45771</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_ADD</SPAN> = <SPAN CLASS="VariableValue">337</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_ALT</SPAN> = <SPAN CLASS="VariableValue">307</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_BACK</SPAN> = <SPAN CLASS="VariableValue">8</SPAN></SPAN>
@@ -131,7 +126,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_SUBTRACT</SPAN> = <SPAN CLASS="VariableValue">339</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_TAB</SPAN> = <SPAN CLASS="VariableValue">9</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">WXK_UP</SPAN> = <SPAN CLASS="VariableValue">317</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\WaxEdSim.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\new_gui_sim.py'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">varlink</SPAN> <SPAN CLASS="VariableName">cvar</SPAN> = <SPAN CLASS="VariableValue">&lt;Global variables&gt;</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">false</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">true</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
@@ -411,6 +406,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_COMMAND_TREE_SET_INFO</SPAN> = <SPAN CLASS="VariableValue">10132</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_COMMAND_VLBOX_SELECTED</SPAN> = <SPAN CLASS="VariableValue">10012</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_COMPARE_ITEM</SPAN> = <SPAN CLASS="VariableValue">10103</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_CORRECT_UTTERANCE</SPAN> = <SPAN CLASS="VariableValue">10207</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_CREATE</SPAN> = <SPAN CLASS="VariableValue">10077</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_DESTROY</SPAN> = <SPAN CLASS="VariableValue">10078</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_DRAW_ITEM</SPAN> = <SPAN CLASS="VariableValue">10101</SPAN></SPAN>
@@ -460,6 +456,8 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NC_RIGHT_DCLICK</SPAN> = <SPAN CLASS="VariableValue">10046</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NC_RIGHT_DOWN</SPAN> = <SPAN CLASS="VariableValue">10039</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NC_RIGHT_UP</SPAN> = <SPAN CLASS="VariableValue">10040</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NEW_LISTEN_CONN</SPAN> = <SPAN CLASS="VariableValue">10205</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NEW_TALK_CONN</SPAN> = <SPAN CLASS="VariableValue">10206</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_NULL</SPAN> = <SPAN CLASS="VariableValue">10000</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_PAINT</SPAN> = <SPAN CLASS="VariableValue">10083</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_PAINT_ICON</SPAN> = <SPAN CLASS="VariableValue">10086</SPAN></SPAN>
@@ -493,6 +491,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_SET_FOCUS</SPAN> = <SPAN CLASS="VariableValue">10031</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_SHOW</SPAN> = <SPAN CLASS="VariableValue">10079</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_SIZE</SPAN> = <SPAN CLASS="VariableValue">10069</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_SOCKET_DATA</SPAN> = <SPAN CLASS="VariableValue">10204</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_SYS_COLOUR_CHANGED</SPAN> = <SPAN CLASS="VariableValue">10092</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_TASKBAR_LEFT_DCLICK</SPAN> = <SPAN CLASS="VariableValue">11555</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxEVT_TASKBAR_LEFT_DOWN</SPAN> = <SPAN CLASS="VariableValue">11551</SPAN></SPAN>
@@ -1213,7 +1212,18 @@
 <SPAN CLASS="PyKeyword">alias</SPAN> <SPAN CLASS="AliasName">wxNamedColor</SPAN> = <SPAN CLASS="AliasFor">wxPython.gdi.wxNamedColour (type function)</SPAN>
 <SPAN CLASS="PyKeyword">alias</SPAN> <SPAN CLASS="AliasName">wxNoRefBitmap</SPAN> = <SPAN CLASS="AliasFor">wxPython.gdi.wxBitmap (type class)</SPAN>
 <SPAN CLASS="PyKeyword">alias</SPAN> <SPAN CLASS="AliasName">wxPen</SPAN> = <SPAN CLASS="AliasFor">wxPython.gdi.wxPyPen (type class)</SPAN>
-</PRE>
+</PRE><H2>Description</H2><P>
+A NewMediatorObject-based VoiceCode server that uses TCP/IP based 
+messaging protocol to communicate with external editors.
+</P>
+<H2 ID="run" CLASS="Function">run()</H2>
+<P></P>
+
+<P>
+Start a ServerNewMediator/ServerMainThread with external message 
+loop using win32event and the new NewMediatorObject
+</P>
+
 <HR>
 <TABLE ALIGN="LEFT">
 <TR><TD>

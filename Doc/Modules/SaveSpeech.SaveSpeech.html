@@ -3,29 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:28:30 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:37:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class EditorBuilder</title>
+<title>Class SaveSpeech</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class EditorBuilder</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="GenEditWX.html">GenEditWX</A></P>
+<H1 CLASS="ClassName">class SaveSpeech - mix-in class with prompt to save speech files</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="SaveSpeech.html">SaveSpeech</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">GenEditWX.EditorBuilder<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SaveSpeech.SaveSpeech<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EditorBuilder</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.EditorBuilder.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEditWX.EditorBuilder.build_editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEditWX.EditorBuilder.build_editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">use_rich=0</SPAN>)<SPAN CLASS="OneLiner"> # builds an editor window</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SaveSpeech</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <A CLASS="DocLink" HREF="#SaveSpeech.SaveSpeech.prompt_save_speech_files"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SaveSpeech.SaveSpeech.prompt_save_speech_files</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame</SPAN>, <SPAN CLASS="Argument">allow_cancel=1</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SaveSpeech.SaveSpeech.save_speech_files</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,24 +34,29 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-mix-in class for creating the editor buffer window and its
-TextBufferWX wrapper
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+<P>
+<EM>none</EM>
 </P>
-<H2 ID="GenEditWX.EditorBuilder.build_editor_buffer" CLASS="Method">GenEditWX.EditorBuilder.build_editor_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">use_rich=0</SPAN>)</H2>
-<P>builds an editor window</P>
+<H2 ID="SaveSpeech.SaveSpeech.prompt_save_speech_files" CLASS="Method">SaveSpeech.SaveSpeech.prompt_save_speech_files(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame</SPAN>, <SPAN CLASS="Argument">allow_cancel=1</SPAN>)</H2>
+<P>None</P>
 
+<P>
+prompts the user to save speech files and other configuration 
+files before exiting, or to cancel.   Note:
+prompt_save_speech_files should save if the user so indicates</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>wxWindow parent</EM>
-<DD>the parent of the editor window
+<EM>BOOL allow_cancel</EM>
+<DD>true to allow the user to cancel exiting,
+false if the message loop has exited and we must quit
 <DT>
-<EM>BOOL use_rich</EM>
-<DD>flag indicating whether we should use a
-standard text control or a rich edit control on Windows
+<EM>wxFrame frame</EM>
+<DD>frame above which to display the dialog
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -59,9 +64,9 @@ standard text control or a rich edit control on Windows
 <DL>
 
 <DT>
-<EM>(wxTextCtrl, TextBufferWX)</EM>
-<DD>the editor window and its
-TextBufferWX wrapper
+<EM>BOOL</EM>
+<DD>true if the user saved or told the mediator to quit
+without saving, false if the user cancelled.
 
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
