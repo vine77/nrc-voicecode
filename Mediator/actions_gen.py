@@ -687,33 +687,18 @@ class ActionSearch(ActionBidirectional):
 
     *INT* num=1 -- Search for *num*th occurence.
     
-    *BOOL* ignore_overlapping_with_cursor-- If true, then ignore any 
-    occurence that overlaps with the cursor.           
-           
-    *BOOL* ignore_left_of_cursor-- If true, then ignore any 
-    occurence that is directly left of the cursor.
-           
-    *BOOL* ignore_right_of_cursor-- If true, then ignore any 
-    occurence that is directly right of the cursor.           
-    
-
     CLASS ATTRIBUTES**
         
     *none* -- 
     """
         
     def __init__(self, regexp=None, num=1, where=1, 
-                 ignore_overlapping_with_cursor = 0,
-                 ignore_left_of_cursor = 0, ignore_right_of_cursor = 0,
                  unlogged = 0,
                  **args_super):
         self.deep_construct(ActionSearch, 
                             {'regexp': regexp, 
                              'num': num, 
                              'where': where,
-                             'ignore_overlapping_with_cursor':  ignore_overlapping_with_cursor,
-                             'ignore_left_of_cursor': ignore_left_of_cursor,
-                             'ignore_right_of_cursor': ignore_right_of_cursor,
                              'unlogged': 0}, 
                             args_super, 
                             {})
@@ -727,9 +712,6 @@ class ActionSearch(ActionBidirectional):
         debug.trace('ActionSearch.execute', 'called, app=%s' % app)
         app.search_for(regexp=self.regexp, direction=self.direction,
                        num=self.num, where=self.where,
-                       ignore_overlapping_with_cursor = self.ignore_overlapping_with_cursor,
-                       ignore_left_of_cursor = self.ignore_left_of_cursor, 
-                       ignore_right_of_cursor = self.ignore_right_of_cursor,
                        unlogged  = self.unlogged)
 
 
@@ -866,7 +848,7 @@ class ActionInsertNewClause(Action):
         
     def __init__(self, end_of_clause_regexp, code_bef='',
                  code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1, 
-                 ignore_occur_right_of_cursor=0, **args_super):
+                 **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
                             {'end_of_clause_regexp': end_of_clause_regexp, 
@@ -886,18 +868,8 @@ class ActionInsertNewClause(Action):
         .. [Action.execute] file:///./Action.Action.html#execute"""
                         
         
-        if self.direction > 0:
-           ignore_left_of_cursor = 1
-           ignore_right_of_cursor = 0
-        else:
-           ignore_left_of_cursor = 0
-           ignore_right_of_cursor = 1
-           
         app.search_for(regexp=self.end_of_clause_regexp, 
                        where = self.where, direction = self.direction,
-                       ignore_overlapping_with_cursor=0,
-                       ignore_left_of_cursor=ignore_left_of_cursor, 
-                       ignore_right_of_cursor=ignore_right_of_cursor,
                        unlogged=1)
                        
         

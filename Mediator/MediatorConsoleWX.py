@@ -665,14 +665,14 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.Raise()
         self.text.SetFocus()
 #        print 'before autolayout: text size is ', self.text.GetSize()
-        print 'before autolayout: choice list size is ', self.choice_list.GetSize()
+#        print 'before autolayout: choice list size is ', self.choice_list.GetSize()
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
 #        print 'before fit: text size is ', self.text.GetSize()
-        print 'before fit: choice list size is ', self.choice_list.GetSize()
+#        print 'before fit: choice list size is ', self.choice_list.GetSize()
         s.Fit(self)
-        print 'after fit: choice list size is ', self.choice_list.GetSize()
+#        print 'after fit: choice list size is ', self.choice_list.GetSize()
 #        print 'after fit: text size is ', self.text.GetSize()
 #        print 'after fit: text size is ', self.text.GetSize()
 #        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
@@ -1376,7 +1376,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 
     def on_choose(self, event):
         i = event.GetIndex()
-        print 'on_choose, %d' %i
+#        print 'on_choose, %d' %i
         self.chose_from_list(i)
 
     def correct_nth(self, n):

@@ -1269,8 +1269,6 @@ class SourceBuff(OwnerObject):
                        self.get_text(start = self.cur_pos()))
 
     def search_for(self, regexp, direction=1, num=1, where=1,
-                   ignore_overlapping_with_cursor = 0,
-                   ignore_left_of_cursor = 0, ignore_right_of_cursor = 0,
                    unlogged = 0):
         
         """Moves cursor to the next occurence of regular expression
@@ -1284,15 +1282,6 @@ class SourceBuff(OwnerObject):
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
            
-           *BOOL* ignore_overlapping_with_cursor-- If true, then ignore any 
-           occurence that overlaps with the cursor.           
-           
-           *BOOL* ignore_left_of_cursor-- If true, then ignore any 
-           occurence that is directly left of the cursor.
-           
-           *BOOL* ignore_right_of_cursor-- If true, then ignore any 
-           occurence that is directly right of the cursor.           
-
            *BOOL* unlogged -- if true, don't log the results of this
            search (used for searches done by mediator without user-initiation)
 
@@ -1309,94 +1298,88 @@ class SourceBuff(OwnerObject):
         # Change the \n in the regexp so they match any of the forms
         # recognised by the editor in this buffer
         #
-        re.sub('\n', self.newline_regexp(), regexp)
+        regexp = re.sub('\n', self.newline_regexp(), regexp)
 
         
         #
         # Find position of all matches
         #
-        reobject = re.compile(regexp)        
-        pos = 0; all_matches_pos = []
-        while 1:
-           a_match = reobject.search(self.get_text(), pos)
-           if a_match and pos < len(self.get_text()):
-# DFC: this allows for overlapping matches - ugh
-#               pos = a_match.start() + 1
-# DFC: this is better...
-#
-# AD: I remember I had to do it this way otherwise it was causing
-#     problems. But since it passes regression testing, I guess you
-#     must have found a better way of avoiding those problems.
-#
-#     Note also that we may need to allow overlapping matches when we start looking
-#     for complexe code contexts. For example, if I want to know whether or 
-#     no the cursor is in the middle of some pattern X, then 
-#     it could be that there is an occurence of X that is at 
-#     position (s1, e1) where e1 < cur_pos(), and and another occurence
-#     at position (s2, e2) where s2 > s1 but e2 > cur_pos(). If we
-#     do not allow overlapping matches, then we will miss the occurence
-#     (s2, e2) and conclude that the cursor is not in the middle of
-#     occurence of X.
-#
-#     Maybe allowing overlapping matches should eventually be an 
-#     argument of search_for().
-# 
-               pos = a_match.end()
-#DFC:  ... but if we get a zero length match (e.g. '$' matching end of line), 
-# then we will continue to get the same match unless we advance the position
-               if a_match.start() == a_match.end():
-                 pos = pos + 1
-               all_matches_pos = all_matches_pos + [(a_match.start(), a_match.end())]               
-           else:
-               break
+        reobject = re.compile(regexp)
 
-
-        #
-        # Look in the list of matches for the num'th match closest to
-        # the cursor in the right direction
-        #
-        closest_match = \
-           self.closest_occurence_to_cursor(all_matches_pos,
-                                            regexp=regexp,
-                                            direction=direction,
-                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
-                                            ignore_left_of_cursor=ignore_left_of_cursor,
-                                            ignore_right_of_cursor=ignore_right_of_cursor,                                            
-                                            where=where)
-
-        trace('SourceBuff.search_for', 'closest_match=%s' % closest_match)
-
-        new_cur_pos = None
-        the_match_index = None        
-        if closest_match != None:
-            if direction > 0:
-                the_match_index = closest_match + num - 1
-                if the_match_index >= len(all_matches_pos):
-                    the_match_index = len(all_matches_pos) - 1
-            else:
-                the_match_index = closest_match - num + 1
-                if the_match_index < 0:
-                    the_match_index = 0
-
-            new_cur_pos = self.pos_extremity(all_matches_pos[the_match_index], where)
-
-
-        #
-        # Log the search so we don't keep bringing back same occurence
-        # if the user repeats the same search.
-        #
-        if not unlogged:
-            the_match = None
-            if the_match_index != None: the_match = all_matches_pos[the_match_index]
-            self.log_search (regexp, direction, where, the_match)
+        text = self.get_text()
+        best_match = None
+        l = self.len()
         
-        if new_cur_pos != None:
-            self.goto(new_cur_pos)
-            success = 1
+        if direction > 0:
+            trace('SourceBuff.search_for', 'searching forward')
+            pos = self.cur_pos()
+            count = 0
+            while pos < l:
+                trace('SourceBuff.search_for', 
+                   'searching from pos %d' % pos)
+                a_match = reobject.search(text, pos)
+                if not a_match:
+                    trace('SourceBuff.search_for', 
+                        'no more matches after cursor')
+                    break
+                count = count + 1
+                if count >= num:
+                    trace('SourceBuff.search_for', 'found the one')
+                    if not self.same_as_previous_search(regexp, direction,
+                          where, a_match.span()):
+                        best_match = a_match.span()
+                        break
+                trace('SourceBuff.search_for', 
+                   'found match from %d to %d' % a_match.span())
+#DCF: no overlapping matches
+                pos = a_match.end()
+#DCF:  ... but if we get a zero length match (e.g. '$' matching end of line), 
+# then we will continue to get the same match unless we advance the position
+                if a_match.start() == a_match.end():
+                    trace('SourceBuff.search_for', 
+                        'zero length match, better increment position anyway')
+                    pos = pos + 1
+
         else:
-            success = 0
-            
-        return success
+            pos = 0
+            matches = []
+            trace('SourceBuff.search_for', 'searching backwards')
+            while pos < l:
+                trace('SourceBuff.search_for', 
+                    'searching from pos %d' % pos)
+                a_match = reobject.search(text, pos)
+                if not a_match or a_match.end() > self.cur_pos():
+                    trace('SourceBuff.search_for', 
+                        'no more matches before cursor')
+                    break
+                matches.append(a_match.span())
+                trace('SourceBuff.search_for', 
+                   'found match from %d to %d' % a_match.span())
+#DCF: no overlapping matches
+                pos = a_match.end()
+#DCF:  ... but if we get a zero length match (e.g. '$' matching end of line), 
+# then we will continue to get the same match unless we advance the position
+                if a_match.start() == a_match.end():
+                    trace('SourceBuff.search_for', 
+                        'zero length match, better increment position anyway')
+                    pos = pos + 1
+            if num <= len(matches):
+                a_match = matches[-num]
+                if not self.same_as_previous_search(regexp, direction,
+                      where, a_match):
+                    best_match = a_match
+                elif num < len(matches):
+                    best_match = matches[-(num + 1)]
+
+        if not unlogged:
+            self.log_search(regexp, direction, where, best_match)
+                   
+        if best_match is None:
+            return 0
+        
+        new_cur_pos = self.pos_extremity(best_match, where)
+        self.goto(new_cur_pos)
+        return 1    
 
 
     def closest_occurence_to_cursor(self, occurences, 
