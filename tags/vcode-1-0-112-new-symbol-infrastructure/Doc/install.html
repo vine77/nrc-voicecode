@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<TITLE>Installing VoiceCode</TITLE>
+</HEAD>
+
+<BODY   BGCOLOR="#ffffff">
+
+
+<MAP NAME="banner_top">
+    <AREA SHAPE="rect" COORDS="588,14,620,40" HREF="http://www.iit.nrc.ca/english.html">
+    <AREA SHAPE="rect" COORDS="538,14,583,37" HREF="http://www.nrc.ca/corporate/english/">
+    <AREA SHAPE="rect" COORDS="86,4,421,37" HREF="http://www.iit.nrc.ca/II_public/index.html">
+</MAP>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+<tr>
+<td valign="bottom" align="left">
+<IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_top.jpg" width="620" height="37" alt="II Group Banner" USEMAP="#banner_top"
+ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voicecode.gif" width="230" height="50" alt="II VoiceGrip"></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+
+
+<H1><FONT COLOR="#400080">Installing VoiceCode</FONT></H1>
+
+To install VoiceCode, follow the following steps
+
+<UL>
+<LI><A HREF="#supportSW">0. Install support software</A>
+<LI><A HREF="#unzip">1. Unzip the files</A>
+<LI><A HREF="#environment">2. Set environment variables</A>
+   <UL>
+   <LI><A HREF="#VCODE_HOME">2.1 VCODE_HOME variable</A>
+   <LI><A HREF="#PYTHONPATH">2.2 PYTHONPATH variable</A>
+   </UL>
+<LI><A HREF="#Emacs">3. Install the Emacs macros</A>
+<LI><A HREF="#VoiceCode_user">4. Create a <EM>VoiceCode</EM> user</A>
+<LI><A HREF="#config_files">5. Create a user configuration file</A>
+<LI><A HREF="#test">6. Test the installation</A>
+<LI><A HREF="user.html#trouble">Trouble shooting</A>
+</UL>
+
+<HR>
+
+<H2><A NAME="supportSW">0. Install support software</A></H2>
+
+In order to use VoiceCode, you must first install the following
+support software.
+
+<UL>
+<LI><A HREF="http://www.python.org/">Python 2.2</A> (actually, anything from 
+1.5.2 on works fine, but recent versions of wxPython are available only for 
+Python 2.1 and 2.2, and precompiled versions of natlink are not available for Python 2.1</A>
+<LI><A HREF="http://www.synapseadaptive.com/joel/PythonMacroSystem.html">NatLink</A> (or better, Darren Ranalli's pre-compiled 
+<A HREF="http://dranalli.com/dragon/NatLink007-py22.zip">natlink for Python 2.2</a>
+<LI><A HREF="http://www.dragonsys.com/">Dragon Naturally Speaking</A>
+<LI><A HREF="http://wxpython.org/">wxPython 2.3.4 or later</A>
+<LI><A HREF="http://sourceforge.net/projects/pyxml">PyXML 0.7 or later</A>
+</UL>
+
+<H2><A NAME="unzip">1. Unzip the files</A></H2>
+
+Unzip the VoiceCode files to a directory on your PC. Make sure you
+preserve subdirectory structure.
+
+
+<H2><A NAME="environment">2. Set environment variables</A></H2>
+
+Next, you must set the following environment variables.
+
+
+<H3><A NAME="VCODE_HOME">2.1 VCODE_HOME variable</A></H3>
+
+Set <EM>VCODE_HOME</EM> to the root of the directory where you
+unzipped the VoiceCode files.
+
+<H3><A NAME="PYTHONPATH">2.2 PYTHONPATH variable</A></H3>
+
+Add the following to your <EM>PYTHONPATH</EM> variable:
+
+<P>
+
+<EM>%VCODE_HOME%/Mediator;%VCODE_HOME%/Admin;C:/NatLink</EM>
+
+<P>
+
+Assuming of course you have installed the NatLink files under
+<EM>C:/NatLink</EM>.
+
+<H2><A NAME="Emacs">3.  Install Emacs Voice Code Macros</H2>
+
+<P>In your .emacs file, add the following line:
+
+<PRE>
+(load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/vcode-mode.el"))
+</PRE>
+
+<P>
+Note that this may cause conflicts with Emacs VR Mode (either Barry
+Jaspan's version or the one included in the PBVKit). If you use VR Mode,
+you should probably not automatically load either one. Instead, define
+interactive Emacs commands to load VR mode and vcode-mode, and do not
+use both in one Emacs session.
+
+<P>
+Save the .emacs file, and restart Emacs.
+
+<H2><A NAME="VoiceCode_user">4. Create a <EM>VoiceCode</EM> user</A></H2>
+
+<P>
+VoiceCode connects to your Speech Recognition system through a special
+user. This is to avoid biasing your regular user towards dictation of
+code (which tends to be very different from dictating English).
+
+<P>
+Before using or testing VoiceCode, you must therefore create that
+special user. The user name should be <EM>VoiceCode</EM>. Instead of
+starting with a brand new user, we recommend that you start with a
+copy of a user that you have already trained to plain English (if you
+have one). To make a copy of a user, do the following:
+
+<UL>
+<LI>open the user in NatSpeak
+<LI>Select User->Backup from the menu.
+<LI>Select User->Restore. This will create a duplicate of the
+     user, with a name like "UserName-Restored1".
+<LI>Select User->Open, highlight the newly created user, and
+    press Rename. Rename it to "VoiceCode".
+<LI>Then hit Cancel (this just cancels the dialog, it doesn't undo your
+renaming.
+</UL>
+
+<H2><A NAME="user_config">6. Create a user configuration file</A></H2>
+
+<P>
+Copy the sample_config.py file from Config/Samples to Config and rename
+it user_config.py
+
+
+<H2><A NAME="test">6. Test the installation</A></H2>
+
+You may run a regression test to make sure that the installation
+succeeded.  This requires a separate VCTest user, so that words you add
+to the VoiceCode user don't mess up the regression test results.  The
+VCTest user should be created as a fresh user (with no custom words
+added, and without running the Vocabulary Builder).  NaturallySpeaking
+requires the user to be trained, but minimal training is sufficient as
+you will never actually be dictating with the VCTest user.
+
+
+<H3>Testing VoiceCode</H3>
+
+<OL>
+<LI>Make sure NatSpeak is running
+<LI>Turn off the microphone
+<LI>Go to a DOS window (the <EM>"server"</EM> window) and type:
+
+<PRE>
+cd %VCODE_HOME%\Mediator
+python wxMediator.py
+</PRE>
+
+<LI>Wait until the Voice Code  window appears.  This will take a long 
+time, possibly a minute or two, the first time you run it, because it 
+adds many new words to the Natspeak vocabulary, which is slow.
+<LI>close the Voice Code window, and click Yes to save your speech files 
+(or close it and save speech files from the Nat Speak window)
+<LI>Start the mediator again, this time telling it to run the test suite:
+
+<PRE>
+python wxMediator.py -t all > foo 
+</PRE>
+
+<LI> Wait until the Voice Code window appears (this may still take 
+20 - 30 seconds)
+<LI>Start Emacs and invoke command vcode-test (i.e. type 
+Esc-xvcode-test<RETURN>)
+
+<LI>The Voice Code window should indicate that a new instance has
+connected. In a few seconds, your speaker should beep to warn you that
+the first test requires Emacs to be in the foreground. Switch to the DOS
+window, hit enter, and then switch back to Emacs within 5 seconds. After
+another 30 seconds or so, you will hear a second beep indicating that
+the foreground tests have completed. However, due to a bug in the
+regression tests (or possibly natlink), it is safest to leave Emacs in
+the foreground for the duration of the test.
+
+<LI>Keep the microphone off until test has finished.
+</OL>
+
+<P>
+When test has finished running, compare the output file <EM>foo</EM>
+to the file
+<EM>%VCODE_HOME%/Data/Benchmark/correct_results.dat</EM>. The two
+files should be identical, except for timing information (which
+depends on the speed of your machine). You can compare the files using
+the Windows <EM>fc</EM> command or with a windows version of the Unix
+<EM>diff</EM> command (like the one found in <A
+HREF="http://www.cygnus.com/">Cygwin</A>, or WinDiff included with
+MS Visual Studio).
+
+<P>
+
+<hr>
+<center>
+<TABLE  border="1" >
+    <tr><td><font size=2>
+    [<A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/">VoiceCode Home</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/contact.html">Contact</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/pbvResources.html">PBV Resources</A> |
+    <A HREF="http://www.iit.nrc.ca/english.html">IIT</A> |
+    <A HREF="http://www.nrc.ca/corporate/english/">NRC</A> |
+    <A HREF="mailto:alain.desilets@nrc.ca">Feedback</A> ]
+    </FONT></td>
+   </tr>
+</table>
+</center>
+
+
+</BODY>
+</HTML>
