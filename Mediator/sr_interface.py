@@ -222,6 +222,27 @@ def saveUser():
     natlink.saveUser()
     sr_user_needs_saving = 0
 
+def send_keys(s, system = 0):
+    """simulates keystroke input
+    
+    **INPUTS**
+    
+    *STR s* -- keys to send, in Dragon (DDWIN/Natspeak scripting
+    language (pre-v6)) notation
+
+    *BOOL system* -- if true, send the keystrokes as system keys
+    (necessary for proper interpretation of Alt+Tab, windows hot keys,
+    etc.)
+
+    **OUTPUT**
+
+    *none*
+    """
+    flags = 0
+    if system:
+        flags = hook_f_systemkeys
+    natlink.playString(s, flags)
+
 def addedByVC(flag):   
     """Returns *true* iif word information *flag* indicates that word
     was added by VoiceCode"""
@@ -519,18 +540,18 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     def __init__(self, results, wave_playback = None, **attrs):
         """creates a SpokenUtteranceNL from a results object
 
-	**INPUTS**
+        **INPUTS**
 
-	*ResObj* results -- natlink results object representing speech
-	information
+        *ResObj* results -- natlink results object representing speech
+        information
 
         *CLASS* wave_playback -- class constructor for a concrete
         subclass of WavePlayback, or None if no playback is available
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         # local variables needed for initialization in deep_construct
         raw_words = results.getWords(0)
         word_list = map(self.spoken_written_form, raw_words)
@@ -560,126 +581,126 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- list of spoken forms from the utterance
-	"""
+        *[STR]* -- list of spoken forms from the utterance
+        """
         return self.spoken_only
 
     def words(self):
         """returns list of words (as (spoken, written) 2-tuples) 
-	from the utterance.
+        from the utterance.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
-	
-	"""
+        *[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
+        
+        """
         return self.word_list
 
     def entry(self, spoken, written = None):
         """returns a vocabulary entry in the form used by
-	NaturallySpeaking/natlink.  If the written form is omitted, then it is
-	assumed to be identical to the spoken form.
+        NaturallySpeaking/natlink.  If the written form is omitted, then it is
+        assumed to be identical to the spoken form.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* spoken -- spoken form
-	*STR* written -- written form (if different)
+        *STR* spoken -- spoken form
+        *STR* written -- written form (if different)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
-	"""
+        *STR* -- vocabulary entry in written\spoken form as used by
+        NaturallySpeaking
+        """
         if  written == None:
             written = spoken
         return vocabulary_entry(spoken, written) 
 
     def entry_tuple(self, word):
         """returns a vocabulary entry in the form used by
-	NaturallySpeaking/natlink.  
+        NaturallySpeaking/natlink.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
+        *(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
-	"""
+        *STR* -- vocabulary entry in written\spoken form as used by
+        NaturallySpeaking
+        """
         return vocabulary_entry(word[0], word[1])
 
     def same_written(self, spoken_forms):
         """converts a list of spoken forms to a list of (spoken, written) 
-	2-tuples.
+        2-tuples.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
-	
-	**OUTPUTS**
+        *[STR]* spoken_forms -- list of spoken forms 
+        (written forms will be assumed to be identical)
+        
+        **OUTPUTS**
 
-	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
-	"""
+        *[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
+        """
         return map(lambda s: (s, s), spoken_forms)
 
     def entries_spoken( self, spoken_forms):
         """converts a list of spoken forms to a list of vocabulary entries
-	in the form used by NaturallySpeaking/natlink.
+        in the form used by NaturallySpeaking/natlink.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
+        *[STR]* spoken_forms -- list of spoken forms 
+        (written forms will be assumed to be identical)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- list of vocabulary entries in written\spoken form as used by
-	NaturallySpeaking
-	"""
+        *[STR]* -- list of vocabulary entries in written\spoken form as used by
+        NaturallySpeaking
+        """
         return map(self.entry, spoken_forms)
 
     def spoken_written_form(self, entry):
         """converts a vocabulary entry in the form used by 
-	NaturallySpeaking/natlink to a 2-tuple of spoken, written.
+        NaturallySpeaking/natlink to a 2-tuple of spoken, written.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
+        *STR* -- vocabulary entry in written\spoken form as used by
+        NaturallySpeaking
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
-	"""
+        *(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
+        """
         return spoken_written_form(entry, clean_spoken = 0)
 
     def adapt(self, words):
         """changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
+        subsequent correction boxes can display the corrected list, and
+        informs the speech engine of the corrected list of words, so
+        it can adapt.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
+        *[(STR, STR)]* -- corrected list of words 
+        (as (spoken, written) 2-tuples) 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the adaption was accepted
-	"""
+        *BOOL* -- true if the adaption was accepted
+        """
         list = []
         for spoken, written in words:
             list.append(vocabulary_entry(spoken, written, clean_written = 0))
@@ -695,73 +716,73 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
     def adapt_spoken(self, spoken_forms):
         """changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
+        subsequent correction boxes can display the corrected list, and
+        informs the speech engine of the corrected list of words, so
+        it can adapt.
 
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
+        *[STR]* spoken_forms -- corrected list of spoken forms 
+        (written forms will be assumed to be identical)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the adaption was accepted
-	"""
+        *BOOL* -- true if the adaption was accepted
+        """
         words = self.same_written(spoken_forms)
         return self.adapt(words)
 
     def set_words(self, words):
         """changes the stored list of words (after correction) so that 
-	subsequent correction boxes can display the corrected list.
-	The results object is unaffected.
+        subsequent correction boxes can display the corrected list.
+        The results object is unaffected.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
+        *[(STR, STR)]* -- corrected list of words 
+        (as (spoken, written) 2-tuples) 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
+        *none*
 
-	"""
+        """
         self.word_list = words
         self.spoken_only = map(lambda x: x[0], words)
 
     def set_spoken(self, spoken_forms):
         """changes the stored list of words (after correction) so that 
-	subsequent correction boxes can display the corrected list.
-	The results object is unaffected.
+        subsequent correction boxes can display the corrected list.
+        The results object is unaffected.
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
+        *[STR]* spoken_forms -- corrected list of spoken forms 
+        (written forms will be assumed to be identical)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
+        *none*
 
-	"""
+        """
         words = self.same_written(spoken_forms)
         self.set_words(words)
 
     def playback_available(self):
         """indicates whether playback of the utterance is available.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if playback is available, false if it is not
-	(because utterance wasn't actually spoken, or speech data has 
-	been lost, or because the implementation doesn't support
-	playback)
-	"""
+        *BOOL* -- true if playback is available, false if it is not
+        (because utterance wasn't actually spoken, or speech data has 
+        been lost, or because the implementation doesn't support
+        playback)
+        """
         if self.wave:
             return 1
         return 0
@@ -769,19 +790,19 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     def playback(self):
         """plays back recorded utterance.
 
-	Playback is synchronous.  It will handle turning the microphone
-	off and back on again (if necessary)
+        Playback is synchronous.  It will handle turning the microphone
+        off and back on again (if necessary)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true unless playback was unavailable, or 
-	there was an error in playback (e.g.  another program had 
-	control of the audio device)
-	"""
+        *BOOL* -- true unless playback was unavailable, or 
+        there was an error in playback (e.g.  another program had 
+        control of the audio device)
+        """
         if self.wave and self.wave.check():
             mic_was = get_mic()
             set_mic('off')
@@ -792,51 +813,51 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
       
     def can_be_adapted(self):
         """indicates whether the utterance can be corrected for adaption
-	of the speech engine.  Utterances for which there was no speech
-	information or for which the speech information has been lost or
-	discarded may not be adaptable.
+        of the speech engine.  Utterances for which there was no speech
+        information or for which the speech information has been lost or
+        discarded may not be adaptable.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the speech information is available for adaption.
-	"""
+        *BOOL* -- true if the speech information is available for adaption.
+        """
         return 1
       
     def alternatives_available(self):
         """returns number of recognition alternatives available 
-	(for the whole utterance), or -1 if the number
-	is unknown.
+        (for the whole utterance), or -1 if the number
+        is unknown.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- number of recognition alternatives available (including
-	the original), or -1 if the number is unknown (NaturallySpeaking
-	doesn't indicate the total number, but simply lets you keep
-	asking for the next one until it runs out.
-	"""
+        *INT* -- number of recognition alternatives available (including
+        the original), or -1 if the number is unknown (NaturallySpeaking
+        doesn't indicate the total number, but simply lets you keep
+        asking for the next one until it runs out.
+        """
         return self.choices_available
 
     def _get_alternative(self, choice):
         """private method for getting a single alternative and converting it to
-	list of 2-tuples.
-	**INPUTS**
+        list of 2-tuples.
+        **INPUTS**
 
-	*INT* choice -- number of the choice to request
+        *INT* choice -- number of the choice to request
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[(STR, STR)]* -- list of words (as (spoken, written) 
-	2-tuples) corresponding to that alternative, or None if choice
-	was unavailable
-	"""
+        *[(STR, STR)]* -- list of words (as (spoken, written) 
+        2-tuples) corresponding to that alternative, or None if choice
+        was unavailable
+        """
         try:
             list = self.results.getWords(choice)
         except natlink.OutOfRange:
@@ -845,24 +866,24 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
     def alternatives(self, n):
         """returns the best recognition alternatives available 
-	(for the whole utterance) including the original.  
-	Will not return more than n alternatives, but may return fewer
-	(if the speech engine has not provided that many).
+        (for the whole utterance) including the original.  
+        Will not return more than n alternatives, but may return fewer
+        (if the speech engine has not provided that many).
 
-	Note: the first alternative in the list will not be identical
-	to the output of words(), if the phrase has previously been
-	corrected with set_words.
+        Note: the first alternative in the list will not be identical
+        to the output of words(), if the phrase has previously been
+        corrected with set_words.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* n -- number of alternatives requested
+        *INT* n -- number of alternatives requested
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[[(STR, STR)]]* -- list of list of words (as (spoken, written) 
-	2-tuples) 
-	
-	"""
+        *[[(STR, STR)]]* -- list of list of words (as (spoken, written) 
+        2-tuples) 
+        
+        """
         if n <= len(self.choices):
             return self.choices[0:n-1]
         if self.choices_available >= 0:

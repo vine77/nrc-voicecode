@@ -44,6 +44,10 @@ import SaveSpeech
 from WavePlaybackWX import WavePlaybackWX
 from thread_communication_WX import *
 
+# for now, our only implementation of WinSystem is the MS Windows
+# specific one
+import WinSystemMSW
+
 
 
 
@@ -296,7 +300,11 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
         wxApp.__init__(self, 0)
 #        wxApp.__init__(self, 1, 'medcrash')
-        console = MediatorConsoleWX(self.main_frame())
+
+# for now, our only implementation of WinSystem is the MS Windows
+# specific one
+        console = MediatorConsoleWX(self.main_frame(),
+            win_sys = WinSystemMSW.WinSystemMSW())
 
         correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
         correct_recent_evt = CorrectRecentEventWX(self, wxEVT_CORRECT_RECENT)
@@ -658,7 +666,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 ##############################################################################
 def run(test_suite=None):
     """Start a ServerNewMediator/ServerMainThread with external message 
-    loop using win32event and the new NewMediatorObject
+    loop using wxWindows events and the new NewMediatorObject
     """
 
     sys.stderr.write('creating wxMediator\n')

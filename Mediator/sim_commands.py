@@ -620,8 +620,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 #        print 'bypass'
             sys.stdout.flush()
             print "Heard  %s" % repr(utterance)            
-            self.interp.interpret_NL_cmd(utterance, the_mediator.app)
-            show_buff()        
+            self.interp.interpret_NL_cmd(utterance, app)
+            self.show_buff()        
         else:
             if util.islist(utterance) or util.istuple(utterance):
                 words = []

@@ -56,29 +56,6 @@ wxEVT_DISMISS_MODAL = wxNewEventType()
 wxID_DISMISS_MODAL = wxNewId()
 
 
-class WasForegroundWindowMSW(MediatorConsole.WasForegroundWindow):
-    """win32 implementation of WasForegroundWindow interface for 
-    storing the current foreground window and restoring it to 
-    the foreground later
-    """
-    def __init__(self, **args):
-        """create an object which stores the current foreground
-        window"""
-        self.deep_construct(WasForegroundWindowMSW, {'handle': None}, args)
-        self.handle = win32gui.GetForegroundWindow()
-
-    def restore_to_foreground(self):
-        """restores the window to the foreground"""
-        for i in range(2):
-            try:
-                win32gui.SetForegroundWindow(self.handle)
-            except pywintypes.error:
-                sys.stderr.write('error restoring window to foreground\n')
-            else:
-                return
-
-
-
 class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     """
     **INSTANCE ATTRIBUTES**
@@ -105,23 +82,15 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
                              'modal_dialogs': [],
                              'dismiss_events': []
                             },
-                            attrs)
+                            attrs, 
+                            enforce_value = {'main_frame_handle':
+                            main_frame.GetHandle()})
 
-    def store_foreground_window(self):
-        """detect the current foreground window, and store it in a
-        WasForegroundWindow object, so that the window can later
-        be restored to the foreground
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *WasForegroundWindow* -- the object which can be used to restore
-        the window to the foreground
-        """
-        return WasForegroundWindowMSW()
+# Hopefully, raise_active_window and raise_wxWindow are made obsolete by
+# WinSystemMSW, since the former doesn't work consistently, and the latter
+# doesn't seem to work at all under Windows NT (and presumably 2000/XP
+# as well)
+# However, I'll leave them in until WinSystemMSW has been tested.
 
     def raise_active_window(self):
         """makes the active window (within the current process) the
@@ -144,10 +113,14 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             else:
                 break
 
+# Hopefully, raise_active_window and raise_wxWindow are made obsolete by
+# WinSystemMSW, since the former doesn't work consistently, and the latter
+# doesn't seem to work at all under Windows NT (and presumably 2000/XP
+# as well)
+# However, I'll leave them in until WinSystemMSW has been tested.
 
     def raise_wxWindow(self, window):
-        """makes the given wxWindoactive window the
-        foreground one (for the system)
+        """makes the given wxWindow the foreground one (for the system)
 
         **INPUTS**
 
@@ -241,10 +214,6 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         wxWakeUpIdle()
         print 'waking up'
         return 1
-
-    def on_double(self, event):
-        self.select_choice(event.GetString())
-        self.simulate_OK()
 
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
@@ -698,8 +667,11 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                 if self.selection_gram:
                     self.selection_gram.activate(window = self.GetHandle())
                 self.first = 0
+# doesn't work consistently
 #                self.console.raise_active_window()
-                self.console.raise_wxWindow(self)
+# doesn't work on Win NT
+#                self.console.raise_wxWindow(self)
+                self.console.win_sys.raise_main_frame()
                 if self.choices:
                     self.choice_list.SetSelection(1, 0)
 
