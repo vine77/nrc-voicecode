@@ -23,7 +23,7 @@
 import re, string, sys
 
 from Object import Object
-import debug, find_difference, sb_services, SourceBuffNonCached
+import debug, find_difference, sb_services, SourceBuffNonCached, util
 
 
 class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
@@ -77,7 +77,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
                             )
 
 	if self.instance_reporting:
-	    print 'SourceBuff.__init__:', self.name()
+	    print 'SourceBuff.__init__:', util.within_VCode(self.name())
 	self.pos = self.make_within_range(self.pos)
 	if not self.selection:
 	    self.selection = (self.pos, self.pos)
@@ -89,7 +89,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     def __del__(self):
 	"destructor"
 	if self.instance_reporting:
-	    print 'SourceBuff.__del__:', self.name()
+	    print 'SourceBuff.__del__:', util.within_VCode(self.name())
 
     def rename_buffer_cbk(self, new_buff_name):
         
@@ -124,7 +124,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 	if self.instance_reporting:
-	    print 'SourceBuff.cleanup:', self.name()
+	    print 'SourceBuff.cleanup:', util.within_VCode(self.name())
         self.lang_srv.cleanup()
 	self.line_srv.cleanup()
 	self.indent_srv.cleanup()

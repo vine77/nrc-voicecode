@@ -74,7 +74,7 @@ def dont_print_trace(trace_id, message, insert_nl=1):
 
 def print_trace(trace_id, message, insert_nl=1):
     global to_be_traced, trace_file
-
+    
     if to_be_traced == 'all' or to_be_traced.has_key(trace_id):
         trace_file.write('-- %s: %s' % (trace_id, message))
         if insert_nl:
