@@ -214,13 +214,7 @@ class wxCmdLog(CmdLog):
 	width, height = self.log.GetClientSizeTuple()
 	char_height = self.log.GetCharHeight()
 	line_height = height/char_height
-	xy = self.log.PositionToXY(p)
-	if len(xy) == 2:
-	    x, y = xy
-	elif len(xy) == 3:
-	    dummy, x, y = xy
-	else:
-	    return
+	x, y = self.log.PositionToXY(p)
 	y = y- line_height
 	p = self.log.XYToPosition(x, y)
 	self.log.ShowPosition(p)
