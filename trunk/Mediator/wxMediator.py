@@ -55,19 +55,25 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off", 
                     active_traces={
-#################################       
-                    'tests_def.get_foreground_window': 1,
-                    'AppMgr.reformat_recent': 1,
-                    'ResMgrBasic.reformat_recent': 1,
-                    'wxMediatorMainFrame.on_reformat_recent': 1,
-                    'ReformatSymbolEventWX.notify': 1,
-                    'NewMediatorObject.reformat_recent': 1,
-                    "ResMgrBasicreformat_recent_synchronous": 1,
-                    'AppMgr._add_new_instance': 1,
-                    'AppMgr.delete_instance': 1, 
-                    'RSMInfrastructure._add_instance': 1,
-                    'RSMInfrastructure.delete_instance': 1,
-                    'RSMBasic.new_universal_instance': 1,
+#################################     
+                    
+                    'check_recent_symbols': 1,
+                    'ResMgrBasic.recent_correctable_dictation': 1,
+                    'ResMgrBasic.recent_symbols': 1,
+                    'ReformatRecentSymbolsView.__init__': 1,
+                    'ReformatRecentSymbolsViewWX.__init__': 1,  
+                    'ReformatRecentSymbolsModel.__init__': 1,
+#                    'AppMgr.reformat_recent': 1,
+#                    'ResMgrBasic.reformat_recent': 1,
+#                    'wxMediatorMainFrame.on_reformat_recent': 1,
+#                    'ReformatSymbolEventWX.notify': 1,
+#                    'NewMediatorObject.reformat_recent': 1,
+#                    "ResMgrBasicreformat_recent_synchronous": 1,
+#                    'AppMgr._add_new_instance': 1,
+#                    'AppMgr.delete_instance': 1, 
+#                    'RSMInfrastructure._add_instance': 1,
+#                    'RSMInfrastructure.delete_instance': 1,
+#                    'RSMBasic.new_universal_instance': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

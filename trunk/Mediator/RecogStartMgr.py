@@ -1338,6 +1338,38 @@ class RSMInfrastructure(RecogStartMgr):
             return self.results[instance_name].recent_dictation(n = n)
         except KeyError:
             return None
+            
+    def recent_symbols(self, instance_name, n=None):
+        """returns a list of the most recently uttered symbols.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        *INT n* -- the number of utterances from which to pull recently dictated symbols.
+        If None, then return all of them.
+
+        **OUTPUTS**
+
+        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        utterances (or all available if < n), sorted most recent last.
+        
+        Note:  These symbols should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        """
+        try:
+            return self.results[instance_name].recent_symbols(n = n)
+        except KeyError:
+            return None
+
 
     def scratch_recent(self, instance_name, n = 1):
         """undo the effect of the most recent n utterances into the

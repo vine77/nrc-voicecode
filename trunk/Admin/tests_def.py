@@ -2821,6 +2821,17 @@ def check_scratch_recent(instance_name, n = 1, should_fail = 0):
 
     sys.stdout.flush()
     return scratched
+    
+def check_recent_symbols(instance_name, expected_symbols, mess = ""):
+    the_mediator = testing.mediator()
+
+    n = the_mediator.stored_utterances(instance_name)
+    recent = the_mediator.recent_dictation(instance_name)
+    debug.trace('check_recent_symbols', '** recent=%s' % repr(recent))
+    
+    
+    recent = the_mediator.recent_symbols(instance_name)
+    print "%s\nrecent symbols were: %s." % (mess, recent)
 
 def test_reinterpret(instance_name, changed, user_input = None):
     the_mediator = testing.mediator()
@@ -3460,6 +3471,8 @@ def test_basic_correction():
     status.append(1)    
     test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
+    check_recent_symbols(instance_name, None)
+    
     sym_corrections = {}
     sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
     correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
@@ -3596,6 +3609,7 @@ def test_wxWindowsWithHelpers():
 add_test('wxWindowsWithHelpers', test_wxWindowsWithHelpers, 'Testing subclasses of wxWindows widgets.')
 
 
+
 ##############################################################################
 # Testing symbol reformatting UI
 ##############################################################################
@@ -3604,9 +3618,9 @@ def test_symbol_reformatting_ui():
    SymbolReformattingUITestCase.test_mediator = testing.mediator()
    unittest.TextTestRunner(). \
        run(unittest.makeSuite(SymbolReformattingUITestCase.SymbolReformattingUITestCase, 'test')) 
-   symbol_reformatting_acceptance_tests()       
+   test_symbol_reformatting_acceptance()
    
-def symbol_reformatting_acceptance_tests():
+def test_symbol_reformatting_acceptance():
    sys.stdout.write("\n*** Starting acceptance tests:\n\n")
    testing.init_simulator_regression()
    
@@ -3620,10 +3634,39 @@ def symbol_reformatting_acceptance_tests():
    #     Maybe because of a difference in the event loop between test mode
    #     and interactive mode?
    test_say(['reformat', 'recent'])
-  
-   
+   print "NOTE: This test doesn't actually work. For some reason, the dialog is not invoked.\n\n"
+   print "But 'reformat recent' DOES display the dialog when I say it in interactive mode.\n\n"
+   print "Presumably because the event loop is different in testing mode than in interactive mode. Need to fix that someday.\n"
+
+
    
 add_test('symbol_reformatting_ui', test_symbol_reformatting_ui, 'Testing symbol reformatting UI.')
+
+##############################################################################
+# Test retrieval of recently dictated symbols
+##############################################################################
+  
+def test_recent_symbol_retrieval():
+    testing.init_simulator_regression()
+    instance_name = testing.instance_name()
+    commands.open_file('blah.py')
+
+    the_mediator = testing.mediator()
+
+    check_recent_symbols(instance_name, None, "Before dictation")
+
+    utterances = []
+    utterances.append(string.split('class some class inherits from some other class'))
+    input = ['0\n0\n']
+#    status = [1]
+
+    for i in range(len(utterances)):
+        test_say(utterances[i], user_input = input[i], never_bypass_sr_recog=1)
+   
+    check_recent_symbols(instance_name, None, "After dictation")
+
+add_test('recent_symbols_retrieval', test_recent_symbol_retrieval, 
+         'Test retrieval of recently dictated symbols.')
 
 
 ##############################################################################
