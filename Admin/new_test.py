@@ -35,9 +35,11 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 debug.config_traces(status="on", 
                     active_traces={
+#                      'CmdInterp': 1
+#                      'CmdInterp': 1
 #                      'DictWinGramNL': 1,
-#                      'mediator.say': 1
 #                      'ResMgr': 1
+#                      'mediator.say': 1
 #                      'StateStack': 1,
 #                      'SourceBuffEdSim.restore_state': 1,
 #                      'BufferStates': 1
@@ -62,6 +64,7 @@ debug.config_traces(status="on",
 #                                    'listen_one_transaction': 1,
 #                                    'close_app_cbk': 1,
 #                                    'AppState': 1
+      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
 

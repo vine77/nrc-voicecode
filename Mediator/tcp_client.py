@@ -53,12 +53,12 @@ from tcp_threads import *
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-#debug.config_traces(status="on",
-#              active_traces={
+debug.config_traces(status="on",
+              active_traces={
 #                             'get_mess':1,
-#                             'send_mess': 1,
+#                             'send_mess': 1
 #                             'SourceBuffEdSim': 1
-#                             })
+                             })
 
 #debug.config_traces(status="on", active_traces='all')
 

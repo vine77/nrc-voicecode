@@ -47,8 +47,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.deep_construct(DictWinGramNL,
             {}, attrs, exclude_bases = {DictGramBase:1})
         DictGramBase.__init__(self)
-        self.load(allResults=1)
-#        self.load()
+#        self.load(allResults=1)
+        self.load()
 
     def activate(self):
         """activates the grammar for recognition
@@ -70,7 +70,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
             if window == None:
                 window = 0
             debug.trace('DictWinGramNL.activate', 
-                'activating, window = %d, exclusive=%s' % (window, self.exclusive))
+                'activating, window = %d, exclusive = %d' % (window,
+                self.exclusive))
             DictGramBase.activate(self, window = window, 
                 exclusive = self.exclusive)
             self.active = 1
@@ -297,6 +298,209 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         
         return spoken_form
 
+class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
+    """natlink implementation of BasicCorrectionWinGram for window-specific 
+    basic correction grammars
+
+    **INSTANCE ATTRIBUTES**
+
+    *{STR: [STR]} lists* -- map from list names to the initial values
+    to be assigned to them once the grammar is loaded
+
+    *[STR] rules* -- list of rules for this grammar
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(BasicCorrectionWinGramNL,
+            {'lists': {},
+             'rules': []}, attrs, exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+            for name, values in self.lists.items():
+                self.setList(name, values)
+
+    def create_rules(self):
+        """create all the rules for this grammar and put them in
+        self.rules
+
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.rules = []
+        if 0:
+            if self.scratch_words:
+                for i in range(len(self.scratch_words)):
+                    self.scratch_words[i] = string.lower(self.scratch_words[i])
+            if self.correct_words:
+                for i in range(len(self.correct_words)):
+                    self.correct_words[i] = string.lower(self.correct_words[i])
+            if self.recent_words:
+                for i in range(len(self.recent_words)):
+                    self.recent_words[i] = string.lower(self.recent_words[i])
+        self.rules.extend(self.scratch_rule())
+        self.rules.extend(self.correct_rule())
+        self.rules.extend(self.correct_recent_rule())
+
+    def scratch_rule(self):
+        """create the rules for the grammar recognizing Scratch That/n
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[STR]* -- list of strings comprising the rules needed to
+        implement the Scratch That and Scratch n commands
+        """
+        if not self.scratch_words:
+            return []
+        scratch = self.scratch_words[0]
+        for word in self.scratch_words[1:]:
+            scratch = scratch + ' | ' + word
+        rules = []
+        rules.append("<scratch_that> exported = ( %s ) That;" % scratch)
+        rules.append("<scratch_n> exported = ( %s ) {count};" % scratch)
+        self.lists['count'] = ['1', '2', '3', '4', '5']
+        return rules
+
+    def correct_rule(self):
+        """create the rules for the grammar recognizing Scratch That/n
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[STR]* -- list of strings comprising the rules needed to
+        implement the Correct That commands
+        """
+        if not self.correct_words:
+            return []
+        correct = self.correct_words[0]
+        for word in self.correct_words[1:]:
+            correct = correct + ' | ' + word
+        rules = []
+        rules.append("<correct_that> exported = ( %s ) That;" % correct)
+        return rules
+
+    def correct_recent_rule(self):
+        """create the rules for the grammar recognizing Correct Recent
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[STR]* -- list of strings comprising the rules needed to
+        implement the Correct Recent commands
+        """
+        if not self.correct_words:
+            return []
+        if not self.recent_words:
+            return []
+        correct = self.correct_words[0]
+        for word in self.correct_words[1:]:
+            correct = correct + ' | ' + word
+        recent = self.recent_words[0]
+        for word in self.recent_words[1:]:
+            recent = recent + ' | ' + word
+        rules = []
+        rules.append("<correct_recent> exported = ( %s ) ( %s );" \
+            % (correct, recent))
+        return rules
+
+    def activate(self):
+        """activates the grammar for recognition
+	tied to the current window.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.trace('BasicCorrectionWinGramNL.activate', 
+            'received activate')
+        if not self.is_active():
+            debug.trace('BasicCorrectionWinGramNL.activate', 
+                'not already active')
+            window = self.window
+            if window == None:
+                window = 0
+            GrammarBase.activateAll(self, window = window, 
+                exclusive = self.exclusive)
+            self.active = 1
+
+    def remove_other_references(self):
+        GrammarBase.unload(self)
+        BasicCorrectionWinGram.remove_other_references(self)
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.trace('BasicCorrectionWinGramNL.activate', 
+            'received deactivate')
+        if self.is_active():
+            debug.trace('BasicCorrectionWinGramNL.activate', 
+                'was active')
+            GrammarBase.deactivateAll(self)
+            self.active = 0
+
+    def gotResults_scratch_that(self, words, fullResults):
+        """handler for scratch that command
+        """
+        debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
+            'heard scratch that')
+        self.scratch_recent(1)
+
+    def gotResults_scratch_n(self, words, fullResults):
+        """handler for scratch that command
+        """
+        count = int(words[1])
+        debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
+            'heard scratch n, n = %d' % count)
+        self.scratch_recent(count)
+
+    def gotResults_correct_that(self, words, fullResults):
+        """handler for scratch that command
+        """
+        debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
+            'heard correct that')
+        self.on_correct_last()
+
+    def gotResults_correct_recent(self, words, fullResults):
+        """handler for scratch that command
+        """
+        debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
+            'heard correct recent')
+        self.on_correct_recent()
+    
 class WinGramFactoryNL(WinGramFactory):
     """natlink implementation of factory which returns 
     window-specific grammars
@@ -377,3 +581,25 @@ class WinGramFactoryNL(WinGramFactory):
             self.select_words, through_word = self.through_word, 
             window = window, exclusive = exclusive) 
     
+    def make_correction(self, manager, window = None, exclusive = 0):
+        """create a new basic correction grammar
+
+	**INPUTS**
+
+	*WinGramMgr* manager -- the grammar manager which will own the
+	grammar
+
+	*INT* window -- make grammar specific to a particular window
+
+	*BOOL* exclusive -- is grammar exclusive?  (prevents other
+	non-exclusive grammars from getting results)
+
+	**OUTPUTS**
+
+	*BasicCorrectionWinGram* -- new basic correction grammar
+	"""
+        return BasicCorrectionWinGramNL(manager = manager, scratch_words =
+            self.scratch_words, correct_words = self.correct_words, 
+            recent_words = self.recent_words, 
+            window = window, exclusive = exclusive) 
+

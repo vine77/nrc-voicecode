@@ -43,6 +43,11 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                      'send_mess': 1,
+#                      'get_mess': 1,
+#                      'RecogStartMgr': 1,
+#                      'RSMInfrastructure': 1
+#                       'DictWinGramNL': 1
 #                        'get_mess':1, 
 #                         'send_mess': 1,                    
 #                       'DictWinGramNL': 1,

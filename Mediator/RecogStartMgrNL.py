@@ -44,7 +44,7 @@ class RecogStartGram(GrammarBase):
     def initialize(self, callback = None):
         self.callback = callback
         self.load(self.gramSpec)
-#        self.activateAll()
+        self.activateAll()
 
     def gotBegin(self, module_info):
         debug.trace('RecogStartGram.gotBegin', '** invoked')

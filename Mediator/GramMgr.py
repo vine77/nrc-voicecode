@@ -131,6 +131,52 @@ class GramMgr(OwnerObject):
         """
         debug.virtual('GramMgr.interpret_dictation')
 
+    def scratch_recent(self, n):
+        """undo the effect of the n most recent utterances into 
+        this application, if possible
+
+        **INPUTS**
+
+        *INT n* -- number of utterances to undo
+
+        **OUTPUTS**
+
+        *INT* -- number of utterances successfully undone
+        """
+        name = self.name()
+        debug.trace('WinGramMgr.scratch_recent', 
+            'instance name = %s' % name)
+        return self.recog_mgr.scratch_recent(name, n)
+
+    def correct_last(self):
+        """initiate user correction of the most recent utterance, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        name = self.name()
+        self.recog_mgr.correct_last(name)
+
+    def correct_recent(self):
+        """initiate user correction of one or more recent utterances,
+        if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        name = self.name()
+        self.recog_mgr.correct_recent(name)
+
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
@@ -416,16 +462,23 @@ class WinGramMgr(GramMgrDictContext):
     *{INT : SelectWinGram}* sel_grammars -- map from window handles to
     to selection grammars
 
+    *{INT : BasicCorrectWinGram}* correction_grammars -- map from 
+    window handles to grammars containing basic correction commands
+
     *WinGramFactory* factory -- factory which supplies WinGramMgr
     with new window-specific dictation and selection grammars.
+
+    *STR* correction -- string indicating the type of correction
+    which is available: 'basic' or 'advanced', or None if no 
+    correction is available
 
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, factory, global_grammars = 0, exclusive =
-        0, **args):
+    def __init__(self, factory, global_grammars = 0, 
+        exclusive = 0, correction = None, **args):
         """
 	
 	**INPUTS**
@@ -439,16 +492,22 @@ class WinGramMgr(GramMgrDictContext):
 	*BOOL* exclusive -- use exclusive grammars which prevent 
 	non-exclusive grammars from getting results (only for testing purposes)
 
+        *STR* correction -- string indicating the type of correction
+        which is available: 'basic' or 'advanced', or None if no 
+        correction is available
 	"""
         self.deep_construct(WinGramMgr,
                             {'factory': factory, 
                             'global_grammars': global_grammars,
                             'exclusive': exclusive,
                             'dict_grammars' : {},
-                            'sel_grammars' : {}},
+                            'sel_grammars' : {},
+                            'correction_grammars' : {},
+                            'correction': correction},
                             args)
         self.add_owned('dict_grammars')
         self.add_owned('sel_grammars')
+        self.add_owned('correction_grammars')
 
     
     def remove_other_references(self):
@@ -515,6 +574,14 @@ class WinGramMgr(GramMgrDictContext):
             for a_window in self.sel_grammars.keys():
                 if a_window != window:
                     self.sel_grammars[a_window].deactivate()
+        if self.correction:
+            self.correction_grammars[window].activate()
+# if the correction grammars are actually global, we need to deactivate 
+# all the rest, even if they are stored under other windows
+            if self.global_grammars:
+                for a_window in self.correction_grammars.keys():
+                    if a_window != window:
+                        self.correction_grammars[a_window].deactivate()
 
 #  set dictation context
         before, after = self.find_context(buffer)
@@ -538,6 +605,8 @@ class WinGramMgr(GramMgrDictContext):
 	"""
         if self.dict_grammars.has_key(window):
             self.sel_grammars[window].deactivate()
+            if self.correction:
+                self.correction_grammars[window].deactivate()
             for a_buffer in self.dict_grammars[window].values():
                 a_buffer.deactivate()
 
@@ -638,6 +707,14 @@ class WinGramMgr(GramMgrDictContext):
                 'window, a_window: %s, %s' % (str(window), str(a_window)))
             self.sel_grammars[window] = self.factory.make_selection(self.app,
                 a_window, exclusive = self.exclusive)
+        if self.correction and not self.correction_grammars.has_key(window):
+            a_window = window
+            if self.global_grammars:
+                a_window = None
+            self.correction_grammars[window] = \
+                self.factory.make_correction(self, a_window, 
+                exclusive = self.exclusive)
+#            print self.correction_grammars[window]
 
     def delete_window(self, window):
         """clean up and destroy all grammars for a window which 
@@ -657,6 +734,8 @@ class WinGramMgr(GramMgrDictContext):
         if self.sel_grammars.has_key(window):
             self._deactivate_all_window(window)
             del self.sel_grammars[window]
+            if self.correction:
+                del self.correction_grammars[window]
         if self.dict_grammars.has_key(window):
             for a_buffer in self.dict_grammars[window].keys():
                 self.dict_grammars[window][a_buffer].cleanup()
@@ -710,12 +789,16 @@ class WinGramMgrFactory(GramMgrFactory):
     *BOOL* exclusive -- use exclusive grammars which prevent 
     non-exclusive grammars from getting results (only for testing purposes)
 
+    *STR* correction -- string indicating the type of correction
+    which is available: 'basic' or 'advanced', or None if no 
+    correction is available
+
     **CLASS ATTRIBUTES**
 
     *none*
     """
     def __init__(self, gram_factory, global_grammars = 0,
-        exclusive = 0, **args):
+        exclusive = 0, correction = None, **args):
         """create a GramMgrFactory which creates WinGramMgr objects for
 	new editors
 
@@ -730,11 +813,15 @@ class WinGramMgrFactory(GramMgrFactory):
 	*BOOL* exclusive -- use exclusive grammars which prevent 
 	non-exclusive grammars from getting results (only for testing purposes)
 
+        *STR* correction -- string indicating the type of correction
+        which is available: 'basic' or 'advanced', or None if no 
+        correction is available
 	"""
         self.deep_construct(WinGramMgrFactory, 
                             {'gram_factory': gram_factory,
                              'global_grammars': global_grammars,
-                             'exclusive': exclusive
+                             'exclusive': exclusive,
+                             'correction': correction
                             }, args)
 
     def using_global(self):
@@ -774,7 +861,8 @@ class WinGramMgrFactory(GramMgrFactory):
         return WinGramMgr(app = editor, instance_name = instance_name,
             recog_mgr = recog_mgr,
             factory = self.gram_factory,
-            global_grammars = self.global_grammars, exclusive = self.exclusive)
+            global_grammars = self.global_grammars, exclusive = self.exclusive,
+            correction = self.correction)
 
     def new_global_manager(self, editor, instance_name, recog_mgr, 
         exclusive = 1):
@@ -800,7 +888,8 @@ class WinGramMgrFactory(GramMgrFactory):
         return WinGramMgr(app = editor, instance_name = instance_name,
             recog_mgr = recog_mgr,
             factory = self.gram_factory,
-            global_grammars = 1, exclusive = exclusive)
+            global_grammars = 1, exclusive = exclusive,
+            correction = self.correction)
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

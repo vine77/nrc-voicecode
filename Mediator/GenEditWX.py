@@ -517,7 +517,7 @@ class WaxCmdPanel(WaxPanel):
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
 
         ID_PROMPT = wxNewId()
-        self.prompt = wxStaticText(self, ID_PROMPT, "&Command")
+        self.prompt = wxStaticText(self, ID_PROMPT, "Co&mmand")
 
         ID_COMMAND_LINE = wxNewId()
         command_line = wxTextCtrl(self, ID_COMMAND_LINE, 
@@ -642,6 +642,9 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     entered at the command line (ignored by subclasses without command
     lines)
 
+    *wxWindow most_recent_focus* -- the control which had the focus when
+    the application was last deactivated
+
     others -- the various menus
     """
     def remove_other_references(self):
@@ -660,6 +663,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 # function, after performing their own duties
 
         self.closing = 1
+        self.most_recent_focus = None
         GenEdit.GenEditFrameActivateEvent.remove_other_references(self)
 
     def __init__(self, ID, size, parent = None, **args):
@@ -721,6 +725,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         EVT_MENU(self, ID_SAVE_AS,self.on_save_as)        
         EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
         EVT_ACTIVATE(self, self.OnActivate) 
+        self.most_recent_focus = None
 
     def show(self, initial = 0):
         """show the window corresponding to this frame
@@ -748,10 +753,18 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     def OnActivate(self, event):
         if self.closing:
             return
+        current = wxWindow_FindFocus()
         if event.GetActive():
 # window is being activated
+
+# if activated by mouse, some control of this application may already
+# be focused, and we don't want to override that, but otherwise
+# we want to set the focus back to the control which had it last
+            if self.most_recent_focus and not current:
+                self.most_recent_focus.SetFocus()
             self.on_activate(1)
         else:
+            self.most_recent_focus = current
             self.on_activate(0)
 
     def full_title(self):

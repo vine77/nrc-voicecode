@@ -271,7 +271,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 
     trace('sim_commands.say', 'utterance=%s, bypass_NatLink=%s' % (utterance, bypass_NatLink))
 
-    print 'Saying: %s' % utterance
+#    print 'Saying: %s' % utterance
     sys.stdout.flush()
     if echo_utterance:
         print 'Saying: %s' % utterance
@@ -318,7 +318,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 
 
         trace('sim_commands.say', 'words=%s' % words)
-        print '-- sim_commands.say: words=%s' % words
+#        print '-- sim_commands.say: words=%s' % words
         sys.stdout.flush()
 
         #

@@ -26,6 +26,7 @@ messaging protocol to communicate with external editors.
 import vc_globals
 
 import NewMediatorObject
+from MediatorConsoleWX import MediatorConsoleWX
 import tcp_server
 
 import natlink, os, posixpath, re, select, socket
@@ -35,6 +36,8 @@ import AppStateEmacs, AppStateMessaging, auto_test, debug
 import messaging, Object
 import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sr_interface, util
+
+import win32gui
 
 from wxPython.wx import *
 
@@ -46,11 +49,17 @@ from thread_communication_WX import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'send_mess': 1,
+#                        'get_mess': 1,
+#                        'RSMInfrastructure': 1,
+#                      'RecogStartMgr': 1,
+#                      'SelectWinGram': 1,
+#                        'GramMgr': 1,
+#                        'BasicCorrectionWinGram': 1
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
 #                      'init_simulator_regression': 1,
-#                      'RecogStartMgr': 1,
 #                      'WinGramMgr': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1
 #                      'synchronize': 1,
@@ -70,6 +79,7 @@ debug.config_traces(status="on",
 #                                    'listen_one_transaction': 1,
 #                                    'close_app_cbk': 1,
 #                                    'AppState': 1
+      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
 
@@ -91,6 +101,7 @@ def EVT_MINE(evt_handler, evt_type, func):
 wxEVT_SOCKET_DATA = wxNewEventType()
 wxEVT_NEW_LISTEN_CONN = wxNewEventType()
 wxEVT_NEW_TALK_CONN = wxNewEventType()
+wxEVT_CORRECT_UTTERANCE = wxNewEventType()
 
 class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     """main frame for the GUI mediator
@@ -119,7 +130,9 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                            )
         self.name_parent('parent')
         wxFrame.__init__(self, None, wxNewId(), self.app_name,
-            wxDefaultPosition, wxSize(300, 100))
+            wxDefaultPosition, wxSize(300, 100), 
+#            wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP)
+            wxDEFAULT_FRAME_STYLE)
         file_menu=wxMenu()
         ID_SAVE_SPEECH_FILES = wxNewId()
         ID_EXIT = wxNewId()
@@ -264,9 +277,14 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
                 os.sep + 'Admin' + os.sep + 'tests_def.py')
             execfile(tests_def_fname, test_space)        
 
+        wxApp.__init__(self, 0)
+        console = MediatorConsoleWX(self.frame)
+
 #        print self.the_server
+        correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
+                console = console, correct_evt = correct_evt,
                 test_args = [test_suite],
                 test_space = test_space, global_grammars = 1, exclusive = 1)
 #        print self.the_mediator.server
@@ -275,7 +293,7 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 #        print self.the_mediator.server
         sys.stderr.write('Finished wxMediator init...\n')
 
-        wxApp.__init__(self, 0)
+        self.frame.show(1)
         self.hook_events()
 #        wxApp.__init__(self, 1, "crash.wxMediator")
 
@@ -306,7 +324,6 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 
     def OnInit(self):
         self.frame = self.create_main()
-        self.frame.show(1)
         self.SetTopWindow(self.frame)
         return 1
 
@@ -331,7 +348,7 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 
 
     def hook_events(self):
-        """hook the server events up to our handlers
+        """hook events up to our handlers
 
 	**INPUTS**
 
@@ -341,7 +358,24 @@ class wxMediator(wxApp, tcp_server.DataEvtSource, Object.OwnerObject):
 
 	*none*
 	"""
-        pass
+        EVT_MINE(self, wxEVT_CORRECT_UTTERANCE, self.on_correct_utterance)
+
+    def on_correct_utterance(self, event):
+        """handler for UtteranceCorrectionEventWX
+
+        **INPUTS**
+
+        *UtteranceCorrectionEventWX event* -- the event posted by 
+        ResMgr.correct_nth_asynchronous via CorrectUtteranceEvent
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.quitting:
+            number = event.utterance_number
+            instance = event.instance_name
+            self.the_mediator.correct_utterance(instance, number)
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
@@ -578,6 +612,7 @@ class wxMediatorServer(wxMediator):
 
 	*none*
 	"""
+        wxMediator.hook_events(self)
         EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
         EVT_MINE(self, wxEVT_NEW_LISTEN_CONN, self.new_listen_conn)
         EVT_MINE(self, wxEVT_NEW_TALK_CONN, self.new_talk_conn)

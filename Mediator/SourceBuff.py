@@ -909,6 +909,11 @@ class SourceBuff(OwnerObject):
 	should not depend on the type, attributes, or methods 
 	of the cookie.
 
+        This method does not synchronize with the editor prior to
+        storing the state.  The caller is responsible for synchronizing 
+        if desired.  (This avoids having duplicate synchronize calls 
+        when storing the current state of more than one buffer).
+
 	**INPUTS**
 
 	*none*
@@ -948,6 +953,12 @@ class SourceBuff(OwnerObject):
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to either cookie has
 	been lost, compare_states will return false.
+
+        This method does not synchronize with the editor prior to
+        comparing with "current".  To ensure that the "current" state 
+        is really current, the caller must synchronize.
+        (This avoids having duplicate synchronize calls 
+        when comparing with the current state of more than one buffer).
 
 	**INPUTS**
 
@@ -1118,6 +1129,10 @@ class SourceBuff(OwnerObject):
 # this allows for overlapping matches - ugh
 #               pos = a_match.start() + 1
                pos = a_match.end()
+# if we get a zero length match (e.g. '$' matching end of line, then we
+# will continue to get the same match unless we advance the position
+               if a_match.start() == a_match.end():
+                 pos = pos + 1
                all_matches_pos = all_matches_pos + [(a_match.start(), a_match.end())]               
            else:
                break

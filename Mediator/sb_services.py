@@ -466,7 +466,7 @@ class SB_ServiceIndent(SB_Service):
         self.buff.insert(code_after)
         self.buff.goto(pos)
 
-    def incr_indent_level(self, levels=1, code_range=None):
+    def incr_indent_level(self, levels=1, range=None):
         
         """Increase the indentation of a region of code by a certain number of
         levels. This version uses Mediator level indentation functionality
@@ -476,7 +476,7 @@ class SB_ServiceIndent(SB_Service):
         
         *INT* levels=1 -- Number of levels to indent by.
         
-        *(INT, INT)* code_range=None -- Region of code to be indented 
+        *(INT, INT)* range=None -- Region of code to be indented 
         
 
         **OUTPUTS**
@@ -489,16 +489,22 @@ class SB_ServiceIndent(SB_Service):
         # name. Otherwise, it conflicts with the range() function in
         # for loops below.
         #
-        if code_range == None:
-            code_range = self.buff.get_selection()
-        code_range = self.buff.make_valid_range(code_range)
+        # DCF: Unless we want to rename this consistently for all
+        # indentation methods, a better workaround is to 
+        # use __builtins__.range when you mean the builtin function
+        # However, I don't see any reference to the range function below, so it
+        # seems this is no longer necessary in this method
+        #
+        if range == None:
+            range = self.buff.get_selection()
+        range = self.buff.make_valid_range(range)
 
         #
         # Indent from start of first line in range
         #
-        start = self.buff.beginning_of_line(code_range[0]) - 1
+        start = self.buff.beginning_of_line(range[0]) - 1
         if start < 0: start = 0
-        end = code_range[1]
+        end = range[1]
         code_to_indent = self.buff.contents()[start:end]
 
         #

@@ -26,7 +26,7 @@ import Object
 import debug
 
 class InterThreadEvent(Object.Object):
-    """abstract interface for sending a dataless message between threads.
+    """abstract interface for sending a dataless message to the main thread.
     Particular implementations may use win32 events or wxPython custom
     events.
 
@@ -45,7 +45,7 @@ class InterThreadEvent(Object.Object):
                             {},
                             args)
     def notify(self):
-        """send the message, and return asynchronously
+        """send the message, and return synchronously
 
 	**INPUTS**
 
@@ -58,7 +58,7 @@ class InterThreadEvent(Object.Object):
         debug.virtual('InterThreadEvent.notify')
 
 class SocketHasDataEvent(Object.Object):
-    """abstract interface for sending a message from to the main thread 
+    """abstract interface for sending a message to the main thread 
     indicating that a particular socket has data waiting to be read.
 
     The concrete subclass will have a reference to the particular
@@ -82,7 +82,7 @@ class SocketHasDataEvent(Object.Object):
                             {},
                             args)
     def notify(self):
-        """send the message, and return asynchronously
+        """send the message, and return synchronously
 
 	**INPUTS**
 
@@ -93,4 +93,47 @@ class SocketHasDataEvent(Object.Object):
 	*none*
 	"""
         debug.virtual('SocketHasDataEvent.notify')
+
+class CorrectUtteranceEvent(Object.Object):
+    """abstract interface for sending a message to the main thread 
+    indicating that it should initiate user correction of a given
+    utterance.
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correction box, while letting the 
+    correction grammar's on_results method return immediately, so as to 
+    allow speech input to the correction box (or other windows).
+
+    Particular implementations may wxPython custom
+    events or other means to communicate with the main thread.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+        self.deep_construct(CorrectUtteranceEvent,
+                            {},
+                            args)
+    def notify(self, instance_name, utterance_number):
+        """send the message, and return synchronously
+
+	**INPUTS**
+
+        *STR instance_name* -- unique name identifying the editor
+        instance
+
+        *INT utterance_number* -- the number assigned by
+        ResMgr.interpret_dictation to the utterance to be corrected
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.virtual('CorrectUtteranceEvent.notify')
 

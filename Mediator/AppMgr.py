@@ -189,7 +189,21 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
         return self.mediator.interpreter()
-        
+    
+    def console(self):
+        """returns a reference to the MediatorConsole which provides the
+        GUI correction interfaces.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.mediator.console()
+         
     def reset_results_mgr(self, instance_name = None):
         """resets the ResMgr objects for a given editor, erasing any 
         stored utterance and corresponding editor state information.  
@@ -319,6 +333,29 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         """
         return self.recog_mgr.can_reinterpret(instance_name, n = n)
    
+    def correct_utterance(self, instance_name, utterance_number):
+        """initiate user correction of the utterance with a given
+        utterance number into the given instance
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correction box.  Generally, it should be called
+        only in response to a CorrectUtterance event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.known_instance(instance_name):
+            return
+        self.recog_mgr.correct_utterance(instance_name, utterance_number)
+
     def add_prefix(self, app_name, title_prefix):
         """add a title prefix for an editor application
 

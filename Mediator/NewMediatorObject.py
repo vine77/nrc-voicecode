@@ -28,6 +28,7 @@ import AppMgr, RecogStartMgr, GramMgr
 import MediatorConsole
 import sr_grammars
 import RecogStartMgrNL
+import ResMgr
 import sr_grammarsNL
 import auto_test
 import regression
@@ -119,10 +120,13 @@ class NewMediatorObject(Object.OwnerObject):
     *{STR: BOOL} external_editors* -- set of instance names
     of all external editors connected to the mediator via the server
 
-    [MediatorConsole] *console* -- GUI console for viewing mediator
+    [MediatorConsole] *the_console* -- GUI console for viewing mediator
     status, allowing the user to close the mediator when it is running
     as a server, and for invoking the correction dialog boxes.  May be
     None if the mediator is not running in GUI mode
+
+    *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
+    event to bring up the correction box asynchronously.
 
     *{STR:ANY} test_args* -- list of test names to run
 
@@ -156,6 +160,7 @@ class NewMediatorObject(Object.OwnerObject):
     def __init__(self, interp = None,
                  server = None,
                  console = None,
+                 correct_evt = None,
                  test_args = None,
                  test_space = None, global_grammars = 0, exclusive = 0, 
                  symdict_pickle_fname = None,
@@ -200,6 +205,9 @@ class NewMediatorObject(Object.OwnerObject):
 	underlying GUI.  May be None if the mediator is not running in 
 	GUI mode.
 
+        *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
+        event to bring up the correction box asynchronously.
+
         *{STR:ANY} test_space* -- if the mediator is started in regression 
         testing mode, test_space is the namespace in which regression tests 
         have been defined and will run.  Otherwise, it should be None.
@@ -223,7 +231,8 @@ class NewMediatorObject(Object.OwnerObject):
                             {'editors': None,
                              'server': server,
                              'external_editors': {},
-                             'console': console,
+                             'the_console': console,
+                             'correct_evt': correct_evt,
                              'interp': interp,
                              'test_args': test_args,
                              'test_space': test_space,
@@ -240,6 +249,9 @@ class NewMediatorObject(Object.OwnerObject):
                             {})
         self.add_owned('server')
         self.add_owned('editors')
+        self.add_owned('the_console')
+        if self.the_console:
+            self.the_console.set_mediator(self)
         if self.interp == None:
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
                 symbol_match_dlg = symbol_match_dlg)
@@ -264,10 +276,20 @@ class NewMediatorObject(Object.OwnerObject):
 	"""
         if self.editors != None:
             return 1 # we've already got one!
-        grammar_factory = sr_grammarsNL.WinGramFactoryNL()
+        correct_words = []
+        if self.the_console:
+            correct_words = ["Correct"]
+        grammar_factory = \
+            sr_grammarsNL.WinGramFactoryNL(correct_words = correct_words, 
+                recent_words = [])
+# suppress Correct That if there is no console
+# suppress Correct Recent for now, because it isn't implemented yet 
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
-            global_grammars = 0)
-        recog_mgr = RecogStartMgrNL.RecogStartMgrNL(GM_factory = GM_factory)
+            global_grammars = 0, correction = 'basic')
+        res_mgr_factory = \
+            ResMgr.ResMgrBasicFactory(correct_evt = self.correct_evt)
+        recog_mgr = RecogStartMgrNL.RecogStartMgrNL(GM_factory = GM_factory,
+            res_mgr_factory = res_mgr_factory)
         self.editors = AppMgr.AppMgr(recog_mgr, mediator = self)
         return 1
     
@@ -289,6 +311,20 @@ class NewMediatorObject(Object.OwnerObject):
             CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
                 disable_dlg_select_symbol_matches = not symbol_match_dlg)
 
+    def console(self):
+        """returns a reference to the MediatorConsole which provides the
+        GUI correction interfaces.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.the_console
+   
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
 
@@ -597,6 +633,9 @@ class NewMediatorObject(Object.OwnerObject):
 
 # for now, don't disconnect from sr_interface -- let the creator do that
 
+        self.correct_evt = None
+# correct_evt may have a reference to a method of the application which
+# owns NewMediatorObject
         Object.OwnerObject.remove_other_references(self)
 
     def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
@@ -733,6 +772,7 @@ class NewMediatorObject(Object.OwnerObject):
              regression.TempConfigNewMediatorFactory(symbol_match_dlg = \
              self.symbol_match_dlg_regression)
         auto_test.run(self.test_args)
+        app.mediator_closing()
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
         self.editors.delete_instance(instance_name)
         return 1
@@ -1058,9 +1098,28 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL* -- true if we can safely reinterpret that utterance
         """
         return self.editors.can_reinterpret(instance_name, n = n)
-   
 
-    
+    def correct_utterance(self, instance_name, utterance_number):
+        """initiate user correction of the utterance with a given
+        utterance number into the given instance
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correction box.  Generally, it should be called
+        only in response to a CorrectUtterance event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *INT utterance_number* -- the number assigned to the utterance by
+        interpret_dictation
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.editors.correct_utterance(instance_name, utterance_number)
+
 ###############################################################################
 # Configuration functions. These are not methods
 ###############################################################################
