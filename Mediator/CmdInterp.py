@@ -254,9 +254,10 @@ class LSAliasSet(Object):
 
         *none*
         """
+        trace('CmdInterp.add_lsa', '** invoked')
         if name is None:
             name = alias.spoken_forms[0]
-        self.aliases[name] = alias
+        self.aliases[name] = alias        
 
     def replace_spoken(self, name, spoken_forms):
         """replace the spoken forms of an alias with the given name

@@ -310,8 +310,9 @@ def addWord(word, *rest):
         #
         word_no_special_chars = re.sub('{Spacebar}', '', word)
         if word_no_special_chars != word:
-#                trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
+#            trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
             natlink.addWord(word_no_special_chars, flag)
+ 
 
 def deleteWord(word, *rest):
     """Delete a word from NatSpeak's vocabulary.

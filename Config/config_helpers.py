@@ -1169,6 +1169,7 @@ class EnglishSmallNumbersSet(Object):
                                                        'sixty', 'seventy', 'eighty', 'ninety']}, 
                               args)
         debug.trace('EnglishSmallNumbersSet.__init__', 'exited')                              
+
                               
     def _add_number(self, aliases, number):        
         written = "%s" % number
@@ -1189,8 +1190,22 @@ class EnglishSmallNumbersSet(Object):
                                     
                                                    
         aliases.add_lsa(LSAlias([spoken], 
-                        {None: written}, like_dot))        
-        
+                        {None: written}, letters_and_digits))
+
+    def _add_zero_prefixed_numbers(self, aliases):
+       aliases.add_lsa(LSAlias(['oh X.'], 
+                       {None: '0x'}, letters_and_digits))
+    
+       for digit in range(9):
+          if digit == 0:
+             spoken = 'oh oh'
+             written = '00'
+          else:
+             spoken = 'oh %s' % self.words_0_19[digit]
+             written = '0%s' % digit
+          aliases.add_lsa(LSAlias([spoken], 
+                          {None: written}, letters_and_digits))
+               
     def create(self, interp):
         """Add LSAs for dictation of English 2-digit numbers.
         
@@ -1210,6 +1225,8 @@ class EnglishSmallNumbersSet(Object):
                                      
         for number in range(99):
            self._add_number(aliases, number)
+           
+        self._add_zero_prefixed_numbers(aliases)
            
                    
         interp.add_lsa_set(aliases)
