@@ -19,6 +19,7 @@ import os
 #
 home = os.environ['VCODE_HOME']
 data = home + os.sep + 'Data'
+tmp = data + os.sep + 'Tmp'
 test_data = data + os.sep + 'TestData'
 config = home + os.sep + 'Config'
 default_config_file = config + os.sep + 'vc_config.py'

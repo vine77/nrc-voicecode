@@ -1,7 +1,7 @@
 """State information for the programming environment."""
 
 
-import debug
+import debug, sys
 from Object import Object
 
 class AppState(Object):
@@ -284,3 +284,72 @@ class AppState(Object):
         self.curr_buffer.selection_start = start
         self.curr_buffer.selection_end = end
         self.goto(start)
+
+
+    def print_buff_content(self, file_name=None):
+        """Prints the content of a source  buffer to the VoiceCode console.
+
+        *[STR file_name]* is the name of the source file for the buffer to
+        print. If *None*, then print current buffer.    
+        """
+        buff = self.find_buff(file_name)
+        cont = self.curr_buffer.content
+
+        if buff.selection_start != None or buff.selection_end != None:
+            if buff.selection_start <= buff.selection_end:
+                selection_start = buff.selection_start
+                selection_end = buff.selection_end
+            else:
+                selection_start = buff.selection_end
+                selection_end = buff.selection_start
+        else:
+            selection_start = buff.cur_pos
+            selection_end = buff.cur_pos
+
+        before_content = cont[:selection_start]
+        selection_content = cont[selection_start:selection_end]
+        after_content = cont[selection_end:]
+        
+        sys.stdout.write("*** Start of source buffer ***\n")
+
+        #
+        # Print region before the selection.
+        #
+        curr_line_num = 1
+        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
+        for aline in lines_with_num[:len(lines_with_num)-1]:
+            sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+        if (len(lines_with_num) > 0):
+             lastline = lines_with_num[len(lines_with_num)-1]
+             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
+        
+        if selection_content == '':
+            sys.stdout.write('<CURSOR>')            
+        else:
+            sys.stdout.write('<SEL_START>')
+
+        #
+        # Print the selection
+        #
+        curr_line_num = curr_line_num + len(lines_with_num) - 1
+        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
+        if (len(lines_with_num) > 0):
+            firstline = lines_with_num[0]
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+        if selection_content != '': sys.stdout.write('<SEL_END>')
+
+        #
+        # Print region after the selection
+        #
+        curr_line_num = curr_line_num + len(lines_with_num) - 1
+        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
+        if (len(lines_with_num) > 0):
+            firstline = lines_with_num[0]
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))        
+        sys.stdout.write("\n*** End of source buffer ***\n")
+        
+

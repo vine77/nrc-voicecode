@@ -52,11 +52,14 @@ class CSCmd(Object):
         for ameaning in self.meanings:
             cont, action = ameaning[0], ameaning[1]
 #            print '-- CSCmd.interpret: cont=%s' % cont
-#            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s' % (ameaning, cont, str(action))
+#            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.__doc__=%s' % (ameaning, cont, str(action), action.__doc__)
             if (cont == None or cont.applies(app)):
 #                print '-- CSCmd.interpret: this context applies'
                 action(app, cont)
+#                print '-- CSCmd.interpret: current buffer is now:'
+#                app.print_buff_content()
                 applied = 1
-                break
+                break            
+
         return applied
 

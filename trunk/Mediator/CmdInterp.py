@@ -180,10 +180,13 @@ class CmdInterp(Object):
         # Interpret the begining of the command until nothing left to
         # interpret.
         #
-        
+
+#        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
 #        print '-- CmdInterp.interpret_NL_cmd: self.all_cmds_regexp()=%s' % self.all_cmds_regexp()
         regexp = '^(\s*)(' + self.all_cmds_regexp() + ')(\s*)'
         while (not cmd == ''):
+#            print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
+            
             #
             # Check for a CSC at the beginning of the command, and compute
             # length of string it consumes
@@ -267,6 +270,7 @@ class CmdInterp(Object):
                 amatch = re.match('(^\s*[^\s]*)', cmd)
                 self.on_app.insert_indent(amatch.group(1), '')
                 cmd = cmd[amatch.end():]
+            
 
 
     def chop_symbol(self, command):
@@ -348,10 +352,13 @@ class CmdInterp(Object):
 
         return choices[0]
 
-    def index_csc(self, acmd):
+    def index_csc(self, acmd, add_voc_entry=1):
         """Add a new csc to the command interpreter's command dictionary
 
         [CSCmd] *acmd* is the command to be indexed.
+
+        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+         for the CSC's spoken forms
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
@@ -384,8 +391,7 @@ class CmdInterp(Object):
                 # spoken form, and add it to the SR vocabulary.
                 #
                 self.cmd_index[a_spoken_form] = [acmd]
-                if not os.environ.has_key('VCODE_NOSPEECH'):
-#                    VoiceDictation.addWord(a_spoken_form)
+                if not os.environ.has_key('VCODE_NOSPEECH') and add_voc_entry:
                     sr_interface.addWord(a_spoken_form)
 
 
@@ -427,4 +433,4 @@ class CmdInterp(Object):
 
             self.last_loaded_language = language
             
-
+#        print '-- CmdInterp.load_language_specific_aliases: finished'

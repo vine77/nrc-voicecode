@@ -2,26 +2,49 @@
 
 from Context import Context
 
-class ContC(Context):
-    """This context applies if current source buffer is in C."""
+class ContLanguage(Context):
+    """Context that applies only if a particular programming language is the
+    active one.
     
-    def __init__(self, **attrs):
-        self.deep_construct(ContC, {}, attrs)
+    **INSTANCE ATTRIBUTES**
+    
+    *ANY language=None* -- Name of the programming language for this context.
+
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, language=None, **args_super):
+        self.deep_construct(ContLanguage, \
+                            {'language': language}, \
+                            args_super, \
+                            {})
 
     def applies(self, app):
         buff = app.curr_buffer
-        return (buff != None and  buff.language == 'C')
+        return (buff != None and  buff.language == self.language)
+        
 
+class ContC(ContLanguage):
+    """This context applies if current source buffer is in C.
 
-class ContPy(Context):
-    """This context applies if current source buffer is in Python."""
+    It is essentially a shortcut for ContLanguage(language='C')
+    """
     
-    def __init__(self, **attrs):
-        self.deep_construct(ContPy, {}, attrs)
+    def __init__(self, **args_super):
+        self.deep_construct(ContC, {}, args_super, enforce_value={'language': 'C'})
 
-    def applies(self, app):
-        buff = app.curr_buffer
-        return (buff != None and  buff.language == 'python')
+
+class ContPy(ContLanguage):
+    """This context applies if current source buffer is in C.
+
+    It is essentially a shortcut for ContLanguage(language='python')
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ContPy, {}, args_super, enforce_value={'language': 'python'})
+
 
 
 class ContAny(Context):

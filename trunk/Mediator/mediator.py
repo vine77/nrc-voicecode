@@ -41,9 +41,23 @@ say(STR utterance)
    When called in this way, the system will simulate a recognition
    event using NatLink's <EM>recognitionMimic</EM> function.
 
+   Note that this command will not work with Select XYZ
+   utterances. For those, you must use the say_select command
+   described below.
+
 say(STR utterance, bypass_NatLink=1)
    Same as above, except that the interpretation process will bypass
    NatLink's <EM>recognitionMimic</EM> function.
+
+say_select([STR] utterrance)
+   Simulates a Select XYZ utterance.
+
+   Elements of list *utterance* are the individual NatSpeak vocabulary
+   entries that make the utterance. For vocabulary entries of the form
+   written\spoken form, you must specify both the written and spoken
+   form of the entry.
+
+   e.g. say_select(['Select', '!=\\not equal to'])
 
 goto(INT pos)
    Moves cursor to position *pos*
@@ -84,7 +98,7 @@ quit()
 """
 
 import natlink
-import os, re, sys
+import os, re, string, sys
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
 
@@ -117,22 +131,61 @@ def compile_symbols(file_list):
         print 'Compiling symbols for file \'%s\'' % a_file
         the_mediator.interp.known_symbols.parse_symbols(a_file)
     print '>>> Known symbols are: '; the_mediator.interp.known_symbols.print_symbols()
+
     
 def say(utterance, bypass_NatLink=0):
     """Simulate an utterance *STR utterance*
 
+    Note that this command will not work with *Select XYZ* utterances.
+    For those, you must use the [say_select] command.
+    
     IF *BOOL bypass_NatLink* is true, the interpretation will be done withouth
     going through NatLink's recognitionMimic function.
+
+    *[STR] utterance* -- The list of words in the utterance. If parts
+    of the utterance are written\spoken words, then they should be
+    written as such. For example:
+
+    say(['horiz_pos\\horizontal position', '{Spacebar}!={Spacebar}\\not equal to', '0'])
+
+    will type: horiz_pos != 0
+
+    Note also that if the utterance is a Select XYZ utterance, and
+    some words in utterance correspond to LSAs, make sure to omit the
+    {Spacebar} from the LSA's written form (Select XYZ grammar doesn't
+    seem to recognise words that contain {Spacebar}). This will work
+    because VoiceCode automatically adds a redundant vocabulary entry
+    for each LSA, which has the {Spacebar}s removed.
+
+    Also, for Select XYZ, make sure to CAPITALISE the word Select.
     """
     
     global the_mediator
     if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
         the_mediator.interp.interpret_NL_cmd(utterance)
+        show_buff()        
     else:
         words = re.split('\s+', utterance)
 #        print '-- mediator.say: words=%s' % repr(words)
         natlink.recognitionMimic(words)
-    show_buff()
+
+def say_select(utterance):
+    """Simulate a *Select XYZ* utterance
+
+
+    Elements of list *utterance* are the individual NatSpeak vocabulary
+    entries that make the utterance. For vocabulary entries of the form
+    written\spoken form, you must specify both the written and spoken
+    form of the entry.
+    
+    e.g. say_select(['Select', '!=\\not equal to'])    
+    """
+    
+    global the_mediator
+    utterance[0] = string.capitalize(utterance[0])
+#    print '-- mediator.say_select: utterance = %s' % repr(utterance)
+    natlink.recognitionMimic(utterance)
+
 
 def goto(pos):
     """Goes to position *INT pos* of the current buffer"""
@@ -205,11 +258,15 @@ def quit():
 def init_simulator():
     global the_mediator
 
-    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-    the_mediator.configure()
     if sr_interface.speech_able:
         natlink.natConnect()
         natlink.setMicState('off')
+
+    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    the_mediator.configure()
+    if sr_interface.speech_able:
+#         natlink.natConnect()
+#         natlink.setMicState('off')
         the_mediator.mixed_grammar.load()
         the_mediator.mixed_grammar.activate()
         the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
@@ -251,16 +308,18 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
+#      clear_symbols()    
 #      open_file('D:/blah.c')
-#      say('for loop index after semi index', bypass_NatLink=1)
+#      compile_symbols(['D:/VoiceCode/VCode.redundant_trans/Data/TestData/small_buff.c'])
+#      say('horizontal position equals zero')
+#      say_select(['Select', """horiz_pos\horizontal position"""])
 #      quit()
+
 
     while (not quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()
-        execute_command(cmd)
-            
-
+        execute_command(cmd)                
         
 if (__name__ == '__main__'):
     
