@@ -41,10 +41,12 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     [AS_ServiceBreadcrumbs] *breadcrumbs_srv* -- The VoiceCode level
     breadcrumbs service used by EdSim.
     
-    **CLASSS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
-    """
+
+    ..[AS_ServiceBreadcrumbs] file:///./AppState.AS_ServiceBreadcrumbs.html"""
+
     buffer_methods = AppState.AppState.buffer_methods[:]
     buffer_methods.append('print_buff')
     
@@ -177,7 +179,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         If *buff* not specified either, drop breadcrumb in current buffer
 	"""
-        self.breadcrumbs_srv.drop_breadcrumbs(buffname, pos)
+        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
 
 
     def pop_breadcrumbs(self, num=1, gothere=1):

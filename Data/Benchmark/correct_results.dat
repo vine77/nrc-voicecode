@@ -181,7 +181,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8ae7f0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8abda0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1507,7 +1507,6 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1990,7 +1989,6 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -2038,7 +2036,7 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at a9f220> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at a84d50> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -2073,7 +2071,6 @@ _cached_symbols_as_one_string is:
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -2091,7 +2088,6 @@ _cached_symbols_as_one_string is:
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -2102,7 +2098,6 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -4960,7 +4955,6 @@ Saying: ['new statement']
 113:             <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -5956,7 +5950,6 @@ Associate 'all right' with symbol (Enter selection):
  43:                print 'all_right<CURSOR>'
 
 *** End of source buffer ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
@@ -6808,7 +6801,6 @@ Associate 'all right' with symbol (Enter selection):
  43:                print 'all_right<CURSOR>'
 
 *** End of source buffer ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6904,7 +6896,6 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -7764,10 +7755,9 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 
 -----------------------------------------------
-Test suite completed in:  997.879999995 secs
+Test suite completed in:  1062.03999996 secs
 -----------------------------------------------

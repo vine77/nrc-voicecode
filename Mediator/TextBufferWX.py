@@ -27,6 +27,13 @@ from Object import Object
 from TextBuffer import *
 from wxPython.wx import *
 
+# workaround for minor bug in wxPython 2.3.2.1 (should be fixed in later
+# versions, and the workaround will still work then)
+def fix_x_y(value):
+    if len(value) == 3:
+	return value[1], value[2]
+    return value
+
 class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
     """TextBufferChangeSpecify wrapper for wxTextCtrl
     
@@ -409,7 +416,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	else:
 	    end = self.underlying.GetLastPosition()
 #	print end
-	ending_x, ending_y = self.underlying.PositionToXY(end)
+	ending_x, ending_y = fix_x_y(self.underlying.PositionToXY(end))
 #	print starting_line, ending_line, ending_x
 	if self.carriage_return_bug:
 	    start, end = self.internal_to_external(start, end)
@@ -423,7 +430,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	if p > s and p < e:
 	    return
 	if p > e:
-	    x, y = self.underlying.PositionToXY(p_internal)
+	    x, y = fix_x_y(self.underlying.PositionToXY(p_internal))
 	    y = y - self.line_height() + 1
 	    p_internal = self.underlying.XYToPosition(x, y)
         self.underlying.ShowPosition(p_internal)

@@ -110,7 +110,7 @@ class AS_ServiceBreadcrumbs(AS_Service):
                             args_super, 
                             {})
 
-    def drop_breadcrumbs(self, buffname=None, pos=None):
+    def drop_breadcrumb(self, buffname=None, pos=None):
 
         """Drops a breadcrumb
 

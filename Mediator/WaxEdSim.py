@@ -109,6 +109,8 @@ class WaxEdSimPane(wxPanel):
         wxBell()
 
     def cleanup(self):
+        self.exiting = 1
+
 #	wxBell()
 #	self.mic_button.SetBitmapLabel(wxNullBitmap)
 #	self.mic_button.Destroy()
@@ -124,6 +126,7 @@ class WaxEdSimPane(wxPanel):
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize,
 	    name = title)
         self.parent = parent
+	self.exiting = 0
 
 # dictionary to provide local name space for user commands
 	self.command_space = {}
@@ -241,6 +244,9 @@ class WaxEdSimPane(wxPanel):
         current = wxWindow_FindFocus()
 	self.command_line.SetFocus()
     def on_focus(self, event):
+	if self.exiting:
+	    event.Skip()
+	    return
 	if self.most_recent_focus == 0:
 	    self.most_recent_focus = self.editor
 	self.most_recent_focus.SetFocus()
@@ -285,6 +291,7 @@ class WaxEdSimPane(wxPanel):
 #		    in sys.modules[self.__class__.__module__].__dict__, \
 #		    self.command_space
                 #	  exec command in self.command_space
+	        print self.command_space['quit_flag']
 	    except Exception, err:
 	        traceback.print_exc()
 	finally:
@@ -293,6 +300,8 @@ class WaxEdSimPane(wxPanel):
 	    # crashes
 	    sys.stdout = stdout
 	    sys.stderr = stderr
+	if self.command_space['quit_flag']:
+	    self.parent.quit_now(None)
     
     def initial_show(self):
 	"""create editor and log windows.  This is done here, rather
@@ -336,6 +345,7 @@ class WaxEdSimFrame(wxFrame):
 	"""necessary because of circular references: 
 	child contains reference to parent.  Note: quit_now calls
 	cleanup"""
+	self.exiting = 1
 	try:
 	    self.pane.cleanup()
 	    self.pane.Destroy()
@@ -349,6 +359,7 @@ class WaxEdSimFrame(wxFrame):
         wxSize(1000, 600))
 
 	self.title = title
+	self.exiting = 0
 	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
@@ -434,6 +445,9 @@ class WaxEdSimFrame(wxFrame):
 	return self.pane.editor_has_focus()
 
     def on_focus(self, event):
+	if self.exiting:
+	    event.Skip()
+	    return
 	if self.most_recent_focus == 0:
 	    self.most_recent_focus = self.pane
 	self.most_recent_focus.SetFocus()
