@@ -21,7 +21,7 @@
 
 import os, re, string, sys
 
-import actions_gen, auto_test, natlink, vc_globals
+import actions_gen, auto_test, vc_globals
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState

@@ -365,6 +365,4 @@ def getmic():
         sr_interface.connect()
         return natlink.getMicState()
 def setmic(state):
-    if sr_interface.speech_able():
-        sr_interface.connect()
-        natlink.setMicState(state)
+    sr_interface.set_mic(state)
