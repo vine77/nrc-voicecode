@@ -26,7 +26,7 @@
 from Object import Object
 import sb_services, SourceBuff
 from LangDef import LangDef
-import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
+import auto_test, CmdInterp, PickledObject, sr_interface, vc_globals
 import util
 from debug import trace
 

@@ -23,9 +23,9 @@
 need for caching)"""
 
 
-import SourceBuffWithServices
+import SourceBuff
 
-class SourceBuffNonCached(SourceBuffWithServices.SourceBuffWithServices):
+class SourceBuffNonCached(SourceBuff.SourceBuffWithServices):
     
     """Interface to a a buffer in a fast programming environment
     (i.e. no need for caching)

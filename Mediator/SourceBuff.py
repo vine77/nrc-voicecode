@@ -28,40 +28,9 @@ import re, string, sys
 
 from Object import Object, OwnerObject
 
+from SourceBuffCookie import SourceBuffCookie
 
-class SourceBuffCookie(OwnerObject):
-    """abstract class which represents a restore-able SourceBuff state
-
-    SourceBuffCookie itself is simply a dummy class which acts as a
-    placeholder.  Its only purpose is to serve as ostensible return or 
-    argument type for various pure virtual SourceBuff functions.  The
-    actual return or argument type will be a subclass of
-    SourceBuffCookie which will vary with SourceBuff subclass.
-
-    **INSTANCE ATTRIBUTES**
-
-    *None*
-
-    **CLASS ATTRIBUTES**
-
-    *None*
-    """
-    def __init__(self, **attrs):
-        self.deep_construct(SourceBuffCookie, {}, attrs)
-
-    def rename_buffer_cbk(self, new_buff_name):
-        """callback which notifies us that the application
-        has renamed the buffer corresponding to this cookie
-
-        **INPUTS**
-
-        *STR* new_buff_name -- new name of the buffer 
-
-        **OUTPUTS**
-
-        *none*
-        """
-        debug.virtual('SourceBuffCookie.rename_buffer_cbk')
+import sb_mixins
 
 class SourceBuff(OwnerObject):
     """Interface to a buffer being edited in the programming environment
@@ -1702,3 +1671,17 @@ class BackspaceMixIn(Object):
         start = max(0, start)
         self.delete(range = (start, end))
         
+class SourceBuffWithServices(sb_mixins.WithKbdService, SourceBuff):
+    """partial implementation of SourceBuff using sb_mixins to implement
+    some methods using mixins
+
+    Mixins included currently are:
+
+    WithKbdService
+    """
+    
+    def __init__(self, **attrs):
+        self.deep_construct(SourceBuffWithServices,
+                            {}, attrs
+                            )
+
