@@ -22,6 +22,7 @@
 """Context objects which are not tied to a specific language"""
 
 from Context import Context
+import actions_gen 
 import debug
 
 class ContLanguage(Context):
@@ -43,7 +44,45 @@ class ContLanguage(Context):
                             args_super, \
                             {})
 
-    def applies(self, app):
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "buffer"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "Language: %s" % self.language
+
+    def _applies(self, app, preceding_symbol = 0):
         buff = app.curr_buffer()
         return (self.language == None or (buff != None and  buff.language_name() == self.language))
         
@@ -83,8 +122,47 @@ class ContAny(Context):
     def __init__(self, **attrs):
         self.deep_construct(ContAny, {}, attrs)
         
-    def applies(self, app):
+    def _applies(self, app, preceding_symbol = 0):
         return not app.translation_is_off
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "global"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "Any"
+
 
 class ContLastActionWas(Context):
     """This context applies if the last action application's command history
@@ -105,14 +183,20 @@ class ContLastActionWas(Context):
         
         self.deep_construct(ContLastActionWas, {'types': types, 'connector': connector},
                             attrs)
+        if self.connector != 'and':
+            self.connector = 'or'
         
-    def applies(self, app):
-        entry = app.get_history(1)
-        debug.trace('ContLastActionWas.applies', 'entry=%s' % repr(entry))
-        if entry:
-            (last_cont, last_action) = entry
+    def _applies(self, app, preceding_symbol = 0):
+        if preceding_symbol:
+            last_cont = None
+            last_action = actions_gen.ActionInsert('%dummy%')
         else:
-            return 0
+            entry = app.get_history(1)
+            debug.trace('ContLastActionWas.applies', 'entry=%s' % repr(entry))
+            if entry:
+                (last_cont, last_action) = entry
+            else:
+                return 0
         if self.connector == 'and':
             answer = 1
             for a_class in self.types:
@@ -128,6 +212,48 @@ class ContLastActionWas(Context):
         debug.trace('ContLastActionWas.applies', 'last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer))
         return answer
 
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "last command"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        for t in self.types:
+            type_names.append(str(t))
+        type_names.sort()
+        s = "LastActionWas: %s %s" % (self.connector, type_names)
+        return s
+
 
 class ContBlankLine(Context):
     """This context applies if the cursor is on a blank line."""
@@ -136,8 +262,9 @@ class ContBlankLine(Context):
         self.deep_construct(ContBlankLine, {'language': language},
                             attrs)
        
-    def applies(self, app):
-
+    def _applies(self, app, preceding_symbol = 0):
+       if preceding_symbol:
+           return 0
        answer = 0
        lang_cont = ContLanguage(language=self.language)
        
@@ -154,6 +281,44 @@ class ContBlankLine(Context):
  
        return answer        
 
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "immediate"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "BlankLine"
+
 
 class ContAnyEvenOff(Context):
     """This context always applies, EVEN IF translation is off."""
@@ -161,8 +326,47 @@ class ContAnyEvenOff(Context):
     def __init__(self, **attrs):
         self.deep_construct(ContAnyEvenOff, {}, attrs)
         
-    def applies(self, app):
+    def _applies(self, app):
         return 1
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "any"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "AnyEvenOff"
+
 
 
 class ContTranslationOff(Context):
@@ -182,6 +386,45 @@ class ContTranslationOff(Context):
                             {}, \
                             args_super, \
                             {})
-    def applies(self, app):
+    def _applies(self, app):
         return app.translation_is_off
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "global"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "TranslationOff"
+
 

@@ -31,6 +31,7 @@ from CSCmd import CSCmd
 from Object import Object, OwnerObject
 import SymDict
 import sr_interface
+import WordTrie
 
 from SpacingState import *
 
@@ -358,10 +359,9 @@ class CmdInterp(OwnerObject):
 
     [SymDict] *known_symbols* -- dictionary of known symbols
     
-    {STR: {STR: STR}} *language_specific_aliases = {}* -- Key is the name of
+    {STR: WordTrie} *language_specific_aliases = {}* -- Key is the name of
      a programming language (None means all languages). Value is a
-     dictionary of written forms over spoken form keys 
-     specific to a language.
+     WordTrie of written forms over spoken form phrases
 
     BOOL *disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
@@ -416,8 +416,9 @@ class CmdInterp(OwnerObject):
                             {'mediator': mediator,
                              'cmd_index': {}, 
                              'known_symbols': None,
-                             'language_specific_aliases': {},
-                             'lsa_spacing': {},
+                             'language_specific_aliases': \
+                                 {None: WordTrie.WordTrie()},
+                             'lsa_spacing': {None: {}},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
@@ -577,7 +578,7 @@ class CmdInterp(OwnerObject):
                  trace('CmdInterp.interpret_massaged', 'processing leading CSC=\'%s\'' % chopped_CSC)
                  CSCs = self.cmd_index[chopped_CSC]
                  trace('CmdInterp.interpret_massaged', '** CSCs=%s' % repr(CSCs))                 
-                 csc_applies = 0
+                 csc_applies = None
 # DCF: why is self.cmd_index[a_spoken_form] a list of CSCs each with
 # multiple meanings?  The meanings are a dictionary, so there is no way
 # to specify their order, so allowing a list of forms allows you to
@@ -585,8 +586,11 @@ class CmdInterp(OwnerObject):
 # appends to the list, so you always have to go from general to
 # specific.  Furthermore, priority within elements is
 # undefined.  This seems like a very bad design.
+                 preceding_symbol = 0
+                 if untranslated_words:
+                     preceding_symbol = 1
                  for aCSC in CSCs:
-                     csc_applies = aCSC.applies(app)
+                     csc_applies = aCSC.applies(app, preceding_symbol)
                      trace('CmdInterp.interpret_massaged', '** aCSC=%s, csc_applies=%s' % (aCSC, csc_applies))
                      if (csc_applies):
 # flush untranslated words before executing action
@@ -595,16 +599,10 @@ class CmdInterp(OwnerObject):
                                  app, exact_symbol)
                              untranslated_words = []
                              exact_symbol = 0
-                         applied = aCSC.interpret(app)
-                         if not applied:
-                            #
-                            # AD: Ideally, this should never happen, but right now
-                            #     it does (ex: if an applies() changes the
-                            #     the state of AppState in such a way that the
-                            #     context does not apply anymore
-                            #
-                            self.user_message("WARNING: tried to interpret a '%s' command without valid context" % CSC_consumes)
+                         context, action = csc_applies
+                         action.log_execute(app, context)
                          break
+
                  if csc_applies:
                      #
                      # Found a CSC that applies
@@ -994,7 +992,7 @@ class CmdInterp(OwnerObject):
         return self.chop_construct(cmd, CmdInterp.is_spoken_CSC, app)
 
     def chop_LSA(self, command, app):
-        """Chops off the first word of a command if it is an LSA.
+        """Chops off the beginning of a command if it is an LSA.
                 
         **INPUTS**
         
@@ -1017,11 +1015,72 @@ class CmdInterp(OwnerObject):
         *[STR]* rest -- The remaining of *cmd* after the construct has been
         chopped
         """
-        
         trace('CmdInterp.chop_LSA', 'command=%s' % command)
-#        print '-- CmdInterp.chop_LSA: command=%s' % command
-        return self.chop_construct(command, CmdInterp.is_spoken_LSA, app)
+#        if not app.translation_is_off:
+        spoken_list = map(lambda word: process_initials(word[0]), command)
+        trace('CmdInterp.chop_LSA', 'spoken=%s' % spoken_list)
 
+        aliases = self.language_specific_aliases
+        language = app.active_language()
+        trace('CmdInterp.chop_LSA', 'language=%s' % language)
+        chopped_LSA = None
+        consumed = 0
+        if aliases.has_key(language):
+            chopped_LSA, consumed = self.chop_spoken_LSA(spoken_list, 
+                aliases[language])
+        chopped_generic, consumed_generic = self.chop_spoken_LSA(spoken_list, 
+            aliases[None])
+
+        if consumed < consumed_generic:
+            chopped_LSA = chopped_generic
+            consumed = consumed_generic
+
+        return chopped_LSA, consumed, command[consumed:]
+    
+    def chop_spoken_LSA(self, spoken_list, aliases):
+        """Chops off the beginning of a command if it is an LSA.
+        
+        **INPUTS**
+        
+        *[STR]* spoken_list -- The list of spoken forms in the command
+
+        *WordTrie* aliases -- the set of aliases to use for the match
+
+        **OUTPUTS**
+
+        Returns a tuple *(chopped_LSA, consumed)* where:
+        
+        *STR* chopped_LSA -- The written form of the LSA that was
+         chopped off. If *None*, it means *command* did not start with
+         an LSA.
+
+        *INT* consumed* -- Number of words consumed by the LSA from
+         the command
+        """
+#        print spoken_list
+        spoken = string.join(spoken_list)
+        phrase = string.split(spoken)
+        #
+        # See if spoken_form is in the list of active LSAs
+        #
+
+        match = aliases.match_phrase(phrase)
+        if match[0] is None:
+            return None, 0
+        written_LSA, rest_spoken = match
+        words_consumed = len(phrase) - len(rest_spoken)
+        consumed_words = phrase[:words_consumed]
+# check common LSAs for all languages, if we haven't found a
+# language-specific one
+
+        whole, consumed = self.whole_words(spoken_list, consumed_words)
+        if whole:
+            return written_LSA, consumed
+        written_LSA, consumed = \
+            self.chop_spoken_LSA(spoken_list[:consumed], aliases)
+        return written_LSA, consumed
+        
+                
     def chop_symbol(self, command, app):
         """Chops off the beginning of a command if it is a known symbol.
         
@@ -1058,7 +1117,7 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[STR]* command -- The list of spoken forms in the command
+        *[STR]* spoken_list -- The list of spoken forms in the command
 
         **OUTPUTS**
 
@@ -1080,23 +1139,48 @@ class CmdInterp(OwnerObject):
             return None, 0
         symbols, rest_spoken = match
         words_consumed = len(phrase) - len(rest_spoken)
-        spoken = string.join(phrase[:words_consumed])
-        chars_consumed = len(spoken)
+        consumed_words = phrase[:words_consumed]
+#        print 'words = %d, phrase = %s' % (words_consumed, phrase[:words_consumed])
+        whole, consumed = self.whole_words(spoken_list, consumed_words)
+        if whole:
+            return string.join(consumed_words), consumed
+        chopped_symbol, consumed = \
+            self.chop_spoken_symbol(spoken_list[:consumed])
+        return chopped_symbol, consumed
+                
+    def whole_words(self, spoken_list, consumed_words):
+        """Checks whether a list of words chopped off the spoken
+        list consists of a whole number of words as returned by the
+        speech engine
+        
+        **INPUTS**
+        
+        *[STR]* spoken_list -- The list of spoken forms in the command
+
+        *[STR]* consumed_words -- The list of words which would be
+        consumed 
+
+        **OUTPUTS**
+
+        (*BOOL*, *INT*) -- if the consumed_words consist of a whole
+        number N of words from spoken_list, returns a tuple of (1, N).
+        Otherwise, returns (0, M) where M is the index of the last
+        partial word from spoken_list consumed by consumed_words
+        """
+        spoken = string.join(spoken_list)
+        consumed_phrase = string.join(consumed_words)
+        chars_consumed = len(consumed_phrase)
         consumed = 0
         total = -1
-#        print 'words = %d, phrase = %s' % (words_consumed, phrase[:words_consumed])
 #        print 'len(spoken) = %d' % chars_consumed
         for i in range(len(spoken_list)):
-            total = total + len(spoken_list[i]) + 1
 #            print total, spoken_list[:i]
+            total = total + len(spoken_list[i]) + 1
             if total == chars_consumed:
                 consumed = i + 1
-                return spoken, consumed
+                return 1, consumed
             if total > chars_consumed:
-                omitted = spoken_list[i:]
-                chopped_symbol, consumed = \
-                    self.chop_spoken_symbol(spoken_list[:i])
-                return chopped_symbol, consumed
+                return 0, i
         raise RuntimeError('total length of command less than length consumed!')
                 
     def chop_word(self, command):
@@ -1106,7 +1190,7 @@ class CmdInterp(OwnerObject):
         
         *[(STR, STR)]* command -- The command,  a list of
          tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
+         clened and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
         
@@ -1306,7 +1390,8 @@ class CmdInterp(OwnerObject):
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-        debug.trace('CmdInterp.index_csc', 'acmd=%s, acmd.spoken_forms=%s, =%s' % (acmd, acmd.spoken_forms, acmd.meanings))
+#        debug.trace('CmdInterp.index_csc', 'acmd=%s, acmd.spoken_forms=%s, =%s' % (acmd, acmd.spoken_forms, acmd.meanings))
+        debug.trace('CmdInterp.index_csc', 'spoken_forms=%s' % acmd.spoken_forms)
         for a_spoken_form in acmd.spoken_forms:
             #
             # Remove leading, trailing and double blanks from the spoken form
@@ -1323,6 +1408,9 @@ class CmdInterp(OwnerObject):
                 # spoken form
                 #
                 cmds_this_spoken_form = self.cmd_index[a_spoken_form]
+                debug.trace('CmdInterp.index_csc',
+                    'spoken form %s has %d commands' % (a_spoken_form, 
+                    len(cmds_this_spoken_form)))
                 cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
 # DCF: what's wrong with self.cmd_index[a_spoken_form].append(acmd)?
 # also, why is self.cmd_index[a_spoken_form] a list of CSCs each with
@@ -1373,6 +1461,8 @@ class CmdInterp(OwnerObject):
 
         *none*
         """
+        debug.trace('CmdInterp.add_csc_set', 
+            'adding CSCs from set %s' % set.name)
         for cmd in set.commands.values():
 #            print cmd.spoken_forms
             self.add_csc(cmd)
@@ -1418,12 +1508,15 @@ class CmdInterp(OwnerObject):
 #                        % (an_LSA.spacing, written_as)
                 
                 if not self.language_specific_aliases.has_key(language):
-                    self.language_specific_aliases[language] = {}
+                    self.language_specific_aliases[language] = \
+                        WordTrie.WordTrie()
                     self.lsa_spacing[language] = {}
 
                 self.lsa_spacing[language][clean_spoken] = an_LSA.spacing 
 
-                self.language_specific_aliases[language][clean_spoken] = hacked_written_as
+                phrase = string.split(clean_spoken)
+                self.language_specific_aliases[language].add_phrase(phrase, 
+                    hacked_written_as)
                 trace('CmdInterp.add_lsa', 'language = %s' % language)
                 trace('CmdInterp.add_lsa', 
                     'spoken, written = "%s", "%s"' % (clean_spoken,
@@ -1469,7 +1562,6 @@ class CmdInterp(OwnerObject):
         for alias in set.aliases.values():
             self.add_lsa(alias)
 
-            
     def has_lsa(self, spoken_form, language = None):
         """check if there is already an LSA defined with this spoken
         form
@@ -1489,7 +1581,8 @@ class CmdInterp(OwnerObject):
         except KeyError:
             return 0
         clean_spoken = sr_interface.clean_spoken_form(spoken_form)
-        if to_check.has_key(clean_spoken):
+        phrase = string.split(clean_spoken)
+        if to_check.complete_match(phrase):
             return 1
         return 0
 

@@ -486,6 +486,13 @@ class SinglePunctuation(PunctuationSet):
                 self._add_lsa(aliases, self.written_forms[i], 
                     add_spoken_forms, self.spacing[i])
                 if not dictation_only:
+#                    if force:
+#                        nav_spoken = []
+#                        for spoken in add_spoken_forms:
+#                            if interp.has_csc
+#                    else:
+#                        nav_spoken = add_spoken_forms
+#                        
                     self._add_single_navigation(commands, i, add_spoken_forms)
         interp.add_lsa_set(aliases)
         interp.add_csc_set(commands)
@@ -1015,6 +1022,8 @@ class PairedQuotes(PairedPunctuation):
         *STR* written_form -- written form
 
         *[STR]* spoken_forms -- list of corresponding spoken forms 
+
+        *BOOL* no_empty -- flag indicating whether to omit empty quotes form
 
         **OUTPUTS**
 

@@ -143,15 +143,16 @@ add_csc_set(backspacing)
 # add punctuation sets
 #######################################
 
-# always create the standard (std_) sets after the corresponding alternative 
-# sets (or any user-defined sets).  This allows you to override the 
-# spacing behavior of standard punctuation by adding punctuation with 
-# the same spoken form to the corresponding
-# alt_ set.
+# always create the standard (std_) sets after all the alternative 
+# sets (or any user-defined sets), and do not use force = 1.  
+# This allows you to override the spacing behavior of standard 
+# punctuation by adding punctuation with the same spoken form to 
+# the corresponding alt_ set.
 #
 # Also, use force = 1 for any sets of non-standard
 # punctuation, otherwise LSAs won't be added unless the corresponding
 # vocabulary entry already exists.
+# 
 
 # If you want colon to have normal spacing instead of the default
 # defined in std_US_punc in vc_config, you should add this line
@@ -161,12 +162,11 @@ add_csc_set(backspacing)
 
 
 alt_punc.create(interpreter, force = 1)
-std_punc.create(interpreter)
-
 alt_grouping.create(interpreter, force = 1)
-std_grouping.create(interpreter)
-
 alt_quotes.create(interpreter, force = 1)
+
+std_punc.create(interpreter)
+std_grouping.create(interpreter)
 std_quotes.create(interpreter)
 
 
