@@ -131,6 +131,19 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         return self.cache['file_name']
         
 
+    def uncache_file_name(self):
+        """uncaches the file name
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.cache['file_name'] = None
+
     def language_name(self):
         """Returns the name of the language a file is written in
         
