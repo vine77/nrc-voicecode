@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -83,7 +83,7 @@ def use_update_class(action):
     return use_class[action]
 
 
-def updates_factory(upd_descr):
+def create_update(upd_descr):
         
     """Creates an AS_Update object based on the description of the
     update to be created.
@@ -186,7 +186,7 @@ class AS_UpdCloseBuffer(AS_Update):
                             {})
         
     def apply(self, on_app):
-        on_app.close_buff(self.descr['buff_name'])
+        on_app.close_buffer_cbk(self.descr['buff_name'])
 
         
 class SB_Update(AS_Update):
@@ -445,8 +445,8 @@ class AppState(Object):
     
     *{STR: * [SourceBuff] *} open_buffers={}* -- List of source
      buffers that are currently open in the programming
-     environment. The key is the buffer ID (not the file name!) and
-     the value is the [SourceBuff] object.
+     environment. The key is the buffer name (not necessarily 
+     the file name!) and the value is the [SourceBuff] object.
     
     *INT* max_history=100 --  Maximum length of the command history.
 
@@ -457,7 +457,7 @@ class AppState(Object):
 
     STR *bound_buffer_name=None* -- Name of the buffer that VoiceCode
     is currently bound to operate on. If *None*, use editor's active
-    buffer. See [curr_buffer] method for a description of buffer
+    buffer. See [curr_buffer_name] method for a description of buffer
     binding.
      
     **CLASS ATTRIBUTES**
@@ -469,7 +469,7 @@ class AppState(Object):
     .. [Action] file:///./actions_gen.Action.html
     .. [Context] file:///./Context.Context.html
     .. [SourceBuff] file:///./SourceBuff.SourceBuff.html
-    .. [curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
+    .. [curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
     'get_selection', 'goto_end_of_selection', 'set_selection', 
@@ -770,7 +770,7 @@ class AppState(Object):
     def is_bound_to_buffer(self):
         """Returns the name of the buffer that AppState is currently bound to.
 
-        See [curr_buffer] for a description of buffer binding.
+        See [curr_buffer_name] for a description of buffer binding.
         
         **INPUTS**
         
@@ -781,15 +781,32 @@ class AppState(Object):
         
         *none* -- 
 
-        ..[curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
+        ..[curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
         
         return self.bound_buffer_name
 
 
+    def unbind_from_buffer(self):
+        """unbinds the AppState from a particular buffer.
+
+        See [curr_buffer_name] for a description of buffer binding.
+        
+        **INPUTS**
+
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
+        
+        self.bound_buffer_name = None
+
     def bind_to_buffer(self, buff_name):
         """Binds the AppState to a particular buffer.
 
-        See [curr_buffer] for a description of buffer binding.
+        See [curr_buffer_name] for a description of buffer binding.
         
         **INPUTS**
         
@@ -798,71 +815,58 @@ class AppState(Object):
 
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if buffer exists and AppState can be bound to it
 
-        ..[curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
+        ..[curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
         
+	buff = self.find_buff(buff_name)
+	if buff == None:
+	    return 0
         self.bound_buffer_name = buff_name
+# Here, we don't tell the application to switch to the found buffer, but
+# we do when a CSC calls change_buffer while the AppState is bound.
+# That way, if the user speaks, and then changes the buffer before the
+# utterance has been interpreted, the result of the utterance will go
+# into the buffer which was active when the user began to speak.
+# However, the editor focus will remain in the new buffer (unless a CSC
+# from the utterance switches the buffer -- a necessary exception,
+# otherwise CSCs to switch buffers would never have a permanent
+# effect).
+# I'm not sure this is the best design.  We may later decide to call
+# change_buffer here as well.
+	return 1
 
 
 
-    def change_buffer(self, buff_name, bind=1):
+    def change_buffer(self, buff_name):
 
 	"""Changes the active buffer.
 
-        May also bind the AppState to that buffer depending on the
-        value of *bind*. See [curr_buffer_name] for a description of
+        Will also bind the AppState to that buffer if the application is
+	currently bound to a buffer.
+        See [curr_buffer_name] for a description of
         buffer binding.
 
         **INPUTS**
         
         STR *buff_name* -- Name of the buffer to switch to.
 
-        BOOL *bind* -- Indicates whether or not the AppState should be
-        bound to operate on that new buffer or not.
-        
         **OUTPUTS**
         
-        *none* --         
+        *BOOL* -- true if buff_name exists and the external application
+	successfully switches to it
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        self.change_buffer_dont_bind(buff_name)
-        if bind:
-            self.bind_to_buffer(buff_name)
+        if self.change_app_buffer(buff_name):
+	    if self.is_bound_to_buffer() != None:
+		self.bind_to_buffer(buff_name)
+	    self.synchronize_with_app()
+	    return 1
+	return 0
 
 
-    def change_buffer_dont_bind(self, buff_name=None):
-
-	"""Changes the external application's active buffer.
-
-        This should NOT bind the *AppState* to the new buffer. This
-        should be done only by [change_buffer].
-
-        See [curr_buffer_name] for a description of buffer binding.
-        
-        WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU KNOW WHAT YOU
-        ARE DOING!!!
-
-        **INPUTS**
-        
-        STR *buff_name=None* -- Name of the buffer to switch to.
-       
-        **OUTPUTS**
-        
-        *none* --         
-        
-        file:///./AppState.AppState.html#curr_buffer_name"""
-
-        #
-        # Change the buffer in the external application, then
-        # synchronize.
-        #
-        self.change_buffer_dont_bind_from_app(buff_name)
-        self.synchronize_with_app()
-
-
-    def change_buffer_dont_bind_from_app(self, buff_name=None):
+    def change_app_buffer(self, buff_name):
 
 	"""Changes the external application's active buffer.
 
@@ -877,15 +881,17 @@ class AppState(Object):
 
         **INPUTS**
         
-        STR *buff_name=None* -- Name of the buffer to switch to.
+        STR *buff_name* -- Name of the buffer to switch to.
        
         **OUTPUTS**
         
-        *none* --         
+        *BOOL* -- true if buff_name exists and the external application
+	successfully switches to it
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        debug.virtual('AppState.change_buffer_dont_bind_from_app')
+        debug.virtual('change_app_buffer')
+
 
 
     def multiple_buffers(self):
@@ -971,25 +977,65 @@ class AppState(Object):
 
 #        print '-- AppState.find_buff: buff_name=%s' % buff_name
 
-        buff = None
         if (buff_name == None):
             buff_name = self.curr_buffer_name()
             
         if buff_name != None:
+# This ends up querying the application extremely frequently, which is
+# probably not necessary.  Instead, I'll assume that the synchronization
+# at the start of the utterance updates the list of open buffers, and
+# that methods which open or close buffers during the utterance make the
+# appropriate changes as well.
+#	    if not self.query_buffer_from_app(buff_name):
+#		return None
             if self.open_buffers.has_key(buff_name):
-                buff = self.open_buffers[buff_name]
+                return self.open_buffers[buff_name]
             else:
-                buff = self.new_source_buffer(buff_name)
-                self.open_buffers[buff_name] = buff
-                return buff
+                new_buff = self.new_source_buffer(buff_name)
+                return new_buff
+        else:
+            return None
 
-        return buff
+    def query_buffer_from_app(self, buff_name):
+	"""query the application to see if a buffer by the name of buff_name 
+	exists.
+
+        **INPUTS**
+
+	*STR* buff_name -- name of the buffer to check
+
+        **OUTPUTS**
+
+	*BOOL* -- does the buffer exist?
+	"""
+	debug.virtual('AppState.query_buffer_from_app')
+
+    def open_buffers_from_app(self):
+	"""retrieve a list of the names of open buffers from the
+	application.
+
+        **INPUTS**
+
+	*none*
+
+        **OUTPUTS**
+
+	*[STR]* -- list of the names of open buffers
+	"""
+	debug.virtual('AppState.open_buffers_from_app')
 
 
-    def close_buff(self, buff_name):
-        if buff_name != None:
-            buff_name = self.curr_buffer_name()
-        if buff_name != None:
+    def close_buffer_cbk(self, buff_name):
+	buff = self.find_buff(buff_name)
+        if buff != None:
+# we need to distinguish between a method which tells the application to
+# close a buffer, and one which cleans up AppState when the application notifies
+# us that a buffer has been closed.  Also, we need to figure out whether
+# the former should also do the latter, or should wait for a
+# close-buffer notification
+
+# this looks like the callback version, since close_buffer, which tells
+# the editor to close a buffer, is virtual
             del self.open_buffers[buff_name]
 
     def drop_breadcrumb(self, buffname=None, pos=None):
@@ -1026,7 +1072,7 @@ class AppState(Object):
         
         **OUTPUTS**
         
-        STR *buff_id* -- Unique name of the buffer in which the file
+        STR *buff_name* -- Unique name of the buffer in which the file
         was opened. Returns *None* if the editor was not able to open
         the file.
         
@@ -1035,14 +1081,14 @@ class AppState(Object):
         debug.not_implemented('AppState.tell_editor_to_open_file')
         
 
-    def open_buffer_cbk(self, buff_id):
+    def open_buffer_cbk(self, buff_name):
         
         """Editor invokes this method to notify VoiceCode that it
         opened a new text buffer.
         
         **INPUTS**
 
-        STR *buff_id* -- ID of the buffer.
+        STR *buff_name* -- unique name of the buffer.
         
         **OUTPUTS**
         
@@ -1050,17 +1096,17 @@ class AppState(Object):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-#        print '-- AppState.open_buffer_cbk: buff_id=%s' % buff_id
+#        print '-- AppState.open_buffer_cbk: buff_name=%s' % buff_name
         
         #
         # First make sure we don't already have a buffer by that name
         #
-        buff = self.find_buff(buff_name=buff_id)
+        buff = self.find_buff(buff_name=buff_name)
         if not buff:
-            buff = self.new_source_buffer(name)
-            self.open_buffers[buff_id] = buff
+            self.new_source_buffer(buff_name)
+            
 
-    def new_compatible_sb(self, buff_id):
+    def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -1071,7 +1117,7 @@ class AppState(Object):
         
         **INPUTS**
                 
-        STR *buff_id* -- ID for the source buffer.
+        STR *buff_name* -- unique name for the source buffer.
         
         **OUTPUTS**
         
@@ -1079,33 +1125,34 @@ class AppState(Object):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuff.SourceBuff(self, buff_id=buff_id)
+        debug.virtual('AppState.new_compatible_sb')
 
 
-    def new_source_buffer(self, buff_id):
+    def new_source_buffer(self, buff_name):
         
         """Creates a new [SourceBuff] instances and adds it to the
         list of open buffers.
         
         **INPUTS**
         
-        STR *buff_id* -- ID of the new buffer
+        STR *buff_name* -- unique name of the new buffer
         
-
         **OUTPUTS**
+
+	*SourceBuff* -- the new buffer
         
         """
 
-#        print '-- AppState.new_source_buffer: buff_id=%s' % buff_id
-        new_buff = self.new_compatible_sb(buff_id=buff_id)
-        self.open_buffers[buff_id] = new_buff
+#        print '-- AppState.new_source_buffer: buff_name=%s' % buff_name
+        new_buff = self.new_compatible_sb(buff_name=buff_name)
+        self.open_buffers[buff_name] = new_buff
         return new_buff
 
     def open_file(self, file_name):
         """Tell the external editor to open a file, and create a local buffer
         for that file.
 
-        Open file with name *STR name* and written in language *STR lang*.
+        Open file with name *STR name*.
 
         Right now, this is used mostly so that the regression testing
         procedure can tell the external editor to open a test
@@ -1119,10 +1166,10 @@ class AppState(Object):
         """
 
 #        print '-- AppState.open_file: file_name="%s"' % file_name
-        buff_id = self.tell_editor_to_open_file(file_name)
+        buff_name = self.tell_editor_to_open_file(file_name)
 
-        if buff_id:
-            self.open_buffer_cbk(buff_id)
+        if buff_name:
+            self.open_buffer_cbk(buff_name)
 
     def save_file(self, full_path = None, no_prompt = 0):
         """Tell the external editor to save the current buffer.

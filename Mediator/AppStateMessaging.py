@@ -60,7 +60,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         self.init_cache()
 
 
-    def new_compatible_sb(self, buff_id):
+    def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -71,7 +71,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         **INPUTS**
                 
-        STR *buff_id* -- ID of the source buffer.
+        STR *buff_name* -- unique name of the source buffer.
         
         **OUTPUTS**
         
@@ -79,7 +79,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffMessaging.SourceBuffMessaging(app=self, buff_id=buff_id)
+        return SourceBuffMessaging.SourceBuffMessaging(app=self, buff_name=buff_name)
 
 
     def config_from_external(self):
@@ -277,7 +277,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
         for a_descr in upd_descr_list:
-            the_update = AppState.updates_factory(a_descr)
+            the_update = AppState.create_update(a_descr)
             the_update.apply(self)
 
 
@@ -339,7 +339,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         **OUTPUTS**
         
-        STR *buff_id* -- Unique name of the buffer in which the file
+        STR *buff_name* -- Unique name of the buffer in which the file
         was opened.
 
         """
@@ -355,6 +355,41 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
 	return buffer_id
         
+    def query_buffer_from_app(self, buff_name):
+	"""query the application to see if a buffer by the name of buff_name 
+	exists.
+
+        **INPUTS**
+
+	*STR* buff_name -- name of the buffer to check
+
+        **OUTPUTS**
+
+	*BOOL* -- does the buffer exist?
+	"""
+        self.talk_msgr.send_mess('confirm_buffer_exists', {'buff_name': buff_name})
+        response = \
+	    self.talk_msgr.get_mess(expect=['confirm_buffer_exists_resp'])
+	buffer_exists = response[1]['value']
+	return buffer_exists
+
+    def open_buffers_from_app(self):
+	"""retrieve a list of the names of open buffers from the
+	application.
+
+        **INPUTS**
+
+	*none*
+
+        **OUTPUTS**
+
+	*[STR]* -- list of the names of open buffers
+	"""
+        self.talk_msgr.send_mess('list_open_buffers')
+        response = \
+	    self.talk_msgr.get_mess(expect=['list_open_buffers_resp'])
+	open_buffers = response[1]['value']
+	return open_buffers
 
     def close_buffer(self, buff_name, save):
         """Ask the editor to close a buffer.

@@ -54,11 +54,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
                             {'only_buffer': None,
                              'only_buffer_name': ""},
                             attrs)
-	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id = "",
-	    language =None)
+	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name = "", language =None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
 
-    def new_compatible_sb(self, buff_id):
+    def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -69,7 +68,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         
         **INPUTS**
                 
-        STR *buff_id* -- ID of the source buffer.
+        STR *buff_name* -- unique name of the source buffer.
         
         **OUTPUTS**
         
@@ -77,7 +76,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_id=buff_id)
+        return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_name=buff_name)
 
         
     def recog_begin(self, window_id):
@@ -200,13 +199,41 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    del self.open_buffers[self.curr_buffer_name()]
 
         self.only_buffer =  \
-            SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id=file_name,
+            SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name=file_name,
                                             initial_contents = source)
 	self.only_buffer_name = file_name
         self.open_buffers[file_name] = self.only_buffer               
 
 
-        return self.only_buffer.buff_id
+        return self.only_buffer.buff_name
+
+    def query_buffer_from_app(self, buff_name):
+	"""query the application to see if a buffer by the name of buff_name 
+	exists.
+
+        **INPUTS**
+
+	*STR* buff_name -- name of the buffer to check
+
+        **OUTPUTS**
+
+	*BOOL* -- does the buffer exist?
+	"""
+	return buff_name in self.open_buffers_from_app()
+
+    def open_buffers_from_app(self):
+	"""retrieve a list of the names of open buffers from the
+	application.
+
+        **INPUTS**
+
+	*none*
+
+        **OUTPUTS**
+
+	*[STR]* -- list of the names of open buffers
+	"""
+	return self.open_buffers.keys()
 
 
     def save_file(self, full_path = None, no_prompt = 0):

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 03 22:32:03 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:07:29 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -14,7 +14,7 @@
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuff - Class representing a source buffer.</H1>
+<H1 CLASS="ClassName">class SourceBuff - Interface to a buffer being edited in the programming environment</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuff<BR>
@@ -26,7 +26,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuff</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__getitem__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__getitem__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)<SPAN CLASS="OneLiner"> # Get a character of the buffer using the buff[i] syntax.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__getslice__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__getslice__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">value</SPAN>)<SPAN CLASS="OneLiner"> # Sets slice of the buffer using the buff[start:end] = value syntax.</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>, <SPAN CLASS="Argument">language=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__setitem__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__setitem__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>, <SPAN CLASS="Argument">value</SPAN>)<SPAN CLASS="OneLiner"> # Set a character of the buffer using the buff[i] syntax.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff._state_cookie_class"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff._state_cookie_class</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.application"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.application</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -36,25 +36,30 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_with_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_with_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.contents"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.contents</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves entire contents of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.cur_pos"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.cur_pos</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.decr_indent_level"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.decr_indent_level</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num_levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.decr_indent_level"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.decr_indent_level</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a source buffer range.</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.delete_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.delete_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.distance_to_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.distance_to_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">*opt_end</SPAN>)<SPAN CLASS="OneLiner"> # Computes the distance of a region to the current selection.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb -- see AppState.drop_breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.end_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.end_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the end of line at position <EM>pos</EM></SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the file being displayed in a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves range of current selection</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # retrieves a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_end_of_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_end_of_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">end=1</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>)<SPAN CLASS="OneLiner"> # Go to a particular line in a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.incr_indent_level"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.incr_indent_level</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.insert"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.insert</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.insert_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.insert_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">text</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.insert_indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.insert_indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)<SPAN CLASS="OneLiner"> # Insert code into source buffer and indent it.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.is_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.is_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang</SPAN>)<SPAN CLASS="OneLiner"> # Check if a source buffer is in a particular language.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.language_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.language_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the language a file is written in</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.len"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.len</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return length of buffer in characters.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.line_num_of"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.line_num_of</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.lines_around_cursor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.lines_around_cursor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the line numbers of lines around cursor</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.log_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.log_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.make_position_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.make_position_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.make_valid_range"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.make_valid_range</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)<SPAN CLASS="OneLiner"> # Makes sure a region is increasing and within the buffer's range.</SPAN>
@@ -62,8 +67,12 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">rel_movement</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to plus or minus a certain number of characters</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>)<SPAN CLASS="OneLiner"> # Moves up or down a certain number of lines</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative_page"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative_page</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>)<SPAN CLASS="OneLiner"> # Moves up or down a certain number of pages</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.newline_conventions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.newline_conventions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.newline_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.newline_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.number_lines"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.number_lines</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)<SPAN CLASS="OneLiner"> # Assign numbers to lines in a string.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.pos_extremity"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.pos_extremity</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">where</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of a given extremity of a range</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.pref_newline_convention"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.pref_newline_convention</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the form of newline that the editor prefers for this buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.print_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.print_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">from_line=None</SPAN>, <SPAN CLASS="Argument">to_line=None</SPAN>)<SPAN CLASS="OneLiner"> # Prints buffer to STDOUT.</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.refresh</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Force a refresh of the buffer</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.refresh_if_necessary</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Refresh buffer if necessary</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.region_distance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.region_distance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">region1_start</SPAN>, <SPAN CLASS="Argument">region1_end</SPAN>, <SPAN CLASS="Argument">region2_start</SPAN>, <SPAN CLASS="Argument">region2_end</SPAN>)<SPAN CLASS="OneLiner"> # Computes the distance between two regions of text</SPAN>
@@ -71,7 +80,10 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.same_as_previous_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.same_as_previous_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_selection_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.store_current_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.store_current_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.to_sync"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.to_sync</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">item</SPAN>, <SPAN CLASS="Argument">what</SPAN>, <SPAN CLASS="Argument">exclude</SPAN>)<SPAN CLASS="OneLiner"> # Determines if an item is to be synchronised</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.valid_cookie"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.valid_cookie</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -81,61 +93,54 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-This abstract class defines interface for manipulating buffer containing
-source code in some programming language.</P>
+ This abstract class defines interface for manipulating buffer containing
+ source code in some programming language.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR file_name=None</EM>
-<DD>Name of the source file loaded into buffer
-<DT>
-<EM>STR language=None</EM>
-<DD>Name of language of the source file
+<EM>STR buff_name=None</EM>
+<DD>Unique name for the buffer.
 <DT>
 <EM>AppState app</EM>
 <DD>application object containing the buffer
 <DT>
 (STR, INT, INT, INT) <EM>last_search</EM>
 <DD>Remember the details of the
-last search or selection that was done with method <EM>search_for</EM> or
-with <EM>Select Pseudocode</EM>. This is so that if the user repeats the
-same search or selection, we don't end up returning the same
-occurence over and over.
+ last search or selection that was done with method <EM>search_for</EM> or
+ with <EM>Select Pseudocode</EM>. This is so that if the user repeats the
+ same search or selection, we don't end up returning the same
+ occurence over and over.
 </DL>
 <P>
-The first 3 entries of the tuple correspond to the value of
-<EM>regexp</EM>, <EM>direction</EM>,
-and <EM>where</EM>. The last entry correspond to the position where
-cursor was put after last search.</P>
-<P>
-CLASS ATTRIBUTES**</P>
+ The first 3 entries of the tuple correspond to the value of
+ <EM>regexp</EM>, <EM>direction</EM>,
+ and <EM>where</EM>. The last entry correspond to the position where
+ cursor was put after last search.</P>
 
 <DL>
 
 <DT>
-<EM>{STR: STR}</EM> file_language
-<DD>key is a standard file extension and
-value is the programming language associated with that extension
-
+INT <EM>print_nlines</EM>
+<DD>When printing content of buffer to STDOUT
+ (*print_buff* methods), print this number of lines before and
+ after current line.
 </DL>
-<H2 ID="SourceBuff.SourceBuff.__getitem__" CLASS="Method">SourceBuff.SourceBuff.__getitem__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)</H2>
+
+<H3> CLASS ATTRIBUTES**</H3>
+ <H2 ID="SourceBuff.SourceBuff.__getitem__" CLASS="Method">SourceBuff.SourceBuff.__getitem__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)</H2>
 <P>Get a character of the buffer using the buff[i] syntax.</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
 <EM>INT</EM> key
 <DD>The index of the character to return
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -146,9 +151,7 @@ value is the programming language associated with that extension
 <H2 ID="SourceBuff.SourceBuff.__getslice__" CLASS="Method">SourceBuff.SourceBuff.__getslice__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">value</SPAN>)</H2>
 <P>Sets slice of the buffer using the buff[start:end] = value syntax.</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -158,14 +161,10 @@ value is the programming language associated with that extension
 <EM>STR</EM> value
 <DD>The string to be inserted in place of the slice.
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<H2 ID="SourceBuff.SourceBuff.__setitem__" CLASS="Method">SourceBuff.SourceBuff.__setitem__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>, <SPAN CLASS="Argument">value</SPAN>)</H2>
+<STRONG>OUTPUTS</STRONG><H2 ID="SourceBuff.SourceBuff.__setitem__" CLASS="Method">SourceBuff.SourceBuff.__setitem__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>, <SPAN CLASS="Argument">value</SPAN>)</H2>
 <P>Set a character of the buffer using the buff[i] syntax.</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -175,9 +174,7 @@ value is the programming language associated with that extension
 <EM>STR</EM> value
 <DD>The string to insert at position <EM>key</EM>
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -187,16 +184,8 @@ value is the programming language associated with that extension
 <H2 ID="SourceBuff.SourceBuff._state_cookie_class" CLASS="Method">SourceBuff.SourceBuff._state_cookie_class(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
-<P>
 returns the class object for the type of cookie used by
-store_current_state.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+store_current_state.<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -207,16 +196,8 @@ SourceBuff
 <H2 ID="SourceBuff.SourceBuff.application" CLASS="Method">SourceBuff.SourceBuff.application(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
-<P>
 returns the AppState object of the application
-containing this buffer.</P>
-<P>
-<STRONG>INPUTS</STRONG>        </P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+containing this buffer.<STRONG>INPUTS</STRONG>        <EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -227,18 +208,14 @@ containing this buffer.</P>
 <H2 ID="SourceBuff.SourceBuff.beginning_of_line" CLASS="Method">SourceBuff.SourceBuff.beginning_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
 <P>Returns the position of the beginning of line at position <EM>pos</EM></P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
 <EM>INT</EM> pos
 <DD>Position for which we want to know the beginning of line.
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -249,13 +226,7 @@ containing this buffer.</P>
 <H2 ID="SourceBuff.SourceBuff.bidirectional_selection" CLASS="Method">SourceBuff.SourceBuff.bidirectional_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>does editor support selections with cursor at left?</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -266,16 +237,10 @@ left end of the selection
 <H2 ID="SourceBuff.SourceBuff.closest_occurence_to_cursor" CLASS="Method">SourceBuff.SourceBuff.closest_occurence_to_cursor(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">occurences</SPAN>, <SPAN CLASS="Argument">direction=None</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)</H2>
 <P>None</P>
 
-<P>
 Determines which occurence of a search pattern (or a
 <EM>Select Pseudocode</EM> pattern) is closest to the current cursor
-location.</P>
-<P>
-If the closest occurence is the one that was previously found for the
-same search or <EM>Select Pseudocode</EM> operation, take next closest one.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+location.If the closest occurence is the one that was previously found for the
+same search or <EM>Select Pseudocode</EM> operation, take next closest one.<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -293,9 +258,7 @@ cursor. If <EM>None</EM>, consider all occurences whether before or after cursor
 <DD>The regular expression used to generate the
  list of occurences.
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -306,15 +269,11 @@ cursor. If <EM>None</EM>, consider all occurences whether before or after cursor
 <H2 ID="SourceBuff.SourceBuff.compare_with_current" CLASS="Method">SourceBuff.SourceBuff.compare_with_current(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</H2>
 <P>None</P>
 
-<P>
 compares the current buffer state to its state at the time when
 the cookie was returned by store_current_state.  By default,
 only the buffer contents are compared, not the selection, unless
 selection == 1.  If the state corresponding to the cookie has
-been lost, compare_with_current will return false.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+been lost, compare_with_current will return false.<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -326,9 +285,7 @@ actual type will vary with SourceBuff subclass.
 <EM>BOOL</EM> selection
 <DD>compare selection as well as contents
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -340,29 +297,13 @@ it cannot be determined due to expiration of the cookie
 <H2 ID="SourceBuff.SourceBuff.contents" CLASS="Method">SourceBuff.SourceBuff.contents(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>retrieves entire contents of the buffer</P>
 
-<P>
-    <STRONG>INPUTS</STRONG></P>
-<P>
-    <EM>none</EM></P>
-<P>
-    <STRONG>OUTPUTS</STRONG></P>
-<P>
-    <EM>STR</EM> contents 
-    </P>
-<H2 ID="SourceBuff.SourceBuff.cur_pos" CLASS="Method">SourceBuff.SourceBuff.cur_pos(<SPAN CLASS="Argument">self</SPAN>)</H2>
+    <STRONG>INPUTS</STRONG>    <EM>none</EM>    <STRONG>OUTPUTS</STRONG>    <EM>STR</EM> contents 
+    <H2 ID="SourceBuff.SourceBuff.cur_pos" CLASS="Method">SourceBuff.SourceBuff.cur_pos(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
-<P>
 retrieves current position of cursor .  Note: the current
 position should coincide with either the start or end of the
-selection.  </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+selection.  <STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -370,28 +311,22 @@ selection.  </P>
 <DD>offset into buffer of current cursor position
 
 </DL>
-<H2 ID="SourceBuff.SourceBuff.decr_indent_level" CLASS="Method">SourceBuff.SourceBuff.decr_indent_level(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num_levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)</H2>
+<H2 ID="SourceBuff.SourceBuff.decr_indent_level" CLASS="Method">SourceBuff.SourceBuff.decr_indent_level(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)</H2>
 <P>None</P>
 
-<P>
 Decrease the indentation of a region of code by a certain number
-of levels.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+of levels.<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
-<EM>STR</EM> num_levels=1
+<EM>STR</EM> levels=1
 <DD>Number of levels to unindent
 <DT>
 <EM>(INT, INT)</EM> range=None
 <DD>Start and end position of code to be indent.
 If <EM>None</EM>, use current selection
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -401,9 +336,7 @@ If <EM>None</EM>, use current selection
 <H2 ID="SourceBuff.SourceBuff.delete" CLASS="Method">SourceBuff.SourceBuff.delete(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)</H2>
 <P>Delete text in a source buffer range.</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -411,17 +344,30 @@ If <EM>None</EM>, use current selection
 <DD>code range to be deleted.  If None,
 defaults to the current selection.
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
+<STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="SourceBuff.SourceBuff.delete_cbk" CLASS="Method">SourceBuff.SourceBuff.delete_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)</H2>
+<P>None</P>
+
+External editor invokes that callback to notify VoiceCode
+of a deletion event.NOTE: This method should NOT update the V-E map, because that is
+already taken care of outside of the method.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+(INT, INT) <EM>range</EM>
+<DD>Start and end pos of range to be deleted
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
 <EM>none</EM>
-</P>
+<DD>
+</DL>
 <H2 ID="SourceBuff.SourceBuff.distance_to_selection" CLASS="Method">SourceBuff.SourceBuff.distance_to_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">*opt_end</SPAN>)</H2>
 <P>Computes the distance of a region to the current selection.</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-
+<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -431,9 +377,7 @@ defaults to the current selection.
 <EM>[INT]</EM> *opt_end
 <DD>end position of region (optional)
 </DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
+<STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -451,7 +395,7 @@ There are no separate buffer-by-buffer stacks.  Therefore, it
 would make no sense to define SourceBuff.pop_breadcrumb.
 SourceBuff.drop_breadcrumb is included only as a convenient
 shorthand for</H3>
-  buff.application().drop_breadcrumb(buffname = buff.file_name,
+  buff.application().drop_breadcrumb(buffname = buff.file_name(),
   pos = ...)<EM>INT pos</EM> is the position where to drop the crumb. *STR
  buffname* is the name of the source buffer.If <EM>pos</EM> not specified, drop breadcrumb at cursor position.
 <H2 ID="SourceBuff.SourceBuff.end_of_line" CLASS="Method">SourceBuff.SourceBuff.end_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
@@ -471,6 +415,23 @@ shorthand for</H3>
 <EM>INT</EM> end_pos
 <DD>Position of the end of the line
 
+</DL>
+<H2 ID="SourceBuff.SourceBuff.file_name" CLASS="Method">SourceBuff.SourceBuff.file_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns the name of the file being displayed in a buffer.</P>
+
+<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+STR <EM>name</EM>
+<DD>
 </DL>
 <H2 ID="SourceBuff.SourceBuff.get_selection" CLASS="Method">SourceBuff.SourceBuff.get_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>retrieves range of current selection</P>
@@ -504,6 +465,25 @@ visible (matching Python's slice convention)<STRONG>INPUTS</STRONG><EM>none</EM>
 
 Moves the cursor to position <EM>INT pos</EM> of source buffer
 (and make selection empty)
+<H2 ID="SourceBuff.SourceBuff.goto_cbk" CLASS="Method">SourceBuff.SourceBuff.goto_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
+<P>None</P>
+
+External editor invokes that callback to notify VoiceCode
+of a cursor movement event.NOTE: This method should NOT update the V-E map, because that is
+already taken care of outside of the method.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+INT <EM>pos</EM>
+<DD>Position the cursor was moved to.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="SourceBuff.SourceBuff.goto_end_of_selection" CLASS="Method">SourceBuff.SourceBuff.goto_end_of_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">end=1</SPAN>)</H2>
 <P>None</P>
 
@@ -571,6 +551,29 @@ with text<STRONG>INPUTS</STRONG>
 defaults to the current selection.
 </DL>
 <STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="SourceBuff.SourceBuff.insert_cbk" CLASS="Method">SourceBuff.SourceBuff.insert_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">text</SPAN>)</H2>
+<P>None</P>
+
+External editor invokes that callback to notify VoiceCode
+of a deletion event.NOTE: This method should NOT update the V-E map, because that is
+already taken care of outside of the method.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+(INT, INT) <EM>range</EM>
+<DD>Start and end position of text to be
+replaced by the insertion.
+<DT>
+STR <EM>text</EM>
+<DD>Text to be inserted
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="SourceBuff.SourceBuff.insert_indent" CLASS="Method">SourceBuff.SourceBuff.insert_indent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)</H2>
 <P>Insert code into source buffer and indent it.</P>
 
@@ -629,6 +632,27 @@ Returns the line number for a particular cursor position<STRONG>INPUTS</STRONG>
 <DT>
 <EM>INT line_num</EM>
 <DD>The line number of that position
+
+</DL>
+<H2 ID="SourceBuff.SourceBuff.lines_around_cursor" CLASS="Method">SourceBuff.SourceBuff.lines_around_cursor(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns the line numbers of lines around cursor</P>
+
+<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<STRONG>OUTPUTS</STRONG><EM>(INT from_line, INT to_line)</EM>
+<DL>
+
+<DT>
+<EM>INT from_line</EM>
+<DD>First line of the window.
+<DT>
+<EM>INT to_line</EM>
+<DD>Last line of the window.
 
 </DL>
 <H2 ID="SourceBuff.SourceBuff.log_search" CLASS="Method">SourceBuff.SourceBuff.log_search(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)</H2>
@@ -766,10 +790,47 @@ right.
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="SourceBuff.SourceBuff.newline_conventions" CLASS="Method">SourceBuff.SourceBuff.newline_conventions(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+Returns a list of the forms of newline the editor can
+recognise for this buffer.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="SourceBuff.SourceBuff.newline_regexp" CLASS="Method">SourceBuff.SourceBuff.newline_regexp(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+Returns a regexp that matches all the forms of newline that
+the editor can recognise in this buffer.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="SourceBuff.SourceBuff.number_lines" CLASS="Method">SourceBuff.SourceBuff.number_lines(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)</H2>
 <P>Assign numbers to lines in a string.</P>
 
-<EM>STR astring</EM> is the string in question.<EM>INT startnum</EM> is the number of the first line in <EM>astring</EM>Returns a list of pairs <EM>[(INT, STR)]</EM> where first entry is
+Used mainly for the purpose of doing a printout of the buffer
+content around the cursor (usually during regression testing).<EM>STR astring</EM> is the string in question.<EM>INT startnum</EM> is the number of the first line in <EM>astring</EM>Returns a list of pairs <EM>[(INT, STR)]</EM> where first entry is
 the line number and the second entry is the line.<H2 ID="SourceBuff.SourceBuff.pos_extremity" CLASS="Method">SourceBuff.SourceBuff.pos_extremity(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">where</SPAN>)</H2>
 <P>Returns the position of a given extremity of a range</P>
 
@@ -791,6 +852,45 @@ the line number and the second entry is the line.<H2 ID="SourceBuff.SourceBuff.p
 <EM>INT</EM>
 <DD>The approriate position
 
+</DL>
+<H2 ID="SourceBuff.SourceBuff.pref_newline_convention" CLASS="Method">SourceBuff.SourceBuff.pref_newline_convention(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns the form of newline that the editor prefers for this buffer.</P>
+
+<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="SourceBuff.SourceBuff.print_buff" CLASS="Method">SourceBuff.SourceBuff.print_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">from_line=None</SPAN>, <SPAN CLASS="Argument">to_line=None</SPAN>)</H2>
+<P>Prints buffer to STDOUT.</P>
+
+This is mostly used when running regression test on an
+external editor (or the EdSim simulation editor).<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>INT</EM> from_line = None
+<DD>First line to be printed. If <EM>None</EM>, then
+print <EM>print_nlines</EM> lines around cursor.
+<DT>
+<EM>INT</EM> to_line = None
+<DD>Last line to be printed.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
 </DL>
 <H2 ID="SourceBuff.SourceBuff.region_distance" CLASS="Method">SourceBuff.SourceBuff.region_distance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">region1_start</SPAN>, <SPAN CLASS="Argument">region1_end</SPAN>, <SPAN CLASS="Argument">region2_start</SPAN>, <SPAN CLASS="Argument">region2_end</SPAN>)</H2>
 <P>Computes the distance between two regions of text</P>
@@ -914,6 +1014,36 @@ choice, as indicated by bidirectional_selection.
 Most Windows applications do not.
 </DL>
 <STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="SourceBuff.SourceBuff.set_selection_cbk" CLASS="Method">SourceBuff.SourceBuff.set_selection_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)</H2>
+<P>None</P>
+
+External editor invokes that callback to notify VoiceCode
+of a set selection event.NOTE: This method should NOT update the V-E map, because that is
+already taken care of outside of the method.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+(INT, INT) <EM>range</EM>
+<DD>Start and end position of selected text
+<DT>
+INT <EM>cursor_at</EM>
+<DD>indicates whether cursor was left at the
+beginning or end of <EM>range</EM>
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="SourceBuff.SourceBuff.set_text" CLASS="Method">SourceBuff.SourceBuff.set_text(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</H2>
+<P>changes a portion of the buffer</P>
+
+<STRONG>INPUTS</STRONG><EM>STR text</EM> is the new text.<EM>INT start</EM> is the offset into the buffer of the text to the
+replaced.  Defaults to start of buffer.<EM>INT end</EM> is the offset into the buffer of the character following 
+the text to be replaced (this matches Python's slice convention).
+Defaults to end of buffer.<STRONG>OUTPUTS</STRONG><EM>none</EM>
 <H2 ID="SourceBuff.SourceBuff.store_current_state" CLASS="Method">SourceBuff.SourceBuff.store_current_state(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -941,6 +1071,38 @@ of the cookie.<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 SourceBuffCookie is a dummy class.  The
 actual return type will vary with SourceBuff subclass.
 
+</DL>
+<H2 ID="SourceBuff.SourceBuff.to_sync" CLASS="Method">SourceBuff.SourceBuff.to_sync(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">item</SPAN>, <SPAN CLASS="Argument">what</SPAN>, <SPAN CLASS="Argument">exclude</SPAN>)</H2>
+<P>Determines if an item is to be synchronised</P>
+
+<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+STR <EM>item</EM>
+<DD>Type of item to be synchronised. Valid entries
+are: <CODE>buff_name</CODE>, <CODE>content</CODE>, <CODE>cur_pos</CODE>, <CODE>selection</CODE>
+<DT>
+[STR] <EM>what=[]</EM>
+<DD>List of items to be included in or excluded
+from the list of things to synchronize (depending on value of
+<EM>exclude</EM>. Valid entries are: <CODE>buff_name</CODE>, <CODE>content</CODE>,
+<CODE>cur_pos</CODE>, <CODE>selection</CODE>.  <EM>exclude_what=1</EM>, this should be
+interpreted as a list of items that don't need to be
+synchronised. If <EM>exclude_what=0</EM>, then it should be
+interpreted as a list of items that need to be syncrhonized.
+<DT>
+BOOL <EM>exclude</EM>
+<DD>If <EM>true</EM>, then <EM>what</EM> is a list of items to
+be excluded from syncrhonization. Otherwise, <EM>what</EM> is a list
+of itmes to be included in the synchronization.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
 </DL>
 <H2 ID="SourceBuff.SourceBuff.valid_cookie" CLASS="Method">SourceBuff.SourceBuff.valid_cookie(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
 <P>None</P>

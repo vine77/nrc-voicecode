@@ -89,28 +89,6 @@ class AppStateCached(AppState.AppState):
                             args_super, 
                             {})
 
-    def new_compatible_sb(self, buff_id):
-        """Creates a new instance of [SourceBuff].
-
-        Note: The class used to instantiate the [SourceBuff] needs to
-        be compatible with the class of *self*. With a few exceptions
-        (if any), each subclass of *AppState* will have to redefine
-        *new_compatible_sb* in order to generate a [SourceBuff] of the
-        appropriate class.
-        
-        **INPUTS**
-                
-        STR *buff_id* -- ID of the source buffer.
-        
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
-        
-        return SourceBuffCached.SourceBuffCached(app=self, buff_id=buff_id)
-
-
     def init_cache(self):
         """Initialises the cache with data obtained from external editor.
         
@@ -229,13 +207,13 @@ class AppStateCached(AppState.AppState):
         
 	debug.virtual('AppStateCached.bidirectional_selection')
 
-    def open_buffer_cbk(self, buff_id):
+    def open_buffer_cbk(self, buff_name):
         """Editor invokes this method to notify VoiceCode that it opened a
         new source buffer.
         
         **INPUTS**
         
-        STR *buff_id* -- Name of the buffer         
+        STR *buff_name* -- Name of the buffer         
 
         **OUTPUTS**
         
@@ -247,7 +225,7 @@ class AppStateCached(AppState.AppState):
         # Invoke super class' version of open_buffer_cbk(), then update cached
         # data that may have changed as a result of the file opening
         #
-        AppState.AppState.open_buffer_cbk(self, buff_id)
+        AppState.AppState.open_buffer_cbk(self, buff_name)
         
-        self.cache['app_active_buffer_name'] = buff_id
+        self.cache['app_active_buffer_name'] = buff_name
 
