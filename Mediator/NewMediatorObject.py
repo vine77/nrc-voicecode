@@ -292,6 +292,8 @@ class NewMediatorObject(Object.OwnerObject):
                 recent_words = [], wave_playback = self.wave_playback)
 # suppress Correct That if there is no console
 # suppress Correct Recent for now, because it isn't implemented yet 
+        if self.the_console:
+            self.the_console.set_gram_factory(grammar_factory)
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
             global_grammars = 0, correction = 'basic')
         res_mgr_factory = \

@@ -58,7 +58,7 @@ debug.config_traces(status="on",
 #                      'RecogStartMgr': 1,
 #                      'SelectWinGram': 1,
 #                        'GramMgr': 1,
-#                        'BasicCorrectionWinGram': 1
+#                        'BasicCorrectionWinGram': 1,
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1

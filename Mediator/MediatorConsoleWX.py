@@ -172,7 +172,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         validator = CorrectionValidatorSpoken(utterance = utterance)
         editor_window = self.store_foreground_window()
         box = CorrectionBoxWX(self, self.main_frame, utterance, validator, 
-            can_reinterpret)
+            can_reinterpret, self.gram_factory)
 #        app = wxGetApp()
 #        evt = wxActivateEvent(0, true)
 #        app.ProcessEvent(evt)
@@ -203,9 +203,12 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
 
+    *choose_n_gram* -- ChoiceGram supporting "Choose n"
+
+    *select_n_gram* -- ChoiceGram supporting "SelectOrEdit n"
     """
     def __init__(self, console, parent, utterance, validator, 
-            can_reinterpret, pos = None, **args):
+            can_reinterpret, gram_factory, pos = None, **args):
         """
         **INPUTS**
 
@@ -214,8 +217,6 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
 
         *wxFrame parent* -- the parent frame
 
-        *(INT, INT)* -- position of the box in pixels
-    
         *SpokenUtterance utterance* -- the utterance itself
 
         *CorrectionValidator validator* -- a validator used to transfer
@@ -228,15 +229,30 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         Whether the utterance can actually be reinterpreted may change
         between the call to this method and its return, so there is no
         guarantee that reinterpretation will take place.
+
+        *WinGramFactory gram_factory* -- the grammar factory used to add
+        speech grammars to the dialog box
+
+        *(INT, INT) pos* -- position of the box in pixels
+    
         """
         self.deep_construct(CorrectionBoxWX,
                             {
                              'console': console,
                              'utterance': utterance,
-                             'first': 1
+                             'first': 1,
+                             'choose_n_gram': None,
+                             'select_n_gram': None
                             }, args,
                             exclude_bases = {wxDialog:1})
         self.name_parent('console')
+        self.add_owned('choose_n_gram')
+        self.add_owned('select_n_gram')
+        if gram_factory:
+            self.choose_n_gram = \
+                gram_factory.make_choices(choice_words = ['Choose'])
+            self.select_n_gram = \
+                gram_factory.make_choices(choice_words = ['Select', 'Edit'])
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
@@ -269,7 +285,8 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
             number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
         self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
              wxDefaultSize, self.choices, wxLB_SINGLE)
-        EVT_LISTBOX(self, ID_CHOICES, self.on_chosen)
+        EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
+        EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
         bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
         yes = wxBitmap(os.path.join(bitpath, 'plus.bmp'), wxBITMAP_TYPE_BMP)
         no = wxBitmap(os.path.join(bitpath, 'minus.bmp'), wxBITMAP_TYPE_BMP)
@@ -306,6 +323,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
         s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
         ok_button.SetDefault()
+        print 'ids', ok_button.GetId(), wxID_OK
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self.text, self.on_char_text)
@@ -336,6 +354,39 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.choice_list.SetSelection(n)
         self.select_choice(self.choices[n])
 
+    def on_select(self, n):
+        """callback called by Select/Edit n grammar to indicate which
+        choice was selected
+
+        **INPUTS**
+
+        *INT n* -- the index of the choice selected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if n <= self.choice_list.Number():
+            self.choice_list.SetSelection(n - 1)
+            self.select_choice(self.choices[n-1])
+
+    def on_choose(self, n):
+        """callback called by Select/Edit n grammar to indicate which
+        choice was selected
+
+        **INPUTS**
+
+        *INT n* -- the index of the choice selected
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if n <= self.choice_list.Number():
+            self.choice_list.SetSelection(n - 1)
+            self.select_choice(self.choices[n-1])
+            self.simulate_OK()
+
     def select_choice(self, text):
         """method which modifies the text field when the selected item
         in the list box changes
@@ -353,13 +404,39 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.text.SetSelection(0, self.text.GetLastPosition())
         self.text.SetFocus()
 
-    def on_chosen(self, event):
+    def on_selected(self, event):
         self.select_choice(event.GetString())
         event.Skip()
+
+    def simulate_OK(self):
+        """method which simulates the user having pressed the Ok button
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK)
+        self.ProcessEvent(button_event)
+# DCF: I'm not sure why wxPostEvent doesn't work here -- it does in the
+# my test version.
+#        wxPostEvent(self, button_event)
+
+    def on_double(self, event):
+        self.select_choice(event.GetString())
+        self.simulate_OK()
 
     def on_activate(self, event):
         if self.first:
             if event.GetActive():
+                if self.choose_n_gram:
+                    self.choose_n_gram.activate(9, self.GetHandle(), 
+                        self.on_choose)
+                    self.select_n_gram.activate(9, self.GetHandle(), 
+                        self.on_select)
                 self.first = 0
 #                self.console.raise_active_window()
                 self.console.raise_wxWindow(self)
@@ -509,7 +586,10 @@ class CorrectionValidator(wxPyValidator, Object.Object):
         win = self.GetWindow()
         parent = win.GetParent()
 #        parent.parent = None
-        return self.convert_corrected(win.GetValue())
+#        print 'transferring from window'
+        valid = self.convert_corrected(win.GetValue())
+#        print 'valid = %d' % valid
+        return valid
 
 class CorrectionValidatorSpoken(CorrectionValidator):
     """simplest possible implementaion of CorrectionValidator,
@@ -589,6 +669,7 @@ class CorrectionValidatorSpoken(CorrectionValidator):
         (otherwise, the dialog box won't close)
         """
         self.utterance.set_spoken(string.split(corrected))
+        return 1
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

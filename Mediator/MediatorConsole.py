@@ -50,13 +50,19 @@ class MediatorConsole(Object.OwnerObject):
 
     *NewMediatorObject mediator* -- the mediator which owns this console
 
+    *WinGramFactory gram_factory* -- the grammar factory used to add
+    speech grammars to dialog boxes
+
+
     **CLASS ATTRIBUTES**
     
     *none* 
     """
     def __init__(self, **attrs):
         self.deep_construct(MediatorConsole,
-                            {'mediator': None,
+                            {
+                             'mediator': None,
+                             'gram_factory': None
                             },
                             attrs)
         self.name_parent('mediator')
@@ -74,6 +80,20 @@ class MediatorConsole(Object.OwnerObject):
         *none*
         """
         self.mediator = mediator
+
+    def set_gram_factory(self, gram_factory):
+        """assigns a parent mediator to the console
+
+        **INPUTS**
+
+        *WinGramFactory gram_factory* -- the grammar factory used to add
+        speech grammars to dialog boxes
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.gram_factory = gram_factory
 
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):

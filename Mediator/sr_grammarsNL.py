@@ -31,6 +31,13 @@ from natlinkutils import *
 
 import CmdInterp, AppState
 
+def compose_alternatives(words):
+    first = words[0]
+    alternatives = first
+    for word in words[1:]:
+        alternatives = alternatives + ' | ' + word
+    return alternatives
+
 class DictWinGramNL(DictWinGram, DictGramBase):
     """natlink implementation of DictWinGram for window-specific 
     dictation grammar interfaces
@@ -60,16 +67,16 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
     def activate(self):
         """activates the grammar for recognition
-	tied to the current window.
+        tied to the current window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('DictWinGramNL.activate', 
             '%s received activate'% self.buff_name)
         if not self.is_active():
@@ -91,14 +98,14 @@ class DictWinGramNL(DictWinGram, DictGramBase):
     def deactivate(self):
         """disable recognition from this grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('DictWinGramNL.deactivate', 
             '%s received deactivate' % self.buff_name)
         if self.is_active():
@@ -109,19 +116,19 @@ class DictWinGramNL(DictWinGram, DictGramBase):
     def set_context(self, before = "", after = ""):
         """set the context to improve dictation accuracy
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* before -- one or more words said immediately before the
-	next utterance, or found in the text immediately before the
-	utterance
+        *STR* before -- one or more words said immediately before the
+        next utterance, or found in the text immediately before the
+        utterance
 
-	*STR* after -- one or more words found in the text
-	immediately after the utterance 
+        *STR* after -- one or more words found in the text
+        immediately after the utterance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.setContext(before, after)
 
     def gotResultsObject(self, recogType, results):
@@ -164,28 +171,28 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     def _set_visible(self, visible):
         """internal call to set the currently visible range.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* visible -- visible text range 
+        *STR* visible -- visible text range 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         SelectGramBase.setSelectText(self, visible)
 
     def activate(self, buff_name):
         """activates the grammar for recognition tied to the current window,
-	and checks with buffer for the currently visible range.
+        and checks with buffer for the currently visible range.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buff_name -- name of currently active buffer
+        *STR* buff_name -- name of currently active buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.buff_name = buff_name
         self.find_visible()
 
@@ -201,14 +208,14 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     def deactivate(self):
         """disable recognition from this grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.is_active():
             SelectGramBase.deactivate(self)
             self.active = 0
@@ -220,14 +227,14 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     def buffer_name(self):
         """returns name of buffer corresponding to this selection grammar.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of buffer currently used by this selection grammar.
-	"""
+        *STR* -- name of buffer currently used by this selection grammar.
+        """
 
         return self.buff_name
     
@@ -377,9 +384,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         """
         if not self.scratch_words:
             return []
-        scratch = self.scratch_words[0]
-        for word in self.scratch_words[1:]:
-            scratch = scratch + ' | ' + word
+        scratch = compose_alternatives(self.scratch_words)
         rules = []
         rules.append("<scratch_that> exported = ( %s ) That;" % scratch)
         rules.append("<scratch_n> exported = ( %s ) {count};" % scratch)
@@ -400,9 +405,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         """
         if not self.correct_words:
             return []
-        correct = self.correct_words[0]
-        for word in self.correct_words[1:]:
-            correct = correct + ' | ' + word
+        correct = compose_alternatives(self.correct_words)
         rules = []
         rules.append("<correct_that> exported = ( %s ) That;" % correct)
         return rules
@@ -423,12 +426,8 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
             return []
         if not self.recent_words:
             return []
-        correct = self.correct_words[0]
-        for word in self.correct_words[1:]:
-            correct = correct + ' | ' + word
-        recent = self.recent_words[0]
-        for word in self.recent_words[1:]:
-            recent = recent + ' | ' + word
+        correct = compose_alternatives(self.correct_words)
+        recent = compose_alternatives(self.recent_words)
         rules = []
         rules.append("<correct_recent> exported = ( %s ) ( %s );" \
             % (correct, recent))
@@ -436,16 +435,16 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
 
     def activate(self):
         """activates the grammar for recognition
-	tied to the current window.
+        tied to the current window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('BasicCorrectionWinGramNL.activate', 
             'received activate')
         if not self.is_active():
@@ -465,14 +464,14 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
     def deactivate(self):
         """disable recognition from this grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('BasicCorrectionWinGramNL.activate', 
             'received deactivate')
         if self.is_active():
@@ -525,15 +524,15 @@ class WinGramFactoryNL(WinGramFactory):
     """
     def __init__(self, wave_playback = None, **attrs):
         """
-	**INPUTS**
+        **INPUTS**
 
         *CLASS* wave_playback -- class constructor for a concrete
         subclass of WavePlayback, or None if no playback is available
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(WinGramFactoryNL,
             {'wave_playback': wave_playback}, attrs)
 
@@ -541,26 +540,26 @@ class WinGramFactoryNL(WinGramFactory):
         exclusive = 0):
         """create a new dictation grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*WinGramMgr* manager -- the grammar manager which will own the
-	grammar
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
 
-	*AppState* app -- application which is the target of the grammar
+        *AppState* app -- application which is the target of the grammar
 
-	*STR* buff_name -- name of the buffer corresponding to this
-	grammar.  Buff_name will be passed to
-	CmdInterp.interpret_NL_cmd as the initial buffer.
+        *STR* buff_name -- name of the buffer corresponding to this
+        grammar.  Buff_name will be passed to
+        CmdInterp.interpret_NL_cmd as the initial buffer.
 
-	*INT* window -- make grammar specific to a particular window
+        *INT* window -- make grammar specific to a particular window
 
-	*BOOL* exclusive -- is grammar exclusive?  (prevents other
-	non-exclusive grammars from getting results)
-	
-	**OUTPUTS**
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+        
+        **OUTPUTS**
 
-	*DictWinGram* -- new dictation grammar
-	"""
+        *DictWinGram* -- new dictation grammar
+        """
         return DictWinGramNL(manager = manager, app = app, 
             buff_name = buff_name, window = window, exclusive = exclusive,
             wave_playback = self.wave_playback) 
@@ -569,26 +568,26 @@ class WinGramFactoryNL(WinGramFactory):
         exclusive = 0):
         """create a new selection grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppState* app -- application corresponding to the selection
-	grammar, which is queried with buff_name for the currently
-	visible range, and is notified of selection changes
+        *AppState* app -- application corresponding to the selection
+        grammar, which is queried with buff_name for the currently
+        visible range, and is notified of selection changes
 
-	*STR* buff_name -- name of the buffer corresponding to this
-	grammar.  Can also be set later in the activate call to the
-	grammar.
+        *STR* buff_name -- name of the buffer corresponding to this
+        grammar.  Can also be set later in the activate call to the
+        grammar.
 
-	*BOOL* exclusive -- is grammar exclusive?  (prevents other
-	non-exclusive grammars from getting results)
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
 
-	*BOOL* exclusive -- is grammar exclusive?  (prevents other
-	non-exclusive grammars from getting results)
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*SelectWinGram* -- new selection grammar
-	"""
+        *SelectWinGram* -- new selection grammar
+        """
         return SelectWinGramNL(app = app, buff_name = buff_name, select_words =
             self.select_words, through_word = self.through_word, 
             window = window, exclusive = exclusive) 
@@ -596,22 +595,147 @@ class WinGramFactoryNL(WinGramFactory):
     def make_correction(self, manager, window = None, exclusive = 0):
         """create a new basic correction grammar
 
-	**INPUTS**
+        **INPUTS**
 
-	*WinGramMgr* manager -- the grammar manager which will own the
-	grammar
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
 
-	*INT* window -- make grammar specific to a particular window
+        *INT* window -- make grammar specific to a particular window
 
-	*BOOL* exclusive -- is grammar exclusive?  (prevents other
-	non-exclusive grammars from getting results)
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BasicCorrectionWinGram* -- new basic correction grammar
-	"""
+        *BasicCorrectionWinGram* -- new basic correction grammar
+        """
         return BasicCorrectionWinGramNL(manager = manager, scratch_words =
             self.scratch_words, correct_words = self.correct_words, 
             recent_words = self.recent_words, 
             window = window, exclusive = exclusive) 
+
+    def make_choices(self, choice_words):
+        """create a new ChoiceGram choice grammar
+
+        **INPUTS**
+
+        *[STR]* choice_words -- grammar will be <choice_words> 1toN
+
+        **OUTPUTS**
+
+        *ChoiceGram* -- new choice grammar
+        """
+        return ChoiceGramNL(choice_words = choice_words)
+   
+class ChoiceGramNL(ChoiceGram, GrammarBase):
+    """natlink implementation of ChoiceGram
+
+    **INSTANCE ATTRIBUTES**
+
+    *FCT(INT)* choice_cbk -- callback to signal recognition
+
+    *[STR] rules* -- list of rules for this grammar in natlink's format
+
+    *{STR: [STR]} lists* -- map from list names to the initial values
+    to be assigned to them once the grammar is loaded
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(ChoiceGramNL,
+            {
+             'choice_cbk': None,
+             'rules': [],
+             'lists': {}
+            }, attrs, 
+            exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+            self.load_lists()
+
+    def empty_lists(self):
+        for name in self.lists.keys():
+            self.emptyList(name)
+
+    def load_lists(self):
+        for name, values in self.lists.items():
+            self.setList(name, values)
+
+    def create_rules(self):
+        """create all the rules for this grammar and put them in
+        self.rules
+
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.choice_words:
+            self.rules = []
+            return
+        first = self.choice_words[0]
+        choose = compose_alternatives(self.choice_words)
+        rules = []
+        rules.append("<choose_n> exported = ( %s ) {count};" % choose)
+        self.lists['count'] = map(str, range(1, 10))
+        self.rules = rules
+
+    def activate(self, n, window, choice_cbk):
+        """activates the grammar for recognition tied to a window
+        with the given handle
+
+        **INPUTS**
+
+        *INT n* -- the maximum choice number
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        *FCT(INT)* choice_cbk -- callback to signal recognition
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.choice_cbk = choice_cbk
+        self.empty_lists()
+        self.lists['count'] = map(str, range(1, n + 1))
+        self.load_lists()
+        if not self.active:
+            self.active = 1
+            self.activateAll(window = window)
+    
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.choice_cbk = None
+        if self.active:
+            self.active = 0
+            self.deactivateAll()
+    
+    def cleanup(self):
+        """method which must be called by the owner prior to deleting
+        the grammar, to ensure that it doesn't have circular references
+        to the owner
+        """
+        self.deactivate()
+        self.empty_lists()
+        GrammarBase.unload(self)
+
+    def gotResults_choose_n(self, words, fullResults):
+        count = int(words[1])
+        self.choice_cbk(count)
 
