@@ -502,6 +502,7 @@ class DlgModelView(Object.OwnerObject):
         #       implement both the view and model layer in a same class
         if self.view_layer != self:
             self.add_owned('view_layer')
+
         
     def set_view(self, view):
         """set the view layer for this dialog.
@@ -533,8 +534,6 @@ class DlgModelView(Object.OwnerObject):
     def Destroy(self):
        """destroy the view layer for this dialog."""
     
-       debug.trace('DlgModelView.Destroy', '** self=%s' %self)
-       debug.trace('DlgModelView.Destroy', '** destroying the view self.view()=%s' % self.view())
        self.view().Destroy()
         
     def ShowModal(self):

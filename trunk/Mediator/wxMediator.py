@@ -56,12 +56,19 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                     'MediatorConsoleWX.__init__': 1,
-                     'ReformatFromRecentViewWX.__init__': 1,
-                     'ReformatRecentSymbolsViewWX.__init__': 1,
-                     'CorrectFromRecentWX.__init__': 1,
-                     'MediatorConsoleWX.show_correction_box': 1,
-                     'UtteranceCorrectionEventWX.__init__': 1,
+#                     'make_view': 1,
+#                     'DlgModelView.__init__': 1,
+#                     'DlgModelViewWX.__init__': 1,
+#                     'ReformatFromRecentWX.__init__': 1,
+#                     'MockReformatFromRecentWX.__init__': 1,
+                     'SymbolReformattingUITestCase.setUp': 1,
+                     'test_choose': 1,
+#                     'MediatorConsoleWX.__init__': 1,
+#                     'ReformatFromRecentViewWX.__init__': 1,
+#                     'ReformatRecentSymbolsViewWX.__init__': 1,
+#                     'CorrectFromRecentWX.__init__': 1,
+#                     'MediatorConsoleWX.show_correction_box': 1,
+#                     'UtteranceCorrectionEventWX.__init__': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
