@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Jun 06 12:10:33 2002)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Module tcp_server</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ModuleName">Module tcp_server</H1>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.AS_MessExtEdSim.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AS_MessExtEdSim</SPAN></A>(<A CLASS="DocLink" HREF="AppStateMessaging.AppStateMessaging.html">AppStateMessaging</A>)</SPAN><SPAN CLASS="OneLiner"> # Communicates with an external [EdSim] through a messaging link.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.CheckReadySocksThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CheckReadySocksThread</SPAN></A>(<A CLASS="DocLink" HREF="threading.Thread.html">Thread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # This thread checks if any of the VC_LISTEN sockets have received data.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ListenForConnThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenForConnThread</SPAN></A>(<A CLASS="DocLink" HREF="threading.Thread.html">Thread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Listens for new socket connections on a port number.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ListenForNewListenersThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenForNewListenersThread</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ListenForConnThread.html">ListenForConnThread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Listens for new connections on the VC_LISTEN port.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ListenForNewTalkersThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenForNewTalkersThread</SPAN></A>(<A CLASS="DocLink" HREF="tcp_server.ListenForConnThread.html">ListenForConnThread</A>)</SPAN><SPAN CLASS="OneLiner"> # Listens for new connections on the VC_TALK port.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.SB_MessExtEdSim.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_MessExtEdSim</SPAN></A>(<A CLASS="DocLink" HREF="SourceBuffMessaging.SourceBuffMessaging.html">SourceBuffMessaging</A>)</SPAN><SPAN CLASS="OneLiner"> # Communicates with an external [EdSim] through a messaging link.</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="tcp_server.ServerSingleThread.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerSingleThread</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Implements a TCP/IP based VoiceCode server.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#app_state_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">app_state_factory</SPAN></A>(<SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messenger_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messenger_factory</SPAN></A>(<SPAN CLASS="Argument">sock</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a messenger from proper compenents</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">prompt_for_cmd</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#run_server"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">run_server</SPAN></A>(<SPAN CLASS="Argument">test_suite=None</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#vc_authentification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">vc_authentification</SPAN></A>(<SPAN CLASS="Argument">messenger</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Authentifies a VoiecCode user.</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_LISTEN_PORT</SPAN> = <SPAN CLASS="VariableValue">45770</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">VC_TALK_PORT</SPAN> = <SPAN CLASS="VariableValue">45771</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\tcp_server.py'</SPAN></SPAN>
+</PRE><H2>Description</H2><P>
+A VoiceCode server that uses TCP/IP based messaging protocol to communicate with external editors.
+</P>
+<H2 ID="app_state_factory" CLASS="Function">app_state_factory(<SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)</H2>
+<P></P>
+
+<P>
+    <STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>app_name</EM>
+<DD>Name of the editor for which we want to
+    create an [AppStateMessaging].
+<DT>
+STR <EM>id</EM>
+<DD>Unique ID of external editor connected to the [AppState]
+<DT>
+[Messenger] <EM>listen_msgr</EM>
+<DD>[Messenger] instance to use for the
+    VC listener side of the connection.
+<DT>
+[Messenger] <EM>talk_msgr</EM>
+<DD>[Messenger] instance to use for the
+    VC talker side of the connection.
+</DL>
+<P>
+    <STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+    ..[AppState] AppState.AppState.html</P>
+<H2 ID="messenger_factory" CLASS="Function">messenger_factory(<SPAN CLASS="Argument">sock</SPAN>)</H2>
+<P>Creates a messenger from proper compenents</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>socket sock</EM>
+<DD>Socket to use for creating the messenger
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[Messenger] <EM>a_messenger</EM>
+<DD>The created [Messenger] instance
+</DL>
+<P>
+..[Messenger] messaging.Messenger.html</P>
+<H2 ID="run_server" CLASS="Function">run_server(<SPAN CLASS="Argument">test_suite=None</SPAN>)</H2>
+<P></P>
+
+<P>
+Start a single thread, single process server.
+</P>
+<H2 ID="vc_authentification" CLASS="Function">vc_authentification(<SPAN CLASS="Argument">messenger</SPAN>)</H2>
+<P>Authentifies a VoiecCode user.</P>
+
+<P>
+For now, this function does nothing.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[Messenger] <EM>messenger</EM>
+<DD>Messenger to be used for the connection.
+<DT>
+[RecogStrartMgr] <EM>recog_mgr</EM>
+<DD>Object responsible for
+dispatching recognition events to the various editors.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+..[Messenger] messaging.Messenger.html
+..[RecogStartMgr] RecogStartMgr.RecogStartMgr.html</P>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
