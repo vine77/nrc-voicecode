@@ -1079,7 +1079,7 @@ class SymbolConstruction(Object):
         for word in spoken_form:
             word_element = self.interp.make_word_element(word)
             word_element.add_to(self.builder)
-        trace('SymbolConstruction.add_symbol',
+        debug.trace('SymbolConstruction.add_symbol',
               'allow_inexact = %d' % self.allow_inexact)
             
     def add_word(self, word):
@@ -1430,19 +1430,22 @@ class CmdInterp(OwnerObject):
 
         *STR rule* -- The natspeak rule.
         """
-
         if self._spoken_commands_gram_rule == None:
            known_spoken_forms = {}
            if not empty:          
               for cmd_dict in  self.commands.items():
-                 spoken_form = string.join(cmd_dict[0])
-                 known_spoken_forms[spoken_form] = 1
-                 
-              for lsa_word_trie in self.language_specific_aliases.values():                        
-                 for an_lsa_word_trie_entry in lsa_word_trie.items():
-                    spoken_form = string.join(an_lsa_word_trie_entry[0])
+                 if cmd_dict[1].generate_discrete_cmd:
+                    spoken_form = string.join(cmd_dict[0])
+                    debug.trace("CmdInterp.gram_spec_spoken_cmd", "** adding %s" % spoken_form)
                     known_spoken_forms[spoken_form] = 1
-
+ 
+# For now, never add LSAs... later, allow adding discrete commands for LSAs where
+# generate_discrete_cmd = 1                 
+#              for lsa_word_trie in self.language_specific_aliases.values():                        
+#                 for an_lsa_word_trie_entry in lsa_word_trie.items():
+#                    spoken_form = string.join(an_lsa_word_trie_entry[0])
+#                    known_spoken_forms[spoken_form] = 1
+#
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
            #       make sure this rule will not be empty (which would cause
            #       a crash).           
@@ -1450,7 +1453,6 @@ class CmdInterp(OwnerObject):
            for a_known_spoken_form in known_spoken_forms.keys():
               self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + "|%s" % a_known_spoken_form
            self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + ";\n"
-                   
         return self._spoken_commands_gram_rule
 
     def gram_spec_spoken_symbol(self, rule_name, empty=0): 
