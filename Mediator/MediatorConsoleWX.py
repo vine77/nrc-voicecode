@@ -28,11 +28,12 @@
 """
 
 import sys
+import string
 import shutil
 import Object, vc_globals
 import MediatorConsole
-import string
 from wxPython.wx import *
+import wxWindowsWithHelpers
 from thread_communication_WX import *
 import exceptions
 import os
@@ -81,6 +82,18 @@ wxID_CORRECT_NEXT = wxNewId()
 wxID_CORRECT_PREV = wxNewId()
 wxID_CORRECT_MORE = wxNewId()
 wxID_DISCARD_CORRECTION = wxNewId()
+
+def resize_last_column(table):
+    """Resize the last column of a table.
+    """
+    list_client_size = table.GetClientSize()
+    n_cols = table.GetColumnCount()
+    rest = 0
+    for col in range(n_cols -1):
+        rest = rest + table.GetColumnWidth(col)
+    table.SetColumnWidth(n_cols - 1, list_client_size.width - rest)
+
+
 
 def set_text_font(control):
     """set the font size for a control
@@ -1352,6 +1365,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
         self.hook_events()
+        
     def hook_events(self):
         """hook events up to our handlers
 
@@ -1545,8 +1559,17 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
        self.setView(ReformatRecentSymbolsViewWX(console, parent, utterances, 
                                                 gram_factory, pos))
 
-    def displayed_utterances(self):
-        return self.view.displayed_utterances()
+    def displayed_symbols(self):
+        return self.view.displayed_symbols()
+
+    def Show(self, flag=None):
+        if flag == None:
+            return self.view.Show()
+        else:
+            return self.view.Show(flag)
+            
+    def ShowModal(self):
+        return self.view.ShowModal()
 
 class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture, 
                               Object.OwnerObject):
@@ -1555,11 +1578,10 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
     **INSTANCE ATTRIBUTES**
 
-    *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
-    dictation utterances (or all available if < n), sorted most recent 
-    last, each with a corresponding utterance number and a flag 
-    indicating if the utterance can be undone and re-interpreted, and a 
-    list of symbols they contain.
+    *[SymbolToReformat] symbols* -- A list of symbols that the user could
+    reformat. It is assumed that all of those symbols CAN be reformatted
+    (i.e. that we can reinterpret the utterances where these symbols 
+    were spoken).
 
     *BOOL first* -- flag indicating whether this is the first time the
     window has been activated.
@@ -1572,7 +1594,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
     *ChoiceGram correct_n_gram* -- ChoiceGram supporting "Correct n"
     """
-    def __init__(self, console, parent, utterances, 
+    def __init__(self, console, parent, symbols, 
             gram_factory, pos = None, **args):
         """
         **INPUTS**
@@ -1582,13 +1604,10 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *wxWindow parent* -- the parent wxWindow
 
-        *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
-        dictation utterances (or all available if < n), sorted most 
-        recent last, with corresponding flags indicating if the utterance 
-        can be undone and re-interpreted, and a list of symbols they contain.
-
-        *{INT: BOOL} corrected* -- set of utterances which have been
-        corrected, counted from most recent = 1
+        *[SymbolToReformat] symbols* -- A list of symbols that the user could
+        reformat. It is assumed that all of those symbols CAN be reformatted
+        (i.e. that we can reinterpret the utterances where these symbols 
+        were spoken).
 
         *WinGramFactory gram_factory* -- the grammar factory used to add
         speech grammars to the dialog box
@@ -1605,7 +1624,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
         self.deep_construct(CorrectRecentWX,
                             {
                              'console': console,
-                             'utterances': utterances,
+                             'symbols': symbols,
                              'gram_factory': gram_factory,
                              'first': 1,
                              'nth_event': CorrectNthEventWX(self),
@@ -1614,36 +1633,49 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
                             }, args, 
                             exclude_bases = {possible_capture:1, wxDialog: 1}
                            )
-#        self.name_parent('console')
-#        self.add_owned('correct_n_gram')
-#        if gram_factory:
-#            if wxMAJOR_VERSION > 2 or \
-#                (wxMAJOR_VERSION == 2 and 
-#                     (wxMINOR_VERSION > 3 or 
-#                          (wxMINOR_VERSION == 3 and wxRELEASE_NUMBER >= 4)
-#                     )
-#                ):
-#                self.correct_n_gram = \
-#                    gram_factory.make_choices(choice_words = ['Correct'])
-#        if pos is None:
-#            self.CenterOnScreen()
-#
-#        s = wxBoxSizer(wxVERTICAL)
-#        intro = wxStaticText(self, wxNewId(), 
-#            "&Choose a phrase to correct",
-#            wxDefaultPosition, wxDefaultSize)
-#        set_text_font(intro)
-#        s.Add(intro, 0, wxEXPAND | wxALL)
-#        recent = wxListCtrl(self, wxNewId(), wxDefaultPosition,
-#            wxDefaultSize, 
-#            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
-#        set_text_font(recent)
-#        recent.InsertColumn(0, "#")
-#        recent.InsertColumn(1, "Spoken phrase")
-#        phrases = map(lambda x: string.join(x[0].spoken_forms()),
-#            utterances)
+        self.name_parent('console')
+        self.add_owned('correct_n_gram')
+        if gram_factory:
+            if wxMAJOR_VERSION > 2 or \
+                (wxMAJOR_VERSION == 2 and 
+                     (wxMINOR_VERSION > 3 or 
+                          (wxMINOR_VERSION == 3 and wxRELEASE_NUMBER >= 4)
+                     )
+                ):
+                self.correct_n_gram = \
+                    gram_factory.make_choices(choice_words = ['Correct'])
+        if pos is None:
+            self.CenterOnScreen()
+
+        main_sizer = wxBoxSizer(wxVERTICAL)
+        intro = wxStaticText(self, wxNewId(), 
+            "&Choose a symbol to correct",
+            wxDefaultPosition, wxDefaultSize)
+        set_text_font(intro)
+        main_sizer.Add(intro, 0, wxEXPAND | wxALL)
+        
+        recent = wxWindowsWithHelpers.wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
+            wxDefaultSize, 
+            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        set_text_font(recent)
+        
+        recent.InsertColumn(0, "#")
+        recent.InsertColumn(1, "Spoken symbol")
+        recent.InsertColumn(2, "Written symbol") 
+        recent.InsertColumn(3, "In utterance") 
+      
+        phrases = map(lambda x: string.join(x.utterance.spoken_forms()),
+                      symbols)
+        index = range(len(phrases), 0, -1)            
+
+# AD: For now, don't worry about the + and - sign that indicate
+#     whether or not the utterance can be corrected. The current correction
+#     backend only allows reinterpretation of the N most recent utterances 
+#    (where utterance N+1 is the first utterance that might cause trouble).
+#     So it's simpler to just assume that the dialog will receive ONLY a list of
+#     symbols that appeared in those last N utterances.
+#               
 #        can_reinterpret = map(lambda x: x[2], utterances)
-#        index = range(len(phrases), 0, -1)
 #        bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
 #        yes = wxBitmap(os.path.join(bitpath, 'small_plus.bmp'), wxBITMAP_TYPE_BMP)
 #        no = wxBitmap(os.path.join(bitpath, 'small_minus.bmp'), wxBITMAP_TYPE_BMP)
@@ -1652,64 +1684,74 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 #        index_yes = self.images.Add(yes)
 ## I'm guessing that LC_REPORT uses small images
 #        recent.SetImageList(self.images, wxIMAGE_LIST_SMALL)
-#        for i in range(len(phrases)):
-#            if can_reinterpret[i]: 
-#                which = index_yes
-#            else:
-#                which = index_no
-#            recent.InsertImageStringItem(i, str(index[i]), which)
-#            recent.SetStringItem(i, 1, phrases[i])
-#        recent.SetColumnWidth(0, wxLIST_AUTOSIZE)
-#        recent.SetColumnWidth(1, wxLIST_AUTOSIZE)
-#
-#        recent.ScrollList(0, len(phrases))
-#        self.recent = recent
-#        self.phrases = phrases
-#        s.Add(recent, 1, wxEXPAND | wxALL)
-#        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-#        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-##        EVT_BUTTON(self, okb.GetId(), self.on_ok)
-#        b_sizer = wxBoxSizer(wxHORIZONTAL)
-#        b_sizer.Add(okb, 0, 0)
-#        b_sizer.Add(cancelb, 0, 0)
-#        s.Add(b_sizer, 0, wxEXPAND | wxALL)
-##        okb.SetDefault()
-## note: neither of these handlers gets called if a child control 
-## has the focus.
-## I thought they would be called if the focused control didn't have a
-## handler
-#        EVT_ACTIVATE(self, self.on_activate)
-#        EVT_CHAR(self, self.on_char)
-##        EVT_KEY_DOWN(self, self.on_key_down)
-#
-##        EVT_KEY_DOWN(self.recent, self.on_recent_char)
-##        EVT_CHAR(self.recent, self.on_recent_char)
-#
-#        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
-#        self.SetAutoLayout(true)
-#        self.SetSizer(s)
-#        self.Layout()
-#        actual = s.GetSize()
-#        minimum = s.GetMinSize()
-#        list_size = self.recent.GetSize()
-#        list_client_size = self.recent.GetClientSize()
-#        h = list_client_size.GetHeight()
-#        w = list_client_size.GetWidth()
-#        s.SetItemMinSize(self.recent, w, h)
-#        s.SetMinSize(wxSize(0, actual.GetHeight()))
-#        q = s.GetMinSize()
-#        s.Fit(self)
-#        s.SetMinSize(wxSize(q.GetWidth(), 0))
-#        self.resize_last_column()
-#        last = len(self.phrases)-1
-#        self.recent.EnsureVisible(last)
-#        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
-#        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+            
+        for ii in range(len(symbols)):
+           recent.InsertStringItem(ii, str(index[ii]))
+           recent.SetStringItem(ii, 1, self.symbols[ii].written)
+           recent.SetStringItem(ii, 2, self.symbols[ii].spoken)
+           recent.SetStringItem(ii, 3, 
+                                 self.symbols[ii].utterance.spoken_form_as_string())
+
+        recent.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(2, wxLIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(3, wxLIST_AUTOSIZE_USEHEADER)
+
+        recent.ScrollList(0, len(symbols))
+        self.recent = recent
+        main_sizer.Add(recent, 1, wxEXPAND | wxALL)
+        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
+        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
+        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        b_sizer.Add(okb, 0, 0)
+        b_sizer.Add(cancelb, 0, 0)
+        main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
+        okb.SetDefault()
+# note: neither of these handlers gets called if a child control 
+# has the focus.
+# I thought they would be called if the focused control didn't have a
+# handler
+        EVT_ACTIVATE(self, self.on_activate)
+        EVT_CHAR(self, self.on_char)
+
+        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
+        self.SetAutoLayout(true)
+        self.SetSizer(main_sizer)
+        self.Layout()
+        actual = main_sizer.GetSize()
+        minimum = main_sizer.GetMinSize()
+        list_size = self.recent.GetSize()
+        list_client_size = self.recent.GetClientSize()
+        h = list_client_size.GetHeight()
+        w = list_client_size.GetWidth()
+        main_sizer.SetItemMinSize(self.recent, w, h)
+        main_sizer.SetMinSize(wxSize(0, actual.GetHeight()))
+        q = main_sizer.GetMinSize()
+        main_sizer.Fit(self)
+        main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
+        resize_last_column(self.recent)
+        last = len(self.symbols)-1
+        self.recent.EnsureVisible(last)
+        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+#AD: Not sure what that does.        
 #        self.hook_events()
 
-    def displayed_utterances(self):
-        return []
+    def on_ok(self, event):
+        debug.not_implemented('ReformatRecentSymbolsViewWX.on_ok')
 
+    def on_activate(self, event):
+        debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
+
+    def on_char(self):
+        debug.not_implemented('ReformatRecentSymbolsViewWX.on_char')
+
+    def on_choose(self):
+        debug.not_implemented('ReformatRecentSymbolsViewWX.on_choose')
+
+    def displayed_symbols(self):
+       return self.recent.AllCellsContentsString()
 
 
 # defaults for vim - otherwise ignore

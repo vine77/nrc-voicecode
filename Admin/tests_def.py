@@ -1,4 +1,4 @@
-###############################################################################
+##############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ import TestCaseWithHelpersTest, SymbolReformattingUITestCase
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 # import mediator, MediatorObject, Object, SymDict, test_pseudo_python
 import Object, SymDict, test_pseudo_python
-import util, unit_testing, vc_globals
+import util, unit_testing, vc_globals, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
@@ -3577,6 +3577,19 @@ def test_basic_correction():
 
 add_test('basic_correction', test_basic_correction, 
     'Testing basic correction infrastructure with ResMgr.')
+
+
+##############################################################################
+# Testing special purpose wxWindows widget subclasses
+##############################################################################
+
+def test_wxWindowsWithHelpers():
+   suite = unittest.TestSuite()
+   suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxListCtrlWithHelpersTest,'test'))
+
+   unittest.TextTestRunner().run(suite) 
+   
+add_test('wxWindowsWithHelpers', test_wxWindowsWithHelpers, 'Testing subclasses of wxWindows widgets.')
 
 
 ##############################################################################
