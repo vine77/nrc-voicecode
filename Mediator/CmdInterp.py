@@ -1314,7 +1314,7 @@ class SymbolConstruction(Object):
         self.symbols.append(result)
         self.reset()
       
-    def insert_new_symbol(self, exact_matches = None,
+    def insert_new_symbol(self, from_utterance, exact_matches = None,
                         inexact_matches = None, forbidden = None):
         """
         Generate and insert a new symbol, track the
@@ -1322,6 +1322,9 @@ class SymbolConstruction(Object):
         object
 
         ** INPUTS **
+        
+        *SpokenUtterance* from_utterance -- The utterance in which the 
+        symbol was heard.
 
         *[STR] exact_matches* -- a prioritized list of exact matches
         to known symbols
@@ -1352,6 +1355,7 @@ class SymbolConstruction(Object):
                               inexact_matches, forbidden, new_symbol = 1)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
+        from_utterance.add_interp_symbol(symbol, self.builder.spoken_form())
         self.reset()
       
         
@@ -1725,7 +1729,7 @@ class CmdInterp(OwnerObject):
             csc_applies = 0
 
             CSC_consumes = self.apply_CSC(app, possible_CSCs,
-                processed_phrase, most_definite, symbols)
+                processed_phrase, most_definite, symbols, utterance)
             if CSC_consumes:
                 phrase = phrase[CSC_consumes:]
                 processed_phrase = processed_phrase[CSC_consumes:]
@@ -1746,7 +1750,7 @@ class CmdInterp(OwnerObject):
                 else:
 # flush untranslated words before inserting LSA
                     if preceding_symbol:
-                        self.match_untranslated_text(symbols, app)
+                        self.match_untranslated_text(symbols, app, utterance)
                     action = actions_gen.ActionInsert(code_bef = \
                         chopped_LSA.written(), code_after = '')
                     action.log_execute(app, None, self.state_interface)
@@ -1804,7 +1808,7 @@ class CmdInterp(OwnerObject):
                 #
                 trace('CmdInterp.interpret_phrase',
                       'found the end of some untranslated text')
-                self.match_untranslated_text(symbols, app)
+                self.match_untranslated_text(symbols, app, utterance)
 
             if trace_is_active('CmdInterp.interpret_phrase'):
                 untranslated_text = string.join(symbols.words())
@@ -1822,7 +1826,7 @@ class CmdInterp(OwnerObject):
         return interpreted
 
     def apply_CSC(self, app, possible_CSCs, spoken_list,
-        most_definite, symbols):
+        most_definite, symbols, from_utterance):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
@@ -1841,6 +1845,9 @@ class CmdInterp(OwnerObject):
 
         *SymbolConstruction symbols* -- object storing information
         related to any pending untranslated symbols
+        
+        *SpokenUtterance* from_utterance -- utterance that the CSC was
+        interpreted from.
         
         **OUTPUTS**
 
@@ -1876,7 +1883,7 @@ class CmdInterp(OwnerObject):
             csc_applies = 1
 # flush untranslated words before executing action
             if preceding_symbol:
-                self.match_untranslated_text(symbols, app)
+                self.match_untranslated_text(symbols, app, from_utterance)
             action.log_execute(app, context, self.state_interface)
             return CSC_consumes
         return 0
@@ -1964,7 +1971,7 @@ class CmdInterp(OwnerObject):
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
-    def match_untranslated_text(self, symbols, app):
+    def match_untranslated_text(self, symbols, app, utterance):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -2050,7 +2057,7 @@ class CmdInterp(OwnerObject):
                                     forbidden = forbidden)
         else:
             symbol = \
-                symbols.insert_new_symbol(exact_matches = complete_match,
+                symbols.insert_new_symbol(utterance, exact_matches = complete_match,
                                           inexact_matches = inexact_matches,
                                           forbidden = forbidden)
         

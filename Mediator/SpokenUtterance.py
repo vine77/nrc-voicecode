@@ -52,7 +52,8 @@ class SpokenUtterance(OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *{STR: STR}* symbols -- symbols that were interpreted from that utterance.
+    The key is the written form, the value is the spoken form.
 
     **CLASS ATTRIBUTES**
 
@@ -60,7 +61,7 @@ class SpokenUtterance(OwnerObject):
     """
     def __init__(self, **attrs):
         self.deep_construct(SpokenUtterance,
-            {}, attrs)
+            {'symbols': {}}, attrs)
 
     def spoken_form_as_string(self):
         """returns the spoken form of the utterance as a single 
@@ -316,7 +317,12 @@ class SpokenUtterance(OwnerObject):
         """
         return remove_periods_from_initials(spoken)
 
+    def add_interp_symbol(self, written, spoken):
+        """Adds a symbol that was interpreted in the utterance.
+        """
+        self.symbols[written] = spoken
       
+         
 class MockSpokenUtterance(SpokenUtterance):
     """Mock version of [SpokenUtterance].
     
@@ -520,5 +526,4 @@ class MockSpokenUtterance(SpokenUtterance):
         
         """
         return []
-      
-   
+        
