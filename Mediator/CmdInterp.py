@@ -894,11 +894,6 @@ class CmdInterp(OwnerObject):
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-# DCF: this doesn't seem to be used anywhere else
-#        global regexp_is_dirty
-#
-#        regexp_is_dirty = 1
-
         for a_spoken_form in acmd.spoken_forms:
             #
             # Remove leading, trailing and double blanks from the spoken form
@@ -913,7 +908,6 @@ class CmdInterp(OwnerObject):
                 # Already indexed. Just add to the list of CSCs for that
                 # spoken form
                 #
-#                print '-- CmdInterp.index_csc: spoken form \'%s\'already indexed. Not adding to SR vocabulary' % a_spoken_form
                 cmds_this_spoken_form = self.cmd_index[a_spoken_form]
                 cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
             else:
@@ -921,10 +915,8 @@ class CmdInterp(OwnerObject):
                 # First time indexed. Create a new list of CSCs for that
                 # spoken form, and add it to the SR vocabulary.
                 #
-#                print '-- CmdInterp.index_csc: spoken form \'%s\' indexed for first time. Adding to SR vocabulary' % a_spoken_form
                 self.cmd_index[a_spoken_form] = [acmd]
-                if (not os.environ.has_key('VCODE_NOSPEECH')
-                   and self.add_sr_entries_for_LSAs_and_CSCs):
+                if (self.add_sr_entries_for_LSAs_and_CSCs):
                     sr_interface.addWord(a_spoken_form)
 # we had some problems in regression testing because the individual
 # words in a spoken form were unknown, so now we add the individual
@@ -977,8 +969,6 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
-        
-#    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
         
 
         for a_meaning in meanings.items():

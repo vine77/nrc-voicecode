@@ -89,15 +89,6 @@ if add_words_as == 'user':
 else:
     word_info_flag = 0x40000000
 
-#
-# The following functions are just wrappers on top of natlink ones.
-# They check for value of environment variable *VCODE_NOSPEECH* before
-# calling the corresponding natlink functions
-#
-
-def speech_able():
-    return not os.environ.has_key('VCODE_NOSPEECH')
-
 
 def set_mic(mic_state):
     """turns microphone on or off (connecting first, if necessary).
@@ -105,10 +96,10 @@ def set_mic(mic_state):
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection.
     """
-    if speech_able():
-        if not sr_is_connected:
-            connect()
-        natlink.setMicState(mic_state)
+
+    if not sr_is_connected:
+        connect()
+    natlink.setMicState(mic_state)
 
 def get_mic():
     """checks the current microphone state
@@ -116,10 +107,9 @@ def get_mic():
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection.
     """
-    if speech_able():
-        if not sr_is_connected:
-            connect()
-        return natlink.getMicState()
+    if not sr_is_connected:
+        connect()
+    return natlink.getMicState()
 
 
 def connect(mic_state=None, mic_change_callback = None):
@@ -143,17 +133,16 @@ def connect(mic_state=None, mic_change_callback = None):
     
 #    trace('sr_interface.connect', 'mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected))
     
-    if speech_able():
-        if not sr_is_connected:
+    if not sr_is_connected:
 # 1 means use threads -- needed for GUI apps
-            natlink.natConnect(1)
-            sr_is_connected = 1            
-            openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
-        if mic_state:
-            natlink.setMicState(mic_state)
-        if mic_change_callback:
-            sr_mic_change_callback = mic_change_callback
-            natlink.setChangeCallback(change_callback)
+        natlink.natConnect(1)
+        sr_is_connected = 1            
+        openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
+    if mic_state:
+        natlink.setMicState(mic_state)
+    if mic_change_callback:
+        sr_mic_change_callback = mic_change_callback
+        natlink.setChangeCallback(change_callback)
 
 
 def disconnect():
@@ -170,11 +159,10 @@ def disconnect():
     """
     global sr_is_connected, sr_mic_change_callback
 
-    if speech_able() and sr_is_connected:
-        if sr_mic_change_callback:
-            natlink.setChangeCallback(None)
-            sr_mic_change_callback = None
-        natlink.natDisconnect()
+    if sr_mic_change_callback:
+        natlink.setChangeCallback(None)
+        sr_mic_change_callback = None
+    natlink.natDisconnect()
     sr_is_connected = 0        
 
 
@@ -269,11 +257,10 @@ def getWordInfo(word, *rest):
 #    trace('sr_interface.getWordInfo', 'reformatted word=%s' % word)
 
     answer = None
-    if speech_able():
-        if len(rest) == 0:
-            answer = natlink.getWordInfo(word)
-        elif len(rest) == 1:
-            answer = natlink.getWordInfo(word, rest[0])
+    if len(rest) == 0:
+        answer = natlink.getWordInfo(word)
+    elif len(rest) == 1:
+        answer = natlink.getWordInfo(word, rest[0])
 
 #    trace('sr_interface.getWordInfo', 'answer is %s' % answer)
     return answer
@@ -282,9 +269,7 @@ def getWordInfo(word, *rest):
 def addWord(word, *rest):
     """Add a word to NatSpeak's vocabulary.
 
-    We only add the word if it doesn't already exist in the vocabulary
-    and if speech is enabled (i.e. environment variable
-    $VCODE_NOSPEECH undefined).
+    We only add the word if it doesn't already exist in the vocabulary.
     """
         
     global word_info_flag
@@ -298,46 +283,42 @@ def addWord(word, *rest):
     word = vocabulary_entry(spoken, written, clean_written=1)
 
 
-    if speech_able():
-        #
-        # Make sure we are connected to SR system
-        #
-        connect()
+    #
+    # Make sure we are connected to SR system
+    #
+    connect()
                 
-        if getWordInfo(word) == None:
+    if getWordInfo(word) == None:
 #            trace('sr_interface.addWord', 'this word is new to NatSpeak')
                    
-            if len(rest) == 0:
-                flag = word_info_flag
-            elif len(rest) == 1:
-                flag = rest[0]
-            else:
-                return None
-                
-            natlink.addWord(word, flag)
-            sr_user_needs_saving = 1
+        if len(rest) == 0:
+            flag = word_info_flag
+        elif len(rest) == 1:
+            flag = rest[0]
+        else:
+            return None
+               
+        natlink.addWord(word, flag)
+        sr_user_needs_saving = 1
 
-            #
-            # Note: Need to add redundant entry without special
-            # characters (e.g. {Spacebar}}) in the written form,
-            # because Select XYZ will not work if XYZ has some spaces
-            # in its written form. This means that there will be two
-            # vocabulary entries in the vocabulary. The entry without
-            # spaces will always be used by Select XYZ, but
-            # unfortunately, the dictation grammar may chose the one
-            # without spaces over the one with spaces. Hopefully,
-            # user correction will address that
-            #
-            word_no_special_chars = re.sub('{Spacebar}', '', word)
-            if word_no_special_chars != word:
+        #
+        # Note: Need to add redundant entry without special
+        # characters (e.g. {Spacebar}}) in the written form,
+        # because Select XYZ will not work if XYZ has some spaces
+        # in its written form. This means that there will be two
+        # vocabulary entries in the vocabulary. The entry without
+        # spaces will always be used by Select XYZ, but
+        # unfortunately, the dictation grammar may chose the one
+        # without spaces over the one with spaces. Hopefully,
+        # user correction will address that
+        #
+        word_no_special_chars = re.sub('{Spacebar}', '', word)
+        if word_no_special_chars != word:
 #                trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
-                natlink.addWord(word_no_special_chars, flag)
+            natlink.addWord(word_no_special_chars, flag)
 
 def deleteWord(word, *rest):
     """Delete a word from NatSpeak's vocabulary.
-
-    We only delete it if speech is enabled (i.e. environment variable
-    $VCODE_NOSPEECH undefined).
 
     Also, we only remove it if the word was added to the vocabulary by
     VoiceCode, i.e. if the word info has 'added by Vocabulary Builder'

@@ -59,7 +59,7 @@ suite_reg['insdel2'] = ['basic_correction', 'insert_delete']
 test_header_fmt = '\n\n******************************************************************************\n* Test       : %s\n* Description : %s\n******************************************************************************\n\n'
 
 
-def add_test(name, fct, desc=""):
+def add_test(name, fct, desc="", order=0):
     """Add a test to the test registry.
 
     Adds a test with name *STR name* and function *FCT fct* to the
@@ -75,7 +75,7 @@ def add_test(name, fct, desc=""):
     if (test_reg.has_key(name)):
         sys.stderr.write("WARNING: Test '%s' defined twice\n" % [name])
     else:
-        test_reg[name] = [fct, desc]
+        test_reg[name] = [fct, desc, order]
 
 def add_suite(name, *patterns):
     """Adds a new test suite to the registry.
@@ -85,6 +85,17 @@ def add_suite(name, *patterns):
     regexp to be matched against test names.
     """
     suite_reg[name] = patterns
+
+def tests_names_by_priority_and_name(tests_to_do):
+    test_priorities_and_names = []
+    for a_test in tests_to_do.items():
+       test_priorities_and_names.append(a_test[1][2], a_test[0])
+    test_priorities_and_names.sort()
+    sorted_test_names = []
+    for a_test_priority_and_name in test_priorities_and_names: 
+      sorted_test_names.append((a_test_priority_and_name[1]))
+    return sorted_test_names
+    
 
 def run(to_run, profile_prefix = None):
     """
@@ -104,14 +115,13 @@ def run(to_run, profile_prefix = None):
         test_suite = expand_suite(an_entry)
         tests_to_do = util.dict_merge(tests_to_do, test_suite)
         
-    test_names = tests_to_do.keys()
-    test_names.sort()
+    test_names = tests_names_by_priority_and_name(tests_to_do)
 
     start_time = time.time()
     end_time = start_time
     
     for a_test_name in test_names:
-        [fct, desc] = tests_to_do[a_test_name]
+        [fct, desc, order] = tests_to_do[a_test_name]
         sys.stdout.write(test_header(a_test_name, desc))
         sys.stdout.flush()
         if profile_prefix is None:
@@ -189,17 +199,17 @@ def find_tests(name, is_regexp=None):
 #        print "-- find_tests: trying as regexp"
         patt = '^' + name + '$'
         for an_entry in test_reg.items():        
-            this_name, [fct, desc] = an_entry
+            this_name, [fct, desc, order] = an_entry
             if (re.match(patt, this_name)):
 #                print "-- find_tests: test %s matched %s" % (str(this_name), str(patt))
-                found_tests[this_name] = [fct, desc]
+                found_tests[this_name] = [fct, desc, order]
         
     else:
         #
         # name is an actual test name
         #
 #        print "-- find_tests: trying an actual test name"
-        found_tests[name] = [test_reg[name][0], test_reg[name][1]]
+        found_tests[name] = [test_reg[name][0], test_reg[name][1], test_reg[name][2]]
 #    print ("-- find_tests: returns found_tests=%s" % found_tests)
 
 

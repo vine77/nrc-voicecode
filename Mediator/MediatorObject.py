@@ -48,29 +48,28 @@ def disconnect_from_sr(disconnect, save_speech_files):
     """
 
 #    print '-- MediatorObject.disconnect_from_sr: disconnect=%s, save_speech_files=%s' % (disconnect, save_speech_files)
-    if sr_interface.speech_able():
-        #
-        # Ask the user if he wants to save speech files
-        #
-        while save_speech_files == None:
-            sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
-            answer = sys.stdin.readline()
-            answer = answer[:len(answer)-1]
-       
-            if answer == 'y':
-                save_speech_files = 1
-            elif answer == 'n':
-                save_speech_files = 0
+    #
+    # Ask the user if he wants to save speech files
+    #
+    while save_speech_files == None:
+        sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
+        answer = sys.stdin.readline()
+        answer = answer[:len(answer)-1]
+     
+        if answer == 'y':
+            save_speech_files = 1
+        elif answer == 'n':
+            save_speech_files = 0
            
-            if save_speech_files == None:
-                print "\nPlease answer 'y' or 'n'."
+        if save_speech_files == None:
+            print "\nPlease answer 'y' or 'n'."
 
-        if save_speech_files and sr_interface.sr_user_needs_saving:
-            print 'Saving speech files. This may take a moment ...'
-            sr_interface.saveUser()
-            print 'Speech files saved.'
+    if save_speech_files and sr_interface.sr_user_needs_saving:
+        print 'Saving speech files. This may take a moment ...'
+        sr_interface.saveUser()
+        print 'Speech files saved.'
 
-        if disconnect: sr_interface.disconnect()
+    if disconnect: sr_interface.disconnect()
             
         
 def do_nothing(*positional, **keywords):
@@ -375,13 +374,12 @@ class MediatorObject(Object.Object):
                 
 #        print 'Mediator configure:\n'
 #        print traceback.extract_stack()
-        if sr_interface.speech_able():
-            self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
-            if self.window == 0:
-                self.mixed_grammar.activate()
-            self.code_select_grammar.load_with_verbs()
-            if self.window == 0:
-                self.code_select_grammar.activate()                
+        self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
+        if self.window == 0:
+            self.mixed_grammar.activate()
+        self.code_select_grammar.load_with_verbs()
+        if self.window == 0:
+            self.code_select_grammar.activate()                
                         
         config_dict = {}
         self.define_config_functions(config_dict)
@@ -426,13 +424,13 @@ class MediatorObject(Object.Object):
         #
         self.interp.cleanup(clean_sr_voc=clean_sr_voc)
     
-        if sr_interface.speech_able():
-            if self.mixed_grammar:
-                self.mixed_grammar.unload()
-            if self.code_select_grammar:
-                self.code_select_grammar.unload()
 
-            disconnect_from_sr(disconnect, save_speech_files)
+        if self.mixed_grammar:
+            self.mixed_grammar.unload()
+        if self.code_select_grammar:
+            self.code_select_grammar.unload()
+
+        disconnect_from_sr(disconnect, save_speech_files)
 
         if self.mixed_grammar:
             self.mixed_grammar.cleanup()

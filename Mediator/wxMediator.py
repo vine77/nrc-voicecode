@@ -284,7 +284,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
     quitting
     """
     def __init__(self, test_suite = None, profile_prefix = None,
-        bypass_for_dictation = 0, **args):
+        bypass_sr_recog = 0, **args):
         """
         **INPUTS**
 
@@ -293,7 +293,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         *STR profile_prefix* -- prefix for filename for output of profiler,
         or None if not profiling (ignored if test_suite is None) 
 
-        *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
+        *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
         dictation utterances (ignored if test_suite is None) 
         """
 
@@ -337,7 +337,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                 test_args = test_args,
                 test_space = test_space, global_grammars = 1, exclusive = 1,
                 profile_prefix = profile_prefix,
-                bypass_for_dictation = bypass_for_dictation)
+                bypass_sr_recog = bypass_sr_recog)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         self.the_mediator.configure()
@@ -687,7 +687,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
 
 ##############################################################################
-def run(test_suite=None, profile_prefix = None, bypass_for_dictation = 0):
+def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0):
     """Start a ServerNewMediator/ServerMainThread with external message 
     loop using wxWindows events and the new NewMediatorObject
     """
@@ -695,7 +695,7 @@ def run(test_suite=None, profile_prefix = None, bypass_for_dictation = 0):
     sys.stderr.write('creating wxMediator\n')
     app = wxMediatorServer(test_suite = test_suite, 
         profile_prefix = profile_prefix, 
-        bypass_for_dictation = bypass_for_dictation)
+        bypass_sr_recog = bypass_sr_recog)
     sys.stderr.write('starting...\n')
     app.run()
 #    sys.stderr.write("run_ext_server finishing\n")
@@ -751,7 +751,7 @@ if __name__ == '__main__':
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
     run(test_suite=opts['t'], profile_prefix = opts['p'],
-        bypass_for_dictation = opts['bypass'])
+        bypass_sr_recog = opts['bypass'])
 
 
 

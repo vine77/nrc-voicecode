@@ -78,12 +78,8 @@ if add_words_as == 'user':
 else:
     word_info_flag = 0x40000000
 
-# The following functions are just wrappers on top of natlink ones.
-# They check for value of environment variable *VCODE_NOSPEECH* before
-# calling the corresponding natlink functions
-
 def speech_able():
-    return not os.environ.has_key('VCODE_NOSPEECH')
+    return 1
 
 def addedByVC(flag):
     
@@ -114,9 +110,7 @@ def getWordInfo(word, *rest):
 def addWord(word, *rest):
     """Add a word to NatSpeak's vocabulary.
 
-    We only add the word if it doesn't already exist in the vocabulary
-    and if speech is enabled (i.e. environment variable
-    $VCODE_NOSPEECH undefined).
+    We only add the word if it doesn't already exist in the vocabulary.
 
     We add the word with flag of 0x40000000 which means 'added by
     Vocabulary  Builder'. This has the effect of decreasing the 
@@ -145,9 +139,6 @@ def addWord(word, *rest):
 
 def deleteWord(word, *rest):
     """Delete a word from NatSpeak's vocabulary.
-
-    We only delete it if speech is enabled (i.e. environment variable
-    $VCODE_NOSPEECH undefined).
 
     Also, we only remove it if the word was added to the vocabulary by
     VoiceCode, i.e. if the word info has 'added by Vocabulary Builder'
@@ -186,22 +177,20 @@ class VoiceDictation(Object):
     # directly to the dialog box.
 
     def initialize(self, window_handle, begin_cbk, change_cbk):
-        if not os.environ.has_key('VCODE_NOSPEECH'):
-            natlink.natConnect(1)
-            self.dictation_object = natlink.DictObj()
-            self.dictation_object.setBeginCallback(begin_cbk)
-            self.dictation_object.setChangeCallback(change_cbk)
-            self.dictation_object.activate(window_handle)
+        natlink.natConnect(1)
+        self.dictation_object = natlink.DictObj()
+        self.dictation_object.setBeginCallback(begin_cbk)
+        self.dictation_object.setChangeCallback(change_cbk)
+        self.dictation_object.activate(window_handle)
 
     # Call this function to cleanup.  We have to reset the callback
     # functions or the object will not be freed.
         
     def terminate(self):
-        if not os.environ.has_key('VCODE_NOSPEECH'):
-            self.dictation_object.deactivate()
-            self.dictation_object.setBeginCallback(None)
-            self.dictation_object.setChangeCallback(None)
-            self.dictation_object = None
+        self.dictation_object.deactivate()
+        self.dictation_object.setBeginCallback(None)
+        self.dictation_object.setChangeCallback(None)
+        self.dictation_object = None
 
     # This makes it possible to access the member functions of the DictObj
     # directly as member functions of this class.
