@@ -1,4 +1,16 @@
 
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>rem  
+
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>rem Shortcut for invoking VoiceCode regression test 
+
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>rem
+
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>d:
+
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>cd D:\VoiceCode\VCode.sf-2002-01-09\Admin 
+
+D:\VoiceCode\VCode.sf-2002-01-09\Admin>python test.py all         
+
 
 *******************************************************************************
 * Name        : CmdInterp
@@ -183,7 +195,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8d5fc0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at e94ef8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -426,7 +438,7 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1521,7 +1533,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1798,7 +1810,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1891,12 +1903,12 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 95ccb0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at ff6cd0> from file 'D:\VoiceCode\VCode.sf-2002-01-09\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.sf-2002-01-09\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5688,6 +5700,120 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:          <CURSOR>
 
 *** End of source buffer ***
+Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
+Associate 'this word' with symbol (Enter selection):
+
+  '0': no association
+  '1': this_word (*new*)
+  '2': ThisWord (*new*)
+  '3': thisWord (*new*)
+  '4': THIS_WORD (*new*)
+  '5': thisword (*new*)
+  '6': THISWORD (*new*)
+
+> Associate 'hello' with symbol (Enter selection):
+
+  '0': no association
+  '1': hello (*new*)
+  '2': Hello (*new*)
+  '3': HELLO (*new*)
+
+>  30:             regexp = regexp + regexp_this_word
+ 31:          return regexp
+ 32:          if not this_word:
+ 33:             this_word = 'hello<CURSOR>'
+
+*** End of source buffer ***
+Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
+Associate 'hi' with symbol (Enter selection):
+
+  '0': no association
+  '1': hi (*new*)
+  '2': Hi (*new*)
+  '3': HI (*new*)
+
+>  32:          if not this_word:
+ 33:             this_word = 'hello'
+ 34:          elif this_word == hi: 
+ 35:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['this', 'word', 'equals', 'greetings', 'else']
+Associate 'greetings' with symbol (Enter selection):
+
+  '0': no association
+  '1': greetings (*new*)
+  '2': Greetings (*new*)
+  '3': GREETINGS (*new*)
+
+>  34:          elif this_word == hi: 
+ 35:             this_word = greetings
+ 36:          else:
+ 37:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
+Associate 'done' with symbol (Enter selection):
+
+  '0': no association
+  '1': done (*new*)
+  '2': Done (*new*)
+  '3': DONE (*new*)
+
+>  35:             this_word = greetings
+ 36:          else:
+ 37:             this_word = 'done'
+ 38:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['try', 'some', 'function', 'with', 'arguments']
+Associate 'some function' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_function (*new*)
+  '2': SomeFunction (*new*)
+  '3': someFunction (*new*)
+  '4': SOME_FUNCTION (*new*)
+  '5': somefunction (*new*)
+  '6': SOMEFUNCTION (*new*)
+
+>  36:          else:
+ 37:             this_word = 'done'
+ 38:             try:
+ 39:                some_function(<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
+Associate 'error' with symbol (Enter selection):
+
+  '0': no association
+  '1': error (*new*)
+  '2': Error (*new*)
+  '3': ERROR (*new*)
+
+>  38:             try:
+ 39:                some_function()
+ 40:             except : 
+ 41:                print 'error<CURSOR>'
+
+*** End of source buffer ***
+Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
+Associate 'all right' with symbol (Enter selection):
+
+  '0': no association
+  '1': all_right (*new*)
+  '2': AllRight (*new*)
+  '3': allRight (*new*)
+  '4': ALL_RIGHT (*new*)
+  '5': allright (*new*)
+  '6': ALLRIGHT (*new*)
+
+>  40:             except : 
+ 41:                print 'error'
+ 42:             finally:
+ 43:                print 'all_right<CURSOR>'
+
+*** End of source buffer ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
@@ -6426,6 +6552,120 @@ Associate 'regular expression' with symbol (Enter selection):
  32:          <CURSOR>
 
 *** End of source buffer ***
+Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
+Associate 'this word' with symbol (Enter selection):
+
+  '0': no association
+  '1': this_word (*new*)
+  '2': ThisWord (*new*)
+  '3': thisWord (*new*)
+  '4': THIS_WORD (*new*)
+  '5': thisword (*new*)
+  '6': THISWORD (*new*)
+
+> Associate 'hello' with symbol (Enter selection):
+
+  '0': no association
+  '1': hello (*new*)
+  '2': Hello (*new*)
+  '3': HELLO (*new*)
+
+>  30:             re = re + regular_expression_this_word
+ 31:          return re
+ 32:          if not this_word:
+ 33:             this_word = 'hello<CURSOR>'
+
+*** End of source buffer ***
+Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
+Associate 'hi' with symbol (Enter selection):
+
+  '0': no association
+  '1': hi (*new*)
+  '2': Hi (*new*)
+  '3': HI (*new*)
+
+>  32:          if not this_word:
+ 33:             this_word = 'hello'
+ 34:          elif this_word == hi: 
+ 35:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['this', 'word', 'equals', 'greetings', 'else']
+Associate 'greetings' with symbol (Enter selection):
+
+  '0': no association
+  '1': greetings (*new*)
+  '2': Greetings (*new*)
+  '3': GREETINGS (*new*)
+
+>  34:          elif this_word == hi: 
+ 35:             this_word = greetings
+ 36:          else:
+ 37:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
+Associate 'done' with symbol (Enter selection):
+
+  '0': no association
+  '1': done (*new*)
+  '2': Done (*new*)
+  '3': DONE (*new*)
+
+>  35:             this_word = greetings
+ 36:          else:
+ 37:             this_word = 'done'
+ 38:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['try', 'some', 'function', 'with', 'arguments']
+Associate 'some function' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_function (*new*)
+  '2': SomeFunction (*new*)
+  '3': someFunction (*new*)
+  '4': SOME_FUNCTION (*new*)
+  '5': somefunction (*new*)
+  '6': SOMEFUNCTION (*new*)
+
+>  36:          else:
+ 37:             this_word = 'done'
+ 38:             try:
+ 39:                some_function(<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
+Associate 'error' with symbol (Enter selection):
+
+  '0': no association
+  '1': error (*new*)
+  '2': Error (*new*)
+  '3': ERROR (*new*)
+
+>  38:             try:
+ 39:                some_function()
+ 40:             except : 
+ 41:                print 'error<CURSOR>'
+
+*** End of source buffer ***
+Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
+Associate 'all right' with symbol (Enter selection):
+
+  '0': no association
+  '1': all_right (*new*)
+  '2': AllRight (*new*)
+  '3': allRight (*new*)
+  '4': ALL_RIGHT (*new*)
+  '5': allright (*new*)
+  '6': ALLRIGHT (*new*)
+
+>  40:             except : 
+ 41:                print 'error'
+ 42:             finally:
+ 43:                print 'all_right<CURSOR>'
+
+*** End of source buffer ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
@@ -6448,7 +6688,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -6535,7 +6775,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.sf-2002-01-09\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6785,7 +7025,6 @@ Associate 'index' with symbol (Enter selection):
   6: <CURSOR>
 
 *** End of source buffer ***
--- hello!
 
 
 >>> Testing console command: goto_line(2)
