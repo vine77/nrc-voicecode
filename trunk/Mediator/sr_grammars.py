@@ -345,7 +345,8 @@ class SelectWinGram(WinGram):
         #
         # Analyse the verb used by the user in the Select utterance
         #
-        debug.trace('SelectWinGram.find_closest', 'invoked')
+        debug.trace('SelectWinGram.find_closest', 'verb=%s, spoken_form=%s, ranges=%s' % 
+                                                   (verb, spoken_form, repr(ranges)))
         direction = None
         if re.search('previous', verb, 1):
             direction = -1
@@ -364,14 +365,16 @@ class SelectWinGram(WinGram):
             where = 1
 
 
-
-        #
+        debug.trace('SelectWinGram.find_closest', 'where=%s' % where)
+ 
         ranges.sort()
         closest_range_index = \
             self.app.closest_occurence_to_cursor(ranges, 
                 regexp=spoken_form, 
                 direction=direction, where=where, 
                 buff_name = self.buff_name)
+                
+        debug.trace('SelectWinGram.find_closest', '** closest_range_index=%s' % closest_range_index)
         if closest_range_index == None:
             return
 
@@ -379,6 +382,7 @@ class SelectWinGram(WinGram):
         # Mark selection and/or move cursor  to the appropriate end of
         # the selection.
         #
+        debug.trace('SelectWinGram.find_closest', '** mark_selection=%s' % mark_selection)
         if mark_selection:
             a = actions_gen.ActionSelect(range = \
                 ranges[closest_range_index],

@@ -30,7 +30,7 @@
 ;; USA
 
 ;;; Change this if you want to see more traces
-(setq message-log-max 1000)
+(setq message-log-max 10000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; User options
@@ -248,6 +248,58 @@ sent."
 (setq vr-log-buff-name "*Messages*")
 (setq message-log-max 100000)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Code for running in testing mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun vcode-close-all-buffers ()
+   (interactive)
+   (let ((all-buffs (buffer-list)) (curr-buffer))
+     (while all-buffs
+       (setq curr-buffer (car all-buffs))
+       (message "-- curr-buffer=%S, (buffer-name curr-buffer)=%S" curr-buffer (buffer-name curr-buffer))
+       (setq all-buffs (cdr all-buffs))
+       (kill-buffer curr-buffer)
+     )
+   )
+)
+
+
+(defun vcode-test ()
+  (interactive)
+  (vr-log "--** vcode-test: started")
+  (setq debug-on-error t)
+  (setq debug-on-quit t)
+  (setq old-py-indent-offset py-indent-offset)
+ 
+  (vcode-close-all-buffers)
+
+  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (vcode-configure-for-regression-testing t)
+  (vr-mode 1 "vcode-test")
+  (vcode-configure-for-regression-testing nil)
+)
+
+(defun vcode-config-py-mode-for-regression-testing ()
+   (setq py-smart-indentation nil) 
+   (setq py-indent-offset 3)
+   (setq tab-width 999)
+   (vr-log "**-- vcode-config-py-mode-for-regression-testing: upon exit, tab-width=%S" tab-width)
+)
+
+(defun vcode-configure-for-regression-testing (status)
+   (if status
+       (progn 
+	 (add-hook 'python-mode-hook 
+		   'vcode-config-py-mode-for-regression-testing)
+       )
+     (remove-hook 'python-mode-hook 
+		   'vcode-config-py-mode-for-regression-testing)
+   )
+)
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Configuration hooks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -459,8 +511,6 @@ expanded, since they often make it go out of sync."
 
 (defun vr-post-command ()
   (add-hook 'post-command-hook 'vr-post-command)
-  (vr-log (format "post-command: %s %s %s\n" this-command
-	  vr-cmd-executing (buffer-name)))
   (if vr-emacs-cmds
       (progn
 	(vr-maybe-activate-buffer (current-buffer))
@@ -474,15 +524,11 @@ expanded, since they often make it go out of sync."
 	)))
 
 (defun vr-kill-buffer ()
-  (vr-log "-- vr-kill-buffer: invoked, (current-buffer)=%S" 
-		  (current-buffer))
   (if (vr-activate-buffer-p (current-buffer))
       (progn
-	(vr-log (format "kill-buffer: %s\n" (current-buffer)))
 	(run-hooks 'vr-send-kill-buffer-hook)
 	)
     )
-  (vr-log "-- vr-kill-buffer: exiting\n")
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -558,7 +604,6 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 
 
 (defun vcode-set-after-change-functions (status)
-  (vr-log "-- vcode-set-after-change-functions: current buffer=%S" (buffer-name))
   (if status
       (progn
 	(make-local-hook 'after-change-functions)
@@ -572,7 +617,6 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
   "Sets the target BUFFER that will receive voice-recognized text.  Called
 interactively, sets the current buffer as the target buffer."
   (interactive (list (current-buffer)))
-  (vr-log "-- vr-activate-buffer: buffer=%S" buffer)
   (if (buffer-live-p vr-buffer)
       (save-excursion
 	(set-buffer vr-buffer)
@@ -620,14 +664,13 @@ interactively, sets the current buffer as the target buffer."
 		     'else-expand-placeholder))
 	    (progn
 	      ;;(call-interactively deferred-deferred-function)
-	      (vr-log "report-change executing deferred function %s\n" vr-deferred-deferred-function)
 	      (setq vr-deferred-deferred-deferred-function
 		    vr-deferred-deferred-function )
 	      (setq vr-deferred-deferred-function nil)
 	      (vr-execute-command
 	       vr-deferred-deferred-deferred-function))
-	  (vr-log "report-change deferring command %s\n"
-		  vr-deferred-deferred-function))
+
+	  )
 	))
 )
 
@@ -649,16 +692,14 @@ will send the queued changes as a big reply message, when it's done
 executing.
 "
 
-  (vr-log "-- vr-report-insert-delete-change: inserted-start=%S, inserted-end=%S, deleted-len=%S\n" inserted-start inserted-end deleted-len)
-  (vr-log "**-- vr-report-insert-delete-change: current buffer is %S\n" (buffer-name))
-
+  (vr-log "--** vr-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
   (let ((the-change nil))
     (setq the-change
-	  (list 'change-is-insert (buffer-name) inserted-start inserted-end deleted-len))
+          (vr-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
+;	  (list 'change-is-insert (buffer-name) inserted-start inserted-end deleted-len)
+	  )
 
-    (vr-log "**-- vr-report-insert-delete-change: the-change=%S, vr-queued-changes=%S" the-change vr-queued-changes)
     (setq vr-queued-changes (cons the-change vr-queued-changes))
-    (vr-log "**-- vr-report-insert-delete-change: updated vr-queued-change=%S" vr-queued-changes)
 
     (if (not vr-changes-caused-by-sr-cmd)
 	(vr-send-queued-changes)
@@ -669,7 +710,6 @@ executing.
     ;; and electric punctuation marks during executio of utterances?
     (vr-execute-deferred-function)
   
-    (vr-log "-- vr-report-insert-delete-change: exited\n")  
   )
 )
 
@@ -680,9 +720,42 @@ happens on a buffer (if it is voice enabled).
 
 Changes are put in a changes queue `vr-queued-changes.
 "
+  (vr-log "--** vr-report-goto-select-change: buff-name=%S sel-start=%S sel-end=%S\n"  buff-name sel-start sel-end)
   (setq vr-queued-changes 
-	(cons (list 'change-is-select buff-name sel-start sel-end)
-	      vr-queued-changes))
+	(cons 
+;	   (list 'change-is-select buff-name sel-start sel-end)
+	   (vr-generate-raw-change-description  'change-is-select (list buff-name sel-start sel-end))
+	   vr-queued-changes))
+)
+
+(defun vr-generate-raw-change-description (change-type change-data)
+
+  (let ((change-desc) (buff-name) (inserted-start) (inserted-end) 
+	(deleted-length) (deleted-start) (deleted-end) (inserted-text))
+    (vr-log "--** vr-generate-raw-change-description: change-type=%S change-data=%S\n" change-type change-data)
+    (if (eq 'change-is-select change-type)
+	(progn 
+	  (vr-log "--** vr-generate-raw-change-description: this is a select change\n")
+	  (setq change-desc (list change-type change-data))
+	)
+      (vr-log "--** vr-generate-raw-change-description: inside else clause\n")
+      (setq buff-name (nth 0 change-data))
+      (setq inserted-start (nth 1 change-data))
+      (setq inserted-end (nth 2 change-data))
+      (setq deleted-length (nth 3 change-data))	
+      (setq deleted-start inserted-start)
+      (setq deleted-end (+ deleted-start deleted-length))
+      (vr-log "--** vr-generate-raw-change-description: inserted-start=%S, inserted-end=%S, buff-name=%S\n" inserted-start inserted-end buff-name)
+      (save-excursion
+	(vr-log "--** vr-generate-raw-change-description: inside save-excursion\n")
+	(switch-to-buffer buff-name)
+	(setq inserted-text (buffer-substring inserted-start inserted-end))
+      )
+      (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
+    )
+    (vr-log "--** vr-generate-raw-change-description: exiting\n")
+    change-desc
+  )
 )
 
 (defun vr-string-replace (src regexp repl)
@@ -786,10 +859,45 @@ Changes are put in a changes queue `vr-queued-changes.
 				  (message "VR Mode: %s calling %s"
 					   (error-message-string err)
 					   vr-command )))
-	  (vr-log "running post-command-hook for %s\n" cmd)
  	  (let ((this-command cmd))
 	    (run-hooks 'post-command-hook)))
   t)
+
+(defun vcode-execute-command-string (command-string)
+  "Execute a string as though it was typed by the user.
+"
+  (let ()
+    (setq debug-on-error t)
+    (setq debug-on-quit t)
+
+    ;;
+    ;; Convert the string to a list of Emacs events
+    ;;
+    (setq unread-command-events
+	  (append unread-command-events
+		  (listify-key-sequence command-string)))
+
+    ;;;
+    ;;; Execute each event
+    ;;;
+    (while unread-command-events
+      (let* ((event (read-key-sequence-vector nil))
+ 	     (command (key-binding event))
+ 	     (last-command-char (elt event 0))
+ 	     (last-command-event (elt event 0))
+ 	     (last-command-keys event)
+ 	     )
+ 	(vr-log "--** vcode-execute-command-string: key-sequence event=%s, command=%s (char-to-string last-command-char)=%s\n" 
+		event command (char-to-string last-command-char))
+	(run-hooks 'pre-command-hook)
+	(command-execute command nil )
+	(run-hooks 'post-command-hook)
+ 	(vr-log "--** vcode-execute-command-string: after executing this event, buffer contains:\n%S\n" (buffer-substring (point-min) (point-max)))
+      )
+    )
+  )
+)
+
 
 
 (defun vr-send-queued-changes ()
@@ -815,7 +923,6 @@ Changes are put in a changes queue `vr-queued-changes.
       (vr-send-cmd change-message)
     )
     (setq vr-queued-changes nil)
-    (vr-log "**-- vr-send-queued-changes: emptied vr-queued-changes=%S" vr-queued-changes)
   )
 )
 
@@ -830,7 +937,6 @@ Changes are put in a changes queue `vr-queued-changes.
     ;;; (Emacs counts from 1 while VCode counts from 1, and VCode
     ;;; may send some nil positions)
     ;;;
-    (vr-log "--** vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S, vr-request-mess=%S\n" vr-changes-caused-by-sr-cmd vr-request-mess)
     (setq vr-request 
 	  (list vr-changes-caused-by-sr-cmd
 		(vcode-fix-positions-in-message 
@@ -863,46 +969,35 @@ Changes are put in a changes queue `vr-queued-changes.
 
 		
 (defun vr-output-filter (p s)
-  (vr-log "**-- vr-output-filter: invoked\n")
   (setq vr-reading-string (concat vr-reading-string s))
-;  (vr-log (format "**-- vr-output-filter: after concatenation, vr-reading-string=%s\n" vr-reading-string))
   (while (> (length vr-reading-string) 0)
-;    (vr-log "**-- vr-output-filter: inside while, vr-deserialize-message-hook=%S\n" vr-deserialize-message-hook)
     (let* ((handler) 
 	   (parsed (condition-case err
  		       (run-hook-with-args 
 			   'vr-deserialize-message-hook vr-reading-string)
 		     ('end-of-file (error "Invalid VR command received: %s"
 					  vr-reading-string))))
-;	   (vr-log (format "**-- vr-output-filter: parsed=%S" parsed))
 	   (vr-request (elt parsed 0))
 	   (idx (elt parsed 1))
 	   (vr-cmd (elt vr-request 0)))
-;	   (vr-log "**-- vr-output-filter: idx=%S, vr-cmd=%S, vr-request=%S\n"  idx vr-cmd vr-request)
-      (if vr-log-read
-	  (vr-log "-> %s\n" (substring vr-reading-string 0 idx)))
       (setq vr-reading-string 
 	    (if (< idx (1- (length vr-reading-string)))
 		(substring vr-reading-string (1+ idx))
 	       ""))
 
-;      (vr-log "**-- vr-output-filter: calling handler\n")
       (setq handler (cl-gethash vr-cmd vr-message-handler-hooks))
-;      (vr-log (format "**-- vr-output-filter: handler=%S\n" handler))
       (if handler
 	  (vr-execute-event-handler handler vr-request)
 
  	;; The VR process should fail gracefully if an expected
  	;; reply does not arrive...
  	(error "Unknown VR request: %s" vr-request))
-      (vr-log "-- vr-output-filter: exiting")
     )
   )
 )
      
 
 (defun vr-send-reply (msg)
-;;  (vr-log "-- vr-send-reply: msg=%S\n" msg)
   (if (and vr-dns-cmds (eq (process-status vr-dns-cmds) 'open))
       (progn
 	(if (integerp msg)
@@ -917,7 +1012,6 @@ Changes are put in a changes queue `vr-queued-changes.
   )
 
 (defun vr-send-cmd (msg)
-  (vr-log (format "-- vr-send-cmd: msg=%S\n" msg))
   (if (and vr-emacs-cmds (eq (process-status vr-emacs-cmds) 'open))
       (progn
 	(if vr-log-send
@@ -925,7 +1019,6 @@ Changes are put in a changes queue `vr-queued-changes.
 ;;; Should this be part of vr-serialize-message???
 ;;;	(process-send-string vr-emacs-cmds (vr-etonl (length msg)))
 
-	(vr-log (format "**-- vr-send-cmd: sending msg=%S\n" msg))
 	(process-send-string vr-emacs-cmds msg))
     (message "VR Mode command channel is not open: %s" msg)))
 
@@ -965,10 +1058,8 @@ off -> on, {on,sleeping} -> off."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun vr-connect (host port)
-  (vr-log (format "**-- vr-connect: host=%S, port=%S\n" host port))
   (condition-case e
       (progn
-	(vr-log "**-- vr-connect: opening vr-emacs-cmds\n")
  	(setq vr-emacs-cmds (open-network-stream "vr-emacs" nil
  						 host port))
 
@@ -978,19 +1069,15 @@ off -> on, {on,sleeping} -> off."
 	;;; connection.
 	;;;
 	(set-process-filter vr-emacs-cmds 'vr-output-filter)
-	(vr-log "**-- vr-connect: opened vr-emacs-cmds\n")
 	(vr-log "connecting to speech server %s\n" vr-emacs-cmds)
 	
 	;;;
 	;;; Possibly wait until Emacs has shaken hands with speech server
 	;;; before opening second network stream.
 	;;;
-	(vr-log "**-- vr-connect: vr-wait-for-handshake-hook=%S\n" vr-wait-for-handshake-hook)
 	(run-hooks 'vr-wait-for-handshake-hook)
-	(vr-log "**-- vr-connect: AFTER vr-wait-for-handshake-hook\n")
 
 	(setq vr-dns-cmds (open-network-stream "vr-dns" nil host (1+ port)))
-	(vr-log "**-- vr-connect: connected to vr-dns-cmds\n")
 	(process-kill-without-query vr-emacs-cmds)
 	(process-kill-without-query vr-dns-cmds)
 	(set-process-filter vr-dns-cmds 'vr-output-filter)
@@ -1003,8 +1090,6 @@ off -> on, {on,sleeping} -> off."
 	      (message (format "Error condition was: %S" e))
 	      (vr-mode 0)
 	      nil)))
-  (vr-log  "**-- vr-connect: exiting\n")
-
 )
 
 ;; functionp isn't defined in Win 95 Emacs 19.34.6 (!??!?)
@@ -1064,9 +1149,7 @@ instructions.
 
 \\{vr-map}"
  (interactive "P")
-  (vr-log "-- vr-mode: arg=%S\n" arg)
 
-  (vr-log "**-- vr-mode: debug-on-error=%S, vr-queued-changes=%S\n" debug-on-error vr-queued-changes)
   (setq vr-vcode-test-client 0)
   (if speech-server
     (cond
@@ -1077,16 +1160,13 @@ instructions.
     )
   )
 
-  (vr-log "**-- vr-mode: after configuring for speech server\n")
   (vr-mode-activate arg)
-  (vr-log "**-- vr-mode: after vr-mode-activate: exiting after configure-for-vr-server\n")
 )
 
 (defun vr-mode-activate (arg)
   "Activates the VR mode, after it has been configured for a particular
 speech server"
 
-  (vr-log "**-- vr-mode-activate: arg=%S, vr-mode=%S\n" arg vr-mode)
   (setq vr-mode
         (if (null arg) (not vr-mode)
  	  (> (prefix-numeric-value arg) 0)))
@@ -1142,8 +1222,6 @@ speech server"
   "Serialises a LISP data structure into a message that can be parsed by
    VR.exe" 
 
-  (vr-log "-- vr-serialize-message: invoked\n")
-
   (let ((mess-name (car message)) (mess-content (cdr message)) (cmd))
     (cond
 
@@ -1158,7 +1236,6 @@ speech server"
       ))
      )
     (setq cmd (format "%s %s" mess-name cmd))
-    (vr-log "-- vr-serialize-message: exited\n")
     cmd
   )
 )
@@ -1199,9 +1276,7 @@ grammars."
 (defun vr-send-kill-buffer ()
    "Sends a 'kill-buffer message to VR.exe"
    (let ()
-     (vr-log "-- vr-send-kill-buffer: invoked\n")
      (vr-send-cmd  (concat "kill-buffer " (buffer-name (current-buffer))))
-     (vr-log "-- vr-send-kill-buffer: exited\n")
    )
 )
 
@@ -1241,8 +1316,6 @@ which is the list representing the command and its arguments."
 
 (defun vr-cmd-frame-activated (wnd)
 
-  (vr-log "-- vr-cmd-frame-activated: invoked, wnd=%S\n" wnd)
-
   ;; This is ridiculous, but Emacs does not automatically change its
   ;; concept of "selected frame" until you type into it.  So, we have
   ;; the subprocess send us the HWND value and explcitly activate the
@@ -1261,8 +1334,6 @@ which is the list representing the command and its arguments."
       (message "VR Mode: %s is not an Emacs frame window handle; ignored."
 	       wnd)))
   (vr-maybe-activate-buffer (current-buffer))
-
-  (vr-log "-- vr-cmd-frame-activated: exiting\n")
 
   t)
 
@@ -1319,7 +1390,6 @@ which is the list representing the command and its arguments."
 (defun vr-cmd-recognition (vr-request)
   (let ((state (nth 1 vr-request)))
     (progn
-      (vr-log (format "-- vr-cmd-recognition: vr-request=%S\n" vr-request))
       (vr-log "recognition %s: current buffer: %s vr-buffer:%s\n"
 	      state (buffer-name) vr-buffer)
       (cond ((eq state 'begin)
@@ -1339,8 +1409,6 @@ which is the list representing the command and its arguments."
 	     (setq vr-recognizing nil))
 	    (t
 	     (error "Unknown recognition state: %s" state)))))
-
-  (vr-log "-- vr-cmd-recognition: exiting\n")
 
   t)
 
@@ -1484,8 +1552,6 @@ command was a yank or not."
 (defun vr-mode-configure-for-vcode-server ()
   "Configures VR Mode for interacting with the VoiceCode speech server."
 
-  (vr-log "**-- vr-mode-configure-for-vcode-server: called\n")
-
   ;;;
   ;;; VCode will do automatic indentation and stuff.
   ;;;
@@ -1569,11 +1635,14 @@ command was a yank or not."
 ;;;  (cl-puthash 'make_position_visible 'vcode-cmd-make-position-visible vr-message-handler-hooks)
   (cl-puthash 'move_relative_page 'vcode-cmd-move-relative-page vr-message-handler-hooks)  
   (cl-puthash 'insert 'vcode-cmd-insert vr-message-handler-hooks)  
+  (cl-puthash 'set_text 'vcode-cmd-set-text vr-message-handler-hooks)  
   (cl-puthash 'indent 'vcode-cmd-indent vr-message-handler-hooks)  
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-message-handler-hooks)  
   (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-message-handler-hooks)  
+
+  (cl-puthash 'mediator_closing 'vcode-cmd-mediator-closing vr-message-handler-hooks)  
 
   ;;;
   ;;; These ones are currently not handled by VCode, but they probably should
@@ -1607,19 +1676,14 @@ command was a yank or not."
 ;;; kinds of changes.
 ;  (cl-puthash 'make-changes 'vr-cmd-make-changes vr-message-handler-hooks)
 
-
-  (vr-log "**-- vr-mode-configure-for-vcode-server: exited\n")
 )
 
 
 (defun vcode-serialize-message (mess)
   "Serializes a LISP data structure into a string message that can be sent to 
 VoiceCode server."
-;  (vr-log (format "-- vcode-serialize-message: mess=%S\n" mess))
   (let ((mess-name (elt mess 0)) (mess-cont (elt mess 1)))
-    (vr-log (format "**-- vcode-serialize-message: mess-name=%S\n" mess-name))
     (setq serialized-mess (vcode-pack-mess (vcode-encode-mess mess-name mess-cont)))
-    (vr-log "-- vcode-serialize-message: exiting with serialized-mess=%S\n" serialized-mess)
     serialized-mess
   )
 )
@@ -1628,7 +1692,6 @@ VoiceCode server."
   "Deserializes a string message received from the VoiceCode server 
 into a LISP data structure."
 
-  (vr-log (format "**-- vcode-deserialize-message: (length mess)=%S, mess=%S\n" (length mess) mess))
   (let ((unpack-result) (unpacked-mess) (bytes-parsed) 
 	(mess-name) (mess-cont))
 
@@ -1637,21 +1700,14 @@ into a LISP data structure."
     ;;;
     (setq unpack-result (vcode-unpack-mess mess))
     (setq unpacked-mess (elt unpack-result 0))
-;    (vr-log (format "**-- vcode-deserialize-message: unpacked-mess=%S\n" unpacked-mess))
     (setq bytes-parsed (elt unpack-result 1))
-;    (vr-log (format "**-- vcode-deserialize-message: bytes-parsed=%S\n" bytes-parsed))
 
     ;;;
     ;;; Then decode it
     ;;; 
-;    (vr-log "**-- vcode-deserialize-message: before vcode-decode-mess\n")
     (setq mess (vcode-decode-mess unpacked-mess ))
-;    (vr-log "**-- vcode-deserialize-message: after vcode-decode-mess, mess=%S\n" mess)
     (setq mess-name (elt mess 0))
-;    (vr-log "**-- vcode-deserialize-message: after setq mess-name\n")
     (setq mess-cont (elt mess 1))
-;    (vr-log "**-- vcode-deserialize-message: after setq mess-cont\n")
-    (vr-log "**-- vcode-deserialize-message: exiting with mess-name=%S, mess-cont=%S\n, bytes-parsed=%S\n" mess-name mess-cont bytes-parsed)
     (list (list mess-name mess-cont) bytes-parsed)
   )
 )
@@ -1674,33 +1730,28 @@ generated while executing VCode request 'vcode-req."
 (defun vcode-cmd-send-app-name (vcode-req)
    "Sends the name of the application ('Emacs) to the VoiceCode server."
 
-   (vr-log (format "**-- vcode-cmd-send-app-name: vcode-req=%S\n" vcode-req))
 
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "value" "emacs" mess-cont)
      (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "app_name" mess-cont)))
   )
 
-   (vr-log "**-- vcode-cmd-send-app-name: exiting\n")
 )
 
 
 (defun vcode-cmd-test-client-query (vcode-req)
    "Sends the name of the application ('Emacs) to the VoiceCode server."
 
-   (vr-log (format "**-- vcode-cmd-test-client-query: vcode-req=%S\n" vcode-req))
 
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "value" vr-vcode-test-client mess-cont)
      (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "test_client_query_resp" mess-cont)))
   )
 
-   (vr-log "**-- vcode-cmd-test-client-query: exiting\n")
 )
 
 (defun vcode-cmd-set-instance-string (vcode-req)
    (let ((resp-cont (make-hash-table :test 'string=)))
-   (vr-log "--** vcode-cmd-set-instance-string: invoked")
 
    (setq vcode-instance-string (cl-gethash "instance_string" (nth 1 vcode-req)))
    (cl-puthash "value" vcode-instance-string resp-cont)
@@ -1730,13 +1781,10 @@ generated while executing VCode request 'vcode-req."
    "Stores the unique ID assigned by VoiceCode to this instance of Emacs, so 
 we can send it back to VoiceCode when we ask it for a second network connection."
 
-   (vr-log (format "**-- vcode-cmd-your-id-is: vcode-req=%S\n" vcode-req))
    (let ((mess-name (elt vcode-req 0)) (mess-cont (elt vcode-req 1))
 	 (ok-mess-cont (make-hash-table :key 'string=)))
-     (vr-log (format "-- vcode-cmd-your-id-is: vcode-req=%S\n" vcode-req))
 
 
-     (vr-log (format "**-- vcode-cmd-your-id-is: sending \"ok\", (hash-items ok-mess-cont)=%S\n" (hash-items ok-mess-cont)))
      (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "ok" ok-mess-cont)))
 
      ;;;
@@ -1748,7 +1796,6 @@ we can send it back to VoiceCode when we ask it for a second network connection.
      ;;;
      (setq vcode-app-id (cl-gethash "value" mess-cont))
    )
-   (vr-log (format "**-- vcode-cmd-your-id-is: exiting, vcode-app-id=%S" vcode-app-id))
 )
 
 (defun vcode-cmd-send-app-id (vcode-req)
@@ -1759,13 +1806,11 @@ network connection to it) back to the VCode server.
 This allows the VCode server to know for sure that the second network
 connection originates from the same Emacs instance as the first one."
 
-   (vr-log (format "-- vcode-cmd-send-app-id: vcode-req=%S, vcode-app-id=%S\n" vcode-req vcode-app-id))
 
    (let ((mess-cont (make-hash-table :test 'string=)))
 
      ;;; Then send that ID back to the server
      (cl-puthash "value" vcode-app-id mess-cont)
-     (vr-log (format "**-- vcode-cmd-send-app-id: sending \"my_id_is\", (hash-items mess-cont)=%S\n" (hash-items mess-cont)))
      (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "my_id_is" mess-cont)))
 
 
@@ -1775,7 +1820,6 @@ connection originates from the same Emacs instance as the first one."
      ;;;
      (vr-startup)
 
-     (vr-log "**-- vcode-cmd-send-app-id: DONE sending \"my_id_is\"")
    )
 )
 
@@ -1784,21 +1828,17 @@ connection originates from the same Emacs instance as the first one."
 on the first socket connection. We know the handshake has happened when
 Emacs has set 'vcode-app-id to a non nil value."
 
-  (vr-log "**-- vcode-wait-for-handshake: called, vcode-app-id=%S\n" vcode-app-id)
 
 ;  (sleep-for 30)
   (while (not vcode-app-id)
     (progn
-      (vr-log "**-- vcode-wait-for-handshake: still waiting, vcode-app-id=%S\n" vcode-app-id)
       (sleep-for 0.1)
       )
     )
-  (vr-log "**-- vcode-wait-for-handshake: exiting\n")
 )
 
 (defun vcode-send-kill-buffer ()
    "Sends a message to VCode server to tell it that Emacs has closed a buffer"
-   (vr-log "-- vcode-send-kill-buffer: invoked")
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "buff_name" (buffer-name) mess-cont)
      (cl-puthash "action" "close_buff" mess-cont)
@@ -1806,7 +1846,6 @@ Emacs has set 'vcode-app-id to a non nil value."
        (run-hook-with-args 
 	 'vr-serialize-message-hook (list "updates" mess-cont)))
    )
-   (vr-log "-- vcode-send-kill-buffer: exiting")
 )
 
 (defun vcode-send-activate-buffer ()
@@ -1822,14 +1861,12 @@ a buffer"
 
 
 (defun vcode-cmd-recognition-start (vcode-request)
-  (vr-log "-- vcode-cmd-recognition-start: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) 
 	(resp-cont (make-hash-table :test 'string=)))
 
     ;;;
     ;;; Tell Emacs what the active window was when we heard the utterance
     ;;;
-    (vr-log "--** vcode-cmd-recognition-start: window id is: %S" (cl-gethash 'window_id mess-cont))
     (vr-cmd-frame-activated (list nil (cl-gethash 'window_id mess-cont)))
 
     ;;;
@@ -1852,15 +1889,11 @@ a buffer"
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "recog_begin_resp" resp-cont)))
-    )
-
-  (vr-log "-- vcode-cmd-recognition-start: exited\n")
-    
+    )    
   )
 
 
 (defun vcode-cmd-recognition-end (vcode-request)
-  (vr-log "-- vcode-cmd-recognition-end: invoked\n")
   (let ((empty-resp (make-hash-table :test 'string=)))
     ;;;
     ;;; Reformulate the request received from VCode, into a request 
@@ -1873,18 +1906,14 @@ a buffer"
       'vr-serialize-message-hook (list "recog_end_resp" empty-resp)))
     )
 
-  (vr-log "-- vcode-cmd-recognition-end: exited\n")
-
   )
 
 
 (defun vcode-cmd-active-buffer-name (vcode-request)
-  (vr-log "-- vcode-cmd-active-buffer-name: invoked\n")  
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash "value" (buffer-name) mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "active_buffer_name_resp" mess-cont)))
     )
-  (vr-log "-- vcode-cmd-active-buffer-name: exited\n")  
   )
 
 
@@ -1892,19 +1921,12 @@ a buffer"
 ;;; Generate a hash table describing an insertion or deletion change
 ;;;
 (defun vcode-generate-insert-change-hash (a-change)
-  (let ((buff-name (nth 1 a-change))
-	(inserted-start (nth 2 a-change))
-	(inserted-end (nth 3 a-change))
-	(deleted-length (nth 4 a-change))
-	(insert-change-hash (make-hash-table :test 'string=))
-	(deleted-start) (deleted-end) (inserted-text))
-
-    (setq deleted-start inserted-start)
-    (setq deleted-end (+ deleted-start deleted-length))
-    (save-excursion
-      (switch-to-buffer buff-name)
-      (setq inserted-text (buffer-substring inserted-start inserted-end))
-    )
+  (let ((buff-name (nth 0 a-change))
+	(deleted-start (nth 1 a-change))
+	(deleted-end (nth 2 a-change))
+	(inserted-text (nth 3 a-change))
+	(insert-change-hash (make-hash-table :test 'string=)))
+    (vr-log "--** vcode-generate-insert-change-hash: a-change=%S, buff-name=%S, deleted-start=%S, deleted-end=%S, inserted-text=%S\n" a-change buff-name deleted-start deleted-end inserted-text)
 
     (cl-puthash "action" "insert" insert-change-hash)
     (cl-puthash "range" 
@@ -1913,8 +1935,6 @@ a buffer"
 		insert-change-hash)
     (cl-puthash "buff_name" buff-name insert-change-hash)
     (cl-puthash "text" inserted-text insert-change-hash)
-    (vr-log "**-- vcode-generate-insert-change-hash: exiting\n")
-    insert-change-hash
 
     insert-change-hash
   )
@@ -1922,28 +1942,27 @@ a buffer"
 
 
 (defun vcode-generate-select-change-hash (a-change)
-  (let ((buff-name (nth 1 a-change))
-	(sel-start (nth 2 a-change))
-	(sel-end (nth 3 a-change))
+  (let ((buff-name (nth 0 a-change))
+	(sel-start (nth 1 a-change))
+	(sel-end (nth 2 a-change))
 	(select-change-hash (make-hash-table :test 'string=))
 	(range nil))
+    (vr-log "--** vcode-generate-select-change-hash: a-change=%S, buff-name=%S, sel-start=%S, sel-end=%S" a-change buff-name sel-start sel-end)
     (cl-puthash "action" "select" select-change-hash)
     (setq range (vcode-convert-range sel-start sel-end 'vcode))
     (cl-puthash "range" range select-change-hash)
     (cl-puthash "cursor_at" 1 select-change-hash)
     (cl-puthash "buff_name" buff-name select-change-hash)
-    (vr-log "**-- vcode-generate-select-change-hash: exiting\n")
     select-change-hash
   )
 )
 
 
 (defun vcode-generate-change-hash (a-change)
-  (vr-log "**-- vcode-generate-change-hash: a-change=%S\n" a-change)
 
     (if (eq (nth 0 a-change) 'change-is-insert)
-	(setq a-change-hash (vcode-generate-insert-change-hash a-change))
-      (setq a-change-hash (vcode-generate-select-change-hash a-change))
+	(setq a-change-hash (vcode-generate-insert-change-hash (nth 1 a-change)))
+      (setq a-change-hash (vcode-generate-select-change-hash (nth 1 a-change)))
     )
     a-change-hash
 )
@@ -1961,14 +1980,12 @@ Otherwise, the message must be formated as an Emacs initiated 'updates_cbk'
 message.
 "
 
-  (vr-log "-- vcode-serialize-changes: vr-changes-caused-by-sr-cmd=%S, change-list=%S\n" vr-changes-caused-by-sr-cmd change-list)
   (let ((mess "") (buff-name) (a-change) (inserted-start) (inserted-end) 
 	(deleted-length) (inserted-text)
 	(change-list-vcode (list)) (a-change-vcode) (a-change-action)
 	(deleted-end)
 	(mess-name) (mess-cont (make-hash-table :test 'string=)))
 
-    (vr-log "**-- vcode-serialize-changes: current buffer is %S" (buffer-name))
 
     (while change-list
       (setq a-change (car change-list))
@@ -1989,7 +2006,6 @@ message.
     ;;;
     ;;; Changes not generated in response to a VCode request:
     ;;; -> name = "updates_cbk"
-    (vr-log "**-- vr-serialize-changes: just before setting mess-name")
     (if vr-changes-caused-by-sr-cmd
 	(setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
       (setq mess-name "updates_cbk")
@@ -2001,7 +2017,6 @@ message.
 )
 
 (defun vcode-cmd-open-file (vcode-request)
-  (vr-log "-- vcode-cmd-open-file: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) 
 	(file-name)
 	(response (make-hash-table :test 'string=)))
@@ -2013,12 +2028,10 @@ message.
       'vr-serialize-message-hook (list "open_file_resp" response))
     )
   )
-  (vr-log "-- vcode-cmd-open-file: exited\n")
 )
 
 
 (defun vcode-cmd-confirm-buffer-exists (vcode-request)
-  (vr-log "-- vcode-confirm-buffer-exists: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) 
 	(buffer-name)
 	(response (make-hash-table :test 'string=)))
@@ -2032,21 +2045,17 @@ message.
       'vr-serialize-message-hook (list "confirm_buffer_exists_resp" response))
     )
   )
-  (vr-log "-- vcode-confirm-buffer-exists: exited\n")
 )
 
 (defun vcode-cmd-list-open-buffers (vcode-request)
-  (vr-log "-- vcode-cmd-list-open-buffers: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) 
 	(open-buffers (buffer-list))
 	(buffer-names nil)
 	(response (make-hash-table :test 'string=)))
 
-    (vr-log "--** vcode-cmd-list-open-buffers: open-buffers=%S\n" open-buffers)
     (while open-buffers
       (setq buffer-names (append buffer-names (list (buffer-name (car open-buffers)))))
       (setq open-buffers (cdr open-buffers))
-      (vr-log "--** vcode-cmd-list-open-buffers: now, open-buffers=%S, buffer-names=%S\n" open-buffers buffer-names)      
       )
 
     (cl-puthash "value" buffer-names response)
@@ -2055,16 +2064,13 @@ message.
       'vr-serialize-message-hook (list "list_open_buffers_resp" response))
     )
   )
-  (vr-log "-- vcode-cmd-list-open-buffers: exited\n")
 )
 
 (defun vcode-cmd-file-name (vcode-request)
-  (vr-log "-- vcode-cmd-file-name: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) 
 	(response (make-hash-table :test 'string=))
 	(buff-name) (file-name) (buff-name))
     (setq buff-name (cl-gethash "buff_name" mess-cont))
-    (vr-log "**-- vcode-cmd-file-name: buff-name=%s\n" buff-name)
     (setq file-name (buffer-file-name (get-buffer buff-name)))
     (cl-puthash "value" file-name response)
     (vr-send-reply
@@ -2072,7 +2078,6 @@ message.
       'vr-serialize-message-hook (list "file_name_resp" response))
     )
   )
-  (vr-log "-- vcode-cmd-file-name: exited\n")
 )
 
 
@@ -2087,15 +2092,13 @@ message.
   ;;;
 
   ;;; beg
-  (vr-log "**-- vcode-kill-buffer: sleeping for 10 secs, to make sure all the pending change notifications happen before we rename the current buffer to ignorethisfie.tmp\n")
-  (sleep-for 10)
+;  (vr-log "**-- vcode-kill-buffer: sleeping for 10 secs, to make sure all the pending change notifications happen before we rename the current buffer to ignorethisfie.tmp\n")
+;  (sleep-for 10)
   ;;; end
 
   (if (eq 0 save) 
       (progn
-	(vr-log "**-- vcode-kill-buffer: before kill-bufferg\n")
 	(kill-buffer buff-name)
-	(vr-log "**-- vcode-kill-buffer: after kill-bufferg\n")
       )
   )
   (if (eq -1 save) 
@@ -2117,30 +2120,21 @@ message.
 	;;;
 	(vcode-set-after-change-functions nil)
 
-	(vr-log "**-- vcode-kill-buffer: before write-file\n")
 	(write-file "ignorethisfile.tmp")
-	(vr-log "**-- vcode-kill-buffer: after write-file\n")
-	(vr-log "**-- vcode-kill-buffer: before kill-buffer\n")
 	(kill-buffer "ignorethisfile.tmp")
-	(vr-log "**-- vcode-kill-buffer: after kill-buffer\n")
 ;        (kill-buffer buff-name)
 	)
   )
   (if (eq 1 save) 
       (progn 
-	(vr-log "**-- vcode-kill-buffer: before save-buffer\n")
 	(save-buffer) 
-	(vr-log "**-- vcode-kill-buffer: after save-buffer\n")
-	(vr-log "**-- vcode-kill-buffer: before kill-buffer\n")
 	(kill-buffer buff-name)
-	(vr-log "**-- vcode-kill-buffer: after kill-buffer\n")
       )
   )
 )
 
 
 (defun vcode-cmd-close-buffer (vcode-request)
-  (vr-log "-- vcode-cmd-close-buffer: invoked\n")
   (let ((mess-cont (elt vcode-request 1))
 	(response (make-hash-table :test 'string=))
 	(buff-name) (buff) (save))
@@ -2148,16 +2142,14 @@ message.
     (cl-puthash "value" 1 response)
 
     (setq buff-name (cl-gethash "buff_name" mess-cont))
-    (setq buff (get-buffer "buff_name"))
+    (setq buff (get-buffer buff-name))
     (setq save (cl-gethash "save" mess-cont))
 
     (if (not buff)
        ;;; 'buff_name is not the name of a buffer. Maybe the name
        ;;; of a file visited by a buffer?
 	(progn
-	  (vr-log "**-- vcode-cmd-close-buffer: before find-buffer-visiting\n")
 	  (setq buff (find-buffer-visiting buff-name))
-	  (vr-log "**-- vcode-cmd-close-buffer: after find-buffer-visiting\n")
 	)
       )
 
@@ -2173,7 +2165,6 @@ message.
       'vr-serialize-message-hook (list "close_buffer_resp" response))
     )
 
-  (vr-log "-- vcode-cmd-close-buffer: exited\n")
   )
 )
 
@@ -2190,21 +2181,19 @@ buffer.
 
 Also converts from VCode's 0-based positions to Emacs 1-based positions."
 
-  (vr-log "--** vcode-fix-pos: pos=%S fix-for-who=%S default-pos=%S\n" pos fix-for-who default-pos)
   ;;;
-  ;;; If nil position was received from vcode, set it to the current 
-  ;;; position in current buffer. No need to convert it to 1-based counting
-  ;;; since (point) already returns it in 1-based counting
+  ;;; If nil position was received from vcode, set it to the default
+  ;;; position received as argument (current cursor, end of buffer or 
+  ;;; beginning of buffer). No need to convert it to 1-based 
+  ;;; counting since it is already passed it in 1-based counting
   ;;;
   (if (and (eq 'emacs fix-for-who) (not pos))
       (progn
-	(vr-log "--** vcode-fix-pos: setting nil position to %S\n" default-pos)
 	(setq pos default-pos)
       )
     
     ;;; Else, convert non-nil position to appropriate counting base. 
-    (vr-log "--** vcode-fix-pos: converting pos to appropriate count base\n")
-    (setq pos (vcode-convert-pos pos 'emacs)))
+    (setq pos (vcode-convert-pos pos fix-for-who)))
   pos
 )
 
@@ -2213,7 +2202,6 @@ Also converts from VCode's 0-based positions to Emacs 1-based positions."
 may contain nil or string values, and the 1st element may be
 greater than the 2nd element."
 
-  (vr-log "-- vcode-fix-range: invoked, range=%S, for-who=%S\n" range for-who)
   (let ((start (nth 0 range)) (end (nth 1 range)) (tmp))
     (setq start (wddx-coerce-int start))
     (setq end (wddx-coerce-int end))
@@ -2245,7 +2233,6 @@ greater than the 2nd element."
 	  (setq start end)
 	  )      
       )
-    (vr-log "-- vcode-fix-range: exiting with start=%S, end=%S\n" start end)
     (list start end)
   )
 )
@@ -2255,18 +2242,17 @@ greater than the 2nd element."
 positions (Emacs starts from 1, VCode from 0), we need to convert from one
 to the other"
 
-  (vr-log "-- vcode-convert-pos: invoked, pos=%s, for-who=%s\n" pos for-who)
+  (vr-log "--** vcode-convert-pos: pos=%S, for-who=%S\n" pos for-who)
   (if (equal for-who 'vcode)
       (progn 
-	(vr-log "--** vcode-convert-pos: substracting 1 to pos\n")
 	(1- pos)
       )
-    (vr-log "--** vcode-convert-pos: adding 1 to pos\n")
     (1+ pos)
     )
 )
 
 (defun vcode-convert-range (start end for-who)
+  (vr-log "--** vcode-convert-range: start=%S end=%S for-who=%S" start end for-who)
   (list (vcode-convert-pos start for-who) (vcode-convert-pos end for-who))
 )
 
@@ -2280,11 +2266,11 @@ to the other"
 ;;;
 (defun vcode-fix-positions-in-message (message fix-for-who)
    (let ((pos) (range) (default-pos))
-     (vr-log "--** vcode-fix-positions-in-message: invoked, fix-for-who=%S\n" fix-for-who) 
      (dolist (position-field '("pos" "position" "start" "end" "linenum")) 
        (if (is-in-hash position-field message)
 	   (progn
-	     (if (or (string= "pos" position-field) (string= "position" position-field))
+	     (if (or (string= "pos" position-field) 
+                     (string= "position" position-field))
 		 (setq default-pos (point)))
 	     (if (string= "start" position-field)
 		 (setq default-pos 1)
@@ -2292,12 +2278,8 @@ to the other"
 	     (if (string= "end" position-field)
 		 (setq default-pos (point-max))
 	     )
-	     (vr-log "--** vcode-fix-positions-in-message: fixing %S\n" 
-		     position-field)
 	     (setq pos (cl-gethash position-field message))
-	     (vr-log "--** vcode-fix-positions-in-message: original pos=%S\n" pos)
 	     (setq pos (vcode-fix-pos pos fix-for-who default-pos))
-	     (vr-log "--** vcode-fix-positions-in-message: fixed pos=%S\n" pos)
 	     (cl-puthash position-field pos message)
 	   )
        )
@@ -2305,14 +2287,12 @@ to the other"
 
      (if (is-in-hash "range" message)
 	 (progn
-	     (vr-log "--** vcode-fix-positions-in-message: fixing range\n")
 	     (setq range (cl-gethash "range" message))
              ;;;
              ;;; Fix possibly nil positions received from VCode
              ;;;
 	     (if (eq fix-for-who 'emacs)
 	         (setq range (vcode-fix-range range fix-for-who)))
-	     (vr-log "--** vcode-fix-positions-in-message: range=%S, (vcode-fix-range range fix-for-who)=%S\n" range (vcode-fix-range range fix-for-who))
 	     (cl-puthash "range" range  message)
 	 )
      )
@@ -2328,26 +2308,21 @@ to the other"
 )
 
 (defun vcode-cmd-cur-pos (vcode-request)
-  (vr-log "-- vcode-cmd-cur-pos: invoked\n")
   (let ((mess-cont (make-hash-table :test 'string=)))
-    (vr-log "-- vcode-cmd-cur-pos: (point)=%S, sending (vcode-convert-pos (point) 'vcode)=%S\n" (point) (vcode-convert-pos (point) 'vcode))
     (cl-puthash 'value (vcode-convert-pos (point) 'vcode) mess-cont)
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "cur_pos_resp" mess-cont)))
     )
-  (vr-log "-- vcode-cmd-cur-pos: exited\n")
   )
 
 (defun vcode-cmd-line-num-of (vcode-request)
-  (vr-log "-- vcode-cmd-line-num-of: invoked\n")
   (let ((mess-cont (nth 1 vcode-request))
 	(response (make-hash-table :test 'string=))
 	(line-num) (opoint))
 
     (setq opoint (cl-gethash "position" mess-cont))
 
-    (vr-log "**-- vcode-cmd-line-num-of: opoint=%S, current buffer=%S" opoint (buffer-name))
     (save-excursion
       (goto-char opoint)
       (beginning-of-line)
@@ -2359,16 +2334,13 @@ to the other"
      (run-hook-with-args 
       'vr-serialize-message-hook (list "line_num_of_resp" response)))
     )
-  (vr-log "-- vcode-cmd-line-num-of: exited\n")
   )
 
 
 (defun vcode-cmd-get-selection (vcode-request)
-  (vr-log "-- vcode-cmd-get-selection: invoked\n")
   (let ((response (make-hash-table :test 'string=))
 	(selection))
     (setq selection (vcode-make-sure-no-nil-in-selection (point) (mark)))
-    (vr-log "**-- vcode-cmd-get-selection: selection=%S\n" selection)
     (cl-puthash 'value 
 		(list (vcode-convert-pos (nth 0 selection) 'vcode)
 		      (vcode-convert-pos (nth 1 selection) 'vcode))
@@ -2377,64 +2349,50 @@ to the other"
      (run-hook-with-args 
       'vr-serialize-message-hook (list "get_selection_resp" response)))
     )
-  (vr-log "-- vcode-cmd-get-selection: exited\n")
   )
 
 (defun vcode-cmd-get-text (vcode-request)
-  (vr-log (format "-- vcode-cmd-get-text: invoked, vcode-request=%S\n" vcode-request))
   (let ((mess-cont (make-hash-table :test 'string=)) 
 	(vcode-request-cont (elt vcode-request 1))
 	(start) (end)
 	)
-    (vr-log "**-- vcode-cmd-get-text: before start\n")
     (setq start (cl-gethash "start" vcode-request-cont))
     (setq end (cl-gethash "end" vcode-request-cont))
-    (vr-log "**-- vcode-cmd-get-text: before 'value, (type-of start)=%S, (type-of end)=%S, start=%S, end=%S\n" (type-of start) (type-of end) start end)
     (cl-puthash "value" (buffer-substring start end) mess-cont)
-    (vr-log "**-- vcode-cmd-get-text: before 'send-reply\n")
 
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "get_text_resp" mess-cont)))
     )
-  (vr-log "-- vcode-cmd-get-text: exited\n")
   )
 
 
 (defun vcode-cmd-get-visible (vcode-request)
-  (vr-log "-- vcode-cmd-get-visible: invoked\n")
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value (list (window-start) (window-end)) mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" mess-cont)))
     )  
-  (vr-log "-- vcode-cmd-get-visible: exited\n")
   )
 
 (defun vcode-cmd-len (vcode-request)
-  (vr-log "-- vcode-cmd-len: invoked\n")
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value (buffer-size) mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" mess-cont)))
     )  
-  (vr-log "-- vcode-cmd-len: exited\n")
   )
 
 (defun vcode-cmd-newline-conventions (vcode-request)
-  (vr-log "-- vcode-cmd-newline-conventions: invoked\n")
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value (list "\n") mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "newline_conventions_resp" mess-cont)))
     )  
-  (vr-log "-- vcode-cmd-newline-conventions: exited\n")
   )
 
 (defun vcode-cmd-pref-newline-conventions (vcode-request)
-  (vr-log "-- vcode-cmd-pref-newline-conventions: invoked\n")
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value "\n" mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "pref_newline_conventions_resp" mess-cont)))
     )  
-  (vr-log "-- vcode-cmd-pref-newline-conventions: exited\n")
 )
 
 
@@ -2457,7 +2415,6 @@ change reports it sends to VCode.
 )
 
 (defun vcode-cmd-set-selection (vcode-request)
-  (vr-log "-- vcode-cmd-set-selection: invoked\n")
   (let ((mess-cont (nth 1 vcode-request)) 
 	(sel-range) (put-cursor-at) (sel-start) (sel-end)
         (buff-name))
@@ -2465,6 +2422,7 @@ change reports it sends to VCode.
     (setq buff-name (cl-gethash "buff_name" mess-cont))
     (setq sel-range (cl-gethash "range" mess-cont))
     (setq put-cursor-at (cl-gethash "cursor_at" mess-cont))
+    (vr-log "--** vcode-cmd-set-selection: buff-name=%S, sel-range=%S, put-cursor-at=%S\n" buff-name  sel-range put-cursor-at)
     (if (= put-cursor-at 1) 
 	(progn 
 	  (setq sel-start (elt sel-range 0))
@@ -2475,11 +2433,12 @@ change reports it sends to VCode.
 	(setq sel-end (elt sel-range 0))
 	)
       )
+    (vr-log "--** vcode-cmd-set-selection: sel-start=%S, sel-end=%S\n" sel-start sel-end)
     (condition-case err     
 	(progn
 	  (switch-to-buffer buff-name)
 	  (goto-char sel-start)
-	  (set-mark sel-end)
+	  (set-mark sel-start)
 	  (goto-char sel-end)
 	)
        ('error (error "VR Error: could not select region [%S, %S]" sel-start sel-end))
@@ -2493,6 +2452,7 @@ change reports it sends to VCode.
     ;;; statement. That way, if there are errors, we can still report
     ;;; where Emacs actually set the selection, as opposed to where we
     ;;; expected it to go.
+    (vr-log "--** vcode-cmd-set-selection: (mark)=%S, (point)=%S\n" (mark) (point))
     (vr-report-goto-select-change buff-name (mark) (point))
 
     (vr-send-queued-changes)
@@ -2500,7 +2460,6 @@ change reports it sends to VCode.
 )
 
 (defun vcode-cmd-move-relative-page (vcode-request)
-  (vr-log "-- vcode-cmd-move-relative-page: invoked\n")
   (let ((mess-cont (elt vcode-request 1)) (direction) (num))
     (setq direction (cl-gethash "direction" mess-cont))
     (setq num (cl-gethash "num" mess-cont))
@@ -2508,36 +2467,60 @@ change reports it sends to VCode.
 	(scroll-down-nomark num)
       (scroll-up-nomark num))
   )
-  (vr-log "-- vcode-cmd-move-relative-page: exited\n")
 )
 
 (defun vcode-cmd-insert (vcode-request)
-;  (vr-log "-- vcode-cmd-insert: vcode-request=%S\n" vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
 	(text) (range) (vr-request) 
-	(repl-start) (repl-end))
+	(delete-start) (delete-end))
+        (vr-log "--** vcode-cmd-insert: range=%S, text=%S\n" range text)
 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
 	(setq buff-name (cl-gethash "buff_name" mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
-        (vr-log "-- vcode-cmd-insert: buff-name=%S, range=%S, text=%S, \n" buff-name range text)	
-        (vr-log "--** vcode-cmd-insert: upon entry, buffer-name=%S, (mark)=%S, (point)=%S, content=%S\n" (buffer-name) (mark) (point) (buffer-substring (point-min) (point-max)))
 	(set-buffer buff-name)
 	(kill-region delete-start delete-end)
-        (vr-log "--** vcode-cmd-insert: after kill-region, buffer-name=%S, (mark)=%S, (point)=%S, content=%S\n" (buffer-name) (mark) (point) (buffer-substring (point-min) (point-max)))
         (set-mark nil)
-	(insert text)
-        (vr-log "--** vcode-cmd-insert: after insert, buffer-name=%S, (mark)=%S, (point)=%S, content=%S\n" (buffer-name) (mark) (point) (buffer-substring (point-min) (point-max)))
+
+
+;;;
+;;; 'vcode-execute-command-string is still experimental
+;;;
+;	(insert text)
+        (vcode-execute-command-string text)
+
 	(vr-send-queued-changes)
     )
-;  (vr-log "-- vcode-cmd-insert: exited\n")
+)
+
+(defun vcode-cmd-set-text (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+ 	(mess-cont (elt vcode-request 1))
+ 	(buff-name) (text) (start) (end))
+
+
+ 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
+ 	(setq buff-name (cl-gethash "buff_name" mess-cont))
+ 	(setq start (cl-gethash "start" mess-cont))
+ 	(setq end (cl-gethash "end" mess-cont))
+ 	(set-buffer buff-name)
+ 	(kill-region start end)
+        (set-mark nil)
+;;;
+;;; 'vcode-execute-command-string is still experimental
+;;;
+; 	(insert text)
+	(vcode-execute-command-string text)
+
+ 	(vr-send-queued-changes)
+    )
 )
 
 
+
 (defun vcode-cmd-indent (vcode-request)
-  (vr-log "-- vcode-cmd-indent: invoked\n")
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
 	(range) (vr-request) 
@@ -2547,18 +2530,11 @@ change reports it sends to VCode.
     (setq indent-start (elt range 0))
     (setq indent-end (elt range 1))
 
-    (vr-log "--** vcode-cmd-indent: indent-start=%S, indent-end=%S\n"  indent-start indent-end)
 
     (set-buffer buff-name)
-    (vr-log "**-- vcode-cmd-indent: switched to current buffer=%S\n" (buffer-name))
-;;; IGNORE INDENTATION FOR NOW!!!
-;;; Eventually, put call to function for doing the indentation below this
-;;; commment, and before (vr-send-queued-changes)
-;;;
     (vcode-indent-region indent-start indent-end)
 
     (vr-send-queued-changes)
-    (vr-log "-- vcode-cmd-indent: exited\n")
   )
 )
 
@@ -2595,6 +2571,40 @@ change reports it sends to VCode.
   )    
 )
 
+(defun vcode-insert-with-autoindented-tabs-OBSOLETE (text)
+   "Insert TEXT, but invoke 'indent-for-tab-command instead of inserting
+tabs.
+"
+   (let ((before-tab) (after-tab) (tab-pos) (tab-was-found))
+     (vr-log "--** vcode-insert-with-autoindented-tabs: text=%S\n" text)
+     (while (not (string= text ""))
+       ;;;
+       ;;; Find text before and after next occurence of TAB
+       ;;;
+       (setq tab-pos (string-match "\t" text))
+       (if (not tab-pos)
+	   (progn
+	     (setq tab-was-found nil)
+	     (setq tab-pos (length text))
+	   )
+	 (setq tab-was-found t)
+       )
+       (setq before-tab (substring text 0 tab-pos))
+       (if tab-was-found 
+	   (setq text (substring text (1+ tab-pos) (length text)))
+	 (setq text "")
+       )  
+
+       (vr-log "--** vcode-insert-with-autoindented-tabs: tab-was-found=%S, tab-pos=%S, before-tab=%S, text=%S\n" tab-was-found tab-pos before-tab text)
+       ;;;
+       ;;; Insert text before tab, and indent the tab.
+       ;;;
+       (insert before-tab)
+       (if tab-was-found (indent-for-tab-command))
+     )
+   )
+)
+
 (defun vcode-indent-region (start end)
   ;;;
   ;;; For some reason, when I invoke (indent-region start end) it doesn't 
@@ -2611,8 +2621,74 @@ change reports it sends to VCode.
   )
 )
 
-
 (defun vcode-unindent-region (start end n-levels)
+  "Deindents region from START to END by N-LEVELS levels."
+  (let (end-line)
+    (message "-- vcode-unindent-region: start=%S, end=%S, n-levels=%S" start end n-levels)
+    (for-lines-in-region-do start end 'vcode-unindent-line (list n-levels))
+  )
+)
+
+
+(defun vcode-unindent-line (n-levels)
+  (interactive "nNumber of levels: ")
+  (vr-log "--** vcode-unindent-line: n-levels=%S, (point)=%S" n-levels (point))
+
+   ;;;
+   ;;; Move to the first non-blank character on the line, then simulate the
+   ;;; backspace key multiple times.
+   ;;;
+   (beginning-of-line)
+   (while (and (looking-at " ") (< (point) (point-max)))
+     (forward-char-nomark 1)
+     )
+
+   ;;;
+   ;;; Don't backspace if empty line, because that will delete the line 
+   ;;; instead of deindenting.
+   ;;;
+   (if (not (or (looking-at "$") (eq 1 (point))))
+       (progn
+        (vr-log "--** vcode-unindent-line: before deindenting line, (point)=%S" (point))
+;        (apply (backspace-invokes-this-function) (list n-levels))
+        ;;; Execute a command string containing just the backspace key
+	(vcode-execute-command-string "\177")
+        (vr-log "--** vcode-unindent-line: after deindenting line")
+        )
+     (vr-log "--** vcode-unindent-line: line was blank... leave it alone")
+   )
+)
+
+(defun what-line (pos)
+   (let ((line-num))
+     (setq line-num (count-lines (point-min) pos))
+     (save-excursion
+       (goto-char pos)
+       (if (bolp)
+           (setq line-num (1+ line-num))
+       )
+     )
+     line-num
+   )
+)
+
+(defun for-lines-in-region-do (start end do-this args)
+  (let ((current-line)(end-line))
+    (save-excursion
+       (setq end-line (what-line end))
+       (message "-- end-line=%S\n" end-line)
+       (goto-char start)
+       (setq current-line (count-lines 1 (point)))
+       (while (<= (what-line (point)) end-line)
+         (message "-- processing line: current-line=%S, (point)=%S" (what-line (point)) (point))
+         (apply do-this args)
+         (next-line 1)
+       )
+    )
+  )
+)
+
+(defun vcode-unindent-region-old (start end n-levels)
   "Deindents region from START to END by N-LEVELS levels."
   (let (end-line)
     (vr-log "-- vcode-unindent-region: start=%S, end=%S, n-levels=%S" start end n-levels)
@@ -2635,7 +2711,9 @@ change reports it sends to VCode.
 )
 
 
-(defun vcode-unindent-line (n-levels)
+
+
+(defun vcode-unindent-line-old (n-levels)
   (interactive "nNumber of levels: ")
   (beginning-of-line)
   (while (and (looking-at " ") (< (point) (point-max)))
@@ -2660,6 +2738,12 @@ change reports it sends to VCode.
 
 
 (defun vcode-cmd-unindent (vcode-request)
+;  (vr-log "-- vcode-cmd-unindent: invoked\n")
+;  (let ((mess-cont (nth 1 vcode-request))
+;	(pos) (buff-name) (final-pos))
+;    (setq pos (cl-gethash "pos" mess-cont))
+;    (setq buff-name (cl-gethash "buff_name" mess-cont))
+
   (vr-log "WARNING: function vcode-cmd-unindent not implemented!!!\n")
 )
 
@@ -2668,7 +2752,6 @@ change reports it sends to VCode.
   )
 
 (defun vcode-cmd-goto (vcode-request)
-  (vr-log "-- vcode-cmd-goto: invoked\n")
   (let ((mess-cont (nth 1 vcode-request))
 	(pos) (buff-name) (final-pos))
     (setq pos (cl-gethash "pos" mess-cont))
@@ -2676,7 +2759,6 @@ change reports it sends to VCode.
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)
-	  (vr-log "--** vcode-cmd-goto: buff-name=%S, pos=%S\n" buff-name pos)
 	  (goto-char pos)
 	)
 
@@ -2690,7 +2772,6 @@ change reports it sends to VCode.
     ;;; expected it to go).
     ;;;
     (switch-to-buffer buff-name)
-    (vr-log "--** vcode-cmd-goto: after going there, (point)=%S, (vcode-convert-pos (point) 'vcode))=%S\n" (point) (vcode-convert-pos (point) 'vcode))
     (setq final-pos (point))
 
     ;;;
@@ -2701,12 +2782,10 @@ change reports it sends to VCode.
 
     (vr-send-queued-changes)
 
-    (vr-log "-- vcode-cmd-goto: exited\n")  
   )
 )
 
 (defun vcode-cmd-goto-line (vcode-request)
-  (vr-log "-- vcode-cmd-goto-line: invoked\n")
   (let ((mess-cont (nth 1 vcode-request))
 	(line-num) (go-where) (buff-name) (final-pos))
     (setq line-num (cl-gethash "linenum" mess-cont))
@@ -2715,14 +2794,11 @@ change reports it sends to VCode.
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)
-	  (vr-log "--** vcode-cmd-goto-line: buff-name=%S, line-num=%S, go-where=%S\n" buff-name line-num go-where)
 	  (goto-line line-num)
-	  (vr-log "--** vcode-cmd-goto-line: after going there")
 	  (if (= -1 go-where) 
 	      (beginning-of-line)
 	    (end-of-line)
 	  )
-	  (vr-log "--** vcode-cmd-goto-line: after moving to extremity of line")
 	)
       ('error (error "VR Error: could not go to line %S" line-num))
     )
@@ -2734,7 +2810,6 @@ change reports it sends to VCode.
     ;;; expected it to go).
     ;;;
     (switch-to-buffer buff-name)
-    (vr-log "--** vcode-cmd-goto-line: after going there, (point)=%S, (vcode-convert-pos (point) 'vcode))=%S\n" (point) (vcode-convert-pos (point) 'vcode))
     (setq final-pos (point))
 
     ;;;
@@ -2745,7 +2820,9 @@ change reports it sends to VCode.
 
     (vr-send-queued-changes)
 
-    (vr-log "-- vcode-cmd-goto-line: exited\n")  
   )
 )
 
+(defun vcode-cmd-mediator-closing (vcode-request)
+  (vr-mode-activate 'vcode)
+)

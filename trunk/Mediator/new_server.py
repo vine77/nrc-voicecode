@@ -46,17 +46,21 @@ debug.config_traces(status="on",
 #                      'send_mess': 1,
 #                      'get_mess': 1,
 #                      'RecogStartMgr': 1,
-#                      'RSMInfrastructure': 1
-#                       'DictWinGramNL': 1
-#                        'get_mess':1, 
-#                         'send_mess': 1,                    
+#                       'get_mess':1, 
+#                       'send_mess': 1,                    
 #                       'DictWinGramNL': 1,
-#                       'SelectWinGramNL.gotResultsObject': 1,
+#                       'sr_grammarsNL': 1,
+#                       'sr_interface': 1,                       
+#                       'SelectWinGramNL': 1,
+#                       'SelectWinGram': 1,
+#                       'SourceBuff.closest_occurence_to_cursor': 1, 
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
 #                      'init_simulator_regression': 1,
 #                      'RecogStartMgr': 1,
+#                       'ResMgrBasic': 1,
+#                       'BasicCorrectionWinGram': 1,
 #                      'RSMInfrastructure': 1,
 #                      'WinGramMgr': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1

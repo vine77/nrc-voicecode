@@ -269,6 +269,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                 pass
 
             spoken = self.selection_spoken_form(resObj)
+            debug.trace('SelectWinGramNL.gotResultsObject', 'verb=%s, spoken=%s, ranges=%s' % (verb, spoken, repr(ranges)))
             self.find_closest(verb, spoken, ranges)
 
     def selection_spoken_form(self, resObj):

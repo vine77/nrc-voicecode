@@ -306,7 +306,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         determine if it should call listen_one_transaction again.
         """
         debug.trace('-- AppStateMessaging.listen_one_transaction', 'called')
-        expected = ['update', 'suspended', 'resuming',
+        expected = ['updates', 'suspended', 'resuming',
             'editor_disconnecting', 'connection_broken']
         mess = self.listen_msgr.get_mess(expect= expected)
         if mess == None:
@@ -316,7 +316,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         mess_name = mess[0]
         debug.trace('-- AppStateMessaging.listen_one_transaction', 
             'heard %s' % mess_name)
-        if mess_name == 'update':
+        if mess_name == 'updates':
             mess_cont = mess[1]
             upd_list = mess_cont['value']
             debug.trace('-- AppStateMessaging.listen_one_transaction', 

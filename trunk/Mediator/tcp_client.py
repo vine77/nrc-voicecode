@@ -569,7 +569,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
         if self.connected:
-            self.talk_msgr.send_mess('update', {'value': update_list})
+            self.talk_msgr.send_mess('updates', {'value': update_list})
             
     def send_simple_response(self, name):
         """send a simple response without any arguments to a message 

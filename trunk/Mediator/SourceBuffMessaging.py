@@ -24,6 +24,7 @@ VoiceCode via a messaging protocol."""
 
 import messaging, SourceBuffCached
 import sb_services
+from debug import trace
 
 class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
     
@@ -289,6 +290,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         #
         # Set the selection and get updates from the editor
         #
+        trace('SourceBuffMessaging.set_selection', '** range=%s, cursor_at=%s' % (repr(range), cursor_at))
         args = {'range': range, 'cursor_at': cursor_at,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('set_selection', args)
