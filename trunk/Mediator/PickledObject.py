@@ -52,14 +52,15 @@ class PickledObject(Object.Object):
                             args_super, \
                             {})
 
-    def pickle(self):
+    def pickle(self, alt_file = None):
         """Saves the object to file.
 
-        Name of file is *self.pickle_fname*. If *None*,don't write to file.
-        
         **INPUTS**
+
+        *STR alt_file* -- name of file to which to save the object, or
+        None to use the default of self.pickle_fname.  If alt_file is omitted 
+        and self.pickle_fname is None, don't write to file.
         
-        *none* -- 
         **OUTPUTS**
         
         *none* -- 
@@ -67,25 +68,28 @@ class PickledObject(Object.Object):
 
 #        print '-- PickledObject.pickle:  self.pickle_fname=%s' % self.pickle_fname
         
-        if self.pickle_fname != None:
+        if alt_file is None:
+            pickle_file = self.pickle_fname
+        else:
+            pickle_file = alt_file
+        if pickle_file != None:
             try:
-                a_file = open(self.pickle_fname, 'w')
+                a_file = open(pickle_file, 'w')
                 cPickle.dump(self, a_file)
                 a_file.close()
             except exceptions.Exception, mess:
-                print 'Error writing %s to file \'%s\'\n%s' % (self, self.pickle_fname, mess)
+                print 'Error writing %s to file \'%s\'\n%s' \
+                    % (self, pickle_file, mess)
 
 
-    def unpickle(self):
+    def unpickle(self, alt_file = None):
         """Reads the object from file.
 
-        Name of the file is *self.pickle_fname*. If *None* don't read from
-        file.
-        
         **INPUTS**
         
-        *STR fname=None* -- Name of the from which to read the
-        instance. If *None*, use 
+        *STR alt_file* -- name of file from which to restore the object, or
+        None to use the default of self.pickle_fname.  If alt_file is omitted 
+        and self.pickle_fname is None, leave the object unchanged
         
 
         **OUTPUTS**
@@ -95,10 +99,14 @@ class PickledObject(Object.Object):
 
 #        print '-- PickledObject.unpickle: self.pickle_fname=%s' % self.pickle_fname
         
-        if self.pickle_fname != None:
+        if alt_file is None:
+            pickle_file = self.pickle_fname
+        else:
+            pickle_file = alt_file
+        if pickle_file != None:
             try:
                 orig_pickle_fname = self.pickle_fname
-                a_file = open(self.pickle_fname, 'r')
+                a_file = open(pickle_file, 'r')
                 tmp = cPickle.load(a_file)
                 a_file.close()
                 self.__dict__ = tmp.__dict__
@@ -108,7 +116,8 @@ class PickledObject(Object.Object):
                 #
                 self.pickle_fname = orig_pickle_fname
             except exceptions.Exception, mess:
-                print 'Error reading %s from file \'%s\'\n%s' % (self, self.pickle_fname, mess)
+                print 'Error reading %s from file \'%s\'\n%s' \
+                    % (self, pickle_file, mess)
 
 
 

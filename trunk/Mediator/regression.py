@@ -29,6 +29,7 @@ import CmdInterp
 import EdSim
 import sr_interface
 import traceback
+import cPickle
 
 """Classes and methods used to set up the MediatorObject or 
 NewMediatorObject for the next new regression test
@@ -640,10 +641,14 @@ class TempConfigNewMediatorFactory(Object.Object):
 
     *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
     dialog/prompt.  Normally disabled except during regression
+
+    *STR pickled_interp* -- CmdInterp as originally configured,
+    pickled to speed up regression testing
     """
-    def __init__(self, symbol_match_dlg = 1, **args):
+    def __init__(self, symbol_match_dlg = 1, pickled_interp = None, **args):
         self.deep_construct(TempConfigNewMediatorFactory, 
-            {'symbol_match_dlg': symbol_match_dlg}, args)
+            {'symbol_match_dlg': symbol_match_dlg,
+             'pickled_interp': pickled_interp}, args)
 
     def new_config(self, editor = None, skip_config = 0):
         """create a new TempConfig object
@@ -660,6 +665,9 @@ class TempConfigNewMediatorFactory(Object.Object):
 
         *TempConfigNewMediator* --  the TempConfigNewMediator object
         """
+        interp = None
+        if self.pickled_interp:
+            interp = cPickle.loads(self.pickled_interp)
         a_mediator = \
             NewMediatorObject.NewMediatorObject(symbol_match_dlg = \
                 self.symbol_match_dlg)

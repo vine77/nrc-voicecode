@@ -1539,7 +1539,8 @@ class SymDict(PickledObject.PickledObject):
             add_sr_entries = 1
         else:
             add_sr_entries = 0
-        self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries=add_sr_entries)
+        if clean_sr_voc or clean_symdict:
+            self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries=add_sr_entries)
 
         #
         # Resave dictionary to disk
