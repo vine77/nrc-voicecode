@@ -56,3 +56,6 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         ..[AppStateEmacs] file:///./AppStateEmacs.AppStateEmacs.html"""
         
         return SourceBuffEmacs.SourceBuffEmacs(app=self, buff_name=buff_name)
+
+    def config_from_external(self):
+        pass
