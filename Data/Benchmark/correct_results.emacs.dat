@@ -38,8 +38,8 @@ This test should always be the very first one to be executed!
 
 
 *******************************************************************************
-* Name        : mixed_mode_editing
-* Description : Testing mixed mode (kbd + voice) editing
+* Name        : request_foreground
+* Description : This dummy test is just there to request that user bring Emacs to the foreground.
 *******************************************************************************
 
 The next series of tests require that the client editor be in the foreground.    
@@ -60,7 +60,14 @@ Note also that if a background process brings a window to the
 foreground, the test results may be invalidated.
 
 Press Enter now:
->  Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
+>  
+
+*******************************************************************************
+* Name        : mixed_mode_editing
+* Description : Testing mixed mode (kbd + voice) editing
+*******************************************************************************
+
+Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
 *** Start of source buffer ***
   1: <CURSOR># This is a small buffer for testing editing of Python code
   2: 
@@ -162,6 +169,26 @@ Heard select hello
   3: 
   4: class AClass(ASuper):
   5:     """This is a dummy class"""
+
+
+*******************************************************************************
+* Name        : text_mode
+* Description : Test dictation of normal text.
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+EdSim instance EdSim(0) connected
+before setting text mode on: is_in_text_mode=0
+after setting text mode on:is_in_text_mode=1
+before setting text mode off: is_in_text_mode=1
+after setting text mode off:is_in_text_mode=0
+
+
+*******************************************************************************
+* Name        : just_ring_bell
+* Description : This dummy test is just there to ring a bell, to notify the user of the end of the foreground tests.
+*******************************************************************************
+
 You can now safely use your computer.
 
 
@@ -486,7 +513,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x0162E740>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x016324E0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -11532,10 +11559,10 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  178.307000041 secs
+Test suite completed in:  209.391000032 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <bound method ExtLoopWin32NewMediator.cleanup of <__main__.ExtLoopWin32NewMediator instance at 0x011DA8E0>>
+cleanup method is  <bound method ExtLoopWin32NewMediator.cleanup of <__main__.ExtLoopWin32NewMediator instance at 0x011DAE70>>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning
