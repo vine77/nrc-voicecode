@@ -1,6 +1,8 @@
+# print '-- CmdInterp.py: imported'
+
 import os, re, string
 
-import auto_test, config, natlink, vc_globals
+import auto_test, natlink, vc_globals
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
@@ -8,16 +10,15 @@ from cont_gen import ContC, ContPy
 from CSCmd import CSCmd
 from EdSim import EdSim
 from Object import Object
-import SymDict
+import EdSim, SymDict
 import sr_interface
-#import VoiceDictation
 
 class CmdInterp(Object):
     """Interprets Context Sensitive Commands spoken into a given application.
     
     **INSTANCE ATTRIBUTES**
 
-    [AppState] *app=None* -- application for which we are
+    [AppState] *on_app=None* -- application for which we are
     interpreting the commands
     
     *{STR: [[* (Context] *, FCT)]} cmd_index={}* -- index of CSCs. Key
@@ -51,9 +52,9 @@ class CmdInterp(Object):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, app=None, **attrs):
+    def __init__(self, on_app=None, **attrs):
         self.deep_construct(CmdInterp,
-                            {'app': app, 'cmd_index': {}, \
+                            {'on_app': on_app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
                              'cached_regexp': '',\
                              'cached_regexp_is_dirty': 1,\
@@ -65,7 +66,7 @@ class CmdInterp(Object):
 #          """Refresh the dictation object's internal buffer."""
 
 #          print '-- CmdInterp.refresh_dict_buff: called'
-#          buff = self.app.curr_buffer
+#          buff = self.on_app.curr_buffer
 #          text = buff.content
 #          sel_start = buff.selection_start
 #          sel_end = buff.selection_end
@@ -111,7 +112,7 @@ class CmdInterp(Object):
 #          # code command
 #          #
 #          self.interpret_NL_cmd(newText)
-#          self.app.print_buff_content()
+#          self.on_app.print_buff_content()
         
 
     def all_cmds_regexp(self):
@@ -218,7 +219,7 @@ class CmdInterp(Object):
                 CSCs = self.cmd_index[string.lower(indexed_spoken_form)]
                 applied = 0
                 for aCSC in CSCs:
-                    applied = aCSC.interpret(self.app)
+                    applied = aCSC.interpret(self.on_app)
                     if (applied):
                         break
                 if applied:
@@ -233,7 +234,7 @@ class CmdInterp(Object):
                         # Insert the symbol after all
                         #
 #                        print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % symbol
-                        self.app.insert(symbol)
+                        self.on_app.insert(symbol)
                         cmd = cmd_without_symbol
                     else:
                         #
@@ -242,7 +243,7 @@ class CmdInterp(Object):
                         #
 #                        print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'
                         amatch = re.match('(^\s*[^\s]*)', cmd)
-                        self.app.insert_indent(amatch.group(1), '')
+                        self.on_app.insert_indent(amatch.group(1), '')
                         cmd = cmd[amatch.end():]
                         cmd = cmd_without_csc
                 
@@ -254,7 +255,7 @@ class CmdInterp(Object):
                 # So, insert the symbol
                 #
 #                print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % a_symbol                
-                self.app.insert_indent(a_symbol, '')
+                self.on_app.insert_indent(a_symbol, '')
                 cmd = cmd_without_symbol
 
             else:
@@ -265,7 +266,7 @@ class CmdInterp(Object):
                 #
 #                print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'                
                 amatch = re.match('(^\s*[^\s]*)', cmd)
-                self.app.insert_indent(amatch.group(1), '')
+                self.on_app.insert_indent(amatch.group(1), '')
                 cmd = cmd[amatch.end():]
 
 
@@ -406,7 +407,7 @@ class CmdInterp(Object):
         *none* -- 
         """
 
-        language = self.app.curr_buffer.language
+        language = self.on_app.curr_buffer.language
         last_language = self.last_loaded_language
         if language != last_language:
             print '-- CmdInterp.load_language_specific_aliases: loading words for language \'%s\'' % language
@@ -426,61 +427,4 @@ class CmdInterp(Object):
 
             self.last_loaded_language = language
             
-
-def self_test():    
-    #
-    # Create a command interpreter connected to the editor simulator
-    #
-    config.interp = CmdInterp(app=EdSim())
-    acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings=[[ContC(), c_simple_for], [ContPy(), py_simple_for]])
-    config.add_csc(acmd)
-    acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings=[[ContC(), c_goto_body], [ContPy(), py_goto_body]])
-    config.add_csc(acmd)
-
-    
-    config.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
-    config.interp.app.goto(41)
-    print '\n\n>>> Testing command interpreter\n\n'
-    print '\n>>> Interpreting \'for loop index loop body\' in a C buffer'    
-    print '\n>>> Current buffer is:\n'
-    config.interp.app.print_buff_content()
-    config.interp.interpret_NL_cmd('for loop index loop body')
-    print '\n>>> Buffer is now:'
-    config.interp.app.print_buff_content()
-    
-
-    config.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
-    config.interp.app.goto(43)
-    config.interp.app.curr_buffer.language = 'python'
-    print '\n>>> Interpreting \'for loop index loop body\' in a Python buffer'    
-    print '\n>>> Current buffer is:\n'
-    config.interp.app.print_buff_content()
-    config.interp.interpret_NL_cmd('for loop index loop body')
-    print '\n>>> Buffer is now:'
-    config.interp.app.print_buff_content()
-
-
-#
-# Initialise config.interp here instead of in vc_globals.py.
-# This is because CmdInterp.py imports vc_globals.py. But when vc_globals.py
-# is imported from CmdInterp.py, the class CmdInterp is not yet defined.
-# Therefore we couldn't access CmdInterp.CmdInterp() from within vc_globals.py
-# at that point.
-#
-# This is a silly problem with Python really...
-#
-#
-# Actually, now we have put the interp object in config.py, cause circular
-# reference problems kept creeping up.
-# config.interp = CmdInterp(app=EdSim())
-
-
-#
-# Add a regression test for this module
-#
-auto_test.add_test('CmdInterp', self_test, 'self-test for CmdInterp.py')
-
-
-if (__name__ == '__main__'):
-    self_test()
 
