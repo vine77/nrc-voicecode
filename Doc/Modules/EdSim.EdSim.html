@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 03 22:32:07 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Nov 20 13:10:08 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,7 +29,6 @@
     <A CLASS="DocLink" HREF="#EdSim.EdSim.curr_buffer_name_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.curr_buffer_name_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return the name of the current buffer</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
-    <A CLASS="DocLink" HREF="#EdSim.EdSim.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Save the current buffer.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -53,9 +52,8 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.get_history"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.get_history</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.set_default_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_default_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)
 
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">list</SPAN> <SPAN CLASS="VariableName">buffer_methods</SPAN> = <SPAN CLASS="VariableValue">['is_language', 'region_distance', 'cur_pos', 'get_selection', 'goto_end_of_selection', 'set_selection', ...]</SPAN></SPAN>
@@ -139,34 +137,6 @@ at the same time
 <P>
 Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.        
 </P>
-<H2 ID="EdSim.EdSim.save_file" CLASS="Method">EdSim.EdSim.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
-<P>Save the current buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR full_path</EM>
-<DD>full path under which to save the file, or
-None to use the buffer name
-<DT>
-<EM>BOOL no_prompt</EM>
-<DD>overwrite any existing file without
-prompting.  No_prompt should only be set to true if the caller
-has already prompted the user.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the file was successfully saved
-
-</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -498,11 +468,11 @@ recent command in the application's command history.
 <DD>true if editor supports having multiple buffers open 
 at the same time
 </DL>
-<H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)</H2>
+<H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
 <P>Open a file.</P>
 
 <P>
-Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.        
+Open file with name <EM>STR name</EM>.        
 </P>
 <H2 ID="AppState.AppState.pop_breadcrumbs" CLASS="Method">AppState.AppState.pop_breadcrumbs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)</H2>
 <P>Pops breadcrumbs from the breadcrumbs stack</P>
@@ -513,34 +483,6 @@ Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.
 if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
 breadcrumb.
 </P>
-<H2 ID="AppState.AppState.save_file" CLASS="Method">AppState.AppState.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
-<P>Save the current buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR full_path</EM>
-<DD>full path under which to save the file, or
-None to use the buffer name
-<DT>
-<EM>BOOL no_prompt</EM>
-<DD>overwrite any existing file without
-prompting.  No_prompt should only be set to true if the caller
-has already prompted the user.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the file was successfully saved
-
-</DL>
 <H2 ID="AppState.AppState.set_default_buffer" CLASS="Method">AppState.AppState.set_default_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
 <P>None</P>
 
