@@ -55,10 +55,10 @@ This will be very slow if symdict gets large.
 ???????????????????????????????????????????????????????????????????????????????
 """
 
-import natlink, socket, SocketServer, sys, time, whrandom
+import natlink, os, re, socket, SocketServer, sys, time, whrandom
 import select, string, threading, time
 
-import AppStateMessaging, mediator, messaging, Object, RecogStartMgr, SourceBuffMessaging, sb_services, sr_interface
+import AppStateMessaging, mediator, messaging, Object, RecogStartMgr, SourceBuffMessaging, sb_services, sim_commands, sr_interface
 
 
 #
@@ -178,10 +178,11 @@ def app_state_factory(app_name, id, listen_msgr, talk_msgr):
 
     ..[AppState] file:///./AppState.AppState.html"""
 
-    if app_name == 'EdSim':
+    if re.match('EdSim', app_name):
         app = AS_MessExtEdSim(app_name=app_name, id=id, listen_msgr=listen_msgr, talk_msgr=talk_msgr)
     else:
-        raise RuntimeError, "Unknown editor '%s'" % app_name
+        print "WARNING: Unknown editor '%s'" % app_name
+        print "Connection refused"
     app.app_name = app_name
     return app
 
@@ -558,21 +559,21 @@ class ListenForNewListenersThread(ListenForConnThread, Object.Object):
 
         a_messenger = messenger_factory(sock)
        
-       #
-       # Ideally, this would be invoked right away here, but can't do it
-       # outside of main thread. Need to wait a bit longer to process it
-       # in main thread. This may cause some timing problems aluded to below.
-       #
-       #
-       # Find the window handle for the external editor. Assume it's the
-       # active window.
-       #
-       # This may not work if there are some timing issues. If this turns out
-       # to be a problem, may have to ask the user to point VoiceCode to the
-       # editor's window, then click OK in some dialog box.
-       #
-#       window = natlink.getCurrentModule()[2]
-
+        #
+        # Ideally, this would be invoked right away here, but can't do it
+        # outside of main thread. Need to wait a bit longer to process it
+        # in main thread. This may cause some timing problems aluded to below.
+        #
+        #
+        # Find the window handle for the external editor. Assume it's the
+        # active window.
+        #
+        # This may not work if there are some timing issues. If this turns out
+        # to be a problem, may have to ask the user to point VoiceCode to the
+        # editor's window, then click OK in some dialog box.
+        #
+ #       window = natlink.getCurrentModule()[2]
+ 
 
 #        print '-- ListenForNewListenersThread.handshake: self=%s, getting app_name' % self
         
@@ -601,7 +602,7 @@ class ListenForNewListenersThread(ListenForConnThread, Object.Object):
         # Make sure you lock it first.
         #
         self.new_socks_lock.acquire()
-        self.new_socks[sock] = [id]
+        self.new_socks[sock] = [id, app_name]
         self.new_socks_lock.release()
 
 #        print '-- ListenForNewListenersThread.handshake: self=%s, done' % self
@@ -722,7 +723,7 @@ class ServerSingleThread(Object.Object):
                             {threading.Thread: 1})
 
 
-    def package_sock_pair(self, id, listen_sock, talk_sock):
+    def package_sock_pair(self, id, app_name, listen_sock, talk_sock):
         """Packages a listen and talk socket into an AppStateMessaging instance
         
         **INPUTS**
@@ -741,11 +742,6 @@ class ServerSingleThread(Object.Object):
         """
 
         print '-- ServerSingleThread.package_sock_pair: called'
-
-        #beg
-#        print '\n\n-- package_sock_pair: at beginning, calling recognitionMimic'
-#        natlink.recognitionMimic(['hello'])
-        #end
         
         
         listen_msgr = messenger_factory(listen_sock)
@@ -772,15 +768,14 @@ class ServerSingleThread(Object.Object):
         #
         ###################################################################
         mediator.init_simulator_regression(disable_dlg_select_symbol_matches=1)
+#        mediator.init_simulator(disable_dlg_select_symbol_matches=1, window=window)
         mediator.the_mediator.interp.on_app = an_app_state
-        
-        #beg
-        print '\n\n-- package_sock_pair: after binding to external editor, calling recognitionMimic'
-        natlink.recognitionMimic(['hello'])
-        #end
-
-
-        print '-- ServerSingleThread.package_sock_pair: done'
+        sim_commands.the_mediator = mediator.the_mediator        
+        # define some useful local variables
+        home = os.environ['VCODE_HOME']
+        sim_commands.command_space['home'] = home
+        sim_commands.command_space['testdata'] = \
+                  os.path.join(home, 'Data', 'TestData')        
         
         return an_app_state
     
@@ -797,12 +792,6 @@ class ServerSingleThread(Object.Object):
         
         *none* -- 
         """
-
-        #beg
-#        print '\n\n-- ServerSingleThread.start: at beginning, calling recognitionMimic'
-#        natlink.recognitionMimic(['hello'])
-        #end
-
 
         #
         # This server listens for new socket connections on VC_LISTEN port.
@@ -824,12 +813,6 @@ class ServerSingleThread(Object.Object):
                                    new_socks_lock=self.new_socks_lock)
         new_talker_server.start()
         
-
-        #beg
-#        print '\n\n-- ServerSingleThread.start: before while, calling recognitionMimic'
-#        natlink.recognitionMimic(['hello'])
-        #end        
-
         #
         # Process connections created by the above 2 threads.
         #
@@ -857,23 +840,10 @@ class ServerSingleThread(Object.Object):
             self.new_socks_lock.acquire()
 
             new_listen_socks_list = self.new_listen_socks.keys()
-
-
-            #beg
-#            print '\n\n-- ServerSingleThread.start: ii=%s, before for a_listen_sock, calling recognitionMimic' % ii
-#            natlink.recognitionMimic(['hello'])
-#            print '-- ServerSingleThread.start: finished calling recognitionMimic'            
-            #end
             
             for a_listen_sock in new_listen_socks_list:
 
-                #beg
-#                print '\n\n-- ServerSingleThread.start: for a_listen_sock, calling recognitionMimic'
-#                natlink.recognitionMimic(['hello'])
-                #end                
-
                 print '-- ServerSingleThread.start: spotted new connection'
-
                 
                 #
                 # Find the window handle for the external editor. Assume it's
@@ -893,8 +863,11 @@ class ServerSingleThread(Object.Object):
                 # some dialog box.
                 #
                 window = natlink.getCurrentModule()[2]
-                self.new_listen_socks[a_listen_sock].append(window)
 
+                #
+                # Find the id and application name for that LISTEN socket
+                #
+                (id, app_name) = self.new_listen_socks[a_listen_sock]
                 
                 #
                 # Check to see if we have a VC_TALK socket that
@@ -911,14 +884,8 @@ class ServerSingleThread(Object.Object):
                     # We do have new talker socket for that
                     # connection. Package the two sockets.
                     #
-
-                    #beg
-#                    print '\n\n-- ServerSingleThread.start: before package_sock_pair, calling recognitionMimic'
-#                    natlink.recognitionMimic(['hello'])
-#                    print '-- ServerSingleThread.start: done recognitionMimic'
-                    #end
                     
-                    an_app_state = self.package_sock_pair(id, a_listen_sock, a_talk_sock)
+                    an_app_state = self.package_sock_pair(app_name, id, a_listen_sock, a_talk_sock)
                     self.active_listen_socks[a_listen_sock] = an_app_state
 
                     #
@@ -934,13 +901,6 @@ class ServerSingleThread(Object.Object):
             self.new_socks_lock.release()
 #            print '-- ServerSingleThread.start: finished with new connections'
 
-            #beg
-#            print '\n\n-- ServerSingleThread.start: after lock release, calling recognitionMimic'
-#            natlink.recognitionMimic(['hello'])
-#            print '-- ServerSingleThread.start: done recognitionMimic'
-            #end
-
-
             #
             # Now check to see if one of the initialised listener sockets has
             # received data
@@ -954,14 +914,7 @@ class ServerSingleThread(Object.Object):
                 (ready_sockets, dum1,dum2) = select.select(listening_sockets, [], [], 0)
 #                print '-- ServerSingleThread.start: ready_sockets=%s, dum1=%s' % (repr(ready_sockets), dum1)
 
-#                  #deb
-#                  for a_socket in ready_sockets:
-#                      data = a_socket.recv(1024)
-#                      print '-- ServerSingleThread.start: received data=\'%s\'' % data
-#                  #fin
-
 #                print '-- ServerSingleThread.start: finished selecting socket'
-
 
                 
                 #
@@ -974,10 +927,23 @@ class ServerSingleThread(Object.Object):
 #                    print '-- ServerSingleThread.start: ready an_app.listen_msgr.transporter.sock=%s' % an_app.listen_msgr.transporter.sock
 #                    print '-- ServerSingleThread.start: an_app.%s' % an_app                    
 #                    an_app.listen_one_transaction()
+
                 
 
+def start_server_singlethread():
+    """Start a single thread, single process server.
+    """
+
+#    print '-- start_server_singlethread: called'
+
+    a_server = ServerSingleThread()
+        
+    a_server.start()
+    print '-- start_server_multiprocesses: done'
+
+
 ##############################################################################
-# Classes for REALLY single-threaded version of the server
+# Classes for single-threaded multi-processes version of the server
 ##############################################################################
 
 
@@ -1159,14 +1125,17 @@ class ServerMultiProcesses(Object.Object):
         #
         ###################################################################
         mediator.init_simulator_regression(disable_dlg_select_symbol_matches=1)
+#        mediator.init_simulator(disable_dlg_select_symbol_matches=1, window=window)
         mediator.the_mediator.interp.on_app = an_app_state
-        
-        #beg
-        print '\n\n-- package_sock_pair: after binding to external editor, calling recognitionMimic'
-        natlink.recognitionMimic(['hello'])
-        print '\n\n-- package_sock_pair: done calling recognitionMimic'        
-        #end
+        sim_commands.the_mediator = mediator.the_mediator        
+        # define some useful local variables
+        home = os.environ['VCODE_HOME']
+        sim_commands.command_space['home'] = home
+        sim_commands.command_space['testdata'] = \
+                  os.path.join(home, 'Data', 'TestData')
 
+        
+        
 
     def start(self):
         """Start the server
@@ -1232,51 +1201,26 @@ class ServerMultiProcesses(Object.Object):
 
 
 def start_server_multiprocesses():
-    """Start a multi-processes server.
+    """Start a single-thread, multi-processes server.
     """
 
 #    print '-- start_server_absolutely_singlethread: called'
 
     a_server = ServerMultiProcesses()
-    
-    #beg
-#      print \n\n-- start_server_multiprocesses: calling recognitionMimic'
-#      natlink.recognitionMimic(['hello'])
-    #end
-    
+        
     a_server.start()
 #    print '-- start_server_multiprocesses: done'
-
-    #
-    # Uncomment this when debugging the server
-    #
-    while 1:
-        prompt = "Enter an utterance (ex: ['for', 'variable', 'do'])\nJust type <Enter> to quit program\n> "
-        utter = raw_input(prompt)
-        if utter == '':
-            break
-        else:
-            print '-- __main__: utter=\'%s\'' % utter
-            utter = eval(utter)
-            natlink.recognitionMimic(utter)
-    
 
 
 if __name__ == '__main__':
 
     sr_interface.connect()
-
-    #beg
-#      mediator.init_simulator_regression(disable_dlg_select_symbol_matches=1)
-#      print '\n\n-- __main__: calling recognitionMimic'
-#      natlink.recognitionMimic(['hello'])
-    #end
-
+    sr_interface.set_mic('on')
 
     #
     # Create a global grammar manager
     #
-    the_recog_start_mgr = RecogStartMgr.RecogStartMgr()
+#    the_recog_start_mgr = RecogStartMgr.RecogStartMgr()
 
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
@@ -1284,6 +1228,14 @@ if __name__ == '__main__':
 #    start_server_singlethread()
     start_server_multiprocesses()
 
+    #
+    # Uncomment this when debugging the server
+    #
+    sim_commands.sleep_before_recognitionMimic = 5
+    sim_commands.help()
+    while (not sim_commands.quit_flag):
+      cmd = raw_input('Command> ')
+      mediator.execute_command(cmd)                
+
+
     sr_interface.disconnect()
-
-
