@@ -98,7 +98,7 @@ class AppState(Object):
     should include those from AppState and add their own 
 
     .. [Action] file:///./actions_gen.Action.html
-    .. [Context] files:///./Context.Context.html
+    .. [Context] file:///./Context.Context.html
     .. [SourceBuff] file:///SourceBuff.SourceBuff.html
     .. [self.curr_buffer] file:///AppState.AppState.html"""
 
