@@ -21,6 +21,7 @@
 
 import os, profile, re
 import sr_interface, vc_globals
+import test_helpers
     
 def dictate_pseudo_python(commands):
     
@@ -210,7 +211,8 @@ def test_editing(testing):
    do_edit_test(testing, edit_file, add_else_clause_test, 'add_else_clause_test')
    do_edit_test(testing, edit_file, add_except_clause_test, 'add_except_clause_test')
    
-   
+def test_python_compilation(testing):
+   test_helpers.compilation_test(testing.mediator().interpreter(), os.path.join(vc_globals.test_data, 'used_to_test_python_parsing.py'))   
    
 # To create an edit test scenario, just   define a test function and invoke 
 # it through do_edit_test as below.
@@ -278,3 +280,5 @@ def add_else_clause_test(commands):
 def add_except_clause_test(commands):   
    commands.goto_line(26)
    commands.say(['catch', 'exceptions'])
+
+   

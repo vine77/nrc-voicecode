@@ -49,6 +49,9 @@ std_small_numbers = std_US_small_numbers
 #
 # Python standard symbols
 #
+
+clear_standard_symbols_file_list()
+
 symbol_files = []
 
 py_std_sym = os.path.join(vc_globals.test_data, 'test_py_std_sym.py')

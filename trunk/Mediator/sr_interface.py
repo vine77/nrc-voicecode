@@ -260,9 +260,6 @@ def getWordInfo(word, *rest):
     
 #    trace('sr_interface.getWordInfo', 'word=%s, rest=%s' % (word, rest))
     
-    #
-    # First, fix the written form of the word
-    #
     try:
        if len(rest) == 0:
            answer = natlink.getWordInfo(word)
@@ -271,6 +268,7 @@ def getWordInfo(word, *rest):
     except:
        # In case the word's spelling is not allowed by
        # NatSpeak
+       print "WARNING: error trying to get info from vocabulary word '%s'" % word
        answer = None       
 
     return answer

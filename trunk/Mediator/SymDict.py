@@ -444,7 +444,12 @@ class SymDict(Object):
 
     [SB_ServiceLang] *lang_name_srv* -- Service used by SymDict to
     determine a buffer's programming language.
-
+    
+    [INT] *min_chars_for_approx_match=3* -- Minimum number of characters that a
+    native symbol must have in order to be matched approximately to a
+    pseudo symbol. Very short symbols tend to cause too many false positive
+    matches, and in any case, they are easy to dictate by spelling (in fact
+    the easiest way to dictate a short symbol is to spell it).
    
     CLASS ATTRIBUTES**
 
@@ -470,7 +475,8 @@ class SymDict(Object):
                          'standard_symbol_sources': [],
                          'abbrev_sources': [],
                          'unresolved_abbreviations': {},
-                         'lang_name_srv': sb_services.SB_ServiceLang(buff=None)})
+                         'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
+                         'min_chars_for_approx_match': 3})
         
         # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
@@ -1060,7 +1066,10 @@ class SymDict(Object):
                 source = ''
                 
         return stripped_source
-                                
+
+    def clear_standard_symbols_file_list(self):
+        """Clears the list of files defining standard symbols"""
+        self.standard_symbol_sources = []                                
 
     def standard_symbols_in(self, file_list):
         """Specify source files defining standard symbols"""
@@ -1455,6 +1464,39 @@ class SymDict(Object):
         return definition
 
 
+    def _remove_short_symbols(self, pseudo_symbol, native_matches):
+       """Remove from *native_matches*, those symbols that match *pseudd_symbol*
+       but are too short.
+       **INPUTS**
+
+       *STR pseudo_symbol* -- The pseudo symbol that was matched.
+       
+       *[[STR]] native_matches* -- List of native symbol matches for *pseudo_symbol*.
+       Each entry of the list is itself a list returned by a regexp match. The first
+       entry of every such list is the matched native symbol.
+      
+       
+       **OUTPUTS**
+       
+       *[STR] good_matches* -- list of native matches that are long enough."""
+       
+       #
+       # In case the word is spelled like "S. I. G."
+       #
+       pseudo_symbol = string.lower(pseudo_symbol)
+       pseudo_symbol = re.sub('[^a-z0-9]', '', pseudo_symbol)
+       trace('SymDict._remove_short_symbols', 'pseudo_symbol after is: "%s"' % pseudo_symbol)       
+       
+       good_matches = []
+       for a_match in native_matches:
+          native_sym = a_match[0]
+          if (len(native_sym) >= self.min_chars_for_approx_match or
+              native_sym == pseudo_symbol):
+              good_matches.append(a_match)
+       return good_matches
+             
+       
+
 
     def match_pseudo_symbol(self, pseudo_symbol):        
         """Returns a prioritized list of all known native symbols that
@@ -1483,7 +1525,6 @@ class SymDict(Object):
         # Remove leading/trailing blanks
         #
         pseudo_symbol = re.sub('(^\s+|\s+$)', '', pseudo_symbol)
-#        words = re.split('\s+', pseudo_symbol)
         words = re.split('[^a-zA-Z0-9]+', pseudo_symbol)
 
         #
@@ -1505,11 +1546,13 @@ class SymDict(Object):
 
 #        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
 
+        good_matches = self._remove_short_symbols(pseudo_symbol, raw_matches)
+
         #
         # Create a list of matches to known symbols
         #
         matches = []
-        for a_match in raw_matches:
+        for a_match in good_matches:
             matches = matches + [SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol=a_match[0], words=words, word_matches=a_match[1:])]
 
 
