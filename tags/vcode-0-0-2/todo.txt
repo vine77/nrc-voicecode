@@ -1,0 +1,44 @@
+Todo list for VoiceCode
+=======================
+
+
+config.py
+---------
+
+-- Alain
+
+CSCmd should have a __setattr__ method that intercepts sets to the
+*meanning* attribute. It would check to make sure that each entry in
+meanings is OK, i.e. it's a pair with 1st element being a context
+instance and the second being a function pointer.
+
+This would address the common mistake where a user adds the following
+configuration statement.
+
+add_csc(spoken_forms=['for loop'], meanings=[[ContC, c_simple_for]])
+
+i.e. the user forgets to add () after ContC, which means he is making
+the context be the ContC class itself (as opposed to a ContC INSTANCE)
+
+
+Grammar for spoken forms
+------------------------
+
+Instead of having to encode all the spoken forms of a command from
+scratch, it would be better to allow grammar rules instead.
+
+For example instead of:
+
+spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;']
+
+we could have:
+
+spoken_forms=['after* (semi|semicolon|;)', 'go after* (semi|semicolon|;)']
+
+
+Symbol translation
+------------------
+
+- When a word in a symbol doesn't correspond to an in-vocab word or a
+  known abbreviation, we should see if it's a concatenation or such
+  words and/or abbreviations.

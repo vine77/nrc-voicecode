@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 02 16:29:51 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class CmdInterp</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class CmdInterp - Interprets Context Sensitive Commands spoken into a given application.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="CmdInterp.html">CmdInterp</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">CmdInterp.CmdInterp<BR>
+&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;VoiceDictation.VoiceDictation<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CmdInterp</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>, <A CLASS="DocLink" HREF="VoiceDictation.VoiceDictation.html">VoiceDictation</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app=&lt;AppState.AppState instance at 8745a0&gt;</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.all_cmds_regexp</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches the spoken form of all voice commands</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.refresh_dict_buff</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)<SPAN CLASS="OneLiner"> # Refresh the dictation object's internal buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.refresh_editor_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.refresh_editor_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">del_start</SPAN>, <SPAN CLASS="Argument">del_end</SPAN>, <SPAN CLASS="Argument">newText</SPAN>, <SPAN CLASS="Argument">sel_start</SPAN>, <SPAN CLASS="Argument">sel_end</SPAN>)<SPAN CLASS="OneLiner"> # Refresh the editor's internal buffer after a recognition</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.spoken_form_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.spoken_form_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches a spoken form of a command.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from VoiceDictation.VoiceDictation</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">VoiceDictation.VoiceDictation.__getattr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attr</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">VoiceDictation.VoiceDictation.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dictation_object=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">VoiceDictation.VoiceDictation.initialize</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_handle</SPAN>, <SPAN CLASS="Argument">begin_cbk</SPAN>, <SPAN CLASS="Argument">change_cbk</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">VoiceDictation.VoiceDictation.terminate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+</PRE><H2>Description</H2><P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="file:///./AppState.AppState.html">AppState</A> <EM>app=AppState()</EM>
+<DD>application for which we are
+interpreting the commands
+<DT>
+<EM>{STR: [[</EM> (Context] <EM>, FCT)]} cmd_index={}</EM>
+<DD>index of CSCs. Key
+ is the spoken form of the command, value is a list of contextual
+ meanings. A contextual meaning is a pair of a <EM>context object</EM>
+ and an <EM>action function</EM> to be fired if the context applies.
+<DT>
+<EM>STR cached_regexp=''</EM>
+<DD>Regular expresion that matches the
+ spoken form of any of the CSCs.
+<DT>
+<EM>BOOL cached_regexp_is_dirty</EM>
+<DD><EM>true</EM> iif <EM>self.cached_regexp</EM> needs
+ to be regenerated based on the values in <EM>self.cmd_index</EM>
+</DL>
+<P>
+CLASS ATTRIBUTES**</P>
+<P>
+<EM>none</EM> --</P>
+<H2 ID="CmdInterp.CmdInterp.index_csc" CLASS="Method">CmdInterp.CmdInterp.index_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)</H2>
+<P>Add a new csc to the command interpreter's command dictionary</P>
+
+<P>
+<A HREF="file:///./CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to be indexed.</P>
+<H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Interprets a natural language command and executes
+corresponding instructions.</P>
+<P>
+<EM>STR cmd</EM> is the spoken form of the command.</P>
+<H2 ID="CmdInterp.CmdInterp.refresh_editor_buff" CLASS="Method">CmdInterp.CmdInterp.refresh_editor_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">del_start</SPAN>, <SPAN CLASS="Argument">del_end</SPAN>, <SPAN CLASS="Argument">newText</SPAN>, <SPAN CLASS="Argument">sel_start</SPAN>, <SPAN CLASS="Argument">sel_end</SPAN>)</H2>
+<P>Refresh the editor's internal buffer after a recognition</P>
+
+
+<H3><EM>INT del_start, del_end</EM> are the start and end position of text
+ that was deleted</H3>
+<EM>STR newText</EM> is the text that was recognised by the dictation object.<EM>INT sel_start, sel_end</EM> are the start and end position of the selection after the recognition<H2 ID="CmdInterp.CmdInterp.spoken_form_regexp" CLASS="Method">CmdInterp.CmdInterp.spoken_form_regexp(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)</H2>
+<P>Returns a regexp that matches a spoken form of a command.</P>
+
+<EM>STR spoken_form</EM> is the spoken form. The returned regexp will match
+it even if the case of the first letter of each word do not match.<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">attrs_superclasses</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+Make <EM>[Object] self</EM> into an instance of class <EM>CLASS this_class</EM>.Automatically call constructors of superclasses of
+<EM>this_class</EM> (except for classes listed in *{CLASS: 1}
+exclude_bases*). Constructors are called with no arguments.Set attributes to the values listed in *{STR: ANY}
+attrs_this_class* and <EM>{STR: ANY} attrs_cupserclasses</EM>. These
+attributes are set even if they do not exist in
+<EM>self.__dict__</EM>.listed in <EM>exclude_bases</EM> argument). These constructors are
+called with no arguments.<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
