@@ -77,10 +77,10 @@ def addWord(word, *rest):
         
     global word_info_flag
 
-#    print '-- sr_interface.addWord: adding \'%s\'' % word
+    print '-- sr_interface.addWord: adding \'%s\'' % word
     if speech_able():
         if getWordInfo(word) == None:
-#            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
+            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
                    
             if len(rest) == 0:
                 natlink.addWord(word, word_info_flag)
@@ -142,12 +142,17 @@ def spoken_written_form(vocabulary_entry):
         written = vocabulary_entry
         spoken = vocabulary_entry
 
+    #
+    # Substitute {Spacebar}->' '
+    #
+    written = re.sub('\\{Spacebar\\}', ' ', written)
+
     return (spoken, written)
     
 
 
 
-def vocabulary_entry(spoken_form, *written_form):
+def vocabulary_entry(spoken_form, written_form):
     """Creates a vocabulary entry with given spoken and written forms.
 
     **INPUTS**
@@ -162,10 +167,14 @@ def vocabulary_entry(spoken_form, *written_form):
     *entry* -- the entry to be added to the SR vocabulary
     """
 
-#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', *written_form=%s' % (spoken_form, repr(written_form))
-        
+    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s' % (spoken_form, repr(written_form))
+
+    #
+    # Substitute blanks in written form
+    #
+    written_form = re.sub('\s', '{Spacebar}', written_form)
     if len(written_form) > 0:
-        entry = written_form[0] + '\\' + spoken_form
+        entry = written_form + '\\' + spoken_form
     else:
         entry = spoken_form
     return entry
@@ -200,8 +209,8 @@ class CommandDictGrammar(DictGramBase):
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
-#        print '-- CommandDictGrammar.gotBegin: called'
-        pass
+        print '-- CommandDictGrammar.gotBegin: called'
+        self.interpreter.load_language_specific_aliases()        
         
     def gotResults(self, words):
         #
@@ -239,6 +248,7 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
+        self.interpreter.load_language_specific_aliases()
         self.setSelectText(self.interpreter.on_app.curr_buffer.content)
 
     def gotResults(self, words, startPos, endPos):
