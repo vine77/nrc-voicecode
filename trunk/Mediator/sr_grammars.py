@@ -448,16 +448,10 @@ class SelectWinGram(WinGram):
         # the selection.
         #
         debug.trace('SelectWinGram.find_closest', '** mark_selection=%s' % mark_selection)
-        if mark_selection:
-            a = actions_gen.ActionSelectPseudoCode(possible_ranges = ranges, select_range_no = closest_range_index,
-                buff_name = self.buff_name, cursor_at=where)
-            a.log_execute(self.app, None)
-        else:
-            if where > 0:
-                pos = ranges[closest_range_index][1]
-            else:
-                pos = ranges[closest_range_index][0]
-            self.app.goto(pos, buff_name = self.buff_name)
+        a = actions_gen.ActionNavigateByPseudoCode(possible_ranges = ranges, select_range_no = closest_range_index,
+                                               buff_name = self.buff_name, cursor_at=where, 
+                                               mark_selection=mark_selection)
+        a.log_execute(self.app, None)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 

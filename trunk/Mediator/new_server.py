@@ -43,8 +43,11 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-#                     'NewMediatorObject._configure_from_file': 1,
-#                     'NewMediatorObject.__init__': 1,
+#                      'ContLastActionWas.applies': 1,
+#                      'Action.log': 1,
+#                      'ActionRepeatLastCmd.log': 1,
+#                      'ActionRepeatBidirectCmd.log': 1,
+#                      'SelectWinGram.find_closest': 1,
 #########################################################################
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,

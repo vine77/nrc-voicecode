@@ -550,6 +550,10 @@ def test_select_pseudocode():
 # point in testing them.  Once we implement correct xyz,
 # test_say(['correct',...]) will bring up the correction test, so the
 # old "correct" results for this test won't be right anyway
+#
+# AD: It's not really silly. It was meant to test that "correct XYZ" is a valid
+#     part of the SelectPseudoCode grammar. But never mind.
+#
 #    test_say(['correct', 'index', '=\\equals', '0'])
 #    test_command("""goto_line(2)""")
 #    test_say(['correct next', 'index', '=\\equals', '0'])
@@ -589,6 +593,10 @@ def test_select_pseudocode():
 # point in testing them.  Once we implement correct xyz,
 # test_say(['correct',...]) will bring up the correction test, so the
 # old "correct" results for this test won't be right anyway
+#
+# AD: It's not really silly. It was meant to test that "correct XYZ" is a valid
+#     part of the SelectPseudoCode grammar. But nevermind
+
 #    test_command("""goto_line(1)""")
 #    test_say(['correct next', 'index', '=\\equals', '0'])
 #    test_say(['correct next', 'index', '=\\equals', '0'])
@@ -606,7 +614,19 @@ def test_select_pseudocode():
     test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
     test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
 
-#    util.request_console_be(active=0)    
+    #
+    # Testing repeatability of SelectPseudoCode commands
+    #
+    test_command("""goto_line(1)""")
+    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])    
+    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])                
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
+  
+    
     
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
@@ -2939,15 +2959,25 @@ auto_test.add_test('profile_config', test_profile_config,
 
 def test_temporary():
 
-   testing.init_simulator_regression()
-   commands = testing.namespace()['commands']
-   commands.open_file('toto.py')
+    testing.init_simulator_regression()
+    test_command("""open_file('blah.py')""")
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
 
-   instance_name  = testing.instance_name ()
-   app = testing.editor()
-   s = "abcdefghijklmnopqrstuvwxyz\n" * 100
-   buff = app.curr_buffer()
-   buff.insert_indent(s, "")
+    #
+    # Testing repeatability of SelectPseudoCode commands
+    #
+    test_command("""goto_line(1)""")
+    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])    
+    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])                
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
    
 #auto_test.add_test('temp', test_temporary, desc='temporary test')

@@ -22,6 +22,7 @@
 """Context objects which are not tied to a specific language"""
 
 from Context import Context
+import debug
 
 class ContLanguage(Context):
     """Context that applies only if a particular programming language is the
@@ -107,6 +108,7 @@ class ContLastActionWas(Context):
         
     def applies(self, app):
         entry = app.get_history(1)
+        debug.trace('ContLastActionWas.applies', 'entry=%s' % repr(entry))
         if entry:
             (last_cont, last_action) = entry
         else:
