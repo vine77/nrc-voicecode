@@ -30,6 +30,10 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
     <UL>
     <LI><A HREF="#debugConfig">Debugging the configuration file</A>
     </UL>
+<LI><A HREF="#trouble">Trouble shooting</A>
+   <UL>
+   <LI><A HREF="#noDictation">Dictation fails</A>
+   </UL>
 </UL>
 
 VoiceCode is currently at the prototype stage. It cannot be used in an
@@ -55,6 +59,11 @@ VoiceCode will then prompt your for commands and execute them. After
 executing each command, the content of the simulator's current buffer
 will be output to the screen. The tag <EM><CURSOR></EM> is used to
 denote the position of the cursor.
+
+<P>
+
+Note that because of a bug in the current version, you must make sure
+that <A HREF="#noDictation">NatSpeak is not already running</A> when you start the mediator.
 
 <P>
 
@@ -211,6 +220,20 @@ with no indication of the line in <EM>vc_config.py</EM> where the error occurred
 <PRE>
 python %VCODE_HOME%\Config\vc_config.py
 </PRE>
+
+
+<H2><A NAME="trouble">Trouble shooting</A></H2>
+
+<H3><A NAME="noDictation">Dictation fails</A></H3>
+
+There is a bug in the current version that prevents it from working when NatSpeak is already running.
+
+<P>
+
+The exact symptoms of this problem is that if you issue a
+<EM>listen()</EM> command and then talk, you will hear a beep and
+control will be returned to the console.
+
 
 
 <hr>
