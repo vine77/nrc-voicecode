@@ -4642,7 +4642,8 @@ define_suite(name = 'fabfour', tests = ['SymDict', 'automatic_abbreviations',
     'mediator_console', 'python'])
     
 define_suite(name = 'mediator_console_dlgs', 
-             tests = ['reformat_recent_dlg', 'reformat_from_recent_dlg'])
+             tests = ['reformat_recent_dlg', 'reformat_from_recent_dlg',
+                      'wxWindowsWithHelpers'])
 
 # tests starting with 'CmdInterp' and ending with 'SymDict')
 define_suite_by_range(name = 'few_early', first = 'CmdInterp', last = 'SymDict')

@@ -28,12 +28,57 @@ Among other things, those helper methods are useful for unit testing GUIs
 from wxPython.wx import *
 import debug
 
-class wxListCtrlWithHelpers(wxListCtrl):
+
+class Mock_wxKeyEvent(wxKeyEvent):
+   """Use this to simulate the event of a user pressing a key.
+   
+   Need to use this instead of wxKeyEvent, because you can't manually
+   set the key of a wxKeyEvent.  
+   """
+   def __init__(self, event_type, keycode):
+      wxKeyEvent.__init__(self, event_type)
+      self.overriden_keycode = keycode
+      
+   def GetKeyCode(self):
+      """For some reason, wxKeyEvent.GetKeyCode() does not return the 
+      value of self.overriden_keycode. So override it so it does"""
+      
+      # AD: Hum... for some strange reason, the Mock_wxKeyEvent
+      #     starts out with proper value of GetKeyCode(), but once
+      #     it gets passed to an event handler through ProcessEvent(),
+      #     it is received as an event with GetKeyCode() = 0
+      return self.overriden_keycode
+
+
+class CanBeSentKeys:
+    def __init__(self):
+       pass
+       
+    def SendKey(self, key_code):
+        key_event = Mock_wxKeyEvent(wxEVT_CHAR, key_code)
+        print "\n-- SendKey: key_event=%s, key_code=%s, key_event.GetKeyCode()=%s" % (key_event, key_code, key_event.GetKeyCode())
+        print "\n-- SendKey: Calling ProcessEvent"
+        self.ProcessEvent(key_event)
+        print "\n-- SendKey: Done with ProcessEvent"
+
+
+class wxButtonWithHelpers(wxButton):
+    """A wxButton with methods for simulating user actions on it.
+    """
+    def __init__(self, parent, ID, Caption, position, size):
+        wxButton.__init__(self, parent, ID, Caption, position, size)
+    
+    def Click(self):
+        click_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
+        self.ProcessEvent(click_event)
+
+class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
     """A wxListCtrl subclass with helpers for finding more about the data
     that is displayed in it.
     """
     def __init__(self, frame, id, pos=wxDefaultPosition, size=wxDefaultSize, style=wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL):
        wxListCtrl.__init__(self, frame, id, pos, size, style)
+       CanBeSentKeys.__init__(self)
         
     def GetCellContentsString(self, row, column ):
        return self.GetItem(row, column).m_text
@@ -65,8 +110,37 @@ class wxListCtrlWithHelpers(wxListCtrl):
        for row_num in range(self.NumberOfRows()):
           contents.append(self.GetCellContentsString(row_num, col_num))
        return contents
-    
        
+    def HandleUpOrDownArrow(self, keycode):
+       """Invoke this with an up or down arrow character to move cursor
+       up or down the list.
+       
+       **INPUTS**
+       
+       *INT keycode* -- the code for the key.
+       
+       **OUTPUTS**
+       
+       *INT direction* -- 1 or -1 depending on the direction of the key. If None, 
+       then the key was not an arrow key.she
+       
+       **SIDE EFFECTS**
+       
+       If the key was an arrow key, moves the cursor up or down the list.
+       """
+       direction = None       
+       if keycode == WXK_UP:
+           direction = -1
+       elif keycode == WXK_DOWN:
+           direction = 1
+
+       if direction:
+          row_index = self.GetFirstSelected() + direction
+          if row_index >= 0 and row_index < self.NumberOfRows():
+              self.Select(row_index)
+
+       return direction
+               
 class MockListSelectionEvent(wxListEvent):
     def __init__(self, nth):
        wxListEvent.__init__(self)
@@ -90,10 +164,13 @@ class wxDialogWithHelpers(wxDialog):
         *wxButton button* -- the button to be clicked.
         """
         button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, button.GetId())
-        self.ProcessEvent(button_event)
-       
-    
-   
+        button.ProcessEvent(button_event)
+        
+    def PressKey(self, key_code, into_widget):
+        key_event = wxKeyEvent(wxEVT_CHAR)
+        key_event.m_keycode = key_code
+        into_widget.ProcessEvent(key_event)
+  
        
 # defaults for vim - otherwise ignore
 # vim:sw=4
