@@ -638,7 +638,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DC5980>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x018FCB10>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1134,6 +1134,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -1333,6 +1334,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -1574,6 +1576,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -1794,6 +1797,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -1993,6 +1997,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -3672,6 +3677,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
+'cbk' expands to ['callback']
 'cgi' expands to ['C. G. I.']
 'char' expands to ['character']
 'chg' expands to ['change', 'changed']
@@ -10932,25 +10938,6 @@ Heard index equals zero new statement
   5: index = 0
 
 
->>> Testing console command: say(['go', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go index equals zero
-*** Start of source buffer ***
-  1: index = 0<CURSOR>
-  2: index = 1
-  3: index = 0
-  4: index = 1
-
-
->>> Testing console command: goto_line(2)
-
-*** Start of source buffer ***
-  1: index = 0
-  2: <CURSOR>index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0
-
-
 >>> Testing console command: say(['go after next', 'index', '=\\equals', '0\\zero'], user_input='None')
 Heard go after next index equals zero
 *** Start of source buffer ***
@@ -11039,48 +11026,6 @@ Heard go before next index equals zero
 Heard go before previous index equals zero
 *** Start of source buffer ***
   1: <CURSOR>index = 0
-  2: index = 1
-  3: index = 0
-  4: index = 1
-
-
->>> Testing console command: goto_line(2)
-
-*** Start of source buffer ***
-  1: index = 0
-  2: <CURSOR>index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0
-
-
->>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go next index equals zero
-*** Start of source buffer ***
-  1: index = 0
-  2: index = 1
-  3: index = 0<CURSOR>
-  4: index = 1
-  5: index = 0
-  6: 
-
-*** End of source buffer ***
-
-
->>> Testing console command: goto_line(2)
-
-*** Start of source buffer ***
-  1: index = 0
-  2: <CURSOR>index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0
-
-
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go previous index equals zero
-*** Start of source buffer ***
-  1: index = 0<CURSOR>
   2: index = 1
   3: index = 0
   4: index = 1
@@ -11258,71 +11203,6 @@ Heard select previous index equals zero
   2: index = 1
   3: index = 0
   4: index = 1
-
-
->>> Testing console command: goto_line(1)
-
-*** Start of source buffer ***
-  1: <CURSOR>index = 0
-  2: index = 1
-  3: index = 0
-  4: index = 1
-
-
->>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go next index equals zero
-*** Start of source buffer ***
-  1: index = 0<CURSOR>
-  2: index = 1
-  3: index = 0
-  4: index = 1
-
-
->>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go next index equals zero
-*** Start of source buffer ***
-  1: index = 0
-  2: index = 1
-  3: index = 0<CURSOR>
-  4: index = 1
-  5: index = 0
-  6: 
-
-*** End of source buffer ***
-
-
->>> Testing console command: goto_line(6)
-
-  3: index = 0
-  4: index = 1
-  5: index = 0
-  6: <CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go previous index equals zero
-  2: index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0<CURSOR>
-  6: 
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
-Heard go previous index equals zero
-*** Start of source buffer ***
-  1: index = 0
-  2: index = 1
-  3: index = 0<CURSOR>
-  4: index = 1
-  5: index = 0
-  6: 
-
-*** End of source buffer ***
 
 
 >>> Testing console command: goto_line(1)
@@ -11836,5 +11716,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1521.59799993 secs
+Test suite completed in:  1532.51400006 secs
 -----------------------------------------------

@@ -476,8 +476,8 @@ def test_select_pseudocode():
     #
     # Testing go commands
     #
-    test_command("""goto_line(2)""")
-    test_say(['go', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_command("""goto_line(2)""")
+#    test_say(['go', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
     test_say(['go after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
@@ -489,10 +489,10 @@ def test_select_pseudocode():
     test_command("""goto_line(2)""")
     test_say(['go before previous', 'index', '=\\equals', '0\\zero'],
         never_bypass_sr_recog=1)
-    test_command("""goto_line(2)""")
-    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-    test_command("""goto_line(2)""")
-    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_command("""goto_line(2)""")
+#    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_command("""goto_line(2)""")
+#    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
     test_say(['after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
@@ -540,12 +540,12 @@ def test_select_pseudocode():
     #
     # Testing repeated go commands in both directions
     #
-    test_command("""goto_line(1)""")
-    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-    test_command("""goto_line(6)""")
-    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_command("""goto_line(1)""")
+#    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_command("""goto_line(6)""")
+#    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+#    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     
 
     #

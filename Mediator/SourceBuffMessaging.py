@@ -501,7 +501,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         self.app.talk_msgr.send_mess('insert', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_resp'])        
         self.app.update_response = 1
-        self.app.apply_upd_descr(response[1]['updates'])
+        updates = self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
         
 
@@ -642,6 +642,8 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('insert_indent', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_indent_resp'])        
+        trace('SourceBuffInsertIndentMess.insert_indent',
+            'updates = %s' % response[1]['updates'])
         self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0

@@ -1561,7 +1561,7 @@ class CmdInterp(OwnerObject):
                 msg = msg + "symbol, but SymDict is not finding any"
                 msg = msg + "complete match:\n"
                 msg = msg + "match_phrase gives %s\n" \
-                    % self.known_symbols.match_phrase(phrase)
+                    % repr(self.known_symbols.match_phrase(phrase))
                 sys.stderr.write(msg)
         # Match untranslated text to new known symbol or a known symbol with
         # unresolved spoken forms.

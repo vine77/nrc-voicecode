@@ -652,9 +652,10 @@ class WinGramFactory(Object):
 #        select_verbs = ['go', 'select', 'insert', 'correct', ''], 
 # Look, I commented out correct for a reason - it is not supported
 # without correct-anywhere -- DCF
-        select_verbs = ['go', 'select', 'insert', ''], 
-        select_cursor_position_words = ['before', 'after', ''],
-        select_direction_words = ['next', 'previous', ''],
+        select_verbs = ['select'], 
+        select_cursor_position_words = ['go before', 'go after', 
+            'insert before', 'insert after', 'before', 'after'],
+        select_direction_words = ['next', 'previous'],
         through_word = 'through',
         scratch_words = None,
         correct_words = None,
@@ -756,30 +757,18 @@ class WinGramFactory(Object):
         debug.virtual('WinGramFactory.make_selection')
 
     def _select_phrases(self):
-       """Gnerates phrases that can be used to select a portion of code."""
+       """Generates phrases that can be used to select a portion of code."""
        phrases = []
        for verb in self.select_verbs:
-          for put_cursor in self.select_cursor_position_words:
-             for direction in self.select_direction_words:
-                if (verb == 'correct' and put_cursor != ''):
-                   #
-                   # Correction utterances can't contain words for putting the cursor
-                   # at either end of 
-                   #
-                   continue
-                if (verb == '' and put_cursor == ''):
-                   #
-                   # Utterance that only specify the direction are not allowed because they 
-                   # cause undesirable ambiguities. For example "next one" could mean either:
-                   #   - select next occurence of the digit 1 or word "one"
-                   #   - repeat last bidirectional command in forward direction
-                   #
-                   continue
-                this_phrase = '%s %s %s' % (verb, put_cursor, direction)
-                this_phrase = re.sub(' +', ' ', this_phrase)
-                this_phrase = re.sub('^ +', '', this_phrase)
-                this_phrase = re.sub(' +$', '', this_phrase)
-                phrases.append(this_phrase)
+           phrases.append(verb)
+           for direction in self.select_direction_words:
+               this_phrase = '%s %s' % (verb, direction)
+               phrases.append(this_phrase)
+       for put_cursor in self.select_cursor_position_words:
+           phrases.append(put_cursor)
+           for direction in self.select_direction_words:
+               this_phrase = '%s %s' % (put_cursor, direction)
+               phrases.append(this_phrase)
                 
        debug.trace('WinGramFactory._select_phrases', 'returning phrases=%s' % repr(phrases))
        return phrases

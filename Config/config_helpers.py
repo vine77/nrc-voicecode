@@ -1279,6 +1279,10 @@ class EnglishSmallNumbersSet(Object):
        aliases.add_lsa(LSAlias(['oh X.'], 
                        {None: '0x'}, letters_and_digits))
     
+       aliases.add_lsa(LSAlias(['thousand'], {None: '000'},
+           letters_and_digits, new_symbol = 'within'))
+       aliases.add_lsa(LSAlias(['hundred'], {None: '00'},
+           letters_and_digits, new_symbol = 'within'))
        for digit in range(10):
           if digit == 0:
              spoken = 'oh oh'
