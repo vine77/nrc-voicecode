@@ -3330,6 +3330,11 @@ change reports it sends to VCode.
             ;;; We don't use 'vcode-execute-command-string because set_text message
             ;;; is used to restore a buffer to a previous state (which is
             ;;; assumed to have already been indented properly)
+
+            ; ugh - need this, otherwise it doesn't even insert at the
+            ; right place
+            (goto-char start)
+            (push-mark start)
             (insert text)
             (push-mark nil)
             (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
