@@ -164,7 +164,7 @@ class KnownTargetModule(Object):
 	    return ("", "")
 	return self.title_escape
 
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -179,6 +179,8 @@ class KnownTargetModule(Object):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -298,7 +300,7 @@ class RemoteShell(KnownTargetModule):
 	"""
 	return self.title_varies
 
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -313,6 +315,8 @@ class RemoteShell(KnownTargetModule):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance_name -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -325,7 +329,7 @@ class RemoteShell(KnownTargetModule):
 	    module = self.name(), 
 	    instance = instance_name, 
 	    single_display = self.single_display(window, title), 
-	    variable_title = self.variable_title)
+	    variable_title = self.variable_title())
     
     def verify_new_instance(self, window, title, instance, editors):
 	"""attempt to verify whether the window belongs to
@@ -449,7 +453,7 @@ class DedicatedModule(KnownTargetModule):
 	return 1
 
 
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -464,6 +468,8 @@ class DedicatedModule(KnownTargetModule):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance_name -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -623,9 +629,9 @@ class SingleWindowDisplay(RemoteDisplay):
 	*BOOL* -- true if the module allows the editor to change the
 	window title
 	"""
-	debug.virtual('KnownTargetModule.variable_title')
+	return 0
     
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -640,6 +646,8 @@ class SingleWindowDisplay(RemoteDisplay):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -683,24 +691,25 @@ class MultiWindowDisplay(RemoteDisplay):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *BOOL* title_varies -- can the title of the window be changed?
 
     **CLASS ATTRIBUTES**
     
     *none*
 
     """
-    def __init__(self, **args):
+    def __init__(self, title_varies = 1, **args):
 	""" 
 	**INPUTS**
 
-	*none*
+	*BOOL* title_varies -- can the title of the window be changed?
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.deep_construct(MultiWindowDisplay, {}, args)
+	self.deep_construct(MultiWindowDisplay, 
+	                    {'title_varies': title_varies}, args)
 
     def single_display(self, window, title):
 	"""does this module display multiple remote windows in this single 
@@ -733,7 +742,7 @@ class MultiWindowDisplay(RemoteDisplay):
 	"""
 	debug.virtual('KnownTargetModule.variable_title')
     
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -748,6 +757,8 @@ class MultiWindowDisplay(RemoteDisplay):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -764,12 +775,12 @@ class MultiWindowDisplay(RemoteDisplay):
 	if instance.shared_window():
 	    return TargetWindow.SharedWindow(window = window, 
 		module = self.name(), 
-		instance = instance,
+		instance = instance_name,
 		single_display = self.single_display(window, title), 
 		variable_title = self.variable_title)
 	return TargetWindow.DedicatedWindow(window = window, 
 	    module = self.name(), 
-	    instance = instance,
+	    instance = instance_name,
 	    single_display = self.single_display(window, title))
     
     def verify_new_instance(self, window, title, instance, editors):
@@ -830,7 +841,7 @@ class DualModeDisplay(RemoteDisplay):
 	"""
 	self.deep_construct(DualModeDisplay, {}, args)
     
-    def new_window(self, window, title, instance_name = None):
+    def new_window(self, window, title, editors, instance_name = None):
 	"""factory which creates a new TargetWindow object.
 	**Note:** the caller should first check single_display.  If it
 	returns true, then the module cannot act as a window factory.
@@ -845,6 +856,8 @@ class DualModeDisplay(RemoteDisplay):
 
 	*STR* title -- the current title of the window
 
+	*AppMgr* editors -- the application manager
+	 
 	*STR* instance -- the name of the initial instance belonging to
 	the window, or None if there is none initially
 
@@ -865,12 +878,12 @@ class DualModeDisplay(RemoteDisplay):
 	if instance.shared_window():
 	    return TargetWindow.SharedWindow(window = window, 
 	        module = self.name(), 
-		instance = instance,
+		instance = instance_name,
 		single_display = self.single_display(window, title), 
 		variable_title = self.variable_title)
 	return TargetWindow.DedicatedWindow(window = window, 
 	    module = self.name(), 
-	    instance = instance,
+	    instance = instance_name,
 	    single_display = self.single_display(window, title))
 
     def verify_new_instance(self, window, title, instance, editors):
@@ -916,12 +929,15 @@ class DualModeDisplayByTitle(DualModeDisplay):
     *STR* title_regex -- regular expression compared against the window
     title to see if this remote display is running in single-window mode
 
+    *BOOL* title_varies -- can the title of the window be changed (when
+    in multi-window mode?
+
     **CLASS ATTRIBUTES**
     
     *none*
 
     """
-    def __init__(self, title_regex, **args):
+    def __init__(self, title_regex, title_varies = 1, **args):
 	""" 
 	**INPUTS**
 
@@ -932,12 +948,16 @@ class DualModeDisplayByTitle(DualModeDisplay):
 	beginning and end of the title string.  (?i) can be used to
 	specify a case-insensitive search.
 
+	*BOOL* title_varies -- can the title of the window be changed (when
+	in multi-window mode?
+
 	**OUTPUTS**
 
 	*none*
 	"""
 	self.deep_construct(DualModeDisplayByTitle, 
-			    {'title_regex': title_regex},
+			    {'title_regex': title_regex,
+			     'title_varies': title_varies},
 			    args)
 
     def single_display(self, window, title):
@@ -958,6 +978,21 @@ class DualModeDisplayByTitle(DualModeDisplay):
 	if re.search(self.title_regex, title) == None:
 	    return 0
 	return 1
+
+    def variable_title(self):
+	"""can an editor running in this module change the window title?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the module allows the editor to change the
+	window title
+	"""
+	return self.title_varies
+
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

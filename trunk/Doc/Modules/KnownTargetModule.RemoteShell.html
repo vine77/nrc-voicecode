@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Jun 06 12:12:49 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 08 12:33:49 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,7 +28,7 @@
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title_varies=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.dedicated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.dedicated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteShell.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteShell.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
@@ -44,7 +44,7 @@
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.dedicated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.dedicated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return the name of the module</SPAN>
-    <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
@@ -126,7 +126,7 @@ editor</P>
 to this module (or None if not dedicated)
 
 </DL>
-<H2 ID="KnownTargetModule.RemoteShell.new_window" CLASS="Method">KnownTargetModule.RemoteShell.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<H2 ID="KnownTargetModule.RemoteShell.new_window" CLASS="Method">KnownTargetModule.RemoteShell.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -148,6 +148,9 @@ window
 <DT>
 <EM>STR</EM> title
 <DD>the current title of the window
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the application manager
 <DT>
 <EM>STR</EM> instance_name
 <DD>the name of the initial instance belonging to
@@ -456,7 +459,7 @@ to this module (or None if not dedicated)
 <DD>name of the module
 
 </DL>
-<H2 ID="KnownTargetModule.KnownTargetModule.new_window" CLASS="Method">KnownTargetModule.KnownTargetModule.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<H2 ID="KnownTargetModule.KnownTargetModule.new_window" CLASS="Method">KnownTargetModule.KnownTargetModule.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -478,6 +481,9 @@ window
 <DT>
 <EM>STR</EM> title
 <DD>the current title of the window
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the application manager
 <DT>
 <EM>STR</EM> instance
 <DD>the name of the initial instance belonging to

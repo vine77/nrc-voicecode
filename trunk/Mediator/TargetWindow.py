@@ -443,7 +443,7 @@ class SharedWindow(TargetWindow):
 	if self.instances() == 0:
 	    return None
 	unknown_instance = None
-	for instance in instances:
+	for instance in self.window_instances:
 	    app = editors.app_instance(instance)
 	    if app.is_active_is_safe():
 		if app.is_active():
