@@ -27,7 +27,7 @@ class SourceBuff(Object):
     value is the programming language associated with that extension
     """
     
-    def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=0, visible_end=0, selection_start=0, selection_end=0, content=None, **attrs):
+    def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=0, visible_end=0, selection_start=None, selection_end=None, content=None, **attrs):
         self.deep_construct(SourceBuff,
                             {'file_name': file_name, \
                              'language': language, \

@@ -86,7 +86,7 @@ class AppState(Object):
         If *f_name* is *None*, then use buffer [self.curr_buffer].
         .. [self.curr_buffer] file:///AppState.AppState.html"""
 
-        debug.not_implemented()
+        debug.virtual('move_to')
 
 
     def find_buff(self, buff_name=None):
@@ -125,7 +125,7 @@ class AppState(Object):
         .. [self.cur_pos] AppState
         .. [self.curr_buffer] AppState"""
 
-        debug.not_implemented(insert_indent)
+        debug.virtual('insert_indent')
         
         
     def insert(self, text, start=None, to=None, f_name=None):
@@ -141,7 +141,7 @@ class AppState(Object):
 
         .. [self.cur_pos] AppState
         .. [self.curr_buffer] AppState"""
-        debug.not_implemented()
+        debug.virtual('insert')
 
     def indent(self, start, end, f_name=None):
         """Indent code in a source buffer region.
@@ -152,7 +152,7 @@ class AppState(Object):
         If *f_name* is *None*, use source buffer [self.curr_buffer].
         
         .. [self.curr_buffer] AppState"""
-        debug.not_implemented(indent)
+        debug.virtual('indent')
 
 
     def delete(self, start=None, end=None, f_name=None):
@@ -170,7 +170,7 @@ class AppState(Object):
         .. [self.cur_pos] AppState        
         .. [self.curr_buffer] AppState"""
         
-        debug.not_implemented()
+        debug.virtual('delete')
         
     def goto(self, pos, f_name=None):
 
@@ -181,7 +181,20 @@ class AppState(Object):
 
         .. [self.curr_buffer] AppState"""
         
-        debug.not_implemented()
+        debug.virtual('goto')
+
+
+
+    def select(self, start, end, f_name=None):
+        """Selects from position *INT start* up to *INT end* of source buffer
+        associated to file with name *STR f_name*.
+
+        If *f_name* is *None*, use [self.curr_buffer].
+
+        .. [self.curr_buffer] AppState"""
+                
+        debug.virtual('select')
+
 
     def search_for(self, regexp, direction=1, num=1, where=1, f_name=None):
         
@@ -202,7 +215,7 @@ class AppState(Object):
            Returns 1 if and only if an occurence was found, and 0 otherwise.                          
         .. [self.curr_buffer] file:///AppState.AppState.html"""
         
-        debug.not_implemented()
+        debug.virtual('search_for')
 
 
     def drop_breadcrumb(self, buffname=None, pos=None):
@@ -248,7 +261,7 @@ class AppState(Object):
 
         Open file with name *STR name*.        
         """
-        debug.not_implemented('AppState.open_file')
+        debug.virtual('AppState.open_file')
 
 
 

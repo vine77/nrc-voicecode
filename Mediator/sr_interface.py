@@ -182,7 +182,7 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotResults(self, words, startPos, endPos):
         print 'Heard Select command: <%s>, startPos=%s, endPos=%s' % (string.join(words), startPos, endPos)
-        self.app.select_region(startPos, endPos)
+        self.app.select(startPos, endPos)
         self.app.print_buff_content()
 
     def gotResultsObject(self,recogType,resObj):
