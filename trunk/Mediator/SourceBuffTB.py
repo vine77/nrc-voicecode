@@ -54,7 +54,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
                             attrs
                             )
     def file_name(self):
-        return self.fname
+        return self.buff_id
 
     def language_name(self):
         """Returns the name of the language a file is written in

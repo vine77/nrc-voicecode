@@ -122,9 +122,9 @@ class AS_ServiceBreadcrumbs(AS_Service):
         If *buff* not specified either, drop breadcrumb in current buffer
 	"""
         buff = self.app.find_buff(buffname)
-        buffname = buff.file_name()
+        file_name = buff.file_name()
         if not pos: pos = buff.cur_pos()
-        self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
+        self.breadcrumbs = self.breadcrumbs + [[file_name, pos]]
 
 
     def pop_breadcrumbs(self, num=1, gothere=1):

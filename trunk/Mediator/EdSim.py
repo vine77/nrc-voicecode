@@ -54,11 +54,11 @@ class EdSim(AppStateNonCached.AppStateNonCached):
                             {'only_buffer': None,
                              'only_buffer_name': ""},
                             attrs)
-	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, fname = "",
+	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id = "",
 	    language =None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
 
-    def new_compatible_sb(self, fname):
+    def new_compatible_sb(self, buff_id):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -69,7 +69,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         
         **INPUTS**
                 
-        STR *fname* -- Name of the source buffer.
+        STR *buff_id* -- ID of the source buffer.
         
         **OUTPUTS**
         
@@ -77,7 +77,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffEdSim.SourceBuffEdSim(app=self, fname=fname)
+        return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_id=buff_id)
 
         
     def recog_begin(self, window_id):
@@ -201,7 +201,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    del self.open_buffers[self.curr_buffer_name()]
 
 
-        self.only_buffer =  SourceBuffEdSim.SourceBuffEdSim(app = self, fname=name, language=lang, 
+        self.only_buffer =  SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id=name, language=lang, 
 	    initial_contents = source)
 	self.only_buffer_name = name
 

@@ -54,6 +54,23 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
                             attrs
                             )
 
+    def file_name_from_app(self):
+        """Gets from the external editor, the name of the file being
+        displayed in this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        STR *name* -- 
+        """
+        self.app.talk_msgr.send_mess('file_name', {'buff_id': self.buff_id})
+        response = self.app.talk_msgr.get_mess(expect=['file_name_resp'])
+        return response[1]['value']
+        
 
     def _language_name_from_app(self):
         """Returns the name of the language a file is written in

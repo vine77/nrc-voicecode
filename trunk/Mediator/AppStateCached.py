@@ -89,7 +89,7 @@ class AppStateCached(AppState.AppState):
                             args_super, 
                             {})
 
-    def new_compatible_sb(self, fname):
+    def new_compatible_sb(self, buff_id):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -100,7 +100,7 @@ class AppStateCached(AppState.AppState):
         
         **INPUTS**
                 
-        STR *fname* -- Name of the source buffer.
+        STR *buff_id* -- ID of the source buffer.
         
         **OUTPUTS**
         
@@ -108,7 +108,7 @@ class AppStateCached(AppState.AppState):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffCached.SourceBuffCached(app=self, fname=fname)
+        return SourceBuffCached.SourceBuffCached(app=self, buff_id=buff_id)
 
 
     def init_cache(self):

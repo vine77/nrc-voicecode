@@ -67,17 +67,14 @@ class SB_Service(Object.Object):
     
     *none* -- 
 
-
     ..[SourceBuff] file:///./SourceBuff.SourceBuff.html
     ..[sb_services] file:///./sb_services.sb_services.html"""
     
-    def __init__(self, buff=None, **args_super):        
+    def __init__(self, buff=None, **args_super):
         self.deep_construct(SB_Service, 
                             {'buff': buff}, 
                             args_super, 
                             {})
-
-
 
 class SB_ServiceLang(SB_Service):
 
@@ -99,7 +96,6 @@ class SB_ServiceLang(SB_Service):
     
     def __init__(self, language_names=None, **args_super):
         self.init_attrs({'file_language': {'c': 'C', 'h': 'C', 'C': 'C', 'cpp': 'C', 'cc' : 'C', 'py': 'python'}})
-                        
         self.deep_construct(SB_ServiceLang, 
                             {'language_names': language_names}, 
                             args_super, 

@@ -130,9 +130,9 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
                             args_super, 
                             {})
 
-    def new_compatible_sb(self, fname):
-#        print '-- AS_MessExtEdSim.new_compatible_sb: fname=%s' % fname
-        buff = SB_MessExtEdSim(app=self, fname=fname)
+    def new_compatible_sb(self, buff_id):
+#        print '-- AS_MessExtEdSim.new_compatible_sb: buff_id=%s' % buff_id
+        buff = SB_MessExtEdSim(app=self, buff_id=buff_id)
         return buff
         
 
@@ -591,9 +591,12 @@ class ServerSingleThread(Object.Object):
             print '-- ServerSingleThread.package_sock_pair: running regression test suite %s' % self.test_suite
             args = [self.test_suite]
             auto_test.run(args)
+
+	    # notify external editor that we are quitting
+	    an_app_state.talk_msgr.send_mess("terminating")
+
             # Send a quit event to quit the server
             win32event.SetEvent(self.evt_quit)            
-
 
         #
         # Copy the mediator to the list of active mediators.

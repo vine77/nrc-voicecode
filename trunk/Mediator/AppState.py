@@ -1044,7 +1044,7 @@ class AppState(Object):
         return buff
             
 
-    def new_compatible_sb(self, fname):
+    def new_compatible_sb(self, buff_id):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -1055,7 +1055,7 @@ class AppState(Object):
         
         **INPUTS**
                 
-        STR *fname* -- Name of the source buffer.
+        STR *buff_id* -- ID for the source buffer.
         
         **OUTPUTS**
         
@@ -1063,26 +1063,26 @@ class AppState(Object):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuff.SourceBuff(self, fname=fname)
+        return SourceBuff.SourceBuff(self, buff_id=buff_id)
 
 
-    def new_source_buffer(self, fname):
+    def new_source_buffer(self, buff_id):
         
         """Creates a new [SourceBuff] instances and adds it to the
         list of open buffers.
         
         **INPUTS**
         
-        STR *fname* -- Name of the new buffer
+        STR *buff_id* -- ID of the new buffer
         
 
         **OUTPUTS**
         
         """
 
-#        print '-- AppState.new_source_buffer: fname=%s' % fname
-        new_buff = self.new_compatible_sb(fname=fname)
-        self.open_buffers[fname] = new_buff
+#        print '-- AppState.new_source_buffer: buff_id=%s' % buff_id
+        new_buff = self.new_compatible_sb(buff_id=buff_id)
+        self.open_buffers[buff_id] = new_buff
         return new_buff
 
     def open_file(self, name, lang = None):
