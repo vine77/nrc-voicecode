@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:04:31 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:31:51 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -94,9 +94,7 @@
 <P>Add a word to NatSpeak's vocabulary.</P>
 
 <P>
-We only add the word if it doesn't already exist in the vocabulary
-and if speech is enabled (i.e. environment variable
-$VCODE_NOSPEECH undefined).</P>
+We only add the word if it doesn't already exist in the vocabulary.</P>
 <P>
 We add the word with flag of 0x40000000 which means 'added by
 Vocabulary  Builder'. This has the effect of decreasing the 
@@ -114,9 +112,6 @@ was added by VoiceCode</P>
 <H2 ID="deleteWord" CLASS="Function">deleteWord(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</H2>
 <P>Delete a word from NatSpeak's vocabulary.</P>
 
-<P>
-We only delete it if speech is enabled (i.e. environment variable
-$VCODE_NOSPEECH undefined).</P>
 <P>
 Also, we only remove it if the word was added to the vocabulary by
 VoiceCode, i.e. if the word info has <CODE>added by Vocabulary Builder</CODE>

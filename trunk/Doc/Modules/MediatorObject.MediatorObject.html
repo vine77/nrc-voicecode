@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:39:22 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:30:43 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,10 +26,10 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app=None</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">owns_app=1</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">owner=None</SPAN>, <SPAN CLASS="Argument">id=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)<SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_lsa</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)<SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='H:\\Projects\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN>)<SPAN CLASS="OneLiner"> # Configures a mediator object based on a configuration file.</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='H:\\Projects\\VoiceCode\\VCode\\Config\\new_vc_config.py'</SPAN>)<SPAN CLASS="OneLiner"> # Configures a mediator object based on a configuration file.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.define_config_functions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.define_config_functions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">exclude=[]</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)<SPAN CLASS="OneLiner"> # Quit the mediator object</SPAN>
@@ -40,6 +40,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.possibly_init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.possibly_init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)
 
 </PRE><H2>Description</H2><P>
 Typically, there will be one such object for every application
@@ -133,19 +134,11 @@ CLASS ATTRIBUTES**</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="MediatorObject.MediatorObject.add_csc" CLASS="Method">MediatorObject.MediatorObject.add_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</H2>
+<H2 ID="MediatorObject.MediatorObject.add_csc" CLASS="Method">MediatorObject.MediatorObject.add_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)</H2>
 <P>Add a new Context Sensitive Command.</P>
 
 <P>
 <A HREF="CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to add.</P>
-
-<DL>
-
-<DT>
-<EM>BOOL add_voc_entry = 1</EM>
-<DD>if true, add a SR vocabulary entry
-for the CSC's spoken forms
-</DL>
 <H2 ID="MediatorObject.MediatorObject.add_lsa" CLASS="Method">MediatorObject.MediatorObject.add_lsa(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)</H2>
 <P>Add a language specific word.</P>
 
@@ -214,7 +207,7 @@ without first sending an editor_disconnecting message
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="MediatorObject.MediatorObject.configure" CLASS="Method">MediatorObject.MediatorObject.configure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='H:\\Projects\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN>)</H2>
+<H2 ID="MediatorObject.MediatorObject.configure" CLASS="Method">MediatorObject.MediatorObject.configure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='H:\\Projects\\VoiceCode\\VCode\\Config\\new_vc_config.py'</SPAN>)</H2>
 <P>Configures a mediator object based on a configuration file.</P>
 
 <P>
@@ -406,6 +399,31 @@ classes will be called automatically.
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
  raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.possibly_init_attrs" CLASS="Method">Object.Object.possibly_init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Initialises existing attributes, unless those attributes
+already exist</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:44:57 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:36:16 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,6 +32,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.possibly_init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.possibly_init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)
 
 </PRE><H2>Description</H2><P>
 factory which produces new instances of concrete subclasses of 
@@ -202,6 +203,31 @@ classes will be called automatically.
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
  raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.possibly_init_attrs" CLASS="Method">Object.Object.possibly_init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Initialises existing attributes, unless those attributes
+already exist</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

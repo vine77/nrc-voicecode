@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:57:22 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:36:11 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ExtLoopWin32NewMediator</SPAN>(<A CLASS="DocLink" HREF="tcp_server.ExtLoopWin32.html">ExtLoopWin32</A>):
-    <A CLASS="DocLink" HREF="#new_server.ExtLoopWin32NewMediator.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">new_server.ExtLoopWin32NewMediator.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#new_server.ExtLoopWin32NewMediator.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">new_server.ExtLoopWin32NewMediator.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_sr_recog=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">new_server.ExtLoopWin32NewMediator.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#new_server.ExtLoopWin32NewMediator.server"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">new_server.ExtLoopWin32NewMediator.server</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the server</SPAN>
 
@@ -68,7 +68,7 @@ STR <EM>test_suite=None</EM>
 <DD>name of regression test suite to run
 
 </DL>
-<H2 ID="new_server.ExtLoopWin32NewMediator.__init__" CLASS="Method">new_server.ExtLoopWin32NewMediator.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)</H2>
+<H2 ID="new_server.ExtLoopWin32NewMediator.__init__" CLASS="Method">new_server.ExtLoopWin32NewMediator.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_sr_recog=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -84,7 +84,7 @@ STR <EM>test_suite=None</EM>
 <DD>prefix for filename for output of profiler,
 or None if not profiling (ignored if test_suite is None) 
 <DT>
-<EM>BOOL bypass_for_dictation</EM>
+<EM>BOOL bypass_sr_recog</EM>
 <DD>when testing, bypass natlink for 
 dictation utterances (ignored if test_suite is None) 
 

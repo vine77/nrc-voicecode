@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 10 13:25:00 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:36:05 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,9 +32,9 @@
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">saveUser</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Saves the current user</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#send_keys"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">send_keys</SPAN></A>(<SPAN CLASS="Argument">s</SPAN>, <SPAN CLASS="Argument">system=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # simulates keystroke input</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#set_mic"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">set_mic</SPAN></A>(<SPAN CLASS="Argument">mic_state</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # turns microphone on or off (connecting first, if necessary).</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">speech_able</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#spoken_written_form"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">spoken_written_form</SPAN></A>(<SPAN CLASS="Argument">vocabulary_entry</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>, <SPAN CLASS="Argument">clean_spoken=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns the written and spoken forms of a NatSpeak vocabulary entry</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#vocabulary_entry"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">vocabulary_entry</SPAN></A>(<SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">written_form</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a vocabulary entry with given spoken and written forms.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#vocabulary_entry"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">vocabulary_entry</SPAN></A>(<SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">written_form=None</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a vocabulary entry with given spoken and written forms.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#word_exists"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">word_exists</SPAN></A>(<SPAN CLASS="Argument">word</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # check if a word exists</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">AltCode</SPAN> = <SPAN CLASS="VariableValue">2</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">GrammarError</SPAN> = <SPAN CLASS="VariableValue">'GrammarError'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">LexicalError</SPAN> = <SPAN CLASS="VariableValue">'LexicalError'</SPAN></SPAN>
@@ -117,9 +117,7 @@ Interface to the Speech Recognition engine.
 <P>Add a word to NatSpeak's vocabulary.</P>
 
 <P>
-We only add the word if it doesn't already exist in the vocabulary
-and if speech is enabled (i.e. environment variable
-$VCODE_NOSPEECH undefined).
+We only add the word if it doesn't already exist in the vocabulary.
 </P>
 <H2 ID="addedByVC" CLASS="Function">addedByVC(<SPAN CLASS="Argument">flag</SPAN>)</H2>
 <P></P>
@@ -208,9 +206,6 @@ after connection. If <EM>None</EM>, then leave mic alone.
 <H2 ID="deleteWord" CLASS="Function">deleteWord(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</H2>
 <P>Delete a word from NatSpeak's vocabulary.</P>
 
-<P>
-We only delete it if speech is enabled (i.e. environment variable
-$VCODE_NOSPEECH undefined).</P>
 <P>
 Also, we only remove it if the word was added to the vocabulary by
 VoiceCode, i.e. if the word info has <CODE>added by Vocabulary Builder</CODE>
@@ -340,7 +335,7 @@ written or written\spoken form.
 <DD>written and spoken forms of the vocabulary entry.
 
 </DL>
-<H2 ID="vocabulary_entry" CLASS="Function">vocabulary_entry(<SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">written_form</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>)</H2>
+<H2 ID="vocabulary_entry" CLASS="Function">vocabulary_entry(<SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">written_form=None</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>)</H2>
 <P>Creates a vocabulary entry with given spoken and written forms.</P>
 
 <P>
@@ -368,6 +363,19 @@ written or written\spoken form.
 <DT>
 <EM>entry</EM>
 <DD>the entry to be added to the SR vocabulary
+
+</DL>
+<H2 ID="word_exists" CLASS="Function">word_exists(<SPAN CLASS="Argument">word</SPAN>)</H2>
+<P>check if a word exists</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> word
+<DD>the word
 
 </DL>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Dec 29 21:36:57 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:31:21 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -70,7 +70,6 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.make_position_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.make_position_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.make_valid_range"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.make_valid_range</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)<SPAN CLASS="OneLiner"> # Makes sure a region is increasing and within the buffer's range.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.make_within_range"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.make_within_range</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position</SPAN>)<SPAN CLASS="OneLiner"> # Makes sure a position is within the buffer's range.</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_cursor_by_kbd</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">num_steps</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">rel_movement</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to plus or minus a certain number of characters</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>)<SPAN CLASS="OneLiner"> # Moves up or down a certain number of lines</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.move_relative_page"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.move_relative_page</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>)<SPAN CLASS="OneLiner"> # Moves up or down a certain number of pages</SPAN>
@@ -91,11 +90,9 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.same_as_previous_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.same_as_previous_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">unlogged=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection_by_kbd</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.store_current_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.store_current_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.to_sync"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.to_sync</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">item</SPAN>, <SPAN CLASS="Argument">what</SPAN>, <SPAN CLASS="Argument">exclude</SPAN>)<SPAN CLASS="OneLiner"> # Determines if an item is to be synchronised</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.type_text</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.uses_server_side_indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.uses_server_side_indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.valid_cookie"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.valid_cookie</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
 
@@ -286,7 +283,7 @@ search<STRONG>INPUTS</STRONG>
 <DT>
 <EM>STR</EM> char_exp
 <DD>a regular expression assumed to match one
-character (e.g. "a", ".", "\s", "\S", "[A-Za-z]"
+character (e.g. "a", ".", "\s", "\S", "[A-Za-z]")
 <DT>
 <EM>INT</EM> direction
 <DD>if positive, search forward, otherwise
