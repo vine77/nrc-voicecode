@@ -70,7 +70,7 @@ class LeakyStack(Object):
         *ANY* -- the dropped item, or None if none was dropped
         """
         self.stack.append(item)
-        if self.max_height is not None and len(self.stack) > self.max_height:
+        if not (self.max_height is None) and len(self.stack) > self.max_height:
             dropping = self.stack[0]
             del self.stack[0]
             self.dropped = self.dropped + 1
@@ -287,7 +287,7 @@ class KeyedLeakyStack(Object):
         self.stack.push(item)
         key_dropping = self.key_stack.push(key)
         self.key_index[key] = self.stack.height() - 1
-        if key_dropping is not None:
+        if not (key_dropping is None):
             del self.key_index[key_dropping]
         return key
 

@@ -24,6 +24,7 @@ import re, string, sys
 
 from Object import Object
 import SourceBuff
+import AppTracker
 import debug, find_difference, sb_services, SourceBuffNonCached, util
 from debug import trace
 
@@ -298,6 +299,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
         self.content = before + text + after
         self.goto(start + len(text))
         self.on_change(start, end, text, 1)
+        return AppTracker.TextBlock(text, start)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -320,9 +322,7 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
 
         *none*
         """
-        
-
-        self.indent_srv.insert_indent(code_bef, code_after, range)
+        return self.indent_srv.insert_indent(code_bef, code_after, range)
         
         
     def uses_server_side_indent(self):

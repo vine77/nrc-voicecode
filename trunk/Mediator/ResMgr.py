@@ -25,6 +25,7 @@
 from Object import Object, OwnerObject
 import debug
 import re
+import string
 import threading
 
 import CmdInterp, AppState
@@ -331,7 +332,8 @@ class ResMgrStd(ResMgr):
 
         **OUTPUTS**
 
-        *none*
+        *InterpretedPhrase* -- the object returned by
+        CmdInterp.interpret_cmd_tuples
         """
         debug.trace('ResMgrStd._std_interp', 'standard interpretation')
         if before:
@@ -339,12 +341,13 @@ class ResMgrStd(ResMgr):
             before(app, initial_buffer = initial_buffer)
         interp = self.interpreter()
         words = result.words()
-        interp.interpret_cmd_tuples(words, app, 
+        interpreted = interp.interpret_cmd_tuples(words, app, 
             initial_buffer = initial_buffer)
         if after:
             debug.trace('ResMgrStd._std_interp', 'about to call after')
             after(app, initial_buffer = initial_buffer)
         app.print_buff_if_necessary(buff_name = initial_buffer)
+        return interpreted
 
     def interpret_dictation(self, result, initial_buffer = None,
         utterance_number = None):
@@ -1959,6 +1962,11 @@ class ResMgrBasic(ResMgrStd):
     most recent last (technically a queue, since it has finite size and
     the oldest utterances can be dropped on push to maintain this limit)
 
+    *[InterpretedPhrase] interpreted* -- stack of recent interpreation
+    results, sorted with most recent last (technically a queue, since it 
+    has finite size and the oldest result can be dropped on push to 
+    maintain this limit)
+
     *[STR] initial_buffers* -- stack of names of initial buffers 
     corresponding to the utterances (technically a queue, since it has 
     finite size and the oldest utterances can be dropped on push to 
@@ -1986,6 +1994,7 @@ class ResMgrBasic(ResMgrStd):
                              'correct_evt': correct_evt,
                              'correct_recent_evt': correct_recent_evt,
                              'utterances': [],
+                             'interpreted': [],
                              'numbers': [],
                              'next_number': 0,
                              'initial_buffers': [],
@@ -2000,7 +2009,7 @@ class ResMgrBasic(ResMgrStd):
         self.correct_evt = None
         self.correct_recent_evt = None
         
-    def store(self, result, initial_buffer, number):
+    def store(self, result, interpreted, initial_buffer, number):
         """store the result, along with the editor state before and 
         after interpretation
 
@@ -2008,6 +2017,9 @@ class ResMgrBasic(ResMgrStd):
 
         *SpokenUtterance result* -- a SpokenUtterance object
         representing the recognition results
+
+        *InterpretedPhrase interpreted* -- an object representing the
+        results of interpretation
 
         *INT number* -- number assigned to the utterance by
         interpret_dictation
@@ -2021,9 +2033,11 @@ class ResMgrBasic(ResMgrStd):
         if len(self.utterances) >= self.max_utterances:
             debug.trace('ResMgrBasic.store', 'removing the oldest')
             del self.utterances[0]
+            del self.interpreted[0]
             del self.initial_buffers[0]
             del self.numbers[0]
         self.utterances.append(result)
+        self.interpreted.append(interpreted)
         self.initial_buffers.append(initial_buffer)
         self.numbers.append(number)
 
@@ -2055,19 +2069,18 @@ class ResMgrBasic(ResMgrStd):
                  'called from thread %s' %
                  threading.currentThread().getName())
         app = self.editor()
-        ResMgrStd._std_interp(self, result, 
-            app, 
+        interpreted = ResMgrStd._std_interp(self, result, app, 
             initial_buffer = initial_buffer, 
             before = self.states.before_interp,
             after = self.states.after_interp)
         debug.trace('ResMgrBasic.interpret_dictation', 
             'storing result and states')
         if utterance_number is None:
-            self.store(result, initial_buffer = initial_buffer, 
+            self.store(result, interpreted, initial_buffer = initial_buffer, 
                 number = self.next_number)
             self.next_number = self.next_number + 1
         else:
-            self.store(result, initial_buffer = initial_buffer, 
+            self.store(result, interpreted, initial_buffer = initial_buffer, 
                 number = utterance_number)
         debug.trace('ResMgrBasic.interpret_dictation', 
             'returning')
@@ -2204,12 +2217,36 @@ class ResMgrBasic(ResMgrStd):
         app = self.editor()
         success = self.states.pop(app, m)
         if success:
+            self.remove_symbols(m)
             del self.utterances[-m:]
+            del self.interpreted[-m:]
             del self.initial_buffers[-m:]
             del self.numbers[-m:]
             return m
         return 0
     
+    def remove_symbols(self, n = 1):
+        """remove any tentative symbols added in the last n utterances
+
+        **INPUTS**
+
+        *INT n* -- number of utterances being undone
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('ResMgrBasic.remove_symbols', 
+            'removing symbols from the last %d utterances' % n)
+        interpreter = self.interpreter()
+        for i in range(1, n+1):
+            interpreted = self.interpreted[-i]
+            for symbol in interpreted.symbols():
+                native = symbol.native_symbol()
+                debug.trace('ResMgrBasic.remove_symbols', 
+                    'removing symbol %s' % native)
+                interpreter.remove_tentative_symbol(native)
+
     def reinterpret_recent(self, changed):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
@@ -2238,7 +2275,7 @@ class ResMgrBasic(ResMgrStd):
         i_possible = []
         for j in changed:
             i = self.find_utterance(j)
-            if i is not None:
+            if not (i is None):
                 possible.append(j)
                 i_possible.append(i)
         n = max(i_possible)
@@ -2254,16 +2291,47 @@ class ResMgrBasic(ResMgrStd):
         m = min(m, n)
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'so popping %d' % m)
+# for any utterances which were changed but can't be reinterpreted, we
+# should still remove symbols which no longer appear in them (just like
+# we adapt the speech engine based on those corrections)
+        interpreter = self.interpreter()
+        for i in range(m+1, n+1):
+            if i in i_possible:
+                symbols = self.interpreted[-i].symbols()
+                utterance = self.utterances[-i]
+                new_spoken_forms = utterance.spoken_forms()
+                spoken = string.join(new_spoken_forms)
+                for symbol in symbols:
+                    spoken_symbol = string.join(symbol.spoken_phrase())
+                    native = symbol.native_symbol()
+                    if spoken.find(spoken_symbol) == -1:
+                        interpreter.remove_tentative_symbol(native)
 # with ResMgrBasic, we must undo all utterances back to the first one to
 # be reinterpreted
         if not self.states.pop(app, m):
+# for any utterances which were changed but can't be reinterpreted, we
+# should still remove symbols which no longer appear in them (just like
+# we adapt the speech engine based on those corrections)
+            for i in range(1, m+1):
+                if i in i_possible:
+                    symbols = self.interpreted[-i].symbols()
+                    utterance = self.utterances[-i]
+                    new_spoken_forms = utterance.spoken_forms()
+                    spoken = string.join(new_spoken_forms)
+                    for symbol in symbols:
+                        spoken_symbol = string.join(symbol.spoken_phrase())
+                        native = symbol.native_symbol()
+                        if spoken.find(spoken_symbol) == -1:
+                            interpreter.remove_tentative_symbol(native)
             return None
 # and then reinterpret all those utterances.
 # First, pop information about those utterances off the top of the stack
+        self.remove_symbols(m)
         to_do = self.utterances[-m:]
         buffers = self.initial_buffers[-m:]
         numbers = self.numbers[-m:]
         del self.utterances[-m:]
+        del self.interpreted[-m:]
         del self.initial_buffers[-m:]
         del self.numbers[-m:]
         debug.trace('ResMgrBasic.reinterpret_recent', 
@@ -2277,7 +2345,7 @@ class ResMgrBasic(ResMgrStd):
             self.interpret_dictation(utterance,
                 initial_buffer = buffers[i], 
                 utterance_number = numbers[i])
-# this will place the information back on the stack
+# interpret_dictation will place the information back on the stack
         return range(m, 0, -1)
 
     def can_reinterpret(self, n):
@@ -2359,10 +2427,25 @@ class ResMgrBasic(ResMgrStd):
             return
         number = self.numbers[-n]
         utterance = self.utterances[-n]
+        symbols = self.interpreted[-n].symbols()
         can_reinterpret = self.can_reinterpret(n)
+        interpreter = self.interpreter()
         if console.correct_utterance(self.name, utterance, 
             can_reinterpret, should_adapt = 1):
-            self.reinterpret_recent(changed = [number])
+            reinterpreted = self.reinterpret_recent(changed = [number])
+# if we could not reinterpret the utterance, we should still remove any
+# tentative symbols no longer present in the phrase
+            if not (n in reinterpreted):
+                new_spoken_forms = self.utterances[-n].spoken_forms()
+                spoken = string.join(new_spoken_forms)
+                for symbol in symbols:
+                    spoken_symbol = string.join(symbol.spoken_phrase())
+                    native = symbol.native_symbol()
+                    if spoken.find(spoken_symbol) == -1:
+                        interpreter.remove_tentative_symbol(native)
+
+            
+            
 #            nn = self.find_utterance(number)
 #            if nn is not None:
 #                self.reinterpret_recent(changed = [nn])
@@ -2419,6 +2502,7 @@ class ResMgrBasic(ResMgrStd):
         """
         console = self.console()
         utterances = self.recent_dictation()
+        interpreted = self.interpreted[:]
         if utterances:
             i_changed = console.correct_recent(self.name, utterances)
             print "phrases changed were: ", i_changed
@@ -2427,7 +2511,19 @@ class ResMgrBasic(ResMgrStd):
                 for i in i_changed:
                     changed.append(utterances[-i][1])
                 print "corresponding utterance numbers were: ", changed
-                self.reinterpret_recent(changed)
+                reinterpreted = self.reinterpret_recent(changed)
+                interpreter = self.interpreter()
+                for n in i_changed:
+                    if not (n in reinterpreted):
+                        symbols = interpreted[-n].symbols()
+                        phrase = interpreted[-n].phrase()
+                        spoken = string.join(phrase)
+                        for symbol in symbols:
+                            spoken_symbol = string.join(symbol.spoken_phrase())
+                            native = symbol.native_symbol()
+                            if spoken.find(spoken_symbol) == -1:
+                                interpreter.remove_tentative_symbol(native)
+
     
     def correct_last(self):
         """initiate user correction of the most recent dictation utterance 

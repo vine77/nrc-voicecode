@@ -650,7 +650,7 @@ class SourceBuffWithDiffs(SourceBuffCached):
         """
         if not self.valid_cookie(cookie):
             return 0
-        if self.accumulated is not None:
+        if not (self.accumulated is None):
             debug.trace('SourceBuffWithDiffs.restore_state',
                 'already inside a restore_state call')
             return 0

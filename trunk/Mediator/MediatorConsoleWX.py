@@ -711,7 +711,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         return self.text.GetSelection()
 
     def on_select_text(self, range):
-        if range is not None:
+        if not (range is None):
             self.text.SetSelection(range[0], range[1])
 
     def on_char_text(self, event):

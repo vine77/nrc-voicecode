@@ -88,7 +88,7 @@ class Action(Object.Object):
         debug.trace('Action.log_execute', 'invoking action log()')        
         action_copy.log(app, cont_copy)
         debug.trace('Action.log_execute', 'invoking action execute()')                
-        action_copy.execute(app, cont, state = state)
+        return action_copy.execute(app, cont, state = state)
 
 
     def log(self, app, cont):
@@ -124,7 +124,7 @@ class Action(Object.Object):
                 
         **OUTPUTS**
         
-        *none* -- 
+        depends on the specific action 
 
         .. [AppState] file:///./AppState.AppState.html"""
         
@@ -501,14 +501,14 @@ class ActionInsert(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
         debug.trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
-        app.insert_indent(self.code_bef, self.code_after)
+        inserted = app.insert_indent(self.code_bef, self.code_after)
         if state:
             styling_state = state.styling_state()
             if self.prefer:
                 styling_state.prefer(self.prefer)
             elif self.expect:
                 styling_state.expect(self.expect)
-
+        return inserted
 
     def doc(self):
         """
@@ -906,9 +906,18 @@ class ActionInsertNewClause(Action):
         .. [Action.execute] file:///./Action.Action.html#execute"""
                         
         
+        debug.trace('ActionInsertNewClause.execute',
+            'where = %d, direction = %d, expression = %s' % \
+            (self.where, self.direction,
+            repr(self.end_of_clause_regexp)))
+        debug.trace('ActionInsertNewClause.execute',
+            'before search, pos = %d' % app.cur_pos())
+
         app.search_for(regexp=self.end_of_clause_regexp, 
                        where = self.where, direction = self.direction,
                        unlogged=1)
+        debug.trace('ActionInsertNewClause.execute',
+            'after search, pos = %d' % app.cur_pos())
                        
         
         blank_lines = ""
@@ -922,6 +931,9 @@ class ActionInsertNewClause(Action):
            code_bef = ""
            code_after = blank_lines
                        
+        debug.trace('ActionInsertNewClause.execute',
+            'about to insert %s, %s' % (repr(code_bef),
+            repr(code_after)))
         app.insert_indent(code_bef=code_bef, code_after=code_after)
             
         #
@@ -931,10 +943,17 @@ class ActionInsertNewClause(Action):
         # told more explicitely. 
         #
         if self.back_indent_by > 0 and app.curr_buffer().uses_server_side_indent():
+            debug.trace('ActionInsertNewClause.execute',
+                'about decrease indent by %d' % self.back_indent_by)
             app.decr_indent_level(levels=self.back_indent_by)
 
             
+        debug.trace('ActionInsertNewClause.execute',
+            'about to insert %s, %s' % (repr(self.code_bef),
+            repr(self.code_after)))
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
+        debug.trace('ActionInsertNewClause.execute',
+            'returning')
 
 
 class ActionCompileSymbols(Action):

@@ -641,7 +641,7 @@ class NewMediatorObject(Object.OwnerObject):
 #            raise err
         user_file = user_config_file
         debug.trace('NewMediatorObject._configure_from_file', 'initially, user_file="%s", test_next=%s, vc_globals.regression_user_config_file="%s", vc_globals.default_user_config_file="%s"' % 
-                    (user_file, self.test_suite is not None, vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
+                    (user_file, not (self.test_suite is None), vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
         if not user_file:
             if testing or self.test_suite:
                 user_file = vc_globals.regression_user_config_file
