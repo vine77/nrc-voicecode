@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:10:44 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:35:14 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -49,6 +49,8 @@
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # constructor</SPAN>
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.buffer_closed"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.buffer_closed</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgr.correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # initiate user correction of the most recent utterance, if possible</SPAN>
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgr.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.deactivate_all"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.deactivate_all</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.interpret_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.interpret_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">result</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
@@ -58,6 +60,7 @@
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # add a new window</SPAN>
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgr.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.GramMgr.using_global"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgr.using_global</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
@@ -467,6 +470,33 @@ has been closed.</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="GramMgr.GramMgr.correct_last" CLASS="Method">GramMgr.GramMgr.correct_last(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>initiate user correction of the most recent utterance, if possible</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GramMgr.GramMgr.correct_recent" CLASS="Method">GramMgr.GramMgr.correct_recent(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of one or more recent utterances,
+if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="GramMgr.GramMgr.deactivate_all" CLASS="Method">GramMgr.GramMgr.deactivate_all(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)</H2>
 <P>None</P>
 
@@ -654,6 +684,31 @@ has renamed a buffer</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="GramMgr.GramMgr.scratch_recent" CLASS="Method">GramMgr.GramMgr.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
+<P>None</P>
+
+<P>
+undo the effect of the n most recent utterances into 
+this application, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT n</EM>
+<DD>number of utterances to undo
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances successfully undone
+
+</DL>
 <H2 ID="GramMgr.GramMgr.using_global" CLASS="Method">GramMgr.GramMgr.using_global(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 

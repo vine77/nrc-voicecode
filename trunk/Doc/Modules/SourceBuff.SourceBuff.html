@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:11:16 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:36:05 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -288,7 +288,11 @@ compares the buffer states at the times when
 two cookies were returned by store_current_state.  By default,
 only the buffer contents are compared, not the selection, unless
 selection == 1.  If the state corresponding to either cookie has
-been lost, compare_states will return false.<STRONG>INPUTS</STRONG>
+been lost, compare_states will return false.This method does not synchronize with the editor prior to
+comparing with "current".  To ensure that the "current" state 
+is really current, the caller must synchronize.
+(This avoids having duplicate synchronize calls 
+when comparing with the current state of more than one buffer).<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
@@ -1162,7 +1166,10 @@ cookies can not be pickled and retrieved.The type of cookie will vary with the c
 of SourceBuff.  The corresponding class object is 
 returned by _state_cookie_class.  However, external callers
 should not depend on the type, attributes, or methods 
-of the cookie.<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
+of the cookie.This method does not synchronize with the editor prior to
+storing the state.  The caller is responsible for synchronizing 
+if desired.  (This avoids having duplicate synchronize calls 
+when storing the current state of more than one buffer).<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>

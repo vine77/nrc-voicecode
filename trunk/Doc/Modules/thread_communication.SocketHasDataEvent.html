@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:06:52 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:36:48 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SocketHasDataEvent</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <A CLASS="DocLink" HREF="#thread_communication.SocketHasDataEvent.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">thread_communication.SocketHasDataEvent.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#thread_communication.SocketHasDataEvent.notify"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">thread_communication.SocketHasDataEvent.notify</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # send the message, and return asynchronously</SPAN>
+    <A CLASS="DocLink" HREF="#thread_communication.SocketHasDataEvent.notify"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">thread_communication.SocketHasDataEvent.notify</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # send the message, and return synchronously</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,7 +34,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-abstract interface for sending a message from to the main thread 
+abstract interface for sending a message to the main thread 
 indicating that a particular socket has data waiting to be read.</P>
 <P>
 The concrete subclass will have a reference to the particular
@@ -58,7 +58,7 @@ events.</P>
 abstract base class so no arguments
 </P>
 <H2 ID="thread_communication.SocketHasDataEvent.notify" CLASS="Method">thread_communication.SocketHasDataEvent.notify(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>send the message, and return asynchronously</P>
+<P>send the message, and return synchronously</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
