@@ -82,25 +82,40 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     #
     
     
+# Multiple windows mode is seriously buggy, so for now, we return 0
+# here.  This doesn't prevent Emacs from opening multiple frames, but it
+# does prevent the mediator from associating new windows (after the
+# first one) with the same instance
     def _multiple_windows_from_app(self):
         return 0
     
-    def _shared_window_from_app(self):
-        return 0
+# DCF: emacs now handles this message, so we can use the default version
+# from AppStateMessaging
+#    def _shared_window_from_app(self):
+#        return 0
 
+# DCF: bit of a cheat, but since suspend_notification is true, this will
+# only be called once, when AppStateMessaging is initialized.  Emacs
+# should be active when it first connects (otherwise, how did it
+# connect), and if it isn't, a lot of other calls would 
+# hang
     def _is_active_from_app(self):
         return 1
         
     # Eventually, delete this method and make Emacs respond to the
     # "suspendable" message with 0 if 'window-system is "w32" and
     # 1 otherwise
-    def suspendable(self):
-        return 0
+# DCF: emacs now handles this message, so we can use the default version
+# from AppStateMessaging
+#    def suspendable(self):
+#        return 0
 
     # For now, assume that Emacs will not be able to notify of suspension.
     # Later on, see if there are hooks in Emacs allowing such notification.
-    def suspend_notification(self):
-        return 0
+# DCF: emacs now handles this message, so we can use the default version
+# from AppStateMessaging
+#    def suspend_notification(self):
+#        return 0
         
     def shared_window(self):
         return 0
