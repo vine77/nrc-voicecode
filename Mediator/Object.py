@@ -139,6 +139,7 @@ class Object:
 
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
+#                print '-- Object.deep_construct: creating instance of %s' % repr(a_base)
                 a_base.__init__(self)
 
         for an_attr_def in attrs_this_class.items():

@@ -83,3 +83,55 @@ class SourceBuff(Object):
         written in programming language *STR lang*.
         """
         return (self.language == lang)
+
+
+    def region_distance(self, region1_start, region1_end, region2_start, region2_end):
+        """Computes the distance between two regions of text
+        
+        **INPUTS**
+        
+        *INT* region1_start -- start position of first region
+        
+        *INT* region1_end -- end position of first region
+        
+        *INT* region2_start -- start position of 2nd region
+        
+        *INT* region2_end -- end position of 2nd region
+        
+
+        **OUTPUTS**
+        
+        *INT* distance -- distnace between the two regions of text
+        """
+
+        distance = min(abs(region1_start - region2_start), abs(region1_start - region2_end), abs(region1_end - region2_start), abs(region1_end - region2_end))
+        return distance
+
+
+
+    def distance_to_selection(self, start, *opt_end):
+        """Coputes the distance of a region to the current selection.
+        
+        **INPUTS**
+        
+        *INT* start -- start position of region
+        
+        *[INT]* *opt_end -- end position of region (optional)
+        
+
+        **OUTPUTS**
+        
+        *INT* -- the distance
+        """
+        if len(opt_end) > 0:
+            end = opt_end[0]
+        else:
+            end = start
+        if self.selection_start != None and self.selection_end != None:
+            start2 = self.selection_start
+            end2 = self.selection_end
+        else:
+            start2 = self.cur_pos
+            end2 = self.cur_pos
+        return self.region_distance(start, end, start2, end2)
+        

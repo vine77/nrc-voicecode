@@ -1,7 +1,8 @@
 from Object import Object
 from SourceBuff import SourceBuff
 from LangDef import LangDef
-import auto_test, config, vc_globals, VoiceDictation
+import auto_test, config, sr_interface, vc_globals
+#import VoiceDictation
 import os, re, string
 
 language_definitions={}
@@ -267,7 +268,7 @@ class SymDict(Object):
                     #       word)
                     #
                     if len(re.split('\s+', a_form)) > 1:
-                           VoiceDictation.addWord(a_form)        
+                           sr_interface.addWord(a_form)        
 
     def get_spoken_forms(self, symbol):
         """Returns a list of possible spoken forms for a symbol.
@@ -386,7 +387,7 @@ class SymDict(Object):
             # Check if this is an unresolved abbreviation
             # (note: flag=4 means case unsensitive)
             #
-            if VoiceDictation.getWordInfo(word, 4) == None:
+            if sr_interface.getWordInfo(word, 4) == None:
                 if self.unresolved_abbreviations.has_key(word):
                     self.unresolved_abbreviations[word][symbol] = 1
                 else:
@@ -490,7 +491,7 @@ class SymDict(Object):
               # Remove it.
               #
               print '-- SymDict.vocabulary_cleanup: removing word %s' % a_form
-              VoiceDictation.deleteWord(a_form)
+              sr_interface.deleteWord(a_form)
         self.spoken_form_info = {}
         self.symbol_info = {}
             

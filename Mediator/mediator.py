@@ -169,6 +169,7 @@ def listen():
     if not os.environ.has_key('VCODE_NOSPEECH'):
         natlink.setMicState('on')
         natlink.waitForSpeech(0)
+        natlink.setMicState('off')
 
 def unresolved_abbreviations():
     print 'List of unresolved abbreviations\n'
@@ -189,9 +190,9 @@ def quit():
     global quit_flag
     quit_flag = 1
     
-    if not config.interp.dictation_object == None and \
-       not os.environ.has_key('VCODE_NOSPEECH'):
-        config.interp.terminate()
+    if sr_interface.speech_able():
+        config.mixed_grammar.unload()
+        config.code_select_grammar.unload()
         natlink.natDisconnect()
 
 
@@ -226,8 +227,14 @@ if (__name__ == '__main__'):
         # Start in console mode with editor simulator.
         # NOTE: We only activate NatLink if -b option was not set
         #
-        if not os.environ.has_key('VCODE_NOSPEECH'):
-            config.interp.activate(0)
+        if sr_interface.speech_able:
+            natlink.natConnect()
+            natlink.setMicState('off')
+            config.mixed_grammar.load()
+            config.mixed_grammar.activate()
+            config.code_select_grammar.load( ['Select', 'Correct'] )
+            config.code_select_grammar.activate()
+        
             
         while (not quit_flag):
             sys.stdout.write('Command> ')

@@ -9,9 +9,10 @@ from CSCmd import CSCmd
 from EdSim import EdSim
 from Object import Object
 import SymDict
-import VoiceDictation
+import sr_interface
+#import VoiceDictation
 
-class CmdInterp(Object, VoiceDictation.VoiceDictation):
+class CmdInterp(Object):
     """Interprets Context Sensitive Commands spoken into a given application.
     
     **INSTANCE ATTRIBUTES**
@@ -47,59 +48,58 @@ class CmdInterp(Object, VoiceDictation.VoiceDictation):
                              'cached_regexp': '',\
                              'cached_regexp_is_dirty': 1},\
                             attrs)
-        VoiceDictation.VoiceDictation.initialize(self, 0, self.refresh_dict_buff, self.refresh_editor_buff)
 
-    def refresh_dict_buff(self, moduleInfo):
-        """Refresh the dictation object's internal buffer."""
+#      def refresh_dict_buff(self, moduleInfo):
+#          """Refresh the dictation object's internal buffer."""
 
-        print '-- CmdInterp.refresh_dict_buff: called'
-        buff = self.app.curr_buffer
-        text = buff.content
-        sel_start = buff.selection_start
-        sel_end = buff.selection_end
-        vis_start = buff.visible_start
-        vis_end = buff.visible_end
+#          print '-- CmdInterp.refresh_dict_buff: called'
+#          buff = self.app.curr_buffer
+#          text = buff.content
+#          sel_start = buff.selection_start
+#          sel_end = buff.selection_end
+#          vis_start = buff.visible_start
+#          vis_end = buff.visible_end
         
-        self.dictation_object.setLock(1)
-        self.dictation_object.setText(text,0,0x7FFFFFFF)
-#        self.dictation_object.setTextSel(sel_start,sel_end)
-#        self.dictation_object.setVisibleText(vis_start,vis_end)
+#          self.dictation_object.setLock(1)
+#          self.dictation_object.setText(text,0,0x7FFFFFFF)
+#  #        self.dictation_object.setTextSel(sel_start,sel_end)
+#  #        self.dictation_object.setVisibleText(vis_start,vis_end)
 
-        #
-        # For some reason, need to repeatadly call setLock(0) until it raises
-        # a natlink.WrongState exception. If don't do that, refresh_editor_buff
-        # doesn't get called for all but the first utterance (although
-        # refresh_dict_buff gets called everytime)
-        #
-        while (1):
-            try:
-                self.dictation_object.setLock(0)
-            except natlink.WrongState:
-                break
+#          #
+#          # For some reason, need to repeatadly call setLock(0) until it raises
+#          # a natlink.WrongState exception. If don't do that, refresh_editor_buff
+#          # doesn't get called for all but the first utterance (although
+#          # refresh_dict_buff gets called everytime)
+#          #
+#          while (1):
+#              try:
+#                  self.dictation_object.setLock(0)
+#              except natlink.WrongState:
+#                  break
 
-    def refresh_editor_buff(self,del_start,del_end,newText,sel_start,sel_end):
-        """Refresh the editor's internal buffer after a recognition
+#      def refresh_editor_buff(self,del_start,del_end,newText,sel_start,sel_end):
+#          """Refresh the editor's internal buffer after a recognition
 
-        *INT del_start, del_end* are the start and end position of text
-         that was deleted
+#          *INT del_start, del_end* are the start and end position of text
+#           that was deleted
 
-         *STR newText* is the text that was recognised by the dictation object.
+#           *STR newText* is the text that was recognised by the dictation object.
 
-         *INT sel_start, sel_end* are the start and end position of the selection after the recognition"""
+#           *INT sel_start, sel_end* are the start and end position of the selection after the recognition"""
 
-        print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
+#          print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
 
-        self.dictation_object.setLock(1)
+#          self.dictation_object.setLock(1)
         
-##        self.edit.SetSel(del_start,del_end)
-##        self.edit.SetSel(sel_start,sel_end)
+#  ##        self.edit.SetSel(del_start,del_end)
+#  ##        self.edit.SetSel(sel_start,sel_end)
 
-        #
-        # Instead of inserting the text as is, interpret it as a pseudo
-        # code command
-        #
-        self.interpret_NL_cmd(newText)
-        self.app.print_buff_content()
+#          #
+#          # Instead of inserting the text as is, interpret it as a pseudo
+#          # code command
+#          #
+#          self.interpret_NL_cmd(newText)
+#          self.app.print_buff_content()
         
 
     def all_cmds_regexp(self):
@@ -372,7 +372,8 @@ class CmdInterp(Object, VoiceDictation.VoiceDictation):
                 #
                 self.cmd_index[a_spoken_form] = [acmd]
                 if not os.environ.has_key('VCODE_NOSPEECH'):
-                    VoiceDictation.addWord(a_spoken_form)
+#                    VoiceDictation.addWord(a_spoken_form)
+                    sr_interface.addWord(a_spoken_form)
 
 def self_test():    
     #
