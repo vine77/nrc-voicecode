@@ -158,6 +158,7 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
+    
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()
