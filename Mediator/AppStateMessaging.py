@@ -51,12 +51,16 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     
     def __init__(self, listen_msgr=None, talk_msgr=None, id=None, **attrs):
-        self.init_attrs({})        
+        self.init_attrs({'multiple_buffer_support' : 0,
+	    'bidirectional_selection_support' : 0})        
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
                              'listen_msgr': listen_msgr,
                              'talk_msgr': talk_msgr},
                             attrs)
+	self.multiple_buffer_support =  self._multiple_buffers_from_app()
+	self.bidirectional_selection_support = \
+	    self._bidirectional_selection_from_app()
         self.init_cache()
 
 
@@ -281,7 +285,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
             the_update.apply(self)
 
 
-    def _app_active_buffer_name_from_app(self):
+    def app_active_buffer_name(self):
         
 	"""Reads the file name of the active buffer, directly from the
 	external application.
@@ -295,6 +299,20 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         return response[1]['value']                
 
 
+    def multiple_buffers(self):
+      	"""does editor support multiple open buffers?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor supports having multiple buffers open 
+	at the same time"""
+
+	return self.multiple_buffer_support
+        
     def _multiple_buffers_from_app(self):
       	"""does editor support multiple open buffers?
 
@@ -313,6 +331,22 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         response = self.talk_msgr.get_mess(expect=['multiple_buffers_resp'])
         return response[1]['value']                
         
+    def bidirectional_selection(self):
+      	"""does editor support selections with cursor at left?
+
+        Get this value directly from the external editor
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor allows setting the selection at the
+	left end of the selection"""
+
+	return self.bidirectional_selection_support
+
     def _bidirectional_selection_from_app(self):
       	"""does editor support selections with cursor at left?
 
@@ -411,7 +445,6 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
         response = self.talk_msgr.get_mess(expect=['close_buffer_resp'])
 	success = response[1]['value']
-        self.cache['app_active_buffer_name'] = None
 	return success
 
 
