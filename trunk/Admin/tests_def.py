@@ -2822,16 +2822,18 @@ def check_scratch_recent(instance_name, n = 1, should_fail = 0):
     sys.stdout.flush()
     return scratched
     
-def check_recent_symbols(instance_name, expected_symbols, mess = ""):
+def check_recent_symbols(instance_name, mess = ""):
     the_mediator = testing.mediator()
 
     n = the_mediator.stored_utterances(instance_name)
-    recent = the_mediator.recent_dictation(instance_name)
-    debug.trace('check_recent_symbols', '** recent=%s' % repr(recent))
+    mess = "%s\nRecent interpreted symbols were: " % mess
+    print mess
+    for a_sym in the_mediator.recent_symbols(instance_name):
+       debug.trace('tests_def.check_recent_symbols', '** a_sym=%s' % repr(a_sym))
+       print "   written as: '%s', spoken as: '%s'" % \
+             (a_sym.native_symbol(), repr(a_sym.spoken_phrase()))    
     
-    
-    recent = the_mediator.recent_symbols(instance_name)
-    print "%s\nrecent symbols were: %s." % (mess, recent)
+
 
 def test_reinterpret(instance_name, changed, user_input = None):
     the_mediator = testing.mediator()
@@ -3471,7 +3473,10 @@ def test_basic_correction():
     status.append(1)    
     test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
-    check_recent_symbols(instance_name, None)
+    print "AD: TEST BELOW PRODUCES FAULTY OUTPUT... SYMBOL excess"
+    print "SHOULD NOT APPEAR IN LIST OF SYMBOLS BECAUSE IT WAS A MISRECOGNIZED"
+    print "THAT WAS REINTERPRETED"
+    check_recent_symbols(instance_name)
     
     sym_corrections = {}
     sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
@@ -3653,7 +3658,7 @@ def test_recent_symbol_retrieval():
 
     the_mediator = testing.mediator()
 
-    check_recent_symbols(instance_name, None, "Before dictation")
+    check_recent_symbols(instance_name, "Before dictation")
 
     utterances = []
     utterances.append(string.split('class some class inherits from some other class'))
@@ -3663,7 +3668,7 @@ def test_recent_symbol_retrieval():
     for i in range(len(utterances)):
         test_say(utterances[i], user_input = input[i], never_bypass_sr_recog=1)
    
-    check_recent_symbols(instance_name, None, "After dictation")
+    check_recent_symbols(instance_name, "After dictation")
 
 add_test('recent_symbols_retrieval', test_recent_symbol_retrieval, 
          'Test retrieval of recently dictated symbols.')

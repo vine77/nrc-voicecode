@@ -500,30 +500,6 @@ class MediatorConsole(Object.OwnerObject):
         *none*
         """
         debug.virtual('MediatorConsole.raise_active_window')
-
-class InterpretedSymbol(Object.Object):
-    """class for a symbol that might be reformatted.
-    
-    **INSTANCE ATTRIBUTES**
-
-    *STR written* -- The symbol's written form.
-    
-    *STR spoken* -- The spoken form used for the symbol.
-
-    *SpokenUtterance utterance* -- Utterance in which the symbol was spoken.
-    
-    *INT utter_id* -- ID of the utterance in which the symbol was spoken.
-    
-    *STR reformatted_written = None* -- Reformatted form of the symbol. If *None*m,
-    then the symbol was not reformatted by the user.
-    """
-    def __init__(self, written, spoken, utterance, utter_id, **args):
-        self.deep_construct(InterpretedSymbol,
-                            {'written': written,
-                             'spoken': spoken,
-                             'utterance': utterance,
-                             'utter_id': utter_id},
-                            args)
     
 
 # defaults for vim - otherwise ignore

@@ -35,6 +35,7 @@ import symbol_formatting
 import sr_interface
 import WordTrie
 import SpokenUtterance
+from SymbolResult import SymbolResult
 
 from SpacingState import *
 
@@ -925,129 +926,6 @@ class StoredInterpState(Object):
         self.deep_construct(StoredInterpState,
                             {'formatting_state': formatting_state}, args) 
         
-    
-class SymbolResult(Object):
-    """
-    class representing a portion of an utterance translated as a
-    new or existing symbol
-    """
-    def __init__(self, native_symbol, spoken_phrase, exact_matches,
-                 as_inserted, buff_name,
-                 builder_preferences, possible_matches = None,
-                 forbidden = None,
-                 new_symbol = 0, **args):
-        """
-        ** INPUTS **
-
-        *STR native_symbol* -- the written form of the symbol
-
-        *[STR] spoken_phrase* -- the list of spoken words which were
-        translated into this symbol
-
-        *STR buff_name* -- the name of the buffer in which the symbol
-        was dictated
-
-        *TextBlock as_inserted* -- the text as inserted  (possibly
-        including leading or trailing spaces) and the range in the
-        buffer this text occupied just after insertion
-        
-        *[STR] builder_preferences* -- list of names of
-        registered SymBuilder objects, prioritized according to the
-        state of the interpreter at the time the symbol was
-        interpreted.
-
-        *[STR] exact_matches* -- a prioritized list of exact matches
-        to known symbols
-
-        *BOOL new_symbol* -- true if the symbol was a new symbol,
-        false if it matched an existing symbol
-        
-        *[(INT, STR)] possible_matches* -- list of (confidence score,
-        written_form) tuples for possible (but not exact) matches to 
-        the spoken form of this symbol.
-        
-        *[(INT, STR)] forbidden* -- list of (confidence score,
-        written_form) tuples for forbidden inexact matches (but
-        which may be displayed as alternatives in the exact symbols
-        tab of the re-formatting dialog)
-        """
-        self.deep_construct(SymbolResult,
-                            {
-                             'symbol': native_symbol,
-                             'phrase': spoken_phrase,
-                             'buff_name': buff_name, 
-                             'text': as_inserted,
-                             'builders': builder_preferences,
-                             'exact': exact_matches,
-                             'possible': possible_matches,
-                             'forbidden': forbidden,
-                             'was_new': new_symbol
-                            }, args)
-    def native_symbol(self):
-        return self.symbol
-    def buffer(self):
-        return self.buff_name
-    def final_range(self):
-        return self.location
-    def spoken_phrase(self):
-        return self.phrase
-    def builder_preferences(self):
-        return self.builders
-
-    def new_symbol(self):
-        """
-        Indicates whether the symbol was a newly generated symbol, or
-        was a match to a previously known symbol
-        """
-        return self.was_new
-        
-    def exact_matches(self):
-        """
-        Returns a prioritized list of exact matches to known
-        symbols
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *[STR]* -- written forms of known symbols which are an exact
-        match to the spoken form of this symbol
-        """
-        return self.exact
-        
-    def possible_matches(self):
-        """
-        Returns a prioritized list of possible (but not exact) matches
-        to known symbols
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *[(INT, STR)]* -- the confidence score and written forms of 
-        possible matches, or None if none have been generated yet
-        """
-        return self.possible
-    
-    def forbidden_matches(self):
-        """
-        Returns a prioritized list of possible (but not exact) matches
-        to known symbols
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *[(INT, STR)]* -- the confidence score and written forms of 
-        forbidden matches, or None if none have been generated yet
-        """
-        return self.forbidden
                  
 class InterpretedPhrase(Object):
     """
@@ -1055,7 +933,9 @@ class InterpretedPhrase(Object):
     the corresponding changes to the buffer, for use by the results
     manager
     """
-    def __init__(self, phrase, symbols, **args):
+    def __init__(self, phrase, symbols, 
+                 utterance, 
+                 **args):
         """
         ** INPUTS **
 
@@ -1065,10 +945,13 @@ class InterpretedPhrase(Object):
 
         *[SymbolResult] symbols* -- symbols matched or created when
         this phrase was interpreted
+        
+        *SpokenUtterance utterance* -- utterance that generated this phrase.
         """
         self.deep_construct(InterpretedPhrase,
                             {
                              'original_phrase': phrase,
+                             'utterance': utterance,
                              'symbol_results': symbols
                             }, args)
     def symbols(self):
@@ -1274,7 +1157,7 @@ class SymbolConstruction(Object):
         """
         return self.symbols
 
-    def insert_existing(self, symbol, exact_matches = None,
+    def insert_existing(self, symbol, found_in_utter, exact_matches = None,
                         inexact_matches = None, forbidden = None):
         """
         Insert a known symbol with the given written form, track the
@@ -1310,7 +1193,8 @@ class SymbolConstruction(Object):
                               exact_matches,
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
-                              inexact_matches, forbidden)
+                              inexact_matches, forbidden,
+                              in_utter = found_in_utter)
         self.symbols.append(result)
         self.reset()
       
@@ -1352,10 +1236,11 @@ class SymbolConstruction(Object):
                               exact_matches,
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
-                              inexact_matches, forbidden, new_symbol = 1)
+                              inexact_matches, forbidden, new_symbol = 1,
+                              in_utter=from_utterance)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
-        from_utterance.add_interp_symbol(symbol, self.builder.spoken_form())
+        from_utterance.add_interp_symbol(result)
         self.reset()
       
         
@@ -1815,7 +1700,7 @@ class CmdInterp(OwnerObject):
                 trace('CmdInterp.interpret_phrase',
                       'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
-        interpreted = InterpretedPhrase(phrase, symbols.inserted_symbols())
+        interpreted = InterpretedPhrase(phrase, symbols.inserted_symbols(), utterance)
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
 
@@ -2051,7 +1936,7 @@ class CmdInterp(OwnerObject):
         if symbol_matches:
             trace('CmdInterp.match_untranslated_text',
                   'symbol_matches=%s' % symbol_matches)
-            symbols.insert_existing(symbol_matches[0][1],
+            symbols.insert_existing(symbol_matches[0][1], utterance,
                                     exact_matches = complete_match,
                                     inexact_matches = inexact_matches,
                                     forbidden = forbidden)

@@ -1,6 +1,6 @@
 import TestCaseWithHelpers
 import MediatorConsoleWX
-import MediatorConsole
+from SymbolResult import SymbolResult
 import time
 from SpokenUtterance import MockSpokenUtterance
 
@@ -10,8 +10,10 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
     utter1 = MockSpokenUtterance([('new', 'new'), ('symbol', 'symbol'), ('one', 'one'), ('one', 'one'), 
                                   ('equals', ' = '), 
                                   ('new', 'new'), ('symbol', 'symbol'), ('one', 'one'), ('two', 'two')])
-    sym1_1 = MediatorConsole.InterpretedSymbol('new_symbol_1_1', 'new symbol one one', utter1, 1)
-    sym1_2 = MediatorConsole.InterpretedSymbol('new_symbol_1_2', 'new symbol one two', utter1, 1)    
+    sym1_1 = SymbolResult('new_symbol_1_1', ['new', 'symbol', 'one', 'one'], None, '', None, [], 
+                          in_utter=utter1)
+    sym1_2 = SymbolResult('new_symbol_1_2', ['new', 'symbol', 'one', 'two'], None, '', None, [], 
+                          in_utter=utter1)    
                                    
     sym_list = [sym1_1, sym1_2]
                                    
