@@ -305,7 +305,7 @@ class ResMgrStd(ResMgr):
                             args)
         
     def _std_interp(self, result, app, initial_buffer = None, 
-        before = None, after = None):
+        clear_state = 0, before = None, after = None):
         """internal method for the standard sequence of calls to
         interpret the result of recognition by a dictation grammar,
         with callbacks to allow the caller to store the relevant 
@@ -321,7 +321,11 @@ class ResMgrStd(ResMgr):
 
         *STR initial_buffer* -- the name of the initial buffer which was
         active at recognition-starting
-
+        
+        *BOOL clear_state* -- if true, tell the interpreter to clear
+        its spacing and formatting state before starting to interpret
+        the utterance
+        
         *FCT* before -- a callback function, 
         before(*AppState* app, *STR* initial_buffer), to be called before
         interpretation starts, or None to do nothing
@@ -342,7 +346,7 @@ class ResMgrStd(ResMgr):
         interp = self.interpreter()
         words = result.words()
         interpreted = interp.interpret_cmd_tuples(words, app, 
-            initial_buffer = initial_buffer)
+            initial_buffer = initial_buffer, clear_state = clear_state)
         if after:
             debug.trace('ResMgrStd._std_interp', 'about to call after')
             after(app, initial_buffer = initial_buffer)
@@ -849,6 +853,33 @@ class BufferStatesBasic(BufferStates):
         except KeyError:
             pass
 
+    def compare_current_buffer(self, app, selection = 0):
+        """compares the stored state of the current buffer to its
+        current state.
+        
+        **INPUTS**
+
+        *AppState app* -- the editor whose states should be compared
+
+        *BOOL* selection -- compare selection as well as contents
+
+        **OUTPUTS**
+
+        *BOOL* -- true if states are the same, false if they are not, or
+        it cannot be determined due to expiration of cookies
+        """
+        buff_name = app.curr_buffer_name()
+        if not self.known_buffer(buff_name):
+            return 0
+
+        buffer = app.find_buff(buff_name)
+        if buffer is None:
+            return 0
+        if not buffer.compare_with_current(self.cookies[buff_name],
+            selection = selection):
+            return 0
+        return 1
+
     def compare_with_current(self, app, selection = 0,
         ignore_new = 1, ignore_deleted = 0):
         """compares the stored state to the current one.
@@ -1282,6 +1313,7 @@ class StateStackBasic(StateStack):
                             {
                              'states': [],
                              'initial_buffers': [],
+                             'final_buffers': [],
                              'cross_buffer': [],
                              'pos_after': [],
                              'sel_after': [],
@@ -1337,6 +1369,37 @@ class StateStackBasic(StateStack):
             initial_buffer = app.curr_buffer_name()
         self._push(current, initial_buffer)
 
+    def interp_state_valid(self, app):
+        """determines whether the user has done anything which would
+        invalidate the interpreter state (including spacing and 
+        formatting state) since the last utterance.
+
+        The state is assumed to be invalid if any of the following
+        conditions apply:
+
+        (1) the user has switched buffers
+        (2) the current buffer has been modified
+        (3) the position or selection have changed since the last
+        utterance 
+
+        **INPUTS**
+
+        *AppState app* -- the editor into which the user is dictating
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the interpreter state remains valid
+        """
+        if len(self.states) == 0 or not self.after_utterance:
+            return 0
+        buff_name = app.curr_buffer_name()
+        if self.cross_buffer[-1]:
+            return 0
+        if buff_name != self.final_buffers[-1]:
+            return 0
+        return self.after_utterance.compare_current_buffer(app, 
+            selection = 1)
+
     def _clear(self):
         """private method to clear the stack(s)
 
@@ -1350,6 +1413,7 @@ class StateStackBasic(StateStack):
         """
         self.states = []
         self.initial_buffers = []
+        self.final_buffers = []
         self.pos_after = []
         self.sel_after = []
         self.cross_buffer = []
@@ -1368,6 +1432,7 @@ class StateStackBasic(StateStack):
         """
         del self.states[-n:]
         del self.initial_buffers[-n:]
+        del self.final_buffers[-n:]
         del self.cross_buffer[-n:]
         del self.pos_after[-n:]
         del self.sel_after[-n:]
@@ -1400,6 +1465,10 @@ class StateStackBasic(StateStack):
             debug.trace('StateStackBasic.check_stacks',
                 '%d states but %d sel_after' % \
                 (d, len(self.sel_after)))
+        if len(self.final_buffers) != d:
+            debug.trace('StateStackBasic.check_stacks',
+                '%d states but %d final_buffers' % \
+                (d, len(self.sel_after)))
 
     def _push(self, state, initial_buffer):
         """private method to push a state onto the stack, removing an
@@ -1424,6 +1493,7 @@ class StateStackBasic(StateStack):
         if self.max_depth > 0 and len(self.states) > self.max_depth:
             del self.states[0]
             del self.initial_buffers[0]
+            del self.final_buffers[0]
             del self.cross_buffer[0]
             del self.pos_after[0]
             del self.sel_after[0]
@@ -1447,6 +1517,7 @@ class StateStackBasic(StateStack):
             return 0
         del self.states[0:-n]
         del self.initial_buffers[0:-n]
+        del self.final_buffers[0:-n]
         del self.cross_buffer[0:-n]
         del self.pos_after[0:-n]
         del self.sel_after[0:-n]
@@ -1481,11 +1552,12 @@ class StateStackBasic(StateStack):
         current = BufferStatesBasic(app)
         self.after_utterance = current
 
+        final_buffer = app.curr_buffer_name()
         if initial_buffer is None:
-            initial_buffer = app.curr_buffer_name()
+            initial_buffer = final_buffer
         buffer = app.find_buff(initial_buffer)
         if not buffer:
-            self._push_cross_buffer()
+            self._push_cross_buffer(final_buffer = final_buffer)
             debug.trace('StateStackBasic.after_interp', 
                     'buffer %s not found (so cross-buffer utterance)' \
                     % initial_buffer)
@@ -1499,13 +1571,13 @@ class StateStackBasic(StateStack):
             debug.trace('StateStackBasic.after_interp', 
                     'initial, changed buffers are %s, %s' \
                     % (initial_buffer, repr(changed)))
-            self._push_cross_buffer()
+            self._push_cross_buffer(final_buffer = final_buffer)
             return
         cookie = current.cookie(initial_buffer)
         pos, sel = buffer.get_state_pos_selection(cookie)
         self._push_single_buffer(pos, sel)
 
-    def _push_cross_buffer(self):
+    def _push_cross_buffer(self, final_buffer):
         """push supplementary information about a cross_buffer utterance
         onto the appropriate stacks
 
@@ -1518,6 +1590,7 @@ class StateStackBasic(StateStack):
         *none*
         """
         self.cross_buffer.append(1)
+        self.final_buffers.append(final_buffer)
         self.pos_after.append(None)
         self.sel_after.append(None)
         self.check_stacks()
@@ -1537,6 +1610,7 @@ class StateStackBasic(StateStack):
         *none*
         """
         self.cross_buffer.append(0)
+        self.final_buffers.append(self.initial_buffers[-1])
         self.pos_after.append(pos)
         self.sel_after.append(selection)
         self.check_stacks()
@@ -1866,7 +1940,7 @@ class StateStackBasic(StateStack):
             for buff in self.states[-i].known_buffers():
                 buff_indices[buff] = i
         which_buffers = []
-        for buff in  self.after_utterance.known_buffers():
+        for buff in self.after_utterance.known_buffers():
             if not buff_indices.has_key(buff):
                 which_buffers.append(buff)
         if which_buffers:
@@ -1924,6 +1998,9 @@ class StateStackBasic(StateStack):
         for i in range(len(self.initial_buffers)):
             if self.initial_buffers[i] == old_buff_name:
                 self.initial_buffers[i] = new_buff_name
+        for i in range(len(self.final_buffers)):
+            if self.final_buffers[i] == old_buff_name:
+                self.final_buffers[i] = new_buff_name
 
     def close_buffer_cbk(self, buff_name):
         """callback which notifies us that a buffer was closed
@@ -1941,6 +2018,9 @@ class StateStackBasic(StateStack):
         for i in range(len(self.initial_buffers)):
             if self.initial_buffers[i] == buff_name:
                 self.initial_buffers[i] = None
+        for i in range(len(self.final_buffers)):
+            if self.final_buffers[i] == buff_name:
+                self.final_buffers[i] = None
 
 
 class ResMgrBasic(ResMgrStd):
@@ -1966,6 +2046,9 @@ class ResMgrBasic(ResMgrStd):
     results, sorted with most recent last (technically a queue, since it 
     has finite size and the oldest result can be dropped on push to 
     maintain this limit)
+
+    *[StoredInterpState] interp_states* -- stack of strore interpreter
+     (formatting and spacing) states before each utterance
 
     *[STR] initial_buffers* -- stack of names of initial buffers 
     corresponding to the utterances (technically a queue, since it has 
@@ -1995,6 +2078,7 @@ class ResMgrBasic(ResMgrStd):
                              'correct_recent_evt': correct_recent_evt,
                              'utterances': [],
                              'interpreted': [],
+                             'interp_states': [],
                              'numbers': [],
                              'next_number': 0,
                              'initial_buffers': [],
@@ -2010,8 +2094,8 @@ class ResMgrBasic(ResMgrStd):
         self.correct_recent_evt = None
         
     def store(self, result, interpreted, initial_buffer, number):
-        """store the result, along with the editor state before and 
-        after interpretation
+        """store the result and its interpretation information after
+        each utterance
 
         **INPUTS**
 
@@ -2036,6 +2120,9 @@ class ResMgrBasic(ResMgrStd):
             del self.interpreted[0]
             del self.initial_buffers[0]
             del self.numbers[0]
+            # this is appended before the utterance, but we can wait
+            # until after to truncate the stack
+            del self.interp_states[0]
         self.utterances.append(result)
         self.interpreted.append(interpreted)
         self.initial_buffers.append(initial_buffer)
@@ -2069,8 +2156,17 @@ class ResMgrBasic(ResMgrStd):
                  'called from thread %s' %
                  threading.currentThread().getName())
         app = self.editor()
+        interpreter = self.interpreter()
+        self.interp_states.append(interpreter.get_state())
+        debug.trace('ResMgrBasic.interpret_dictation',
+             'last interp state is %s' %
+             self.interp_states[-1].formatting_state.__dict__)
+        clear_state = not self.states.interp_state_valid(app)
+        debug.trace('ResMgrBasic.interpret_dictation',
+                    'clear state = %d' % clear_state)
         interpreted = ResMgrStd._std_interp(self, result, app, 
             initial_buffer = initial_buffer, 
+            clear_state = clear_state,
             before = self.states.before_interp,
             after = self.states.after_interp)
         debug.trace('ResMgrBasic.interpret_dictation', 
@@ -2222,6 +2318,18 @@ class ResMgrBasic(ResMgrStd):
             del self.interpreted[-m:]
             del self.initial_buffers[-m:]
             del self.numbers[-m:]
+            debug.trace('ResMgrBasic.scratch_recent',
+                 'last interp state was %s' % \
+                 self.interp_states[-1].formatting_state.__dict__)
+# because interp_states are stored before utterances, we want to pop one
+# fewer
+            if m > 1:
+                del self.interp_states[- (m - 1):]
+            if self.interp_states:
+                debug.trace('ResMgrBasic.scratch_recent',
+                     'last interp state is %s' % \
+                     self.interp_states[-1].formatting_state.__dict__)
+                self.interpreter().restore_state(self.interp_states[-1])
             return m
         return 0
     
@@ -2334,6 +2442,17 @@ class ResMgrBasic(ResMgrStd):
         del self.interpreted[-m:]
         del self.initial_buffers[-m:]
         del self.numbers[-m:]
+# because interp_states are stored before utterances, we want to pop one
+# fewer
+        if m > 1:
+            del self.interp_states[- (m - 1):]
+        if self.interp_states:
+            debug.trace('ResMgrBasic.reinterpret_recent',
+                        'restoring state')
+            interpreter.restore_state(self.interp_states[-1])
+# we're going to reinterpret the utterance, which will push a new copy
+# of this state, so we need to pop the old copy to avoid duplication
+            del self.interp_states[-1]
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'about to reinterpret %s' % repr(to_do))
         for i in range(len(to_do)):

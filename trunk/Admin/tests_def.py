@@ -2871,6 +2871,12 @@ def test_symbol_formatting():
     test_say(['\\All-Caps', 'style', 'W.', 'M.', 'user'])
     commands.say(['new', 'statement'])
 
+    print "Testing styling across utterances"
+    test_say(['Hungarian'])
+
+    test_say(['delayed', 'name'])
+    commands.say(['new', 'statement'])
+
     print "Testing manual formatting\n"
 
     test_say(['no', 'space', 'style', 'W.', 'X.', 'cap', 'python'])
@@ -3473,6 +3479,156 @@ def test_basic_correction():
     print '\n***Testing symbol removal***\n'
 
     check_symbol(interpreter, 'excess', expected = 0)
+
+    print '\nTesting correction and formatting state:\n'
+
+    new_utterances = []
+    new_utterances.append(string.split('new statement'))
+    new_input = ['0\n']
+    new_status = [1]
+
+    new_utterances.append(string.split('new class'))
+    new_input.append('')
+    new_status.append(1)
+
+    new_utterances.append(string.split('red brick'))
+    new_input.append('0\n')
+    new_status.append(1)
+
+
+    for i in range(len(new_utterances)):
+        test_say(new_utterances[i], user_input = new_input[i], 
+            never_bypass_sr_recog=1)
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing scratch that***\n'
+
+    scratched = check_scratch_recent(instance_name)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    print '\n***new class name should still be in HungarianNotation***\n'
+
+    new_utterances = []
+    new_utterances.append(string.split('red book'))
+    new_input = ['0\n']
+    new_status = [1]
+
+    for i in range(len(new_utterances)):
+        test_say(new_utterances[i], user_input = new_input[i], 
+            never_bypass_sr_recog=1)
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    new_utterances = []
+    new_utterances.append(string.split('class body'))
+    new_input = ['0\n']
+    new_status = [1]
+
+    new_utterances.append(string.split('define method'))
+    new_input.append('')
+    new_status.append(1)
+
+    new_utterances.append(string.split('lower Hungarian'))
+    new_input.append('')
+    new_status.append(1)
+
+    new_utterances.append(string.split('act up'))
+    new_input.append('')
+    new_status.append(1)
+
+    for i in range(len(new_utterances)):
+        test_say(new_utterances[i], user_input = new_input[i], 
+            never_bypass_sr_recog=1)
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing symbol addition and formatting**\n'
+    check_symbol(interpreter, 'actUp', expected = 1)
+
+    print '\n***Testing correction***\n'
+
+    errors = {}
+    errors[1] = {'up': 'out'}
+    reinterpret(instance_name, utterances, errors, user_input = '0\n'*3)
+  
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing symbol removal on correction***\n'
+
+    check_symbol(interpreter, 'actUp', expected = 0)
+
+    print '\n***Testing symbol addition and formatting**\n'
+    check_symbol(interpreter, 'actOut', expected = 1)
+
+    print "\n***Moving cursor manually***\n"
+    commands.goto_line(1)
+
+    print '\n***Testing scratching of manual styling***\n'
+
+    scratched = check_scratch_recent(instance_name, n = 2)
+    if scratched:
+        print 'scratched: '
+        for i in range(1, scratched+1):
+            print utterances[-i]
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    print '\n***Testing symbol removal on correction***\n'
+
+    check_symbol(interpreter, 'actOut', expected = 0)
+
+    new_utterances = []
+    new_input = []
+    new_status = []
+
+    new_utterances.append(string.split('act out'))
+    new_input.append('')
+    new_status.append(1)
+
+    for i in range(len(new_utterances)):
+        test_say(new_utterances[i], user_input = new_input[i], 
+            never_bypass_sr_recog=1)
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing symbol addition and formatting**\n'
+    check_symbol(interpreter, 'act_out', expected = 1)
 
 add_test('basic_correction', test_basic_correction, 
     'Testing basic correction infrastructure with ResMgr.')
