@@ -55,7 +55,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
     
     *none* --
     """
-    def __init__(self, underlying_control, **args):
+    def __init__(self, underlying_control, carriage_return_bug = 1, **args):
 	"""wraps underlying wxPython wxTextCtrl
 
 	**INPUTS**
@@ -72,7 +72,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 			    'program_initiated':0,
 			    'contents_external': underlying_control.GetValue(),
 			    'contents_internal': '',
-			    'carriage_return_bug':1,
+			    'carriage_return_bug':carriage_return_bug,
 			    'nl': '\n',
 			    'crnl': '\015\n',
 			    'delta_width': 0},
