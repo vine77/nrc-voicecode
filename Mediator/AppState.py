@@ -52,7 +52,7 @@ class ForwardToBuffer:
     def __call__(self, *positional, **keys):
 	f_name = None
 	if keys.has_key("f_name"):
-	    which = keys["f_name"]
+	    f_name = keys["f_name"]
 	    del keys["f_name"]
 	buffer = self.application.find_buff(f_name)
 	if buffer:
@@ -1233,7 +1233,7 @@ class AppState(Object):
 	buff_name = self.curr_buffer_name()
         new_buff_name = self.app_save_file(full_path, no_prompt)
 
-        if new_buff_name != buff_name:
+        if new_buff_name != None and new_buff_name != buff_name:
 	    self.rename_buffer_cbk(buff_name, new_buff_name)
 
     def app_save_file(self, full_path = None, no_prompt = 0):

@@ -480,7 +480,7 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 #    print '-- sr_interface.vocabulary_entry: returning entry=\'%s\'' % entry
     return entry
 
-class SpokenUtteranceNL(Object):
+class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     """implementation of SpokenUtterance using natlink ResObj.
     Defines an interface for manipulating the speech
     information associated with a single user utterance

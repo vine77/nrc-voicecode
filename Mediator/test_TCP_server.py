@@ -102,13 +102,13 @@ class ListenThread(threading.Thread, Object.Object):
         action = req[0]
         args = req[1]
         if action == 'active_buffer_name':
-            self.xed.vc_talk_msgr.send_mess('active_buffer_name_resp', {'value': self.xed.ed.only_buffer_name})
+            self.xed.vc_talk_msgr.send_mess('active_buffer_name_resp', {'value': self.xed.ed.app_active_buffer_name()})
         elif action == 'language_name':
-            self.xed.vc_talk_msgr.send_mess('language_name_resp', {'value': self.xed.ed.only_buffer.language_name()})
+            self.xed.vc_talk_msgr.send_mess('language_name_resp', {'value': self.xed.ed.curr_buffer().language_name()})
         elif action == 'newline_conventions':
-            self.xed.vc_talk_msgr.send_mess('newline_conventions_resp', {'value': self.xed.ed.only_buffer.newline_conventions()})
+            self.xed.vc_talk_msgr.send_mess('newline_conventions_resp', {'value': self.xed.ed.curr_buffer().newline_conventions()})
         elif action == 'pref_newline_convention':
-            self.xed.vc_talk_msgr.send_mess('pref_newline_convention_resp', {'value': self.xed.ed.only_buffer.pref_newline_convention()})                        
+            self.xed.vc_talk_msgr.send_mess('pref_newline_convention_resp', {'value': self.xed.ed.curr_buffer().pref_newline_convention()})                        
         elif action == 'cur_pos':
             self.xed.vc_talk_msgr.send_mess('cur_pos_resp', {'value': self.xed.ed.cur_pos()})
 
