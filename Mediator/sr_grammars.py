@@ -276,12 +276,6 @@ class DictWinGram(WinGram):
         self.results_callback(results.words())
         self.manager.interpret_dictation(results, \
             initial_buffer = self.buff_name)
-# old implementation - now taken care of by the ResMgr
-#        interp = self.interpreter()
-#        interp.interpret_NL_cmd(words, self.app,
-#            initial_buffer = self.buff_name)
-#        self.app.print_buff_if_necessary(buff_name = self.buff_name)
-
 
 
 

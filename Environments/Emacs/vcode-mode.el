@@ -318,8 +318,7 @@ sent."
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
-  (vcode-mode 1)
+  (vcode-mode 1 "vcode")
 )
 
 (defun vcode-log-all ()
@@ -1549,6 +1548,7 @@ grammars."
    )
 )
 
+
 (defun vr-send-activate-buffer ()
    "Sends a 'activate-buffer message to VR.exe"
    (let ()
@@ -1801,6 +1801,7 @@ message from VR.EXE")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repeating commands (based on code by Steve Freund).
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defvar vr-repeat-rate nil
   "The rate at which to repeat commands, in seconds.  If nil, any
 currently repeating command will terminate.")
@@ -1950,6 +1951,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 (defun vcode-make-all-keys-self-insert ()
   
 )
@@ -2076,6 +2078,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   ;;;
 ;  (cl-puthash 'heard-command 'vr-cmd-heard-command-hook vr-message-handler-hooks)
 ;  (cl-puthash 'mic-state 'vr-cmd-mic-state-hook vr-message-handler-hooks)
+
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

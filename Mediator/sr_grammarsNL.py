@@ -193,6 +193,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
         *none*
         """
+        debug.trace('SelectGramBase.activate', 'invoked')
         self.buff_name = buff_name
         self.find_visible()
 
@@ -1248,6 +1249,7 @@ class SimpleSelectionNL(SimpleSelection, SelectGramBase):
 
         *none*
         """
+        debug.trace('SimpleSelectionNL.activate', 'invoked')
         if not self.is_active():
             SelectGramBase.activate(self, window = window)
             self.active = 1
