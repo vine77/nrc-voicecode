@@ -701,7 +701,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D5D008>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CCF6A8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -942,6 +942,15 @@ one blank line)
 -----------------------------------------
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\selected_py_sym.py'
+
+saving modified SymDict
+attempting to recover symbols and abbreviations with
+bad persistent SymDict
+finishing configuration of the recovered SymDict
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\selected_py_sym.py'
+comparing modified persistent dictionary with the recovered one
+no differences found
+
 version number unchanged
 
 comparing symdict.dict created from scratch with
@@ -13194,6 +13203,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1439.11900008 secs
+Test suite completed in:  1450.09500003 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6

@@ -163,7 +163,7 @@ def trace(trace_id, message):
     # config_traces() to change trace_fct after import, we will still be
     # invoking the old trace_fct(), not the new one.
     #
-    if util.isfunction(message):
+    if callable(message):
        mess_string = message()
     else: 
        mess_string = message

@@ -845,6 +845,18 @@ class DictReadFailure:
         self.failed = 1
         self.msg = message
 
+class InterceptInputError:
+    def __init__(self):
+        self.reset()
+    def reset(self):
+        self.error = 0
+        self.msg = ''
+        self.fatal = 0
+    def input_error(self, msg, fatal = 0):
+        self.error = 1
+        self.msg = msg
+        self.fatal = fatal
+
 def mod_diff(x, y):
     raw_diff = difflib.ndiff(x, y)
     return filter(lambda x: x[0] != ' ', raw_diff)
@@ -882,6 +894,7 @@ def test_SymDict_storage():
     symbols.finish_config(mark_user = 0)
 
     dict_file = os.path.join(test_data, 'symdict.dict')
+    mod_dict_file = os.path.join(test_data, 'modified_symdict.dict')
 
     symbols.sym_file = dict_file
     symbols.save(dict_file)
@@ -900,6 +913,67 @@ def test_SymDict_storage():
         print "ERROR: version in persistent file doesn't match"
         print "SymDict.current_version"
         return
+
+    symbols.prepend_abbreviations('color', ['clr'])
+    symbols.add_abbreviation('visual', 'vis')
+    print "\nsaving modified SymDict"
+    symbols.save(mod_dict_file)
+    d_mod = symbols.persistent_dict()
+
+    print "attempting to recover symbols and abbreviations with"
+    print "bad persistent SymDict"
+
+    junk_file = os.path.join(test_data, 'bad.dict')
+    f = open(junk_file, "w")
+    f.write('This file is not actually a persistent SymDict file\n')
+    f.close()
+
+    ierr = InterceptInputError()
+    recovered_symbols = SymDict.SymDict(interp = ierr, sym_file = junk_file, 
+        export_file = export_file)
+    if not ierr.error:
+        print "ERROR: SymDict did not report an error on init from"
+        print "a bad persistent SymDict"
+        return
+    if ierr.fatal:
+        print "ERROR: SymDict reported a fatal error on init from"
+        print "a bad persistent SymDict, indicating that it failed"
+        print "to recover abbreviation preferences from the text"
+        print "file of exported abbreviations"
+        return
+
+# only abbreviation preferences will have been recovered from the text
+# file, so we need to recover known symbols from the standard files
+
+    print "finishing configuration of the recovered SymDict"
+
+    recovered_symbols.standard_symbols_in([symbol_file])
+    recovered_symbols.abbreviations_in([abbrev_file])
+    recovered_symbols.finish_config(mark_user = 0)
+
+    d_recovered = recovered_symbols.persistent_dict()
+
+    print "comparing modified persistent dictionary with the recovered one"
+
+# the two dictionaries should also be the same in detail
+    o = DiffCrawler.ObjDiff(all = 1)
+    o.compare(d_mod, d_recovered)
+    same_difference = o.differences()
+    if same_difference:
+        print "ERROR: Differences found:"
+        for diff in same_difference:
+            print diff.location()
+            print diff.description()
+            print ""
+        print "\nFix problems with recovery from exported abbreviation"
+        print "file, and re-run this test"
+        return
+
+    print "no differences found\n"
+
+
+
+
 
     curr_dict_file = os.path.join(test_data, 'current_symdict.dict')
     prev_dict_file = os.path.join(test_data, 'previous_symdict.dict')
@@ -924,7 +998,7 @@ def test_SymDict_storage():
         s.compare(d_curr, d)
         same_difference = s.differences()
         incr_version = \
-            "\nIf these differences do reflect changes made to" \
+            "\nIf these differences do reflect changes made to\n" \
           + "the persistent SymDict format, you must:\n" \
           + "  1. increment current_version in SymDict.py\n" \
           + "  2. create a new SingleVersionDictConverter to\n" \
