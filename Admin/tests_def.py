@@ -447,7 +447,7 @@ def test_mediator_console():
     test_command("""open_file('blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'
     mediator.print_abbreviations()    
-    test_command("""compile_symbols(['""" + file + """'])""")
+    test_command("""compile_symbols([r'""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
 
 #    util.request_console_be(active=1)    
@@ -581,7 +581,7 @@ def test_auto_add_abbrevs():
     test_command("""open_file('blah.c')""")
     print repr(vc_globals.test_data)
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
-    test_command("""compile_symbols(['""" + file + """'])""")
+    test_command("""compile_symbols([r'""" + file + """'])""")
     test_command("""print_abbreviations(1)""")    
 
     #
@@ -642,7 +642,7 @@ def test_persistence():
     #
     # Compile symbols
     #
-    test_command("""compile_symbols(['""" + vc_globals.test_data + os.sep + """small_buff.c'])""")
+    test_command("""compile_symbols([r'""" + vc_globals.test_data + os.sep + """small_buff.c'])""")
 
     #
     # Restart the mediator, with saved SymDict. The symbols should still be
@@ -676,7 +676,7 @@ def test_redundant_translation():
     
     mediator.init_simulator_regression()    
     test_command("""open_file('blah.c')""")
-    test_command("""compile_symbols(['""" + small_buff_c + """'])""")
+    test_command("""compile_symbols([r'""" + small_buff_c + """'])""")
     test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
     test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
     test_say(['move_horiz\\move horizontally'], '0\n0\n')
@@ -1347,7 +1347,7 @@ auto_test.add_test('python', test_pseudo_python.run, 'testing the various Python
 def test_repeat_last():
     mediator.init_simulator_regression()    
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
-    test_command("""open_file('""" + file_name + """')""")
+    test_command("""open_file(r'""" + file_name + """')""")
     test_command("""say(['after hyphen'])""")
     test_command("""say(['again'])""")
     test_command("""goto_line(1)""")
@@ -1372,7 +1372,7 @@ def test_change_direction():
     
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
     
-    test_command("""open_file('""" + file_name + """')""")
+    test_command("""open_file(r'""" + file_name + """')""")
     
     
     test_command("""say(['after hyphen'])""")
@@ -1393,7 +1393,7 @@ def test_misc_bugs():
     
     mediator.init_simulator_regression()
 
-    test_command("""open_file('blah.py')""")
+    test_command("""open_file(r'blah.py')""")
 
     #
     # NatSpeak defined words like '<\\less-than' used to mask the VoiceCode
