@@ -349,7 +349,7 @@ class ExternalEdSim(Object.Object):
         # Send name of editor
         #
         self.vc_listen_msgr.get_mess(expect=['send_app_name'])
-        self.vc_listen_msgr.send_mess('app_name', {'value': 'dumbEdSim'})
+        self.vc_listen_msgr.send_mess('app_name', {'value': 'EdSim'})
 
 
         trace('test_TCP_server.open_vc_listener_conn',
@@ -361,6 +361,14 @@ class ExternalEdSim(Object.Object):
         msg = self.vc_listen_msgr.get_mess(expect=['your_id_is'])
         self.id = msg[1]['value']
         self.vc_listen_msgr.send_mess('ok')
+
+        #
+        # test_client query
+        #
+        msg = self.vc_listen_msgr.get_mess(expect=['test_client_query'])
+# test TCP server is only used for regression testing, so our response
+# is always true
+        self.vc_listen_msgr.send_mess('test_client_query_resp', {'value': 1})
         
         trace('test_TCP_server.open_vc_listener_conn',
               'done')

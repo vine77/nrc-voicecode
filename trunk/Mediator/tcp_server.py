@@ -203,17 +203,15 @@ class AppStateFactorySimple(AppStateFactory):
 
     **INSTANCE ATTRIBUTES**
 
-    *BOOL use_local_srv* -- flag indicating whether we should use 
-    local indent_srv and line_num_srv for external EdSim
+    *none*
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, use_local_srv = 1, **args):
+    def __init__(self, **args):
 	self.deep_construct(AppStateFactorySimple,
-			    {
-			     'use_local_srv': use_local_srv
+			    { 
 			    },
 			    args)
     
@@ -243,13 +241,10 @@ class AppStateFactorySimple(AppStateFactory):
 	..[AppState] file:///./AppState.AppState.html"""
 
 
-	if re.match('dumbEdSim', app_name):
+	if re.match('EdSim', app_name):
 	    as_class = AS_MessExtEdSim
-	elif re.match('EdSim', app_name):
-	    if self.use_local_srv:
-		as_class = AS_MessExtEdSim
-            else:
-		as_class = AppStateMessaging.AppStateInsertIndentMess
+	elif re.match('EdSimClientIndent', app_name):
+	    as_class = AppStateMessaging.AppStateInsertIndentMess
 	elif re.match('emacs', app_name):
 	    as_class = AppStateEmacs.AppStateEmacs
 	else:
@@ -383,7 +378,7 @@ class ListenForConnThread(threading.Thread, Object.Object):
         """
         
         self.new_socks_lock.acquire()
-        self.new_socks.append((client_socket, [None, None, None]))
+        self.new_socks.append((client_socket, [None, None, None, None]))
         self.new_socks_lock.release()        
 
         
@@ -502,13 +497,15 @@ class ServerSingleThread(Object.Object):
     
     **INSTANCE ATTRIBUTES**
 
-    [(socket, (STR, STR, STR))] *new_listen_socks=[]* -- Each entry is
+    [(socket, (STR, STR, STR, BOOL))] *new_listen_socks=[]* -- Each entry is
     a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
-    port, and data about that socket. The data is itself a 3ple
+    port, and data about that socket. The data is itself a 4ple
     consisting of: (a) identifier of external editor, (b) name of the
-    external editor and (c) window handle of the external editor.
+    external editor, (c) window handle of the external editor, and (d)
+    a flag indicating whether the client is expecting to be used for
+    regression testing. 
 
-    *[(socket, [None, None, None])] new_talk_socks* -- Like
+    *[(socket, [None, None, None, None])] new_talk_socks* -- Like
      *new_listen_socks*, except sockets are on the VC_TALK port, and
      the data part of the 2ple is useless.
     
@@ -587,7 +584,8 @@ class ServerSingleThread(Object.Object):
                             {threading.Thread: 1})
 
 
-    def package_sock_pair(self, id, app_name, window, listen_sock, talk_sock):
+    def package_sock_pair(self, id, app_name, window, 
+	listen_sock, talk_sock, test_client = 0):
         
         """Packages a listen and talk socket into an
         [AppStateMessaging] instance
@@ -604,6 +602,9 @@ class ServerSingleThread(Object.Object):
         socket *listen_sock* -- The listen socket
         
         socket *talk_sock* -- The talk socket
+
+	BOOL *test_client* -- flag indicating whether or not the client
+	is expecting to be used for regression testing
         
 
         **OUTPUTS**
@@ -641,7 +642,7 @@ class ServerSingleThread(Object.Object):
         #
         ###################################################################
 
-        if opts['t'] != None:
+        if test_client and opts['t'] != None:
             mediator.init_simulator_regression(on_app=an_app_state)
         else:
             exclusive = 1
@@ -656,7 +657,7 @@ class ServerSingleThread(Object.Object):
         #
         # Run regression test?
         #
-        if self.test_suite != None:
+	if test_client and self.test_suite != None:
 	    an_app_state.print_buff_when_changed = 1
             args = [self.test_suite]
             auto_test.run(args)
@@ -720,6 +721,11 @@ class ServerSingleThread(Object.Object):
         id = '%s_%s' % (app_name, repr(whrandom.random()))
         a_messenger.send_mess('your_id_is', {'value': id})
         a_messenger.get_mess(expect=['ok'])
+
+        # query whether client expects to be used for regression tests
+        a_messenger.send_mess('test_client_query')
+        mess = a_messenger.get_mess(expect=['test_client_query_resp'])
+	test_client = messaging.messarg2int(mess[1]['value'])
         
         #
         # Assign window, id and app_name to the last socket in the list of
@@ -728,6 +734,7 @@ class ServerSingleThread(Object.Object):
         most_rec_data[0] = id
         most_rec_data[1] = app_name
         most_rec_data[2] = window
+        most_rec_data[3] = test_client
         
         self.new_socks_lock.release()
         
@@ -774,13 +781,13 @@ class ServerSingleThread(Object.Object):
             jj = 0
             while jj < len(self.new_listen_socks):
                 (listen_sock, listen_data) = self.new_listen_socks[jj]
-                (a_listen_id, app_name, window) = listen_data
+                (a_listen_id, app_name, window, test_client) = listen_data
                 if a_listen_id == id:
                     #
                     # Found it. Remove the two sockets from the list of
                     # new connections.
                     #
-                    found = (listen_sock, app_name, window)
+                    found = (listen_sock, app_name, window, test_client)
                     del self.new_listen_socks[jj]
                     del self.new_talk_socks[ii]
                     break
@@ -788,7 +795,7 @@ class ServerSingleThread(Object.Object):
                 jj = jj + 1
                 
             if found != None:
-                self.package_sock_pair(id, app_name, window, listen_sock, talk_sock)
+                self.package_sock_pair(id, app_name, window, listen_sock, talk_sock, test_client)
                         
         self.new_socks_lock.release()        
 
@@ -1015,11 +1022,13 @@ class ServerMainThread(Object.Object):
     **INSTANCE ATTRIBUTES**
 
     [Queue] *new_listen_socks* -- Queue from which to get any new connections.
-    Each item is [(socket, (STR, STR, STR))] 
+    Each item is [(socket, (STR, STR, STR, BOOL))] 
     a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
-    port, and data about that socket. The data is itself a 3ple
+    port, and data about that socket. The data is itself a 4ple
     consisting of: (a) identifier of external editor, (b) name of the
-    external editor and (c) window handle of the external editor.
+    external editor, (c) window handle of the external editor, and (d)
+    a flag indicating whether the client is expecting to be used for
+    regression testing. 
 
     *[(socket, [None, None, None])] new_talk_socks* -- the socket
     element of each 2ple is a new (uninitialised) socked
@@ -1231,7 +1240,7 @@ class ServerMainThread(Object.Object):
 # may be sufficient.
 	self.connection_ending[id].set()
 
-    def _new_instance(self, id, instance):
+    def _new_instance(self, id, instance, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
         
@@ -1240,6 +1249,9 @@ class ServerMainThread(Object.Object):
         STR *id* -- The unique ID of the listen socket
 
 	AppStateMessaging *instance*  -- the new instance
+
+	BOOL *test_client* -- flag indicating whether or not the client
+	is expecting to be used for regression testing
 
         **OUTPUTS**
         
@@ -1264,7 +1276,8 @@ class ServerMainThread(Object.Object):
 	"""
 	debug.virtual('ServerMainThread.known_instance')
 
-    def package_sock_pair(self, id, app_name, window, listen_sock, talk_sock):
+    def package_sock_pair(self, id, app_name, window, 
+	listen_sock, talk_sock, test_client = 0):
         
         """Packages a listen and talk socket into an
         [AppStateMessaging] instance
@@ -1282,6 +1295,8 @@ class ServerMainThread(Object.Object):
         
         socket *talk_sock* -- The talk socket
         
+	BOOL *test_client* -- flag indicating whether or not the client
+	is expecting to be used for regression testing
 
         **OUTPUTS**
         
@@ -1309,7 +1324,7 @@ class ServerMainThread(Object.Object):
         #
         an_app_state.config_from_external()
 
-	stay_alive = self._new_instance(id, an_app_state)
+	stay_alive = self._new_instance(id, an_app_state, test_client)
 	if stay_alive:
 	    self.data_threads[id] = data_thread
 	    return 1
@@ -1371,12 +1386,17 @@ class ServerMainThread(Object.Object):
         id = '%s_%s' % (app_name, repr(whrandom.random()))
         a_messenger.send_mess('your_id_is', {'value': id})
         a_messenger.get_mess(expect=['ok'])
+
+        # query whether client expects to be used for regression tests
+        a_messenger.send_mess('test_client_query')
+        mess = a_messenger.get_mess(expect=['test_client_query_resp'])
+	test_client = messaging.messarg2int(mess[1]['value'])
         
         #
         # Assign window, id and app_name to the last socket in the list of
         # new listen sockets
         #
-	most_rec_data = (id, app_name, window)
+	most_rec_data = (id, app_name, window, test_client)
         
 # using this lock shouldn't be necessary, since only
 # handshake_talk_socks is the only other one accessing
@@ -1433,13 +1453,13 @@ class ServerMainThread(Object.Object):
             jj = 0
             while jj < len(self.pending_listen_socks):
                 (listen_sock, listen_data) = self.pending_listen_socks[jj]
-                (a_listen_id, app_name, window) = listen_data
+                (a_listen_id, app_name, window, test_client) = listen_data
                 if a_listen_id == id:
                     #
                     # Found it. Remove the two sockets from the list of
                     # new connections.
                     #
-                    found = (listen_sock, app_name, window)
+                    found = (listen_sock, app_name, window, test_client)
                     del self.pending_listen_socks[jj]
                     del self.new_talk_socks[ii]
                     break
@@ -1448,7 +1468,7 @@ class ServerMainThread(Object.Object):
                 
             if found != None:
                 stay_alive = self.package_sock_pair(id, app_name, 
-		    window, listen_sock, talk_sock)
+		    window, listen_sock, talk_sock, test_client)
                         
         self.new_socks_lock.release()        
 	return stay_alive
@@ -1573,7 +1593,7 @@ class ServerOldMediator(ServerMainThread):
 #       quitting.  We are no longer in the message loop, so any events
 #       they continue to send will be ignored.
 
-    def _new_instance(self, id, instance):
+    def _new_instance(self, id, instance, test_client = 0):
         """add a new AppStateMessaging.  Called internally by
 	package_sock_pair
         
@@ -1583,12 +1603,15 @@ class ServerOldMediator(ServerMainThread):
 
 	AppStateMessaging *instance*  -- the new instance
 
+	BOOL *test_client* -- flag indicating whether or not the client
+	is expecting to be used for regression testing
+
         **OUTPUTS**
         
 	*BOOL* -- false if the server should exit (because we're done
 	running the test suite)
 	"""
-        if self.test_suite != None:
+        if test_client and self.test_suite != None:
             mediator.init_simulator_regression(on_app=instance)
 	    instance.print_buff_when_changed = 1
             args = [self.test_suite]
@@ -1926,7 +1949,7 @@ class ExtLoopWin32(Object.Object):
     STR *test_suite=None* -- If not *None*, then upon connection by a
     new editor run regression test suite *test_suite*.
     """
-    def __init__(self, test_suite = None, local_srv = 0, **args_super):
+    def __init__(self, test_suite = None, **args_super):
         self.deep_construct(ExtLoopWin32, 
                             {'test_suite': test_suite,
 			     'server': None,
@@ -1938,7 +1961,7 @@ class ExtLoopWin32(Object.Object):
 			         win32event.CreateEvent(None, 0, 0, None)
                              }, 
                             args_super)
-	factory = AppStateFactorySimple(use_local_srv = local_srv)
+	factory = AppStateFactorySimple()
 	self.server = ServerOldMediatorExtLoop(owner = self,
 			     test_suite = test_suite, 
 			     editor_factory = factory)
@@ -2087,41 +2110,41 @@ class ExtLoopWin32(Object.Object):
 ##############################################################################
 # start test standalone server
 ##############################################################################
-def run_int_server(test_suite=None, local_srv = 1):
+def run_int_server(test_suite=None):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
 
     sys.stderr.write('running ServerOldMediatorIntLoop\n')
     print 'running ServerOldMediatorIntLoop'
-    factory = AppStateFactorySimple(use_local_srv = local_srv)
+    factory = AppStateFactorySimple()
     a_server = ServerOldMediatorIntLoop(test_suite = test_suite,
 	editor_factory = factory)
         
     a_server.run()
     
-def run_ext_server(test_suite=None, local_srv = 1):
+def run_ext_server(test_suite=None):
     """Start a ServerMainThread with external message loop using
     win32event and the old MediatorObject.
     """
 
     sys.stderr.write('running ExtLoopWin32 with ServerOldMediator\n')
     print 'running ExtLoopWin32 with ServerOldMediator'
-    a_loop = ExtLoopWin32(test_suite, local_srv = local_srv)
+    a_loop = ExtLoopWin32(test_suite)
 
     a_loop.run()
     
-def run_smt_server(test_suite=None, local_srv = 1):
+def run_smt_server(test_suite=None):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
-    run_ext_server(test_suite, local_srv = local_srv)
+    run_ext_server(test_suite)
     
-def run_server(test_suite=None, local_srv = 1):
+def run_server(test_suite=None):
     """Start a single thread, single process server.
     """
 
-    factory = AppStateFactorySimple(use_local_srv = local_srv)
+    factory = AppStateFactorySimple()
     a_server = ServerSingleThread(editor_factory = factory)
     a_server.test_suite = test_suite
         
@@ -2153,9 +2176,6 @@ OPTIONS
 
    (Default: None)
 
--r :
-   Let remote editor handle indentation, line-numbering (if it can)
-
 --sst :
    Use ServerSingleThread (default)
 
@@ -2174,7 +2194,7 @@ OPTIONS
 if __name__ == '__main__':
 
 
-    opts, args = util.gopt(['h', None, 't=', None, 'r', None,
+    opts, args = util.gopt(['h', None, 't=', None, 
 			    'int', None, 'sst', None,
                             'ext', None, 'smt', None])
 
@@ -2195,16 +2215,13 @@ if __name__ == '__main__':
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
-    local_srv = 1
-    if opts['r'] != None:
-	local_srv = 0
     if opts['int'] != None:
-	run_int_server(test_suite=opts['t'], local_srv = local_srv)
+	run_int_server(test_suite=opts['t'])
     elif opts['ext'] != None:
-	run_ext_server(test_suite=opts['t'], local_srv = local_srv)
+	run_ext_server(test_suite=opts['t'])
     elif opts['smt'] != None:
-	run_smt_server(test_suite=opts['t'], local_srv = local_srv)
+	run_smt_server(test_suite=opts['t'])
     else:
-	run_server(test_suite=opts['t'], local_srv = local_srv)
+	run_server(test_suite=opts['t'])
 
     sr_interface.disconnect()

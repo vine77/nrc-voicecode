@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:14:52 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 21:02:06 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,12 +25,12 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientConnection</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.connect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)<SPAN CLASS="OneLiner"> # connect to the mediator</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.connect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)<SPAN CLASS="OneLiner"> # connect to the mediator</SPAN>
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.disconnect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.is_connected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.is_connected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.listen"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.listen</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)<SPAN CLASS="OneLiner"> # creates and starts a data thread on the listen_sock</SPAN>
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.open_vc_listener_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.open_vc_listener_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_port</SPAN>)<SPAN CLASS="OneLiner"> # Connects to VoiceCode on the listen port</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.open_vc_listener_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.open_vc_listener_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_port</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)<SPAN CLASS="OneLiner"> # Connects to VoiceCode on the listen port</SPAN>
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.open_vc_talker_conn"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.open_vc_talker_conn</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">talk_port</SPAN>)<SPAN CLASS="OneLiner"> # Connects to VoiceCode on the talk port</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -82,7 +82,7 @@ ending, or the client is quitting
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="tcp_client.ClientConnection.connect" CLASS="Method">tcp_client.ClientConnection.connect(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)</H2>
+<H2 ID="tcp_client.ClientConnection.connect" CLASS="Method">tcp_client.ClientConnection.connect(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>connect to the mediator</P>
 
 <P>
@@ -112,6 +112,10 @@ new listen connections.  Defaults to VC_LISTENER_PORT
 <EM>INT</EM> talk_port
 <DD>port number on which the server expects
 new talk connections.  Defaults to VC_TALKER_PORT
+<DT>
+<EM>BOOL</EM> test_client
+<DD>true if this connection is for a client
+expecting to run regression tests
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -226,7 +230,7 @@ socket <EM>listen_sock</EM>
 <P>
 ..[ListenAndQueueMsgsThread] 
 tcp_server.ListenAndQueueMsgsThread.html</P>
-<H2 ID="tcp_client.ClientConnection.open_vc_listener_conn" CLASS="Method">tcp_client.ClientConnection.open_vc_listener_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_port</SPAN>)</H2>
+<H2 ID="tcp_client.ClientConnection.open_vc_listener_conn" CLASS="Method">tcp_client.ClientConnection.open_vc_listener_conn(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">host</SPAN>, <SPAN CLASS="Argument">listen_port</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>Connects to VoiceCode on the listen port</P>
 
 <P>
@@ -247,6 +251,10 @@ locally.
 <EM>INT</EM> listen_port
 <DD>port number on which the server expects
 new listen connections
+<DT>
+<EM>BOOL</EM> test_client
+<DD>true if this connection is for a client
+expecting to run regression tests
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
