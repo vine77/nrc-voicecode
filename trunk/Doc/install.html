@@ -32,7 +32,6 @@ To install VoiceCode, follow the following steps
    <UL>
    <LI><A HREF="#VCODE_HOME">2.1 VCODE_HOME variable</A>
    <LI><A HREF="#PYTHONPATH">2.2 PYTHONPATH variable</A>
-   <LI><A HREF="#VCODE_NOSPEECH">2.3 VCODE_NOSPEECH variable</A>
    </UL>
 <LI><A HREF="#VoiceCode_user">3. Create a <EM>VoiceCode</EM> user</A>
 <LI><A HREF="#test">4. Test the installation</A>
@@ -46,18 +45,11 @@ In order to use VoiceCode, you must first install the following
 support software.
 
 <UL>
-<LI><A HREF="http://www.python.org">Python</A>
+<LI><A HREF="http://www.python.org">Python 1.5 (Python 2.0 not supported for now)</A>
 <LI><A HREF="http://www.synapseadaptive.com/joel/pythonamacroasystem.htm">NatLink</A>
 <LI><A HREF="http://www.dragonsys.com/">Dragon Naturally Speaking</A>
+<LI><A HREF="http://wxpython.org/">wxPython 2.2</A>
 </UL>
-
-Note that you can still run VoiceCode in <A HREF="user.html#simulation">simulation mode</A> without having to install Dragon Naturally Speaking. You must then set the <A HREF="#VCODE_NOSPEECH">VCODE_NOSPEECH</A> environment variable.
-
-<P>
-
-Note however that NatLink must be installed on your machine whether or
-not you install NatSpeak. If you don't install NatSpeak, you can just
-copy NatLink to your machine without running <EM>EnableNL</EM>.
 
 <H2><A NAME="unzip">1. Unzip the files</A></H2>
 
@@ -81,22 +73,12 @@ Add the following to your <EM>PYTHONPATH</EM> variable:
 
 <P>
 
-<EM>%VCODE_HOME%/Mediator; %VCODE_HOME%/Admin; C:/NatLink</EM>
-
-Assuming of course you have installed the NatLink files under
-<EM>C:/NatLink</EM>.
-
-
-<H3><A NAME="VCODE_NOSPEECH">2.3 VCODE_NOSPEECH variable</A></H3>
-
-If you don't have installed Dragon Naturally Speaking, you can still
-run VoiceCode in simulation and use keyboard commands to simulate
-dictation events.
+<EM>%VCODE_HOME%/Mediator;%VCODE_HOME%/Admin;C:/NatLink</EM>
 
 <P>
 
-To do this you must define environment variable
-<EM>VCODE_NOSPEECH</EM> (the value you set it to is irrelevant).
+Assuming of course you have installed the NatLink files under
+<EM>C:/NatLink</EM>.
 
 
 <H2><A NAME="VoiceCode_user">3. Create a <EM>VoiceCode</EM> user</A></H2>
@@ -105,8 +87,27 @@ VoiceCode connects to your Speech Recognition system through a special
 user. This is to avoid biasing your regular user towards dictation of
 code (which tends to be very different from dictating English).
 
-Before using or testing VoiceCode, you must create that special
-user. The user name should be <EM>VoiceCode</EM>.
+Before using or testing VoiceCode, you must therefore create that
+special user. The user name should be <EM>VoiceCode</EM>. Instead of
+starting with a brand new user, we recommend that you start with a
+copy of a user that you have already trained to plain English (if you
+have one). To make a copy of a user, do the following:
+
+<P>
+
+
+
+<UL>
+<LI>open the user in NatSpeak
+<LI>Select User->Backup from the menu.
+<LI>Select User->Restore. This will create a duplicate of the
+     user, with a name like "UserName-Restored1".
+<LI>Select User->Open, highlight the newly created user, and
+    press Rename. Rename it to "VoiceCode".
+<LI>Select your actual user, and press Open. This is just because
+    I don't trust NatSpeak not to undo the rename if you hit Cancel,
+    and is probably paranoia.
+</UL>
 
 
 <H2><A NAME="test">4. Test the installation</A></H2>
