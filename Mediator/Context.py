@@ -154,7 +154,61 @@ class Context(Object):
         
         debug.virtual('Context._applies')
 
+#    Currently, the recognized return values for scope, in order of
+#    decreasing specificity, are: 
+#
+#    "last command": depends on the last command executed
+#    "immediate": depends on the current line or statement in the
+#        current buffer 
+#    "block": depends on a wider range of code around the cursor (for
+#        example, whether the cursor is inside a for loop)
+#    "project": depends on whether the current file is part of a
+#        project
+#    "buffer": depends only on characteristics of the entire buffer
+#        (for example, the language or file name)
+#    "global": depends only on the global state of the mediator
+#    "any": independent of context
 
+scope_map = {"last command": 0,
+             "immediate": 1,
+             "block": 2,
+             "project": 3,
+             "buffer": 4, 
+             "global": 5,
+             "any": 6}
+
+def valid_scope(scope):
+    """checks whether the scope is a recognized one
+
+    **INPUTS**
+
+    *STR scope* -- the string identifying the scope
+
+    **OUTPUTS**
+
+    *BOOL* -- true if the scope is known
+    """
+    try:
+        scope_map[scope]
+        return 1
+    except KeyError:
+        return 0
+
+def scope_order():
+    """returns the list of scope names in order from highest priority to
+    lowest
+
+    **INPUTS**
+
+    *none*
+
+    **OUTPUTS**
+
+    *[STR]* 
+    """
+    pairs = scope_map.items()
+    pairs.sort(lambda a, b: cmp(a[1], b[1]))
+    return map(lambda a: a[0], pairs)
 
 
 #  Todo

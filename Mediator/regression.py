@@ -529,8 +529,11 @@ class TempConfigNewMediatorFactory(Object.Object):
                 symbol_match_dlg = self.symbol_match_dlg,
                 alt_sym_file = alt_sym_file, temporary = 1)
         debug.trace('TempConfigNewMediatorFactory.new_config', '** after NewMediatorObject()')                        
+        exclude_interp = 0
+        if self.pickled_interp:
+            exclude_interp = 1
         if not skip_config:
-            a_mediator.configure(testing = 1)
+            a_mediator.configure(exclude_interp = exclude_interp, testing = 1)
         if editor == None:
             app = EdSim.EdSim()
         else:

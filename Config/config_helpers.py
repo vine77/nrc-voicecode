@@ -986,6 +986,7 @@ class PairedQuotes(PairedPunctuation):
                              'singular_spoken_forms': [],
                              'plural_spoken_forms': [],
                              'no_empty': [],
+                             'no_singular_navigation': [],
                              'open_prefixes': None,
                              'close_prefixes': None},
                             args)
@@ -1014,7 +1015,7 @@ class PairedQuotes(PairedPunctuation):
         self.close_prefixes = close_prefixes
 
     def add(self, written_form, singular_spoken_forms, 
-            plural_spoken_forms, no_empty = 0):
+            plural_spoken_forms, no_empty = 0, no_singular_navigation = 0):
         """add a type of quotes
 
         **INPUTS**
@@ -1025,6 +1026,11 @@ class PairedQuotes(PairedPunctuation):
 
         *BOOL* no_empty -- flag indicating whether to omit empty quotes form
 
+        *BOOL* no_singular_navigation -- flag indicating whether to 
+        omit commands for navigation around singular forms.  This is used 
+        when adding paired quotes for a symbol which also has a standard
+        SinglePunctuation.
+
         **OUTPUTS**
 
         *none*
@@ -1033,6 +1039,7 @@ class PairedQuotes(PairedPunctuation):
         self.singular_spoken_forms.append(singular_spoken_forms)
         self.plural_spoken_forms.append(plural_spoken_forms)
         self.no_empty.append(no_empty)
+        self.no_singular_navigation.append(no_singular_navigation)
 
     def create(self, interp, force = 0, dictation_only = 0):
         """add LSAs for dictation of punctuation symbols and CSCs for
@@ -1122,8 +1129,9 @@ class PairedQuotes(PairedPunctuation):
                         self.plural_spoken_forms[i])
                 if not dictation_only:
                     expression = re.escape(self.written_forms[i])
-                    self._add_navigation(navigation, expression,
-                        self.singular_spoken_forms[i])
+                    if not self.no_singular_navigation[i]:
+                        self._add_navigation(navigation, expression,
+                            self.singular_spoken_forms[i])
                     if plural:
                         self._add_jump_out(navigation,
                             self.written_forms[i],

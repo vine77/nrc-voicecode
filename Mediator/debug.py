@@ -48,6 +48,17 @@ def critical_warning(warn):
 #   file and/or tell the user to submit a bug report
     sys.stderr.write(warn)
 
+def config_warning(warn):
+    """Prints a warning message about a possible configuration error
+    
+    Configuration errors may be caused by the standard commands defined
+    in vc_config, but could also be caused by user definitions in
+    user_config.
+    """
+#   for now, just write to stderr.  Later, we may want to log this to a
+#   file 
+    sys.stderr.write(warn)
+
 
 
 def print_call_stack(print_to_file=sys.stdout):

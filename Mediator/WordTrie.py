@@ -127,15 +127,14 @@ class WordTrie(Object):
         corresponding to the partial phrase, together with any remaining 
         unmatched words from the phrase
         """
-        if not phrase:
-            if self.value is None:
-                return []
-            return [(self.value, [])]
-        word = phrase[0]
-        rest = phrase[1:]
         matches = []
-        if self.branches.has_key(word):
-            matches = self.branches[word].all_matches(rest)
+        if phrase:
+            word = phrase[0]
+            rest = phrase[1:]
+            if self.branches.has_key(word):
+                matches = self.branches[word].all_matches(rest)
+        if self.value is not None:
+            matches.append((self.value, phrase))
         return matches
 
     def all_phrase_values(self, prefix = None):

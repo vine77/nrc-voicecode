@@ -22,12 +22,12 @@
 import os, re, string, sys
 
 import actions_gen, auto_test, vc_globals
-from debug import trace
+from debug import trace, config_warning
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
 from cont_gen import ContC, ContPy
-from CSCmd import CSCmd
+from CSCmd import CSCmd, DuplicateContextKeys
 from Object import Object, OwnerObject
 import SymDict
 import sr_interface
@@ -128,7 +128,6 @@ class CSCmdSet(Object):
             name = command.spoken_forms[0]
         self.commands[name] = command
 
-
     def replace_spoken(self, name, spoken_forms):
         """replace the spoken forms of a command with the given name
 
@@ -143,7 +142,8 @@ class CSCmdSet(Object):
         *BOOL* -- true if a command by that name existed
         """
         try:
-            self.commands[name].spoken_forms = spoken_forms[:]
+            command = self.commands[name]
+            command.replace_spoken(spoken_forms)
         except KeyError:
             return 0
         return 1
@@ -163,10 +163,9 @@ class CSCmdSet(Object):
         """
         try:
             command = self.commands[name]
+            command.add_spoken(spoken_forms)
         except KeyError:
             return 0
-        for spoken in spoken_forms:
-            command.spoken_forms.append(spoken)
         return 1
 
 
@@ -185,13 +184,9 @@ class CSCmdSet(Object):
         """
         try:
             command = self.commands[name]
+            command.remove_spoken(spoken_forms)
         except KeyError:
             return 0
-        new_spoken = []
-        for spoken in command.spoken_forms:
-            if spoken not in spoken_forms:
-                new_spoken.append(spoken)
-        command.spoken_forms = new_spoken
         return 1
 
 
@@ -352,10 +347,9 @@ class CmdInterp(OwnerObject):
     *NewMediatorObject mediator* -- reference to the parent mediator
     which owns this CmdInterp instance
 
-    {STR: [[(Context , FCT)]} *cmd_index={}* -- index of CSCs. Key
-     is the spoken form of the command, value is a list of contextual
-     meanings. A contextual meaning is a pair of a *context object*
-     and an *action function* to be fired if the context applies.
+    WordTrie *commands* -- WordTrie mapping spoken form phrases to 
+    CSCmdDict objects which contain the data on mappings from Context to
+    Action
 
     [SymDict] *known_symbols* -- dictionary of known symbols
     
@@ -414,7 +408,7 @@ class CmdInterp(OwnerObject):
         #
         self.deep_construct(CmdInterp,
                             {'mediator': mediator,
-                             'cmd_index': {}, 
+                             'commands': WordTrie.WordTrie(), 
                              'known_symbols': None,
                              'language_specific_aliases': \
                                  {None: WordTrie.WordTrie()},
@@ -539,17 +533,18 @@ class CmdInterp(OwnerObject):
              #
              # Identify leading CSC, LSA, symbol and ordinary word
              #
-             chopped_CSC, CSC_consumes, cmd_without_CSC = \
-                 self.chop_CSC(cmd, app)
+             possible_CSCs = self.chop_CSC(cmd, app)
              chopped_LSA, LSA_consumes, cmd_without_LSA = \
                  self.chop_LSA(cmd, app)
              chopped_symbol, symbol_consumes, cmd_without_symbol = \
                  self.chop_symbol(cmd, app)
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
-             most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
+             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
 
              trace('CmdInterp.interpret_massaged', 
-             'chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
+             'possible_CSCs=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (possible_CSCs, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
+             trace('CmdInterp.interpret_massaged', 
+                 'most_definite = %d' % most_definite)
              head_was_translated = 0
 
              #
@@ -568,59 +563,57 @@ class CmdInterp(OwnerObject):
              #   spoken form of a known symbol
              # - ordinary words can be anything
              #
-             
-             if CSC_consumes == most_consumed:
-                 #
-                 # CSC consumed the most words from the command.
-                 # Try all the CSCs with this spoken form until find
-                 # one that applies in current context
-                 #
-                 trace('CmdInterp.interpret_massaged', 'processing leading CSC=\'%s\'' % chopped_CSC)
-                 CSCs = self.cmd_index[chopped_CSC]
-                 trace('CmdInterp.interpret_massaged', '** CSCs=%s' % repr(CSCs))                 
-                 csc_applies = None
-# DCF: why is self.cmd_index[a_spoken_form] a list of CSCs each with
-# multiple meanings?  The meanings are a dictionary, so there is no way
-# to specify their order, so allowing a list of forms allows you to
-# prioritize between elements.  On the other hand, add_csc always
-# appends to the list, so you always have to go from general to
-# specific.  Furthermore, priority within elements is
-# undefined.  This seems like a very bad design.
-                 preceding_symbol = 0
-                 if untranslated_words:
-                     preceding_symbol = 1
-                 for aCSC in CSCs:
-                     csc_applies = aCSC.applies(app, preceding_symbol)
-                     trace('CmdInterp.interpret_massaged', '** aCSC=%s, csc_applies=%s' % (aCSC, csc_applies))
-                     if (csc_applies):
-# flush untranslated words before executing action
-                         if untranslated_words:
-                             self.match_untranslated_text(untranslated_words, 
-                                 app, exact_symbol)
-                             untranslated_words = []
-                             exact_symbol = 0
-                         context, action = csc_applies
-                         action.log_execute(app, context)
-                         break
+             csc_applies = 0
 
-                 if csc_applies:
-                     #
-                     # Found a CSC that applies
-                     # Chop the CSC from the command
-                     #
-                     cmd = cmd_without_CSC
-                     head_was_translated = 1
-                 else:
-                     #
-                     # As it turns out, none of the CSCs with this
-                     # spoken form apply in current context
-                     # So don't chop the CSC
-                     #
-                     chopped_CSC = None
-                     CSC_consumes = 0
-                     most_consumed = max((LSA_consumes, symbol_consumes, word_consumes))
+             preceding_symbol = 0
+             if untranslated_words:
+                 preceding_symbol = 1
              
-             if not head_was_translated and LSA_consumes == most_consumed:
+             for match in possible_CSCs:
+                 meanings, CSC_consumes, cmd_without_CSC = match
+                 trace('CmdInterp.interpret_massaged', 
+                     'possible CSC %s, consumes %d' % \
+                     (meanings, CSC_consumes))
+                 if CSC_consumes < most_definite:
+# LSA or symbol consumes more than the rest of the CSCs, so defer to
+# them
+                     break
+                 applicable = meanings.applies(app, preceding_symbol)
+                 if not applicable:
+                     continue
+                 context, action = applicable[0]
+                 trace('CmdInterp.interpret_massaged', 
+                     'len(applicable) = %d' % len(applicable))
+                 if len(applicable) > 1:
+                     msg = 'Configuration Warning: phrase %s\n' \
+                         % cmd[:CSC_consumes]
+                     msg = msg + \
+                         'has more than one applicable context with the same'
+                     msg = msg + '\nscope %s:\n' % context.scope()
+                     for context, action in applicable:
+                         msg = msg + 'context: %s, action: %s\n' \
+                             % (context, action)
+                     msg = msg + 'Applying the first context'
+                     config_warning(msg)
+                 csc_applies = 1
+# flush untranslated words before executing action
+                 if untranslated_words:
+                     self.match_untranslated_text(untranslated_words, 
+                         app, exact_symbol)
+                     untranslated_words = []
+                     exact_symbol = 0
+                 action.log_execute(app, context)
+                 break
+
+             if csc_applies:
+                 #
+                 # Found a CSC that applies
+                 # Chop the CSC from the command
+                 #
+                 cmd = cmd_without_CSC
+                 head_was_translated = 1
+             
+             if not head_was_translated and LSA_consumes == most_definite:
                  #
                  # LSA consumed the most words from command. Insert it.
                  #
@@ -636,7 +629,7 @@ class CmdInterp(OwnerObject):
                  head_was_translated = 1
 
 
-             if not head_was_translated and symbol_consumes == most_consumed:
+             if not head_was_translated and symbol_consumes == most_definite:
                  #
                  # Symbol consumed the most words from command. Insert it.
                  #
@@ -658,7 +651,7 @@ class CmdInterp(OwnerObject):
                  head_was_translated = 1
                                           
                     
-             if not head_was_translated and word_consumes == most_consumed:
+             if not head_was_translated and word_consumes == most_definite:
                  #
                  # Nothing special translated at begining of command.
                  # Just chop off the first word and insert it, marking
@@ -962,35 +955,89 @@ class CmdInterp(OwnerObject):
 #            app.insert_indent(untranslated_text, '')
         
 
-    def chop_CSC(self, cmd, app):
+    def chop_CSC(self, command, app):
         """Chops the start of a command if it starts with a CSC.
         
         **INPUTS**
         
-        *[(STR, STR)]* cmd -- The command,  a list of
+        *[(STR, STR)]* command -- The command,  a list of
          tuples of (spoken_form, written_form), with the spoken form
          cleaned and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
 
-        Returns a tuple *(chopped_CSC, consumed, rest)* where:
+        Returns a list of tuples, each of the form 
+        *(chopped_CSC, consumed, rest)*,  where:
         
-        *STR* chopped_symbol -- The spoken form of the CSC that
-        was chopped off. If *None*, it means *cmd* did
-        not start with a known CSC.
+        *CSCmdDict meanings* -- the meanings corresponding to the spoken
+        form chopped off.
 
         *INT* consumed* -- Number of words consumed by the CSC from
          the command
 
         *[STR]* rest -- The remaining of *cmd* after the construct has been
         chopped
+
+        The list is sorted in order of descending numbers of words
+        consumed
         """
         
-        trace('CmdInterp.chop_CSC', 'cmd=%s' % cmd)
-#        print '-- CmdInterp.chop_CSC: cmd=%s' % cmd
+        trace('CmdInterp.chop_CSC', 'command=%s' % command)
+        spoken_list = map(lambda word: process_initials(word[0]), command)
+        trace('CmdInterp.chop_CSC', 'spoken=%s' % spoken_list)
 
-        return self.chop_construct(cmd, CmdInterp.is_spoken_CSC, app)
+        matches = self.chop_spoken_CSC(spoken_list, app)
+        full_matches = []
+        
+        for match in matches:
+            cmd_dict, consumed = match
+            trace('CmdInterp.chop_CSC', 'consumed=%s' % consumed)
+            full_matches.append((cmd_dict, consumed, command[consumed:]))
 
+        return full_matches
+
+    def chop_spoken_CSC(self, spoken_list, app):
+        """Chops the start of a command if it starts with a CSC.
+        
+        **INPUTS**
+        
+        *[STR]* spoken_list -- The list of spoken forms in the command
+
+        **OUTPUTS**
+
+        Returns a list of tuples, each of the form 
+        *(meanings, consumed)*, where:
+        
+        *CSCmdDict meanings* -- the meanings corresponding to the spoken
+        form chopped off.
+
+        *INT* consumed* -- Number of words consumed by the CSC from
+         the command
+
+        The list is sorted in order of descending numbers of words
+        consumed
+        """
+        spoken = string.join(spoken_list)
+        phrase = string.split(spoken)
+
+        matches = self.commands.all_matches(phrase)
+        trace('CmdInterp.chop_spoken_CSC',
+            '%d matches' % len(matches))
+        whole_matches = []
+        for match in matches:
+            cmd_dict, rest_spoken = match
+            words_consumed = len(phrase) - len(rest_spoken)
+            consumed_words = phrase[:words_consumed]
+            trace('CmdInterp.chop_spoken_CSC',
+                'words = %d, phrase = %s' % (words_consumed,
+                phrase[:words_consumed]))
+            whole, consumed = self.whole_words(spoken_list, consumed_words)
+            if whole:
+                t = (cmd_dict, consumed)
+                whole_matches.append(t)
+
+        return whole_matches
+                    
     def chop_LSA(self, command, app):
         """Chops off the beginning of a command if it is an LSA.
                 
@@ -1392,6 +1439,8 @@ class CmdInterp(OwnerObject):
 
 #        debug.trace('CmdInterp.index_csc', 'acmd=%s, acmd.spoken_forms=%s, =%s' % (acmd, acmd.spoken_forms, acmd.meanings))
         debug.trace('CmdInterp.index_csc', 'spoken_forms=%s' % acmd.spoken_forms)
+        cmd_dict = acmd.get_meanings()
+
         for a_spoken_form in acmd.spoken_forms:
             #
             # Remove leading, trailing and double blanks from the spoken form
@@ -1402,28 +1451,26 @@ class CmdInterp(OwnerObject):
             #
             # Index the spoken form
             #
-            if (self.cmd_index.has_key(a_spoken_form)):
-                #
-                # Already indexed. Just add to the list of CSCs for that
-                # spoken form
-                #
-                cmds_this_spoken_form = self.cmd_index[a_spoken_form]
-                debug.trace('CmdInterp.index_csc',
-                    'spoken form %s has %d commands' % (a_spoken_form, 
-                    len(cmds_this_spoken_form)))
-                cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
-# DCF: what's wrong with self.cmd_index[a_spoken_form].append(acmd)?
-# also, why is self.cmd_index[a_spoken_form] a list of CSCs each with
-# multiple meanings?  The meanings are a dictionary, so there is no way
-# to specify their order, so allowing a list of forms allows you to
-# prioritize between elements.  However, priority within elements is
-# undefined.  This seems like a very bad design.
+            phrase = string.split(a_spoken_form)
+            meanings = self.commands.complete_match(phrase)
+            trace('CmdInterp.index_csc', 'adding phrase %s' % phrase)
+            if meanings:
+                try:
+                    meanings.merge(cmd_dict)
+                except DuplicateContextKeys, e:
+                    msg = 'Warning: when adding CSC spoken form %s,\n' % phrase
+                    msg = msg + e.msg
+                    config_warning(msg)
+
+# since meanings is an object reference, we don't need to call
+# add_phrase to modify the value corresponding to the
+# phrase
             else:
                 #
                 # First time indexed. Create a new list of CSCs for that
                 # spoken form, and add it to the SR vocabulary.
                 #
-                self.cmd_index[a_spoken_form] = [acmd]
+                self.commands.add_phrase(phrase, cmd_dict)
                 if (self.add_sr_entries_for_LSAs_and_CSCs):
                     sr_interface.addWord(orig_spoken)
 # we had some problems in regression testing because the individual
@@ -1441,6 +1488,9 @@ class CmdInterp(OwnerObject):
                         for word in all_words:
                             word = sr_interface.clean_spoken_form(word)
                             sr_interface.addWord(word)
+
+#            print self.commands.all_matches(phrase)
+
     def add_csc(self, acmd):
         """Add a new Context Sensitive Command. (synonym for index_csc)
 

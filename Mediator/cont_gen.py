@@ -250,6 +250,7 @@ class ContLastActionWas(Context):
 
         *STR* -- the key
         """
+        type_names = []
         for t in self.types:
             type_names.append(str(t))
         type_names.sort()
@@ -369,7 +370,7 @@ class ContEmacs(Context):
 
         *STR* -- the key
         """
-        return "EmacsInMiniBuffer"
+        return "Emacs"
 
 
 class ContEmacsInMinibuffer(Context):
