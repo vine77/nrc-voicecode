@@ -64,6 +64,11 @@ input.  Whenever a window matching vr-win-class (which see) and
 vr-win-title is the foreground window, dictation and commands spoken
 into the microphone will be executed by VR Mode.")
 
+(defvar vcode-previous-frame-title-format frame-title-format
+  "*Store previous frame-title-format so we can restore it when vcode
+  exits (or the mediator disconnects)"
+)
+
 (defvar vr-activation-list nil
   "*A list of buffer name patterns which VR Mode will voice activate.
 Each element of the list is a REGEXP.  Any buffer whose name matches
@@ -577,6 +582,28 @@ expanded, since they often make it go out of sync."
 	(run-hooks 'vr-send-kill-buffer-hook)
 	)
     )
+)
+
+(defun vcode-send-suspended ()
+  "sends suspended message to the mediator to let it know that Emacs
+  is (about to be) suspended"
+  (let ((empty-resp (make-hash-table :test 'string=)))
+    (vr-send-cmd 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "suspended" empty-resp)))
+    )
+
+)
+
+(defun vcode-send-resuming ()
+  "sends resuming message to the mediator to let it know that Emacs
+  has just resumed execution (from being suspended)"
+  (let ((empty-resp (make-hash-table :test 'string=)))
+    (vr-send-cmd 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "resuming" empty-resp)))
+    )
+
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1269,6 +1296,10 @@ speech server"
     (remove-hook 'post-command-hook 'vr-post-command)
     (remove-hook 'minibuffer-setup-hook 'vr-enter-minibuffer)
     (remove-hook 'kill-buffer-hook 'vr-kill-buffer)
+    (remove-hook 'suspend-hook 'vcode-send-suspended)
+    (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
+    (setq frame-title-format 
+          `("%b -- " (, invocation-name "@" system-name)))
     (vr-activate-buffer nil)
     (if vr-host
 	(vr-sentinel nil "finished\n")
@@ -1669,6 +1700,8 @@ command was a yank or not."
   (setq vr-send-activate-buffer-hook 'vcode-send-activate-buffer)
   (setq vr-send-deactivate-buffer-hook 'vcode-send-deactivate-buffer)
   (add-hook 'kill-buffer-hook 'vr-kill-buffer)
+  (add-hook 'suspend-hook 'vcode-send-suspended)
+  (add-hook 'suspend-resume-hook 'vcode-send-resuming)
 
   ;;; Function for handling errors in execution of commands received from 
   ;;; VR.exe.
@@ -1689,12 +1722,23 @@ command was a yank or not."
   (cl-puthash 'send_id 'vcode-cmd-send-app-id vr-message-handler-hooks)
   (cl-puthash 'terminating 'vr-cmd-terminating vr-message-handler-hooks)
   (cl-puthash 'test_client_query 'vcode-cmd-test-client-query vr-message-handler-hooks)
+
+  ;;; These messages are sent once by VCode immediately after the 
+  ;;; handshake part of the protocol
+  ;;;
   (cl-puthash 'set_instance_string 'vcode-cmd-set-instance-string vr-message-handler-hooks)
-  (cl-puthash 'instance_string 'vcode-cmd-get-instance-string vr-message-handler-hooks)
-
-
+; DCF: obsolete message 
+;  (cl-puthash 'instance_string 'vcode-cmd-get-instance-string vr-message-handler-hooks)
   (cl-puthash 'suspendable 'vcode-cmd-suspendable 
 	      vr-message-handler-hooks)
+  (cl-puthash 'suspend_notification 'vcode-cmd-suspend-notification 
+	      vr-message-handler-hooks)
+  (cl-puthash 'shared_window 'vcode-cmd-shared-window
+	      vr-message-handler-hooks)
+  (cl-puthash 'multiple_windows 'vcode-cmd-multiple-windows
+	      vr-message-handler-hooks)
+
+
   (cl-puthash 'recog_begin 'vcode-cmd-recognition-start 
 	      vr-message-handler-hooks)
   (cl-puthash 'recog_end 'vcode-cmd-recognition-end 
@@ -1856,8 +1900,14 @@ returns name of current buffer."
    (let ((resp-cont (make-hash-table :test 'string=)))
 
    (setq vcode-instance-string (cl-gethash "instance_string" (nth 1 vcode-req)))
-   (cl-puthash "value" vcode-instance-string resp-cont)
 
+; emacs can't set the window title when running from a shell window
+   (if (eq window-system nil)
+     (cl-puthash "value" 0 resp-cont)
+     (cl-puthash "value" 1 resp-cont)	 
+   )
+
+   (setq vcode-previous-frame-title-format frame-title-format)
    (setq frame-title-format 
           `("%b -- " (,vcode-instance-string invocation-name "@" system-name)))
 
@@ -1972,6 +2022,50 @@ a buffer"
       'vr-serialize-message-hook (list "suspendable_resp" resp-cont)))
    )
 )
+
+(defun vcode-cmd-suspend-notification (vcode-request)
+   (let ((resp-cont (make-hash-table :test 'string=)))
+
+     (if (string= "w32" window-system)
+	 (cl-puthash "value" 0 resp-cont)
+       (cl-puthash "value" 1 resp-cont)	 
+     )
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "suspend_notification_resp" resp-cont)))
+   )
+)
+
+(defun vcode-cmd-shared-window (vcode-request)
+   (let ((resp-cont (make-hash-table :test 'string=)))
+
+; when running from the shell, Emacs could be suspended or killed and
+; the same window could belong to another application
+     (if (eq window-system nil)
+	 (cl-puthash "value" 1 resp-cont)
+       (cl-puthash "value" 0 resp-cont)	 
+     )
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "shared_window_resp" resp-cont)))
+   )
+)
+
+(defun vcode-cmd-multiple-windows (vcode-request)
+   (let ((resp-cont (make-hash-table :test 'string=)))
+
+     ; unless we're running from the shell, we can have multiple windows
+     ; (frames, in Emacs terminology)
+     (if (eq window-system nil)
+	 (cl-puthash "value" 0 resp-cont)
+       (cl-puthash "value" 1 resp-cont)	 
+     )
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "multiple_windows_resp" resp-cont)))
+   )
+)
+
 
 (defun vcode-cmd-recognition-start (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
@@ -2138,6 +2232,7 @@ message.
 	    (setq mess-name "updates")
 	    (setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
 	)
+	(setq mess-name "updates")
       )
     (if (string= mess-name "updates")
 	(setq mess-key "value")
