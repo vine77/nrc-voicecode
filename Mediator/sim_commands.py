@@ -137,7 +137,7 @@ quit()
 """
 
 import natlink
-import os, profile, re, string, sys
+import os, profile, re, string, sys, time
 import traceback
 import vc_globals
 
@@ -168,6 +168,9 @@ gui_sim = 0
 
 # local name space for user command-line commands
 command_space = {}
+
+# Set this to 0 during regression testing and > 0 during interactive testing
+sleep_before_recognitionMimic = 0
 
 def help():
     print __doc__
@@ -239,7 +242,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
               say(['x', ' != \\not equal to'] -> 'x != '
     """
     
-    global the_mediator
+    global the_mediator, sleep_before_recognitionMimic
 
 #    print '-- sim_commands.say: utterance=%s' % utterance
 
@@ -285,7 +288,19 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 	if gui_sim:
 	    the_mediator.mixed_grammar.activate()
 	    the_mediator.code_select_grammar.activate()
+
+
+        #
+        # During interactive sessions, may need to pause a few seconds before
+        # doing *recognitionMimic*, to give user time to switch to the editor
+        # window.
+        #
+        if sleep_before_recognitionMimic:
+            print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
+            time.sleep(sleep_before_recognitionMimic)
+            
         natlink.recognitionMimic(words)
+        
 	if gui_sim:
 	    the_mediator.mixed_grammar.deactivate()
 	    the_mediator.code_select_grammar.deactivate()
