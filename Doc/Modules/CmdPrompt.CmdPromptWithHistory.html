@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:40:34 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:50:47 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CmdPromptWithHistory</SPAN>(<A CLASS="DocLink" HREF="CmdPrompt.CmdPrompt.html">CmdPrompt</A>):
-    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">cursor_always_on_top=1</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # create a new history stack</SPAN>
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # create a new history stack</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory._on_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory._on_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory._raw_push"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory._raw_push</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # push a command onto the stack, without changing stack_index</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.depth"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.depth</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # current depth of stack</SPAN>
@@ -70,12 +70,6 @@ edited, and in_progress.</P>
 <EM>INT</EM> stack_index
 <DD>index (from back of command_stack) of currently
     recalled command
-<DT>
-<EM>BOOL</EM> cursor_always_on_top=1
-<DD>if <EM>TRUE</EM>, then <EM>stack_index</EM> is
-always moved back to the top of the history stack after a new
-command is pushed to it. If <EM>FALSE</EM>, <EM>stack_index</EM> is left at the
-current position
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -93,7 +87,7 @@ forward past the most recent command.  The previous commands may be
 edited, but these changes are lost when the user moves in either
 direction.
 </P>
-<H2 ID="CmdPrompt.CmdPromptWithHistory.__init__" CLASS="Method">CmdPrompt.CmdPromptWithHistory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">cursor_always_on_top=1</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="CmdPrompt.CmdPromptWithHistory.__init__" CLASS="Method">CmdPrompt.CmdPromptWithHistory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>create a new history stack</P>
 
 <P>
@@ -147,11 +141,9 @@ should call this function</P>
 <P>
 <EM>none</EM></P>
 <P>
-Note: the stack_index should normally be moved (either reset
-to 0 or increased by one) when a command is pushed onto the
-stack, but _raw_push does not perform this task </P>
-<P>
-Unless this is specifically desired, push
+Note: the stack_index should normally be reset to zero 
+when a command is pushed onto the stack, but _raw_push does not
+perform this task.  Unless this is specifically desired, push
 should be used instead.
 </P>
 <H2 ID="CmdPrompt.CmdPromptWithHistory.depth" CLASS="Method">CmdPrompt.CmdPromptWithHistory.depth(<SPAN CLASS="Argument">self</SPAN>)</H2>

@@ -427,11 +427,5 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 # change history.  In the case, however, given the brute force implementation of
 # SourceBuffState, there isn't really much point in trying to detect whether 
 # the caller has forged a cookie.
-
-# do make sure that it is at least a subclass of SourceBuffState,
-# otherwise other cookie-related SourceBuffTB methods will fail
-	if not issubclass(cookie.__class__, self._state_cookie_class):
-	    return 0
-
 	return self.file_name == cookie.name()
 

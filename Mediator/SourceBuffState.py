@@ -25,9 +25,8 @@ import debug
 import re, string, sys
 
 from Object import Object
-from SourceBuff import SourceBuffCookie
 
-class SourceBuffState(SourceBuffCookie):
+class SourceBuffState(Object):
     """Basic implementation of a restore-able SourceBuff state
 
     **CLASS ATTRIBUTES**

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:55:45 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Feb 26 14:40:14 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,7 +28,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CommandDictGrammar.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CommandDictGrammar.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CommandDictGrammar.gotBegin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CommandDictGrammar.gotResultsObject</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_type</SPAN>, <SPAN CLASS="Argument">results</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CommandDictGrammar.gotResults</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GramClassBase</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.__del__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -65,9 +65,6 @@ recognised dictation utterances.</P>
 <DD>MSW window handle of the window which must be in the
 foreground for the grammar to be activated, or 0 to make the grammar
 global
-<DT>
-<EM>SpokenUtterance last</EM>
-<DD>stores the last recognized dictation utterance 
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>

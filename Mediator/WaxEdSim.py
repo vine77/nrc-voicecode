@@ -112,11 +112,9 @@ class WaxEdSimPane(wxPanel):
         self.button_line = wxBoxSizer(wxHORIZONTAL)
 
 	self.green_light = wxBitmap("green.bmp", wxBITMAP_TYPE_BMP)
-	self.grey_light = wxBitmap("yellow.bmp", wxBITMAP_TYPE_BMP)
+	self.grey_light = wxBitmap("grey.bmp", wxBITMAP_TYPE_BMP)
 	self.dark_grey_light = wxBitmap("darkgrey.bmp", wxBITMAP_TYPE_BMP)
-	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
-	wxDefaultPosition,
-	(self.grey_light.GetWidth()+10,self.grey_light.GetHeight()+10))
+	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light)
 	self.mic_label = wxStaticText(self, ID_MIC_LABEL, "Microphone: ")
 	self.button_line.Add(self.mic_label, 0, wxALIGN_CENTER)
 	self.button_line.Add(self.mic_button, 0)
@@ -143,10 +141,6 @@ class WaxEdSimPane(wxPanel):
         self.log = log
 	self.prompt_text = "Command> "
 	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
-	self.command_log.write('Microphone button: %d %d\n' % \
-	    (self.mic_button.GetSizeTuple()))
-	self.command_log.write('Microphone button shown = %d\n' % \
-	    (self.mic_button.IsShown()))
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
 	self.vbox.Add(self.button_line, 0)
@@ -303,8 +297,6 @@ class WaxEdSimFrame(wxFrame):
 
     *AppStateWaxEdit* app_control -- AppState interface
 
-    *STR* title -- window title (without filename)
-
     others -- the various menus
     """
 
@@ -312,7 +304,6 @@ class WaxEdSimFrame(wxFrame):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
         wxSize(1000, 600))
 
-	self.title = title
 	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
@@ -351,19 +342,6 @@ class WaxEdSimFrame(wxFrame):
         EVT_MENU(self,ID_FOCUS_EDITOR,self.pane.focus_editor)
         EVT_MENU(self,ID_FOCUS_COMMAND,self.pane.focus_command_line)
         EVT_ACTIVATE(self, self.on_activate) 
-
-    def set_name(self, name):
-        """sets the filename to name (usually indicated in the title bar)
-
-	**INPUTS**
-
-	*STR* name -- name of current file
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.SetTitle(self.title + ' - ' + name)
 
     def editor_buffer(self):
 	"""returns a reference to the TextBufferWX embedded in the GUI
@@ -561,18 +539,6 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 
     def update_mic_button(self, state = None):
 	self.frame.update_mic_button(state)
-    def set_name(self, name):
-        """sets the filename to name (usually indicated in the title bar)
-
-	**INPUTS**
-
-	*STR* name -- name of current file
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.frame.set_name(name)
     def run(self, app_control):
 	"""starts the message loop.  Note: this function does not
 	return until the GUI exits.

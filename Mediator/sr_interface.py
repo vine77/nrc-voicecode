@@ -29,8 +29,6 @@ import actions_gen, CmdInterp
 from Object import Object
 import debug
 
-import SpokenUtterance
-
 #import nsformat
 
 #
@@ -469,53 +467,33 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 #    print '-- sr_interface.vocabulary_entry: returning entry=\'%s\'' % entry
     return entry
 
-class SpokenUtteranceNL(Object):
-    """implementation of SpokenUtterance using natlink ResObj.
-    Defines an interface for manipulating the speech
-    information associated with a single user utterance
+class BufferState(Object):
+    """stores information about the buffer before and after the 
+    most recent dictation utterance
 
     **INSTANCE ATTRIBUTES**
 
-    *ResObj* results -- natlink results object representing speech
-    information
-    *[(STR, STR)]* word_list -- list of spoken, written forms,
-    either originally recognized or corrected with set_words
-    *[STR]* spoken_only -- list of spoken forms,
-    either originally recognized or corrected with set_words
-    *[[(STR, STR))]* choices -- list of alternative choices retrieved
-    from ResObj (ResObj may have more choices than this - see
-    alternatives method)
-    *INT* choices_available -- number of alternative choices available
-    or -1 if unknown
+    *none*
+
+    **CLASS ATTRIBUTES**
+    """
+    def __init__(self):
+        pass
+
+class LastDictationUtterance(Object):
+    """stores information about the most recent dictation utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, results, **attrs):
-	"""creates a SpokenUtteranceNL from a results object
-
-	**INPUTS**
-
-	*ResObj* results -- natlink results object representing speech
-	information
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	# local variables needed for initialization in deep_construct
-	raw_words = results.getWords(0)
-	word_list = map(spoken_written_form, raw_words)
-	spoken_only = map(lambda x: x[0], word_list)
-      
-	self.deep_construct(SpokenUtteranceNL,
-	    {'results' : results, 
-	    'word_list': word_list,
-	    'spoken_only': spoken_only,
-	    'choices_available': -1,
-	    'choices': []}, 
-	    attrs)
+    def __init__(self, **attrs):
+	self.deep_construct(LastDictationUtterance,
+	    {}, attrs)
 
     def spoken_forms(self):
 	"""returns list of spoken forms from the utterance
@@ -528,11 +506,15 @@ class SpokenUtteranceNL(Object):
 
 	*[STR]* -- list of spoken forms from the utterance
 	"""
-	return self.spoken_only
+	words = self.words()
+	l = []
+	for a_word in words:
+	    spoken, written = spoken_written_form(a_word)
+	    l.append(spoken)
+	return l
 
     def words(self):
-	"""returns list of words (as (spoken, written) 2-tuples) 
-	from the utterance.
+	"""returns list of words (in written\spoken form) from the utterance
 
 	**INPUTS**
 
@@ -540,140 +522,75 @@ class SpokenUtteranceNL(Object):
 
 	**OUTPUTS**
 
-	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
+	*[STR]* -- list of words (in written\spoken form) from the utterance
 	
 	"""
-	return self.word_list
-
-    def entry(self, spoken, written = None):
-	"""returns a vocabulary entry in the form used by
-	NaturallySpeaking/natlink.  If the written form is omitted, then it is
-	assumed to be identical to the spoken form.
+	debug.virtual('LastDictationUtterance.words')
+      
+    def set_words(self, words):
+	"""changes the stored list of words (after correction) so that 
+	subsequent correction boxes can display the corrected list.
+	The results object is unaffected.
 
 	**INPUTS**
 
-	*STR* spoken -- spoken form
-	*STR* written -- written form (if different)
+	*[STR] words* -- corrected list of words (in written\spoken form, or 
+	simply spoken form)
+
+	*none*
+
+	**OUTPUTS**
+	"""
+	debug.virtual('LastDictationUtterance.set_words')
+      
+
+class LastDictNatlink(LastDictationUtterance):
+    """stores information about the most recent dictation utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *ResObj* results -- natlink ResObj results object
+    *[STR]* last_words -- corresponding list of words
+
+    **CLASS ATTRIBUTES**
+    """
+    def __init__(self, results = None, **attrs):
+	"""initialize LastDictNatlink 
+
+	**INPUTS**
+
+	*ResObj* results -- a new natlink ResObj results object
+	"""
+	self.deep_construct(LastDictNatlink,
+	    {'results': results, 'last_words':[]}, attrs)
+	if results:
+	    self.last_words = results.getWords(0)
+
+    def save(self, results):
+	"""stores the new results object, replacing the old one
+
+	**INPUTS**
+
+	*ResObj* results -- natlink ResObj results object
+
+	"""
+	self.results = results
+	if results:
+	    self.last_words = results.getWords(0)
+
+    def words(self):
+	"""returns list of words (in written\spoken form) from the utterance
+
+	**INPUTS**
+
+	*none*
 
 	**OUTPUTS**
 
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
-	"""
-	if  written == None:
-	    written = spoken
-	return vocabulary_entry(spoken, written) 
-
-    def entry_tuple(self, word):
-	"""returns a vocabulary entry in the form used by
-	NaturallySpeaking/natlink.  
-
-	**INPUTS**
-
-	*(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
-
-	**OUTPUTS**
-
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
-	"""
-	return vocabulary_entry(word[0], word[1])
-
-    def same_written(self, spoken_forms):
-	"""converts a list of spoken forms to a list of (spoken, written) 
-	2-tuples.
-
-	**INPUTS**
-
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
+	*[STR]* -- list of words (in written\spoken form) from the utterance
 	
-	**OUTPUTS**
-
-	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
 	"""
-	return map(lambda s: (s, s), spoken_forms)
-
-    def entries_spoken( self, spoken_forms):
-	"""converts a list of spoken forms to a list of vocabulary entries
-	in the form used by NaturallySpeaking/natlink.
-
-	**INPUTS**
-
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
-
-	**OUTPUTS**
-
-	*[STR]* -- list of vocabulary entries in written\spoken form as used by
-	NaturallySpeaking
-
-	"""
-	return map(self.entry, spoken_forms)
-
-    def spoken_written_form(self, entry):
-	"""converts a vocabulary entry in the form used by 
-	NaturallySpeaking/natlink to a 2-tuple of spoken, written.
-
-	**INPUTS**
-
-	*STR* -- vocabulary entry in written\spoken form as used by
-	NaturallySpeaking
-
-	**OUTPUTS**
-
-	*(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
-
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
-
-	"""
-	return spoken_written_form(entry)
-
-    def adapt(self, words):
-	"""changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
-
-	**INPUTS**
-
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the adaption was accepted
-	"""
-	list = entries(words)
-	success = 0
-	try:
-	    success = self.results.correction(list)
-	except natlink.InvalidWord:
-# if the ResObj raises an InvalidWord exception, do not set the 
-#	 word list
-	    return 0
-	set_words(words)
-	return success
-
-    def adapt_spoken(self, spoken_forms):
-	"""changes the stored list of words so that 
-	subsequent correction boxes can display the corrected list, and
-	informs the speech engine of the corrected list of words, so
-	it can adapt.
-
-
-	**INPUTS**
-
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the adaption was accepted
-	"""
-	words = self.same_written(spoken_forms)
-	return self.adapt(words)
+	return self.last_words
 
     def set_words(self, words):
 	"""changes the stored list of words (after correction) so that 
@@ -682,160 +599,15 @@ class SpokenUtteranceNL(Object):
 
 	**INPUTS**
 
-	*[(STR, STR)]* -- corrected list of words 
-	(as (spoken, written) 2-tuples) 
-
-	**OUTPUTS**
-
-	*none*
-
-	"""
-	self.word_list = words
-	self.spoken_only = map(lambda x: x[0], word_list)
-
-    def set_spoken(self, spoken_forms):
-	"""changes the stored list of words (after correction) so that 
-	subsequent correction boxes can display the corrected list.
-	The results object is unaffected.
-
-	**INPUTS**
-
-	*[STR]* spoken_forms -- corrected list of spoken forms 
-	(written forms will be assumed to be identical)
-
-	**OUTPUTS**
-
-	*none*
-
-	"""
-	words = self.same_written(spoken_forms)
-	self.set_words(words)
-
-    def playback_available(self):
-	"""indicates whether playback of the utterance is available.
-
-	**INPUTS**
+	*[STR] words* -- corrected list of words (in written\spoken form, or 
+	simply spoken form)
 
 	*none*
 
 	**OUTPUTS**
-
-	*BOOL* -- true if playback is available, false if it is not
-	(because utterance wasn't actually spoken, or speech data has 
-	been lost, or because the implementation doesn't support
-	playback)
 	"""
-	return 0
-# ResObj may have wave data, but we don't have code to play it back yet
-
-    def playback(self):
-	"""plays back recorded utterance.
-
-	Playback is synchronous.  It will handle turning the microphone
-	off and back on again (if necessary)
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true unless playback was unavailable, or 
-	there was an error in playback (e.g.  another program had 
-	control of the audio device)
-	"""
-	return 0
-# ResObj may have wave data, but we don't have code to play it back yet
+	self.last_words = words
       
-    def can_be_adapted(self):
-	"""indicates whether the utterance can be corrected for adaption
-	of the speech engine.  Utterances for which there was no speech
-	information or for which the speech information has been lost or
-	discarded may not be adaptable.
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true if the speech information is available for adaption.
-	"""
-	return 1
-      
-    def alternatives_available(self):
-	"""returns number of recognition alternatives available 
-	(for the whole utterance), or -1 if the number
-	is unknown.
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*INT* -- number of recognition alternatives available (including
-	the original), or -1 if the number is unknown (NaturallySpeaking
-	doesn't indicate the total number, but simply lets you keep
-	asking for the next one until it runs out.
-	"""
-	return self.choices_available
-
-    def _get_alternative(self, choice):
-	"""private method for getting a single alternative and converting it to
-	list of 2-tuples.
-	**INPUTS**
-
-	*INT* choice -- number of the choice to request
-
-	**OUTPUTS**
-
-	*[(STR, STR)]* -- list of words (as (spoken, written) 
-	2-tuples) corresponding to that alternative, or None if choice
-	was unavailable
-	"""
-	try:
-	    list = self.results.getWords(choice)
-	except natlink.OutOfRange:
-	    return None
-	return map(self.spoken_written_form, list)
-
-    def alternatives(self, n):
-	"""returns the best recognition alternatives available 
-	(for the whole utterance) including the original.  
-	Will not return more than n alternatives, but may return fewer
-	(if the speech engine has not provided that many).
-
-	Note: the first alternative in the list will not be identical
-	to the output of words(), if the phrase has previously been
-	corrected with set_words.
-
-	**INPUTS**
-
-	*INT* n -- number of alternatives requested
-
-	**OUTPUTS**
-
-	*[[(STR, STR)]]* -- list of list of words (as (spoken, written) 
-	2-tuples) 
-	
-	"""
-	if n <= len(self.choices):
-	    return self.choices[0:n-1]
-	if self.choices_available >= 0:
-	    return self.choices
-# if number of choices available is known, then we already have all
-# available choices, so just return what we have.
-# otherwise, try to get more choices
-	for choice in range(len(self.choices), n):
-	    words = self._get_alternative(choice)
-	    if words == None:
-# no more available, so now we know how many are available
-		self.choices_available = choice
-		break
-	    self.choices.append(words)
-# return what we have.
-	return self.choices
 
 class CommandDictGrammar(DictGramBase):
     """A grammar for mixing continuous dictation and commands.
@@ -853,7 +625,7 @@ class CommandDictGrammar(DictGramBase):
     foreground for the grammar to be activated, or 0 to make the grammar
     global
 
-    *SpokenUtterance last* -- stores the last recognized dictation utterance 
+    *LastDictNatlink last* -- stores the last recognized dictation utterance 
 
     CLASS ATTRIBUTES**
     
@@ -870,7 +642,7 @@ class CommandDictGrammar(DictGramBase):
 	self.window = window
         self.state = None
         self.isActive = 0
-	self.last = None
+	self.last = LastDictNatlink()
 
     def deactivate(self):
 	DictGramBase.deactivate(self)
@@ -896,7 +668,7 @@ class CommandDictGrammar(DictGramBase):
         
     def gotResultsObject(self, recog_type, results):
 	if recog_type == 'self':
-	    self.last = SpokenUtteranceNL(results)
+	    self.last.save(results)
 	    words = results.getWords(0)
 	    self.interpreter.interpret_NL_cmd(words)
 	    self.interpreter.on_app.curr_buffer.refresh_if_necessary()
@@ -926,7 +698,8 @@ class CodeSelectGrammar(SelectGramBase):
 
     *INT window* -- MSW window handle of the window which must be in the
     foreground for the grammar to be activated, or 0 to make the grammar
-    global 
+    global
+
     CLASS ATTRIBUTES**
     
     *none* -- 
