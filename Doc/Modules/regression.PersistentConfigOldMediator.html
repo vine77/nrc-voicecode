@@ -3,29 +3,30 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:30:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:31:03 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class DataEvtSource</title>
+<title>Class PersistentConfigOldMediator</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class DataEvtSource</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
+<H1 CLASS="ClassName">class PersistentConfigOldMediator</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="regression.html">regression</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.DataEvtSource<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">regression.PersistentConfigOldMediator<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DataEvtSource</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.DataEvtSource.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">PersistentConfigOldMediator</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # <STRONG>INPUTS</STRONG></SPAN>
+    <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.execute_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.execute_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.PersistentConfigOldMediator.init_simulator_regression"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigOldMediator.init_simulator_regression</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)<SPAN CLASS="OneLiner"> # re-initialize the mediator, using the same editor application</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,39 +35,67 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-abstract class which supplies a data_event for ServerMainThread 
-subclasses with external message loops.</P>
+implementation of PersistentConfig which calls 
+init_simulator_regression from the mediator module to create a 
+global MediatorObject in mediator.the_mediator</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="tcp_server.DataEvtSource.data_event" CLASS="Method">tcp_server.DataEvtSource.data_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
+
+<DL>
+
+<DT>
+<EM>{STR:ANY} names</EM>
+<DD>the namespace dictionary in which the
+regression test definitions file, tests_def, has been (or will be) 
+run with execfile
+
+</DL>
+<H2 ID="regression.PersistentConfigOldMediator.__init__" CLASS="Method">regression.PersistentConfigOldMediator.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P><STRONG>INPUTS</STRONG></P>
+
+
+<DL>
+
+<DT>
+<EM>{STR:ANY} names</EM>
+<DD>the namespace dictionary in which the
+regression test definitions file, tests_def, has been (or will be) 
+run with execfile
+
+</DL>
+<H2 ID="regression.PersistentConfigOldMediator.execute_command" CLASS="Method">regression.PersistentConfigOldMediator.execute_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
 <P>None</P>
 
 <P>
-virtual method which supplies a data_event for ServerMainThread 
-subclasses </P>
+execute a command in the proper namespace, trapping any
+exceptions and printing the traceback</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>STR command</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="regression.PersistentConfigOldMediator.init_simulator_regression" CLASS="Method">regression.PersistentConfigOldMediator.init_simulator_regression(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)</H2>
+<P>re-initialize the mediator, using the same editor application</P>
+
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-STR <EM>id</EM>
-<DD>The unique ID of the listen socket
+STR <EM>symdict_pickle_fname=None</EM>
+<DD>Name of the file containing the
+persistent version of the symbols dictionnary.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>SocketHasDataEvent</EM>
-<DD>the data event which will allow the
-data thread to ensure that process_ready_socks is called.
-
-</DL>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

@@ -94,6 +94,11 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
         the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 	    save_speech_files=save_speech_files, disconnect=disconnect)
 
+def new_cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None, 
+	disconnect = 1):
+    the_mediator.quit(clean_sr_voc=clean_sr_voc, 
+	save_speech_files=save_speech_files, disconnect=disconnect)
+
 def new_simulator(symdict_pickle_fname=None,
 		   disable_dlg_select_symbol_matches = None,
 		   window = 0, exclusive = 0,
@@ -456,15 +461,84 @@ def simulator_mode(options):
     #
     
     if options['e']:
-      sys.stderr = sys.stdout
+	sys.stderr = sys.stdout
     try:
-      while (not sim_commands.quit_flag):
-        sys.stdout.write('Command> ')
-        cmd = sys.stdin.readline()
-        execute_command(cmd)                
+	while (not sim_commands.quit_flag):
+	    sys.stdout.write('Command> ')
+	    cmd = sys.stdin.readline()
+	    execute_command(cmd)                
     finally:
-      if options['e']:
-	sys.stderr = sys.__stderr__
+	if options['e']:
+	    sys.stderr = sys.__stderr__
+
+def new_execute_command(cmd, names):
+#    print '-- mediator.execute_command: cmd=%s' % cmd
+    try:
+	exec cmd in names
+	#	  exec command in sim_commands and command_space
+    except Exception, err:
+        traceback.print_exc()
+
+def new_simulator_mode(options):
+    """Start mediator in console mode.
+
+    Useful for debugging purposes when using the mediator separately from
+    an external editor.
+
+    **INPUTS**
+
+    *[STR: ANY] options* -- Dictionary of options for the script.
+
+
+    **OUTPUTS**
+
+    *none* -- 
+    """
+
+#
+# Handle of the DOS window in which mediator is running
+#
+# print natlink.getCurrentModule()
+
+    sr_interface.set_mic('off')
+
+    console_win_handle = natlink.getCurrentModule()[2]
+
+    names = {}
+    names['quit_flag'] = 0
+# stuff from mediator.init_simulator (must be defined here now that we are using
+# mediator.new_simulator
+    home = os.environ['VCODE_HOME']
+    names['home'] = home
+    names['testdata'] = os.path.join(home, 'Data', 'TestData')
+
+    the_mediator = new_simulator(window = console_win_handle,
+	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+	disable_dlg_select_symbol_matches = 1) 
+
+    commands = sim_commands.SimCmdsObj(the_mediator.app, 
+	the_mediator.interp, names)
+# add bound methods of the commands SimCmdsObj instance, corresponding
+# to the functions in the sim_commands module, to this 
+# namespace 
+#    print actual_names
+    commands.bind_methods(names)
+#    print actual_names
+
+
+
+    if options['e']:
+	sys.stderr = sys.stdout
+    try:
+	while (not names['quit_flag']):
+	    sys.stdout.write('Command> ')
+	    cmd = sys.stdin.readline()
+	    new_execute_command(cmd, names)                
+    finally:
+	new_cleanup(the_mediator, commands.clean_sr_voc, 
+	    commands.save_speech_files, commands.disconnect_flag)
+	if options['e']:
+	    sys.stderr = sys.__stderr__
 
 def run(options):
     """run simulator from within a Python shell
@@ -493,15 +567,16 @@ def run(options):
         # Run mediator using an editor simulator, in profiling mode
         #
         profile.run("""
-simulator_mode(opts)""")
+new_simulator_mode(opts)""")
     elif opts['s']:
         #
         # Run mediator using an editor simulator
         #
-        simulator_mode(opts)
+        new_simulator_mode(opts)
+#        simulator_mode(opts)
 
-    cleanup(sim_commands.clean_sr_voc_flag, 
-	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
+#    cleanup(sim_commands.clean_sr_voc_flag, 
+#	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
         
 if (__name__ == '__main__'):
     

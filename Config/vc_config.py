@@ -129,6 +129,7 @@ for abbrev_file in ('user_abbrevs.py', 'py_abbrevs.py'):
         raise err
 
         
+# print add_abbreviation
 add_abbreviation('attr', ['attribute'])
 
 
