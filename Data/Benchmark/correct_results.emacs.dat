@@ -1045,10 +1045,10 @@ Heard after semi new paragraph
  55:       }
  56:   }
  57: }
-Heard switch initial character goto body
+Heard switch initial character go to body
  52: 	enum shapes {square, circle, triangle};
  53: 
- 54: 	switch (initial_character_goto) {
+ 54: 	switch (initial_character) {
  55: <CURSOR>
  56: 	}
  57:       }
@@ -1056,7 +1056,7 @@ Heard switch initial character goto body
 Heard case single-quotes a
  52: 	enum shapes {square, circle, triangle};
  53: 
- 54: 	switch (initial_character_goto) {
+ 54: 	switch (initial_character) {
  55: 	case 'a<CURSOR>':
  56: 
  57: 	}
@@ -1181,7 +1181,7 @@ Heard new statement
  79: 	}
  80:       }
  81:   }
-Heard process exception parens little boy jump out jump out Caps-On new paragraph
+Heard process exception parens little boy jump out jump out new paragraph
  78: 	  process_exception(little_boy);
  79: 	}
  80: 
@@ -1551,6 +1551,14 @@ Heard private members
 124: 
 125: }
 126: #endif
+Heard new line int foo semicolon
+121: public:
+122: 
+123: private:
+124:   int Foo; <CURSOR>
+125: 
+126: }
+127: #endif
 Heard jump back out
 116: }
 117: 
@@ -1566,7 +1574,7 @@ Heard new public member new line float pointer bar semi new line
 123:   <CURSOR>
 124: 
 125: private:
-126: 
+126:   int Foo; 
 Heard declare function testing declaration
 120: 
 121: public:
@@ -1574,7 +1582,7 @@ Heard declare function testing declaration
 123:   testing_declaration<CURSOR>();
 124: 
 125: private:
-126: 
+126:   int Foo; 
 Heard jump out
 120: 
 121: public:
@@ -1582,214 +1590,214 @@ Heard jump out
 123:   testing_declaration()<CURSOR>;
 124: 
 125: private:
-126: 
+126:   int Foo; 
 Heard jump out
-124: 
 125: private:
-126: 
-127: }<CURSOR>
-128: #endif
-129: 
+126:   int Foo; 
+127: 
+128: }<CURSOR>
+129: #endif
+130: 
 
 *** End of source buffer ***
 Heard new paragraph
-126: 
-127: }
-128: 
-129: <CURSOR>
-130: #endif
-131: 
+127: 
+128: }
+129: 
+130: <CURSOR>
+131: #endif
+132: 
 
 *** End of source buffer ***
 Heard typedef struct my tree structured data
-126: 
-127: }
-128: 
-129: typedef struct my_tree_structured_data<CURSOR>
-130: {
-131: 
-132: };
+127: 
+128: }
+129: 
+130: typedef struct my_tree_structured_data<CURSOR>
+131: {
+132: 
+133: };
 Heard body
-128: 
-129: typedef struct my_tree_structured_data
-130: {
-131: <CURSOR>
-132: };
-133: #endif
-134: 
+129: 
+130: typedef struct my_tree_structured_data
+131: {
+132: <CURSOR>
+133: };
+134: #endif
+135: 
 
 *** End of source buffer ***
 Heard character star description semi new statement
-129: typedef struct my_tree_structured_data
-130: {
-131:   character*description; 
-132:   <CURSOR>;
-133: };
-134: #endif
-135: 
-
-*** End of source buffer ***
-Heard integer value count
-129: typedef struct my_tree_structured_data
-130: {
-131:   character*description; 
-132:   int value_count<CURSOR>;
-133: };
-134: #endif
-135: 
-
-*** End of source buffer ***
-Heard new statement
-130: {
-131:   character*description; 
-132:   int value_count;
+130: typedef struct my_tree_structured_data
+131: {
+132:   character*description; 
 133:   <CURSOR>;
 134: };
 135: #endif
 136: 
 
 *** End of source buffer ***
-Heard structured tree node asterisk left child
-130: {
-131:   character*description; 
-132:   int value_count;
-133:   structured_tree_node*left_child<CURSOR>;
+Heard integer value count
+130: typedef struct my_tree_structured_data
+131: {
+132:   character*description; 
+133:   int value_count<CURSOR>;
 134: };
 135: #endif
 136: 
 
 *** End of source buffer ***
 Heard new statement
-131:   character*description; 
-132:   int value_count;
-133:   structured_tree_node*left_child;
+131: {
+132:   character*description; 
+133:   int value_count;
 134:   <CURSOR>;
 135: };
 136: #endif
 137: 
 
 *** End of source buffer ***
-Heard structured tree node pointer right child
-131:   character*description; 
-132:   int value_count;
-133:   structured_tree_node*left_child;
-134:   structured_tree_node* right_child<CURSOR>;
+Heard structured tree node asterisk left child
+131: {
+132:   character*description; 
+133:   int value_count;
+134:   structured_tree_node*left_child<CURSOR>;
 135: };
 136: #endif
 137: 
 
 *** End of source buffer ***
+Heard new statement
+132:   character*description; 
+133:   int value_count;
+134:   structured_tree_node*left_child;
+135:   <CURSOR>;
+136: };
+137: #endif
+138: 
+
+*** End of source buffer ***
+Heard structured tree node pointer right child
+132:   character*description; 
+133:   int value_count;
+134:   structured_tree_node*left_child;
+135:   structured_tree_node* right_child<CURSOR>;
+136: };
+137: #endif
+138: 
+
+*** End of source buffer ***
 Heard jump out
-132:   int value_count;
-133:   structured_tree_node*left_child;
-134:   structured_tree_node* right_child;
-135: }<CURSOR>;
-136: #endif
-137: 
+133:   int value_count;
+134:   structured_tree_node*left_child;
+135:   structured_tree_node* right_child;
+136: }<CURSOR>;
+137: #endif
+138: 
 
 *** End of source buffer ***
 Heard structured tree node comma star structured tree node
-132:   int value_count;
-133:   structured_tree_node*left_child;
-134:   structured_tree_node* right_child;
-135: }structured_tree_node, *structured_tree_node<CURSOR>;
-136: #endif
-137: 
+133:   int value_count;
+134:   structured_tree_node*left_child;
+135:   structured_tree_node* right_child;
+136: }structured_tree_node, *structured_tree_node<CURSOR>;
+137: #endif
+138: 
 
 *** End of source buffer ***
 Heard after semi new paragraph
-134:   structured_tree_node* right_child;
-135: }structured_tree_node, *structured_tree_node;
-136: 
-137: <CURSOR>
-138: #endif
-139: 
+135:   structured_tree_node* right_child;
+136: }structured_tree_node, *structured_tree_node;
+137: 
+138: <CURSOR>
+139: #endif
+140: 
 
 *** End of source buffer ***
 Heard declare union united states
-134:   structured_tree_node* right_child;
-135: }structured_tree_node, *structured_tree_node;
-136: 
-137: union united_states<CURSOR>
-138: {
-139: 
-140: };
-Heard new statement
-137: union united_states
-138: {
-139: 
-140:   <CURSOR>;
+135:   structured_tree_node* right_child;
+136: }structured_tree_node, *structured_tree_node;
+137: 
+138: union united_states<CURSOR>
+139: {
+140: 
 141: };
-142: #endif
-143: 
-
-*** End of source buffer ***
-Heard int number of states
-137: union united_states
-138: {
-139: 
-140:   int number_of_states<CURSOR>;
-141: };
-142: #endif
-143: 
-
-*** End of source buffer ***
 Heard new statement
-138: {
-139: 
-140:   int number_of_states;
+138: union united_states
+139: {
+140: 
 141:   <CURSOR>;
 142: };
 143: #endif
 144: 
 
 *** End of source buffer ***
-Heard float input literacy rate
-138: {
-139: 
-140:   int number_of_states;
-141:   float input_literacy_rate<CURSOR>;
+Heard int number of states
+138: union united_states
+139: {
+140: 
+141:   int number_of_states<CURSOR>;
 142: };
 143: #endif
 144: 
 
 *** End of source buffer ***
 Heard new statement
-139: 
-140:   int number_of_states;
-141:   float input_literacy_rate;
+139: {
+140: 
+141:   int number_of_states;
 142:   <CURSOR>;
 143: };
 144: #endif
 145: 
 
 *** End of source buffer ***
-Heard char star president
-139: 
-140:   int number_of_states;
-141:   float input_literacy_rate;
-142:   char *president<CURSOR>;
+Heard float input literacy rate
+139: {
+140: 
+141:   int number_of_states;
+142:   float input_literacy_rate<CURSOR>;
 143: };
 144: #endif
 145: 
 
 *** End of source buffer ***
+Heard new statement
+140: 
+141:   int number_of_states;
+142:   float input_literacy_rate;
+143:   <CURSOR>;
+144: };
+145: #endif
+146: 
+
+*** End of source buffer ***
+Heard char star president
+140: 
+141:   int number_of_states;
+142:   float input_literacy_rate;
+143:   char *president<CURSOR>;
+144: };
+145: #endif
+146: 
+
+*** End of source buffer ***
 Heard jump out sample type
-140:   int number_of_states;
-141:   float input_literacy_rate;
-142:   char *president;
-143: }sample_type<CURSOR>;
-144: #endif
-145: 
+141:   int number_of_states;
+142:   float input_literacy_rate;
+143:   char *president;
+144: }sample_type<CURSOR>;
+145: #endif
+146: 
 
 *** End of source buffer ***
 Heard after semi new paragraph
-142:   char *president;
-143: }sample_type;
-144: 
-145: <CURSOR>
-146: #endif
-147: 
+143:   char *president;
+144: }sample_type;
+145: 
+146: <CURSOR>
+147: #endif
+148: 
 
 *** End of source buffer ***
 
@@ -2635,7 +2643,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01ECF0F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01A393F8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2992,7 +3000,7 @@ Fresh abbreviation file matches current one, as expected
 
 ..
 ----------------------------------------------------------------------
-Ran 2 tests in 0.016s
+Ran 2 tests in 0.000s
 
 OK
 
@@ -8006,13 +8014,6 @@ Heard select various useful
 
 >>> Testing console command: say(['copy', 'that'], user_input='None')
 Heard copy that
-  4: autoTst = 0
-  5:     """A  for all VoiceCode objects
-  6: 
-  7:     This class implements <SEL_START>various useful<SEL_END> behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - safe attribute setting
 
 
 >>> Testing console command: say(['paste', 'that'], user_input='None')
@@ -13825,7 +13826,7 @@ Heard move horizontally
 
 .....
 ----------------------------------------------------------------------
-Ran 5 tests in 0.203s
+Ran 5 tests in 0.172s
 
 OK
 
@@ -13837,7 +13838,7 @@ OK
 
 ......
 ----------------------------------------------------------------------
-Ran 6 tests in 0.391s
+Ran 6 tests in 0.297s
 
 OK
 
@@ -16989,5 +16990,5 @@ OK
 
 
 -----------------------------------------------
-Test suite completed in:  534.594000101 secs
+Test suite completed in:  486.733999968 secs
 -----------------------------------------------
