@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Feb 26 14:38:45 2001)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class WaxEdit</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class WaxEdit - base class for of new GUI interface to the mediator simulation</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="WaxEdit.html">WaxEdit</A></P>
+
+
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdit</SPAN>:
+    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the TextBufferWX embedded in the GUI</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor frame is active</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)
+
+</PRE><H2>Description</H2><P>
+<STRONG>CLASS ATTRIBUTES</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WaxEdit.WaxEdit.editor_buffer" CLASS="Method">WaxEdit.WaxEdit.editor_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns a reference to the TextBufferWX embedded in the GUI</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>TextBufferWX</EM>
+<DD>the TextBufferWX
+
+</DL>
+<H2 ID="WaxEdit.WaxEdit.editor_has_focus" CLASS="Method">WaxEdit.WaxEdit.editor_has_focus(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether the editor window has the focus</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG>
+<EM>BOOL</EM> -- true if editor window has the focus
+</P>
+<H2 ID="WaxEdit.WaxEdit.is_active" CLASS="Method">WaxEdit.WaxEdit.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether the editor frame is active</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if frame window is active
+
+</DL>
+<H2 ID="WaxEdit.WaxEdit.run" CLASS="Method">WaxEdit.WaxEdit.run(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)</H2>
+<P>None</P>
+
+<P>
+starts the message loop.  Note: this function does not
+return until the GUI exits.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppStateWaxEdit app_control</EM>
+<DD>reference to corresponding 
+AppState interface
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
