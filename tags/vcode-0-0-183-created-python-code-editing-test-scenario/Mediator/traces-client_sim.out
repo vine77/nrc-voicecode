@@ -1,0 +1,487 @@
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
+Loading test definitions...
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=['all']
+Configuring the mediator...
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Finished ExtLoop init...
+Running ExtLoopWin32...
+Starting server threads...
+Starting message loop...
+-- send_mess: self=<messaging.MessengerBasic instance at 18017a0>, mess_name='send_app_name'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18017a0>, expecting ['app_name']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('app_name', {'value': 'EdSim'})
+-- send_mess: self=<messaging.MessengerBasic instance at 18017a0>, mess_name='your_id_is'
+-- send_mess: mess_argvals='{'value': 'EdSim_0.844030226339'}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18017a0>, expecting ['ok']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('ok', {})
+-- send_mess: self=<messaging.MessengerBasic instance at 18017a0>, mess_name='test_client_query'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18017a0>, expecting ['test_client_query_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('test_client_query_resp', {'value': 1.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 180dd60>, mess_name='send_id'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 180dd60>, expecting ['my_id_is']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('my_id_is', {'value': 'EdSim_0.844030226339'})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='suspendable'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['suspendable_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('suspendable_resp', {'value': 0.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='process_active'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['process_active_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('process_active_resp', {'value': 1.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='shared_window'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['shared_window_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('shared_window_resp', {'value': 0.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='multiple_windows'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['multiple_windows_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('multiple_windows_resp', {'value': 0.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='multiple_buffers'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['multiple_buffers_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('multiple_buffers_resp', {'value': 0.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='bidirectional_selection'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['bidirectional_selection_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('bidirectional_selection_resp', {'value': 0.0})
+WARNING: virtual method 'AppStateMessaging.config_from_external' called!!!
+-- NewMediatorObject._new_test_editor: ** self.test_args=['all'], self.global_grammars=1-- tcp_threads.ListenAndQueueMsgsThread.run: ** invoking self.get_mess()
+
+-- NewMediatorObject._new_test_editor: ** invoking universal_instance
+-- tcp_threads.ListenAndQueueMsgsThread.get_mess: ** invoked
+-- AppMgr.new_universal_instance: ** exclusive=1
+-- get_mess: self=<messaging.MessengerBasic instance at 18085c8>, expecting None
+-- AppMgr._add_new_instance: ** invoked
+-- AppMgr._add_new_instance: ** app_name=EdSim
+-- AppMgr._add_new_instance: ** not in self.app_names()
+-- AppMgr._add_new_instance: ** WAS in self.app_names()
+-- AppMgr._add_new_instance: ** invoking app.set_name()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_name()
+-- AppMgr._add_new_instance: ** invoking app.set_instance_string()
+-- AppStateMessaging.set_instance_string: ** invoked
+-- send_mess: self=<messaging.MessengerBasic instance at 18382a0>, mess_name='set_instance_string'
+-- send_mess: mess_argvals='{'instance_string': '(Standby 0)'}'
+-- get_mess: self=<messaging.MessengerBasic instance at 18382a0>, expecting ['set_instance_string_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('set_instance_string_resp', {})
+-- AppStateMessaging.set_instance_string: ** exiting
+** AppStateMessaging.set_instance_string: exiting!!!
+-- AppMgr._add_new_instance: ** DONE invoking app.set_instance_string()
+-- AppMgr._add_new_instance: new instance='EdSim(0)', app=<tcp_server.AS_MessExtEdSim instance at 18df448>
+-- AppMgr.new_universal_instance: ** after _add_new_instance
+-- AppMgr.new_universal_instance: ** returning new_name=EdSim(0)
+universal instance named "EdSim(0)"
+-- NewMediatorObject._new_test_editor: ** instance_name='EdSim(0)'
+-- NewMediatorObject._new_test_editor: ** running tests, self.test_args=['all']
+-- auto_test.run: ** to_run=['all']
+
+
+*******************************************************************************
+* Name        : CmdInterp
+* Description : self-test for CmdInterp.py
+*******************************************************************************
+
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=None
+-- AppMgr._add_new_instance: ** invoked
+-- AppMgr._add_new_instance: ** app_name=EdSim
+-- AppMgr._add_new_instance: ** not in self.app_names()
+-- AppMgr._add_new_instance: ** WAS in self.app_names()
+-- AppMgr._add_new_instance: ** invoking app.set_name()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_name()
+-- AppMgr._add_new_instance: ** invoking app.set_instance_string()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_instance_string()
+-- AppMgr._add_new_instance: new instance='EdSim(0)', app=<EdSim.EdSim instance at 17e7e38>
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+-- NewMediatorObject.quit: quit called
+
+
+*******************************************************************************
+* Name        : EdSim
+* Description : self-test for EdSim.py
+*******************************************************************************
+
+>>> Testing EdSim.py
+
+
+>>> Opening a buffer
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+*** Start of source buffer ***
+  1: <CURSOR>/* This is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Moving to position 5
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Testing breadcrumbs
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Popping 2 crumbs -> end up here:
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+*** Start of source buffer ***
+  1: /* This is a small t<CURSOR>est buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Popping 1 crumb -> end up here...
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Testing code indentation. Inserting for loop.
+  3: 
+  4: for (ii=0; ii <= maxValue; ii++)
+  5: {
+  6: <CURSOR>
+  7: }
+  8: void move(float x, y)
+  9: {
+
+
+*******************************************************************************
+* Name        : EdSim_alloc_cleanup
+* Description : Testing EdSim allocation and cleanup.
+*******************************************************************************
+
+
+*** testing cleanup with single buffer EdSim
+
+EdSim.__init__
+SourceBuff.__init__: 
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=None
+-- AppMgr._add_new_instance: ** invoked
+-- AppMgr._add_new_instance: ** app_name=EdSim
+-- AppMgr._add_new_instance: ** not in self.app_names()
+-- AppMgr._add_new_instance: ** WAS in self.app_names()
+-- AppMgr._add_new_instance: ** invoking app.set_name()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_name()
+-- AppMgr._add_new_instance: ** invoking app.set_instance_string()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_instance_string()
+-- AppMgr._add_new_instance: new instance='EdSim(0)', app=<EdSim.EdSim instance at bae3b8>
+SourceBuff.remove_other_references: 
+SourceBuff.__del__: 
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+-- NewMediatorObject.quit: quit called
+EdSim.remove_other_references
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+EdSim.__del__
+
+*** testing cleanup with multi-buffer EdSim
+
+EdSim.__init__
+SourceBuff.__init__: 
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=None
+-- AppMgr._add_new_instance: ** invoked
+-- AppMgr._add_new_instance: ** app_name=EdSim
+-- AppMgr._add_new_instance: ** not in self.app_names()
+-- AppMgr._add_new_instance: ** WAS in self.app_names()
+-- AppMgr._add_new_instance: ** invoking app.set_name()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_name()
+-- AppMgr._add_new_instance: ** invoking app.set_instance_string()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_instance_string()
+-- AppMgr._add_new_instance: new instance='EdSim(0)', app=<EdSim.EdSim instance at ba7d80>
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
+-- AppState.open_buffer_cbk: AppState received open buffer callback
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+-- NewMediatorObject.quit: quit called
+EdSim.remove_other_references
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: 
+SourceBuff.__del__: 
+EdSim.__del__
+
+
+*******************************************************************************
+* Name        : Object
+* Description : self-test for Object.py
+*******************************************************************************
+
+Testing exceptions for get/set
+
+
+Trying to get the value of attribute 'name', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.name=Alain, x=Alain
+
+
+Trying to set the value of attribute 'name', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.name=999, x=0
+
+
+Trying to get the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
+   -> Caught AttributeError exception: '[{'args': ('nonexistant',)}]'
+
+
+Trying to set the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.nonexistant=999, x=0
+
+Testing inheritance of constructor arguments
+   Employee1(name='Alain', salary='not enough') -> {'salary': 'not enough', 'name': 'Alain', 'citizenship': None}
+
+
+Redefining default value of *citizenship*
+   MyPerson(name='Alain') -> result={'salary': 'not enough', 'name': 'Alain', 'citizenship': None}
+
+Overriding redefined default value of *citizenship*
+   MyPerson(name='Alain', citizenship='US citizen') -> result={'marital_status': None, 'name': 'Alain', 'citizenship': 'US citizen'}
+
+Enforcing 'Canadian eh?' as the value of *citizenship*
+   Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
+
+Trying to change enforced value 'Canadian eh?' of *citizenship*
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 199d158>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+
+Person2.__init__ received init_file=C:/temp.txt
+Class with private *init_file* attribute*
+   Person2(init_file='C:/temp.txt') -> result={'name': None, 'citizenship': None}
+
+Subclassing from non-standard class AnimatedCharacter.*
+   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'name': 'Alain', 'frames_per_sec': 40, 'animation_file': 'C:/People/Alain.dat', 'citizenship': None}
+
+
+*******************************************************************************
+* Name        : SymDict
+* Description : self-test for SymDict.py
+*******************************************************************************
+
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=None
+ERROR: in configuration file None.
+
+Received KeyboardInterrupt in message loop, exiting
+Message loop ended, cleaning up
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at b6d588>
+-- NewMediatorObject.quit: quit called
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+ExtLoopWin32.run returning
+Terminate batch job (Y/N)? 
