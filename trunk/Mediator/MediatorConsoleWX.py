@@ -1470,7 +1470,7 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
             wxDefaultPosition, wxDefaultSize)
         set_text_font(intro)
         s.Add(intro, 0, wxEXPAND | wxALL)
-        recent = wxListCtrl(self, wxNewId(), wxDefaultPosition,
+        recent = wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
             wxDefaultSize, 
             style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
         set_text_font(recent)
@@ -1509,19 +1509,10 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         b_sizer.Add(okb, 0, 0)
         b_sizer.Add(cancelb, 0, 0)
         s.Add(b_sizer, 0, wxEXPAND | wxALL)
-#        okb.SetDefault()
-# note: neither of these handlers gets called if a child control 
-# has the focus.
-# I thought they would be called if the focused control didn't have a
-# handler
+        
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self, self.on_char)
-#        EVT_KEY_DOWN(self, self.on_key_down)
-
-#        EVT_KEY_DOWN(self.recent, self.on_recent_char)
-#        EVT_CHAR(self.recent, self.on_recent_char)
-
-        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
+        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)        
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
@@ -1827,12 +1818,13 @@ class ReformatRecentSymbols(DlgModelViewWX):
        
        *ReformatFromRecentWX* -- the dialog
        """
-       if self.dlg_reformat_from_recent:
-          self.dlg_reformat_from_recent.reset(symbol)
-       else:
+       if not self.dlg_reformat_from_recent:
           self.dlg_reformat_from_recent = \
               ReformatFromRecentWX(console = self.console, parent = self.view(), 
                                    symbol = symbol)
+       self.dlg_reformat_from_recent.reset(symbol)
+
+          
        return self.dlg_reformat_from_recent
        
        
@@ -1884,9 +1876,10 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
-        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
+        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat Recent", use_pos,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+           
         possible_capture.__init__(self)
         self.deep_construct(ReformatRecentSymbolsViewWX,
                             {
@@ -1936,24 +1929,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         phrases = map(lambda x: x.in_utter_interp.phrase_as_string(),
                       symbols)
         index = range(len(phrases), 0, -1)            
-
-# AD: For now, don't worry about the + and - sign that indicate
-#     whether or not the utterance can be corrected. The current correction
-#     backend only allows reinterpretation of the N most recent utterances 
-#    (where utterance N+1 is the first utterance that might cause trouble).
-#     So it's simpler to just assume that the dialog will receive ONLY a list of
-#     symbols that appeared in those last N utterances.
-#               
-#        can_reinterpret = map(lambda x: x[2], utterances)
-#        bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
-#        yes = wxBitmap(os.path.join(bitpath, 'small_plus.bmp'), wxBITMAP_TYPE_BMP)
-#        no = wxBitmap(os.path.join(bitpath, 'small_minus.bmp'), wxBITMAP_TYPE_BMP)
-#        self.images = wxImageList(16, 16)
-#        index_no = self.images.Add(no)
-#        index_yes = self.images.Add(yes)
-## I'm guessing that LC_REPORT uses small images
-#        recent.SetImageList(self.images, wxIMAGE_LIST_SMALL)
-            
+          
         for ii in range(len(symbols)):
            recent.InsertStringItem(ii, str(index[ii]))
            recent.SetStringItem(ii, 1, self.symbols[ii].native_symbol())
@@ -1968,6 +1944,8 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
 
         recent.ScrollList(0, len(symbols))
         self.recent = recent
+        
+        
         main_sizer.Add(recent, 1, wxEXPAND | wxALL)
         self.okb = wxButtonWithHelpers(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
         self.cancelb = wxButtonWithHelpers(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)              
@@ -2006,10 +1984,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         self.recent.EnsureVisible(last)
         self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
-#AD: Not sure what that does.        
-#        self.hook_events()
-
-        debug.trace('ReformatRecentSymbolsViewWX.__init__', '** EXITED')
+        
         
     def on_ok(self, event=None):
         self.model().on_ok(event)
@@ -2029,12 +2004,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
 
     def on_recent_char(self, event):
         keycode = event.GetKeyCode()
-        debug.trace('ReformatRecentSymbolsView.on_recent_char', 'keycode=%s' % keycode)
         if self.recent.HandleUpOrDownArrow(keycode):
-           return
-           
-        if keycode == wxK_RETURN:
-           self.on_choose_selected_symbol()
            return
            
         event.Skip()
@@ -2321,11 +2291,10 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self, self.on_dialog_char)
         
-        
-        
 #        EVT_CHAR(self.txt_chosen_form, self.on_chosen_form_char)
 #        EVT_SET_FOCUS(self.txt_chosen_form, self.on_chosen_form_set_focus)
 #        EVT_KILL_FOCUS(self.txt_chosen_form, self.on_chosen_form_kill_focus)
+
 
         self.Raise()
         self.txt_chosen_form.SetFocus()
@@ -2337,8 +2306,9 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        **INPUTS**
        
        SymbolResult symbol -- The symbol to reinitialise with."""
-       
-       pass        
+
+       self.formats_pick_list.Select(0)
+       self.formats_pick_list.SetFocus()
 
     def intro(self):
        return self.txt_intro.GetLabel()
