@@ -25,8 +25,7 @@
 import natlink, os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 
-#import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
-import AppStateMessaging, auto_test, mediator, messaging, Object
+import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
 import RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 
