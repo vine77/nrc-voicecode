@@ -155,6 +155,9 @@ class NewMediatorObject(Object.OwnerObject):
 
     *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
     dictation utterances (ignored if test_space is None) 
+    
+    *INT num_words_training* -- if > 0, generate some training files
+    with that number of words.
 
     *TestSuite test_suite* -- test suite to run, or None if we are not going 
     to run regression tests using the next test editor to connect
@@ -202,6 +205,7 @@ class NewMediatorObject(Object.OwnerObject):
                  global_grammars = 0, exclusive = 0, 
                  profile_prefix = None,
                  bypass_sr_recog = 0,
+                 num_words_training = 0,	                 
                  alt_sym_file = None,
                  symbol_match_dlg_regression = 0,
                  symbol_match_dlg = 0,
@@ -297,13 +301,15 @@ class NewMediatorObject(Object.OwnerObject):
                              'exclusive': exclusive,
                              'profile_prefix': profile_prefix,
                              'bypass_sr_recog': bypass_sr_recog,
+                             'num_words_training': num_words_training,
                              'test_suite': None,
                              'testing': 0, 
                              'foreground_testing': 0, 
                              'pickled_interp': None,
                              'config_file': None,
                              'user_config_file': None,
-                             'construction_failed': 0
+                             'construction_failed': 0,
+                             'num_words_training': num_words_training
                             },
                             attrs,
                             {})
@@ -503,7 +509,7 @@ class NewMediatorObject(Object.OwnerObject):
         # Comment this out if you want to generate training material
         # Actually, need to invoke these AFTER CSC, etc... have been
         # added!        
-#        self.interp.generate_training_material(num_words=1000000)            
+        self.interp.generate_training_material(self.num_words_training)            
             
         if not okay:
             return okay
@@ -1096,7 +1102,7 @@ class NewMediatorObject(Object.OwnerObject):
             regression.PersistentConfigNewMediator(mediator = self,
             editor_name = instance_name, names = self.test_space,
             symbol_match_dlg = self.symbol_match_dlg_regression,
-            bypass_sr_recog = self.bypass_sr_recog,
+            bypass_sr_recog = self.bypass_sr_recog,            
             correction = 'basic', text_mode_toggling = 1)
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg_regression)
         self.test_space['temp_factory'] = \

@@ -1261,9 +1261,11 @@ class AppState(OwnerObject):
         return 0
 
 
-    def app_change_buffer(self, buff_name):
+    def app_change_buffer(self, buff_name=None):
 
-        """Changes the external application's active buffer.
+        """Changes the external application's active buffer. 
+        If *buff_name* is *None*, starts a speech-enabled dialog
+        allowing the user to select it.
 
         This variant only changes the buffer in the external
         application. It does not resynchronise VoiceCode with external
@@ -2135,3 +2137,17 @@ class AppState(OwnerObject):
         
         debug.virtual('AppState.app_close_buffer')
 
+    def switch_buff(self, buff_name=None):
+        """changes the active buffer. If no buffer name is specified,
+        open a speech-enabled dialog allowing the user to select it.
+        
+        **INPUTS**
+        
+        STR *buff_name* -- name of the buffer to switch to
+
+        **OUTPUTS**
+        
+        *none*
+        """
+        
+        debug.virtual('AppState.switch_buffer_dlg')
