@@ -111,9 +111,10 @@ class WaxEdSimPane(wxPanel):
 
         self.button_line = wxBoxSizer(wxHORIZONTAL)
 
-	self.green_light = wxBitmap("green.bmp", wxBITMAP_TYPE_BMP)
-	self.grey_light = wxBitmap("yellow.bmp", wxBITMAP_TYPE_BMP)
-	self.dark_grey_light = wxBitmap("darkgrey.bmp", wxBITMAP_TYPE_BMP)
+	self.green_light = wxBitmap("bitmaps/green.bmp", wxBITMAP_TYPE_BMP)
+#	self.grey_light = wxBitmap("bitmaps/yellow.bmp", wxBITMAP_TYPE_BMP)
+	self.grey_light = wxBitmap("bitmaps/grey.bmp", wxBITMAP_TYPE_BMP)
+	self.dark_grey_light = wxBitmap("bitmaps/darkgrey.bmp", wxBITMAP_TYPE_BMP)
 	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
 	wxDefaultPosition,
 	(self.grey_light.GetWidth()+10,self.grey_light.GetHeight()+10))
