@@ -1343,14 +1343,25 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
-                           code_bef = 'elif ', code_after = ': \n\t', back_indent_by=0),
+                           code_bef = 'elif ', code_after = ': \n\t', 
+#                           back_indent_by=0,
+# I suspect the default value of back_indent_by = 1 won't hurt in the
+# Emacs case, because elif will have the correct indentatation
+# initially, and Emacs will be smart enough to leave it alone.  
+# It is, except if something on the previous line (like a return
+# statement) triggers a back indent
+                           where = -1),
+# Using where = -1 should solve the problem of the extra \n
+# -- DCF
+#                           code_bef = 'elif ', code_after = ': \n\t', where = -1),
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
-                          code_bef = 'else:\n\t', code_after = ''),
+                          code_bef = 'else:\n\t', code_after = '', where = -1),
+# try where = -1 here as well 
                        ContC(): c_else,
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
@@ -1382,6 +1393,11 @@ acmd = CSCmd(spoken_forms=['define method', 'declare method'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_method_declaration},
              docstring='method definition')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['define function', 'declare function'],
+             meanings={ContC(): c_function_declaration,
+                       ContPy(): c_function_declaration},
+             docstring='function definition')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
              meanings={ContC(): c_function_add_argument,
@@ -1415,6 +1431,7 @@ define_language('python',
 #
 # CSCs and LSAs specific to Python
 #
+add_lsa(['self dot'], {'python': 'self.'})
 add_lsa(['continue statement'], {'python': '\\\n'})
 add_lsa(['assert'], {'python': 'assert '})
 add_lsa(['del', 'delete', 'delete', 'delete', 'delete object',
