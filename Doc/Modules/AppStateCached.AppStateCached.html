@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Apr 03 23:01:46 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 00:59:09 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -33,48 +33,78 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
     <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__getattr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">max_history=100</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">max_history=100</SPAN>, <SPAN CLASS="Argument">print_buff_when_changed=0</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>, <SPAN CLASS="Argument">manager=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState._new_source_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState._new_source_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.apply_updates"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.apply_updates</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">updates</SPAN>)<SPAN CLASS="OneLiner"> # Applies a list of updates returned by the external application.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bind_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bind_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Binds the AppState to a particular buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.change_app_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_app_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_all_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_all_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to close all buffers known to VoiceCode</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # close a buffer</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.current_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.current_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the the manager which owns this AppState</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.get_history"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.get_history</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.init_for_test"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.init_for_test</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # is the editor application active (not suspended)?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.is_active_is_safe"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_active_is_safe</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can is_active safely be queried, without blocking?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.is_bound_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_bound_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the buffer that AppState is currently bound to.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.mediator_closing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.mediator_closing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.multiple_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple windows per instance?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.new_window_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.new_window_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.on_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.on_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.process_pending_updates"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.process_pending_updates</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AppState.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>, <SPAN CLASS="Argument">block=0</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_end"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_end</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the end of a recognition event.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_indicator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_indicator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">status</SPAN>)<SPAN CLASS="OneLiner"> # Sets a "recognition in progress" visual indicator.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to open a file in a new buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.unbind_from_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.unbind_from_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # unbinds the AppState from a particular buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
 
 </PRE><H2>Description</H2><P>
 Interface optimised for editors that communicate with VoiceCode
@@ -308,17 +338,179 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's grandparent (or great-grandparent, etc.)
+(Actually, any other reference which needs to be del'ed but not
+cleaned up)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR grandparent</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR parent</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the name of the parent attribute</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the parent, or None if none
+
+</DL>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
+remove_other_references method, after performing their own duties.
+Also, a class inheriting from two OwnerObject classes MUST
+define remove_other_references and call both subclasses'
+versions</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState._new_source_buffer" CLASS="Method">AppState.AppState._new_source_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
 <P>
-Creates a new [SourceBuff] instances and adds it to the
+Creates a new [SourceBuff] instance and adds it to the
 list of open buffers.</P>
 <P>
 Note: this method should not only be called by other AppState
 methods, not from outside AppState, and only if such methods
 have already verified that self.open_buffers doesn't already
 have a key matching buff_name</P>
+<P>
+Note: this method does not automatically synchronize the new
+SourceBuff with an external editor.  Normally, for external editors, 
+we will be using SourceBuffCached which will be initialized with an 
+empty cache for the buffer contents, so it will be synchronized
+the first time someone tries to access the buffer contents.  The
+caller may force immediate synchronization if it is appropriate.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -415,6 +607,39 @@ method for a description of buffer binding).</P>
 </DL>
 <P>
 AppState.AppState.html#curr_buffer_name</P>
+<H2 ID="AppState.AppState.app_change_buffer" CLASS="Method">AppState.AppState.app_change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>Changes the external application's active buffer.</P>
+
+<P>
+This variant only changes the buffer in the external
+application. It does not resynchronise VoiceCode with external
+application.</P>
+<P>
+This should NOT bind the <EM>AppState</EM> to the new buffer. This
+should be done only by [change_buffer].</P>
+<P>
+See [curr_buffer_name] for a description of buffer binding.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Name of the buffer to switch to.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if buff_name exists and the external application
+successfully switches to it
+</DL>
+<P>
+AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.app_close_buffer" CLASS="Method">AppState.AppState.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>Ask the editor to close a buffer.</P>
 
@@ -453,7 +678,7 @@ INT <EM>save</EM>
 <DT>
 <EM>STR full_path</EM>
 <DD>full path under which to save the file, or
-None to use the buffer name
+None to use the existing file name or prompt
 <DT>
 <EM>BOOL no_prompt</EM>
 <DD>overwrite any existing file without
@@ -536,39 +761,6 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[curr_buffer_name] AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="AppState.AppState.change_app_buffer" CLASS="Method">AppState.AppState.change_app_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>Changes the external application's active buffer.</P>
-
-<P>
-This variant only changes the buffer in the external
-application. It does not resynchronise VoiceCode with external
-application.</P>
-<P>
-This should NOT bind the <EM>AppState</EM> to the new buffer. This
-should be done only by [change_buffer].</P>
-<P>
-See [curr_buffer_name] for a description of buffer binding.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Name of the buffer to switch to.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if buff_name exists and the external application
-successfully switches to it
-</DL>
-<P>
-AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.change_buffer" CLASS="Method">AppState.AppState.change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Changes the active buffer.</P>
 
@@ -621,6 +813,29 @@ INT <EM>save</EM>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppState.AppState.close_app_cbk" CLASS="Method">AppState.AppState.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that it is
+about to close, or is disconnecting from the mediator</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
+</DL>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.close_buffer" CLASS="Method">AppState.AppState.close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>close a buffer</P>
 
@@ -648,6 +863,26 @@ INT <EM>save</EM>
 <DD>true if the editor does close the buffer
 
 </DL>
+<H2 ID="AppState.AppState.close_buffer_cbk" CLASS="Method">AppState.AppState.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that a
+buffer has been closed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>the name of the buffer which has been closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.curr_buffer" CLASS="Method">AppState.AppState.curr_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -690,6 +925,46 @@ ARE DOING!!!</P>
 </DL>
 <P>
 AppState.AppState.html#app_active_buffer_name</P>
+<H2 ID="AppState.AppState.curr_buffer_name_cbk" CLASS="Method">AppState.AppState.curr_buffer_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState of the name of
+the current buffer.  </P>
+<P>
+<STRONG>Note:</STRONG> this should never change the bound_buffer_name</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.current_manager" CLASS="Method">AppState.AppState.current_manager(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns a reference to the the manager which owns this AppState</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppCbkHandler</EM>
+<DD>the AppCbkHandler object which owns this 
+AppState, or None if there is none.
+
+</DL>
 <H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
 <P>Drops a breadcrumb</P>
 
@@ -768,6 +1043,84 @@ external editor), we need to reinitialise it after every test.</P>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppState.AppState.instance_string" CLASS="Method">AppState.AppState.instance_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the identifier string for this editor instance (which 
+should be a substring of the window title)</P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not be able to set 
+the overall title.  
+However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+identifying title strings should still return the appropriate
+string.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the identifying string, or None if the editor was not given 
+such a string or cannot set the window title.
+
+</DL>
+<H2 ID="AppState.AppState.is_active" CLASS="Method">AppState.AppState.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>is the editor application active (not suspended)?</P>
+
+<P>
+Usually true, except for remote editors running in a (Unix)
+shell.  GUI editors tend to minimize instead of suspending, so
+their process should still be active.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is active (i.e. has not been suspended)
+
+</DL>
+<H2 ID="AppState.AppState.is_active_is_safe" CLASS="Method">AppState.AppState.is_active_is_safe(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>can is_active safely be queried, without blocking?</P>
+
+<P>
+For example, Emacs provides a suspend-hook and a
+suspend-resume-hook, so a properly written AppStateEmacs can
+set a flag on suspend and clear it on resume, and will therefore
+be able to respond to is_active without querying Emacs.</P>
+<P>
+Also, except for remote editors running in a (Unix)
+shell, this is usually true.  GUI editors tend to minimize 
+instead of suspending, so their process should still be active.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if is_active can be queried without blocking,
+even if the editor has been suspended. 
+
+</DL>
 <H2 ID="AppState.AppState.is_bound_to_buffer" CLASS="Method">AppState.AppState.is_bound_to_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Returns the name of the buffer that AppState is currently bound to.</P>
 
@@ -817,6 +1170,29 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppState.AppState.mediator_closing" CLASS="Method">AppState.AppState.mediator_closing(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called to inform AppState that the mediator is
+closing.    Internal editors should exit.  They may prompt the
+user to save modified files, but must not allow the user to
+cancel and leave the editor running.  External editors should
+disconnect but not close.  <STRONG>Note:</STRONG> this method should not
+block.  For external editors, that means the corresponding
+message should have a response for which to wait.  Otherwise, a
+single hung or disconnected editor hang the mediator and prevent
+it from closing or from notifying the rest of the connected
+editors that it was closing.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.multiple_buffers" CLASS="Method">AppState.AppState.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>does editor support multiple open buffers?</P>
 
@@ -833,6 +1209,58 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 <EM>BOOL</EM>
 <DD>true if editor supports having multiple buffers open 
 at the same time
+</DL>
+<H2 ID="AppState.AppState.multiple_windows" CLASS="Method">AppState.AppState.multiple_windows(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple windows per instance?</P>
+
+<P>
+Note: the purpose of this function is to allow the RecogStartMgr
+to determine whether a previously unknown window could belong to
+this known instance.  Therefore, Emacs running in text mode 
+should return false, even though it can have (sub-)windows in 
+a single frame.  </P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not appear to the mediator 
+as having separate windows.  However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+multiple windows should return true, regardless of the remote
+display method.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports opening multiple editor windows.  
+
+</DL>
+<H2 ID="AppState.AppState.name" CLASS="Method">AppState.AppState.name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+the unique name (assigned by the the manager) to this editor
+instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name of the instance, or None if the manager has
+not given it one.
+
 </DL>
 <H2 ID="AppState.AppState.new_compatible_sb" CLASS="Method">AppState.AppState.new_compatible_sb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Creates a new instance of [SourceBuff].</P>
@@ -863,6 +1291,57 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
+<H2 ID="AppState.AppState.new_window_cbk" CLASS="Method">AppState.AppState.new_window_cbk(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that it has
+opened a new window</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.on_change" CLASS="Method">AppState.AppState.on_change(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which should be called after the contents of a buffer
+is changed.  If the AppState represents an external editor which
+does not support change notification, then on_change may only be
+called for mediator-initiated changes (including responses from
+the external editor to mediator-initiated changes).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the modified buffer
+<DT>
+<EM>INT</EM> start
+<DD>start of the modified range
+<DT>
+<EM>INT</EM> end
+<DD>end of the modified range
+<DT>
+<EM>STR</EM> text
+<DD>the new text replacing this range
+<DT>
+<EM>BOOL</EM> program_initiated
+<DD>true if the change was
+initiated by the mediator
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.open_buffer_cbk" CLASS="Method">AppState.AppState.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
@@ -911,7 +1390,7 @@ application.</P>
 Tell the external editor to open a file, and create a local buffer
 for that file.</P>
 <P>
-Open file with name <EM>STR name</EM>.</P>
+Open file with name <EM>STR file_name</EM>.</P>
 <P>
 Right now, this is used mostly so that the regression testing
 procedure can tell the external editor to open a test
@@ -925,6 +1404,7 @@ open-file dialogue using pseudo-code dictation of file names.</P>
 <DT>
 STR <EM>file_name</EM>
 <DD>Full path of the file to be opened.
+
 </DL>
 <H2 ID="AppState.AppState.pop_breadcrumbs" CLASS="Method">AppState.AppState.pop_breadcrumbs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)</H2>
 <P>Pops breadcrumbs from the breadcrumbs stack</P>
@@ -934,6 +1414,21 @@ STR <EM>file_name</EM>
 <P>
 if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
 breadcrumb.
+</P>
+<H2 ID="AppState.AppState.process_pending_updates" CLASS="Method">AppState.AppState.process_pending_updates(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Process any pending updates which the editor has already
+sent us, before querying the editor for additional updates.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM> 
 </P>
 <H2 ID="AppState.AppState.query_buffer_from_app" CLASS="Method">AppState.AppState.query_buffer_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
@@ -960,52 +1455,12 @@ exists.</P>
 <DD>does the buffer exist?
 
 </DL>
-<H2 ID="AppState.AppState.recog_begin" CLASS="Method">AppState.AppState.recog_begin(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)</H2>
+<H2 ID="AppState.AppState.recog_begin" CLASS="Method">AppState.AppState.recog_begin(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>, <SPAN CLASS="Argument">block=0</SPAN>)</H2>
 <P>Invoked at the beginning of a recognition event.</P>
 
 <P>
 The editor then returns telling VoiceCode whether or not the user
 is allowed to speak into window <EM>window_id</EM>.</P>
-<P>
-If possible, the editor should also stop responding to user
-input until method <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. This is to
-prevent a bunch of problems that can arise if the user types
-while VoiceCode is still processing an utterance. In such
-cases, the results of the utterance interpretation can be
-unpredictable, especially when it comes to correction.</P>
-<P>
-Each external editor will respond to that message as best it can.</P>
-<P>
-Ideally, the editor would:</P>
-
-<UL>
-
-<LI>Start recording user actions to a log
-
-<LI>execute those actions later when <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked.
-</UL>
-<P>
-If the editor is able to stop responding to user input, but is
-not able to record them and/or execute them later, then it
-should:</P>
-
-<UL>
-
-<LI>Stop responding to user input until <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is
-  later invoked.
-</UL>
-<P>
-If the editor is not even able to stop responding to user
-input, then it should:</P>
-
-<UL>
-
-<LI>Do nothing
-</UL>
-<P>
-NOTE: This method may be invoked more than once before
-<A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. In such cases, only the first
-call to the method should do anything.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -1015,7 +1470,26 @@ call to the method should do anything.</P>
 STR <EM>window_id</EM>
 <DD>The ID of the window that was active when
 the recognition began.                
+<DT>
+<EM>BOOL block</EM>
+<DD>true if the speech engine can detect recog_end
+events reliably.  If so, and if the editor is capable of doing so, 
+the editor may (at its discretion) also stop responding to user
+input until method <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked.  This is to
+prevent a bunch of problems that can arise if the user types
+while VoiceCode is still processing an utterance. In such
+cases, the results of the utterance interpretation can be
+unpredictable, especially when it comes to correction.
 </DL>
+<P>
+<STRONG>NOTE:</STRONG> However, if block is false, the editor <STRONG>MUST NOT</STRONG>
+stop responding, because the mediator will not be able to use
+recog_end to tell it to resume responding to user input.  </P>
+<P>
+Also, the editor must provide a way for the user to re-enable
+input manually, in case the mediator crashes.  If it cannot do
+so, it should not stop responding, regardless of the value of
+block.</P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 
@@ -1159,7 +1633,7 @@ STR <EM>new_buff_name</EM>
 <DT>
 <EM>STR full_path</EM>
 <DD>full path under which to save the file, or
-None to use the buffer name
+None to use the existing file name or prompt
 <DT>
 <EM>BOOL no_prompt</EM>
 <DD>overwrite any existing file without
@@ -1176,7 +1650,136 @@ has already prompted the user.
 <DD>true if file was saved successfully
 
 </DL>
-<H2 ID="AppState.AppState.synchronize_with_app" CLASS="Method">AppState.AppState.synchronize_with_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)</H2>
+<H2 ID="AppState.AppState.set_change_callback" CLASS="Method">AppState.AppState.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
+<P>changes the callback to a new function</P>
+
+<P>
+<STRONG>NOTE:</STRONG> This method sets a change callback which will be
+called for program-initiated changes, but may not be called for
+user-initiated ones.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT</EM> change_callback
+<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
+<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
+<EM>STR</EM> buff_name, <EM>BOOL</EM> program_initiated)
+</DL>
+<P>
+The arguments to the change callback specify the character offsets
+of the start and end of the changed region (before the change),
+the text with which this region was replaced, the start and end
+of the selected region (after the change), the name of the
+buffer reporting the change, and whether the change was
+initiated by the program, or by the user</P>
+<P>
+Note the difference between this change_callback and the
+TextBufferWX one: here the name of the buffer is returned,
+rather than a reference to the underlying TextBufferWX.  </P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.set_instance_string" CLASS="Method">AppState.AppState.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specifies the identifier string for this editor instance.  If the 
+editor is capable of setting the window title to include this string, 
+it should (and then should return this string when the
+instance_string method is called.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance_string
+<DD>the identifying string to be included in the
+window title if possible.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.set_manager" CLASS="Method">AppState.AppState.set_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)</H2>
+<P>None</P>
+
+<P>
+indicates the AppState's manager.  Normally called only by 
+the manager.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppCbkHandler</EM> manager
+<DD>the AppCbkHandler object which owns 
+this AppState.  
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.set_name" CLASS="Method">AppState.AppState.set_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+assign a unique name to this editor instance.  
+<STRONG>NOTE:</STRONG> only the manager should call this method.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> name
+<DD>the name of the instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.shared_window" CLASS="Method">AppState.AppState.shared_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+is the editor running in a window which could be shared with
+another editor instance (because it is a shell window,
+and this instance could be suspended or closed)</P>
+<P>
+Usually false for GUI editors.</P>
+<P>
+Note: remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will also appear to be
+shared windows.  However, the mediator will perform a separate 
+check to detect this, so for remote editors which do not share windows 
+on the remote system, AppState.shared_window should report
+false.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is running in a potentially shared window
+
+</DL>
+<H2 ID="AppState.AppState.synchronize_with_app" CLASS="Method">AppState.AppState.synchronize_with_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -1230,8 +1833,41 @@ STR <EM>file_name</EM>
 STR <EM>buff_name</EM>
 <DD>Unique name of the buffer in which the file
 was opened. Returns <EM>None</EM> if the editor was not able to open
-the file.
+the file.  Note: if no file by the name file_name exists, the 
+regression tests expect the editor to open an empty buffer with
+that name.  Therefore, tell_editor_to_open_file should only fail
+if the user cancels the open file command (e.g. if there is an
+unsaved buffer)
+
 </DL>
+<H2 ID="AppState.AppState.title_escape_sequence" CLASS="Method">AppState.AppState.title_escape_sequence(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)</H2>
+<P>None</P>
+
+<P>
+gives the editor a (module-dependent) hint about the escape
+sequence which can be used to set the module's window title, if
+any.  If the editor has its own mechanism for setting the window
+title, it should simply ignore this method.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> before
+<DD>the escape sequence to be sent before the string
+to place in the window title, or the empty string if there is no
+escape sequence
+<DT>
+<EM>STR</EM> after
+<DD>the escape sequence which terminates the window
+title value
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.unbind_from_buffer" CLASS="Method">AppState.AppState.unbind_from_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>unbinds the AppState from a particular buffer.</P>
 
@@ -1257,7 +1893,7 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 </DL>
 <P>
 ..[curr_buffer_name] AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="AppState.AppState.updates_from_app" CLASS="Method">AppState.AppState.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
+<H2 ID="AppState.AppState.updates_from_app" CLASS="Method">AppState.AppState.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
 <P>Gets a list of updates from the external app.</P>
 
 <P>

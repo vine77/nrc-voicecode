@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:38:03 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:02:13 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -42,6 +42,12 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from TextBuffer.TextBufferChangeSpecify</SPAN>
+    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify._on_change_specification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify._on_change_specification</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">selection_start</SPAN>, <SPAN CLASS="Argument">selection_end</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)
+    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.get_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.get_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from TextBuffer.TextBuffer</SPAN>
     <A CLASS="DocLink" HREF="#TextBuffer.TextBuffer.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBuffer.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # abstract base class - no arguments</SPAN>
     <A CLASS="DocLink" HREF="#TextBuffer.TextBuffer.cur_pos"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBuffer.cur_pos</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -51,12 +57,6 @@
     <A CLASS="DocLink" HREF="#TextBuffer.TextBuffer.len"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBuffer.len</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns length of buffer </SPAN>
     <A CLASS="DocLink" HREF="#TextBuffer.TextBuffer.set_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBuffer.set_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes range of current selection</SPAN>
     <A CLASS="DocLink" HREF="#TextBuffer.TextBuffer.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBuffer.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes a portion of the buffer</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from TextBuffer.TextBufferChangeSpecify</SPAN>
-    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify._on_change_specification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify._on_change_specification</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">selection_start</SPAN>, <SPAN CLASS="Argument">selection_end</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)
-    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.get_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.get_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#TextBuffer.TextBufferChangeSpecify.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">TextBuffer.TextBufferChangeSpecify.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
 
 </PRE><H2>Description</H2><P>
 creates a TextBufferChangeSpecify given an underlying
@@ -281,6 +281,71 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="TextBuffer.TextBufferChangeSpecify.__init__" CLASS="Method">TextBuffer.TextBufferChangeSpecify.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT</EM> change_callback
+<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
+<EM>INT</EM> selection_start,
+<EM>INT</EM> selection_end, TextBufferChangeSpecify buffer,
+<EM>BOOL</EM> program_initiated) 
+see TextBufferChangeSpecify documentation for details.
+
+</DL>
+<H2 ID="TextBuffer.TextBufferChangeSpecify._on_change_specification" CLASS="Method">TextBuffer.TextBufferChangeSpecify._on_change_specification(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">selection_start</SPAN>, <SPAN CLASS="Argument">selection_end</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)</H2>
+<P>None</P>
+
+<P>
+internal function which triggers the
+change_callback.  Only the concrete subclass of 
+TextBufferChangeSpecify implementing change specification
+should call this function</P>
+<H2 ID="TextBuffer.TextBufferChangeSpecify.get_change_callback" CLASS="Method">TextBuffer.TextBufferChangeSpecify.get_change_callback(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+return change callback function (used by wrappers like
+TextBufferCRToNL)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT</EM> change_callback
+<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
+<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
+<EM>TextBufferChangeSpecify</EM> buffer, <EM>BOOL</EM> program_initiated) 
+
+</DL>
+<H2 ID="TextBuffer.TextBufferChangeSpecify.set_change_callback" CLASS="Method">TextBuffer.TextBufferChangeSpecify.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
+<P>changes the callback to a new function</P>
+
+<P>
+<STRONG>INPUTS</STRONG>
+<EM>FCT</EM> change_callback --
+change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
+<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
+<EM>TextBufferChangeSpecify</EM> buffer, <EM>BOOL</EM> program_initiated) 
+see TextBufferChangeSpecify documentation for details.
+-- function to be called on change to
+the underlying buffer.  
+see TextBufferChangeSpecify documentation for details.</P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="TextBuffer.TextBuffer.__init__" CLASS="Method">TextBuffer.TextBuffer.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>abstract base class - no arguments</P>
 
@@ -407,71 +472,6 @@ replaced.  Defaults to start of buffer.</P>
 <EM>INT end</EM> is the offset into the buffer of the character following 
 the text to be replaced (this matches Python's slice convention).
 Defaults to end of buffer.</P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="TextBuffer.TextBufferChangeSpecify.__init__" CLASS="Method">TextBuffer.TextBufferChangeSpecify.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
-<P>None</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>FCT</EM> change_callback
-<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
-<EM>INT</EM> selection_start,
-<EM>INT</EM> selection_end, TextBufferChangeSpecify buffer,
-<EM>BOOL</EM> program_initiated) 
-see TextBufferChangeSpecify documentation for details.
-
-</DL>
-<H2 ID="TextBuffer.TextBufferChangeSpecify._on_change_specification" CLASS="Method">TextBuffer.TextBufferChangeSpecify._on_change_specification(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">selection_start</SPAN>, <SPAN CLASS="Argument">selection_end</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)</H2>
-<P>None</P>
-
-<P>
-internal function which triggers the
-change_callback.  Only the concrete subclass of 
-TextBufferChangeSpecify implementing change specification
-should call this function</P>
-<H2 ID="TextBuffer.TextBufferChangeSpecify.get_change_callback" CLASS="Method">TextBuffer.TextBufferChangeSpecify.get_change_callback(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-return change callback function (used by wrappers like
-TextBufferCRToNL)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>FCT</EM> change_callback
-<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
-<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
-<EM>TextBufferChangeSpecify</EM> buffer, <EM>BOOL</EM> program_initiated) 
-
-</DL>
-<H2 ID="TextBuffer.TextBufferChangeSpecify.set_change_callback" CLASS="Method">TextBuffer.TextBufferChangeSpecify.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
-<P>changes the callback to a new function</P>
-
-<P>
-<STRONG>INPUTS</STRONG>
-<EM>FCT</EM> change_callback --
-change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
-<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
-<EM>TextBufferChangeSpecify</EM> buffer, <EM>BOOL</EM> program_initiated) 
-see TextBufferChangeSpecify documentation for details.
--- function to be called on change to
-the underlying buffer.  
-see TextBufferChangeSpecify documentation for details.</P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Jun 09 12:04:59 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:07:44 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,6 +29,7 @@
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram._set_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram._set_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)<SPAN CLASS="OneLiner"> # internal call to set the currently visible range.</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns name of buffer corresponding to this selection grammar.</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.find_closest"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.find_closest</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.find_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.find_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
@@ -127,6 +128,16 @@ and checks with buffer for the currently visible range.</P>
 <DD>name of buffer currently used by this selection grammar.
 
 </DL>
+<H2 ID="sr_grammars.SelectWinGram.cleanup" CLASS="Method">sr_grammars.SelectWinGram.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+SelectWinGram has a reference to an AppState instance, but no
+circular references, so strictly speaking it is only necessary
+for the grammar manager to delete its reference to the grammar.
+However, a dummy cleanup method allows us to avoid the need for
+a custom cleanup method for GramMgr.
+</P>
 <H2 ID="sr_grammars.SelectWinGram.find_closest" CLASS="Method">sr_grammars.SelectWinGram.find_closest(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)</H2>
 <P>None</P>
 
