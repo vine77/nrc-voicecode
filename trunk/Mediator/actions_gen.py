@@ -120,17 +120,18 @@ class ActionRepeatable(Action):
     
     **INSTANCE ATTRIBUTES**
     
-    *none*-- 
+    *BOOL already_repeated=0* -- If true, then the action has been repeated at
+    least once before.
 
     CLASS ATTRIBUTES**
     
     *none* -- 
     """
     
-    def __init__(self, docstring=None, **args_super):
-        self.deep_construct(Action, \
-                            {}, \
-                            args_super, \
+    def __init__(self, already_repeated=0, **args_super):
+        self.deep_construct(Action,
+                            {'already_repeated': already_repeated},
+                            args_super,
                             {})
 
 class ActionRepeatLastCmd(Action):
@@ -139,16 +140,31 @@ class ActionRepeatLastCmd(Action):
     **INSTANCE ATTRIBUTES**
     
     *INT n_times=1* -- Number of times to repeate the previous command.
+
+    *BOOL check_already_repeated=0* -- If true, then *n_times* will be
+     decreased by 1 before repeating the action, unless the action
+     being repeated was already repeated once before.
+
+     This is to allow utterance such as: 'N times' to be used both as a
+     qualifier for the command to be repeated, and as a way of repeating
+     a command that was already repeated.
+
+     For example, in ['page down', '3 times'], the utterance '3 times' should
+     only repeat the 'page down' twice because 'page down' already went down
+     one page. But in ['page down', '2 times', '3 times'], the utterance
+     should repeat it '3 times' because it was not used as a qualifier for
+     'page down'.
     
      **CLASS ATTRIBUTES**
     
     *none* -- 
     """
     
-    def __init__(self, n_times=1, **args_super):
-        self.deep_construct(ActionRepeatPreviousCmd, \
-                            {'n_times': n_times}, \
-                            args_super, \
+    def __init__(self, n_times=1, check_already_repeated=0, **args_super):
+        self.deep_construct(ActionRepeatLastCmd, 
+                            {'n_times': n_times,
+                             'check_already_repeated': check_already_repeated},
+                           args_super,
                             {})
 
     def log(self, app, cont):
@@ -169,12 +185,19 @@ class ActionRepeatLastCmd(Action):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
-        
-        (last_cont, last_action) = app.get_history(self, 1)
+
+#        print '-- ActionRepeatLastCmd.execute: self=%s,self.__dict__=%s' % (self      , self.__dict__)
+
+        (last_cont, last_action) = app.get_history(1)
+#        print '-- ActionRepeatLastCmd.execute: last_action=%s, last_action.__dict__=%s' % (last_action, last_action.__dict__)
+        if self.check_already_repeated and not last_action.already_repeated:
+            self.n_times = self.n_times - 1
+            last_action.already_repeated = 1            
+
         for ii in range(self.n_times):
             last_action.log_execute(app, cont)
 
-class ActionSelect(Action):
+class ActionSelect(ActionRepeatable):
     """This action sets the selection in a buffer.
 
     **INSTANCE ATTRIBUTES**
@@ -259,7 +282,7 @@ class ActionInsert(Action):
         return the_doc
 
 
-class ActionSearch(Action):
+class ActionSearch(ActionRepeatable):
     """Moves cursor to occurence of a regular expression.
         
     **INSTANCE ATTRIBUTES**

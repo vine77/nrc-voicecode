@@ -79,8 +79,9 @@ add_abbreviation('attr', ['attribute'])
 # CSCs and LSAs that apply for ALL languages
 #############################################################################
 
-#
+#############################################################################
 # Punctuation marks.
+#############################################################################
 #
 # These LSAs usually don't add spaces before/after the punctuation
 # mark. There are other LSAs and CSCs for inserting space padded punctuation.
@@ -99,7 +100,7 @@ add_lsa(['asterisk', 'star'], {None: '*'})
 add_lsa(['double asterisk', 'double star'], {None: '**'})
 add_lsa(['slash'], {None: '/'})
 add_lsa(['plus sign'], {None: '+'})
-add_lsa(['minus sign'], {None: '-'})
+add_lsa(['minus sign', 'hyphen'], {None: '-'})
 add_lsa(['percent', 'percent sign'], {None: '%'})
 add_lsa(['and percent'], {None: '&'})
 add_lsa(['pipe', 'pipe sign', 'vertical bar'], {None: '|'})
@@ -405,19 +406,19 @@ add_csc(acmd)
 #
 # minus
 #
-acmd = CSCmd(spoken_forms=['after minus'],
+acmd = CSCmd(spoken_forms=['after minus', 'after hyphen'],
              meanings={ContAny(): ActionSearch('-\s{0,1}')},
              docstring='go after next minus')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['before minus', 'before next minus'],
+acmd = CSCmd(spoken_forms=['before minus', 'before next minus', 'before hyphen', 'before next hyphen'],
              meanings={ContAny(): ActionSearch('\s{0,1}-', where=-1)},
              docstring='go before next minus')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['previous minus', 'after previous minus'],
+acmd = CSCmd(spoken_forms=['previous minus', 'after previous minus', 'previous hyphen', 'after previous hyphen'],
              meanings={ContAny(): ActionSearch('-\s{0,1}', direction=-1)},
              docstring='go after previous minus')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['before previous minus'],
+acmd = CSCmd(spoken_forms=['before previous minus', 'before previous hyphen'],
              meanings={ContAny(): ActionSearch('\s{0,1}-', direction=-1, where=-1)},
              docstring='go before previous minus')
 add_csc(acmd)
@@ -902,6 +903,125 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
              meanings={ContAny(): ActionSearch('\s{0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
              docstring='jump backwards out of innermost balanced expression')
+add_csc(acmd)
+
+
+#############################################################################
+# Repeating/Qualifying last command
+#############################################################################
+
+
+#
+# Note: "N times" doesn't do the same thing as utterance like "again N times"
+# If "N times" is used immediatly after the command to be repeated
+# (e.g. ['page down', '3 times']), then the command is repeated only N-1 times
+# because we already executed it once. If it doesn't immediatly follow the
+# command to be repeated (e.g.'4 times' in: ['page down', '3 times', '4 times])
+# then it is repeated N times.
+#
+# Utterances like "again N times" on the other hand, always repeat the action
+# N times.
+#
+acmd = CSCmd(spoken_forms=['1 time', '1 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=1, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again', 'do that again', 'repeat', 'repeat that', 'redo', 'again 1 time', 'again 1 times', 'repeat 1 time'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms=['2 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=2, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 2 times', 'repeat 2 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=2)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms=['3 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=3, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 3 times', 'repeat 3 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=3)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['4 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=4, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 4 times', 'repeat 4 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=4)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['5 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=5, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 5 times', 'repeat 5 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=5)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['6 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=6, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 6 times', 'repeat 6 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=6)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['7 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=7, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 7 times', 'repeat 7 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=7)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['8 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=8, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 8 times', 'repeat 8 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=8)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['9 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=9, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 9 times', 'repeat 9 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=9)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['10 times'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=10, check_already_repeated=1)},
+             docstring='Repeat last command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['again 10 time', 'repeat 10 time'],
+             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=10)},
+             docstring='Repeat last command')
 add_csc(acmd)
 
 

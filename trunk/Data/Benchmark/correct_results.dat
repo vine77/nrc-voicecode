@@ -1,7 +1,13 @@
 
-D:\VoiceCode\VCode.logActions\Admin>cd D:\VoiceCode\VCode.logActions\Admin 
+D:\VoiceCode\VCode.repeat\Admin>rem  
 
-D:\VoiceCode\VCode.logActions\Admin>python test.py all         
+D:\VoiceCode\VCode.repeat\Admin>rem Shortcut for invoking VoiceCode regression test 
+
+D:\VoiceCode\VCode.repeat\Admin>rem
+
+D:\VoiceCode\VCode.repeat\Admin>cd D:\VoiceCode\VCode.repeat\Admin 
+
+D:\VoiceCode\VCode.repeat\Admin>python test.py all 
 
 
 *******************************************************************************
@@ -213,7 +219,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 880d00>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 87a860>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -228,9 +234,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c ***
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -259,8 +265,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.logActions\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.repeat\Data\TestData\large_buff.py ***
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -361,11 +367,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.logActions\\Data\\TestData\\large_buff.py']
+   Source files are: ['D:\\VoiceCode\\VCode.repeat\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -376,8 +382,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+*** Accept symbol match test. source='D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c' ***
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -436,7 +442,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -444,7 +450,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -456,9 +462,9 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1538,7 +1544,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1546,14 +1552,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -1743,9 +1749,9 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1795,7 +1801,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1815,15 +1821,15 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 8916f0> from file 'D:\VoiceCode\VCode.logActions\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.logActions\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 8a5d40> from file 'D:\VoiceCode\VCode.repeat\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.repeat\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1849,9 +1855,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1866,10 +1872,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1880,7 +1886,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1888,9 +1894,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1918,7 +1924,7 @@ Associate 'variable' with symbol (Enter selection):
   2:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new', 'statement']
+Saying: ['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement']
 
 
 *** Start of source buffer ***
@@ -1927,7 +1933,7 @@ Saying: ['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign',
   3:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new', 'statement']
+Saying: ['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement']
 
 
 *** Start of source buffer ***
@@ -1962,7 +1968,7 @@ Associate 'value' with symbol (Enter selection):
   6:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals', '0', ';\\semi', 'new', 'statement']
+Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals', '0', ';\\semi', 'new statement']
 
 
   4:    if Index&variable:
@@ -1971,7 +1977,7 @@ Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals',
   7:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', '.\\dot', 'function', '()\\without arguments', 'new', 'statement']
+Saying: ['index', '.\\dot', 'function', '()\\without arguments', 'new statement']
 Associate 'function' with symbol (Enter selection):
 
   '0': no association
@@ -1987,7 +1993,7 @@ Associate 'function' with symbol (Enter selection):
   8:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new', 'statement']
+Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement']
 
 
   6:    Index = 0;variable = 0;
@@ -1996,7 +2002,7 @@ Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', '
   9:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['#\\pound', '!\\bang', 'python', 'new', 'statement']
+Saying: ['#\\pound', '!\\bang', 'python', 'new statement']
 Associate 'python' with symbol (Enter selection):
 
   '0': no association
@@ -2012,7 +2018,7 @@ Associate 'python' with symbol (Enter selection):
  10:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['#\\pound sign', '!\\exclamation mark', 'python', 'new', 'statement']
+Saying: ['#\\pound sign', '!\\exclamation mark', 'python', 'new statement']
 
 
   8:    variable = [0...10]
@@ -2030,7 +2036,7 @@ Saying: ['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then']
  12:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new', 'statement']
+Saying: ['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement']
 Associate 'field' with symbol (Enter selection):
 
   '0': no association
@@ -2055,7 +2061,7 @@ Saying: ['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater 
  14:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', '=\\equal sign', '0', 'new', 'statement']
+Saying: ['index', '=\\equal sign', '0', 'new statement']
 
 
  12:    variable::Index::Field
@@ -2064,7 +2070,7 @@ Saying: ['index', '=\\equal sign', '0', 'new', 'statement']
  15:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new', 'statement']
+Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new statement']
 
 
  13:    if Index<0 and Index>-1:
@@ -2073,7 +2079,7 @@ Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new', 'statement']
  16:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', 'parens', '0', 'new', 'statement']
+Saying: ['function', 'parens', '0', 'new statement']
 
 
  14:    Index=0
@@ -2082,7 +2088,7 @@ Saying: ['function', 'parens', '0', 'new', 'statement']
  17:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', '()\\empty parens', 'new', 'statement']
+Saying: ['function', '()\\empty parens', 'new statement']
 
 
  15:    Function(0)
@@ -2091,7 +2097,7 @@ Saying: ['function', '()\\empty parens', 'new', 'statement']
  18:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', '[\\open bracket', '0', ']\\close bracket', 'new', 'statement']
+Saying: ['list', '[\\open bracket', '0', ']\\close bracket', 'new statement']
 Associate 'list' with symbol (Enter selection):
 
   '0': no association
@@ -2107,7 +2113,7 @@ Associate 'list' with symbol (Enter selection):
  19:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', 'brackets', '0', 'new', 'statement']
+Saying: ['list', 'brackets', '0', 'new statement']
 
 
  17:    Function()
@@ -2116,7 +2122,7 @@ Saying: ['list', 'brackets', '0', 'new', 'statement']
  20:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', '[]\\empty brackets', 'new', 'statement']
+Saying: ['list', '[]\\empty brackets', 'new statement']
 
 
  18:    List[0]
@@ -2125,7 +2131,7 @@ Saying: ['list', '[]\\empty brackets', 'new', 'statement']
  21:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['dictionary', 'braces', '0', 'new', 'statement']
+Saying: ['dictionary', 'braces', '0', 'new statement']
 Associate 'dictionary' with symbol (Enter selection):
 
   '0': no association
@@ -2141,7 +2147,7 @@ Associate 'dictionary' with symbol (Enter selection):
  22:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['<\\open angled', 'head', '>\\close angled', 'new', 'statement']
+Saying: ['<\\open angled', 'head', '>\\close angled', 'new statement']
 Associate 'head' with symbol (Enter selection):
 
   '0': no association
@@ -2157,7 +2163,7 @@ Associate 'head' with symbol (Enter selection):
  23:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['angled brackets', 'head', 'new', 'statement']
+Saying: ['angled brackets', 'head', 'new statement']
 
 
  21:    Dictionary{0}
@@ -2166,7 +2172,7 @@ Saying: ['angled brackets', 'head', 'new', 'statement']
  24:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['<>\\empty angled', 'new', 'statement']
+Saying: ['<>\\empty angled', 'new statement']
 
 
  22:    <Head>
@@ -2175,7 +2181,7 @@ Saying: ['<>\\empty angled', 'new', 'statement']
  25:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', "'\\open single quote", 'message', "'\\close single quote", 'new', 'statement']
+Saying: ['string', ' = \\equals', "'\\open single quote", 'message', "'\\close single quote", 'new statement']
 Associate 'string' with symbol (Enter selection):
 
   '0': no association
@@ -2198,7 +2204,7 @@ Associate 'string' with symbol (Enter selection):
  26:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', 'single', 'quotes', 'message', 'new', 'statement']
+Saying: ['string', ' = \\equals', 'single', 'quotes', 'message', 'new statement']
 
 
  24:    <>
@@ -2207,7 +2213,7 @@ Saying: ['string', ' = \\equals', 'single', 'quotes', 'message', 'new', 'stateme
  27:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ["''\\empty single quotes", 'new', 'statement']
+Saying: ["''\\empty single quotes", 'new statement']
 
 
  25:    String = 'Message'
@@ -2216,7 +2222,7 @@ Saying: ["''\\empty single quotes", 'new', 'statement']
  28:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 'new', 'statement']
+Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 'new statement']
 
 
  26:    String = 'Message'
@@ -2225,7 +2231,7 @@ Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 
  29:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', 'quotes', 'message', 'new', 'statement']
+Saying: ['string', ' = \\equals', 'quotes', 'message', 'new statement']
 
 
  27:    ''
@@ -2234,7 +2240,7 @@ Saying: ['string', ' = \\equals', 'quotes', 'message', 'new', 'statement']
  30:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['""\\empty quotes', 'new', 'statement']
+Saying: ['""\\empty quotes', 'new statement']
 
 
  28:    String = "Message"
@@ -2243,7 +2249,7 @@ Saying: ['""\\empty quotes', 'new', 'statement']
  31:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close back quote', 'new', 'statement']
+Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close back quote', 'new statement']
 
 
  29:    String = "Message"
@@ -2252,7 +2258,7 @@ Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close bac
  32:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new', 'statement']
+Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new statement']
 
 
  30:    ""
@@ -2261,7 +2267,7 @@ Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new', 'statement
  33:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['``\\empty back quotes', 'new', 'statement']
+Saying: ['``\\empty back quotes', 'new statement']
 
 
  31:    String = `Message`
@@ -2277,7 +2283,7 @@ Saying: ['quotes']
  34:    "<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\a\\back slash a.', 'new', 'statement']
+Saying: ['\\a\\back slash a.', 'new statement']
 
 
  32:    String = `Message`
@@ -2286,7 +2292,7 @@ Saying: ['\\a\\back slash a.', 'new', 'statement']
  35:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['\\a\\back slash alpha', 'new', 'statement']
+Saying: ['\\a\\back slash alpha', 'new statement']
 
 
  33:    ``
@@ -2316,7 +2322,7 @@ Saying: ['\\b\\back slash bravo']
  36:    "\b\b<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  34:    "\a"
@@ -2346,7 +2352,7 @@ Saying: ['\\c\\back slash charlie']
  37:    "\c\c<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  35:    \a
@@ -2376,7 +2382,7 @@ Saying: ['\\d\\back slash delta']
  38:    "\d\d<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  36:    "\b\b"
@@ -2406,7 +2412,7 @@ Saying: ['\\e\\back slash echo']
  39:    "\e\e<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  37:    "\c\c"
@@ -2436,7 +2442,7 @@ Saying: ['\\f\\back slash foxtrot']
  40:    "\f\f<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  38:    "\d\d"
@@ -2466,7 +2472,7 @@ Saying: ['\\g\\back slash golf']
  41:    "\g\g<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  39:    "\e\e"
@@ -2496,7 +2502,7 @@ Saying: ['\\h\\back slash hotel']
  42:    "\h\h<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  40:    "\f\f"
@@ -2526,7 +2532,7 @@ Saying: ['\\i\\back slash india']
  43:    "\i\i<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  41:    "\g\g"
@@ -2556,7 +2562,7 @@ Saying: ['\\j\\back slash juliett']
  44:    "\j\j<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  42:    "\h\h"
@@ -2586,7 +2592,7 @@ Saying: ['\\k\\back slash kilo']
  45:    "\k\k<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  43:    "\i\i"
@@ -2616,7 +2622,7 @@ Saying: ['\\l\\back slash lima']
  46:    "\l\l<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  44:    "\j\j"
@@ -2646,7 +2652,7 @@ Saying: ['\\m\\back slash mike']
  47:    "\m\m<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  45:    "\k\k"
@@ -2676,7 +2682,7 @@ Saying: ['\\n\\back slash november']
  48:    "\n\n<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  46:    "\l\l"
@@ -2706,7 +2712,7 @@ Saying: ['\\o\\back slash oscar']
  49:    "\o\o<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  47:    "\m\m"
@@ -2736,7 +2742,7 @@ Saying: ['\\p\\back slash papa']
  50:    "\p\p<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  48:    "\n\n"
@@ -2766,7 +2772,7 @@ Saying: ['\\q\\back slash quebec']
  51:    "\q\q<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  49:    "\o\o"
@@ -2796,7 +2802,7 @@ Saying: ['\\r\\back slash romeo']
  52:    "\r\r<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  50:    "\p\p"
@@ -2826,7 +2832,7 @@ Saying: ['\\s\\back slash sierra']
  53:    "\s\s<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  51:    "\q\q"
@@ -2856,7 +2862,7 @@ Saying: ['\\t\\back slash tango']
  54:    "\t\t<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  52:    "\r\r"
@@ -2886,7 +2892,7 @@ Saying: ['\\u\\back slash uniform']
  55:    "\u\u<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  53:    "\s\s"
@@ -2916,7 +2922,7 @@ Saying: ['\\v\\back slash victor']
  56:    "\v\v<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  54:    "\t\t"
@@ -2946,7 +2952,7 @@ Saying: ['\\w\\back slash whiskey']
  57:    "\w\w<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  55:    "\u\u"
@@ -2976,7 +2982,7 @@ Saying: ['\\x\\back slash xray']
  58:    "\x\x<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  56:    "\v\v"
@@ -3006,7 +3012,7 @@ Saying: ['\\y\\back slash yankee']
  59:    "\y\y<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  57:    "\w\w"
@@ -3036,7 +3042,7 @@ Saying: ['\\z\\back slash zulu']
  60:    "\z\z<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  58:    "\x\x"
@@ -3059,7 +3065,7 @@ Saying: ['\\A\\back slash cap a.']
  61:    "\A<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\A\\back slash cap alpha', 'new', 'statement']
+Saying: ['\\A\\back slash cap alpha', 'new statement']
 
 
  59:    "\y\y"
@@ -3082,7 +3088,7 @@ Saying: ['\\B\\back slash cap b.']
  62:    "\B<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\B\\back slash cap bravo', 'new', 'statement']
+Saying: ['\\B\\back slash cap bravo', 'new statement']
 
 
  60:    "\z\z"
@@ -3105,7 +3111,7 @@ Saying: ['\\D\\back slash cap d.']
  63:    "\D<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\D\\back slash cap delta', 'new', 'statement']
+Saying: ['\\D\\back slash cap delta', 'new statement']
 
 
  61:    "\A\A"
@@ -3128,7 +3134,7 @@ Saying: ['\\E\\back slash cap e.']
  64:    "\E<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\E\\back slash cap echo', 'new', 'statement']
+Saying: ['\\E\\back slash cap echo', 'new statement']
 
 
  62:    "\B\B"
@@ -3151,7 +3157,7 @@ Saying: ['\\F\\back slash cap f.']
  65:    "\F<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\F\\back slash cap foxtrot', 'new', 'statement']
+Saying: ['\\F\\back slash cap foxtrot', 'new statement']
 
 
  63:    "\D\D"
@@ -3174,7 +3180,7 @@ Saying: ['\\G\\back slash cap g.']
  66:    "\G<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\G\\back slash cap golf', 'new', 'statement']
+Saying: ['\\G\\back slash cap golf', 'new statement']
 
 
  64:    "\E\E"
@@ -3197,7 +3203,7 @@ Saying: ['\\H\\back slash cap h.']
  67:    "\H<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\H\\back slash cap hotel', 'new', 'statement']
+Saying: ['\\H\\back slash cap hotel', 'new statement']
 
 
  65:    "\F\F"
@@ -3220,7 +3226,7 @@ Saying: ['\\I\\back slash cap i.']
  68:    "\I<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\I\\back slash cap india', 'new', 'statement']
+Saying: ['\\I\\back slash cap india', 'new statement']
 
 
  66:    "\G\G"
@@ -3243,7 +3249,7 @@ Saying: ['\\J\\back slash cap j.']
  69:    "\J<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\J\\back slash cap juliett', 'new', 'statement']
+Saying: ['\\J\\back slash cap juliett', 'new statement']
 
 
  67:    "\H\H"
@@ -3266,7 +3272,7 @@ Saying: ['\\K\\back slash cap k.']
  70:    "\K<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\K\\back slash cap kilo', 'new', 'statement']
+Saying: ['\\K\\back slash cap kilo', 'new statement']
 
 
  68:    "\I\I"
@@ -3289,7 +3295,7 @@ Saying: ['\\L\\back slash cap l.']
  71:    "\L<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\L\\back slash cap lima', 'new', 'statement']
+Saying: ['\\L\\back slash cap lima', 'new statement']
 
 
  69:    "\J\J"
@@ -3312,7 +3318,7 @@ Saying: ['\\M\\back slash cap m.']
  72:    "\M<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\M\\back slash cap mike', 'new', 'statement']
+Saying: ['\\M\\back slash cap mike', 'new statement']
 
 
  70:    "\K\K"
@@ -3335,7 +3341,7 @@ Saying: ['\\N\\back slash cap n.']
  73:    "\N<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\N\\back slash cap november', 'new', 'statement']
+Saying: ['\\N\\back slash cap november', 'new statement']
 
 
  71:    "\L\L"
@@ -3358,7 +3364,7 @@ Saying: ['\\O\\back slash cap o.']
  74:    "\O<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\O\\back slash cap oscar', 'new', 'statement']
+Saying: ['\\O\\back slash cap oscar', 'new statement']
 
 
  72:    "\M\M"
@@ -3381,7 +3387,7 @@ Saying: ['\\P\\back slash cap p.']
  75:    "\P<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\P\\back slash cap papa', 'new', 'statement']
+Saying: ['\\P\\back slash cap papa', 'new statement']
 
 
  73:    "\N\N"
@@ -3404,7 +3410,7 @@ Saying: ['\\Q\\back slash cap q.']
  76:    "\Q<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\Q\\back slash cap quebec', 'new', 'statement']
+Saying: ['\\Q\\back slash cap quebec', 'new statement']
 
 
  74:    "\O\O"
@@ -3427,7 +3433,7 @@ Saying: ['\\R\\back slash cap r.']
  77:    "\R<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\R\\back slash cap romeo', 'new', 'statement']
+Saying: ['\\R\\back slash cap romeo', 'new statement']
 
 
  75:    "\P\P"
@@ -3450,7 +3456,7 @@ Saying: ['\\S\\back slash cap s.']
  78:    "\S<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\S\\back slash cap sierra', 'new', 'statement']
+Saying: ['\\S\\back slash cap sierra', 'new statement']
 
 
  76:    "\Q\Q"
@@ -3473,7 +3479,7 @@ Saying: ['\\T\\back slash cap t.']
  79:    "\T<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\T\\back slash cap tango', 'new', 'statement']
+Saying: ['\\T\\back slash cap tango', 'new statement']
 
 
  77:    "\R\R"
@@ -3496,7 +3502,7 @@ Saying: ['\\U\\back slash cap u.']
  80:    "\U<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\U\\back slash cap uniform', 'new', 'statement']
+Saying: ['\\U\\back slash cap uniform', 'new statement']
 
 
  78:    "\S\S"
@@ -3519,7 +3525,7 @@ Saying: ['\\V\\back slash cap v.']
  81:    "\V<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\V\\back slash cap victor', 'new', 'statement']
+Saying: ['\\V\\back slash cap victor', 'new statement']
 
 
  79:    "\T\T"
@@ -3542,7 +3548,7 @@ Saying: ['\\W\\back slash cap w.']
  82:    "\W<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\W\\back slash cap whiskey', 'new', 'statement']
+Saying: ['\\W\\back slash cap whiskey', 'new statement']
 
 
  80:    "\U\U"
@@ -3565,7 +3571,7 @@ Saying: ['\\X\\back slash cap x.']
  83:    "\X<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\X\\back slash cap xray', 'new', 'statement']
+Saying: ['\\X\\back slash cap xray', 'new statement']
 
 
  81:    "\V\V"
@@ -3588,7 +3594,7 @@ Saying: ['\\Y\\back slash cap y.']
  84:    "\Y<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\Y\\back slash cap yankee', 'new', 'statement']
+Saying: ['\\Y\\back slash cap yankee', 'new statement']
 
 
  82:    "\W\W"
@@ -3611,7 +3617,7 @@ Saying: ['\\Z\\back slash cap z.']
  85:    "\Z<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['\\Z\\back slash cap zulu', 'new', 'statement']
+Saying: ['\\Z\\back slash cap zulu', 'new statement']
 
 
  83:    "\X\X"
@@ -3634,7 +3640,7 @@ Saying: ['previous semi', 'previous semi']
  86:    Index;variable;<CURSOR>
 
 *** End of source buffer ***
-Saying: ['after', 'semi']
+Saying: ['after semi']
  83:    "\X\X"
  84:    "\Y\Y"
  85:    "\Z\Z"
@@ -3662,7 +3668,7 @@ Saying: ['before semi']
  86:    Index;variable;<CURSOR>
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  84:    "\Y\Y"
@@ -3678,167 +3684,174 @@ Saying: ['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma'
  87:    variable = [0, 1, 3<CURSOR>]
 
 *** End of source buffer ***
-Saying: ['previous comma\\previous comma', 'previous comma\\previous comma']
+Saying: ['previous', 'previous comma']
+Associate 'previous' with symbol (Enter selection):
+
+  '0': no association
+  '1': previous (*new*)
+  '2': Previous (*new*)
+  '3': PREVIOUS (*new*)
+
+>  84:    "\Y\Y"
+ 85:    "\Z\Z"
+ 86:    Index;variable;
+ 87:    variable = [0, 1, <CURSOR>3Previous]
+
+*** End of source buffer ***
+Saying: ['after comma']
  84:    "\Y\Y"
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, <CURSOR>3]
+ 87:    variable = [0, 1, <CURSOR>3Previous]
 
 *** End of source buffer ***
-Saying: ['after comma\\after comma']
+Saying: ['before previous comma']
  84:    "\Y\Y"
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, <CURSOR>3]
+ 87:    variable = [0, 1<CURSOR>, 3Previous]
 
 *** End of source buffer ***
-Saying: ['before previous comma\\before previous comma']
+Saying: ['before next comma']
  84:    "\Y\Y"
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1<CURSOR>, 3]
+ 87:    variable = [0, 1<CURSOR>, 3Previous]
 
 *** End of source buffer ***
-Saying: ['before next comma\\before next comma']
- 84:    "\Y\Y"
- 85:    "\Z\Z"
- 86:    Index;variable;
- 87:    variable = [0, 1<CURSOR>, 3]
-
-*** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'dot', 'previous', 'dot']
+Saying: ['previous dot', 'previous dot']
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.<CURSOR>Value
 
 *** End of source buffer ***
-Saying: ['after', 'dot']
+Saying: ['after dot']
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.<CURSOR>Value
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'dot']
+Saying: ['before previous dot']
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field<CURSOR>.Value
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'dot']
+Saying: ['before next dot']
  85:    "\Z\Z"
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field<CURSOR>.Value
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['braces', 'variable', ': \\colon', '0', 'value', ': \\colon', '0']
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0<CURSOR>}
 
 *** End of source buffer ***
-Saying: ['previous', 'colon', 'previous', 'colon']
+Saying: ['previous colon', 'previous colon']
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: <CURSOR>0}
 
 *** End of source buffer ***
-Saying: ['after', 'colon']
+Saying: ['after colon']
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: <CURSOR>0}
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'colon']
+Saying: ['before previous colon']
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value<CURSOR>: 0}
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'colon']
+Saying: ['before next colon']
  86:    Index;variable;
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value<CURSOR>: 0}
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
- 87:    variable = [0, 1, 3]
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'asterisk', 'previous', 'star']
- 87:    variable = [0, 1, 3]
+Saying: ['previous asterisk', 'previous star']
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
-Saying: ['after', 'star']
- 87:    variable = [0, 1, 3]
+Saying: ['after star']
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'asterisk']
- 87:    variable = [0, 1, 3]
+Saying: ['before previous asterisk']
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'star']
- 87:    variable = [0, 1, 3]
+Saying: ['before next star']
+ 87:    variable = [0, 1, 3Previous]
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  88:    variable.Field.Value
@@ -3854,35 +3867,35 @@ Saying: ['variable', ' = \\equals', '2', '/\\slash', '3', '/\\slash', '4']
  91:    variable = 2/3/4<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'slash', 'previous', 'slash']
+Saying: ['previous slash', 'previous slash']
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/<CURSOR>4
 
 *** End of source buffer ***
-Saying: ['after', 'slash']
+Saying: ['after slash']
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/<CURSOR>4
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'slash']
+Saying: ['before previous slash']
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'slash']
+Saying: ['before next slash']
  88:    variable.Field.Value
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  89:    {variable: 0 Value: 0}
@@ -3898,35 +3911,35 @@ Saying: ['variable', ' = \\equals', '2', ' + \\plus', '3', ' + \\plus', '4']
  92:    variable = 2 + 3 + 4<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'plus', 'previous', 'plus']
+Saying: ['previous plus', 'previous plus']
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + <CURSOR>4
 
 *** End of source buffer ***
-Saying: ['after', 'plus']
+Saying: ['after plus']
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + <CURSOR>4
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'plus']
+Saying: ['before previous plus']
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/4
  92:    variable = 2 + 3 <CURSOR>+ 4
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'plus']
+Saying: ['before next plus']
  89:    {variable: 0 Value: 0}
  90:    variable = 2*3*4
  91:    variable = 2/3/4
  92:    variable = 2 + 3 <CURSOR>+ 4
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  90:    variable = 2*3*4
@@ -3970,7 +3983,7 @@ Saying: ['before next minus']
  93:    variable = 2 - 3 <CURSOR>- 4
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  91:    variable = 2/3/4
@@ -3986,35 +3999,35 @@ Saying: ['variable', ' = \\equals', '2', ' % \\modulo', '3', ' % \\modulo', '4']
  94:    variable = 2 % 3 % 4<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'percent', 'previous', 'percent']
+Saying: ['previous percent', 'previous percent']
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % <CURSOR>4
 
 *** End of source buffer ***
-Saying: ['after', 'percent']
+Saying: ['after percent']
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % <CURSOR>4
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'percent']
+Saying: ['before previous percent']
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 <CURSOR>% 4
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'percent']
+Saying: ['before next percent']
  91:    variable = 2/3/4
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 <CURSOR>% 4
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  92:    variable = 2 + 3 + 4
@@ -4030,35 +4043,35 @@ Saying: ['0', '&\\and percent', '1', '&\\and percent', '2']
  95:    0&1&2<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'and', 'percent', 'previous', 'and', 'percent']
+Saying: ['previous and percent', 'previous and percent']
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['after', 'and', 'percent']
+Saying: ['after and percent']
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'and', 'percent']
+Saying: ['before previous and percent']
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1<CURSOR>&2
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'and', 'percent']
+Saying: ['before next and percent']
  92:    variable = 2 + 3 + 4
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1<CURSOR>&2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  93:    variable = 2 - 3 - 4
@@ -4074,35 +4087,35 @@ Saying: ['0', '|\\pipe', '1', '|\\pipe', '2']
  96:    0|1|2<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous', 'pipe', 'previous', 'pipe']
+Saying: ['previous pipe', 'previous pipe']
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&2
  96:    0|1|<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['after', 'pipe']
+Saying: ['after pipe']
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&2
  96:    0|1|<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['before', 'previous', 'pipe']
+Saying: ['before previous pipe']
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&2
  96:    0|1<CURSOR>|2
 
 *** End of source buffer ***
-Saying: ['before', 'next', 'pipe']
+Saying: ['before next pipe']
  93:    variable = 2 - 3 - 4
  94:    variable = 2 % 3 % 4
  95:    0&1&2
  96:    0|1<CURSOR>|2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  94:    variable = 2 % 3 % 4
@@ -4146,7 +4159,7 @@ Saying: ['before next ellipsis']
  97:    0...1<CURSOR>...2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  95:    0&1&2
@@ -4190,7 +4203,7 @@ Saying: ['before next bang']
  98:    0!1<CURSOR>!2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  96:    0|1|2
@@ -4234,7 +4247,7 @@ Saying: ['before next question mark']
  99:    0?1<CURSOR>?2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  97:    0...1...2
@@ -4278,7 +4291,7 @@ Saying: ['before next pound sign']
 100:    0#1<CURSOR>#2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  98:    0!1!2
@@ -4322,7 +4335,7 @@ Saying: ['before next double colon']
 101:    0::1<CURSOR>::2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
  99:    0?1?2
@@ -4366,7 +4379,7 @@ Saying: ['before next tilde']
 102:    0~1<CURSOR>~2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 100:    0#1#2
@@ -4410,7 +4423,7 @@ Saying: ['before next less sign']
 103:    0<1<CURSOR><2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 101:    0::1::2
@@ -4454,7 +4467,7 @@ Saying: ['before next greater sign']
 104:    0>1<CURSOR>>2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 102:    0~1~2
@@ -4498,7 +4511,7 @@ Saying: ['before next equal sign']
 105:    0=1<CURSOR>=2
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 103:    0<1<2
@@ -4563,7 +4576,7 @@ Saying: ['back out of parens']
 106:    <CURSOR>(1)
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 104:    0>1>2
@@ -4628,7 +4641,7 @@ Saying: ['back out of brackets']
 107:    <CURSOR>[1]
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 105:    0=1=2
@@ -4693,7 +4706,7 @@ Saying: ['back out of braces']
 108:    <CURSOR>{1}
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 106:    (1)
@@ -4758,7 +4771,7 @@ Saying: ['back out of angled']
 109:    <CURSOR><1>
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 107:    [1]
@@ -4823,7 +4836,7 @@ Saying: ['back out of single quotes']
 110:    <CURSOR>'1'
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 108:    {1}
@@ -4888,7 +4901,7 @@ Saying: ['back out of quotes']
 111:    "1<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 109:    <1>
@@ -4953,7 +4966,7 @@ Saying: ['back out of back quotes']
 112:    <CURSOR>`1`
 
 *** End of source buffer ***
-Saying: ['new', 'statement']
+Saying: ['new statement']
 
 
 110:    '1'
@@ -4962,7 +4975,7 @@ Saying: ['new', 'statement']
 113:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -4972,10 +4985,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.logActions\\Data\\TestData\\native_python.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\\VoiceCode\\VCode.repeat\\Data\\TestData\\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -5892,13 +5905,13 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
@@ -6678,7 +6691,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6686,9 +6699,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -6700,9 +6713,9 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -6774,7 +6787,110 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+
+
+*******************************************************************************
+* Name        : repeat_last
+* Description : testing repetition of last command
+*******************************************************************************
+
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+
+
+>>> Testing console command: open_file('D:\VoiceCode\VCode.repeat\Data\TestData\large_buff.py')
+
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+
+
+>>> Testing console command: say(['after hyphen'])
+
+ 11:     This class implements various useful behaviors for generic
+ 12:     objects, such as:
+ 13: 
+ 14:     - <CURSOR>safe attribute setting
+ 15:     - deep constructor
+ 16:     - pretty printing???
+ 17:     
+
+
+>>> Testing console command: say(['again'])
+
+ 12:     objects, such as:
+ 13: 
+ 14:     - safe attribute setting
+ 15:     - <CURSOR>deep constructor
+ 16:     - pretty printing???
+ 17:     
+ 18: 
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+
+
+>>> Testing console command: say(['after hyphen'])
+
+ 11:     This class implements various useful behaviors for generic
+ 12:     objects, such as:
+ 13: 
+ 14:     - <CURSOR>safe attribute setting
+ 15:     - deep constructor
+ 16:     - pretty printing???
+ 17:     
+
+
+>>> Testing console command: say(['again 3 times'])
+
+ 35: 
+ 36:     Profile tests on NT indicate that:
+ 37: 
+ 38:     - <CURSOR>the speed of constructors for Object and non-Object instances are the same
+ 39:     - the speed of attribute *gets* is the same for Object and non-Object instances
+ 40:     - when *$PY_DEBUG_OBJECT=0*, the performance of attribute *sets* is the same for Object and non-Object instances
+ 41:     - when *$PY_DEBUG_OBJECT=1*, attribute *sets* are slower by a factor of about 15 for Object instances than for non-Object instances
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+
+
+>>> Testing console command: say(['after hyphen'])
+
+ 11:     This class implements various useful behaviors for generic
+ 12:     objects, such as:
+ 13: 
+ 14:     - <CURSOR>safe attribute setting
+ 15:     - deep constructor
+ 16:     - pretty printing???
+ 17:     
+
+
+>>> Testing console command: say(['3 times'])
+
+ 13: 
+ 14:     - safe attribute setting
+ 15:     - deep constructor
+ 16:     - <CURSOR>pretty printing???
+ 17:     
+ 18: 
+ 19:     **SAFE ATTRIBUTE SETTING***
 
 
 *******************************************************************************
@@ -6782,9 +6898,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
@@ -7453,4 +7569,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.logActions\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.repeat\Config\py_std_sym.py'

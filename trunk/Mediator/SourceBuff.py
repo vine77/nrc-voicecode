@@ -523,6 +523,26 @@ class SourceBuff(Object):
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
 	debug.virtual('SourceBuff.goto_line')
+
+
+
+    def move_page(self, direction=1, num=1):
+        """Moves up or down a certain number of pages
+        
+        **INPUTS**
+        
+        *INT* direction=1 -- If positive, page down. If negative, page up.
+        
+        *INT* num=1 -- Number of pages to move.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('move_page')
+
                 
     def refresh_if_needed(self):
 	"""Refresh buffer if necessary"""
