@@ -53,15 +53,19 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", 
+debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                    'CorrectionBoxViewWX.simulate_OK': 1,
-                    'CorrectionBoxViewWX.on_dismiss': 1,
-#                    'CmdInterp.match_untranslated_text': 1,
-#                    'SymbolConstruction.insert_existing_symbol': 1,
-#                    'SymbolConstruction.insert_new_symbol': 1,
-#                    'SymbolResult.suggestions_list': 1,
+                    'on_ok': 1,
+                    'reformat_a_symbol': 1,
+                    'ReformatFromRecentWX.do_choose_nth_form': 1,
+                    'ReformatFromRecentWX.on_choose_alternate_form': 1,
+                    'MediatorConsoleWX.reformat_nth': 1,
+                    'test_do_ok': 1,
+                    'MediatorConsoleWX.show_modal_dialog': 1,
+                    'CorrectRecentViewWX.chose_from_list': 1,
+                    'ReformatRecentSymbolsViewWX.on_cancel': 1,
+                    'DismissModalFlagTimerWX.dismiss': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

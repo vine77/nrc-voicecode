@@ -437,9 +437,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         **OUTPUTS**
 
-        *[INT]* -- the symbol numbers of 
-        those symbols which were corrected by the user, or None if
-        none were corrected
+        *[SymbolResult]* -- the list of reformatted symbols.
         """
         debug.trace('MediatorConsoleWX.show_recent_symbols', 'symbols=%s' % repr(symbols))
         box = ReformatRecentSymbols(self, self.main_frame, 
@@ -448,7 +446,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         self.corr_recent_pos = box.GetPositionTuple()
         
         box.cleanup()
-        box.Destroy()
+#        box.Destroy()
         
         return box.user_reformatted_symbols()
 
@@ -542,11 +540,9 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
     def check_dismiss_flag_idle(self, event):
 #        print 'idle'
         if self.bye.isSet():
-#           print 'set'
             self.on_dismiss()
             return
         event.RequestMore()
-#        print 'not set'
 
     def check_dismiss_flag(self, event):
         if self.bye.isSet():
@@ -834,7 +830,6 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         return button_sizer
 
     def on_dismiss(self):
-        debug.trace_call_stack('CorrectionBoxViewWX.on_dismiss')
         self.EndModal(wxID_DISMISS_MODAL)
 
     def on_playback(self, event):
@@ -957,8 +952,6 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
         *none*
         """
-        print '-- simulate_OK\n\n'
-        debug.trace_call_stack('CorrectionBoxViewWX.simulate_OK')
         button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK)
         self.ProcessEvent(button_event)
         
@@ -1782,9 +1775,10 @@ class ReformatRecentSymbols(DlgModelViewWX):
         return self.view().do_ok()
         
     def on_ok(self, event=None):
+        debug.trace('ReformatRecentSymbols.on_ok', '** invoked')
         pass
       
-    def on_cancel(self, event):
+    def on_cancel(self, event=None):
         self.void_all_user_reformattings()
        
     def void_all_user_reformattings(self):
@@ -1971,7 +1965,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
         self.recent = recent
         main_sizer.Add(recent, 1, wxEXPAND | wxALL)
         self.okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        self.cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)      
+        self.cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)              
         EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
         EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)        
         b_sizer = wxBoxSizer(wxHORIZONTAL)
@@ -2015,12 +2009,16 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
         
     def on_ok(self, event=None):
         self.model().on_ok(event)
+        self.EndModal(wxID_OK)
+
         
-    def on_cancel(self, event):
+    def on_cancel(self, event=None):
         self.model().on_cancel(event)
+        self.EndModal(wxID_CANCEL)
+
 
     def on_activate(self, event):
-        debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
+        pass
 
     def on_char(self):
         debug.not_implemented('ReformatRecentSymbolsViewWX.on_char')
@@ -2166,7 +2164,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
     def do_cancel(self):
        self.view().do_cancel()
        
-    def on_cancel(self, event):
+    def on_cancel(self, event=None):
        self.was_okayed = false
        self.symbol.reformat_to(None)         
 
@@ -2341,13 +2339,16 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelpers.w
 
     def on_ok(self, event=None):
        self.model().on_ok(event)
+       self.EndModal(wxID_OK)
 
     def on_cancel(self, event=None):
        self.model().on_cancel(event)
+       self.EndModal(wxID_CANCEL)
+
 
        
     def on_activate(self, event):
-       debug.not_implemented('ReformatFromRecentViewWX.on_activate')
+       pass
 
     def on_char(self):
        debug.not_implemented('ReformatFromRecentViewWX.on_char')

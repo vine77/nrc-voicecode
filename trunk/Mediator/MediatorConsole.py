@@ -437,8 +437,9 @@ class MediatorConsole(Object.OwnerObject):
         *none*
         """
         editor_window = self.store_foreground_window()
-        self.show_recent_symbols(editor_name, symbols)
+        reformatted_symbols = self.show_recent_symbols(editor_name, symbols)
         editor_window.restore_to_foreground()
+        return reformatted_symbols
 
     def show_recent_symbols(self, editor_name, symbols):
         """display a dialog box with recent symbols to allow the user to 
