@@ -1,31 +1,10 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
-running ExtLoopWin32NewMediator with ServerNewMediator
-running ExtLoopWin32NewMediator with ServerNewMediator
+creating wxMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished ExtLoop init...
-Running ExtLoopWin32...
+Finished wxMediator init...
+starting...
 Starting server threads...
-Starting message loop...
-New connection
-New connection from emacs
-awaiting corresponding talk connection
-received talk connection
-creating messengers
-configuring from external
-creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -312,10 +291,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -358,7 +337,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1429470>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2464890>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -497,7 +476,6 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
-'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -754,10 +732,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -963,7 +941,7 @@ List of unresolved abbreviations
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 
 
->>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ', \\comma'], user_input='1\n')
+>>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
 Heard this symbol is unresolved comma
 Associate 'this symbol is unresolved' with symbol (Enter selection):
 
@@ -1186,7 +1164,7 @@ _cached_symbols_as_one_string is:
     void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
->>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ', \\comma'], user_input='None')
+>>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ',\\comma'], user_input='None')
 Heard this symbol is unresolved too comma
 *** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, <CURSOR>
@@ -1398,7 +1376,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 
 
->>> Testing console command: say(['file', 'name', ', \\comma'], user_input='1\n')
+>>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
 Heard file name comma
 Associate 'file name' with symbol (Enter selection):
 
@@ -1622,7 +1600,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 
 
->>> Testing console command: say(['application', 'programming', 'interface', 'function', ', \\comma'], user_input='1\n')
+>>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
 Heard application programming interface function comma
 Associate 'application programming interface function' with symbol (Enter selection):
 
@@ -2435,7 +2413,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3271,7 +3249,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3305,7 +3283,7 @@ Heard for loop horizontal position loop body
 *** End of source buffer ***
 
 
->>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'], selection = 1, bypass_NatLink=0)
+>>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'],  never_bypass_sr_recog=1)
 
 Heard select horizontal position equals
 *** Start of source buffer ***
@@ -3337,7 +3315,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Testing console command: say(['<\less-than', '>\greater-than', '=\equal-sign'])
 
-Heard less than greater than equal sign
+Heard less-than greater-than equal-sign
 *** Start of source buffer ***
   1:  <> =<CURSOR>
 
@@ -3354,7 +3332,7 @@ Heard less than greater than equal sign
 >>> Starting mediator with persistence
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3425,8 +3403,8 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\012\\newline']
-Heard variable blank space equals space bar index asterisk 2 double asterisk 8 newline
+Saying: ['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\\New-Line']
+Heard variable blank space equals space-bar index asterisk 2 double asterisk 8 New-Line
 Associate 'variable' with symbol (Enter selection):
 
   '0': no association
@@ -3454,7 +3432,7 @@ Heard variable equals variable slash 2 plus sign 1 minus sign index new statemen
   3: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement']
+Saying: ['variable', '=\\equals', 'index', '%\\percent', '2', '+\\plus', 'index', '%\\percent sign', '3', 'new statement']
 Heard variable equals index percent 2 plus index percent sign 3 new statement
 *** Start of source buffer ***
   1: variable  =  Index*2**8
@@ -3463,8 +3441,8 @@ Heard variable equals index percent 2 plus index percent sign 3 new statement
   4: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['if', 'index', '&\\and percent', 'variable', 'then']
-Heard if index and percent variable then
+Saying: ['if', 'index', '&\\ampersand', 'variable', 'then']
+Heard if index ampersand variable then
   2: variable = variable/2+1-Index
   3: variable = Index%2 + Index%3
   4: if Index&variable:
@@ -3486,11 +3464,11 @@ Associate 'value' with symbol (Enter selection):
   6:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals', '0', ';\\semi', 'new statement']
+Saying: ['index', '=\\equals', '0', ';\\semicolon', 'variable', '=\\equals', '0', ';\\semi', 'new statement']
 Heard index equals 0 semicolon variable equals 0 semi new statement
   4: if Index&variable:
   5:    if Index|variable|Index|Value:
-  6:       Index = 0;variable = 0;
+  6:       Index = 0; variable = 0;
   7:       <CURSOR>
 
 *** End of source buffer ***
@@ -3504,14 +3482,14 @@ Associate 'function' with symbol (Enter selection):
   '3': FUNCTION (*new*)
 
 >   5:    if Index|variable|Index|Value:
-  6:       Index = 0;variable = 0;
+  6:       Index = 0; variable = 0;
   7:       Index.Function()
   8:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement']
+Saying: ['variable', '=\\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement']
 Heard variable equals new list 0 ellipsis 10 new statement
-  6:       Index = 0;variable = 0;
+  6:       Index = 0; variable = 0;
   7:       Index.Function()
   8:       variable = [0...10]
   9:       <CURSOR>
@@ -3563,7 +3541,7 @@ Associate 'field' with symbol (Enter selection):
  13:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then']
+Saying: ['if', 'index', '<\\less sign', '0', 'and\\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then']
 Heard if index less sign 0 and index greater sign minus sign 1 then
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
@@ -3579,8 +3557,8 @@ Heard index equal sign 0 new statement
  15:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new statement']
-Heard function open paren 0 close paren new statement
+Saying: ['function', '(\\open-paren', '0', ')\\close-paren', 'new statement']
+Heard function open-paren 0 close-paren new statement
  13:          if Index<0 and Index>-1:
  14:             Index=0
  15:             Function(0)
@@ -3603,8 +3581,8 @@ Heard function empty parens new statement
  18:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', '[\\open bracket', '0', ']\\close bracket', 'new statement']
-Heard list open bracket 0 close bracket new statement
+Saying: ['list', '[\\open-bracket', '0', ']\\close-bracket', 'new statement']
+Heard list open-bracket 0 close-bracket new statement
 Associate 'list' with symbol (Enter selection):
 
   '0': no association
@@ -3649,8 +3627,8 @@ Associate 'dictionary' with symbol (Enter selection):
  22:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['<\\open angled', 'head', '>\\close angled', 'new statement']
-Heard open angled head close angled new statement
+Saying: ['<\\open-angle', 'head', '>\\close-angle', 'new statement']
+Heard open-angle head close-angle new statement
 Associate 'head' with symbol (Enter selection):
 
   '0': no association
@@ -3664,24 +3642,24 @@ Associate 'head' with symbol (Enter selection):
  23:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['angled brackets', 'head', 'new statement']
-Heard angled brackets head new statement
+Saying: ['angle brackets', 'head', 'new statement']
+Heard angle brackets head new statement
  21:             Dictionary{0}
  22:             <Head>
  23:             <Head>
  24:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['<>\\empty angled', 'new statement']
-Heard empty angled new statement
+Saying: ['<>\\empty angles', 'new statement']
+Heard empty angles new statement
  22:             <Head>
  23:             <Head>
  24:             <>
  25:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', "'\\open single quote", 'message', "'\\close single quote", 'new statement']
-Heard string equals open single quote message close single quote new statement
+Saying: ['string', '=\\equals', "'\\open-single-quote", 'message', "'\\close-single-quote", 'new statement']
+Heard string equals open-single-quote message close-single-quote new statement
 Associate 'string' with symbol (Enter selection):
 
   '0': no association
@@ -3718,8 +3696,8 @@ Heard empty single quotes new statement
  28:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 'new statement']
-Heard string equals open quote message close quote new statement
+Saying: ['string', '=\\equals', '"\\open-quote', 'message', '"\\close-quote', 'new statement']
+Heard string equals open-quote message close-quote new statement
  26:             String = 'Message'
  27:             ''
  28:             String = "Message"
@@ -3742,24 +3720,24 @@ Heard empty quotes new statement
  31:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close back quote', 'new statement']
-Heard string equals open back quote message close back quote new statement
+Saying: ['string', '=\\equals', '`\\open-backquote', 'message', '`\\close-backquote', 'new statement']
+Heard string equals open-backquote message close-backquote new statement
  29:             String = "Message"
  30:             ""
  31:             String = `Message`
  32:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new statement']
-Heard string equals back quotes message new statement
+Saying: ['string', '=\\equals', 'backquotes', 'message', 'new statement']
+Heard string equals backquotes message new statement
  30:             ""
  31:             String = `Message`
  32:             String = `Message`
  33:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['``\\empty back quotes', 'new statement']
-Heard empty back quotes new statement
+Saying: ['``\\empty backquotes', 'new statement']
+Heard empty backquotes new statement
  31:             String = `Message`
  32:             String = `Message`
  33:             ``
@@ -3775,7 +3753,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\a\\back slash a.', 'new statement']
-Heard back slash a new statement
+Heard back slash a. new statement
  32:             String = `Message`
  33:             ``
  34:             "\a"
@@ -3799,7 +3777,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\b\\back slash b.']
-Heard back slash b
+Heard back slash b.
  33:             ``
  34:             "\a"
  35:             \a
@@ -3831,7 +3809,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\c\\back slash c.']
-Heard back slash c
+Heard back slash c.
  34:             "\a"
  35:             \a
  36:             "\b\b"
@@ -3863,7 +3841,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\d\\back slash d.']
-Heard back slash d
+Heard back slash d.
  35:             \a
  36:             "\b\b"
  37:             "\c\c"
@@ -3895,7 +3873,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\e\\back slash e.']
-Heard back slash e
+Heard back slash e.
  36:             "\b\b"
  37:             "\c\c"
  38:             "\d\d"
@@ -3927,7 +3905,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\f\\back slash f.']
-Heard back slash f
+Heard back slash f.
  37:             "\c\c"
  38:             "\d\d"
  39:             "\e\e"
@@ -3959,7 +3937,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\g\\back slash g.']
-Heard back slash g
+Heard back slash g.
  38:             "\d\d"
  39:             "\e\e"
  40:             "\f\f"
@@ -3991,7 +3969,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\h\\back slash h.']
-Heard back slash h
+Heard back slash h.
  39:             "\e\e"
  40:             "\f\f"
  41:             "\g\g"
@@ -4023,7 +4001,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\i\\back slash i.']
-Heard back slash i
+Heard back slash i.
  40:             "\f\f"
  41:             "\g\g"
  42:             "\h\h"
@@ -4055,7 +4033,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\j\\back slash j.']
-Heard back slash j
+Heard back slash j.
  41:             "\g\g"
  42:             "\h\h"
  43:             "\i\i"
@@ -4087,7 +4065,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\k\\back slash k.']
-Heard back slash k
+Heard back slash k.
  42:             "\h\h"
  43:             "\i\i"
  44:             "\j\j"
@@ -4119,7 +4097,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\l\\back slash l.']
-Heard back slash l
+Heard back slash l.
  43:             "\i\i"
  44:             "\j\j"
  45:             "\k\k"
@@ -4151,7 +4129,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\m\\back slash m.']
-Heard back slash m
+Heard back slash m.
  44:             "\j\j"
  45:             "\k\k"
  46:             "\l\l"
@@ -4183,7 +4161,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\n\\back slash n.']
-Heard back slash n
+Heard back slash n.
  45:             "\k\k"
  46:             "\l\l"
  47:             "\m\m"
@@ -4215,7 +4193,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\o\\back slash o.']
-Heard back slash o
+Heard back slash o.
  46:             "\l\l"
  47:             "\m\m"
  48:             "\n\n"
@@ -4247,7 +4225,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\p\\back slash p.']
-Heard back slash p
+Heard back slash p.
  47:             "\m\m"
  48:             "\n\n"
  49:             "\o\o"
@@ -4279,7 +4257,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\q\\back slash q.']
-Heard back slash q
+Heard back slash q.
  48:             "\n\n"
  49:             "\o\o"
  50:             "\p\p"
@@ -4311,7 +4289,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\r\\back slash r.']
-Heard back slash r
+Heard back slash r.
  49:             "\o\o"
  50:             "\p\p"
  51:             "\q\q"
@@ -4343,7 +4321,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\s\\back slash s.']
-Heard back slash s
+Heard back slash s.
  50:             "\p\p"
  51:             "\q\q"
  52:             "\r\r"
@@ -4375,7 +4353,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\t\\back slash t.']
-Heard back slash t
+Heard back slash t.
  51:             "\q\q"
  52:             "\r\r"
  53:             "\s\s"
@@ -4407,7 +4385,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\u\\back slash u.']
-Heard back slash u
+Heard back slash u.
  52:             "\r\r"
  53:             "\s\s"
  54:             "\t\t"
@@ -4439,7 +4417,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\v\\back slash v.']
-Heard back slash v
+Heard back slash v.
  53:             "\s\s"
  54:             "\t\t"
  55:             "\u\u"
@@ -4471,7 +4449,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\w\\back slash w.']
-Heard back slash w
+Heard back slash w.
  54:             "\t\t"
  55:             "\u\u"
  56:             "\v\v"
@@ -4503,7 +4481,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\x\\back slash x.']
-Heard back slash x
+Heard back slash x.
  55:             "\u\u"
  56:             "\v\v"
  57:             "\w\w"
@@ -4535,7 +4513,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\y\\back slash y.']
-Heard back slash y
+Heard back slash y.
  56:             "\v\v"
  57:             "\w\w"
  58:             "\x\x"
@@ -4567,7 +4545,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\z\\back slash z.']
-Heard back slash z
+Heard back slash z.
  57:             "\w\w"
  58:             "\x\x"
  59:             "\y\y"
@@ -4599,7 +4577,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\A\\back slash cap a.']
-Heard back slash cap a
+Heard back slash cap a.
  58:             "\x\x"
  59:             "\y\y"
  60:             "\z\z"
@@ -4623,7 +4601,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\B\\back slash cap b.']
-Heard back slash cap b
+Heard back slash cap b.
  59:             "\y\y"
  60:             "\z\z"
  61:             "\A\A"
@@ -4647,7 +4625,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\D\\back slash cap d.']
-Heard back slash cap d
+Heard back slash cap d.
  60:             "\z\z"
  61:             "\A\A"
  62:             "\B\B"
@@ -4671,7 +4649,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\E\\back slash cap e.']
-Heard back slash cap e
+Heard back slash cap e.
  61:             "\A\A"
  62:             "\B\B"
  63:             "\D\D"
@@ -4695,7 +4673,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\F\\back slash cap f.']
-Heard back slash cap f
+Heard back slash cap f.
  62:             "\B\B"
  63:             "\D\D"
  64:             "\E\E"
@@ -4719,7 +4697,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\G\\back slash cap g.']
-Heard back slash cap g
+Heard back slash cap g.
  63:             "\D\D"
  64:             "\E\E"
  65:             "\F\F"
@@ -4743,7 +4721,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\H\\back slash cap h.']
-Heard back slash cap h
+Heard back slash cap h.
  64:             "\E\E"
  65:             "\F\F"
  66:             "\G\G"
@@ -4767,7 +4745,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\I\\back slash cap i.']
-Heard back slash cap i
+Heard back slash cap i.
  65:             "\F\F"
  66:             "\G\G"
  67:             "\H\H"
@@ -4791,7 +4769,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\J\\back slash cap j.']
-Heard back slash cap j
+Heard back slash cap j.
  66:             "\G\G"
  67:             "\H\H"
  68:             "\I\I"
@@ -4815,7 +4793,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\K\\back slash cap k.']
-Heard back slash cap k
+Heard back slash cap k.
  67:             "\H\H"
  68:             "\I\I"
  69:             "\J\J"
@@ -4839,7 +4817,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\L\\back slash cap l.']
-Heard back slash cap l
+Heard back slash cap l.
  68:             "\I\I"
  69:             "\J\J"
  70:             "\K\K"
@@ -4863,7 +4841,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\M\\back slash cap m.']
-Heard back slash cap m
+Heard back slash cap m.
  69:             "\J\J"
  70:             "\K\K"
  71:             "\L\L"
@@ -4887,7 +4865,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\N\\back slash cap n.']
-Heard back slash cap n
+Heard back slash cap n.
  70:             "\K\K"
  71:             "\L\L"
  72:             "\M\M"
@@ -4911,7 +4889,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\O\\back slash cap o.']
-Heard back slash cap o
+Heard back slash cap o.
  71:             "\L\L"
  72:             "\M\M"
  73:             "\N\N"
@@ -4935,7 +4913,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\P\\back slash cap p.']
-Heard back slash cap p
+Heard back slash cap p.
  72:             "\M\M"
  73:             "\N\N"
  74:             "\O\O"
@@ -4959,7 +4937,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\Q\\back slash cap q.']
-Heard back slash cap q
+Heard back slash cap q.
  73:             "\N\N"
  74:             "\O\O"
  75:             "\P\P"
@@ -4983,7 +4961,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\R\\back slash cap r.']
-Heard back slash cap r
+Heard back slash cap r.
  74:             "\O\O"
  75:             "\P\P"
  76:             "\Q\Q"
@@ -5007,7 +4985,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\S\\back slash cap s.']
-Heard back slash cap s
+Heard back slash cap s.
  75:             "\P\P"
  76:             "\Q\Q"
  77:             "\R\R"
@@ -5031,7 +5009,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\T\\back slash cap t.']
-Heard back slash cap t
+Heard back slash cap t.
  76:             "\Q\Q"
  77:             "\R\R"
  78:             "\S\S"
@@ -5055,7 +5033,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\U\\back slash cap u.']
-Heard back slash cap u
+Heard back slash cap u.
  77:             "\R\R"
  78:             "\S\S"
  79:             "\T\T"
@@ -5079,7 +5057,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\V\\back slash cap v.']
-Heard back slash cap v
+Heard back slash cap v.
  78:             "\S\S"
  79:             "\T\T"
  80:             "\U\U"
@@ -5103,7 +5081,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\W\\back slash cap w.']
-Heard back slash cap w
+Heard back slash cap w.
  79:             "\T\T"
  80:             "\U\U"
  81:             "\V\V"
@@ -5127,7 +5105,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\X\\back slash cap x.']
-Heard back slash cap x
+Heard back slash cap x.
  80:             "\U\U"
  81:             "\V\V"
  82:             "\W\W"
@@ -5151,7 +5129,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\Y\\back slash cap y.']
-Heard back slash cap y
+Heard back slash cap y.
  81:             "\V\V"
  82:             "\W\W"
  83:             "\X\X"
@@ -5175,7 +5153,7 @@ Heard quotes
 
 *** End of source buffer ***
 Saying: ['\\Z\\back slash cap z.']
-Heard back slash cap z
+Heard back slash cap z.
  82:             "\W\W"
  83:             "\X\X"
  84:             "\Y\Y"
@@ -5195,7 +5173,7 @@ Heard index semi variable semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;<CURSOR>
+ 86:             Index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous semi', 'previous semi']
@@ -5203,7 +5181,7 @@ Heard previous semi previous semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;<CURSOR>variable;
+ 86:             Index; <CURSOR>variable; 
 
 *** End of source buffer ***
 Saying: ['after semi']
@@ -5211,7 +5189,7 @@ Heard after semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;<CURSOR>
+ 86:             Index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous semi']
@@ -5219,7 +5197,7 @@ Heard before previous semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable<CURSOR>;
+ 86:             Index; variable<CURSOR>; 
 
 *** End of source buffer ***
 Saying: ['after semi']
@@ -5227,7 +5205,7 @@ Heard after semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;<CURSOR>
+ 86:             Index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before semi']
@@ -5235,22 +5213,22 @@ Heard before semi
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;<CURSOR>
+ 86:             Index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3']
+Saying: ['variable', '=\\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3']
 Heard variable equals brackets 0 comma 1 comma 3
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3<CURSOR>]
 
 *** End of source buffer ***
@@ -5258,7 +5236,7 @@ Saying: ['previous comma']
 Heard previous comma
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
@@ -5266,7 +5244,7 @@ Saying: ['after comma']
 Heard after comma
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
@@ -5274,7 +5252,7 @@ Saying: ['before previous comma']
 Heard before previous comma
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
@@ -5282,14 +5260,14 @@ Saying: ['before next comma']
 Heard before next comma
  84:             "\Y\Y"
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             <CURSOR>
 
@@ -5297,7 +5275,7 @@ Heard new statement
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
 Heard variable dot field dot value
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value<CURSOR>
 
@@ -5305,7 +5283,7 @@ Heard variable dot field dot value
 Saying: ['previous dot', 'previous dot']
 Heard previous dot previous dot
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.<CURSOR>Field.Value
 
@@ -5313,7 +5291,7 @@ Heard previous dot previous dot
 Saying: ['after dot']
 Heard after dot
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.<CURSOR>Value
 
@@ -5321,7 +5299,7 @@ Heard after dot
 Saying: ['before previous dot']
 Heard before previous dot
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field<CURSOR>.Value
 
@@ -5329,22 +5307,22 @@ Heard before previous dot
 Saying: ['before next dot']
 Heard before next dot
  85:             "\Z\Z"
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field<CURSOR>.Value
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['braces', 'variable', ': \\colon', '0', 'value', ': \\colon', '0']
+Saying: ['braces', 'variable', ':\\colon', '0', 'value', ':\\colon', '0']
 Heard braces variable colon 0 value colon 0
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0<CURSOR>}
@@ -5352,7 +5330,7 @@ Heard braces variable colon 0 value colon 0
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
 Heard previous colon previous colon
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: <CURSOR>0 Value: 0}
@@ -5360,7 +5338,7 @@ Heard previous colon previous colon
 *** End of source buffer ***
 Saying: ['after colon']
 Heard after colon
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: <CURSOR>0}
@@ -5368,7 +5346,7 @@ Heard after colon
 *** End of source buffer ***
 Saying: ['before previous colon']
 Heard before previous colon
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value<CURSOR>: 0}
@@ -5376,7 +5354,7 @@ Heard before previous colon
 *** End of source buffer ***
 Saying: ['before next colon']
 Heard before next colon
- 86:             Index;variable;
+ 86:             Index; variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value<CURSOR>: 0}
@@ -5390,7 +5368,7 @@ Heard new statement
  90:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
+Saying: ['variable', '=\\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
 Heard variable equals 2 asterisk 3 asterisk 4
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5486,7 +5464,7 @@ Heard new statement
  92:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', ' = \\equals', '2', ' + \\plus', '3', ' + \\plus', '4']
+Saying: ['variable', '=\\equals', '2', '+\\plus', '3', '+\\plus', '4']
 Heard variable equals 2 plus 3 plus 4
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5534,7 +5512,7 @@ Heard new statement
  93:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', '2', ' - \\minus', '3', ' - \\minus', '4']
+Saying: ['variable', 'equals', '2', '-\\minus', '3', '-\\minus', '4']
 Heard variable equals 2 minus 3 minus 4
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5582,7 +5560,7 @@ Heard new statement
  94:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', '2', ' % \\modulo', '3', ' % \\modulo', '4']
+Saying: ['variable', 'equals', '2', '%\\modulo', '3', '%\\modulo', '4']
 Heard variable equals 2 modulo 3 modulo 4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5630,40 +5608,40 @@ Heard new statement
  95:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '&\\and percent', '1', '&\\and percent', '2']
-Heard 0 and percent 1 and percent 2
+Saying: ['0', '&\\ampersand', '1', '&\\ampersand', '2']
+Heard 0 ampersand 1 ampersand 2
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous and percent', 'previous and percent']
-Heard previous and percent previous and percent
+Saying: ['previous ampersand', 'previous ampersand']
+Heard previous ampersand previous ampersand
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&<CURSOR>1&2
 
 *** End of source buffer ***
-Saying: ['after and percent']
-Heard after and percent
+Saying: ['after ampersand']
+Heard after ampersand
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['before previous and percent']
-Heard before previous and percent
+Saying: ['before previous ampersand']
+Heard before previous ampersand
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1<CURSOR>&2
 
 *** End of source buffer ***
-Saying: ['before next and percent']
-Heard before next and percent
+Saying: ['before next ampersand']
+Heard before next ampersand
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -6374,64 +6352,64 @@ Heard new statement
 109:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between angled', '1']
-Heard between angled 1
+Saying: ['between angles', '1']
+Heard between angles 1
 106:             (1)
 107:             [1]
 108:             {1}
 109:             <1<CURSOR>>
 
 *** End of source buffer ***
-Saying: ['before previous angled']
-Heard before previous angled
+Saying: ['before previous angle']
+Heard before previous angle
 106:             (1)
 107:             [1]
 108:             {1}
 109:            <CURSOR> <1>
 
 *** End of source buffer ***
-Saying: ['after angled']
-Heard after angled
+Saying: ['after angle']
+Heard after angle
 106:             (1)
 107:             [1]
 108:             {1}
 109:             <<CURSOR>1>
 
 *** End of source buffer ***
-Saying: ['before angled']
-Heard before angled
+Saying: ['before angle']
+Heard before angle
 106:             (1)
 107:             [1]
 108:             {1}
 109:             <1<CURSOR>>
 
 *** End of source buffer ***
-Saying: ['previous angled']
-Heard previous angled
+Saying: ['previous angle']
+Heard previous angle
 106:             (1)
 107:             [1]
 108:             {1}
-109:             <1<CURSOR>>
+109:             <<CURSOR>1>
 
 *** End of source buffer ***
-Saying: ['out of angled']
-Heard out of angled
+Saying: ['out of angles']
+Heard out of angles
 106:             (1)
 107:             [1]
 108:             {1}
 109:             <1><CURSOR>
 
 *** End of source buffer ***
-Saying: ['before previous angled']
-Heard before previous angled
+Saying: ['before previous angle']
+Heard before previous angle
 106:             (1)
 107:             [1]
 108:             {1}
 109:             <1<CURSOR>>
 
 *** End of source buffer ***
-Saying: ['back out of angled']
-Heard back out of angled
+Saying: ['back out of angles']
+Heard back out of angles
 106:             (1)
 107:             [1]
 108:             {1}
@@ -6483,7 +6461,7 @@ Heard previous single quote
 107:             [1]
 108:             {1}
 109:             <1>
-110:             '1<CURSOR>'
+110:             '<CURSOR>1'
 
 *** End of source buffer ***
 Saying: ['out of single quotes']
@@ -6555,7 +6533,7 @@ Heard previous quote
 108:             {1}
 109:             <1>
 110:             '1'
-111:             "1<CURSOR>"
+111:             "<CURSOR>1"
 
 *** End of source buffer ***
 Saying: ['out of quotes']
@@ -6579,7 +6557,7 @@ Heard back out of quotes
 108:             {1}
 109:             <1>
 110:             '1'
-111:             "1<CURSOR>"
+111:            <CURSOR> "1"
 
 *** End of source buffer ***
 Saying: ['new statement']
@@ -6590,64 +6568,64 @@ Heard new statement
 112:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between back quotes', '1']
-Heard between back quotes 1
+Saying: ['between backquotes', '1']
+Heard between backquotes 1
 109:             <1>
 110:             '1'
 111:             "1"
 112:             `1<CURSOR>`
 
 *** End of source buffer ***
-Saying: ['before previous back quote']
-Heard before previous back quote
+Saying: ['before previous backquote']
+Heard before previous backquote
 109:             <1>
 110:             '1'
 111:             "1"
 112:            <CURSOR> `1`
 
 *** End of source buffer ***
-Saying: ['after back quote']
-Heard after back quote
+Saying: ['after backquote']
+Heard after backquote
 109:             <1>
 110:             '1'
 111:             "1"
 112:             `<CURSOR>1`
 
 *** End of source buffer ***
-Saying: ['before back quote']
-Heard before back quote
+Saying: ['before backquote']
+Heard before backquote
 109:             <1>
 110:             '1'
 111:             "1"
 112:             `1<CURSOR>`
 
 *** End of source buffer ***
-Saying: ['previous back quote']
-Heard previous back quote
+Saying: ['previous backquote']
+Heard previous backquote
 109:             <1>
 110:             '1'
 111:             "1"
-112:             `1<CURSOR>`
+112:             `<CURSOR>1`
 
 *** End of source buffer ***
-Saying: ['out of back quotes']
-Heard out of back quotes
+Saying: ['out of backquotes']
+Heard out of backquotes
 109:             <1>
 110:             '1'
 111:             "1"
 112:             `1`<CURSOR>
 
 *** End of source buffer ***
-Saying: ['before previous back quote']
-Heard before previous back quote
+Saying: ['before previous backquote']
+Heard before previous backquote
 109:             <1>
 110:             '1'
 111:             "1"
 112:             `1<CURSOR>`
 
 *** End of source buffer ***
-Saying: ['back out of back quotes']
-Heard back out of back quotes
+Saying: ['back out of backquotes']
+Heard back out of backquotes
 109:             <1>
 110:             '1'
 111:             "1"
@@ -7014,7 +6992,7 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
+Saying: ['import', 'modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
 Associate 'R. E.' with symbol (Enter selection):
 
@@ -7028,7 +7006,7 @@ Associate 'R. E.' with symbol (Enter selection):
   2: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+Saying: ['import', 'modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
 Associate 'natural link' with symbol (Enter selection):
 
@@ -7057,7 +7035,7 @@ Associate 'natural link' with symbol (Enter selection):
   3: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
+Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
@@ -7236,7 +7214,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
  10: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
+Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
 Associate 'S. R. interface' with symbol (Enter selection):
 
@@ -7463,14 +7441,21 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
- 19:                           attrs)
+Associate 'R. E.' with symbol (Enter selection):
+
+  '0': no association
+  '1': re
+  '2': Re (*new*)
+  '3': RE (*new*)
+
+>  19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
-Heard single quotes back slash s plus sign jump out comma spoken form new statement
+Heard single quotes back slash s. plus sign jump out comma spoken form new statement
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
@@ -7542,7 +7527,7 @@ Heard if statement not regular expression equal to empty single quotes if body
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
-Heard regular expression equals regular expression plus single quotes back slash s asterisk new statement
+Heard regular expression equals regular expression plus single quotes back slash s. asterisk new statement
  27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
  28:          if not regexp == '':
  29:             regexp = regexp + '\s*'
@@ -7704,7 +7689,7 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
+Saying: ['import', 'modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
 Associate 'O. S.' with symbol (Enter selection):
 
@@ -7739,7 +7724,7 @@ Associate 'O. S.' with symbol (Enter selection):
   2: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+Saying: ['import', 'modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
 Associate 'auto test' with symbol (Enter selection):
 
@@ -7777,7 +7762,7 @@ Associate 'auto test' with symbol (Enter selection):
   3: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
+Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
@@ -7921,7 +7906,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
  10: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
+Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
 Associate 'S. R. interface' with symbol (Enter selection):
 
@@ -8225,7 +8210,7 @@ Associate 'words' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
-Heard single quotes back slash s plus sign jump out comma spoken form new statement
+Heard single quotes back slash s. plus sign jump out comma spoken form new statement
  20: 
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
@@ -8368,7 +8353,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
-Heard regular expression equals regular expression plus single quotes back slash s asterisk new statement
+Heard regular expression equals regular expression plus single quotes back slash s. asterisk new statement
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -9180,7 +9165,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9267,7 +9252,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11314,10 +11299,7 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  288.694999933 secs
+Test suite completed in:  553.25999999 secs
 -----------------------------------------------
-Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at 10dc4e8>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-ExtLoopWin32.run returning

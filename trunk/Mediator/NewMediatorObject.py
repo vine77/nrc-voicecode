@@ -524,11 +524,17 @@ class NewMediatorObject(Object.OwnerObject):
         file = config_file
         if not file:
             file = vc_globals.default_config_file
-        try:
-            execfile(file, config_dict)
-        except Exception, err:
-            print 'ERROR: in configuration file %s.\n' % file
-            raise err
+# doing execfile directly actually provides better error reporting (the
+# traceback is actually reported from the proper line, even when it is
+# in another module imported from the config file).  (Probably the same
+# effect could be achieved if we put a try block in the config file
+# itself)
+        execfile(file, config_dict)
+#        try:
+#            execfile(file, config_dict)
+#        except Exception, err:
+#            print 'ERROR: in configuration file %s.\n' % file
+#            raise err
 
 # if successful, store file name so the reconfigure method can reuse it
         self.config_file = config_file
@@ -606,14 +612,21 @@ class NewMediatorObject(Object.OwnerObject):
             self.interp.add_sr_entries_for_LSAs_and_CSCs = \
                 add_sr_entries_for_LSAs_and_CSCs
         if ignore:
+            config_dict['interpreter'] = None
             config_dict['add_csc'] = do_nothing
+            config_dict['add_csc_set'] = do_nothing
             config_dict['add_lsa'] = do_nothing
+            config_dict['add_lsa_set'] = do_nothing
             config_dict['add_abbreviation'] = do_nothing
             config_dict['standard_symbols_in'] = do_nothing
             config_dict['print_abbreviations'] = do_nothing
         else:
+            config_dict['interpreter'] = self
             config_dict['add_csc'] = self.add_csc
+            config_dict['add_csc_set'] = self.add_csc_set
             config_dict['add_lsa'] = self.add_lsa
+            config_dict['add_lsa_set'] = self.add_lsa_set
+            config_dict['has_lsa'] = self.has_lsa
             config_dict['add_abbreviation'] = self.add_abbreviation
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['print_abbreviations'] = self.print_abbreviations
@@ -968,35 +981,61 @@ class NewMediatorObject(Object.OwnerObject):
 
         self.interp.add_csc(acmd)
 
+    def add_csc_set(self, set):
+        """add CSCs from a set
 
-    def add_lsa(self, spoken_forms, meanings):
+        **INPUTS**
+
+        *CSCmdSet set* -- the set of commands to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.interp.add_csc_set(set)
+
+    def has_lsa(self, spoken_form, language = None):
+        """check if there is already an LSA defined with this spoken
+        form
+
+        **INPUTS**
+
+        *STR spoken_form* -- spoken form to check
+
+        *STR language* -- name of the language in which to check
+
+        **OUTPUTS**
+
+        *BOOL* -- true if such an LSA exists
+        """
+        return self.interp.has_lsa(spoken_form, language)
+
+    def add_lsa(self, an_LSA):
         """Add a language specific word.
 
-        These words get added and removed dynamically from the SR
-        vocabulary, depending on the language of the active buffer.
-
-        A redundant CSC is also added to allow translation of the LSA at
-        the level of the Mediator, in cases where NatSpeak prefers to
-        recognise the LSA as dictated text instead of a spoken/written
-        word (this often happens if the spoken form looks to much like
-        dictated text, e.g. "is not equal to").
-        
         **INPUTS**
         
-        *STR* spoken_forms -- List of spoken form of the word.
-
-        *{STR: STR}* meanings -- Dictionary of language specific
-         meanings. Key is the language name and value is the written form
-         of the LSA for that langugage. If language name is *None*, then
-         it means that this LSA applies for all languages (I know, it
-         doesn't make much sense syntactically).
+        *LSAlias an_LSA* -- language-specific alias (see CmdInterp)
         
         **OUTPUTS**
         
         *none* -- 
         """
         
-        self.interp.add_lsa(spoken_forms, meanings)
+        self.interp.add_lsa(an_LSA)
+
+    def add_lsa_set(self, set):
+        """add LSAs from a set
+
+        **INPUTS**
+
+        *LSAliasSet set* -- the set of aliases to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.interp.add_lsa_set(set)
 
     def add_abbreviation(self, abbreviation, expansions):
         """Add an abbreviation to VoiceCode's abbreviations dictionary.

@@ -34,13 +34,16 @@ def dictate_pseudo_python(commands):
     commands.open_file('blah.py')
         
 # causes Natspeak v.4 bug
-    commands.say(['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['import', 'modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
 # causes Natspeak v.4 bug
-    commands.say(['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['import', 'modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
    
-    commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+#    commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+# The above won't work now that we've eliminated leading and trailing
+# spaces from the written forms entered as vocabular words.  try this instead
+    commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
@@ -55,7 +58,10 @@ def dictate_pseudo_python(commands):
     commands.say(['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
 # causes Natspeak v.4 bug
-    commands.say(['import', 'module',  'S.', 'R.', 'interface',  'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+# also v. 6, now
+#    commands.say(['import', 'module',  'S.', 'R.', 'interface',  'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+# try this
+    commands.say(['import\\import module',  'S.', 'R.', 'interface',  'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
@@ -224,7 +230,7 @@ def create_new_class_test(commands):
 
 def change_subclass_of_existing_class(commands):
    commands.goto_line(4)
-   commands.say(['select', 'ASuper\\A Super'], never_bypass_sr_recog=1)
+   commands.say(['select', 'ASuper\\a super'], never_bypass_sr_recog=1)
    commands.say(['new', 'super', 'class'], user_input="1\n")
    
 def add_method_to_existing_class_test(commands):

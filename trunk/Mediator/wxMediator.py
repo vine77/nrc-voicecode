@@ -78,7 +78,17 @@ debug.config_traces(status="on",
 #                       'OwnerObject': 1
 #                      'init_simulator_regression': 1,
 #                      'WinGramMgr': 1,
-#                      'CmdInterp.interpret_NL_cmd': 1
+#                      'CmdInterp.interpret_NL_cmd': 1,
+#                      'CmdInterp.interpret_NL_cmd': 1,
+#                      'CmdInterp.match_untranslated_text': 1,
+#                      'CmdInterp.dlg_select_symbol_match': 1,
+#                      'CmdInterp.is_spoken_LSA': 1,
+#                      'CmdInterp.is_spoken_CSC': 1,
+#                      'CmdInterp.add_lsa': 1,
+#                      'sr_interface.addWord': 1,
+#                      'SinglePunctuation': 1,
+#                      'LeftRightPunctuation': 1,
+#                      'PairedQuotes': 1,
 #                      'synchronize': 1,
 #                      'insert_indent': 1,
 #                      'get_selection': 1,
@@ -315,6 +325,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
             test_space = globals()
             test_args = [test_suite]
             sys.stderr.write('Loading test definitions...\n')
+            sys.stderr.flush()
             tests_def_fname = posixpath.expandvars('$VCODE_HOME' + \
                 os.sep + 'Admin' + os.sep + 'tests_def.py')
             execfile(tests_def_fname, test_space)        
@@ -340,9 +351,11 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                 bypass_sr_recog = bypass_sr_recog)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
+        sys.stderr.flush()
         self.the_mediator.configure()
 #        print self.the_mediator.server
         sys.stderr.write('Finished wxMediator init...\n')
+        sys.stderr.flush()
 
         self.main_frame().show(1)
         self.hook_events()
@@ -650,6 +663,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
             wxEVT_NEW_TALK_CONN) 
         server = self.server()
         sys.stderr.write('Starting server threads...\n')
+        sys.stderr.flush()
         server.start_other_threads(listener_evt, talker_evt)
         wxMediator.run(self)
 
@@ -693,10 +707,12 @@ def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0):
     """
 
     sys.stderr.write('creating wxMediator\n')
+    sys.stderr.flush()
     app = wxMediatorServer(test_suite = test_suite, 
         profile_prefix = profile_prefix, 
         bypass_sr_recog = bypass_sr_recog)
     sys.stderr.write('starting...\n')
+    sys.stderr.flush()
     app.run()
 #    sys.stderr.write("run_ext_server finishing\n")
     
