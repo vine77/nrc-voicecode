@@ -52,6 +52,7 @@ import re
 import debug
 
 import SourceBuffState
+import sr_interface
 
 class SB_Service(Object.OwnerObject):
     """Support service for SourceBuff classes.
@@ -1039,12 +1040,12 @@ class SB_ServiceFullState(SB_ServiceState):
 
         return self.buff.name() == cookie.name()
 
-class SB_ServiceSimulateKbdAndMouseEdits(SB_Service):
+class SB_ServiceSimKbd(SB_Service):
     """Provides services for simulating editing operations carried out through
-    mouse and keyboard.
+    keyboard.
     
     The methods provided by this service are only used for regression testing, to
-    test mixed-mode (voice with kbd and mouse) editing scenarios.
+    test mixed-mode (voice with kbd) editing scenarios.
     
     **INSTANCE ATTRIBUTES**
     
@@ -1056,27 +1057,54 @@ class SB_ServiceSimulateKbdAndMouseEdits(SB_Service):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(SB_ServiceSimulateKbdAndMouseEdits, 
+        self.deep_construct(SB_ServiceSimKbd, 
                             {}, 
                             args_super, 
                             {})
 
     def set_selection_by_kbd(self, start, end):
-        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.set_selection_by_kbd')
+        debug.virtual('SB_ServiceSimKbd.set_selection_by_kbd')
         
     def move_cursor_by_kbd(self, direction, num_steps):
-        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.move_cursor_by_kbd')    
+        debug.virtual('SB_ServiceSimKbd.move_cursor_by_kbd')    
         
     def type_text(self, text):
-        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.type_text')    
+        self.send_keys_to_buff(text)
         
-    def play_string_with_buffer_in_focus(self, string):
+    def send_keys_to_buff(self, string):
         # Eventually, this will make sure that the buffer has the focus before
         # playing the string. But for now, just play the string.
-        natlink.playString(string)
+#        natlink.playString(string)
+# reduce direct dependence on natlink
+        sr_interface.send_keys(string)
 
-class SB_ServiceSimulateKbdAndMouseEditsWindowsStyle(SB_ServiceSimulateKbdAndMouseEdits):
-    """Simulates editing actions through Windows style keyboard and mouse events.
+class SB_ServiceSimKbdArrows(SB_ServiceSimKbd):
+    """partial implementation for editors which use the arrow keys
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_ServiceSimKbdArrows, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def move_cursor_by_kbd(self, direction, num_steps):
+        string_to_play = ''
+        move_with_key = "{%s" % direction
+        string_to_play = '%s %d}' % (move_with_key, num_steps)
+        self.send_keys_to_buff(string_to_play)
+        
+                            
+class SB_ServiceSimKbdWindowsStyle(SB_ServiceSimKbdArrows):
+    """Simulates editing actions through Windows style keyboard events.
     
     For example, it uses a sequence of Shift-Right keys to select an area of text.
     
@@ -1091,7 +1119,7 @@ class SB_ServiceSimulateKbdAndMouseEditsWindowsStyle(SB_ServiceSimulateKbdAndMou
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(SB_ServiceSimulateKbdAndMouseEditsWindowsStyle, 
+        self.deep_construct(SB_ServiceSimKbdWindowsStyle, 
                             {}, 
                             args_super, 
                             {})
@@ -1101,21 +1129,9 @@ class SB_ServiceSimulateKbdAndMouseEditsWindowsStyle(SB_ServiceSimulateKbdAndMou
         string_to_play = ''
         self.buff.goto(start)
         if end >= start:
-           move_with_key = '{Shift+Right}'
+           move_with_key = '{Shift+Right'
         else:
-           move_with_key = '{Shift+Left}'        
-        for ii in range(abs(end-start)):
-           string_to_play = string_to_play + move_with_key
-        self.play_string_with_buffer_in_focus()
+           move_with_key = '{Shift+Left'        
+        string_to_play = '%s %d}' % (move_with_key, abs(end-start))
+        self.send_keys_to_buff(string_to_play)
 
-        
-    def move_cursor_by_kbd(self, direction, num_steps):
-        string_to_play = ''
-        move_with_key = "{%s}" % direction
-        for ii in range(num_steps):
-           string_to_play = string_to_play + move_with_key
-        self.play_string_with_buffer_in_focus(string_to_play)
-        
-    def type_text(self, text):
-        self.play_string_with_buffer_in_focus(text)
-                            

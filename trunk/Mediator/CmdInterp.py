@@ -28,9 +28,8 @@ from actions_py import *
 from AppState import AppState
 from cont_gen import ContC, ContPy
 from CSCmd import CSCmd
-from EdSim import EdSim
 from Object import Object, OwnerObject
-import EdSim, SymDict
+import SymDict
 import sr_interface
 
 
