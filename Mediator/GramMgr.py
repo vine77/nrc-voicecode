@@ -234,13 +234,16 @@ class GramMgr(OwnerObject):
         """
         debug.virtual('GramMgr.activate_sink')
     
-    def activate(self, buffer, window):
+    def activate(self, buffer, window, except_code_dictation = 0):
         """activate grammars for a buffer displayed in a particular
         window, and deactivate all other buffer/window-specific grammars
 
         **INPUTS**
 
         *STR* buffer -- name of buffer
+
+        *BOOL* except_code_dictation = 0 -- if TRUE, then do not activate the
+        code dictation grammar.
 
         *INT* window -- 
         number identifying the current window  displaying
@@ -568,13 +571,16 @@ class WinGramMgr(GramMgrDictContext):
         self.deactivate_all()
 
 
-    def activate(self, buffer, window):
+    def activate(self, buffer, window, except_code_dictation = 0):
         """activate grammars for a buffer displayed in a particular
         window, and deactivate all other buffer/window-specific grammars
 
         **INPUTS**
 
         *STR* buffer -- name of buffer
+
+        *BOOL* except_code_dictation = 0 -- if TRUE, then do not activate the
+        code dictation grammar.                
 
         *INT* window -- 
         number identifying the current window  displaying
@@ -591,7 +597,7 @@ class WinGramMgr(GramMgrDictContext):
         if not self.dict_grammars[window].has_key(buffer):
             self.new_buffer(buffer, window)
         for buff_name in self.dict_grammars[window].keys():
-            if buff_name != buffer:
+            if buff_name != buffer or except_code_dictation:
                 self.dict_grammars[window][buff_name].deactivate()
 # if the dictation grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows in dict_grammars
@@ -622,7 +628,8 @@ class WinGramMgr(GramMgrDictContext):
         before, after = self.find_context(buffer)
         self.dict_grammars[window][buffer].set_context(before, after)
 
-        self.dict_grammars[window][buffer].activate()
+        if not except_code_dictation:
+           self.dict_grammars[window][buffer].activate()
     
     def activate_sink(self, window):
         """activate dummy dictation grammar as a sink to intercept

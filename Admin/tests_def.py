@@ -1,4 +1,4 @@
-##############################################################################
+###############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -186,6 +186,7 @@ def symbol_match_test(interp, sources, pseudo_symbols):
 def test_SymDict():
     """Self test for SymDict"""
 
+
     temp_config = temp_factory.new_config()
     interp = temp_config.interpreter() 
     compilation_test(interp, vc_globals.test_data + os.sep + 'small_buff.c')
@@ -269,7 +270,6 @@ def test_CmdInterp():
     #
     # Create a command interpreter connected to the editor simulator
     #
-#    natlink.natConnect()    
     temp_config = temp_factory.new_config(skip_config = 1)
 #     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
 #         interp=CmdInterp.CmdInterp())
@@ -480,6 +480,10 @@ auto_test.add_test('mediator_console', test_mediator_console, desc='testing medi
 def test_no_config_file():
     """Make sure that VCode fails gracefully it tries to use a non-existant config file"""
 
+    #
+    # Question... could this be refactored to get the interp from testing.interp()
+    # instead? Trying to get rid of the temp_factory. AD.
+    #
     temp_config = temp_factory.new_config()
     a_mediator = temp_config.mediator()
     try:
@@ -716,6 +720,11 @@ def test_persistence():
 # but we don't want standard symbols defined.  How can
 # we achieve that?  Oddly enough, configuration doesn't seem to define any 
 # standard symbols - why not?
+    #
+    # Question... could this be refactored to get the interp from testing.interp()
+    # instead? Trying to get rid of the temp_factory. AD.
+    #
+
 #    temp_config = temp_factory.new_config(skip_config = 1)
     temp_config = temp_factory.new_config()
 # here, try with no official pickle file
@@ -2989,23 +2998,17 @@ auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Test
 
 def test_normal_text_dictation():
    testing.init_simulator_regression()
-   
-   temp_config = temp_factory.new_config()
-   mediator = temp_config.mediator() 
+ 
+   mediator = testing.mediator()
    recog_mgr = mediator.editors.recog_mgr
    
-   print "before setting text mode on: is_in_text_mode=%s" % recog_mgr.is_in_text_mode      
+   commands.open_file('blah.py')   
    recog_mgr.set_text_mode(1)
-   print "after setting text mode on:is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
-   print "before setting text mode off: is_in_text_mode=%s" % recog_mgr.is_in_text_mode      
+   print 'Setting VCode in text mode.'
+   commands.say(['bug', 'this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'but', 'it', 'is', 'never', 'typed'], never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
+   print 'Setting VCode in code dictation mode.'   
    recog_mgr.set_text_mode(0)
-   print "after setting text mode off:is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
-
-#   commands.open_file('blah.py')   
-#   recog_mgr.set_text_mode(1)
-#   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'comma'], never_bypass_sr_recog=1, user_input="0\n0\n")
-#   recog_mgr.set_text_mode(0)
-#   commands.say(['but', 'this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="0\n0\n0\n")
+   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
    
 auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
 
@@ -3028,10 +3031,9 @@ auto_test.add_test('just_ring_bell', test_dummy_just_ring_bell, 'This dummy test
 def test_number_dictation():
    testing.init_simulator_regression()
    commands.open_file('blah.py')   
-   commands.say(['twenty-three\\twenty-three', 'fifty-four\\fifty-four'])
-   commands.say(['select', '54'], never_bypass_sr_recog=1)   
-   commands.say(['select', '23', '54'], never_bypass_sr_recog=1)   
-
+   commands.say(['twenty-three\\twenty-three', 'fifty-four\\fifty-four'], echo_cmd=1)
+   commands.say(['select', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
 auto_test.add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
 
@@ -3094,10 +3096,18 @@ auto_test.add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
-def test_temporary():    
-    pass  
+def test_temporary():  
+   testing.init_simulator_regression()
+   temp_config = temp_factory.new_config()   
+   temp_config = temp_factory.new_config()   
+   temp_config = temp_factory.new_config()         
+   
+   commands.open_file('blah.py')   
+   commands.say(['hello', 'world'], never_bypass_sr_recog=1, user_input="0\n0\n")
 
    
-#auto_test.add_test('temp', test_temporary, desc='temporary test')
+#auto_test.add_test('temp', test_temporary, desc='temporary test', order=10)
+
+
 
 

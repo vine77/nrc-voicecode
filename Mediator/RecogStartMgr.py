@@ -220,14 +220,15 @@ class RecogStartMgr(OwnerObject):
         window corresponds to the editor when the editor first connects to
         VoiceCode, or when it notifies VoiceCode of a new window.
         """
-
         self.deep_construct(RecogStartMgr,
                             {'editors': None,
                              'trust_current_window': trust_current_window,
                              'is_in_text_mode': 0
+#                             'is_in_text_mode': 1
                             },
                             args)
         self.name_parent('editors')
+        debug.trace('RecogStartMgr.__init__', '** upon exit, self.is_in_text_mode=%sself=%s' % (self.is_in_text_mode, self))
         
     def user_message(self, message, instance = None):
         """sends a user message up the chain to the NewMediatorObject to
@@ -301,6 +302,7 @@ class RecogStartMgr(OwnerObject):
         #
         if set_to:
            natlink.execScript('SetNaturalText 1')
+        debug.trace('RecogStartMgr.set_text_mode', '** upon exit, self.is_in_text_mode=%sself=%s' % (self.is_in_text_mode, self))           
 
     def interpret_dictation(self, instance, result, initial_buffer = None):
         """interpret the result of recognition by a dictation grammar,
@@ -836,6 +838,7 @@ class RSMInfrastructure(RecogStartMgr):
         ResMgr objects
 
         """
+        debug.trace('RSMInfrastructure.__init__', '** self=%s' % self)        
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
                              'GM_factory': GM_factory,
@@ -1720,7 +1723,7 @@ class RSMInfrastructure(RecogStartMgr):
         app.synchronize_with_app()
         buff_name = app.curr_buffer_name()
         if app.active_field() == None and dictation_allowed:
-            self.grammars[instance_name].activate(buff_name, window)
+            self.grammars[instance_name].activate(buff_name, window, except_code_dictation = self.is_in_text_mode)
         else:
             self.grammars[instance_name].deactivate_all(window)
         others = self.windows[window].instance_names()
@@ -1896,6 +1899,7 @@ class RSMBasic(RSMInfrastructure):
         see RecogStartMgr
 
         """
+        debug.trace('RSMBasic.__init__', '** self=%s' % self)                
         self.deep_construct(RSMBasic,
                             {'universal': None
                             },
@@ -2196,19 +2200,19 @@ class RSMBasic(RSMInfrastructure):
         except messaging.SocketError:
             debug.trace('RSMInfrastructure._activate_universal_grammars',
                 'Socket Error during synch')
-            self.grammars[instance_name].activate_sink(-1)
+            self.grammars[instance_name].activate_sink(-1, except_code_dictation = self.is_in_text_mode)
             debug.trace('RSMInfrastructure._activate_universal_grammars',
                 'activated dictation sink')
         else:
             if dictation_allowed:
                 debug.trace('RSMInfrastructure._activate_universal_grammars',
                     'activating dictation grammar')
-                self.grammars[instance_name].activate(buff_name, -1)
+                self.grammars[instance_name].activate(buff_name, -1, except_code_dictation = self.is_in_text_mode)
             else:
                 msg = "recog_begin returned false unexpectedly during\n"
                 msg = msg + "regression tests.  Will abort test\n"
                 sys.stderr.write(msg)
-                self.grammars[instance_name].activate_sink(-1)
+                self.grammars[instance_name].activate_sink(-1, except_code_dictation = self.is_in_text_mode)
                 debug.trace('RSMInfrastructure._activate_universal_grammars',
                     'activated dictation sink')
                 self.editors.cancel_testing()
