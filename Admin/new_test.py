@@ -35,12 +35,12 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 debug.config_traces(status="on", 
                     active_traces={
-                       'StateStackBasic': 1,
-                       'BufferStateBasic': 1,
+#                       'StateStackBasic': 1,
+#                       'BufferStateBasic': 1,
 #                      'CmdInterp': 1
 #                      'CmdInterp': 1
 #                      'DictWinGramNL': 1,
-                      'ResMgr': 1,
+#                      'ResMgr': 1,
 #                      'mediator.say': 1
 #                      'StateStack': 1,
 #                      'SourceBuffEdSim.restore_state': 1,
@@ -113,6 +113,11 @@ OPTIONS
            (and possibly buggy) version of the system to output of a test run
            done on a bug-free (yeah, right ;-) version of the system.
 
+-p pfile : profile the code, writing the output of the python profiler
+           to pfile (see Python Profiler in the Python library manual)
+
+--bypass : bypass natlink for dictation utterances (used for profiling)
+
 ARGUMENTS
 ---------
 
@@ -132,7 +137,13 @@ if (__name__ == '__main__'):
         print 'ERROR: in configuration file %s.\n' % config_file
         raise err
     
-    opts, args = util.gopt(('d', None, 'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py'), 'h', None, 's', 0))
+    opts, args = util.gopt(('d', None, 
+        'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + 
+            os.sep + 'tests_def.py'), 
+        'bypass', None,
+        'h', None, 
+        's', 0, 
+        'p=', None))
 
     if (opts['h']) or len(args) == 0:
         usage()
@@ -151,7 +162,10 @@ if (__name__ == '__main__'):
             the_mediator = \
                 NewMediatorObject.NewMediatorObject(
                     test_args = args,
-                    test_space = test_space, global_grammars = 1, exclusive = 1)
+                    test_space = test_space, global_grammars = 1, 
+                    exclusive = 1, 
+                    profile_prefix = opts['p'],
+                    bypass_for_dictation = opts['bypass'])
             sys.stderr.write('Configuring the mediator...\n')
             the_mediator.configure()
             sys.stderr.write('Finished configuring...\n')

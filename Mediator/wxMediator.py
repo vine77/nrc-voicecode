@@ -283,7 +283,20 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
     *BOOL quitting* -- flag indicating that we are in the process of
     quitting
     """
-    def __init__(self, test_suite = None, **args):
+    def __init__(self, test_suite = None, profile_prefix = None,
+        bypass_for_dictation = 0, **args):
+        """
+        **INPUTS**
+
+        STR *test_suite=None* -- name of regression test suite to run
+
+        *STR profile_prefix* -- prefix for filename for output of profiler,
+        or None if not profiling (ignored if test_suite is None) 
+
+        *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
+        dictation utterances (ignored if test_suite is None) 
+        """
+
         self.deep_construct(wxMediator, 
                             {
                              'the_server': None,
@@ -322,7 +335,9 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                 correct_evt = correct_evt,
                 correct_recent_evt = correct_recent_evt,
                 test_args = test_args,
-                test_space = test_space, global_grammars = 1, exclusive = 1)
+                test_space = test_space, global_grammars = 1, exclusive = 1,
+                profile_prefix = profile_prefix,
+                bypass_for_dictation = bypass_for_dictation)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         self.the_mediator.configure()
@@ -672,13 +687,15 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
 
 ##############################################################################
-def run(test_suite=None):
+def run(test_suite=None, profile_prefix = None, bypass_for_dictation = 0):
     """Start a ServerNewMediator/ServerMainThread with external message 
     loop using wxWindows events and the new NewMediatorObject
     """
 
     sys.stderr.write('creating wxMediator\n')
-    app = wxMediatorServer(test_suite = test_suite)
+    app = wxMediatorServer(test_suite = test_suite, 
+        profile_prefix = profile_prefix, 
+        bypass_for_dictation = bypass_for_dictation)
     sys.stderr.write('starting...\n')
     app.run()
 #    sys.stderr.write("run_ext_server finishing\n")
@@ -708,11 +725,17 @@ OPTIONS
 
    (Default: None)
 
+-p pfile : profile the code, writing the output of the python profiler
+           to pfile (see Python Profiler in the Python library manual)
+
+--bypass : bypass natlink for dictation utterances (used for profiling)
+
     """
 
 
 if __name__ == '__main__':
-    opts, args = util.gopt(['h', None, 't=', None])
+    opts, args = util.gopt(['h', None, 't=', None, 'bypass', 0,
+        'p=', None])
     
     sr_interface.connect()
 
@@ -727,7 +750,8 @@ if __name__ == '__main__':
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
-    run(test_suite=opts['t'])
+    run(test_suite=opts['t'], profile_prefix = opts['p'],
+        bypass_for_dictation = opts['bypass'])
 
 
 

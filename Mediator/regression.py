@@ -277,9 +277,13 @@ class PersistentConfigNewMediator(Object.Object):
 
     *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
     dialog/prompt.  Normally disabled except during regression
+
+    *BOOL bypass_for_dictation* -- bypass natlink for dictation
+    utterances
     """
     def __init__(self, mediator, editor_name, names, 
-        symbol_match_dlg = 1, correction = None, **args):
+        symbol_match_dlg = 1, correction = None, 
+        bypass_for_dictation = 0, **args):
         """**INPUTS**
 
         *{STR:ANY} names* -- the namespace dictionary in which the
@@ -297,6 +301,9 @@ class PersistentConfigNewMediator(Object.Object):
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
+
+        *BOOL bypass_for_dictation* -- bypass natlink for dictation
+        utterances
         """
         self.deep_construct(PersistentConfigNewMediator, 
                             {
@@ -304,7 +311,8 @@ class PersistentConfigNewMediator(Object.Object):
                              'names': names,
                              'correction': correction,
                              'editor_name': editor_name,
-                             'symbol_match_dlg': symbol_match_dlg
+                             'symbol_match_dlg': symbol_match_dlg,
+                             'bypass_for_dictation': bypass_for_dictation
                             }, args)
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
@@ -396,7 +404,8 @@ class PersistentConfigNewMediator(Object.Object):
         editor = self.mediator().editor_instance(self.editor_name)
         editor.init_for_test()
         interp = self.mediator().interpreter()
-        commands = sim_commands.SimCmdsObj(editor, interp, self.names)
+        commands = sim_commands.SimCmdsObj(editor, interp, self.names,
+            bypass_for_dictation = self.bypass_for_dictation)
         commands.bind_methods(self.names)
         self.names['commands'] = commands
 

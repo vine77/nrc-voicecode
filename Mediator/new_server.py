@@ -135,7 +135,20 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
             disconnect=1)
         Object.OwnerObject.remove_other_references(self)
 
-    def __init__(self, test_suite = None, **args_super):
+    def __init__(self, test_suite = None, profile_prefix = None, 
+        bypass_for_dictation = 0, **args_super):
+        """
+        **INPUTS**
+
+        STR *test_suite=None* -- name of regression test suite to run
+
+        *STR profile_prefix* -- prefix for filename for output of profiler,
+        or None if not profiling (ignored if test_suite is None) 
+
+        *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
+        dictation utterances (ignored if test_suite is None) 
+        """
+
         self.deep_construct(ExtLoopWin32NewMediator, 
                             {
                              'the_server': None,
@@ -167,7 +180,9 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
                 test_args = [test_suite],
-                test_space = test_space, global_grammars = 1, exclusive = 1)
+                test_space = test_space, global_grammars = 1, exclusive = 1,
+                profile_prefix = profile_prefix, 
+                bypass_for_dictation = bypass_for_dictation)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
@@ -193,14 +208,17 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 ##############################################################################
 # start test standalone server
 ##############################################################################
-def run_new_server(test_suite=None, extra_opts = None):
+def run_new_server(test_suite=None, profile_prefix = None, 
+    bypass_for_dictation = 0, extra_opts = None):
     """Start a ServerNewMediator/ServerMainThread with external message 
     loop using win32event and the new NewMediatorObject
     """
 
     sys.stderr.write('running ExtLoopWin32NewMediator with ServerNewMediator\n')
     print 'running ExtLoopWin32NewMediator with ServerNewMediator'
-    a_loop = ExtLoopWin32NewMediator(test_suite = test_suite) 
+    a_loop = ExtLoopWin32NewMediator(test_suite = test_suite, 
+        profile_prefix = profile_prefix, 
+        bypass_for_dictation = bypass_for_dictation) 
 
     sys.stderr.write('Running ExtLoopWin32...\n')
     a_loop.run()
@@ -234,11 +252,18 @@ OPTIONS
 -0:
    Close the server when the last external editor disconnects.
    Currently ignored except for ServerOldMediator
+
+
+-p pfile : profile the code, writing the output of the python profiler
+           to pfile (see Python Profiler in the Python library manual)
+
+--bypass : bypass natlink for dictation utterances (used for profiling)
     """
 
 
 if __name__ == '__main__':
-    opts, args = util.gopt(['h', None, 't=', None, '0', None])
+    opts, args = util.gopt(['h', None, 't=', None, '0', None,
+    'bypass', 0, 'p=', None])
     non_exclusive_opts = ['0']
     
     sr_interface.connect()
@@ -260,7 +285,8 @@ if __name__ == '__main__':
         except KeyError:
             pass
 
-    run_new_server(test_suite=opts['t'], extra_opts = extra_opts)
+    run_new_server(test_suite=opts['t'], profile_prefix = opts['p'],
+        bypass_for_dictation = opts['bypass'], extra_opts = extra_opts)
 
 #    sys.stderr.write("run finished\n")
 

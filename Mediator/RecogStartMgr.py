@@ -2134,8 +2134,9 @@ class RSMBasic(RSMInfrastructure):
 
         *none*
         """
-        buff_name = app.curr_buffer_name()
         dictation_allowed = app.recog_begin(None)
+        app.synchronize_with_app()
+        buff_name = app.curr_buffer_name()
         if app.active_field() == None and dictation_allowed:
             self.grammars[instance_name].activate(buff_name, -1)
         else:

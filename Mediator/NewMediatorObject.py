@@ -148,6 +148,12 @@ class NewMediatorObject(Object.OwnerObject):
     regression testing (ignored if test_space is None or global_grammars
     is false)
 
+    *STR profile_prefix* -- prefix for filename for output of profiler,
+    or None if not profiling (ignored if test_space is None) 
+
+    *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
+    dictation utterances (ignored if test_space is None) 
+
     *BOOL test_next* -- flag to indicate that the mediator should run
     regression tests using the next editor to connect
 
@@ -175,6 +181,8 @@ class NewMediatorObject(Object.OwnerObject):
                  correct_recent_evt = None,
                  test_args = None,
                  test_space = None, global_grammars = 0, exclusive = 0, 
+                 profile_prefix = None,
+                 bypass_for_dictation = 0,
                  symdict_pickle_fname = None,
                  symbol_match_dlg_regression = 1,
                  symbol_match_dlg = 0,
@@ -234,9 +242,12 @@ class NewMediatorObject(Object.OwnerObject):
         regression testing (ignored if test_space is None or
         global_grammars is false)
 
-        *BOOL test_next* -- flag to indicate that the mediator should run
-        regression tests using the next editor to connect
-    
+        *STR profile_prefix* -- prefix for filename for output of profiler,
+        or None if not profiling (ignored if test_space is None) 
+
+        *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
+        dictation utterances (ignored if test_space is None) 
+
         STR *symdict_pickle_fname=None* -- Name of the file containing the
         persistent version of the symbols dictionnary.
         """
@@ -259,6 +270,8 @@ class NewMediatorObject(Object.OwnerObject):
                                   symbol_match_dlg_regression,
                              'symbol_match_dlg': symbol_match_dlg,
                              'exclusive': exclusive,
+                             'profile_prefix': profile_prefix,
+                             'bypass_for_dictation': bypass_for_dictation,
                              'test_next': 0,
                              'testing': 0, 
                              'config_file': None
@@ -801,13 +814,14 @@ class NewMediatorObject(Object.OwnerObject):
             regression.PersistentConfigNewMediator(mediator = self,
             editor_name = instance_name, names = self.test_space,
             symbol_match_dlg = self.symbol_match_dlg_regression,
+            bypass_for_dictation = self.bypass_for_dictation,
             correction = 'basic')
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg_regression)
         self.test_space['temp_factory'] = \
              regression.TempConfigNewMediatorFactory(symbol_match_dlg = \
              self.symbol_match_dlg_regression)
         self.testing = 1
-        auto_test.run(self.test_args)
+        auto_test.run(self.test_args, profile_prefix = self.profile_prefix)
         self.testing = 0
         app.mediator_closing()
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)

@@ -276,6 +276,11 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
 ;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
 
+; testing problems with insert_delete test 12/31/02 - DCF
+;(cl-puthash "vcode-cmd-insert" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-insert-indent" 1 vcode-traces-on)
+;(cl-puthash "vcode-fix-positions-in-message" 1 vcode-traces-on)
+
 
 
 ; DCF - tracing indentation problems (at Alain's suggestion)
@@ -2772,9 +2777,12 @@ message.
         ;;; freezing.
 	;;;
 
-	(write-file "ignorethisfile.tmp")
-	(kill-buffer "ignorethisfile.tmp")
+          (save-excursion
+            (set-buffer buff-name)
+            (write-file "ignorethisfile.tmp")
+            (kill-buffer "ignorethisfile.tmp")
 ;        (kill-buffer buff-name)
+          )
 	)
   )
   (if (eq 1 save) 
@@ -3007,45 +3015,67 @@ buffer"
 ;;; and 1-based counting
 ;;;
 (defun vcode-fix-positions-in-message (message fix-for-who)
-   (let ((pos) (range) (default-pos) )
-     (dolist (position-field '("pos" "position" "start" "end")) 
-       (if (is-in-hash position-field message)
-	   (progn
-	     (if (or (string= "pos" position-field) 
-                     (string= "position" position-field))
-		 (setq default-pos (point)))
-	     (if (string= "start" position-field)
-		 (setq default-pos 
-		       (nth 0 (vcode-bounds-of-buff-in-message message)))
-	     )
-	     (if (string= "end" position-field)
-		 (setq default-pos 
-		       (nth 1 (vcode-bounds-of-buff-in-message message)))
-	     )
-	     (setq pos (cl-gethash position-field message))
-	     (setq pos (vcode-fix-pos pos fix-for-who default-pos))
-	     (cl-puthash position-field pos message)
-	   )
-       )
-     )
-
-     (if (is-in-hash "range" message)
-	 (progn
-	     (setq range (cl-gethash "range" message))
-	     (vr-log "--** vcode-fix-positions-in-message: range is %S\n" range)
-             ;;;
-             ;;; Fix possibly nil positions received from VCode
-             ;;;
-	     (if (eq fix-for-who 'emacs)
-		 (setq range (vcode-fix-range-for-emacs 
-			      range 
-			      (vcode-selection-of-buff-in-message message))
-		 )
+   (let ((pos) (range) (default-pos) (buff-name) (dummy-var-temp))
+     (save-excursion
+       (if (eq fix-for-who 'emacs)
+         (progn
+;             (vcode-trace "vcode-fix-positions-in-message" "here")
+           (if (is-in-hash "buff_name" message)
+             (progn
+;                   (vcode-trace "vcode-fix-positions-in-message"
+;                       "buff_name in hash")
+;                   (setq buff-name (cl-gethash "buff_name" message))
+               (setq buff-name (vcode-get-buff-name-from-message message))
+               (if (get-buffer buff-name)
+                   (set-buffer buff-name))
              )
-	     (cl-puthash "range" range  message)
-	 )
-     )
-     message
+           )
+;             (vcode-trace "vcode-fix-positions-in-message" "message is %S"
+;                 message)
+;            (setq buff-name (vcode-get-buff-name-from-message message))
+;            (setq buff-name nil)
+         )
+       )
+;       (if buff-name (set-buffer buff-name))
+       (dolist (position-field '("pos" "position" "start" "end")) 
+         (if (is-in-hash position-field message)
+             (progn
+               (if (or (string= "pos" position-field) 
+                       (string= "position" position-field))
+                   (setq default-pos (point)))
+               (if (string= "start" position-field)
+                   (setq default-pos 
+                         (nth 0 (vcode-bounds-of-buff-in-message message)))
+               )
+               (if (string= "end" position-field)
+                   (setq default-pos 
+                         (nth 1 (vcode-bounds-of-buff-in-message message)))
+               )
+               (setq pos (cl-gethash position-field message))
+               (setq pos (vcode-fix-pos pos fix-for-who default-pos))
+               (cl-puthash position-field pos message)
+             )
+         )
+       )
+
+       (if (is-in-hash "range" message)
+           (progn
+               (setq range (cl-gethash "range" message))
+               (vr-log "--** vcode-fix-positions-in-message: range is %S\n" range)
+               ;;;
+               ;;; Fix possibly nil positions received from VCode
+               ;;;
+               (if (eq fix-for-who 'emacs)
+                   (setq range (vcode-fix-range-for-emacs 
+                                range 
+                                (vcode-selection-of-buff-in-message message))
+                   )
+               )
+               (cl-puthash "range" range  message)
+           )
+       )
+    )
+    message
   )
 )
 
@@ -3326,7 +3356,10 @@ change reports it sends to VCode.
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
 
-	(vr-log "--** vcode-cmd-insert: upon entry, (point)=%S,
+;	(vr-log "--** vcode-cmd-insert: upon entry, (point)=%S,
+;	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, text=%S\n" 
+;	    (point) (mark) range delete-start delete-end text)
+	(vcode-trace "vcode-cmd-insert" "upon entry, (point)=%S,
 	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, text=%S\n" 
 	    (point) (mark) range delete-start delete-end text)
 
@@ -3357,6 +3390,13 @@ change reports it sends to VCode.
 
 	(set-buffer buff-name)
 
+;	(vcode-trace "vcode-cmd-insert-indent" "buffer=%S"
+;            (buffer-substring (point-min) (point-max)))
+;	(vcode-trace "vcode-cmd-insert-indent" "(point)=%S,
+;	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, \n
+;            code-bef=%S, code-after = %S\n" 
+;	    (point) (mark) range delete-start delete-end code-bef
+;            code-after)
 
 	(kill-region delete-start delete-end)
 
@@ -3366,6 +3406,9 @@ change reports it sends to VCode.
 
 ;	(set-mark (point))
         (vcode-execute-command-string code-bef)
+;	(vcode-trace "vcode-cmd-insert-indent" "after before, buffer=%S"
+;            (buffer-substring (point-min) (point-max)))
+
 ;	(save-excursion
 ;	  (vcode-indent-region (mark) (point))
 ;	)
@@ -3373,6 +3416,8 @@ change reports it sends to VCode.
 	(save-excursion
 ;	  (set-mark (point))
 	  (vcode-execute-command-string code-after)
+;          (vcode-trace "vcode-cmd-insert-indent" "after after, buffer=%S"
+;              (buffer-substring (point-min) (point-max)))
 ;	  (vcode-indent-region (mark) (point))
 ;	  (set-mark nil)
 	)

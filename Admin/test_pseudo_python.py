@@ -224,7 +224,7 @@ def create_new_class_test(commands):
 
 def change_subclass_of_existing_class(commands):
    commands.goto_line(4)
-   commands.say(['select', 'ASuper\\A Super'])
+   commands.say(['select', 'ASuper\\A Super'], selection = 1)
    commands.say(['new', 'super', 'class'], user_input="1\n")
    
 def add_method_to_existing_class_test(commands):
@@ -237,7 +237,8 @@ def add_argument_to_existing_method_test(commands):
    
 def change_existing_argument_of_a_method_test(commands):
    commands.goto_line(7)
-   commands.say(['select', 'some_argument\\some argument'])
+   commands.say(['select', 'some_argument\\some argument'],
+       selection = 1)
    commands.say(['new', 'argument'], user_input="1\n")
    
 def insert_line_of_code_in_method_test(commands):
@@ -248,7 +249,7 @@ def insert_line_of_code_in_method_test(commands):
 def change_arguments_in_method_call_test(commands):
    pass   
    commands.goto_line(10)
-   commands.say(['select', 'some_array\\some array'])
+   commands.say(['select', 'some_array\\some array'], selection = 1)
    commands.say(['none'])
    commands.goto_line(11)
    commands.say(['after', 'paren', 'none'])

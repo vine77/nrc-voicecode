@@ -455,10 +455,10 @@ def test_command(command):
     testing.execute_command(command)
     sys.stdout.flush()
 
-def test_say(utterance, user_input=None):
+def test_say(utterance, user_input=None, selection = 0):
     print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
     sys.stdout.flush()
-    commands.say(utterance, user_input)
+    commands.say(utterance, user_input, selection = selection)
     sys.stdout.flush()
     
 
@@ -471,7 +471,8 @@ def test_mediator_console():
     test_command("""compile_symbols([r'""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
 
-    test_command("""say(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
+    test_command("say(['select', 'horiz_pos\\horizontal position'," + \
+        " '=\equals'], selection = 1)")
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
@@ -501,31 +502,32 @@ def test_select_pseudocode():
     # Testing go commands
     #
     test_command("""goto_line(2)""")
-    test_say(['go', 'index', '=\\equals', '0'])
+    test_say(['go', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go after next', 'index', '=\\equals', '0'])
+    test_say(['go after next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go after previous', 'index', '=\\equals', '0'])
+    test_say(['go after previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go before', 'index', '=\\equals', '0'])
+    test_say(['go before', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go before next', 'index', '=\\equals', '0'])
+    test_say(['go before next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go before previous', 'index', '=\\equals', '0'])
+    test_say(['go before previous', 'index', '=\\equals', '0'],
+        selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go next', 'index', '=\\equals', '0'])
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go previous', 'index', '=\\equals', '0'])
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['after next', 'index', '=\\equals', '0'])
+    test_say(['after next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['after previous', 'index', '=\\equals', '0'])
+    test_say(['after previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before', 'index', '=\\equals', '0'])
+    test_say(['before', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before next', 'index', '=\\equals', '0'])
+    test_say(['before next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before previous', 'index', '=\\equals', '0'])
+    test_say(['before previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
     
     #
@@ -546,25 +548,25 @@ def test_select_pseudocode():
     # Testing selectionn commands
     #
     test_command("""goto_line(2)""")
-    test_say(['next', 'index', '=\\equals', '0'])
+    test_say(['next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['previous', 'index', '=\\equals', '0'])
+    test_say(['previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select', 'index', '=\\equals', '0'])
+    test_say(['select', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select next', 'index', '=\\equals', '0'])
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select previous', 'index', '=\\equals', '0'])
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
 
     #
     # Testing repeated go commands in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['go next', 'index', '=\\equals', '0'])
-    test_say(['go next', 'index', '=\\equals', '0'])
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(6)""")
-    test_say(['go previous', 'index', '=\\equals', '0'])
-    test_say(['go previous', 'index', '=\\equals', '0'])
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
     
 
     #
@@ -586,11 +588,11 @@ def test_select_pseudocode():
     # Testing repeated selection in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['select next', 'index', '=\\equals', '0'])
-    test_say(['select next', 'index', '=\\equals', '0'])
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(6)""")
-    test_say(['select previous', 'index', '=\\equals', '0'])
-    test_say(['select previous', 'index', '=\\equals', '0'])
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
 
 #    util.request_console_be(active=0)    
     
@@ -2520,7 +2522,7 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    test_say(['select', 'clown'])
+    test_say(['select', 'clown'], selection = 1)
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
 
@@ -2758,10 +2760,10 @@ def test_insert_delete_commands():
    else:
        editor = mediator.app
    editor.set_text('some additional text')
-   test_say(['select', 'additional'])
+   test_say(['select', 'additional'], selection = 1)
    test_say(['back space'])
    editor.set_text('some additional text')
-   test_say(['select', 'additional'])
+   test_say(['select', 'additional'], selection = 1)
    test_say(['back space 2'])
 
 auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
@@ -2806,7 +2808,7 @@ def test_select_typed_text_by_voice(app, commands):
    commands.open_file(edit_this_buff_py)
    commands.goto_line(2)
    app.curr_buffer().type_text('hello')   
-   commands.say(['select', 'hello'])
+   commands.say(['select', 'hello'], selection = 1)
 
 #auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing')
 
@@ -2827,10 +2829,6 @@ def test_compile_symbols():
 auto_test.add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
     
     
-##############################################################################
-# Use this to create temporary tests
-##############################################################################
-
 def test_large_messages():
     testing.init_simulator_regression()
     commands.open_file('tmp.py')
@@ -2856,8 +2854,15 @@ def generate_string_of_approx_length(str_len):
 
 auto_test.add_test('large_messages', test_large_messages, desc='Send a message that has more than 1024 character (length of a message chunk)')
 
+##############################################################################
+# test for profiling startup/configuration
+##############################################################################
 
+def test_profile_config():
+   testing.init_simulator_regression()
     
+auto_test.add_test('profile_config', test_profile_config, 
+    desc='profiling configuration')
     
 ##############################################################################
 # Use this to create temporary tests
@@ -2878,6 +2883,6 @@ def test_temporary():
    commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
 
     
-auto_test.add_test('temp', test_temporary, desc='temporary test')
+# auto_test.add_test('temp', test_temporary, desc='temporary test')
 
 
