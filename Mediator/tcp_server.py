@@ -853,10 +853,9 @@ class ServerSingleThread(Object.Object):
         # and package them into an AppState instance with their corresponding
         # VC_LISTEN sockets.
         #
-        ii = 0
-        while ii < len(self.new_talk_socks):            
+        for sock in self.new_talk_socks:
 
-            (talk_sock, dummy) = self.new_talk_socks[ii]
+            (talk_sock, dummy) = sock
         
             #
             # Shake hands with that VC_TALK socket.
@@ -882,14 +881,17 @@ class ServerSingleThread(Object.Object):
                     #
                     found = (listen_sock, app_name, window, test_client)
                     del self.new_listen_socks[jj]
-                    del self.new_talk_socks[ii]
                     break
 
                 jj = jj + 1
                 
             if found != None:
                 self.package_sock_pair(id, app_name, window, listen_sock, talk_sock, test_client)
+            else:
+                talk_sock.close()
                         
+# all new talk sockets will have been packaged or closed
+        del self.new_talk_socks[:]
         self.new_socks_lock.release()        
 
 
@@ -1581,10 +1583,9 @@ class ServerMainThread(Object.OwnerObject):
         # and package them into an AppState instance with their corresponding
         # VC_LISTEN sockets.
         #
-        ii = 0
-        while ii < len(self.new_talk_socks):            
+        for sock in self.new_talk_socks:
 
-            (talk_sock, dummy) = self.new_talk_socks[ii]
+            (talk_sock, dummy) = sock
         
             #
             # Shake hands with that VC_TALK socket.
@@ -1610,7 +1611,6 @@ class ServerMainThread(Object.OwnerObject):
                     #
                     found = (listen_sock, app_name, window_info, test_client)
                     del self.pending_listen_socks[jj]
-                    del self.new_talk_socks[ii]
                     break
 
                 jj = jj + 1
@@ -1619,8 +1619,11 @@ class ServerMainThread(Object.OwnerObject):
                 stay_alive = self.package_sock_pair(id, app_name, 
                     window_info, listen_sock, talk_sock, test_client)
             else:
+                talk_sock.close()
                 self.user_message('no corresponding listen connection')
                         
+# all new talk sockets will have been packaged or closed
+        del self.new_talk_socks[:]
         self.new_socks_lock.release()        
 #        if stay_alive == 0:
 #            sys.stderr.write("got 0 from package_sock_pair\n")
