@@ -5,9 +5,11 @@ Main script for VoiceCode mediator.
 OPTIONS
 -------
 
--h   : print this help message.
+-h  : print this help message.
 
--s   : run mediator in simulation mode
+-s  : run mediator in simulation mode
+
+-p  : port number for communication with external programming environment
 
 
 Console mode
@@ -81,14 +83,10 @@ quit()
    (e.g. *Ctrl-C*), your DOS window will hang up.   
 """
 
-import util
-
 import natlink
-import os, sys
-import util, vc_globals
+import os, re, sys
+import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
-import config
-
 
 # for actions that span different languages
 from cont_gen import ContC, ContPy
@@ -100,16 +98,7 @@ from actions_C_Cpp import *
 # for Python support
 from actions_py import *
 
-#
-# Configure the system
-#
-config_file = vc_globals.config + os.sep + 'vc_config.py'
-try:
-    execfile(config_file)
-except Exception, err:
-    print 'ERROR: in configuration file %s.\n' % config_file
-    raise err
-
+the_mediator = None
 quit_flag = 0
 
 def open_file(fname):
@@ -117,16 +106,18 @@ def open_file(fname):
 
     *STR fname* is the path of the file"""
 
-    config.interp.app.open_file(fname)
-    print '-- mediator: config.interp.known_symbols=%s' % config.interp.known_symbols
-    config.interp.known_symbols.parse_symbols(fname)
+    global the_mediator
+    the_mediator.interp.on_app.open_file(fname)
+    print '-- mediator: the_mediator.interp.known_symbols=%s' % the_mediator.interp.known_symbols
+    the_mediator.interp.known_symbols.parse_symbols(fname)
     show_buff()
 
 def compile_symbols(file_list):
+    global the_mediator
     for a_file in file_list:
         print 'Compiling symbols for file \'%s\'' % a_file
-        config.interp.known_symbols.parse_symbols(a_file)
-    print '>>> Known symbols are: '; config.interp.known_symbols.print_symbols()
+        the_mediator.interp.known_symbols.parse_symbols(a_file)
+    print '>>> Known symbols are: '; the_mediator.interp.known_symbols.print_symbols()
     
 def say(utterance, bypass_NatLink=0):
     """Simulate an utterance *STR utterance*
@@ -134,36 +125,43 @@ def say(utterance, bypass_NatLink=0):
     IF *BOOL bypass_NatLink* is true, the interpretation will be done withouth
     going through NatLink's recognitionMimic function.
     """
-
+    
+    global the_mediator
     if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
-        config.interp.interpret_NL_cmd(utterance)
+        the_mediator.interp.interpret_NL_cmd(utterance)
     else:
-        natlink.recognitionMimic(utterance)
+        words = re.split('\s+', utterance)
+        print '-- mediator.say: words=%s' % repr(words)
+        natlink.recognitionMimic(words)
     show_buff()
 
 def goto(pos):
     """Goes to position *INT pos* of the current buffer"""
-
-    config.interp.app.goto(pos)
+    global the_mediator
+    the_mediator.interp.on_app.goto(pos)
     show_buff()
 
 def goto_line(linenum):
     """Goes to line number *INT linenum* of current source buffer"""
-    config.interp.app.goto_line(linenum)
+    global the_mediator    
+    the_mediator.interp.on_app.goto_line(linenum)
     show_buff()
 
 def select(start, end):
     """Selects from position *start* to position *end* in current buffer"""
-    config.interp.app.select(start, end)
+    global the_mediator    
+    the_mediator.interp.on_app.select(start, end)
     
 def show_buff():
     """Shows content of current source buffer"""
-    config.interp.app.print_buff_content()
+    global the_mediator    
+    the_mediator.interp.on_app.print_buff_content()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""
-    pos = config.interp.app.curr_buffer.cur_pos
-    config.interp.app.goto(pos + steps)
+    global the_mediator        
+    pos = the_mediator.interp.on_app.curr_buffer.cur_pos
+    the_mediator.interp.on_app.goto(pos + steps)
     show_buff()
 
 
@@ -179,11 +177,12 @@ def listen():
         natlink.setMicState('off')
 
 def unresolved_abbreviations():
+    global the_mediator        
     print 'List of unresolved abbreviations\n'
-    sorted_unresolved = config.interp.known_symbols.unresolved_abbreviations.keys()
+    sorted_unresolved = the_mediator.interp.known_symbols.unresolved_abbreviations.keys()
     sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
     for an_abbreviation in sorted_unresolved:
-        symbol_list = config.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        symbol_list = the_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
 
@@ -191,67 +190,86 @@ def clear_symbols():
     #
     # Remove symbols from the Speech Recognition vocabulary
     #
-    config.interp.known_symbols.vocabulary_cleanup()
+    global the_mediator        
+    the_mediator.interp.known_symbols.vocabulary_cleanup()
     
 def quit():
-    global quit_flag
+    global quit_flag, the_mediator
     quit_flag = 1
     
     if sr_interface.speech_able():
-        config.mixed_grammar.unload()
-        config.code_select_grammar.unload()
+        the_mediator.mixed_grammar.unload()
+        the_mediator.code_select_grammar.unload()
         natlink.natDisconnect()
+        
+def simulator_mode(options):
+    """Start mediator in console mode.
+
+    Useful for debugging purposes when using the mediator separately from
+    an external editor.
+
+    **INPUTS**
+
+    *[STR: ANY] options* -- Dictionary of options for the script.
 
 
+    **OUTPUTS**
+
+    *none* -- 
+    """
+
+    global the_mediator
+
+    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    print '-- mediator.simulator_mode: the_mediator=%s' % repr(the_mediator)   
+    the_mediator.configure()
+    if sr_interface.speech_able:
+        natlink.natConnect()
+        natlink.setMicState('off')
+        the_mediator.mixed_grammar.load()
+        the_mediator.mixed_grammar.activate()
+        the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
+        the_mediator.code_select_grammar.activate()
+
+    #
+    # For better error reporting, you can type some instructions here
+    # instead of typing them at the console. The fact that the console
+    # commands are eval'ed means the error reporting isn't great
+    #
+    # e.g. compile_symbols(['D:/Temp/blah.py'])
+    #
+#      open_file('D:/blah.c')
+#      say('for loop index after semi index', bypass_NatLink=1)
+#      quit()
+
+    while (not quit_flag):
+        sys.stdout.write('Command> ')
+        cmd = sys.stdin.readline()
+        try:
+            exec(cmd)
+        except Exception, err:
+            print 'Error executing command.\n'
+            print '   Error type: %s' % err
+            print '   Error data: %s' % err.__dict__
+            
+
+        
 if (__name__ == '__main__'):
+    
+    if sr_interface.speech_able():
+        natlink.natConnect()
+        print '-- main: checked mic state'
 
-    opts, args = util.gopt(['h', None, 's', None])
+    opts, args = util.gopt(['h', None, 's', None, 'p', 50007])
+    print '-- mediator.__main__: opts=%s' % opts
+    
     if opts['h']:
         print __doc__
     elif opts['s']:
-        
         #
-        # Start in console mode with editor simulator.
-        # NOTE: We only activate NatLink if -b option was not set
+        # Run mediator using an editor simulator
         #
-        if sr_interface.speech_able:
-            natlink.natConnect()
-            natlink.setMicState('off')
-            config.mixed_grammar.load()
-            config.mixed_grammar.activate()
-            config.code_select_grammar.load( ['Select', 'Correct'] )
-            config.code_select_grammar.activate()
+        simulator_mode(opts)        
 
-
-#
-# For better error reporting, you can type some instructions here instead
-# of typing them at the console.
-# The fact that the console commands are eval'ed means the error reporting
-# isn't great
-#
-#    compile_symbols(['D:/Temp/blah.py'])
-#    compile_symbols(['Actions_C.py', 'AppState.py', 'CSCmd.py', 'CmdInterp.py', 'Context.py', 'EdSim.py', 'LangDef.py', 'Object.py', 'SelfHandlingExc.py', 'SourceBuff.py', 'SymDict.py', 'VoiceDictation.py', 'actions_C_Cpp.py', 'actions_gen.py', 'actions_py.py', 'config.py', 'cont_gen.py', 'debug.py', 'mediator.py', 'safe_setattr.py', 'util.py', 'vc_globals.py'])
-#    compile_symbols(['D:/VoiceCode/VCode/Data/TestData/large_buff.py'])
-#        open_file('D:/VoiceCode/VCode/Data/TestData/small_buff.c')
-#    say('for a base in')
-#    unresolved_abbreviations()
-#    clear_symbols()
-#    say('horizontal position = 0', bypass_NatLink=1)
-#      say('witharguments', bypass_NatLink=1)
-#    unresolved_abbreviations()
-#    clear_symbols()
-#    quit()
-        
-            
-        while (not quit_flag):
-            sys.stdout.write('Command> ')
-            cmd = sys.stdin.readline()
-            try:
-                exec(cmd)
-            except Exception, err:
-                print 'Error executing command.\n'
-                print '   Error type: %s' % err
-                print '   Error data: %s' % err.__dict__
-
-quit()
+    quit()
         

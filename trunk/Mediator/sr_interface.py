@@ -216,24 +216,35 @@ class CommandDictGrammar(DictGramBase):
             spoken, words[index] = spoken_written_form(words[index])
                 
         self.interpreter.interpret_NL_cmd(string.join(words))
-        self.interpreter.app.print_buff_content()
+        self.interpreter.on_app.print_buff_content()
         
 
 class CodeSelectGrammar(SelectGramBase):
+    """A grammar for selecting part of the visible code.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [CmdInterp] *interpreter=None*-- Command interpreter used to and execute the
+    recognised dictation utterances.
 
-    def __init__(self, app=None):
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+
+    def __init__(self, interpreter=None):
         DictGramBase.__init__(self)
-        self.app = app
+        self.interpreter = interpreter
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
-        self.setSelectText(self.app.curr_buffer.content)
+        self.setSelectText(self.interpreter.on_app.curr_buffer.content)
 
     def gotResults(self, words, startPos, endPos):
         print 'Heard Select command: <%s>, startPos=%s, endPos=%s' % (string.join(words), startPos, endPos)
-        self.app.select(startPos, endPos)
-        self.app.print_buff_content()
+        self.interpreter.on_app.select(startPos, endPos)
+        self.interpreter.on_app.print_buff_content()
 
     def gotResultsObject(self,recogType,resObj):
         # If there are multiple matches in the text we need to scan through
@@ -250,9 +261,9 @@ class CodeSelectGrammar(SelectGramBase):
                 else:
                     region = resObj.getSelectInfo(self.gramObj, i)
 #                    print '-- CodeSelectGrammar.gotResultsObject: processingregion: %s' % repr(region)                    
-                    distance = self.app.curr_buffer.distance_to_selection(region[0], region[1])
+                    distance = self.interpreter.on_app.curr_buffer.distance_to_selection(region[0], region[1])
                     if closest == None or distance < closest:
-                        self.ranges = [self.app.curr_buffer.content[region[0]:region[1]]]
+                        self.ranges = [self.interpreter.on_app.curr_buffer.content[region[0]:region[1]]]
         except natlink.OutOfRange:
             return
 

@@ -17,15 +17,32 @@
 import natlink
 from natlinkutils import *
 
+#
+# Import configuration functions
+#
+from MediatorObject import associate_language, define_language, add_abbreviation, add_csc, add_lsa
+
 from CSCmd import CSCmd
 from LangDef import LangDef
-from config import *
 from cont_gen import *
 from actions_gen import *
 from actions_C_Cpp import *
 from actions_py import *
 
-if (__name__ == '__main__'): natlink.natConnect()
+import sr_interface
+
+if (__name__ == '__main__'):
+    import MediatorObject
+    MediatorObject.to_configure = MediatorObject.MediatorObject()
+    
+    if sr_interface.speech_able():
+        natlink.natConnect()    
+
+
+##############################################################################
+# Customize from here only
+##############################################################################
+
 
 ###############################################################################
 # Associate file extensions to programming languages
@@ -162,7 +179,7 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), type]])
+acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), py_assignment]])
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['is equal to', 'equal to'], meanings=[[ContPy(), py_logical_equal]])

@@ -1,3 +1,4 @@
+-- gopt: opt_dict={'f': 'D:\\VoiceCode\\VCodeMediatorObject\\Admin\\tests_def.py', 'h': None, 'd': None}, args=['all']
 
 
 *******************************************************************************
@@ -297,7 +298,7 @@ Trying to set the value of attribute 'nonexistant'
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-*** Compiling symbols from file: D:\VoiceCode\VCode\Data\TestData\small_buff.c ***
+*** Compiling symbols from file: D:\VoiceCode\VCodeMediatorObject\Data\TestData\small_buff.c ***
 Parsed symbols are: 
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
@@ -310,10 +311,15 @@ y: ['y']
 
 
 Unresolved abbreviations are:
+'float': appears in ['float']
+'move': appears in ['move', 'move_horiz', 'move_vert']
+'void': appears in ['void']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode\Data\TestData\large_buff.py ***
+*** Compiling symbols from file: D:\VoiceCode\VCodeMediatorObject\Data\TestData\large_buff.py ***
 Parsed symbols are: 
 AttributeError: ['attribute error']
 LargeNonObject: ['large non object']
@@ -405,6 +411,70 @@ y: ['y']
 
 
 Unresolved abbreviations are:
+'a': appears in ['a_base']
+'add': appears in ['add_test']
+'age': appears in ['age', 'her_age']
+'an': appears in ['an_attr_init', 'an_attr_def']
+'and': appears in ['and']
+'attribute': appears in ['try_attribute', 'AttributeError']
+'auto': appears in ['auto_test']
+'base': appears in ['a_base']
+'bases': appears in ['__bases__', 'exclude_bases']
+'class': appears in ['this_class', 'attrs_this_class', 'class']
+'code': appears in ['code', 'code_file']
+'constr': appears in ['profConstrLargeNonObj', 'profConstrSmallObj', 'profConstrLargeObj', 'profConstrSmallNonObj']
+'construct': appears in ['deep_construct']
+'deep': appears in ['deep_construct']
+'else': appears in ['else']
+'error': appears in ['AttributeError']
+'except': appears in ['except']
+'exceptions': appears in ['exceptions']
+'exclude': appears in ['exclude_bases']
+'exec': appears in ['exec']
+'execfile': appears in ['execfile']
+'expandvars': appears in ['expandvars']
+'file': appears in ['code_file']
+'float': appears in ['float']
+'for': appears in ['for']
+'get': appears in ['profGetLargeNonObj', 'profGetSmallNonObj', 'profGetSmallObj', 'profGetLargeObj']
+'has': appears in ['has_key']
+'her': appears in ['her_age']
+'if': appears in ['if']
+'import': appears in ['import']
+'in': appears in ['in']
+'index': appears in ['index']
+'items': appears in ['items']
+'key': appears in ['has_key']
+'large': appears in ['LargeObject', 'profConstrLargeObj', 'profSetLargeNonObj', 'profConstrLargeNonObj', 'profGetLargeNonObj', 'profGetLargeObj', 'profSetLargeObj', 'LargeNonObject']
+'move': appears in ['move', 'move_horiz', 'move_vert']
+'name': appears in ['__name__', 'name']
+'non': appears in ['profSetLargeNonObj', 'profConstrLargeNonObj', 'profGetLargeNonObj', 'SmallNonObject', 'profSetSmallNonObj', 'profConstrSmallNonObj', 'profGetSmallNonObj', 'LargeNonObject']
+'not': appears in ['not']
+'num': appears in ['num_times']
+'obj': appears in ['profConstrLargeObj', 'profSetLargeNonObj', 'profGetLargeNonObj', 'profGetLargeObj', 'profConstrSmallObj', 'profSetLargeObj', 'profGetSmallNonObj', 'obj', 'profConstrLargeNonObj', 'profSetSmallObj', 'profSetSmallNonObj', 'profConstrSmallNonObj', 'profGetSmallObj']
+'object': appears in ['LargeObject', 'profObject', 'Object', 'LargeNonObject', 'SmallNonObject', 'SmallObject']
+'operation': appears in ['operation']
+'pass': appears in ['pass']
+'posixpath': appears in ['posixpath']
+'profile': appears in ['profile']
+'range': appears in ['range']
+'run': appears in ['run']
+'self': appears in ['self', 'self_test']
+'sep': appears in ['sep']
+'set': appears in ['profSetSmallObj', 'profSetSmallNonObj', 'profSetLargeNonObj', 'profSetLargeObj']
+'setattr': appears in ['setattr']
+'small': appears in ['profSetSmallObj', 'SmallNonObject', 'profSetSmallNonObj', 'SmallObject', 'profConstrSmallObj', 'profConstrSmallNonObj', 'profGetSmallNonObj', 'profGetSmallObj']
+'stdout': appears in ['stdout']
+'str': appears in ['str']
+'superclasses': appears in ['attrs_superclasses']
+'test': appears in ['auto_test', 'prof_test', 'add_test', 'self_test']
+'this': appears in ['this_class', 'attrs_this_class']
+'times': appears in ['num_times']
+'try': appears in ['try_attribute', 'try']
+'void': appears in ['void']
+'write': appears in ['write']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of compilation test ***
 

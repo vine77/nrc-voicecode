@@ -1,9 +1,12 @@
+# print '-- SymDict.py: imported'
+
 from Object import Object
 from SourceBuff import SourceBuff
 from LangDef import LangDef
-import auto_test, config, sr_interface, vc_globals
-#import VoiceDictation
+import auto_test, sr_interface, vc_globals
 import os, re, string
+import CmdInterp, EdSim
+
 
 language_definitions={}
 
@@ -552,20 +555,4 @@ class SymDict(Object):
             print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
         print '\n*** End of compilation test ***\n'
-
-
-def self_test():
-    """Self test for SymDict"""
-    
-    a_dictionary=SymDict()
-    a_dictionary.compilation_test(vc_globals.test_data + os.sep + 'small_buff.c')
-    a_dictionary.compilation_test(vc_globals.test_data + os.sep + 'large_buff.py')
-
-
         
-
-
-auto_test.add_test('SymDict', self_test, desc='self-test for SymDict.py')
-
-if (__name__ == '__main__'):
-    self_test()

@@ -363,56 +363,6 @@ class EdSim(AppState):
 
 
 
-###############################################################################
-# Regression testing
-###############################################################################
 
-def self_test():
-    """Self test for EdSim.py."""
-
-    test_buff = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Data' + os.sep + 'TestData' + os.sep + 'small_buff.c')
-    sim = EdSim()
-    test_buff2 = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Data' + os.sep + 'TestData' + os.sep + 'small_buff2.c')
-
-
-    print ">>> Testing EdSim.py"
-    print "\n\n>>> Opening a buffer"
-    sim.open_file(test_buff)    
-    sim.print_buff_content()
-
-    print "\n\n>>> Moving to position 5"
-    sim.move_to(5)
-    sim.print_buff_content()
-
-    print "\n\n>>> Testing breadcrumbs"
-    print "\n>>> Dropping one here"; sim.print_buff_content()
-    sim.drop_breadcrumb()
-    sim.move_to(10)
-    sim.drop_breadcrumb()
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
-    print "\n>>> Popping 2 crumbs -> end up here:"
-    sim.pop_breadcrumbs(num=2)
-    sim.print_buff_content()
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
-    sim.drop_breadcrumb()
-    sim.move_to(10)
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
-    sim.drop_breadcrumb()
-    sim.move_to(20)
-    sim.print_buff_content()
-    sim.pop_breadcrumbs()
-    print "\n>>> Popping 1 crumb -> end up here..."    
-    sim.print_buff_content()
-
-    print '\n\n>>> Testing code indentation. Inserting for loop.'
-    sim.goto(42)
-    sim.insert_indent('for (ii=0; ii <= maxValue; ii++)\n{\n', '\n}\n')
-    sim.print_buff_content()
-
-
-auto_test.add_test('EdSim', self_test, desc='self-test for EdSim.py')
-
-if (__name__ == '__main__'):
-    self_test()
 
 

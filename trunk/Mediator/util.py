@@ -51,54 +51,69 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
     *opts, args* -- *opts* is a dictionary of options names and
     values. *args* is the list of arguments.
     """
+
+    opt_dict = {}
+    args = []    
+    
     #
     # Set default values of options
     #
     index = 0
-    opt_dict = {}
     while (index < len(opt_defs)):
         opt_name = opt_defs[index]
         opt_default = opt_defs[index + 1]
         opt_name = re.match('^(.*?)(=*)$', opt_name).groups()[0]        
         opt_dict[opt_name] = opt_default
         index = index + 2
+#    print '-- util.gopt: initialised opt_dict=%s' % repr(opt_dict)
 
 
     #
-    # Parse command line
+    # Set options specifications to be used by getopt.
     #
-    args = []
     short_opts = ''
     long_opts = []
 
+    requires_val = {}
+    is_long = {}    
     index = 0
     while (index < len(opt_defs)):
         opt_name = opt_defs[index]
         opt_default = opt_defs[index + 1]
         index = index + 2
         match = re.match('^(.)(.*?)(=*)$', opt_name)
-        opt_name = match.groups()[0]+ match.groups()[1]
-        is_long = 0
-        requires_val = 0
-        if (match.groups()[1] != ''):
-            is_long = 1
-        if (match.groups()[2] != ''):
-            requires_val = 1
+        opt_name = match.group(1)+ match.group(2)
+        if (match.group(2) != ''):
+            is_long[opt_name] = 1
+        if (match.group(3) != ''):
+            requires_val[opt_name] = 1
             
-        if (is_long):
-            long_opts = long_opts + [opt_name + match.groups()[2]]
+        if is_long.has_key(opt_name):
+            long_opts = long_opts + [opt_name + match.group(3)]
         else:
             short_opts = short_opts + opt_name
-            if (requires_val):
+            if requires_val.has_key(opt_name):
                 short_opts = short_opts + ':'
-    options, args = getopt.getopt(cmd, short_opts, long_opts)
+
+    #
+    # Parse the command line options
+    #
+#    print '-- util.gopt: calling getopt with cmd=%s, short_opts=%s, long_opts=%s' % (repr(cmd), repr(short_opts), repr(long_opts))                
+    options, args = getopt.getopt(cmd, short_opts, long_opts)    
+#    print '-- util.gopt: options=%s, args=%s' % (repr(options), repr(args))
+
+
+    #
+    # Assign parsed values to the options dictionary.
+    #
+#    print '-- util.gopt: is_long=%s, requires_val=%s' % (repr(is_long), repr(requires_val))
     for an_opt in options:
         opt_name = an_opt[0]
         a_match = re.match('^(-*)(.*)$', opt_name)
-        opt_name = a_match.groups()[1]
-        if (a_match.groups()[0] == '-'):
+        opt_name = a_match.group(2)
+        if not requires_val.has_key(opt_name):
             #
-            # getopt.getopt returns None as the value for short options
+            # getopt.getopt returns None as the value for BOOLEAN options
             # but we want it to be 1, otherwise it makes it look like the
             # options was off
             #
@@ -113,7 +128,7 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
             opt_val = an_opt[1]
         opt_dict[opt_name] = opt_val
 
-#    print "-- gopt: opt_dic=%s, args=%s" % (str(opt_dict)    , str(args))        
+    print "-- gopt: opt_dict=%s, args=%s" % (str(opt_dict)    , str(args))        
     return opt_dict, args
 
 
