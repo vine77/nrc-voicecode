@@ -94,6 +94,11 @@ py_method_declaration = \
     ActionInsert(code_bef='def ', code_after='(self):\n\t',
                  docstring="""Types template code for a method""")
 
+py_constructor_definition = \
+    ActionInsert(code_bef='def __init__(self', code_after='):\n\t',
+                 docstring="""Types template code for a constructor""")
+
+
 py_function_declaration = \
     ActionInsert(code_bef='def ', code_after='():\n\t',
                  docstring="""Types template code for a function""")

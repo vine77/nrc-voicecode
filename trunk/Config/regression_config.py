@@ -97,6 +97,8 @@ abbreviations_in(abbrev_files)
 
 # generic
 
+add_capitalization_word_set(manual_formatting)
+
 add_csc_set(mediator_ctrl)
 add_csc_set(out_of_balance)
 add_csc_set(indent_cmds)
@@ -189,6 +191,7 @@ std_quotes.create(interpreter)
 # add sets for dictating 2-digit numbers
 #######################################
 
-std_small_numbers.create(interpreter)
+std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
+
 
 

@@ -46,7 +46,8 @@ from config_helpers import *
 import CmdInterp
 
 from CSCmd import CSCmd
-from CmdInterp import LSAlias
+from CmdInterp import LSAlias, CapitalizationWord
+from CmdInterp import LSAliasSet, CSCmdSet, CapitalizationWordSet
 from LangDef import LangDef
 from cont_gen import *
 from actions_gen import *
@@ -273,8 +274,17 @@ alt_US_punc.add(";", ['semi'], no_space_before)
 
 
 
-#
 # Generic balanced expressions (e.g. "", '', (), [], {})
+#
+#       e.g. 'open paren' -> '(', 'close paren' -> ')'
+#
+#    We also define an LSA for typing an empty balanced expression and
+#    putting the cursor after it.
+#       e.g. 'empty parens' -> '()^'
+#
+#    We also define a CSC for typing an empty balanced expression and moving
+#    the cursor in between.
+#       e.g. 'between parens' -> '(^)'
 #
 
 std_US_grouping = \
@@ -333,19 +343,9 @@ alt_US_quotes.add('`', ['backquote', 'reverse-quote'],
 #   ['backquotes', 'reverse-quotes'], no_empty = 1)
 
 
-#
-# Generic balanced expressions (e.g. "", '', (), [], {})
-#
-#       e.g. 'open paren' -> '(', 'close paren' -> ')'
-#
-#    We also define an LSA for typing an empty balanced expression and
-#    putting the cursor after it.
-#       e.g. 'empty parens' -> '()^'
-#
-#    We also define a CSC for typing an empty balanced expression and moving
-#    the cursor in between.
-#       e.g. 'between parens' -> '(^)'
-#
+######################################################################
+# Sets to be filled in by user_config.py with help from config_helpers
+######################################################################
 
 #
 # Letters using military pronunciation
@@ -361,9 +361,41 @@ military_letters = LSAliasSet(name = 'military letters',
 escaped_characters = CSCmdSet(name = 'escaped characters', 
     description = 'characters escaped with backslashes')
 
+######################################################################
+# Formatting commands
+######################################################################
+
+manual_formatting = CapitalizationWordSet(name = 'manual formatting',
+    descriptions = 'commands for manual formatting within symbols')
+
+word = CapitalizationWord(['Cap'], caps = 'cap')
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['All-Caps'], caps = 'all-caps')
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['No-Caps'], caps = 'no-caps')
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['All-Caps On'], caps = 'all-caps', one_word = 0)
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['Caps-On'], caps = 'cap', one_word = 0)
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['No-Caps-On'], caps = 'no-caps', one_word = 0)
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['All-Caps Off'], caps = 'normal', one_word = 0)
+manual_formatting.add_capitalization_word(word)
+
+word = CapitalizationWord(['No-Caps-Off'], caps = 'normal', one_word = 0)
+manual_formatting.add_capitalization_word(word)
+
+######################################################################
+# Jumping out of balanced expressions
+######################################################################
 #
-# Commands for jumping to a specific punctuation mark
-# Not exhaustive.
 # This really calls for some sort of grammar to automatically generate the
 # spoken forms. But for now, exhaustively (or "exhaustingly" ;-) listing all
 # possible spoken forms will have to do (although it's definitely exhausting"
@@ -872,6 +904,7 @@ misc_python.add_lsa(LSAlias(['self dot'], {'python': 'self.'}, spacing =
 #  choosing between homophonic symbols (e.g. chose most recent, 
 #  choose one with closest occurence to the cursor, etc...)
 #            
+
 misc_python.add_lsa(LSAlias(['self'], {'python': 'self'}, spacing =
     no_space_after))    
     
@@ -881,6 +914,12 @@ acmd = CSCmd(spoken_forms=['continue statement'],
              meanings={ContPy(): ActionInsert('\\\n', '', 
                                      spacing = no_space_after)},
              docstring='python lamdba function')
+
+misc_python_cmds.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['define in it', 'define init', 'define constructor'],
+             meanings={ContPy(): py_constructor_definition},
+             docstring='constructor definition')
 
 misc_python_cmds.add_csc(acmd)
 

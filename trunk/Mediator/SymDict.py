@@ -404,6 +404,8 @@ class ManualCaps(Object):
         state = self.current_caps
         if self.one_word:
             self.current_caps = 'normal'
+        trace('ManualCaps.capitalization_state', 
+            'state = %s' % state)
         return state
 
     def change_caps(self, caps = None, one_word = 1):
@@ -424,6 +426,8 @@ class ManualCaps(Object):
         
         *none*
         """
+        trace('ManualCaps.change_caps', 
+            'caps, one_word = %s, %d' % (caps, one_word))
         self.current_caps = caps
         self.one_word = one_word
 
@@ -549,7 +553,9 @@ class FixedCaps(ManualCaps):
         """
         state = ManualCaps.capitalization_state(self)
         if state == 'normal':
-            return self.default_caps
+            state = self.default_caps
+        trace('FixedCaps.capitalization_state', 
+            'effective state = %s' % state)
         return state
 
 class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
