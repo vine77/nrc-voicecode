@@ -109,7 +109,8 @@ class AppState(Object):
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'delete', 'goto', 'goto_line', 'move_relative_line',
     'move_relative_page', 'search_for',
-    'refresh_if_necessary', 'refresh']
+    'refresh_if_necessary', 'refresh', 'incr_indent_level',
+    'decr_indent_level']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:

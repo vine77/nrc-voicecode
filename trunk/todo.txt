@@ -4,6 +4,34 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+Performance
+-----------
+
+Command translation seems very slow. Profile it to figure out what is
+making it so slow.
+
+Also, startup is very slow. Why?
+
+
+BUGS: Regression test and pickle
+--------------------------
+
+David wrote:
+
+During one of my tests from the command line, I did
+say(['remove','test']) and the interpreter typed remove_test.  However,
+when I ran the mediator again, it had apparently pickled this new symbol,
+but it tried to add it as 'remove_test\ ', which caused an exception in
+addWord, crashing the mediator.  The only way I was able to get the
+mediator to run again was to delete the symdict.pkl file.  Some
+of the problems getting the regression test to come out the same way may
+therefore be due to the change in the set of pickled symbols.
+
+Q1: Why did the mediator try to add the symbol as 'remove_test\ '?
+
+Q2: Why did the regression test use the pickle file? 
+
+
 BUG
 ---
 
@@ -42,6 +70,7 @@ in a row.
 The addWord behaviour seems to be different when the new symbol is
 initially added, since that doesn't trigger the error.
 
+
 Note that the SymDict is pickled on exit even if you don't save your
 speech files.  This should probably be changed.
 
@@ -54,12 +83,17 @@ forms but at least makes it possible to continue testing without having
 to be familiar enough with the mediator code to know to find and delete
 the pickle file.
 
-Performance
------------
 
-Command translation seems very slow. Profile it to figure out what is
-making it so slow.
+BUG: Code indentation back indentation
+--------------------------------------
 
+BUG #1: Doesn't work on first line of a buffer because the line is not preceded by a '\n'. The fix is to modify decr_indent_level and incr_indent_level so that they check if the first line is in the range and indent it before calling indent_by_spaces. 
+
+Note: we don't want indent_by_spaces to do a substitution on '(^\n)'
+because it is sometimes used to indent code that's in the middle of a
+line and that would result in the addition of spaces before that code.
+
+BUG #2: In gui_sim.py, 'back indent' and 'indent' don't work properly. It se
 
 Keep doing that
 ---------------

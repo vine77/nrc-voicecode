@@ -23,7 +23,7 @@
 import re, string, sys
 
 from Object import Object
-import SourceBuff
+import SourceBuffIndent
 import find_difference
 
 
@@ -33,7 +33,7 @@ import find_difference
 print_window_size = 3
 
 
-class SourceBuffEdSim(SourceBuff.SourceBuff):
+class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
     """concrete class representing a disconnected source buffer for the
     editor simulator EdSim.
 
@@ -53,18 +53,22 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
     *none*
     """
     
-    def __init__(self, init_pos=0, init_selection = None,
-	initial_contents="", window_size = print_window_size,
-	global_selection = 1, **attrs):
+    def __init__(self, indent_level=3, indent_to_curr_level=1, init_pos=0,
+                 init_selection = None, initial_contents="",
+                 window_size = print_window_size, global_selection = 1,
+                 **attrs):
+
 
         self.deep_construct(SourceBuffEdSim,
-                            {'pos': init_pos, \
-                             'selection': init_selection, \
-                             'content': initial_contents, \
-			     'window_size': window_size, \
-			     'global_selection': global_selection, \
-			     }, \
-                            attrs \
+                            {'pos': init_pos, 
+                             'selection': init_selection, 
+                             'content': initial_contents, 
+			     'window_size': window_size, 
+			     'global_selection': global_selection,
+                             'indent_level': indent_level,
+                             'indent_to_curr_level': indent_to_curr_level,
+			     }, 
+                            attrs
                             )
 
 	self.pos = self.make_within_range(self.pos)
@@ -273,40 +277,6 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         self.move_relative_line(direction=direction, num=num_lines)
 
 
-    def insert_indent(self, code_bef, code_after, range = None):
-        """Insert code into source buffer and indent it.
-
-        Replace code in range 
-        with the concatenation of
-        code *STR code_bef* and *str code_after*. Cursor is put right
-        after code *STR bef*.
-
-	**INPUTS**
-
-	*STR* code_bef -- code to be inserted before new cursor location
-        
-	*STR* code_bef -- code to be inserted after new cursor location
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-
-	if range == None:
-	    range = self.get_selection()
-	range = self.make_valid_range(range)
-        self.insert(code_bef, range = range)
-	start = range[0]
-        self.indent((start, self.cur_pos()))
-        self.app.drop_breadcrumb()
-        start = self.cur_pos()
-        self.insert(code_after)
-        self.indent((start, self.cur_pos()))
-        self.app.pop_breadcrumbs()
-
     def insert(self, text, range = None):
         """Replace text in range with 
         with text
@@ -344,37 +314,8 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 
 	*none*
 	"""
-        #
-        # In this simulator editor, we indent every line by 3 spaces
-        #
-	if range == None:
-	    range = self.get_selection()
-	range = self.make_valid_range(range)
-        padding = '   '
-	start, end = range
-        code_to_indent = self.get_text(start, end)
-        self.delete(range)
-        lines_to_indent = re.split('\n', code_to_indent)
 
-        #
-        # Check to see if first bit is in the middle of a line
-        #
-        if len(lines_to_indent) > 0:
-            a_line = lines_to_indent[0]
-            if len(lines_to_indent) > 1:
-                lines_to_indent = lines_to_indent[1:]
-            else:
-                lines_to_indent = []
-            if self.len() == 0 or self.get_text(start-1, start)== '\n':
-                self.insert(padding + a_line)
-            else:
-                self.insert(a_line)
-            for a_line in lines_to_indent:
-                self.insert('\n   ' + a_line)
-                if (len(code_to_indent) > 0 and code_to_indent[len(code_to_indent) - 1] == '\n'):
-                    print '\n'
-
-
+        pass
 
 
     def delete(self, range = None):

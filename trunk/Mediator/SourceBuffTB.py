@@ -24,11 +24,11 @@
 
 import debug
 import re, string, sys
-from SourceBuff import *
+import SourceBuffIndent
 
 from Object import Object
 
-class SourceBuffTB(SourceBuff):
+class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
     """implementation of (most of) SourceBuff as a wrapper around an
     object which inherits multiple interfaces: TextBuffer, VisibleBuffer, 
     and NumberedLines.
@@ -226,37 +226,7 @@ class SourceBuffTB(SourceBuff):
 	    num = - num
 	current = self.underlying.line_num_of()
 	self.underlying.goto_line(current + num)
-
-    def insert_indent(self, code_bef, code_after, range = None):
-        """Insert code into source buffer and indent it.
-
-        Replace code in range 
-        with the concatenation of
-        code *STR code_bef* and *str code_after*. Cursor is put right
-        after code *STR bef*.
-
-	**INPUTS**
-
-	*STR* code_bef -- code to be inserted before new cursor location
-        
-	*STR* code_bef -- code to be inserted after new cursor location
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        
-	if range == None:
-	    range = self.get_selection()
-	range = self.make_valid_range(range)
-	self.insert(code_bef, range=range)
-	self.app.drop_breadcrumb()
-	self.insert(code_after)
-	self.app.pop_breadcrumbs()
-        
+       
     def insert(self, text, range = None):
         """Replace text in range with 
         with text

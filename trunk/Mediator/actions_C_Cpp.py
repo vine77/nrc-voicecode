@@ -26,11 +26,11 @@ from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
 
 c_simple_for = \
     ActionInsert(code_bef='for (',
-                 code_after='=0;  <= ; ++)\n{\n\n}\n',
+                 code_after='=0;  <= ; ++)\n\t{\n\t\n\t}\n',
                  docstring = """Insert template code for a simple C for loop""")
 
 c_simple_while = \
-    ActionInsert(code_bef='while (', code_after=')\n{\n}',
+    ActionInsert(code_bef='while (', code_after=')\n\t{\n\t}',
                  docstring = """Insert template code for a simple C for loop""")
 
 c_goto_body = \
@@ -39,7 +39,7 @@ c_goto_body = \
 
 cpp_class_definition = \
     ActionInsert(code_bef='class ',
-                 code_after='{\n\npublic:\n\nprivate:\n}',
+                 code_after='{\n\npublic:\n\t\nprivate:\n\t}',
                  docstring = """Insert template code for a C++ class""")
     
 cpp_subclass = \
