@@ -88,9 +88,6 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
     def line_num_of(self, position = None):
 	return self.lines_srv.line_num_of(position)
 
-    def number_lines(self, astring, startnum=1):
-        return self.lines_srv.number_lines(astring, startnum)
-
     def beginning_of_line(self, pos):
         return self.lines_srv.beginning_of_line(pos)
 

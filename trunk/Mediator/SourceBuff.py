@@ -495,6 +495,7 @@ class SourceBuff(ChildObject):
         
 	debug.virtual('SourceBuff.line_num_of')
 
+
     def number_lines(self, astring, startnum=1):
         """Assign numbers to lines in a string.
 
@@ -506,11 +507,25 @@ class SourceBuff(ChildObject):
         *INT startnum* is the number of the first line in *astring*
         
         Returns a list of pairs *[(INT, STR)]* where first entry is
-        the line number and the second entry is the line.
-        
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
+        the line number and the second entry is the line."""
 
-        debug.virtual('SourceBuff.number_lines')
+        #
+        # Note: need to split using regexp self.buff.newline_regexp()
+        #       but for now this will do.
+        #
+
+        regexp = re.compile(self.newline_regexp())
+        lines = regexp.split(astring)
+        result = []
+
+        if (astring != ''):
+	    lineno = startnum                
+            for aline in lines:
+                result[len(result):] = [(lineno, aline)]
+                lineno = lineno + 1
+            
+        return result
+
 
 
     def len(self):
@@ -1382,7 +1397,7 @@ class SourceBuff(ChildObject):
         #
         # Figure out the first and last line to be printed
         #
-        if from_line == None:
+        if from_line == None or to_line == None:
            from_line, to_line = self.lines_around_cursor()
 
         #
@@ -1430,7 +1445,7 @@ class SourceBuff(ChildObject):
         *INT to_line* -- Last line of the window.
         """
 
-        curr_line = self.line_num_of(self.cur_pos())        
+        curr_line = self.line_num_of(self.cur_pos())
         from_line = curr_line - self.print_nlines
         to_line = curr_line + self.print_nlines
 	if from_line < 1:

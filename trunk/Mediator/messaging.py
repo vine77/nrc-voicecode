@@ -24,7 +24,7 @@
 import re, sys, types
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
 
-import Object
+import debug, Object
 
 class Messenger(Object.Object):
    
@@ -803,9 +803,14 @@ class MessEncoderWDDX(MessEncoder):
 
 def messarg2int(messarg):
     """Converts a message argument to an int.
-    
-    If the message argument is the string *'None'*, convert it to
-    the *None* object.
+
+    Convert the message argument to the value *None* if it is one of the
+    following:
+
+       *''* (the string)
+       *'None'* (the string)
+       *'[]'* (the list, not the string... this corresponds to the EmacsLisp
+       *nil* value)
     
     **INPUTS**
     
@@ -816,15 +821,16 @@ def messarg2int(messarg):
     
     INT | None *as_int* -- The message argument converted to int.
     """
-                 
-    if messarg == 'None' or messarg == '':
+
+    if messarg == 'None' or messarg == '' or messarg == []:
         #
         # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
-        # while MessEncoderWDDX encodes it as the empty string
+        # while MessEncoderWDDX encodes it as the empty string, and
+        # EmacsLisp's nil value gets encoded as an empty list.
         #        
         as_int = None
     else:
-        as_int = int(messarg)
+        as_int = int(float(messarg))
         return as_int
 
 
@@ -1103,7 +1109,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
 #        print '-- decode_data_item: str_item=\'%s\'' % str_item
         a_match = re.match('\s*(\d+)\s*([<\\[{])', str_item)
-        length = int(a_match.group(1))
+        length = int(float(a_match.group(1)))
         delim_open = a_match.group(2)
 
         #
