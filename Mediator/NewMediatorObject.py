@@ -754,6 +754,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['clear_standard_symbols_file_list'] = do_nothing            
             config_dict['standard_symbols_in'] = do_nothing
             config_dict['abbreviations_in'] = do_nothing
+            config_dict['add_identifier'] = do_nothing
+            config_dict['set_builder_preferences'] = do_nothing
             config_dict['print_abbreviations'] = do_nothing
             config_dict['text_mode_toggling'] = do_nothing
         else:
@@ -770,6 +772,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['clear_standard_symbols_file_list'] = self.clear_standard_symbols_file_list          
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['abbreviations_in'] = self.abbreviations_in
+            config_dict['add_identifier'] = self.add_identifier
+            config_dict['set_builder_preferences'] = self.set_builder_preferences
             config_dict['print_abbreviations'] = self.print_abbreviations
             config_dict['text_mode_toggling'] = self.text_mode_toggling            
 
@@ -1315,6 +1319,42 @@ class NewMediatorObject(Object.OwnerObject):
 
     def print_abbreviations(self, show_unresolved=0):
         self.interp.print_abbreviations(show_unresolved)
+
+    def add_identifier(self, identifier, parent = None):
+        """defines a new identifier type for the SymBuilderFactory
+
+        *STR identifier* -- name of the new identifier type (must NOT be
+        a known identifier type, or a RuntimeError will be raised)
+
+        *STR parent* -- name of the parent (must be a known identifier
+        type, or None, or a RuntimeError will be raised)
+
+        **OUTPUTS**
+        """
+        self.interp.add_identifier(identifier, parent = parent)
+ 
+    def set_builder_preferences(self, builders, identifier = None, 
+        language = None):
+        """establishes the preferred order for symbol formatting styles
+        for a given language and identifier type
+
+        **INPUTS**
+
+        *[STR] builders* -- prioritized list of names of registered SymBuilder
+        objects. If one of the builders is unknown, set_preferences raises 
+        a RuntimeError.
+
+        *STR identifier* -- name of the identifier to which these
+        preference apply, or None to set general preferences for all
+        identifiers without their own preferences.  If the identifier type 
+        is unknown, set_preferences raises a RuntimeError.
+
+        *STR language* -- name of the language to which these
+        preference apply, or None to set general preferences for all
+        languages
+        """
+        self.interp.set_builder_preferences(builders, identifier =
+            identifier, language = language)
 
     def add_module(self, module):
         """add a new KnownTargetModule to the AppMgr/RecogStartMgr

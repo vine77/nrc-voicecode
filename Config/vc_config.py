@@ -1096,6 +1096,23 @@ c_preprocessor.add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
 ###############################################################################
 
 
+######################################################################
+# Symbol formatting
+######################################################################
+
+add_identifier('class')
+add_identifier('object instance')
+add_identifier('function')
+add_identifier('method', 'function')
+add_identifier('private method', 'method')
+add_identifier('operator', 'method')
+add_identifier('attribute')
+add_identifier('private attribute', 'attribute')
+
+set_builder_preferences(['std_underscore', 'std_intercaps',
+    'std_all_caps_underscore'])
+set_builder_preferences(['std_intercaps', 'std_underscore',
+    'std_all_caps_underscore'], identifier = 'class')
 
 ###############################################################################
 # Add words which are missing from the SR vocab
