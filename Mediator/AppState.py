@@ -183,20 +183,25 @@ class AppState(Object):
         
         debug.not_implemented()
 
-    def search_for(self, regexp, where=1, f_name=None):
+    def search_for(self, regexp, direction=1, num=1, where=1, f_name=None):
         
         """Moves cursor to the next occurence of regular expression
            *STR regexp* in buffer with file name *STR f_name*.
 
-           If *where > 0*, move cursor after the occurence, otherwise,
-           move it before.
+           *INT* direction -- if positive, search forward, otherwise
+            search backward
 
-           Returns 1 if and only if an occurence was found, and 0 otherwise.               
-           If *f_name* is *None*, [self.curr_buffer].
+           *INT* num -- number of occurences to search for
 
-           .. [self.curr_buffer] AppState
-        """
+           *INT* where -- if positive, move cursor after the occurence,
+           otherwise move it before
 
+           *STR* f_name -- name of the file in buffer where the search
+            should be done. If *None*, use [self.curr_buffer].
+
+           Returns 1 if and only if an occurence was found, and 0 otherwise.                          
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+        
         debug.not_implemented()
 
 

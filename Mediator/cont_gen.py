@@ -24,3 +24,11 @@ class ContPy(Context):
         return (buff != None and  buff.language == 'python')
 
 
+class ContAny(Context):
+    """This context always applies."""
+
+    def __init__(self, **attrs):
+        self.deep_construct(ContAny, {}, attrs)
+        
+    def applies(self, app):
+        return 1

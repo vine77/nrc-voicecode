@@ -47,7 +47,7 @@ class CmdInterp(Object, VoiceDictation):
     def refresh_dict_buff(self, moduleInfo):
         """Refresh the dictation object's internal buffer."""
 
-        print '-- CmdInterp.refresh_dict_buff: called'
+#        print '-- CmdInterp.refresh_dict_buff: called'
         buff = self.app.curr_buffer
         text = buff.content
         sel_start = buff.selection_start
@@ -82,7 +82,7 @@ class CmdInterp(Object, VoiceDictation):
 
          *INT sel_start, sel_end* are the start and end position of the selection after the recognition"""
 
-        print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
+#        print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
 
         self.dictation_object.setLock(1)
         
@@ -110,13 +110,16 @@ class CmdInterp(Object, VoiceDictation):
             # Sort spoken forms in decreasing order of length so that
             # longer expressions will be used in priority
             #            
-            spoken_forms = self.cmd_index.keys()
+            all_spoken_forms = self.cmd_index.keys()
 
             def cmp(x, y):
                 if (len(x) < len(y)): return 1
                 else: return -1
-            spoken_forms.sort(cmp)
-            for a_spoken_form in spoken_forms:
+            all_spoken_forms.sort(cmp)
+
+#            print '-- CmdInterp.all_cmds_regexp: sorted all_spoken_forms=%s' % str(all_spoken_forms)
+            
+            for a_spoken_form in all_spoken_forms:
                 #
                 # Allow arbitrary number of spaces between words
                 #
@@ -160,10 +163,12 @@ class CmdInterp(Object, VoiceDictation):
         # Interpret the begining of the command until nothing left to
         # interpret.
         #
+#        print '-- CmdInterp.interpret_NL_cmd: self.all_cmds_regexp()=%s' % self.all_cmds_regexp()
         regexp = '^(\s*)(' + self.all_cmds_regexp() + ')(\s*)'
         while (not cmd == ''):
             amatch = re.match(regexp, cmd)
             if (amatch):
+
                 #
                 # Command starts with the spoken form of a CSC. Try each 
                 # CSC that has this spoken form
@@ -172,6 +177,7 @@ class CmdInterp(Object, VoiceDictation):
                 trailblanks = amatch.group(3)
                 after = cmd[amatch.end():]
                 orig_spoken_form = amatch.group(2)
+#                print '-- CmdInterp.interpret_NL_cmd: matched spoken form \'%s\'' % orig_spoken_form                                
                 indexed_spoken_form = orig_spoken_form
                 re.sub('\s+', ' ', indexed_spoken_form)
                 CSCs = self.cmd_index[string.lower(indexed_spoken_form)]
@@ -231,17 +237,16 @@ class CmdInterp(Object, VoiceDictation):
                 # Already indexed. Just add to the list of CSCs for that
                 # spoken form
                 #
-                spoken_forms = self.cmd_index[a_spoken_form]
-                spoken_forms[len(spoken_forms):] = acmd
+                cmds_this_spoken_form = self.cmd_index[a_spoken_form]
+                cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
             else:
                 #
                 # First time indexed. Create a new list of CSCs for that
                 # spoken form, and add it to the SR vocabulary
-                #                
+                #
                 self.cmd_index[a_spoken_form] = [acmd]
                 if not os.environ.has_key('VCODE_NOSPEECH'):
                     natlink.addWord(a_spoken_form)
-                
 
 def self_test():    
     #

@@ -19,3 +19,19 @@ add_csc(spoken_forms=['for loop'], meanings=[[ContC, c_simple_for]])
 
 i.e. the user forgets to add () after ContC, which means he is making
 the context be the ContC class itself (as opposed to a ContC INSTANCE)
+
+
+Grammar for spoken forms
+------------------------
+
+Instead of having to encode all the spoken forms of a command from
+scratch, it would be better to allow grammar rules instead.
+
+For example instead of:
+
+spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;']
+
+we could have:
+
+spoken_forms=['after* (semi|semicolon|;)', 'go after* (semi|semicolon|;)']
+
