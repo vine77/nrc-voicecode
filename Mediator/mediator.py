@@ -88,6 +88,7 @@ the_mediator = None
 # Handle of the DOS window in which mediator is running
 #
 sr_interface.connect()
+# print natlink.getCurrentModule()
 console_win_handle = natlink.getCurrentModule()[2]
 
 def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):

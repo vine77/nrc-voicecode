@@ -7,31 +7,31 @@
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class DedicatedModule</title>
+<title>Class LocalInterpreter</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class DedicatedModule</H1>
+<H1 CLASS="ClassName">class LocalInterpreter</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="KnownTargetModule.html">KnownTargetModule</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">KnownTargetModule.DedicatedModule<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">KnownTargetModule.LocalInterpreter<BR>
 &nbsp;&nbsp;<A HREF="KnownTargetModule.KnownTargetModule.html">KnownTargetModule.KnownTargetModule</A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DedicatedModule</SPAN>(<A CLASS="DocLink" HREF="KnownTargetModule.KnownTargetModule.html">KnownTargetModule</A>):
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.dedicated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.dedicated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DedicatedModule.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DedicatedModule.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">LocalInterpreter</SPAN>(<A CLASS="DocLink" HREF="KnownTargetModule.KnownTargetModule.html">KnownTargetModule</A>):
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title_varies=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.dedicated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.dedicated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
+    <A CLASS="DocLink" HREF="#KnownTargetModule.LocalInterpreter.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.LocalInterpreter.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -51,17 +51,26 @@
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
 
 </PRE><H2>Description</H2><P>
-implements KnownTargetModule for a module dedicated to a
-particular editor</P>
+implements KnownTargetModule for a local interpreter which can
+run different applications (including internal editors)
+but only one active application per window.  At the moment, this
+class is functionally identical to RemoteShell, but at some point
+there might be other methods which distinguish the two.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> title_varies
+<DD>can the title of the window be changed?
+</DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
-<EM>none</EM></P>
-<H2 ID="KnownTargetModule.DedicatedModule.__init__" CLASS="Method">KnownTargetModule.DedicatedModule.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<EM>none</EM>
+</P>
+<H2 ID="KnownTargetModule.LocalInterpreter.__init__" CLASS="Method">KnownTargetModule.LocalInterpreter.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title_varies=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -71,16 +80,15 @@ particular editor</P>
 <DL>
 
 <DT>
-<EM>STR</EM> editor
-<DD>VoiceCode's internal name for the editor to
-which this module is dedicated
+<EM>BOOL</EM> title_varies
+<DD>can the title of the window be changed?
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="KnownTargetModule.DedicatedModule.dedicated" CLASS="Method">KnownTargetModule.DedicatedModule.dedicated(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.dedicated" CLASS="Method">KnownTargetModule.LocalInterpreter.dedicated(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -100,7 +108,7 @@ is this module dedicated to a specific (local) editor, or is it a
 <DD>is window dedicated to a specific editor
 
 </DL>
-<H2 ID="KnownTargetModule.DedicatedModule.editor" CLASS="Method">KnownTargetModule.DedicatedModule.editor(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.editor" CLASS="Method">KnownTargetModule.LocalInterpreter.editor(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -121,7 +129,7 @@ editor</P>
 to this module (or None if not dedicated)
 
 </DL>
-<H2 ID="KnownTargetModule.DedicatedModule.new_window" CLASS="Method">KnownTargetModule.DedicatedModule.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.new_window" CLASS="Method">KnownTargetModule.LocalInterpreter.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -162,7 +170,7 @@ the window, or None if there is none initially
 if the module is unable to create one
 
 </DL>
-<H2 ID="KnownTargetModule.DedicatedModule.single_display" CLASS="Method">KnownTargetModule.DedicatedModule.single_display(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.single_display" CLASS="Method">KnownTargetModule.LocalInterpreter.single_display(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -191,7 +199,7 @@ dedicated module.</P>
 <DD>is this a single-window display?
 
 </DL>
-<H2 ID="KnownTargetModule.DedicatedModule.variable_title" CLASS="Method">KnownTargetModule.DedicatedModule.variable_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.variable_title" CLASS="Method">KnownTargetModule.LocalInterpreter.variable_title(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>can an editor running in this module change the window title?</P>
 
 <P>
@@ -209,7 +217,7 @@ dedicated module.</P>
 window title
 
 </DL>
-<H2 ID="KnownTargetModule.DedicatedModule.verify_new_instance" CLASS="Method">KnownTargetModule.DedicatedModule.verify_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)</H2>
+<H2 ID="KnownTargetModule.LocalInterpreter.verify_new_instance" CLASS="Method">KnownTargetModule.LocalInterpreter.verify_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)</H2>
 <P>None</P>
 
 <P>

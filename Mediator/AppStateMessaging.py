@@ -213,6 +213,29 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         self.talk_msgr.send_mess('recog_end')
         response = self.talk_msgr.get_mess(expect=['recog_end_resp'])
 
+    def mediator_closing(self):
+	"""method called to inform AppState that the mediator is
+	closing.    Internal editors should exit.  They may prompt the
+	user to save modified files, but must not allow the user to
+	cancel and leave the editor running.  External editors should
+	disconnect but not close.  **Note:** this method should not
+	block.  For external editors, that means the corresponding
+	message should have a response for which to wait.  Otherwise, a
+	single hung or disconnected editor hang the mediator and prevent
+	it from closing or from notifying the rest of the connected
+	editors that it was closing.  
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        self.talk_msgr.send_mess('mediator_closing', {})
+# this message has no response, otherwise we might block waiting for it
+# if the external editor had hung, crashed, or been disconnected
 
     def listen_one_transaction(self):
         """Completes a single editor-initiated transaction
@@ -425,7 +448,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	open_buffers = response[1]['value']
 	return open_buffers
 
-    def app_close_buffer(self, buff_name, save):
+    def app_close_buffer(self, buff_name, save=0):
         """Ask the editor to close a buffer.
         
         **INPUTS**
@@ -439,7 +462,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if the editor does close the buffer
         """
 
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})

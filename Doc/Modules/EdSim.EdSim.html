@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Jun 06 12:10:26 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:54:59 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,12 +28,14 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">multiple=0</SPAN>, <SPAN CLASS="Argument">instance_reporting=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#EdSim.EdSim.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # is the editor application active (not suspended)?</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.is_active_is_safe"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.is_active_is_safe</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can is_active safely be queried, without blocking?</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.mediator_closing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.mediator_closing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.multiple_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.multiple_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple windows per instance?</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
@@ -43,21 +45,11 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.recog_begin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)<SPAN CLASS="OneLiner"> # EdSim can't block user input and always allows user to dictate</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.recog_end</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # EdSim can't block user input</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#EdSim.EdSim.set_title_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.set_title_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # See [AppState.tell_editor_to_open_file()] for doc.</SPAN>
     <A CLASS="DocLink" HREF="#EdSim.EdSim.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
-    <A CLASS="DocLink" HREF="#EdSim.EdSim.title_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.title_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#EdSim.EdSim.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # For EdSim, no need to get updates from external editor.</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -67,7 +59,7 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__getattr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">max_history=100</SPAN>, <SPAN CLASS="Argument">print_buff_when_changed=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">max_history=100</SPAN>, <SPAN CLASS="Argument">print_buff_when_changed=0</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>, <SPAN CLASS="Argument">manager=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState._new_source_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState._new_source_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
@@ -80,22 +72,28 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.bind_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bind_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Binds the AppState to a particular buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_all_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_all_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to close all buffers known to VoiceCode</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # close a buffer</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.current_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.current_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the AppMgr which owns this AppState</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.get_history"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.get_history</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">nth</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.init_for_test"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.init_for_test</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # is the editor application active (not suspended)?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.is_active_is_safe"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_active_is_safe</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can is_active safely be queried, without blocking?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.is_bound_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.is_bound_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the buffer that AppState is currently bound to.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.mediator_closing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.mediator_closing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.multiple_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.multiple_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple windows per instance?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.new_window_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.new_window_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)
@@ -106,14 +104,24 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_indicator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_indicator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">status</SPAN>)<SPAN CLASS="OneLiner"> # Sets a "recognition in progress" visual indicator.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.set_title_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_title_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to open a file in a new buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AppState.title_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.title_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.unbind_from_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.unbind_from_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # unbinds the AppState from a particular buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from AppStateNonCached.AppStateNonCached</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateNonCached.AppStateNonCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -211,7 +219,7 @@ successfully switches to it
 </DL>
 <P>
 AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="EdSim.EdSim.app_close_buffer" CLASS="Method">EdSim.EdSim.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)</H2>
+<H2 ID="EdSim.EdSim.app_close_buffer" CLASS="Method">EdSim.EdSim.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>Close a buffer.</P>
 
 <P>
@@ -234,8 +242,8 @@ INT <EM>save</EM>
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD>
+<EM>BOOL</EM>
+<DD>true if the editor does close the buffer
 </DL>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
@@ -295,6 +303,36 @@ If <EM>pos</EM> not specified, drop breadcrumb at cursor position.</P>
 <P>
 If <EM>buff</EM> not specified either, drop breadcrumb in current buffer
 </P>
+<H2 ID="EdSim.EdSim.instance_string" CLASS="Method">EdSim.EdSim.instance_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the identifier string for this editor instance (which 
+should be a substring of the window title)</P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not be able to set 
+the overall title.  
+However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+identifying title strings should still return the appropriate
+string.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the identifying string, or None if the editor was not given 
+such a string or cannot set the window title.
+
+</DL>
 <H2 ID="EdSim.EdSim.is_active" CLASS="Method">EdSim.EdSim.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>is the editor application active (not suspended)?</P>
 
@@ -343,6 +381,29 @@ instead of suspending, so their process should still be active.</P>
 even if the editor has been suspended. 
 
 </DL>
+<H2 ID="EdSim.EdSim.mediator_closing" CLASS="Method">EdSim.EdSim.mediator_closing(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called to inform AppState that the mediator is
+closing.    Internal editors should exit.  They may prompt the
+user to save modified files, but must not allow the user to
+cancel and leave the editor running.  External editors should
+disconnect but not close.  <STRONG>Note:</STRONG> this method should not
+block.  For external editors, that means the corresponding
+message should have a response for which to wait.  Otherwise, a
+single hung or disconnected editor hang the mediator and prevent
+it from closing or from notifying the rest of the connected
+editors that it was closing.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="EdSim.EdSim.multiple_buffers" CLASS="Method">EdSim.EdSim.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>does editor support multiple open buffers?</P>
 
@@ -489,21 +550,21 @@ its owned objects are the last remaining references</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="EdSim.EdSim.set_title_string" CLASS="Method">EdSim.EdSim.set_title_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
+<H2 ID="EdSim.EdSim.set_instance_string" CLASS="Method">EdSim.EdSim.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
 <P>None</P>
 
 <P>
 specifies the identifier string for this editor instance.  If the 
 editor is capable of setting the window title to include this string, 
 it should (and then should return this string when the
-title_string method is called.  </P>
+instance_string method is called.  </P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR</EM>
+<EM>STR</EM> instance_string
 <DD>the identifying string to be included in the
 window title if possible.
 </DL>
@@ -576,36 +637,6 @@ title value
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="EdSim.EdSim.title_string" CLASS="Method">EdSim.EdSim.title_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns the identifier string for this editor instance (which 
-should be a substring of the window title)</P>
-<P>
-Note: multiple windows of remote editors running in a remote display
-which appears as a single window to be local operating system 
-(X servers in single window mode, VNC) will not be able to set 
-the overall title.  
-However, the mediator will perform a 
-separate check to detect this, so remote editors which support
-identifying title strings should still return the appropriate
-string.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the identifying string, or None if the editor was not given 
-such a string or cannot set the window title.
-
-</DL>
 <H2 ID="EdSim.EdSim.updates_from_app" CLASS="Method">EdSim.EdSim.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
 <P>For EdSim, no need to get updates from external editor.</P>
 
@@ -638,116 +669,6 @@ external app.
 </DL>
 <P>
 ..[AS_Update] AppState.AS_Update.html</P>
-<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
-<P>attempt to call cleanup on object</P>
-
-<P>
-<STRONG>INPUTS*</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>OwnerObject object</EM>
-<DD>note: class of object is the expected
-class, but _cleanup_object doesn't assume this is correct, nor
-does it check whether the object is a subclass of
-OwnerObject, only that it is a class instance and that it
-has a cleanup attribute
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>reason for error (or None if no error).
-
-</DL>
-<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append a new attribute name to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append new attribute names to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR] owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's parent.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>name of the parent, or None if none
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -1191,6 +1112,21 @@ INT <EM>save</EM>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppState.AppState.close_app_cbk" CLASS="Method">AppState.AppState.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that it is
+about to close</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.close_buffer" CLASS="Method">AppState.AppState.close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>close a buffer</P>
 
@@ -1218,6 +1154,26 @@ INT <EM>save</EM>
 <DD>true if the editor does close the buffer
 
 </DL>
+<H2 ID="AppState.AppState.close_buffer_cbk" CLASS="Method">AppState.AppState.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that a
+buffer has been closed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>the name of the buffer which has been closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.curr_buffer" CLASS="Method">AppState.AppState.curr_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -1260,6 +1216,24 @@ ARE DOING!!!</P>
 </DL>
 <P>
 AppState.AppState.html#app_active_buffer_name</P>
+<H2 ID="AppState.AppState.current_manager" CLASS="Method">AppState.AppState.current_manager(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns a reference to the AppMgr which owns this AppState</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppMgr</EM>
+<DD>the AppMgr object which owns this AppState, or None
+if there is none.
+
+</DL>
 <H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
 <P>Drops a breadcrumb</P>
 
@@ -1337,6 +1311,36 @@ external editor), we need to reinitialise it after every test.</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="AppState.AppState.instance_string" CLASS="Method">AppState.AppState.instance_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the identifier string for this editor instance (which 
+should be a substring of the window title)</P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not be able to set 
+the overall title.  
+However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+identifying title strings should still return the appropriate
+string.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the identifying string, or None if the editor was not given 
+such a string or cannot set the window title.
+
 </DL>
 <H2 ID="AppState.AppState.is_active" CLASS="Method">AppState.AppState.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>is the editor application active (not suspended)?</P>
@@ -1435,6 +1439,29 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppState.AppState.mediator_closing" CLASS="Method">AppState.AppState.mediator_closing(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called to inform AppState that the mediator is
+closing.    Internal editors should exit.  They may prompt the
+user to save modified files, but must not allow the user to
+cancel and leave the editor running.  External editors should
+disconnect but not close.  <STRONG>Note:</STRONG> this method should not
+block.  For external editors, that means the corresponding
+message should have a response for which to wait.  Otherwise, a
+single hung or disconnected editor hang the mediator and prevent
+it from closing or from notifying the rest of the connected
+editors that it was closing.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.multiple_buffers" CLASS="Method">AppState.AppState.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>does editor support multiple open buffers?</P>
 
@@ -1483,6 +1510,27 @@ display method.</P>
 <DD>true if editor supports opening multiple editor windows.  
 
 </DL>
+<H2 ID="AppState.AppState.name" CLASS="Method">AppState.AppState.name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+the unique name (assigned by the AppMgr) to this editor
+instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name of the instance, or None if the manager has
+not given it one.
+
+</DL>
 <H2 ID="AppState.AppState.new_compatible_sb" CLASS="Method">AppState.AppState.new_compatible_sb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Creates a new instance of [SourceBuff].</P>
 
@@ -1512,6 +1560,21 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
+<H2 ID="AppState.AppState.new_window_cbk" CLASS="Method">AppState.AppState.new_window_cbk(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState that it has
+opened a new window</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.open_buffer_cbk" CLASS="Method">AppState.AppState.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
@@ -1825,23 +1888,63 @@ has already prompted the user.
 <DD>true if file was saved successfully
 
 </DL>
-<H2 ID="AppState.AppState.set_title_string" CLASS="Method">AppState.AppState.set_title_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
+<H2 ID="AppState.AppState.set_instance_string" CLASS="Method">AppState.AppState.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
 <P>None</P>
 
 <P>
 specifies the identifier string for this editor instance.  If the 
 editor is capable of setting the window title to include this string, 
 it should (and then should return this string when the
-title_string method is called.  </P>
+instance_string method is called.  </P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR</EM>
+<EM>STR</EM> instance_string
 <DD>the identifying string to be included in the
 window title if possible.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.set_manager" CLASS="Method">AppState.AppState.set_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)</H2>
+<P>None</P>
+
+<P>
+indicates the AppState's manager.  Normally called only by 
+the manager.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppMgr</EM> manager
+<DD>the AppMgr object which owns this AppState.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.set_name" CLASS="Method">AppState.AppState.set_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+assign a unique name to this editor instance.  
+<STRONG>NOTE:</STRONG> only AppMgr should call this method.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> name
+<DD>the name of the instance
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -1963,36 +2066,6 @@ title value
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="AppState.AppState.title_string" CLASS="Method">AppState.AppState.title_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns the identifier string for this editor instance (which 
-should be a substring of the window title)</P>
-<P>
-Note: multiple windows of remote editors running in a remote display
-which appears as a single window to be local operating system 
-(X servers in single window mode, VNC) will not be able to set 
-the overall title.  
-However, the mediator will perform a 
-separate check to detect this, so remote editors which support
-identifying title strings should still return the appropriate
-string.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the identifying string, or None if the editor was not given 
-such a string or cannot set the window title.
-
-</DL>
 <H2 ID="AppState.AppState.unbind_from_buffer" CLASS="Method">AppState.AppState.unbind_from_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>unbinds the AppState from a particular buffer.</P>
 
@@ -2049,6 +2122,116 @@ external app.
 </DL>
 <P>
 ..[AS_Update] AppState.AS_Update.html</P>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 
 <HR>
 <TABLE ALIGN="LEFT">

@@ -359,7 +359,7 @@ class WaxEdSimFrame(wxFrame):
         wxSize(1000, 600))
 
 	self.title = title
-	self.title_string = ""
+	self.instance_string = ""
 	self.name = None
 	self.exiting = 0
 	self.app_control = None
@@ -406,19 +406,19 @@ class WaxEdSimFrame(wxFrame):
         EVT_MENU(self,ID_FOCUS_COMMAND,self.pane.focus_command_line)
         EVT_ACTIVATE(self, self.on_activate) 
 
-    def set_title_string(self, title_string):
+    def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
 	displayed in the title bar
 
 	**INPUTS**
 
-	*STR* title_string -- string to include as part of the title
+	*STR* instance_string -- string to include as part of the title
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.title_string = title_string
+	self.instance_string = instance_string
 	self.update_title()
       
     def set_name(self, name):
@@ -440,8 +440,8 @@ class WaxEdSimFrame(wxFrame):
 	the title string
 	"""
 	title = self.title
-	if self.title_string:
-	    title = title + ' ' + self.title_string
+	if self.instance_string:
+	    title = title + ' ' + self.instance_string
 	if self.name:
 	    title = title + ' - ' + self.name
 	self.SetTitle(title)
@@ -717,19 +717,19 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
     def update_mic_button(self, state = None):
 	self.frame.update_mic_button(state)
       
-    def set_title_string(self, title_string):
+    def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
 	displayed in the title bar
 
 	**INPUTS**
 
-	*STR* title_string -- string to include as part of the title
+	*STR* instance_string -- string to include as part of the title
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.frame.set_title_string(title_string)
+	self.frame.set_instance_string(instance_string)
       
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)

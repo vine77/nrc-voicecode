@@ -172,18 +172,27 @@ class RecogStartMgr(OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *AppMgr* editors -- the parent AppMgr object, which provides
+    information about editor application instances
 
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, **args):
+    def __init__(self, editors, **args):
+	"""
+	**INPUTS**
+
+	*AppMgr* editors -- the editors AppMgr object, which provides
+	information about editor application instances
+	"""
+
         self.deep_construct(RecogStartMgr,
-                            {
+                            {'editors': editors
 			    },
                             args)
+	self.name_parent('editors')
 	
     def set_app_mgr(self, manager):
 	"""fill in the reference to the parent AppMgr
@@ -196,7 +205,7 @@ class RecogStartMgr(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('RecogStartMgr.set_app_mgr')
+	self.editors = manager
 	
     def window_info(self):
 	"""find the window id, title, and module of the current window
@@ -270,7 +279,7 @@ class RecogStartMgr(OwnerObject):
 	
 	*BOOL* -- true if window is a known window 
 	"""
-	debug.virtual('RecogStartMgr.window_info')
+	debug.virtual('RecogStartMgr.known_window')
 
     def shared_window(self, window):
 	"""is window a shared window?
@@ -405,6 +414,26 @@ class RecogStartMgr(OwnerObject):
 	"""
 	debug.virtual('RecogStartMgr.new_instance')
 
+    def new_universal_instance(self, instance, exclusive = 1):
+	"""method called by AppMgr to notify RecogStartMgr that a new
+	test instance has been added which should use global grammars
+    
+	**INPUTS**
+
+	*STR* instance -- name of the editor instance
+
+	*BOOL* exclusive -- should the instance use exclusive grammars
+	as well?
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the instance was added as a universal instance.
+	False if there was already such a universal instance, in which case the
+	new instance will be added normally, or if the instance name was
+	already known.
+	"""
+	debug.virtual('RecogStartMgr.new_universal_instance')
+
     def delete_instance(self, instance):
 	"""method called by AppMgr to notify RecogStartMgr that an
 	editor instance has been deleted
@@ -419,13 +448,17 @@ class RecogStartMgr(OwnerObject):
 	"""
 	debug.virtual('RecogStartMgr.delete_instance')
 
-    def specify_window(self, instance):
+    def specify_window(self, instance, window_id = None):
 	"""called to indicate that user has manually identified a
 	known instance with the current window 
 
 	**INPUTS**
 
 	*STR* instance -- name of the application instance
+
+	*INT* window_id -- handle which must match that of the current
+	window (otherwise specify_window will ignore the current window
+	and return 0), or None if the caller does not know the handle 
 
 	**OUTPUTS**
 
@@ -529,9 +562,6 @@ class RSMInfrastructure(RecogStartMgr):
     *GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
     objects for new instances
 
-    *AppMgr* editors -- the parent AppMgr object, which provides
-    information about editor application instances
-
     *BOOL* active -- flag indicating whether the RecogStartMgr is
     active
 
@@ -544,12 +574,9 @@ class RSMInfrastructure(RecogStartMgr):
     *none*
     """
 
-    def __init__(self, editors, GM_factory, trust_current_window = 0, **args):
+    def __init__(self, GM_factory, trust_current_window = 0, **args):
 	"""
 	**INPUTS**
-
-	*AppMgr* editors -- the editors AppMgr object, which provides
-	information about editor application instances
 
 	*GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
 	objects for new instances
@@ -562,7 +589,6 @@ class RSMInfrastructure(RecogStartMgr):
 	"""
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
-			     'editors': editors,
 			     'GM_factory': GM_factory,
 			     'grammars': {},
 			     'windows': {},
@@ -571,21 +597,39 @@ class RSMInfrastructure(RecogStartMgr):
 			     'instances': {}
 			    },
                             args)
-	self.name_parent('editors')
 	
-    def set_app_mgr(self, manager):
-	"""fill in the reference to the parent AppMgr
+    def activate(self):
+	"""activate the RecogStartMgr
 
 	**INPUTS**
 
-	*AppMgr* manager -- the parent AppMgr
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if activated successfully
+	"""
+	if not self.active and hasattr(self, '_activate_detection'):
+	    self._activate_detection()
+	self.active = 1
+
+    def deactivate(self):
+	"""deactivate the RecogStartMgr, and disable all window-specific
+	grammars
+
+	**INPUTS**
+
+	*none*
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.editors = manager
-	
+	self._deactivate_all_grammars()
+	if self.active and hasattr(self, '_deactivate_detection'):
+	    self._deactivate_detection()
+	self.active = 0
+
     def add_module(self, module):
 	"""add a new KnownTargetModule object
 
@@ -945,13 +989,17 @@ class RSMInfrastructure(RecogStartMgr):
 	del self.instances[instance]
 	del self.grammars[instance]
 
-    def specify_window(self, instance):
+    def specify_window(self, instance, window_id = None):
 	"""called to indicate that user has manually identified a
 	known instance with the current window 
 
 	**INPUTS**
 
 	*STR* instance -- name of the application instance
+
+	*INT* window_id -- handle which must match that of the current
+	window (otherwise specify_window will ignore the current window
+	and return 0), or None if the caller does not know the handle 
 
 	**OUTPUTS**
 
@@ -964,6 +1012,8 @@ class RSMInfrastructure(RecogStartMgr):
 	if not self.known_instance(instance):
 	    return 0
 	window, title, module_name = self.window_info()
+	if window_id != None and window != window_id:
+	    return 0
 #	print self.window_info()
 	if self.known_window(window):
 #	    print 'specify - known window'
@@ -1079,6 +1129,20 @@ class RSMInfrastructure(RecogStartMgr):
 	for editor in others:
 	    if editor != instance_name:
 		self.grammars[editor].deactivate_all(window)
+	    
+    def _deactivate_all_grammars(self):
+	"""private method used to deactivate all grammars 
+	
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	for instance in self.instances.keys():
+	    self.grammars[instance].deactivate_all()
 	
     def _deactivate_grammars(self, window):
 	"""private method used to deactivate all grammars for a given
@@ -1168,10 +1232,12 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	if self.known_window(window):
-	    self._recognition_starting_known_window( window, title)
-	elif self.known_module(module_name):
-	    self._recognition_starting_known_module(window, title, module_name)
+	if self.active:
+	    if self.known_window(window):
+		self._recognition_starting_known_window( window, title)
+	    elif self.known_module(module_name):
+		self._recognition_starting_known_module(window, title, 
+		    module_name)
     
     def _assign_ID_client(self, module_name, window, title):
 	"""check if there is a WinIDClient not yet assigned to a window.
@@ -1203,6 +1269,9 @@ class RSMBasic(RSMInfrastructure):
 
     **INSTANCE ATTRIBUTES**
 
+    *STR* universal -- name of a universal instance using global
+    grammars for testing purposes, or None if there is none
+
     **CLASS ATTRIBUTES**
     
     *none*
@@ -1214,7 +1283,7 @@ class RSMBasic(RSMInfrastructure):
 
 	"""
         self.deep_construct(RSMBasic,
-                            {
+                            {'universal': None
 			    },
                             args)
 	
@@ -1371,6 +1440,115 @@ class RSMBasic(RSMInfrastructure):
 		    return
 #		print 'not verified'
 		continue
+
+    def new_universal_instance(self, instance, exclusive = 1):
+	"""method called by AppMgr to notify RecogStartMgr that a new
+	test instance has been added which should use global grammars
+    
+	**INPUTS**
+
+	*STR* instance -- name of the editor instance
+
+	*BOOL* exclusive -- should the instance use exclusive grammars
+	as well?
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the instance was added as a universal instance.
+	False if there was already such a universal instance, in which case the
+	new instance will be added normally, or if the instance name was
+	already known.
+	"""
+	if self.known_instance(instance):
+	    return 0
+	if self.universal == None:
+	    self.instances[instance] = KnownInstance()
+	    app = self.editors.app_instance(instance)
+	    self.grammars[instance] = \
+		self.GM_factory.new_global_manager(app, exclusive = exclusive)
+	    self.universal = instance
+	    return 1
+	self.new_instance(instance)
+
+    def delete_instance(self, instance):
+	"""method called by AppMgr to notify RecogStartMgr that an
+	editor instance has been deleted
+    
+	**INPUTS**
+
+	*STR* instance -- name of the editor instance
+
+	**OUTPUTS**
+
+	*BOOL* -- true if instance was known
+	"""
+	if instance == self.universal:
+	    self.universal = None
+	return RSMInfrastructure.delete_instance(self, instance)
+
+    def _recognition_starting(self, window, title, module_name = None):
+	"""private method which a concrete subclass will call to handle
+	the recognition starting event.
+
+	**INPUTS**
+
+	*INT* window -- window handle (unique identifier) of the current 
+	window
+
+	*STR* title -- title of the window 
+
+	*STR* module -- filename of the application corresponding to
+	this window, or None if the particular subclass of RecogStartMgr
+	cannot detect it.  **Note**: the module may not
+	be the name of the editor.  For example, for remote editors, the
+	module will generally be the name of the telnet/X server
+	program, and any application written in python will show up as PYTHON.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.universal == None:
+	    RSMInfrastructure._recognition_starting(self, window, title,
+		module_name)
+	else:
+	    app = self.editors.app_instance(self.universal)
+	    self._activate_universal_grammars(app, self.universal, window)
+
+    def _activate_universal_grammars(self, app, instance_name, window):
+	"""private method used to activate global grammars for the 
+	universal instance, assuming that the buffer is VoiceCode-enabled
+	
+	**INPUTS**
+
+	*AppState* app -- the editor application interface
+
+	*STR* instance_name -- instance name
+
+	*INT* window -- current window handle (used only to know which
+	other grammars to deactivate 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	buff_name = app.curr_buffer_name()
+	dictation_allowed = app.recog_begin(None)
+	if app.active_field() == None and dictation_allowed:
+	    self.grammars[instance_name].activate(buff_name, -1)
+	else:
+	    self.grammars[instance_name].deactivate_all()
+	others = []
+	if self.known_window(window):
+	    others = self.windows[window].instance_names()
+	if self.GM_factory.using_global():
+	    others = self.known_instances()
+	for editor in others:
+	    if editor != instance_name:
+		self.grammars[editor].deactivate_all(window)
+	    
+	    
+    
 		
 class CurrWindow(Object):
     """abstract class for supplying information about the current window
@@ -1463,14 +1641,14 @@ class CurrWindowDummy(Object):
 	"""
 #	print 'current is ', (self.window, self.title, self.module)
 	title = ""
-	if self.alt_title != None:
+	if self.alt_title != "":
 	    title = self.alt_title
 	if self.instance != None:
-	    ts = self.instance.title_string()
+	    ts = self.instance.instance_string()
 	    if ts != None:
 		if self.app_name != None:
 		    title = self.app_name + " - "
-		title = title + self.instance.title_string()
+		title = title + self.instance.instance_string()
 		if self.instance.curr_buffer_name():
 		    title = title + " - " + self.instance.curr_buffer_name()
 
@@ -1545,52 +1723,6 @@ class RSMExtInfo(RSMBasic):
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
 	return self.find_info.window_info()
-
-class RSMDummy(RSMExtInfo):
-    """dummy subclass of RSMExtInfo not connected to the speech 
-    engine, for testing purposes
-
-    **INSTANCE ATTRIBUTES**
-
-    *none*
-
-    **CLASS ATTRIBUTES**
-    
-    *none*
-    """
-
-    def __init__(self, **args):
-        self.deep_construct(RSMDummy,
-                            {},
-                            args)
-	
-    def activate(self):
-	"""activate the RecogStartMgr
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*BOOL* -- true if activated successfully
-	"""
-	return 1
-
-    def deactivate(self):
-	"""deactivate the RecogStartMgr, and disable all window-specific
-	grammars
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	return 1
-
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

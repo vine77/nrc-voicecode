@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Jun 09 12:05:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:55:33 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,6 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppMgr</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr._add_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr._add_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr._assign_ID_client"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr._assign_ID_client</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object to the RecogStartMgr</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
@@ -38,6 +39,7 @@
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a known window ID?</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.known_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.known_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>)<SPAN CLASS="OneLiner"> # add a new application instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)<SPAN CLASS="OneLiner"> # add a new application instance</SPAN>
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppMgr.AppMgr.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
@@ -107,6 +109,42 @@ corresponding AppState interfaces
 <DT>
 <EM>RecogStartMgr</EM> recog_mgr
 <DD>reference to a RecogStartMgr object
+</DL>
+<H2 ID="AppMgr.AppMgr._add_new_instance" CLASS="Method">AppMgr.AppMgr._add_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method called internally to do the work of
+new_instance, except for notifying the recog_mgr.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> app_name
+<DD>name of the application 
+(e.g. "Emacs (Win)", "jEdit")
+<DT>
+<EM>STR</EM> title_prefix
+<DD>a unique string for each application, used
+as the prefix of the title string (which is in turn included as
+a substring of the window title, if the editor can do so)
+<DT>
+<EM>AppState</EM> app
+<DD>AppState interface corresponding to the new
+instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the application instance.  Necessary
+if you want to add windows to the application in the future.
+
 </DL>
 <H2 ID="AppMgr.AppMgr._assign_ID_client" CLASS="Method">AppMgr.AppMgr._assign_ID_client(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
 <P>None</P>
@@ -428,6 +466,42 @@ instance
 <EM>BOOL</EM> check_window
 <DD>should we check to see if the
 current window belongs to this instance?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the application instance.  Necessary
+if you want to add windows to the application in the future.
+
+</DL>
+<H2 ID="AppMgr.AppMgr.new_universal_instance" CLASS="Method">AppMgr.AppMgr.new_universal_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<P>add a new application instance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> app_name
+<DD>name of the application 
+(e.g. "Emacs (Win)", "jEdit")
+<DT>
+<EM>STR</EM> title_prefix
+<DD>a unique string for each application, used
+as the prefix of the title string (which is in turn included as
+a substring of the window title, if the editor can do so)
+<DT>
+<EM>AppState</EM> app
+<DD>AppState interface corresponding to the new
+instance
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>use exclusive grammars?
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

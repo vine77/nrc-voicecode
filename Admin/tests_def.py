@@ -1507,6 +1507,19 @@ def new_instance(manager, current, app_name, title_prefix, app, window = None,
 	    % (app, a)
     return i_name
 
+def new_universal_instance(manager, current, app_name, title_prefix, app, exclusive = 1):
+    print 'new universal instance of %s %d' % (app_name, app)
+    i_name = manager.new_universal_instance(app_name, title_prefix, app, exclusive)
+    a_name = manager.app_name(i_name)
+    if a_name != app_name:
+	print 'Warning: app names %s and %s do not match' \
+	    % (app_name, a_name)
+    a = manager.instances[i_name]
+    if a != app:
+	print 'Warning: AppStates %d and %d do not match' \
+	    % (app, a)
+    return i_name
+
 class FakeWindow(Object.Object):
     def __init__(self, handle, module, **args):
 	self.deep_construct(FakeWindow,
@@ -1557,11 +1570,11 @@ class FakeAppState(EdSim.EdSim):
 	return self.active
     def is_active_is_safe(self):
 	return self.safe_active
-    def set_title_string(self, title):
-	self.the_title_string = title
-    def title_string(self):
+    def set_instance_string(self, instance_string):
+	self.the_instance_string = instance_string
+    def instance_string(self):
 	if self.title_control:
-	    return self.the_title_string 
+	    return self.the_instance_string 
 	return None
     def title_escape_sequence(self, a, b):
 	pass
@@ -1620,7 +1633,7 @@ def test_am_dictionaries():
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 1)
     GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
     current = RecogStartMgr.CurrWindowDummy()
-    recog_mgr = RecogStartMgr.RSMDummy(editors = None, GM_factory = GM_factory, 
+    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, GM_factory = GM_factory, 
       win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
@@ -1694,7 +1707,7 @@ def test_rsm_algorithm():
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 0)
     GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
     current = RecogStartMgr.CurrWindowDummy()
-    recog_mgr = RecogStartMgr.RSMDummy(editors = None, GM_factory = GM_factory, 
+    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, GM_factory = GM_factory, 
       win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
@@ -1775,6 +1788,7 @@ if ($voiceGripOS eq 'win') {
         title_control = 0)
     xEmacs = FakeAppState(9, '.cshrc', shared = 0, multi = 1)
     text_Vim = FakeAppState(10, '', shared = 1, multi = 0, safe_active = 0)
+    internal = FakeAppState(12, 'large_buff.py', multi = 0)
 
     windows[14] = FakeWindow(14, 'EMACS')
     print 'new instance in window 14'
@@ -1948,6 +1962,29 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, xe1)
 
+    windows[99] = FakeWindow(99, 'PYTHON')
+    ii1 = new_universal_instance(manager, current, 'WaxEdit', 'Floor', internal)
+    print 'now it is on WaxEdit'
+    set_window(current, windows[99], 'WaxEdit', internal)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, ii1)
+
+    print 'but now it is'
+    set_window(current, windows[27], 'Emacs', xEmacs)
+    print 'current is', repr(current.window_info())
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, xe1)
+    instance_status(manager, ii1)
+    manager.delete_instance(ii1)
+
+    print 'and now the WaxEdit is gone'
+    print 'current is', repr(current.window_info())
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    instance_status(manager, xe1)
+
 auto_test.add_test('am_dictionaries', test_am_dictionaries, 
     'Testing AppMgr dictionary management.')
 
@@ -1985,8 +2022,7 @@ def buffer_closed(manager, buffer):
     print 'close buffer %s' % (buffer) 
     manager.buffer_closed(buffer)
 
-def test_gram_manager_flags(global_grammars = 0, exclusive = 0,
-    all_results = 0):
+def test_gram_manager_flags(global_grammars = 0, exclusive = 0):
     fish_h_before = "void move(float x, y);"
     fish_h_after = "\n"
     fish_before = """/* This is a small test buffer for C */
@@ -2038,8 +2074,7 @@ if ($voiceGripOS eq 'win') {
     factory = sr_grammars.WinGramFactoryDummy()
     app = EdSim.EdSim(multiple = 1, instance_reporting = 1)
     manager = GramMgr.WinGramMgr(factory, None, app = app,
-	global_grammars = global_grammars, exclusive = exclusive,
-	all_results = all_results)
+	global_grammars = global_grammars, exclusive = exclusive)
     w = 5
     w2 = 7
     new_buffer(manager, 'fish.C', w, fish_before, fish_after)
@@ -2071,7 +2106,7 @@ def test_gram_manager():
     test_gram_manager_flags()
     
 def test_gram_manager_all_set():
-    test_gram_manager_flags(1, 1, 1)
+    test_gram_manager_flags(1, 1)
 
 
 auto_test.add_test('dummy_grammars', test_gram_manager, 
