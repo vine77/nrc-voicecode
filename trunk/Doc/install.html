@@ -32,6 +32,7 @@ To install VoiceCode, follow the following steps
    <UL>
    <LI><A HREF="#VCODE_HOME">2.1 VCODE_HOME variable</A>
    <LI><A HREF="#PYTHONPATH">2.2 PYTHONPATH variable</A>
+   <LI><A HREF="#VCODE_NOSPEECH">2.3 VCODE_NOSPEECH variable</A>
    </UL>
 <LI><A HREF="#test">Test the installation</A>
 </UL>
@@ -46,7 +47,16 @@ support software.
 <UL>
 <LI><A HREF="http://www.python.org">Python</A>
 <LI><A HREF="http://www.synapseadaptive.com/joel/default.htm">NatLink</A>
+<LI><A HREF="http://www.dragonsys.com/">Dragon Naturally Speaking</A>
 </UL>
+
+Note that you can still run VoiceCode in <A HREF="user.html#simulation">simulation mode</A> without having to install Dragon Naturally Speaking. You must then set the <A HREF="#VCODE_NOSPEECH">VCODE_NOSPEECH</A> environment variable.
+
+<P>
+
+Note however that NatLink must be installed on your machine whether or
+not you install NatSpeak. If you don't install NatSpeak, you can just
+copy NatLink to your machine without running <EM>EnableNL</EM>.
 
 <H2><A NAME="unzip">1. Unzip the files</A></H2>
 
@@ -70,7 +80,22 @@ Add the following to your <EM>PYTHONPATH</EM> variable:
 
 <P>
 
-<EM>%VCODE_HOME%/Mediator; %VCODE_HOME%/Admin; </EM>
+<EM>%VCODE_HOME%/Mediator; %VCODE_HOME%/Admin; C:/NatLink</EM>
+
+Assuming of course you have installed the NatLink files under
+<EM>C:/NatLink</EM>.
+
+
+<H3><A NAME="VCODE_NOSPEECH">2.3 VCODE_NOSPEECH variable</A></H3>
+
+If you don't have installed Dragon Naturally Speaking, you can still
+run VoiceCode in simulation and use keyboard commands to simulate
+dictation events.
+
+<P>
+
+To do this you must define environment variable
+<EM>VCODE_NOSPEECH</EM> (the value you set it to is irrelevant).
 
 
 <H2><A NAME="test">Test the installation</A></H2>

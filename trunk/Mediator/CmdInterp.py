@@ -236,9 +236,11 @@ class CmdInterp(Object, VoiceDictation):
             else:
                 #
                 # First time indexed. Create a new list of CSCs for that
-                # spoken form
+                # spoken form, and add it to the SR vocabulary
                 #                
                 self.cmd_index[a_spoken_form] = [acmd]
+                if not os.environ.has_key('VCODE_NOSPEECH'):
+                    natlink.addWord(a_spoken_form)
                 
 
 def self_test():    

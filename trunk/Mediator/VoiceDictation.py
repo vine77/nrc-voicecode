@@ -55,7 +55,7 @@
 #  import win32gui
 
 # Speech imports
-import natlink
+import natlink, vc_globals
 from natlinkutils import *
 from Object import Object
 
@@ -73,6 +73,7 @@ from Object import Object
 
 class VoiceDictation(Object):
 
+
     def __init__(self, dictation_object=None, **attrs):
         self.deep_construct(VoiceDictation, {'dictation_object': dictation_object}, attrs)
 
@@ -81,20 +82,22 @@ class VoiceDictation(Object):
     # directly to the dialog box.
 
     def initialize(self, window_handle, begin_cbk, change_cbk):
-        natlink.natConnect(1)
-        self.dictation_object = natlink.DictObj()
-        self.dictation_object.setBeginCallback(begin_cbk)
-        self.dictation_object.setChangeCallback(change_cbk)
-        self.dictation_object.activate(window_handle)
+        if not os.environ.has_key('VCODE_NOSPEECH'):
+            natlink.natConnect(1)
+            self.dictation_object = natlink.DictObj()
+            self.dictation_object.setBeginCallback(begin_cbk)
+            self.dictation_object.setChangeCallback(change_cbk)
+            self.dictation_object.activate(window_handle)
 
     # Call this function to cleanup.  We have to reset the callback
     # functions or the object will not be freed.
         
     def terminate(self):
-        self.dictation_object.deactivate()
-        self.dictation_object.setBeginCallback(None)
-        self.dictation_object.setChangeCallback(None)
-        self.dictation_object = None
+        if not os.environ.has_key('VCODE_NOSPEECH'):
+            self.dictation_object.deactivate()
+            self.dictation_object.setBeginCallback(None)
+            self.dictation_object.setChangeCallback(None)
+            self.dictation_object = None
 
     # This makes it possible to access the member functions of the DictObj
     # directly as member functions of this class.
