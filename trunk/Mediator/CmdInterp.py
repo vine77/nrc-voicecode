@@ -2198,6 +2198,34 @@ class CmdInterp(OwnerObject):
             user_supplied_spoken_forms, tentative = tentative,
             add_sr_entries = add_sr_entries)
 
+    def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
+        """Correct the written form of a symbol.
+
+        **INPUTS**
+        
+        *STR* spoken_form -- Spoken form of the symbol.
+
+        *STR bad_written_form* -- written form that was matched incorrectly to
+        *spoken_form*.
+        
+        *STR correct_written_form* -- written form that SHOULLD have been used instead
+        for *spoken_form*.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        
+        **SIDE EFFECTS**
+        
+        If *bad_written_form* is a new symbol that was created tentatively on account
+        of *spoken_form* beind said, then this method will remove *bad_written_form*
+        from the dictionnary altogether. Otherwise, it will simply change the 
+        priority of *bad_written_form* and *correct_written_form* for
+        *spoken_form*.        
+        """
+        self.known_symbols.correct_symbol(spoken_form, bad_written_form, correct_written_form)
+
+
     def current_preferences(self, app):
         """returns the current list of preferences for SymBuilder
         objects
@@ -2879,7 +2907,7 @@ class CmdInterp(OwnerObject):
         """
         return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
     
-    def remove_tentative_symbol(self, symbol):
+    def remove_symbol_if_tentative(self, symbol):
         """remove a symbol which was tentatively added
         from the dictionary
 
@@ -2892,7 +2920,7 @@ class CmdInterp(OwnerObject):
         *BOOL* -- true if the symbol was only tentative, and 
         was successfully removed
         """
-        return self.known_symbols.remove_tentative_symbol(symbol)
+        return self.known_symbols.remove_symbol_if_tentative(symbol)
   
     def known_symbol(self, symbol):
         return self.known_symbols.known_symbol(symbol)

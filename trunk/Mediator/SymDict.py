@@ -1544,7 +1544,7 @@ class SymDict(OwnerObject):
             if not a_file in self.abbrev_sources:
                 self.abbrev_sources.append(a_file)
 
-    def remove_tentative_symbol(self, symbol):
+    def remove_symbol_if_tentative(self, symbol):
         """remove a symbol which was tentatively added
         from the dictionary
 
@@ -1557,14 +1557,14 @@ class SymDict(OwnerObject):
         *BOOL* -- true if the symbol was only tentative, and 
         was successfully removed
         """
-        debug.trace('SymDict.remove_tentative_symbol',
+        debug.trace('SymDict.remove_symbol_if_tentative',
             'symbol = %s' % symbol)
         success = 0
         if self.tentative_symbols.has_key(symbol):
-            debug.trace('SymDict.remove_tentative_symbol',
+            debug.trace('SymDict.remove_symbol_if_tentative',
                 'is tentative')
             success = self.remove_symbol(symbol)
-        debug.trace('SymDict.remove_tentative_symbol',
+        debug.trace('SymDict.remove_symbol_if_tentative',
             'success = %d' % success)
         return success
 
@@ -1833,6 +1833,74 @@ class SymDict(OwnerObject):
                 return 1
 
         return 0
+        
+    def correct_symbol(self, spoken_form_used, bad_written_form, correct_written_form):
+        """Correct the written form of a symbol.
+
+        **INPUTS**
+        
+        *STR* spoken_form_used -- Spoken form of the symbol.
+
+        *STR bad_written_form* -- written form that was matched incorrectly to
+        *spoken_form*.
+        
+        *STR correct_written_form* -- written form that SHOULLD have been used instead
+        for *spoken_form*.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        
+        **SIDE EFFECTS**
+        
+        If *bad_written_form* is a new symbol that was created tentatively on account
+        of *spoken_form* beind said, then this method will remove *bad_written_form*
+        from the dictionnary altogether. Otherwise, it will simply change the 
+        priority of *bad_written_form* and *correct_written_form* for
+        *spoken_form*.        
+        """
+        debug.trace('SymDict.correct_symbol', '** invoked')
+        
+        
+        # TODO: Find the priority list of written forms for spoken_form, and 
+        #       move correct_written_form to the top of it (make sure to delete
+        #       old entry if there was one).
+        # 
+        self.move_written_form_to_top_of_priority_list(spoken_form_used,
+                                                       correct_written_form)
+        self.add_symbol(correct_written_form, [spoken_form_used], tentative=0)
+        self.remove_symbol_if_tentative(bad_written_form)        
+
+
+    def move_written_form_to_top_of_priority_list(self, spoken_form, written_form):
+        """Moves a written form to the top of the priority list for a spoken form
+        
+        **INPUTS**
+        
+        *STR* spoken_form* -- Spoken form for which we want to change the priority list of
+        written forms.
+
+        *STR written_form* -- Written form that we want to bump to the head of the priority list.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        
+        """
+        written_forms_priority_list = self.match_phrase(spoken_form)[0]
+        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
+                    "written_forms_priority_list=%s" % repr(written_forms_priority_list))
+        if (written_forms_priority_list == None):
+           written_forms_priority_list = []
+        written_forms_priority_list = \
+           util.remove_occurences_from_list(written_form, written_forms_priority_list)
+        written_forms_priority_list = [written_form] + written_forms_priority_list
+        self.spoken_form_info.add_phrase(spoken_form, written_forms_priority_list)
+        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
+                    "** after bumping, written_forms_priority_list=%s" % repr(written_forms_priority_list))        
+        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
+                    "after bumping, priority list =%s" % repr(self.match_phrase(spoken_form)[0]))        
+
 
     def remove_vocabulary_entry(self, symbol, spoken_form):
         """removes a vocabulary entry corresponding to a spoken form for a

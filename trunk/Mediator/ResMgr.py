@@ -2357,7 +2357,7 @@ class ResMgrBasic(ResMgrStd):
                 native = symbol.native_symbol()
                 debug.trace('ResMgrBasic.remove_symbols', 
                     'removing symbol %s' % native)
-                interpreter.remove_tentative_symbol(native)
+                interpreter.remove_symbol_if_tentative(native)
 
     def reinterpret_recent(self, changed):
         """undo the effect of one or more recent utterances, if
@@ -2383,6 +2383,8 @@ class ResMgrBasic(ResMgrStd):
         with the oldest first, or None if no utterances could be 
         reinterpreted
         """
+        
+        debug.trace('ResMgrBasic.reinterpret_recent', '** changed=%s' % repr(changed))
         possible = []
         i_possible = []
         for j in changed:
@@ -2417,7 +2419,7 @@ class ResMgrBasic(ResMgrStd):
                     spoken_symbol = string.join(symbol.spoken_phrase())
                     native = symbol.native_symbol()
                     if spoken.find(spoken_symbol) == -1:
-                        interpreter.remove_tentative_symbol(native)
+                        interpreter.remove_symbol_if_tentative(native)
 # with ResMgrBasic, we must undo all utterances back to the first one to
 # be reinterpreted
         if not self.states.pop(app, m):
@@ -2434,7 +2436,7 @@ class ResMgrBasic(ResMgrStd):
                         spoken_symbol = string.join(symbol.spoken_phrase())
                         native = symbol.native_symbol()
                         if spoken.find(spoken_symbol) == -1:
-                            interpreter.remove_tentative_symbol(native)
+                            interpreter.remove_symbol_if_tentative(native)
             return None
 # and then reinterpret all those utterances.
 # First, pop information about those utterances off the top of the stack
@@ -2565,7 +2567,7 @@ class ResMgrBasic(ResMgrStd):
                     spoken_symbol = string.join(symbol.spoken_phrase())
                     native = symbol.native_symbol()
                     if spoken.find(spoken_symbol) == -1:
-                        interpreter.remove_tentative_symbol(native)
+                        interpreter.remove_symbol_if_tentative(native)
 
             
             
@@ -2623,11 +2625,13 @@ class ResMgrBasic(ResMgrStd):
 
         *none*
         """
+        debug.trace('ResMgrBasic.correct_recent_synchronous', '** invoked')
         console = self.console()
         utterances = self.recent_dictation()
         interpreted = self.interpreted[:]
         if utterances:
             i_changed = console.correct_recent(self.name, utterances)
+            debug.trace('ResMgrBasic.correct_recent_synchronous', '** i_changed=%s' % repr(i_changed))
             print "phrases changed were: ", i_changed
             if i_changed:
                 changed = []
@@ -2645,7 +2649,7 @@ class ResMgrBasic(ResMgrStd):
                             spoken_symbol = string.join(symbol.spoken_phrase())
                             native = symbol.native_symbol()
                             if spoken.find(spoken_symbol) == -1:
-                                interpreter.remove_tentative_symbol(native)
+                                interpreter.remove_symbol_if_tentative(native)
 
     
     def correct_last(self):

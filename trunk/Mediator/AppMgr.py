@@ -446,6 +446,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         *none*
         """
+        debug.trace('AppMgr.correct_recent', '** invoked')
         if not self.known_instance(instance_name):
             return
         self.recog_mgr.correct_recent_synchronous(instance_name)
