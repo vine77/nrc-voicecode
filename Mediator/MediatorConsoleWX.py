@@ -442,9 +442,9 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         none were corrected
         """
         print "This will eventually show the recent symbols, but it is not implemented yet."
-#make that correction dialog        box = CorrectRecentWX(self, self.main_frame, utterances, 
-#            self.gram_factory, pos = self.corr_recent_pos)
-#        answer = self.show_modal_dialog(box)
+        box = ReformatRecentSymbolsModel(self, self.main_frame, utterances, 
+                              self.gram_factory)
+        answer = self.show_modal_dialog(box)
 #        self.corr_recent_pos = box.GetPositionTuple()
 #        changed = box.changed()  
 #        box.cleanup()
@@ -1568,11 +1568,8 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
 
     **INSTANCE ATTRIBUTES**
 
-    *[(SpokenUtterance, INT, BOOL, [STR])] utterances* -- the n most recent 
-    dictation utterances (or all available if < n), sorted most recent 
-    last, each with a corresponding utterance number and a flag 
-    indicating if the utterance can be undone and re-interpreted,
-    as well as a list of symbols that they contain.
+    *[SymbolToReformat] symbols* -- the n most recently uttered symbols
+    sorted most recent last.
 
     *BOOL first* -- flag indicating whether this is the first time the
     dialog has been activated.
@@ -1585,12 +1582,13 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
 
     *ChoiceGram correct_n_gram* -- ChoiceGram supporting "Correct n"
     """
-    def __init__(self, console, parent, utterances, 
+    def __init__(self, console, parent, symbols, 
                  gram_factory, pos = None, **args): 
        self.deep_construct(ReformatRecentSymbolsModel, 
-                           {'utterances': utterances},
+                           {'symbols': symbols},
                            args)
-       self.setView(ReformatRecentSymbolsViewWX(console, parent, utterances, 
+       debug.trace('ReformatRecentSymbolsModel.__init__', 'symbols=%s' % symbols)
+       self.setView(ReformatRecentSymbolsViewWX(console, parent, symbols, 
                                                 gram_factory, pos))
 
     def displayed_symbols(self):
@@ -1648,6 +1646,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *(INT, INT) pos* -- position of the box in pixels
         """
+        debug.trace('ReformatRecentSymbolsView.__init__', 'symbols=%s' % symbols)
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
@@ -1667,6 +1666,8 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
                             }, args, 
                             exclude_bases = {possible_capture:1, wxDialog: 1}
                            )
+                           
+        
         self.name_parent('console')
         self.add_owned('correct_n_gram')
         if gram_factory:
@@ -1697,7 +1698,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
         recent.InsertColumn(1, "Spoken symbol")
         recent.InsertColumn(2, "Written symbol") 
         recent.InsertColumn(3, "In utterance") 
-      
+                         
         phrases = map(lambda x: string.join(x.utterance.spoken_forms()),
                       symbols)
         index = range(len(phrases), 0, -1)            

@@ -210,6 +210,32 @@ class ResMgr(OwnerObject):
         buffer during correction.
         """
         debug.virtual('ResMgr.recent_dictation')
+        
+    def recent_symbols(self, n=None):
+        """returns a list of the most recently uttered symbols.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *INT n* -- the number of utterances from which to pull recently dictated symbols.
+        If None, then return all of them.
+
+        **OUTPUTS**
+
+        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        utterances (or all available if < n), sorted most recent last.
+        
+        Note:  These symbols should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        """
+        debug.virtual('ResMgr.recent_symbols')
 
     def correct_last(self):
         """initiate user correction of the most recent dictation utterance 
@@ -469,6 +495,33 @@ class ResMgrStd(ResMgr):
         buffer during correction.
         """
         return None
+        
+    def recent_symbols(self, n=None):
+        """returns a list of the most recently uttered symbols.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *INT n* -- the number of utterances from which to pull recently dictated symbols.
+        If None, then return all of them.
+
+        **OUTPUTS**
+
+        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        utterances (or all available if < n), sorted most recent last.
+        
+        Note:  These symbols should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        """
+        return None
+        
 # no information stored, but subclasses will need to
 # define this
 
@@ -2263,6 +2316,43 @@ class ResMgrBasic(ResMgrStd):
         recent_dictation
         """
         return len(self.utterances)
+        
+    def recent_correctable_dictation(self, n = None):
+        """returns a list of SpokenUtterance objects that can be reinterpreted.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *INT n* -- the number of utterances to return, or None to return 
+        all available utterances.
+
+        **OUTPUTS**
+
+        *[(SpokenUtterance, INT)]* -- the n most recent reinterpretable dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        each with a corresponding identifying number.
+
+        The utterance number is unique, within a given editor instance.
+
+        Note:  These utterances should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        buffer during correction.        
+        """
+        utterances = self.recent_dictation(n)
+        debug.trace('ResMgrBasic.recent_correctable_dictation', '** utterances=%s' % repr(utterances))
+        reinterpretable_utterances = []
+        if utterances:
+           for an_utter_info in utterances:
+              if an_utter_info[2]:
+                 reinterpretable_utterances.append([an_utter_info[0], an_utter_info[1]])
+        return reinterpretable_utterances
 
     def recent_dictation(self, n = None):
         """returns a list of SpokenUtterance objects
@@ -2325,7 +2415,37 @@ class ResMgrBasic(ResMgrStd):
                 'adding %s, number = %d, safe = %d' % (self.utterances[-i], self.numbers[-i], i <= safe))
             utterances.append((self.utterances[-i], self.numbers[-i], i <= safe))
         return utterances
-   
+    
+    def recent_symbols(self, n=None):
+        """returns a list of the most recently uttered symbols.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *INT n* -- the number of utterances from which to pull recently dictated symbols.
+        If None, then return all of them.
+
+        **OUTPUTS**
+
+        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        utterances (or all available if < n), sorted most recent last.
+        
+        Note:  These symbols should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        """
+        utterances = self.recent_correctable_dictation(n)
+        debug.trace('ResMgrBasic.recent_symbols', '** utterances=%s' % repr(utterances))
+#TODO: Return the symbols computed from the utterances.
+           
+
+    
     def scratch_recent(self, n = 1):
         """undo the effect of the most recent n utterances, if possible.
 
@@ -2716,9 +2836,9 @@ class ResMgrBasic(ResMgrStd):
         """
         debug.trace("ResMgrBasicreformat_recent_synchronous", "invoked")
         console = self.console()
-        utterances = self.recent_dictation()
+        symbols = self.recent_symbols()
         if utterances:
-            console.reformat_recent(self.name, utterances)
+            console.reformat_recent(self.name, symbols)
         
 
 

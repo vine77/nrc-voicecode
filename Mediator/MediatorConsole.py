@@ -461,10 +461,9 @@ class MediatorConsole(Object.OwnerObject):
 
         debug.trace('MediatorConsole.reformat_recent', 'invoked with utterances=%s' % utterances)
         editor_window = self.store_foreground_window()
-        self.show_recent_symbols(editor_name, utterances)
-        print "This will eventually display the recent symbol correction dialog box, but it is not implemented yet"
+        ok = self.show_recent_symbols(editor_name, utterances)
         editor_window.restore_to_foreground()
-#        return ok
+        return ok
 
     def show_recent_symbols(self, editor_name, utterances):
         """display a dialog box with recent symbols to allow the user to 
