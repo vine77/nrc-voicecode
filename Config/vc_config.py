@@ -854,6 +854,17 @@ misc_python_cmds = CSCmdSet('miscellaneous Python commands',
 misc_python.add_lsa(LSAlias(['none'], {'python': 'None'}))
 misc_python.add_lsa(LSAlias(['self dot'], {'python': 'self.'}, spacing =
     no_space_after))
+    
+#AD (2003-07-01) --
+#  I created this LSA so that 'self' would not be printed
+#  as __self__. This is a temporary fix. The right way to fix
+#  this problem would be to implement a smarter algorithm for
+#  choosing between homophonic symbols (e.g. chose most recent, 
+#  choose one with closest occurence to the cursor, etc...)
+#            
+misc_python.add_lsa(LSAlias(['self'], {'python': 'self'}, spacing =
+    no_space_after))    
+    
 misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
 
 acmd = CSCmd(spoken_forms=['continue statement'],
@@ -924,7 +935,7 @@ python_imports.add_lsa(LSAlias(['import all'], {'python': ' import all'}))
 
 python_comparisons = LSAliasSet('Python comparison operators',
     description = "Python-specific comparison operators")
-python_comparisons.add_lsa(LSAlias(['in', 'in list', 'in sequence'], {'python': ' in '}))
+python_comparisons.add_lsa(LSAlias(['in list', 'in sequence', 'is in', 'is in list', 'is in sequence'], {'python': ' in '}))
 
 # '<>' is obsolete in python ('!=' is now the encouraged form), but we include
 # it so we can select code that uses the obsolete form
@@ -935,7 +946,7 @@ python_comparisons.add_lsa(LSAlias(['in', 'in list', 'in sequence'], {'python': 
 #        'less than greater than'],
 #        {'python': ' <> '}))
 
-python_comparisons.add_lsa(LSAlias(['is', 'is same', 'same as', 'is same as'], {'python': ' is '}))
+python_comparisons.add_lsa(LSAlias(['is same', 'same as', 'is same as'], {'python': ' is '}))
 
 
 # Python-specific quotes
