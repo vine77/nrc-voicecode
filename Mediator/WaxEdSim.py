@@ -7,7 +7,8 @@ import debug
 import traceback
 import sys
 from Object import Object
-import wxEditor
+#import wxEditor
+import TextBufferWX
 import wxCmdPrompt
 import wxAutoSplitterWindow
 from wxPython.wx import *
@@ -63,16 +64,16 @@ class WaxEditPane(wxPanel):
     *wxTextControl* log -- text control for log window to display
     output, error messages, and command history
 
-    *wxEditor* wax_text_buffer -- editor interface with change
+    *TextBufferWX* wax_text_buffer -- editor interface with change
     specification, so that we can keep track of changes to the editor
     buffer.
-
-    *TextBufferNotifyWX* notify -- TextBufferChangeNotify wrapper for
-    the editor control
 
     *wxTextControl* editor -- underlying text control for editor window
 
     """
+
+    def __del__(self):
+        print 'pane breaking'
 
     def __init__(self, parent, ID, title):
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize,
@@ -114,6 +115,8 @@ class WaxEditPane(wxPanel):
         self.command_line = command_line
 # dictionary to provide local name space for user commands
 	self.command_space = {}
+# provide extra access for testing - get rid of this in the end
+	self.command_space['the_pane'] = self
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
 
@@ -121,10 +124,8 @@ class WaxEditPane(wxPanel):
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
 
   
-        notify = wxEditor.TextBufferNotifyWX(self.editor)
-        self.notify = notify
-        self.wax_text_buffer = wxEditor.TextBufferSpecifyWX(notify,
-	    change_callback=self.on_editor_change)
+        self.wax_text_buffer = \
+	    TextBufferWX.TextBufferWX(self.editor, change_callback=self.on_editor_change)
         self.SetAutoLayout(1)
         self.SetSizer(self.vbox)
         self.vbox.Fit(self)
@@ -255,6 +256,7 @@ class WaxEditFrame(wxFrame):
         self.SetStatusText(m)
         return
     def quit_now(self, event):
+	print 'closing'
         self.Close(true)
     def on_activate(self, event):
         current = wxWindow_FindFocus()

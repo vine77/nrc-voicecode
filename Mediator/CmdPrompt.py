@@ -363,7 +363,7 @@ class CmdLog(Object):
 	    self.prompt = ""
 
     def log_command(self, command):
-	"""log a command.  Must be implemented by concrete subclass
+	"""log a command.
 
 	**INPUTS**
 
@@ -374,10 +374,12 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	pass
+	self.write(self.prompt + command + '\n')
     
     def write(self, string):
-	"""synonym for log_message.  Allows CmdLog to be used to capture
+	"""add a string to the command log.
+	Must be implemented by concrete subclass.
+	This interface allows CmdLog to be used to capture
 	standard output.
 
 	**INPUTS**
@@ -389,10 +391,10 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	self.log_message(string)
+	pass
 
     def log_message(self, message):
-	"""log output/message.  Must be implemented by concrete subclass
+	"""log output/message.  
 
 	**INPUTS**
 
@@ -403,8 +405,75 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	pass
+	self.write(message)
+
+class CmdLogFile(CmdLog):
+    """implementation of CmdLog which writes to a file, and also
+    optionally passes messages through to another CmdLog implementation.
+
+    **INSTANCE ATTRIBUTES**
+
+    *FILE* log_file -- file (open for writing or appending) used to
+    log commands.  The file will be closed when the CmdLog is destroyed
+
+    *CmdLog* second -- optional second CmdLog object to which the 
+    write message will be passed (in addition to writing to the file)
+
+    *BOOL* flush -- flush on each write?
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, log_file, second_cmd_log = None, flush = 0, **args):
+	"""create a new CmdLog
+
+	**INPUTS**
+
+	*FILE* log_file -- file (should already be open for writing or
+	appending) to use to log commands
+    
+	*CmdLog* second_cmd_log -- optional second CmdLog object to which the 
+	write message will be passed (in addition to writing to the file)
+
+	*BOOL* flush -- flush on each write?
+	"""
+        self.deep_construct(CmdLogFile,
+                            {'log_file':log_file,
+			     'second': second_cmd_log,
+			     'flush': flush}, 
+                            args)
+
+    def __del__(self):
+	"""destructor.  Shouldn't be called explicitly.
+	"""
+	self.log_file.flush()
+	self.log_file.close()
+
+    def write(self, string):
+	"""add a string to the command log.
+	This interface allows CmdLog to be used to capture
+	standard output.
+
+	**INPUTS**
+
+	*STR* string -- message string to be logged (unlike
+	log_command, should include internal and trailing new-lines)
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.log_file.write(string)
+	if self.flush:
+	    self.log_file.flush()
+	if self.second:
+	    self.second.write(string)
 
 
 
+
+
+
+    
 

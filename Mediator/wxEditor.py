@@ -55,6 +55,7 @@ class TextBufferNotifyWX(TextBufferChangeNotify, VisibleBuffer):
 	
 	calls  TextBufferChangeNotify's _on_change
 	"""
+	print '_on_evt_text', self.program_initiated
 	self._on_change(self.program_initiated)
 	
     def _external_position(self, internal):
@@ -195,16 +196,23 @@ class TextBufferNotifyWX(TextBufferChangeNotify, VisibleBuffer):
 	    start = self._internal_position(start)
 	    end = self._internal_position(end)
 	s, e = self.range_defaults(start, end)
-	self.program_initiated = 1
+	print 'TBNwx.set_text ', s, e, text
+#	self.program_initiated = 1
 # this tries to use clipboard, for some unknown reason, and fails
 #	self.underlying.Replace(s, e, text)
 	if self.carriage_return_bug:
 	    s = self._external_position(s)
 	    e = self._external_position(e)
 	self.set_selection(s, e)
+	self.program_initiated = 1
 	self.underlying.WriteText(text)
 	self.program_initiated = 0
 
+    def get_length(self):
+	e = self.underlying.GetLastPosition()
+	if self.carriage_return_bug:
+	    e = self._external_position(e)
+	return e
 
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
@@ -273,6 +281,7 @@ class TextBufferNotifyWX(TextBufferChangeNotify, VisibleBuffer):
 	    start = self._internal_position(start)
 	    end = self._internal_position(end)
 	s, e = self.range_defaults(start, end)
+	print 'TBNwx.set_selection', s, e
 	self.program_initiated = 1
 	self.underlying.SetSelection(s, e)
 	self.program_initiated = 0
@@ -295,10 +304,12 @@ class TextBufferNotifyWX(TextBufferChangeNotify, VisibleBuffer):
 	char_height = self.underlying.GetCharHeight()
 	starting_line = self.underlying.GetScrollPos(wxVERTICAL)
 	lines = self.underlying.GetNumberOfLines()
-	ending_line = min(starting_line + height/char_height, lines)
+	ending_line = min(starting_line + height/char_height, lines-1)
 	ending_x = self.underlying.GetLineLength(ending_line)
-	start = self.underlying.PositionToXY(starting_line,0)
-	end = self.underlying.PositionToXY(ending_line, ending_x)
+	print starting_line, ending_line, ending_x
+	start = self.underlying.XYToPosition(0, starting_line)
+	end = self.underlying.XYToPosition(ending_x, ending_line)
+	print end
 	if self.carriage_return_bug:
 	    start = self._external_position(start)
 	    end = self._external_position(end)
