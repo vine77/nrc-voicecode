@@ -7,3 +7,7 @@ def gen_parens_pair(app, cont):
 def gen_brackets_pair(app, cont):
     """Insert parens"""
     app.insert_indent('[', ']')
+
+
+    
+    
