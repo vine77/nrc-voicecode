@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 26 23:45:22 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Dec 29 21:37:41 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,6 +29,7 @@
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.before_interp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.before_interp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.can_restore"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.can_restore</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.StateStack.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # callback which notifies us that a buffer was closed</SPAN>
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.pop"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.pop</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.StateStack.safe_depth"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.StateStack.safe_depth</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
@@ -207,6 +208,23 @@ trying to restore the state (n = 1 refers to the top entry)
 <DD>true if we can safely restore to that state
 
 </DL>
+<H2 ID="ResMgr.StateStack.close_buffer_cbk" CLASS="Method">ResMgr.StateStack.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>callback which notifies us that a buffer was closed</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="ResMgr.StateStack.pop" CLASS="Method">ResMgr.StateStack.pop(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
 <P>None</P>
 

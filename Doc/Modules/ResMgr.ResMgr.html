@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 26 23:45:22 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Dec 29 21:37:41 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,6 +26,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ResMgr</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
     <A CLASS="DocLink" HREF="#ResMgr.ResMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.ResMgr.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>)<SPAN CLASS="OneLiner"> # can we safely reinterpret the nth most recent utterance</SPAN>
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgr.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # callback which notifies us that a buffer was closed</SPAN>
     <A CLASS="DocLink" HREF="#ResMgr.ResMgr.console"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.console</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.ResMgr.correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.ResMgr.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgr.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -119,6 +120,26 @@ to be reinterpreted
 <DD>true if we can safely reinterpret that utterance
 
 </DL>
+<H2 ID="ResMgr.ResMgr.close_buffer_cbk" CLASS="Method">ResMgr.ResMgr.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>callback which notifies us that a buffer was closed</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="ResMgr.ResMgr.console" CLASS="Method">ResMgr.ResMgr.console(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
