@@ -27,7 +27,7 @@ import AppMgr, RecogStartMgr, GramMgr
 import MediatorConsole
 import sr_grammars
 import RecogStartMgrNL
-import sr_grammars_NL
+import sr_grammarsNL
 
 """Defines main class for the mediator.
 
