@@ -22,7 +22,7 @@
 """Interface to a buffer being edited in the programming environment"""
 
 
-import debug
+import debug, util
 import re, string, sys
 
 from Object import Object, ChildObject

@@ -156,7 +156,7 @@ EdSim.__init__
 SourceBuff.__init__: 
 SourceBuff.cleanup: 
 SourceBuff.__del__: 
-SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
 
 
 >>> Testing command interpreter
@@ -185,9 +185,9 @@ SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
   8:    }
   9:    
  10:    }
-SourceBuff.cleanup: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
-SourceBuff.__del__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
-SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
+SourceBuff.cleanup: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Interpreting in a Python buffer
 
@@ -212,15 +212,15 @@ SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.cleanup
-SourceBuff.cleanup: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
-SourceBuff.__del__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
+SourceBuff.cleanup: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 EdSim.__del__
 
 *** testing cleanup with multi-buffer EdSim
 
 EdSim.__init__
 SourceBuff.__init__: 
-SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
 
 
 >>> Testing command interpreter
@@ -249,7 +249,7 @@ SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
   8:    }
   9:    
  10:    }
-SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Interpreting in a Python buffer
 
@@ -274,10 +274,10 @@ SourceBuff.__init__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.cleanup
-SourceBuff.cleanup: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
-SourceBuff.__del__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c
-SourceBuff.cleanup: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
-SourceBuff.__del__: H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.py
+SourceBuff.cleanup: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.cleanup: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.cleanup: 
 SourceBuff.__del__: 
 EdSim.__del__
