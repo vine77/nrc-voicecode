@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:47:12 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:57:29 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">PersistentConfigNewMediator</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <A CLASS="DocLink" HREF="#regression.PersistentConfigNewMediator.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigNewMediator.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=1</SPAN>, <SPAN CLASS="Argument">correction=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # <STRONG>INPUTS</STRONG></SPAN>
+    <A CLASS="DocLink" HREF="#regression.PersistentConfigNewMediator.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigNewMediator.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=1</SPAN>, <SPAN CLASS="Argument">correction=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # <STRONG>INPUTS</STRONG></SPAN>
     <A CLASS="DocLink" HREF="#regression.PersistentConfigNewMediator.correction_available"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigNewMediator.correction_available</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigNewMediator.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigNewMediator.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#regression.PersistentConfigNewMediator.execute_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfigNewMediator.execute_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
@@ -37,6 +37,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.possibly_init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.possibly_init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)
 
 </PRE><H2>Description</H2><P>
 implementation of PersistentConfig which resets a pre-existing
@@ -67,9 +68,13 @@ regression tests using a persistent editor
 <EM>BOOL symbol_match_dlg</EM>
 <DD>use a CmdInterp with symbol match 
 dialog/prompt.  Normally disabled except during regression
+<DT>
+<EM>BOOL bypass_for_dictation</EM>
+<DD>bypass natlink for dictation
+utterances
 
 </DL>
-<H2 ID="regression.PersistentConfigNewMediator.__init__" CLASS="Method">regression.PersistentConfigNewMediator.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=1</SPAN>, <SPAN CLASS="Argument">correction=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="regression.PersistentConfigNewMediator.__init__" CLASS="Method">regression.PersistentConfigNewMediator.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=1</SPAN>, <SPAN CLASS="Argument">correction=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P><STRONG>INPUTS</STRONG></P>
 
 
@@ -96,6 +101,10 @@ regression tests using a persistent editor
 <EM>BOOL symbol_match_dlg</EM>
 <DD>use a CmdInterp with symbol match 
 dialog/prompt.  Normally disabled except during regression
+<DT>
+<EM>BOOL bypass_for_dictation</EM>
+<DD>bypass natlink for dictation
+utterances
 
 </DL>
 <H2 ID="regression.PersistentConfigNewMediator.correction_available" CLASS="Method">regression.PersistentConfigNewMediator.correction_available(<SPAN CLASS="Argument">self</SPAN>)</H2>
@@ -325,6 +334,31 @@ classes will be called automatically.
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
  raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.possibly_init_attrs" CLASS="Method">Object.Object.possibly_init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Initialises existing attributes, unless those attributes
+already exist</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
