@@ -1332,11 +1332,11 @@ class EnglishSmallNumbersSet(Object):
         
 
         
-class StandardFunctionCalls(Object):
+class StandardFunctionCallsHelper(Object):
     """Helper class for creating a CSC set for standard functions and method
-    names.
+    names for a particular programming language.
     
-    The standard functions set is used to allow:
+    The standard functions sets are used to allow:
     
     - Distinction between a function name an possible homophonic variable names.      
       For example in Python, the utterance "string with arguments" would refer
@@ -1359,6 +1359,8 @@ class StandardFunctionCalls(Object):
 
     **INSTANCE ATTRIBUTES**
 
+    *STR language* -- Name of the language that these functions belong to.
+    
     *[STR] with_arguments_suffixes* -- List of suffixes that can be appended
     to the function or method name to invoke it with a non-empty arguments list
     (eg: in Python, that means: type () and put the cursor IN BETWEEN).
@@ -1384,8 +1386,7 @@ class StandardFunctionCalls(Object):
     to print an empty argument list for the function or method name.      
     """
     
-    def __init__(self, command_set,
-                       with_arguments_suffixes=
+    def __init__(self, language, with_arguments_suffixes=
                            ['with arguments', 'with argument', 'call with',
                            'called with', 'function of', 'of'], 
                        without_arguments_suffixes=
@@ -1397,7 +1398,8 @@ class StandardFunctionCalls(Object):
                        without_arguments_actions={},     
                        **args):
         self.deep_construct(Object,
-                            {'with_arguments_suffixes': with_arguments_suffixes,
+                            {'language': language,
+                            'with_arguments_suffixes': with_arguments_suffixes,
                              'without_arguments_suffixes': without_arguments_suffixes,
                              'with_arguments_actions': with_arguments_actions,
                              'without_arguments_actions': without_arguments_actions,
@@ -1405,27 +1407,23 @@ class StandardFunctionCalls(Object):
                              'default_without_arguments_action': default_without_arguments_action},
                             args)
                             
-    def add_function_name(self, spoken_forms, written_forms, command_set):
+    def add_function_name(self, spoken_forms, written_form, command_set):
        """Add a definition for a standard function or method name to the set.
                
         **INPUTS**
         
         *[STR] spoken_forms -- List of spoken forms for the function. 
         
-        *{STR: STR} written_forms* -- Key is the name of a programming language and value 
-        is the written form of that function in the specified language. If 
-        a key is None, it means the associated value is a default written 
-        form to be used if there are no specific keys for a given language in 
-        *writen_forms*.        
-
-       *CSCmdSet command_set* -- CSC set to wich the commands for calling this 
-       function should be added.
-       """
+        *STR written_form* -- Written form of the function for language *self.language*.
+ 
+        *CSCmdSet command_set* -- CSC set to wich the commands for calling this 
+        function should be added.
+        """
        
-       self._add_function_calls(spoken_forms, written_forms, 'non-empty', command_set)
-       self._add_function_calls(spoken_forms, written_forms, 'empty', command_set)       
+       self._add_function_calls(spoken_forms, written_form, 'non-empty', command_set)
+       self._add_function_calls(spoken_forms, written_form, 'empty', command_set)       
        
-    def _add_function_calls(self, spoken_forms, written_forms, arg_list_type, 
+    def _add_function_calls(self, spoken_forms, written_form, arg_list_type, 
                                   command_set):
        """Add CSCs for calling the function with a non-empty list of arguments.
                
@@ -1433,12 +1431,8 @@ class StandardFunctionCalls(Object):
         
         *[STR] spoken_forms -- List of spoken forms for the function. 
         
-        *{STR: STR} written_forms* -- Key is the name of a programming language and value 
-        is the written form of that function in the specified language. If 
-        a key is None, it means the associated value is a default written 
-        form to be used if there are no specific keys for a given language in 
-        *writen_forms*.        
-
+        *STR written_form* -- Written form of the function for language *self.language*.
+        
         *STR arg_list_type* -- type of argument list to call the function with. 
         Either 'empty', or 'non-empty'.
         
@@ -1458,24 +1452,19 @@ class StandardFunctionCalls(Object):
              spoken_call = "%s %s" % (a_spoken_form, a_suffix)
              call_spoken_forms.append(spoken_call)
           
-       cont_meanings = {}   
-       for a_language in written_forms.keys():
-          call_action = self._function_call_action_factory(written_forms[a_language], a_language, arg_list_type)
-          cont_meanings[ContNotAfterNewSymb(a_language)] = call_action
+       call_action = self._function_call_action_factory(written_form, arg_list_type)
+       cont_meanings = {ContNotAfterNewSymb(self.language): call_action}
           
        aCSC = CSCmd(spoken_forms = call_spoken_forms, 
                     meanings = cont_meanings,
-                   docstring = 'call function/method "%s" with %s argument list' % (spoken_forms[0], arg_list_type))
+                   docstring = 'call %s function/method "%s" with %s argument list'  \
+                               % (self.language, written_form, arg_list_type))
           
        command_set.add_csc(aCSC)
 
-    def _function_call_action_factory(self, func_name, language, args_list_type):
-       """Returns an action for printing the function or method call.
-       
-       NOTE: for now, the *language* argument is not used because all
-             supported languages use the same syntax, i.e. func_name(). But
-             this may not always be the case."""
-             
+    def _function_call_action_factory(self, func_name, args_list_type):
+       """Returns an action for printing the function or method call."""
+                    
        return ActionFuncCallWithParens(func_name, args_list_type)
 
                             
