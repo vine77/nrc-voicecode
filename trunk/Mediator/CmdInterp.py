@@ -873,6 +873,68 @@ class CmdInterp(Object):
     def print_abbreviations(self):
 	self.known_symbols.print_abbreviations()
 
+    def peek_at_unresolved(self):
+        """returns a reference to the dictionary of unresolved 
+	abbreviations maintained by the SymDict, and the symbols 
+	containing those abbreviations.
+
+	**NOTE:** This method is intended only for diagnostic testing
+	purpose.  The caller must not modify the dictionary returned
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*{STR: {STR: 1}}* unresolved_abbreviations={} -- Dictionary of
+	unresolved abbreviations. These are abbreviations that have
+	appeared in at least one compiled symbol, yet are neither a word
+	in the speech vocabulary or a known abbreviation. Values are
+	dictionnaries that list the symbols containing the unresolved
+	abbreviation.
+	"""
+	return self.known_symbols.peek_at_unresolved()
+
+    def accept_symbol_match(self, the_match):
+        """Accepts a match between a pseudo symbol and its native form.
+
+        Adds the new written\spoken symbol to the SR vocabulary and
+        adds new abbreviations which are used in the match.
+
+        Also, adds written\spoken symbols for symbols that contain
+        those new abbreviations and whose spoken form can now be
+        resolved because of those new abbreviations.
+        
+        **INPUTS**
+        
+        [SymbolMatch] the_match -- The match to be accepted
+        
+
+        **OUTPUTS**
+        
+        *none* --
+
+        .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+	return self.known_symbols.accept_symbol_match(the_match)
+
+    def match_pseudo_symbol(self, pseudo_symbol):        
+        """Returns a prioritized list of all known native symbols that
+        match a given pseudo symbol.
+        
+        **INPUTS**
+        
+        *STR* pseudo_symbol -- The pseudo symbol to be matched. 
+        
+
+        **OUTPUTS**
+        
+        *[* [SymbolMatch] *]* -- Prioritized list of symbol matches.
+
+        
+        .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+	return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
+
     def cleanup(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
         

@@ -1699,14 +1699,15 @@ class ServerOldMediator(ServerMainThread):
 	    sys.stderr.write("new instance, not testing: %d\n" % test_client)
             exclusive = 0
             allResults = 0
-            mediator.init_simulator(on_app=instance, 
+            a_mediator = mediator.new_simulator(on_app=instance, 
 	        disable_dlg_select_symbol_matches=1, window=window, 
 		exclusive = exclusive, allResults = allResults, 
 		owns_app = 1, owner = self, id = id)
 
-	    self.active_meds[id] = mediator.the_mediator
-	    mediator.the_mediator = None
-	    return 1
+	    if a_mediator:
+	      self.active_meds[id] = a_mediator
+	      return 1
+	    return 0
 
     def known_instance(self, id):
 	"""returns a reference to the AppStateMessaging instance 

@@ -52,12 +52,13 @@ def compilation_test(a_mediator, source):
     a_mediator.interp.cleanup()
     a_mediator.interp.parse_symbols_from_file(source)
     print '\n\nParsed symbols are: '
-    a_mediator.interp.known_symbols.print_symbols()
+    a_mediator.interp.print_symbols()
     print 'Unresolved abbreviations are:'
-    sorted_unresolved = a_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    unresolved = a_mediator.interp.peek_at_unresolved()
+    sorted_unresolved = unresolved.keys()
     sorted_unresolved.sort()
     for an_abbreviation in sorted_unresolved:
-        symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        symbol_list = unresolved[an_abbreviation].keys()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
         
     print '\n*** End of compilation test ***\n'
@@ -71,28 +72,30 @@ def accept_symbol_match_test(a_mediator, source, symbol_matches):
     a_mediator.interp.cleanup()            
     a_mediator.interp.parse_symbols_from_file(source)
     print 'Parsed symbols are: '
-    a_mediator.interp.known_symbols.print_symbols()
+    a_mediator.interp.print_symbols()
     print '\n\nUnresolved abbreviations are:'
-    sorted_unresolved = a_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    unresolved = a_mediator.interp.peek_at_unresolved()
+    sorted_unresolved = unresolved.keys()
     sorted_unresolved.sort()
     for an_abbreviation in sorted_unresolved:
-        symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        symbol_list = unresolved[an_abbreviation].keys()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
     sys.stdout.write('\n\nAccepting: ')
     for a_match in symbol_matches:
        sys.stdout.write('\'%s\' -> \'%s\', ' % (a_match.pseudo_symbol, a_match.native_symbol))
-       a_mediator.interp.known_symbols.accept_symbol_match(a_match)
+       a_mediator.interp.accept_symbol_match(a_match)
     sys.stdout.write('\n')
            
 
     print '\n\nAfter accepting those symbols, known symbols are:\n'
-    a_mediator.interp.known_symbols.print_symbols()
+    a_mediator.interp.print_symbols()
     print '\n\nUnresolved abbreviations are:'
-    sorted_unresolved = a_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    unresolved = a_mediator.interp.peek_at_unresolved()
+    sorted_unresolved = unresolved.keys()
     sorted_unresolved.sort()
     for an_abbreviation in sorted_unresolved:
-        symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        symbol_list = unresolved[an_abbreviation].keys()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
         
@@ -138,7 +141,7 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
         # Match the symbols
         #
         for a_symbol in pseudo_symbols:
-            matches = a_mediator.interp.known_symbols.match_pseudo_symbol(a_symbol)
+            matches = a_mediator.interp.match_pseudo_symbol(a_symbol)
             sys.stdout.write('\'%s\' matches: [' % a_symbol) 
             if matches:
                 for a_match in matches:
