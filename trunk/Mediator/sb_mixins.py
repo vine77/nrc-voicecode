@@ -25,42 +25,6 @@
 from Object import OwnerObject
 import sb_services
 
-class WithKbdService(OwnerObject):
-    """a SourceBuff mixin that implements keyboard simulation methods"""
-    def __init__(self, srv_sim_kbd = None, **attrs):
-        self.deep_construct(WithKbdService,
-                            {'srv_sim_kbd': srv_sim_kbd},
-                            attrs
-                            )
-        if self.srv_sim_kbd is None:
-            self.srv_sim_kbd = \
-                sb_services.SB_ServiceSimKbdWindowsStyle(buff = self)
-        self.add_owned('srv_sim_kbd')
-
-###################################################################
-# Methods for simulating user kbd input. Those methods
-# are only used by the regression test, in order to test mixed mode
-# (i.e. voice + kbd) editing scenarios.
-###################################################################
-    
-    def set_selection_by_kbd(self, start, end):
-        self.srv_sim_kbd.simulate_set_selection_by_kbd(start, end)
-        
-    def move_cursor_by_kbd(self, direction, num_steps):
-        self.srv_sim_kbd.simulate_set_selection_by_kbd(direction, num_steps)
-        
-    def type_text(self, text):
-        self.srv_sim_kbd.simulate_set_selection_by_kbd(text)
-
-    
-    def set_selection_by_kbd(self, start, end):
-        self.srv_sim_kbd.simulate_set_selection_by_kbd(start, end)
-      
-    def move_cursor_by_kbd(self, direction, num_steps):
-        self.srv_sim_kbd.simulate_move_cursor_by_kbd(direction, num_steps)
-        
-    def type_text(self, text):
-        self.srv_sim_kbd.simulate_type_text(text)
         
 class WithStateService(OwnerObject):
     """a SourceBuff mixin that uses an SB_ServiceState object to implement 

@@ -36,17 +36,6 @@ debug.config_traces(status="on", active_traces = {
    allow_trace_id_substrings = 1)
 
 
-#
-# Make sure we run tests without connecting to NatSpeak
-#
-# Must do this before importing other VoiceCode files because creation and
-# initialisation of VoiceDictation may try to link with NatSpeak
-#
-# NOTE: This is commented out because it causes problems with say_select
-#       Don't know why.
-#
-# os.environ['VCODE_NOSPEECH'] = '1'
-
 import auto_test, util
 
 

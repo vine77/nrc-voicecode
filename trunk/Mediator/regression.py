@@ -308,12 +308,12 @@ class PersistentConfigNewMediator(Object.Object):
     *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
     dialog/prompt.  Normally disabled except during regression
 
-    *BOOL bypass_for_dictation* -- bypass natlink for dictation
+    *BOOL bypass_sr_recog* -- bypass natlink for dictation
     utterances
     """
     def __init__(self, mediator, editor_name, names, 
         symbol_match_dlg = 1, correction = None, 
-        bypass_for_dictation = 0, **args):
+        bypass_sr_recog = 0, **args):
         """**INPUTS**
 
         *{STR:ANY} names* -- the namespace dictionary in which the
@@ -332,7 +332,7 @@ class PersistentConfigNewMediator(Object.Object):
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
 
-        *BOOL bypass_for_dictation* -- bypass natlink for dictation
+        *BOOL bypass_sr_recog* -- bypass natlink for dictation
         utterances
         """
         self.deep_construct(PersistentConfigNewMediator, 
@@ -342,7 +342,7 @@ class PersistentConfigNewMediator(Object.Object):
                              'correction': correction,
                              'editor_name': editor_name,
                              'symbol_match_dlg': symbol_match_dlg,
-                             'bypass_for_dictation': bypass_for_dictation
+                             'bypass_sr_recog': bypass_sr_recog
                             }, args)
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
@@ -450,7 +450,7 @@ class PersistentConfigNewMediator(Object.Object):
         editor.init_for_test()
         interp = self.mediator().interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names,
-            bypass_for_dictation = self.bypass_for_dictation)
+            bypass_sr_recog = self.bypass_sr_recog)
         commands.bind_methods(self.names)
         self.names['commands'] = commands
 
@@ -472,6 +472,27 @@ class PersistentConfigNewMediator(Object.Object):
             exec command in self.names
         except Exception, err:
             traceback.print_exc()
+            
+    def kbd_event_sim_factory(self, app):
+       """Returns a [KbdEventSim] that can be used to simulate keyboard events
+       a given client editor.
+    
+       **INPUTS**
+    
+       [AppState] *app* -- the client editor on which we want to simulate
+       keyboard events
+    
+       **OUTPUT**
+       
+       [KbdEventSim] -- an object through which we can simulate keyboard events
+       for that editor.
+       
+       ..[KbdEventSim] file:///./regression.KbdEventSim.html
+       ..[AppState] file:///./AppState.AppState.html"""
+       
+       # For now, this factory method always returns a MS-Windows style 
+       # simulator for all editors.
+       return KbdEventSimWindowsStyle()
 
 class TempConfig(Object.Object):
     """abstract base class which hides the details of the internal
@@ -682,6 +703,73 @@ class TempConfigNewMediatorFactory(Object.Object):
 # recursion (well, maybe not, since we didn't specify test_args, but
 # anyway)
         return TempConfigNewMediator(mediator = a_mediator, editor = app)
+
+
+class KbdEventSim(Object.Object):
+    """Class for simulating keyboard user actions (e.g. typing text, 
+    changing selection).
+
+    **INSTANCE ATTRIBUTES**
+    
+    *none*
+
+    **CLASS ATTRIBUTES**
+        
+    *none*
+
+    """
+
+    def __init__(self, **args):
+        self.deep_construct(TempConfigNewMediatorFactory, 
+            {}, args)
+
+    def set_selection_by_kbd(self, direction, length):
+        debug.virtual('KbdEventSim.set_selection_by_kbd')
+        
+    def move_cursor_by_kbd(self, direction, num_steps):
+        debug.virtual('KbdEventSim.move_cursor_by_kbd')    
+        
+    def type_text(self, text):
+        debug.virtual('KbdEventSim.type_text')    
+
+
+class KbdEventSimWindowsStyle(KbdEventSim):
+    """Class for simulating keyboard user actions (e.g. typing text, 
+    changing selection) using windows-style keyboard key sequences.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *none*
+
+    **CLASS ATTRIBUTES**
+        
+    *none*
+
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(KbdEventSimWindowsStyle, 
+                            {}, 
+                            args_super, 
+                            {})
+                            
+    def move_cursor_by_kbd(self, direction, num_steps):
+        string_to_send = ''
+        move_with_key = "{%s" % direction
+        string_to_send = '%s %d}' % (move_with_key, num_steps)
+        sr_interface.send_keys(string_to_send, 1)
+        
+                            
+    def set_selection_by_kbd(self, direction, length):    
+        string_to_send = ''
+        move_with_key = '{Shift+%s' % direction
+        string_to_send = '%s %d}' % (move_with_key, length)
+        sr_interface.send_keys(string_to_send, 1)
+        
+    def type_text(self, text):
+        sr_interface.send_keys(text, )
+
+
 
 
 # defaults for vim - otherwise ignore
