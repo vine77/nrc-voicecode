@@ -42,9 +42,11 @@ from natlinkutils import *
 #
 # Import configuration functions
 #
-from MediatorObject import associate_language, define_language, \
-     add_abbreviation, add_csc, add_lsa, print_abbreviations, \
-     standard_symbols_in
+# from MediatorObject import associate_language, define_language, \
+#      add_abbreviation, add_csc, add_lsa, print_abbreviations, \
+#      standard_symbols_in
+
+from MediatorObject import associate_language, define_language
 
 from CSCmd import CSCmd
 from LangDef import LangDef
@@ -56,13 +58,35 @@ from actions_perl import *
 
 import sr_interface
 
+#test_mediator = None
 
 if (__name__ == '__main__'):
-    import MediatorObject
-    MediatorObject.to_configure = MediatorObject.MediatorObject()
+    if not globals().has_key('add_csc') and not locals().has_key('add_csc'):
+	import MediatorObject
+#	global test_mediator
+	test_mediator = MediatorObject.MediatorObject()
+#	MediatorObject.to_configure = test_mediator
+	global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
+	    standard_symbols_in
+#    add_abbreviation = MediatorObject.add_abbreviation
+#    add_csc = MediatorObject.add_csc
+#    add_lsa = MediatorObject.add_lsa
+#    print_abbreviations = MediatorObject.print_abbreviations
+#    standard_symbols_in = MediatorObject.standard_symbols_in
+#	add_abbreviation = MediatorObject.to_configure.add_abbreviation
+#	add_csc = MediatorObject.to_configure.add_csc
+#	add_lsa = MediatorObject.to_configure.add_lsa
+#	print_abbreviations = MediatorObject.to_configure.print_abbreviations
+#	standard_symbols_in = MediatorObject.to_configure.standard_symbols_in
+
+	add_abbreviation = test_mediator.add_abbreviation
+	add_csc = test_mediator.add_csc
+	add_lsa = test_mediator.add_lsa
+	print_abbreviations = test_mediator.print_abbreviations
+	standard_symbols_in = test_mediator.standard_symbols_in
         
-    if sr_interface.speech_able():
-        natlink.natConnect()    
+	if sr_interface.speech_able():
+	    natlink.natConnect()    
 
 
 ##############################################################################

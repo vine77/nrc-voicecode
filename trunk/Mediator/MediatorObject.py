@@ -26,12 +26,12 @@ import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interfa
 
 **MODULE VARIABLES**
 
-[MediatorObject] *to_configure* -- When configuring a mediator object, we temporarily assign it to this global variable so that it be accessible from the various configuration function.
 
 ..[MediatorObject] file:///./MediatorObject.MediatorObject.html"""
 
-to_configure = None
+# to_configure = None
 
+# no longer used: [MediatorObject] *to_configure* -- When configuring a mediator object, we temporarily assign it to this global variable so that it be accessible from the various configuration function.
 
 
 def disconnect_from_sr(disconnect, save_speech_files):
@@ -151,21 +151,27 @@ class MediatorObject(Object.Object):
         
         *none* -- 
         """
-        global to_configure
+#        global to_configure
         
-        to_configure = self
+#        to_configure = self
         
         if sr_interface.speech_able():
 #            print '-- MediatorObject.configure: loading grammars'
-            to_configure.mixed_grammar.load(allResults=to_configure.mixed_grammar.allResults)
+            self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
 	    if self.window == 0:
-		to_configure.mixed_grammar.activate()
-            to_configure.code_select_grammar.load_with_verbs()
+		self.mixed_grammar.activate()
+            self.code_select_grammar.load_with_verbs()
 	    if self.window == 0:
-		to_configure.code_select_grammar.activate()                
+		self.code_select_grammar.activate()                
                         
+	config_dict = {}
+	config_dict['add_csc'] = self.add_csc
+	config_dict['add_lsa'] = self.add_lsa
+	config_dict['add_abbreviation'] = self.add_abbreviation
+	config_dict['standard_symbols_in'] = self.standard_symbols_in
+	config_dict['print_abbreviations'] = self.print_abbreviations
         try:
-            execfile(config_file)
+            execfile(config_file, config_dict)
         except Exception, err:
             print 'ERROR: in configuration file %s.\n' % config_file
             raise err
@@ -173,10 +179,10 @@ class MediatorObject(Object.Object):
         #
         # Compile standard symbols for the different languages
         #
-        to_configure.interp.known_symbols.parse_standard_symbols(add_sr_entries=to_configure.interp.known_symbols.sr_symbols_cleansed)
-        to_configure.interp.known_symbols.sr_symbols_cleansed = 0
+        self.interp.known_symbols.parse_standard_symbols(add_sr_entries=self.interp.known_symbols.sr_symbols_cleansed)
+        self.interp.known_symbols.sr_symbols_cleansed = 0
 
-        to_configure = None
+#        to_configure = None
 
     def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
         """Quit the mediator object
@@ -211,77 +217,143 @@ class MediatorObject(Object.Object):
 
             disconnect_from_sr(disconnect, save_speech_files)
                 
+    def add_csc(self, acmd, add_voc_entry=1):
+	"""Add a new Context Sensitive Command.
 
-            
+	[CSCmd] *acmd* is the command to add.
+
+	*BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+	for the CSC's spoken forms
+	
+
+	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
+
+	self.interp.add_csc(acmd, add_voc_entry)
+
+
+    def add_lsa(self, spoken_forms, meanings):
+	"""Add a language specific word.
+
+	These words get added and removed dynamically from the SR
+	vocabulary, depending on the language of the active buffer.
+
+	A redundant CSC is also added to allow translation of the LSA at
+	the level of the Mediator, in cases where NatSpeak prefers to
+	recognise the LSA as dictated text instead of a spoken/written
+	word (this often happens if the spoken form looks to much like
+	dictated text, e.g. "is not equal to").
+	
+	**INPUTS**
+	
+	*STR* spoken_forms -- List of spoken form of the word.
+
+	*{STR: STR}* meanings -- Dictionary of language specific
+	 meanings. Key is the language name and value is the written form
+	 of the LSA for that langugage. If language name is *None*, then
+	 it means that this LSA applies for all languages (I know, it
+	 doesn't make much sense syntactically).
+	
+	**OUTPUTS**
+	
+	*none* -- 
+	"""
+	
+        self.interp.add_lsa(spoken_forms, meanings)
+
+    def add_abbreviation(self, abbreviation, expansions):
+	"""Add an abbreviation to VoiceCode's abbreviations dictionary.
+
+	**INPUTS**
+
+	*STR* abbreviation -- the abbreviation 
+
+	*[STR]* expansions -- list of possible expansions
+
+
+	**OUTPUTS**
+
+	*none* -- 
+	"""
+	self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
+
+
+    def standard_symbols_in(self, file_list):
+	"""Compile symbols defined in a series of source files"""
+
+#    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
+	self.interp.standard_symbols_in(file_list)
+    
+    def print_abbreviations(self):
+	self.interp.print_abbreviations()
     
 ###############################################################################
 # Configuration functions. These are not methods
 ###############################################################################
 
-def add_csc(acmd, add_voc_entry=1):
-    """Add a new Context Sensitive Command.
-
-    [CSCmd] *acmd* is the command to add.
-
-    *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-    for the CSC's spoken forms
-    
-
-    .. [CSCmd] file:///./CSCmd.CSCmd.html"""
-
-    global to_configure
-    to_configure.interp.index_csc(acmd, add_voc_entry)
-
-
-def add_lsa(spoken_forms, meanings):
-    """Add a language specific word.
-
-    These words get added and removed dynamically from the SR
-    vocabulary, depending on the language of the active buffer.
-
-    A redundant CSC is also added to allow translation of the LSA at
-    the level of the Mediator, in cases where NatSpeak prefers to
-    recognise the LSA as dictated text instead of a spoken/written
-    word (this often happens if the spoken form looks to much like
-    dictated text, e.g. "is not equal to").
-    
-    **INPUTS**
-    
-    *STR* spoken_forms -- List of spoken form of the word.
-
-    *{STR: STR}* meanings -- Dictionary of language specific
-     meanings. Key is the language name and value is the written form
-     of the LSA for that langugage. If language name is *None*, then
-     it means that this LSA applies for all languages (I know, it
-     doesn't make much sense syntactically).
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-    
-    global to_configure
-
-#    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
-    
-
-    language_specific_aliases = to_configure.interp.language_specific_aliases
-    for a_meaning in meanings.items():
-        language, written_as = a_meaning
-        for spoken_as in spoken_forms:
-	    clean_spoken = sr_interface.clean_spoken_form(spoken_as)
-            entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-            vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
-            
-            if not language_specific_aliases.has_key(language):
-                language_specific_aliases[language] = {}
-
-	    language_specific_aliases[language][clean_spoken] = written_as
-
-            #
-            # Add LSA to the SR vocabulary
-            #
-            sr_interface.addWord(entry)
+#def add_csc(acmd, add_voc_entry=1):
+#    """Add a new Context Sensitive Command.
+#
+#    [CSCmd] *acmd* is the command to add.
+#
+#    *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+#    for the CSC's spoken forms
+#    
+#
+#    .. [CSCmd] file:///./CSCmd.CSCmd.html"""
+#
+#    global to_configure
+#    to_configure.interp.index_csc(acmd, add_voc_entry)
+#
+#
+#def add_lsa(spoken_forms, meanings):
+#    """Add a language specific word.
+#
+#    These words get added and removed dynamically from the SR
+#    vocabulary, depending on the language of the active buffer.
+#
+#    A redundant CSC is also added to allow translation of the LSA at
+#    the level of the Mediator, in cases where NatSpeak prefers to
+#    recognise the LSA as dictated text instead of a spoken/written
+#    word (this often happens if the spoken form looks to much like
+#    dictated text, e.g. "is not equal to").
+#    
+#    **INPUTS**
+#    
+#    *STR* spoken_forms -- List of spoken form of the word.
+#
+#    *{STR: STR}* meanings -- Dictionary of language specific
+#     meanings. Key is the language name and value is the written form
+#     of the LSA for that langugage. If language name is *None*, then
+#     it means that this LSA applies for all languages (I know, it
+#     doesn't make much sense syntactically).
+#    
+#    **OUTPUTS**
+#    
+#    *none* -- 
+#    """
+#    
+#    global to_configure
+#
+##    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
+#    
+#
+#    language_specific_aliases = to_configure.interp.language_specific_aliases
+#    for a_meaning in meanings.items():
+#        language, written_as = a_meaning
+#        for spoken_as in spoken_forms:
+#	    clean_spoken = sr_interface.clean_spoken_form(spoken_as)
+#            entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+#            vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
+#            
+#            if not language_specific_aliases.has_key(language):
+#                language_specific_aliases[language] = {}
+#
+#	    language_specific_aliases[language][clean_spoken] = written_as
+#
+#            #
+#            # Add LSA to the SR vocabulary
+#            #
+#            sr_interface.addWord(entry)
         
 def associate_language(extension, language):
     """Add an association between a file extension and a programming
@@ -301,34 +373,34 @@ def associate_language(extension, language):
     SourceBuff.file_language[extension] = language
 
 
-def add_abbreviation(abbreviation, expansions):
-    """Add an abbreviation to VoiceCode's abbreviations dictionary.
+#def add_abbreviation(abbreviation, expansions):
+#    """Add an abbreviation to VoiceCode's abbreviations dictionary.
+#
+#    **INPUTS**
+#
+#    *STR* abbreviation -- the abbreviation 
+#
+#    *[STR]* expansions -- list of possible expansions
+#
+#
+#    **OUTPUTS**
+#
+#    *none* -- 
+#    """
+#    global to_configure
+#    to_configure.interp.known_symbols.add_abbreviation(abbreviation, expansions, user_added=1)
+#
 
-    **INPUTS**
-
-    *STR* abbreviation -- the abbreviation 
-
-    *[STR]* expansions -- list of possible expansions
-
-
-    **OUTPUTS**
-
-    *none* -- 
-    """
-    global to_configure
-    to_configure.interp.known_symbols.add_abbreviation(abbreviation, expansions, user_added=1)
-
-
-def standard_symbols_in(file_list):
-    """Compile symbols defined in a series of source files"""
-
-#    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
-    global to_configure
-
-    for a_file in file_list:
-        if not a_file in to_configure.interp.known_symbols.standard_symbol_sources:
-            to_configure.interp.known_symbols.standard_symbol_sources = to_configure.interp.known_symbols.standard_symbol_sources + [a_file]
-    
+#def standard_symbols_in(file_list):
+#    """Compile symbols defined in a series of source files"""
+#
+##    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
+#    global to_configure
+#
+#    for a_file in file_list:
+#        if not a_file in to_configure.interp.known_symbols.standard_symbol_sources:
+#            to_configure.interp.known_symbols.standard_symbol_sources = to_configure.interp.known_symbols.standard_symbol_sources + [a_file]
+#    
 
 def define_language(name, definition):
     """Defines the syntax of a programming language.
@@ -350,6 +422,6 @@ def define_language(name, definition):
     SymDict.language_definitions[name] = definition
 
 
-def print_abbreviations():
-    global to_configure
-    to_configure.interp.known_symbols.print_abbreviations()
+#def print_abbreviations():
+#    global to_configure
+#    to_configure.interp.known_symbols.print_abbreviations()

@@ -81,7 +81,9 @@ def run(to_run):
     for a_test_name in test_names:
         [fct, desc] = tests_to_do[a_test_name]
         sys.stdout.write(test_header(a_test_name, desc))
+        sys.stdout.flush()
         apply(fct)
+        sys.stdout.flush()
 #        print "-- auto_test.run: global_dicts[a_test_name]=%s" % global_dicts[a_test_name]
 #        print "-- auto_test.run: local_dicts[a_test_name]=%s" % local_dicts[a_test_name]
 #        exec(fct, global_dicts[a_test_name], local_dicts[a_test_name])
