@@ -945,6 +945,10 @@ Changes are put in a changes queue `vcode-queued-changes.
       (setq inserted-end (nth 2 change-data))
       (setq deleted-length (nth 3 change-data))	
       (setq deleted-start inserted-start)
+; Emacs never calls the after-change-functions with a third argument of
+; nil, so the following only applies to the direct call to 
+; vcode-generate-raw-change-description from
+; vcode-generate-whole-buffer-changes?  - DCF
       (if deleted-length
 	  (setq deleted-end (+ deleted-start deleted-length))
 	(setq deleted-end nil)
@@ -2231,6 +2235,8 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   ;;; 
   ;;; These messages are used by VCode to control Emacs (e.g. switch buffer)
   ;;;
+  (cl-puthash 'find_matching 'vcode-cmd-find-matching vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'beginning_of_statement 'vcode-cmd-beginning-of-statement vr-deprecated-message-handler-hooks)  
   (cl-puthash 'change_buff 'vcode-cmd-change-buff vr-deprecated-message-handler-hooks)  
 
   ;;;
@@ -4030,6 +4036,66 @@ change reports it sends to VCode.
 (defun vcode-cmd-beginning-of-line (vcode-request)
   (vcode-line-start-end-pos -1 vcode-request)
 )
+
+(defun vcode-cmd-find-matching (vcode-request)
+  (let ((mess-cont (nth 1 vcode-request))
+        (return-pos) (pos (point)) (reply-name) (buff-name) (direction)
+	(response (make-hash-table :test 'string=)))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (setq direction (cl-gethash "direction" mess-cont nil))
+    (save-excursion
+      (condition-case err     
+        (progn 
+          (set-buffer buff-name)
+          (setq return-pos 
+             (vcode-convert-pos (scan-lists (point) direction 0) 'vcode))
+        )
+;        ('error (error "vr-deprecated Error: could not find matching paren/brace to that at %d" pos))
+      )
+      (cl-puthash "value" return-pos response)
+      (setq reply-name "find_matching_resp")
+      (vr-deprecated-send-reply 
+        (run-hook-with-args 
+          'vr-deprecated-serialize-message-hook 
+          (list reply-name response)
+        )
+      )
+    )
+  )
+)
+
+(defun vcode-cmd-beginning-of-statement (vcode-request)
+  (let ((mess-cont (nth 1 vcode-request))
+        (return-pos) (pos (point)) (reply-name) (buff-name)
+	(response (make-hash-table :test 'string=)))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (condition-case err     
+        (progn 
+          (set-buffer buff-name)
+          (if (equal major-mode 'c-mode)
+            (progn
+              (c-beginning-of-statement)
+              (setq return-pos (vcode-convert-pos (point) 'vcode))
+            )
+;            ('error (error "vr-deprecated Error: could not find beginning of statement at %d" pos))
+          )
+        )
+;        ('error (error "vr-deprecated Error: could not find beginning of statement at %d" pos))
+      )
+      (cl-puthash "value" return-pos response)
+      (setq reply-name "beginning_of_statement_resp")
+      (vr-deprecated-send-reply 
+        (run-hook-with-args 
+          'vr-deprecated-serialize-message-hook 
+          (list reply-name response)
+        )
+      )
+    )
+  )
+)
+
+
 
 (defun vcode-cmd-change-buff (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))

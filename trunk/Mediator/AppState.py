@@ -694,6 +694,8 @@ class AppState(OwnerObject):
     'set_text',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
     'move_relative', 'insert', 'indent', 'insert_indent', 
+    'syntax_nav_supported',
+    'find_matching', 'beginning_of_statement',
     'delete', 'goto', 'goto_line', 
     'goto_end_of_line', 'goto_beginning_of_line',
     'goto_range', 'move_relative_line',

@@ -158,3 +158,74 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
 #
 #        SourceBuffMessaging.SourceBuffInsertIndentMess.insert(self, text, range)
            
+
+###################################################################
+# Emacs-specific implementation of methods for code syntax navigation
+###################################################################
+
+    def syntax_nav_supported(self):
+        """
+        Indicates whether this SourceBuff instance supports syntax
+        navigation (either in the mediator or through the external
+        editor
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.language_name() == 'C'
+
+    def find_matching(self, direction = 1):
+        """
+        Finds a matching brace/bracket/parenthesis.
+
+        NOTE: this method does not find matching quotes, or any other
+        character where the opening and closing characters are
+        identical
+
+        ** INPUTS **
+
+        *INT direction* -- direction of the search.  Direction = 1
+        means to search forward for the character matching the one at
+        the current cursor position.  Direction = minus 1 means to
+        search backward for the character matching the one before the
+        current cursor position.
+
+        ** OUTPUTS **
+
+        *INT* -- the position of the matching character, or if the
+        character adjacent to the cursor was not a bracket, brace, or
+        parenthesis, or if no matching character could be found
+        """
+        self.app.talk_msgr.send_mess('find_matching', 
+            {'buff_name': self.buff_name, 'direction': direction})
+        response = self.app.talk_msgr.get_mess(expect = ['find_matching_resp'])
+        return messaging.messarg2int(response[1]['value'])
+
+    def beginning_of_statement(self):
+        """Finds the location of the beginning of the current
+        statement
+
+        NOTE: initially, this method maybe implemented using the
+        external editor, said the exact definition of the current
+        statement and where it starts may vary.
+
+        ** INPUTS **
+
+        *none*
+
+        ** OUTPUTS **
+
+        *INT* -- the position of the beginning of the statement found
+        at the cursor position
+        """
+        self.app.talk_msgr.send_mess('beginning_of_statement',
+            {'buff_name': self.buff_name})
+        response = \
+            self.app.talk_msgr.get_mess(expect = ['beginning_of_statement_resp'])
+        return messaging.messarg2int(response[1]['value'])
+    
