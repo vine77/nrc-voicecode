@@ -171,8 +171,55 @@ class GramMgr(Object):
 	"""
 	debug.virtual('GramMgr.buffer_closed')
     
+class GramMgrDictContext(GramMgr):
+    """implements finding of dictation context
 
-class WinGramMgr(GramMgr):
+    **INSTANCE ATTRIBUTES**
+
+    *AppState* app -- the application to which the buffers belong
+    
+    **CLASS ATTRIBUTES**
+    
+    *none*
+    """
+    def find_context(self, buffer):
+	"""Find context for dictation grammar
+
+	**INPUTS**
+
+	*STR buffer* -- name of the current buffer
+
+	**OUTPUTS**
+
+	(STR, STR) -- (two-word) context before and after the current
+	selection
+	"""
+#  find dictation context
+	current = self.app.cur_pos(f_name = buffer)
+#	print current
+        self.app.drop_breadcrumb(buffname = buffer)
+        self.app.drop_breadcrumb(buffname = buffer)
+#	self.app.search_for(r'\S+\s+\S+', direction = -1, 
+#	    num = 1, where = -1, f_name = buffer)
+	self.app.search_for(r'\s+\S', direction = -1, 
+	    num = 2, where = -1, f_name = buffer)
+#	self.app.search_for(r'\s+\S+', direction = -1, 
+#	    num = 2, where = -1, f_name = buffer)
+	start = self.app.cur_pos(f_name = buffer)
+#	print start
+	before = self.app.get_text(start, current, f_name = buffer)
+#	print before
+        self.app.pop_breadcrumbs()
+	self.app.search_for(r'\S+\s+', direction = 1, 
+	    num = 2, where = 1, f_name = buffer)
+	end = self.app.cur_pos(f_name = buffer)
+#	print end
+	after = self.app.get_text(current, end, f_name = buffer)
+        self.app.pop_breadcrumbs()
+	return before, after
+
+
+class WinGramMgr(GramMgrDictContext):
     """implementation of GramMgr using window-specific grammars from
     a WinGramFactory.
 
@@ -192,7 +239,8 @@ class WinGramMgr(GramMgr):
     *none*
     """
 
-    def __init__(self, factory, interp, **args):
+    def __init__(self, factory, interp, global_grammars = 0, exclusive =
+	0, all_results = 0, **args):
 	"""
 	
 	**INPUTS**
@@ -202,9 +250,21 @@ class WinGramMgr(GramMgr):
 
 	*CmdInterp* interp -- command interpreter to which dictation
 	results should be sent
+
+	*BOOL* global_grammars -- use global grammars, instead of
+	window-specific ones (only for testing purposes)
+
+	*BOOL* exclusive -- use exclusive grammars which prevent 
+	non-exclusive grammars from getting results (only for testing purposes)
+
+	*BOOL* all_results -- use grammars which are notified about all results
+	(only for testing purposes)
 	"""
         self.deep_construct(WinGramMgr,
                             {'factory': factory, 'interp': interp,
+			    'global_grammars': global_grammars,
+			    'exclusive': exclusive,
+			    'all_results': all_results,
 			    'dict_grammars' : {},
 			    'sel_grammars' : {}},
                             args)
@@ -235,35 +295,48 @@ class WinGramMgr(GramMgr):
 	for buff_name in self.dict_grammars[window].keys():
 	    if buff_name != buffer:
 	        self.dict_grammars[window][buff_name].deactivate()
+# if the dictation grammars are actually global, we need to deactivate 
+# all the rest, even if they are stored under other windows in dict_grammars
+	if self.global_grammars:
+	    for a_window in self.dict_grammars.keys():
+		if a_window != window:
+		    for buff_name in self.dict_grammars[a_window].keys():
+			self.dict_grammars[a_window][buff_name].deactivate()
+
 #  set visible range and buffer for selection grammar
-	self.sel_grammars[window].activate(buffer, window)
+	self.sel_grammars[window].activate(buffer)
+# if the selection grammars are actually global, we need to deactivate 
+# all the rest, even if they are stored under other windows in sel_grammars
+	if self.global_grammars:
+	    for a_window in self.sel_grammars.keys():
+		if a_window != window:
+		    self.sel_grammars[a_window].deactivate()
 
 #  set dictation context
-	current = self.app.cur_pos(f_name = buffer)
-#	print current
-        self.app.drop_breadcrumb(buffname = buffer)
-        self.app.drop_breadcrumb(buffname = buffer)
-#	self.app.search_for(r'\S+\s+\S+', direction = -1, 
-#	    num = 1, where = -1, f_name = buffer)
-	self.app.search_for(r'\s+\S', direction = -1, 
-	    num = 2, where = -1, f_name = buffer)
-#	self.app.search_for(r'\s+\S+', direction = -1, 
-#	    num = 2, where = -1, f_name = buffer)
-	start = self.app.cur_pos(f_name = buffer)
-#	print start
-	before = self.app.get_text(start, current, f_name = buffer)
-#	print before
-        self.app.pop_breadcrumbs()
-	self.app.search_for(r'\S+\s+', direction = 1, 
-	    num = 2, where = 1, f_name = buffer)
-	end = self.app.cur_pos(f_name = buffer)
-#	print end
-	after = self.app.get_text(current, end, f_name = buffer)
-        self.app.pop_breadcrumbs()
+	before, after = self.find_context(buffer)
 	self.dict_grammars[window][buffer].set_context(before, after)
 
-	self.dict_grammars[window][buffer].activate(window)
+	self.dict_grammars[window][buffer].activate()
     
+    def _deactivate_all_window(self, window):
+	"""de-activate all buffer-specific grammars which would be
+	active in window
+
+	**INPUTS**
+
+	*INT* window --
+	identifier of current window.  Only grammars associated with 
+	that window will be explicitly de-activated.  
+	
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.dict_grammars.has_key(window):
+	    self.sel_grammars[window].deactivate()
+	    for a_buffer in self.dict_grammars[window].values():
+		a_buffer.deactivate()
+
     def deactivate_all(self, window = None):
 	"""de-activate all buffer-specific grammars which would be
 	active in window, or all grammars if window is omitted.
@@ -280,13 +353,11 @@ class WinGramMgr(GramMgr):
 
 	*none*
 	"""
-	if window == None:
+	if window == None or self.global_grammars:
 	    for a_window in self.dict_grammars.keys():
-		self.deactivate_all(a_window)
-	elif self.dict_grammars.has_key(window):
-	    self.sel_grammars[window].deactivate()
-	    for a_buffer in self.dict_grammars[window].values():
-		a_buffer.deactivate()
+		self._deactivate_all_window(a_window)
+	else:
+	    self._deactivate_all_window(window)
 
     def new_buffer(self, buffer, window = None):
 	"""add grammars for new buffer/window
@@ -311,9 +382,14 @@ class WinGramMgr(GramMgr):
 	    if not self.dict_grammars.has_key(window):
 		self.new_window(window, buffer)
 	    if not self.dict_grammars[window].has_key(buffer):
+		a_window = window
+		if self.global_grammars:
+		    a_window = None
 		self.dict_grammars[window][buffer] = \
 		    self.factory.make_dictation(self.interp, self.app, 
-		    buffer, window)
+		    buffer, a_window, 
+		    exclusive = self.exclusive, all_results =
+		    self.all_results)
 
     def new_window(self, window, buffer = None):
 	"""add a new window
@@ -332,8 +408,12 @@ class WinGramMgr(GramMgr):
 	if not self.dict_grammars.has_key(window):
 	    self.dict_grammars[window] = {}
 	if not self.sel_grammars.has_key(window):
+	    a_window = window
+	    if self.global_grammars:
+	        a_window = None
 	    self.sel_grammars[window] = self.factory.make_selection(self.app,
-		window)
+		a_window, exclusive = self.exclusive, all_results =
+		self.all_results)
 
     def delete_window(self, window):
 	"""clean up and destroy all grammars for a window which 
@@ -371,3 +451,4 @@ class WinGramMgr(GramMgr):
 	    buffers = self.dict_grammars[a_window]
 	    if buffers.has_key(buffer):
 		del buffers[buffer]
+

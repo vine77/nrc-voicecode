@@ -1512,7 +1512,8 @@ def buffer_closed(manager, buffer):
     print 'close buffer %s' % (buffer) 
     manager.buffer_closed(buffer)
 
-def test_gram_manager():
+def test_gram_manager_flags(global_grammars = 0, exclusive = 0,
+    all_results = 0):
     fish_h_before = "void move(float x, y);"
     fish_h_after = "\n"
     fish_before = """/* This is a small test buffer for C */
@@ -1563,7 +1564,9 @@ if ($voiceGripOS eq 'win') {
 
     factory = sr_grammars.WinGramFactoryDummy()
     app = EdSim.EdSim(multiple = 1, instance_reporting = 1)
-    manager = GramMgr.WinGramMgr(factory, None, app = app)
+    manager = GramMgr.WinGramMgr(factory, None, app = app,
+	global_grammars = global_grammars, exclusive = exclusive,
+	all_results = all_results)
     w = 5
     w2 = 7
     new_buffer(manager, 'fish.C', w, fish_before, fish_after)
@@ -1585,13 +1588,23 @@ if ($voiceGripOS eq 'win') {
     activate_for(manager,'fish.C', w)
     print 'deactivate all'
     manager.deactivate_all()
+    print 'close all buffers'
     app.close_all_buffers(-1)
+    print 'cleanup app'
     app.cleanup()
+    print 'test ending - expect dels of manager, app'
 
-# this test requires a dummy editor with support for multiple buffers,
-# so I have commented it out until one is available - DCF
+def test_gram_manager():
+    test_gram_manager_flags()
+    
+def test_gram_manager_all_set():
+    test_gram_manager_flags(1, 1, 1)
+
+
 auto_test.add_test('dummy_grammars', test_gram_manager, 
    'Testing WinGramMgr grammar management with dummy grammars.')
+auto_test.add_test('dummy_grammars_global', test_gram_manager_all_set, 
+   'Testing WinGramMgr grammar management with global, exclusive dummy grammars.')
 
 ##############################################################################
 # Testing EdSim allocation and cleanup 

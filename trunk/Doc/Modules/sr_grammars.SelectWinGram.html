@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:54 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue May 14 14:22:08 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,9 +26,8 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SelectWinGram</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.WinGram.html">WinGram</A>):
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.buff_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.buff_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns name of buffer corresponding to this selection grammar.</SPAN>
-    <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.reactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.reactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -38,13 +37,12 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.WinGram</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.WinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the grammar is active for recognition </SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.is_exclusive"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.is_exclusive</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # is the grammar exclusive?</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.is_global"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.is_global</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # tells whether the grammar is global</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.is_greedy"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.is_greedy</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the grammar capture all results?</SPAN>
-    <A CLASS="DocLink" HREF="#sr_grammars.WinGram.reactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.reactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # reactivate recognition using the same window (or globally).</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
@@ -65,7 +63,7 @@
 <EM>STR</EM> buff_name - name of buffer to which to tie this 
 selection grammar (can also be set by activate)
 </P>
-<H2 ID="sr_grammars.SelectWinGram.activate" CLASS="Method">sr_grammars.SelectWinGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)</H2>
+<H2 ID="sr_grammars.SelectWinGram.activate" CLASS="Method">sr_grammars.SelectWinGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -79,18 +77,6 @@ and checks with buffer for the currently visible range.</P>
 <DT>
 <EM>STR</EM> buff_name
 <DD>name of currently active buffer
-<DT>
-<EM>INT</EM> window
-<DD>make grammar window-specific.  Specify None 
-to make the grammar global
-<DT>
-<EM>BOOL</EM> exclusive
-<DD>make grammar exclusive?  (prevents other
-non-exclusive grammars from getting results.  Use with caution)
-<DT>
-<EM>BOOL</EM> all_results
-<DD>make grammar intercept all results, even for
-other grammars
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -114,21 +100,6 @@ other grammars
 <DD>name of buffer currently used by this selection grammar.
 
 </DL>
-<H2 ID="sr_grammars.SelectWinGram.reactivate" CLASS="Method">sr_grammars.SelectWinGram.reactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-reactivate recognition using the same buffer name and
-same window (or globally).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -259,7 +230,7 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="sr_grammars.WinGram.activate" CLASS="Method">sr_grammars.WinGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)</H2>
+<H2 ID="sr_grammars.WinGram.activate" CLASS="Method">sr_grammars.WinGram.activate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -267,22 +238,8 @@ activates the grammar for recognition
 tied to the current window.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>make grammar window-specific.  Specify None 
-to make the grammar global
-<DT>
-<EM>BOOL</EM> exclusive
-<DD>make grammar exclusive?  (prevents other
-non-exclusive grammars from getting results.  Use with caution)
-<DT>
-<EM>BOOL</EM> all_results
-<DD>make grammar intercept all results, even for
-other grammars
-</DL>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
@@ -369,18 +326,6 @@ recognition.
 <DD>captures all results?
 
 </DL>
-<H2 ID="sr_grammars.WinGram.reactivate" CLASS="Method">sr_grammars.WinGram.reactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>reactivate recognition using the same window (or globally).</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="sr_grammars.WinGram.window" CLASS="Method">sr_grammars.WinGram.window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
