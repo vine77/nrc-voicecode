@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 16:41:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:12:33 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,19 +27,13 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxClientBase</SPAN>(<A CLASS="DocLink" HREF="WaxEditClient.ClientBase.html">ClientBase</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.WaxClientBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_size=None</SPAN>, <SPAN CLASS="Argument">cmd_line=0</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#WaxEditClient.WaxClientBase.new_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.WaxClientBase.new_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEditClient.WaxClientBase.new_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.WaxClientBase.new_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">instance_string=''</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.ActivateEventMixIn</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.active_frame_ID"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.active_frame_ID</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the ID of the currently active frame, if any</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.frame_activated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.frame_activated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether an editor frame is active</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -62,6 +56,12 @@
     <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.testing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.testing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEditClient.ClientBase.update_connection_status"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEditClient.ClientBase.update_connection_status</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # updates the connection menu to reflect the current status</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.ActivateEventMixIn</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.active_frame_ID"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.active_frame_ID</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the ID of the currently active frame, if any</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.frame_activated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.frame_activated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.ActivateEventMixIn.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.ActivateEventMixIn.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether an editor frame is active</SPAN>
+
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
@@ -81,7 +81,7 @@ frame?
 entered at the command line 
 
 </DL>
-<H2 ID="WaxEditClient.WaxClientBase.new_frame" CLASS="Method">WaxEditClient.WaxClientBase.new_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<H2 ID="WaxEditClient.WaxClientBase.new_frame" CLASS="Method">WaxEditClient.WaxClientBase.new_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">instance_string=''</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -98,6 +98,10 @@ new_buffer first, followed by add_frame</P>
 <DT>
 <EM>STR buff_name</EM>
 <DD>the name of the initial buffer for the frame
+<DT>
+<EM>STR instance_string</EM>
+<DD>portion of the title string indicating 
+the name of this particular instance.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -238,65 +242,6 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
-</DL>
-<H2 ID="GenEdit.ActivateEventMixIn.active_frame_ID" CLASS="Method">GenEdit.ActivateEventMixIn.active_frame_ID(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the ID of the currently active frame, if any</P>
-
-<P>
-<STRONG>INPUTS</STRONG> </P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM>
-<DD>the unique ID of the currently active frame, or None if
-no frame of the editor is active.
-
-</DL>
-<H2 ID="GenEdit.ActivateEventMixIn.frame_activated" CLASS="Method">GenEdit.ActivateEventMixIn.frame_activated(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-callback used by GenEditFrame to notify GenEditFrames that 
-it has been activated or deactivated.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR frame_ID</EM>
-<DD>the ID of the frame
-<DT>
-<EM>BOOL activated</EM>
-<DD>true if the frame has just been activated,
-otherwise false
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.ActivateEventMixIn.is_active" CLASS="Method">GenEdit.ActivateEventMixIn.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>indicates whether an editor frame is active</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if frame window is active
-
 </DL>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>
@@ -584,6 +529,65 @@ a test_client
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="GenEdit.ActivateEventMixIn.active_frame_ID" CLASS="Method">GenEdit.ActivateEventMixIn.active_frame_ID(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the ID of the currently active frame, if any</P>
+
+<P>
+<STRONG>INPUTS</STRONG> </P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>the unique ID of the currently active frame, or None if
+no frame of the editor is active.
+
+</DL>
+<H2 ID="GenEdit.ActivateEventMixIn.frame_activated" CLASS="Method">GenEdit.ActivateEventMixIn.frame_activated(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback used by GenEditFrame to notify GenEditFrames that 
+it has been activated or deactivated.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR frame_ID</EM>
+<DD>the ID of the frame
+<DT>
+<EM>BOOL activated</EM>
+<DD>true if the frame has just been activated,
+otherwise false
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.ActivateEventMixIn.is_active" CLASS="Method">GenEdit.ActivateEventMixIn.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether an editor frame is active</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if frame window is active
+
+</DL>
 
 <HR>
 <TABLE ALIGN="LEFT">

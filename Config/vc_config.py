@@ -169,7 +169,8 @@ mod_exceed = \
 
 mod_ttssh = KnownTargetModule.RemoteShell(module_name = 'TTSSH')
 
-mod_python = KnownTargetModule.LocalInterpreter(module_name = 'PYTHON')
+mod_python = KnownTargetModule.LocalInterpreter(module_name = 'PYTHON',
+    title_varies = 1)
   
 #     add them to the RecogStartMgr
 add_module(mod_Emacs)
