@@ -138,7 +138,6 @@ class GramMgr(Object):
 	"""
 	debug.virtual('GramMgr.new_window')
 
-
     def delete_window(self, window):
 	"""clean up and destroy all grammars for a window which 
 	has been deleted.
@@ -171,12 +170,43 @@ class GramMgr(Object):
 	"""
 	debug.virtual('GramMgr.buffer_closed')
     
+class GramMgrFactory(Object):
+    """factory which produces GramMgr objects for new application
+    instances
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	"""abstract class, no arguments
+	"""
+	self.deep_construct(GramMgrFactory, {}, args)
+
+    def new_manager(self, editor):
+	"""creates a new GramMgr
+
+	**INPUTS**
+
+	*AppState* editor -- AppState object for which to manage
+	grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('GramMgrFactory.new_manager')
+
 class GramMgrDictContext(GramMgr):
     """implements finding of dictation context
 
     **INSTANCE ATTRIBUTES**
 
-    *AppState* app -- the application to which the buffers belong
+    *none*
     
     **CLASS ATTRIBUTES**
     
@@ -446,4 +476,71 @@ class WinGramMgr(GramMgrDictContext):
 	    buffers = self.dict_grammars[a_window]
 	    if buffers.has_key(buffer):
 		del buffers[buffer]
+
+# defaults for vim - otherwise ignore
+# vim:sw=4
+
+class WinGramMgrFactory(GramMgrFactory):
+    """implements GramMgrFactory for WinGramMgr
+
+    **INSTANCE ATTRIBUTES**
+
+    *WinGramFactory* gram_factory -- factory which will supply each
+    WinGramMgr with new window-specific dictation and selection grammars.
+
+    *CmdInterp* interp -- command interpreter to which dictation
+    results should be sent
+
+    *BOOL* global_grammars -- use global grammars, instead of
+    window-specific ones (only for testing purposes)
+
+    *BOOL* exclusive -- use exclusive grammars which prevent 
+    non-exclusive grammars from getting results (only for testing purposes)
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, gram_factory, interp, global_grammars = 0,
+	exclusive = 0, **args):
+	"""create a GramMgrFactory which creates WinGramMgr objects for
+	new editors
+
+	**INPUTS**
+
+	*WinGramFactory* gram_factory -- factory which will supply each
+	WinGramMgr with new window-specific dictation and selection grammars.
+
+	*CmdInterp* interp -- command interpreter to which dictation
+	results should be sent
+
+	*BOOL* global_grammars -- use global grammars, instead of
+	window-specific ones (only for testing purposes)
+
+	*BOOL* exclusive -- use exclusive grammars which prevent 
+	non-exclusive grammars from getting results (only for testing purposes)
+
+	"""
+	self.deep_construct(WinGramMgrFactory, 
+			    {'gram_factory': gram_factory,
+			     'interp': interp,
+			     'global_grammars': global_grammars,
+			     'exclusive': exclusive
+			    }, args)
+
+    def new_manager(self, editor):
+	"""creates a new GramMgr
+
+	**INPUTS**
+
+	*AppState* editor -- AppState object for which to manage
+	grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	return WinGramMgr(app = editor, factory = self.gram_factory,
+	    interp = self.interp,
+	    global_grammars = self.global_grammars, exclusive = self.exclusive)
 
