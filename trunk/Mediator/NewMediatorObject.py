@@ -20,6 +20,7 @@
 ##############################################################################
 
 import exceptions, os, sys
+import traceback
 import messaging
 import string
 import debug
@@ -683,6 +684,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_lsa_set'] = do_nothing
             config_dict['add_abbreviation'] = do_nothing
             config_dict['standard_symbols_in'] = do_nothing
+            config_dict['abbreviations_in'] = do_nothing
             config_dict['print_abbreviations'] = do_nothing
         else:
             config_dict['interpreter'] = self
@@ -693,6 +695,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['has_lsa'] = self.has_lsa
             config_dict['add_abbreviation'] = self.add_abbreviation
             config_dict['standard_symbols_in'] = self.standard_symbols_in
+            config_dict['abbreviations_in'] = self.abbreviations_in
             config_dict['print_abbreviations'] = self.print_abbreviations
 
     def reset(self, config_file = None, user_config_file = None, 
@@ -1020,15 +1023,16 @@ class NewMediatorObject(Object.OwnerObject):
             except messaging.SocketError:
                 sys.stdout.write('**** Test editor disconnected unexpectedly')
                 pass
-        finally:
-            self.testing = 0
-            if self.console():
-                self.console().finished_tests()
-            del self.test_space['testing']
-            del self.test_space['temp_factory']
-            self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
-            self.editors.delete_instance(instance_name)
-            return 1
+        except:
+            traceback.print_exc()
+        self.testing = 0
+        if self.console():
+            self.console().finished_tests()
+        del self.test_space['testing']
+        del self.test_space['temp_factory']
+        self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
+        self.editors.delete_instance(instance_name)
+        return 1
 
     def new_editor(self, app, server = 1, check_window = 1, 
             window_info = None, test_editor = 0):
@@ -1179,10 +1183,13 @@ class NewMediatorObject(Object.OwnerObject):
 
 
     def standard_symbols_in(self, file_list):
-        """Compile symbols defined in a series of source files"""
-
+        """Specify source files defining standard symbols"""
         self.interp.standard_symbols_in(file_list)
-    
+
+    def abbreviations_in(self, file_list):
+        """Specify source files defining expansions and abbreviations"""
+        self.interp.abbreviations_in(file_list)
+
     def print_abbreviations(self):
         self.interp.print_abbreviations()
 
