@@ -25,9 +25,9 @@ import MediatorConsole
 import string
 from wxPython.wx import *
 from thread_communication_WX import GenericEventWX
-import threading
-import os
 import exceptions
+import os
+import threading
 
 class DummyCapture:
     pass
