@@ -2241,7 +2241,7 @@ returns name of current buffer."
 
    (setq vcode-previous-frame-title-format frame-title-format)
    (setq frame-title-format 
-          `("%b -- " (,vcode-instance-string invocation-name "@" system-name)))
+          `("%b -- " (,vcode-instance-string " " invocation-name "@" system-name)))
 
 ;   (setq frame-title-format 
 ;	 `(multiple-frames "%b" (,vcode-instance-string invocation-name "@" system-name)))

@@ -369,7 +369,9 @@ class SymbolMatch(Object):
 
 
 class ErrorReadingPersistDict(RuntimeError):
-    pass
+    def __init__(self, message):
+        RuntimeError.__init__(self, message)
+        self.message = message
 
 class SymDict(OwnerObject):
     """Known symbols dictionary.
@@ -445,7 +447,7 @@ class SymDict(OwnerObject):
 
     *INT* file_time -- if from_file is true, contains the time of last 
     modification of the symbol dictionary file (in seconds since the
-    epoch, as returned by os.stat)
+    epoch, as returned by os.stat).  Otherwise, file_type is None.
 
     [SB_ServiceLang] *lang_name_srv* -- Service used by SymDict to
     determine a buffer's programming language.
@@ -1892,14 +1894,14 @@ class SymDict(OwnerObject):
                   + 'new version of VoiceCode, please submit a bug report.\n'
         shutil.copyfile(file, backup)
         os.remove(file)
+        if fatal:
+            self.sym_file = None
         if self.interp:
-            sys.stderr.write('preview: ')
-            sys.stderr.write(msg)
             self.interp.input_error(msg, fatal)
         else:
             sys.stderr.write(msg)
             if fatal:
-                raise RuntimeError()
+                raise RuntimeError(msg)
 
     def init_from_file(self):
         """Initialises the symbol dictionary from a persistent version
@@ -1916,7 +1918,6 @@ class SymDict(OwnerObject):
         *BOOL* -- true if we successfully retrieved the state from the
         file
         """
-
         file = self.sym_file
         if file is None:
             return 0
@@ -1934,45 +1935,138 @@ class SymDict(OwnerObject):
                 version = db['version']
             except KeyError:
                 version = 1
+            debug.trace('SymDict.init_from_file',
+                'state file version %s (current is %s)' \
+                % (version, current_version))
+# The keys() method of the database objects from bsddb, used for shelve,
+# fails in Python 2.2.2, so we're going to explicitly store the field
+# list.  Since we didn't do this in version 1, we just have to hard code
+# that case.
+
+# (actually, the failure is just with symdict.dat.  If I create a new
+# shelve from scratch with no keys, or a single key, it works fine.  I'm
+# not sure what the problem is.)
+            if version == 1:
+                fields = ['version', 'symbol_info', 'spoken_form_info', 
+                    'abbreviations', 'alt_abbreviations', 
+                    'unresolved_abbreviations']
+                debug.trace('SymDict.init_from_file',
+                    'assuming fields %s' % fields)
+            else:
+                try:
+                    debug.trace('SymDict.init_from_file',
+                        'reading fields from file')
+                    fields = db['fields']
+                except KeyError:
+                    msg = 'missing field "fields" (list of fields) ' \
+                        + 'in symbol dictionary file\n%s\n' % self.sym_file
+                    raise ErrorReadingPersistDict(msg)
+            debug.trace('SymDict.init_from_file',
+                'expected fields are %s' % fields)
             if version != current_version:
-                msg = 'unknown version %d of the symbol dictionary file\n%s\n' % \
-                    (version, self.sym_file)
-                self._failed_read(msg, fatal = 1)
-                raise ErrorReadingPersistDict()
+                msg = 'unknown version %d' % version \
+                    + ' of the symbol dictionary file\n%s\n' % self.sym_file
+                raise ErrorReadingPersistDict(msg)
+            current_field = None
             try:
                 values = {}
-                fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
-                    'alt_abbreviations', 'unresolved_abbreviations']
                 for field in fields:
+                    current_field = field
+                    debug.trace('SymDict.init_from_file',
+                        'reading field %s/%s' % (field, current_field))
                     values[field] = db[field]
             except:
                 msg = 'WARNING: error reading %s from symbol dictionary file\n%s\n' \
-                    % (field, self.sym_file)
-                self._failed_read(msg, fatal = 1)
-                raise ErrorReadingPersistDict()
-        except ErrorReadingPersistDict:
+                    % (current_field, self.sym_file)
+                raise ErrorReadingPersistDict(msg)
+
+        except ErrorReadingPersistDict, e:
             db.close()
+            self._failed_read(e.message, fatal = 1)
             return 0
 
         db.close()
-        self.symbol_info = values['symbol_info']
-        self.spoken_form_info = values['spoken_form_info']
-        self.abbreviations = values['abbreviations'] 
-        self.alt_abbreviations = values['alt_abbreviations'] 
-        self.unresolved_abbreviations = values['unresolved_abbreviations'] 
+        okay = self.init_from_dictionary(values)
+        if okay:
+            self.file_time = util.last_mod(self.sym_file)
+        return okay
 
-        self.file_time = util.last_mod(self.sym_file)
+    def init_from_dictionary(self, dict):
+        """Initialises the symbol dictionary object from a dictionary of
+        attributes.
+
+        Note: init_from_dictionary can raise a number of different
+        exceptions
+
+        **INPUTS**
+        
+        *{STR: ANY} dict* -- dictionary of attributes necessary to
+        initialize SymDict
+        
+        **OUTPUTS**
+        
+        *BOOL* -- true if we successfully initialized from the
+        dictionary
+        """
+        try:
+            try:
+                version = dict['version']
+            except KeyError:
+                version = 1
+            if version != current_version:
+##{ wrong version
+                msg = 'unknown version %d of the symbol dictionary file\n%s\n' % \
+                    (version, self.sym_file)
+                raise ErrorReadingPersistDict(msg)
+##} wrong version
+            fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
+                'alt_abbreviations', 'unresolved_abbreviations']
+            current_field = None
+            for field in fields:
+                current_field = field
+                if not dict.has_key(field):
+##{ Missing field
+                    msg = 'WARNING: missing field %s ' % field
+                    ' reading %s from symbol dictionary file\n%s\n' \
+                        % (current_field, self.sym_file)
+                    raise ErrorReadingPersistDict(msg)
+##} Missing field
+        except ErrorReadingPersistDict:
+## Cleanup (failed_read/rename here?)
+            self._failed_read(msg, fatal = 1)
+            return 0
+
+# should we enclose the following in a try block to catch all unexpected
+# exceptions?
+# if so, how do we get the message to pass to _failed_read?
+        try:
+            self.symbol_info = dict['symbol_info']
+            self.spoken_form_info = dict['spoken_form_info']
+            self.abbreviations = dict['abbreviations'] 
+            self.alt_abbreviations = dict['alt_abbreviations'] 
+            self.unresolved_abbreviations = dict['unresolved_abbreviations'] 
 
 # re-create expansions from abbreviations
-        self.regenerate_expansions()
+            self.regenerate_expansions()
 
-        #
-        # Make sure symbols have been added to SR's vocabulary
-        #
-        for written_as, symbol_info in self.symbol_info.items():
-            for spoken_as in symbol_info.spoken_forms:
-                entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-                sr_interface.addWord(entry)
+            #
+            # Make sure symbols have been added to SR's vocabulary
+            #
+            for written_as, symbol_info in self.symbol_info.items():
+                for spoken_as in symbol_info.spoken_forms:
+                    entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+                    sr_interface.addWord(entry)
+        except Exception, e:
+            extype, value, trace = sys.exc_info()
+            ex = traceback.format_exception(extype, value, trace)
+            msg = 'Unexpected exception:\n'
+            for line in ex:
+                msg = msg + line
+            msg = msg + '\nwhile initializing SymDict with dictionary data\n'
+            msg = msg + ' read from symbol dictionary file\n%s\n' \
+                  % self.sym_file
+            self._failed_read(msg, fatal = 1)
+            return 0
         return 1
 
     def regenerate_expansions(self):

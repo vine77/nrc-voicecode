@@ -1,9 +1,3 @@
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd c:\eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>python wxMediator.py --bypass -t all        
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -633,7 +627,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F347E8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D3B6B0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -674,8 +668,10 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of compilation test ***
 
@@ -770,8 +766,13 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'execfile': appears in ['execfile']
+'expandvars': appears in ['expandvars']
+'non': appears in ['LargeNonObject', 'SmallNonObject', 'profConstrLargeNonObj', 'profConstrSmallNonObj', 'profGetLargeNonObj', 'profGetSmallNonObj', 'profSetLargeNonObj', 'profSetSmallNonObj']
 'posixpath': appears in ['posixpath']
+'setattr': appears in ['setattr']
+'stdout': appears in ['stdout']
+'x': appears in ['x']
 
 *** End of compilation test ***
 
@@ -815,8 +816,10 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
 
 
 Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres', 
@@ -845,7 +848,9 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name2', 'f_name']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of accept symbol match test ***
 
@@ -1030,10 +1035,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'c:\\eclipse\\workspace\\VCode\\Data\\TestData'
+'N:\\DavidFox\\Code\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1239,9 +1244,11 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
@@ -1447,8 +1454,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: print_symbols()
@@ -1685,8 +1694,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
@@ -1914,8 +1925,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
@@ -2122,8 +2135,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
@@ -2735,7 +2750,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3562,10 +3577,9 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3687,7 +3701,7 @@ Heard new statement below
   3: below_when_empty_buffer
 
 *** End of source buffer ***
-Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'non', 'empty', 'buffer']
+Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'non-', 'empty', 'buffer']
 Heard below when at first line of non empty buffer
 Associate 'below when at first line of non empty buffer' with symbol (Enter selection):
 
@@ -3721,7 +3735,7 @@ Heard new statement below
   4: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
+Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'non-', 'empty', 'buffer']
 Heard below when at last character of non empty buffer
 Associate 'below when at last character of non empty buffer' with symbol (Enter selection):
 
@@ -3960,7 +3974,7 @@ Heard new statement above
   3: 
 
 *** End of source buffer ***
-Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'non', 'empty', 'buffer']
+Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'non-', 'empty', 'buffer']
 Heard above when at first line of non empty buffer
 Associate 'above when at first line of non empty buffer' with symbol (Enter selection):
 
@@ -3994,7 +4008,7 @@ Heard new statement above
   4: 
 
 *** End of source buffer ***
-Saying: ['above', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
+Saying: ['above', 'when', 'at', 'last', 'character', 'of', 'non-', 'empty', 'buffer']
 Heard above when at last character of non empty buffer
 Associate 'above when at last character of non empty buffer' with symbol (Enter selection):
 
@@ -4236,7 +4250,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -8201,27 +8215,27 @@ Heard from module context generic import symbols context C. comma context python
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
 Heard from module context sensitive command import symbols context sensitive command new statement
-Associate 'context sensitive cmd' with symbol (Enter selection):
+Associate 'context sensitive command' with symbol (Enter selection):
 
   '0': no association
   '1': CSCmd
-  '2': context_sensitive_cmd (*new*)
-  '3': ContextSensitiveCmd (*new*)
-  '4': contextSensitiveCmd (*new*)
-  '5': CONTEXT_SENSITIVE_CMD (*new*)
-  '6': contextsensitivecmd (*new*)
-  '7': CONTEXTSENSITIVECMD (*new*)
+  '2': context_sensitive_command (*new*)
+  '3': ContextSensitiveCommand (*new*)
+  '4': contextSensitiveCommand (*new*)
+  '5': CONTEXT_SENSITIVE_COMMAND (*new*)
+  '6': contextsensitivecommand (*new*)
+  '7': CONTEXTSENSITIVECOMMAND (*new*)
 
-> Associate 'context sensitive cmd' with symbol (Enter selection):
+> Associate 'context sensitive command' with symbol (Enter selection):
 
   '0': no association
   '1': CSCmd
-  '2': context_sensitive_cmd (*new*)
-  '3': ContextSensitiveCmd (*new*)
-  '4': contextSensitiveCmd (*new*)
-  '5': CONTEXT_SENSITIVE_CMD (*new*)
-  '6': contextsensitivecmd (*new*)
-  '7': CONTEXTSENSITIVECMD (*new*)
+  '2': context_sensitive_command (*new*)
+  '3': ContextSensitiveCommand (*new*)
+  '4': contextSensitiveCommand (*new*)
+  '5': CONTEXT_SENSITIVE_COMMAND (*new*)
+  '6': contextsensitivecommand (*new*)
+  '7': CONTEXTSENSITIVECOMMAND (*new*)
 
 >   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
@@ -8232,6 +8246,17 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
 Associate 'ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
+> Associate 'ed simulator' with symbol (Enter selection):
 
   '0': no association
   '1': EdSim
@@ -8258,7 +8283,18 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-  7: from EdSim import EdSim
+Associate 'ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
+>   7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -8312,15 +8348,16 @@ Associate 'on application' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
-Associate 'SymDict pickle file' with symbol (Enter selection):
+Associate 'symbol dictionary pickle file' with symbol (Enter selection):
 
   '0': no association
   '1': symdict_pickle_file
-  '2': SymdictPickleFile (*new*)
-  '3': symdictPickleFile (*new*)
-  '4': SYMDICT_PICKLE_FILE (*new*)
-  '5': symdictpicklefile (*new*)
-  '6': SYMDICTPICKLEFILE (*new*)
+  '2': symbol_dictionary_pickle_file (*new*)
+  '3': SymbolDictionaryPickleFile (*new*)
+  '4': symbolDictionaryPickleFile (*new*)
+  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
+  '6': symboldictionarypicklefile (*new*)
+  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
 
 >  10: import sr_interface
  11: class CmdInterp(Object):
@@ -8438,25 +8475,27 @@ Heard single quotes last loaded language jump out colon none comma continue stat
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
 Heard single quotes symbol dictionary pickle file jump out colon symbol dictionary pickle file jump out comma continue statement
-Associate 'SymDict pickle file' with symbol (Enter selection):
+Associate 'symbol dictionary pickle file' with symbol (Enter selection):
 
   '0': no association
   '1': symdict_pickle_file
-  '2': SymdictPickleFile (*new*)
-  '3': symdictPickleFile (*new*)
-  '4': SYMDICT_PICKLE_FILE (*new*)
-  '5': symdictpicklefile (*new*)
-  '6': SYMDICTPICKLEFILE (*new*)
+  '2': symbol_dictionary_pickle_file (*new*)
+  '3': SymbolDictionaryPickleFile (*new*)
+  '4': symbolDictionaryPickleFile (*new*)
+  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
+  '6': symboldictionarypicklefile (*new*)
+  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
 
-> Associate 'SymDict pickle file' with symbol (Enter selection):
+> Associate 'symbol dictionary pickle file' with symbol (Enter selection):
 
   '0': no association
   '1': symdict_pickle_file
-  '2': SymdictPickleFile (*new*)
-  '3': symdictPickleFile (*new*)
-  '4': SYMDICT_PICKLE_FILE (*new*)
-  '5': symdictpicklefile (*new*)
-  '6': SYMDICTPICKLEFILE (*new*)
+  '2': symbol_dictionary_pickle_file (*new*)
+  '3': SymbolDictionaryPickleFile (*new*)
+  '4': symbolDictionaryPickleFile (*new*)
+  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
+  '6': symboldictionarypicklefile (*new*)
+  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
 
 >  16:                            'language_specific_aliases': {}, \
  17:                            'last_loaded_language': None, \
@@ -9021,7 +9060,7 @@ Associate 'initialize' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
-Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
+Associate 'symbol dictionary pickle file' with symbol (Enter selection):
 
   '0': no association
   '1': symbol_dictionary_pickle_file (*new*)
@@ -9336,7 +9375,7 @@ Associate 'rest' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 Heard regular expression this word equals single quotes
-Associate 'regular_expression this word' with symbol (Enter selection):
+Associate 'regular expression this word' with symbol (Enter selection):
 
   '0': no association
   '1': regular_expression_this_word (*new*)
@@ -9581,7 +9620,6 @@ _cached_symbols_as_one_string is:
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
 'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'sasymbol': appears in ['ISasymbol']
 
 *** End of compilation test ***
@@ -10015,7 +10053,7 @@ Associate 'some flag' with symbol (Enter selection):
  15:         try:
  16:             do_some_stuff()
 Heard do some more stuff with arguments some argument
-Associate 'do_some_more stuff' with symbol (Enter selection):
+Associate 'do some more stuff' with symbol (Enter selection):
 
   '0': no association
   '1': do_some_stuff
@@ -10034,7 +10072,7 @@ Associate 'do_some_more stuff' with symbol (Enter selection):
  15:         try:
  16:             do_some_stuff()
 Heard else do some stuff again with arguments some other argument
-Associate 'do_some_stuff again' with symbol (Enter selection):
+Associate 'do some stuff again' with symbol (Enter selection):
 
   '0': no association
   '1': do_some_stuff_again (*new*)
@@ -10196,7 +10234,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -10284,7 +10322,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12403,7 +12441,8 @@ se: ['se']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
 Unresolved abbreviations are:
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
+'openlog': appears in ['openlog']
+'s': appears in ['s']
 'se': appears in ['se']
 
 *** End of compilation test ***
@@ -12582,5 +12621,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  306.968000054 secs
+Test suite completed in:  1117.67699993 secs
 -----------------------------------------------
