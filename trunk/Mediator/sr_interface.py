@@ -4,7 +4,7 @@
 import re
 import natlink
 from natlinkutils import *
-import CmdInterp
+import actions_gen, CmdInterp
 #import nsformat
 
 #
@@ -530,7 +530,8 @@ class CodeSelectGrammar(SelectGramBase):
             # the selection.
             #
             if mark_selection:
-                self.interpreter.on_app.curr_buffer.set_selection(self.ranges[closest_range_index], cursor_at=where)
+                actions_gen.ActionSelect(range=self.ranges[closest_range_index], cursor_at=where).log_execute(self.interpreter.on_app, None)
+#                self.interpreter.on_app.curr_buffer.set_selection(self.ranges[closest_range_index], cursor_at=where)
             else:
                 if where > 0:
                     pos = self.ranges[closest_range_index][1]
@@ -577,6 +578,6 @@ class CodeSelectGrammar(SelectGramBase):
                 spoken_form = spoken_form + ' '
             spoken_form = spoken_form + a_spoken_word
 
-        print '-- CodeSelectGrammar.selection_spoken_form: returning spoken_form=%s' % spoken_form
+#        print '-- CodeSelectGrammar.selection_spoken_form: returning spoken_form=%s' % spoken_form
         
         return spoken_form

@@ -1,6 +1,6 @@
 import os, re, string, sys
 
-import auto_test, natlink, vc_globals
+import actions_gen, auto_test, natlink, vc_globals
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
@@ -176,7 +176,8 @@ class CmdInterp(Object):
 		 if untranslated_words:
 		     self.match_untranslated_text(untranslated_words)
 		     untranslated_words = []
-                 self.on_app.insert_indent(chopped_LSA, '')
+                 actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(self.on_app, None)
+#                 self.on_app.insert_indent(chopped_LSA, '')
                  cmd = cmd_without_LSA
                  head_was_translated = 1
 #                 print '-- CmdInterp.interpret_NL_cmd: after translating LSA, buffer is:'; self.on_app.print_buff_content()                 
@@ -310,9 +311,11 @@ class CmdInterp(Object):
             if symbol_matches:
                 self.dlg_select_symbol_match(untranslated_text, symbol_matches)
 	    else:
-		self.on_app.insert_indent(untranslated_text, '')
+                actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                
+#		self.on_app.insert_indent(untranslated_text, '')
 	else:
-	    self.on_app.insert_indent(untranslated_text, '')
+            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                            
+#	    self.on_app.insert_indent(untranslated_text, '')
         
 
     def dlg_select_symbol_match(self, untranslated_text, symbol_matches):
@@ -376,9 +379,11 @@ class CmdInterp(Object):
             #
             # Insert matched symbol
             #
-            self.on_app.insert_indent(chosen_match.native_symbol, '')
+            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(self.on_app, None)            
+#            self.on_app.insert_indent(chosen_match.native_symbol, '')
 	else:
-	    self.on_app.insert_indent(untranslated_text, '')
+            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                        
+#	    self.on_app.insert_indent(untranslated_text, '')
 	
             
 

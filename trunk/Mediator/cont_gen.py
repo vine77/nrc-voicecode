@@ -64,6 +64,25 @@ class ContAny(Context):
     def applies(self, app):
         return not app.translation_is_off
 
+class ContLastActionWas(Context):
+    """This context applies if the last action application's command history
+    was of a certain type"""
+
+    def __init__(self, type, **attrs):
+        """**INPUTS**
+
+        *CLASS* type -- A class object (not instance). The context applies if
+        the last action is an instance of a class that is a descendant (not
+        necessarily direct) of class *type*.
+        """
+        
+        self.deep_construct(ContAny, {'type': type}, attrs)
+        
+    def applies(self, app):
+        (last_cont, last_action) = app.get_history(1)
+        return isinstance(last_action, self.type)
+
+
 class ContAnyEvenOff(Context):
     """This context always applies, EVEN IF translation is off."""
 
