@@ -259,7 +259,7 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 
 ;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 
 
@@ -312,6 +312,8 @@ sent."
   (setq vr-log-read t)
   (setq vr-log-send t)
 )
+
+
 
 (defun vcode-test ()
   (interactive)
@@ -832,7 +834,9 @@ Changes are put in a changes queue `vr-queued-changes.
       (setq deleted-start inserted-start)
       (setq deleted-end (+ deleted-start deleted-length))
       (save-excursion
-	(switch-to-buffer buff-name)
+	(set-buffer buff-name)
+; shouldn't this be set-buffer?  -- DCF
+;	(switch-to-buffer buff-name)
 	(setq inserted-text (buffer-substring inserted-start inserted-end))
       )
       (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
@@ -1342,6 +1346,8 @@ speech server"
     (remove-hook 'kill-buffer-hook 'vr-kill-buffer)
     (remove-hook 'suspend-hook 'vcode-send-suspended)
     (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
+
+
     (setq frame-title-format 
           `("%b -- " (, invocation-name "@" system-name)))
     (vr-activate-buffer nil)
@@ -1799,6 +1805,8 @@ command was a yank or not."
   (add-hook 'suspend-hook 'vcode-send-suspended)
   (add-hook 'suspend-resume-hook 'vcode-send-resuming)
 
+
+
   ;;; Function for handling errors in execution of commands received from 
   ;;; VR.exe.
   (setq vr-upon-cmd-error 'vcode-send-cmd-error-message)
@@ -2178,7 +2186,7 @@ a buffer"
     ;;;
     (setq window-id (cl-gethash 'window_id mess-cont))
     (vcode-trace "vcode-cmd-recognition-start" "(type-of window-id)=%S, window-id=%S" (type-of window-id) window-id)
-    (if (stringp window-id)
+    (if (numberp window-id)
         (setq window-id (int-to-string window-id)))
     (vr-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
     (vr-cmd-frame-activated window-id)
@@ -3017,21 +3025,23 @@ change reports it sends to VCode.
  	(setq start (cl-gethash "start" mess-cont))
  	(setq end (cl-gethash "end" mess-cont))
         (vcode-trace "vcode-cmd-set-text" "buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
-	(set-buffer buff-name)
-	(vcode-trace "vcode-cmd-set-text" "*** before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S, buffer contains:\n%S" (point-min) (point-max) after-change-functions (buffer-substring (point-min) (point-max)))
-	(kill-region start end)
-	(vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
-	(set-mark nil)
+        (save-excursion
+            (set-buffer buff-name)
+            (vcode-trace "vcode-cmd-set-text" "*** before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S, buffer contains:\n%S" (point-min) (point-max) after-change-functions (buffer-substring (point-min) (point-max)))
+            (kill-region start end)
+            (vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
+            (set-mark nil)
 
         ;;;
 	;;; We don't use 'vcode-execute-command-string because set_text message
         ;;; is used to restore a buffer to a previous state (which is
         ;;; assumed to have already been indented properly)
-	(insert text)
+            (insert text)
 
-	(vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
+            (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
 
- 	(vr-send-queued-changes)
+            (vr-send-queued-changes)
+        )
     )
 )
 
@@ -3070,8 +3080,8 @@ change reports it sends to VCode.
 
     (vr-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
 
-    (set-buffer buff-name)
     (save-excursion
+      (set-buffer buff-name)
       (set-mark nil)
       (vcode-unindent-region indent-start indent-end levels) 
       (vr-log "--** vcode-cmd-decr-indent-level: upon exit, (point)=%S, (mark)=%S, buffer contains\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))

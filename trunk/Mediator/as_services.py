@@ -125,9 +125,9 @@ class AS_ServiceBreadcrumbs(AS_Service):
         """
         buff = self.app.find_buff(buffname)
         
-        file_name = buff.file_name()
+#        file_name = buff.file_name()
         if not pos: pos = buff.cur_pos()
-        self.breadcrumbs = self.breadcrumbs + [[file_name, pos]]
+        self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
 
 
     def pop_breadcrumbs(self, num=1, gothere=1):
@@ -139,10 +139,13 @@ class AS_ServiceBreadcrumbs(AS_Service):
         breadcrumb.
         """
 
-#        print '-- as_services.SBServiceBreadcrumbs.pop_breadcrumb:num=%s, gothere=%s' % (num, gothere)
+        trace('as_services.SBServiceBreadcrumbs.pop_breadcrumb', 'num=%s, gothere=%s' % (num, gothere))
 #        print '-- as_services.SBServiceBreadcrumbs.pop_breadcrumb:  self.breadcrumbs=%s' % self.breadcrumbs       
         stacklen = len(self.breadcrumbs)
         lastbuff, lastpos = self.breadcrumbs[stacklen - num]
+
+        trace('SBServiceBreadcrumbs.pop_breadcrumb', 
+            'lastbuff, lastpos = %s, %d' % (lastbuff, lastpos))
         self.breadcrumbs = self.breadcrumbs[:stacklen - num]
         if gothere:
             self.app.goto(lastpos, buff_name=lastbuff)
