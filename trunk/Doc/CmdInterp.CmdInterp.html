@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 31 12:07:53 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 02 16:29:51 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,9 +25,9 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CmdInterp</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>, <A CLASS="DocLink" HREF="VoiceDictation.VoiceDictation.html">VoiceDictation</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app=&lt;AppState.AppState instance at 881d30&gt;</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app=&lt;AppState.AppState instance at 8745a0&gt;</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.all_cmds_regexp</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches the spoken form of all voice commands</SPAN>
-    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary and to DNS' vocabulary.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.refresh_dict_buff</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)<SPAN CLASS="OneLiner"> # Refresh the dictation object's internal buffer.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.refresh_editor_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.refresh_editor_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">del_start</SPAN>, <SPAN CLASS="Argument">del_end</SPAN>, <SPAN CLASS="Argument">newText</SPAN>, <SPAN CLASS="Argument">sel_start</SPAN>, <SPAN CLASS="Argument">sel_end</SPAN>)<SPAN CLASS="OneLiner"> # Refresh the editor's internal buffer after a recognition</SPAN>
@@ -73,14 +73,10 @@ CLASS ATTRIBUTES**</P>
 <P>
 <EM>none</EM> --</P>
 <H2 ID="CmdInterp.CmdInterp.index_csc" CLASS="Method">CmdInterp.CmdInterp.index_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)</H2>
-<P>Add a new csc to the command interpreter's command dictionary and to DNS' vocabulary.</P>
+<P>Add a new csc to the command interpreter's command dictionary</P>
 
 <P>
 <A HREF="file:///./CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to be indexed.</P>
-<P>
-For each of the spoken forms of <EM>acmd</EM>, a new phrase gets
-added to DNS' vocabulary. The spoken form also gets added to the
-command interpreter's index of CSCs.        </P>
 <H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)</H2>
 <P>None</P>
 

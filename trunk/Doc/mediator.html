@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 19 12:02:05 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 02 16:30:08 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -17,13 +17,17 @@
 <H1 CLASS="ModuleName">Module mediator</H1>
 <PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to position <EM>INT pos</EM> of the current buffer</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gotoline</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#openfile"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">openfile</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a file with name in current buffer.</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN>(<SPAN CLASS="Argument">utterance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">showbuff</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Shows content of current source buffer</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode\\Mediator\\mediator.py'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">acmd</SPAN> = <SPAN CLASS="VariableValue">CSCmd.CSCmd instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">config_file</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">quit_flag</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 </PRE><H2>Description</H2><P>
 Main script for VoiceCode mediator.</P>
 <P>
@@ -47,24 +51,35 @@ Valid commands are:</P>
 <P>
 openfile(STR fname)
    Opens file with path name <EM>fname</EM> in the editor simulator</P>
-<P>
-say(STR utterance)
-   Interprets string <EM>utterance</EM> as though it had been said by a user</P>
-<P>
-goto(INT pos)
-   Moves cursor to position <EM>pos</EM></P>
-<P>
-gotoline(INT linenum)
-   Moves cursor to the beginning of line number <EM>linenum</EM></P>
-<P>
-showbuff()
+
+<H3>say(STR utterance)
+   Interprets string <EM>utterance</EM> as though it had been said by a user.</H3>
+   When called in this way, the system will simulate a recognition
+   event using NatLink's &lt;EM&gt;recognitionMimic&lt;/EM&gt; function.say(STR utterance, bypass_NatLink=1)
+   Same as above, except that the interpretation process will bypass
+   NatLink's &lt;EM&gt;recognitionMimic&lt;/EM&gt; function.goto(INT pos)
+   Moves cursor to position <EM>pos</EM>gotoline(INT linenum)
+   Moves cursor to the beginning of line number <EM>linenum</EM>showbuff()
    Prints the content of the current buffer
-</P>
+<H3>listen()
+   Throws the mediator into a dictation loop. It will listen for
+   dictation utterances and interpret and execute any part of the
+   utterance that corresponds to a Context Sensitive Command.</H3>
+   Once in <CODE>listen</CODE> mode, you cannot type console commands until you
+   have clicked the <CODE>OK</CODE> button on the <CODE>Natlink/ Python Subsystem</CODE>
+   window.
+<H3>quit()
+   Quit the simulator.</H3>
+   Note that if you don't quit using this command
+   (e.g. &lt;EM&gt;Ctrl-C&lt;/EM&gt;), your DOS window will hang up.   
 <H2 ID="openfile" CLASS="Function">openfile(<SPAN CLASS="Argument">fname</SPAN>)</H2>
 <P>Open a file with name in current buffer.</P>
 
-<P>
-<EM>STR fname</EM> is the path of the file</P>
+<EM>STR fname</EM> is the path of the file<H2 ID="say" CLASS="Function">say(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>)</H2>
+<P>Simulate an utterance <EM>STR utterance</EM></P>
+
+IF <EM>BOOL bypass_NatLink</EM> is true, the interpretation will be done withouth
+going through NatLink's recognitionMimic function.
 
 <HR>
 <TABLE ALIGN="LEFT">
