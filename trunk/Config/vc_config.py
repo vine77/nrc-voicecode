@@ -171,12 +171,16 @@ mod_ttssh = KnownTargetModule.RemoteShell(module_name = 'TTSSH')
 
 mod_python = KnownTargetModule.LocalInterpreter(module_name = 'PYTHON',
     title_varies = 1)
+
+mod_pythonw = KnownTargetModule.LocalInterpreter(module_name = 'PYTHONW',
+    title_varies = 1)
   
 #     add them to the RecogStartMgr
 add_module(mod_Emacs)
 add_module(mod_exceed)
 add_module(mod_ttssh)
 add_module(mod_python)
+add_module(mod_pythonw)
 
 # Known editors and the prefixes used to form their unique instance
 # strings

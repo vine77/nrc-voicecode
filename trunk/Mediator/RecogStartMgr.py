@@ -377,7 +377,8 @@ class RecogStartMgr(OwnerObject):
 
 	**OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
+	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        module name should be converted to all lowercase
 	"""
         debug.virtual('RecogStartMgr.window_info')
 
@@ -833,6 +834,8 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true unless a module of the same name already exists
 	"""
         module_name = module.name()
+        # win9x and NT differ on case-convention here, so standardize
+        module_name = string.lower(module_name) 
         if self.known_module(module_name):
             return 0
         self.modules[module_name] = module
@@ -1006,9 +1009,10 @@ class RSMInfrastructure(RecogStartMgr):
         *none*
         """
         debug.trace('RSMInfrastructure.interpret_dictation', 
-                    'instance=%s, result=%s' % (instance, repr(result.words())))
+            'instance = %s, result = %s' % (instance, repr(result.words())))
         if self.known_instance(instance):
-            debug.trace('RSMInfrastructure.interpret_dictation', 'known instance')
+            debug.trace('RSMInfrastructure.interpret_dictation', 
+                'known instance')
             self.results[instance].interpret_dictation(result,
                 initial_buffer = initial_buffer)
 
@@ -1414,6 +1418,7 @@ class RSMInfrastructure(RecogStartMgr):
                 window, title, module_name = self.window_info()
             else:
                 window, title, module_name = window_info
+            module_name = string.lower(module_name) 
             if self.known_window(window):
                 debug.trace('RSMInfrastructure.new_instance',
                             'window_info = %s' % window_info)             
@@ -2097,7 +2102,8 @@ class CurrWindow(Object):
 
 	**OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
+	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        module name should be converted to all lowercase
 	"""
         debug.virtual('CurrWindow.window_info')
 
@@ -2161,7 +2167,8 @@ class CurrWindowDummy(Object):
 
 	**OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
+	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        module name should be converted to all lowercase
 	"""
 #        print 'current is ', (self.window, self.title, self.module)
         title = ""
@@ -2176,7 +2183,7 @@ class CurrWindowDummy(Object):
                 if self.instance.curr_buffer_name():
                     title = title + " - " + self.instance.curr_buffer_name()
 
-        return (self.window, title, self.module)
+        return (self.window, title, string.lower(self.module))
 
     def set_info(self, window = None, module = None, instance = None, 
         app_name = None, alt_title = ""):
@@ -2244,7 +2251,8 @@ class RSMExtInfo(RSMBasic):
 
 	**OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
+	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        module name should be converted to all lowercase
 	"""
         return self.find_info.window_info()
 
