@@ -276,7 +276,9 @@ class AppState(Object):
         """
         
         if len(self.history) > self.max_history:
-            self.history = self.history[:len(self.history)-1]
+#            self.history = self.history[:len(self.history)-1]
+# should drop oldest command, right?
+            self.history = self.history[1:]
         self.history.append((cont, action))
 
 
