@@ -208,6 +208,9 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
     *select_n_gram* -- ChoiceGram supporting "SelectOrEdit n"
 
     *spelling_gram* -- NaturalSpelling grammar
+
+    *selection_gram* -- SimpleSelection grammar for select-and-say in
+    the corrected text control
     """
     def __init__(self, console, parent, utterance, validator, 
             can_reinterpret, gram_factory, pos = None, **args):
@@ -244,13 +247,15 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
                              'utterance': utterance,
                              'first': 1,
                              'choose_n_gram': None,
-                             'select_n_gram': None
+                             'select_n_gram': None,
+                             'selection_gram': None
                             }, args,
                             exclude_bases = {wxDialog:1})
         self.name_parent('console')
         self.add_owned('choose_n_gram')
         self.add_owned('select_n_gram')
         self.add_owned('spelling_gram')
+        self.add_owned('selection_gram')
         if gram_factory:
             self.choose_n_gram = \
                 gram_factory.make_choices(choice_words = ['Choose'])
@@ -259,6 +264,10 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
             self.spelling_gram = \
                 gram_factory.make_natural_spelling(spelling_cbk = \
                 self.on_spelling)
+            self.selection_gram = \
+                gram_factory.make_simple_selection(get_visible_cbk = \
+                self.get_text, get_selection_cbk = self.get_selection,
+                select_cbk = self.on_select_text)
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
@@ -347,6 +356,16 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
             self.playback_button.Disable()
         self.text.SetFocus()
 
+    def get_text(self):
+        return self.text.GetValue()
+
+    def get_selection(self):
+        return self.text.GetSelection()
+
+    def on_select_text(self, range):
+        if range is not None:
+            self.text.SetSelection(range[0], range[1])
+
     def on_char_text(self, event):
         k = event.GetKeyCode()
         if k == WXK_UP:
@@ -384,7 +403,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
 
         *none*
         """
-        print 'spelled "%s"' % letters
+#        print 'spelled "%s"' % letters
         self.text.WriteText(letters)
 
     def on_select(self, n):
@@ -470,6 +489,8 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
                         self.on_choose)
                     self.select_n_gram.activate(9, self.GetHandle(), 
                         self.on_select)
+                if self.selection_gram:
+                    self.selection_gram.activate(window = self.GetHandle())
                 self.first = 0
 #                self.console.raise_active_window()
                 self.console.raise_wxWindow(self)

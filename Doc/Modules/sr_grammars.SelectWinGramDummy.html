@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Oct 17 23:21:08 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 18 23:48:49 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,6 +32,12 @@
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGramDummy.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGramDummy.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGramDummy.identify_grammar"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGramDummy.identify_grammar</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.SelectWinGram</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">select_words=['select']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram._set_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram._set_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)<SPAN CLASS="OneLiner"> # internal call to set the currently visible range.</SPAN>
@@ -40,12 +46,6 @@
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.find_closest"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.find_closest</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.SelectWinGram.find_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SelectWinGram.find_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.WinGram</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -120,130 +120,6 @@ window</P>
 <STRONG>INPUTS</STRONG></P>
 <P>
 <EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.SelectWinGram.__init__" CLASS="Method">sr_grammars.SelectWinGram.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">select_words=['select']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
-<P>None</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>AppState</EM> app
-<DD>application to which results will be sent
-<DT>
-<EM>STR</EM> buff_name
-<DD>name of buffer to which to tie this 
-selection grammar (can also be set by activate)
-
-</DL>
-<H2 ID="sr_grammars.SelectWinGram._set_visible" CLASS="Method">sr_grammars.SelectWinGram._set_visible(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)</H2>
-<P>internal call to set the currently visible range.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> visible
-<DD>visible text range 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.SelectWinGram.activate" CLASS="Method">sr_grammars.SelectWinGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-activates the grammar for recognition tied to the current window,
-and checks with buffer for the currently visible range.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> buff_name
-<DD>name of currently active buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.SelectWinGram.buffer_name" CLASS="Method">sr_grammars.SelectWinGram.buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns name of buffer corresponding to this selection grammar.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>name of buffer currently used by this selection grammar.
-
-</DL>
-<H2 ID="sr_grammars.SelectWinGram.cleanup" CLASS="Method">sr_grammars.SelectWinGram.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-SelectWinGram has a reference to an AppState instance, but no
-circular references, so strictly speaking it is only necessary
-for the grammar manager to delete its reference to the grammar.
-However, a dummy cleanup method allows us to avoid the need for
-a custom cleanup method for GramMgr.
-</P>
-<H2 ID="sr_grammars.SelectWinGram.find_closest" CLASS="Method">sr_grammars.SelectWinGram.find_closest(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Sort the ranges from earliest to latest, and select the one
-which is closest to the cursor in the proper direction</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> verb
-<DD>verb used by the selection
-<DT>
-<EM>STR</EM> spoken_form
-<DD>The spoken form of the selected code.
-<DT>
-*[(INT, INT)]
-<DD>list of ranges of offsets into buffer with the
-best recognition score
-
-</DL>
-<H2 ID="sr_grammars.SelectWinGram.find_visible" CLASS="Method">sr_grammars.SelectWinGram.find_visible(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-find the currently visible range for self.buff_name
-and checks with buffer for the currently visible range.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> buff_name
-<DD>name of currently active buffer
-</DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
@@ -379,6 +255,130 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="sr_grammars.SelectWinGram.__init__" CLASS="Method">sr_grammars.SelectWinGram.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">select_words=['select']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>application to which results will be sent
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of buffer to which to tie this 
+selection grammar (can also be set by activate)
+
+</DL>
+<H2 ID="sr_grammars.SelectWinGram._set_visible" CLASS="Method">sr_grammars.SelectWinGram._set_visible(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)</H2>
+<P>internal call to set the currently visible range.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> visible
+<DD>visible text range 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.SelectWinGram.activate" CLASS="Method">sr_grammars.SelectWinGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+activates the grammar for recognition tied to the current window,
+and checks with buffer for the currently visible range.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of currently active buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.SelectWinGram.buffer_name" CLASS="Method">sr_grammars.SelectWinGram.buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns name of buffer corresponding to this selection grammar.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of buffer currently used by this selection grammar.
+
+</DL>
+<H2 ID="sr_grammars.SelectWinGram.cleanup" CLASS="Method">sr_grammars.SelectWinGram.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+SelectWinGram has a reference to an AppState instance, but no
+circular references, so strictly speaking it is only necessary
+for the grammar manager to delete its reference to the grammar.
+However, a dummy cleanup method allows us to avoid the need for
+a custom cleanup method for GramMgr.
+</P>
+<H2 ID="sr_grammars.SelectWinGram.find_closest" CLASS="Method">sr_grammars.SelectWinGram.find_closest(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Sort the ranges from earliest to latest, and select the one
+which is closest to the cursor in the proper direction</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> verb
+<DD>verb used by the selection
+<DT>
+<EM>STR</EM> spoken_form
+<DD>The spoken form of the selected code.
+<DT>
+*[(INT, INT)]
+<DD>list of ranges of offsets into buffer with the
+best recognition score
+
+</DL>
+<H2 ID="sr_grammars.SelectWinGram.find_visible" CLASS="Method">sr_grammars.SelectWinGram.find_visible(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+find the currently visible range for self.buff_name
+and checks with buffer for the currently visible range.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of currently active buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="sr_grammars.WinGram.activate" CLASS="Method">sr_grammars.WinGram.activate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 

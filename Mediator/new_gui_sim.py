@@ -57,6 +57,7 @@ from wxMediator import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#      'SimpleSelection':1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
 #                        'get_mess': 1,

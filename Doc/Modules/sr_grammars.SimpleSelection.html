@@ -7,46 +7,37 @@
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class BasicCorrectionWinGram</title>
+<title>Class SimpleSelection</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class BasicCorrectionWinGram</H1>
+<H1 CLASS="ClassName">class SimpleSelection - abstract base class for simple selection grammars</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="sr_grammars.html">sr_grammars</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammars.BasicCorrectionWinGram<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammars.SimpleSelection<BR>
 &nbsp;&nbsp;<A HREF="sr_grammars.WinGram.html">sr_grammars.WinGram</A><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
-&nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">BasicCorrectionWinGram</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.WinGram.html">WinGram</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SimpleSelection</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.WinGram.html">WinGram</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">select_words=['select']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">get_visible_cbk=None</SPAN>, <SPAN CLASS="Argument">get_selection_cbk=None</SPAN>, <SPAN CLASS="Argument">select_cbk=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection._set_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection._set_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)<SPAN CLASS="OneLiner"> # internal call to set the currently visible range.</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection.find_closest"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.find_closest</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.SimpleSelection.recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.SimpleSelection.recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.WinGram</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -58,35 +49,44 @@
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
-abstract base class for window-specific grammar for basic
-correction (Scratch That/n, Correct That, Correct Recent)</P>
-<P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>WinGramMgr</EM> manager
-<DD>the grammar manager which owns this grammar
+<EM>[STR]</EM> select_words
+<DD>words (or phrases) which introduces a
+selection utterance
 <DT>
-<EM>[STR]</EM> scratch_words
-<DD>list of synonyms for Scratch in "Scratch
-That" and "Scratch n"
+<EM>STR</EM> through_word
+<DD>word which separates the beginning and end of
+a range to be selected.
 <DT>
-<EM>[STR]</EM> correct_words
-<DD>list of synonyms for Correct in "Correct
-That" and "Correct Recent" 
+<EM>STR FCT() get_visible_cbk</EM>
+<DD>callback for retrieving the visible range
 <DT>
-<EM>[STR]</EM> recent_words
-<DD>list of synonyms for Recent in "Correct Recent"
+<EM>(INT, INT) FCT() get_selection_cbk</EM>
+<DD>callback for retrieving the 
+current selection
+<DT>
+<EM>FCT(range) select_cbk</EM>
+<DD>callback which returns the <EM>(INT, INT)</EM> 
+range to be selected (relative to the start of the visible range 
+passed to the get_visible_cbk), or None if text wasn't found
+<DT>
+<EM>STR</EM> visible
+<DD>currently visible range 
+<DT>
+<EM>(INT, INT)</EM> selection
+<DD>current selection 
+<DT>
+<EM>INT</EM> window
+<DD>window handle (unique identifier) for the window to
+which the grammar is specific
+
 </DL>
-<P>
-<STRONG>CLASS ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.__init__" CLASS="Method">sr_grammars.BasicCorrectionWinGram.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
-<P>None</P>
+<H2 ID="sr_grammars.SimpleSelection._set_visible" CLASS="Method">sr_grammars.SimpleSelection._set_visible(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">visible</SPAN>)</H2>
+<P>internal call to set the currently visible range.</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -94,28 +94,43 @@ That" and "Correct Recent"
 <DL>
 
 <DT>
-<EM>WinGramMgr</EM> manager
-<DD>the grammar manager which owns this grammar
-<DT>
-<EM>[STR]</EM> scratch_words
-<DD>list of synonyms for Scratch in "Scratch
-That" and "Scratch n", or None for the default of <CODE>Scratch</CODE>
-<DT>
-<EM>[STR]</EM> correct_words
-<DD>list of synonyms for Correct in "Correct
-That" and "Correct Recent"  or None for the default of <CODE>Correct</CODE>
-<DT>
-<EM>[STR]</EM> recent_words
-<DD>list of synonyms for 
-Recent in "Correct Recent" or None for the dfault of 'Recent
-
+<EM>STR</EM> visible
+<DD>visible text range 
 </DL>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_last" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_last(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.SimpleSelection.activate" CLASS="Method">sr_grammars.SimpleSelection.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
 <P>
-method which subclass must call when the grammar 
-recognizes Correct That with nothing selected</P>
+activates the grammar for recognition tied to the current window,
+and checks with buffer for the currently visible range.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle (unique identifier) for the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.SimpleSelection.cleanup" CLASS="Method">sr_grammars.SimpleSelection.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+clean up the grammar and any circular references
+</P>
+<H2 ID="sr_grammars.SimpleSelection.deactivate" CLASS="Method">sr_grammars.SimpleSelection.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>disable recognition from this grammar</P>
+
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -125,12 +140,32 @@ recognizes Correct That with nothing selected</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_recent(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammars.SimpleSelection.find_closest" CLASS="Method">sr_grammars.SimpleSelection.find_closest(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verb</SPAN>, <SPAN CLASS="Argument">ranges</SPAN>)</H2>
 <P>None</P>
 
 <P>
-method which subclass must call when the grammar 
-recognizes Correct Recent </P>
+Sort the ranges from earliest to latest, and select the one
+which is closest to the cursor in the proper direction</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> verb
+<DD>verb used by the selection
+<DT>
+*[(INT, INT)]
+<DD>list of ranges of offsets into visible range
+with the best recognition score
+
+</DL>
+<H2 ID="sr_grammars.SimpleSelection.recognition_starting" CLASS="Method">sr_grammars.SimpleSelection.recognition_starting(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which a concrete subclass should call when recognition
+is starting</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -140,32 +175,6 @@ recognizes Correct Recent </P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.scratch_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method which subclass must call when the grammar 
-recognizes Scratch That/Scratch n, to undo the effect of the 
-most recent n utterances, if possible.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT n</EM>
-<DD>number of utterances to undo
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM>
-<DD>number of utterances successfully undone
-
-</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -296,161 +305,6 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
-<P>attempt to call cleanup on object</P>
-
-<P>
-<STRONG>INPUTS*</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>OwnerObject object</EM>
-<DD>note: class of object is the expected
-class, but _cleanup_object doesn't assume this is correct, nor
-does it check whether the object is a subclass of
-OwnerObject, only that it is a class instance and that it
-has a cleanup attribute
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>reason for error (or None if no error).
-
-</DL>
-<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's grandparent (or great-grandparent, etc.)
-(Actually, any other reference which needs to be del'ed but not
-cleaned up)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR grandparent</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append a new attribute name to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append new attribute names to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR] owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's parent.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR parent</EM>
-<DD>name of the parent, or None if none
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the name of the parent attribute</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>name of the parent, or None if none
-
-</DL>
-<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
-remove_other_references method, after performing their own duties.
-Also, a class inheriting from two OwnerObject classes MUST
-define remove_other_references and call both subclasses'
-versions</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="sr_grammars.WinGram.activate" CLASS="Method">sr_grammars.WinGram.activate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
