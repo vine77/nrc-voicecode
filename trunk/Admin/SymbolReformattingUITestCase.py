@@ -1,3 +1,5 @@
+from wxPython.wx import *
+import WinSystemMSW
 import TestCaseWithHelpers
 import MediatorConsoleWX
 from SymbolResult import SymbolResult
@@ -7,6 +9,11 @@ from CmdInterp import MockUtteranceInterpretation
 
 
 class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):    
+    
+#>    frame = wxFrame(None, wxNewId(), "test console", 
+#>            wxDefaultPosition, wxDefaultSize)
+ 
+#>    console = MediatorConsoleWX.MediatorConsoleWX(frame, win_sys = WinSystemMSW.WinSystemMSW())
     
     utter1 = MockSpokenUtterance(['new', 'symbol', 'one', 'one', 'equals', 'new', 'symbol', 'one', 'two'])
             
@@ -31,8 +38,13 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
            MediatorConsoleWX.ReformatRecentSymbols(None, None, 
                                                         SymbolReformattingUITestCase.sym_list, 
                                                          None)
+#>        self.ui = \
+#>           MediatorConsoleWX.ReformatRecentSymbols(SymbolReformattingUITestCase.console, None, 
+#>                                                        SymbolReformattingUITestCase.sym_list, 
+#>
+#>                                                         None)
         # AD: Uncomment this if you want to see what the window looks like. 
-        # self.ui.ShowModal()
+#        self.ui.ShowModal()
         
                                                          
     def tearDown(self):
@@ -41,7 +53,7 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
         
     def test_fixture_initialisation(self):
         assert self.ui != None, "Symbool reformatting model not initialised properly."
-
+        
     def test_displayed_symbols(self):
         self.assert_sequences_have_same_content\
                ("Displayed utterances were wrong.", 
@@ -53,3 +65,7 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
                   ], 
                 self.ui.displayed_symbols())
 
+#    def test_choose(self):
+#       print "** test_choose"
+#       self.ui.do_choose(0)
+#       self.assert_equals("Selected symbol was wrong.", 0, self.ui.selected_symbol_index())

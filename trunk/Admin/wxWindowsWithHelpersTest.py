@@ -50,6 +50,14 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.assert_sequences_have_same_content("Cells of the list were wrong.", 
                                                [['item 0-0', 'item 0-1', 'item 0-2'], ['item 1-0', 'item 1-1', 'item 1-2']], 
                                                self.dlg.list.AllCellsContentsString())
+                                               
+#    def test_DoSelectItem(self):
+#       self.dlg.list.DoSelectItem(0, 0)
+#       self.assert_equals("Selected item was wrong.", [0], self.dlg.list.SelectedItem())
+#       self.dlg.list.Select(1, 1)
+#       self.assert_equals("Selected item was wrong.", [1], self.dlg.list.GetFirstSelected()
+#)       
+                                                   
     def tearDown(self):
        self.dlg.Destroy()
        

@@ -416,35 +416,6 @@ class MediatorConsole(Object.OwnerObject):
         """
         debug.virtual('MediatorConsole.show_recent_utterances')
 
-    def reformat_recent(self, editor_name, utterances):
-        """Store the current foreground window,
-        display a reformat recent sdialog box to allow the user to 
-        select a recent symbol to reformat.  Finally, restore
-        the original window to the foreground
-
-
-        **INPUTS**
-
-        *STR editor_name* -- name of the editor instance
-
-        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
-
-        **OUTPUTS**
-
-        *[INT]* -- the utterance numbers of 
-        those utterances which were corrected by the user, or None if
-        none were corrected
-        """
-
-        debug.trace('MediatorConsole.reformat_recent', 'invoked with utterances=%s' % utterances)
-        editor_window = self.store_foreground_window()
-        ok = self.show_recent_symbols(editor_name, utterances)
-        editor_window.restore_to_foreground()
-        return ok
-
     def show_recent_symbols(self, editor_name, utterances):
         """display a dialog box with recent symbols to allow the user to 
         select a recent symbol to reformat
@@ -465,6 +436,29 @@ class MediatorConsole(Object.OwnerObject):
         none were corrected
         """
         debug.virtual('MediatorConsole.show_recent_symbols')
+
+
+    def reformat_nth_symbol(self, editor_name, symbol):
+        """Store the current foreground window,
+        display a reformatting box for reformatting a recent
+        symbol, accept user reformatting, allow the user to
+        approve or cancel.  Finally, restore
+        the original window to the foreground
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *SymbolResult symbol* -- the symbol itself
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the user made changes and approved them
+        """
+        editor_window = self.store_foreground_window()
+        ok = self.show_reformatting_box(editor_name, symbol)
+        editor_window.restore_to_foreground()
+        return ok
 
 
     def raise_active_window(self):
@@ -490,7 +484,7 @@ class DlgModelView(Object.OwnerObject):
     
     **INSTANCE ATTRIBUTES**
 
-    *wxDialog* view_layer -- The presentation layer for this dialog
+    *ViewLayer* view_layer -- The presentation layer for this dialog
     (note this may be *self* if presentation layer and model
     layer are rolled into a single same object). 
 
@@ -514,7 +508,7 @@ class DlgModelView(Object.OwnerObject):
         
         **INPUTS**
         
-        *wxDialog view* -- The view layer.
+        *ViewLayer view* -- The view layer.
         """
         self.view_layer = view
                     
@@ -523,7 +517,7 @@ class DlgModelView(Object.OwnerObject):
         
         **OUTPUTS**
         
-        *wxDialog* -- The view layer.
+        *ViewLayer* -- The view layer.
         """
         return self.view_layer
            
@@ -532,7 +526,7 @@ class DlgModelView(Object.OwnerObject):
        
        **OUTPUTS**
        
-       *wxDialog* -- a new view layer for this dialog.
+       *ViewLayer* -- a new view layer for this dialog.
        """
        debug.virtual('DlgModelView.make_view', self)
         
@@ -563,6 +557,33 @@ class DlgModelView(Object.OwnerObject):
         """
         debug.virtual('DlgModelView.dismiss_event', self)
 
+
+class ViewLayer(Object.OwnerObject):
+    """class for implementing view layer of model-view dialogs.
+        
+    **INSTANCE ATTRIBUTES**
+
+    *DlgModelView* model -- The model-view dialog that this is the 
+    view for.
+
+    **CLASS ATTRIBUTES**
+    
+    *none* --    
+    """
+    def __init__(self, model, **args_super):
+        self.deep_construct(ViewLayer, 
+                            {'the_model': model}, 
+                            args_super)
+        
+    def model(self):
+        """return the view layer for this dialog.
+        
+        **OUTPUTS**
+        
+        *DlgModelView* -- The model-view dialod.
+        """
+        return self.the_model
+           
                             
 
 # defaults for vim - otherwise ignore
