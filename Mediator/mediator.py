@@ -59,12 +59,11 @@ quit()
    (e.g. <EM>Ctrl-C</EM>), your DOS window will hang up.   
 """
 
+import util
+
 import natlink
-natlink.natConnect(1)
-
-import os, sys, util
-
-import vc_globals
+import os, sys
+import util, vc_globals
 from CSCmd import CSCmd
 from config import add_csc
 
@@ -106,7 +105,7 @@ def say(utterance, bypass_NatLink=0):
     going through NatLink's recognitionMimic function.
     """
 
-    if bypass_NatLink:
+    if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
         vc_globals.interp.interpret_NL_cmd(utterance)
     else:
         natlink.recognitionMimic(utterance)
@@ -135,30 +134,38 @@ def move(steps):
 
 
 def setmic(state):
-    natlink.setMicState(state)
+    if not os.environ.has_key('VCODE_NOSPEECH'):
+        natlink.setMicState(state)
 
 
 def listen():
-    natlink.setMicState('on')
-    natlink.waitForSpeech(0)
+    if not os.environ.has_key('VCODE_NOSPEECH'):
+        natlink.setMicState('on')
+        natlink.waitForSpeech(0)
         
 def quit():
     global quit_flag
     quit_flag = 1
-    if not vc_globals.interp.dictation_object == None:
+    if not vc_globals.interp.dictation_object == None and \
+       not os.environ.has_key('VCODE_NOSPEECH'):
         vc_globals.interp.terminate()
         natlink.natDisconnect()
 
 if (__name__ == '__main__'):
 
     opts, args = util.gopt(['h', None, 's', None])
+
     if opts['h']:
         print __doc__
     elif opts['s']:
+        
         #
         # Start in console mode with editor simulator.
+        # NOTE: We only activate NatLink if -b option was not set
         #
-        vc_globals.interp.activate(0)
+        if not os.environ.has_key('VCODE_NOSPEECH'):
+            vc_globals.interp.activate(0)
+            
         while (not quit_flag):
             sys.stdout.write('Command> ')
             cmd = sys.stdin.readline()
@@ -171,7 +178,3 @@ if (__name__ == '__main__'):
 
 quit()
         
-
-
-
-
