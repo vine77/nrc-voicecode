@@ -20,6 +20,7 @@
 ##############################################################################
 
 import sys
+#import traceback
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
 """Defines main class for the mediator.
@@ -146,6 +147,8 @@ class MediatorObject(Object.Object):
 	    sr_interface.CodeSelectGrammar(app = self.app,
 		window = window, exclusive = exclusive,
                 allResults = allResults)
+#	print 'Mediator constructor: allResults = %d\n' % allResults
+#	print traceback.extract_stack()
 
 
     def configure(self, config_file=vc_globals.default_config_file):
@@ -162,6 +165,8 @@ class MediatorObject(Object.Object):
         """        
 
                 
+#	print 'Mediator configure:\n'
+#	print traceback.extract_stack()
         if sr_interface.speech_able():
             self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
 	    if self.window == 0:

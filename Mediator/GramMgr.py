@@ -195,26 +195,26 @@ class GramMgrDictContext(GramMgr):
 	selection
 	"""
 #  find dictation context
-	current = self.app.cur_pos(f_name = buffer)
+	current = self.app.cur_pos(buff_name = buffer)
 #	print current
         self.app.drop_breadcrumb(buffname = buffer)
         self.app.drop_breadcrumb(buffname = buffer)
 #	self.app.search_for(r'\S+\s+\S+', direction = -1, 
-#	    num = 1, where = -1, f_name = buffer)
+#	    num = 1, where = -1, buff_name = buffer)
 	self.app.search_for(r'\s+\S', direction = -1, 
-	    num = 2, where = -1, f_name = buffer)
+	    num = 2, where = -1, buff_name = buffer)
 #	self.app.search_for(r'\s+\S+', direction = -1, 
-#	    num = 2, where = -1, f_name = buffer)
-	start = self.app.cur_pos(f_name = buffer)
+#	    num = 2, where = -1, buff_name = buffer)
+	start = self.app.cur_pos(buff_name = buffer)
 #	print start
-	before = self.app.get_text(start, current, f_name = buffer)
+	before = self.app.get_text(start, current, buff_name = buffer)
 #	print before
         self.app.pop_breadcrumbs()
 	self.app.search_for(r'\S+\s+', direction = 1, 
-	    num = 2, where = 1, f_name = buffer)
-	end = self.app.cur_pos(f_name = buffer)
+	    num = 2, where = 1, buff_name = buffer)
+	end = self.app.cur_pos(buff_name = buffer)
 #	print end
-	after = self.app.get_text(current, end, f_name = buffer)
+	after = self.app.get_text(current, end, buff_name = buffer)
         self.app.pop_breadcrumbs()
 	return before, after
 
@@ -240,7 +240,7 @@ class WinGramMgr(GramMgrDictContext):
     """
 
     def __init__(self, factory, interp, global_grammars = 0, exclusive =
-	0, all_results = 0, **args):
+	0, **args):
 	"""
 	
 	**INPUTS**
@@ -257,14 +257,11 @@ class WinGramMgr(GramMgrDictContext):
 	*BOOL* exclusive -- use exclusive grammars which prevent 
 	non-exclusive grammars from getting results (only for testing purposes)
 
-	*BOOL* all_results -- use grammars which are notified about all results
-	(only for testing purposes)
 	"""
         self.deep_construct(WinGramMgr,
                             {'factory': factory, 'interp': interp,
 			    'global_grammars': global_grammars,
 			    'exclusive': exclusive,
-			    'all_results': all_results,
 			    'dict_grammars' : {},
 			    'sel_grammars' : {}},
                             args)
@@ -388,8 +385,7 @@ class WinGramMgr(GramMgrDictContext):
 		self.dict_grammars[window][buffer] = \
 		    self.factory.make_dictation(self.interp, self.app, 
 		    buffer, a_window, 
-		    exclusive = self.exclusive, all_results =
-		    self.all_results)
+		    exclusive = self.exclusive)
 
     def new_window(self, window, buffer = None):
 	"""add a new window
@@ -412,8 +408,7 @@ class WinGramMgr(GramMgrDictContext):
 	    if self.global_grammars:
 	        a_window = None
 	    self.sel_grammars[window] = self.factory.make_selection(self.app,
-		a_window, exclusive = self.exclusive, all_results =
-		self.all_results)
+		a_window, exclusive = self.exclusive)
 
     def delete_window(self, window):
 	"""clean up and destroy all grammars for a window which 

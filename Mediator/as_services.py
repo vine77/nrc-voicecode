@@ -143,7 +143,7 @@ class AS_ServiceBreadcrumbs(AS_Service):
         lastbuff, lastpos = self.breadcrumbs[stacklen - num]
         self.breadcrumbs = self.breadcrumbs[:stacklen - num]
         if gothere:
-            self.app.goto(lastpos, f_name=lastbuff)
+            self.app.goto(lastpos, buff_name=lastbuff)
 
 
 class AS_ServiceLangName(AS_Service):
