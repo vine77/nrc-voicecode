@@ -286,7 +286,8 @@ class PersistentConfigNewMediator(Object.Object):
         """
         return self.names
 
-    def init_simulator_regression(self, symdict_pickle_fname=None):
+    def init_simulator_regression(self, symdict_pickle_fname=None,
+        exclusive = 1):
         """re-initialize the mediator, using the same editor application
 
         **NOTE:**  This method must also ensure that the namespace in
@@ -301,6 +302,9 @@ class PersistentConfigNewMediator(Object.Object):
         STR *symdict_pickle_fname=None* -- Name of the file containing the
         persistent version of the symbols dictionnary.
 
+        BOOL *exclusive* -- true unless the test is a foreground test
+        and cannot use exclusive grammars
+
         **OUTPUTS**
 
         *none*
@@ -312,7 +316,9 @@ class PersistentConfigNewMediator(Object.Object):
         debug.trace('PersistentConfigNewMediator.init_simulator_regression',
             'about to reset persistent mediator')
         self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = self.symbol_match_dlg, add_sr_entries_for_LSAs_and_CSCs=0)
+            symbol_match_dlg = self.symbol_match_dlg, 
+            add_sr_entries_for_LSAs_and_CSCs=0,
+            exclusive = exclusive)
         debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** before editor_instance')                    
         editor = self.mediator().editor_instance(self.editor_name)
         debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** before init_for_test')        

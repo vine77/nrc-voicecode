@@ -56,6 +56,38 @@ class WinGram(OwnerObject):
             'active' : 0}, attrs)
         self.name_parent('manager')
 
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('WinGram._set_exclusive_when_active')
+        
+    def set_exclusive(self, exclusive = 1):
+        """makes the grammar exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.exclusive = exclusive
+        if self.is_active():
+            self._set_exclusive_when_active(exclusive)
+
     def activate(self):
         """activates the grammar for recognition
         tied to the current window.
@@ -183,15 +215,10 @@ class WinGram(OwnerObject):
         *STR* -- the message
         """
         s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
+        debug.trace('WinGram.format_utterance_message', 
+            "Full utterance was %s" % repr(words))
         return s
         
-    def recog_mgr(self):
-       """Returns the [RecogStartMgr] that manages this grammar.
-       
-       ..[RecogStartMgr] file:///./RecogStartMgr.RecogStartMgr.html"""
-        
-       return self.manager.manager.recog_mgr                       
-
 class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces
 
@@ -621,7 +648,10 @@ class WinGramFactory(Object):
     *none*
     """
     def __init__(self, 
-        select_verbs = ['go', 'select', 'insert', 'correct', ''], 
+#        select_verbs = ['go', 'select', 'insert', 'correct', ''], 
+# Look, I commented out correct for a reason - it is not supported
+# without correct-anywhere -- DCF
+        select_verbs = ['go', 'select', 'insert', ''], 
         select_cursor_position_words = ['before', 'after', ''],
         select_direction_words = ['next', 'previous', ''],
         through_word = 'through',

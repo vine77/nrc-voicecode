@@ -65,6 +65,22 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 #        self.load(allResults=1)
         self.load()
 
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        DictGramBase.setExclusive(self, exclusive)
+        
     def activate(self):
         """activates the grammar for recognition
         tied to the current window.
@@ -168,6 +184,22 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         self.load(selectWords = self.select_phrases, throughWord =
             self.through_word)
 
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        SelectGramBase.setExclusive(self, exclusive)
+        
     def _set_visible(self, visible):
         """internal call to set the currently visible range.
 
@@ -331,6 +363,22 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         self.create_rules()
         self.load()
 
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        GrammarBase.setExclusive(self, exclusive)
+        
     def load(self):
         if self.rules:
             GrammarBase.load(self, self.rules)
@@ -617,6 +665,27 @@ class WinGramFactoryNL(WinGramFactory):
             recent_words = self.recent_words, 
             window = window, exclusive = exclusive) 
 
+    def make_text_mode(self, manager, window = None, exclusive = 0):
+        """Create a new grammar for toggling text-mode on and off.
+        
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *TextModeGram* -- the command grammar for toggling text-mode.
+        
+        """
+        return TextModeTogglingGramNL(manager = manager, window = window, 
+            exclusive=exclusive)
+            
     def make_choices(self, choice_words):
         """create a new ChoiceGram choice grammar
 
@@ -695,27 +764,13 @@ class WinGramFactoryNL(WinGramFactory):
         *SimpleSelection* -- new selection grammar
         """
         if alt_select_phrases is None:
-            select_phrases = self.select_phrases
+            select_phrases = self._select_phrases()
         else:
             select_phrases = alt_select_phrases
         return SimpleSelectionNL(select_phrases = select_phrases,
             get_visible_cbk = get_visible_cbk,
             get_selection_cbk = get_selection_cbk, 
             select_cbk = select_cbk)
-            
-    def make_text_mode(self, manager, window=None, exclusive=0):
-        """Create a new grammar for toggling text-mode on and off.
-        
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *TextModeGram* -- the command grammar for toggling text-mode.
-        
-        """
-        return TextModeTogglingGramNL(manager=manager, window=window, exclusive=exclusive)
             
 
 class ChoiceGramNL(ChoiceGram, GrammarBase):
@@ -1364,6 +1419,21 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
         GrammarBase.__init__(self)
         self.load(self.gram_spec())
 
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        GrammarBase.setExclusive(self, exclusive)
 
     def gram_spec(self):
     
@@ -1420,10 +1490,12 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
         debug.trace('TextModeTogglingGramNL.gotBegin', '** self.exclusive=%s' % self.exclusive)
     
     def gotResults_text_mode_on(self, words, full_results):
-        self.recog_mgr().is_in_text_mode = 1
+        if self.manager:
+            self.manager.set_text_mode(1)
 
     def gotResults_text_mode_off(self, words, full_results):
-        self.recog_mgr().is_in_text_mode = 0    
+        if self.manager:
+            self.manager.set_text_mode(0)
 
 
 

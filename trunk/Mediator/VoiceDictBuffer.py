@@ -184,7 +184,8 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
         self.program_initiated = 1
         self.underlying.setText(text, s, e)
 # DictObj, unlike CDgnDictCustom, appears to send change events only on
-# internally initiated changes
+# internally initiated changes, so we have to call
+# _on_change_specification manually
         selection_start, selection_end = self.get_selection()
         self._on_change_specification(s, e, text, selection_start,
             selection_end, self.program_initiated)

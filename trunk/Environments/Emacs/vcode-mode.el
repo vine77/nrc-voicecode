@@ -266,11 +266,12 @@ in the 'vr-deprecated-log-buff-name buffer.")
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
 
-; Until we know that the new mechanism for fixing the selected-frame
-; problem works, these traces should be left on - DCF
+; testing hang/deadlock with text_mode test 5/8/03 - DCF
 ;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
 ;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
+;(cl-puthash "vcode-serialize-message" 1 vcode-traces-on)
 
 ; testing problems with insert_delete test 12/31/02 - DCF
 ;(cl-puthash "vcode-cmd-insert" 1 vcode-traces-on)
@@ -2139,6 +2140,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   "Serializes a LISP data structure into a string message that can be sent to 
 VoiceCode server."
   (let ((mess-name (elt mess 0)) (mess-cont (elt mess 1)))
+    (vcode-trace "vcode-serialize-message" "mess-name=%S, mess-cont=%S" mess-name mess-cont)
     (setq serialized-mess (vcode-pack-mess (vcode-encode-mess mess-name mess-cont)))
     serialized-mess
   )

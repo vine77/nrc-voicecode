@@ -228,6 +228,24 @@ class RecogStartMgr(OwnerObject):
                             args)
         self.name_parent('editors')
         
+    def set_exclusive(self, exclusive = 1, instance = None):
+        """makes the grammars exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if all grammars for a given instance
+        should be exclusive
+
+        *STR instance* -- name of the editor instance, or None to change
+        for all instances
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.set_exclusive')
+
     def user_message(self, message, instance = None):
         """sends a user message up the chain to the NewMediatorObject to
         be displayed
@@ -890,6 +908,28 @@ class RSMInfrastructure(RecogStartMgr):
         if self.active and hasattr(self, '_deactivate_detection'):
             self._deactivate_detection()
         self.active = 0
+
+    def set_exclusive(self, exclusive = 1, instance = None):
+        """makes the grammars exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if all grammars for a given instance
+        should be exclusive
+
+        *STR instance* -- name of the editor instance, or None to change
+        for all instances
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if instance is None:
+            for instance in self.known_instances():
+                self.set_exclusive(exclusive, instance)
+        elif self.known_instance(instance):
+            self.grammars[instance].set_exclusive(exclusive)
 
     def add_module(self, module):
         """add a new KnownTargetModule object
@@ -2117,6 +2157,40 @@ class RSMBasic(RSMInfrastructure):
             return 1
         self.new_instance(instance)
         return 0
+
+    def make_universal(self, instance, exclusive = 1):
+        """make an existing instance into a universal instance using
+        global grammars
+
+        **INPUTS**
+
+        *STR* instance -- the name of the instance
+
+        *BOOL* exclusive -- should the instance use exclusive grammars
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the instance existed and was made into a universal 
+        instance.  False if the named isntance didn't exist, or if there was 
+        already another universal instance
+        """
+        if not self.known_instance(instance):
+            return 0
+        if self.universal != None:
+            if self.universal == instance:
+# if the instance is already the universal instance, do nothing, but return true
+                return 1
+            return 0
+        app = self.app_instance(instance)
+        debug.trace('RecogStartMgr.make_universal', 
+            'new global manager')
+        self.grammars[instance].cleanup()
+        self.grammars[instance] = \
+            self.GM_factory.new_global_manager(app, 
+                instance_name = instance, 
+                recog_mgr = self, exclusive = exclusive)
+        self.universal = instance
+        return 1
 
     def delete_instance(self, instance):
         """method called by AppMgr to notify RecogStartMgr that an

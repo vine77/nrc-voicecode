@@ -44,13 +44,22 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-###########################################################
-###########################################################
+#                       'NewMediatorObject': 1,
+#                       'PersistentConfigNewMediator': 1,
+#                       'RecogStartGram': 1,
+#                       'RecogStartMgr': 1,
+#                       'RecogStartMgrNL': 1,
+#                       'TempConfigNewMediatorFactory': 1,
+#                        'sr_interface.addWord': 1,
+#                        'CmdInterp.add_lsa': 1,
+#                        'LSAlias.__init__': 1,
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,
 #                       'ResMgrBasic.interpret_dictation': 1,
 #                       'send_mess': 1,
 #                       'get_mess': 1,
+#                       'AppState': 1,
+#                       'SourceBuff': 1,
 #                       'MessPackager_FixedLenSeq.pack_mess': 1,
 #                       'RecogStartMgr': 1,
 #                       'DictWinGramNL': 1,
@@ -91,7 +100,7 @@ debug.config_traces(status="on",
 #                                    'listen_one_transaction': 1,
 #                                    'close_app_cbk': 1,
 #                                    'AppState': 1,
-#                       'sim_commands.say': 1,
+#                       'SimCmdsObj.say': 1,
 #                       'got': 1,
 #                       'RecogStartGram': 1,
 #                       'DictWinGramNL.gotResultsObject': 1,
@@ -170,21 +179,11 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
                                          test_server = test_server,
                                          editor_factory = factory) 
 
-        test_space = globals()
-#        test_space = {}
-#        test_space['auto_test'] = auto_test
-        if test_server:
-            sys.stderr.write('Loading test definitions...\n')
-            sys.stderr.flush()
-            tests_def_fname = posixpath.expandvars('$VCODE_HOME' + \
-                os.sep + 'Admin' + os.sep + 'tests_def.py')
-            execfile(tests_def_fname, test_space)        
-
 #        print self.the_server
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
-                test_args = [test_suite],
-                test_space = test_space, global_grammars = 1, exclusive = 1,
+                test_or_suite = test_suite,
+                global_grammars = 1, exclusive = 1,
                 profile_prefix = profile_prefix, 
                 bypass_sr_recog = bypass_sr_recog)
 #        print self.the_mediator.server

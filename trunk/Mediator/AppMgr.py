@@ -156,6 +156,24 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         OwnerObject.remove_other_references(self)
 
+    def set_exclusive(self, exclusive = 1, instance = None):
+        """makes the grammars exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if all grammars for a given instance
+        should be exclusive
+
+        *STR instance* -- name of the editor instance, or None to change
+        for all instances
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.recog_mgr.set_exclusive(exclusive, instance)
+
     def cancel_testing(self):
         """cancel a regression test if one is running, and return to the
         main message loop.  If no regression test is running, this
@@ -626,6 +644,24 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         else:
             self.delete_instance(new_name)
             return None
+
+    def make_universal(self, instance, exclusive = 1):
+        """make an existing instance into a universal instance using
+        global grammars
+
+        **INPUTS**
+
+        *STR* instance -- the name of the instance
+
+        *BOOL* exclusive -- should the instance use exclusive grammars
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the instance existed and was made into a universal 
+        instance.  False if the named isntance didn't exist, or if there was 
+        already another universal instance
+        """
+        return self.recog_mgr.make_universal(instance, exclusive)
 
     def delete_instance(self, instance):
         """called by NewMediatorObject to remove named instance 

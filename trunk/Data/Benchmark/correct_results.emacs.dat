@@ -1,17 +1,3 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
-
-C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -19,59 +5,35 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Finished wxMediator init...
 starting...
 Starting server threads...
-universal instance named "emacs(0)"
+Starting foreground tests...
 
-
-*******************************************************************************
-* Name        : test_done_first
-* Description : check that regression tests are executed in order of priority
-*******************************************************************************
-
-This test should always be the very first one to be executed!
-
-
-*******************************************************************************
-* Name        : request_foreground
-* Description : This dummy test is just there to request that user bring Emacs to the foreground.
-*******************************************************************************
-
-The next series of tests require that the client editor be in the foreground.    
-    
-Please do the following:
-    
-- press Enter
-- immediatly bring the client editor to the foreground
-- do not touch the computer until further notice
-
-
-
-Note that after pressing Enter, you will have 5 seconds
-to bring the editor to the foreground before the tests
-start.
-
-Note also that if a background process brings a window to the 
-foreground, the test results may be invalidated.
-
-Press Enter now:
->  
 
 *******************************************************************************
 * Name        : mixed_mode_editing
 * Description : Testing mixed mode (kbd + voice) editing
 *******************************************************************************
 
-Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
 *** Start of source buffer ***
-  1: <CURSOR># This is a small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
-Got command: goto(1,)
-*** Start of source buffer ***
-  1: #<CURSOR> This is a small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
+  1: <CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  2: # WARNING: the mediator is now running foreground tests, which may
+  3: # change the contents of the foreground window.  Unless you want your
+  4: # own files corrupted, this editor window MUST remain in the foreground 
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: <CURSOR># This is a small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto(472,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #<CURSOR> This is a small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
 Got simulated kbd event: move_cursor_by_kbd(Right,10,)
 Got command: say(['hello'],0
 ,0,0,)
@@ -83,23 +45,36 @@ Associate 'hello' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
-> *** Start of source buffer ***
-  1: # This is ahello<CURSOR> small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
-Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
-*** Start of source buffer ***
-  1: # This is ahello<CURSOR> small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
-Got command: goto(1,)
-*** Start of source buffer ***
-  1: #<CURSOR> This is ahello small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
+>   6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is ahello<CURSOR> small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is ahello<CURSOR> small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: <CURSOR># This is ahello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto(472,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #<CURSOR> This is ahello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
 Got simulated kbd event: set_selection_by_kbd(Right,10,)
 Got command: say(['hello'],0
 ,0,0,)
@@ -111,57 +86,66 @@ Associate 'hello' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
-> *** Start of source buffer ***
-  1: #hello<CURSOR>hello small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
-Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
-*** Start of source buffer ***
-  1: #hello<CURSOR>hello small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
-Got command: goto_line(2,)
-*** Start of source buffer ***
-  1: #hellohello small buffer for testing editing of Python code
-  2: <CURSOR>
-  3: 
-  4: class AClass(ASuper):
-  5:     """This is a dummy class"""
+>   6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hello<CURSOR>hello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
+  6: # is safe for you to proceed with your work.
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hello<CURSOR>hello small buffer for testing editing of Python code
+ 10: 
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+Got command: goto_line(10,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: <CURSOR>
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
 Got simulated kbd event: stype_text(, hi,)
 Got simulated kbd event: move_cursor_by_kbd(Left,5,)
 Got command: say(['next', 'comma'],None,0,0,)
 Heard next comma
-*** Start of source buffer ***
-  1: #hellohello small buffer for testing editing of Python code
-  2: , <CURSOR>hi
-  3: 
-  4: class AClass(ASuper):
-  5:     """This is a dummy class"""
-Got command: open_file(%VCODE_HOME%\Data\TestData\edit_this_buff.py,)
-*** Start of source buffer ***
-  1: #hellohello small buffer for testing editing of Python code
-  2: , <CURSOR>hi
-  3: 
-  4: class AClass(ASuper):
-  5:     """This is a dummy class"""
-Got command: goto_line(2,)
-*** Start of source buffer ***
-  1: #hellohello small buffer for testing editing of Python code
-  2: <CURSOR>, hi
-  3: 
-  4: class AClass(ASuper):
-  5:     """This is a dummy class"""
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: , <CURSOR>hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: , <CURSOR>hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got command: goto_line(10,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10: <CURSOR>, hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
 Got simulated kbd event: stype_text( hello ,)
 Got command: say(['select', 'hello'],None,1,0,)
 Heard select hello
-*** Start of source buffer ***
-  1: #hellohello small buffer for testing editing of Python code
-  2:  <SEL_START>hello<SEL_END> , hi
-  3: 
-  4: class AClass(ASuper):
-  5:     """This is a dummy class"""
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: #hellohello small buffer for testing editing of Python code
+ 10:  <SEL_START>hello<SEL_END> , hi
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
 
 
 *******************************************************************************
@@ -169,29 +153,101 @@ Heard select hello
 * Description : Test dictation of normal text.
 *******************************************************************************
 
-WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
+  1: <CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  2: # WARNING: the mediator is now running foreground tests, which may
+  3: # change the contents of the foreground window.  Unless you want your
+  4: # own files corrupted, this editor window MUST remain in the foreground 
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: <CURSOR>
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Heard print quotes
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "<CURSOR>"
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "<CURSOR>"
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Setting VCode in text mode.
 Got command: say(['text', 'mode', 'on'],1
 1
 1
 ,1,0,)
-is_in_text_mode=1
+Got command: say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'],1
+1
+,1,0,)
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "this should be typed as normal text<CURSOR>"
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Setting VCode in code dictation mode.
 Got command: say(['text', 'mode', 'off'],1
 1
 1
 ,1,0,)
-is_in_text_mode=0
+Heard jump out
+  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "this should be typed as normal text"<CURSOR>
+ 11: class AClass(ASuper):
+ 12:     """This is a dummy class"""
+ 13:     
+Got command: say(['new', 'statement', 'print'],None,0,0,)
+Heard new statement print
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "this should be typed as normal text"
+ 11: print <CURSOR>
+ 12: class AClass(ASuper):
+ 13:     """This is a dummy class"""
+ 14:     
+Got command: say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'],1
+1
+1
+,1,0,)
+Heard this should be typed as a variable name
+Associate 'this should be typed as a variable name' with symbol (Enter selection):
 
+  '0': no association
+  '1': this_should_be_typed_as_a_variable_name (*new*)
+  '2': ThisShouldBeTypedAsAVariableName (*new*)
+  '3': thisShouldBeTypedAsAVariableName (*new*)
+  '4': THIS_SHOULD_BE_TYPED_AS_A_VARIABLE_NAME (*new*)
+  '5': thisshouldbetypedasavariablename (*new*)
+  '6': THISSHOULDBETYPEDASAVARIABLENAME (*new*)
 
-*******************************************************************************
-* Name        : just_ring_bell
-* Description : This dummy test is just there to ring a bell, to notify the user of the end of the foreground tests.
-*******************************************************************************
-
-You can now safely use your computer.
+>   8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "this should be typed as normal text"
+ 11: print this_should_be_typed_as_a_variable_name<CURSOR>
+ 12: class AClass(ASuper):
+ 13:     """This is a dummy class"""
+ 14:     
+  8: 
+  9: # This is a small buffer for testing editing of Python code
+ 10: print "this should be typed as normal text"
+ 11: print this_should_be_typed_as_a_variable_name<CURSOR>
+ 12: class AClass(ASuper):
+ 13:     """This is a dummy class"""
+ 14:     
+Finished foreground tests...
+Starting background tests...
 
 
 *******************************************************************************
@@ -515,7 +571,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x02011C58>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02168840>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -557,6 +613,8 @@ Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of compilation test ***
 
@@ -652,10 +710,12 @@ Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
+'non': appears in ['LargeNonObject', 'SmallNonObject', 'profConstrLargeNonObj', 'profConstrSmallNonObj', 'profGetLargeNonObj', 'profGetSmallNonObj', 'profSetLargeNonObj', 'profSetSmallNonObj']
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
 'tst': appears in ['autoTst']
+'x': appears in ['x']
 
 *** End of compilation test ***
 
@@ -700,6 +760,8 @@ Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
 
 
 Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres', 
@@ -728,6 +790,8 @@ _cached_symbols_as_one_string is:
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name2', 'f_name']
+'x': appears in ['x']
+'y': appears in ['y']
 
 *** End of accept symbol match test ***
 
@@ -914,10 +978,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1119,6 +1183,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
@@ -1324,6 +1390,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1557,6 +1625,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1782,6 +1852,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1987,6 +2059,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -2071,8 +2145,8 @@ Associate 'popularity' with symbol (Enter selection):
 *** End of source buffer ***
 
 
->>> Testing console command: say(['return', '8'], user_input='')
-Heard return 8
+>>> Testing console command: say(['return', 'eight'], user_input='')
+Heard return eight
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -2249,8 +2323,8 @@ Associate 'fine method popularity' with symbol (Enter selection):
 *** End of source buffer ***
 
 
->>> Testing console command: say(['return', '8'], user_input='')
-Heard return 8
+>>> Testing console command: say(['return', 'eight'], user_input='')
+Heard return eight
 *** Start of source buffer ***
   1: class cloud(student):
   2:    fine method popularityreturn 8<CURSOR>
@@ -2404,9 +2478,9 @@ Heard back indent
 *** End of source buffer ***
 
 
->>> Testing console command: say(['excess', 'equals', '0'], user_input='0
+>>> Testing console command: say(['excess', 'equals', 'zero'], user_input='0
 ')
-Heard excess equals 0
+Heard excess equals zero
 Associate 'excess' with symbol (Enter selection):
 
   '0': no association
@@ -2469,9 +2543,9 @@ reinterpretation failed, as expected
 
 
 
->>> Testing console command: say(['excess', 'equals', '1', 'new', 'line'], user_input='0
+>>> Testing console command: say(['excess', 'equals', 'one', 'new', 'line'], user_input='0
 ')
-Heard excess equals 1 new line
+Heard excess equals one new line
 Associate 'excess' with symbol (Enter selection):
 
   '0': no association
@@ -2497,9 +2571,9 @@ Heard back indent
 *** End of source buffer ***
 
 
->>> Testing console command: say(['results', 'at', 'index', '0', 'jump', 'out', 'equals', '0'], user_input='0
+>>> Testing console command: say(['results', 'at', 'index', 'zero', 'jump', 'out', 'equals', 'zero'], user_input='0
 ')
-Heard results at index 0 jump out equals 0
+Heard results at index zero jump out equals zero
 Associate 'results' with symbol (Enter selection):
 
   '0': no association
@@ -2600,7 +2674,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3436,7 +3510,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3472,7 +3546,7 @@ Heard for loop horizontal position loop body
 
 >>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'],  never_bypass_sr_recog=1)
 
-Heard select horizontal position equals
+Heard select horizontal position 
 *** Start of source buffer ***
   1: for (<SEL_START>horiz_pos=<SEL_END>0;  <= ; ++)
   2: {
@@ -3519,45 +3593,38 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Got command: say(['23\\twenty-three', '54\\fifty-four', 'comma', '0x\\oh X.', '04\\oh four'],None,0,0,)
-Heard twenty-three fifty-four comma oh X. oh four
+Got command: say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'],None,0,0,)
+Heard twenty-three fifty-four comma zero point oh four
 *** Start of source buffer ***
-  1: 2354, 0x04<CURSOR>
+  1: 2354, 0.04<CURSOR>
 
 *** End of source buffer ***
-Got command: say(['select', '54'],0
+Got command: say(['select', 'twenty', 'three', 'fifty', 'four'],0
 ,1,0,)
-Heard select 54
+Heard select twenty three fifty four
 *** Start of source buffer ***
-  1: 23<SEL_START>54<SEL_END>, 0x04
+  1: <SEL_START>2354<SEL_END>, 0.04
 
 *** End of source buffer ***
-Got command: say(['select', '23', '54'],0
+Got command: say(['select', '0\\zero', '.\\point'],0
 ,1,0,)
-Heard select 23 54
+Heard select zero point
 *** Start of source buffer ***
-  1: <SEL_START>2354<SEL_END>, 0x04
+  1: 2354, <SEL_START>0.<SEL_END>04
 
 *** End of source buffer ***
-Got command: say(['select', '0x'],0
+Got command: say(['select', '04\\oh four'],0
 ,1,0,)
-Heard select oh X.
+Heard select oh four
 *** Start of source buffer ***
-  1: 2354, <SEL_START>0x<SEL_END>04
+  1: 2354, 0.<SEL_START>04<SEL_END>
 
 *** End of source buffer ***
-Got command: say(['select', '04'],0
+Got command: say(['select', '0\\zero', '.\\point', 'oh', 'four'],0
 ,1,0,)
-Heard select 04
+Heard select zero point oh four
 *** Start of source buffer ***
-  1: 2354, 0x<SEL_START>04<SEL_END>
-
-*** End of source buffer ***
-Got command: say(['select', '0x', '04'],0
-,1,0,)
-Heard select oh X. 04
-*** Start of source buffer ***
-  1: 2354, <SEL_START>0x04<SEL_END>
+  1: 2354, <SEL_START>0.04<SEL_END>
 
 *** End of source buffer ***
 
@@ -3578,7 +3645,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3669,7 +3736,7 @@ WARNING: source file 'blah.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\\New-Line']
+Saying: ['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2\\two', '**\\double asterisk', '8\\eight', '\\New-Line']
 Heard variable blank space equals space-bar index asterisk two double asterisk eight New-Line
 Associate 'variable' with symbol (Enter selection):
 
@@ -3690,15 +3757,15 @@ Associate 'variable' with symbol (Enter selection):
   2: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus-sign', '1', '-\\minus-sign', 'index', 'new statement']
-Heard variable equals variable slash 2 plus-sign 1 minus-sign index new statement
+Saying: ['variable', 'equals', 'variable', '/\\slash', '2\\two', '+\\plus-sign', '1\\one', '-\\minus-sign', 'index', 'new statement']
+Heard variable equals variable slash two plus-sign one minus-sign index new statement
 *** Start of source buffer ***
   1: variable  =  Index*2**8
   2: variable = variable/2+1-Index
   3: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', 'index', '%\\percent', '2', '+\\plus', 'index', '%\\percent-sign', '3', 'new statement']
+Saying: ['variable', '=\\equals', 'index', '%\\percent', '2\\two', '+\\plus', 'index', '%\\percent-sign', '3\\three', 'new statement']
 Heard variable equals index percent two plus index percent-sign three new statement
 *** Start of source buffer ***
   1: variable  =  Index*2**8
@@ -3730,7 +3797,7 @@ Associate 'value' with symbol (Enter selection):
   6:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', '=\\equals', '0', ';\\semicolon', 'variable', '=\\equals', '0', ';\\semi', 'new statement']
+Saying: ['index', '=\\equals', '0\\zero', ';\\semicolon', 'variable', '=\\equals', '0\\zero', ';\\semi', 'new statement']
 Heard index equals zero semicolon variable equals zero semi new statement
   4: if Index&variable:
   5:    if Index|variable|Index|Value:
@@ -3753,7 +3820,7 @@ Associate 'function' with symbol (Enter selection):
   8:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement']
+Saying: ['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10', 'new statement']
 Heard variable equals new list zero ellipsis 10 new statement
   6:       Index = 0; variable = 0;
   7:       Index.Function()
@@ -3807,31 +3874,31 @@ Associate 'field' with symbol (Enter selection):
  13:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['if', 'index', '<\\less-than', '0', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1', 'then']
-Heard if index less-than 0 and index greater-than minus-sign 1 then
+Saying: ['if', 'index', '<\\less-than', '0\\zero', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1\\one', 'then']
+Heard if index less-than zero and index greater-than minus-sign one then
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
  13:          if Index < 0 and Index > -1:
  14:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['index', '=\\equal-sign', '0', 'new statement']
-Heard index equal-sign 0 new statement
+Saying: ['index', '=\\equal-sign', '0\\zero', 'new statement']
+Heard index equal-sign zero new statement
  12:          variable::Index::Field
  13:          if Index < 0 and Index > -1:
  14:             Index=0
  15:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', '(\\open-paren', '0', ')\\close-paren', 'new statement']
-Heard function open-paren 0 close-paren new statement
+Saying: ['function', '(\\open-paren', '0\\zero', ')\\close-paren', 'new statement']
+Heard function open-paren zero close-paren new statement
  13:          if Index < 0 and Index > -1:
  14:             Index=0
  15:             Function(0)
  16:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['function', 'parens', '0', 'new statement']
+Saying: ['function', 'parens', '0\\zero', 'new statement']
 Heard function parens zero new statement
  14:             Index=0
  15:             Function(0)
@@ -3847,8 +3914,8 @@ Heard function empty parens new statement
  18:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', '[\\open-bracket', '0', ']\\close-bracket', 'new statement']
-Heard list open-bracket 0 close-bracket new statement
+Saying: ['list', '[\\open-bracket', '0\\zero', ']\\close-bracket', 'new statement']
+Heard list open-bracket zero close-bracket new statement
 Associate 'list' with symbol (Enter selection):
 
   '0': no association
@@ -3862,7 +3929,7 @@ Associate 'list' with symbol (Enter selection):
  19:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', 'brackets', '0', 'new statement']
+Saying: ['list', 'brackets', '0\\zero', 'new statement']
 Heard list brackets zero new statement
  17:             Function()
  18:             List[0]
@@ -3878,7 +3945,7 @@ Heard list empty brackets new statement
  21:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['dictionary', 'braces', '0', 'new statement']
+Saying: ['dictionary', 'braces', '0\\zero', 'new statement']
 Heard dictionary braces zero new statement
 Associate 'dictionary' with symbol (Enter selection):
 
@@ -5498,8 +5565,8 @@ Heard new statement
  88:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3']
-Heard variable equals brackets zero comma 1 comma 3
+Saying: ['variable', '=\\equals', 'brackets', '0\\zero', ',\\comma', '1\\one', ',\\comma', '3\\three']
+Heard variable equals brackets zero comma one comma three
  85:             "\Y\Y"
  86:             "\Z\Z"
  87:             Index; variable;
@@ -5594,8 +5661,8 @@ Heard new statement
  90:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['braces', 'variable', ':\\colon', '0', 'comma', 'value', ':\\colon', '0']
-Heard braces variable colon zero comma value colon 0
+Saying: ['braces', 'variable', ':\\colon', '0\\zero', 'comma', 'value', ':\\colon', '0\\zero']
+Heard braces variable colon zero comma value colon zero
  87:             Index; variable;
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
@@ -5642,8 +5709,8 @@ Heard new statement
  91:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
-Heard variable equals two asterisk three asterisk 4
+Saying: ['variable', '=\\equals', '2\\two', '*\\asterisk', '3\\three', '*\\asterisk', '4\\four']
+Heard variable equals two asterisk three asterisk four
  88:             variable = [0, 1, 3]
  89:             variable.Field.Value
  90:             {variable: 0, Value: 0}
@@ -5690,8 +5757,8 @@ Heard new statement
  92:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4']
-Heard variable equals 2 slash 3 slash 4
+Saying: ['variable', 'equals', '2\\two', '/\\slash', '3\\three', '/\\slash', '4\\four']
+Heard variable equals two slash three slash four
  89:             variable.Field.Value
  90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
@@ -5738,8 +5805,8 @@ Heard new statement
  93:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', '2', '+\\plus', '3', '+\\plus', '4']
-Heard variable equals two plus three plus 4
+Saying: ['variable', '=\\equals', '2\\two', '+\\plus', '3\\three', '+\\plus', '4\\four']
+Heard variable equals two plus three plus four
  90:             {variable: 0, Value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
@@ -5786,8 +5853,8 @@ Heard new statement
  94:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', '2', '-\\minus', '3', '-\\minus', '4']
-Heard variable equals two minus three minus 4
+Saying: ['variable', 'equals', '2\\two', '-\\minus', '3\\three', '-\\minus', '4\\four']
+Heard variable equals two minus three minus four
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + 4
@@ -5834,8 +5901,8 @@ Heard new statement
  95:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', 'equals', '2', '%\\modulo', '3', '%\\modulo', '4']
-Heard variable equals two modulo three modulo 4
+Saying: ['variable', 'equals', '2\\two', '%\\modulo', '3\\three', '%\\modulo', '4\\four']
+Heard variable equals two modulo three modulo four
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + 4
  94:             variable = 2 - 3 - 4
@@ -5882,8 +5949,8 @@ Heard new statement
  96:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '&\\ampersand', '1', '&\\ampersand', '2']
-Heard 0 ampersand one ampersand 2
+Saying: ['0\\zero', '&\\ampersand', '1\\one', '&\\ampersand', '2\\two']
+Heard zero ampersand one ampersand two
  93:             variable = 2 + 3 + 4
  94:             variable = 2 - 3 - 4
  95:             variable = 2 % 3 % 4
@@ -5930,8 +5997,8 @@ Heard new statement
  97:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '|\\pipe', '1', '|\\pipe', '2']
-Heard 0 pipe one pipe 2
+Saying: ['0\\zero', '|\\pipe', '1\\one', '|\\pipe', '2\\two']
+Heard zero pipe one pipe two
  94:             variable = 2 - 3 - 4
  95:             variable = 2 % 3 % 4
  96:             0&1&2
@@ -5978,8 +6045,8 @@ Heard new statement
  98:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '...\\ellipsis', '1', '...\\ellipsis', '2']
-Heard 0 ellipsis 1 ellipsis 2
+Saying: ['0\\zero', '...\\ellipsis', '1\\one', '...\\ellipsis', '2\\two']
+Heard zero ellipsis one ellipsis two
  95:             variable = 2 % 3 % 4
  96:             0&1&2
  97:             0|1|2
@@ -6026,8 +6093,8 @@ Heard new statement
  99:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '!\\bang', '1', '!\\bang', '2']
-Heard 0 bang one bang 2
+Saying: ['0\\zero', '!\\bang', '1\\one', '!\\bang', '2\\two']
+Heard zero bang one bang two
  96:             0&1&2
  97:             0|1|2
  98:             0...1...2
@@ -6074,8 +6141,8 @@ Heard new statement
 100:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '?\\question-mark', '1', '?\\question-mark', '2']
-Heard 0 question-mark one question-mark 2
+Saying: ['0\\zero', '?\\question-mark', '1\\one', '?\\question-mark', '2\\two']
+Heard zero question-mark one question-mark two
  97:             0|1|2
  98:             0...1...2
  99:             0!1!2
@@ -6122,8 +6189,8 @@ Heard new statement
 101:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '#\\pound-sign', '1', '#\\pound-sign', '2']
-Heard 0 pound-sign 1 pound-sign 2
+Saying: ['0\\zero', '#\\pound-sign', '1\\one', '#\\pound-sign', '2\\two']
+Heard zero pound-sign one pound-sign two
  98:             0...1...2
  99:             0!1!2
 100:             0?1?2
@@ -6170,8 +6237,8 @@ Heard new statement
 102:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '::\\double colon', '1', '::\\double colon', '2']
-Heard 0 double colon one double colon 2
+Saying: ['0\\zero', '::\\double colon', '1\\one', '::\\double colon', '2\\two']
+Heard zero double colon one double colon two
  99:             0!1!2
 100:             0?1?2
 101:             0#1#2
@@ -6218,8 +6285,8 @@ Heard new statement
 103:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '~\\tilde', '1', '~\\tilde', '2']
-Heard 0 tilde one tilde 2
+Saying: ['0\\zero', '~\\tilde', '1\\one', '~\\tilde', '2\\two']
+Heard zero tilde one tilde two
 100:             0?1?2
 101:             0#1#2
 102:             0::1::2
@@ -6266,8 +6333,8 @@ Heard new statement
 104:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '<\\less-than', '1', '<\\less-than', '2']
-Heard 0 less-than 1 less-than 2
+Saying: ['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two']
+Heard zero less-than one less-than two
 101:             0#1#2
 102:             0::1::2
 103:             0~1~2
@@ -6314,8 +6381,8 @@ Heard new statement
 105:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '>\\greater-than', '1', '>\\greater-than', '2']
-Heard 0 greater-than 1 greater-than 2
+Saying: ['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two']
+Heard zero greater-than one greater-than two
 102:             0::1::2
 103:             0~1~2
 104:             0 < 1 < 2
@@ -6362,8 +6429,8 @@ Heard new statement
 106:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0', '=\\equal-sign', '1', '=\\equal-sign', '2']
-Heard 0 equal-sign 1 equal-sign 2
+Saying: ['0\\zero', '=\\equal-sign', '1\\one', '=\\equal-sign', '2\\two']
+Heard zero equal-sign one equal-sign two
 103:             0~1~2
 104:             0 < 1 < 2
 105:             0 > 1 > 2
@@ -6410,8 +6477,8 @@ Heard new statement
 107:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between parens', '1']
-Heard between parens 1
+Saying: ['between parens', '1\\one']
+Heard between parens one
 104:             0 < 1 < 2
 105:             0 > 1 > 2
 106:             0=1=2
@@ -6482,8 +6549,8 @@ Heard new statement
 108:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between brackets', '1']
-Heard between brackets 1
+Saying: ['between brackets', '1\\one']
+Heard between brackets one
 105:             0 > 1 > 2
 106:             0=1=2
 107:             (1)
@@ -6554,8 +6621,8 @@ Heard new statement
 109:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between braces', '1']
-Heard between braces 1
+Saying: ['between braces', '1\\one']
+Heard between braces one
 106:             0=1=2
 107:             (1)
 108:             [1]
@@ -6626,8 +6693,8 @@ Heard new statement
 110:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between angles', '1']
-Heard between angles 1
+Saying: ['between angles', '1\\one']
+Heard between angles one
 107:             (1)
 108:             [1]
 109:             {1}
@@ -6698,8 +6765,8 @@ Heard new statement
 111:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between single-quotes', '1']
-Heard between single-quotes 1
+Saying: ['between single-quotes', '1\\one']
+Heard between single-quotes one
 108:             [1]
 109:             {1}
 110:             <1>
@@ -6770,8 +6837,8 @@ Heard new statement
 112:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between quotes', '1']
-Heard between quotes 1
+Saying: ['between quotes', '1\\one']
+Heard between quotes one
 109:             {1}
 110:             <1>
 111:             '1'
@@ -6842,8 +6909,8 @@ Heard new statement
 113:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['between backquotes', '1']
-Heard between backquotes 1
+Saying: ['between backquotes', '1\\one']
+Heard between backquotes one
 110:             <1>
 111:             '1'
 112:             "1"
@@ -7715,7 +7782,14 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
- 19:                           attrs)
+Associate 'R. E.' with symbol (Enter selection):
+
+  '0': no association
+  '1': re
+  '2': Re (*new*)
+  '3': RE (*new*)
+
+>  19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -7745,7 +7819,7 @@ Heard for loop a word in list words loop body
  25:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
+Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0\\zero', 'new', 'statement']
 Heard first equals a word at index zero new statement
  23:       regexp = ''
  24:       for a_word in words:
@@ -7753,8 +7827,8 @@ Heard first equals a word at index zero new statement
  26:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
-Heard rest equals a word at index 1 colon new statement
+Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1\\one', ':\\colon', 'new', 'statement']
+Heard rest equals a word at index one colon new statement
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          rest = a_word[1: ]
@@ -8521,7 +8595,7 @@ Associate 'a word' with symbol (Enter selection):
  25:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
+Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0\\zero', 'new', 'statement']
 Heard first equals a word at index zero new statement
 Associate 'first' with symbol (Enter selection):
 
@@ -8536,8 +8610,8 @@ Associate 'first' with symbol (Enter selection):
  26:          <CURSOR>
 
 *** End of source buffer ***
-Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
-Heard rest equals a word at index 1 colon new statement
+Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1\\one', ':\\colon', 'new', 'statement']
+Heard rest equals a word at index one colon new statement
 Associate 'rest' with symbol (Enter selection):
 
   '0': no association
@@ -9436,7 +9510,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9458,10 +9532,10 @@ _cached_symbols_as_one_string is:
     void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
 
->>> Testing console command: say(['index', '!=\\not equal to', '0'], user_input='0
+>>> Testing console command: say(['index', '!=\\not equal to', '0\\zero'], user_input='0
 0
 ')
-Heard index not equal to 0
+Heard index not equal to zero
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -9475,10 +9549,10 @@ Associate 'index' with symbol (Enter selection):
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'not', 'equal', 'to', '0'], user_input='0
+>>> Testing console command: say(['index', 'not', 'equal', 'to', '0\\zero'], user_input='0
 0
 ')
-Heard index not equal to 0
+Heard index not equal to zero
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -9523,7 +9597,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -9684,13 +9758,10 @@ emacs(0)
 
 Setting text mode on
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
-DictWinGramDummy for buffer = 'fish.C', window 20
-deactivating
 SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
-setting context: before = [ x, y)
-], after = [{]
+deactivating
 
 Setting text mode off
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
@@ -10354,17 +10425,13 @@ window #20:
 all instances for window:
 emacs(0)
 
--- test_rsm_algorithm: manager=<AppMgr.AppMgr instance at 0x01FBC6B8>
 
 Setting text mode on
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
-DictWinGramDummy for buffer = 'fish.C', window 20
-deactivating
 SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
-setting context: before = [ x, y)
-], after = [{]
+deactivating
 
 Setting text mode off
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
@@ -11006,7 +11073,7 @@ WARNING: source file 'blah.py' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+>>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
 Heard index equals zero new statement
 Associate 'index' with symbol (Enter selection):
 
@@ -11022,8 +11089,8 @@ Associate 'index' with symbol (Enter selection):
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'equals', '1', 'new statement'], user_input='1\n')
-Heard index equals 1 new statement
+>>> Testing console command: say(['index', 'equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11032,7 +11099,7 @@ Heard index equals 1 new statement
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+>>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
 Heard index equals zero new statement
 *** Start of source buffer ***
   1: index = 0
@@ -11043,8 +11110,8 @@ Heard index equals zero new statement
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'equals', '1', 'new statement'], user_input='1\n')
-Heard index equals 1 new statement
+>>> Testing console command: say(['index', 'equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
   2: index = 1
   3: index = 0
   4: index = 1
@@ -11053,7 +11120,7 @@ Heard index equals 1 new statement
 *** End of source buffer ***
 
 
->>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+>>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
 Heard index equals zero new statement
   3: index = 0
   4: index = 1
@@ -11073,8 +11140,8 @@ Heard index equals zero new statement
   5: index = 0
 
 
->>> Testing console command: say(['go', 'index', '=\\equals', '0'], user_input='None')
-Heard go index equals 0
+>>> Testing console command: say(['go', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go index  zero
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -11092,8 +11159,8 @@ Heard go index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go after next', 'index', '=\\equals', '0'], user_input='None')
-Heard go after next index equals 0
+>>> Testing console command: say(['go after next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go after next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11115,8 +11182,8 @@ Heard go after next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go after previous', 'index', '=\\equals', '0'], user_input='None')
-Heard go after previous index equals 0
+>>> Testing console command: say(['go after previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go after previous index  zero
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -11134,8 +11201,8 @@ Heard go after previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go before', 'index', '=\\equals', '0'], user_input='None')
-Heard go before index equals 0
+>>> Testing console command: say(['go before', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go before index  zero
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -11153,8 +11220,8 @@ Heard go before index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go before next', 'index', '=\\equals', '0'], user_input='None')
-Heard go before next index equals 0
+>>> Testing console command: say(['go before next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go before next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11176,8 +11243,8 @@ Heard go before next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go before previous', 'index', '=\\equals', '0'], user_input='None')
-Heard go before previous index equals 0
+>>> Testing console command: say(['go before previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go before previous index  zero
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -11195,8 +11262,8 @@ Heard go before previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
-Heard go next index equals 0
+>>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11218,8 +11285,8 @@ Heard go next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
-Heard go previous index equals 0
+>>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go previous index  zero
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -11237,8 +11304,8 @@ Heard go previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['after next', 'index', '=\\equals', '0'], user_input='None')
-Heard after next index equals 0
+>>> Testing console command: say(['after next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard after next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11260,8 +11327,8 @@ Heard after next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['after previous', 'index', '=\\equals', '0'], user_input='None')
-Heard after previous index equals 0
+>>> Testing console command: say(['after previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard after previous index  zero
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -11279,8 +11346,8 @@ Heard after previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['before', 'index', '=\\equals', '0'], user_input='None')
-Heard before index equals 0
+>>> Testing console command: say(['before', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before index  zero
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -11298,8 +11365,8 @@ Heard before index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['before next', 'index', '=\\equals', '0'], user_input='None')
-Heard before next index equals 0
+>>> Testing console command: say(['before next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11321,8 +11388,8 @@ Heard before next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['before previous', 'index', '=\\equals', '0'], user_input='None')
-Heard before previous index equals 0
+>>> Testing console command: say(['before previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before previous index  zero
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -11350,8 +11417,8 @@ Heard before previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['select', 'index', '=\\equals', '0'], user_input='None')
-Heard select index equals 0
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index  zero
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -11369,8 +11436,8 @@ Heard select index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
-Heard select next index equals 0
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11392,8 +11459,8 @@ Heard select next index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
-Heard select previous index equals 0
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index  zero
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -11410,8 +11477,8 @@ Heard select previous index equals 0
   4: index = 1
 
 
->>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
-Heard go next index equals 0
+>>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go next index  zero
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -11419,8 +11486,8 @@ Heard go next index equals 0
   4: index = 1
 
 
->>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
-Heard go next index equals 0
+>>> Testing console command: say(['go next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11442,8 +11509,8 @@ Heard go next index equals 0
 *** End of source buffer ***
 
 
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
-Heard go previous index equals 0
+>>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go previous index  zero
   2: index = 1
   3: index = 0
   4: index = 1
@@ -11453,8 +11520,8 @@ Heard go previous index equals 0
 *** End of source buffer ***
 
 
->>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
-Heard go previous index equals 0
+>>> Testing console command: say(['go previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go previous index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11475,8 +11542,8 @@ Heard go previous index equals 0
   4: index = 1
 
 
->>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
-Heard select next index equals 0
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index  zero
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -11484,8 +11551,8 @@ Heard select next index equals 0
   4: index = 1
 
 
->>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
-Heard select next index equals 0
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11507,8 +11574,8 @@ Heard select next index equals 0
 *** End of source buffer ***
 
 
->>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
-Heard select previous index equals 0
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index  zero
   2: index = 1
   3: index = 0
   4: index = 1
@@ -11518,8 +11585,8 @@ Heard select previous index equals 0
 *** End of source buffer ***
 
 
->>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
-Heard select previous index equals 0
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11540,8 +11607,8 @@ Heard select previous index equals 0
   4: index = 1
 
 
->>> Testing console command: say(['select', 'index', '=\\equals', '0'], user_input='None')
-Heard select index equals 0
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index  zero
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -11571,8 +11638,8 @@ Heard previous one
   4: index = 1
 
 
->>> Testing console command: say(['go after next', 'index', '=\\equals', '0'], user_input='None')
-Heard go after next index equals 0
+>>> Testing console command: say(['go after next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go after next index  zero
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -11641,16 +11708,137 @@ Heard previous one
 
 
 *******************************************************************************
-* Name        : test_done_last
-* Description : check that regression tests are executed in order of priority
+* Name        : v7_select
+* Description : testing oddities in select pseudocode with Natspeak 7
 *******************************************************************************
 
-This test should always be the very last one to be executed!
+
+
+>>> Testing console command: open_file('blah.py')
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
+Heard index equals zero new statement
+Associate 'index' with symbol (Enter selection):
+
+  '0': no association
+  '1': index (*new*)
+  '2': Index (*new*)
+  '3': INDEX (*new*)
+
+> *** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', 'equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', '=\\equals', '0\\zero', 'new statement'], user_input='1\n')
+Heard index equals zero new statement
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', '=\\equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
+  2: index = 1
+  3: index = 0
+  4: index = 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index  zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index  zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index  zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
 
 
 
 -----------------------------------------------
-Test suite completed in:  280.424000025 secs
+Test suite completed in:  610.940000057 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

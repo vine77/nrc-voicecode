@@ -30,6 +30,8 @@ object named 'testing'
 """
 
 import os, sys
+import time
+import posixpath
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 # import mediator, MediatorObject, Object, SymDict, test_pseudo_python
 import Object, SymDict, test_pseudo_python
@@ -45,29 +47,12 @@ from cont_gen import *
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
 small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
-edit_this_buff_py = vc_globals.test_data + os.sep + 'edit_this_buff.py'
 
-right_before_foreground_tests = -3
-during_foreground_tests = right_before_foreground_tests + 1
-right_after_foreground_tests = during_foreground_tests + 1
- 
+# use this only for foreground tests:
+foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
+
 #  auto_test.add_test('PyUnitTests', unit_testing.run_all_pyunit_tests,
 #                     desc='run a series of unit tests through PyUnit')
-
-
-############################################################################
-# Check that tests are sorted in order of priority
-############################################################################
-
-def test_should_be_first_test_to_execute():
-   print "This test should always be the very first one to be executed!"
-
-def test_should_be_last_test_to_execute():
-   print "This test should always be the very last one to be executed!"
-
-   
-auto_test.add_test('test_done_first', test_should_be_first_test_to_execute, 'check that regression tests are executed in order of priority', order=-999)
-auto_test.add_test('test_done_last', test_should_be_last_test_to_execute, 'check that regression tests are executed in order of priority', order=999)
 
 
 ##############################################################################
@@ -199,7 +184,7 @@ def test_SymDict():
 
     temp_config.quit()    
 
-auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
+add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
 
 ##############################################################################
@@ -276,7 +261,7 @@ def test_CmdInterp():
     test_CmdInterp_mediator(temp_config)
     
 
-auto_test.add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
+add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
 
 
 ###############################################################################
@@ -327,7 +312,7 @@ def test_EdSim():
     sim.cleanup()
 
 
-auto_test.add_test('EdSim', test_EdSim, desc='self-test for EdSim.py')
+add_test('EdSim', test_EdSim, desc='self-test for EdSim.py')
 
 
 ###############################################################################
@@ -435,7 +420,7 @@ def test_Object():
     print "\nSubclassing from non-standard class AnimatedCharacter.*\n   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result=%s" % result.__dict__        
 
 
-auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
+add_test('Object', test_Object, desc='self-test for Object.py')
 
 ###############################################################################
 # Testing mediator.py console
@@ -470,7 +455,7 @@ def test_mediator_console():
 
 
 
-auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
+add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
 
 ##############################################################################
 # Testing configuration without user_config.py file
@@ -495,7 +480,7 @@ def test_no_config_file():
     except:
         print "Exception was properly raised!"
 
-# auto_test.add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
+# add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
 # DCF: I've now modified NMO so that it prompts the user to create a
 # configuration file, so this test no longer produces the expected
 # exception
@@ -511,11 +496,11 @@ def test_select_pseudocode():
     
     testing.init_simulator_regression()
     test_command("""open_file('blah.py')""")
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '1\\one', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
+    test_say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '1\\one', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
+    test_say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
 
 #    util.request_console_be(active=1)
     
@@ -523,32 +508,32 @@ def test_select_pseudocode():
     # Testing go commands
     #
     test_command("""goto_line(2)""")
-    test_say(['go', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go after previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go after previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go before', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go before', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go before next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go before next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go before previous', 'index', '=\\equals', '0'],
+    test_say(['go before previous', 'index', '=\\equals', '0\\zero'],
         never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['after previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['after previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['before', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['before next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['before previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
     
     #
@@ -567,31 +552,31 @@ def test_select_pseudocode():
 # and the text would be selected, but no correction box 
 # would appear - and they would assume this is a bug.  
 #
-#    test_say(['correct', 'index', '=\\equals', '0'])
+#    test_say(['correct', 'index', '=\\equals', '0\\zero'])
 #    test_command("""goto_line(2)""")
-#    test_say(['correct next', 'index', '=\\equals', '0'])
+#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
 #    test_command("""goto_line(2)""")
-#    test_say(['correct previous', 'index', '=\\equals', '0'])
+#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
 
     #
     # Testing selectionn commands
     #
     test_command("""goto_line(2)""")
-    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
 
     #
     # Testing repeated go commands in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(6)""")
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     
 
     #
@@ -607,30 +592,30 @@ def test_select_pseudocode():
 #     part of the SelectPseudoCode grammar. But nevermind
 
 #    test_command("""goto_line(1)""")
-#    test_say(['correct next', 'index', '=\\equals', '0'])
-#    test_say(['correct next', 'index', '=\\equals', '0'])
+#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
+#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
 #    test_command("""goto_line(6)""")
-#    test_say(['correct previous', 'index', '=\\equals', '0'])
-#    test_say(['correct previous', 'index', '=\\equals', '0'])
+#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
+#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
     
     #
     # Testing repeated selection in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(6)""")
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
 
     #
     # Testing repeatability of SelectPseudoCode commands
     #
     test_command("""goto_line(1)""")
-    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['next', 'one'])
     test_say(['previous', 'one'])    
-    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['next', 'one'])
     test_say(['previous', 'one'])                
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
@@ -640,7 +625,33 @@ def test_select_pseudocode():
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
-auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing select pseudocode commands')
+add_test('select_pseudocode', test_select_pseudocode, desc='testing select pseudocode commands')
+
+
+###############################################################################
+# Testing Oddities in Select Pseudocode With Natspeak 7
+###############################################################################
+
+
+def test_v7_select():
+    testing.init_simulator_regression()
+    test_command("""open_file('blah.py')""")
+    test_say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '1\\one', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
+    test_say(['index', '=\\equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', '=\\equals', '1\\one', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
+
+    # Testing selectionn commands
+    #
+    test_command("""goto_line(2)""")
+    test_say(['select', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_command("""goto_line(2)""")
+    test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+    test_command("""goto_line(2)""")
+    test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
+
+
+add_test('v7_select', test_v7_select, desc='testing oddities in select pseudocode with Natspeak 7')
 
 
 
@@ -690,7 +701,7 @@ def test_auto_add_abbrevs():
     test_command("""print_abbreviations(1)""")
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
-auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automatic creation of abbreviations')
+add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automatic creation of abbreviations')
 
 
 ##############################################################################
@@ -808,7 +819,7 @@ def test_persistence():
     temp_config.quit()
     
 
-auto_test.add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
+add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
 
 
 ##############################################################################
@@ -821,13 +832,13 @@ def test_redundant_translation():
     testing.init_simulator_regression()    
     test_command("""open_file('blah.c')""")
     test_command("""compile_symbols([r'""" + small_buff_c + """'])""")
-    test_say(['index', '!=\\not equal to', '0'], '0\n0\n')
-    test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
+    test_say(['index', '!=\\not equal to', '0\\zero'], '0\n0\n')
+    test_say(['index', 'not', 'equal', 'to', '0\\zero'], '0\n0\n')
     test_say(['move_horiz\\move horizontally'], '0\n0\n')
     test_say(['move', 'horizontally'], '0\n0\n')
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
-auto_test.add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
+add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
 
 
 ##############################################################################
@@ -838,23 +849,23 @@ def test_punctuation():
     testing.init_simulator_regression()
     commands.open_file('blah.py')
 
-    commands.say(['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\\New-Line'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2\\two', '**\\double asterisk', '8\\eight', '\\New-Line'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
 ## causes recognitionMimic error in Natspeak 4
-#    commands.say(['variable', '=\\equals', 'variable', '/\\slash', '2', '+\\plus-sign', '1', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus-sign', '1', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', '=\\equals', 'variable', '/\\slash', '2\\two', '+\\plus-sign', '1\\one', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', 'variable', '/\\slash', '2\\two', '+\\plus-sign', '1\\one', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['variable', '=\\equals', 'index', '%\\percent', '2', '+\\plus', 'index', '%\\percent-sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', 'index', '%\\percent', '2\\two', '+\\plus', 'index', '%\\percent-sign', '3\\three', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['if', 'index', '&\\ampersand', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe-sign', 'index', '|\\vertical-bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['index', '=\\equals', '0', ';\\semicolon', 'variable', '=\\equals', '0', ';\\semi', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['index', '=\\equals', '0\\zero', ';\\semicolon', 'variable', '=\\equals', '0\\zero', ';\\semi', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['index', '.\\dot', 'function', '()\\without arguments', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['variable', '=\\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['#\\pound', '!\\bang', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['#\\pound-sign', '!\\exclamation-mark', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -863,27 +874,27 @@ def test_punctuation():
 
     commands.say(['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '<\\less-than', '0', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['if', 'index', '<\\less-than', '0\\zero', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1\\one', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
-    commands.say(['index', '=\\equal-sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['index', '=\\equal-sign', '0\\zero', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['function', '(\\open-paren', '0', ')\\close-paren', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['function', '(\\open-paren', '0\\zero', ')\\close-paren', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['function', 'parens', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['function', 'parens', '0\\zero', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['function', '()\\empty parens', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['list', '[\\open-bracket', '0', ']\\close-bracket', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['list', '[\\open-bracket', '0\\zero', ']\\close-bracket', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['list', 'brackets', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['list', 'brackets', '0\\zero', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['list', '[]\\empty brackets', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
 
 ## BUG: causes recognitionMimic error    
-##    commands.say(['dictionary', '{\\open-brace', '0', '}\\close-brace', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+##    commands.say(['dictionary', '{\\open-brace', '0\\zero', '}\\close-brace', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['dictionary', 'braces', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['dictionary', 'braces', '0\\zero', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 ## BUG: causes recognitionMimic error
 ##    commands.say(['dictionary', '{}\\empty braces', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1180,7 +1191,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', '=\\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', 'brackets', '0\\zero', ',\\comma', '1\\one', ',\\comma', '3\\three'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous comma'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1204,7 +1215,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['braces', 'variable', ':\\colon', '0', 'comma', 'value', ':\\colon', '0'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['braces', 'variable', ':\\colon', '0\\zero', 'comma', 'value', ':\\colon', '0\\zero'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['previous colon', 'previous colon'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['after colon'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1215,7 +1226,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', '=\\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', '2\\two', '*\\asterisk', '3\\three', '*\\asterisk', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous asterisk', 'previous star'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1228,8 +1239,8 @@ def test_punctuation():
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
 ## causes recognitionMimic error in Natspeak 4
-#    commands.say(['variable', '=\\equals', '2', '/\\slash', '3', '/\\slash', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', '=\\equals', '2\\two', '/\\slash', '3\\three', '/\\slash', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2\\two', '/\\slash', '3\\three', '/\\slash', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous slash', 'previous slash'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1241,7 +1252,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', '=\\equals', '2', '+\\plus', '3', '+\\plus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', '2\\two', '+\\plus', '3\\three', '+\\plus', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous plus', 'previous plus'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1254,8 +1265,8 @@ def test_punctuation():
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
 ## causes recognitionMimic error in Natspeak 4
-#    commands.say(['variable', '=\\equals', '2', '-\\minus', '3', '-\\minus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['variable', 'equals', '2', '-\\minus', '3', '-\\minus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', '=\\equals', '2\\two', '-\\minus', '3\\three', '-\\minus', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2\\two', '-\\minus', '3\\three', '-\\minus', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous minus', 'previous minus'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1268,8 +1279,8 @@ def test_punctuation():
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
 ## causes recognitionMimic error in Natspeak 4
-#    commands.say(['variable', '=\\equals', '2', '%\\modulo', '3', '%\\modulo', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['variable', 'equals', '2', '%\\modulo', '3', '%\\modulo', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', '=\\equals', '2\\two', '%\\modulo', '3\\three', '%\\modulo', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2\\two', '%\\modulo', '3\\three', '%\\modulo', '4\\four'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous percent', 'previous percent'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1281,7 +1292,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '&\\ampersand', '1', '&\\ampersand', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '&\\ampersand', '1\\one', '&\\ampersand', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous ampersand', 'previous ampersand'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1293,7 +1304,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '|\\pipe', '1', '|\\pipe', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '|\\pipe', '1\\one', '|\\pipe', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous pipe', 'previous pipe'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1305,7 +1316,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '...\\ellipsis', '1', '...\\ellipsis', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '...\\ellipsis', '1\\one', '...\\ellipsis', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous ellipsis', 'previous ellipsis'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1317,7 +1328,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '!\\bang', '1', '!\\bang', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '!\\bang', '1\\one', '!\\bang', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous bang', 'previous bang'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1329,7 +1340,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '?\\question-mark', '1', '?\\question-mark', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '?\\question-mark', '1\\one', '?\\question-mark', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous question-mark', 'previous question-mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1341,7 +1352,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '#\\pound-sign', '1', '#\\pound-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '#\\pound-sign', '1\\one', '#\\pound-sign', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous pound-sign', 'previous pound-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1353,7 +1364,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '::\\double colon', '1', '::\\double colon', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '::\\double colon', '1\\one', '::\\double colon', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous double colon', 'previous double colon'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1365,7 +1376,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '~\\tilde', '1', '~\\tilde', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '~\\tilde', '1\\one', '~\\tilde', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous tilde', 'previous tilde'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1377,7 +1388,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '<\\less-than', '1', '<\\less-than', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous less-than', 'previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1389,7 +1400,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '>\\greater-than', '1', '>\\greater-than', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous greater-than', 'previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1401,7 +1412,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '=\\equal-sign', '1', '=\\equal-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '=\\equal-sign', '1\\one', '=\\equal-sign', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous equal-sign', 'previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1413,7 +1424,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['between parens', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between parens', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous paren'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after paren'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before paren'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1423,7 +1434,7 @@ def test_punctuation():
     commands.say(['back out of parens'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between brackets', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between brackets', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous bracket'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after bracket'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before bracket'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1433,7 +1444,7 @@ def test_punctuation():
     commands.say(['back out of brackets'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between braces', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between braces', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous brace'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after brace'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before brace'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1444,7 +1455,7 @@ def test_punctuation():
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
 
-    commands.say(['between angles', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between angles', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous angle'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after angle'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before angle'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1454,7 +1465,7 @@ def test_punctuation():
     commands.say(['back out of angles'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between single-quotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between single-quotes', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1464,7 +1475,7 @@ def test_punctuation():
     commands.say(['back out of single-quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between quotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between quotes', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1474,7 +1485,7 @@ def test_punctuation():
     commands.say(['back out of quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between backquotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between backquotes', '1\\one'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before previous backquote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['after backquote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['before backquote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1486,7 +1497,7 @@ def test_punctuation():
 
     commands.quit(save_speech_files=0, disconnect=0)    
 
-auto_test.add_test('punctuation', test_punctuation, 'testing the various Python CSCs and LSAs')
+add_test('punctuation', test_punctuation, 'testing the various Python CSCs and LSAs')
 
 
 
@@ -1496,12 +1507,12 @@ auto_test.add_test('punctuation', test_punctuation, 'testing the various Python 
 def pseudo_python_wrapper():
     test_pseudo_python.test_dictate_from_scratch(testing)
 
-auto_test.add_test('python', pseudo_python_wrapper, 'testing the various CSCs and LSAs for dictating Python from scratch')
+add_test('python', pseudo_python_wrapper, 'testing the various CSCs and LSAs for dictating Python from scratch')
 
 def pseudo_python_editing_wrapper():    
     test_pseudo_python.test_editing(testing)
     
-auto_test.add_test('python_editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
+add_test('python_editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
 
 ##############################################################################
 # Testing repetition of last commands
@@ -1523,7 +1534,7 @@ def test_repeat_last():
     
     
 
-auto_test.add_test('repeat_last', test_repeat_last, 'testing repetition of last command')
+add_test('repeat_last', test_repeat_last, 'testing repetition of last command')
 
 
 ##############################################################################
@@ -1546,7 +1557,7 @@ def test_change_direction():
     test_command("""say(['previous one'])""")
     test_command("""say(['next one'])""")
     
-auto_test.add_test('change_direction', test_change_direction, 'testing changing direction of last command')
+add_test('change_direction', test_change_direction, 'testing changing direction of last command')
 
 ##############################################################################
 # Testing LSA masking by NatSpeak words
@@ -1570,7 +1581,7 @@ def test_misc_bugs():
     #
     test_command("""say(['<\\less-than', '>\\greater-than', '=\\equal-sign'])""")
     
-auto_test.add_test('misc_bugs', test_misc_bugs, 'Testing a series of miscellaneous bugs that might reoccur.')
+add_test('misc_bugs', test_misc_bugs, 'Testing a series of miscellaneous bugs that might reoccur.')
 
 
 ##############################################################################
@@ -2170,13 +2181,13 @@ def test_rsm_algorithm_no_trust():
 def test_rsm_algorithm_trust():
     test_rsm_algorithm(trust = 1)
 
-auto_test.add_test('am_dictionaries', test_am_dictionaries, 
+add_test('am_dictionaries', test_am_dictionaries, 
     'Testing AppMgr dictionary management.')
 
-auto_test.add_test('rsm_algorithm', test_rsm_algorithm_no_trust, 
+add_test('rsm_algorithm', test_rsm_algorithm_no_trust, 
     'Testing RecogStartMgr algorithm.')
 
-auto_test.add_test('rsm_algorithm_trust', test_rsm_algorithm_trust, 
+add_test('rsm_algorithm_trust', test_rsm_algorithm_trust, 
     'Testing RecogStartMgr algorithm.')
 
 ##############################################################################
@@ -2300,9 +2311,9 @@ def test_gram_manager_all_set():
     test_gram_manager_flags(1, 1)
 
 
-auto_test.add_test('dummy_grammars', test_gram_manager, 
+add_test('dummy_grammars', test_gram_manager, 
    'Testing WinGramMgr grammar management with dummy grammars.')
-auto_test.add_test('dummy_grammars_global', test_gram_manager_all_set, 
+add_test('dummy_grammars_global', test_gram_manager_all_set, 
    'Testing WinGramMgr grammar management with global, exclusive dummy grammars.')
 
 ##############################################################################
@@ -2335,7 +2346,7 @@ def test_EdSim_alloc_cleanup():
     test_CmdInterp_mediator(temp_config)
     
 
-auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 
+add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 
     'Testing EdSim allocation and cleanup.')
 
 ##############################################################################
@@ -2603,7 +2614,7 @@ def test_basic_correction():
     status.append(1)
 
 
-    utterances.append(string.split('return 8'))
+    utterances.append(string.split('return eight'))
     input.append('')
     status.append(1)
 
@@ -2692,7 +2703,7 @@ def test_basic_correction():
     input.append('0\n')
     status.append(1)
 
-    utterances.append(string.split('return 8'))
+    utterances.append(string.split('return eight'))
     input.append('')
     status.append(1)
 
@@ -2737,7 +2748,7 @@ def test_basic_correction():
     new_input.append('')
     new_status.append(1)
 
-    new_utterances.append(string.split('excess equals 0'))
+    new_utterances.append(string.split('excess equals zero'))
     new_input.append('0\n')
     new_status.append(1)
 
@@ -2783,7 +2794,7 @@ def test_basic_correction():
     check_recent(instance_name, utterances, status)
 
     new_utterances = []
-    new_utterances.append(string.split('excess equals 1 new line'))
+    new_utterances.append(string.split('excess equals one new line'))
     new_input = ['0\n']
     new_status = [1]
 
@@ -2791,7 +2802,7 @@ def test_basic_correction():
     new_input.append('')
     new_status.append(1)
 
-    new_utterances.append(string.split('results at index 0 jump out equals 0'))
+    new_utterances.append(string.split('results at index zero jump out equals zero'))
     new_input.append('0\n')
     new_status.append(1)
 
@@ -2842,7 +2853,7 @@ def test_basic_correction():
 # without interference
 #
 
-auto_test.add_test('basic_correction', test_basic_correction, 
+add_test('basic_correction', test_basic_correction, 
     'Testing basic correction infrastructure with ResMgr.')
 
 ##############################################################################
@@ -2866,7 +2877,7 @@ def test_set_text():
     editor.print_buff_if_necessary()
 
 
-auto_test.add_test('set_text', test_set_text, 
+add_test('set_text', test_set_text, 
     'Testing set_text.')
     
 ##############################################################################
@@ -2896,19 +2907,7 @@ def test_insert_delete_commands():
    test_say(['select', 'additional'], never_bypass_sr_recog=1)
    test_say(['back space 2'])
 
-auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
-
-
-##############################################################################
-# This dummy test is just there to request that the user bring
-# Emacs to the foreground.
-##############################################################################
-
-def test_dummy_request_foreground():
-    request_that_user_bring_editor_to_foreground()    
-
-
-auto_test.add_test('request_foreground', test_dummy_request_foreground, 'This dummy test is just there to request that user bring Emacs to the foreground.', order=right_before_foreground_tests)
+add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
 
 ##############################################################################
@@ -2939,10 +2938,6 @@ Press Enter now:
     dummy = raw_input()
     time.sleep(delay_secs)
 
-def notify_user_that_editor_can_be_in_background():
-    util.bell()
-    sys.stderr.write("""You can now safely use your computer.\n""")
-    sys.stderr.flush()
     
 #    dummy = raw_input()
    
@@ -2959,30 +2954,31 @@ def test_mixed_kbd_and_voice_editing():
         
     kbd_evt_sim = testing.kbd_event_sim_factory(app)
 
-#    request_that_user_bring_editor_to_foreground()
+    init_line = 9
+    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim, init_line)
+    test_selection_set_by_kbd(app, commands, kbd_evt_sim, init_line)
+    test_search_for_typed_text(app, commands, kbd_evt_sim, init_line)
+    test_select_typed_text_by_voice(app, commands, kbd_evt_sim, init_line)
     
-    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
-    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
-    test_search_for_typed_text(app, commands, kbd_evt_sim)
-    test_select_typed_text_by_voice(app, commands, kbd_evt_sim)
-    
-#    notify_user_that_editor_can_be_in_background()    
-   
-def test_cursor_moved_by_kbd(app, commands, kbd_evt_sim):
-   commands.open_file(edit_this_buff_py, echo_cmd=1)
-   commands.goto(1, echo_cmd=1)
+def test_cursor_moved_by_kbd(app, commands, kbd_evt_sim, init_line):
+   commands.open_file(foreground_py, echo_cmd=1)
+   commands.goto_line(init_line)
+   pos = app.cur_pos()
+   commands.goto(pos + 1, echo_cmd=1)
    kbd_evt_sim.move_cursor_by_kbd('Right', 10)
    commands.say(['hello'], user_input="0\n", echo_cmd=1)
 
-def test_selection_set_by_kbd(app, commands, kbd_evt_sim):
-   commands.open_file(edit_this_buff_py, echo_cmd=1)
-   commands.goto(1, echo_cmd=1)
+def test_selection_set_by_kbd(app, commands, kbd_evt_sim, init_line):
+   commands.open_file(foreground_py, echo_cmd=1)
+   commands.goto_line(init_line)
+   pos = app.cur_pos()
+   commands.goto(pos + 1, echo_cmd=1)
    kbd_evt_sim.set_selection_by_kbd('Right', 10)
    commands.say(['hello'], user_input="0\n", echo_cmd=1)
    
-def test_search_for_typed_text(app, commands, kbd_evt_sim):
-   commands.open_file(edit_this_buff_py, echo_cmd=1)
-   commands.goto_line(2, echo_cmd=1)
+def test_search_for_typed_text(app, commands, kbd_evt_sim, init_line):
+   commands.open_file(foreground_py, echo_cmd=1)
+   commands.goto_line(init_line + 1, echo_cmd = 1)
    kbd_evt_sim.type_text(', hi')
    
    # Need to give Emacs time to notify the server of the typed text
@@ -2991,9 +2987,9 @@ def test_search_for_typed_text(app, commands, kbd_evt_sim):
    kbd_evt_sim.move_cursor_by_kbd('Left', 5)
    commands.say(['next', 'comma'], echo_cmd=1)
    
-def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
-   commands.open_file(edit_this_buff_py, echo_cmd=1)
-   commands.goto_line(2, echo_cmd=1)
+def test_select_typed_text_by_voice(app, commands, kbd_evt_sim, init_line):
+   commands.open_file(foreground_py, echo_cmd=1)
+   commands.goto_line(init_line + 1, echo_cmd = 1)
    kbd_evt_sim.type_text(' hello ')   
    
    # Need to give Emacs time to notify the server of the typed text
@@ -3001,38 +2997,51 @@ def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
    
    commands.say(['select', 'hello'], never_bypass_sr_recog=1, echo_cmd=1)
 
-auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=during_foreground_tests)
+add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', foreground = 1)
 
 ##############################################################################
 # Test normal text dictation.
 ##############################################################################
 
 def test_normal_text_dictation():
-   testing.init_simulator_regression()
+   testing.init_simulator_regression(exclusive = 0)
  
    mediator = testing.mediator()
    recog_mgr = mediator.editors.recog_mgr
+   app = testing.editor()
+   init_line = 10
    
-   commands.open_file('blah.py')   
+   commands.open_file(foreground_py)   
+   commands.goto_line(init_line)
+
+   commands.say(['print', 'quotes'])
+   app.print_buff()
+
+   print 'Setting VCode in text mode.'
    commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   print "is_in_text_mode=%s" % recog_mgr.is_in_text_mode
+#   recog_mgr.set_text_mode(1)
+   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'], 
+       never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
+   time.sleep(3)
+# see if adding this makes any difference
+   app.process_pending_updates()
+   time.sleep(3)
+   app.process_pending_updates()
+   app.print_buff()
+
+
+   print 'Setting VCode in code dictation mode.'   
    commands.say(['text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
-   print "is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
+#   recog_mgr.set_text_mode(0)
+   commands.say(['jump', 'out'])
+   commands.say(['new', 'statement', 'print'], echo_cmd = 1)
+   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   app.print_buff()
+
    
   
-auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
+add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', foreground = 1)   
 
-
-##############################################################################
-# This dummy test is just there to ring a bell to notify
-# the user that he can now bring any other window in the foreground
-##############################################################################
-
-def test_dummy_just_ring_bell():
-    notify_user_that_editor_can_be_in_background()    
-
-
-auto_test.add_test('just_ring_bell', test_dummy_just_ring_bell, 'This dummy test is just there to ring a bell, to notify the user of the end of the foreground tests.', order=right_after_foreground_tests)
 
 ##############################################################################
 # Number dictation
@@ -3041,13 +3050,15 @@ auto_test.add_test('just_ring_bell', test_dummy_just_ring_bell, 'This dummy test
 def test_number_dictation():
    testing.init_simulator_regression()
    commands.open_file('blah.py')   
-   commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0x\\oh X.', '04\\oh four'], echo_cmd=1)
-   commands.say(['select', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   commands.say(['select', '0x'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
-   commands.say(['select', '04'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   commands.say(['select', '0x', '04'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
-auto_test.add_test('number_dictation', test_number_dictation, desc='Test number dictation')
+   commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'], echo_cmd=1)
+# not sure why this doesn't work
+#   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', 'twenty', 'three', 'fifty', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+   commands.say(['select', '04\\oh four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '0\\zero', '.\\point', 'oh', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
+
+add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
 
 ##############################################################################
@@ -3064,7 +3075,7 @@ def test_compile_symbols():
    print "After compiling symbols, symbols are:\n"
    commands.print_symbols()
    
-auto_test.add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
+add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
 
 
 ##############################################################################
@@ -3093,7 +3104,7 @@ def generate_string_of_approx_length(str_len):
    return the_string
       
 
-auto_test.add_test('large_messages', test_large_messages, desc='Send a message that has more than 1024 character (length of a message chunk)')
+add_test('large_messages', test_large_messages, desc='Send a message that has more than 1024 character (length of a message chunk)')
 
 ##############################################################################
 # test for profiling startup/configuration
@@ -3102,7 +3113,7 @@ auto_test.add_test('large_messages', test_large_messages, desc='Send a message t
 def test_profile_config():
    testing.init_simulator_regression()
     
-auto_test.add_test('profile_config', test_profile_config, 
+add_test('profile_config', test_profile_config, 
     desc='profiling configuration')
     
 ##############################################################################
@@ -3119,8 +3130,30 @@ def test_temporary():
    commands.say(['hello', 'world'], never_bypass_sr_recog=1, user_input="0\n0\n")
 
    
-#auto_test.add_test('temp', test_temporary, desc='temporary test', order=10)
+# add_test('temp', test_temporary, desc='temporary test')
 
 
+##############################################################################
+# Define test suites:
+##############################################################################
 
+# here are some sample suites
+#
+# Note that 'all', 'foreground', and 'background' are pre-defined and
+# are therefore reserved names.  Also note that suite names must not
+# match any existing test names.
 
+sort_tests()
+
+define_suite(name = 'fabfour', tests = ['SymDict', 'automatic_abbreviations',
+    'mediator_console', 'python'])
+
+# tests starting with 'CmdInterp' and ending with 'SymDict')
+define_suite_by_range(name = 'few_early', first = 'CmdInterp', last = 'SymDict')
+
+# tests up to (and including) 'SymDict')
+define_suite_by_range(name = 'thru_SymDict', last = 'SymDict')
+
+# tests starting with 'select_pseudocode' and going through the last
+# test
+define_suite_by_range(name = 'from_select_pseudo', first = 'select_pseudocode')
