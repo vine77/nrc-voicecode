@@ -496,6 +496,15 @@ class NewMediatorObject(Object.OwnerObject):
         okay = self._configure_from_file(config_file = config_file,
             user_config_file = user_config_file,
             exclude = exclude, testing = testing)
+        # Generate and cache the grammar specifcations
+        self.interp.gram_spec_spoken_cmd('known_spoken_cmd')
+        self.interp.gram_spec_spoken_symbol('known_spoken_symbol')
+        
+        # Comment this out if you want to generate training material
+        # Actually, need to invoke these AFTER CSC, etc... have been
+        # added!        
+#        self.interp.generate_training_material(num_words=1000000)            
+            
         if not okay:
             return okay
         if testing:
