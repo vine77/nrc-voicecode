@@ -203,7 +203,7 @@ class NewMediatorObject(Object.OwnerObject):
                  profile_prefix = None,
                  bypass_sr_recog = 0,
                  alt_sym_file = None,
-                 symbol_match_dlg_regression = 1,
+                 symbol_match_dlg_regression = 0,
                  symbol_match_dlg = 0,
                  temporary = 0,
                  **attrs):
@@ -222,7 +222,7 @@ class NewMediatorObject(Object.OwnerObject):
         testing, and even then, the persistent mediator object should
         be created symbol_match_dlg = 0, because if
         symbol_match_dlg_regression is set, the mediator object will 
-        automatically the dialog when regression testing starts 
+        automatically enable the dialog when regression testing starts 
         and disable it afterwards.  
 
         *BOOL symbol_match_dlg_regression* -- use a CmdInterp with symbol match 
