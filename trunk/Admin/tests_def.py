@@ -46,6 +46,7 @@ def test_CmdInterp():
     #
     # Create a command interpreter connected to the editor simulator
     #
+    natlink.natConnect()
     a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
     MediatorObject.to_configure = a_mediator
     acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings=[[ContC(), c_simple_for], [ContPy(), py_simple_for]])
@@ -253,16 +254,17 @@ auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
 ###############################################################################
 
 def test_command(command):
-    print '\n\n--- Testing console command: %s ---\n' % command
+    print '\n\n>>> Testing console command: %s <<<\n' % command
     mediator.execute_command(command)
 
 def test_mediator_console():
     mediator.init_simulator()
-    test_command("clear_symbols()")
-    test_command("compile_symbols(['" + vc_globals.test_data + os.sep + "small_buff.c'])")
-    test_command("open_file(' + + vc_globals.test_data + os.sep + blah.c')")
-    test_command("say('for loop horizontal position equal zero after semi horizontal position after equal')")
-    test_command("say('select horizontal position equal zero')")
-    test_command("quit()")
+    test_command("""clear_symbols()    """)
+    test_command("""open_file('D:/blah.c')""")
+    file = vc_globals.test_data + os.sep + 'small_buff.c'    
+    test_command("""compile_symbols(['""" + file + """'])""")
+    test_command("""say('for loop horizontal position loop body')""")
+    test_command("""say_select(['select', 'horiz_pos\horizontal position', '=\equals'])""")
+
 
 auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')

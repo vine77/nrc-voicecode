@@ -1,14 +1,21 @@
 """Regression testing script"""
 
-
 import os, natlink, posixpath
 
 #
-# Make sure we run this without connecting to NatLink
+# Make sure we run tests without connecting to NatSpeak
 #
-os.environ['VCODE_NOSPEECH'] = '1'
+# Must do this before importing other VoiceCode files because creation and
+# initialisation of VoiceDictation may try to link with NatSpeak
+#
+# NOTE: This is commented out because it causes problems with say_select
+#       Don't know why.
+#
+# os.environ['VCODE_NOSPEECH'] = '1'
 
 import auto_test, util
+import auto_test, util, vc_globals
+
 
 def usage():
     print """
@@ -41,26 +48,16 @@ output1, output2 :
     """
 
 
-import natlink, os, posixpath
-
-#
-# Make sure we run tests without connecting to NatSpeak
-#
-# Must do this before importing other VoiceCode files because creation and
-# initialisation of VoiceDictation may try to link with NatSpeak
-#
-os.environ['VCODE_NOSPEECH'] = '1'
-
-import auto_test, util, vc_globals
-
-
 if (__name__ == '__main__'):
+
+#    print '-- test: before configuration'
     config_file = vc_globals.config + os.sep + 'vc_config.py'
     try:
         execfile(config_file)
     except Exception, err:
         print 'ERROR: in configuration file %s.\n' % config_file
         raise err
+#    print '-- test: after configuration'    
 
     opts, args = util.gopt(('d', None, 'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py'), 'h', None))
     
@@ -79,4 +76,5 @@ if (__name__ == '__main__'):
     # terminates.
     #
     natlink.natDisconnect()
+
 

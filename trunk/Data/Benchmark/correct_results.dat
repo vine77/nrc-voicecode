@@ -308,7 +308,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 83aad0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 830b10>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -323,7 +323,7 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.newobject\Data\TestData\small_buff.c ***
+*** Compiling symbols from file: D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c ***
 Parsed symbols are: 
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
@@ -336,15 +336,12 @@ y: ['y']
 
 
 Unresolved abbreviations are:
-'float': appears in ['float']
-'move': appears in ['move', 'move_horiz', 'move_vert']
-'void': appears in ['void']
 'x': appears in ['x']
 'y': appears in ['y']
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.newobject\Data\TestData\large_buff.py ***
+*** Compiling symbols from file: D:\VoiceCode\VCode.redundant_trans\Data\TestData\large_buff.py ***
 Parsed symbols are: 
 AttributeError: ['attribute error']
 LargeNonObject: ['large non object']
@@ -436,68 +433,16 @@ y: ['y']
 
 
 Unresolved abbreviations are:
-'a': appears in ['a_base']
-'add': appears in ['add_test']
-'age': appears in ['age', 'her_age']
-'an': appears in ['an_attr_init', 'an_attr_def']
-'and': appears in ['and']
-'attribute': appears in ['try_attribute', 'AttributeError']
-'auto': appears in ['auto_test']
-'base': appears in ['a_base']
-'bases': appears in ['__bases__', 'exclude_bases']
-'class': appears in ['this_class', 'attrs_this_class', 'class']
-'code': appears in ['code', 'code_file']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrSmallObj', 'profConstrLargeObj', 'profConstrSmallNonObj']
-'construct': appears in ['deep_construct']
-'deep': appears in ['deep_construct']
-'else': appears in ['else']
-'error': appears in ['AttributeError']
-'except': appears in ['except']
-'exceptions': appears in ['exceptions']
-'exclude': appears in ['exclude_bases']
-'exec': appears in ['exec']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
-'file': appears in ['code_file']
-'float': appears in ['float']
-'for': appears in ['for']
-'get': appears in ['profGetLargeNonObj', 'profGetSmallNonObj', 'profGetSmallObj', 'profGetLargeObj']
-'has': appears in ['has_key']
-'her': appears in ['her_age']
-'if': appears in ['if']
-'import': appears in ['import']
-'in': appears in ['in']
-'index': appears in ['index']
-'items': appears in ['items']
-'key': appears in ['has_key']
-'large': appears in ['LargeObject', 'profConstrLargeObj', 'profSetLargeNonObj', 'profConstrLargeNonObj', 'profGetLargeNonObj', 'profGetLargeObj', 'profSetLargeObj', 'LargeNonObject']
-'move': appears in ['move', 'move_horiz', 'move_vert']
-'name': appears in ['__name__', 'name']
-'non': appears in ['profSetLargeNonObj', 'profConstrLargeNonObj', 'profGetLargeNonObj', 'SmallNonObject', 'profSetSmallNonObj', 'profConstrSmallNonObj', 'profGetSmallNonObj', 'LargeNonObject']
-'not': appears in ['not']
-'num': appears in ['num_times']
 'obj': appears in ['profConstrLargeObj', 'profSetLargeNonObj', 'profGetLargeNonObj', 'profGetLargeObj', 'profConstrSmallObj', 'profSetLargeObj', 'profGetSmallNonObj', 'obj', 'profConstrLargeNonObj', 'profSetSmallObj', 'profSetSmallNonObj', 'profConstrSmallNonObj', 'profGetSmallObj']
-'object': appears in ['LargeObject', 'profObject', 'Object', 'LargeNonObject', 'SmallNonObject', 'SmallObject']
-'operation': appears in ['operation']
-'pass': appears in ['pass']
 'posixpath': appears in ['posixpath']
-'profile': appears in ['profile']
-'range': appears in ['range']
-'run': appears in ['run']
-'self': appears in ['self', 'self_test']
 'sep': appears in ['sep']
-'set': appears in ['profSetSmallObj', 'profSetSmallNonObj', 'profSetLargeNonObj', 'profSetLargeObj']
 'setattr': appears in ['setattr']
-'small': appears in ['profSetSmallObj', 'SmallNonObject', 'profSetSmallNonObj', 'SmallObject', 'profConstrSmallObj', 'profConstrSmallNonObj', 'profGetSmallNonObj', 'profGetSmallObj']
 'stdout': appears in ['stdout']
 'str': appears in ['str']
 'superclasses': appears in ['attrs_superclasses']
-'test': appears in ['auto_test', 'prof_test', 'add_test', 'self_test']
-'this': appears in ['this_class', 'attrs_this_class']
-'times': appears in ['num_times']
-'try': appears in ['try_attribute', 'try']
-'void': appears in ['void']
-'write': appears in ['write']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -512,13 +457,21 @@ Unresolved abbreviations are:
 
 
 
---- Testing console command: clear_symbols() ---
+>>> Testing console command: clear_symbols()     <<<
 
 
 
---- Testing console command: compile_symbols(['D:\VoiceCode\VCode.newobject\Data\TestData\small_buff.c']) ---
+>>> Testing console command: open_file('D:/blah.c') <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.newobject\Data\TestData\small_buff.c'
+WARNING: source file 'D:/blah.c' doesn't exist.
+*** Start of source buffer ***
+<CURSOR>
+*** End of source buffer ***
+
+
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c']) <<<
+
+Compiling symbols for file 'D:\VoiceCode\VCode.redundant_trans\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
@@ -530,15 +483,7 @@ x: ['x']
 y: ['y']
 
 
---- Testing console command: open_file(' + + vc_globals.test_data + os.sep + blah.c') ---
-
-WARNING: source file ' + + vc_globals.test_data + os.sep + blah.c' doesn't exist.
-*** Start of source buffer ***
-<CURSOR>
-*** End of source buffer ***
-
-
---- Testing console command: say('for loop horizontal position equal zero after semi horizontal position after equal') ---
+>>> Testing console command: say('for loop horizontal position loop body') <<<
 
 
 
@@ -549,26 +494,23 @@ WARNING: source file ' + + vc_globals.test_data + os.sep + blah.c' doesn't exist
 
 
 *** Start of source buffer ***
-  1:    for (horiz_posequal zero=0; horiz_pos <= <CURSOR>; ++)
-  1:    {
-  2:    
+  1:    for (horiz_pos=0;  <= ; ++)
+  2:    {
+  3: <CURSOR>   
   3:    }
   4:    
 
 *** End of source buffer ***
 
 
---- Testing console command: say('select horizontal position equal zero') ---
+>>> Testing console command: say_select(['select', 'horiz_pos\horizontal position', '=\equals']) <<<
 
 *** Start of source buffer ***
-  1:    for (horiz_posequal zero=0; horiz_pos <= selecthoriz_posequal zero<CURSOR>; ++)
-  1:    {
-  2:    
-  3:    }
-  4:    
+  1:    for (<SEL_START>horiz_pos=
+<SEL_END>0;  <= ; ++)
+  2:    {
+  3:    
+  4:    }
+  5:    
 
 *** End of source buffer ***
-
-
---- Testing console command: quit() ---
-
