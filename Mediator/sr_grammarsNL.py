@@ -633,6 +633,26 @@ class WinGramFactoryNL(WinGramFactory):
         return NaturalSpellingNL(spell_words = spell_words, spelling_cbk =
             spelling_cbk)
    
+    def make_military_spelling(self, spell_words = None, spelling_cbk = None):
+        """create a new MilitarySpelling grammar
+
+        **INPUTS**
+
+        *[STR]* spell_words -- words which must proceed the first spelled 
+        letter, or None for an unrestricted spelling grammar.  The latter is not
+        advisable unless dictation is disabled.
+
+        *FCT(STR)* spelling_cbk -- callback to signal recognition.
+        Currently, the letters or numbers spelled are returned as a single 
+        string (with double-o, etc. expanded)
+
+        **OUTPUTS**
+
+        *MilitarySpelling* -- the spelling grammar
+        """
+        return MilitarySpellingNL(spell_words = spell_words, spelling_cbk =
+            spelling_cbk)
+   
     def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
         select_cbk, alt_select_words = None):
         """create a new SimpleSelection grammar
@@ -863,7 +883,7 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
         cap_next = 0
         caps_on = 0
         for word in words:
-#            print "word is [%s]" % word
+            print "word is [%s]" % word
             if re.match(r'\\', word):
 #                print 'starts with slash'
                 if re.match(r'\\space-bar$', word, re.IGNORECASE):
@@ -910,6 +930,17 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                 cap_next = 0
                 continue
 #            print "testing double"
+            military_match = re.match(r'([A-Za-z])\\.*\\h$', word)
+            if military_match:
+                c = military_match.group(1)
+#                print "matches letter %s" % c
+                if cap_next or caps_on:
+                    c = string.upper(c)
+#                print "matches letter %s" % c
+                s = s + c
+                cap_next = 0
+                continue
+#            print "testing double"
             double_match = re.match(r'double-([A-Za-z])\\\\l$', word)
             if double_match:
                 c = double_match.group(1) * 2
@@ -929,6 +960,233 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
             cap_next = 0
 
         self.spelling_cbk(s)
+
+class MilitarySpellingNL(MilitarySpelling, GrammarBase):
+    """implementation of MilitarySpelling using natlink
+
+    **INSTANCE ATTRIBUTES**
+
+    *{STR: [STR]} lists* -- map from list names to the initial values
+    to be assigned to them once the grammar is loaded
+
+    *[STR] rules* -- list of rules for this grammar
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
+        self.deep_construct(MilitarySpellingNL,
+            {'lists': {},
+             'rules': []}, attrs, exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+            for name, values in self.lists.items():
+                self.setList(name, values)
+
+    def create_rules(self):
+        """create all the rules for this grammar and put them in
+        self.rules
+
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.rules = []
+        self.letter_list()
+        self.digit_list()
+        self.other_lists()
+        self.rules.extend(self.character_rule())
+        self.rules.extend(self.spell_rule())
+
+    def digit_list(self):
+        self.lists['digits'] = ['0', '1', '2', '3', '4', '5', '6', '7',
+            '8', '9']
+
+    def other_lists(self):
+        self.lists['formatting'] = \
+          [
+            r'\\space-bar',
+            r'\\Cap',
+            r'\\Caps-On',
+            r'\\Caps-Off',
+            r'\\All-Caps-Off',
+            r'\\All-Caps',
+            r'\\All-Caps-On'
+          ]
+
+    def character_rule(self):
+        rules = ["<character> = ( {formatting} | {letters} | {prefixed_letters} | {digits} );"]
+        return rules
+
+    def spell_rule(self):
+        spell = ""
+        if self.spell_words:
+            spell = compose_alternatives(self.spell_words) + " "
+        rules = ["<mil_spell> exported = %s<character>+;" % spell]
+        return rules
+
+    def letter_list(self):
+        self.lists['letters'] = \
+          [ r'a\alpha',
+            r'b\bravo',
+            r'c\charlie',
+            r'd\delta',
+            r'e\echo',
+            r'f\foxtrot',
+            r'g\golf',
+            r'h\hotel',
+            r'i\india',
+            r'j\juliett',
+            r'k\kilo',
+            r'l\lima',
+            r'm\mike',
+            r'n\november',
+            r'o\oscar',
+            r'p\papa',
+            r'q\quebec',
+            r'r\romeo',
+            r's\sierra',
+            r't\tango',
+            r'u\uniform',
+            r'v\victor',
+            r'w\whiskey',
+            r'x\xray',
+            r'y\yankee',
+            r'z\zulu' ]
+
+        self.lists['prefixed_letters'] = \
+          [ r'a\letter-alpha',
+            r'b\letter-bravo',
+            r'c\letter-charlie',
+            r'd\letter-delta',
+            r'e\letter-echo',
+            r'f\letter-foxtrot',
+            r'g\letter-golf',
+            r'h\letter-hotel',
+            r'i\letter-india',
+            r'j\letter-juliett',
+            r'k\letter-kilo',
+            r'l\letter-lima',
+            r'm\letter-mike',
+            r'n\letter-november',
+            r'o\letter-oscar',
+            r'p\letter-papa',
+            r'q\letter-quebec',
+            r'r\letter-romeo',
+            r's\letter-sierra',
+            r't\letter-tango',
+            r'u\letter-uniform',
+            r'v\letter-victor',
+            r'w\letter-whiskey',
+            r'x\letter-xray',
+            r'y\letter-yankee',
+            r'z\letter-zulu' ]
+
+    def gotResults_mil_spell(self, words, fullResults):
+        s = ""
+        print "milword" 
+        cap_next = 0
+        caps_on = 0
+        for word in words:
+            print "milword is [%s]" % word
+#            print "word is [%s]" % word
+            if re.match(r'\\', word):
+#                print 'starts with slash'
+                if re.match(r'\\space-bar$', word, re.IGNORECASE):
+                    cap_next = 0
+                    s = s + ' '
+                    continue
+                if re.match(r'\\Cap$', word, re.IGNORECASE):
+                    cap_next = 1
+                    continue
+                elif re.match(r'\\Caps-On$', word, re.IGNORECASE):
+                    caps_on = 1
+                    continue
+                elif re.match(r'\\Caps-Off$', word, re.IGNORECASE):
+                    caps_on = 0
+                    cap_next = 0
+                    continue
+                elif re.match(r'\\All-Caps-Off', word, re.IGNORECASE):
+                    caps_on = 0
+                    cap_next = 0
+                    continue
+                elif re.match(r'\\All-Caps', word, re.IGNORECASE):
+                    caps_on = 1
+                    continue
+                continue
+#            print "testing letter"
+            letter_match = re.match(r'([A-Za-z])\\', word)
+            if letter_match:
+                c = letter_match.group(1)
+#                print "matches letter %s" % c
+                if cap_next or caps_on:
+                    c = string.upper(c)
+#                print "matches letter %s" % c
+                s = s + c
+                cap_next = 0
+                continue
+            letter_match = re.match(r'([0-9])', word)
+            if letter_match:
+                c = letter_match.group(1)
+                s = s + c
+                cap_next = 0
+                continue
+
+        print 'milstring "%s"' % s
+        self.spelling_cbk(s)
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to a window
+        with the given handle
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.active:
+            print 'activated mil'
+            self.active = 1
+            self.activateAll(window = window)
+    
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.active:
+            self.active = 0
+            self.deactivateAll()
+    
+    def cleanup(self):
+        """method which must be called by the owner prior to deleting
+        the grammar, to ensure that it doesn't have circular references
+        to the owner
+        """
+        self.deactivate()
+        GrammarBase.unload(self)
+        MilitarySpelling.cleanup(self)
+
+
 
 class SimpleSelectionNL(SimpleSelection, SelectGramBase):
     """natlink implementation of SimpleSelection 

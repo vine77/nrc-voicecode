@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 18 23:48:49 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Oct 19 16:03:11 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,6 +28,7 @@
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_choices"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_choices</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">choice_words</SPAN>)<SPAN CLASS="OneLiner"> # create a new ChoiceGram choice grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_correction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_correction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new basic correction grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_military_spelling"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_military_spelling</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new MilitarySpelling grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_natural_spelling"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_natural_spelling</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new NaturalSpelling grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_simple_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_simple_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">get_visible_cbk</SPAN>, <SPAN CLASS="Argument">get_selection_cbk</SPAN>, <SPAN CLASS="Argument">select_cbk</SPAN>, <SPAN CLASS="Argument">alt_select_words=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new SimpleSelection grammar</SPAN>
@@ -193,6 +194,35 @@ non-exclusive grammars from getting results)
 <DT>
 <EM>DictWinGram</EM>
 <DD>new dictation grammar
+
+</DL>
+<H2 ID="sr_grammars.WinGramFactory.make_military_spelling" CLASS="Method">sr_grammars.WinGramFactory.make_military_spelling(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>)</H2>
+<P>create a new MilitarySpelling grammar</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> spell_words
+<DD>words which must proceed the first spelled 
+letter, or None for an unrestricted spelling grammar.  The latter is not
+advisable unless dictation is disabled.
+<DT>
+<EM>FCT(STR)</EM> spelling_cbk
+<DD>callback to signal recognition.
+Currently, the letters or numbers spelled are returned as a single 
+string 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>MilitarySpelling</EM>
+<DD>the spelling grammar
 
 </DL>
 <H2 ID="sr_grammars.WinGramFactory.make_natural_spelling" CLASS="Method">sr_grammars.WinGramFactory.make_natural_spelling(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>)</H2>
