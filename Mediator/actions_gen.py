@@ -152,15 +152,35 @@ class ActionRepeatable(Action):
                             {})
 
 class ActionBidirectional(Action):
-    """Base class for bidirectional actions, i.e. actions that can be executed
-    in one of two directions (e.g. up vs down, right vs left,
-    forward vs backward, etc.)
+
+    """Base class for bidirectional actions, i.e. actions that can be
+    executed in on of two directions (e.g. upward vs downward, left vs
+    right, backward vs
+
+    **INSTANCE ATTRIBUTES**
+    
+    *INT* direction -- 
+
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, direction=1, **args_super):
+        self.deep_construct(Action,
+                            {'direction': direction},
+                            args_super,
+                            {})
+
+
+class ActionBidirectionalRepeat(ActionRepeatable, ActionBidirectional):
+    """Base class for repeatable bidirectional actions, i.e. bidirectional
+    actions that can be repeated and qualified by subsequent utterances
+    like: 'previous one', 'next one' or 'reverse'.
    
     **INSTANCE ATTRIBUTES**
     
-    *INT direction=1* -- If positive, then action is executed in
-     forward/down/right/next etc. direction. If negative, the action
-     is executed in backward/up/left/previous etc. direction
+    *none* --
 
     CLASS ATTRIBUTES**
     
@@ -225,7 +245,7 @@ class ActionRepeatLastCmd(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
 
-#        print '-- ActionRepeatLastCmd.execute: self=%s,self.__dict__=%s' % (self      , self.__dict__)
+#        print '-- ActionRepeatLastCmd.execute: self=%s,self.__dict__=%s' % (self, self.__dict__)
 
         (last_cont, last_action) = app.get_history(1)
 #        print '-- ActionRepeatLastCmd.execute: last_action=%s, last_action.__dict__=%s' % (last_action, last_action.__dict__)
@@ -530,7 +550,7 @@ class ActionAutoIndent(Action):
         return the_doc    
 
 
-class ActionSearch(ActionRepeatable, ActionBidirectional):
+class ActionSearch(ActionBidirectional):
     """Moves cursor to occurence of a regular expression.
         
     **INSTANCE ATTRIBUTES**
@@ -567,6 +587,7 @@ class ActionSearch(ActionRepeatable, ActionBidirectional):
 
 
 
+
     def doc(self):
         """See [Action.doc].
 
@@ -594,6 +615,38 @@ class ActionSearch(ActionRepeatable, ActionBidirectional):
                 
             the_doc = 'Moves %s of %s.%s' % (str_occurence, self.regexp, str_where)
         return the_doc
+
+
+class ActionSearchRepeat(ActionSearch, ActionRepeatable):
+    """Moves cursor to occurence of a regular expression.
+
+    Contrarily to [ActionSearch], this class of search can be repeated
+    or qualified by subsequent commands (e.g. 'again 3 times',
+    'previous one').
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+
+    ..[ActionSearch] file:///./actions_gen.ActionSearch.html#ActionSearch"""
+        
+    def __init__(self, **args_super):
+        self.deep_construct(ActionSearchRepeat, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return ActionSearch.doc(self) + """ (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one')."""
+
 
 
 class ActionSearchInsert(Action):

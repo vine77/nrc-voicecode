@@ -4,6 +4,19 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+BUG in setmic
+-------------
+
+Can't turn mic on after turned it off once. Ex:
+
+python gui_sim.py -s
+setmic('on')
+I say: "for" -> types "for ^:\n"
+setmic('off')
+setmic('on')
+I say: "for" -> doesn't type anything
+
+
 BUG in gui_sim
 --------------
 

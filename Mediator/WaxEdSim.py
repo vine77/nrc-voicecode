@@ -36,6 +36,7 @@ import WaxEdit
 
 ID_EXIT = 101
 ID_OPEN_FILE = 150
+ID_CONF_SCRIPT = 160
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
@@ -303,6 +304,7 @@ class WaxEdSimFrame(wxFrame):
 	self.activated = 0
         file_menu=wxMenu()
         file_menu.Append(ID_OPEN_FILE,"&Open","Open a file")
+        file_menu.Append(ID_CONF_SCRIPT,"&Config Script","Execute a python configuration script for the environment (ex: a demo file)")        
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
         window_menu = wxMenu()
@@ -325,6 +327,7 @@ class WaxEdSimFrame(wxFrame):
         self.SetMenuBar(menuBar)
         EVT_MENU(self,ID_EXIT,self.quit_now)
         EVT_MENU(self,ID_OPEN_FILE,self.open_file)
+        EVT_MENU(self,ID_CONF_SCRIPT,self.execute_file)        
         EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
@@ -398,6 +401,15 @@ class WaxEdSimFrame(wxFrame):
 #	    self.app_control.open_file(file_path)
 
 
+    def execute_file(self, event):
+	init_dir = self.app_control.curr_dir
+        dlg = wxFileDialog(self, "Execute Script File", init_dir)
+        answer = dlg.ShowModal()
+        print '-- WaxEdSim.execute_file: answer=%s, wxID_OK=%s' % (answer, wxID_OK)
+        if answer == wxID_OK:
+            file_path = dlg.GetPath()
+            
+            self.pane.command_prompt._on_command("execfile('%s')" % file_path)
 
     def choose_font(self, event):
 

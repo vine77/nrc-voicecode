@@ -282,418 +282,428 @@ add_lsa(['back slash cap z.', 'back slash cap z', 'back slash cap zulu'], {None:
 #
 # semicolon
 #
-acmd = CSCmd(spoken_forms=['after semi', 'after semicolon'],
-             meanings={ContAny(): ActionSearch(';\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next semi', 'after semi', 'next semicolon',
+                           'after semicolon'],
+             meanings={ContAny(): ActionSearchRepeat(regexp=';\s{0,1}')},
              docstring='go after next semicolon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before semi', 'before next semi', 'before semicolon', 'before next semicolon'],
-             meanings={ContAny(): ActionSearch('\s{0,1};', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1};', where=-1)},
              docstring='go before next semicolon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous semi', 'previous semicolon',
                            'after previous semi',
                            'after previous semicolon'],
-             meanings={ContAny(): ActionSearch(';\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp=';\s{0,1}', direction=-1)},
              docstring='go after previous semicolon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous semi',
                            'before previous semicolon'],
-             meanings={ContAny(): ActionSearch('\s{0,1};', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1};', direction=-1, where=-1)},
              docstring='go before previous semicolon')
 add_csc(acmd)
 
 #
 # comma
 #
-acmd = CSCmd(spoken_forms=['after comma'],
-             meanings={ContAny(): ActionSearch(',\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next comma', 'after comma'],
+             meanings={ContAny(): ActionSearchRepeat(regexp=',\s{0,1}')},
              docstring='go after next comma')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before comma', 'before next comma'],
-             meanings={ContAny(): ActionSearch('\s{0,1},', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1},', where=-1)},
              docstring='go before next comma')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous comma', 'after previous comma'],
-             meanings={ContAny(): ActionSearch(',\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp=',\s{0,1}', direction=-1)},
              docstring='go after previous comma')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous comma'],
-             meanings={ContAny(): ActionSearch('\s{0,1},', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1},', direction=-1, where=-1)},
              docstring='go before previous comma')
 add_csc(acmd)
 
 #
 # dot
 #
-acmd = CSCmd(spoken_forms=['after dot'],
-             meanings={ContAny(): ActionSearch('\\.\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next dot', 'after dot'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\.\s{0,1}')},
              docstring='go after next dot')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before dot', 'before next dot'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\.', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\.', where=-1)},
              docstring='go before next dot')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous dot', 'after previous dot'],
-             meanings={ContAny(): ActionSearch('\\.\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\.\s{0,1}', direction=-1)},
              docstring='go after previous dot')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous dot'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\.', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\.', direction=-1, where=-1)},
              docstring='go before previous dot')
 add_csc(acmd)
 
 #
 # colon
 #
-acmd = CSCmd(spoken_forms=['after colon'],
-             meanings={ContAny(): ActionSearch(':\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next colon', 'after colon'],
+             meanings={ContAny(): ActionSearchRepeat(regexp=':\s{0,1}')},
              docstring='go after next colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before colon', 'before next colon'],
-             meanings={ContAny(): ActionSearch('\s{0,1}:', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}:', where=-1)},
              docstring='go before next colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous colon', 'after previous colon'],
-             meanings={ContAny(): ActionSearch(':\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp=':\s{0,1}', direction=-1)},
              docstring='go after previous colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous colon'],
-             meanings={ContAny(): ActionSearch('\s{0,1}:', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}:', direction=-1, where=-1)},
              docstring='go before previous colon')
 add_csc(acmd)
 
 #
 # asterisk
 #
-acmd = CSCmd(spoken_forms=['after asterisk', 'after star'],
-             meanings={ContAny(): ActionSearch('\\*\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next asterisk', 'after asterisk', 'next star',
+                           'after star'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\*\s{0,1}')},
              docstring='go after next asterisk')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before asterisk', 'before next asterisk',
                            'before star', 'before next star'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\*', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\*', where=-1)},
              docstring='go before next asterisk')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous asterisk', 'previous star',
                            'after previous asterisk', 'after previous star'],
-             meanings={ContAny(): ActionSearch('\\*\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\*\s{0,1}', direction=-1)},
              docstring='go after previous asterisk')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous asterisk', 'before previous star'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\*', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\*', direction=-1, where=-1)},
              docstring='go before previous asterisk')
 add_csc(acmd)
 
 #
 # slash
 #
-acmd = CSCmd(spoken_forms=['after slash'],
-             meanings={ContAny(): ActionSearch('/\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next slash', 'after slash'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='/\s{0,1}')},
              docstring='go after next slash')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before slash', 'before next slash'],
-             meanings={ContAny(): ActionSearch('\s{0,1}/', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}/', where=-1)},
              docstring='go before next slash')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous slash', 'after previous slash'],
-             meanings={ContAny(): ActionSearch('/\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='/\s{0,1}', direction=-1)},
              docstring='go after previous slash')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous slash'],
-             meanings={ContAny(): ActionSearch('\s{0,1}/', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}/', direction=-1, where=-1)},
              docstring='go before previous slash')
 add_csc(acmd)
 
 #
 # plus
 #
-acmd = CSCmd(spoken_forms=['after plus'],
-             meanings={ContAny(): ActionSearch('\\+\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next plus', 'after plus'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\+\s{0,1}')},
              docstring='go after next plus')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before plus', 'before next plus'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\+', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\+', where=-1)},
              docstring='go before next plus')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous plus', 'after previous plus'],
-             meanings={ContAny(): ActionSearch('\\+\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\+\s{0,1}', direction=-1)},
              docstring='go after previous plus')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous plus'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\+', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\+', direction=-1, where=-1)},
              docstring='go before previous plus')
 add_csc(acmd)
 
 #
 # minus
 #
-acmd = CSCmd(spoken_forms=['after minus', 'after hyphen'],
-             meanings={ContAny(): ActionSearch('-\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next minus', 'after minus', 'next hyphen',
+                           'after hyphen'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='-\s{0,1}')},
              docstring='go after next minus')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before minus', 'before next minus', 'before hyphen', 'before next hyphen'],
-             meanings={ContAny(): ActionSearch('\s{0,1}-', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}-', where=-1)},
              docstring='go before next minus')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['previous minus', 'after previous minus', 'previous hyphen', 'after previous hyphen'],
-             meanings={ContAny(): ActionSearch('-\s{0,1}', direction=-1)},
+acmd = CSCmd(spoken_forms=['previous minus', 'after previous minus',
+                           'previous hyphen', 'after previous hyphen'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='-\s{0,1}', direction=-1)},
              docstring='go after previous minus')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous minus', 'before previous hyphen'],
-             meanings={ContAny(): ActionSearch('\s{0,1}-', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}-', direction=-1, where=-1)},
              docstring='go before previous minus')
 add_csc(acmd)
 
 #
 # percent
 #
-acmd = CSCmd(spoken_forms=['after percent'],
-             meanings={ContAny(): ActionSearch('%\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next percent', 'after percent'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='%\s{0,1}')},
              docstring='go after next percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before percent', 'before next percent'],
-             meanings={ContAny(): ActionSearch('\s{0,1}%', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}%', where=-1)},
              docstring='go before next percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous percent', 'after previous percent'],
-             meanings={ContAny(): ActionSearch('%\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='%\s{0,1}', direction=-1)},
              docstring='go after previous percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous percent'],
-             meanings={ContAny(): ActionSearch('\s{0,1}%', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}%', direction=-1, where=-1)},
              docstring='go before previous percent')
 add_csc(acmd)
 
 #
 # and percent
 #
-acmd = CSCmd(spoken_forms=['after and percent'],
-             meanings={ContAny(): ActionSearch('&\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next and percent', 'after and percent'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='&\s{0,1}')},
              docstring='go after next and percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before and percent', 'before next and percent'],
-             meanings={ContAny(): ActionSearch('\s{0,1}&', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}&', where=-1)},
              docstring='go before next and percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous and percent', 'after previous and percent'],
-             meanings={ContAny(): ActionSearch('&\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='&\s{0,1}', direction=-1)},
              docstring='go after previous and percent')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous and percent'],
-             meanings={ContAny(): ActionSearch('\s{0,1}&', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}&', direction=-1, where=-1)},
              docstring='go before previous and percent')
 add_csc(acmd)
 
 #
 # pipe
 #
-acmd = CSCmd(spoken_forms=['after pipe', 'after pipe sign'],
-             meanings={ContAny(): ActionSearch('\\|\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next pipe', 'after pipe', 'next pipe sign', 'after pipe sign'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\|\s{0,1}')},
              docstring='go after next pipe')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before pipe', 'before next pipe',
                            'before pipe sign', 'before next pipe sign'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\|', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\|', where=-1)},
              docstring='go before next pipe sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous pipe', 'previous pipe sign',
                            'after previous pipe', 'after previous pipe sign'],
-             meanings={ContAny(): ActionSearch('\\|\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\|\s{0,1}', direction=-1)},
              docstring='go after previous pipe sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous pipe', 'before previous pipe sign'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\|', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\|', direction=-1, where=-1)},
              docstring='go before previous pipe sign')
 add_csc(acmd)
 
 #
 # ellipsis
 #
-acmd = CSCmd(spoken_forms=['after ellipsis'],
-             meanings={ContAny(): ActionSearch('\\.\\.\\.\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next ellipsis', 'after ellipsis'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\.\\.\\.\s{0,1}')},
              docstring='go after next ellipsis')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before ellipsis', 'before next ellipsis'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\.\\.\\.', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\.\\.\\.', where=-1)},
              docstring='go before next ellipsis')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous ellipsis', 'after previous ellipsis'],
-             meanings={ContAny(): ActionSearch('\\.\\.\\.\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\.\\.\\.\s{0,1}', direction=-1)},
              docstring='go after previous ellipsis')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous ellipsis'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\.\\.\\.', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\.\\.\\.', direction=-1, where=-1)},
              docstring='go before previous ellipsis')
 add_csc(acmd)
 
 #
 # exclamation mark
 #
-acmd = CSCmd(spoken_forms=['after exclamation mark', 'after bang'],
-             meanings={ContAny(): ActionSearch('!\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next exclamation mark', 'after exclamation mark',
+                           'next bang', 'after bang'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='!\s{0,1}')},
              docstring='go after next exclamation mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before exclamation mark', 'before next exclamation mark', 'before bang', 'before next bang'],
-             meanings={ContAny(): ActionSearch('\s{0,1}!', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}!', where=-1)},
              docstring='go before next exclamation mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous exclamation mark', 'after previous exclamation mark', 'previous bang',
                            'after previous bang'],
-             meanings={ContAny(): ActionSearch('!\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='!\s{0,1}', direction=-1)},
              docstring='go after previous exclamation mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous exclamation mark', 'before previous bang'],
-             meanings={ContAny(): ActionSearch('\s{0,1}!', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}!', direction=-1, where=-1)},
              docstring='go before previous exclamation mark')
 add_csc(acmd)
 
 #
 # question mark
 #
-acmd = CSCmd(spoken_forms=['after question mark'],
-             meanings={ContAny(): ActionSearch('\\?\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next question mark', 'after question mark'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\?\s{0,1}')},
              docstring='go after next question mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before question mark', 'before next question mark'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\?', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\?', where=-1)},
              docstring='go before next question mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous question mark', 'after previous question mark'],
-             meanings={ContAny(): ActionSearch('\\?\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\\?\s{0,1}', direction=-1)},
              docstring='go after previous question mark')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous question mark'],
-             meanings={ContAny(): ActionSearch('\s{0,1}\\?', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}\\?', direction=-1, where=-1)},
              docstring='go before previous question mark')
 add_csc(acmd)
 
 #
 # pound
 #
-acmd = CSCmd(spoken_forms=['after pound', 'after pound sign'],
-             meanings={ContAny(): ActionSearch('#\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next pound', 'after pound', 'next pound sign',
+                           'after pound sign'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='#\s{0,1}')},
              docstring='go after next pound sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before pound', 'before next pound',
                            'before pound sign', 'before next pound sign'],
-             meanings={ContAny(): ActionSearch('\s{0,1}#', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}#', where=-1)},
              docstring='go before next pound sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous pound', 'previous pound sign',
                            'after previous pound', 'after previous pound sign'],
-             meanings={ContAny(): ActionSearch('#\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='#\s{0,1}', direction=-1)},
              docstring='go after previous pound sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous pound', 'before previous pound sign'],
-             meanings={ContAny(): ActionSearch('\s{0,1}#', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}#', direction=-1, where=-1)},
              docstring='go before previous pound sign')
 add_csc(acmd)
 
 #
 # double colon
 #
-acmd = CSCmd(spoken_forms=['after double colon'],
-             meanings={ContAny(): ActionSearch('::\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next double colon', 'after double colon'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='::\s{0,1}')},
              docstring='go after next double colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before double colon', 'before next double colon'],
-             meanings={ContAny(): ActionSearch('\s{0,1}::', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}::', where=-1)},
              docstring='go before next double colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous double colon', 'after previous double colon'],
-             meanings={ContAny(): ActionSearch('::\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='::\s{0,1}', direction=-1)},
              docstring='go after previous double colon')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous double colon'],
-             meanings={ContAny(): ActionSearch('\s{0,1}::', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}::', direction=-1, where=-1)},
              docstring='go before previous double colon')
 add_csc(acmd)
 
 #
 # tilde
 #
-acmd = CSCmd(spoken_forms=['after tilde', 'after squiggle'],
-             meanings={ContAny(): ActionSearch('~\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next tilde', 'after tilde', 'next squiggle',
+                           'after squiggle'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='~\s{0,1}')},
              docstring='go after next tilde')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before tilde', 'before next tilde',
                            'before squiggle', 'before next squiggle'],
-             meanings={ContAny(): ActionSearch('\s{0,1}~', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}~', where=-1)},
              docstring='go before next tilde')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous tilde', 'previous squiggle',
                            'after previous tilde', 'after previous squiggle'],
-             meanings={ContAny(): ActionSearch('~\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='~\s{0,1}', direction=-1)},
              docstring='go after previous tilde')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous tilde', 'before previous squiggle'],
-             meanings={ContAny(): ActionSearch('\s{0,1}~', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}~', direction=-1, where=-1)},
              docstring='go before previous tilde')
 add_csc(acmd)
 
 #
 # less sign
 #
-acmd = CSCmd(spoken_forms=['after less sign', 'after less than'],
-             meanings={ContAny(): ActionSearch('<\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next less sign', 'after less sign',
+                           'next less than', 'after less than'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='<\s{0,1}')},
              docstring='go after next less sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before less sign', 'before next less sign',
                            'before less than', 'before next less than'],
-             meanings={ContAny(): ActionSearch('\s{0,1}<', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}<', where=-1)},
              docstring='go before next less sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous less sign', 'previous less than',
                            'after previous less sign', 'after previous less than'],
-             meanings={ContAny(): ActionSearch('<\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='<\s{0,1}', direction=-1)},
              docstring='go after previous less sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous less sign', 'before previous less than'],
-             meanings={ContAny(): ActionSearch('\s{0,1}<', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}<', direction=-1, where=-1)},
              docstring='go before previous less sign')
 add_csc(acmd)
 
 #
 # greater sign
 #
-acmd = CSCmd(spoken_forms=['after greater sign', 'after greater than'],
-             meanings={ContAny(): ActionSearch('>\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next greater sign', 'after greater sign',
+                           'next greater than', 'after greater than'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='>\s{0,1}')},
              docstring='go after next greater sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before greater sign', 'before next greater sign',
                            'before greater than', 'before next greater than'],
-             meanings={ContAny(): ActionSearch('\s{0,1}>', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}>', where=-1)},
              docstring='go before next greater sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous greater sign', 'previous greater than',
                            'after previous greater sign', 'after previous greater than'],
-             meanings={ContAny(): ActionSearch('>\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='>\s{0,1}', direction=-1)},
              docstring='go after previous greater sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous greater sign', 'before previous greater than'],
-             meanings={ContAny(): ActionSearch('\s{0,1}>', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}>', direction=-1, where=-1)},
              docstring='go before previous greater sign')
 add_csc(acmd)
 
 #
 # equal sign
 #
-acmd = CSCmd(spoken_forms=['after equal sign', 'after equal'],
-             meanings={ContAny(): ActionSearch('=\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next equal sign', 'after equal sign',
+                           'next equal', 'after equal'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='=\s{0,1}')},
              docstring='go after next equal sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before equal sign', 'before next equal sign',
                            'before equal', 'before next equal'],
-             meanings={ContAny(): ActionSearch('\s{0,1}=', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}=', where=-1)},
              docstring='go before next equal sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous equal sign', 'previous equal',
                            'after previous equal sign', 'after previous equal'],
-             meanings={ContAny(): ActionSearch('=\s{0,1}', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='=\s{0,1}', direction=-1)},
              docstring='go after previous equal sign')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous equal sign', 'before previous equal'],
-             meanings={ContAny(): ActionSearch('\s{0,1}=', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}=', direction=-1, where=-1)},
              docstring='go before previous equal sign')
 add_csc(acmd)
 
@@ -706,62 +716,64 @@ add_csc(acmd)
 #
 # parens
 #
-acmd = CSCmd(spoken_forms=['after paren'],
-             meanings={ContAny(): ActionSearch('[\\(\\)]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next paren', 'after paren'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\(\\)]\s{0,1}')},
              docstring='go after next paren (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before paren', 'before next paren'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\(\\)]', where=-1)},
              docstring='go before next paren (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous paren'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\(\\)]', direction=-1)},
              docstring='go after previous paren (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous paren'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\(\\)]', direction=-1, where=-1)},
              docstring='go before previous paren (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of parens'],
-             meanings={ContAny(): ActionSearch('[\\)]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\)]\s{0,1}')},
              docstring='jump forward out of inner most paren pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of parens'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\(]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\(]', direction=-1, where=-1)},
              docstring='jump backward out of inner most paren pair')
 add_csc(acmd)
 
 #
 # brackets
 #
-acmd = CSCmd(spoken_forms=['after bracket', 'after square bracket', 'after square'],
-             meanings={ContAny(): ActionSearch('[\\[\\]]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next bracket', 'after bracket',
+                           'next square bracket', 'after square bracket',
+                           'next square', 'after square'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\[\\]]\s{0,1}')},
              docstring='go after next bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before bracket', 'before next bracket',
                            'before square bracket', 'before next square bracket',
                            'before square', 'before next square'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\[\\]]', where=-1)},
              docstring='go before next bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous bracket', 'after previous bracket'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\[\\]]', direction=-1)},
              docstring='go after previous bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous bracket',
                            'before previous square bracket',
                            'before previous square'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\[\\]]', direction=-1, where=-1)},
              docstring='go before previous bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of brackets', 'out of square brackets',
                            'out of square'],
-             meanings={ContAny(): ActionSearch('[\\]]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\]]\s{0,1}')},
              docstring='jump forward out of inner most bracket pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of brackets', 'back out of square brackets',
                            'back out of square'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\[]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\[]', direction=-1, where=-1)},
              docstring='jump backward out of inner most bracket pair')
 add_csc(acmd)
 
@@ -769,147 +781,150 @@ add_csc(acmd)
 #
 # braces
 #
-acmd = CSCmd(spoken_forms=['after brace', 'after curly bracket', 'after curly'],
-             meanings={ContAny(): ActionSearch('[\\{\\}]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next brace', 'after brace',
+                           'next curly bracket', 'after curly bracket',
+                           'next curly', 'after curly'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\{\\}]\s{0,1}')},
              docstring='go after next brace (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before brace', 'before curly bracket', 'before curly'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\{\\}]', where=-1)},
              docstring='go before next brace (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous brace', 'after previous brace'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\{\\}]', direction=-1)},
              docstring='go after previous brace (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous brace',
                            'before previous curly bracket',
                            'before previous curly'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\{\\}]', direction=-1, where=-1)},
              docstring='go before previous brace (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of braces', 'out of curly brackets',
                            'out of curlies'],
-             meanings={ContAny(): ActionSearch('[\\}]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\\}]\s{0,1}')},
              docstring='jump forward out of inner most brace pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of braces', 'back out of curly brackets',
                            'back out of curlies'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\\{]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\\{]', direction=-1, where=-1)},
              docstring='jump backward out of inner most brace pair')
 add_csc(acmd)
 
 #
 # angled brackets
 #
-acmd = CSCmd(spoken_forms=['after angled bracket', 'after angled'],
-             meanings={ContAny(): ActionSearch('[<>]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next angled bracket', 'after angled bracket',
+                           'next angled', 'after angled'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[<>]\s{0,1}')},
              docstring='go after next angled (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before angled bracket', 'before angled'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[<>]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[<>]', where=-1)},
              docstring='go before next angled bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous angled bracket', 'previous angled',
                            'after previous angled bracket',
                            'after previous angled'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[<>]]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[<>]]', direction=-1)},
              docstring='go after previous angled bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous angled bracket',
                            'before previous angled'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[<>]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[<>]', direction=-1, where=-1)},
              docstring='go before previous angled bracket (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of angled', 'out of angled brackets'],
-             meanings={ContAny(): ActionSearch('[>]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[>]\s{0,1}')},
              docstring='jump forward out of inner most angled bracket pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of angled', 'back out of angled brackets'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[<]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[<]', direction=-1, where=-1)},
              docstring='jump backward out of inner most angled bracket pair')
 add_csc(acmd)
 
 #
 # quotes
 #
-acmd = CSCmd(spoken_forms=['after quote'],
-             meanings={ContAny(): ActionSearch('["]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next quote', 'after quote'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='["]\s{0,1}')},
              docstring='go after next quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}["]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}["]', where=-1)},
              docstring='go before next quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous quote', 'after previous quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}["]]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}["]]', direction=-1)},
              docstring='go after previous quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}["]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}["]', direction=-1, where=-1)},
              docstring='go before previous quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of quotes'],
-             meanings={ContAny(): ActionSearch('[">]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[">]\s{0,1}')},
              docstring='jump forward out of inner most quote pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of quotes'],
-             meanings={ContAny(): ActionSearch('\s{0,1}["], direction=-1, where=-1')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}["], direction=-1, where=-1')},
              docstring='jump backward out of inner most quote pair')
 add_csc(acmd)
 
 #
 # single quotes
 #
-acmd = CSCmd(spoken_forms=['after single quote'],
-             meanings={ContAny(): ActionSearch('[\']\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next single quote', 'after single quote'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\']\s{0,1}')},
              docstring='go after next single quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before single quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\']', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\']', where=-1)},
              docstring='go before next single quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous single quote', 'after previous single quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\']]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\']]', direction=-1)},
              docstring='go after previous single quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous single quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\']', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\']', direction=-1, where=-1)},
              docstring='go before previous single quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of single quotes'],
-             meanings={ContAny(): ActionSearch('[\'>]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\'>]\s{0,1}')},
              docstring='jump forward out of inner most single quote pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of single quotes'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\']', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\']', direction=-1, where=-1)},
              docstring='jump backward out of inner most single quote pair')
 add_csc(acmd)
 
 #
 # back quotes
 #
-acmd = CSCmd(spoken_forms=['after back quote'],
-             meanings={ContAny(): ActionSearch('[`]\s{0,1}')},
+acmd = CSCmd(spoken_forms=['next back quote', 'after back quote'],
+             meanings={ContAny(): ActionSearchRepeat(regexp='[`]\s{0,1}')},
              docstring='go after next back quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before back quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[`]', where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[`]', where=-1)},
              docstring='go before next back quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['previous back quote', 'after previous back quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[`]]', direction=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[`]]', direction=-1)},
              docstring='go after previous back quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['before previous back quote'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[`]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[`]', direction=-1, where=-1)},
              docstring='go before previous back quote (opening or closing)')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['out of back quotes'],
-             meanings={ContAny(): ActionSearch('[`>]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[`>]\s{0,1}')},
              docstring='jump forward out of inner most back quote pair')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back out of back quotes'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[`]', direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[`]', direction=-1, where=-1)},
              docstring='jump backward out of inner most back quote pair')
 add_csc(acmd)
 
@@ -918,11 +933,11 @@ add_csc(acmd)
 # All balanced expressions
 #
 acmd = CSCmd(spoken_forms=['jump out'],
-             meanings={ContAny(): ActionSearch('[\]\)\}\'\"]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\]\)\}\'\"]\s{0,1}')},
              docstring='jump out of innermost balanced expression')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
-             meanings={ContAny(): ActionSearch('\s{0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
              docstring='jump backwards out of innermost balanced expression')
 add_csc(acmd)
 
@@ -959,104 +974,104 @@ add_csc(acmd)
 # N times.
 #
 acmd = CSCmd(spoken_forms=['1 time', '1 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=1, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=1, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again', 'do that again', 'repeat', 'repeat that', 'redo', 'again 1 time', 'again 1 times', 'repeat 1 time'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 
 acmd = CSCmd(spoken_forms=['2 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=2, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=2, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 2 times', 'repeat 2 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=2)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=2)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 
 acmd = CSCmd(spoken_forms=['3 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=3, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=3, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 3 times', 'repeat 3 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=3)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=3)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['4 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=4, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=4, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 4 times', 'repeat 4 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=4)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=4)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['5 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=5, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=5, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 5 times', 'repeat 5 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=5)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=5)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['6 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=6, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=6, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 6 times', 'repeat 6 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=6)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=6)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['7 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=7, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=7, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 7 times', 'repeat 7 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=7)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=7)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['8 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=8, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=8, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 8 times', 'repeat 8 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=8)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=8)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['9 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=9, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=9, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 9 times', 'repeat 9 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=9)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=9)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['10 times'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=10, check_already_repeated=1)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=10, check_already_repeated=1)},
              docstring='Repeat last command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['again 10 time', 'repeat 10 time'],
-             meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=10)},
+             meanings={ContLastActionWas([ActionRepeatable]): ActionRepeatLastCmd(n_times=10)},
              docstring='Repeat last command')
 add_csc(acmd)
 
@@ -1066,17 +1081,17 @@ add_csc(acmd)
 #############################################################################
 
 acmd = CSCmd(spoken_forms=['reverse', 'reverse direction'],
-             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=None)},
+             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=None)},
              docstring='Reverses the direction of previous command')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['backward', 'upward', 'leftward', 'previous one'],
-             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=-1)},
+             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=-1)},
              docstring='Repeats the previous command in backward/up/left direction.')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['forward', 'downward', 'rightward', 'next one'],
-             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=1)},
+             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=1)},
              docstring='Repeats the previous command in forward/down/right direction.')
 add_csc(acmd)
 
@@ -1125,7 +1140,8 @@ add_lsa(['equal to', 'is equal to', 'is equal'],
 add_lsa(['without arguments', 'with no arguments', 'without argument',
         'with no argument'],
         {'python': '()', 'perl': '()', 'C': '()'})
-acmd = CSCmd(spoken_forms=['with arguments', 'call with', 'called with'],
+acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
+                           'called with'],
              meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
                        ContPerl(): gen_parens_pair},
              docstring='argument list for function')
@@ -1223,7 +1239,7 @@ acmd = CSCmd(spoken_forms=['class body'],
              meanings={ContC(): cpp_class_body, ContPy(): py_class_body},
              docstring='move to body of class definition')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['define method'],
+acmd = CSCmd(spoken_forms=['define method', 'declare method'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_method_declaration},
              docstring='method definition')

@@ -89,19 +89,38 @@ class ContLastActionWas(Context):
     """This context applies if the last action application's command history
     was of a certain type"""
 
-    def __init__(self, type, **attrs):
+    def __init__(self, types, connector='and', **attrs):
         """**INPUTS**
 
-        *CLASS* type -- A class object (not instance). The context applies if
-        the last action is an instance of a class that is a descendant (not
-        necessarily direct) of class *type*.
+        *CLASS* types -- A list of class objects (not instance). The
+        context applies if the last action is an instance of all them
+        (or *one of them* if *self.connector == 'or'*).
+
+        *STR* connector='and' -- If *'and'*, then context applies if
+         last action is an instance of all the classes in *types*. If
+         *'or'*, then context applies if last action is an instance of
+         any of the classes in *types*.
         """
         
-        self.deep_construct(ContAny, {'type': type}, attrs)
+        self.deep_construct(ContAny, {'types': types, 'connector': connector},
+                            attrs)
         
     def applies(self, app):
         (last_cont, last_action) = app.get_history(1)
-        return isinstance(last_action, self.type)
+        if self.connector == 'and':
+            answer = 1
+            for a_class in self.types:
+                if not isinstance(last_action, a_class):
+                    answer = 0
+                    break
+        else:
+            answer = 0
+            for a_class in self.types:
+                if isinstance(last_action, a_class):
+                    answer = 1
+                    break
+#        print '-- cont_gen.ContLastActionWas.applies: last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer)
+        return answer
 
 
 class ContAnyEvenOff(Context):
