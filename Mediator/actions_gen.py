@@ -812,7 +812,45 @@ class ActionBackspace(ActionRepeatable):
         app.backspace(self.n_times)
 
 
+class ActionFuncCallWithParens(Action):
+    """Inserts a call to a function or method. Assumes that the syntax for calls is
+    funcName(args).
 
+     **INSTANCE ATTRIBUTES**
+        
+     STR *args_list_type* -- indicates the type of arg list ('emtpy' or 'non-empty').
+    
+     STR *func_name* -- name of the function or method name.
+
+     CLASS ATTRIBUTES**
+        
+     *none* -- 
+   
+    """
+    def __init__(self, func_name, args_list_type, **args_super):
+        self.deep_construct(ActionFuncCallWithParens, 
+                            {'func_name': func_name,
+                             'args_list_type': args_list_type}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return "Prints a call to function/method %s with %s arguments list." % (self.func_name, self.args_list_type)
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        if self.args_list_type == 'non-empty':
+           tmp_insert_action = ActionInsert(code_bef="%s(" % self.func_name, code_after=")")
+        else:
+           tmp_insert_action = ActionInsert(code_bef="%s()" % self.func_name, code_after="")
+        tmp_insert_action.execute(app, cont, state)
 
 class ActionInsertNewClause(Action):
 
@@ -1136,7 +1174,7 @@ gen_parens_pair = \
 gen_empty_parens_pair = \
     ActionInsert(code_bef='()', code_after='',
                  docstring="""Insert parens and puts cursor after them.""")
-
+                 
 gen_brackets_pair = \
     ActionInsert(code_bef='[', code_after=']',
                  docstring="""Insert brackets""")

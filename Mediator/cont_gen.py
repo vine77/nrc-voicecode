@@ -435,7 +435,7 @@ class ContAnyEvenOff(Context):
     def __init__(self, **attrs):
         self.deep_construct(ContAnyEvenOff, {}, attrs)
         
-    def _applies(self, app):
+    def _applies(self, app, preceding_symbol = 0):
         return 1
 
     def scope(self):
@@ -495,7 +495,7 @@ class ContTranslationOff(Context):
                             {}, \
                             args_super, \
                             {})
-    def _applies(self, app):
+    def _applies(self, app, preceding_symbol = 0):
         return app.translation_is_off
 
     def scope(self):
@@ -537,3 +537,23 @@ class ContTranslationOff(Context):
         return "TranslationOff"
 
 
+class ContNotAfterNewSymb(Context):
+    """This context applies if the current buffer is in a particular language
+    AND the words being interpreted weren't preceded by words which were
+    interpreted as being part of a new symbol."""
+
+    def __init__(self, language, **args_super):
+        self.deep_construct(ContNotAfterNewSymb, \
+                            {'language': language}, \
+                            args_super, \
+                            {})
+    
+    def _applies(self, app, preceding_symbol = 0):
+        tmp_cont_lang = ContLanguage(self.language)
+        return not preceding_symbol and tmp_cont_lang._applies(app, preceding_symbol)
+    
+    def scope(self):
+        return "last command"
+        
+    def equivalence_key(self):
+        return "NotAfterSymb_in_%s" % self.language
