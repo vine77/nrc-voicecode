@@ -70,7 +70,7 @@ from sim_commands import *
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, MediatorObject, sr_interface, util, vc_globals
-import WaxEdit
+import OldWaxEdit
 import WaxEdSim
 import AppStateWaxEdit
 from CSCmd import CSCmd

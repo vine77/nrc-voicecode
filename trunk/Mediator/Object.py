@@ -655,7 +655,15 @@ class Object:
         #
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
-                apply(a_base.__init__, [self], args_super)
+		try:
+		    apply(a_base.__init__, [self], args_super)
+		except TypeError:
+		    msg = "TypeError while initializing base %s of class %s\n" \
+		        % (str(a_base), str(this_class))
+		    sys.stderr.write(msg)
+		    msg = "keyword arguments were: %s\n" % str(args_super)
+		    sys.stderr.write(msg)
+		    raise
 
                     
 
@@ -769,7 +777,8 @@ class OwnerObject(Object):
     def __init__(self, **attrs):
 	self.deep_construct(OwnerObject,
 			    {'parent_name': None,
-			    'owned_objects': []},
+			     'grandparents': [],
+			     'owned_objects': []},
 			    attrs)
 
     def name_parent(self, parent = None):
@@ -785,6 +794,24 @@ class OwnerObject(Object):
 	*none*
 	"""
 	self.parent_name = parent
+
+
+    def add_grandparent(self, grandparent):
+	"""specify the name of the attribute containing a reference to 
+	this object's grandparent (or great-grandparent, etc.)
+	(Actually, any other reference which needs to be del'ed but not
+	cleaned up)
+
+	**INPUTS**
+
+	*STR owned* -- names of owned attributes
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.grandparents.append(grandparent)
+
 
     def add_owned(self, owned):
 	"""append a new attribute name to the list of owned objects
@@ -826,7 +853,7 @@ class OwnerObject(Object):
 	*none*
 	"""
 # subclasses must call their parent class's remove_other_references
-# function, before performing their own duties
+# function, after performing their own duties
 	pass
 
     def _cleanup_object(self, object):
@@ -921,6 +948,10 @@ class OwnerObject(Object):
 		    % (name, error_msg)
 		debug.critical_warning(msg_prefix + error_msg)
 	
+	for grandparent in self.grandparents:
+	    if self.__dict__.has_key(grandparent):
+		del self.__dict__[grandparent]
+
 	if self.parent_name != None \
 		and self.__dict__.has_key(self.parent_name):
 	    del self.__dict__[self.parent_name]

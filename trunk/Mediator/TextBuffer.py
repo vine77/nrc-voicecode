@@ -603,6 +603,69 @@ class VisibleBuffer:
 	*none*
 	"""
 	pass
+      
+class StoreableTextBuffer(Object):
+    """abstract base class for loading and saving a text buffer, and for
+    keeping track of whether the buffer has been modified and needs to
+    be saved.  Note: this is a fairly low-level interface (so that it
+    can easily be supported by as many buffers as possible), so it
+    doesn't allow for fancy features like prompting before overwriting a
+    file.
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	self.deep_construct(StoreableTextBuffer, {}, args)
+    
+    def modified(self):
+	"""has the buffer been modified since the last time it was
+	saved?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the buffer has been modified since the last
+	save (or load)
+	"""
+	debug.virtual('StoreableTextBuffer.modified')
+
+    def save_file(self, f_path):
+	"""save the buffer to a file
+
+	**INPUTS**
+
+	*STR f_path* -- full path of the file
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was saved successfully
+	"""
+	debug.virtual('StoreableTextBuffer.save_file')
+
+    def load_file(self, f_path):
+	"""load the buffer from a file (erasing the current contents)
+
+	**INPUTS**
+
+	*STR f_path* -- full path of the file
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was loaded successfully
+	"""
+	debug.virtual('StoreableTextBuffer.load_file')
+
+
+
 
 class NumberedLines(Object):
     """abstract base class describing additional interfaces for moving
@@ -957,7 +1020,7 @@ class TextBufferChangeSpecify(TextBuffer):
 #	print 'hi there'
 #	print repr(self.change_callback)
 #	print 'changeSpec._on_change_specification ', start, end, text, \
-	selection_start, selection_end, program_initiated
+#	selection_start, selection_end, program_initiated
 	if self.change_callback:
 	    (self.change_callback)(start, end, text, selection_start, 
 		selection_end, self, program_initiated)

@@ -58,6 +58,7 @@ class ForwardToBuffer:
 	buffer = self.application.find_buff(buff_name)
 	if buffer:
 	    return apply(getattr(buffer, self.method), positional, keys)
+	return None
 
 
 def use_update_class(action):
@@ -205,9 +206,9 @@ class AS_UpdOpenBuffer(AS_Update):
     *none* -- 
     """
     
-    def __init__(self, descr, **args_super):
+    def __init__(self, **args_super):
         self.deep_construct(AS_UpdOpenBuffer, 
-                            {'descr': descr}, 
+                            {}, 
                             args_super, 
                             {})
         
@@ -228,9 +229,9 @@ class AS_UpdCloseBuffer(AS_Update):
     *none* -- 
     """
     
-    def __init__(self, descr, **args_super):
+    def __init__(self, **args_super):
         self.deep_construct(AS_UpdCloseBuffer, 
-                            {'descr': descr}, 
+                            {}, 
                             args_super, 
                             {})
         
@@ -250,9 +251,9 @@ class AS_UpdRenameBuffer(AS_Update):
     *none* -- 
     """
     
-    def __init__(self, descr, **args_super):
+    def __init__(self, **args_super):
         self.deep_construct(AS_UpdRenameBuffer, 
-                            {'descr': descr}, 
+                            {}, 
                             args_super, 
                             {})
         
@@ -305,7 +306,13 @@ class SB_Update(AS_Update):
         # Forward SourceBuff updates to the appropriate source buffer
         #                
         buff = on_app.find_buff(self.on_buff_named())
-        self.apply_to_buff(buff)
+# if we don't already know about this buffer name, find_buff
+# will query the application.
+# Because updates from the application may be handled asynchronously,
+# it is possible that we will attempt to process an update
+# for a buffer which no longer exists.  If so, we ignore the update
+	if buff:
+	    self.apply_to_buff(buff)
 
     def apply_to_buff(self, on_buff):
         
@@ -808,8 +815,8 @@ class AppState(OwnerObject):
 	self.change_callback = change_callback
 
     def remove_other_references(self):
-	OwnerObject.remove_other_references(self)
 	self.change_callback = None
+	OwnerObject.remove_other_references(self)
 
     def on_change(self, buff_name, start, end, text, program_initiated):
 	"""method which should be called after the contents of a buffer
@@ -1567,7 +1574,7 @@ class AppState(OwnerObject):
         if not self.open_buffers.has_key(buff_name):
 # if we don't already have a buffer by that name, treat this as an
 # open_buffer_cbk
-	    self.open_buffer_cbk(self, buff_name)
+	    self.open_buffer_cbk(buff_name)
 	else:
 # do nothing except pass this on to our manager
 	    if self.current_manager() and self.name():
@@ -1665,8 +1672,11 @@ class AppState(OwnerObject):
         
         STR *buff_name* -- Unique name of the buffer in which the file
         was opened. Returns *None* if the editor was not able to open
-        the file.
-        
+        the file.  Note: if no file by the name file_name exists, the 
+	regression tests expect the editor to open an empty buffer with
+	that name.  Therefore, tell_editor_to_open_file should only fail
+	if the user cancels the open file command (e.g. if there is an
+	unsaved buffer)
         """
         
         debug.virtual('AppState.tell_editor_to_open_file')
@@ -1724,6 +1734,9 @@ class AppState(OwnerObject):
 	    self.current_manager().open_buffer_cbk(self.name(), buff_name)
         if not self.open_buffers.has_key(buff_name):
             self._new_source_buffer(buff_name)
+	lang = self.open_buffers[buff_name].language_name()
+#	print 'new buffer "%s"' % buff_name, ' in language "%s"' \
+#	    % str(lang)
 # For external editors, SourceBuffCached will be
 # created with no content cached, so it will synchronize automatically 
 # when we try to read the contents of the buffer.
@@ -1792,7 +1805,7 @@ class AppState(OwnerObject):
         """Tell the external editor to open a file, and create a local buffer
         for that file.
 
-        Open file with name *STR name*.
+        Open file with name *STR file_name*.
 
         Right now, this is used mostly so that the regression testing
         procedure can tell the external editor to open a test
@@ -1802,7 +1815,6 @@ class AppState(OwnerObject):
         **INPUTS**
 
         STR *file_name* -- Full path of the file to be opened.
-
         """
 
 #        print '-- AppState.open_file: file_name="%s"' % file_name
@@ -1817,7 +1829,7 @@ class AppState(OwnerObject):
         **INPUTS**
 	
 	*STR full_path* -- full path under which to save the file, or
-	None to use the buffer name
+	None to use the existing file name or prompt
 
 	*BOOL no_prompt* -- overwrite any existing file without
 	prompting.  No_prompt should only be set to true if the caller
@@ -1843,7 +1855,7 @@ class AppState(OwnerObject):
         **INPUTS**
 	
 	*STR full_path* -- full path under which to save the file, or
-	None to use the buffer name
+	None to use the existing file name or prompt
 
 	*BOOL no_prompt* -- overwrite any existing file without
 	prompting.  No_prompt should only be set to true if the caller
@@ -1982,6 +1994,7 @@ class AppState(OwnerObject):
         
         *BOOL* -- true if the editor does close the buffer
         """
+#	print 'someone called AppState.close_buffer "%s"' % buff_name
         if self.app_close_buffer(buff_name, save):
 	    self.close_buffer_cbk(buff_name)
 	    return 1

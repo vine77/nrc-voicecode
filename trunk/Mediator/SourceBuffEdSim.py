@@ -131,7 +131,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 # subclasses must call their parent class's remove_other_references
-# function, before performing their own duties
+# function, after performing their own duties
 	if self.instance_reporting:
 	    print 'SourceBuff.remove_other_references:', util.within_VCode(self.name())
 	SourceBuffNonCached.SourceBuffNonCached.remove_other_references(self)

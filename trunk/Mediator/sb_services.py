@@ -119,6 +119,7 @@ class SB_ServiceLang(SB_Service):
 
         language = None
         fname = self.buff.file_name()
+#	print 'language for "%s"' % fname
         if  fname != None:
             language = self.file_language_name(fname)
         return language
@@ -130,8 +131,10 @@ class SB_ServiceLang(SB_Service):
         if a_match:
             extension = a_match.group(1)
 
+#	print 'extension is "%s"' % extension
         if self.file_language.has_key(extension):
             language =  self.file_language[extension]
+#	print 'language is "%s"' % language
         return language
 
 

@@ -39,7 +39,7 @@ try:
 except NameError:
     wxCHANGE_DIR = 0
 
-import WaxEdit
+import OldWaxEdit
 
 ID_EXIT = 101
 ID_OPEN_FILE = 200
@@ -629,7 +629,7 @@ class WaxEdSimFrame(wxFrame):
 	"""
 	return self.activated
 
-class WaxEdSim(wxApp, WaxEdit.WaxEdit):
+class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
     """application class
 
     **CLASS ATTRIBUTES**
