@@ -318,7 +318,8 @@ sent."
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (vcode-mode 1 "vcode")
+  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (vcode-mode 1)
 )
 
 (defun vcode-log-all ()
@@ -1548,7 +1549,6 @@ grammars."
    )
 )
 
-
 (defun vr-send-activate-buffer ()
    "Sends a 'activate-buffer message to VR.exe"
    (let ()
@@ -1580,45 +1580,6 @@ which is the list representing the command and its arguments."
 	 (message "VR process initialization: %s"
 		  (nth 1 vr-request))))
   t)
-
-
-(defun vr-cmd-alt-frame-activated (wnd)
-
-  ;; This is ridiculous, but Emacs does not automatically change its
-  ;; concept of "selected frame" until you type into it.  So, we have
-  ;; the subprocess send us the HWND value and explcitly activate the
-  ;; frame that owns it.  The HWND may not belong to any frame, for
-  ;; example if vr-win-class/title match a Windows window not
-  ;; belonging to Emacs.  In that case, just ignore it.
-  ;;
-  (let ()
-
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame: %S\n"
-        (selected-frame))
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame handle: %S\n"
-        (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vr-log "--** vr-cmd-alt-frame-activated: init buffer: %S\n"
-        (buffer-name (current-buffer)))
-    (global-set-key "\C-\M--" "")
-; Emacs lisp (Node: Focus Events) claims that a keyboard key or mouse
-; button should trigger a focus event (consistent with Barry Jaspan's
-; note above.  However, simulating keyboard input, at least in this
-; manner, doesn't seem to do the trick, so for the moment we are still
-; stuck with the vr-cmd-frame-activated which depends on the voicecode
-; sending us the current window handle (which won't work for remote
-; instances of Emacs).
-;    (vcode-execute-command-string "dummy")
-    (vcode-execute-command-string "\C-\M--")
-    (vr-log "--** vr-cmd-alt-frame-activated: current frame: %S\n"
-        (selected-frame))
-    (vr-log "--** vr-cmd-alt-frame-activated: current frame handle: %S\n"
-        (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vr-log "--** vr-cmd-alt-frame-activated: current buffer: %S\n"
-        (buffer-name (current-buffer)))
-  )
-  (vr-maybe-activate-buffer (current-buffer))
-
-t)
 
 (defun vr-cmd-frame-activated (wnd)
 
@@ -1840,7 +1801,6 @@ message from VR.EXE")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repeating commands (based on code by Steve Freund).
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defvar vr-repeat-rate nil
   "The rate at which to repeat commands, in seconds.  If nil, any
 currently repeating command will terminate.")
@@ -1990,7 +1950,6 @@ See vcode-cmd-prepare-for-ignored-key for more details.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defun vcode-make-all-keys-self-insert ()
   
 )
@@ -2117,7 +2076,6 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   ;;;
 ;  (cl-puthash 'heard-command 'vr-cmd-heard-command-hook vr-message-handler-hooks)
 ;  (cl-puthash 'mic-state 'vr-cmd-mic-state-hook vr-message-handler-hooks)
-
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
