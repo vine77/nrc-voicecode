@@ -48,6 +48,8 @@
 
 from MediatorObject import associate_language, define_language
 
+import CmdInterp
+
 from CSCmd import CSCmd
 from LangDef import LangDef
 from cont_gen import *
@@ -66,10 +68,12 @@ if (__name__ == '__main__'):
     if not globals().has_key('add_csc') and not locals().has_key('add_csc'):
 	import MediatorObject
 #	global test_mediator
-	test_mediator = MediatorObject.MediatorObject()
+	test_mediator = MediatorObject.MediatorObject( \
+	    interp = CmdInterp.CmdInterp())
 #	MediatorObject.to_configure = test_mediator
 	glob_names = globals()
 	test_mediator.define_config_functions(glob_names)
+#	print glob_names['add_abbreviation']
 #    add_abbreviation = MediatorObject.add_abbreviation
 #    add_csc = MediatorObject.add_csc
 #    add_lsa = MediatorObject.add_lsa
@@ -93,10 +97,24 @@ if (__name__ == '__main__'):
 #	    natlink.natConnect()    
 	    sr_interface.connect()
 
+#try:
+#    print add_abbreviation
+#    print add_abbreviation.im_self
+#except Exception, err:
+#    print 'no global add_abbreviation'
+    
 
 ##############################################################################
 # Customize from here only
 ##############################################################################
+
+#import traceback
+#try:
+#    add_abbreviation('attr', ['attribute'])
+#except Exception, err:
+#    print 'error adding abbreviation'
+#    traceback.print_exc(err)
+#    raise err
 
 #
 # Load abbreviations files

@@ -959,7 +959,7 @@ class TextBufferChangeSpecify(TextBuffer):
 #	print 'changeSpec._on_change_specification ', start, end, text, \
 	selection_start, selection_end, program_initiated
 	if self.change_callback:
-	    self.change_callback(start, end, text, selection_start, 
+	    (self.change_callback)(start, end, text, selection_start, 
 		selection_end, self, program_initiated)
 	    # note: change_callback is an attribute of 
 	    # TextBufferChangeSpecify, which is a function, not a method of

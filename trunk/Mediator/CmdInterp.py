@@ -916,5 +916,33 @@ class CmdInterp(Object):
         *none* --
         """
 
-	self.known_symbols.parse_symbols_from_files(self, file_list, 
+	self.known_symbols.parse_symbols_from_files(file_list, 
 	    add_sr_entries = add_sr_entries)
+
+
+    def parse_symbols_from_file(self, file_name, add_sr_entries=1):
+        """Parse symbols from a single source file.
+
+        *STR* file_name -- The path of the file.
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
+        """
+
+#        print '-- SymDict.parse_symbols: file_name=%s' % file_name
+	self.known_symbols.parse_symbols_from_file(file_name, 
+	    add_sr_entries = add_sr_entries)
+                
+    def parse_symbols(self, contents, language_name, add_sr_entries=1):
+        """Parse symbols from a string representing the contents of a 
+	source file.
+
+        *STR* contents -- the contents of the source file
+
+	*STR* language_name -- the name of the language of the source
+	file
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
+        """
+	self.known_symbols.parse_symbols(contents, language_name,
+	    add_sr_entries = add_sr_entries)
+

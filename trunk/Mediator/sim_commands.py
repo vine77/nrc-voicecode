@@ -189,7 +189,7 @@ def open_file(fname):
 
     global the_mediator
     the_mediator.app.open_file(fname)
-    the_mediator.interp.known_symbols.parse_symbols(fname)
+    the_mediator.interp.parse_symbols_from_file(fname)
     the_mediator.app.curr_buffer().print_buff_if_necessary()
 # show_buff()
 
@@ -228,7 +228,7 @@ def save_as(fname, no_prompt = 0):
 def compile_symbols(file_list):
     global the_mediator
     
-    the_mediator.interp.known_symbols.parse_symbols_from_files(file_list)
+    the_mediator.interp.parse_symbols_from_files(file_list)
     print '>>> Known symbols are: '; the_mediator.interp.known_symbols.print_symbols()
 
     #
@@ -414,7 +414,7 @@ def clear_symbols():
     #
     global the_mediator
 
-    the_mediator.interp.known_symbols.cleanup()
+    the_mediator.interp.cleanup()
 
 def clear_abbreviations():
     #

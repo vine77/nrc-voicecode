@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:12:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 15:27:23 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -44,6 +44,8 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.massage_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.massage_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Massages a command to prepare it for interpretation.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.match_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.match_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_words</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Tries to match last sequence of untranslated text to a symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_standard_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_standard_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse standard symbols for the various programming languages.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">contents</SPAN>, <SPAN CLASS="Argument">language_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_symbols_from_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_symbols_from_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a single source file.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_symbols_from_files"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_symbols_from_files</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a series of source files</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.spoken_form_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.spoken_form_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches a spoken form of a command.</SPAN>
@@ -594,6 +596,41 @@ multiple, leading or trailing blanks.</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="CmdInterp.CmdInterp.parse_symbols" CLASS="Method">CmdInterp.CmdInterp.parse_symbols(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">contents</SPAN>, <SPAN CLASS="Argument">language_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Parse symbols from a string representing the contents of a 
+source file.</P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> contents
+<DD>the contents of the source file
+<DT>
+<EM>STR</EM> language_name
+<DD>the name of the language of the source
+file
+<DT>
+<EM>BOOL</EM> add_sr_entries = 1
+<DD>If true, add symbols to the SR vocabulary
+
+</DL>
+<H2 ID="CmdInterp.CmdInterp.parse_symbols_from_file" CLASS="Method">CmdInterp.CmdInterp.parse_symbols_from_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)</H2>
+<P>Parse symbols from a single source file.</P>
+
+
+<DL>
+
+<DT>
+<EM>STR</EM> file_name
+<DD>The path of the file.
+<DT>
+<EM>BOOL</EM> add_sr_entries = 1
+<DD>If true, add symbols to the SR vocabulary
+
 </DL>
 <H2 ID="CmdInterp.CmdInterp.parse_symbols_from_files" CLASS="Method">CmdInterp.CmdInterp.parse_symbols_from_files(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)</H2>
 <P>Parse symbols from a series of source files</P>

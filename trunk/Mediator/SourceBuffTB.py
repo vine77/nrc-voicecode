@@ -79,7 +79,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	if change_specification:
 	    self.underlying.set_change_callback(self.on_underlying_change)
 
-    def on_underlying_change(start, end, text, selection_start,
+    def on_underlying_change(self, start, end, text, selection_start,
 	selection_end, buffer, program_initiated):
 	"""method called by the underlying buffer to signal a change
 

@@ -667,7 +667,7 @@ class SymDict(PickledObject.PickledObject):
 #        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
         for a_file in file_list:
             print 'Compiling symbols for file \'%s\'' % util.within_VCode(a_file)
-            self.parse_symbols(a_file, add_sr_entries=add_sr_entries)
+            self.parse_symbols_from_file(a_file, add_sr_entries=add_sr_entries)
             
         #
         # Save dictionary to file
@@ -676,8 +676,7 @@ class SymDict(PickledObject.PickledObject):
 
 #        print '-- SymDict.parse_symbols_from_files: symbols are:'; self.print_symbols()                    
 
-    
-    def parse_symbols(self, file_name, add_sr_entries=1):
+    def parse_symbols_from_file(self, file_name, add_sr_entries=1):
         """Parse symbols from a source file.
 
         *STR* file_name -- The path of the file.
@@ -701,20 +700,43 @@ class SymDict(PickledObject.PickledObject):
             
 #            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
 
-            language_definition = self.get_language_definition(file_name)
+            language_name = self.get_language_by_filename(file_name)
+#            print '-- SymDict.parse_symbols: language_name=%s' % language_name
+	    self.parse_symbols(source, language_name)
+                
+    def parse_symbols(self, contents, language_name, add_sr_entries=1):
+        """Parse symbols from a string representing the contents of a 
+	source file.
+
+        *STR* contents -- the contents of the source file
+
+	*STR* language_name -- the name of the language of the source
+	file
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
+        
+        Parsed symbols are stored in the *symbol_info* and
+        *spoken_forms2symbol* attributes.
+        """
+
+#            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
+
+	language_definition = self.get_language_definition(language_name)
 #            print '-- SymDict.parse_symbols: language_definition.name=%s' % language_definition.name
-            source = self.strip_source(source, language_definition)
+	stripped_contents = self.strip_source(contents, language_definition)
 
             #
             # Parse symbols from the first chunk
             #
-            while source != '':
-                a_match = re.search('(' + language_definition.regexp_symbol + ')', source)
-                if a_match:
-                    self.add_symbol(a_match.group(1), add_sr_entries=add_sr_entries)
-                    source = source[a_match.end()+1:]
-                else:
-                    source = ''
+	while stripped_contents != '':
+	    a_match = re.search('(' + \
+		language_definition.regexp_symbol + ')', stripped_contents)
+	    if a_match:
+		self.add_symbol(a_match.group(1), 
+		    add_sr_entries=add_sr_entries)
+		stripped_contents = stripped_contents[a_match.end()+1:]
+	    else:
+		stripped_contents = ''
                 
     def strip_source(self, source, language_definition):
         """Removes all parts of a source file that don't contain symbols.
@@ -1086,8 +1108,27 @@ class SymDict(PickledObject.PickledObject):
                     
             return expanded_forms
             
+    def get_language_by_filename(self, file_name):
+        """Gets the name of the language associated with a source file.
+        
+        **INPUTS**
+        
+        *STR* file_name -- name of the file 
+        
+
+        **OUTPUTS**
+        
+	*STR* -- name of the language.  Returns *None* if there doesn'
+	t exist a proper language definition, or if can't tell what 
+	language the source file is written in.
+
+        """
+
+        language_name = self.lang_name_srv.file_language_name(file_name)
+	return language_name
+
             
-    def get_language_definition(self, file_name):
+    def get_language_definition_by_filename(self, file_name):
         """Gets the definition of the language associated with a source file.
         
         **INPUTS**
@@ -1107,7 +1148,29 @@ class SymDict(PickledObject.PickledObject):
         global language_definitions
         definition = None
         
-        language_name = self.lang_name_srv.file_language_name(file_name)
+        language_name = self.get_language_by_filename(file_name)
+	return self.get_language_definition(language_name)
+
+    def get_language_definition(self, language_name):
+        """Gets the definition of the language associated with a source file.
+        
+        **INPUTS**
+        
+        *STR* file_name -- name of the file 
+        
+
+        **OUTPUTS**
+        
+        [LangDef] -- definition of the language *file_name* is written
+        in. Returns *None* if there doesn't exist a proper language
+        definition, or if can't tell what language the source file is
+        written in.
+
+        ..[LangDef] file:///./LangDef.LangDef.html"""
+
+        global language_definitions
+        definition = None
+        
 #        print '-- SymDict.get_language_definition: language_definitions=%s, language_name=%s' % (language_definitions, language_name)
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]
