@@ -48,10 +48,10 @@ class CmdInterp(Object):
 
     *[SymDict] known_symbols* -- dictionary of known symbols
     
-    *{STR: [STR]}* language_specific_aliases = {} -- Key is the name of
+    *{STR: {STR: STR}}* language_specific_aliases = {} -- Key is the name of
      a programming language (None means all languages). Value is a
-     list of written form\spoken form words specific to a
-     language.
+     dictionary of written forms over spoken form keys 
+     specific to a language.
 
     *FILE symdict_pickle_file = None* -- File used to for
      reading/writing the symbol dictionary. If *None*, then don't
@@ -621,25 +621,20 @@ class CmdInterp(Object):
         written_LSA = None
         
         #
-        # Create a list of active LSAs (i.e. global LSAs and those for the
-        # active language)
-        #
-        active_LSAs = []
-        if self.language_specific_aliases.has_key(self.on_app.active_language()):
-            active_LSAs = active_LSAs + self.language_specific_aliases[self.on_app.active_language()]
-        if self.language_specific_aliases.has_key(None):
-            active_LSAs = active_LSAs + self.language_specific_aliases[None]
-            
-        #
         # See if spoken_form is in the list of active LSAs
         #
-        for an_active_LSA in active_LSAs:
-            spoken, written = sr_interface.spoken_written_form(an_active_LSA)
 
-            if spoken == spoken_form:
-                written_LSA = written
-                break
-        
+	aliases = self.language_specific_aliases
+	language = self.on_app.active_language()
+        if aliases.has_key(language):
+	    if aliases[language].has_key(spoken_form):
+		written_LSA = aliases[language][spoken_form]
+# check common LSAs for all languages, if we haven't found a
+# language-specific one
+	if written_LSA == None and aliases.has_key(None):
+	    if aliases[None].has_key(spoken_form):
+		written_LSA = aliases[None][spoken_form]
+
         return written_LSA
         
     def is_spoken_symbol(self, spoken_form):

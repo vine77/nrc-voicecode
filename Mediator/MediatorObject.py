@@ -253,16 +253,20 @@ def add_lsa(spoken_forms, meanings):
 
 #    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
     
+
+    language_specific_aliases = to_configure.interp.language_specific_aliases
     for a_meaning in meanings.items():
         language, written_as = a_meaning
         for spoken_as in spoken_forms:
+	    clean_spoken = sr_interface.clean_spoken_form(spoken_as)
             entry = sr_interface.vocabulary_entry(spoken_as, written_as)
             vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
             
-            if to_configure.interp.language_specific_aliases.has_key(language):
-                to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [vc_entry]
-            else:
-                to_configure.interp.language_specific_aliases[language] = [vc_entry]
+            if not language_specific_aliases.has_key(language):
+                language_specific_aliases[language] = {}
+
+	    language_specific_aliases[language][clean_spoken] = written_as
+
             #
             # Add LSA to the SR vocabulary
             #

@@ -188,14 +188,21 @@ def simulator_mode(options):
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
     
-    while (not sim_commands.quit_flag):
-        sys.stdout.write('Command> ')
-        cmd = sys.stdin.readline()
-        execute_command(cmd)                
+    if options['e']:
+      sys.stderr = sys.stdout
+    try:
+    
+      while (not sim_commands.quit_flag):
+	  sys.stdout.write('Command> ')
+	  cmd = sys.stdin.readline()
+	  execute_command(cmd)                
+    finally:
+      if options['e']:
+	sys.stderr = sys.__stderr__
         
 if (__name__ == '__main__'):
     
-    opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None])
+    opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None, 'e', None])
     
 #    print '-- mediator.__main__: opts=%s' % opts
     
