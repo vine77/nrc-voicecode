@@ -27,13 +27,16 @@ def dictate_pseudo_C_Cpp(commands):
     
     commands.open_file('blah.cpp')
 
-    commands.say(['wrap','header'])
-    commands.say(['pound', 'include','quotes','string','after','quotes'], user_input='1\n1\n1\n1\n1\n1\n1\n',echo_utterance=1)
-    commands.say(['new','line'])
-#    commands.say(['pound', 'include','angle-brackets','string'], user_input='1\n1\n1\n1\n1\n1\n1\n',echo_utterance=1)
+    # macros
 
-####NOTE####    commands.say(['jump','out']) # this doesn't work for <>
-####NOTE####    commands.say(['after','angle-brackets']) # this seems to insert []!!
+    commands.say(['wrap','header'])
+    commands.say(['pound', 'include','quotes','string','after','quotes'])
+    commands.say(['new','line'])
+    commands.say(['pound', 'include','angle-brackets','string'])
+    commands.say(['after','angle'])
+    commands.say(['new','paragraph'])
+
+    # comments
 
     commands.say(['comment','line'])
     commands.say(['test','comment'])
@@ -44,6 +47,21 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['new','line'])
     commands.say(['bit','of','information','end','long','comment'])
     commands.say(['new','paragraph'])
+
+    # class template
+
+    commands.say(['define','template'])
+    commands.say(['type','name'])
+    commands.say(['some','data','type'])
+    commands.say([',\\comma','class','object','type'])
+    commands.say(['after','angle','new','line','define','class','foo'])
+    commands.say(['class','body'])
+    commands.say(['jump','out'])
+
+    commands.say(['new','paragraph'])
+
+    # declarations
+
     commands.say(['declare','function','test','procedure'])
     commands.say(['add','argument','integer','count'])
     commands.say([',\\comma','float','divisor'])
@@ -51,24 +69,24 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['new','statement'])
     commands.say(['declare','char','hello'])
     commands.say(['new','statement'])
-    commands.say(['int','count'])
+    commands.say(['int\\int','count'])
     commands.say(['new','statement','integer','pointer','testing','pointers'])
     commands.say(['comma','pointer','testing','other','pointers'])
     commands.say(['new','statement','declare','the','value','of','type','double'])
-    commands.say(['new','statement','declare','some','variable','of','type','static','int'])
+    commands.say(['new','statement','declare','some','variable','of','type','static','int\\int'])
     commands.say(['new','statement','declare','char','star','star','string','address'])
     commands.say(['after','semi'])
     commands.say(['new','paragraph'])
     commands.say(['declare','function','foo'])
     commands.say(['returning','some','pointer'])
-    commands.say(['add','argument','integer','counter','comma','sum','of','type','int'])
+    commands.say(['add','argument','integer','counter','comma','sum','of','type','int\\int'])
     commands.say(['after','semi'])
     commands.say(['new','paragraph'])
     commands.say(['declare','method','bar','scope','operator','fabulous','method','returning','char','star'])
     commands.say(['add','argument','integer','pointer','another','memory','address'])
     commands.say(['after','semi','new','paragraph'])
     commands.say(['define','function','foo','returning','some','pointer'])
-    commands.say(['add','argument','integer','counter','comma','sum','of','type','int'])
+    commands.say(['add','argument','integer','counter','comma','sum','of','type','int\\int'])
     commands.say(['jump','out','jump','out','new','paragraph'])
     commands.say(['define','method','foo','scope','bar','returning','pointer','to','char'])
     commands.say(['method','body'])
@@ -79,23 +97,147 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['platypus','count'])
     commands.say(['after','semi','index','increment'])
     commands.say(['loop','body'])
+
+    # while ... do
+    
     commands.say(['while','loop'])
     commands.say(['conditional','function','with','argument','index'])
     commands.say(['do','some','stuff'])
     commands.say(['empty','parens','semicolon'])
     commands.say(['after','semi','new','line'])
-    commands.say(['if','the','value','less','than','4','then','break'])
-    commands.say(['else','if','the','value','greater','than','15','then','foo','equals','new','bar'])
-    commands.say(['else','continue'])
-    commands.say(['jump','out','jump','out','jump','out','new','paragraph'])
+
+    # enumerator
+
+    commands.say(['declare','enumerator','shapes'])
+    commands.say(['after','brace','square',',\\comma','circle',',\\comma','triangle'])
+    commands.say(['after','semi','new','paragraph'])
+
+    # switch - case - default - break
+
+    commands.say(['switch','initial','character','goto','body'])
+    commands.say(['case','single-quotes','a'])
+    commands.say(['after','colon','new','line','some','procedure','with','arguments','jump','out','semi','new','line','break'])
+    commands.say(['case','single-quotes','b'])
+    commands.say(['after','colon','new','line','do','something','different','parens','jump','out','semi','new','line'])
+    commands.say(['break','default','foo','bar','equals','4','semi','jump','out','new','paragraph'])
+
+    # typeid()
+
+    commands.say(['if','type','I.','D.','of','some','variable','jump','out','is','equal','to','type','I.','D.','int\\int'])
+    commands.say(['then','increment','some','variable','semicolon'])
+    commands.say(['jump','out'])
+
+    commands.say(['new','paragraph'])
+
+    # try - catch
+    commands.say(['try','value','equals','some','procedure','execution','with','arguments','jump','out','semicolon'])
+    commands.say(['new','statement'])
+    commands.say(['zoo','dot','animal','parens','quotes','tiger','jump','out','jump','out','dot','eat',
+                  'with','argument','little','boy'])
+    commands.say(['jump','out','jump','out','new','line'])
+    commands.say(['catch','ellipsis'])
+    commands.say(['goto','body'])
+    commands.say(['new','statement'])
+    commands.say(['process','exception','parens','little','boy','jump','out','jump','out','','new','paragraph'])
+
+    # do...while
+    commands.say(['do','while'])
+    commands.say(['some','silly','value','increment','semi'])
+    commands.say(['after','paren'])
+    commands.say(['some','silly','value'])
+    commands.say(['less','than'])
+    commands.say(['10\\ten','jump','out','jump','out'])
+    commands.say(['new','paragraph'])
+
+    # if statement
+
+    commands.say(['if','the','value','less','than','4','then'])
+
+    # type casts
+
+    commands.say(['value','1','equals','static','cast','integer','add','argument','some','symbol'])
+    commands.goto_end_of_line()
+    commands.say(['semi','new','statement'])
+    commands.say(['value','2','equals','reinterpret','cast','integer','add','argument','some','symbol'])
+    commands.say(['new','statement'])
+    commands.say(['value','3','equals','dynamic','cast','integer','add','argument','some','symbol'])
+    commands.say(['new','statement'])
+
+    commands.say(['value','8','equals'])
+    commands.say(['constant','cast'])
+    commands.say(['integer','add','argument','some','symbol'])
     commands.say(['new','statement','above'])
-    commands.say(['class','really','great','stuff'])
+
+    commands.say(['value','4','equals','some','symbol'])
+    commands.say(['constant','cast','to'])
+    commands.say(['integer'])
+    commands.say(['new','statement'])
+
+    commands.say(['value','5','equals','some','symbol','dynamic','cast','to','void','pointer'])
+    commands.say(['new','statement'])
+    commands.say(['value','7','equals','some','symbol','reinterpret','cast','to','fake','object','type'])
+    commands.say(['new','statement','above'])
+    commands.say(['value','6','equals','some','symbol','static','cast','to','void','star'])
+
+    commands.say(['next','semi'])
+    commands.say(['next','semi'])
+    commands.say(['again'])
+
+    commands.say(['new','statement'])
+    commands.say(['yet','another','value','equals','value','5','cast','to','int\\int','pointer'])
+    commands.say(['new','statement'])
+    commands.say(['yet','another','value','equals','cast','int\\int','pointer','jump','out','value','8'])
+
+    commands.say(['after','semi','new','line'])
+    commands.say(['break'])
+
+    # else-if and else
+
+    commands.say(['else','if','the','value','greater','than','15','then','foo','equals','new','bar','semicolon'])
+    commands.say(['else','continue'])
+
+    commands.say(['new','statement','above','testing','adding','above','with','arguments'])
+
+    # class definition
+
+    commands.say(['jump','out','jump','out','jump','out','jump','out'])
+    commands.say(['new','paragraph'])
+    commands.say(['define','class','really','great','stuff'])
     commands.say(['with','superclass','important','superclass'])
     commands.say(['private','members'])
-    commands.say(['New-Line','int','foo','semicolon'])
+    commands.say(['New-Line','int\\int','foo','semicolon'])
     commands.say(['jump','back','out'])
     commands.say(['new','public','member','new','line','float','pointer','bar','semi','new','line'])
     commands.say(['declare','function','testing','declaration'])
+
+    # typedef struct
+
+    commands.say(['jump','out'])    
+    commands.say(['jump','out'])
+    commands.say(['new','paragraph'])
+    commands.say(['typedef','struct','my','tree','structured','data'])
+    commands.say(['body'])
+    commands.say(['character','star','description','semi','new','statement'])
+    commands.say(['integer','value','count'])
+    commands.say(['new','statement'])
+    commands.say(['structured','tree','node','asterisk','left','child'])
+    commands.say(['new','statement'])
+    commands.say(['structured','tree','node','pointer','right','child'])
+    commands.say(['jump','out'])
+    commands.say(['structured','tree','node','comma','star','structured','tree','node'])
+    commands.say(['after','semi','new','paragraph'])
+
+    # union
+
+    commands.say(['declare','union','united','states'])
+    commands.say(['new','statement'])
+    commands.say(['int\\int','number','of','states'])
+    commands.say(['new','statement'])
+    commands.say(['float','input','literacy','rate'])
+    commands.say(['new','statement'])
+    commands.say(['char','star','president'])
+    commands.say(['jump','out','sample','type'])
+    commands.say(['after','semi','new','paragraph'])
 
     commands.quit(save_speech_files=0, disconnect=0)
 
@@ -216,7 +358,7 @@ def insert_import_statement_test(commands):
    
 def create_new_class_test(commands):   
    commands.goto_line(20)
-   commands.say(['class', 'dummy', 'class', 'body'], user_input="1\n")
+   commands.say(['define','class', 'dummy', 'class', 'body'], user_input="1\n")
    commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
 
 def change_subclass_of_existing_class(commands):
