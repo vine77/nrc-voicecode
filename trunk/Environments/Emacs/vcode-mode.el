@@ -786,9 +786,86 @@ interactively, sets the current buffer as the target buffer."
 	))
 )
 
+(defun vcode-merge-or-prepend-change (new-change)
+  "merges the new-change with the first change in 'vr-queued-changes, if
+  possible, otherwise prepends it to the list.
+
+  changes can be merged if they are both of type 'change-is-insert and
+  represent contiguous insertions or deletions.
+  "
+(if (null vr-queued-changes)
+  (setq vr-queued-changes (cons new-change vr-queued-changes))
+  (let* ((previous-change (car vr-queued-changes))
+        (previous-type (car previous-change))
+        (new-type (car new-change))
+        (new-entry new-change)
+       )
+ ;
+ ; if previous change and new change are both inserts...
+ ;
+    (if (and (eq 'change-is-insert previous-type)
+             (eq 'change-is-insert new-type))
+      (let* ((previous-change-params (car (cdr previous-change)))
+            (new-change-params (car (cdr new-change)))
+            (previous-buffer (nth 0 previous-change-params))
+            (new-buffer (nth 0 previous-change-params)))
+ ;
+ ; ... and if same buffer...
+ ;
+        (if (eq previous-buffer new-buffer)
+          (let* ((previous-start (nth 1 previous-change-params))
+                (previous-end (nth 2 previous-change-params))
+                (previous-text (nth 3 previous-change-params))
+        ; middle-end is the position of the end of the previous
+        ; change in the current coordinates
+                (middle-end (+ previous-start 
+                   (length previous-text)))
+                (new-start (nth 1 new-change-params))
+                (new-text (nth 3 new-change-params))
+                (new-end (nth 2 new-change-params)))
+ ; 
+ ; then check if they are contiguous, in either order
+ ; 
+            (cond
+              ; need to compare in consistent coordinates
+              ((eq middle-end new-start)
+                (let*
+                  ((start previous-start)
+                   (text (concat previous-text new-text))
+                   ; length of old text replaced is total amount 
+                   ; replaced by the two changes
+                   (end (+ previous-end (- new-end new-start)))
+                   (contents (list new-buffer start end text)))
+                  ; combine changes, pop previous 
+                  (setq vr-queued-changes (cdr vr-queued-changes))
+                  (setq new-entry (list 'change-is-insert contents))
+                )
+              )
+              ((eq new-end previous-start)
+                (let*
+                  ((start new-start)
+                   (text (concat new-text previous-text))
+                   (end previous-end)
+                   (contents (list new-buffer start end text)))
+                  ; combine changes, pop previous 
+                  (setq vr-queued-changes (cdr vr-queued-changes))
+                  (setq new-entry (list 'change-is-insert contents))
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    ; push combined or new
+    (setq vr-queued-changes (cons new-entry vr-queued-changes))
+  )
+)
+)
+
 
 (defun vr-report-insert-delete-change (inserted-start inserted-end deleted-len)
-  "Invoked whenever an insertion or deletion change happens on the current 
+"Invoked whenever an insertion or deletion change happens on the current 
 buffer (if it is voice enabled). 
 
 Changes are put in a changes queue `vr-queued-changes.
@@ -814,7 +891,8 @@ executing.
 	  
 	  (vr-log "--** vr-report-insert-delete-change: the-change=%S" the-change)
 	  
-	  (setq vr-queued-changes (cons the-change vr-queued-changes))
+          (vcode-merge-or-prepend-change the-change)
+;	  (setq vr-queued-changes (cons the-change vr-queued-changes))
 	  
 	  (if (not vr-changes-caused-by-sr-cmd)
 	      (vr-send-queued-changes)

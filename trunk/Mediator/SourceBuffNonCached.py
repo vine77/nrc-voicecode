@@ -24,8 +24,10 @@ need for caching)"""
 
 
 import SourceBuff
+import sb_mixins 
 
-class SourceBuffNonCached(SourceBuff.SourceBuffWithServices):
+class SourceBuffNonCached(sb_mixins.WithStateService, 
+    SourceBuff.SourceBuffWithServices):
     
     """Interface to a a buffer in a fast programming environment
     (i.e. no need for caching)
@@ -50,3 +52,8 @@ class SourceBuffNonCached(SourceBuff.SourceBuffWithServices):
                             {}, 
                             args_super, 
                             {})
+    def remove_other_references(self):
+        sb_mixins.WithKbdService.remove_other_references(self)
+#        sb_mixins.WithStateService.remove_other_references(self)
+        SourceBuff.SourceBuffWithServices.remove_other_references(self)
+

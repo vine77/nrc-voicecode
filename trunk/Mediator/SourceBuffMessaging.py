@@ -23,10 +23,11 @@
 VoiceCode via a messaging protocol."""
 
 import messaging, SourceBuffCached
+import SourceBuffWithDiffs
 import sb_services
 from debug import trace
 
-class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
+class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
     
     """Class representing a source buffer connected to VoiceCode via a
     messaging protocol.
@@ -52,7 +53,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.init_attrs({})        
         self.deep_construct(SourceBuffMessaging,
                             {},
-                            attrs
+                            attrs, new_default = {'max_cookies': 32},
                             )
 
     def _file_name_from_app(self):

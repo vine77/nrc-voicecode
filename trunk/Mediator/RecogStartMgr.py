@@ -614,6 +614,22 @@ class RecogStartMgr(OwnerObject):
         """
         debug.virtual('RecogStartMgr.rename_buffer_cbk')
 
+    def close_buffer_cbk(self, instance, buff_name):
+        """callback from AppMgr which notifies us that the application
+        has closed a buffer
+
+        **INPUTS**
+
+        *STR* instance -- name of the application instance 
+
+        *STR* buff_name -- name of the buffer which was closed
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.close_buffer_cbk')
+
     def new_universal_instance(self, instance, exclusive = 1):
         """method called by AppMgr to notify RecogStartMgr that a new
         test instance has been added which should use global grammars
@@ -1480,6 +1496,26 @@ class RSMInfrastructure(RecogStartMgr):
         if not self.known_instance(instance):
             return 
         self.grammars[instance].rename_buffer_cbk(old_buff_name, new_buff_name)
+        self.results[instance].rename_buffer_cbk(old_buff_name, new_buff_name)
+
+    def close_buffer_cbk(self, instance, buff_name):
+        """callback from AppMgr which notifies us that the application
+        has closed a buffer
+
+        **INPUTS**
+
+        *STR* instance -- name of the application instance 
+
+        *STR* buff_name -- name of the buffer which was closed
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.known_instance(instance):
+            return 
+        self.grammars[instance].buffer_closed(buff_name)
+        self.results[instance].close_buffer_cbk(buff_name)
 
     def delete_instance(self, instance):
         """method called by AppMgr to notify RecogStartMgr that an
