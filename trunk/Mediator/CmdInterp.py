@@ -703,13 +703,7 @@ class CmdInterp(Object):
         regexp_is_dirty = 1
 
         for a_spoken_form in acmd.spoken_forms:
-            #
-            # Remove leading, trailing and double blanks from the spoken form
-            #
-            re.sub('\s+', ' ', a_spoken_form)
-            re.sub('^\s+', '', a_spoken_form)
-            re.sub('\s+$', '', a_spoken_form)
-            a_spoken_form = string.lower(a_spoken_form)
+            a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
 
             #
             # Index the spoken form

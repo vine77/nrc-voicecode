@@ -1,7 +1,13 @@
 
-D:\VoiceCode\VCode.noDlg\Admin>cd D:\VoiceCode\VCode.noDlg\Admin 
+D:\VoiceCode\VCode.resolve_clash\Admin>rem  
 
-D:\VoiceCode\VCode.noDlg\Admin>python test.py all         
+D:\VoiceCode\VCode.resolve_clash\Admin>rem Shortcut for invoking VoiceCode regression test 
+
+D:\VoiceCode\VCode.resolve_clash\Admin>rem
+
+D:\VoiceCode\VCode.resolve_clash\Admin>cd D:\VoiceCode\VCode.resolve_clash\Admin 
+
+D:\VoiceCode\VCode.resolve_clash\Admin>python test.py all 
 
 
 *******************************************************************************
@@ -213,7 +219,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 87de20>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8c3a00>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -228,9 +234,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c ***
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -259,8 +265,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.resolve_clash\Data\TestData\large_buff.py ***
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -313,7 +319,7 @@ not: ['not']
 num_times: ['num times', 'number times']
 obj: ['obj', 'object']
 operation: ['operation']
-os: ['os', 'operating system', 'o. s.']
+os: ['os', 'operating system', 'o s']
 pass: ['pass']
 posixpath: ['posixpath']
 profConstrLargeNonObj: ['prof constr large non obj', 'prof constr large non object', 'profile constr large non obj', 'profile constr large non object', 'profiling constr large non obj', 'profiling constr large non object', 'professional constr large non obj', 'professional constr large non object']
@@ -361,11 +367,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.noDlg\\Data\\TestData\\large_buff.py']
+   Source files are: ['D:\\VoiceCode\\VCode.resolve_clash\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -376,8 +382,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+*** Accept symbol match test. source='D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c' ***
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -436,7 +442,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -444,7 +450,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -456,9 +462,9 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -487,11 +493,11 @@ List of abbreviations
 'alnum' expands to ['all numeric', 'all numberical']
 'alt' expands to ['alternate', 'alternative']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -502,7 +508,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -520,12 +526,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -536,13 +542,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -554,15 +560,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -572,8 +578,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -586,16 +592,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -604,9 +610,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -617,7 +623,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -626,34 +632,34 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
@@ -692,11 +698,11 @@ List of abbreviations
 'alnum' expands to ['all numeric', 'all numberical']
 'alt' expands to ['alternate', 'alternative']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -707,7 +713,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -725,12 +731,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -741,13 +747,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -759,15 +765,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -777,8 +783,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -791,16 +797,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -809,9 +815,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -822,7 +828,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -831,35 +837,35 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
 'unres' expands to ['unresolved']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
@@ -926,11 +932,11 @@ List of abbreviations
 'alnum' expands to ['all numeric', 'all numberical']
 'alt' expands to ['alternate', 'alternative']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -941,7 +947,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -959,12 +965,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -975,13 +981,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -993,15 +999,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -1011,8 +1017,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -1025,16 +1031,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -1043,9 +1049,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -1056,7 +1062,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -1065,35 +1071,35 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
 'unres' expands to ['unresolved']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
@@ -1152,11 +1158,11 @@ List of abbreviations
 'alnum' expands to ['all numeric', 'all numberical']
 'alt' expands to ['alternate', 'alternative']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -1167,7 +1173,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -1185,12 +1191,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -1201,13 +1207,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -1219,15 +1225,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -1237,8 +1243,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -1251,16 +1257,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -1269,9 +1275,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -1282,7 +1288,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -1291,35 +1297,35 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
 'unres' expands to ['unresolved']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
@@ -1358,11 +1364,11 @@ List of abbreviations
 'alt' expands to ['alternate', 'alternative']
 'api' expands to ['application programming interface']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -1373,7 +1379,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -1391,12 +1397,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -1407,13 +1413,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -1425,15 +1431,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -1443,8 +1449,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -1457,16 +1463,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -1475,9 +1481,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -1488,7 +1494,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -1497,35 +1503,35 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
 'unres' expands to ['unresolved']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
@@ -1538,7 +1544,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1546,12 +1552,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.resolve_clash\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1634,14 +1640,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -1658,11 +1664,11 @@ List of abbreviations
 'alnum' expands to ['all numeric', 'all numberical']
 'alt' expands to ['alternate', 'alternative']
 'arg' expands to ['argument']
-'argv' expands to ['arg v.', 'argument value']
+'argv' expands to ['arg v', 'argument value']
 'asc' expands to ['ascii']
 'atan' expands to ['arc tangent']
-'atof' expands to ['a. to f.']
-'atol' expands to ['a. to l.']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
 'attr' expands to ['attribute']
 'avail' expands to ['available']
 'avg' expands to ['average']
@@ -1673,7 +1679,7 @@ List of abbreviations
 'buff' expands to ['buffer']
 'builtin' expands to ['built in']
 'calc' expands to ['calculate', 'calculated', 'calculation']
-'cgi' expands to ['c. g. i.']
+'cgi' expands to ['c g i']
 'char' expands to ['character']
 'chdir' expands to ['change dir', 'change directory']
 'chg' expands to ['change', 'changed']
@@ -1691,12 +1697,12 @@ List of abbreviations
 'conn' expands to ['connection', 'connected']
 'cont' expands to ['control']
 'cos' expands to ['co sine']
-'cpp' expands to ['c. plus plus']
+'cpp' expands to ['c plus plus']
 'ctl' expands to ['control']
 'ctrl' expands to ['control']
 'cur' expands to ['cursor', 'current']
 'curr' expands to ['current']
-'db' expands to ['d. b.', 'data base']
+'db' expands to ['d b', 'data base']
 'decl' expands to ['declaration', 'declare']
 'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
 'delim' expands to ['delimiter']
@@ -1707,13 +1713,13 @@ List of abbreviations
 'doc' expands to ['document', 'documentation']
 'dom' expands to ['domain']
 'dst' expands to ['distance']
-'dtd' expands to ['d. t. d.']
+'dtd' expands to ['d t d']
 'elem' expands to ['element']
 'ent' expands to ['entry']
 'env' expands to ['environment']
 'environ' expands to ['environment']
-'eol' expands to ['e. o. l.', 'end of line']
-'eval' expands to ['e. val', 'evaluate']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
 'ex' expands to ['example']
 'exc' expands to ['exception']
 'exec' expands to ['execute', 'executable']
@@ -1725,15 +1731,15 @@ List of abbreviations
 'func' expands to ['function']
 'gen' expands to ['general', 'generic']
 'getattr' expands to ['get attribute']
-'gid' expands to ['g. i. d.', 'group i. d.']
+'gid' expands to ['g i d', 'group i d']
 'glob' expands to ['global']
 'goto' expands to ['go to']
 'gr' expands to ['group']
 'hex' expands to ['hexadecimal']
 'horiz' expands to ['horizontal', 'horizontally']
-'html' expands to ['h. t. m. l.']
-'http' expands to ['h. t. t. p.']
-'imap' expands to ['i. map']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
 'impl' expands to ['implementation']
 'inc' expands to ['increment', 'include']
 'incl' expands to ['include', 'included']
@@ -1743,8 +1749,8 @@ List of abbreviations
 'int' expands to ['integer']
 'interp' expands to ['interpreter']
 'intro' expands to ['introduction']
-'io' expands to ['i. o.']
-'ip' expands to ['i. p.']
+'io' expands to ['i o']
+'ip' expands to ['i p']
 'lambd' expands to ['lambda']
 'len' expands to ['length']
 'ln' expands to ['line']
@@ -1757,16 +1763,16 @@ List of abbreviations
 'mod' expands to ['mode', 'modify']
 'msec' expands to ['millisecond']
 'msg' expands to ['message']
-'mtime' expands to ['m. time']
+'mtime' expands to ['m time']
 'nam' expands to ['name']
-'nntp' expands to ['n. n. t. p.']
+'nntp' expands to ['n n t p']
 'no' expands to ['number']
 'num' expands to ['number']
 'obj' expands to ['object']
 'oct' expands to ['octal']
 'opt' expands to ['optional', 'option', 'optimize']
-'os' expands to ['operating system', 'o. s.']
-'osf' expands to ['o. s. f.']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
 'par' expands to ['parameter']
 'param' expands to ['parameter']
 'pat' expands to ['pattern']
@@ -1775,9 +1781,9 @@ List of abbreviations
 'pos' expands to ['position', 'positionning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
-'pty' expands to ['p. t. y.']
+'pty' expands to ['p t y']
 'punct' expands to ['punctuation']
-'py' expands to ['python', 'p. y.']
+'py' expands to ['python', 'p y']
 'rand' expands to ['random']
 'rd' expands to ['read']
 'rect' expands to ['rectangle']
@@ -1788,7 +1794,7 @@ List of abbreviations
 'repr' expands to ['represent', 'representation']
 'req' expands to ['request']
 'rexp' expands to ['regular expression']
-'rgb' expands to ['r. g. b.']
+'rgb' expands to ['r g b']
 'rm' expands to ['remove']
 'scr' expands to ['screen']
 'sec' expands to ['second']
@@ -1797,43 +1803,43 @@ List of abbreviations
 'serv' expands to ['server']
 'sig' expands to ['signal', 'special interest group']
 'sin' expands to ['sine']
-'smtp' expands to ['s. m. t. p.']
+'smtp' expands to ['s m t p']
 'sock' expands to ['socket']
 'soundex' expands to ['soundex']
 'spc' expands to ['space']
 'src' expands to ['source']
 'st' expands to ['standard']
 'stat' expands to ['statistic', 'static']
-'stdin' expands to ['s. t. d. in', 'standard input']
+'stdin' expands to ['s t d in', 'standard input']
 'str' expands to ['string']
 'sub' expands to ['sub routine']
 'sym' expands to ['symbol']
 'sync' expands to ['synchronize']
 'sys' expands to ['system']
 'temp' expands to ['temporary']
-'termid' expands to ['term i. d.', 'terminal i. d.']
+'termid' expands to ['term i d', 'terminal i d']
 'tmp' expands to ['temporary']
 'tok' expands to ['token']
 'trans' expands to ['transition', 'transport', 'transform', 'transformation']
-'tty' expands to ['t. t. y.']
-'uid' expands to ['u. i. d.', 'user i. d.']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
 'undef' expands to ['undefined']
 'uniq' expands to ['unique']
-'url' expands to ['u. r. l.']
-'uu' expands to ['u. u.']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
 'var' expands to ['variable']
 'vert' expands to ['vertical', 'vertically']
 'win' expands to ['window']
-'xml' expands to ['x. m. l.']
+'xml' expands to ['x m l']
 
 
 List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1883,7 +1889,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1903,15 +1909,15 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 9fec90> from file 'D:\VoiceCode\VCode.noDlg\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.noDlg\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 8ade70> from file 'D:\VoiceCode\VCode.resolve_clash\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.resolve_clash\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1937,9 +1943,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1954,10 +1960,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1968,7 +1974,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1976,9 +1982,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -5057,7 +5063,7 @@ Saying: ['new statement']
 113:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -5067,10 +5073,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.noDlg\\Data\\TestData\\native_python.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\\VoiceCode\\VCode.resolve_clash\\Data\\TestData\\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -5078,7 +5084,7 @@ CSCmd: ['cs cmd', 'cs command']
 CSCs: ['cs cs']
 CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpreter']
 ContC: ['cont c', 'control c']
-ContPy: ['cont py', 'cont python', 'cont p. y.', 'control py', 'control python', 'control p. y.']
+ContPy: ['cont py', 'cont python', 'cont p y', 'control py', 'control python', 'control p y']
 EdSim: ['ed sim']
 LSA_consumes: ['lsa consumes']
 None: ['none']
@@ -5093,8 +5099,8 @@ a_spoken_form: ['a spoken form']
 a_word: ['a word']
 accept_symbol_match: ['accept symbol match']
 acmd: ['acmd']
-actions_C_Cpp: ['actions c cpp', 'actions c c. plus plus']
-actions_py: ['actions py', 'actions python', 'actions p. y.']
+actions_C_Cpp: ['actions c cpp', 'actions c c plus plus']
+actions_py: ['actions py', 'actions python', 'actions p y']
 active_language: ['active language']
 active_language_LSAs: ['active language ls as']
 addWord: ['add word']
@@ -5192,7 +5198,7 @@ num_match: ['num match', 'number match']
 old_pos: ['old pos', 'old position', 'old positionning']
 on_app: ['on app']
 or: ['or']
-os: ['os', 'operating system', 'o. s.']
+os: ['os', 'operating system', 'o s']
 print: ['print']
 print_buff_content: ['print buff content', 'print buffer content']
 re: ['re']
@@ -5215,7 +5221,7 @@ spoken_forms: ['spoken forms']
 spoken_written_form: ['spoken written form']
 sr_interface: ['sr interface']
 start: ['start']
-stdin: ['stdin', 's. t. d. in', 'standard input']
+stdin: ['stdin', 's t d in', 'standard input']
 stdout: ['stdout']
 string: ['string']
 sub: ['sub', 'sub routine']
@@ -5246,7 +5252,7 @@ CSCmd: ['cs cmd', 'cs command']
 CSCs: ['cs cs']
 CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpreter']
 ContC: ['cont c', 'control c']
-ContPy: ['cont py', 'cont python', 'cont p. y.', 'control py', 'control python', 'control p. y.']
+ContPy: ['cont py', 'cont python', 'cont p y', 'control py', 'control python', 'control p y']
 EdSim: ['ed sim']
 LSA_consumes: ['lsa consumes']
 None: ['none']
@@ -5261,8 +5267,8 @@ a_spoken_form: ['a spoken form']
 a_word: ['a word']
 accept_symbol_match: ['accept symbol match']
 acmd: ['acmd']
-actions_C_Cpp: ['actions c cpp', 'actions c c. plus plus']
-actions_py: ['actions py', 'actions python', 'actions p. y.']
+actions_C_Cpp: ['actions c cpp', 'actions c c plus plus']
+actions_py: ['actions py', 'actions python', 'actions p y']
 active_language: ['active language']
 active_language_LSAs: ['active language ls as']
 addWord: ['add word']
@@ -5360,7 +5366,7 @@ num_match: ['num match', 'number match']
 old_pos: ['old pos', 'old position', 'old positionning']
 on_app: ['on app']
 or: ['or']
-os: ['os', 'operating system', 'o. s.']
+os: ['os', 'operating system', 'o s']
 print: ['print']
 print_buff_content: ['print buff content', 'print buffer content']
 re: ['re']
@@ -5383,7 +5389,7 @@ spoken_forms: ['spoken forms']
 spoken_written_form: ['spoken written form']
 sr_interface: ['sr interface']
 start: ['start']
-stdin: ['stdin', 's. t. d. in', 'standard input']
+stdin: ['stdin', 's t d in', 'standard input']
 stdout: ['stdout']
 string: ['string']
 sub: ['sub', 'sub routine']
@@ -5414,7 +5420,14 @@ WARNING: source file 'D:/blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
-Associate 'R. E.' with symbol (Enter selection):
+Associate 'O. S.' with symbol (Enter selection):
+
+  '0': no association
+  '1': os
+  '2': Os (*new*)
+  '3': OS (*new*)
+
+> Associate 'R. E.' with symbol (Enter selection):
 
   '0': no association
   '1': re
@@ -5883,7 +5896,7 @@ Associate 'R. E.' with symbol (Enter selection):
  22:    words = re.split(<CURSOR>)
 
 *** End of source buffer ***
-Saying: ['single', 'quotes', 'back', 'slash', 'S.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
+Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 
 
  20:    
@@ -5960,7 +5973,7 @@ Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empt
  29:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back', 'slash', 'S.', 'asterisk', 'new', 'statement']
+Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
 
 
  27:    regexp_this_word = '[' + string.lower(first) + string.upper(first)
@@ -5987,13 +6000,13 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
@@ -6543,7 +6556,7 @@ Associate 'words' with symbol (Enter selection):
  22:    words = re.split(<CURSOR>)
 
 *** End of source buffer ***
-Saying: ['single', 'quotes', 'back', 'slash', 'S.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
+Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 
 
  20:    
@@ -6691,7 +6704,7 @@ Associate 'regular expression' with symbol (Enter selection):
  29:    <CURSOR>
 
 *** End of source buffer ***
-Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back', 'slash', 'S.', 'asterisk', 'new', 'statement']
+Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -6773,7 +6786,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6781,9 +6794,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -6795,9 +6808,9 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -6869,7 +6882,7 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6877,12 +6890,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.resolve_clash\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6980,9 +6993,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
@@ -7651,4 +7664,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.resolve_clash\Config\py_std_sym.py'

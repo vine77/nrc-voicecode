@@ -186,10 +186,7 @@ def simulator_mode(options):
     # commands are eval'ed means the error reporting isn't great
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
-    #
-    file_name = vc_globals.test_data + os.sep + 'large_buff.py'
-    open_file(file_name)
-    
+    #    
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()
