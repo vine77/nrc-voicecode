@@ -4,6 +4,25 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+Testing
+-------
+Test redundant translation of symbols NOT JUST LSAs
+
+LSAs
+----
+
+-- Alain
+
+Creation of CSC for redundant translation of LSAs at Mediator level is not necessary anymore because CmdInterp.chop_LSA does the redundant translation directly now.
+
+Module documentation
+--------------------
+Move all module documentation to a new directory Doc/Modules
+
+That way, one can easily erase all Module documentation by doing rm
+Doc/Modules/*.html. When all doc in Doc, can't do that because user
+and installation documentation is in there also.
+
 Interpreter
 -----------
 
@@ -80,7 +99,6 @@ given as arguments be accessible from the mediator).
 
 Test thorgoughly
 ----------------
-
 
 GNU copyright
 -------------

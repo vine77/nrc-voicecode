@@ -122,6 +122,8 @@ class CmdInterp(Object):
              chopped_symbol, symbol_consumes, cmd_without_symbol = self.chop_symbol(cmd)
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
+
+#             print '-- CmdInterp.interpret_NL_cmd: chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes)
              head_was_translated = 0
 
              #
@@ -226,9 +228,14 @@ class CmdInterp(Object):
                 # text. Try to match untranslated text to a known (or new)
                 # symbol.
                 #
+#                print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
                 self.match_untranslated_text()
 
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
+             if self._untranslated_text_start != None:
+                 untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
+             else:
+                 untranslated_text = None
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
 
 
 
@@ -324,14 +331,22 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-
-#        print '-- CmdInterp.match_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end])
-#        self.on_app.print_buff_content()
         
         untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
 
+#        print '-- CmdInterp.match_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated_text=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, untranslated_text);
+#        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
+#        print '-- CmdInterp.match_untranslated_text: self.known_symbols.symbol_info.keys()=%s' % self.known_symbols.symbol_info.keys()
+        
         a_match = re.match('(\s*)([\s\S]*)\s*$', untranslated_text)
         text_no_spaces = a_match.group(2)
+#          #
+#          # Remove dots after single characters
+#          # Not really necessary because the symbol matching ignores non
+#          # alphanums?
+#          #
+#          text_no_spaces = re.sub('(^|\s)([a-zA-Z])\.', '\1\2', text_no_spaces)
+        
         leading_spaces = a_match.group(1)
 
 #        print '-- CmdInterp.match_untranslated_text: text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces)
@@ -344,14 +359,20 @@ class CmdInterp(Object):
         # form of a known symbol or if it's a number
         #
         reg = '[\d\s]+'
-#        print '-- CmdInterp.match_untranslated_text: reg=%s' % reg
         num_match = re.match(reg, text_no_spaces)
+#        print '--** CmdInterp.match_untranslated_text: before checking self.known_symbols.symbol_info.keys()=%s' % self.known_symbols.symbol_info.keys()
         if not self.known_symbols.symbol_info.has_key(text_no_spaces) and \
            not num_match:
-#        print '-- CmdInterp.match_untranslated_text: trying to match untranslated text to a symbol. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end)
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
+#            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
                 self.dlg_select_symbol_match(symbol_matches)
+
+        #
+        # Now, there is no more untranslated text.
+        #
+        self._untranslated_text_start = None
+        self._untranslated_text_end = None
         
 
     def dlg_select_symbol_match(self, symbol_matches):
@@ -368,6 +389,7 @@ class CmdInterp(Object):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
+#        print '-- CmdInterp.dlg_select_symbol_match: called'
         untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
 
         good_answer = 0
@@ -381,11 +403,10 @@ class CmdInterp(Object):
                     sys.stdout.write(' (*new*)')
                 sys.stdout.write('\n')
                 ii = ii + 1
-#                print '-- CmdInterp.dlg_select_symbol_match: a_match.score()=%s, a_match.__dict__=%s' % (a_match.score(), a_match.__dict__)
             sys.stdout.write('\n> ')
             answer = sys.stdin.readline()
-#            print '-- CmdInterp.dlg_select_symbol_matches: answer=\'%s\'' % answer
             answer_match = re.match('\s*([\d])+\s*', answer)
+#            print '-- CmdInterp.dlg_select_symbol_match: answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups())
             if answer_match:
                 choice_index = int(answer_match.group(1)) - 1
                 if choice_index < len(symbol_matches) and choice_index >= -1:
@@ -397,13 +418,14 @@ class CmdInterp(Object):
         #
         # Accept the match
         #
+#        print '-- CmdInterp.dlg_select_symbol_match: choice_index=%s' % choice_index
         if choice_index >= 0:
             #
             # A match was chosen. Accept it and type it instead of the
             # untranslated text.
             #
             chosen_match = symbol_matches[choice_index]
-            self.known_symbols.accept_symbol_match(chosen_match)
+            self.known_symbols.accept_symbol_match(chosen_match)            
 
             #
             # Insert matched symbol, then go back to where we were
@@ -413,13 +435,6 @@ class CmdInterp(Object):
             new_pos = old_pos + len(chosen_match.native_symbol) - (self._untranslated_text_end - self._untranslated_text_start)
             self.on_app.move_to(new_pos)
             
-        
-        #
-        # Now, there is no more untranslated text.
-        #
-        self._untranslated_text_start = None
-        self._untranslated_text_end = None
-
 
     def chop_CSC(self, cmd):
         """Chops the start of a command if it starts with a CSC.
@@ -445,38 +460,7 @@ class CmdInterp(Object):
         
 #        print '-- CmdInterp.chop_CSC: cmd=%s' % cmd
 
-        chopped_CSC, consumed, rest = None, 0, cmd
-
-        #
-        # Create list of spoken forms of the words in command
-        #
-        words = []
-        for a_word in cmd:
-            a_word, dummy = sr_interface.spoken_written_form(a_word)
-            words = words + [a_word]
-
-        #
-        # Starting with the whole command and dropping words from the end,
-        # check if that corresponds to the spoken form of a known CSC.
-        #
-        upto = len(words)
-        while upto:
-            a_spoken_form = string.join(words[:upto], ' ')
-#            print '-- CmdInterp.chop_CSC: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
-
-            if self.cmd_index.has_key(a_spoken_form):
-                #
-                # This corresponds to the spoken form of a CSC and it's the
-                # longest one we'll ever find.
-                #
-#                print '-- CmdInterp.chop_CSC: matches known CSC \'%s\'' % a_spoken_form
-                chopped_CSC = a_spoken_form
-                rest = cmd[upto:]
-                consumed = upto
-                break
-            upto = upto - 1
-        return chopped_CSC, consumed, rest
-
+        return self.chop_construct(cmd, CmdInterp.is_spoken_CSC)
 
     def chop_LSA(self, command):
         """Chops off the first word of a command if it is an LSA.
@@ -503,30 +487,7 @@ class CmdInterp(Object):
         """
         
 #        print '-- CmdInterp.chop_LSA: command=%s' % command
-        
-        chopped_LSA, consumed, rest = None, 0, command
-        leading_word = command[0]
-
-        #
-        # Check if the LSA is in the list of LSAs for the current
-        # language, or in the list of non-language specific aliases
-        # (i.e. language=None)
-        #
-        active_language_LSAs = []
-        if self.language_specific_aliases.has_key(self.on_app.active_language()):
-            active_language_LSAs = self.language_specific_aliases[self.on_app.active_language()]
-        all_language_LSAs = []
-        if self.language_specific_aliases.has_key(None):
-            all_language_LSAs = self.language_specific_aliases[None]
-        if (leading_word in active_language_LSAs) or \
-           (leading_word in all_language_LSAs):
-            chopped_LSA = leading_word
-            rest = command[1:]
-            consumed = 1
-
-#        print '-- CmdInterp.chop_LSA: returning chopped_LSA=%s, rest=%s' % (chopped_LSA, rest)
-        return chopped_LSA, consumed, rest
-
+        return self.chop_construct(command, CmdInterp.is_spoken_LSA)
 
     def chop_symbol(self, command):
         """Chops off the beginning of a command if it is a known symbol.
@@ -551,37 +512,8 @@ class CmdInterp(Object):
         """
 
 #        print '-- CmdInterp.chop_symbols: command=%s' % command
-
-        chopped_symbol, consumed, rest = None, 0, command
-
-        #
-        # Create list of spoken forms of the words in command
-        #
-        words = []
-        for a_word in command:
-            a_word, dummy = sr_interface.spoken_written_form(a_word)
-            words = words + [a_word]
-
-        #
-        # Starting with the whole command and dropping words from the end,
-        # check if that corresponds to a known symbol.
-        #
-        upto = len(words)
-        while upto:
-            a_spoken_form = string.join(words[:upto], ' ')
-#            print '-- CmdInterp.chop_symbols: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
-            if self.known_symbols.spoken_form_info.has_key(a_spoken_form):
-                # This corresponds to the spoken form of a symbol
-#                print '-- CmdInterp.chop_symbols: matches a known symbol'
-                chopped_symbol = self.choose_best_symbol(a_spoken_form, self.known_symbols.spoken_form_info[a_spoken_form].symbols)
-                rest = command[upto:]
-                consumed = upto
-                break
-            upto = upto - 1
-        return chopped_symbol, consumed, rest
-
-
-
+        return self.chop_construct(command, CmdInterp.is_spoken_symbol)
+    
     def chop_word(self, command):
         """Removes a single word from a command.
         
@@ -609,6 +541,146 @@ class CmdInterp(Object):
         rest = command[1:]
         return chopped_word, consumed, rest
         
+
+
+    def chop_construct(self, cmd, construct_check):
+        """Look at NL command to see if it starts with a
+        particular kind of construct (e.g. CSC, LSA, symbol)
+        
+        **INPUTS**
+        
+        *[STR]* cmd -- The words in the NL command (in their written\spoken
+        form).
+
+        *METHOD* construct_check(self, STR) returns STR -- Method used
+         to check wether a string corresponds to the type of construct
+         we are looking for. For LSA and symbol constructs, it returns
+         the construct's written form. For CSCs, it returns its spoken
+         form. If the string doesn't correspond to the proper construtct,
+         it returns *None*.
+
+         
+        **OUTPUTS**
+        
+        *(chopped_construct, consumed, rest)*
+
+        *STR* chopped_construct -- Spoken form of the construct
+        chopped from the command
+
+        *INT* consumed -- Number of words consumed from *cmd*
+
+        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        chopped"""
+
+        chopped_construct, consumed, rest = None, 0, cmd
+
+        #
+        # Create list of spoken forms of the words in command
+        #
+        words = []
+        for a_word in cmd:
+            a_word, dummy = sr_interface.spoken_written_form(a_word)
+            words = words + [a_word]
+
+        #
+        # Starting with the whole command and dropping words from the end,
+        # check if that corresponds to the spoken form of a known CSC.
+        #
+        upto = len(words)
+        while upto:
+            a_spoken_form = string.join(words[:upto], ' ')
+            a_spoken_form = string.lower(a_spoken_form)
+#            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
+
+            chopped_construct = construct_check(self, a_spoken_form)
+            if chopped_construct != None:
+                #
+                # This corresponds to the spoken form of a construct and it's
+                # the longest one we'll ever find.
+                #
+#                print '-- CmdInterp.chop_construct: matches known construct \'%s\'' % a_spoken_form
+                rest = cmd[upto:]
+                consumed = upto
+                break
+            upto = upto - 1
+        return chopped_construct, consumed, rest
+        
+
+
+    def is_spoken_CSC(self, spoken_form):
+        """Checks if a string is the spoken form of a CSC.
+        
+        **INPUTS**
+        
+        *STR* spoken_form -- String to be checked
+        
+
+        **OUTPUTS**
+        
+        *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
+        """
+        chopped_CSC = None
+        if self.cmd_index.has_key(spoken_form):
+            chopped_CSC = spoken_form
+        return chopped_CSC
+
+
+
+    def is_spoken_LSA(self, spoken_form):
+        """Checks if a string is the spoken form of an LSA.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+
+        *BOOL* return value -- True iif *spoken_form* is the spoken form of a LSA.
+        """
+#        print '-- CmdInterp.is_spoken_LSA: spoken_form = \'%s\'' % spoken_form
+
+        written_LSA = None
+        
+        #
+        # Create a list of active LSAs (i.e. global LSAs and those for the
+        # active language)
+        #
+        active_LSAs = []
+        if self.language_specific_aliases.has_key(self.on_app.active_language()):
+            active_LSAs = active_LSAs + self.language_specific_aliases[self.on_app.active_language()]
+        if self.language_specific_aliases.has_key(None):
+            active_LSAs = active_LSAs + self.language_specific_aliases[None]
+#        print '-- CmdInterp.is_spoken_LSA: active_LSAs=%s' % active_LSAs
+
+        #
+        # See if spoken_form is in the list of active LSAs
+        #
+        for an_active_LSA in active_LSAs:
+            spoken, written = sr_interface.spoken_written_form(an_active_LSA)
+            if spoken == spoken_form:
+                written_LSA = written
+                break
+            
+        return written_LSA
+        
+    def is_spoken_symbol(self, spoken_form):
+        """Checks if a string is the spoken form of a known symbol.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+
+        *BOOL* return value -- True iif *spoken_form* is the spoken form of a
+        known symbol.
+        """
+
+        written_symbol = None
+        if self.known_symbols.spoken_form_info.has_key(spoken_form):
+            written_symbol = self.choose_best_symbol(spoken_form, self.known_symbols.spoken_form_info[spoken_form].symbols)
+            
+        return written_symbol
 
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.

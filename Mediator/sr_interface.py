@@ -40,14 +40,49 @@ else:
 # calling the corresponding natlink functions
 #
 
-def speech_able():
+def speech_able(mic_state=None):
     return not os.environ.has_key('VCODE_NOSPEECH')
+
+
+
+def connect(mic_state=None):
+    """Connects to the SR system.
+    
+    **INPUTS**
+    
+    *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
+    after connection. If *None*, then leave mic alone.
+    
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+    if speech_able():        
+        natlink.natConnect()
+        if mic_state:
+            natlink.setMicState(mic_state)
+
+def disconnect():
+    """Dicsconnects from SR system.
+    
+    **INPUTS**
+    
+    *none* -- 
+    
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+    if speech_able():        
+        natlink.natDisconnect()
 
 def addedByVC(flag):   
     """Returns *true* iif word information *flag* indicates that word
     was added by VoiceCode"""
 
-#    print '-- sr_interfacen.addedByVC: flag=%s' % str(flag)
+#    print '-- sr_interface.addedByVC: flag=%s' % str(flag)
     if flag == None:
         indicator = 0
     elif (add_words_as == 'user'):
@@ -57,14 +92,26 @@ def addedByVC(flag):
 #    print '-- sr_interfacen.addedByVC: indicator=%s' % indicator
     return indicator
 
-def getWordInfo(word, *rest):    
+def getWordInfo(word, *rest):
+    
+#    print '-- sr_interface.getWordInfo: word=%s, rest=%s' % (word, rest)
+
+    #
+    # First, fix the written form of the word
+    #
+    spoken, written = spoken_written_form(word)
+    word = vocabulary_entry(spoken, written, clean_written=1)
+#    print '-- sr_interface.getWordInfo: reformatted word=%s' % word
+
+    answer = None
     if speech_able():
         if len(rest) == 0:
-            return natlink.getWordInfo(word)
+            answer = natlink.getWordInfo(word)
         elif len(rest) == 1:
-            return natlink.getWordInfo(word, rest[0])
-    else:
-        return None
+            answer = natlink.getWordInfo(word, rest[0])
+
+#    print '-- sr_interface.getWordInfo: answer is %s' % answer
+    return answer
 
 
 def addWord(word, *rest):
@@ -78,9 +125,17 @@ def addWord(word, *rest):
     global word_info_flag
 
 #    print '-- sr_interface.addWord: adding \'%s\'' % word
+    
+    #
+    # First, fix the written form of the word
+    #
+    spoken, written = spoken_written_form(word)
+    word = vocabulary_entry(spoken, written, clean_written=1)
+
+
     if speech_able():
         if getWordInfo(word) == None:
-#            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
+#            print '-- sr_interface.addWord: this word is new to NatSpeak'
                    
             if len(rest) == 0:
                 flag = word_info_flag
@@ -121,12 +176,12 @@ def deleteWord(word, *rest):
     if speech_able():
         flag = getWordInfo(word, 4)
         num_words = len(re.split('\s+', word))
-#        print '-- sr_interfacen.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
+#        print '-- sr_interface.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
         if addedByVC(flag) and num_words > 1:
-#            print '-- sr_interfacen.deleteWord: actually deleting word %s' % word
+#            print '-- sr_interface.deleteWord: actually deleting word %s' % word
             return natlink.deleteWord(word)
         else:
-#            print '-- sr_interfacen.deleteWord: word not added by VoiceCode %s' % word
+#            print '-- sr_interface.deleteWord: word not added by VoiceCode %s' % word
             return None
 
 def clean_written_form(written_form, clean_for=None):
@@ -218,19 +273,18 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 
 #    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s' % (spoken_form, repr(written_form))
 
-    #
-    # Substitute special characters in written form (e.g. {Spacebar}, {Enter})
-    # to the form used in VoiceCode (e.g. ' ', '\n')
-    #
-    if clean_written:
-        written_form = clean_written_form(written_form, clean_for='sr')
-        
-    if len(written_form) > 0:
-        entry = written_form + '\\' + spoken_form
-    else:
-        entry = spoken_form
+    entry = spoken_form
+    if spoken_form != written_form:
+        #
+        # Substitute special characters in written form (e.g. {Spacebar},
+        # {Enter}) to the form used in VoiceCode (e.g. ' ', '\n')
+        #
+        if clean_written:
+            written_form = clean_written_form(written_form, clean_for='sr')
 
-    
+        if len(written_form) > 0:
+            entry = written_form + '\\' + entry
+            
     return entry
 
 class CommandDictGrammar(DictGramBase):

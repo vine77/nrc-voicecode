@@ -4,6 +4,7 @@
 import debug, sys
 from Object import Object
 
+
 class AppState(Object):
     """State information for the programming environment.    
 
@@ -87,6 +88,18 @@ class AppState(Object):
         .. [self.curr_buffer] file:///AppState.AppState.html"""
 
         debug.virtual('move_to')
+
+    def move_relative(self, rel_movement, f_name=None):
+        """Move cursor to plus or minus a certain number of characters
+
+        if *INT rel_movement* < 0 then move to the left. Otherwise, move to the
+        right.
+        
+        If *f_name* is *None*, then use buffer [self.curr_buffer].
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+        debug.virtual('move_relative')
+        
 
 
     def find_buff(self, buff_name=None):
@@ -212,7 +225,8 @@ class AppState(Object):
            *STR* f_name -- name of the file in buffer where the search
             should be done. If *None*, use [self.curr_buffer].
 
-           Returns 1 if and only if an occurence was found, and 0 otherwise.                          
+           Returns *None* if no occurence was found. Otherwise,
+           returns a match object.
         .. [self.curr_buffer] file:///AppState.AppState.html"""
         
         debug.virtual('search_for')
@@ -293,68 +307,8 @@ class AppState(Object):
         print. If *None*, then print current buffer.    
         """
         buff = self.find_buff(file_name)
-        cont = self.curr_buffer.content
-
-        if buff.selection_start != None or buff.selection_end != None:
-            if buff.selection_start <= buff.selection_end:
-                selection_start = buff.selection_start
-                selection_end = buff.selection_end
-            else:
-                selection_start = buff.selection_end
-                selection_end = buff.selection_start
-        else:
-            selection_start = buff.cur_pos
-            selection_end = buff.cur_pos
-
-        before_content = cont[:selection_start]
-        selection_content = cont[selection_start:selection_end]
-        after_content = cont[selection_end:]
+        buff.print_buff()
         
-        sys.stdout.write("*** Start of source buffer ***\n")
-
-        #
-        # Print region before the selection.
-        #
-        curr_line_num = 1
-        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
-        for aline in lines_with_num[:len(lines_with_num)-1]:
-            sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if (len(lines_with_num) > 0):
-             lastline = lines_with_num[len(lines_with_num)-1]
-             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
-        
-        if selection_content == '':
-            sys.stdout.write('<CURSOR>')            
-        else:
-            sys.stdout.write('<SEL_START>')
-
-        #
-        # Print the selection
-        #
-        curr_line_num = curr_line_num + len(lines_with_num) - 1
-        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if selection_content != '': sys.stdout.write('<SEL_END>')
-
-        #
-        # Print region after the selection
-        #
-        curr_line_num = curr_line_num + len(lines_with_num) - 1
-        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))        
-        sys.stdout.write("\n*** End of source buffer ***\n")
-        
-
-
-
     def active_language(self):
         """Returns name of active programming language.
 

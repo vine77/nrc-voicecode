@@ -75,6 +75,6 @@ if (__name__ == '__main__'):
     # Need to disconnect otherwise the DOS window hangs up after script
     # terminates.
     #
-    natlink.natDisconnect()
+    sr_interface.disconnect()
 
 

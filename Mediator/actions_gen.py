@@ -51,19 +51,30 @@ def anonymous_action(code, description):
         raise AnonymousAction, 'Syntax error in code of anonymous action function.\Code was:\n%s\n' % code
 
 def gen_parens_pair(app, cont):
-    """Insert parens"""
+    """Insert parens and puts cursor in between"""
     app.insert_indent('(', ')')
 
 def gen_brackets_pair(app, cont):
     """Insert brackets"""
     app.insert_indent('[', ']')
 
+def gen_braces_pair(app, cont):
+    """Insert braces"""
+    app.insert_indent('{', '}')
+
+
 def gen_quotes_pair(app, cont):
-    """Insert quotes"""
+    """Insert quotes and moves cursor in between"""
     app.insert_indent('"', '"')
 
+def gen_single_quotes_pair_after(app, cont):
+    """Insert single quotes and moves cursor after"""
+    app.insert_indent('""', '')
+
 def gen_single_quotes_pair(app, cont):
-    """Insert single quotes"""
+    """Insert single quotes and moves cursor in between"""
     app.insert_indent('\'', '\'')
-    
-    
+
+def gen_single_quotes_pair_after(app, cont):
+    """Insert single quotes and moves cursor after"""
+    app.insert_indent('\'\'', '')
