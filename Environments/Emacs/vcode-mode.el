@@ -1082,7 +1082,7 @@ Changes are put in a changes queue `vr-queued-changes.
 (defun vcode-execute-command-string (command-string)
   "Execute a string as though it was typed by the user.
 "
-  (let ()
+  (let ((abbrev-mode-was))
     (vcode-trace "vcode-execute-command-string" "command-string=%S" command-string)
     (vr-log "-- vcode-execute-command-string: command-string=%S" command-string)
     (if unread-command-events
@@ -1110,6 +1110,10 @@ Changes are put in a changes queue `vr-queued-changes.
     ;;;
     ;;; Execute each event
     ;;;
+
+    ;; turn off abbrevs temporarily
+    (setq abbrev-mode-was abbrev-mode)
+    (abbrev-mode 0)
     (while unread-command-events
       (let* ((event (read-key-sequence-vector nil))
  	     (command (key-binding event))
@@ -1123,6 +1127,8 @@ Changes are put in a changes queue `vr-queued-changes.
 	(run-hooks 'post-command-hook)
       )
     )
+    (if abbrev-mode-was
+        (abbrev-mode 1))
   )
 )
 
