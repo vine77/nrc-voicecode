@@ -832,7 +832,9 @@ class SourceBuff(OwnerObject):
 
         trace('SourceBuff.insert_indent',
               '... code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
+
         if range == None:
+            trace('SourceBuff.insert_indent', "  no range")
             range = self.get_selection()
             trace('SourceBuff.insert_indent',
                 'got selection ... range=%s' % repr(range))
@@ -1431,7 +1433,7 @@ class SourceBuff(OwnerObject):
         return best_match
 
     def search_for(self, regexp, direction=1, num=1, where=1,
-                   unlogged = 0):
+                   include_current_line = 0, unlogged = 0):
         
         """Moves cursor to the next occurence of regular expression
            *STR regexp* in buffer.
@@ -1443,6 +1445,10 @@ class SourceBuff(OwnerObject):
 
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
+
+           *BOOL* include_current_line -- if true, include the entire
+           current line in the search (start at end of line if going
+           backwards, start at beginning of line if going forwards)
            
            *BOOL* unlogged -- if true, don't log the results of this
            search (used for searches done by mediator without user-initiation)
@@ -1453,8 +1459,20 @@ class SourceBuff(OwnerObject):
            """
 
         trace('SourceBuff.search_for', 
-              "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s, self.cur_pos()=%s" %
-               (regexp, direction, num, where, unlogged, self.cur_pos()))               
+              "regexp='%s', direction=%s, num=%s, where=%s, include_current_line=%s, unlogged=%s, self.cur_pos()=%s" %
+               (regexp, direction, num, where, include_current_line, unlogged, self.cur_pos()))               
+
+        # save old cursor position in case we go to beginning or end
+        # of line and search fails so we need to return 
+        old_cur_pos = self.cur_pos()
+
+        if include_current_line:
+            if direction > 0:
+                # searching forward, so start at beginning of line
+                self.goto(self.beginning_of_line())
+            else:
+                # searching backward, so start at end of line
+                self.goto(self.end_of_line())
                        
         best_match = self.search_for_match(regexp, direction =
             direction, num = num, where = where)
@@ -1463,10 +1481,13 @@ class SourceBuff(OwnerObject):
             self.log_search(regexp, direction, where, best_match)
                    
         if best_match is None:
+            self.goto(old_cur_pos)
+            trace('SourceBuff.search_for','... not found.')
             return 0
-        
+
         new_cur_pos = self.pos_extremity(best_match, where)
         self.goto(new_cur_pos)
+        trace('SourceBuff.search_for','... found.')
         return 1    
 
     def search_for_match(self, regexp, direction=1, num=1, where=1):
@@ -1510,6 +1531,7 @@ class SourceBuff(OwnerObject):
         if direction > 0:
             trace('SourceBuff.search_for_match', 'searching forward')
             pos = self.cur_pos()
+            trace('SourceBuff.search_for_match', 'Searching text "'+text[pos:]+'"')
             count = 0
             while pos < l:
                 trace('SourceBuff.search_for_match', 
@@ -1517,7 +1539,7 @@ class SourceBuff(OwnerObject):
                 a_match = reobject.search(text, pos)
                 if not a_match:
                     trace('SourceBuff.search_for_match', 
-                        'no more matches after cursor')
+                        'no more matches after cuor')
                     break
                 count = count + 1
                 if count >= num:
@@ -1545,14 +1567,22 @@ class SourceBuff(OwnerObject):
             pos = 0
             matches = []
             trace('SourceBuff.search_for_match', 'searching backwards')
-            while pos < l:
+            # SN: changed to go only up to cur_pos, so we will stop if our final
+            # match is just up to cur_pos (see comment on matches through
+            # cur_pos below)
+            # while pos < l:
+            while pos < self.cur_pos():
                 trace('SourceBuff.search_for_match', 
                     'searching from pos %d' % pos)
-                a_match = reobject.search(text, pos)
-                if not a_match or a_match.end() > self.cur_pos():
-                    trace('SourceBuff.search_for_match', 
-                        'no more matches before cursor')
-                    break
+                trace('SourceBuff.search_for_match', 'Searching text "'+text[pos:]+'"')
+                # SN: only search through cur_pos() -- this prevents a
+                # final match which goes *through* cur_pos from being
+                # found and blocking a match up to cur_pos.
+                a_match = reobject.search(text[:self.cur_pos()], pos)
+                if not a_match:
+                          trace('SourceBuff.search_for_match', 
+                                'no more matches for /'+regexp+'/ before cursor')
+                          break                            
                 matches.append(a_match.span())
                 trace('SourceBuff.search_for_match', 
                    'found match from %d to %d' % a_match.span())
