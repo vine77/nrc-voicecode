@@ -25,7 +25,7 @@
 import debug, sys
 from Object import Object
 
-import AppState, AppStateCached, SourceBuffMessaging
+import AppState, AppStateCached, messaging, SourceBuffMessaging
 
 
 	
@@ -101,11 +101,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         debug.virtual('AppStateMessaging.config_from_external')
 
+    def recog_begin(self, window_id):
+        """Invoked at the beginning of a recognition event.
 
-    def stop_responding(self):
-        
-        """When an utterance is heard, VoiceCode invokes this to ask
-        the editor to stop responding to user input. This is to
+        The editor then returns telling VoiceCode whether or not the user
+        is allowed to speak into window *window_id*.
+
+        If possible, the editor should also stop responding to user
+        input until method [recog_end()] is invoked. This is to
         prevent a bunch of problems that can arise if the user types
         while VoiceCode is still processing an utterance. In such
         cases, the results of the utterance interpretation can be
@@ -115,14 +118,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         Ideally, the editor would:
 
-        - Start recording user actions to a log Then execute those
-        - actions later when [start_responding()] is invoked.
+        - Start recording user actions to a log
+        - execute those actions later when [recog_end()] is invoked.
 
         If the editor is able to stop responding to user input, but is
         not able to record them and/or execute them later, then it
         should:
 
-        - Stop responding to user input until [start_responding()] is
+        - Stop responding to user input until [recog_end()] is
           later invoked.
 
         If the editor is not even able to stop responding to user
@@ -132,30 +135,32 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
 
         NOTE: This method may be invoked more than once before
-        [start_responding()] is invoked. In such cases, only the first
+        [recog_end()] is invoked. In such cases, only the first
         call to the method should do anything.
 
+        
         **INPUTS**
         
-        *none* -- 
-        
+        STR *window_id* -- The ID of the window that was active when
+        the recognition began.                
 
         **OUTPUTS**
         
-        *none* -- 
-
-        ..[start_responding()] file:///./AppState.AppState.html#start_responding"""
+        BOOL *can_talk* -- *true* iif editor allows user to speak into window
+        with ID *window_id*
         
-        self.talk_msgr.send_mess('stop_responding')
-        response = self.talk_msgr.get_mess(expect=['stop_responding_resp'])
+        .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
 
+        self.talk_msgr.send_mess('recog_begin', {'window_id': window_id})
+        response = self.talk_msgr.get_mess(expect=['recog_begin_resp'])
+        return messaging.messarg2int(response[1]['value'])
 
-    def start_responding(self):
-        
-        """Invoked when VoiceCode has finished processing an
-        utterance. This tells the editor to start responding to user
+    def recog_end(self):
+        """Invoked at the end of a recognition event.
+
+        This tells the editor to start responding to user
         input again, and possibly to execute any user inputs it may
-        have recorded since [stop_responding()] was invoked.
+        have recorded since [recog_begin()] was invoked.
         
         Each external editor will respond to that message as best it can.
 
@@ -178,7 +183,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         - Do nothing
 
         NOTE: This method may be invoked more than once before
-        [stop_responding()] is invoked. In such cases, only the first
+        [recog_begin()] is invoked. In such cases, only the first
         call to the method should do anything.
 
         **INPUTS**
@@ -189,11 +194,20 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         **OUTPUTS**
         
         *none* -- 
+        
+        **INPUTS**
+        
+        *none* -- 
+        
 
-        ..[stop_responding()] file:///./AppState.AppState.html#stop_responding"""
+        **OUTPUTS**
+        
+        *none* -- 
 
-        self.talk_msgr.send_mess('start_responding')
-        response = self.talk_msgr.get_mess(expect=['start_responding_resp'])
+        ..[recog_begin()] file:///./AppState.AppState.html#recog_begin"""
+        
+        self.talk_msgr.send_mess('recog_end')
+        response = self.talk_msgr.get_mess(expect=['recog_end_resp'])
 
 
     def listen_one_transaction(self):
@@ -208,7 +222,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         *none* -- 
         """
-#        print '-- AppStateMessaging.listen_one_transation: called'
+        print '-- AppStateMessaging.listen_one_transation: called'
         mess = self.listen_msgr.get_mess(expect=['update'])
         mess_name = mess[0]
         mess_cont = mess[1]

@@ -79,17 +79,17 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         
         return SourceBuffEdSim.SourceBuffEdSim(app=self, fname=fname)
 
+        
+    def recog_begin(self, window_id):
+        
+        """EdSim can't block user input and always allows user to dictate"""
 
-    def stop_responding(self):
+        return 1
+
+
+    def recog_end(self):
         
         """EdSim can't block user input"""
-
-        pass
-        
-    def start_responding(self):
-        
-        """EdSim can't block user input"""
-
         pass
 
 

@@ -141,7 +141,7 @@ class Messenger(Object.Object):
         *none* response -- 
         """
 
-#        print '-- send_mess: mess_name=\'%s\'' % (mess_name)
+        print '-- send_mess: mess_name=\'%s\'' % (mess_name)
 #        print '-- send_mess: mess_argvals=%s' % repr(mess_argvals)
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
         pkd_mess = self.packager.pack_mess(unpkd_mess)
@@ -163,12 +163,12 @@ class Messenger(Object.Object):
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format."""
 
-#        print '-- get_mess: expecting %s' % repr(expect)
+        print '-- get_mess: expecting %s' % repr(expect)
         
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-#        print '-- get_mess: received message name=\'%s\'' % name_argvals_mess[0]
+        print '-- get_mess: received message name=\'%s\'' % name_argvals_mess[0]
 #        print '-- get_mess: received message args=%s' % repr(name_argvals_mess[1])
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
@@ -360,12 +360,10 @@ class MessPackager_FixedLenSeq(MessPackager):
         pkd_message = ''
         last_chunk = 0
         while not (last_chunk == '1'):
-#            print '-- MessPackager_FixedLenSeq.get_packed_mess: in while'
             a_chunk = transporter.receive_string(self.chunk_len)
-#            print '-- MessPackager_FixedLenSeq.get_packed_mess: got a_chunk="%s"' % a_chunk            
             pkd_message = pkd_message + a_chunk
+#            print '-- get_packed_mess: read a chunk, pkd_message=\'%s\'' % pkd_message
             last_chunk = a_chunk[0]
-#            print '-- MessPackager_FixedLenSeq.get_packed_mess: last_chunk="%s"' % last_chunk
 
 #        print '-- get_packed_mess: done'
         
