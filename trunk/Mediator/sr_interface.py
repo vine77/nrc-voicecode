@@ -27,7 +27,7 @@ import natlink
 from natlinkutils import *
 import actions_gen, CmdInterp
 from Object import Object
-import debug
+from debug import trace
 
 import SpokenUtterance
 
@@ -128,7 +128,7 @@ def connect(mic_state=None, mic_change_callback = None):
     global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
     global sr_mic_change_callback
     
-#    print '-- sr_interface.connect: mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected)
+#    trace('sr_interface.connect', 'mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected))
     
     if speech_able():
         if not sr_is_connected:
@@ -213,26 +213,26 @@ def addedByVC(flag):
     """Returns *true* iif word information *flag* indicates that word
     was added by VoiceCode"""
 
-#    print '-- sr_interface.addedByVC: flag=%s' % str(flag)
+#    trace('sr_interface.addedByVC', 'flag=%s' % str(flag))
     if flag == None:
         indicator = 0
     elif (add_words_as == 'user'):
         indicator = (flag % int(0x00000010))        
     else:
         indicator = (flag / int(0x40000000))
-#    print '-- sr_interfacen.addedByVC: indicator=%s' % indicator
+#    trace('sr_interfacen.addedByVC', 'indicator=%s' % indicator)
     return indicator
 
 def getWordInfo(word, *rest):
     
-#    print '-- sr_interface.getWordInfo: word=%s, rest=%s' % (word, rest)
+#    trace('sr_interface.getWordInfo', 'word=%s, rest=%s' % (word, rest))
     
     #
     # First, fix the written form of the word
     #
     spoken, written = spoken_written_form(word)
     word = vocabulary_entry(spoken, written, clean_written=1)
-#    print '-- sr_interface.getWordInfo: reformatted word=%s' % word
+#    trace('sr_interface.getWordInfo', 'reformatted word=%s' % word)
 
     answer = None
     if speech_able():
@@ -241,7 +241,7 @@ def getWordInfo(word, *rest):
         elif len(rest) == 1:
             answer = natlink.getWordInfo(word, rest[0])
 
-#    print '-- sr_interface.getWordInfo: answer is %s' % answer
+#    trace('sr_interface.getWordInfo', 'answer is %s' % answer)
     return answer
 
 
@@ -255,7 +255,7 @@ def addWord(word, *rest):
         
     global word_info_flag
 
-#    print '-- sr_interface.addWord: adding \'%s\'' % word
+#    trace('sr_interface.addWord', 'adding \'%s\'' % word)
     
     #
     # First, fix the written form of the word
@@ -271,7 +271,7 @@ def addWord(word, *rest):
         connect()
                 
         if getWordInfo(word) == None:
-#            print '-- sr_interface.addWord: this word is new to NatSpeak'
+#            trace('sr_interface.addWord', 'this word is new to NatSpeak')
                    
             if len(rest) == 0:
                 flag = word_info_flag
@@ -296,7 +296,7 @@ def addWord(word, *rest):
             #
             word_no_special_chars = re.sub('{Spacebar}', '', word)
             if word_no_special_chars != word:
-#                print '-- sr_interface.addWord: adding redundant form with no spaces \'%s\'' % word_no_special_chars
+#                trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
                 natlink.addWord(word_no_special_chars, flag)
 
 def deleteWord(word, *rest):
@@ -310,17 +310,16 @@ def deleteWord(word, *rest):
     flag set and if the word is a phrase (single words might actually
     have ben added by the real Vocabulary Builder)"""
 
-#    print '-- sr_interface.deleteWord: word=%s, rest=%s' % (word, rest)
+#    trace('sr_interface.deleteWord', 'word=%s, rest=%s' % (word, rest))
     if speech_able():
         flag = getWordInfo(word, 4)
         num_words = len(re.split('\s+', word))
-#        print '-- sr_interface.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
         if addedByVC(flag) and num_words > 1:
-#            print '-- sr_interface.deleteWord: actually deleting word %s' % word
+#            trace('sr_interface.deleteWord', 'actually deleting word %s' % word)
             sr_user_needs_saving = 1
             return natlink.deleteWord(word)
         else:
-#            print '-- sr_interface.deleteWord: word not added by VoiceCode %s' % word
+#            trace('sr_interface.deleteWord', 'word not added by VoiceCode %s' % word)
             return None
 
 def clean_written_form(written_form, clean_for=None):
@@ -341,7 +340,7 @@ def clean_written_form(written_form, clean_for=None):
     *STR cleansed_form* -- The clean written form
     """
 
-#    print '-- sr_interface.clean_written_form: written_form=\'%s\', clean_for=%s' % (written_form, clean_for)
+#    trace('sr_interface.clean_written_form', 'written_form=\'%s\', clean_for=%s' % (written_form, clean_for))
     cleansed_form = written_form
     if clean_for == 'sr': 
         cleansed_form = re.sub('\n', '{Enter}', cleansed_form)
@@ -351,7 +350,7 @@ def clean_written_form(written_form, clean_for=None):
         cleansed_form = re.sub('\\{Enter\\}', '\n', cleansed_form)
         cleansed_form = re.sub('\\{Spacebar\\}', ' ', cleansed_form)
         cleansed_form = re.sub('\\{Backslash\\}', '\\\\', cleansed_form)        
-#    print '-- sr_interface.clean_written_form: cleansed_form=\'%s\'' % cleansed_form
+#    trace('sr_interface.clean_written_form', 'cleansed_form=\'%s\'' % cleansed_form)
     return cleansed_form
     
 
@@ -368,7 +367,7 @@ def clean_spoken_form(spoken_form):
     *STR* clean_form -- The cleansed form.
     """
 
-#    print '-- sr_interface.clean_spoken_form: spoken_form=\'%s\'' % spoken_form
+#    trace('sr_interface.clean_spoken_form', 'spoken_form=\'%s\'' % spoken_form)
 
     clean_form = spoken_form
 
@@ -398,7 +397,7 @@ def clean_spoken_form(spoken_form):
         clean_form = re.sub('^\s+', '', clean_form)
         clean_form = re.sub('\s+$', '', clean_form)
 
-#    print '-- sr_interface.clean_spoken_form: returning clean_form=\'%s\'' % clean_form
+#    trace('sr_interface.clean_spoken_form', 'returning clean_form=\'%s\'' % clean_form)
     return clean_form
 
 
@@ -416,7 +415,7 @@ def spoken_written_form(vocabulary_entry):
     """
     a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
     if a_match:
-#        print '-- sr_interface.spoken_written_form: entry \'%s\' is spoken/written form' % vocabulary_entry
+#        trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
         
         #
         # Note: need to check for things like {Enter} in written_form
@@ -425,7 +424,7 @@ def spoken_written_form(vocabulary_entry):
         written = a_match.group(1)
         spoken = a_match.group(2)
     else:
-#        print '-- sr_interface.spoken_written_form: entry \'%s\' is just spoken ' % vocabulary_entry        
+#        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
         written = vocabulary_entry
         spoken = vocabulary_entry
 
@@ -440,7 +439,7 @@ def spoken_written_form(vocabulary_entry):
     #
     spoken = clean_spoken_form(spoken)
 
-#    print '-- sr_interface.spoken_written_form: spoken=\'%s\', written=\'%s\'' % (spoken, written)
+#    trace('sr_interface.spoken_written_form', 'spoken=\'%s\', written=\'%s\'' % (spoken, written))
 
     return (spoken, written)
     
@@ -462,7 +461,7 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
     *entry* -- the entry to be added to the SR vocabulary
     """
 
-#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s, clean_written=%s' % (spoken_form, repr(written_form), clean_written)
+#    trace('sr_interface.vocabulary_entry', 'spoken_form=\'%s\', written_form=%s, clean_written=%s' % (spoken_form, repr(written_form), clean_written))
 
     spoken_form = clean_spoken_form(spoken_form)
     entry = spoken_form
@@ -477,7 +476,7 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
         if len(written_form) > 0:
             entry = written_form + '\\' + entry
 
-#    print '-- sr_interface.vocabulary_entry: returning entry=\'%s\'' % entry
+#    trace('sr_interface.vocabulary_entry', 'returning entry=\'%s\'' % entry)
     return entry
 
 class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
@@ -900,20 +899,21 @@ class CommandDictGrammar(DictGramBase):
 	del self.interpreter
 
     def deactivate(self):
-#        print '-- CommandDictGramm.deactivate: called'
+#        trace('sr_interface.CommandDictGramm.deactivate', 'called')
 	DictGramBase.deactivate(self)
 	self.isActive = 0
 
     def activate(self):
 	if self.isActive:
-#            print '-- CommandDictGramm.activate: already active'
+#            trace('sr_interface.CommandDictGramm.activate', 'already active')
 	    return
-#        print '-- CommandDictGramm.activate: activating grammar'        
+#        trace('sr_interface.CommandDictGramm.activate', 'activating grammar')
 	DictGramBase.activate(self, window = self.window, exclusive = self.exclusive)
 	self.isActive = 1
 
-    def gotBegin(self, moduleInfo):        
-#        print '-- CommandDictGrammar.gotBegin: self.window=%s, self.isActive=%s, self.exclusive=%s, self.allResults=%s, self.app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.exclusive, self.allResults, self.app.active_field(), moduleInfo)
+    def gotBegin(self, moduleInfo):
+        trace('sr_interface.CommandDictGrammar.gotBegin', 
+              'invoked: self.window=%s, self.isActive=%s, self.exclusive=%s, self.allResults=%s, self.app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.exclusive, self.allResults, self.app.active_field(), moduleInfo))
 
         #
         # Tell the external editor which window was active when utterance
@@ -926,21 +926,21 @@ class CommandDictGrammar(DictGramBase):
         
 	if self.window == 0:
 	    pass
-#            print '-- CommandDictGrammar.gotBegin: this is a global grammar. Just pass'
+            trace('sr_interface.CommandDictGrammar.gotBegin', 'this is a global grammar. Just pass')
 	elif (self.app.active_field() == None and
               self.dictation_allowed):
-#            print '-- CommandDictGrammar.gotBegin: I think this is supposed to be called only when editor window is active.'
+            trace('sr_interface.CommandDictGrammar.gotBegin', 'I think this is supposed to be called only when editor window is active.')
 	    if not self.isActive:
-#                print '-- CommandDictGrammar.gotBegin: grammar not active. Activating it.'                
+                trace('sr_interface.CommandDictGrammar.gotBegin', 'grammar not active. Activating it.'                )
 		self.activate()
 	else:
-#            print '-- CommandDictGrammar.gotBegin: Local grammar but the editor doesn\'t have focus. Deactivate the grammar'
+            trace('sr_interface.CommandDictGrammar.gotBegin', 'Local grammar but the editor doesn\'t have focus. Deactivate the grammar')
 	    self.deactivate()
 
         
     def gotResultsObject(self, recogType, results):
-#        print '-- CommandDictGramm.gotResultsObject: recogType=%s' % recogType
-#        print '-- CommandDictGramm.gotResultsObject: self.app=%s, self.dictation_allowed=%s' % (self.app, self.dictation_allowed)
+        trace('sr_interface.CommandDictGramm.gotResultsObject', 'recogType=%s' % recogType)
+        trace('sr_interface.CommandDictGramm.gotResultsObject', 'self.app=%s, self.dictation_allowed=%s' % (self.app, self.dictation_allowed))
 
         if self.dictation_allowed:        
             #
@@ -958,14 +958,14 @@ class CommandDictGrammar(DictGramBase):
                 # (in which case, ignore it).
                 #
                 try:
-#                    print '-- CommandDictGramm.gotResultsObject: checking if select grammar result'
+                    trace('sr_interface.CommandDictGramm.gotResultsObject', 'checking if select grammar result')
                     results.getSelectInfo(self.gramObj, 0)
                     # If no exception is generated, then results was generated
                     # by a selection grammar. So skip it.
-#                    print '-- CommandDictGramm.gotResultsObject: this result generated by a selection grammar. Skipping it'
+                    trace('sr_interface.CommandDictGramm.gotResultsObject', 'this result generated by a selection grammar. Skipping it')
                     return
                 except natlink.BadGrammar:
-#                    print '-- CommandDictGramm.gotResultsObject: this result NOT generated by a selection grammar. Processing it'
+                    trace('sr_interface.CommandDictGramm.gotResultsObject', 'this result NOT generated by a selection grammar. Processing it')
                     # If exception is generated, then results was NOT generated
                     # by a selection grammar. So keep processing it.
                     pass
@@ -976,7 +976,7 @@ class CommandDictGrammar(DictGramBase):
                 self.interpreter.interpret_NL_cmd(words, self.app)
                 self.app.curr_buffer().print_buff_if_necessary()
 
-#        print '-- CommandDictGramm.gotResults: exited'
+#        trace('sr_interface.CommandDictGramm.gotResults', 'exited')
         
 
 class CodeSelectGrammar(SelectGramBase):
@@ -1034,16 +1034,24 @@ class CodeSelectGrammar(SelectGramBase):
 	self.isActive = 1
 
     def gotBegin(self, moduleInfo):
-#        print '-- CodeSelectGrammar.gotBegin: called, self=%s' % repr(self.__dict__)
-#        print '-- CodeSelectGrammar.gotBegin: called,self.app=%s, self.app.curr_buffer()=%s' % (self.app, self.app.curr_buffer())
+        trace('sr_interface.CodeSelectGrammar.gotBegin',
+              'called,self.app=%s, self.app.curr_buffer()=%s' % (self.app, self.app.curr_buffer()))
 
-	vis_start, vis_end = self.app.curr_buffer().get_visible()
+	vis_start, vis_end = self.app.get_visible()
 	self.vis_start = vis_start
 	visible = \
 	    self.app.curr_buffer().get_text(vis_start, vis_end)
+        trace('sr_interface.CodeSelectGrammar.gotBegin',
+              '** vis_start=%s, vis_end=%s, visible="%s"' %
+              (vis_start, vis_end, visible))
+        trace('sr_interface.CodeSelectGrammar.gotBegin',
+              '** self.app.get_text()="%s", self.app.curr_buffer()._get_text_from_app()="%s"' %
+              (self.app.get_text(), self.app.curr_buffer()._get_text_from_app()))
+        
+        
 	self.setSelectText(visible)
 	if self.window == 0:
-#	    self.activate()
+	    self.activate()
 	    self.setSelectText(visible)
 	elif self.app.active_field() == None:
 	    self.setSelectText(visible)
@@ -1053,7 +1061,8 @@ class CodeSelectGrammar(SelectGramBase):
         
 
     def gotResultsObject(self,recogType,resObj):
-#        print '-- CodeSelectGrammar.gotResultsObject: called, recogType=\'%s\'' % recogType
+        trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+              'called, recogType=\'%s\'' % recogType)
 
         #
         # In regression testing mode (self.allResults = 1), we process all
@@ -1075,9 +1084,11 @@ class CodeSelectGrammar(SelectGramBase):
                 return
         
         if recogType == 'self' or (recogType == 'other' and self.allResults):
+            trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                  '** collecting the possible regions')
+            
             # If there are multiple matches in the text we need to scan through
             # the list of choices to find every entry which has the highest.
-            
             self.ranges = []        
             try:
                 bestScore = resObj.getWordInfo(0)[0][2]
@@ -1107,6 +1118,9 @@ class CodeSelectGrammar(SelectGramBase):
                 # Collect selection ranges with highest score
                 #
                 for i in range(100):
+                    trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                          '** i=%s' % i)
+                    
                     #
                     # The candidate regions are sorted from best to worst scores.
                     # Loop through candidate regions until we reach one whose
@@ -1129,13 +1143,16 @@ class CodeSelectGrammar(SelectGramBase):
                         #
                         region = resObj.getSelectInfo(self.gramObj, i)
 
-#                        print '-- CodeSelectGrammar.gotResultsObject: region=%s, self.vis_start=%s' % (repr(region), self.vis_start)
+#                        trace('sr_interface.CodeSelectGrammar.gotResultsObject', 'region=%s, self.vis_start=%s' % (repr(region), self.vis_start))
                         
                         true_region = (region[0] + self.vis_start,
                           region[1] + self.vis_start)
                         self.ranges.append(true_region)
 
             except natlink.OutOfRange:
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** got the last region, self.ranges=%s' % self.ranges)
+                
                 #
                 # Note: We end up here when we finished collecting selection ranges
                 #       with the top score
@@ -1144,20 +1161,41 @@ class CodeSelectGrammar(SelectGramBase):
                 # which is closest to the cursor
                 #
                 self.ranges.sort()
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** invoking closest_occurence_to_cursor')
+                
                 closest_range_index = self.app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)
+
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** DONE with closest_occurence_to_cursor')
 
                 #
                 # Mark selection and/or move cursor  to the appropriate end of
                 # the selection.
                 #
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** mark_selection=%s' % mark_selection)
+                
                 if mark_selection:
+                    trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                          '** invoking ActionSelect(...).log_execute(...)')
+                    
                     actions_gen.ActionSelect(range=self.ranges[closest_range_index], cursor_at=where).log_execute(self.app, None)
+                    trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                          '** DONE invoking ActionSelect(...).log_execute(...)')
+                    
                 else:
                     if where > 0:
                         pos = self.ranges[closest_range_index][1]
                     else:
                         pos = self.ranges[closest_range_index][0]
+                    trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                          '** going to pos=%s' % pos)
+                        
                     self.app.curr_buffer().goto(pos)
+                    trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                          '** DONE going to pos=%s' % pos)
+                    
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 
@@ -1165,14 +1203,29 @@ class CodeSelectGrammar(SelectGramBase):
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the print_buff_if_necessary message.
 
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** invoking print_buff_if_necessary')
+
                 self.app.curr_buffer().print_buff_if_necessary()
+                
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** DONE invoking print_buff_if_necessary')
+
 
                 #
                 # Log the selected occurence so that if the user repeats the
                 # same Select Pseudocode operation we don't end up selecting
                 # the same occurence again
                 #
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** invoking log_search')
+                
                 self.app.curr_buffer().log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
+
+                trace('sr_interface.CodeSelectGrammar.gotResultsObject',
+                      '** DONE invoking log_search')
+
+        trace('sr_interface.CodeSelectGrammar.gotResultsObject', 'exited')
 
 
     def selection_spoken_form(self, resObj):
@@ -1200,6 +1253,6 @@ class CodeSelectGrammar(SelectGramBase):
                 spoken_form = spoken_form + ' '
             spoken_form = spoken_form + a_spoken_word
 
-#        print '-- CodeSelectGrammar.selection_spoken_form: returning spoken_form=%s' % spoken_form
+#        trace('sr_interface.CodeSelectGrammar.selection_spoken_form', 'returning spoken_form=%s' % spoken_form)
         
         return spoken_form
