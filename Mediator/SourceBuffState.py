@@ -40,6 +40,9 @@ class SourceBuffState(SourceBuffCookie):
 
     *STR* text -- copy of the buffer contents
 
+    *INT* cursor_at -- indicates whether the cursor is at the start (0)
+    or end (1) of the selection_range
+
     *(INT, INT)* selection_range -- range of the selection
     
     """
@@ -96,6 +99,19 @@ class SourceBuffState(SourceBuffCookie):
         following the selection (this matches Python's slice convention).
         """
         return self.selection_range
+
+    def position(self):
+        """returns the stored location of the cursor
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *INT* -- offset into the buffer of the stored cursor location
+        """
+        return self.selection_range[self.cursor_at()]
 
     def cursor_at(self):
         """tells at which end of the selection the cursor was located

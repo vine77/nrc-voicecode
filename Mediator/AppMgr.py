@@ -661,10 +661,9 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         *none*
         """
-        # this should call NewMediatorObject, unless all buffer-specific
-        # information is stored under AppMgr.  Since I haven't decided
-        # yet where that information will be stored, do nothing for now
-        pass
+        # For now, all buffer-specific information is stored under 
+        # AppMgr/RecogStartMgr, so we don't need to notify NewMediatorObject
+        self.recog_mgr.close_buffer_cbk(instance, buff_name)
 
     def open_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
@@ -720,9 +719,8 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         *none*
         """
-        # this should also call NewMediatorObject, unless all buffer-specific
-        # information is stored under AppMgr.  For now, that is the
-        # case.
+        # For now, all buffer-specific information is stored under 
+        # AppMgr/RecogStartMgr, so we don't need to notify NewMediatorObject
         self.recog_mgr.rename_buffer_cbk(instance, old_buff_name, new_buff_name)
 
     def new_window(self, instance):

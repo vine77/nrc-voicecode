@@ -1559,7 +1559,7 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
         
-        trace('SourceBuff.isnert_cbk.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
+        trace('SourceBuff.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         self.on_change(range[0], range[1], text, 0)
 
     def pos_selection_cbk(self, pos, selection):
@@ -1778,7 +1778,8 @@ class BackspaceMixIn(Object):
         self.delete(range = (start, end))
         
 class SourceBuffWithServices(sb_mixins.WithKbdService,
-    sb_mixins.WithStateService, SourceBuff):
+#    sb_mixins.WithStateService, 
+    SourceBuff):
     """partial implementation of SourceBuff using sb_mixins to implement
     some methods using mixins
 
@@ -1799,6 +1800,6 @@ class SourceBuffWithServices(sb_mixins.WithKbdService,
                             )
     def remove_other_references(self):
         sb_mixins.WithKbdService.remove_other_references(self)
-        sb_mixins.WithStateService.remove_other_references(self)
+#        sb_mixins.WithStateService.remove_other_references(self)
         SourceBuff.remove_other_references(self)
 
