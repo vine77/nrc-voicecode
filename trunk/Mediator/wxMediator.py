@@ -55,6 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'spoken_written_form': 1,
 #                        'ListenAndQueueMsgsThread': 1,
 #                        'activate': 1,
 #                        'SimCmdsObj.say': 1,

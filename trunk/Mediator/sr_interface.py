@@ -429,7 +429,7 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     """
     a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
     if a_match:
-#        trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+        trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
         
         #
         # Note: need to check for things like {Enter} in written_form
@@ -441,12 +441,19 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
 # natspeak 7, get reported as written\spoken\t (That's backslash and t,
 # not a tab character) - DCF
         spoken = a_match.group(2)
+        trace('sr_interface.spoken_written_form', 
+            'initial spoken, written = "%s", "%s"' % (spoken, written))
         extra = string.find(written, '\\')
         if extra >= 0:
-            written = written[:extra]
-            spoken = written[extra+1:]
+            was_written = written
+            written = was_written[:extra]
+            spoken = was_written[extra+1:]
+            trace('sr_interface.spoken_written_form', 
+                'but extra = %d' % extra)
+            trace('sr_interface.spoken_written_form', 
+                'final spoken, written = "%s", "%s"' % (spoken, written))
     else:
-#        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
+        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
         written = vocabulary_entry
         spoken = vocabulary_entry
 

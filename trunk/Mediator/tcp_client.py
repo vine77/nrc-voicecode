@@ -55,6 +55,7 @@ from tcp_threads import *
 # activate some traces.
 debug.config_traces(status="on",
               active_traces={
+#                              'ClientEditor': 1,
 #                             'get_mess':1,
 #                             'send_mess': 1
 #                             'SourceBuffEdSim': 1
@@ -133,7 +134,7 @@ class ClientConnection(Object.Object):
 
         ..[ListenAndQueueMsgsThread] 
         file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-        queue = Queue.Queue(10)
+        queue = Queue.Queue()
         broken_connection = ('broken_connection', {})
         self.client_quitting = threading.Event()
         sleeper = messaging.LightSleeper(self.client_quitting)

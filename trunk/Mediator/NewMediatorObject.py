@@ -1038,7 +1038,7 @@ class NewMediatorObject(Object.OwnerObject):
                     self.foreground_testing = 0
                 else:
                     msg = 'WARNING: Unable to run foreground tests with\n' \
-                        + 'an internal editor'
+                        + 'an internal editor\n'
                     sys.stderr.write(msg)
                 if self.test_suite.background_count():
                     if self.global_grammars:
