@@ -229,28 +229,25 @@ class AppStateCached(AppState.AppState):
         
 	debug.virtual('AppStateCached.bidirectional_selection')
 
-    def open_file_cbk(self, name):
-        """Editor invokes this method to notify VoiceCode that it opened a new source file.
+    def open_buffer_cbk(self, buff_id):
+        """Editor invokes this method to notify VoiceCode that it opened a
+        new source buffer.
         
         **INPUTS**
         
-        STR *name* -- Name of the buffer         
+        STR *buff_id* -- Name of the buffer         
 
         **OUTPUTS**
         
-        [SourceBuff] *new_buff* -- The [SourceBuff] instance created
-        to represent this new file.
-        
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-#        print "-- AppStateCached.open_file_cbk: name=%s" % name
+#        print "-- AppStateCached.open_buffer_cbk: name=%s" % name
         
         #
-        # Invoke super class' version of open_file(), then update cached
+        # Invoke super class' version of open_buffer_cbk(), then update cached
         # data that may have changed as a result of the file opening
         #
-        new_buff = AppState.AppState.open_file_cbk(self, name)
-
+        AppState.AppState.open_buffer_cbk(self, buff_id)
         
-        self.cache['app_active_buffer_name'] = name
-        return new_buff
+        self.cache['app_active_buffer_name'] = buff_id
+

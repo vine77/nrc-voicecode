@@ -443,8 +443,10 @@ class AppState(Object):
     entry is the context in which the command was applied. The second
     entry is the action that was executed.
     
-    *{STR: * [SourceBuff] *} open_buffers={}* -- List of source buffers that
-     are currently open in the programming environment.
+    *{STR: * [SourceBuff] *} open_buffers={}* -- List of source
+     buffers that are currently open in the programming
+     environment. The key is the buffer ID (not the file name!) and
+     the value is the [SourceBuff] object.
     
     *INT* max_history=100 --  Maximum length of the command history.
 
@@ -968,19 +970,20 @@ class AppState(Object):
         """
 
 #        print '-- AppState.find_buff: buff_name=%s' % buff_name
-        
+
+        buff = None
         if (buff_name == None):
             buff_name = self.curr_buffer_name()
             
         if buff_name != None:
             if self.open_buffers.has_key(buff_name):
-                return self.open_buffers[buff_name]
+                buff = self.open_buffers[buff_name]
             else:
-                new_buff = self.new_source_buffer(buff_name)
-                self.open_buffers[buff_name] = new_buff
-                return new_buff
-        else:
-            return None
+                buff = self.new_source_buffer(buff_name)
+                self.open_buffers[buff_name] = buff
+                return buff
+
+        return buff
 
 
     def close_buff(self, buff_name):
@@ -1013,36 +1016,49 @@ class AppState(Object):
         debug.virtual('AppState.pop_breadcrumbs')        
 
 
-    def open_file_cbk(self, name, last_modified=None):
-        """Editor invokes this method to notify VoiceCode that it opened a new source file.
+
+    def tell_editor_to_open_file(self, file_name):
+        """Tell the editor to open a file in a new buffer.
         
         **INPUTS**
         
-        STR *name* -- Name of the buffer
-
-        (INT, INT, INT, INT, INT, INT) *last_modified* -- Date where
-        this buffer was last modified (year, month, day, hours,
-        minutes, seconds). Used to decide whether symbols in that file
-        should be recompiled or not (future use only)
-
+        STR *file_name* -- The full path of the file to be opened.
+        
         **OUTPUTS**
         
-        [SourceBuff] *new_buff* -- The [SourceBuff] instance created
-        to represent this new file.
+        STR *buff_id* -- Unique name of the buffer in which the file
+        was opened. Returns *None* if the editor was not able to open
+        the file.
+        
+        """
+        
+        debug.not_implemented('AppState.tell_editor_to_open_file')
+        
+
+    def open_buffer_cbk(self, buff_id):
+        
+        """Editor invokes this method to notify VoiceCode that it
+        opened a new text buffer.
+        
+        **INPUTS**
+
+        STR *buff_id* -- ID of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-#        print '-- AppState.open_file_cbk: name=%s' % name
+#        print '-- AppState.open_buffer_cbk: buff_id=%s' % buff_id
         
         #
         # First make sure we don't already have a buffer by that name
         #
-        buff = self.find_buff(buff_name=name)
+        buff = self.find_buff(buff_name=buff_id)
         if not buff:
             buff = self.new_source_buffer(name)
-        
-        return buff
-            
+            self.open_buffers[buff_id] = buff
 
     def new_compatible_sb(self, buff_id):
         """Creates a new instance of [SourceBuff].
@@ -1085,17 +1101,28 @@ class AppState(Object):
         self.open_buffers[buff_id] = new_buff
         return new_buff
 
-    def open_file(self, name, lang = None):
-        """Tell the external editor to open a file.
+    def open_file(self, file_name):
+        """Tell the external editor to open a file, and create a local buffer
+        for that file.
 
         Open file with name *STR name* and written in language *STR lang*.
 
         Right now, this is used mostly so that the regression testing
         procedure can tell the external editor to open a test
         file. But in the future, it may be used to voice-enable the
-        open-file dialogue using pseudo-code dictation of file names.        
+        open-file dialogue using pseudo-code dictation of file names.
+
+        **INPUTS**
+
+        STR *file_name* -- Full path of the file to be opened.
+
         """
-        debug.virtual('AppState.open_file')
+
+#        print '-- AppState.open_file: file_name="%s"' % file_name
+        buff_id = self.tell_editor_to_open_file(file_name)
+
+        if buff_id:
+            self.open_buffer_cbk(buff_id)
 
     def save_file(self, full_path = None, no_prompt = 0):
         """Tell the external editor to save the current buffer.

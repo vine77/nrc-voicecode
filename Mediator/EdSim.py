@@ -185,14 +185,13 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         """
         self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
 
+    def tell_editor_to_open_file(self, file_name):
+        """See [AppState.tell_editor_to_open_file()] for doc.
 
-    def open_file(self, name, lang=None):
-        """Tell the editor to open a file.
+        ..[AppState.tell_editor_to_open_file()] file:///./AppState.AppState.html#tell_editor_to_open_file"""
 
-        Open file with name *STR name* and written in language *STR lang*.        
-        """
         try:
-            source_file = open(name, 'r')
+            source_file = open(file_name, 'r')
             source = source_file.read()
             source_file.close()
         except Exception, err:
@@ -200,12 +199,14 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	if self.curr_buffer_name() != None:
 	    del self.open_buffers[self.curr_buffer_name()]
 
+        self.only_buffer =  \
+            SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id=file_name,
+                                            initial_contents = source)
+	self.only_buffer_name = file_name
+        self.open_buffers[file_name] = self.only_buffer               
 
-        self.only_buffer =  SourceBuffEdSim.SourceBuffEdSim(app = self, buff_id=name, language=lang, 
-	    initial_contents = source)
-	self.only_buffer_name = name
 
-        self.open_buffers[name] = self.only_buffer
+        return self.only_buffer.buff_id
 
 
     def save_file(self, full_path = None, no_prompt = 0):
@@ -214,7 +215,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         **INPUTS**
 	
 	*STR full_path* -- full path under which to save the file, or
-	None to use the buffer name
+	*None* to use the buffer name
 
 	*BOOL no_prompt* -- overwrite any existing file without
 	prompting.  No_prompt should only be set to true if the caller

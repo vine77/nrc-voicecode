@@ -202,36 +202,35 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	    return None
 	return ('unknown')
 
-    def open_file(self, name, lang=None):
-        """Open a file.
 
-        Open file with name *STR name* and written in language *STR lang*.        
-        """
-	path, short = os.path.split(name)
+    def tell_editor_to_open_file(self, file_name):
+        """See [AppState.tell_editor_to_open_file()] for doc.
+
+        ..[AppState.tell_editor_to_open_file()] file:///./AppState.AppState.html#tell_editor_to_open_file"""
+
+
+        buff_id = None                
+	path, short = os.path.split(file_name)
 	if path:
 	    self.curr_dir = path
 	else:
 	    path = self.curr_dir
-	    name = os.path.join(path, short)
-	success = self.the_editor.open_file_in_buffer(name)
-#         try:
-#             source_file = open(name, 'rw')
-#             source = source_file.read()
-#             source_file.close()
-#         except Exception, err:
-# 	    return
+	    file_name = os.path.join(path, short)
+	success = self.the_editor.open_file_in_buffer(file_name)
+        
 	# WaxEdit only supports one open buffer at a time
 	if success:
 	    if self.curr_buffer_name() != None:
 		del self.open_buffers[self.curr_buffer_name()]
-	    self.only_buffer =  SourceBuffTB(app = self, buff_id=name, 
+	    self.only_buffer =  SourceBuffTB(app = self, buff_id=file_name, 
 		underlying_buffer = self.the_editor.editor_buffer(),
-		language=lang, indent_level=3, indent_to_curr_level=1)
-	    self.only_buffer_name = name
-#	    self.the_editor.editor_buffer().set_text(source)
+		indent_level=3, indent_to_curr_level=1)
+	    self.only_buffer_name = file_name
+            self.open_buffers[file_name] = self.only_buffer            
 	    self.the_editor.set_name(short)
+            buff_id = self.only_buffer.buff_id
 
-	    self.open_buffers[name] = self.only_buffer
+        return buff_id
 
         
     def save_file(self, full_path = None, no_prompt = 0):

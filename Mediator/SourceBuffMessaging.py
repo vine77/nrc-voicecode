@@ -54,7 +54,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
                             attrs
                             )
 
-    def file_name_from_app(self):
+    def _file_name_from_app(self):
         """Gets from the external editor, the name of the file being
         displayed in this buffer.
         

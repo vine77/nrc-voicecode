@@ -332,30 +332,29 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         return response[1]['value']                
 
 
-    def open_file(self, name, lang = None):
+    def tell_editor_to_open_file(self, file_name):
         """Tell the external editor to open a file.
 
-        Open file with name *STR name* and written in language *STR lang*.
+        STR *file_name* -- The full path of the file to be opened.
+        
+        **OUTPUTS**
+        
+        STR *buff_id* -- Unique name of the buffer in which the file
+        was opened.
 
-        Right now, this is used mostly so that the regression testing
-        procedure can tell the external editor to open a test
-        file. But in the future, it may be used to voice-enable the
-        open-file dialogue using pseudo-code dictation of file names.        
         """
 
-#        print '-- AppStateMessaging.open_file: name=%s' % name
+#        print '-- AppStateMessaging.tell_editor_to_open_file: name=%s' % name
         
         #
         # Tell external editor to open the file
         #
-        self.talk_msgr.send_mess('open_file', {'name': name, 'lang': lang})
+        self.talk_msgr.send_mess('open_file', {'file_name': file_name})
         response = self.talk_msgr.get_mess(expect=['open_file_resp'])
-        
-        #
-        # Make sure we create a corresponding SourceBuff in the mediator.
-        #
-        self.open_file_cbk(name)
+	buffer_id = response[1]['buffer_id']
 
+	return buffer_id
+        
 
     def close_buffer(self, buff_name, save):
         """Ask the editor to close a buffer.
