@@ -407,17 +407,35 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	lines = self.line_range_external(0, pos)
 	return lines[1]
 
-    def position_of_line(self, line = None):
-	"""returns the position of the start of the specified line 
+    def lines(self):
+	"""return number of lines in the buffer
+	
+	**INPUTS**
+	
+	*none*
+	
+	**OUTPUT**
+	
+	*int* -- number of lines in the buffer (incomplete lines are
+	counted, so this is always > 0
+	"""
+	return self.underlying.GetNumberOfLines():
+
+    def position_of_line(self, line = None, where = -1):
+	"""returns the position of the start or end of the specified line 
 
 	**INPUTS**
 
 	*INT line* -- line number (starting with 0).  Defaults to current line.
 	If line is out of range, returns position of end of buffer.
 
+        *INT where* indicates whether the position of the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line
+	 should be returned.
+
 	**OUTPUTS**
 
-	*INT* -- position of start of that line.
+	*INT* -- position of start/end of that line.
 	"""
 
 	end = None
@@ -426,10 +444,18 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 # we don't need lines past the desired line
 	
 	lines = string.split(self.get_text(0, end), '\n')
+	last = len(lines) - 1
 	if line == None:
-	    line = len(lines) - 1
+	    line = last
+	elif line > last:
+	    line = last
 	before = string.join(lines[0:line], '\n')
-	return len(before)
+	position = len(before)
+	if (line > 0):
+	    position = position + 1
+	if where > 0:
+	    position = position + self.line_length(line)
+	return position
 
     def line_length(self, line = None):
 	"""returns the length of the specified line
@@ -449,18 +475,108 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    return None
 	return self.underlying.GetLineLength(line)
 
-	debug.virtual('NumberedLines.line_length')
-
-    def goto_line(self, line = None):
-	"""moves cursor to start of the specified line
-
-	**INPUTS**
+    def goto_line(self, line = None, where = -1):
+        """Go to a particular line in a buffer.
 
 	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is greater than the number of lines, goes to the end of
+	the buffer.
+
+        *INT where* indicates if the cursor should go at the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line.
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	pos = self.position_of_line(line)
-	self.set_selection( pos, pos)
+	pos = self.position_of_line(line, where)
+	self.set_selection(pos, pos)
+    
+    def range_of_line(self, line = None):
+	"""returns the character range corresponding to the specified line 
+	(not including the newline)
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, last line is used.
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- offsets into the buffer of the start and end of
+	the line.
+	"""
+	end = None
+	if line == None:
+	    end = self.cur_pos()
+# we don't need lines past the desired line
+	
+	lines = string.split(self.get_text(0, end), '\n')
+	last = len(lines) - 1
+	if line == None:
+	    line = last
+	elif line > last:
+	    line = last
+	before = string.join(lines[0:line], '\n')
+	start = len(before)
+	if line > 0:
+	    start = start + 1
+	end = start + self.line_length(line)
+	return start, end
+      
+    def range_of_lines(self, first_line, last_line):
+	"""returns the character range corresponding to the specified range
+	of lines (not including the final newline)
+
+	**INPUTS**
+
+	*INT first_line, second_line* -- line numbers (starting with 0)
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- offsets into the buffer of the start and end of
+	the range of lines.
+	"""
+    
+	lines = string.split(self.get_text(), '\n')
+	last = len(lines) - 1
+	before = string.join(lines[0:first_line], '\n')
+	if last_line > last:
+	    last_line = last
+	start = len(before)
+	if first_line > 0:
+	    start = start + 1
+	between = string.join(lines[first_line:last_line])
+	end = start + len(between) + self.line_length(last_line)
+	if last_line > first_line:
+	    end = end + 1
+	return start, end
+      
+    def ranges_of_lines(self, first_line, last_line):
+	"""returns a list of the character ranges corresponding to the 
+	specified range of lines (not including the final newline of
+	each line)
+
+	**INPUTS**
+
+	*INT first_line, second_line* -- line numbers (starting with 0)
+
+	**OUTPUTS**
+
+	*[(INT, INT), ...]* -- offsets into the buffer of the start and end of
+	the each line in the range of lines.
+	"""
+	lines = string.split(self.get_text(), '\n')
+	last = len(lines) - 1
+	before = string.join(lines[0:first_line], '\n')
+	ranges = []
+	start = len(before)
+	if first_line > 0:
+	    start = start + 1
+	if last_line > last:
+	    last_line = last 
+	for line in range(first_line, last_line+1):
+	    end = start + self.line_length(line)
+	    ranges.append((start, end))
+	    start = end + len(self.nl)
+	return ranges

@@ -596,11 +596,11 @@ class SourceBuff(Object):
 # several lines of context around the current cursor position.  Most
 # other editors will automatically refresh the screen on any change, so
 # they need not override this default (no-op) behavior.
-	debug.virtual('SourceBuff.refresh_if_needed')
+	pass
 
     def refresh(self):
 	"""Force a refresh of the buffer"""
-	debug.virtual('SourceBuff.refresh')
+	pass
 
     def search_for(self, regexp, direction=1, num=1, where=1):
         
