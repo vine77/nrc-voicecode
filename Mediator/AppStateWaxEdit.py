@@ -23,10 +23,10 @@
 
 import os, posixpath, re, sys
 import auto_test, debug
-import AppState
+import AppState, AppStateNonCached, as_services
 from SourceBuffTB import SourceBuffTB
 
-class AppStateWaxEdit(AppState.AppState):
+class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     """This class is a an AppState wrapper on top of WaxEdit.
 
     It is used to decouple from any external editor so that we can
@@ -42,32 +42,111 @@ class AppStateWaxEdit(AppState.AppState):
 
     *SourceBuffTB* only_buffer -- THE buffer
     
-    *STR* only_buffer_name -- its name 
+    *STR* only_buffer_name -- its name
+
+    [AS_ServiceBreadcrumbs] breadcrumbs_srv -- Breadcrumbs service used by
+    this AppState.
     
     **CLASS ATTRIBUTES**
     
     *none* -- 
-    """
+
+    ..[AS_ServiceBreadcrumbs] file:///./AppState.AS_ServiceBreadcrumbs.html"""
+    
     buffer_methods = AppState.AppState.buffer_methods[:]
     buffer_methods.append('print_buff')
     
     def __init__(self, editor, **attrs):
         self.deep_construct(AppStateWaxEdit, {'the_editor': editor, 
-	    'only_buffer': None, 'only_buffer_name' : ""}, attrs)
-        self.only_buffer =  SourceBuffTB(app = self, file_name="", \
+	    'only_buffer': None, 'only_buffer_name' : "",
+            'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)}, attrs)
+        self.only_buffer =  SourceBuffTB(app = self, fname="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
-      
-    def curr_buffer_name_from_app(self):
 
-	"""return the name of the current buffer
+    def stop_responding(self):
+        
+        """Haven't figured out how to make WaxEdit block user input"""
 
+        pass
+        
+    def start_responding(self):
+        
+        """Haven't figured out how to make WaxEdit block user input"""
+
+        pass
+
+
+    def updates_from_app(self, what=[], exclude=1):
+        
+        """For AppStateWaxEdit, no need to get updates from external editor.
+
+        We always get the state from EdSim directly, and every EdSim
+        command that writes to the buffers will update the V-E map
+        directly.
+        
+        **INPUTS**
+        
+        [STR] *what* -- List of items to be included/excluded in the updates.
+
+        BOOL *exclude* -- Indicates if *what* is a list of items to be
+        included or excluded from updates.
+        
         **OUTPUTS**
+        
+        [ [AS_Update] ] *updates* -- List of updates retrieved from the
+        external app.
+        
+        ..[AS_Update] file:///./AppState.AS_Update.html"""
+        
+        return []
 
-	*STR*  -- current buffer
-	"""
+
+    def app_active_buffer_name(self):
+        
+	"""Returns the file name of the buffer currently active in the
+	external application.
+
+        Note that this may or may not be the same the buffer that
+        VoiceCode is currently bound to (see [curr_buffer_name]
+        method for a description of buffer binding).
+
+        **INPUTS**
+
+        *none* --
+        
+	**OUTPUTS**
+
+	*STR* -- file name of current buffer
+
+        file:///./AppState.AppState.html#curr_buffer_name"""        
+      
 	return self.only_buffer_name
+
+    def change_buffer_dont_bind_from_app(self, buff_name=None):
+	"""Changes the external application's active buffer.
+
+        This variant only changes the buffer in the external
+        application. It does not resynchronise VoiceCode with external
+        application.
+
+        This should NOT bind the *AppState* to the new buffer. This
+        should be done only by [change_buffer].
+        See [curr_buffer_name] for a description of buffer binding.
+
+        **INPUTS**
+        
+        STR *buff_name=None* -- Name of the buffer to switch to.
+       
+        **OUTPUTS**
+        
+        *none* --         
+        
+        file:///./AppState.AppState.html#curr_buffer_name"""
+
+        self.only_buffer_name = buff_name
+
         
     def active_field(self):
 	"""indicates what part of the editor has the focus.
@@ -119,7 +198,7 @@ class AppStateWaxEdit(AppState.AppState):
 	if success:
 	    if self.curr_buffer_name() != None:
 		del self.open_buffers[self.curr_buffer_name()]
-	    self.only_buffer =  SourceBuffTB(app = self, file_name=name, 
+	    self.only_buffer =  SourceBuffTB(app = self, fname=name, 
 		underlying_buffer = self.the_editor.editor_buffer(),
 		language=lang, indent_level=3, indent_to_curr_level=1)
 	    self.only_buffer_name = name
@@ -202,6 +281,54 @@ class AppStateWaxEdit(AppState.AppState):
 	left end of the selection"""
 	return 0
 
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at cursor position.
+
+        If *buff* not specified either, drop breadcrumb in current buffer
+	"""
+        self.breadcrumbs_srv.drop_breadcrumb(self, buffname, pos)
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
 
 
 
+    def multiple_buffers(self):
+      	"""does editor support multiple open buffers?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor supports having multiple buffers open 
+	at the same time"""
+	return 0
+
+    def bidirectional_selection(self):
+      	"""does editor support selections with cursor at left?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor allows setting the selection at the
+	left end of the selection"""
+	return 0

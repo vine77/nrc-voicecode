@@ -112,14 +112,16 @@ class CmdInterp(Object):
         corresponding instructions.
 
         *[STR] cmd* -- The command. It is a list of written\spoken words.
+        
         *[STR] initial_buffer* -- The name of the target buffer at the 
 	start of the utterance.  Some CSCs may change the target buffer of 
 	subsequent parts of the command.  If None, then the current buffer 
 	will be used.
+        
         """
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
-	self.on_app.set_default_buffer(initial_buffer)
+	self.on_app.bind_to_buffer(initial_buffer)
 
 	untranslated_words = []
 
@@ -131,14 +133,18 @@ class CmdInterp(Object):
         #
         while len(cmd) > 0:
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer.cur_pos(); 
+#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer().cur_pos(); 
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
              #
+#             print '-- CmdInterp.interpret_NL_cmd: before chop_CSC'
              chopped_CSC, CSC_consumes, cmd_without_CSC = self.chop_CSC(cmd)
+#             print '-- CmdInterp.interpret_NL_cmd: before chop_LSA'
              chopped_LSA, LSA_consumes, cmd_without_LSA = self.chop_LSA(cmd)
+#             print '-- CmdInterp.interpret_NL_cmd: before chop_symbol'
              chopped_symbol, symbol_consumes, cmd_without_symbol = self.chop_symbol(cmd)
+#             print '-- CmdInterp.interpret_NL_cmd: before chop_word'
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
@@ -259,10 +265,15 @@ class CmdInterp(Object):
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer.cur_pos())
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer().cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer().cur_pos())
 
-# make sure to clear default buffer before returning
-	self.on_app.set_default_buffer()
+        # make sure to unbind the buffer before returning
+	self.on_app.bind_to_buffer(None)
+
+        #
+        # Notify external editor of the end of recognition
+        #
+        self.on_app.recog_end()
 
 
     def massage_command(self, command):
@@ -553,6 +564,8 @@ class CmdInterp(Object):
         *[STR]* rest -- The remaining of *cmd* after the construct has been
         chopped"""
 
+#        print '-- CmdInterp.chop_construct: construct_check=%s' % repr(construct_check)
+
         chopped_construct, consumed, rest = None, 0, cmd
 
         #
@@ -574,6 +587,7 @@ class CmdInterp(Object):
 #            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
 
             chopped_construct = construct_check(self, a_spoken_form)
+#            print '-- CmdInterp.chop_construct: after construct_check'
             if chopped_construct != None:
                 #
                 # This corresponds to the spoken form of a construct and it's
@@ -584,6 +598,8 @@ class CmdInterp(Object):
                 consumed = upto
                 break
             upto = upto - 1
+
+#        print '-- CmdInterp.chop_construct: returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest))
         return chopped_construct, consumed, rest
         
 
@@ -629,7 +645,13 @@ class CmdInterp(Object):
         #
 
 	aliases = self.language_specific_aliases
+
+#        print '-- CmdInterp.is_spoken_LSA: after aliases'
+        
 	language = self.on_app.active_language()
+
+#        print '-- CmdInterp.is_spoken_LSA: after language'
+        
         if aliases.has_key(language):
 	    if aliases[language].has_key(spoken_form):
 		written_LSA = aliases[language][spoken_form]

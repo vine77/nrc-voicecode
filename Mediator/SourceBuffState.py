@@ -36,7 +36,7 @@ class SourceBuffState(SourceBuffCookie):
 
     **INSTANCE ATTRIBUTES**
 
-    *STR* file_name -- filename of buffer
+    *STR* fname -- filename of buffer
 
     *STR* text -- copy of the buffer contents
 
@@ -44,15 +44,15 @@ class SourceBuffState(SourceBuffCookie):
     
     """
     
-    def __init__(self, file_name, contents, selection, **attrs):
+    def __init__(self, fname, contents, selection, **attrs):
         self.deep_construct(SourceBuffState,
                             {'text': contents,
-			    'file_name': file_name,
+			    'fname': fname,
 			    'selection_range': selection},
                             attrs
                             )
     def name(self):
-	"""returns file_name
+	"""returns fname
 
 	**INPUTS**
 
@@ -62,7 +62,7 @@ class SourceBuffState(SourceBuffCookie):
 
 	*STR* -- file name
 	"""
-	return self.file_name
+	return self.fname
 
     def get_selection(self):
 	"""retrieves range of stored selection.  

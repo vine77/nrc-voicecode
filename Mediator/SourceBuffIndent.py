@@ -184,6 +184,7 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
         *none* -- 
         """
 
+        print '-- SourceBuffIndent.decr_indent_level: calle'
         if range == None:
             range = self.get_selection()
         range = self.make_valid_range(range)
@@ -303,4 +304,10 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
 #        print '-- SourceBuffIndent.indentation_at: returning num_spaces=%s' % num_spaces
         
         return num_spaces
+
+
+
+
+
+
 
