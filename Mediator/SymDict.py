@@ -700,7 +700,10 @@ class SymDict(OwnerObject):
         *[STR]* -- list of written forms of symbols whose spoken 
         forms match the phrase, or None if no match was found
         """
-        return self.spoken_form_info.complete_match(phrase)
+        phrases_list = self.spoken_form_info.complete_match(phrase)
+        if not phrases_list:
+           phrases_list = []
+        return phrases_list
   
     def _add_corresponding_expansion(self, abbreviation, expansion):
         """private method to add expansions for an abbreviation corresponding 
