@@ -56,11 +56,12 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                     'ActionSearchOrLookback.execute': 1,
-                     'ActionSearchOrLookback.__init__': 1,
-                     'ActionBidirectional.__init__': 1,
-                     'ActionBidirectionalRepeat.__init__': 1,
-                     
+                     'MediatorConsoleWX.__init__': 1,
+                     'ReformatFromRecentViewWX.__init__': 1,
+                     'ReformatRecentSymbolsViewWX.__init__': 1,
+                     'CorrectFromRecentWX.__init__': 1,
+                     'MediatorConsoleWX.show_correction_box': 1,
+                     'UtteranceCorrectionEventWX.__init__': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

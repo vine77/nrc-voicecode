@@ -26,6 +26,7 @@ Among other things, those helper methods are useful for unit testing GUIs
 """
 
 from wxPython.wx import *
+import debug
 
 class wxListCtrlWithHelpers(wxListCtrl):
     """A wxListCtrl subclass with helpers for finding more about the data
@@ -58,6 +59,14 @@ class wxListCtrlWithHelpers(wxListCtrl):
              row.append(self.GetCellContentsString(row_num, col_num))
           contents.append(row)
        return contents
+       
+class MockListSelectionEvent(wxListEvent):
+    def __init__(self, nth):
+       wxListEvent.__init__(self)
+       self.nth = nth
 
+    def GetIndex(self):
+       return self.nth
+       
 # defaults for vim - otherwise ignore
 # vim:sw=4
