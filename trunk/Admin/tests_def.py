@@ -2825,7 +2825,6 @@ def check_scratch_recent(instance_name, n = 1, should_fail = 0):
 def check_recent_symbols(instance_name, mess = ""):
     the_mediator = testing.mediator()
 
-    n = the_mediator.stored_utterances(instance_name)
     mess = "%s\nRecent interpreted symbols were: " % mess
     print mess
     for a_sym in the_mediator.recent_symbols(instance_name):
@@ -3473,9 +3472,7 @@ def test_basic_correction():
     status.append(1)    
     test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
-    print "AD: TEST BELOW PRODUCES FAULTY OUTPUT... SYMBOL excess"
-    print "SHOULD NOT APPEAR IN LIST OF SYMBOLS BECAUSE IT WAS A MISRECOGNIZED"
-    print "THAT WAS REINTERPRETED"
+    print "Checking that 'excess' is not in recent symbols anymore:"
     check_recent_symbols(instance_name)
     
     sym_corrections = {}

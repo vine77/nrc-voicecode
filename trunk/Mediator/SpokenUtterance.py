@@ -52,8 +52,6 @@ class SpokenUtterance(OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *[SymbolResult]* symbols -- List of symbols that were interpreted from that utterance.
-
     *STR id - None* -- A unique identifier for this utterance. 
     **CLASS ATTRIBUTES**
 
@@ -63,9 +61,7 @@ class SpokenUtterance(OwnerObject):
     """
     def __init__(self, id=None, **attrs):
         self.deep_construct(SpokenUtterance,
-            {'symbols': [], 
-            'id': id}, attrs)       
-        self.add_owned('symbols')
+            {'id': id}, attrs)       
 
     def spoken_form_as_string(self):
         """returns the spoken form of the utterance as a single 
@@ -321,11 +317,7 @@ class SpokenUtterance(OwnerObject):
         """
         return remove_periods_from_initials(spoken)
 
-    def add_interp_symbol(self, symbol_result):
-        """Adds a symbol that was interpreted in the utterance.
-        """
-        self.symbols.append(symbol_result)
-      
+     
          
 class MockSpokenUtterance(SpokenUtterance):
     """Mock version of [SpokenUtterance].
@@ -353,7 +345,7 @@ class MockSpokenUtterance(SpokenUtterance):
 
         *[STR]* -- list of spoken forms from the utterance
         """
-        return map(lambda x: x[0], self.words())        
+        return word_list       
 
     def words(self):
         """returns list of words (as (spoken, written) 2-tuples) 

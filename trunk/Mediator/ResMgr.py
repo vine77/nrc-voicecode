@@ -2453,9 +2453,10 @@ class ResMgrBasic(ResMgrStd):
         debug.trace('ResMgrBasic.recent_symbols', '** utterances=%s' % repr(utterances))
         rec_symbols = []
         for an_utter_info in utterances:
-           an_utter = an_utter_info[0]
-           debug.trace('ResMgrBasic.recent_symbols', '** an_utter_info=%s' % repr(an_utter_info))
-           rec_symbols.extend(an_utter.symbols)
+           an_interp_phrase = an_utter_info[2]
+           debug.trace('ResMgrBasic.recent_symbols', '** an_utter_info=%s' % repr(an_interp_phrase))
+           rec_symbols.extend(an_interp_phrase.symbol_results)
+        debug.trace('ResMgrBasic.recent_symbols', '** returning rec_symbols=%s' % repr(rec_symbols))
         return rec_symbols
            
     

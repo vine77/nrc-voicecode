@@ -985,6 +985,14 @@ class InterpretedPhrase(Object):
         by the speech engine
         """
         return self.original_phrase
+        
+    def phrase_as_string(self):
+        debug.trace('InterpretedPhrase.phrase_as_string', '** self.phrase()=%s' % self.phrase())
+        return string.join(self.phrase())
+
+class MockInterpretedPhrase(InterpretedPhrase):
+    def __init__(self, phrase, symbols, utterance, **args):
+        apply(InterpretedPhrase.__init__, [self, phrase, symbols, utterance], args)
     
 class SymbolConstruction(Object):
     """
@@ -1198,7 +1206,7 @@ class SymbolConstruction(Object):
         self.symbols.append(result)
         self.reset()
       
-    def insert_new_symbol(self, from_utterance, exact_matches = None,
+    def insert_new_symbol(self, interp_phrase, exact_matches = None,
                         inexact_matches = None, forbidden = None):
         """
         Generate and insert a new symbol, track the
@@ -1207,8 +1215,8 @@ class SymbolConstruction(Object):
 
         ** INPUTS **
         
-        *SpokenUtterance* from_utterance -- The utterance in which the 
-        symbol was heard.
+        *InterpretedPhrase* interp_phrase -- The phrase from which
+        the symbol was interpreted.
 
         *[STR] exact_matches* -- a prioritized list of exact matches
         to known symbols
@@ -1227,6 +1235,7 @@ class SymbolConstruction(Object):
 
         *STR* -- the written form of the new symbol
         """
+        from_utterance = interp_phrase.utterance
         symbol = self.builder.finish()
         debug.trace('SymbolConstruction.insert_new_symbol',
             'symbol = %s' % repr(symbol))
@@ -1240,7 +1249,8 @@ class SymbolConstruction(Object):
                               in_utter=from_utterance)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
-        from_utterance.add_interp_symbol(result)
+#>        from_utterance.add_interp_symbol(result)
+        interp_phrase.symbol_results.append(result)
         self.reset()
       
         
@@ -1770,7 +1780,6 @@ class CmdInterp(OwnerObject):
             return CSC_consumes
         return 0
 
-
     def interpret_NL_cmd(self, cmd, app, initial_buffer = None,
             clear_state = 0):
         
@@ -1866,7 +1875,7 @@ class CmdInterp(OwnerObject):
         *SymbolConstruction symbols* -- object storing information
         related to any pending untranslated symbols
         
-        *InterpretedPhrase interp_phrase8 -- The phrase that the untranslated
+        *InterpretedPhrase interp_phrase -- The phrase that the untranslated
         text is matched from.
 
         **OUTPUTS**
@@ -1944,7 +1953,7 @@ class CmdInterp(OwnerObject):
                                     forbidden = forbidden)
         else:
             symbol = \
-                symbols.insert_new_symbol(utterance, exact_matches = complete_match,
+                symbols.insert_new_symbol(interp_phrase, exact_matches = complete_match,
                                           inexact_matches = inexact_matches,
                                           forbidden = forbidden)
         
