@@ -17,6 +17,15 @@ setmic('on')
 I say: "for" -> doesn't type anything
 
 
+BUG in back indent
+------------------
+
+When cursor is at end of current line and say 'back indent', then it just deletes the CR character (but it seems to leave the LF character there).
+
+This doesn't happen when cursor is not at the end of the current line.
+
+
+
 BUG in gui_sim
 --------------
 

@@ -39,7 +39,7 @@ c_goto_body = \
 
 cpp_class_definition = \
     ActionInsert(code_bef='class ',
-                 code_after='{\n\npublic:\n\t\nprivate:\n\t}',
+                 code_after='\n\t{\n\n\tpublic:\n\t\n\tprivate:\n\t}',
                  docstring = """Insert template code for a C++ class""")
     
 cpp_subclass = \
