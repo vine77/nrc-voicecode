@@ -1013,6 +1013,32 @@ class SourceBuff(OwnerObject):
         """
         debug.virtual('SourceBuff.compare_states')
 
+    def compare_state_selections(self, first_cookie, second_cookie):
+        """compares the selection and cursor positions at the times when
+        two cookies were returned by store_current_state.
+        If the state corresponding to either cookie has
+        been lost, compare_states will return false.
+
+        This method does not synchronize with the editor prior to
+        comparing with "current".  To ensure that the "current" state 
+        is really current, the caller must synchronize.
+        (This avoids having duplicate synchronize calls 
+        when comparing with the current state of more than one buffer).
+
+        **INPUTS**
+
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or it cannot be determined due to expiration of 
+        either cookie
+        """
+        debug.virtual('SourceBuff.compare_state_selections')
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
@@ -1035,6 +1061,26 @@ class SourceBuff(OwnerObject):
         it cannot be determined due to expiration of the cookie
         """
         debug.virtual('SourceBuff.compare_with_current')
+
+    def compare_selection_with_current(self, cookie):
+        """compares the current buffer position and selection to these
+        values at the time when the cookie was returned by 
+        store_current_state.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or if it cannot be determined due to 
+        expiration of the cookie
+        """
+        debug.virtual('SourceBuff.compare_selection_with_current')
 
 
     def valid_cookie(self, cookie):

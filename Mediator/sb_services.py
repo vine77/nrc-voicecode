@@ -913,9 +913,15 @@ class SB_ServiceFullState(SB_ServiceState):
 
         *SourceBuffState* -- state cookie (see above)
         """
+        selection = self.buff.get_selection()
+        pos = self.buff.cur_pos()
+        if pos == selection[0]:
+            cursor_at = 0
+        else:
+            cursor_at = 1
         cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
-            contents = self.buff.contents(), selection =
-            self.buff.get_selection())
+            contents = self.buff.contents(), 
+            selection = selection, cursor_at = cursor_at)
         return cookie
 
     def restore_state(self, cookie):
@@ -948,7 +954,8 @@ class SB_ServiceFullState(SB_ServiceState):
         self.buff.set_text(cookie.contents())
         
         
-        self.buff.set_selection(cookie.get_selection())
+        self.buff.set_selection(cookie.get_selection(), cursor_at =
+            cookie.cursor_at())
         self.buff.print_buff_if_necessary()
         debug.trace('SB_ServiceFullState.restore_state', '*** returning 1')        
         return 1
@@ -984,7 +991,41 @@ class SB_ServiceFullState(SB_ServiceState):
             return 0
         if not selection:
             return 1
-        return first_cookie.get_selection() == second_cookie.get_selection()
+        return self.compare_state_selections(first_cookie, second_cookie)
+
+    def compare_state_selections(self, first_cookie, second_cookie):
+        """compares the selection and cursor positions at the times when
+        two cookies were returned by store_current_state.
+        If the state corresponding to either cookie has
+        been lost, compare_states will return false.
+
+        This method does not synchronize with the editor prior to
+        comparing with "current".  To ensure that the "current" state 
+        is really current, the caller must synchronize.
+        (This avoids having duplicate synchronize calls 
+        when comparing with the current state of more than one buffer).
+
+        **INPUTS**
+
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or it cannot be determined due to expiration of 
+        either cookie
+        """
+# if unable to make comparison, treat as false
+        if not self.valid_cookie(first_cookie):
+            return 0
+        if not self.valid_cookie(second_cookie):
+            return 0
+        return first_cookie.get_selection() == second_cookie.get_selection() \
+            and first_cookie.cursor_at() == second_cookie.cursor_at()
+
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
@@ -1011,8 +1052,36 @@ class SB_ServiceFullState(SB_ServiceState):
             return 0
         if not selection:
             return 1
-        return self.buff.get_selection() == cookie.get_selection()
+        cookie_sel = cookie.get_selection()
+        cookie_pos = cookie_sel[cookie.cursor_at()]
+        return self.compare_selection_with_current(cookie)
         
+    def compare_selection_with_current(self, cookie):
+        """compares the current buffer position and selection to these
+        values at the time when the cookie was returned by 
+        store_current_state.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or if it cannot be determined due to 
+        expiration of the cookie
+        """
+        if not self.valid_cookie(cookie):
+            return 0
+# unable to make comparison, so treat as false
+        cookie_sel = cookie.get_selection()
+        cookie_pos = cookie_sel[cookie.cursor_at()]
+        return self.buff.get_selection() == cookie_sel \
+            and self.buff.cur_pos() == cookie_pos
+
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
         If the state corresponding to the cookie has

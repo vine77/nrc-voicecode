@@ -592,15 +592,19 @@ class BufferStates(OwnerObject):
         """
         debug.virtual('BufferStates.compare_with_current')
 
-    def restore_state(self, app):
+    def restore_state(self, app, buffers = None):
         """restores the editor to its stored state
 
         **NOTE:** restore_state never re-creates deleted buffers or
-        modifies new ones. 
+        modifies new ones, even if the deleted buffers are included in
+        the buffers argument.
         
         **INPUTS**
 
         *AppState app* -- the editor whose states should be restored
+
+        *[STR] buffers* -- list of buffers to restore, or None to
+        restore all known buffers (except deleted ones)
 
         **OUTPUTS**
 
@@ -799,15 +803,19 @@ class BufferStatesBasic(BufferStates):
                 return 0
         return 1
 
-    def restore_state(self, app):
+    def restore_state(self, app, buffers = None):
         """restores the editor to its stored state
 
         **NOTE:** restore_state never re-creates deleted buffers or
-        modifies new ones. 
+        modifies new ones, even if the deleted buffers are included in
+        the buffers argument.
         
         **INPUTS**
 
         *AppState app* -- the editor whose states should be restored
+
+        *[STR] buffers* -- list of buffers to restore, or None to
+        restore all known buffers (except deleted ones)
 
         **OUTPUTS**
 
@@ -824,8 +832,10 @@ class BufferStatesBasic(BufferStates):
         debug.trace('BufferStatesBasic.restore_state',
                     'cookies valid, proceeding to restore')
         temporary_cookies = {}
+        if buffers is None:
+            buffers = self.known_buffers()
         try:
-            for buff_name in self.known_buffers():
+            for buff_name in buffers:
                 buffer = app.find_buff(buff_name)
                 if buffer is None:
 # when restoring, always ignore deleted buffers
@@ -1277,7 +1287,7 @@ class StateStackBasic(StateStack):
             return 1
         return 0
 
-    def pop(self, app, n):
+    def old_pop(self, app, n):
         """restores the editor to its nth most recent stored state, if
         this can be done safely, popping n - 1 entries off our stack.
 
@@ -1307,6 +1317,69 @@ class StateStackBasic(StateStack):
         for i in range(1, n+1):
             debug.trace('StateStack.pop', 'popping %d' % i)
             if not self.states[-i].restore_state(app):
+# since we checked cookies in can_restore, this shouldn't happen, but
+# if it does, un-restore the state before returning 0 to signal failure
+                warning = \
+                    'StateStack.pop: unexpected failure to restore state\n'
+                debug.critical_warning(warning)
+                temporary.restore_state(app)
+                return 0
+        self.after_utterance = self.states[-n]
+        del self.states[-n:]
+        return 1
+
+    def pop(self, app, n):
+        """restores the editor to its nth most recent stored state, if
+        this can be done safely, popping n - 1 entries off our stack.
+
+        **NOTE:** This method must not 
+        be called between before_interp and after_interp.
+
+        **INPUTS**
+
+        *AppState app* -- the editor 
+
+        *INT n* -- the depth in the editor state stack to which we are 
+        trying to restore the state (n = 1 refers to the top entry)
+
+        *BOOL* -- true if we sucessfully restored the editor to that state
+        """
+        debug.trace('StateStackBasic.pop', 'called with n = %d' % n)
+        if not self.can_restore(app, n):
+            debug.trace('StateStack.pop', 'unable to restore')
+            return 0
+        temporary = BufferStatesBasic(app)
+# create a map from buffer names to the oldest BufferStatesBasic which
+# knows about that buffer
+        buff_indices = {}
+        for i in range(1, n+1):
+            for buff in self.states[-i].known_buffers():
+                buff_indices[buff] = i
+        which_buffers = []
+        for buff in  self.after_utterance.known_buffers():
+            if not buff_indices.has_key(buff):
+                which_buffers.append(buff)
+        if which_buffers:
+            if not self.after_utterance.restore_state(app, buffers =
+                which_buffers):
+# since we checked cookies in can_restore, this shouldn't happen, but
+# if it does, un-restore the state before returning 0 to signal failure
+                warning = \
+                    'StateStack.pop: unexpected failure to restore state\n'
+                debug.critical_warning(warning)
+                temporary.restore_state(app)
+                return 0
+        for i in range(1, n+1):
+            debug.trace('StateStack.pop', 'popping %d' % i)
+            which_buffers = []
+            for buff in self.states[-i].known_buffers():
+                if buff_indices[buff] == i:
+                    which_buffers.append(buff)
+# only restore those buffers for which we aren't later going to restore an
+# earlier state.  This makes restores more efficient by avoiding multiple 
+# restores of the same buffer.
+            if not self.states[-i].restore_state(app, buffers =
+                which_buffers):
 # since we checked cookies in can_restore, this shouldn't happen, but
 # if it does, un-restore the state before returning 0 to signal failure
                 warning = \
