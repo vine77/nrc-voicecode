@@ -1234,13 +1234,22 @@ class EnglishSmallNumbersSet(Object):
     def __init__(self, **args):
         debug.trace('EnglishSmallNumbersSet.__init__', 'invoked')        
         self.deep_construct(EnglishSmallNumbersSet,
-                            {'words_0_19': ['zero', 'one', 'two', 'three', 'four', 'five', 'six',
-                                            'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-                                            'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
-                                            'eighteen', 'nineteen'],
-                             'words_multiples_of_10': ['ten', 'twenty', 'thirty', 'forty', 'fifty', 
-                                                       'sixty', 'seventy', 'eighty', 'ninety']}, 
-                              args)
+                            {
+                             'digits': ['zero', 'one', 'two', 
+                                         'three', 'four', 'five', 'six',
+                                         'seven', 'eight', 'nine'],
+                             'words_0_19': ['zero', 'one', 'two', 
+                                         'three', 'four', 'five', 'six',
+                                         'seven', 'eight', 'nine',
+                                         'ten', 'eleven', 'twelve',
+                                         'thirteen', 'fourteen', 'fifteen', 
+                                         'sixteen', 'seventeen',
+                                         'eighteen', 'nineteen'],
+                             'words_multiples_of_10': \
+                                 ['ten', 'twenty', 'thirty', 'forty', 
+                                  'fifty', 'sixty', 'seventy',
+                                  'eighty', 'ninety']
+                            }, args)
         debug.trace('EnglishSmallNumbersSet.__init__', 'exited')                              
 
                               
@@ -1281,7 +1290,7 @@ class EnglishSmallNumbersSet(Object):
                           {None: written}, letters_and_digits,
                           new_symbol = 'within'))
                
-    def create(self, interp):
+    def create(self, interp, numeral_prefix = None):
         """Add LSAs for dictation of English 2-digit numbers.
         
         **INPUTS**
@@ -1289,6 +1298,9 @@ class EnglishSmallNumbersSet(Object):
         *CmdInterp interp* -- command interpreter (or NewMediatorObject,
         which will forward to the interpreter) to which to add the LSAs
         and CSCs
+
+        *STR numeral_prefix* -- prefix to use for forms "numeral zero"
+        through "numeral nine", or None or empty to omit prefixed forms
         """
 
         if not interp:
@@ -1299,8 +1311,16 @@ class EnglishSmallNumbersSet(Object):
         
                                      
         for number in range(100):
-           self._add_number(aliases, number)
+            self._add_number(aliases, number)
            
+        if numeral_prefix:
+            for number in range(10):
+                spoken = "%s%s" % (numeral_prefix, self.digits[number])
+                written = "%d" % number
+                aliases.add_lsa(LSAlias([spoken], 
+                                {None: written}, letters_and_digits, 
+                                new_symbol = 'within'))
+
         self._add_zero_prefixed_numbers(aliases)
            
                    

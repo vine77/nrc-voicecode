@@ -82,7 +82,6 @@ BufferType
 BuiltinFunctionType
 BuiltinMethodType
 Busy
-C
 CDROM
 CGIHTTPRequestHandler
 CGIHTTPServer
@@ -148,7 +147,6 @@ DictionaryType
 Dlg
 DumbWriter
 DuplicateSectionError
-E
 EACCES
 EADDRINUSE
 EADDRNOTAVAIL
@@ -343,7 +341,6 @@ HTMLParser
 HTTP
 HTTPServer
 HandleEvent
-I
 IC
 IGNORECASE
 IMAP
@@ -375,7 +372,6 @@ InterpolationError
 KeyError
 KeyboardInterrupt
 Konquerer
-L
 LC_ALL
 LC_COLLATE
 LC_CTYPE
@@ -394,7 +390,6 @@ Lock
 LockType
 LongType
 LookupError
-M
 MAXLEN
 MAX_INTERPOLATION_DEPTH
 MH
@@ -474,7 +469,6 @@ OpenKey
 OpenKeyEx
 OutputType
 OverflowError
-P
 PAUSED
 PKG_DIRECTORY
 PLAYING
@@ -558,7 +552,6 @@ ResolveAliasFile
 RestoreKey
 RobotFileParser
 RuntimeError
-S
 SAXException
 SEARCH_ERROR
 SEEK_CUR
@@ -678,7 +671,6 @@ Translations
 TupleType
 TypeError
 TypeType
-U
 UDPCreate
 UDPServer
 UNICODE
@@ -697,11 +689,9 @@ Update
 UserDict
 UserList
 UserString
-V
 VERBOSE
 ValueError
 Version
-W
 WEXITSTATUS
 WIFEXITED
 WIFSIGNALED
@@ -720,7 +710,6 @@ WindowsDefault
 WindowsError
 Write
 Writer
-X
 XMLFilterBase
 XMLGenerator
 XMLParser

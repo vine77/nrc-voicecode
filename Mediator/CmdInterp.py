@@ -128,7 +128,7 @@ class LSAlias(Object):
         for language, written_as in meanings.items():
             self.meanings[language] = written_as
 
-class AliasMeaning(DeferInterp):
+class AliasMeaning(DeferInterp, SymDict.SymElement):
     """underlying object used by CmdInterp to store the data associated 
     with an LSAlias meaning
 
@@ -215,8 +215,91 @@ class AliasMeaning(DeferInterp):
 
         *none*
         """
-        builder.add_word(self.written())
+        written = self.written()
+        match = re.match(r'([a-zA-Z])\.{0,1}$', written)
+        if match:
+            builder.add_letter(string.lower(match.group(1)))
+        else:
+            builder.add_word(written)
 
+
+class CapitalizationWord(Object):
+    """A word with no written form, but which affects capitalization of
+    following word(s) in the symbol
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *STR* spoken_forms -- List of spoken form of the word.
+
+    *CapsModifier modifier* -- underlying capitalization data
+    """
+    def __init__(self, spoken_forms, caps, one_word = 1, **args):
+        """
+        **INPUTS**
+
+        *STR caps* -- the new capitalization state: 'no-caps', 'normal', 
+        'cap', or 'all-caps'
+
+        *BOOL one_word* -- if true, modify capitalization for the next
+        word.  If false, modify for all following words until a
+        subsequent CapitalizationWord with one_word = 0.  (A subsequent
+        CapitalizationWord one_word = 1 will take precedence temporarily)
+        """
+        self.deep_construct(CapitalizationWord,
+                            {
+                             'spoken_forms': spoken_forms,
+                             'modifier': CapsModifier(caps, one_word),
+                            },
+                            args)
+
+class CapsModifier(DeferInterp, SymDict.SymElement):
+    """underlying object used by CmdInterp to store the data associated 
+    with a CapitalizationWord
+    """
+    def __init__(self, caps, one_word = 1, **args):
+        self.deep_construct(CapsModifier, 
+                            {
+                             'caps': caps, 
+                             'one_word': one_word
+                            }, args)
+
+    def interp_now(self,  preceding_symbol = 0):
+        """tells the interpreter main loop whether to interpret this 
+        object now or whether to append it to the untranslated list
+        which will build up the components of a new symbol
+
+        **INPUTS**
+
+        BOOL *preceding_symbol* indicates if there is already
+        untranslated text (LSAs generating digits should be interpreted
+        immediately if there is no pending text, because digits cannot
+        start a symbol name)
+
+        **OUTPUTS**
+
+        *BOOL* -- if true, the object should be interpreted now
+        """
+# manual capitalization is ALWAYS part of new symbol, so it is never
+# interpreted immediately (and it couldn't be interpreted safely, 
+# since it doesn't implement the rest of the methods of AliasMeaning)
+        return 0
+
+    def written(self):
+# dummy method to allow CapsModifier to pretend to be an LSAlias
+        return ""
+
+    def add_to(self, builder):
+        """Add element to the symbol builder
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.change_caps(self.caps, one_word = self.one_word)
 
 class CSCmdSet(Object):
     """a collection of context-sensitive commands which may be deleted,
@@ -357,7 +440,7 @@ class LSAliasSet(Object):
     *STR* description -- description of the alias set (to be used 
     for automatic generation of documentation)
 
-    *{STR: CSCmd}* aliases -- map from unique names to
+    *{STR: LSAlias}* aliases -- map from unique names to
     language-specific aliases
     """
     def __init__(self, name, description = None, **args):
@@ -370,9 +453,10 @@ class LSAliasSet(Object):
         *STR* description -- description of the alias set (to be used 
         for automatic generation of documentation)
         """
-        self.deep_construct(CSCmdSet,
+        self.deep_construct(LSAliasSet,
                             {'name': name, 'description': description,
                              'aliases': {}}, args)
+
     def add_lsa(self, alias, name = None):
         """add a language-specific alias to the set
 
@@ -387,7 +471,6 @@ class LSAliasSet(Object):
 
         *none*
         """
-        trace('CmdInterp.add_lsa', '** invoked')
         if name is None:
             name = alias.spoken_forms[0]
         self.aliases[name] = alias
@@ -474,41 +557,134 @@ class LSAliasSet(Object):
             return 0
         return 1
 
-
-class SymAlias(SymDict.SymElement):
-    """an LSAlias as an element of a symbol 
+class CapitalizationWordSet(Object):
+    """a collection of CapitalizationWord objects which may be deleted,
+    renamed, or giving synonyms prior to adding them to the command
+    interpreter.
 
     **INSTANCE ATTRIBUTES**
 
-    *AliasMeaning alias* -- the data structure containing the alias
+    *STR* name -- name of the set (to be used for automatic 
+    generation of documentation)
 
-    *STR spoken_form* -- spoken form 
+    *STR* description -- description of the set (to be used 
+    for automatic generation of documentation)
+
+    *{STR: CapitalizationWord}* words -- map from unique names to
+    CapitalizationWord objects
     """
-    def __init__(self, alias, spoken_form, **args):
-        self.deep_construct(SymAlias,
-                            {
-                             'alias': alias,
-                             'spoken_form': spoken_form
-                            },
-                            args)
+    def __init__(self, name, description = None, **args):
+        """
+        **INPUTS**
 
-    def add_to(self, builder):
-        """Add alias's written form to the symbol builder
+        *STR* name -- name of the set (to be used for automatic 
+        generation of documentation)
+
+        *STR* description -- description of the set (to be used 
+        for automatic generation of documentation)
+        """
+        self.deep_construct(CapitalizationWordSet,
+                            {'name': name, 'description': description,
+                             'words': {}}, args)
+
+    def add_capitalization_word(self, word, name = None):
+        """add a CapitalizationWord to the set
 
         **INPUTS**
 
-        *SymBuilder builder*
+        *CapitalizationWord word* -- the word
+
+        *STR name* -- a unique name for the word, or None to use the
+        first item in the spoken form list
 
         **OUTPUTS**
 
         *none*
         """
-        written = self.alias.written()
-        match = re.match(r'([a-zA-Z])\.{0,1}$', written)
-        if match:
-            builder.add_letter(string.lower(match.group(1)))
-        else:
-            builder.add_word(self.alias.written())
+        if name is None:
+            name = word.spoken_forms[0]
+        self.words[name] = word
+
+    def replace_spoken(self, name, spoken_forms):
+        """replace the spoken forms of a word with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the alias given when it was added
+
+        *[STR] spoken_forms* -- the new spoken forms
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            self.words[name].spoken_forms = spoken_forms[:]
+        except KeyError:
+            return 0
+        return 1
+
+    def add_spoken(self, name, spoken_forms):
+        """add the given spoken forms to a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to add
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a word by that name existed
+        """
+        try:
+            word = self.words[name]
+        except KeyError:
+            return 0
+        for spoken in spoken_forms:
+            word.spoken_forms.append(spoken)
+        return 1
+
+    def remove_spoken(self, name, spoken_forms):
+        """remove the given spoken forms of a word with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the word given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a word by that name existed
+        """
+        try:
+            word = self.words[name]
+        except KeyError:
+            return 0
+        new_spoken = []
+        for spoken in word.spoken_forms:
+            if spoken not in spoken_forms:
+                new_spoken.append(spoken)
+        word.spoken_forms = new_spoken
+        return 1
+
+    def remove_word(self, name):
+        """remove a word with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the word given when it was added
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a word by that name existed
+        """
+        try:
+            del self.words[name]
+        except KeyError:
+            return 0
+        return 1
 
 class SymWord(SymDict.SymElement):
     """a word as an element of a symbol 
@@ -544,41 +720,6 @@ class SymWord(SymDict.SymElement):
             builder.add_letter(string.lower(match.group(1)))
         else:
             builder.add_word(self.word, self.original)
-
-class CapsModifier(SymDict.SymElement):
-    """a symbol element which modifies the capitalization of subsequent
-    elements
-
-    **INSTANCE ATTRIBUTES**
-    
-    *STR caps* -- the new capitalization state: 'no-caps', 'normal', 
-    'cap', or 'all-caps'
-
-    *BOOL one_word* -- if true, modify capitalization for the next
-    word.  If false, modify for all following words until a
-    subsequent change_caps with one_word = 0.  (A subsequent call to
-    change_caps with one_word = 1 will take precedence temporarily)
-    """
-    def __init__(self, caps, one_word = 1, **args):
-        self.deep_construct(CapsModifier,
-                            {
-                             'caps': caps,
-                             'one_word': one_word
-                            },
-                            args)
-
-    def add_to(self, builder):
-        """Modify the capitalization state of the symbol builder
-
-        **INPUTS**
-
-        *SymBuilder builder*
-
-        **OUTPUTS**
-
-        *none*
-        """
-        builder.change_caps(caps, one_word)
 
 class NoSeparator(SymDict.SymElement):
     """a symbol element which suppresses any separator before the next
@@ -841,6 +982,8 @@ class CmdInterp(OwnerObject):
 # flag indicating whether untranslated words consists of an exact match
 # of the spoken form to an existing symbol
         exact_symbol = 0
+
+        new_symbol = 0
         
         #
         # Process the beginning of the command until there is nothing
@@ -904,7 +1047,7 @@ class CmdInterp(OwnerObject):
 
             CSC_consumes = self.apply_CSC(app, possible_CSCs, processed_phrase, 
                 most_definite, builder, untranslated_words, 
-                exact_symbol)
+                exact_symbol, new_symbol)
             if CSC_consumes:
                 phrase = phrase[CSC_consumes:]
                 processed_phrase = processed_phrase[CSC_consumes:]
@@ -912,6 +1055,7 @@ class CmdInterp(OwnerObject):
                 untranslated_words = []
                 builder = None
                 exact_symbol = 0
+                new_symbol = 0
 
             if not head_was_translated and LSA_consumes == most_definite:
                 #
@@ -922,20 +1066,24 @@ class CmdInterp(OwnerObject):
                 if builder and not builder.empty():
                     preceding_symbol = 1
                 if not chopped_LSA.interp_now(preceding_symbol):
-                    untranslated_words.append(chopped_LSA.written())
+                    if chopped_LSA.written():
+                        untranslated_words.append(chopped_LSA.written())
+                    else:
+                        new_symbol = 1
                     spoken_form = processed_phrase[:LSA_consumes]
-                    element = SymAlias(chopped_LSA, spoken_form)
                     if not builder:
                         builder = self.new_builder(app)
-                    element.add_to(builder)
+                    chopped_LSA.add_to(builder)
                 else:
 # flush untranslated words before inserting LSA
                     if builder:
                         self.match_untranslated_text(builder, 
-                            untranslated_words, app, exact_symbol)
+                            untranslated_words, app, exact_symbol,
+                            new_symbol)
                         untranslated_words = []
                         builder = None
                         exact_symbol = 0
+                        new_symbol = 0
                     actions_gen.ActionInsert(code_bef=chopped_LSA.written(), 
                         code_after='').log_execute(app, None)
                 phrase = phrase[LSA_consumes:]
@@ -1006,10 +1154,11 @@ class CmdInterp(OwnerObject):
                 #
                 trace('CmdInterp.interpret_phrase', 'found the end of some untranslated text')
                 self.match_untranslated_text(builder, 
-                    untranslated_words, app, exact_symbol)
+                    untranslated_words, app, exact_symbol, new_symbol)
                 builder = None
                 untranslated_words = []
                 exact_symbol = 0
+                new_symbol = 0
 
             if untranslated_words:
                 untranslated_text = string.join(untranslated_words)
@@ -1026,7 +1175,8 @@ class CmdInterp(OwnerObject):
         app.recog_end()
 
     def apply_CSC(self, app, possible_CSCs, spoken_list,
-        most_definite, builder, untranslated_words, exact_symbol):
+        most_definite, builder, untranslated_words, exact_symbol,
+        new_symbol):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
@@ -1051,6 +1201,10 @@ class CmdInterp(OwnerObject):
 
         *BOOL exact_symbol* -- true if the untranslated words are an
         exact match to a known symbol
+
+        *BOOL new_symbol* -- true if the untranslated words include
+        manual formatting and therefore should not be loosely matched to
+        an existing symbol
 
         **OUTPUTS**
 
@@ -1090,7 +1244,7 @@ class CmdInterp(OwnerObject):
 # flush untranslated words before executing action
             if untranslated_words:
                 self.match_untranslated_text(builder, 
-                    untranslated_words, app, exact_symbol)
+                    untranslated_words, app, exact_symbol, new_symbol)
             action.log_execute(app, context)
             return CSC_consumes
         return 0
@@ -1192,7 +1346,7 @@ class CmdInterp(OwnerObject):
         return self.massage_command_tuples(command_tuples)
 
     def match_untranslated_text(self, builder, 
-        untranslated_words, app, exact_symbol = 0):
+        untranslated_words, app, exact_symbol = 0, new_symbol = 0):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -1218,7 +1372,7 @@ class CmdInterp(OwnerObject):
         untranslated_text = string.join(untranslated_words)
         trace('CmdInterp.match_untranslated_text', 'untranslated_text=\'%s\'' % (untranslated_text))
 
-        if exact_symbol:
+        if exact_symbol and not new_symbol:
             spoken_form = untranslated_text
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
@@ -1243,8 +1397,11 @@ class CmdInterp(OwnerObject):
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
             return
 
-        symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
-        trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
+        symbol_matches = None
+        trace('CmdInterp.match_untranslated_text', 'new_symbol=%s' % new_symbol)
+        if not new_symbol:
+            symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
+            trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
         if symbol_matches:
             self.dlg_select_symbol_match(untranslated_text, 
                 symbol_matches, app)
@@ -1697,6 +1854,38 @@ class CmdInterp(OwnerObject):
                         word = sr_interface.clean_spoken_form(word)
                         sr_interface.addWord(word)
 
+    def add_capitalization_word(self, word):
+        """Add a language specific word.
+
+        **INPUTS**
+        
+        *CapitalizationWord word* -- the new word
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        if not self.language_specific_aliases.has_key(None):
+            self.language_specific_aliases[None] = \
+                WordTrie.WordTrie()
+
+        for spoken_as in word.spoken_forms:
+            clean_spoken = sr_interface.clean_spoken_form(spoken_as)
+            vc_entry = sr_interface.vocabulary_entry(spoken_as, "", clean_written=0)
+            phrase = string.split(clean_spoken)
+            self.language_specific_aliases[None].add_phrase(phrase, 
+                word.modifier)
+
+            #
+            # Add LSA to the SR vocabulary
+            #
+            if self.add_sr_entries_for_LSAs_and_CSCs:
+                trace('CmdInterp.add_capitalization_word', 
+                    'adding entry "%s"' % vc_entry)
+#                    print 'clean_spoken, written, entry: "%s", "%s", "%s"' \
+#                        % (clean_spoken, hacked_written_as, entry)
+                sr_interface.addWord(vc_entry)
+
     def add_lsa_set(self, set):
         """add LSAs from a set
 
@@ -1710,6 +1899,20 @@ class CmdInterp(OwnerObject):
         """
         for alias in set.aliases.values():
             self.add_lsa(alias)
+
+    def add_capitalization_word_set(self, set):
+        """add CapitalizationWords from a set
+
+        **INPUTS**
+
+        *CapitalizationWordSet set* -- the set of words to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for word in set.words.values():
+            self.add_capitalization_word(word)
 
     def has_lsa(self, spoken_form, language = None):
         """check if there is already an LSA defined with this spoken

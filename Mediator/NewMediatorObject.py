@@ -749,6 +749,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_csc_set'] = do_nothing
             config_dict['add_lsa'] = do_nothing
             config_dict['add_lsa_set'] = do_nothing
+            config_dict['add_capitalization_word'] = do_nothing
+            config_dict['add_capitalization_word_set'] = do_nothing
             config_dict['clear_standard_symbols_file_list'] = do_nothing            
             config_dict['standard_symbols_in'] = do_nothing
             config_dict['abbreviations_in'] = do_nothing
@@ -760,6 +762,10 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_csc_set'] = self.add_csc_set
             config_dict['add_lsa'] = self.add_lsa
             config_dict['add_lsa_set'] = self.add_lsa_set
+            config_dict['add_capitalization_word'] = \
+                self.add_capitalization_word
+            config_dict['add_capitalization_word_set'] = \
+                self.add_capitalization_word_set
             config_dict['has_lsa'] = self.has_lsa
             config_dict['clear_standard_symbols_file_list'] = self.clear_standard_symbols_file_list          
             config_dict['standard_symbols_in'] = self.standard_symbols_in
@@ -1252,6 +1258,20 @@ class NewMediatorObject(Object.OwnerObject):
         
         self.interp.add_lsa(an_LSA)
 
+    def add_capitalization_word(self, an_LSA):
+        """Add a capitalization word.
+
+        **INPUTS**
+        
+        *CapitalizationWord word* -- see CmdInterp
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.interp.add_capitalization_word(word)
+
     def add_lsa_set(self, set):
         """add LSAs from a set
 
@@ -1264,6 +1284,19 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.interp.add_lsa_set(set)
+
+    def add_capitalization_word_set(self, set):
+        """add CapitalizationWords from a set
+
+        **INPUTS**
+
+        *CapitalizationWordSet set* -- the set of words to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.interp.add_capitalization_word_set(set)
 
     def clear_standard_symbols_file_list(self):
         """Clears the list of files defining standard symbols"""
