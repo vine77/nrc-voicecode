@@ -125,12 +125,6 @@ debug.config_traces(status="on",
 VC_LISTEN_PORT = 45770
 VC_TALK_PORT = 45771
 
-class ConfigFailed(exceptions.RuntimeError):
-    """
-    exception raised when mediator configuration fails
-    """
-    pass
-
 class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
     """implementation of ExtLoopWin32 for ServerNewMediator 
 
@@ -141,6 +135,8 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
     *NewMediatorObject the_mediator* -- the mediator object
 
     STR *test_suite=None* -- name of regression test suite to run
+
+    *BOOL okay* -- true if the configuration was successful
     """
     def remove_other_references(self):
 # for now, quit first, then cleanup (including server owned by the
@@ -192,13 +188,18 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
-        okay = self.the_mediator.configure()
+        self.okay = self.the_mediator.configure() and self.the_mediator.ready()
         if not okay:
             sys.stderr.write('Mediator configuration failed...exiting\n')
-            raise ConfigFailed()
 #        print self.the_mediator.server
         sys.stderr.write('Finished ExtLoop init...\n')
         sys.stderr.flush()
+
+    def run(self):
+        """Start the server as well as the ExtLoopWin32 message loop.
+        """
+        if self.okay:
+            ExtLoopWin32.run()
 
     def server(self):
         """returns a reference to the server

@@ -208,6 +208,19 @@ class MediatorConsole(Object.OwnerObject):
         """
         return 0
 
+    def message_box(self, message):
+        """displays an error or warning message in a message box
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('MediatorConsole.message_box')
+
     def set_gram_factory(self, gram_factory):
         """used by NewMediatorObject to specify a WinGramFactory which the 
         console can use to speech-enable dialog boxes
@@ -292,7 +305,6 @@ class MediatorConsole(Object.OwnerObject):
 # the dialog should do this when control returns to it on dismissal of
 # the dialog
 
-    
     def copy_user_config(self, target, directory):
         """prompt the user for the sample user configuration file to
         copy to the target path, and copy the file

@@ -157,6 +157,22 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         self.main_frame.set_status_text(message)
         return 1
 
+    def message_box(self, message):
+        """displays an error or warning message in a message box
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        **OUTPUTS**
+
+        *none*
+        """
+        box = wxMessageDialog(self.main_frame, message, "Error", wxOK,
+            wxDefaultPosition)
+        box.ShowModal()
+        box.Destroy()
+
     def starting_tests(self):
         """method used by NewMediatorObject to notify us that it is
         about to start regression testing
