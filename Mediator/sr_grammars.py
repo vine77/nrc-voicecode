@@ -449,10 +449,8 @@ class SelectWinGram(WinGram):
         #
         debug.trace('SelectWinGram.find_closest', '** mark_selection=%s' % mark_selection)
         if mark_selection:
-            a = actions_gen.ActionSelect(range = \
-                ranges[closest_range_index],
-                buff_name = self.buff_name,
-                cursor_at=where)
+            a = actions_gen.ActionSelectPseudoCode(possible_ranges = ranges, select_range_no = closest_range_index,
+                buff_name = self.buff_name, cursor_at=where)
             a.log_execute(self.app, None)
         else:
             if where > 0:
