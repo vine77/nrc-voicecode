@@ -24,6 +24,7 @@ buffer is slow"""
 
 
 import debug, SourceBuff
+from debug import trace
 
 from Object import Object
 
@@ -451,16 +452,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         old_text = self.get_text()
         self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]+1:]
 
-        #
-        # Uncache visible region.
-        #        
-        # Note: we don't recache it from external application for efficiency
-        # reasons. That's because the visible region is only needed at the
-        # beginning of an utterance, but delete_cbk() can be invoked many
-        # times within an utterance (which would result in many unecessary
-        # calls to _get_visible_from_app()).
-        #
-        self.cache['get_visible'] = None
+        self.uncache_data_after_buffer_change()
+        
 
     def insert_cbk(self, range, text):
         
@@ -481,23 +474,17 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-#        print '-- SourceBuffCached.insert_cbk: range=%s, text=\'%s\'' % (range, text)
+        trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
+        trace('SourceBuffCached.insert_cbk', '** upon entry, self.cache["get_text"]="%s"' % self.cache["get_text"])        
 
         if range == None:
-            range = self.get_selection()        
+            range = self.get_selection()     
         old_text = self.get_text()
         self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]:]
 
-        #
-        # Uncache visible region.
-        #        
-        # Note: we don't recache it from external application for efficiency
-        # reasons. That's because the visible region is only needed at the
-        # beginning of an utterance, but insert_cbk() can be invoked many
-        # times within an utterance (which would result in many unecessary
-        # calls to _get_visible_from_app()).
-        #
-        self.cache['get_visible'] = None        
+        self.uncache_data_after_buffer_change()
+        
+        trace('SourceBuffCached.insert_cbk', '** upon exit, self.cache["get_text"]="%s"' % self.cache["get_text"])
 
     def set_selection_cbk(self, range, cursor_at=1):
         
@@ -527,18 +514,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
             self.cache['cur_pos'] = range[1]
         else:
             self.cache['cur_pos'] = range[0]
-
-        #
-        # Uncache visible region.
-        #        
-        # Note: we don't recache it from external application for efficiency
-        # reasons. That's because the visible region is only needed at the
-        # beginning of an utterance, but set_selection_cbk() can be invoked
-        # many times within an utterance (which would result in many unecessary
-        # calls to _get_visible_from_app()).
-        #
-        self.cache['get_visible'] = None
             
+        self.uncache_data_after_buffer_change('get_selection')            
 
     def goto_cbk(self, pos):
         
@@ -559,13 +536,25 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 #        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
         self.cache['cur_pos'] = pos
 
+
+    def uncache_data_after_buffer_change(self, what_changed=None):
+        trace('SourceBuffCached.uncache_data_after_buffer_change',
+              'invoked, what_changed="%s"' % what_changed)
         #
-        # Uncache visible region.
-        #        
-        # Note: we don't recache it from external application for efficiency
-        # reasons. That's because the visible region is only needed at the
-        # beginning of an utterance, but goto_cbk() can be invoked many
-        # times within an utterance (which would result in many unecessary
-        # calls to _get_visible_from_app()).
+        # Uncache data that may have become obsolete as a result of a
+        # buffer change.
         #
-        self.cache['get_visible'] = None
+        for cache_entry_name in ('cur_pos', 'get_visible', 'get_selection'):
+            trace('SourceBuffCached.uncache_data_after_buffer_change',
+                  '** cache_entry_name="%s"' % cache_entry_name)
+            
+            if cache_entry_name != what_changed:
+                #
+                # Don't uncache the data that was changed, because we assume
+                # that it has been cached to the appropriate value.
+                #
+                self.cache[cache_entry_name] = None
+                
+        trace('SourceBuffCached.uncache_data_after_buffer_change',
+              'exited')
+        

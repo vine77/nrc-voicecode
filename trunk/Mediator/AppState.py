@@ -75,7 +75,7 @@ def use_update_class(action):
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
     use_class = {'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
-                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto,
+                 'select': SB_UpdSetSelection, 'goto': SB_UpdGoto,
                  'close_buff': AS_UpdCloseBuffer,
                  'open_buff': AS_UpdOpenBuffer}
 
@@ -1350,7 +1350,7 @@ class AppState(OwnerObject):
         #
         # Just ask the editor to close all buffers known to VoiceCode
         #
-        self.close_all_buffers()
+        self.close_all_buffers(-1)
 
 
 

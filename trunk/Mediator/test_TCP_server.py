@@ -5,7 +5,7 @@ communicates with VoiceCode through a TCP/IP messaging protocol.
 from socket import *
 import os, natlink, sys, threading
 import EdSim, mediator, messaging, Object, SourceBuffEdSim, sim_commands, sr_interface
-import debug
+from debug import config_traces, trace
 
 VC_LISTENER_PORT = 45770
 VC_TALKER_PORT = 45771
@@ -16,7 +16,11 @@ HOST = gethostname()
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
+config_traces(status="on",
+              active_traces={
+#                             'get_mess':1,
+#                             'send_mess': 1
+                             })
 
 
 def create_tcp_mess(sock):
@@ -83,7 +87,7 @@ class ListenThread(threading.Thread, Object.Object):
         buff_name = self.xed.ed.app_active_buffer_name()
         updates = []
 
-        updates.append({'action': 'set_selection', 'range': self.xed.ed.get_selection(), 'buff_name': buff_name})        
+        updates.append({'action': 'select', 'range': self.xed.ed.get_selection(), 'buff_name': buff_name})        
         updates.append({'action': 'goto', 'pos': self.xed.ed.cur_pos(), 'buff_name': buff_name})
 
         return updates
@@ -102,7 +106,7 @@ class ListenThread(threading.Thread, Object.Object):
         *none* -- 
         """
         
-        print '-- execute_request: req=%s' % repr(req)
+        trace('test_TCP_server.execute_request', 'req=%s' % repr(req))
         
         buff_name = self.xed.ed.app_active_buffer_name()
         action = req[0]
@@ -138,11 +142,12 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.ed.set_selection(range=range, cursor_at=cursor_at)
             self.xed.vc_talk_msgr.send_mess('set_selection_resp', {'updates': self.upd_curpos_sel()})
         elif action == 'get_text':
-            print '-- execute_request: get_text, args[\'start\']=%s, args[\'end\']=%s' % ( args['start'], args['end'])
+            trace('test_TCP_server.execute_request',
+                  'get_text, args[\'start\']=%s, args[\'end\']=%s' % ( args['start'], args['end']))
             start = messaging.messarg2int(args['start'])
             end = messaging.messarg2int(args['end'])
             self.xed.vc_talk_msgr.send_mess('get_text_resp', {'value': self.xed.ed.get_text(start, end)})
-            print '-- execute_request: request=\'get_text\', sending self.xed.ed.get_text(start, end)[0:100]=%s' % self.xed.ed.get_text(start, end)[0:100]
+            trace('test_TCP_server.execute_request', 'request=\'get_text\', sending self.xed.ed.get_text(start, end)[0:100]=%s' % self.xed.ed.get_text(start, end)[0:100])
 
         elif action == 'get_visible':
             self.xed.vc_talk_msgr.send_mess('get_visible_resp', {'value': self.xed.ed.get_visible()})            
@@ -154,7 +159,8 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('len', {'value': self.xed.ed.len()})
 
         elif action == 'insert':
-            print '-- execute_request: args=%s' % repr(args)
+            trace('test_TCP_server.execute_request',
+                  'args=%s' % repr(args))
             text = args['text']
             range = messaging.messarg2intlist(args['range'])
             self.xed.ed.insert(text, range)
@@ -186,11 +192,13 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('recog_end_resp')
             self.xed.ed.refresh()
         elif action == 'open_file':
-            print '-- execute_request: action=\'open_file\''
+            trace('test_TCP_server.execute_request',
+                  'action=\'open_file\'')
             self.xed.ed.open_file(file_name=args['file_name'])            
             self.xed.vc_talk_msgr.send_mess('open_file_resp', {'buffer_id': args['file_name']})
         elif action == 'close_buffer':
-            print '-- execute_request: action=\'close_buffer\''
+            trace('test_TCP_server.execute_request',
+                  'action=\'close_buffer\'')
 	    success = self.xed.ed.close_buffer(buff_name=args['buff_name'], 
 		save=['save'])
             self.xed.vc_talk_msgr.send_mess('close_buffer_resp',
@@ -213,7 +221,6 @@ class ListenThread(threading.Thread, Object.Object):
         """
 
         while 1:
-#            print '--  ListenThread.run: polling VoiceCode'
             try:
                 request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating'])
                 
@@ -267,7 +274,8 @@ class ExternalEdSim(Object.Object):
         *none*
         """
 
-        print '-- open_vc_listener_conn: started'
+        trace('test_TCP_server.open_vc_listener_conn',
+              'started')
 
         global HOST
         a_socket = socket(AF_INET, SOCK_STREAM)
@@ -281,7 +289,8 @@ class ExternalEdSim(Object.Object):
         encoder = messaging.MessEncoderWDDX()
         self.vc_listen_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
 
-        print '-- open_vc_listener_conn: sending name of editor'
+        trace('test_TCP_server.open_vc_listener_conn',
+              'sending name of editor')
         
         #
         # Send name of editor
@@ -290,7 +299,8 @@ class ExternalEdSim(Object.Object):
         self.vc_listen_msgr.send_mess('app_name', {'value': 'EdSim'})
 
 
-        print '-- open_vc_listener_conn: getting ID'
+        trace('test_TCP_server.open_vc_listener_conn',
+              'getting ID')
         
         #
         # Get unique identifier from VoiceCode
@@ -299,7 +309,8 @@ class ExternalEdSim(Object.Object):
         self.id = msg[1]['value']
         self.vc_listen_msgr.send_mess('ok')
         
-        print '-- open_vc_listener_conn: done'
+        trace('test_TCP_server.open_vc_listener_conn',
+              'done')
 
 
 
@@ -318,7 +329,7 @@ class ExternalEdSim(Object.Object):
         """
         global HOST
 
-        print '-- open_vc_talker_conn: started'
+        trace('test_TCP_server.open_vc_talker_conn', 'started')
         
         #
         # Open the socket
@@ -326,7 +337,7 @@ class ExternalEdSim(Object.Object):
         a_socket = socket(AF_INET, SOCK_STREAM)
         a_socket.connect(HOST, VC_TALKER_PORT)      
 
-        print '-- open_vc_talker_conn: socket opened'
+        trace('test_TCP_server.open_vc_talker_conn', 'socket opened')
         
         #
         # Create a messenger
@@ -337,7 +348,7 @@ class ExternalEdSim(Object.Object):
         self.vc_talk_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
         
 
-        print '-- open_vc_talker_conn: sending ID'
+        trace('test_TCP_server.open_vc_talker_conn', 'sending ID')
         
         #
         # Send the connection pair ID to the remote server
@@ -345,7 +356,7 @@ class ExternalEdSim(Object.Object):
         self.vc_talk_msgr.get_mess(expect=['send_id'])
         self.vc_talk_msgr.send_mess('my_id_is', {'value': self.id})
         
-        print '-- open_vc_talker_conn: done'
+        trace('test_TCP_server.open_vc_talker_conn', 'done')
 
     def listen(self):
         """Listens for commands from VoiceCode and executes them.
@@ -377,16 +388,7 @@ class ExternalEdSim(Object.Object):
         *none* -- 
         """
         self.open_vc_listener_conn()
-        print '-- ExternalEdSim.connect: after open_vc_listener_conn'
-        self.open_vc_talker_conn()
-        print '-- ExternalEdSim.connect: after open_vc_talker_conn'
-
-        #begin
-#          while 1:
-#              print '-- just shooting the breeze'
-#              pass
-        #end
-        
+        self.open_vc_talker_conn()        
         self.listen()
 
 
@@ -421,8 +423,6 @@ class ExternalEdSim(Object.Object):
         
         sr_interface.disconnect()
 
-        print '-- start_shell: disconnected'
-
         sys.exit()
 
 
@@ -430,7 +430,6 @@ if __name__ == '__main__':
 
     sr_interface.connect()
     window = natlink.getCurrentModule()[2]
-    print '-- __main__: window=%s' % window
     sr_interface.disconnect()
 
     an_editor = ExternalEdSim()
