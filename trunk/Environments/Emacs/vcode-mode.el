@@ -3121,8 +3121,8 @@ buffer"
 )
 
 (defun line-num-at (pos)
-  (1+ (count-lines 1 pos))
-;;;  (count-lines 1 pos)
+;;;  (1+ (count-lines 1 pos))
+  (count-lines 1 pos)
 )
 
 (defun vcode-cmd-line-num-of (vcode-request)

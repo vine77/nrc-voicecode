@@ -1669,23 +1669,25 @@ class SourceBuff(OwnerObject):
         """
 
         #
+        # Figure out the text before/within/after the selection
+        #
+        selection_start, selection_end = self.get_selection()
+                                       (self, self.cur_pos(), selection_start, selection_end))
+
+        #
         # Figure out the first and last line to be printed
         #
         if from_line == None or to_line == None:
            from_line, to_line = self.lines_around_cursor()
            trace('SourceBuff.print_buff', '** now, from_line=%s, to_line=%s' % (from_line, to_line))           
         
-        #
-        # Figure out the text before/withing/after the selection
-        #
-        selection_start, selection_end = self.get_selection()
-
-        trace('SourceBuff.print_buff', 'from_line=%s, to_line=%s, selection_start=%s, selection_end=%s' % (from_line, to_line, selection_start, selection_end))
 
         before_content = self.get_text(0, selection_start)
         selection_content = self.get_text(selection_start, selection_end)
         after_content = self.get_text(selection_end)
+        
 
+        
         printed = before_content
         if selection_content == '':
             printed = printed + '<CURSOR>'
@@ -1695,16 +1697,16 @@ class SourceBuff(OwnerObject):
             printed = printed + '<SEL_END>'
         printed = printed + after_content
 
-        trace('SourceBuff.print_buff', 'printed="%s"' % printed)
 
         lines_with_num = self.number_lines(printed, startnum = 1)
         
-        if from_line == 1:
+        if from_line == 0:
             sys.stdout.write("*** Start of source buffer ***\n")
-        for aline in lines_with_num[from_line-1:to_line]:
+        for aline in lines_with_num[from_line:to_line+1]:
             sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if to_line == len(lines_with_num):
+        if to_line == len(lines_with_num) - 1:
             sys.stdout.write("\n*** End of source buffer ***\n")
+                
         return
 
     def lines_around_cursor(self):
@@ -1729,8 +1731,8 @@ class SourceBuff(OwnerObject):
         to_line = curr_line + self.print_nlines
         trace('SourceBuff.lines_around_cursor', '** curr_line=%s, self.cur_pos()=%s, self.print_nlines=%s, from_line=%s, to_line=%s' 
                                                 % (curr_line, self.cur_pos(), self.print_nlines, from_line, to_line))                
-        if from_line < 1:
-            from_line = 1
+        if from_line < 0:
+            from_line = 0
         last_line = self.line_num_of(self.len())    
         trace('SourceBuff.lines_around_cursor', '** self.len()=%s, last_line=%s' % (self.len(), last_line))
         if to_line > last_line:

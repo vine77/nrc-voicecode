@@ -326,40 +326,40 @@ EdSim instance EdSim(0) connected
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
+  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
+ 11: 
 
 >>> Interpreting in a Python buffer
 
 >>> Current buffer is:
 
-*** Start of source buffer ***
-  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
+  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
-  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
+  9:     def a_method(self, x):
 
 
 *******************************************************************************
@@ -376,6 +376,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 
 >>> Moving to position 5
@@ -384,6 +385,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 
 >>> Testing breadcrumbs
@@ -394,6 +396,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -401,6 +404,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 >>> Popping 2 crumbs -> end up here:
 *** Start of source buffer ***
@@ -408,6 +412,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -415,6 +420,7 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -422,11 +428,13 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 *** Start of source buffer ***
   1: /* This is a small t<CURSOR>est buffer for C */
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 >>> Popping 1 crumb -> end up here...
 *** Start of source buffer ***
@@ -434,16 +442,17 @@ EdSim instance EdSim(0) connected
   2: 
   3: 
   4: void move(float x, y)
+  5: {
 
 
 >>> Testing code indentation. Inserting for loop.
-  3: 
   4: for (ii=0; ii <= maxValue; ii++)
   5: {
   6: <CURSOR>
   7: }
   8: void move(float x, y)
   9: {
+ 10:   move_horiz(x);
 
 
 *******************************************************************************
@@ -477,17 +486,18 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
+  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
+ 11: 
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
@@ -496,24 +506,23 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Current buffer is:
 
-*** Start of source buffer ***
-  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
+  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
-  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
+  9:     def a_method(self, x):
 EdSim.remove_other_references
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
@@ -542,41 +551,41 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
   4: void move(float x, y)
   5: {
   6:   move_horiz(x);
+  7:   move_vert(y)
 >>> Interpreting: ['for loop', 'loop body']
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4: {
   5: for (=0;  <= ; ++)
   6: {
   7: <CURSOR>   
   8: }
   9:    
  10: }
+ 11: 
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Interpreting in a Python buffer
 
 >>> Current buffer is:
 
-*** Start of source buffer ***
-  1: # This is a small test buffer for Python
   2: 
   3: 
   4: <CURSOR>
   5: class AClass(ASuper):
   6:     """This is a dummy class"""
   7:     
+  8:     def a_method(self, x):
 >>> Interpreting: ['for loop', 'loop body']
 
 >>> Buffer is now:
-  2: 
   3: 
   4: for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
+  9:     def a_method(self, x):
 EdSim.remove_other_references
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
@@ -624,7 +633,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F2AEA8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F337E8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2866,14 +2875,13 @@ SourceBuff.__init__: fowl.py
 DictWinGramDummy for buffer = 'fowl.py', window 5
 init
 activating buffer fish.C for window 5
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 DictWinGramDummy for buffer = 'fowl.py', window 5
 deactivating
 SelectWinGramDummy for buffer 'fish.C', window 5
@@ -2897,15 +2905,12 @@ SourceBuff.__init__: fish.h
 DictWinGramDummy for buffer = 'fish.h', window 7
 init
 activating buffer dog.pl for window 7
- 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.h', window 7
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', window 7
@@ -2919,8 +2924,6 @@ activating buffer fish.h for window 7
 *** Start of source buffer ***
   1: void move(float x, y);<CURSOR>
   2: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'dog.pl', window 7
 deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
@@ -2931,14 +2934,15 @@ setting context: before = [ x, y);], after = [
 DictWinGramDummy for buffer = 'fish.h', window 7
 activating:  7  
 activating buffer fowl.py for window 5
-*** Start of source buffer ***
-  1: import sys
   2: 
   3: def something(value):
   4:     print <CURSOR>value
   5: 
   6: if __name__ == '__main__':
   7:     something('nice')
+  8: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
 SelectWinGramDummy for buffer 'fowl.py', window 5
@@ -2975,14 +2979,13 @@ SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
 close buffer dog.pl
 activating buffer fish.C for window 5
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
@@ -3037,14 +3040,13 @@ SourceBuff.__init__: fowl.py
 DictWinGramDummy for buffer = 'fowl.py', global
 init
 activating buffer fish.C for window 5
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 DictWinGramDummy for buffer = 'fowl.py', global
 deactivating
 SelectWinGramDummy for buffer 'fish.C', global
@@ -3070,15 +3072,12 @@ SourceBuff.__init__: fish.h
 DictWinGramDummy for buffer = 'fish.h', global
 init
 activating buffer dog.pl for window 7
- 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.h', global
 deactivating
 DictWinGramDummy for buffer = 'fish.C', global
@@ -3100,8 +3099,6 @@ activating buffer fish.h for window 7
 *** Start of source buffer ***
   1: void move(float x, y);<CURSOR>
   2: 
-
-*** End of source buffer ***
 DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
 DictWinGramDummy for buffer = 'fish.C', global
@@ -3120,14 +3117,15 @@ DictWinGramDummy for buffer = 'fish.h', global
 activating:  global  exclusive 
 
 activating buffer fowl.py for window 5
-*** Start of source buffer ***
-  1: import sys
   2: 
   3: def something(value):
   4:     print <CURSOR>value
   5: 
   6: if __name__ == '__main__':
   7:     something('nice')
+  8: 
+
+*** End of source buffer ***
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
@@ -3178,14 +3176,13 @@ SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
 close buffer dog.pl
 activating buffer fish.C for window 5
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
 
@@ -9864,14 +9861,13 @@ emacs(0)
 
 new window 20
 new buffer fish.C for instance 1
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 
 instance emacs(0)
 running in module emacs
@@ -10146,15 +10142,12 @@ with window 15
 SelectWinGramDummy for buffer None, window 15
 init
 new buffer dog.pl for instance 10
- 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
-
-*** End of source buffer ***
 
 instance Vim(0)
 running in module exceed
@@ -10534,14 +10527,13 @@ emacs(0)
 
 new window 20
 new buffer fish.C for instance 1
-*** Start of source buffer ***
-  1: /* This is a small test buffer for C */
   2: 
   3: void move(float x, y)
   4: <CURSOR>{
   5:   move_horiz(x);
   6:   move_vert(y)
   7:   horiz_pos = 0;
+  8:   this_sym_is_unres = 0;
 
 instance emacs(0)
 running in module emacs
@@ -10821,15 +10813,12 @@ with window 15
 SelectWinGramDummy for buffer None, window 15
 init
 new buffer dog.pl for instance 10
- 10:     $dirSep = "\";
  11:     $curDirCom = 'cd';
  12: } else {
  13:     $dirSep = <CURSOR>'/';
  14:     $curDirCom = 'pwd';
  15: };
  16: 
-
-*** End of source buffer ***
 
 instance Vim(0)
 running in module exceed
@@ -12051,5 +12040,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  488.983999968 secs
+Test suite completed in:  621.375 secs
 -----------------------------------------------
