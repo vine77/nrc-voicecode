@@ -253,9 +253,13 @@ class EdSim(AppState):
         Open file with name *STR name* and written in language *STR lang*.        
         """
         self.curr_buffer =  SourceBuff(file_name=name, language=lang)
-        source_file = open(name)
-        source = source_file.read()
-        source_file.close()
+        try:
+            source_file = open(name, 'rw')
+            source = source_file.read()
+            source_file.close()
+        except Exception, err:
+            source = ''
+            
         self.curr_buffer.content = source
         self.open_buffers[name] = self.curr_buffer
         
@@ -272,9 +276,7 @@ class EdSim(AppState):
         cont = self.curr_buffer.content
         sys.stdout.write("*** Start of source buffer ***\n")
         lines_with_num = self.number_lines(cont[0:pos])
-#        print '-- EdSim.print_buff_content: lines_with_num=%s' % lines_with_num
         for aline in lines_with_num[:len(lines_with_num)-1]:
-#            print '-- EdSim.print_buff_content: aline=%s' % str(aline)
             sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
         if (len(lines_with_num) > 0):
              lastline = lines_with_num[len(lines_with_num)-1]
@@ -284,12 +286,16 @@ class EdSim(AppState):
 
         lines_with_num = self.number_lines(cont[pos:], startnum=len(lines_with_num)-1)
 
-        firstline = lines_with_num[0]
-        sys.stdout.write('%s\n' % firstline[1])
-        for aline in lines_with_num[1:]:
-#            print '-- EdSim.print_buff_content: aline=%s' % str(aline)
-            sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+        if (len(lines_with_num) > 0):
+            firstline = lines_with_num[0]
+            print '-- EdSim.print_buff_content: here2'
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                #            print '-- EdSim.print_buff_content: aline=%s' % str(aline)
+                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+                print '-- EdSim.print_buff_content: here3'
         sys.stdout.write("\n*** End of source buffer ***\n")
+        
 
 
 
