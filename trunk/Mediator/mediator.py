@@ -102,7 +102,7 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
 
 def init_simulator(symdict_pickle_fname=None,
                    disable_dlg_select_symbol_matches = None,
-                   window=None, exclusive=0, allResults=0,
+                   window=0, exclusive=0, allResults=0,
                    reuse_mediator=0, on_app=None, owns_app = 1, owner =
 		   None, id = None):
 
@@ -120,7 +120,7 @@ def init_simulator(symdict_pickle_fname=None,
     
     STR *window=None* -- Window handle of application associated with
     the mediator. The mediator listens only when this window is
-    active. If *window=0*, then mediator is not associated with a
+    active. If *window=None*, then mediator is not associated with a
     particular window and it will always listen for utterances.
     
     BOOL *exclusive=0* -- See [MediatorObject.exclusive] for details.
@@ -165,9 +165,6 @@ def init_simulator(symdict_pickle_fname=None,
     if on_app == None:
         on_app = EdSim.EdSim()
     
-    if window == None:
-        window = console_win_handle
-
     try:
         sr_interface.connect('off')
     except natlink.UnknownName:
@@ -257,7 +254,7 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
 
     
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
-                   window=None, owns_app = 0, exclusive=1, allResults=0, 
+                   window=0, owns_app = 0, exclusive=1, allResults=0, 
 		   reuse_mediator=1,
                    disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)
 		   
@@ -293,7 +290,7 @@ def simulator_mode(options):
     global the_mediator
 
     setmic('off')
-    init_simulator(symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', disable_dlg_select_symbol_matches = 1)
+    init_simulator(window = console_win_handle, symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', disable_dlg_select_symbol_matches = 1)
     
     #
     # For better error reporting, you can type some instructions here

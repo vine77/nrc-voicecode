@@ -973,7 +973,7 @@ class ServerSingleThread(Object.Object):
 # ServerSingleThread.
 ##############################################################################
 
-class ServerMainThread(Object.Object):
+class ServerMainThread(Object.OwnerObject):
     """Abstract base class for the main thread of a TCP/IP based 
     VoiceCode server.
 
@@ -1061,10 +1061,6 @@ class ServerMainThread(Object.Object):
     used to signal to the corresponding data thread that the connection is 
     ending, or the server is quitting
 
-    {STR : Event} *server_quitting* -- threading.Event used to signal to other
-    threads that the server is quitting (or to let them sleep until a 
-    timeout, or such a signal).
-    
     *AppStateFactory editor_factory* -- factory for creating new
     AppStateMessaging instances
   
@@ -1087,12 +1083,11 @@ class ServerMainThread(Object.Object):
 			     'new_listener_server': None,
 			     'new_talker_server': None,
 			     'connection_ending': {},
-			     'server_quitting': threading.Event(),
 			     'editor_factory': editor_factory
                              }, 
                             args_super)
       
-    def quit(self):
+    def remove_other_references(self):
 	"""Perform any cleanup prior to quitting.  Called when the main 
 	thread has exited its event loop.  Subclasses which override
 	this method should be sure to call their parent class's version.
@@ -1105,6 +1100,7 @@ class ServerMainThread(Object.Object):
 
 	*none*
 	"""
+	Object.OwnerObject.remove_other_references(self)
 	for id in self.data_threads.keys():
 	    self.deactivate_data_thread(id)
 
@@ -1208,7 +1204,9 @@ class ServerMainThread(Object.Object):
 
         ..[ListenAndQueueMsgsThread] 
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-	a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05)
+	sleeper = messaging.LightSleeper(connection_ending)
+	a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05,
+	    sleeper = sleeper)
 	queue = Queue.Queue(10)
 	broken_connection = ('connection_broken', {})
 	thread = ListenAndQueueMsgsThread( a_msgr, queue, data_event,
@@ -1329,9 +1327,15 @@ class ServerMainThread(Object.Object):
 	    self.data_threads[id] = data_thread
 	    return 1
 	else:
+#	    sys.stderr.write("got 0 from _new_instance\n")
 	    self.deactivate_data_thread(id)
+# 	    sys.stderr.write("sent signal to data thread\n")
+#	    data_thread.join(15.0)
+#	    sys.stderr.write("joined thread (or timed out)\n")
 	    del data_thread
+#	    sys.stderr.write("deleted our reference to data thread\n")
 	    an_app_state.cleanup()
+#	    sys.stderr.write("cleaned up app_state\n")
 	    return 0
 	
     def handshake_listen_socks(self):
@@ -1471,6 +1475,8 @@ class ServerMainThread(Object.Object):
 		    window, listen_sock, talk_sock, test_client)
                         
         self.new_socks_lock.release()        
+#	if stay_alive == 0:
+#	    sys.stderr.write("got 0 from package_sock_pair\n")
 	return stay_alive
 
 
@@ -1567,7 +1573,12 @@ class ServerOldMediator(ServerMainThread):
 			     'test_suite': test_suite
                              }, 
                             args_super)
-    def quit(self):
+#	self.add_owned('active_meds')
+#       for now, MediatorObject is not a standard OwnerObject, and uses
+#       quit rather than cleanup, so we have to do this manually in
+#       remove_other_references
+      
+    def remove_other_references(self):
 	"""Perform any cleanup prior to quitting.  Called when the main 
 	thread has exited its event loop.  Subclasses which override
 	this method should be sure to call their parent class's version.
@@ -1580,7 +1591,7 @@ class ServerOldMediator(ServerMainThread):
 
 	*none*
 	"""
-	ServerMainThread.quit(self)
+	ServerMainThread.remove_other_references(self)
 	for id in self.active_meds.keys():
 # except for editors running regression tests, the MediatorObject should
 # own its editor, so quitting the former should cleanup the editor
@@ -1615,20 +1626,31 @@ class ServerOldMediator(ServerMainThread):
             mediator.init_simulator_regression(on_app=instance)
 	    instance.print_buff_when_changed = 1
             args = [self.test_suite]
-            auto_test.run(args)
+	    try:
+		auto_test.run(args)
+            except messaging.SocketError:
+	        sys.stderr.write("broken socket while running")
+	        sys.stderr.write(" regression tests.\n")
+	        sys.stderr.write("cleaning up and terminating\n")
+            else:
+		# notify external editor that we are quitting
+		instance.talk_msgr.send_mess("terminating")
 
 	    # notify data thread that we are quitting
-	    self.server_quitting.set()
+# don't have the Event here to do that - let caller do so on stay_alive != 0
+# 	    self.server_quitting.set()
 
-	    # notify external editor that we are quitting
-	    instance.talk_msgr.send_mess("terminating")
 
+#	    sys.stderr.write("terminating\n")
 	    if mediator.the_mediator:
+#		sys.stderr.write("quitting mediator\n")
 		mediator.the_mediator.quit(clean_sr_voc=0, save_speech_files=0, 
 		    disconnect=0)
+#		sys.stderr.write("mediator quit done\n")
 		mediator.the_mediator = None
 
             # return 0 to quit the server
+#	    sys.stderr.write("returning 0 from _new_instance\n")
 	    return 0
         else:
             exclusive = 1
@@ -1682,10 +1704,10 @@ class ServerOldMediator(ServerMainThread):
 	if self.active_meds.has_key(id):
 	    self.deactivate_data_thread(id)
 	    self._destroy_mediator(id)
-	    del active_meds[id]
-	    if unexpected:
-	        sys.stderr.write('Mediator %d disconnected unexpectedly\n' \
-		    % id)
+# now done by _destroy_mediator
+#	    del active_meds[id]
+#	    if unexpected:
+#	        sys.stderr.write('Mediator %d disconnected unexpectedly\n' \ % id)
 
 
     def _destroy_mediator(self, id):
@@ -1703,6 +1725,7 @@ class ServerOldMediator(ServerMainThread):
 	"""
 	self.active_meds[id].quit(clean_sr_voc=0, save_speech_files=0, 
 	    disconnect=0)
+	del self.active_meds[id]
 	
 class ServerOldMediatorIntLoop(ServerOldMediator):
     """concrete subclass of ServerOldMediator(ServerMainThread) which uses 
@@ -1823,6 +1846,7 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
                 #
                 debug.trace('ServerSingleThread.run', 'got evt_new_talk_conn')
                 if not self.handshake_talk_socks():
+#		    sys.stderr.write("got 0 from handshake_talk_socks\n")
 		    break
 
                 
@@ -1867,7 +1891,9 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
 
             counter = counter + 1
 
-	self.quit()
+#	sys.stderr.write("cleaning up int loop\n")
+	self.cleanup()
+#	sys.stderr.write("done cleaning up int loop\n")
 
 
 
@@ -1913,6 +1939,7 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
         self.deep_construct(ServerOldMediatorExtLoop, 
                             {'owner': owner}, 
                             args_super)
+	self.name_parent('owner')
 
     def data_event(self, id):
 	"""virtual method which supplies a data_event for ServerMainThread 
@@ -1929,7 +1956,7 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
 	"""
 	return self.owner.data_event(id)
 
-class ExtLoopWin32(Object.Object):
+class ExtLoopWin32(Object.OwnerObject):
     """class providing an external win32 message message loop for
     ServerOldMediator using win32event
 
@@ -1965,6 +1992,7 @@ class ExtLoopWin32(Object.Object):
 	self.server = ServerOldMediatorExtLoop(owner = self,
 			     test_suite = test_suite, 
 			     editor_factory = factory)
+	self.add_owned('server')
 
     def data_event(self, id):
 	"""virtual method which supplies a data_event for ServerMainThread 
@@ -2058,6 +2086,7 @@ class ExtLoopWin32(Object.Object):
                 #
                 debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
                 if not self.server.handshake_talk_socks():
+#		    sys.stderr.write("got 0 from handshake_talk_socks\n")
 		    break
 
                 
@@ -2102,7 +2131,11 @@ class ExtLoopWin32(Object.Object):
 
             counter = counter + 1
 
-	self.server.quit()
+#	sys.stderr.write("cleaning up server from ext loop\n")
+	self.server.cleanup()
+#	sys.stderr.write("done cleaning up server from ext loop\n")
+	self.server = None
+#	sys.stderr.write("server = None")
 
 
 
@@ -2122,6 +2155,7 @@ def run_int_server(test_suite=None):
 	editor_factory = factory)
         
     a_server.run()
+#    sys.stderr.write("run_int_server finishing\n")
     
 def run_ext_server(test_suite=None):
     """Start a ServerMainThread with external message loop using
@@ -2133,12 +2167,14 @@ def run_ext_server(test_suite=None):
     a_loop = ExtLoopWin32(test_suite)
 
     a_loop.run()
+#    sys.stderr.write("run_ext_server finishing\n")
     
 def run_smt_server(test_suite=None):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
     run_ext_server(test_suite)
+#    sys.stderr.write("run_smt_server finishing\n")
     
 def run_server(test_suite=None):
     """Start a single thread, single process server.
@@ -2191,19 +2227,20 @@ OPTIONS
    Use the latest ServerMainThread version (currently --ext)
     """
 
+
 if __name__ == '__main__':
-
-
     opts, args = util.gopt(['h', None, 't=', None, 
+                            'd', None,
 			    'int', None, 'sst', None,
                             'ext', None, 'smt', None])
-
     if opts['t'] != None:        
         #
         # Load definition of regression tests
         #
         tests_def_fname = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py')
         execfile(tests_def_fname)        
+
+
     
     sr_interface.connect()
 
@@ -2212,6 +2249,8 @@ if __name__ == '__main__':
     #
 #    the_recog_start_mgr = RecogStartMgr.RecogStartMgr()
 
+
+    sys.stderr = sys.stdout
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
@@ -2224,4 +2263,8 @@ if __name__ == '__main__':
     else:
 	run_server(test_suite=opts['t'])
 
+#    sys.stderr.write("run finished\n")
     sr_interface.disconnect()
+#    sys.stderr.write("disconnected from natlink\n")
+
+

@@ -99,7 +99,7 @@ def init_simulator(app, symdict_pickle_fname=None,
     disable_dlg_select_symbol_matches = None, window = 0, exclusive = 0,
     allResults = 0, editor_app = None):
 
-#    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
+#    print '-- gui_sim.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
     
     global the_mediator
 

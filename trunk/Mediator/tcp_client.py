@@ -107,7 +107,7 @@ class ClientConnection(Object.Object):
 			     'connecting': 0,
 			     'connected': 0,
 			     'ID': None,
-			     'client_quitting': threading.Event()
+			     'client_quitting': None
                              }, 
                             args_super)
 
@@ -130,9 +130,12 @@ class ClientConnection(Object.Object):
 
         ..[ListenAndQueueMsgsThread] 
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-	a_msgr = messaging.messenger_factory(listen_sock)
 	queue = Queue.Queue(10)
 	broken_connection = ('broken_connection', {})
+        self.client_quitting = threading.Event()
+	sleeper = messaging.LightSleeper(self.client_quitting)
+	a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05,
+	    sleeper = sleeper)
 	thread = ListenAndQueueMsgsThread(a_msgr, queue, data_event,
 	   self.client_quitting, broken_connection)
 	return thread
@@ -285,7 +288,10 @@ class ClientConnection(Object.Object):
 
 	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
 	to pass to the new data thread so it can notify the main thread
-	when there is a command waiting in the queue.
+	when there is a command waiting in the queue.  Unlike the
+	server, there is only one connection and one data socket per client, 
+	so we don't need to give the socket a unique ID and create a 
+	data_event based on that ID.
 
 	*STR* host -- name or IP address of the host on which the
 	mediator server is running.  Defaults to a server running
@@ -318,14 +324,20 @@ class ClientConnection(Object.Object):
 	    host = socket.gethostname()
 	# vc listener means the VoiceCode mediator is listening -- we're
 	# talking
-        talk_msgr = self.open_vc_listener_conn(app_name, host, listen_port, 
-	    test_client = test_client)
+	try:
+	    talk_msgr = self.open_vc_listener_conn(app_name, host, listen_port, 
+		test_client = test_client)
+	except socket.error:
+	    talk_msgr = None
 	if talk_msgr == None:
 	    self.connecting = 0
 	    return None
 	# vc talker means the VoiceCode mediator is talking -- we're
 	# listening
-        listen_sock = self.open_vc_talker_conn(host, talk_port)
+	try:
+	    listen_sock = self.open_vc_talker_conn(host, talk_port)
+	except socket.error:
+	    talk_msgr = None
 	if listen_sock == None:
 	    self.connecting = 0
 	    return None
@@ -352,7 +364,10 @@ class ClientConnection(Object.Object):
 	"""
 	if not self.is_connected():
 	    return 0
+	self.connected = 0
+	self.connecting = 0
 	self.client_quitting.set()
+	self.client_quitting = None
 	return 1
 
     def listen(self, listen_sock, data_event):
@@ -415,6 +430,10 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     *STR ID* -- unique ID of this ClientEditor, so that it can identify
     itself during callbacks to its owner
 
+    *BOOL mediator_closing* -- flag indicating that the ClientEditor has
+    received a mediator_closing message, and shouldn't be surprised if
+    it receives a broken_connection message.
+
     **CLASS ATTRIBUTES**
 
     *none*
@@ -428,6 +447,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 			     'editor_name': None,
 			     'owner': owner,
 			     'ID': ID,
+			     'mediator_closing': 0,
 			     'msg_map': {},
 			     'expect': [],
 			     'ignore_callbacks': 0,
@@ -449,7 +469,8 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 	    'language_name', 'newline_conventions', 
 	    'pref_newline_convention', 'open_file', 'close_buffer', 
 	    'save_file',
-	    'terminating', 'mediator_closing', 'updates']
+	    'terminating', 'mediator_closing', 'updates',
+	    'broken_connection']
 	for msg_name in self.expect:
 	    method_name = 'cmd_' + msg_name
 #	    msg_handler = self.__class__.__dict__[method_name]
@@ -493,6 +514,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 	self.talk_msgr = talk_msgr
 	self.listen_msgr = listen_msgr
 	self.editor.set_change_callback(self.on_change)
+	self.mediator_closing = 0
 	
     def on_change(self, start, end, text, selection_start,
 	selection_end, buff_name, program_initiated):
@@ -981,7 +1003,13 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 	self.cmd_mediator_closing(arguments)
 
     def cmd_mediator_closing(self, arguments):
-	self.owner.mediator_closing(self.ID)
+	self.mediator_closing = 1
+	self.owner.mediator_closing(self.ID, unexpected = 0)
+
+    def cmd_broken_connection(self, arguments):
+        if not self.mediator_closing:
+	    self.mediator_closing = 1
+	    self.owner.mediator_closing(self.ID, unexpected = 1)
 
     def cmd_updates(self, arguments):
 	debug.virtual('ClientEditor.cmd_updates')
@@ -1072,9 +1100,13 @@ class UneventfulLoop(Object.OwnerObject):
 	   print_buff_when_changed = print_buff)
 	self.editor = ClientEditorChangeSpec(editor = underlying_editor, 
 	    owner = self, ID = 'dummy')
+	self.add_owned('editor')
 
-    def mediator_closing(self, ID):
-	sys.stderr.write('mediator disconnected')
+    def mediator_closing(self, ID, unexpected = 0):
+	if unexpected:
+	    sys.stderr.write('mediator connection broken unexpectedly\n')
+	else:
+	    sys.stderr.write('mediator disconnected\n')
 	self.quit_flag = 1
 
     def run(self, host = None, listen_port = None, talk_port = None):
@@ -1095,6 +1127,7 @@ class UneventfulLoop(Object.OwnerObject):
 		time.sleep(.05)
 	    self.editor.mediator_cmd()
 	self.editor.disconnected()
+	self.connection.disconnect()
 	return
 	
 class ClientMainThread(Object.OwnerObject):

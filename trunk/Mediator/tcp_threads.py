@@ -96,6 +96,8 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 			    }, 
                             args_super, 
                             exclude_bases={'threading.Thread': 1})
+# provides debug messages
+#        threading.Thread.__init__(self, verbose = 1)
         threading.Thread.__init__(self)
 
     def message_queue(self):
@@ -156,11 +158,15 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 		data = self.get_mess()
 	    except messaging.SocketError, err:
 		if self.connection_ending.isSet():
+#		    sys.stderr.write('SocketError, but connection_ending was set\n')
 		    break
 # connection broken unexpectedly (unless we just didn't get the
 # connection_ending event in time)
+#		sys.stderr.write('unexpected SocketError\n')
 		self.completed_msgs.put(self.conn_broken_msg)
 		self.notify_main()
+		break
+	    except messaging.WokenUp:
 		break
 
 	    if data:
@@ -172,7 +178,10 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 	    self.connection_ending.wait(0.01)
 #	    self.connection_ending.wait(1.0)
 	    if self.connection_ending.isSet():
+#		sys.stderr.write('connection_ending detected\n')
 		break
+        self.underlying = None
+
 
 class ListenNewConnThread(threading.Thread, Object.Object):
     """Abstract base class which listens for new socket connections on 
@@ -249,7 +258,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
             # When debugging, increase this if you want to see things happen
             # in slow motion
             #
-            time.sleep(0.01)
+            time.sleep(0.05)
 #            time.sleep(1)
 
 

@@ -21,6 +21,7 @@
 
 """Classes for communicating with an external editor through a messaging protocol"""
 
+import socket
 import re, sys, types
 import copy
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
@@ -35,6 +36,74 @@ class SocketError(RuntimeError):
     def __init__(self, msg):
         RuntimeError.__init__(self, msg)
 #	self.msg = msg
+
+# exception to allow receive_string to signal that it was woken from its
+# sleep
+class WokenUp:
+    def __init__(self, msg):
+	self.msg = msg
+
+class LightSleeper(Object.Object):
+    """class with a sleep method, like the time module, but which
+    can be woken by another thread, by setting a threading.Event
+
+    **INSTANCE ATTRIBUTES**
+
+    *threading.Event wakeup_event* -- the underlying threading.Event
+    which supplies the wait method and can be checked upon wakeup to see
+    if the wait method timed out, or was stopped early.
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, wakeup_event, **args):
+	"""
+	**INPUTS**
+
+	*threading.Event wakeup_event* -- the underlying threading.Event
+	which supplies the wait method and can be checked upon wakeup to see
+	if the wait method timed out, or was stopped early.
+
+	**NOTE:** if the creator wants to be able to wake up a thread
+	sleeping with this object's sleep method, it must retain a
+	reference to the wakeup_event object
+	"""
+	self.deep_construct(LightSleeper,
+			    {'wakeup_event': wakeup_event}, args)
+    
+    def sleep(self, timeout):
+	"""allows the calling thread to sleep for a given number of
+	seconds, or until another thread sets the wakeup_event,
+	whichever comes first.
+
+	**INPUTS**
+
+	*FLOAT timeout* -- the timeout in seconds, or None to wait
+	indefinitely for the wakeup_event
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.wakeup_event.wait(timeout)
+
+    def was_woken(self):
+	"""checks to see if the wakeup_event is set.  Note: since other
+	threads may also be waiting on the same event, LightSleeper does
+	not clear the wakeup_event.  Unless another thread does so,
+	subsequent calls to sleep will terminate immediately
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the wakeup_event is set
+	"""
+	return self.wakeup_event.isSet()
+
 
 class Messenger(Object.Object):
    
@@ -766,23 +835,31 @@ class MessTransporter_Socket(MessTransporter):
     *socket sock*-- The socket connection used to transport the bytes.
 
     *FLOAT sleep* -- number of seconds to sleep if before checking again
-    if the socket has no data, or None to check continuously until the
-    requested number of bytes are received.
+    if the socket has no data, or None to block when there is no data,
+    and check repeatedly until the requested number of bytes are received.
+
+    *LightSleeper sleeper* -- LightSleeper object used to make the
+    thread sleep, but let it be woken early from another thread.  May be
+    omitted if sleep == None
    
     CLASS ATTRIBUTES**
             
     *none* -- 
     """
     
-    def __init__(self, sock, sleep = None, **args_super):
+    def __init__(self, sock, sleep = None, sleeper = None, **args_super):
         self.deep_construct(MessTransporter_Socket, \
                             {'sock': sock,
-			     'sleep': sleep}, \
+			     'sleep': sleep,
+			     'sleeper': sleeper}, \
                             args_super, \
                             {})
+#        sys.stderr.write('MessTransporter_Socket on socket %s being created\n' % repr(self.sock))
 
 
 
+#    def __del__(self):
+#        sys.stderr.write('MessTransporter_Socket on socket %s being deleted\n' % repr(self.sock))
     def send_string(self, a_string):
         """Sends a string on the Socket connection.
         
@@ -798,9 +875,12 @@ class MessTransporter_Socket(MessTransporter):
         mess_len = len(a_string)
         totalsent = 0
         while totalsent < mess_len:
-            sent = self.sock.send(a_string[totalsent:])
+	    try:
+		sent = self.sock.send(a_string[totalsent:])
+	    except socket.error:
+		raise SocketError("socket connection broken (sending)")
             if sent == 0:
-                raise SocketError("socket connection broken")
+		raise SocketError("socket connection broken (sending)")
 #                raise SocketError, "socket connection broken"
             totalsent = totalsent + sent
         
@@ -822,11 +902,17 @@ class MessTransporter_Socket(MessTransporter):
         while len(a_string) < num_bytes:
 	    if self.sleep:
 		while not self.data_available():
-		    time.sleep(self.sleep)
-            chunk = self.sock.recv(num_bytes - len(a_string))
-            trace('receive_string', 'read chunk=\'%s\'' % chunk);
+		    self.sleeper.sleep(self.sleep)
+		    if self.sleeper.was_woken():
+			raise WokenUp("receive_string woken up")
+#		    time.sleep(self.sleep)
+	    try:
+		chunk = self.sock.recv(num_bytes - len(a_string))
+		trace('receive_string', 'read chunk=\'%s\'' % chunk);
+            except socket.error:
+	        chunk = ''
             if chunk == '':
-                raise SocketError("socket connection broken")
+                raise SocketError("socket connection broken (receiving)")
 #                raise SocketError, "socket connection broken"
             a_string = a_string + chunk
 
@@ -845,7 +931,10 @@ class MessTransporter_Socket(MessTransporter):
 	has data
 	"""
 # poll by using timeout = 0
-	data, dummy, dummy2 = select.select([self.sock], [], [], 0)
+	try:
+	    data, dummy, dummy2 = select.select([self.sock], [], [], 0)
+	except socket.error:
+	    raise SocketError("socket connection broken (receiving)")
 	return len(data) != 0
 
 
@@ -1399,7 +1488,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         return the_dict
 
-def messenger_factory(sock, sleep = None):
+def messenger_factory(sock, sleep = None, sleeper = None):
     """Creates a messenger from proper compenents
     
     **INPUTS**
@@ -1418,7 +1507,8 @@ def messenger_factory(sock, sleep = None):
     # Create a messenger
     #
     packager = MessPackager_FixedLenSeq()
-    transporter = MessTransporter_Socket(sock=sock, sleep = sleep)
+    transporter = MessTransporter_Socket(sock=sock, sleep = sleep,
+	sleeper = sleeper)
     encoder = MessEncoderWDDX()
     a_messenger = MessengerBasic(packager=packager, 
 	transporter=transporter, encoder=encoder)        

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 21:02:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 03 12:28:28 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -98,7 +98,10 @@ mediator
 SocketHasDataEvent <EM>data_event</EM>
 <DD>the SocketHasDataEvent event
 to pass to the new data thread so it can notify the main thread
-when there is a command waiting in the queue.
+when there is a command waiting in the queue.  Unlike the
+server, there is only one connection and one data socket per client, 
+so we don't need to give the socket a unique ID and create a 
+data_event based on that ID.
 <DT>
 <EM>STR</EM> host
 <DD>name or IP address of the host on which the
