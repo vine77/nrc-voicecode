@@ -12,6 +12,25 @@ def compilation_test(a_mediator, source):
     """Does a compilation test on file *source*        
     """
     print '*** Compiling symbols from file: %s ***' % source
+    a_mediator.interp.known_symbols.vocabulary_cleanup()            
+    a_mediator.interp.known_symbols.parse_symbols(source)
+    print '\n\nParsed symbols are: '
+    a_mediator.interp.known_symbols.print_symbols()
+    print 'Unresolved abbreviations are:'
+    sorted_unresolved = a_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    sorted_unresolved.sort()
+    for an_abbreviation in sorted_unresolved:
+        symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
+        
+    print '\n*** End of compilation test ***\n'
+
+
+def accept_symbol_match_test(a_mediator, source, symbol_matches):
+    """Does a test on SymDict.accept_symbol_match.
+    """
+    print '\n\n*** Accept symbol match test. source=\'%s\' ***' % source
+    a_mediator.interp.known_symbols.vocabulary_cleanup()            
     a_mediator.interp.known_symbols.parse_symbols(source)
     print 'Parsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
@@ -21,8 +40,26 @@ def compilation_test(a_mediator, source):
     for an_abbreviation in sorted_unresolved:
         symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
+
+    sys.stdout.write('\n\nAccepting: ')
+    for a_match in symbol_matches:
+       sys.stdout.write('\'%s\' -> \'%s\', ' % (a_match.pseudo_symbol, a_match.native_symbol))
+       a_mediator.interp.known_symbols.accept_symbol_match(a_match)
+    sys.stdout.write('\n')
+           
+
+    print '\n\nAfter accepting those symbols, known symbols are:\n'
+    a_mediator.interp.known_symbols.print_symbols()
+    print '\n\nUnresolved abbreviations are:'
+    sorted_unresolved = a_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    sorted_unresolved.sort()
+    for an_abbreviation in sorted_unresolved:
+        symbol_list = a_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
+
         
-    print '\n*** End of compilation test ***\n'
+    print '\n*** End of accept symbol match test ***\n'
+    
         
 def symbol_match_test(a_mediator, sources, pseudo_symbols):
         """Tests pseudo-symbol matching.
@@ -48,7 +85,7 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
         #
         # Compile symbols
         #
-        a_mediator.interp.known_symbols.vocabulary_cleanup()
+        a_mediator.interp.known_symbols.vocabulary_cleanup()        
         for a_source in sources:
             a_mediator.interp.known_symbols.parse_symbols(a_source)
 #        print '\n Known symbols are: \n'
@@ -79,6 +116,11 @@ def test_SymDict():
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'large_buff.py')
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
     symbol_match_test(a_mediator, [vc_globals.test_data + os.sep + 'large_buff.py'], pseudo_symbols)
+
+    a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])
+    accept_symbol_match_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
+
+    
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 

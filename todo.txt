@@ -4,6 +4,12 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+GNU copyright
+-------------
+
+Put it in all source files.
+
+
 Documentation
 -------------
 
@@ -80,7 +86,7 @@ Symbol translation
    have a time out so that the server can unlock the file after a few
    seconds (assume that the update doesn't take long).
 
-   STATUS: Basic VG3 style symbol matching was implemented in SymDict.
+   STATUS: Basic VG3 style symbol matching was implemented in SymDict. 
            We now have to use it in the interpreter as described above.
 
 
@@ -135,6 +141,8 @@ Interpreter
 
 Should it take into account the word property (space adding?) or is
 that done automatically by VDct?
+
+If we start using word properties, then we don't need the hack where addWord adds redundant spoken form for words that start/end with blanks.
 
 Symbol compilation
 ------------------
@@ -206,6 +214,10 @@ Hum... need to think some more about this.
 
 addWord
 -------
+
+-- Alain (note: this may not be necessary if we use wordinfo to decide
+   if a word should have leading/trailing blanks. In which case, words
+   never need to have leading/trailing blanksin their written forms).
 
 Joel Gould claims that Select XYZ works as long as the written form of
 XYZ doesn't have leading/trailing spaces. So addWord doesn't have to
