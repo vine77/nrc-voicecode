@@ -3,28 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 27 17:35:19 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 26 17:17:06 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SmallObject</title>
+<title>Class MediatorObject</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SmallObject - A test object with few attributes</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="Object.html">Object</A></P>
+<H1 CLASS="ClassName">class MediatorObject - Main object for the mediator.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="MediatorObject.html">MediatorObject</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">Object.SmallObject<BR>
-&nbsp;&nbsp;<A HREF="Object.Object.html">Object.Object</A><BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">MediatorObject.MediatorObject<BR>
+&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SmallObject</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <A CLASS="DocLink" HREF="#Object.SmallObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.SmallObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name='Alain'</SPAN>, <SPAN CLASS="Argument">age=36</SPAN>)<SPAN CLASS="OneLiner"> # Constructor</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=&lt;CmdInterp.CmdInterp instance at 88db30&gt;</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='D:\\VoiceCode\\VCode.newobject\\Config\\vc_config.py'</SPAN>)<SPAN CLASS="OneLiner"> # Configures a mediator object based on a configuration file.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -33,28 +34,42 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-This class is used to profile the performance of access methods
-when accessing attribute from a small Object subclass.</P>
+Typically, there will be one such object for every application
+that is being controlled through a VoiceCode mediator.</P>
 <P>
-<STRONG>INSTANCE ATTRIBUTE</STRONG></P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR</EM> name
-<DD><EM>INT</EM> age --
+[AppState] <EM>app = AppState.AppState()</EM>
+<DD>Application being run
+through the mediator.
+<DT>
+[CmdInterp] <EM>interp=CmdInterp.CmdInterp()</EM>
+<DD>Command interpreter used to
+translate pseudo-code to native code.
+<DT>
+[CommandDictGrammar] <EM>mixed_grammar = None</EM>
+<DD>Speech Recognition grammar
+that recognises continuous dictation and forwards the results to the
+<EM>interp</EM> command interpreter.
+<DT>
+[CodeSelectGrammar] code_select_grammar = None
+<DD>Grammar for
+selecting a part of the visible code.
 </DL>
 <P>
-<STRONG>CLASS ATTRIBUTE</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.SmallObject.__init__" CLASS="Method">Object.SmallObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name='Alain'</SPAN>, <SPAN CLASS="Argument">age=36</SPAN>)</H2>
-<P>Constructor</P>
+CLASS ATTRIBUTES**</P>
+<P>
+<EM>none</EM> --</P>
+<P>
+..[AppState] AppState.AppState.html
+..[CmdInterp] CmdInterp.CmdInterp.html
+..[CommandDictGrammar] sr_interface.CommandDictGrammar.html
+..[CodeSelectGrammar] sr_interface.CodeSelectGrammar.html</P>
+<H2 ID="MediatorObject.MediatorObject.configure" CLASS="Method">MediatorObject.MediatorObject.configure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='D:\\VoiceCode\\VCode.newobject\\Config\\vc_config.py'</SPAN>)</H2>
+<P>Configures a mediator object based on a configuration file.</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -62,11 +77,8 @@ when accessing attribute from a small Object subclass.</P>
 <DL>
 
 <DT>
-<EM>STR</EM> name="Alain"
-<DD>undocumented 
-<DT>
-<EM>INT</EM> age=36
-<DD>undocumented 
+<EM>STR</EM> config_file = vc_globals.default_config_file
+<DD>Full path of the config 
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -159,7 +171,7 @@ for them by <EM>this_class.__init__</EM>
 <DD>Lists of arguments with
  enforced values. If the constructor is called with a value
  for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ for it in <EM>enforce_value</EM>, then an [EnforcedConstrArg]
  exception will be raised. Also, if the constructor is called
  without specifying a value for a particular argument, then
  the value defined in <EM>enforce_value</EM> (if it exists) will be
@@ -181,6 +193,9 @@ specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
 which means that the constructor of all immediate super
 classes will be called automatically.
 </DL>
+<P>
+..[EnforcedConstrArg] Object.html#EnforcedConstrArg
+</P>
 <H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Initialises existing attributes</P>
 

@@ -179,14 +179,18 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), py_assignment]])
-add_csc(acmd)
+#
+# This is now a language specific abbreviation
+#
+# acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), py_assignment]])
+# add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['is equal to', 'equal to'], meanings=[[ContPy(), py_logical_equal]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['is not equal to', 'not equal to'], meanings=[[ContPy(), py_logical_not_equal]])
-add_csc(acmd)
+# This is now a language specific abbreviation
+# acmd = CSCmd(spoken_forms=['is not equal to', 'not equal to'], meanings=[[ContPy(), py_logical_not_equal]])
+# add_csc(acmd)
 
 
 #
@@ -201,6 +205,7 @@ add_csc(acmd)
 #
 # Language specific aliases
 #
+add_lsa(['C', 'python'], ['equals', 'equal', 'is assigned', 'assign value'], ' = ')
 add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')
 
 if (__name__ == '__main__'): natlink.natDisconnect()

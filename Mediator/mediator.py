@@ -98,7 +98,7 @@ from actions_C_Cpp import *
 # for Python support
 from actions_py import *
 
-the_mediator = None
+the_mediator = MediatorObject.MediatorObject()
 quit_flag = 0
 
 def open_file(fname):
@@ -108,7 +108,6 @@ def open_file(fname):
 
     global the_mediator
     the_mediator.interp.on_app.open_file(fname)
-    print '-- mediator: the_mediator.interp.known_symbols=%s' % the_mediator.interp.known_symbols
     the_mediator.interp.known_symbols.parse_symbols(fname)
     show_buff()
 
@@ -131,7 +130,7 @@ def say(utterance, bypass_NatLink=0):
         the_mediator.interp.interpret_NL_cmd(utterance)
     else:
         words = re.split('\s+', utterance)
-        print '-- mediator.say: words=%s' % repr(words)
+#        print '-- mediator.say: words=%s' % repr(words)
         natlink.recognitionMimic(words)
     show_buff()
 
@@ -198,9 +197,32 @@ def quit():
     quit_flag = 1
     
     if sr_interface.speech_able():
+#        print '-- mediator.quit: the_mediator=%s' % the_mediator.__dict__
         the_mediator.mixed_grammar.unload()
         the_mediator.code_select_grammar.unload()
         natlink.natDisconnect()
+
+def init_simulator():
+    global the_mediator
+
+    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    the_mediator.configure()
+    if sr_interface.speech_able:
+        natlink.natConnect()
+        natlink.setMicState('off')
+        the_mediator.mixed_grammar.load()
+        the_mediator.mixed_grammar.activate()
+        the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
+        the_mediator.code_select_grammar.activate()
+
+def execute_command(cmd):
+    try:
+        exec(cmd)
+    except Exception, err:
+        print 'Error executing command.\n'
+        print '   Error type: %s' % err
+        print '   Error data: %s' % err.__dict__
+
         
 def simulator_mode(options):
     """Start mediator in console mode.
@@ -220,17 +242,8 @@ def simulator_mode(options):
 
     global the_mediator
 
-    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-    print '-- mediator.simulator_mode: the_mediator=%s' % repr(the_mediator)   
-    the_mediator.configure()
-    if sr_interface.speech_able:
-        natlink.natConnect()
-        natlink.setMicState('off')
-        the_mediator.mixed_grammar.load()
-        the_mediator.mixed_grammar.activate()
-        the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
-        the_mediator.code_select_grammar.activate()
-
+    init_simulator()
+    
     #
     # For better error reporting, you can type some instructions here
     # instead of typing them at the console. The fact that the console
@@ -245,12 +258,7 @@ def simulator_mode(options):
     while (not quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()
-        try:
-            exec(cmd)
-        except Exception, err:
-            print 'Error executing command.\n'
-            print '   Error type: %s' % err
-            print '   Error data: %s' % err.__dict__
+        execute_command(cmd)
             
 
         
@@ -258,10 +266,10 @@ if (__name__ == '__main__'):
     
     if sr_interface.speech_able():
         natlink.natConnect()
-        print '-- main: checked mic state'
+#        print '-- main: checked mic state'
 
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007])
-    print '-- mediator.__main__: opts=%s' % opts
+#    print '-- mediator.__main__: opts=%s' % opts
     
     if opts['h']:
         print __doc__
