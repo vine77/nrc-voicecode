@@ -3,31 +3,31 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:42:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:26:49 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class WavePlayback</title>
+<title>Class WaxEdSimBase</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class WavePlayback</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="WavePlayback.html">WavePlayback</A></P>
+<H1 CLASS="ClassName">class WaxEdSimBase - base class for the wxApp application class for the WaxEdSim console</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="WaxEdSim.html">WaxEdSim</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WavePlayback.WavePlayback<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WaxEdSim.WaxEdSimBase<BR>
 &nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WavePlayback</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <A CLASS="DocLink" HREF="#WavePlayback.WavePlayback.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WavePlayback.WavePlayback.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">data</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#WavePlayback.WavePlayback.check"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WavePlayback.WavePlayback.check</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # check the wave data to see if it is okay</SPAN>
-    <A CLASS="DocLink" HREF="#WavePlayback.WavePlayback.play"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WavePlayback.WavePlayback.play</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # play the wave data synchronously</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WavePlayback.WavePlayback.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEdSimBase</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimBase.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimBase.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimBase.access_command_space"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimBase.access_command_space</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimBase.mic_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimBase.mic_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)<SPAN CLASS="OneLiner"> # function to receive microphone state change callbacks</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdSim.WaxEdSimBase.update_mic_button"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEdSimBase.update_mic_button</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -47,20 +47,24 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
-abstract base class for object providing playback of a Wave
-sound-file data</P>
-<P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>STR data</EM>
-<DD>the binary wave data in the form of a Python
-string
+<EM>WaxEdSimConsole</EM> console
+<DD>the GUI console manager
+<DT>
+<EM>AppStateGenEdit editor</EM>
+<DD>the AppState wrapper interface to 
+the console
+<DT>
+<EM>{STR:ANY}</EM> command_space
+<DD>a namespace (dictionary) in which to
+execute commands from the command line
 
 </DL>
-<H2 ID="WavePlayback.WavePlayback.__init__" CLASS="Method">WavePlayback.WavePlayback.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">data</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="WaxEdSim.WaxEdSimBase.__init__" CLASS="Method">WaxEdSim.WaxEdSimBase.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_space=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -69,14 +73,18 @@ string
 <DL>
 
 <DT>
-<EM>STR data</EM>
-<DD>the binary wave data in the form of a Python
-string
+<EM>{STR:ANY}</EM> command_space
+<DD>a namespace (dictionary) in which to
+execute commands from the command line
 
 </DL>
-<H2 ID="WavePlayback.WavePlayback.check" CLASS="Method">WavePlayback.WavePlayback.check(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>check the wave data to see if it is okay</P>
+<H2 ID="WaxEdSim.WaxEdSimBase.access_command_space" CLASS="Method">WaxEdSim.WaxEdSimBase.access_command_space(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
 
+<P>
+returns a reference to the command_space namespace being
+used by the panel, allowing access and modifications to that
+namespace after construction of WaxEdSim</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -87,27 +95,48 @@ string
 <DL>
 
 <DT>
-<EM>BOOL</EM>
-<DD>true if the wave data appears playable
+<EM>{STR:ANY}</EM>
+<DD>the namespace dictionary 
 
 </DL>
-<H2 ID="WavePlayback.WavePlayback.play" CLASS="Method">WavePlayback.WavePlayback.play(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>play the wave data synchronously</P>
+<H2 ID="WaxEdSim.WaxEdSimBase.mic_change" CLASS="Method">WaxEdSim.WaxEdSimBase.mic_change(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)</H2>
+<P>function to receive microphone state change callbacks</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>BOOL</EM>
-<DD>true if the wave data was played successfully
-
+<EM>STR</EM> state
+<DD>new state ('on', <CODE>off</CODE>, <CODE>sleeping</CODE>, 'disabled')
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WaxEdSim.WaxEdSimBase.update_mic_button" CLASS="Method">WaxEdSim.WaxEdSimBase.update_mic_button(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+update the microphone button to reflect the state of the
+microphone</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> state
+<DD>new state ('on', <CODE>off</CODE>, <CODE>sleeping</CODE>, 'disabled'),
+or None to have update_mic_button check the state
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

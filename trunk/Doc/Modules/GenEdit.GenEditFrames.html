@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Sep 28 13:35:42 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Oct 16 12:26:12 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,6 +32,7 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.add_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.add_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">user_initiated=1</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.confirm_exit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.confirm_exit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID=None</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.corresponding_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.corresponding_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
@@ -47,6 +48,31 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.save_as_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.save_as_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditBuffers</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">multiple=0</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.buffer_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.buffer_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.corresponding_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.corresponding_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns the current filename associated with a given buffer</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.generate_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.generate_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.mark_as_scratch"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.mark_as_scratch</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">as_scratch=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.new_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.new_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)<SPAN CLASS="OneLiner"> # opens a new file </SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_file_new_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_file_new_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.remove_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.remove_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # remove a buffer from the list of buffers.  </SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.rename_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.rename_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">rename_buff=1</SPAN>, <SPAN CLASS="Argument">ask_for_new_name=0</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the buffer buff_name to a file</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.save_specified"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.save_specified</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.show_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.show_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEdit</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
@@ -73,30 +99,6 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">rename_buff=1</SPAN>, <SPAN CLASS="Argument">ask_for_new_name=0</SPAN>, <SPAN CLASS="Argument">perform_callback=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the buffer buff_name to a file</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.set_app_control"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.set_app_control</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from GenEdit.GenEditBuffers</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">multiple=0</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.buffer_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.buffer_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.corresponding_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.corresponding_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns the current filename associated with a given buffer</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.generate_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.generate_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.new_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.new_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)<SPAN CLASS="OneLiner"> # opens a new file </SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.open_file_new_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.open_file_new_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.remove_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.remove_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # remove a buffer from the list of buffers.  </SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.rename_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.rename_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">rename_buff=1</SPAN>, <SPAN CLASS="Argument">ask_for_new_name=0</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the buffer buff_name to a file</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.save_specified"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.save_specified</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.show_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.show_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -262,6 +264,35 @@ STR <EM>buff_name</EM>
 <EM>BOOL</EM>
 <DD>true if buff_name exists and the application
 successfully switches to it
+
+</DL>
+<H2 ID="GenEdit.GenEditFrames.confirm_exit" CLASS="Method">GenEdit.GenEditFrames.confirm_exit(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by on_exit which allows the user to save files, 
+etc. or cancel the exit process</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT ID</EM>
+<DD>ID of the frame sending the event, or None if the
+event doesn't originate from a frame.  (Currently, this
+parameter is ignored).
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the editor is exiting in response to this
+event (unless, e.g., the user has hit cancel in response to a 
+save modified files dialog)
 
 </DL>
 <H2 ID="GenEdit.GenEditFrames.corresponding_frame" CLASS="Method">GenEdit.GenEditFrames.corresponding_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
@@ -649,6 +680,600 @@ for all windows containing editor buffers.
 
 </DL>
 <H2 ID="GenEdit.GenEditFrames.update_title" CLASS="Method">GenEdit.GenEditFrames.update_title(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+update the window title of the frame containing buff_name to
+reflect a new buffer name (unless that buffer is not the current
+buffer displayed in that frame)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.app_close_buffer" CLASS="Method">GenEdit.GenEditBuffers.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
+<P>Close a buffer.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>name of buffer to close
+<DT>
+INT <EM>save</EM>
+<DD><EM>-1</EM> -&gt; don't save the buffer
+                    <EM>0</EM> -&gt; query user if buffer needs saving
+                    <EM>1</EM> -&gt; save without querying user
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the editor does close the buffer
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.buffer_title" CLASS="Method">GenEdit.GenEditBuffers.buffer_title(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+the buffer or file name to be used when a particular buffer is 
+active</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name to combine with the application name and
+instance string
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.corresponding_frame" CLASS="Method">GenEdit.GenEditBuffers.corresponding_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the GenEditFrame containing the given
+buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>GenEditFrame</EM>
+<DD>the corresponding frame
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.delete_buffer" CLASS="Method">GenEdit.GenEditBuffers.delete_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
+<P>delete a buffer </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>name of buffer to remove
+<DT>
+<EM>BOOL perform_callback</EM>
+<DD>indicates whether this method should
+invoke the curr_buffer_name_cbk
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.editor_buffer" CLASS="Method">GenEdit.GenEditBuffers.editor_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the TextBufferChangeSpec embedded in 
+the GUI which corresponds to buffer buff_name</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>TextBufferChangeSpec</EM>
+<DD>the TextBufferChangeSpec
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.file_name" CLASS="Method">GenEdit.GenEditBuffers.file_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>returns the current filename associated with a given buffer</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the filename
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.generate_buffer_name" CLASS="Method">GenEdit.GenEditBuffers.generate_buffer_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+find a new, unique buffer name for a buffer, given a file
+name</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR file_name</EM> 
+<DD>the short file name of the file (without the
+path)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Unique name for the buffer 
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.mark_as_scratch" CLASS="Method">GenEdit.GenEditBuffers.mark_as_scratch(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">as_scratch=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+mark a buffer as a scratch buffer which never needs to be
+saved.</P>
+<P>
+<STRONG>NOTE:</STRONG> Use this method with caution, as it can cause the user
+to lose work when exiting the editor.  This method is used to
+avoid having to save buffers created/modified by regression 
+testing.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of the buffer
+<DT>
+<EM>BOOL as_scratch</EM>
+<DD>whether to mark the buffer as a scratch
+buffer or unmark it
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.modified_buffer" CLASS="Method">GenEdit.GenEditBuffers.modified_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a list of names buffers which have been modified
+since the last time they were saved</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>the list of buffer names
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.modified_buffers" CLASS="Method">GenEdit.GenEditBuffers.modified_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a list of names buffers which have been modified
+since the last time they were saved</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>the list of buffer names
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.multiple_buffers" CLASS="Method">GenEdit.GenEditBuffers.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple open buffers?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports having multiple buffers open 
+at the same time
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.new_buffer" CLASS="Method">GenEdit.GenEditBuffers.new_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+adds a new buffer, optionally performing a callback to the
+AppState interface</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the new buffer
+<DT>
+<EM>TextBufferChangeSpec buffer</EM>
+<DD>the TextBufferChangeSpec interface 
+to the new buffer
+<DT>
+<EM>BOOL perform_callback</EM>
+<DD>indicates whether this method should
+invoke the parent AppState's open buffer callback
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the new buffer was added successfully
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.open_buffers" CLASS="Method">GenEdit.GenEditBuffers.open_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+retrieve a list of the names of open buffers from the
+application.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of the names of open buffers
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.open_file" CLASS="Method">GenEdit.GenEditBuffers.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
+<P>opens a new file </P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR file_name</EM> 
+<DD>the full path of the file to open, or None
+to ask the user
+<DT>
+<EM>BOOL user_initiated</EM>
+<DD>indicates whether this method was
+user-initiated or whether it was called by AppState.
+In the latter case, it will not invoke the parent AppState's 
+open buffer callback, because AppState.open_file invokes 
+the callback itself. 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Unique name of the buffer in which the file
+was opened. Returns <EM>None</EM> if the editor was not able to open
+the file.  Note: if no file by the name file_name exists, the 
+regression tests expect the editor to open an empty buffer with
+that name.  Therefore, open_file should only fail
+if the user cancels the open file command (e.g. if there is an
+unsaved buffer) or if file_name was omitted and the user cancelled
+the Open File dialog box
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.open_file_new_buffer" CLASS="Method">GenEdit.GenEditBuffers.open_file_new_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+opens a new file.  Depending on the subclass of 
+GenEditBuffers, this may open a new frame, or hide the 
+previously visible buffer in the same frame.</P>
+<P>
+<STRONG>NOTE:</STRONG> despite the name of this method, the 
+TextBufferChangeSpec returned can be an existing buffer, 
+if, e.g.,  the editor only has one window and one buffer.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR file_name</EM> 
+<DD>the full path of the file to open, or None
+to create a new, empty buffer
+<DT>
+<EM>STR new_buff_name</EM> 
+<DD>the name which will be given to the new
+buffer
+<DT>
+<EM>BOOL user_initiated</EM>
+<DD>indicates whether this method was
+user-initiated or whether it was called by AppState.
+In the latter case, it will not invoke the parent AppState's 
+open buffer callback, because AppState.open_file invokes 
+the callback itself. 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the file was opened successfully.
+Note: if no file by the name file_name exists, 
+open_file_new_buffer should create a new, empty buffer with 
+that file name.
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.remove_buffer" CLASS="Method">GenEdit.GenEditBuffers.remove_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
+<P>remove a buffer from the list of buffers.  </P>
+
+<P>
+<STRONG>Note:</STRONG> this method only removes the buffer from GenEdit's
+records, it does not destroy the underlying GUI buffer or the
+window containing it.  For that, use delete_buffer (which will
+also call this method)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>name of buffer to remove
+<DT>
+<EM>BOOL perform_callback</EM>
+<DD>indicates whether this method should
+invoke the curr_buffer_name_cbk
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.remove_other_references" CLASS="Method">GenEdit.GenEditBuffers.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.rename_buffer" CLASS="Method">GenEdit.GenEditBuffers.rename_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+renames a buffer, optionally performing a callback to the
+AppState interface</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the old name of the new buffer
+<DT>
+<EM>STR new_buff_name</EM>
+<DD>the new name of the new buffer
+<DT>
+<EM>BOOL perform_callback</EM>
+<DD>indicates whether this method should
+invoke the parent AppState's rename buffer callback
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the new buffer was renamed successfully
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.save_file" CLASS="Method">GenEdit.GenEditBuffers.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">rename_buff=1</SPAN>, <SPAN CLASS="Argument">ask_for_new_name=0</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
+<P>Saves the buffer buff_name to a file</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+<DT>
+<EM>STR full_path</EM>
+<DD>path name of file to save, or None to use the
+current file name, or prompt
+<DT>
+<EM>BOOL no_prompt</EM>
+<DD>if true, don't prompt before overwriting
+an existing file.
+<DT>
+<EM>BOOL rename_buff</EM>
+<DD>if false, do not rename the buffer
+<DT>
+<EM>BOOL ask_for_new_name</EM>
+<DD>if true, prompt for a new name, even if the
+buffer already has a corresponding filename.  Ignored unless
+full_path == None.
+<DT>
+<EM>BOOL user_initiated</EM>
+<DD>indicates whether this method was
+user-initiated or whether it was called by AppState.
+In the latter case, it will invoke the parent AppState's 
+rename buffer callback.  If this method is called by AppState,
+this would be redundant, because AppState.save_file invokes 
+the callback itself. 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>new buffer name if successful, or None if the save 
+failed
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.save_specified" CLASS="Method">GenEdit.GenEditBuffers.save_specified(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Saves the buffer buff_name to a file.  This version assumes
+buff_name exists and full_path has actually been specified, but
+will still prompt if asked to overwrite an existing file, unless
+no_prompt is true.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+<DT>
+<EM>STR full_path</EM>
+<DD>path name of file to save
+<DT>
+<EM>BOOL no_prompt</EM>
+<DD>if true, don't prompt before overwriting
+an existing file.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if file was saved successfully
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.show_buffer" CLASS="Method">GenEdit.GenEditBuffers.show_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+makes a buffer the foreground one.
+Depending on the subclass of GenEditBuffers, this may activate a
+different frame, or reveal a previously hidden buffer and update
+the window title appropriately)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+<DT>
+<EM>BOOL perform_callback</EM>
+<DD>indicates whether this method should
+invoke the curr_buffer_name_cbk
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="GenEdit.GenEditBuffers.update_title" CLASS="Method">GenEdit.GenEditBuffers.update_title(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -1254,571 +1879,6 @@ instance string in its window title for all windows
 containing editor buffers.
 
 </DL>
-<H2 ID="GenEdit.GenEditBuffers.app_close_buffer" CLASS="Method">GenEdit.GenEditBuffers.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
-<P>Close a buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>name of buffer to close
-<DT>
-INT <EM>save</EM>
-<DD><EM>-1</EM> -&gt; don't save the buffer
-                    <EM>0</EM> -&gt; query user if buffer needs saving
-                    <EM>1</EM> -&gt; save without querying user
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the editor does close the buffer
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.buffer_title" CLASS="Method">GenEdit.GenEditBuffers.buffer_title(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-the buffer or file name to be used when a particular buffer is 
-active</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the name to combine with the application name and
-instance string
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.corresponding_frame" CLASS="Method">GenEdit.GenEditBuffers.corresponding_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns a reference to the GenEditFrame containing the given
-buffer</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>GenEditFrame</EM>
-<DD>the corresponding frame
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.delete_buffer" CLASS="Method">GenEdit.GenEditBuffers.delete_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
-<P>delete a buffer </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>name of buffer to remove
-<DT>
-<EM>BOOL perform_callback</EM>
-<DD>indicates whether this method should
-invoke the curr_buffer_name_cbk
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.GenEditBuffers.editor_buffer" CLASS="Method">GenEdit.GenEditBuffers.editor_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns a reference to the TextBufferChangeSpec embedded in 
-the GUI which corresponds to buffer buff_name</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>TextBufferChangeSpec</EM>
-<DD>the TextBufferChangeSpec
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.file_name" CLASS="Method">GenEdit.GenEditBuffers.file_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>returns the current filename associated with a given buffer</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>the filename
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.generate_buffer_name" CLASS="Method">GenEdit.GenEditBuffers.generate_buffer_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-find a new, unique buffer name for a buffer, given a file
-name</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR file_name</EM> 
-<DD>the short file name of the file (without the
-path)
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Unique name for the buffer 
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.modified_buffer" CLASS="Method">GenEdit.GenEditBuffers.modified_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns a list of names buffers which have been modified
-since the last time they were saved</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>the list of buffer names
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.modified_buffers" CLASS="Method">GenEdit.GenEditBuffers.modified_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-returns a list of names buffers which have been modified
-since the last time they were saved</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>the list of buffer names
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.multiple_buffers" CLASS="Method">GenEdit.GenEditBuffers.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does editor support multiple open buffers?</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if editor supports having multiple buffers open 
-at the same time
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.new_buffer" CLASS="Method">GenEdit.GenEditBuffers.new_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-adds a new buffer, optionally performing a callback to the
-AppState interface</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the new buffer
-<DT>
-<EM>TextBufferChangeSpec buffer</EM>
-<DD>the TextBufferChangeSpec interface 
-to the new buffer
-<DT>
-<EM>BOOL perform_callback</EM>
-<DD>indicates whether this method should
-invoke the parent AppState's open buffer callback
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the new buffer was added successfully
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.open_buffers" CLASS="Method">GenEdit.GenEditBuffers.open_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-retrieve a list of the names of open buffers from the
-application.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>list of the names of open buffers
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.open_file" CLASS="Method">GenEdit.GenEditBuffers.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
-<P>opens a new file </P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR file_name</EM> 
-<DD>the full path of the file to open, or None
-to ask the user
-<DT>
-<EM>BOOL user_initiated</EM>
-<DD>indicates whether this method was
-user-initiated or whether it was called by AppState.
-In the latter case, it will not invoke the parent AppState's 
-open buffer callback, because AppState.open_file invokes 
-the callback itself. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Unique name of the buffer in which the file
-was opened. Returns <EM>None</EM> if the editor was not able to open
-the file.  Note: if no file by the name file_name exists, the 
-regression tests expect the editor to open an empty buffer with
-that name.  Therefore, open_file should only fail
-if the user cancels the open file command (e.g. if there is an
-unsaved buffer) or if file_name was omitted and the user cancelled
-the Open File dialog box
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.open_file_new_buffer" CLASS="Method">GenEdit.GenEditBuffers.open_file_new_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
-<P>None</P>
-
-<P>
-opens a new file.  Depending on the subclass of 
-GenEditBuffers, this may open a new frame, or hide the 
-previously visible buffer in the same frame.</P>
-<P>
-<STRONG>NOTE:</STRONG> despite the name of this method, the 
-TextBufferChangeSpec returned can be an existing buffer, 
-if, e.g.,  the editor only has one window and one buffer.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR file_name</EM> 
-<DD>the full path of the file to open, or None
-to create a new, empty buffer
-<DT>
-<EM>STR new_buff_name</EM> 
-<DD>the name which will be given to the new
-buffer
-<DT>
-<EM>BOOL user_initiated</EM>
-<DD>indicates whether this method was
-user-initiated or whether it was called by AppState.
-In the latter case, it will not invoke the parent AppState's 
-open buffer callback, because AppState.open_file invokes 
-the callback itself. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the file was opened successfully.
-Note: if no file by the name file_name exists, 
-open_file_new_buffer should create a new, empty buffer with 
-that file name.
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.remove_buffer" CLASS="Method">GenEdit.GenEditBuffers.remove_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
-<P>remove a buffer from the list of buffers.  </P>
-
-<P>
-<STRONG>Note:</STRONG> this method only removes the buffer from GenEdit's
-records, it does not destroy the underlying GUI buffer or the
-window containing it.  For that, use delete_buffer (which will
-also call this method)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>name of buffer to remove
-<DT>
-<EM>BOOL perform_callback</EM>
-<DD>indicates whether this method should
-invoke the curr_buffer_name_cbk
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.GenEditBuffers.remove_other_references" CLASS="Method">GenEdit.GenEditBuffers.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.GenEditBuffers.rename_buffer" CLASS="Method">GenEdit.GenEditBuffers.rename_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-renames a buffer, optionally performing a callback to the
-AppState interface</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the old name of the new buffer
-<DT>
-<EM>STR new_buff_name</EM>
-<DD>the new name of the new buffer
-<DT>
-<EM>BOOL perform_callback</EM>
-<DD>indicates whether this method should
-invoke the parent AppState's rename buffer callback
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the new buffer was renamed successfully
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.save_file" CLASS="Method">GenEdit.GenEditBuffers.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>, <SPAN CLASS="Argument">rename_buff=1</SPAN>, <SPAN CLASS="Argument">ask_for_new_name=0</SPAN>, <SPAN CLASS="Argument">user_initiated=0</SPAN>)</H2>
-<P>Saves the buffer buff_name to a file</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-<DT>
-<EM>STR full_path</EM>
-<DD>path name of file to save, or None to use the
-current file name, or prompt
-<DT>
-<EM>BOOL no_prompt</EM>
-<DD>if true, don't prompt before overwriting
-an existing file.
-<DT>
-<EM>BOOL rename_buff</EM>
-<DD>if false, do not rename the buffer
-<DT>
-<EM>BOOL ask_for_new_name</EM>
-<DD>if true, prompt for a new name, even if the
-buffer already has a corresponding filename.  Ignored unless
-full_path == None.
-<DT>
-<EM>BOOL user_initiated</EM>
-<DD>indicates whether this method was
-user-initiated or whether it was called by AppState.
-In the latter case, it will invoke the parent AppState's 
-rename buffer callback.  If this method is called by AppState,
-this would be redundant, because AppState.save_file invokes 
-the callback itself. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>new buffer name if successful, or None if the save 
-failed
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.save_specified" CLASS="Method">GenEdit.GenEditBuffers.save_specified(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Saves the buffer buff_name to a file.  This version assumes
-buff_name exists and full_path has actually been specified, but
-will still prompt if asked to overwrite an existing file, unless
-no_prompt is true.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-<DT>
-<EM>STR full_path</EM>
-<DD>path name of file to save
-<DT>
-<EM>BOOL no_prompt</EM>
-<DD>if true, don't prompt before overwriting
-an existing file.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if file was saved successfully
-
-</DL>
-<H2 ID="GenEdit.GenEditBuffers.show_buffer" CLASS="Method">GenEdit.GenEditBuffers.show_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-makes a buffer the foreground one.
-Depending on the subclass of GenEditBuffers, this may activate a
-different frame, or reveal a previously hidden buffer and update
-the window title appropriately)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>the name of the buffer
-<DT>
-<EM>BOOL perform_callback</EM>
-<DD>indicates whether this method should
-invoke the curr_buffer_name_cbk
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="GenEdit.GenEditBuffers.update_title" CLASS="Method">GenEdit.GenEditBuffers.update_title(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-update the window title of the frame containing buff_name to
-reflect a new buffer name (unless that buffer is not the current
-buffer displayed in that frame)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR buff_name</EM>
-<DD>name of the buffer
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
