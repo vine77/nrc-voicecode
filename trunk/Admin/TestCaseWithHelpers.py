@@ -1,3 +1,4 @@
+import string
 import unittest
 import debug
 
@@ -7,11 +8,16 @@ class TestCaseWithHelpers(unittest.TestCase):
     def __init__(self, name):
         unittest.TestCase.__init__(self, name)
     
-    def assert_equals(self, mess, expected, got):
+    def assert_equals(self, expected, got, mess):
         mess = mess + ("\n   Expected : %s\n   Got      : %s\n" % (expected, got))
         self.assert_(expected == got, mess)
 
-    def assert_sequences_have_same_content(self, mess, expected, got):
+    def assert_string_contains(self, pattern, the_string, mess=''):
+        self.assert_(string.find(the_string, pattern) != -1, 
+                     mess + "\nSubstring: '%s' was not found in string: '%s'" % (pattern, the_string))
+        
+
+    def assert_sequences_have_same_content(self, expected, got, mess):
         """Use this to compare long lists, instead of just doing:
         
             assert(exepcted == got, ...)

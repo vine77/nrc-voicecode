@@ -4,7 +4,7 @@ import debug
 import TestCaseWithHelpers
 import MediatorConsoleWX
 from SymbolResult import SymbolResult
-import time
+import string, time
 from SpokenUtterance import MockSpokenUtterance
 from CmdInterp import MockUtteranceInterpretation
 
@@ -102,24 +102,25 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
         
     def test_displayed_symbols(self):
         self.assert_sequences_have_same_content\
-               ("Displayed utterances were wrong.", 
-                  [
+               ([
                      ['2', 'new_symbol_1_1', 'new symbol one one', 
                       'new symbol one one equals new symbol one two'], 
                      ['1', 'new_symbol_1_2', 'new symbol one two', 
                       'new symbol one one equals new symbol one two']
-                  ], 
-                self.dlg.displayed_symbols())
+                 ], 
+                self.dlg.displayed_symbols(),
+               "Displayed utterances were wrong.")
 
     def assert_reformat_from_recent_invoked_with_symbol(self, symbol):
        self.assert_(self.dlg.dlg_reformat_from_recent.was_displayed_modally,
                     "Reformat from recent dialog was not displayed")
-       self.assert_equals("Reformat from recent dialog invoked with wrong symbol", 
-                          symbol, self.dlg.dlg_reformat_from_recent.symbol)
+       self.assert_equals(symbol, self.dlg.dlg_reformat_from_recent.symbol,
+                          "Reformat from recent dialog invoked with wrong symbol")
 
     def test_choose(self):
        self.dlg.do_choose(0)
-       self.assert_equals("Selected symbol was wrong.", 0, self.dlg.selected_symbol_index())
+       self.assert_equals(0, self.dlg.selected_symbol_index(),
+                          "Selected symbol was wrong.")
        self.assert_reformat_from_recent_invoked_with_symbol(self.dlg.symbols[0])
        
 class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
@@ -137,32 +138,39 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
                         (console = self.console, 
                         parent = None, symbol = self.sym1_1)
        # AD: Uncomment this if you want to see what the window looks like. 
-#       self.dlg.ShowModal()
+       self.dlg.ShowModal()
 
 
     def tearDown(self):
         self.console.destroy_main_frame()
         self.dlg.Destroy()
+        
+    def assert_displayed_spoken_form_is(self, expected, mess=''):
+        self.assert_string_contains(expected, 
+                           self.dlg.view().intro(), 
+                           "Spoken form displayed for the symbol was wrong.")
 
     def assert_displayed_form_is(self, expected, mess=''):
-        self.assert_equals(mess + "Corrected form displayed by view was wrong",
-                           expected, self.dlg.chosen_form())
+        self.assert_equals(expected, self.dlg.chosen_form(),
+                           mess + "Corrected form displayed by view was wrong")
                            
     def assert_displayed_alternate_forms_are(self, expected, mess=''):
-        self.assert_sequences_have_same_content("%s\nAlternate forms for the symbol displayed by the view were wrong." % mess,
-                                                expected, self.dlg.displayed_list_of_alternate_forms())
+        self.assert_sequences_have_same_content(expected, self.dlg.displayed_list_of_alternate_forms(),
+                                                "Displayed utterances were wrong.")
 
     def test_fixture_initialisation(self):
         self.assert_(self.dlg != None, "Reformat from recent dialog not initialised properly.")
         self.assert_displayed_form_is('new_symbol_1_1')
         self.assert_displayed_alternate_forms_are(self.sym1_1.alternate_forms)
+        self.assert_displayed_spoken_form_is(string.join(self.sym1_1.spoken_phrase()))
+#>        self.assert_displayed_spoken_form_is("blah")
         
     def assert_symbol_was_not_reformatted(self):
         self.assert_(not self.dlg.symbol.reformatted_to, "Symbol reformatted prematurely, or its reformatting was not undone as it should have")
 
     def assert_symbol_was_reformatted_to(self, expected_form):
-        self.assert_equals("Symbol reformatted to the wrong form.",
-                           expected_form, self.dlg.symbol.reformatted_to)
+        self.assert_equals(expected_form, self.dlg.symbol.reformatted_to,
+                           "Symbol reformatted to the wrong form.")
         
     def test_on_select_form(self):
         self.dlg.do_select_nth_form(2)

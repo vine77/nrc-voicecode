@@ -507,8 +507,8 @@ WARNING: source file 'blah.cpp' doesn't exist.
 *** End of source buffer ***
 Heard wrap header
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP2728703
-  2: #define BLAH_CPP2728703
+  1: #ifndef BLAH_CPP9155735
+  2: #define BLAH_CPP9155735
   3: 
   4: <CURSOR>
   5: #endif
@@ -518,8 +518,8 @@ Heard wrap header
 Saying: ['pound', 'include', 'quotes', 'string', 'after', 'quotes']
 Heard pound include quotes string after quotes
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP2728703
-  2: #define BLAH_CPP2728703
+  1: #ifndef BLAH_CPP9155735
+  2: #define BLAH_CPP9155735
   3: 
   4: #include "str"<CURSOR>
   5: #endif
@@ -527,7 +527,7 @@ Heard pound include quotes string after quotes
 
 *** End of source buffer ***
 Heard new line
-  2: #define BLAH_CPP2728703
+  2: #define BLAH_CPP9155735
   3: 
   4: #include "str"
   5: <CURSOR>
@@ -1887,7 +1887,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02161CD0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01C72358>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -9440,8 +9440,8 @@ FAIL: test_bad_length_in_assert_sequences_have_same_content (TestCaseWithHelpers
 ----------------------------------------------------------------------
 Traceback (most recent call last):
   File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 15, in test_bad_length_in_assert_sequences_have_same_content
-    self.assert_sequences_have_same_content(self.nevermind, [], [1, 2])
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 27, in assert_sequences_have_same_content
+    self.assert_sequences_have_same_content([], [1, 2], self.nevermind)
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
     self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s"
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -9456,9 +9456,9 @@ Got list:
 FAIL: test_different_first_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 19, in test_different_first_item_in_assert_sequences_have_same_content
-    self.assert_sequences_have_same_content(self.nevermind, ['hello', 'world'], ['hello', 'universe'])
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 20, in test_different_first_item_in_assert_sequences_have_same_content
+    self.nevermind)
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -9469,9 +9469,9 @@ Item at position 1 was wrong. Expected 'world', but got 'universe'
 FAIL: test_different_last_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 23, in test_different_last_item_in_assert_sequences_have_same_content
-    self.assert_sequences_have_same_content(self.nevermind, ['hello', 'world'], ['hi', 'world'])
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 25, in test_different_last_item_in_assert_sequences_have_same_content
+    self.nevermind)
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -9482,9 +9482,9 @@ Item at position 0 was wrong. Expected 'hello', but got 'hi'
 FAIL: test_different_middle_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 28, in test_different_middle_item_in_assert_sequences_have_same_content
-    ['hello', 'wonderful', 'world'])
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 31, in test_different_middle_item_in_assert_sequences_have_same_content
+    self.nevermind)
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -9492,7 +9492,7 @@ AssertionError: Nevermind, this test is supposed to fail.
 Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
 
 ----------------------------------------------------------------------
-Ran 4 tests in 0.000s
+Ran 4 tests in 0.010s
 
 FAILED (failures=4)
 
@@ -11497,6 +11497,26 @@ Heard move horizontally
 * Description : Testing dialog for reformatting a selected symbol.
 *******************************************************************************
 
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.
+----------------------------------------------------------------------
+Ran 5 tests in 16.273s
+
+OK
 
 
 *******************************************************************************
@@ -11504,9 +11524,14 @@ Heard move horizontally
 * Description : Testing dialog for selecting a symbol to reformat.
 *******************************************************************************
 
-...
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
+.
 ----------------------------------------------------------------------
-Ran 3 tests in 0.050s
+Ran 3 tests in 0.130s
 
 OK
 
@@ -14655,6 +14680,6 @@ OK
 
 
 -----------------------------------------------
-Test suite completed in:  881.787999868 secs
+Test suite completed in:  630.125999928 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6
+WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!

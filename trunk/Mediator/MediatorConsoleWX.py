@@ -2114,6 +2114,9 @@ class ReformatFromRecentWX(DlgModelViewWX):
        self.symbol = symbol
        self.view().reset(symbol)
        
+    def intro(self):
+       return self.view().intro()
+       
     def chosen_form(self):
        """returns the written form of the symbol being displayed by the 
        view layer"""
@@ -2208,17 +2211,19 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
     def set_layout(self, symbol):
         main_sizer = wxBoxSizer(wxVERTICAL)
 
-        intro = wxStaticText(self, wxNewId(), 
-            "&Choose or type the correct format for this symbol",
+        spoken_form = string.join(self.symbol.spoken_phrase()),
+        self.txt_intro = wxStaticText(self, wxNewId(), 
+            "&Choose or type the correct format for symbol: \n     \"%s\"" % spoken_form,
             wxDefaultPosition, wxDefaultSize)
-        set_text_font(intro)
-        main_sizer.Add(intro, 0, wxEXPAND | wxALL)
+        set_text_font(self.txt_intro)
+        main_sizer.Add(self.txt_intro, 0, wxEXPAND | wxALL)
+
 
         # AD: Will have to add a validator for this text field later.
         self.txt_chosen_form = wxTextCtrl(self, wxNewId(), "", wxDefaultPosition,
             (550, 20), style = wxTE_NOHIDESEL)
         set_text_font(self.txt_chosen_form)
-        self.txt_chosen_form.SetValue(symbol.native_symbol())
+        self.txt_chosen_form.SetValue(symbol.native_symbol())        
         main_sizer.Add(self.txt_chosen_form, 0, wxEXPAND | wxALL)
 
         
@@ -2276,43 +2281,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         self.formats_pick_list.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.formats_pick_list.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
 
-        return
-
-############## REST 
-
-        
-        middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
-# three rows, two columns, 5 pixels between rows and columns
-        number_sizer = wxBoxSizer(wxVERTICAL)
-        ID_CHOICES = wxNewId()
-        ID_NUMBERS = wxNewId()
-        for i in range(1, 10):
-            st = wxStaticText(self, ID_NUMBERS + i, "%d" % i,
-                wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT)
-            set_text_font(st)
-            number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
-        self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
-             wxDefaultSize, self.symbol.alternate_forms, wxLB_SINGLE)
-        set_text_font(self.choice_list)
-        EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
-        EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
-        middle_sizer.AddMany([(intro, 0, wxEXPAND),
-                              (0, 0), #spacer
-                              (self.txt_chosen_form, 0, wxEXPAND | wxALIGN_TOP, 3),
-                              (number_sizer, 0, wxEXPAND | wxALIGN_RIGHT),
-                              (self.choice_list, 0, wxEXPAND)])
-        middle_sizer.AddGrowableRow(2)
-        middle_sizer.AddGrowableCol(1)
-        s.Add(middle_sizer, 1, wxEXPAND | wxALL)
-        button_sizer = wxBoxSizer(wxHORIZONTAL)
-        ok_button = wxButton(self, wxID_OK, "OK", wxDefaultPosition, 
-            wxDefaultSize)
-        cancel_button = wxButton(self, wxID_CANCEL, "Cancel", 
-            wxDefaultPosition, wxDefaultSize)
-        button_sizer.Add(ok_button, 0, wxALL)
-        button_sizer.Add(cancel_button, 0, wxALL)
-        ok_button.SetDefault()
-        s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
         
 # AD: Activate those later        
 #        EVT_ACTIVATE(self, self.on_activate)
@@ -2322,12 +2290,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
 
         self.Raise()
         self.txt_chosen_form.SetFocus()
-        self.SetAutoLayout(true)
-        self.SetSizer(s)
-        self.Layout()
-        s.Fit(self)
-        
-#        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
 
 
         
@@ -2340,6 +2302,9 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        SymbolResult symbol -- The symbol to reinitialise with."""
        
        pass        
+
+    def intro(self):
+       return self.txt_intro.GetLabel()
 
     def chosen_form(self):
        """returns the written form of the symbol being displayed by the 
@@ -2392,7 +2357,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        
     def do_type_form(self, form):
        self.set_alternate_form(form)
-              
+                     
     def cleanup(self):
        self.Destroy()
        

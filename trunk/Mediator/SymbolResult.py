@@ -97,12 +97,16 @@ class SymbolResult(Object):
                             
     def native_symbol(self):
         return self.symbol
+
     def buffer(self):
         return self.buff_name
+
     def final_range(self):
         return self.location
+
     def spoken_phrase(self):
         return self.phrase
+
     def builder_preferences(self):
         return self.builders
 

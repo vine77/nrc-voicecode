@@ -14,9 +14,6 @@ class wxListCtrlTestDlg(wxDialog):
             wxWindowsWithHelpers.wxListCtrlWithHelpers(self, wxNewId(), 
                                                        style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
 
-#        main_sizer = wxBoxSizer(wxVERTICAL)
-#        main_sizer.Add(self.list, 1, wxEXPAND | wxALL)
-
         self.list.InsertColumn(0,"This is Col #1")
         self.list.InsertColumn(1,"This is Col #2")
         self.list.InsertColumn(2,"This is Col #3")
@@ -39,24 +36,18 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg = wxListCtrlTestDlg()       
 
     def test_NumberOfColumns(self):
-       self.assert_equals("Number of columns was wrong.", 3, 
-                          self.dlg.list.NumberOfColumns())
+       self.assert_equals(3, self.dlg.list.NumberOfColumns(),
+                          "Number of columns was wrong.", )
 
     def test_NumberOfRows(self):
-       self.assert_equals("Number of rows was wrong.", 2, 
-                          self.dlg.list.NumberOfRows())
+       self.assert_equals(self.dlg.list.NumberOfRows(),
+                          "Number of rows was wrong.", 2)
        
     def test_AllCellsContentsString(self):
-       self.assert_sequences_have_same_content("Cells of the list were wrong.", 
-                                               [['item 0-0', 'item 0-1', 'item 0-2'], ['item 1-0', 'item 1-1', 'item 1-2']], 
-                                               self.dlg.list.AllCellsContentsString())
+       self.assert_sequences_have_same_content([['item 0-0', 'item 0-1', 'item 0-2'], ['item 1-0', 'item 1-1', 'item 1-2']], 
+                                               self.dlg.list.AllCellsContentsString(),
+                                               "Cells of the list were wrong.")
                                                
-#    def test_DoSelectItem(self):
-#       self.dlg.list.DoSelectItem(0, 0)
-#       self.assert_equals("Selected item was wrong.", [0], self.dlg.list.SelectedItem())
-#       self.dlg.list.Select(1, 1)
-#       self.assert_equals("Selected item was wrong.", [1], self.dlg.list.GetFirstSelected()
-#)       
                                                    
     def tearDown(self):
        self.dlg.Destroy()
