@@ -127,6 +127,7 @@ def runme():
     if not pydoc_path:
         sys.stderr.write("unable to locate pydoc script\n")
         quit()
+    sys.stderr.write("pydoc was found in\n" + pydoc_path + "\n")
        
     #
     # Get names of py files to document

@@ -555,7 +555,7 @@ class SourceBuff(Object):
         *none* -- 
         """
         
-        debug.virtual('move_relative_page')
+        debug.virtual('SourceBuff.move_relative_page')
 
 
 
@@ -583,7 +583,7 @@ class SourceBuff(Object):
 	*none*
 	"""
         
-        debug.virtual('insert_indent')
+        debug.virtual('SourceBuff.insert_indent')
         
         
     def insert(self, text, range = None):
@@ -602,7 +602,7 @@ class SourceBuff(Object):
 	*none*
 	"""
 
-        debug.virtual('insert')
+        debug.virtual('SourceBuff.insert')
 
     def indent(self, range = None):
         
@@ -619,7 +619,7 @@ class SourceBuff(Object):
 	*none*
 	"""
 
-        debug.virtual('indent')
+        debug.virtual('SourceBuff.indent')
 
 
     def incr_indent_level(self, levels=1, range=None):
@@ -639,7 +639,7 @@ class SourceBuff(Object):
         *none* -- 
         """
 
-        debug.virtual('incr_indent_level')
+        debug.virtual('SourceBuff.incr_indent_level')
 
     def decr_indent_level(self, num_levels=1, range=None):
 
@@ -658,7 +658,7 @@ class SourceBuff(Object):
         *none* -- 
         """
 
-        debug.virtual('decr_indent_level')
+        debug.virtual('SourceBuff.decr_indent_level')
 
 
     def delete(self, range = None):
@@ -673,7 +673,7 @@ class SourceBuff(Object):
 
 	*none*
 	"""
-        debug.virtual('delete')
+        debug.virtual('SourceBuff.delete')
         
     def goto(self, pos):
 
@@ -681,7 +681,7 @@ class SourceBuff(Object):
 	(and make selection empty)
         """
         
-        debug.virtual('goto')
+        debug.virtual('SourceBuff.goto')
 
     def goto_line(self, linenum, where=-1):
         """Go to a particular line in a buffer.
