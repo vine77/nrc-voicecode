@@ -147,6 +147,12 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
     def remove_other_references(self):
         self.recog_mgr.deactivate()
+
+# need to do this before cleanup because it is the only way to make sure
+# that the server removes its references to these instances
+        for instance in self.instances.keys():
+            self.mediator.delete_editor_cbk(instance, unexpected = 0)
+
         OwnerObject.remove_other_references(self)
 
     def app_instances(self, app_name = None):
@@ -531,6 +537,38 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 #            print instance, self.app_instance(instance)
             return self.recog_mgr.app_new_window(instance)
         return 0
+
+    def suspend_cbk(self, instance):
+        """called when the editor notifies us that its process is about
+        to be suspended
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+# AppStateMessaging keeps track of the state of the editor -- AppState
+# calls this callback only for the benefit of client editor
+        pass
+
+    def resume_cbk(self, instance):
+        """called when the editor notifies us that its process has 
+        resumed after having been suspended 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+# AppStateMessaging keeps track of the state of the editor -- AppState
+# calls this callback only for the benefit of client editor
+        pass
     
     def specify_window(self, instance):
         """called to indicate that user has manually identified a

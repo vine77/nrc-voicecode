@@ -705,6 +705,8 @@ class SourceBuff(OwnerObject):
               '... code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
         if range == None:
             range = self.get_selection()
+            trace('SourceBuff.insert_indent',
+                'got selection ... range= %d, %d' % range)
         range = self.make_valid_range(range)          
 
         trace('SourceBuff.insert_indent', '** inserting code_bef')    
@@ -1032,7 +1034,8 @@ class SourceBuff(OwnerObject):
         return regexp
 
 
-    def search_for(self, regexp, direction=1, num=1, where=1):
+    def search_for(self, regexp, direction=1, num=1, where=1, 
+        unlogged = 0):
         
         """Moves cursor to the next occurence of regular expression
            *STR regexp* in buffer.
@@ -1044,6 +1047,9 @@ class SourceBuff(OwnerObject):
 
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
+
+           *BOOL* unlogged -- if true, don't log the results of this
+           search (used for searches done by mediator without user-initiation)
 
            Returns *None* if no occurence was found. Otherwise,
            returns a match object."""
@@ -1102,9 +1108,10 @@ class SourceBuff(OwnerObject):
         # Log the search so we don't keep bringing back same occurence
         # if the user repeats the same search.
         #
-        the_match = None
-        if the_match_index != None: the_match = all_matches_pos[the_match_index]
-        self.log_search (regexp, direction, where, the_match)
+        if not unlogged:
+            the_match = None
+            if the_match_index != None: the_match = all_matches_pos[the_match_index]
+            self.log_search (regexp, direction, where, the_match)
         
         if new_cur_pos != None:
             self.goto(new_cur_pos)

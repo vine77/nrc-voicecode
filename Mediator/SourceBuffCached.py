@@ -227,8 +227,12 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
+        trace('SourceBuffCached.get_selection', 'first, check cache...')
         if self.cache['get_selection'] == None:
             self.cache['get_selection'] = self._get_selection_from_app()
+            trace('SourceBuffCached.get_selection', 'cache empty')
+        trace('SourceBuffCached.get_selection', 
+            'sel is %s' % repr(self.cache['get_selection']))
         return self.cache['get_selection']
         
 
@@ -536,7 +540,11 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
 #        print '-- SourceBuffCached.set_selection_cbk: called, range=%s, cursor_at=%s' % (repr(range), cursor_at)
 
+        trace('SourceBuffCached.set_selection_cbk',
+            'selection is %d, %d' % (range[0], range[1]))
         self.cache['get_selection'] = range
+        trace('SourceBuffCached.set_selection_cbk',
+            'cursor at %d' % cursor_at)
         if cursor_at > 0:
             self.cache['cur_pos'] = range[1]
         else:
@@ -562,6 +570,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         *none* -- 
         """
 #        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
+        trace('SourceBuffCached.goto_cbk', 'position is %d' % pos)
         self.cache['cur_pos'] = pos
 
 

@@ -27,6 +27,7 @@ import MediatorObject
 import NewMediatorObject
 import CmdInterp
 import EdSim
+import sr_interface
 
 """Classes and methods used to set up the MediatorObject or 
 NewMediatorObject for the next new regression test
@@ -39,6 +40,20 @@ class PersistentConfig(Object.Object):
     """
     def __init__(self, **args):
         self.deep_construct(PersistentConfig, {}, args)
+
+    def namespace(self):
+        """return a reference to the namespace in which commands are
+        found
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *{STR:ANY}* -- the namespace (a dictionary)
+        """
+        debug.virtual('PersistentConfig.namespace')
 
     def init_simulator_regression(symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
@@ -100,6 +115,20 @@ class PersistentConfigOldMediator(Object.Object):
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
 
+    def namespace(self):
+        """return a reference to the namespace in which commands are
+        found
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *{STR:ANY}* -- the namespace (a dictionary)
+        """
+        return self.names
+
     def init_simulator_regression(self, symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
 
@@ -151,8 +180,12 @@ class PersistentConfigNewMediator(Object.Object):
 
     *STR editor_name* -- the name of the editor being used for those
     regression tests using a persistent editor 
+
+    *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
+    dialog/prompt.  Normally disabled except during regression
     """
-    def __init__(self, mediator, editor_name, names, **args):
+    def __init__(self, mediator, editor_name, names, 
+        symbol_match_dlg = 1, **args):
         """**INPUTS**
 
 	*{STR:ANY} names* -- the namespace dictionary in which the
@@ -164,15 +197,35 @@ class PersistentConfigNewMediator(Object.Object):
 
         *STR editor_name* -- the name of the editor being used for those
         regression tests using a persistent editor 
+
+        *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
+        dialog/prompt.  Normally disabled except during regression
 	"""
         self.deep_construct(PersistentConfigNewMediator, 
                             {
                              'mediator': mediator,
                              'names': names,
-                             'editor_name': editor_name
+                             'editor_name': editor_name,
+                             'symbol_match_dlg': symbol_match_dlg
                             }, args)
+        self.names['init_simulator_regression'] = \
+            self.init_simulator_regression
 
-    def init_simulator_regression(symdict_pickle_fname=None):
+    def namespace(self):
+        """return a reference to the namespace in which commands are
+        found
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *{STR:ANY}* -- the namespace (a dictionary)
+        """
+        return self.names
+
+    def init_simulator_regression(self, symdict_pickle_fname=None):
         """re-initialize the mediator, using the same editor application
 
 	**NOTE:**  This method must also ensure that the namespace in
@@ -191,8 +244,16 @@ class PersistentConfigNewMediator(Object.Object):
 
 	*none*
 	"""
-        self.mediator.reset(symdict_pickle_fname = symdict_pickle_fname)
+# thought this would fix problems with tests_def.no_sr_user, but
+# disconnecting still unloads all existing grammars and re-connecting
+# doesn't re-load them.
+#        sr_interface.connect()
+        debug.trace('PersistentConfigNewMediator.init_simulator_regression',
+            'about to reset persistent mediator')
+        self.mediator.reset(symdict_pickle_fname = symdict_pickle_fname,
+            symbol_match_dlg = self.symbol_match_dlg)
         editor = self.mediator.editor_instance(self.editor_name)
+        editor.init_for_test()
         interp = self.mediator.interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names)
         commands.bind_methods(self.names)
@@ -375,13 +436,20 @@ class TempConfigNewMediator(Object.Object):
         self.the_editor = None
         self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
             disconnect=0)
+        self.the_mediator.cleanup()
         self.the_mediator = None
 
 class TempConfigNewMediatorFactory(Object.Object):
     """implementation of TempConfigFactory using NewMediatorObject
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
+    dialog/prompt.  Normally disabled except during regression
     """
-    def __init__(self, **args):
-        self.deep_construct(TempConfigNewMediatorFactory, {}, args)
+    def __init__(self, symbol_match_dlg = 1, **args):
+        self.deep_construct(TempConfigNewMediatorFactory, 
+            {'symbol_match_dlg': symbol_match_dlg}, args)
 
     def new_config(self, editor = None, skip_config = 0):
         """create a new TempConfig object
@@ -398,14 +466,19 @@ class TempConfigNewMediatorFactory(Object.Object):
 
 	*TempConfigNewMediator* --  the TempConfigNewMediator object
 	"""
-        a_mediator = NewMediatorObject.NewMediatorObject()
+        a_mediator = \
+            NewMediatorObject.NewMediatorObject(symbol_match_dlg = \
+                self.symbol_match_dlg)
         if not skip_config:
             a_mediator.configure()
         if editor == None:
             app = EdSim.EdSim()
         else:
             app = editor
-        a_mediator.new_editor(app)
+        a_mediator.new_editor(app, server = 0, check_window = 0)
+# we do NOT call this a test_editor, otherwise we're in for some nasty
+# recursion (well, maybe not, since we didn't specify test_args, but
+# anyway)
         return TempConfigNewMediator(mediator = a_mediator, editor = app)
 
 

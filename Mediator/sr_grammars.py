@@ -24,6 +24,8 @@
 
 from Object import Object, OwnerObject
 import debug
+import re
+import actions_gen
 
 import CmdInterp, AppState
 
@@ -165,6 +167,7 @@ class DictWinGram(WinGram, OwnerObject):
 	*none*
 	"""
         return self.manager.interpreter()
+
     def set_context(self, before = "", after = ""):
         """set the context to improve dictation accuracy
 
@@ -245,7 +248,7 @@ class SelectWinGram(WinGram):
 
 	*none*
 	"""
-        self.buff_name = buff_name
+        buff_name = self.buff_name
         vis_start, vis_end = self.app.get_visible(buff_name = buff_name)
         self.vis_start = vis_start
         visible = \
@@ -325,6 +328,8 @@ class SelectWinGram(WinGram):
                 regexp=spoken_form, 
                 direction=direction, where=where, 
                 buff_name = self.buff_name)
+        if closest_range_index == None:
+            return
 
         #
         # Mark selection and/or move cursor  to the appropriate end of
@@ -383,7 +388,7 @@ class WinGramFactory(Object):
         'before next', 'before previous', 'correct',
         'correct next', 'correct previous', 'next', 'previous',
         'select', 'select next', 'select previous', 'after'], 
-        through_words = 'through',
+        through_word = 'through',
         **attrs):
         """
 	**INPUTS**

@@ -21,6 +21,7 @@
 
 import auto_test, exceptions, os, posixpath, profile, sys
 import types
+import traceback
 import debug
 
 class EnforcedConstrArg(exceptions.Exception):    
@@ -919,6 +920,7 @@ class OwnerObject(Object):
         try:
             object.cleanup()
         except:
+            traceback.print_exc()
             return 'because its cleanup method threw an exception'
         
     def cleanup(self):
@@ -933,7 +935,10 @@ class OwnerObject(Object):
 
 	*none*
 	"""
+        debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
+#        debug.print_call_stack()
         self.remove_other_references()
+        debug.trace('OwnerObject.cleanup', 'after remove_other_references')
     
         reversed_names = self.owned_objects
         reversed_names.reverse()
@@ -942,6 +947,8 @@ class OwnerObject(Object):
         for name in reversed_names:
             if self.__dict__.has_key(name):
                 attribute = self.__dict__[name]
+                debug.trace('OwnerObject.cleanup', 
+                    'cleanup %s with value %s' % (name, repr(attribute)))
                 if attribute == None:
                     continue
                 if type(attribute) == types.ListType:
@@ -993,6 +1000,7 @@ class OwnerObject(Object):
         if self.parent_name != None \
                 and self.__dict__.has_key(self.parent_name):
             del self.__dict__[self.parent_name]
+        debug.trace('OwnerObject.cleanup', 'cleanup of %s finished' % repr(self))
 
 
 

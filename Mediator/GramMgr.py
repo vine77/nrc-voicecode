@@ -291,26 +291,30 @@ class GramMgrDictContext(GramMgr):
 	"""
 #  find dictation context
         current = self.app.cur_pos(buff_name = buffer)
+        selection = self.app.get_selection(buff_name = buffer)
 #        print current
         self.app.drop_breadcrumb(buffname = buffer)
         self.app.drop_breadcrumb(buffname = buffer)
 #        self.app.search_for(r'\S+\s+\S+', direction = -1, 
-#            num = 1, where = -1, buff_name = buffer)
+#            num = 1, where = -1, buff_name = buffer, unlogged = 1)
+# don't log the search -- otherwise we mess up commands to repeat
+# previous user-initiated searches and punctuation navigation
         self.app.search_for(r'\s+\S', direction = -1, 
-            num = 2, where = -1, buff_name = buffer)
+            num = 2, where = -1, buff_name = buffer, unlogged = 1)
 #        self.app.search_for(r'\s+\S+', direction = -1, 
-#            num = 2, where = -1, buff_name = buffer)
+#            num = 2, where = -1, buff_name = buffer, unlogged = 1)
         start = self.app.cur_pos(buff_name = buffer)
 #        print start
         before = self.app.get_text(start, current, buff_name = buffer)
 #        print before
         self.app.pop_breadcrumbs()
         self.app.search_for(r'\S+\s+', direction = 1, 
-            num = 2, where = 1, buff_name = buffer)
+            num = 2, where = 1, buff_name = buffer, unlogged = 1)
         end = self.app.cur_pos(buff_name = buffer)
 #        print end
         after = self.app.get_text(current, end, buff_name = buffer)
         self.app.pop_breadcrumbs()
+        self.app.set_selection(selection, buff_name = buffer)
         return before, after
 
 
@@ -499,9 +503,11 @@ class WinGramMgr(GramMgrDictContext):
                 a_window = window
                 if self.global_grammars:
                     a_window = None
+                debug.trace('WinGramMgr.new_buffer', 
+                    'window, a_window: %s, %s' % (str(window), str(a_window)))
                 self.dict_grammars[window][buffer] = \
                     self.factory.make_dictation(self, self.app, 
-                    buffer, a_window, 
+                    buffer, window = a_window, 
                     exclusive = self.exclusive)
 
     def new_window(self, window, buffer = None):
@@ -524,6 +530,8 @@ class WinGramMgr(GramMgrDictContext):
             a_window = window
             if self.global_grammars:
                 a_window = None
+            debug.trace('WinGramMgr.new_window', 
+                'window, a_window: %s, %s' % (str(window), str(a_window)))
             self.sel_grammars[window] = self.factory.make_selection(self.app,
                 a_window, exclusive = self.exclusive)
 
@@ -655,6 +663,8 @@ class WinGramMgrFactory(GramMgrFactory):
 
 	*none*
 	"""
+        debug.trace('WinGramMgrFactory.new_manager', 
+            'new manager: global = ' + str(self.global_grammars))
         return WinGramMgr(app = editor, recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = self.global_grammars, exclusive = self.exclusive)
@@ -675,6 +685,8 @@ class WinGramMgrFactory(GramMgrFactory):
 
 	*none*
 	"""
+        debug.trace('WinGramMgrFactory.new_global_manager', 
+            'new global manager')
         return WinGramMgr(app = editor, recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = 1, exclusive = exclusive)

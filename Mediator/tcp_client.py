@@ -473,11 +473,19 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
             'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 
             'set_selection', 'get_text', 'make_position_visible', 'len', 
             'insert', 'delete', 'goto', 'active_buffer_name', 
+            'file_name',
             'indent', 'insert_indent', 
             'incr_indent_level',
             'decr_indent_level',
             'line_num_of', 'goto_line',
             'beginning_of_line', 'end_of_line',
+            'process_active',
+            'suspendable',
+            'suspend_notification',
+            'shared_window',
+            'set_instance_string', 'get_instance_string',
+            'title_escape',
+            'multiple_windows',
             'multiple_buffers', 'bidirectional_selection', 'get_visible', 
             'language_name', 'newline_conventions', 
             'pref_newline_convention', 'open_file', 'close_buffer', 
@@ -811,9 +819,82 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 	"""
         if self.editor_name == instance:
             if not self.ignore_callbacks:
+                buff_name = self.editor.app_active_buffer_name()
                 updates = {'action': 'new_window'}
                 update_list = [updates] + self.sel_update(buff_name)
                 self.send_updates(update_list)
+              
+    def suspend_cbk(self, instance):
+        """called when the editor notifies us that its process is about
+        to be suspended
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        if self.connected:
+            self.talk_msgr.send_mess('suspended')
+
+    def resume_cbk(self, instance):
+        """called when the editor notifies us that its process has 
+        resumed after having been suspended 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+        *none*
+	"""
+        if self.connected:
+            self.talk_msgr.send_mess('resuming')
+
+    def cmd_process_active(self, arguments):
+        value = self.editor.is_active()
+        self.send_response('process_active_resp', value)
+
+    def cmd_suspendable(self, arguments):
+        value = self.editor.suspendable()
+        self.send_response('suspendable_resp', value)
+# technically, if ClientEditor is running in a separate process from the editor,
+# this should also depend on whether ClientEditor can be suspended.
+# However, for now, we just assume that the user won't do that.
+
+    def cmd_suspend_notification(self, arguments):
+        value = self.editor.suspend_notification()
+        self.send_response('suspend_notification_resp', value)
+# technically, if ClientEditor is running in a separate process from the editor,
+# this should also depend on whether ClientEditor can detect if *it* is
+# about to be suspended and notify the server.
+# However, for now, we just assume that the user won't do that.
+
+    def cmd_shared_window(self, arguments):
+        value = self.editor.shared_window()
+        self.send_response('shared_window_resp', value)
+
+    def cmd_set_instance_string(self, arguments):
+        instance_string = arguments['instance_string']
+        self.editor.set_instance_string(instance_string)
+        self.send_simple_response('set_instance_string_resp')
+
+    def cmd_get_instance_string(self, arguments):
+        instance_string = self.editor.instance_string()
+        self.send_response('get_instance_string_resp', instance_string)
+
+    def cmd_title_escape(self, arguments):
+        before = arguments['before']
+        after = arguments['after']
+        self.editor.title_escape_sequence(before, after)
+        self.send_simple_response('title_escape_resp')
+
+    def cmd_multiple_windows(self, arguments):
+        value = self.editor.multiple_windows()
+        self.send_response('multiple_windows_resp', value)
 
     def cmd_multiple_buffers(self, arguments):
         value = self.editor.multiple_buffers()
@@ -984,6 +1065,11 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.awaiting_response = None
         updates = updates + self.sel_update(b_name)
         self.send_updates_response('insert_indent_resp', updates)
+
+    def cmd_file_name(self, arguments):
+        buff_name = arguments['buff_name']
+        value = self.editor.file_name(buff_name = buff_name)
+        self.send_response('file_name_resp', value)
 
     def cmd_delete(self, arguments):
         buff_name = arguments['buff_name']
