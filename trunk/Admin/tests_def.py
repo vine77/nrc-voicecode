@@ -744,7 +744,7 @@ def test_punctuation():
 
     commands.say(['if', 'index', '&\\ampersand', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe sign', 'index', '|\\vertical-bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe-sign', 'index', '|\\vertical-bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['index', '=\\equals', '0', ';\\semicolon', 'variable', '=\\equals', '0', ';\\semi', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -759,7 +759,7 @@ def test_punctuation():
 
     commands.say(['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '<\\less sign', '0', 'and\\and', 'index', '>\\greater sign', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['if', 'index', '<\\less-sign', '0', 'and\\and', 'index', '>\\greater-sign', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
     commands.say(['index', '=\\equal-sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -814,250 +814,252 @@ def test_punctuation():
     commands.say(['``\\empty backquotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-    commands.say(['\\a\\back slash a.', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\a\\back slash alpha', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash A.', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash alpha', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\b\\back slash b.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\b\\back slash bravo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash B.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash bravo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\c\\back slash c.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\c\\back slash charlie'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash C.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash charlie'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\d\\back slash d.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\d\\back slash delta'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash D.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash delta'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\e\\back slash e.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\e\\back slash echo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash E.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash echo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\f\\back slash f.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\f\\back slash foxtrot'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash F.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash foxtrot'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\g\\back slash g.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\g\\back slash golf'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash G.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash golf'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\h\\back slash h.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\h\\back slash hotel'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash H.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash hotel'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\i\\back slash i.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\i\\back slash india'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash I.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash india'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\j\\back slash j.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\j\\back slash juliett'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash J.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash juliett'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\k\\back slash k.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\k\\back slash kilo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash K.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash kilo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\l\\back slash l.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\l\\back slash lima'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash L.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash lima'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\m\\back slash m.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\m\\back slash mike'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash M.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash mike'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\n\\back slash n.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\n\\back slash november'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash N.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash november'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\o\\back slash o.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\o\\back slash oscar'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash O.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash oscar'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\p\\back slash p.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\p\\back slash papa'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash P.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash papa'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\q\\back slash q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\q\\back slash quebec'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash Q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash quebec'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\r\\back slash r.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\r\\back slash romeo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash R.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash romeo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\s\\back slash s.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\s\\back slash sierra'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash S.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash sierra'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\t\\back slash t.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\t\\back slash tango'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash T.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash tango'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\u\\back slash u.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\u\\back slash uniform'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash U.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash uniform'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\v\\back slash v.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\v\\back slash victor'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash V.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash victor'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\w\\back slash w.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\w\\back slash whiskey'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash W.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash whiskey'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\x\\back slash x.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\x\\back slash xray'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash X.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash xray'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\y\\back slash y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\y\\back slash yankee'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash Y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash yankee'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\z\\back slash z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\z\\back slash zulu'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash Z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash zulu'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\A\\back slash cap a.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\A\\back slash cap alpha', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap A.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap alpha', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\B\\back slash cap b.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\B\\back slash cap bravo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap B.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap bravo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     #
-#BUG:    commands.say(['quotes', '\\C\\back slash cap c.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#BUG:    commands.say(['quotes', 'back slash cap C.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\D\\back slash cap d.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\D\\back slash cap delta', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['back slash cap D.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap delta', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\E\\back slash cap e.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\E\\back slash cap echo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap E.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap echo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\F\\back slash cap f.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\F\\back slash cap foxtrot', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap F.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap foxtrot', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\G\\back slash cap g.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\G\\back slash cap golf', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap G.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap golf', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\H\\back slash cap h.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\H\\back slash cap hotel', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap H.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap hotel', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\I\\back slash cap i.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\I\\back slash cap india', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-
-    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\J\\back slash cap j.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\J\\back slash cap juliett', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap I.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap india', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\K\\back slash cap k.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\K\\back slash cap kilo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap J.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap juliett', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\L\\back slash cap l.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\L\\back slash cap lima', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap K.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap kilo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\M\\back slash cap m.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\M\\back slash cap mike', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap L.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap lima', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\N\\back slash cap n.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\N\\back slash cap november', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap M.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap mike', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+
+    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap N.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap november', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\O\\back slash cap o.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\O\\back slash cap oscar', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap O.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap oscar', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\P\\back slash cap p.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\P\\back slash cap papa', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap P.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap papa', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Q\\back slash cap q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Q\\back slash cap quebec', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-
-    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\R\\back slash cap r.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\R\\back slash cap romeo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap Q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap quebec', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\S\\back slash cap s.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\S\\back slash cap sierra', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap R.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap romeo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\T\\back slash cap t.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\T\\back slash cap tango', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap S.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap sierra', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\U\\back slash cap u.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\U\\back slash cap uniform', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap T.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap tango', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\V\\back slash cap v.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\V\\back slash cap victor', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\W\\back slash cap w.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\W\\back slash cap whiskey', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap U.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap uniform', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\X\\back slash cap x.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\X\\back slash cap xray', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap V.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap victor', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap W.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap whiskey', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Y\\back slash cap y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Y\\back slash cap yankee', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap X.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap xray', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Z\\back slash cap z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['\\Z\\back slash cap zulu', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['back slash cap Y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap yankee', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+
+    commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap Z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back slash cap zulu', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
   
 
     commands.say(['index', 'semi', 'variable', 'semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1226,25 +1228,25 @@ def test_punctuation():
     
     commands.say(['0', '?\\question-mark', '1', '?\\question-mark', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous question mark', 'previous question mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous question-mark', 'previous question-mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after question mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after question-mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous question mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous question-mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next question mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next question-mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['0', '#\\pound-sign', '1', '#\\pound-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous pound sign', 'previous pound sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous pound-sign', 'previous pound-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after pound sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after pound-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous pound sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous pound-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next pound sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next pound-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1272,39 +1274,39 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '<\\less sign', '1', '<\\less sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '<\\less-sign', '1', '<\\less-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous less sign', 'previous less sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous less-sign', 'previous less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after less sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous less sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next less sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '>\\greater sign', '1', '>\\greater sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '>\\greater-sign', '1', '>\\greater-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous greater sign', 'previous greater sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous greater-sign', 'previous greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after greater sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous greater sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next greater sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['0', '=\\equal-sign', '1', '=\\equal-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous equal sign', 'previous equal sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous equal-sign', 'previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after equal sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous equal sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next equal sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1349,14 +1351,14 @@ def test_punctuation():
     commands.say(['back out of angles'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['between single quotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['before previous single quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-    commands.say(['after single quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['before single quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['previous single quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-    commands.say(['out of single quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['before previous single quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-    commands.say(['back out of single quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['between single-quotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['after single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['out of single-quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous single-quote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['back out of single-quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['between quotes', '1'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -2607,7 +2609,6 @@ def test_basic_correction():
     check_recent(instance_name, utterances, status)
 
     new_utterances = []
-#    new_utterances.append(['\\New-Line'])
     new_utterances.append(string.split('new line'))    
     new_input = ['']
     new_status = [1]

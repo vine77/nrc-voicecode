@@ -200,10 +200,13 @@ add_prefix('dumbEdSim', 'Dumbo')
 # CSCs and LSAs that apply for ALL languages
 #############################################################################
 
+mediator_ctrl = CSCmdSet(name = 'mediator control',
+    description = 'commands to control the mediator')
 acmd = CSCmd(spoken_forms=['compile symbols'], 
              meanings={ContLanguage(None): ActionCompileSymbols()}, 
              docstring='compile symbols from active buffer.')
-add_csc(acmd)
+mediator_ctrl.add_csc(acmd)
+add_csc_set(mediator_ctrl)
 
 
 #############################################################################
@@ -294,7 +297,7 @@ alt_US_punc.add('*', ['star'], spacing = like_dot)
 # arguments)
 alt_US_punc.add('**', ['double star', 'double asterisk'],
     like_dot)
-alt_US_punc.add('|', ['pipe', 'pipe sign'])
+alt_US_punc.add('|', ['pipe', 'pipe-sign'])
 alt_US_punc.add('!', ['bang'], no_space_after)
 alt_US_punc.add('~', ['squiggle'], no_space_after)
 alt_US_punc.add('::', ['double colon', 'colon colon'], 
@@ -310,9 +313,9 @@ alt_US_punc.add(";", ['semi'], no_space_before)
 
 # Alain's
 alt_US_punc.add('&', ['and percent'])
-alt_US_punc.add('<', ['less sign'], spacing =
+alt_US_punc.add('<', ['less-sign'], spacing =
     like_dot)
-alt_US_punc.add('>', ['greater sign'], spacing =
+alt_US_punc.add('>', ['greater-sign'], spacing =
     like_dot)
 
 alt_punc = alt_US_punc
@@ -405,11 +408,11 @@ alt_quotes = alt_US_quotes
 # Escaped characters (back slash a., a, alpha, etc.)
 #
 
-escaped_characters = LSAliasSet(name = 'escaped characters', 
+escaped_characters = CSCmdSet(name = 'escaped characters', 
     description = 'characters escaped with backslashes')
 add_escaped_characters(escaped_characters)
 
-add_lsa_set(escaped_characters)
+add_csc_set(escaped_characters)
 
 #
 # Commands for jumping to a specific punctuation mark
@@ -421,33 +424,41 @@ add_lsa_set(escaped_characters)
 
 
 
+out_of_balance = CSCmdSet("balanced expression navigation",
+            description = """jumping out of any balanced expression""")
+
 #
 # All balanced expressions
 #
 acmd = CSCmd(spoken_forms=['jump out'],
              meanings={ContAny(): ActionSearchRepeat(regexp='[\]\)\}\'\"] {0,1}')},
              docstring='jump out of innermost balanced expression')
-add_csc(acmd)
+out_of_balance.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
              meanings={ContAny(): ActionSearchRepeat(regexp=' {0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
              docstring='jump backwards out of innermost balanced expression')
-add_csc(acmd)
+out_of_balance.add_csc(acmd)
+
+add_csc_set(out_of_balance)
 
 
 #############################################################################
 # Code indentation
 #############################################################################
+indent_cmds = CSCmdSet("indentation commands",
+            description = """commands to manually adjust indentation""")
 
 acmd = CSCmd(spoken_forms=['indent', 'tab', 'tab key'],
              meanings={ContAny(): ActionIncrIndentation(levels=1)})
-add_csc(acmd)
+indent_cmds.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back indent', 'back tab'],
              meanings={ContAny(): ActionDecrIndentation(levels=1)})
-add_csc(acmd)
+indent_cmds.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['auto indent'],
              meanings={ContAny(): ActionAutoIndent()})
-add_csc(acmd)
+indent_cmds.add_csc(acmd)
+add_csc_set(indent_cmds)
 
 
 #############################################################################
@@ -534,118 +545,213 @@ add_backspacing(backspacing)
 
 
 add_csc_set(backspacing)
+
 ##############################################################################
 # CSCs and LSAs that apply for more than one language (but not necessarily
 # all)
 ##############################################################################
 
-add_lsa(LSAlias(['multiply by', 'multiplied by', 'times'], 
-        {'C': ' * ', 'python': ' * ', 'perl': ' * '}))
-add_lsa(LSAlias(['to the power', 'to the power of', 'power of'], 
-        {'C': '**', 'python': '**', 'perl': '**'}))
-add_lsa(LSAlias(['divide by', 'divided by'],
-        {'C': ' / ', 'python': ' / ', 'perl': ' / '}))
-add_lsa(LSAlias(['plus'], {'C': ' + ', 'python': ' + ', 'perl': ' + '}))
-add_lsa(LSAlias(['minus'], {'C': ' - ', 'python': ' - ', 'perl': ' - '}))
-add_lsa(LSAlias(['modulo'], {'C': ' % ', 'python': ' % '}))
-add_lsa(LSAlias(['left shift'], {'C': ' << ', 'python': ' << ', 'perl': ' << '}))
-add_lsa(LSAlias(['right shift'], {'C': ' >> ', 'python': ' >> ', 'perl': ' >> '}))
-add_lsa(LSAlias(['not'], {'python': 'not ', 'C': '!', 'perl': '!'}))
-add_lsa(LSAlias(['or'], {'python': ' or ', 'C': ' || ', 'perl': ' || '}))
-add_lsa(LSAlias(['and'], {'python': ' and ', 'C': ' && ', 'perl': ' && '}))
-add_lsa(LSAlias(['binary and', 'bitwise and'], {'C': ' & ', 'python': ' & '}))
-add_lsa(LSAlias(['binary or', 'bitwise or'], {'C': ' | ', 'python': ' | '}))
-add_lsa(LSAlias(['binary not', 'bitwise not'], {'C': '~', 'python': '~'}))
-add_lsa(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'C': ' ^ ', 'python': ' ^ '}))
-add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
-        {'C': ' = ', 'python': ' = '}))
-add_lsa(LSAlias(['less than', 'is less than'],
-        {'C': ' < ', 'python': ' < ', 'perl': ' < '}))
-add_lsa(LSAlias(['greater than', 'is greater than'],
-        {'C': ' > ', 'python': ' > ', 'perl': ' > '}))
-add_lsa(LSAlias(['less or equal to', 'is less or equal to', 'less or equal',
-        'is less or equal'],
-        {'C': ' <= ', 'python': ' <= ', 'perl': ' <= '}))
-add_lsa(LSAlias(['greater or equal to', 'is greater or equal to', 'greater or equal',
-        'is greater or equal'],
-        {'C': ' >= ', 'python': ' >= ', 'perl': ' >= '}))
-add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
-        'is different from', 'differs from', 'bang equal'],
-        {'C': ' != ', 'python': ' != ', 'perl': ' != '}))
-add_lsa(LSAlias(['equal to', 'is equal to', 'is equal'],
-        {'C': ' == ', 'python': ' == ', 'perl': ' == '}))
-add_lsa(LSAlias(['without arguments', 'with no arguments', 'without argument',
-        'with no argument'],
-        {'python': '()', 'perl': '()', 'C': '()'}))
-add_lsa(LSAlias(['print'], {'python': 'print ', 'perl': 'print '}))
+math_ops = LSAliasSet('mathematical operators', 
+    description = "mathematical operators")
+logic_ops = LSAliasSet('logical operators', 
+    description = "logical operators")
+comparisons = LSAliasSet('comparison operators', 
+    description = "comparison operators")
 
+math_ops.add_lsa(LSAlias(['multiply by', 'multiplied by', 'times'], 
+        {'C': ' * ', 'python': ' * ', 'perl': ' * '}, 
+        spacing = binary_operator), name = 'multiplication')
+
+math_ops.add_lsa(LSAlias(['to the power', 'to the power of', 'power of'], 
+        {'python': '**', 'perl': '**'}, spacing = like_dot), name =
+        'exponentiation')
+math_ops.add_lsa(LSAlias(['divide by', 'divided by'],
+        {'C': ' / ', 'python': ' / ', 'perl': ' / '}, 
+        spacing = binary_operator), name = 'division')
+math_ops.add_lsa(LSAlias(['plus'], 
+    {'C': ' + ', 'python': ' + ', 'perl': ' + '}, spacing = binary_operator), 
+    name = 'addition')
+math_ops.add_lsa(LSAlias(['minus'], 
+    {'C': ' - ', 'python': ' - ', 'perl': ' - '}, spacing = binary_operator),
+    name = 'subtraction')
+math_ops.add_lsa(LSAlias(['modulo'], {'C': ' % ', 'python': ' % '}, 
+    spacing = binary_operator))
+math_ops.add_lsa(LSAlias(['left shift'], 
+    {'C': ' << ', 'python': ' << ', 'perl': ' << '}, 
+    spacing = binary_operator))
+math_ops.add_lsa(LSAlias(['right shift'], 
+    {'C': ' >> ', 'python': ' >> ', 'perl': ' >> '},
+    spacing = binary_operator))
+
+logic_ops.add_lsa(LSAlias(['not'], {'python': 'not '}, ), 
+    name = 'python logical not')
+logic_ops.add_lsa(LSAlias(['not'], 
+    {'C': '!', 'perl': '!'}, spacing = like_bang), name = 'logical not')
+
+logic_ops.add_lsa(LSAlias(['or'], 
+    {'python': ' or ', 'C': ' || ', 'perl': ' || '}))
+logic_ops.add_lsa(LSAlias(['and'], 
+    {'python': ' and ', 'C': ' && ', 'perl': ' && '}))
+
+math_ops.add_lsa(LSAlias(['binary and', 'bitwise and'], {'C': ' & ', 'python': ' & '}, spacing = binary_operator))
+math_ops.add_lsa(LSAlias(['binary or', 'bitwise or'], {'C': ' | ', 'python': ' | '}, spacing = binary_operator))
+math_ops.add_lsa(LSAlias(['binary not', 'bitwise not'], {'C': '~', 'python': '~'}, spacing = unary_operator))
+math_ops.add_lsa(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'C': ' ^ ', 'python': ' ^ '}, spacing = binary_operator))
+
+
+comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
+        {'C': ' = ', 'python': ' = '}, comparison_operator))
+comparisons.add_lsa(LSAlias(['less than', 'is less than'],
+        {'C': ' < ', 'python': ' < ', 'perl': ' < '},
+        comparison_operator))
+comparisons.add_lsa(LSAlias(['greater than', 'is greater than'],
+        {'C': ' > ', 'python': ' > ', 'perl': ' > '},
+        comparison_operator))
+comparisons.add_lsa(LSAlias(['less or equal to', 'is less or equal to', 'less or equal',
+        'is less or equal'],
+        {'C': ' <= ', 'python': ' <= ', 'perl': ' <= '},
+        comparison_operator))
+comparisons.add_lsa(LSAlias(['greater or equal to', 'is greater or equal to', 'greater or equal',
+        'is greater or equal'],
+        {'C': ' >= ', 'python': ' >= ', 'perl': ' >= '},
+        comparison_operator))
+comparisons.add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+        'is different from', 'differs from', 'bang equal'],
+        {'C': ' != ', 'python': ' != ', 'perl': ' != '},
+        comparison_operator))
+comparisons.add_lsa(LSAlias(['equal to', 'is equal to', 'is equal'],
+        {'C': ' == ', 'python': ' == ', 'perl': ' == '},
+        comparison_operator))
+
+add_lsa_set(math_ops)
+add_lsa_set(logic_ops)
+add_lsa_set(comparisons)
+
+empty_pairs = LSAliasSet('empty pairs', 
+    description = 'functional names for empty pairs of punctuation symbols')
+
+empty_pairs.add_lsa(LSAlias(['without arguments', 'with no arguments', 'without argument',
+        'with no argument', 'empty function'],
+        {'python': '()', 'perl': '()', 'C': '()'}, 
+        spacing = joins_identifier))
+
+
+
+functional_pairs = CSCmdSet('functional pairs',
+    description = 'functional names for paired punctuation')
 
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with'],
              meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
                        ContPerl(): gen_parens_pair},
              docstring='argument list for function')
-add_csc(acmd)        
-add_lsa(LSAlias(['comment line', 'new comment'], {'perl': '\n# ', 'python': '\n# '}))
-add_lsa(LSAlias(['return'], {'C': 'return ', 'python': 'return '}))
-add_lsa(LSAlias(['empty dictionary', 'empty hash'], {'python': '{}', 'perl': '{}'}))
+functional_pairs.add_csc(acmd)        
+
+comment_aliases = LSAliasSet('comment aliases', 
+    description = "aliases for dictating comments")
+
+comment_aliases.add_lsa(LSAlias(['comment line', 'new comment'], 
+    {'perl': '\n#', 'python': '\n#'}, spacing = no_space_before))
+comment_aliases.add_lsa(LSAlias(['begin comment'],
+    {'perl': '# ', 'python': '# ', 'C': '// '}))
+comment_aliases.add_lsa(LSAlias(['begin long comment'],
+    {'C': '/* '}))
+comment_aliases.add_lsa(LSAlias(['end long comment'],
+    {'C': '*/'}))
+add_lsa_set(comment_aliases)
+
+misc_aliases = LSAliasSet('miscellaneous aliases', 
+    description = 'miscellaneous commands')
+misc_aliases.add_lsa(LSAlias(['print'], {'python': 'print ', 'perl': 'print '}))
+misc_aliases.add_lsa(LSAlias(['return'], {'C': 'return ', 'python': 'return '}))
+misc_aliases.add_lsa(LSAlias(['break'], {'python': 'break\n', 'C': 'break;\n'},
+    spacing = no_space_after))
+misc_aliases.add_lsa(LSAlias(['continue'], {'python': 'continue\n', 
+    'C': 'continue;\n'}, spacing = no_space_after))
+
+empty_pairs.add_lsa(LSAlias(['empty dictionary', 'empty hash'], {'python': '{}', 'perl': '{}'}))
+
 acmd = CSCmd(spoken_forms=['dictionary with elements', 'hash with elements', 
                            'new dictionary', 'new hash',
                            'dictionary with items', 'hash with items'],
-             meanings={ContPy(): ActionInsert('{', '}'),
-                       ContPerl(): ActionInsert('(', ')')},
-             docstring='dictionary with enumareted elements')
-add_csc(acmd)             
-add_lsa(LSAlias(['empty list'], {'python': '[]', 'perl': '()'}))
+             meanings={ContPy(): ActionInsert('{', '}', 
+                                     spacing = like_open_paren),
+                       ContPerl(): ActionInsert('(', ')', 
+                                     spacing = like_open_paren)},
+             docstring='dictionary with enumerated elements')
+functional_pairs.add_csc(acmd)             
+
+empty_pairs.add_lsa(LSAlias(['empty list'], {'python': '[]', 'perl': '()'}))
 acmd = CSCmd(spoken_forms=['list with elements', 'new list',
                            'list with items'],
-             meanings={ContPy(): ActionInsert('[', ']'),
-                       ContPerl(): ActionInsert('(', ')')},
-             docstring='list with enumareted elements')
-add_csc(acmd)
+             meanings={ContPy(): ActionInsert('[', ']',
+                                     spacing = like_open_paren),
+                       ContPerl(): ActionInsert('(', ')',
+                                     spacing = like_open_paren)},
+             docstring='list with enumerated elements')
+functional_pairs.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['at index', 'indexed by'],
-             meanings={ContPy(): ActionInsert('[', ']'),
-                       ContC(): ActionInsert('[', ']'),
-                       ContPerl(): ActionInsert('[', ']')},
+             meanings={ContPy(): ActionInsert('[', ']',
+                                     spacing = like_open_paren),
+                       ContC(): ActionInsert('[', ']',
+                                     spacing = like_open_paren),
+                       ContPerl(): ActionInsert('[', ']',
+                                     spacing = like_open_paren)},
              docstring='array element access')
-add_csc(acmd)             
+functional_pairs.add_csc(acmd)             
 acmd = CSCmd(spoken_forms=['at key'],
-             meanings={ContPy(): ActionInsert('[', ']'), 
-                       ContPerl(): ActionInsert('{', '}')},
+             meanings={ContPy(): ActionInsert('[', ']',
+                                     spacing = like_open_paren),
+                       ContPerl(): ActionInsert('{', '}',
+                                     spacing = like_open_paren)},
              docstring='dictionary/hash element access')
-add_csc(acmd)                          
+functional_pairs.add_csc(acmd)                          
+
+new_statement = CSCmdSet('new statement', 
+description = 'new statement commands') 
+
 acmd = CSCmd(spoken_forms=['new statement'],
              meanings={ContPy(): py_new_statement, ContC(): c_new_statement},
              docstring='start new statement on next line')
-add_csc(acmd)
+new_statement.add_csc(acmd)
+
+compound_statements = CSCmdSet('compound statements', 
+    description = 'commands for dictation and navigating compound statements') 
+
 acmd = CSCmd(spoken_forms=['body', 'goto body'],
              meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
                        ContPerl(): c_goto_body},
              docstring = 'move to body of a compound statement')
-add_csc(acmd)
+compound_statements.add_csc(acmd)
+
+ctrl_structures = CSCmdSet('control structures', 
+    description = 'commands for dictation and navigation of control structures')
+
 acmd = CSCmd(spoken_forms=['for', 'for loop'],
              meanings={ContC(): c_simple_for, ContPy(): py_simple_for,
                        ContPerl(): c_simple_for},
              docstring='for loop')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['while', 'while loop'],
              meanings={ContC(): c_simple_while,
                        ContPy(): ActionInsert('while ', ':\n\t'),
                        ContPerl(): c_simple_while},
              docstring='while loop')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
                            'while body'],
              meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
                        ContPerl(): c_goto_body},
              docstring = 'move to body of loop')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['if', 'if statement'],
              meanings={ContPy(): ActionInsert('if ', ':\n\t'),
-                       ContC(): ActionInsert('if (', ')\n\t{\n\t}'),
-                       ContPerl(): ActionInsert('if (', ') {\n\t}')},
+                       ContC(): ActionInsert('if (', ')\n\t{\n\t}',
+                           spacing = no_space_after),
+                       ContPerl(): ActionInsert('if (', ') {\n\t}',
+                           spacing = no_space_after)},
              docstring = 'if statement')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
@@ -663,7 +769,7 @@ acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
                           code_bef = 'else:\n\t', code_after = '', where = -1),
@@ -671,50 +777,66 @@ acmd = CSCmd(spoken_forms=['else clause', 'else'],
                        ContC(): c_else,
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
                            'if body'],
              meanings={ContPy(): py_goto_body, ContC(): c_goto_body,
                        ContPerl(): c_goto_body},
              docstring='move to body of a conditional')
-add_csc(acmd)
+ctrl_structures.add_csc(acmd)
+
+
+data_structures = CSCmdSet('data structures', 
+    description = 'commands for dictation of commands to define new data types')
+
 acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
                            'class definition', 'class declaration',
                            'new class'],
              meanings={ContC(): cpp_class_definition,
                        ContPy(): py_class_definition},
              docstring='class definition')
-add_csc(acmd)
+data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
                            'is subclass of', 'with superclass',
                            'with superclasses'],
              meanings={ContC(): cpp_subclass, ContPy(): gen_parens_pair},
              docstring='superclasses of a class')
-add_csc(acmd)
+data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['class body'],
              meanings={ContC(): cpp_class_body, ContPy(): py_class_body},
              docstring='move to body of class definition')
-add_csc(acmd)
+data_structures.add_csc(acmd)
+
+function_definitions = CSCmdSet('function definitions', 
+    description = 'commands for defining new functions')
 acmd = CSCmd(spoken_forms=['define method', 'declare method', 'add method'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_method_declaration},
              docstring='method definition')
-add_csc(acmd)
+function_definitions.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['define function', 'declare function'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): c_function_declaration},
              docstring='function definition')
-add_csc(acmd)
+function_definitions.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
              meanings={ContC(): c_function_add_argument,
                        ContPy(): py_function_add_argument},
              docstring='move to end of argument list of a function call or declaration')
-add_csc(acmd)
+function_definitions.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['method body'],
              meanings={ContC(): c_function_body, ContPy(): py_function_body},
              docstring='move to body of a function definition')
-add_csc(acmd)
+function_definitions.add_csc(acmd)
 
+add_csc_set(function_definitions)
+add_csc_set(data_structures)
+add_csc_set(ctrl_structures)
+add_csc_set(compound_statements)
+add_csc_set(functional_pairs)
+add_csc_set(new_statement)
+add_lsa_set(empty_pairs)
+add_lsa_set(misc_aliases)
 
 ###############################################################################
 # Python specific stuff
@@ -737,85 +859,130 @@ define_language('python',
 #
 # CSCs and LSAs specific to Python
 #
-add_lsa(LSAlias(['none'], {'python': 'None'}))
-add_lsa(LSAlias(['self dot'], {'python': 'self.'}))
-add_lsa(LSAlias(['continue statement'], {'python': '\\\n'}))
-add_lsa(LSAlias(['assert'], {'python': 'assert '}))
-add_lsa(LSAlias(['del', 'delete', 'delete', 'delete', 'delete object',
-         'delete instance'],
+
+misc_python = LSAliasSet('miscellaneous Python fragments',
+    description = "miscellaneous Python expressions and constructs")
+
+misc_python_cmds = CSCmdSet('miscellaneous Python commands',
+    description = "miscellaneous Python commands")
+
+misc_python.add_lsa(LSAlias(['none'], {'python': 'None'}))
+misc_python.add_lsa(LSAlias(['self dot'], {'python': 'self.'}, spacing =
+    no_space_after))
+acmd = CSCmd(spoken_forms=['continue statement'],
+             meanings={ContPy(): ActionInsert('\\\n', '', 
+                                     spacing = no_space_after)},
+             docstring='python lamdba function')
+misc_python_cmds.add_csc(acmd)
+
+python_statements = LSAliasSet('simple Python statements', 
+    description = 'aliases for simple Python statements')
+
+python_statements.add_lsa(LSAlias(['global', 'global variable', 'global variables'],
+        {'python': 'global '}))
+
+python_statements.add_lsa(LSAlias(['del', 'delete', 'delete object',
+         'delete instance', 'delete item'],
         {'python': 'del '}))
-add_lsa(LSAlias(['raise', 'raise exception'], {'python': 'raise '}))
+
+python_statements.add_lsa(LSAlias(['exec'], {'python': 'exec '}))
+python_statements.add_lsa(LSAlias(['pass'], {'python': 'pass\n'}))
+
+
+python_statements.add_lsa(LSAlias(['assert'], {'python': 'assert '}))
+
+python_statements.add_lsa(LSAlias(['raise', 'raise exception'], {'python': 'raise '}))
+python_compound = CSCmdSet('Python compound statements',
+    description = "commands for dictating Python-specific compound statements")
+
 acmd = CSCmd(spoken_forms=['lambda'],
              meanings={ContPy(): ActionInsert('lambda ', ': ')},
              docstring='python lamdba function')
-add_csc(acmd)
-add_lsa(LSAlias(['return'], {'python': 'return '}))
-add_lsa(LSAlias(['break'], {'python': 'break\n'}))
-add_lsa(LSAlias(['global', 'global variable', 'global variables'],
-        {'python': 'global '}))
-add_lsa(LSAlias(['from', 'from module'], {'python': 'from '}))
-# this form used for statements : import module1, module2, etc...
-add_lsa(LSAlias(['import', 'import module', 'import modules'], {'python': 'import '}))
-# this form used for statements like: from module symbol1, symbol2, etc...
-add_lsa(LSAlias(['import symbols', 'import symbol'], {'python': ' import '}))
-# this form used for statements like: from module import all
-add_lsa(LSAlias(['import all'], {'python': ' import all'}))
+python_compound.add_csc(acmd)
+
 acmd = CSCmd(spoken_forms=['try'],
-             meanings={ContPy(): ActionInsert('try:\n\t', '')},
+             meanings={ContPy(): ActionInsert('try:\n\t', '', 
+                 spacing = no_space_after)},
              docstring='python try statement')
-add_csc(acmd)
+python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions', 'except when', 'except clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 'except ', ': \n\t')},
              docstring='python except statement')
-add_csc(acmd)
+python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['finally', 'finally do'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 'finally:\n\t', '')},
              docstring='finally clause of python try statement')
-add_csc(acmd)
-add_lsa(LSAlias(['continue'], {'python': 'continue\n'}))
-add_lsa(LSAlias(['exec'], {'python': 'exec '}))
-add_lsa(LSAlias(['pass'], {'python': 'pass\n'}))
-add_lsa(LSAlias(['in', 'in list'], {'python': ' in '}))
-add_lsa(LSAlias(['triple quote', 'open triple quote', 'close triple quote'],
-        {'python': '"""'}))
-add_lsa(LSAlias(['empty triple quotes', 'empty triple'], {'python': '""""""'}))
-acmd = CSCmd(spoken_forms=['between triple quotes', 'triple quotes'],
-             meanings={ContAny(): ActionInsert('"""', '"""')},
-             docstring = 'put cursor between triple quotes: """^"""')
-add_csc(acmd)
+python_compound.add_csc(acmd)
 
-add_lsa(LSAlias(['three single quote', 'open three single quote',
-         'open three single', 'close three single quote',
-         'close three single'],
-         {'python': '\'\'\''}))
-add_lsa(LSAlias(['empty three single quotes', 'empty three single'],
-         {'python': '\'\'\'\'\'\''}))
-acmd = CSCmd(spoken_forms=['between three single quotes',
-                           'between three single', 'three single quotes'],
-             meanings={ContAny(): ActionInsert('\'\'\'', '\'\'\'')},
-             docstring = 'put cursor between three single quotes: \'\'\'^\'\'\'')
-add_csc(acmd)
-add_lsa(LSAlias(['concatenate', 'concatenate with'], {'python': ' + '}))
-add_lsa(LSAlias(['collect arguments', 'collect rest'], {'python': '**'}))
+python_imports = LSAliasSet('Python import statements',
+    description = "Python import module statements")
+
+python_imports.add_lsa(LSAlias(['from', 'from module'], {'python': 'from '}))
+# this form used for statements : import module1, module2, etc...
+python_imports.add_lsa(LSAlias(['import', 'import module', 'import modules'], {'python': 'import '}))
+# this form used for statements like: from module symbol1, symbol2, etc...
+python_imports.add_lsa(LSAlias(['import symbols', 'import symbol'], {'python': ' import '}))
+# this form used for statements like: from module import all
+python_imports.add_lsa(LSAlias(['import all'], {'python': ' import all'}))
+
+python_comparisons = LSAliasSet('Python comparison operators',
+    description = "Python-specific comparison operators")
+python_comparisons.add_lsa(LSAlias(['in', 'in list', 'in sequence'], {'python': ' in '}))
+
+python_quotes = PairedQuotes(name = 'Python-specific quotes',
+        plural_pair = ['between %s', '%s'])
+python_quotes.add('"""', ['triple-quote', 'triple-quotes'], ['triple-quotes'], 
+    no_empty = 1)
+python_quotes.add("'''", ['triple-single-quote', 'three-single-quote', 'three-single'], ['triple-single-quotes', 'three-single-quotes', 'three-singles'], 
+    no_empty = 1)
+python_quotes.create(interpreter, force = 1)
+
+python_operators = LSAliasSet('Python operators', 
+    description = 'Python-specific operators')
+python_operators.add_lsa(LSAlias(['concatenate', 'concatenate with'], 
+    {'python': ' + '}, binary_operator))
+python_operators.add_lsa(LSAlias(['collect arguments', 'collect rest'], 
+    {'python': '**'}, no_space_after))
 
 # '<>' is obsolete in python ('!=' is now the encouraged form), but we include
 # it so we can select code that uses the obsolete form
-add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
-        'is different from', 'differs from', 'less greater',
-        'less than greater than'],
-        {'python': ' <> '}))
-add_lsa(LSAlias(['is', 'is same', 'same as', 'is same as'], {'python': ' is '}))
-add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
+# UGH - this would shadow the new form for dictation - either one could
+# be recognized
+#add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+#        'is different from', 'differs from', 'less greater',
+#        'less than greater than'],
+#        {'python': ' <> '}))
+
+python_comparisons.add_lsa(LSAlias(['is', 'is same', 'same as', 'is same as'], {'python': ' is '}))
+
+
+misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
+
+python_functional = CSCmdSet('Python paired punctuation',
+    description = "Python-specific paired punctuation")
+
 acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
                            'tuple with items'],
-             meanings={ContPy(): ActionInsert('(', ')')},
-             docstring='python tuple with enumareted elements')
-add_csc(acmd)
-acmd = CSCmd(spoken_forms=['range of'],
-             meanings={ContPy(): ActionInsert('range(', ')')},
-             docstring='types range(^)')
-add_csc(acmd)
+             meanings={ContPy(): ActionInsert('(', ')', 
+                                     spacing = like_open_paren)},
+             docstring='python tuple with enumerated elements')
+python_functional.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['range of'],
+             meanings={ContPy(): ActionInsert('range(', ')', 
+                                     spacing = no_space_after)},
+             docstring='types range(^)')
+python_functional.add_csc(acmd)
+
+
+add_lsa_set(python_statements)
+add_lsa_set(misc_python)
+add_lsa_set(python_comparisons)
+add_lsa_set(python_operators)
+add_lsa_set(python_imports)
+add_csc_set(python_compound)
+add_csc_set(python_functional)
+add_csc_set(misc_python_cmds)
 
 ###############################################################################
 # C/C++ specific stuff
@@ -830,26 +997,35 @@ define_language('C',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
 
+c_preprocessor_cmds = CSCmdSet('C pre-processor', 
+description = """dictating C pre-processor commands""")
+
 acmd = CSCmd(spoken_forms=['header wrapper', 'wrap header'],
              meanings={ContC(): ActionHeaderWrapper()},
              docstring='insert code template for unique #include')
-add_csc(acmd)
+c_preprocessor_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['macro if'],
              meanings={ContC(): ActionInsert('#ifdef', '\n#endif\n')},
              docstring='insert code template for #ifdef')
-add_csc(acmd)
+c_preprocessor_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['macro if not'],
              meanings={ContC(): ActionInsert('#ifndef', '\n#endif\n')},
              docstring='insert code template for #ifndef')
-add_csc(acmd)
+c_preprocessor_cmds.add_csc(acmd)
 
-add_lsa(LSAlias(['macro define'], {'C': '#define'}))
+c_preprocessor = LSAliasSet('C pre-processor aliases', 
+description = """aliases for dictating C pre-processor commands""")
 
-add_lsa(LSAlias(['macro include'], {'C': '#include'}))
+c_preprocessor.add_lsa(LSAlias(['macro define'], {'C': '#define'}))
 
-add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
+c_preprocessor.add_lsa(LSAlias(['macro include'], {'C': '#include'}))
+
+c_preprocessor.add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
+
+add_csc_set(c_preprocessor_cmds)
+add_lsa_set(c_preprocessor)
 
 ###############################################################################
 # Add words which are missing from the SR vocab
@@ -880,5 +1056,7 @@ alt_grouping.create(interpreter, force = 1)
 std_grouping.create(interpreter)
 alt_quotes.create(interpreter, force = 1)
 std_quotes.create(interpreter)
+
+
 
 if (__name__ == '__main__'): sr_interface.disconnect()

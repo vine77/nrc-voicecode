@@ -57,8 +57,9 @@ from wxMediator import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-                        'SB_ServiceIndent':1,
-                        'ActionInsertNewClause':1,
+#                        'SB_ServiceIndent':1,
+#                        'ActionInsertNewClause':1,
+#                        'sr_interface.connect':1,
 #      'SimpleSelection':1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
@@ -117,6 +118,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
                             }, 
                             args)
         self.add_owned('wax_console')
+        sr_interface.connect(mic_change_callback = self.mic_change)
         app = AppStateGenEdit.AppStateGenEdit(self.wax_console)
         if not self.the_mediator.new_editor(app, server = 0, check_window = 1):
             sys.stderr.write('NewMediatorObject.new_editor failed\n')
@@ -167,7 +169,6 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
             app_name = 'WaxEdSim',
             command_space = self.command_space, curr_dir =
             vc_globals.test_data, show = 0)
-        sr_interface.connect(mic_change_callback = self.mic_change)
 
     def create_server(self, test_server):
         """create the TCP server for the mediator, if running in server
@@ -222,7 +223,7 @@ OPTIONS
 if __name__ == '__main__':
     opts, args = util.gopt(['h', None])
     
-    sr_interface.connect()
+#    sr_interface.connect()
 
     #
     # Create a global grammar manager

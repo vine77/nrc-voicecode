@@ -63,15 +63,15 @@ alpha_bravo["x"] = "xray"
 alpha_bravo["y"] = "yankee"
 alpha_bravo["z"] = "zulu"
 
-def add_escaped_characters(alias_set, back_slash = 'back slash', 
+def add_escaped_characters(commands, back_slash = 'back slash', 
     alphabet = 'abcdefghijklmnopqrstuvwxyz',
-    name_map = alpha_bravo, cap = "cap", language = None):
-    """define LSAs for characters escaped with backslashes
+    name_map = alpha_bravo, cap = "cap", context = None):
+    """define CSCs for characters escaped with backslashes
 
     **INPUTS**
 
-    *LSAliasSet alias_set* -- set to which to add the language-specific
-    aliases 
+    *CSCmdSet commands* -- set to which to add the context-sensitive
+    commands
 
     *STR* back_slash -- spoken form for the backslash
 
@@ -84,12 +84,13 @@ def add_escaped_characters(alias_set, back_slash = 'back slash',
     *STR* cap -- spoken form indicating that the letter should be
     capitalized, or None to omit capitalized forms
 
-    *STR* language -- language to which the LSAs will be specific, or
-    None to make them language-independent
+    *Context* context -- the context in which the CSCs should apply, or
+    None for ContAny()
     """
+    if context is None:
+        context = ContAny()
     for letter in alphabet:
-        ending = ["%s." % letter]
-        ending.append("%s" % letter)
+        ending = ["%s." % string.upper(letter)]
         if name_map:
             try:
                 named = "%s" % name_map[letter]
@@ -99,15 +100,19 @@ def add_escaped_characters(alias_set, back_slash = 'back slash',
                 ending.append(named)
         spoken = map(lambda s, prefix = back_slash: "%s %s" % (prefix, s),
                      ending)
-        alias_set.add_lsa(LSAlias(spoken, {language: '\\%s' % letter}, 
-            spacing = no_space_before | no_space_after))
+        acmd = CSCmd(spoken_forms = spoken, 
+            meanings = {context: ActionInsert('\\%s' % letter, '',
+                spacing = no_space_before | no_space_after)},
+                docstring = 'escaped character')
+        commands.add_csc(acmd)
         if cap:
             cap_spoken = map(lambda s, prefix = ("%s %s" % (back_slash, cap)): \
-               "%s %s" % (prefix, s), 
-               ending)
-            alias_set.add_lsa(LSAlias(cap_spoken, 
-                {language: '\\%s' % string.upper(letter)},
-                spacing = no_space_before | no_space_after))
+               "%s %s" % (prefix, s), ending)
+            acmd = CSCmd(spoken_forms = cap_spoken, meanings = \
+                {context: ActionInsert('\\%s' % string.upper(letter), '',
+                    spacing = no_space_before | no_space_after)},
+                    docstring = 'cap escaped character')
+            commands.add_csc(acmd)
 
 
 def add_backspacing(commands, max_count = 5, primary = 'back space', 
@@ -138,12 +143,14 @@ def add_backspacing(commands, max_count = 5, primary = 'back space',
     if context is None:
         context = ContAny()
     for i in range(1, max_count + 1):
-        count_string = " %s" % i
-        if i == 1:
-            count_string = ""
+        count_string = "%s" % i
         spoken = ["%s %s" % (primary, count_string)]
         if alternate:
             spoken.append("%s %s" % (alternate, count_string))
+        if i == 1:
+            spoken = [primary]
+            if alternate:
+                spoken.append(alternate)
         command = CSCmd(spoken_forms = spoken, 
             meanings = {context: ActionBackspace(n_times = i)},
             docstring = "Backspace %d characters" % i)
