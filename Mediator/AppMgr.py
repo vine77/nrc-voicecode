@@ -86,6 +86,12 @@ class AppMgr(OwnerObject):
     *{STR : INT}* past_instances -- map from editor application name 
     to number of current and past instances
 
+    *{STR : STR}* title_prefixes -- map from editor application name 
+    to title prefix for that application.  A title prefix is a unique 
+    string for each application, used as the prefix of the title 
+    string (which is in turn included as a substring of the window 
+    title, if the editor can do so)
+
     *{INT : [STR]}* windows -- map from currently known windows to
     lists of associated instance names, sorted in the order of instances
     most recently known to be active
@@ -97,9 +103,16 @@ class AppMgr(OwnerObject):
     corresponding AppState interfaces
 
     **CLASS ATTRIBUTES**
+
+    *[STR]* unknown_app_prefixes -- list of title prefixes to use with
+    editors without predefined title_prefixes
     
-    *none*
     """
+    unknown_app_prefixes = ['Arthur', 'Bryan', 'Charlie', 'David', 'Eric',
+	'Franklin', 'Gordon', 'Harry', 'Isaac', 'Joshua', 'Kelly', 'Larry',
+	'Michael', 'Neville', 'Oscar', 'Peter', 'Roger', 'Steven', 'Thomas',
+	'Walther']
+    unknown_app_prefixes.reverse()
 
     def __init__(self, recog_mgr, **args):
 	"""
@@ -111,6 +124,7 @@ class AppMgr(OwnerObject):
         self.deep_construct(AppMgr,
                             {'instance_names': {}, 
 			    'instances': {}, 'instance_data': {},
+			    'title_prefixes': {},
 			    'recog_mgr': recog_mgr,
 			    'past_instances' : {}},
                             args)
@@ -143,6 +157,33 @@ class AppMgr(OwnerObject):
 	if app_name not in self.app_names():
 	    return []
 	return self.instance_names[app_name]
+	
+    def add_prefix(self, app_name, title_prefix):
+	"""add a title prefix for an editor application
+
+	**INPUTS**
+
+	*STR* app_name -- name of the editor application
+
+	*STR* title_prefix  -- a unique string for each application, 
+	used as the prefix of the title string (which is in turn 
+	included as a substring of the window title, if the editor 
+	can do so).  The prefix should be entirely alphabetic and
+	contain no spaces or punctuation.
+
+	**OUTPUTS**
+
+	*BOOL* -- false if app_name was already known, or prefix wasn't
+	unique
+	"""
+
+	if app_name in self.title_prefixes.keys():
+	    return 0
+	if title_prefix in self.title_prefixes.values():
+	    return 0
+	if title_prefix in self.unknown_app_prefixes:
+	    return 0
+	self.title_prefixes[app_name] = title_prefix
 	
     def app_names(self):
 	"""names of applications being managed
@@ -186,6 +227,23 @@ class AppMgr(OwnerObject):
 	"""
 	self.recog_mgr.add_module(module)
 
+    def trust_current(self, trust = 1):
+	"""specifies whether the RecogStartMgr should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**INPUTS**
+
+	*BOOL* trust -- 1 if RSM should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.recog_mgr.trust_current(trust)
+	
     def known_window(self, window):
 	"""is window a known window ID?
 
@@ -229,18 +287,11 @@ class AppMgr(OwnerObject):
 	"""
 	return self.recog_mgr.window_info()
 
-    def _add_new_instance(self, app_name, title_prefix, app):
+    def _add_new_instance(self, app):
 	"""private method called internally to do the work of
 	new_instance, except for notifying the recog_mgr.
 
 	**INPUTS**
-
-	*STR* app_name -- name of the application 
-	(e.g. "Emacs (Win)", "jEdit")
-
-	*STR* title_prefix -- a unique string for each application, used
-	as the prefix of the title string (which is in turn included as
-	a substring of the window title, if the editor can do so)
 
 	*AppState* app --  AppState interface corresponding to the new
 	instance
@@ -250,10 +301,14 @@ class AppMgr(OwnerObject):
 	*STR* -- name of the application instance.  Necessary
 	if you want to add windows to the application in the future.
 	"""
+	app_name = app.app_name
 	if app_name not in self.app_names():
 	    self.instance_names[app_name] = []
 	    self.past_instances[app_name] = 0
+	    if app_name not in self.title_prefixes.keys():
+		self.title_prefixes[app_name] = self.unknown_app_prefixes.pop()
 	n = self.past_instances[app_name]
+	title_prefix = self.title_prefixes[app_name]
 	new_name = app_name + "(%d)" % (n)
 	self.past_instances[app_name] = n + 1
 	self.instances[new_name] = app
@@ -266,17 +321,11 @@ class AppMgr(OwnerObject):
 #	print repr(app)
 	return new_name
 
-    def new_instance(self, app_name, title_prefix, app, check_window = 1):
+    def new_instance(self, app, check_window = 1,
+	    window_info = None):
 	"""add a new application instance
 
 	**INPUTS**
-
-	*STR* app_name -- name of the application 
-	(e.g. "Emacs (Win)", "jEdit")
-
-	*STR* title_prefix -- a unique string for each application, used
-	as the prefix of the title string (which is in turn included as
-	a substring of the window title, if the editor can do so)
 
 	*AppState* app --  AppState interface corresponding to the new
 	instance
@@ -284,28 +333,27 @@ class AppMgr(OwnerObject):
 	*BOOL* check_window -- should we check to see if the
 	current window belongs to this instance?
 
+	*(INT, STR, STR) window_info*  -- window id, title, and module of 
+	the current window as detected by the TCP server when it
+	originally processed the new editor connection, or None to let
+	RSM.new_instance check now.  Ignored unless check_window is
+	true.
+
 	**OUTPUTS**
 
 	*STR* -- name of the application instance.  Necessary
 	if you want to add windows to the application in the future.
 	"""
-	new_name = self._add_new_instance(app_name, title_prefix, app)
-	self.recog_mgr.new_instance(new_name, check_window)
+	new_name = self._add_new_instance(app)
+	self.recog_mgr.new_instance(new_name, check_window, window_info)
 #	print repr(self.app_instance(new_name))
 	return new_name
 
-    def new_universal_instance(self, app_name, title_prefix, app,
+    def new_universal_instance(self, app,
 	exclusive = 1):
 	"""add a new application instance
 
 	**INPUTS**
-
-	*STR* app_name -- name of the application 
-	(e.g. "Emacs (Win)", "jEdit")
-
-	*STR* title_prefix -- a unique string for each application, used
-	as the prefix of the title string (which is in turn included as
-	a substring of the window title, if the editor can do so)
 
 	*AppState* app --  AppState interface corresponding to the new
 	instance
@@ -317,7 +365,7 @@ class AppMgr(OwnerObject):
 	*STR* -- name of the application instance.  Necessary
 	if you want to add windows to the application in the future.
 	"""
-	new_name = self._add_new_instance(app_name, title_prefix, app)
+	new_name = self._add_new_instance(app)
 	self.recog_mgr.new_universal_instance(new_name, exclusive)
 #	print repr(self.app_instance(new_name))
 	return new_name

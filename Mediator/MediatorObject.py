@@ -151,6 +151,43 @@ class MediatorObject(Object.Object):
 #	print 'Mediator constructor: allResults = %d\n' % allResults
 #	print traceback.extract_stack()
 
+    def define_config_functions(self, names, exclude = []):
+        """Adds the appropriate configuration functions to the  given
+	namespace, to allow the configuration file to access the
+	appropriate mediator methods.  These functions are generally
+	bound methods.
+        
+        **INPUTS**
+
+	*{STR: ANY}* names -- the dictionary or namespace to which to
+	add the functions
+
+	*[STR] exclude* -- list of mediator object attribute objects 
+	to ignore during reconfiguration.  Currently, the only recognized 
+	attributes are ['editors', 'interp'].  MediatorObject may
+	exclude some attribute objects not supported by this version, 
+	even if they are not specified.
+        
+        **OUTPUTS**
+        
+        *none* 
+        """        
+	names['add_module'] = do_nothing
+	names['add_prefix'] = do_nothing
+	names['trust_current_window'] = do_nothing
+	if 'interp' in exclude:
+	    names['add_csc'] = do_nothing
+	    names['add_lsa'] = do_nothing
+	    names['add_abbreviation'] = do_nothing
+	    names['standard_symbols_in'] = do_nothing
+	    names['print_abbreviations'] = do_nothing
+	else:
+	    names['add_csc'] = self.add_csc
+	    names['add_lsa'] = self.add_lsa
+	    names['add_abbreviation'] = self.add_abbreviation
+	    names['standard_symbols_in'] = self.standard_symbols_in
+	    names['print_abbreviations'] = self.print_abbreviations
+
 
     def configure(self, config_file=vc_globals.default_config_file):
         """Configures a mediator object based on a configuration file.
@@ -177,12 +214,7 @@ class MediatorObject(Object.Object):
 		self.code_select_grammar.activate()                
                         
 	config_dict = {}
-	config_dict['add_module'] = do_nothing
-	config_dict['add_csc'] = self.add_csc
-	config_dict['add_lsa'] = self.add_lsa
-	config_dict['add_abbreviation'] = self.add_abbreviation
-	config_dict['standard_symbols_in'] = self.standard_symbols_in
-	config_dict['print_abbreviations'] = self.print_abbreviations
+	self.define_config_functions(config_dict)
         try:
             execfile(config_file, config_dict)
         except Exception, err:

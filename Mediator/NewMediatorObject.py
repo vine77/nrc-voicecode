@@ -25,6 +25,9 @@ import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interfa
 import tcp_server
 import AppMgr, RecogStartMgr, GramMgr
 import MediatorConsole
+import sr_grammars
+import RecogStartMgrNL
+import sr_grammars_NL
 
 """Defines main class for the mediator.
 
@@ -160,7 +163,29 @@ class NewMediatorObject(Object.OwnerObject):
                             {})
 	if self.interp == None:
 	    self.new_interpreter()
+	if self.editors == None:
+	    self.new_app_mgr()
 
+    def new_app_mgr(self):
+	"""create a new AppMgr if one was not supplied to  the
+	constructor
+	
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if a new AppMgr was sucessfully created
+	"""
+	if self.editors != None:
+	    return 1 # we've already got one!
+	grammar_factory = WinGramFactoryNL()
+	GM_factory = WinGramMgrFactory(grammar_factory, self.interp)
+	recog_mgr = RecogStartMgrNL(GM_factory)
+	self.editors = AppMgr(recog_mgr)
+	return 1
+    
     def new_interpreter(self):
 	"""create a new interpreter
 
@@ -194,6 +219,29 @@ class NewMediatorObject(Object.OwnerObject):
 #	print traceback.extract_stack()
 	self._configure_from_file(config_file = config_file)
 
+    def define_config_functions(self, names, exclude = []):
+        """Adds the appropriate configuration functions to the  given
+	namespace, to allow the configuration file to access the
+	appropriate mediator methods.  These functions are generally
+	bound methods.
+        
+        **INPUTS**
+
+	*{STR: ANY}* names -- the dictionary or namespace to which to
+	add the functions
+
+	*[STR] exclude* -- list of mediator object attributes objects 
+	to ignore during reconfiguration.  Currently, the only recognized 
+	attributes are ['editors', 'interp'].
+        
+        **OUTPUTS**
+        
+        *none* 
+        """        
+	self.before_app_mgr_config(names, ignore = 'editors' in exclude)
+	self.before_interp_config(names, ignore = 'interp' in exclude)
+
+
     def _configure_from_file(self, exclude = [], config_file = None):
 	"""private method used by configure and reconfigure to perform
 	 actual configuration.
@@ -213,10 +261,7 @@ class NewMediatorObject(Object.OwnerObject):
         """        
 
 	config_dict = {}
-	if not 'editors' in exclude:
-	    self.before_app_mgr_config(config_dict)
-	if not 'interp' in exclude:
-	    self.before_interp_config(config_dict)
+	self.define_config_functions(config_dict, exclude)
         try:
             execfile(config_file, config_dict)
         except Exception, err:
@@ -254,8 +299,12 @@ class NewMediatorObject(Object.OwnerObject):
 	"""
 	if self.ignore:
 	    config_dict['add_module'] = do_nothing
+	    config_dict['trust_current_window'] = do_nothing
+	    config_dict['add_app_prefix'] = do_nothing
 	else:
 	    config_dict['add_module'] = self.add_module
+	    config_dict['trust_current_window'] = self.trust_current_window
+	    config_dict['add_app_prefix'] = self.add_app_prefix
 
     def before_interp_config(self, config_dict, reset = 1, ignore = 0):
 	"""called by configure to reset or replace the current interpreter 
@@ -504,6 +553,44 @@ class NewMediatorObject(Object.OwnerObject):
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
 	return self.editors.window_info()
+
+    def trust_current_window(self, trust = 1):
+	"""specifies whether the RecogStartMgr should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**INPUTS**
+
+	*BOOL* trust_current_window -- 1 if RSM should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.editors.trust_current(trust)
+
+    def add_app_prefix(self, app_name, title_prefix):
+	"""specifies a title prefix to use for a given editor application.
+
+	**INPUTS**
+
+	*STR* app_name -- name of the editor application
+
+	*STR* title_prefix  -- a unique string for each application, 
+	used as the prefix of the title string (which is in turn 
+	included as a substring of the window title, if the editor 
+	can do so).  The prefix should be entirely alphabetic and
+	contain no spaces or punctuation.
+
+	**OUTPUTS**
+
+	*BOOL* -- false if app_name was already known, or prefix wasn't
+	unique
+	"""
+	return self.editors.add_prefix(app_name, title_prefix)
+
 
     
 ###############################################################################

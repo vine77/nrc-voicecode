@@ -68,8 +68,8 @@ if (__name__ == '__main__'):
 #	global test_mediator
 	test_mediator = MediatorObject.MediatorObject()
 #	MediatorObject.to_configure = test_mediator
-	global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
-	    standard_symbols_in
+	glob_names = globals()
+	test_mediator.define_config_functions(glob_names)
 #    add_abbreviation = MediatorObject.add_abbreviation
 #    add_csc = MediatorObject.add_csc
 #    add_lsa = MediatorObject.add_lsa
@@ -81,11 +81,13 @@ if (__name__ == '__main__'):
 #	print_abbreviations = MediatorObject.to_configure.print_abbreviations
 #	standard_symbols_in = MediatorObject.to_configure.standard_symbols_in
 
-	add_abbreviation = test_mediator.add_abbreviation
-	add_csc = test_mediator.add_csc
-	add_lsa = test_mediator.add_lsa
-	print_abbreviations = test_mediator.print_abbreviations
-	standard_symbols_in = test_mediator.standard_symbols_in
+#	global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
+#	    standard_symbols_in
+#	add_abbreviation = test_mediator.add_abbreviation
+#	add_csc = test_mediator.add_csc
+#	add_lsa = test_mediator.add_lsa
+#	print_abbreviations = test_mediator.print_abbreviations
+#	standard_symbols_in = test_mediator.standard_symbols_in
         
 	if sr_interface.speech_able():
 #	    natlink.natConnect()    
@@ -124,9 +126,22 @@ add_abbreviation('attr', ['attribute'])
 #  associate_language('py', 'python')
 
 ###############################################################################
-# Known editor modules (ignored by old MediatorObject)
+# AppMgr and RecogStartMgr (ignored by old MediatorObject)
 ###############################################################################
 
+
+#  should the RecogStartMgr trust that the current
+#  window corresponds to the editor when the editor first connects to
+#  VoiceCode, or when it notifies VoiceCode of a new window.
+
+# currently, do not trust to maintain compatibility with regression test
+# results
+
+trust_current_window(0)
+
+# Known editor modules 
+
+#     define modules
 mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
 	editor = 'emacs')
 mod_exceed = \
@@ -134,10 +149,20 @@ mod_exceed = \
     module_name = 'EXCEED')
 
 mod_ttssh = KnownTargetModule.RemoteShell(module_name = 'TTSSH')
+
+mod_python = KnownTargetModule.LocalInterpreter(module_name = 'PYTHON')
   
+#     add them to the RecogStartMgr
 add_module(mod_Emacs)
 add_module(mod_exceed)
 add_module(mod_ttssh)
+add_module(mod_python)
+
+# Known editors and the prefixes used to form their unique instance
+# strings
+add_prefix('emacs', 'Yak')
+add_prefix('WaxEdit', 'Floor')
+add_prefix('EdSim', 'Standby')
 
 #############################################################################
 # CSCs and LSAs that apply for ALL languages

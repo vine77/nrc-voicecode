@@ -59,7 +59,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
                             {'the_editor': editor, 
                              'active_buffer_name' : "",
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
-                            attrs,
+                            attrs, new_default = {'app_name': 'WaxEdit'}
                             )
 	self.add_owned('breadcrumbs_srv')
         self.open_buffers[self.active_buffer_name] =  \

@@ -39,6 +39,8 @@ import Queue
 # activate some traces.
 #debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
 #debug.config_traces(status="on", active_traces = 'all')
+#debug.config_traces(status="on", active_traces = {'sr_interface':1},
+#allow_trace_id_substrings = 1)
 
 #
 # Port numbers for the communication link
@@ -182,7 +184,8 @@ def app_state_factory(app_name, id, listen_msgr, talk_msgr):
     
     **OUTPUTS**
     
-    *none* -- 
+    *AppStateMessaging* -- the new AppStateMessaging representing the
+    editor instance 
 
     ..[AppState] file:///./AppState.AppState.html"""
 
@@ -193,9 +196,12 @@ def app_state_factory(app_name, id, listen_msgr, talk_msgr):
     else:
         print "WARNING: Unknown editor '%s'" % app_name
         print "Connection refused"
+	return None
         
-    if app: app.app_name = app_name
+    app.app_name = app_name
     return app
+
+
 
 
 def vc_authentification(messenger):
@@ -207,7 +213,7 @@ def vc_authentification(messenger):
 
     [Messenger] *messenger* -- Messenger to be used for the connection.
 
-    [RecogStrartMgr] *recog_mgr* -- Object responsible for
+    [RecogStartMgr] *recog_mgr* -- Object responsible for
     dispatching recognition events to the various editors.
         
 

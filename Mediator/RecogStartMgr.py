@@ -175,21 +175,30 @@ class RecogStartMgr(OwnerObject):
     *AppMgr* editors -- the parent AppMgr object, which provides
     information about editor application instances
 
+    *BOOL* trust_current_window -- 1 if RSM should trust that the current
+    window corresponds to the editor when the editor first connects to
+    VoiceCode, or when it notifies VoiceCode of a new window.
+
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, editors, **args):
+    def __init__(self, editors, trust_current_window = 0, **args):
 	"""
 	**INPUTS**
 
 	*AppMgr* editors -- the editors AppMgr object, which provides
 	information about editor application instances
+
+	*BOOL* trust_current_window -- 1 if RSM should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
 	"""
 
         self.deep_construct(RecogStartMgr,
-                            {'editors': editors
+                            {'editors': editors,
+			     'trust_current_window': trust_current_window
 			    },
                             args)
 	self.name_parent('editors')
@@ -206,6 +215,23 @@ class RecogStartMgr(OwnerObject):
 	*none*
 	"""
 	self.editors = manager
+
+    def trust_current(self, trust = 1):
+	"""specifies whether the RecogStartMgr should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**INPUTS**
+
+	*BOOL* trust -- 1 if RSM should trust that the current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.trust_current_window = trust
 	
     def window_info(self):
 	"""find the window id, title, and module of the current window
@@ -396,7 +422,7 @@ class RecogStartMgr(OwnerObject):
 	"""
 	debug.virtual('RecogStartMgr.instance_module')
     
-    def new_instance(self, instance, check_window = 1):
+    def new_instance(self, instance, check_window = 1, window_info = None):
 	"""method called by AppMgr to notify RecogStartMgr that a new
 	editor instance has been added, and (optionally) to tell it to 
 	check if the current window belongs to (or contains) that instance
@@ -407,6 +433,12 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* check_window -- should we check to see if the
 	current window belongs to this instance?
+
+	*(INT, STR, STR) window_info*  -- window id, title, and module of 
+	the current window as detected by the TCP server when it
+	originally processed the new editor connection, or None to let
+	RSM.new_instance check now.  Ignored unless check_window is
+	true.
 
 	**OUTPUTS**
 
@@ -565,34 +597,24 @@ class RSMInfrastructure(RecogStartMgr):
     *BOOL* active -- flag indicating whether the RecogStartMgr is
     active
 
-    *BOOL* trust_current_window -- 1 if RSM should trust that a current
-    window corresponds to the editor when the editor first connects to
-    VoiceCode, or when it notifies VoiceCode of a new window.
-
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, GM_factory, trust_current_window = 0, **args):
+    def __init__(self, GM_factory, **args):
 	"""
 	**INPUTS**
 
 	*GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
 	objects for new instances
 
-	*BOOL* trust_current_window -- 1 if RSM should trust that a current
-	window corresponds to the editor when the editor first connects to
-	VoiceCode, or when it notifies VoiceCode of a new window.
-
-	
 	"""
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
 			     'GM_factory': GM_factory,
 			     'grammars': {},
 			     'windows': {},
-                             'trust_current_window': trust_current_window,
 			     'modules': {},
 			     'instances': {}
 			    },
@@ -940,7 +962,7 @@ class RSMInfrastructure(RecogStartMgr):
 	"""
 	debug.virtual('RSMInfrastructure._new_instance_known_module')
 
-    def new_instance(self, instance, check_window = 1):
+    def new_instance(self, instance, check_window = 1, window_info = None):
 	"""method called by AppMgr to notify RecogStartMgr that a new
 	editor instance has been added, and (optionally) to tell it to 
 	check if the current window belongs to (or contains) that instance
@@ -952,6 +974,12 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* check_window -- should we check to see if the
 	current window belongs to this instance?
 
+	*(INT, STR, STR) window_info*  -- window id, title, and module of 
+	the current window as detected by the TCP server when it
+	originally processed the new editor connection, or None to let
+	RSM.new_instance check now.  Ignored unless check_window is
+	true.
+
 	**OUTPUTS**
 
 	*none*
@@ -959,7 +987,10 @@ class RSMInfrastructure(RecogStartMgr):
 	if not self._add_instance(instance):
 	    return
 	if check_window:
-	    window, title, module_name = self.window_info()
+	    if window_info == None:
+		window, title, module_name = self.window_info()
+	    else:
+		window, title, module_name = window_info
 	    if self.known_window(window):
 		self._new_instance_known_window(window, title, instance,
 		    trust = self.trust_current_window)

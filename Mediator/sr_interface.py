@@ -1044,9 +1044,9 @@ class CodeSelectGrammar(SelectGramBase):
         trace('sr_interface.CodeSelectGrammar.gotBegin',
               '** vis_start=%s, vis_end=%s, visible="%s"' %
               (vis_start, vis_end, visible))
-        trace('sr_interface.CodeSelectGrammar.gotBegin',
-              '** self.app.get_text()="%s", self.app.curr_buffer()._get_text_from_app()="%s"' %
-              (self.app.get_text(), self.app.curr_buffer()._get_text_from_app()))
+#        trace('sr_interface.CodeSelectGrammar.gotBegin',
+#              '** self.app.get_text()="%s", self.app.curr_buffer()._get_text_from_app()="%s"' %
+#              (self.app.get_text(), self.app.curr_buffer()._get_text_from_app()))
         
         
 	self.setSelectText(visible)

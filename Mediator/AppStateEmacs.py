@@ -32,7 +32,7 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         
         self.deep_construct(AppStateEmacs, 
                             {},
-                            attrs)
+                            attrs, new_default = {'app_name': 'emacs'})
 
     def _multiple_buffers_from_app(self):
         return 1
