@@ -717,7 +717,7 @@ def test_redundant_translation():
     testing.init_simulator_regression()    
     test_command("""open_file('blah.c')""")
     test_command("""compile_symbols([r'""" + small_buff_c + """'])""")
-    test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
+    test_say(['index', '!=\\not equal to', '0'], '0\n0\n')
     test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
     test_say(['move_horiz\\move horizontally'], '0\n0\n')
     test_say(['move', 'horizontally'], '0\n0\n')
@@ -737,14 +737,14 @@ def test_punctuation():
     commands.say(['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\\New-Line'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
 ## causes recognitionMimic error in Natspeak 4
-#    commands.say(['variable', '=\\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', '=\\equals', 'variable', '/\\slash', '2', '+\\plus-sign', '1', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus-sign', '1', '-\\minus-sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['variable', '=\\equals', 'index', '%\\percent', '2', '+\\plus', 'index', '%\\percent sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', 'index', '%\\percent', '2', '+\\plus', 'index', '%\\percent-sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['if', 'index', '&\\ampersand', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe sign', 'index', '|\\vertical bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['if', 'index', '|\\pipe', 'variable', '|\\pipe sign', 'index', '|\\vertical-bar', 'value', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['index', '=\\equals', '0', ';\\semicolon', 'variable', '=\\equals', '0', ';\\semi', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -753,15 +753,15 @@ def test_punctuation():
     commands.say(['variable', '=\\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['#\\pound', '!\\bang', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['#\\pound sign', '!\\exclamation mark', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['#\\pound-sign', '!\\exclamation-mark', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '<\\less sign', '0', 'and\\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['if', 'index', '<\\less sign', '0', 'and\\and', 'index', '>\\greater sign', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
-    commands.say(['index', '=\\equal sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['index', '=\\equal-sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['function', '(\\open-paren', '0', ')\\close-paren', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -797,7 +797,7 @@ def test_punctuation():
     commands.say(['string', 'equals', 'single', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     
-    commands.say(['\'\'\\empty single quotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['\'\'\\empty single-quotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['string', '=\\equals', '\"\\open-quote', 'message', '\"\\close-quote', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1224,7 +1224,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '?\\question mark', '1', '?\\question mark', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '?\\question-mark', '1', '?\\question-mark', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous question mark', 'previous question mark'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1236,7 +1236,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '#\\pound', 'sign', '1', '#\\pound', 'sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '#\\pound-sign', '1', '#\\pound-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous pound sign', 'previous pound sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1296,7 +1296,7 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '=\\equal sign', '1', '=\\equal sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '=\\equal-sign', '1', '=\\equal-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous equal sign', 'previous equal sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -2607,7 +2607,8 @@ def test_basic_correction():
     check_recent(instance_name, utterances, status)
 
     new_utterances = []
-    new_utterances.append(string.split('new line'))
+#    new_utterances.append(['\\New-Line'])
+    new_utterances.append(string.split('new line'))    
     new_input = ['']
     new_status = [1]
 
