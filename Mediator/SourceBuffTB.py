@@ -373,12 +373,12 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 	*BOOL* -- true if restore was successful
 
 	"""
-	if self.valid_cookie(cookie):
-	    self.set_text(cookie.contents())
-	    self.set_selection(cookie.get_selection())
-	    self.refresh_if_necessary()
-	    return 1
-	return 0
+	if not self.valid_cookie(cookie):
+	    return 0
+	self.set_text(cookie.contents())
+	self.set_selection(cookie.get_selection())
+	self.refresh_if_necessary()
+	return 1
 
 
     def compare_with_current(self, cookie, selection = 0):

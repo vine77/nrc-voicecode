@@ -218,8 +218,12 @@ class WaxEdSimPane(wxPanel):
 	current = self.command_space['getmic']()
 	if current == 'off':
 	    self.command_space['setmic']('on')
+	    self.most_recent_focus = self.editor
+	    self.most_recent_focus.SetFocus()
 	else:
 	    self.command_space['setmic']('off')
+	    self.most_recent_focus = self.editor
+	    self.most_recent_focus.SetFocus()
     def update_mic_button(self, state = None):
 	if state == None:
 	    state = self.command_space['getmic']()

@@ -189,7 +189,9 @@ def simulator_mode(options):
     setmic('off')
 
     editor_app = WaxEdSim.WaxEdSim(command_space= sim_commands.__dict__)
-    window = natlink.getCurrentModule()[2]
+    module_info = natlink.getCurrentModule()
+    window = module_info[2]
+    print module_info
     app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
 
     
