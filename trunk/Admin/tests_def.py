@@ -53,6 +53,7 @@ from actions_C_Cpp import *
 from actions_py import *
 from cont_gen import *
 from exceptions import Exception
+import SymbolResultTest
 
 
 if_else_c = vc_globals.test_data + os.sep + 'ifelse.c'
@@ -270,6 +271,19 @@ def test_CmdInterp():
     
 
 add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
+
+
+##############################################################################
+# Testing SymbolResult
+##############################################################################
+
+def test_SymbolResult():
+   unittest.TextTestRunner(). \
+       run(unittest.makeSuite(SymbolResultTest.SymbolResultTest, 'test')) 
+   
+   
+add_test('SymbolResult', test_SymbolResult, 
+         'Testing SymbolResult.')
 
 
 ###############################################################################

@@ -56,6 +56,21 @@ class SymBuilder(Object):
     """
     def __init__(self, **args):
         self.deep_construct(SymBuilder, {'spoken': []}, args)
+        
+    def build_from_words(self, words):
+        """build a symbol from a complete list of words.
+        
+        **INPUTS**
+        
+        *[STR] words* -- the list of words
+        
+        **OUTPUTS**
+        
+        *STR* -- the symbol
+        """
+        for a_word in words:
+           self.add_word(a_word)
+        return self.finish()
 
     def add_word(self, word, original = None):
         """appends a new word to the symbol

@@ -40,8 +40,8 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
                           "Number of columns was wrong.", )
 
     def test_NumberOfRows(self):
-       self.assert_equals(self.dlg.list.NumberOfRows(),
-                          "Number of rows was wrong.", 2)
+       self.assert_equals(self.dlg.list.NumberOfRows(), 2,
+                          "Number of rows was wrong.")
        
     def test_AllCellsContentsString(self):
        self.assert_sequences_have_same_content([['item 0-0', 'item 0-1', 'item 0-2'], ['item 1-0', 'item 1-1', 'item 1-2']], 
