@@ -259,6 +259,9 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 ;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vcode-line-start-end-pos" 1 vcode-traces-on)
+;(cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
+;(cl-puthash 'beginning_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
 ;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 
@@ -3116,6 +3119,10 @@ buffer"
     )
 )
 
+(defun line-num-at (pos)
+  (1+ (count-lines 1 pos))
+)
+
 (defun vcode-cmd-line-num-of (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))
 	(response (make-hash-table :test 'string=))
@@ -3128,6 +3135,7 @@ buffer"
       (set-buffer buff-name)
       (goto-char opoint)
       (beginning-of-line)
+;;;      (setq line-num (line-num-at (point)))
       (setq line-num (1+ (count-lines 1 (point))))
       )
 
@@ -3775,6 +3783,53 @@ tabs.
 
   )
 )
+
+(defun vcode-line-start-end-pos (which-end vcode-request)
+  (let ((mess-cont (nth 1 vcode-request))
+	(pos) (line-num) (return-pos)
+	(which-end-as-text)
+	(response (make-hash-table :test 'string=)))
+    (setq pos (cl-gethash "pos" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (setq line-num (line-num-at pos))
+    (if (< which-end 0)
+	(setq which-end-as-text "beginning")
+      (setq which-end-as-text "end")
+    )
+;;    (vcode-trace "vcode-line-start-end-pos" 
+;;		 "pos=%S, buff-name=%S, line-num=%S, which-end=%S, which-end-as-text=%S"
+;;		 pos buff-name line-num which-end which-end-as-text)
+    (save-excursion
+       (condition-case err     
+	   (progn 
+             (set-buffer buff-name)
+      (goto-line line)
+   	     (if (<  which-end 0) 
+	         (beginning-of-line)
+	       (end-of-line)
+	     )
+             (setq return-pos (point))
+	     (cl-puthash "value" return-pos response)
+	     (setq reply-name (format "%S_of_line_resp" which-end-as-text))
+	     (vr-deprecated-send-reply 
+	      (run-hook-with-args 
+	       'vr-deprecated-serialize-message-hook 
+	       (list reply-name response)))
+	   )
+         ('error (error (concat "vr-deprecated Error: could not get %S of line at %S" which-end-as-text pos)))
+       )
+    )
+  )
+)
+
+(defun vcode-cmd-end-of-line (vcode-request)
+  (vcode-line-start-end-pos 1 vcode-request)
+)
+
+(defun vcode-cmd-beginning-of-line (vcode-request)
+  (vcode-line-start-end-pos -1 vcode-request)
+)
+
 
 (defun vcode-cmd-mediator-closing (vcode-request)
    (vcode-mode-activate nil)
