@@ -119,7 +119,7 @@ class PersistentConfig(Object.Object):
         """
         debug.virtual('PersistentConfig.namespace')
 
-    def init_simulator_regression(symdict_pickle_fname=None):
+    def init_simulator_regression(alt_sym_file = None):
         """re-initialize the mediator, using the same editor application
 
         **NOTE:**  This method must also ensure that the namespace in
@@ -131,8 +131,10 @@ class PersistentConfig(Object.Object):
 
         **INPUTS**
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
 
         **OUTPUTS**
 
@@ -286,7 +288,7 @@ class PersistentConfigNewMediator(Object.Object):
         """
         return self.names
 
-    def init_simulator_regression(self, symdict_pickle_fname=None,
+    def init_simulator_regression(self, alt_sym_file = None,
         exclusive = 1):
         """re-initialize the mediator, using the same editor application
 
@@ -299,8 +301,10 @@ class PersistentConfigNewMediator(Object.Object):
 
         **INPUTS**
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
 
         BOOL *exclusive* -- true unless the test is a foreground test
         and cannot use exclusive grammars
@@ -315,7 +319,7 @@ class PersistentConfigNewMediator(Object.Object):
 #        sr_interface.connect()
         debug.trace('PersistentConfigNewMediator.init_simulator_regression',
             'about to reset persistent mediator')
-        self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
+        self.mediator().reset(alt_sym_file = alt_sym_file,
             symbol_match_dlg = self.symbol_match_dlg, 
             add_sr_entries_for_LSAs_and_CSCs=0,
             exclusive = exclusive)
@@ -418,7 +422,7 @@ class TempConfigFactory(Object.Object):
         self.deep_construct(TempConfigFactory, {}, args)
 
     def new_config(self, editor = None, skip_config = 0, 
-        symdict_pickle_fname = None):
+        alt_sym_file = None):
         """create a new TempConfig object
 
         **INPUTS**
@@ -429,8 +433,10 @@ class TempConfigFactory(Object.Object):
         *BOOL skip_config* -- flag allowing you to create a
         MediatorObject without configuring it 
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
         """
         debug.virtual('TempConfigFactory.new_config')
 
@@ -494,7 +500,7 @@ class TempConfigNewMediatorFactory(Object.Object):
              'pickled_interp': pickled_interp}, args)
 
     def new_config(self, editor = None, skip_config = 0, 
-        symdict_pickle_fname = None):
+        alt_sym_file = None):
         """create a new TempConfig object
 
         **INPUTS**
@@ -505,8 +511,10 @@ class TempConfigNewMediatorFactory(Object.Object):
         *BOOL skip_config* -- flag allowing you to create a
         MediatorObject without configuring it 
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
 
         **OUTPUTS**
 
@@ -519,7 +527,7 @@ class TempConfigNewMediatorFactory(Object.Object):
         a_mediator = \
             NewMediatorObject.NewMediatorObject(interp = interp, 
                 symbol_match_dlg = self.symbol_match_dlg,
-                symdict_pickle_fname = symdict_pickle_fname)
+                alt_sym_file = alt_sym_file)
         debug.trace('TempConfigNewMediatorFactory.new_config', '** after NewMediatorObject()')                        
         if not skip_config:
             a_mediator.configure(testing = 1)

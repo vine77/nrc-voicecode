@@ -174,6 +174,12 @@ class NewMediatorObject(Object.OwnerObject):
     This file will also be the default to use if reconfigure is called
     (usually only by init_simulator_regression during regression tests)
 
+    STR *alt_sym_file=None* -- Name of an alternative file
+    containing the persistent version of the symbols dictionary, to
+    be used in place of the default file.  Note: the default is to
+    use vc_globals.sym_state_file for interactive use, but no file
+    for regression testing.
+
     **CLASS ATTRIBUTES**
     
     *none* --
@@ -193,7 +199,7 @@ class NewMediatorObject(Object.OwnerObject):
                  global_grammars = 0, exclusive = 0, 
                  profile_prefix = None,
                  bypass_sr_recog = 0,
-                 symdict_pickle_fname = None,
+                 alt_sym_file = None,
                  symbol_match_dlg_regression = 1,
                  symbol_match_dlg = 0,
                  **attrs):
@@ -256,8 +262,11 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
         dictation utterances (ignored if test_or_suite is None) 
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file.  Note: the default is to
+        use vc_globals.sym_state_file for interactive use, but no file
+        for regression testing.
         """
 
         debug.trace('NewMediatorObject.__init__', 'invoked')
@@ -273,7 +282,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'test_or_suite': test_or_suite,
                              'test_space': None,
                              'global_grammars': global_grammars,
-                             'symdict_pickle_fname': symdict_pickle_fname,
+                             'alt_sym_file': alt_sym_file,
                              'symbol_match_dlg_regression': \
                                   symbol_match_dlg_regression,
                              'symbol_match_dlg': symbol_match_dlg,
@@ -319,7 +328,7 @@ class NewMediatorObject(Object.OwnerObject):
             user = 'VoiceCode'
         sr_interface.connect(user, mic_state = 'off')        
         if self.interp == None:
-            self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
+            self.new_interpreter(alt_sym_file = alt_sym_file,
                 symbol_match_dlg = symbol_match_dlg)
         else:
             self.interp.set_mediator(self)
@@ -366,7 +375,7 @@ class NewMediatorObject(Object.OwnerObject):
         self.editors = AppMgr.AppMgr(recog_mgr, mediator = self)
         return 1
     
-    def new_interpreter(self, symdict_pickle_fname = None,
+    def new_interpreter(self, alt_sym_file = None,
         symbol_match_dlg = 0, no_circle = 0):
         """create a new interpreter
 
@@ -379,12 +388,17 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         if self.interp:
-            self.interp.cleanup()
+            self.interp.cleanup_dictionary()
         m = self
         if no_circle:
             m = None
+        sym_file = alt_sym_file
+# if no alternative file is specified, use the default SymDict state
+# file, or None if we are doing regression testing
+        if alt_sym_file is None and not self.test_suite:
+            sym_file = vc_globals.sym_state_file
         self.interp = \
-            CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
+            CmdInterp.CmdInterp(sym_file = sym_file, 
                 disable_dlg_select_symbol_matches = not symbol_match_dlg, 
                 mediator = m)
 
@@ -446,7 +460,6 @@ class NewMediatorObject(Object.OwnerObject):
         testing = testing or self.test_suite
         okay = self._configure_from_file(config_file = config_file,
             user_config_file = user_config_file,
-            symdict_pickle_fname = self.symdict_pickle_fname, 
             exclude = exclude, testing = testing)
         if not okay:
             return okay
@@ -465,7 +478,7 @@ class NewMediatorObject(Object.OwnerObject):
 
     def define_config_functions(self, names, exclude = None,
             reset = 0,
-            symdict_pickle_fname = None, symbol_match_dlg = None, 
+            alt_sym_file = None, symbol_match_dlg = None, 
             add_sr_entries_for_LSAs_and_CSCs = 1):
         """Adds the appropriate configuration functions to the  given
         namespace, to allow the configuration file to access the
@@ -484,8 +497,11 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL reset* -- if true, reset the current interpreter, or
         replace it with a fresh one
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file.  Note: the default is to
+        use vc_globals.sym_state_file for interactive use, but no file
+        for regression testing.
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
@@ -503,7 +519,7 @@ class NewMediatorObject(Object.OwnerObject):
            sym_dlg = symbol_match_dlg
         self.before_interp_config(names, ignore = 'interp' in exclude,
             reset = reset and ('interp' not in exclude),
-            symdict_pickle_fname = symdict_pickle_fname,
+            alt_sym_file = alt_sym_file,
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
 
@@ -511,7 +527,7 @@ class NewMediatorObject(Object.OwnerObject):
     def _configure_from_file(self, exclude = None, config_file = None,
         user_config_file = None,
         reset = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None,
+        alt_sym_file = None, symbol_match_dlg = None,
         add_sr_entries_for_LSAs_and_CSCs = 1,
         use_pickled_interp = 0, testing = 0):
         """private method used by configure and reconfigure to perform
@@ -532,8 +548,11 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL reset* -- if true, reset the current interpreter, or
         replace it with a fresh one
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file.  Note: the default is to
+        use vc_globals.sym_state_file for interactive use, but no file
+        for regression testing.
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
@@ -560,7 +579,7 @@ class NewMediatorObject(Object.OwnerObject):
            sym_dlg = symbol_match_dlg
         if not 'interp' in exclude:
             if use_pickled_interp and self.pickled_interp:
-                self.interp.cleanup(clean_sr_voc = 0, clean_symdict = 0, 
+                self.interp.cleanup_dictionary(clean_sr_voc = 0, clean_symdict = 0, 
                     resave = 0)
                 self.interp = cPickle.loads(self.pickled_interp)
                 self.interp.set_mediator(self)
@@ -568,7 +587,7 @@ class NewMediatorObject(Object.OwnerObject):
 # if we've unpickled the interpreter, we don't need to re-configure it
         self.define_config_functions(config_dict, exclude,
             reset = reset,
-            symdict_pickle_fname = symdict_pickle_fname,
+            alt_sym_file = alt_sym_file,
             symbol_match_dlg = sym_dlg,
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
         file = config_file
@@ -620,10 +639,7 @@ class NewMediatorObject(Object.OwnerObject):
         # Compile standard symbols for the different languages
         #
         if not 'interp' in exclude:
-            self.interp.parse_standard_symbols(add_sr_entries = 
-                self.interp.known_symbols.sr_symbols_cleansed)
-# what does this mean?  
-            self.interp.known_symbols.sr_symbols_cleansed = 0
+            self.interp.finish_config()
         return 1
 
     def before_app_mgr_config(self, config_dict, ignore = 0):
@@ -652,7 +668,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_prefix'] = self.add_app_prefix
 
     def before_interp_config(self, config_dict, reset = 0, ignore = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None, 
+        alt_sym_file = None, symbol_match_dlg = None, 
         add_sr_entries_for_LSAs_and_CSCs = 1):
         """called by configure to reset or replace the current interpreter 
         (unless reset is false), and add the functions pertaining to
@@ -674,8 +690,11 @@ class NewMediatorObject(Object.OwnerObject):
         the configuration file will be ignored.  Normally, reset should
         be false if ignore is true
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file.  Note: the default is to
+        use vc_globals.sym_state_file for interactive use, but no file
+        for regression testing.
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
@@ -685,7 +704,7 @@ class NewMediatorObject(Object.OwnerObject):
             sym_dlg = self.symbol_match_dlg
             if symbol_match_dlg != None:
                sym_dlg = symbol_match_dlg
-            self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
+            self.new_interpreter(alt_sym_file = alt_sym_file,
                 symbol_match_dlg = sym_dlg)
             self.interp.add_sr_entries_for_LSAs_and_CSCs = \
                 add_sr_entries_for_LSAs_and_CSCs
@@ -712,7 +731,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['print_abbreviations'] = self.print_abbreviations
 
     def reset(self, config_file = None, user_config_file = None, 
-        symdict_pickle_fname = None,
+        alt_sym_file = None,
         symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1,
         use_pickled_interp = 1, exclusive = 0):
         """reset the mediator object to continue regression testing with
@@ -729,6 +748,11 @@ class NewMediatorObject(Object.OwnerObject):
         then use the same one used previously by configure, or
         the vc_globals.default_user_config_file if configure
         did not record the filename.
+
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
@@ -750,7 +774,7 @@ class NewMediatorObject(Object.OwnerObject):
         self.reconfigure(exclude = ['editors'],
             config_file = config_file, 
             user_config_file = user_config_file, reset = 1, 
-            symdict_pickle_fname = symdict_pickle_fname,
+            alt_sym_file = alt_sym_file,
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
             use_pickled_interp = use_pickled_interp)
@@ -762,7 +786,7 @@ class NewMediatorObject(Object.OwnerObject):
     def reconfigure(self, exclude = None, config_file=None,
         user_config_file = None,
         reset = 0,
-        symdict_pickle_fname = None, symbol_match_dlg = None,
+        alt_sym_file = None, symbol_match_dlg = None,
         add_sr_entries_for_LSAs_and_CSCs = 1,
         use_pickled_interp = 1):
         """reconfigure an existing mediator object.  Unlike configure,
@@ -791,8 +815,10 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL reset* -- if true, reset the current interpreter, or
         replace it with a fresh one
 
-        STR *symdict_pickle_fname=None* -- Name of the file containing the
-        persistent version of the symbols dictionnary.
+        STR *alt_sym_file=None* -- Name of an alternative file
+        containing the persistent version of the symbols dictionary, to
+        be used in place of the default file, or None to use the same
+        file as specified at initial creation of NewMediatorObject
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
@@ -812,13 +838,15 @@ class NewMediatorObject(Object.OwnerObject):
         user_file = user_config_file
         if not user_file:
             user_file = self.user_config_file
+        if alt_sym_file is None:
+            alt_sym_file = self.alt_sym_file
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
         self._configure_from_file(exclude = exclude, config_file = file,
             user_config_file = user_config_file,
             reset = reset,
-            symdict_pickle_fname = symdict_pickle_fname,
+            alt_sym_file = alt_sym_file,
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
             use_pickled_interp = use_pickled_interp)
@@ -846,11 +874,6 @@ class NewMediatorObject(Object.OwnerObject):
 # method, after performing their own duties
 #        print 'removing'
 
-# This isn't necessary from an OwnerObject point of view (CmdInterp has
-# no circular references).  If you want to clean up the interpreter, you
-# should call NMO.quit
-
-#        self.interp.cleanup()
 
 # for now, don't disconnect from sr_interface -- let the creator do that
 
@@ -887,7 +910,7 @@ class NewMediatorObject(Object.OwnerObject):
         #
 #        print 'quitting'
         debug.trace('NewMediatorObject.quit', 'quit called')
-        self.interp.cleanup(clean_sr_voc=clean_sr_voc)
+        self.interp.cleanup_dictionary(clean_sr_voc=clean_sr_voc)
     
         if self.server:
             self.server.mediator_closing()

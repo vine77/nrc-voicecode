@@ -194,6 +194,31 @@ def saveUser():
     natlink.saveUser()
     sr_user_needs_saving = 0
 
+marking_word = r'VoiceCode\Deleting this word will cause voice code to ' + \
+            're-scan its standard symbol files'
+
+def mark_user():
+    """marks the current user as having been used with VoiceCode
+
+    Note: this function is used to detect when standard symbol files should 
+    be re-scanned, because a fresh VoiceCode user file has been created.
+    It should not be called except by SymDict's finish_config method.
+    """
+    addWord(marking_word)
+
+def is_user_marked():
+    """checks whether the current user is marked as having been used with 
+    VoiceCode
+
+    Note: this function is used to detect when standard symbol files should 
+    be re-scanned, because a fresh VoiceCode user file has been created
+    """
+# don't want to process the word through spoken_written_form
+    if natlink.getWordInfo(marking_word) is None:
+        return 0
+    return 1
+
+
 def send_keys(s, system = 0):
     """simulates keystroke input
     
@@ -393,7 +418,7 @@ def clean_spoken_form(spoken_form):
     # ends up calling
     #   recognitionMimic(['O.\\o'])
     #
-    if not re.match('[A-Z].$', clean_form):
+    if not re.match(r'[A-Z]\.$', clean_form):
 
         #
         # Lower case

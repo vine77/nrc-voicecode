@@ -257,7 +257,7 @@ class LSAliasSet(Object):
         trace('CmdInterp.add_lsa', '** invoked')
         if name is None:
             name = alias.spoken_forms[0]
-        self.aliases[name] = alias        
+        self.aliases[name] = alias
 
     def replace_spoken(self, name, spoken_forms):
         """replace the spoken forms of an alias with the given name
@@ -386,14 +386,14 @@ class CmdInterp(OwnerObject):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, symdict_pickle_file=None,
+    def __init__(self, sym_file = None,
                  disable_dlg_select_symbol_matches = None, mediator =
                  None, **attrs):
         
         """
         **INPUTS**
 
-        *FILE symdict_pickle_file = None* -- File used to for
+        *STR sym_file = None* -- File used for
         reading/writing the symbol dictionary. If *None*, then don't
         read/write the symbol dictionary from/to file.
 
@@ -416,7 +416,7 @@ class CmdInterp(OwnerObject):
                             {'mediator': mediator,
                              'cmd_index': {}, 
                              'known_symbols':
-                             SymDict.SymDict(pickle_fname = symdict_pickle_file), 
+                             SymDict.SymDict(sym_file = sym_file), 
                              'language_specific_aliases': {},
                              'lsa_spacing': {},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
@@ -1417,15 +1417,12 @@ class CmdInterp(OwnerObject):
 
 
     def standard_symbols_in(self, file_list):
-        """Compile symbols defined in a series of source files"""
+        """Specify source files defining standard symbols"""
+        self.known_symbols.standard_symbols_in(file_list)
 
-
-        for a_file in file_list:
-            if not a_file in self.known_symbols.standard_symbol_sources:
-                self.known_symbols.standard_symbol_sources = self.known_symbols.standard_symbol_sources + [a_file]
-
-    def print_abbreviations(self):
-        self.known_symbols.print_abbreviations()
+    def abbreviations_in(self, file_list):
+        """Specify source files defining expansions and abbreviations"""
+        self.known_symbols.abbreviations_in(file_list)
 
     def peek_at_unresolved(self):
         """returns a reference to the dictionary of unresolved 
@@ -1489,7 +1486,7 @@ class CmdInterp(OwnerObject):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
         return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
 
-    def cleanup(self, clean_sr_voc=0, clean_symdict=1, resave=1):
+    def cleanup_dictionary(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
         
         **INPUTS**
@@ -1507,7 +1504,7 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
-        self.known_symbols.cleanup(clean_sr_voc=clean_sr_voc, 
+        self.known_symbols.cleanup_dictionary(clean_sr_voc=clean_sr_voc, 
             clean_symdict=clean_symdict, resave=resave)
 
     def abbreviations_cleanup(self):
@@ -1523,22 +1520,35 @@ class CmdInterp(OwnerObject):
         *none* -- 
         """
         self.known_symbols.abbreviations_cleanup()
-      
-    def parse_standard_symbols(self, add_sr_entries=1):
+
+    def finish_config(self):
+        """Finish performing those parts of the CmdInterp/SymDict
+        configuration which can't take place until after the VoiceCode
+        configuration files have been executed
+        
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+# for now, only SymDict requires this
+        self.known_symbols.finish_config()
+    
+    def parse_standard_symbols(self):
         """Parse standard symbols for the various programming languages.
         
         **INPUTS**
-        
-        *BOOL* add_sr_entries = 1 -- If true, then add symbols to the
-         SR vocabulary.
-        
 
+        *none*
+        
         **OUTPUTS**
         
-        *none* -- 
+        *none*
         """
-        self.known_symbols.parse_standard_symbols(add_sr_entries =
-            add_sr_entries)
+        self.known_symbols.parse_standard_symbols()
     
     def parse_symbols_from_files(self, file_list, add_sr_entries=1):
         """Parse symbols from a series of source files

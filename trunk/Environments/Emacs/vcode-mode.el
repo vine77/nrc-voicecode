@@ -2789,25 +2789,15 @@ message.
   (if (eq -1 save) 
       (progn
 	;;;
-	;;; Don't know how to kill a buffer without asking the user
-	;;; if wants to save.
-	;;; So save buffer under a temporary name, and then kill it.
-        ;;;
-	;;; Since the temporary file will be up to date, Emacs won't
-	;;; query user.
-	;;;
-	;;; Note that we remove the 'after-change-hook before writing
-	;;; to the temporary file. This is because saving to the temporary
-        ;;; file caused a change to be reported on that temporary file, and
-	;;; inserted in 'vr-deprecated-queued-changes. But when the change queue got
-	;;; cleaned up, the temporary file had been closed and Emacs was 
-        ;;; freezing.
+        ;;; The easiest way to kill a buffer without prompting is to set
+        ;;; the visited file name to nil, so Emacs thinks the buffer
+        ;;; isn't associated with a file
 	;;;
 
           (save-excursion
             (set-buffer buff-name)
-            (write-file "ignorethisfile.tmp")
-            (kill-buffer "ignorethisfile.tmp")
+            (set-visited-file-name nil)
+            (kill-buffer buff-name)
 ;        (kill-buffer buff-name)
           )
 	)
