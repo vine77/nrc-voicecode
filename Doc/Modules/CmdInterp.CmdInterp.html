@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:51 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Dec 10 09:54:54 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -31,16 +31,15 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">construct_check</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Chops off the beginning of a command if it is a known symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_word</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Removes a single word from a command.</SPAN>
-    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.dlg_select_symbol_match"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.dlg_select_symbol_match</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>)<SPAN CLASS="OneLiner"> # Asks the user to select a match for pseudo symbol.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.dlg_select_symbol_match"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.dlg_select_symbol_match</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>)<SPAN CLASS="OneLiner"> # Asks the user to select a match for pseudo symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
-    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.insert_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.insert_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_CSC"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_CSC</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a CSC.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_LSA"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_LSA</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of an LSA.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a known symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.load_language_specific_aliases"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.load_language_specific_aliases</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.massage_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.massage_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Massages a command to prepare it for interpretation.</SPAN>
-    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.match_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.match_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Tries to match last sequence of untranslated text to a symbol.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.match_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.match_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_words</SPAN>)<SPAN CLASS="OneLiner"> # Tries to match last sequence of untranslated text to a symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.spoken_form_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.spoken_form_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches a spoken form of a command.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -84,14 +83,6 @@ interpreting the commands
 <DD>File used to for
  reading/writing the symbol dictionary. If <EM>None</EM>, then don't
  read/write the symbol dictionary from/to file.
-<DT>
-<EM>INT</EM> _untranslated_text_start = None
-<DD>Start position of the
- current string of untranslated text inserted in current buffer.
-<DT>
-<EM>INT</EM> _untranslated_text_end = None
-<DD>End position of the
- current string of untranslated text inserted in current buffer.
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>
@@ -304,7 +295,7 @@ Returns a tuple <EM>(chopped_word, consumed, rest)</EM> where:</P>
 <EM>[STR]</EM> rest
 <DD>Rest of the command after the word was chopped
 </DL>
-<H2 ID="CmdInterp.CmdInterp.dlg_select_symbol_match" CLASS="Method">CmdInterp.CmdInterp.dlg_select_symbol_match(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>)</H2>
+<H2 ID="CmdInterp.CmdInterp.dlg_select_symbol_match" CLASS="Method">CmdInterp.CmdInterp.dlg_select_symbol_match(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>)</H2>
 <P>Asks the user to select a match for pseudo symbol.</P>
 
 <P>
@@ -312,6 +303,10 @@ Returns a tuple <EM>(chopped_word, consumed, rest)</EM> where:</P>
 
 <DL>
 
+<DT>
+<EM>STR</EM> untranslated_text
+<DD>untranslated form of the text which
+matched
 <DT>
 <EM>[SymbolMatch]</EM> symbol_matches
 <DD>List of possible matches.
@@ -337,35 +332,6 @@ Returns a tuple <EM>(chopped_word, consumed, rest)</EM> where:</P>
 <EM>BOOL add_voc_entry = 1</EM>
 <DD>if true, add a SR vocabulary entry
  for the CSC's spoken forms
-</DL>
-<H2 ID="CmdInterp.CmdInterp.insert_untranslated_text" CLASS="Method">CmdInterp.CmdInterp.insert_untranslated_text(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Inserts some text in current buffer, and marks it as untranslated
-text.</P>
-<P>
-The next time a CSC or LSA is encountered, the interpreter will try
-to match that text (and all untranslated text that immediatly
-precedes/follows it) to a new symbol, or a known symbol with
-unresolved spoken forms.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> text
-<DD>The text to be inserted
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)</H2>
 <P>None</P>
@@ -497,7 +463,7 @@ multiple, leading or trailing blanks.</P>
 <DD>The massaged command
 
 </DL>
-<H2 ID="CmdInterp.CmdInterp.match_untranslated_text" CLASS="Method">CmdInterp.CmdInterp.match_untranslated_text(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="CmdInterp.CmdInterp.match_untranslated_text" CLASS="Method">CmdInterp.CmdInterp.match_untranslated_text(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_words</SPAN>)</H2>
 <P>Tries to match last sequence of untranslated text to a symbol.</P>
 
 <P>
@@ -506,8 +472,8 @@ multiple, leading or trailing blanks.</P>
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD>
+<EM>[STR]</EM>
+<DD>list of untranslated words
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

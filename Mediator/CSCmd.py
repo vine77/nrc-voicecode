@@ -34,6 +34,36 @@ class CSCmd(Object):
                              'meanings': meanings},
                             attrs)
 
+    def applies(self, app):
+        """test whether any of its contexts applies, and returns
+
+	**INPUTS**
+
+        [AppState] app is the application into which the command was spoken.
+
+	**OUTPUTS**
+
+	*meaning* -- meaning if a Context applies,
+	otherwise None
+
+	"""
+        
+        #
+        # Try each of the contextual meanings in turn until find one that
+        # applies
+        #
+#        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
+        for ameaning in self.meanings.items():
+            cont, action = ameaning
+#            print '-- CSCmd.interpret: cont=%s' % cont
+#            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
+            if (cont == None or cont.applies(app)):
+#                print '-- CSCmd.interpret: this context applies'
+		return ameaning
+
+        return None
+
+
 
     def interpret(self, app):
         """Executes the command if any of its contexts applies.
@@ -51,17 +81,16 @@ class CSCmd(Object):
         # applies
         #
 #        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
-        for ameaning in self.meanings.items():
+	ameaning = self.applies(app)
+	if ameaning:
             cont, action = ameaning
 #            print '-- CSCmd.interpret: cont=%s' % cont
 #            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
-            if (cont == None or cont.applies(app)):
 #                print '-- CSCmd.interpret: this context applies'
-                action.execute(app, cont)
+	    action.execute(app, cont)
 #                print '-- CSCmd.interpret: current buffer is now:'
 #                app.print_buff_content()
-                applied = 1
-                break            
+	    applied = 1
 
         return applied
 

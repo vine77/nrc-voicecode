@@ -42,12 +42,6 @@ class CmdInterp(Object):
      reading/writing the symbol dictionary. If *None*, then don't
      read/write the symbol dictionary from/to file.
 
-    *INT* _untranslated_text_start = None -- Start position of the
-     current string of untranslated text inserted in current buffer.
-
-    *INT* _untranslated_text_end = None -- End position of the
-     current string of untranslated text inserted in current buffer.
-     
     
     CLASS ATTRIBUTES**
 
@@ -62,7 +56,7 @@ class CmdInterp(Object):
         #
         # These attributes can't be set at construction time
         #
-        self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
+#        self.decl_attrs({})
 
         #
         # But these can
@@ -103,8 +97,7 @@ class CmdInterp(Object):
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
 
-        self._untranslated_text_start = None
-        self._untranslated_text_end = None
+	untranslated_words = []
 
         cmd = self.massage_command(cmd)
         
@@ -153,12 +146,17 @@ class CmdInterp(Object):
                  #
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading CSC=\'%s\'' % chopped_CSC
                  CSCs = self.cmd_index[chopped_CSC]
-                 csc_applied = 0
+                 csc_applies = 0
                  for aCSC in CSCs:
-                     csc_applied = aCSC.interpret(self.on_app)
-                     if (csc_applied):
+                     csc_applies = aCSC.applies(self.on_app)
+                     if (csc_applies):
+# flush untranslated words before executing action
+		         if untranslated_words:
+			     self.match_untranslated_text(untranslated_words)
+			     untranslated_words = []
+			 aCSC.interpret(self.on_app)
                          break
-                 if csc_applied:
+                 if csc_applies:
                      #
                      # Found a CSC that applies
                      # Chop the CSC from the command
@@ -181,6 +179,10 @@ class CmdInterp(Object):
                  # LSA consumed the most words from command. Insert it.
                  #
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
+# flush untranslated words before inserting LSA
+		 if untranslated_words:
+		     self.match_untranslated_text(untranslated_words)
+		     untranslated_words = []
                  self.on_app.insert_indent(chopped_LSA, '')
                  cmd = cmd_without_LSA
                  head_was_translated = 1
@@ -199,7 +201,7 @@ class CmdInterp(Object):
                  #       SomeprefixSomeClass or SomeClassSomepostfix.
                  #
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading symbol=\'%s\'' % chopped_symbol                     
-                 self.insert_untranslated_text(chopped_symbol)
+		 untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
                  head_was_translated = 1
 #                 print '-- CmdInterp.interpret_NL_cmd: after translating symbol, buffer is:'; self.on_app.print_buff_content()                     
@@ -212,7 +214,7 @@ class CmdInterp(Object):
                  # it as untranslated text.
                  #                 
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading word=\'%s\'' % chopped_word                                                  
-                 self.insert_untranslated_text(chopped_word)
+		 untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
                  head_was_translated = 1
 #                 print '-- CmdInterp.interpret_NL_cmd: after translating ordinary word, buffer is:'; self.on_app.print_buff_content()
@@ -222,19 +224,19 @@ class CmdInterp(Object):
              #
              # Check if it marked the end of some untranslated text
              #
-             if (CSC_consumes or LSA_consumes or len(cmd) == 0) and \
-                self._untranslated_text_start != None:
-                #
-                # A CSC or LSA was translated, or we reached end of the
-                # command, thus marking the end of a sequence of untranslated
-                # text. Try to match untranslated text to a known (or new)
-                # symbol.
-                #
+             if (len(cmd) == 0) and untranslated_words:
+                 #
+                 # A CSC or LSA was translated, or we reached end of the
+                 # command, thus marking the end of a sequence of untranslated
+                 # text. Try to match untranslated text to a known (or new)
+                 # symbol.
+                 #
 #                print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
-                self.match_untranslated_text()
+                 self.match_untranslated_text(untranslated_words)
+	 	 untranslated_words = []
 
-             if self._untranslated_text_start != None:
-                 untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
+             if untranslated_words:
+                 untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
 #             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
@@ -268,77 +270,12 @@ class CmdInterp(Object):
             mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
         return mod_command
 
-                                
-    def insert_untranslated_text(self, text):
-        
-        """Inserts some text in current buffer, and marks it as untranslated
-        text.
-
-        The next time a CSC or LSA is encountered, the interpreter will try
-        to match that text (and all untranslated text that immediatly
-        precedes/follows it) to a new symbol, or a known symbol with
-        unresolved spoken forms.
-        
-        **INPUTS**
-        
-        *STR* text -- The text to be inserted
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-#        print '-- CmdInterp.insert_untranslated_text: text=\'%s\',  ' % (text,  )
-
-#        if self.on_app.translation_is_off and \
-#            self._untranslated_text_start != None:
-#            #
-#            # translation has just been turned off and there is some
-#            # text that needs translation
-#            #
-#            self.match_untranslated_text()
-#            self._untranslated_text_start = None
-#            self._untranslated_text_end = None
-
-#       add condition not self.translation_is_off
-        if self._untranslated_text_start != None:
-            #
-            # This is inserted in middle of an untranslated region.
-            # Insert space between this word and the one that preceded
-            # it in the untranslated region.
-            #
-            text = ' ' + text
-            
-        self.on_app.insert_indent(text, '')            
-
-#       add condition not self.translation_is_off
-        if self._untranslated_text_start == None:
-            #
-            # This was the beginning of a sequence of
-            # untranslated text. Remember its start
-            # position.
-            #
-            # NOTE: must take care to set start past any blanks that may
-            # have been inserted for indentation
-            #
-            self._untranslated_text_start = self.on_app.curr_buffer.cur_pos - len(text)            
-        
-        #
-        # Remember end of the current sequence of untranslated
-        # text.
-        #
-        self._untranslated_text_end = self.on_app.curr_buffer.cur_pos
-
-#        print '-- CmdInterp.insert_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]); self.on_app.print_buff_content()
-        
-
-    def match_untranslated_text(self):
+    def match_untranslated_text(self, untranslated_words):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
         
-        *none* -- 
+        *[STR]* -- list of untranslated words
         
 
         **OUTPUTS**
@@ -346,7 +283,7 @@ class CmdInterp(Object):
         *none* -- 
         """
         
-        untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
+        untranslated_text = string.join(untranslated_words)
 
 #        print '-- CmdInterp.match_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated_text=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, untranslated_text);
 #        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
@@ -380,19 +317,24 @@ class CmdInterp(Object):
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
 #            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
-                self.dlg_select_symbol_match(symbol_matches)
+                self.dlg_select_symbol_match(untranslated_text, symbol_matches)
+	    else:
+		self.on_app.insert_indent(untranslated_text, '')
+	else:
+	    self.on_app.insert_indent(untranslated_text, '')
 
         #
         # Now, there is no more untranslated text.
         #
-        self._untranslated_text_start = None
-        self._untranslated_text_end = None
         
 
-    def dlg_select_symbol_match(self, symbol_matches):
+    def dlg_select_symbol_match(self, untranslated_text, symbol_matches):
         """Asks the user to select a match for pseudo symbol.
         
         **INPUTS**
+
+	*STR* untranslated_text -- untranslated form of the text which
+	matched
         
         *[SymbolMatch]* symbol_matches -- List of possible matches.
         
@@ -406,7 +348,6 @@ class CmdInterp(Object):
         global disable_dlg_select_symbol_matches
 
 #        print '-- CmdInterp.dlg_select_symbol_match: called'
-        untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
 
         if disable_dlg_select_symbol_matches:
             choice_index = 0
@@ -446,12 +387,12 @@ class CmdInterp(Object):
             self.known_symbols.accept_symbol_match(chosen_match)            
 
             #
-            # Insert matched symbol, then go back to where we were
+            # Insert matched symbol
             #
-            old_pos = self.on_app.curr_buffer.cur_pos
-            self.on_app.insert_indent(chosen_match.native_symbol, '', start=self._untranslated_text_start, end=self._untranslated_text_end)
-            new_pos = old_pos + len(chosen_match.native_symbol) - (self._untranslated_text_end - self._untranslated_text_start)
-            self.on_app.move_to(new_pos)
+            self.on_app.insert_indent(chosen_match.native_symbol, '')
+	else:
+	    self.on_app.insert_indent(untranslated_text, '')
+	
             
 
     def chop_CSC(self, cmd):
