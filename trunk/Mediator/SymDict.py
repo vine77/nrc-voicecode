@@ -2408,6 +2408,7 @@ class SymDict(OwnerObject):
        norm = 0.
        trace('SymDict._score_word_missing_letters',
            'letter matches = %s' % letter_matches)
+       last_letter = ""
        for letter, letter_match in letter_matches:
            consonant = not is_vowel(letter)
            if consonant:
@@ -2430,11 +2431,13 @@ class SymDict(OwnerObject):
                after_weak = 0
            if dropped:
                if consonant:
-                   penalty = penalty + 1.
-                   if self.weak_pairs.has_key(letter):
-                       after_weak = letter
+                   if letter != last_letter:
+                       penalty = penalty + 1.
+                       if self.weak_pairs.has_key(letter):
+                           after_weak = letter
                else:
                    penalty = penalty + 0.5
+           last_letter = letter
        trace('SymDict._score_word_missing_letters',
            'penalty, norm = %f, %f' % (penalty, norm))
        penalty = penalty/norm
