@@ -25,12 +25,16 @@
 import natlink, os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 
-import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
+import AppStateEmacs, AppStateMessaging, auto_test, debug, mediator 
+import messaging, Object
 import RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 
-from debug import trace
 
+
+# Uncomment this and add some entries to trace_what if you want to 
+# activate some traces.
+#debug.config_traces(status="on", trace_what={'get_mess':1, 'send_mess': 1})
 
 #
 # Port numbers for the communication link
@@ -274,7 +278,7 @@ class ListenForConnThread(threading.Thread, Object.Object):
             # Accept a new connection
             (client_socket, address) = server_socket.accept()
 
-            trace('ListenForConnThread.run', 'got new connection on port=%s' % self.port)
+            debug.trace('ListenForConnThread.run', 'got new connection on port=%s' % self.port)
             
             #
             # Log it and Raise Win32 event to notify the main event loop that
@@ -409,7 +413,7 @@ class CheckReadySocksThread(threading.Thread, Object.Object):
 		self.ready_socks.extend(new_ready_socks)
                 self.ready_socks_lock.release()
                 if len(self.ready_socks) > 0:
-                    trace('CheckReadySocksThread.run', 'some sockets are ready')
+                    debug.trace('CheckReadySocksThread.run', 'some sockets are ready')
                     win32event.SetEvent(self.raise_event)
 
             # When debuggin, increase sleep time if you want to see things
@@ -725,7 +729,7 @@ class ServerSingleThread(Object.Object):
         *none* -- 
         """
 
-        trace('ServerSingleThread.process_ready_socks', 'self.ready_socks=%s' % id(self.ready_socks))
+        debug.trace('ServerSingleThread.process_ready_socks', 'self.ready_socks=%s' % id(self.ready_socks))
 
         self.ready_socks_lock.acquire()
 
@@ -831,14 +835,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # A new VC_LISTEN connection was opened
                 #
-                trace('ServerSingleThread.run', 'got evt_new_listen_conn')
+                debug.trace('ServerSingleThread.run', 'got evt_new_listen_conn')
                 self.handshake_listen_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+1:
                 #
                 # A new VC_TALK connection was opened
                 #
-                trace('ServerSingleThread.run', 'got evt_new_talk_conn')
+                debug.trace('ServerSingleThread.run', 'got evt_new_talk_conn')
                 self.handshake_talk_socks()
 
                 
@@ -846,14 +850,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # Some of the active VC_LISTEN sockets have received data
                 #
-                trace('ServerSingleThread.run', 'got evt_sockets_ready')
+                debug.trace('ServerSingleThread.run', 'got evt_sockets_ready')
                 self.process_ready_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+3:
                 #
                 # Server is shutting down. Exit the event loop.
                 #
-                trace('ServerSingleThread.run', 'got evt_quit')
+                debug.trace('ServerSingleThread.run', 'got evt_quit')
                 break
                 
             elif rc == win32event.WAIT_OBJECT_0+4:
@@ -861,7 +865,7 @@ class ServerSingleThread(Object.Object):
                 # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
                 # Note: this must be done for COM and other windowsy
                 #   things to work.
-#                trace('ServerSingleThread.run', 'forwarding unknown message')
+#                debug.trace('ServerSingleThread.run', 'forwarding unknown message')
                 if pythoncom.PumpWaitingMessages():
                     break # wm_quit
                 
@@ -871,7 +875,7 @@ class ServerSingleThread(Object.Object):
                 #   or just feel good to be alive.
                 # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
                 pass
-#                trace('ServerSingleThread.run', 'nothing to do, counter=%s' % counter)
+#                debug.trace('ServerSingleThread.run', 'nothing to do, counter=%s' % counter)
             else:
                 raise RuntimeError( "unexpected win32wait return value")
 
@@ -925,7 +929,8 @@ if __name__ == '__main__':
         #
         tests_def_fname = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py')
         execfile(tests_def_fname)        
-    
+
+    debug.trace('get_mess', 'THIS IS NOT REALLY FROM get_mess')    
     
     sr_interface.connect()
 

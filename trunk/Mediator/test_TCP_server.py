@@ -5,12 +5,18 @@ communicates with VoiceCode through a TCP/IP messaging protocol.
 from socket import *
 import os, natlink, sys, threading
 import EdSim, mediator, messaging, Object, SourceBuffEdSim, sim_commands, sr_interface
+import debug
 
 VC_LISTENER_PORT = 45770
 VC_TALKER_PORT = 45771
 
 
 HOST = gethostname()
+
+
+# Uncomment this and add some entries to trace_what if you want to 
+# activate some traces.
+debug.config_traces(status="on", trace_what={'get_mess':1, 'send_mess': 1})
 
 
 def create_tcp_mess(sock):
