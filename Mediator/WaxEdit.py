@@ -75,3 +75,19 @@ class WaxEdit:
 	*TextBufferWX* -- the TextBufferWX
 	"""
 	debug.virtual('WaxEdit.editor_buffer')
+    
+    def run(self, app_control):
+	"""starts the message loop.  Note: this function does not
+	return until the GUI exits.
+
+	**INPUTS**
+
+	*AppStateWaxEdit app_control* -- reference to corresponding 
+	AppState interface
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('WaxEdit.run')
+
