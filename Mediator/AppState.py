@@ -24,6 +24,7 @@
 
 import debug, messaging, sys
 from Object import Object, ChildObject, OwnerObject
+from debug import trace
 
 
 """can we auto-forward stuff from App to buff"""
@@ -831,8 +832,9 @@ class AppState(OwnerObject):
         
         *none* -- 
         """
-	if what == None:
-	    what = []
+        trace('AppState.synchronize_with_app', 'invoked')
+        if what == None:
+            what = []
         if updates == None:
             updates = self.updates_from_app(what, exclude)
         self.apply_updates(updates)

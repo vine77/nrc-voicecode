@@ -136,7 +136,7 @@
 (defun vcode-decode-mess (mess)
     "Parses a WDDX \"document\" and converts it to a LISP data structure"
 
-    (vr-log (format "-- vcode-decode-mess: mess=%S\n" mess))
+;    (vr-log (format "-- vcode-decode-mess: mess=%S\n" mess))
     (let ((mess-cont) (mess-name))
        ;;;
        ;;; Parse the message in a temporary buffer
@@ -162,8 +162,8 @@
 (defun vcode-encode-mess (mess-name mess-content)
    "Translates a LISP data structure into a WDDX \"document\"."
  
-   (vr-log "-- vcode-encode-mess: started, mess-name=%S, mess-content=%S\n" mess-name mess-content)
-   (vr-log (format "-- vcode-encode-mess: (hash-items mess-content)=%S\n" (hash-items mess-content)))
+;   (vr-log "-- vcode-encode-mess: started, mess-name=%S, mess-content=%S\n" mess-name mess-content)
+;   (vr-log (format "-- vcode-encode-mess: (hash-items mess-content)=%S\n" (hash-items mess-content)))
    (let ((wddx-mess))
 
      ;;; Generate header
@@ -176,7 +176,7 @@
 
      ;;; Generate closing of header
      (setq wddx-mess (concat wddx-mess "</data></wddxPacket>"))
-     (vr-log "-- vcode-encode-mess: exited\n")
+;     (vr-log "-- vcode-encode-mess: exited\n")
      wddx-mess
    )
 )

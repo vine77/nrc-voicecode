@@ -822,6 +822,7 @@ class MessTransporter_Socket(MessTransporter):
 		while not self.data_available():
 		    time.sleep(self.sleep)
             chunk = self.sock.recv(num_bytes - len(a_string))
+            trace('receive_string', 'read chunk=\'%s\'' % chunk);
             if chunk == '':
                 raise SocketError, "socket connection broken"
             a_string = a_string + chunk
