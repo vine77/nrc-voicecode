@@ -59,14 +59,20 @@ class ActionEmacsListBuffers(Action):
 
         .. [AppState] file:///./AppState.AppState.html"""
         debug.trace('ActionEmacsListBuffers.execute', '** invoked')
-        # AD: This is probably better handled through a new
-        #     'switch_buffer_dlg' message type. But sending
-        #     keys will do for now.
-        app.app_change_buffer()
+        #
+        # AD: This would probably be better handled by invoking 
+        #     app.app_change_buffer(), but unfortunately, I couldn't
+        #     find a programmatic way of replicating what happens in
+        #     Emacs when you interactively invoke `switch-bo-buffer
+        #     and then type tab. The problem is that I couldn't figure
+        #     out how to display the list of buffers in a window that 
+        #     disappears automatically when you select one of the buffers.
+        #     With everything I tried, if you start out with a single
+        #     window layout, you eventually ended up with a 2 windows
+        #     layout.
+        ActionTypeText(key_strokes='{Esc}xswitch-to-buffer{Enter}{Tab}{Esc}v').execute(app, cont, state)                
         app.synchronize_with_app()
-        debug.trace('ActionEmacsListBuffers.execute', 
-                    '** app.curr_buffer().name()=%s' % app.curr_buffer().name())        
-        ActionCompileSymbols("*Buffer List*").execute(app=app, cont=cont, state=state)
+        ActionCompileSymbols("*Completions*").execute(app=app, cont=cont, state=state)
 
 
     def doc(self):

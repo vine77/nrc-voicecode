@@ -1,12 +1,12 @@
 ;;
-;; Vcode Mode - integration of GNU Emacs and VoiceCode 
+;; Vcode Mode - integration of GNU Emacs and VoiceCode
 ;;    http://voicecode.iit.nrc.ca/VoiceCode
 ;;
 ;; Based on vr-deprecated Mode by Barry Jaspan
 ;;
 ;; Copyright 1999 Barry Jaspan, <bjaspan@mit>.  All rights reserved.
 ;;
-;; $Id: vc.el,v 1.9 2002/08/05 22:59:58 alain_desilets Exp $
+;; $Id: vc.el,v 1.9 2002/08/05 22:59:58 alain_desilets Exp$ 
 ;;
 ;; This file is part of Emacs vr-deprecated Mode.
 ;;
@@ -25,7 +25,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Buffer List*"))
+(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Completions*"))
 
 
 ;;; Change this if you want to see more traces
@@ -264,24 +264,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-;(cl-puthash  "vcode-unindent-region" 1 vcode-traces-on)
-;(cl-puthash  "vcode-unindent-line" 1 vcode-traces-on)
-;(cl-puthash  "vcode-report-insert-delete-change" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
-;(cl-puthash  "vcode-generate-raw-change-description"  1 vcode-traces-on)
-;(cl-puthash  "vcode-send-queued-changes" 1 vcode-traces-on)
-
-;(cl-puthash  "vcode-serialize-changes" 1 vcode-traces-on)
-;(cl-puthash  "vcode-generate-change-hash" 1 vcode-traces-on)
-;(cl-puthash  "vcode-generate-pos-select-change-hash" 1 vcode-traces-on)
-;(cl-puthash  "vcode-generate-whole-buffer-changes" 1 vcode-traces-on)
-;(cl-puthash  "vcode-filter-queued-changes" 1 vcode-traces-on)
-;(cl-puthash  "vcode-generate-whole-buffer-changes" 1 vcode-traces-on)
-;(cl-puthash  "vcode-report-insert-delete-change" 1 vcode-traces-on)
-;(cl-puthash  "vcode-language-for-file" 1 vcode-traces-on)
-;(cl-puthash  "vcode-language-for-buff" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
-;(cl-puthash  "vcode-execute-command-string" 1 vcode-traces-on)
+;(cl-puthash  "vcode-merge-or-prepend-change" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
@@ -336,7 +319,7 @@ sent."
   (setq debug-on-quit t)
  
   (vcode-close-all-buffers)
-  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Buffer List*"))
+  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Completions*"))
   (vcode-configure-for-regression-testing t)
   (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)
@@ -819,6 +802,7 @@ interactively, sets the current buffer as the target buffer."
             (new-change-params (car (cdr new-change)))
             (previous-buffer (nth 0 previous-change-params))
             (new-buffer (nth 0 previous-change-params)))
+
  ;
  ; ... and if same buffer...
  ;
@@ -949,6 +933,7 @@ Changes are put in a changes queue `vcode-queued-changes.
 ; nil, so the following only applies to the direct call to 
 ; vcode-generate-raw-change-description from
 ; vcode-generate-whole-buffer-changes?  - DCF
+; Yes - AD
       (if deleted-length
 	  (setq deleted-end (+ deleted-start deleted-length))
 	(setq deleted-end nil)
@@ -1217,7 +1202,7 @@ Changes are put in a changes queue `vcode-queued-changes.
    "Filter queued changes to patch apparent bugs in Emacs' change reporting. 
 
 There seem to be bugs in the way that Emacs reports changes to buffers
-like *Buffer List*. Sometimes, the start and end position of a change do 
+like *Buffer List* and *Completions*. Sometimes, the start and end position of a change do 
 not take into account insertions that have been done in a previous change.
 
 This function filters the queued changes, and replaces any change report for
@@ -1232,17 +1217,17 @@ whole content of the buffer."
        (setq vcode-queued-changes (cdr vcode-queued-changes))
        (setq buff-name (nth 0 (nth 1 a-change)))
        (vcode-trace "vcode-filter-queued-changes" "** buff-name=%S" buff-name)
-       (if (string= buff-name "*Buffer List*")
+       (if (string= buff-name "*Completions*")
            (setq buffer-list-has-changed t)
 	 (setq filtered-changes (append filtered-changes (list a-change)))
 	 (vcode-trace "vcode-filter-queued-changes" "** added this change to filtered-changes, filtered-changes=%S" filtered-changes)
        )       
      )
 
-     (vcode-trace "vcode-filter-queued-changes" "After removing *Buffer List* changes, filtered-changes=%S" filtered-changes)
+     (vcode-trace "vcode-filter-queued-changes" "After removing *Completions* changes, filtered-changes=%S" filtered-changes)
      (if buffer-list-has-changed 
 	 (setq filtered-changes 
-	       (append (vcode-generate-whole-buffer-changes "*Buffer List*")
+	       (append (vcode-generate-whole-buffer-changes "*Completions*")
 		       filtered-changes))
      )
     (setq vcode-queued-changes filtered-changes)
@@ -3612,7 +3597,7 @@ change reports it sends to VCode.
 
         ;;;
         ;;; We wrap this in an exception catching block in case we try
-        ;;; to dictate text in a read-only buffer like "*Buffer List*"
+        ;;; to dictate text in a read-only buffer like "*Completions*"
         (condition-case err
            (progn
 	     (set-buffer buff-name)
@@ -4120,7 +4105,7 @@ change reports it sends to VCode.
 
 (defun vcode-switch-buffer-dlg ()
    (list-buffers)
-   (switch-to-buffer "*Buffer List*")
+   (switch-to-buffer "*Completions*")
 )
 
 (defun vcode-cmd-mediator-closing (vcode-request)

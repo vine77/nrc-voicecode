@@ -178,16 +178,7 @@ WARNING: source file 'test.py' doesn't exist.
 *** End of source buffer ***
 Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
 Heard emacs switch to buffer
-Compiling symbols for *Buffer List*
-WARNING: error trying to get info from vocabulary word ''
-WARNING: error trying to get info from vocabulary word '-\'
-WARNING: error trying to get info from vocabulary word ''
-WARNING: error trying to get info from vocabulary word ''
-WARNING: error trying to get info from vocabulary word '-\'
-WARNING: error trying to get info from vocabulary word ''
-WARNING: error trying to get info from vocabulary word ''
-WARNING: error trying to get info from vocabulary word '-\'
-WARNING: error trying to get info from vocabulary word ''
+Compiling symbols for *Completions*
 Done compiling symbols
 *** Start of source buffer ***
   1: <CURSOR>
@@ -195,26 +186,27 @@ Done compiling symbols
 *** End of source buffer ***
 Got command: say(['select', 'dummy'],None,0,0,)
 Heard select dummy
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .   test.py	        0  Python	
-  4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
-  5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      194  Fundamental	
-  7: 
+  3: 
+  4: Possible completions are:
+  5: *Messages*			   *scratch*
+  6: <SEL_START>dummy<SEL_END>.py			   test.pyy
+
+*** End of source buffer ***
 Got command: say(['new', 'line'],None,0,0,)
 Heard new line
-Warning: context <cont_emacs.ContEmacsInBuffNamed instance at 0x012B8390>
+
+*** AD: Investigate the warning below about context 
+        cont_emacs.ContEmacsInBuffNamed not restoring the cursor.
+        DO NOT DELETE THESE LINES FROM THE BENCHMARK UNTIL THAT'S DONE.
+
+Warning: context <cont_emacs.ContEmacsInBuffNamed instance at 0x01D7D248>
 didn't restore the cursor position
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .   test.py	        0  Python	
-  4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
-  5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      194  Fundamental	
-  7: 
+  3: 
+  4: Possible completions are:
+  5: *Messages*			   *scratch*
+  6: <SEL_START>dummy<SEL_END>.py			   test.pyy
+
+*** End of source buffer ***
 *** Start of source buffer ***
   1: class Dummy<CURSOR>:
   2:     
@@ -228,7 +220,7 @@ WARNING: source file 'dummy.py' doesn't exist.
 *** End of source buffer ***
 Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
 Heard emacs switch to buffer
-Compiling symbols for *Buffer List*
+Compiling symbols for *Completions*
 Done compiling symbols
 *** Start of source buffer ***
   1: class Dummy<CURSOR>:
@@ -237,29 +229,29 @@ Done compiling symbols
 *** End of source buffer ***
 Got command: say(['select', 'dummy'],None,0,0,)
 Heard select dummy
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
-  4:     test.py	        0  Python	
-  5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      229  Fundamental	
+  3: 
+  4: Possible completions are:
+  5: *Completions*			   *Messages*
+  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
+  7: test.pyy
+
+*** End of source buffer ***
 Got command: say(['hello'],None,0,0,)
 Heard hello
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
-  4:     test.py	        0  Python	
-  5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      229  Fundamental	
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
-  4:     test.py	        0  Python	
-  5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      229  Fundamental	
+  3: 
+  4: Possible completions are:
+  5: *Completions*			   *Messages*
+  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
+  7: test.pyy
+
+*** End of source buffer ***
+  3: 
+  4: Possible completions are:
+  5: *Completions*			   *Messages*
+  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
+  7: test.pyy
+
+*** End of source buffer ***
 
 
 *******************************************************************************
