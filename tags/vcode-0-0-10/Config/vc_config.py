@@ -1,0 +1,1175 @@
+#
+# Configuration script for VoiceCode
+#
+
+#
+# Note: those import statements are not absolutely necessary because file
+#       vc_config.py is evaluated in a context where those have already
+#       been imported.
+#
+#       But having them here makes it possible to compile vc_config.py
+#       with command line:
+#
+#           python vc_config.py
+#
+#       which provides better error reportingn than when evaluated by
+#       MediatorObject.configure().
+#
+import natlink
+from natlinkutils import *
+
+#
+# Import configuration functions
+#
+from MediatorObject import associate_language, define_language, \
+     add_abbreviation, add_csc, add_lsa, print_abbreviations, \
+     standard_symbols_in
+
+from CSCmd import CSCmd
+from LangDef import LangDef
+from cont_gen import *
+from actions_gen import *
+from actions_C_Cpp import *
+from actions_py import *
+from actions_perl import *
+
+import sr_interface
+
+
+if (__name__ == '__main__'):
+    import MediatorObject
+    MediatorObject.to_configure = MediatorObject.MediatorObject()
+        
+    if sr_interface.speech_able():
+        natlink.natConnect()    
+
+
+##############################################################################
+# Customize from here only
+##############################################################################
+
+#
+# Load abbreviations files
+#
+for abbrev_file in ('user_abbrevs.py', 'py_abbrevs.py'):
+    try:
+        full_file = vc_globals.config + os.sep + abbrev_file
+        execfile(full_file)
+    except Exception, err:
+        print 'ERROR: in abbreviations file: %s' % full_file
+        raise err
+
+        
+add_abbreviation('attr', ['attribute'])
+
+
+###############################################################################
+# Associate file extensions to programming languages
+###############################################################################
+
+#
+# Doesn't seem to work for now so we set it in SourceBuff.py directly
+#
+#  associate_language('c', 'C')
+#  associate_language('h', 'C')
+#  associate_language('py', 'python')
+
+
+#############################################################################
+# CSCs and LSAs that apply for ALL languages
+#############################################################################
+
+#
+# Punctuation marks.
+#
+# These LSAs usually don't add spaces before/after the punctuation
+# mark. There are other LSAs and CSCs for inserting space padded punctuation.
+#
+# For example:
+#   'less sign' -> '<' (i.e. no space padding)
+#   'is less than' -> ' < ' (i.e. space padded)
+#
+# This gives the user the flexibility of padding the punctuation with signs
+# or not, depending on the context in which it is said. We are careful to
+# choose wordings of padded forms 
+#
+add_lsa(['blank space', 'space bar'], {None: ' '})
+add_lsa(['newline', 'new line'], {None: '\n'})
+add_lsa(['asterisk', 'star'], {None: '*'})
+add_lsa(['double asterisk', 'double star'], {None: '**'})
+add_lsa(['slash'], {None: '/'})
+add_lsa(['plus sign'], {None: '+'})
+add_lsa(['minus sign'], {None: '-'})
+add_lsa(['percent', 'percent sign'], {None: '%'})
+add_lsa(['and percent'], {None: '&'})
+add_lsa(['pipe', 'pipe sign', 'vertical bar'], {None: '|'})
+add_lsa(['comma'], {None: ', '})
+add_lsa(['semicolon', 'semi'], {None: ';'})
+add_lsa(['dot'], {None: '.'})
+add_lsa(['ellipsis'], {None: '...'})
+add_lsa(['exclamation mark', 'bang'], {None: '!'})
+add_lsa(['question mark'], {None: '?'})
+add_lsa(['pound', 'pound sign'], {None: '#'})
+add_lsa(['tilde', 'squiggle'], {None: '~'})
+add_lsa(['colon'], {None: ': '})
+add_lsa(['double colon'], {None: '::'})
+add_lsa(['less sign'], {None: '<'})
+add_lsa(['greater sign'], {None: '>'})
+add_lsa(['equal sign'], {None: '='})
+
+#
+# Generic balanced expressions (e.g. "", '', (), [], {})
+#
+#    We define LSAs for the start/end of the balanced expresion.
+#       e.g. 'open paren' -> '(', 'close paren' -> ')'
+#
+#    We also define an LSA for typing an empty balanced expression and
+#    putting the cursor after it.
+#       e.g. 'empty parens' -> '()^'
+#
+#    We also define a CSC for typing an empty balanced expression and moving
+#    the cursor in between.
+#       e.g. 'between parens' -> '(^)'
+#
+add_lsa(['open paren'], {None: '('})
+add_lsa(['close paren'], {None: ')'})
+add_lsa(['empty parens'], {None: '()'})
+acmd = CSCmd(spoken_forms=['between parens', 'paren pair', 'parens pair'], 
+             meanings={ContAny(): ActionInsert('(', ')')},
+             docstring='put cursor between parens: (^)')
+add_csc(acmd)
+add_lsa(['open bracket', 'open square bracket'], {None: '['})
+add_lsa(['close bracket', 'close square bracket'], {None: ']'})
+add_lsa(['empty brackets', 'empty square brackets'], {None: '[]'})
+acmd = CSCmd(spoken_forms=['between brackets', 'between square brackets',
+                           'bracket pair', 'square bracket pair',
+                           'brackets pair', 'square brackets pair',
+                           'brackets', 'square brackets'], 
+             meanings={ContAny(): ActionInsert('[', ']')}, 
+             docstring='put cursor between square brackets: [^]')
+add_csc(acmd)
+add_lsa(['open brace', 'open curly bracket', 'open curly'], {None: '{'})
+add_lsa(['close brace', 'close curly bracket', 'close curly'], {None: '}'})
+add_lsa(['empty curly brackets', 'empty curlies'], {None: '{}'})
+acmd = CSCmd(spoken_forms=['between braces', 'brace pair','braces pair',
+                           'braces', 'between curlies', 'curly pair',
+                           'curlies pair', 'curlies', 'curly brackets'], 
+             meanings={ContAny(): ActionInsert('{', '}')},
+             docstring='put cursor between curly brackets: {^}')
+add_csc(acmd)
+add_lsa(['open angled bracket', 'open angled'], {None: '<'})
+add_lsa(['close angled bracket', 'close angled'], {None: '>'})
+add_lsa(['empty angled brackets', 'empty angled'], {None: '<>'})
+acmd = CSCmd(spoken_forms=['between angled brackets', 'angled bracket pair',
+                           'angled brackets pair', 'angled', 'between angled',
+                           'angled pair', 'angled brackets'], 
+             meanings={ContAny(): ActionInsert('<', '>')}, 
+             docstring='put cursor between angled brackets: <^>')
+add_csc(acmd)
+add_lsa(['single quote', 'open single quote', 'close single quote'],
+        {None: '\''})
+add_lsa(['empty single quotes', 'empty single'], {None: '\'\''})
+acmd = CSCmd(spoken_forms=['between single quotes', 'single quotes'],
+             meanings={ContAny(): ActionInsert('\'', '\'')},
+             docstring = 'put cursor between single quotes: \'^\'')
+add_csc(acmd)
+add_lsa(['quote', 'open quote', 'close quote', 'open quotes',
+         'close quotes'],
+        {None: '"'})
+add_lsa(['empty quotes'], {None: '""'})
+acmd = CSCmd(spoken_forms=['between quotes', 'quotes'],
+             meanings={ContAny(): ActionInsert('"', '"')},
+             docstring = 'put cursor between quotes: "^"')
+add_csc(acmd)
+add_lsa(['back quote', 'open back', 'close back', 'open back quotes',
+         'close back quotes'],
+        {None: '`'})
+add_lsa(['empty back quotes', 'empty back'], {None: '``'})
+acmd = CSCmd(spoken_forms=['between back quotes', 'back quotes',
+                           'between back'],
+             meanings={ContAny(): ActionInsert('`', '`')},
+             docstring = 'put cursor between back quotes: `^`')
+add_csc(acmd)
+
+#
+# Escaped characters
+#
+add_lsa(['back slash a.', 'back slash a', 'back slash alpha'], {None: '\\a'})
+add_lsa(['back slash b.', 'back slash b', 'back slash bravo'], {None: '\\b'})
+add_lsa(['back slash c.', 'back slash c', 'back slash charlie'], {None: '\\c'})
+add_lsa(['back slash d.', 'back slash d', 'back slash delta'], {None: '\\d'})
+add_lsa(['back slash e.', 'back slash e', 'back slash echo'], {None: '\\e'})
+add_lsa(['back slash f.', 'back slash f', 'back slash foxtrot'], {None: '\\f'})
+add_lsa(['back slash g.', 'back slash g', 'back slash golf'], {None: '\\g'})
+add_lsa(['back slash h.', 'back slash h', 'back slash hotel'], {None: '\\h'})
+add_lsa(['back slash i.', 'back slash i', 'back slash india'], {None: '\\i'})
+add_lsa(['back slash j.', 'back slash j', 'back slash juliett'], {None: '\\j'})
+add_lsa(['back slash k.', 'back slash k', 'back slash kilo'], {None: '\\k'})
+add_lsa(['back slash l.', 'back slash l', 'back slash lima'], {None: '\\l'})
+add_lsa(['back slash m.', 'back slash m', 'back slash mike'], {None: '\\m'})
+add_lsa(['back slash n.', 'back slash n', 'back slash november'], {None: '\\n'})
+add_lsa(['back slash o.', 'back slash o', 'back slash oscar'], {None: '\\o'})
+add_lsa(['back slash p.', 'back slash p', 'back slash papa'], {None: '\\p'})
+add_lsa(['back slash q.', 'back slash q', 'back slash quebec'], {None: '\\q'})
+add_lsa(['back slash r.', 'back slash r', 'back slash romeo'], {None: '\\r'})
+add_lsa(['back slash s.', 'back slash s', 'back slash sierra'], {None: '\\s'})
+add_lsa(['back slash t.', 'back slash t', 'back slash tango'], {None: '\\t'})
+add_lsa(['back slash u.', 'back slash u', 'back slash uniform'], {None: '\\u'})
+add_lsa(['back slash v.', 'back slash v', 'back slash victor'], {None: '\\v'})
+add_lsa(['back slash w.', 'back slash w', 'back slash whiskey'], {None: '\\w'})
+add_lsa(['back slash x.', 'back slash x', 'back slash xray'], {None: '\\x'})
+add_lsa(['back slash y.', 'back slash y', 'back slash yankee'], {None: '\\y'})
+add_lsa(['back slash z.', 'back slash z', 'back slash zulu'], {None: '\\z'})
+add_lsa(['back slash cap a.', 'back slash cap a', 'back slash cap alpha'], {None: '\\A'})
+add_lsa(['back slash cap b.', 'back slash cap b', 'back slash cap bravo'], {None: '\\B'})
+add_lsa(['back slash cap c.', 'back slash cap c', 'back slash cap charlie'], {None: '\\c'})
+add_lsa(['back slash cap d.', 'back slash cap d', 'back slash cap delta'], {None: '\\D'})
+add_lsa(['back slash cap e.', 'back slash cap e', 'back slash cap echo'], {None: '\\E'})
+add_lsa(['back slash cap f.', 'back slash cap f', 'back slash cap foxtrot'], {None: '\\F'})
+add_lsa(['back slash cap g.', 'back slash cap g', 'back slash cap golf'], {None: '\\G'})
+add_lsa(['back slash cap h.', 'back slash cap h', 'back slash cap hotel'], {None: '\\H'})
+add_lsa(['back slash cap i.', 'back slash cap i', 'back slash cap india'], {None: '\\I'})
+add_lsa(['back slash cap j.', 'back slash cap j', 'back slash cap juliett'], {None: '\\J'})
+add_lsa(['back slash cap k.', 'back slash cap k', 'back slash cap kilo'], {None: '\\K'})
+add_lsa(['back slash cap l.', 'back slash cap l', 'back slash cap lima'], {None: '\\L'})
+add_lsa(['back slash cap m.', 'back slash cap m', 'back slash cap mike'], {None: '\\M'})
+add_lsa(['back slash cap n.', 'back slash cap n', 'back slash cap november'], {None: '\\N'})
+add_lsa(['back slash cap o.', 'back slash cap o', 'back slash cap oscar'], {None: '\\O'})
+add_lsa(['back slash cap p.', 'back slash cap p', 'back slash cap papa'], {None: '\\P'})
+add_lsa(['back slash cap q.', 'back slash cap q', 'back slash cap quebec'], {None: '\\Q'})
+add_lsa(['back slash cap r.', 'back slash cap r', 'back slash cap romeo'], {None: '\\R'})
+add_lsa(['back slash cap s.', 'back slash cap s', 'back slash cap sierra'], {None: '\\S'})
+add_lsa(['back slash cap t.', 'back slash cap t', 'back slash cap tango'], {None: '\\T'})
+add_lsa(['back slash cap u.', 'back slash cap u', 'back slash cap uniform'], {None: '\\U'})
+add_lsa(['back slash cap v.', 'back slash cap v', 'back slash cap victor'], {None: '\\V'})
+add_lsa(['back slash cap w.', 'back slash cap w', 'back slash cap whiskey'], {None: '\\W'})
+add_lsa(['back slash cap x.', 'back slash cap x', 'back slash cap xray'], {None: '\\X'})
+add_lsa(['back slash cap y.', 'back slash cap y', 'back slash cap yankee'], {None: '\\Y'})
+add_lsa(['back slash cap z.', 'back slash cap z', 'back slash cap zulu'], {None: '\\Z'})
+
+
+#
+# Commands for jumping to a specific punctuation mark
+# Not exhaustive.
+# This really calls for some sort of grammar to automatically generate the
+# spoken forms. But for now, exhaustively (or "exhaustingly" ;-) listing all
+# possible spoken forms will have to do (although it's definitely exhausting"
+#
+
+
+#
+# semicolon
+#
+acmd = CSCmd(spoken_forms=['after semi', 'after semicolon'],
+             meanings={ContAny(): ActionSearch(';\s{0,1}')},
+             docstring='go after next semicolon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before semi', 'before semicolon'],
+             meanings={ContAny(): ActionSearch('\s{0,1};', where=-1)},
+             docstring='go before next semicolon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous semi', 'previous semicolon',
+                           'after previous semi',
+                           'after previous semicolon'],
+             meanings={ContAny(): ActionSearch(';\s{0,1}', direction=-1)},
+             docstring='go after previous semicolon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous semi',
+                           'before previous semicolon'],
+             meanings={ContAny(): ActionSearch('\s{0,1};', direction=-1, where=-1)},
+             docstring='go before previous semicolon')
+add_csc(acmd)
+
+#
+# comma
+#
+acmd = CSCmd(spoken_forms=['after comma'],
+             meanings={ContAny(): ActionSearch(',\s{0,1}')},
+             docstring='go after next comma')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before comma'],
+             meanings={ContAny(): ActionSearch('\s{0,1},', where=-1)},
+             docstring='go before next comma')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous comma', 'after previous comma'],
+             meanings={ContAny(): ActionSearch(',\s{0,1}', direction=-1)},
+             docstring='go after previous comma')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous comma'],
+             meanings={ContAny(): ActionSearch('\s{0,1},', direction=-1, where=-1)},
+             docstring='go before previous comma')
+add_csc(acmd)
+
+#
+# dot
+#
+acmd = CSCmd(spoken_forms=['after dot'],
+             meanings={ContAny(): ActionSearch('\\.\s{0,1}')},
+             docstring='go after next dot')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before dot'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\.', where=-1)},
+             docstring='go before next dot')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous dot', 'after previous dot'],
+             meanings={ContAny(): ActionSearch('\\.\s{0,1}', direction=-1)},
+             docstring='go after previous dot')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous dot'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\.', direction=-1, where=-1)},
+             docstring='go before previous dot')
+add_csc(acmd)
+
+#
+# colon
+#
+acmd = CSCmd(spoken_forms=['after colon'],
+             meanings={ContAny(): ActionSearch(':\s{0,1}')},
+             docstring='go after next colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before colon'],
+             meanings={ContAny(): ActionSearch('\s{0,1}:', where=-1)},
+             docstring='go before next colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous colon', 'after previous colon'],
+             meanings={ContAny(): ActionSearch(':\s{0,1}', direction=-1)},
+             docstring='go after previous colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous colon'],
+             meanings={ContAny(): ActionSearch('\s{0,1}:', direction=-1, where=-1)},
+             docstring='go before previous colon')
+add_csc(acmd)
+
+#
+# asterisk
+#
+acmd = CSCmd(spoken_forms=['after asterisk'],
+             meanings={ContAny(): ActionSearch('\\*\s{0,1}')},
+             docstring='go after next asterisk')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before asterisk', 'before star'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\*', where=-1)},
+             docstring='go before next asterisk')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous asterisk', 'previous star',
+                           'after previous asterisk', 'after previous star'],
+             meanings={ContAny(): ActionSearch('\\*\s{0,1}', direction=-1)},
+             docstring='go after previous asterisk')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous asterisk', 'before previous star'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\*', direction=-1, where=-1)},
+             docstring='go before previous asterisk')
+add_csc(acmd)
+
+#
+# slash
+#
+acmd = CSCmd(spoken_forms=['after slash'],
+             meanings={ContAny(): ActionSearch('/\s{0,1}')},
+             docstring='go after next slash')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before slash'],
+             meanings={ContAny(): ActionSearch('\s{0,1}/', where=-1)},
+             docstring='go before next slash')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous slash', 'after previous slash'],
+             meanings={ContAny(): ActionSearch('/\s{0,1}', direction=-1)},
+             docstring='go after previous slash')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous slash'],
+             meanings={ContAny(): ActionSearch('\s{0,1}/', direction=-1, where=-1)},
+             docstring='go before previous slash')
+add_csc(acmd)
+
+#
+# plus
+#
+acmd = CSCmd(spoken_forms=['after plus'],
+             meanings={ContAny(): ActionSearch('\\+\s{0,1}')},
+             docstring='go after next plus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before plus'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\+', where=-1)},
+             docstring='go before next plus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous plus', 'after previous plus'],
+             meanings={ContAny(): ActionSearch('\\+\s{0,1}', direction=-1)},
+             docstring='go after previous plus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous plus'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\+', direction=-1, where=-1)},
+             docstring='go before previous plus')
+add_csc(acmd)
+
+#
+# minus
+#
+acmd = CSCmd(spoken_forms=['after minus'],
+             meanings={ContAny(): ActionSearch('-\s{0,1}')},
+             docstring='go after next minus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before minus'],
+             meanings={ContAny(): ActionSearch('\s{0,1}-', where=-1)},
+             docstring='go before next minus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous minus', 'after previous minus'],
+             meanings={ContAny(): ActionSearch('-\s{0,1}', direction=-1)},
+             docstring='go after previous minus')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous minus'],
+             meanings={ContAny(): ActionSearch('\s{0,1}-', direction=-1, where=-1)},
+             docstring='go before previous minus')
+add_csc(acmd)
+
+#
+# percent
+#
+acmd = CSCmd(spoken_forms=['after percent'],
+             meanings={ContAny(): ActionSearch('%\s{0,1}')},
+             docstring='go after next percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before percent'],
+             meanings={ContAny(): ActionSearch('\s{0,1}%', where=-1)},
+             docstring='go before next percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous percent', 'after previous percent'],
+             meanings={ContAny(): ActionSearch('%\s{0,1}', direction=-1)},
+             docstring='go after previous percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous percent'],
+             meanings={ContAny(): ActionSearch('\s{0,1}%', direction=-1, where=-1)},
+             docstring='go before previous percent')
+add_csc(acmd)
+
+#
+# and percent
+#
+acmd = CSCmd(spoken_forms=['after and percent'],
+             meanings={ContAny(): ActionSearch('&\s{0,1}')},
+             docstring='go after next and percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before and percent'],
+             meanings={ContAny(): ActionSearch('\s{0,1}&', where=-1)},
+             docstring='go before next and percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous and percent', 'after previous and percent'],
+             meanings={ContAny(): ActionSearch('&\s{0,1}', direction=-1)},
+             docstring='go after previous and percent')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous and percent'],
+             meanings={ContAny(): ActionSearch('\s{0,1}&', direction=-1, where=-1)},
+             docstring='go before previous and percent')
+add_csc(acmd)
+
+#
+# pipe
+#
+acmd = CSCmd(spoken_forms=['after pipe', 'after pipe sign'],
+             meanings={ContAny(): ActionSearch('\\|\s{0,1}')},
+             docstring='go after next pipe')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before pipe', 'before pipe sign'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\|', where=-1)},
+             docstring='go before next pipe sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous pipe', 'previous pipe sign',
+                           'after previous pipe', 'after previous pipe sign'],
+             meanings={ContAny(): ActionSearch('\\|\s{0,1}', direction=-1)},
+             docstring='go after previous pipe sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous pipe', 'before previous pipe sign'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\|', direction=-1, where=-1)},
+             docstring='go before previous pipe sign')
+add_csc(acmd)
+
+#
+# ellipsis
+#
+acmd = CSCmd(spoken_forms=['after ellipsis'],
+             meanings={ContAny(): ActionSearch('\\.\\.\\.\s{0,1}')},
+             docstring='go after next ellipsis')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before ellipsis'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\.\\.\\.', where=-1)},
+             docstring='go before next ellipsis')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous ellipsis', 'after previous ellipsis'],
+             meanings={ContAny(): ActionSearch('\\.\\.\\.\s{0,1}', direction=-1)},
+             docstring='go after previous ellipsis')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous ellipsis'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\.\\.\\.', direction=-1, where=-1)},
+             docstring='go before previous ellipsis')
+add_csc(acmd)
+
+#
+# exclamation mark
+#
+acmd = CSCmd(spoken_forms=['after exclamation mark'],
+             meanings={ContAny(): ActionSearch('!\s{0,1}')},
+             docstring='go after next exclamation mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before exclamation mark'],
+             meanings={ContAny(): ActionSearch('\s{0,1}!', where=-1)},
+             docstring='go before next exclamation mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous exclamation mark', 'after previous exclamation mark'],
+             meanings={ContAny(): ActionSearch('!\s{0,1}', direction=-1)},
+             docstring='go after previous exclamation mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous exclamation mark'],
+             meanings={ContAny(): ActionSearch('\s{0,1}!', direction=-1, where=-1)},
+             docstring='go before previous exclamation mark')
+add_csc(acmd)
+
+#
+# question mark
+#
+acmd = CSCmd(spoken_forms=['after question mark'],
+             meanings={ContAny(): ActionSearch('\\?\s{0,1}')},
+             docstring='go after next question mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before question mark'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\?', where=-1)},
+             docstring='go before next question mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous question mark', 'after previous question mark'],
+             meanings={ContAny(): ActionSearch('\\?\s{0,1}', direction=-1)},
+             docstring='go after previous question mark')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous question mark'],
+             meanings={ContAny(): ActionSearch('\s{0,1}\\?', direction=-1, where=-1)},
+             docstring='go before previous question mark')
+add_csc(acmd)
+
+#
+# pound
+#
+acmd = CSCmd(spoken_forms=['after pound', 'after pound sign'],
+             meanings={ContAny(): ActionSearch('#\s{0,1}')},
+             docstring='go after next pound sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before pound', 'before pound sign'],
+             meanings={ContAny(): ActionSearch('\s{0,1}#', where=-1)},
+             docstring='go before next pound sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous pound', 'previous pound sign',
+                           'after previous pound', 'after previous pound sign'],
+             meanings={ContAny(): ActionSearch('#\s{0,1}', direction=-1)},
+             docstring='go after previous pound sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous pound', 'before previous pound sign'],
+             meanings={ContAny(): ActionSearch('\s{0,1}#', direction=-1, where=-1)},
+             docstring='go before previous pound sign')
+add_csc(acmd)
+
+#
+# double colon
+#
+acmd = CSCmd(spoken_forms=['after double colon'],
+             meanings={ContAny(): ActionSearch('::\s{0,1}')},
+             docstring='go after next double colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before double colon'],
+             meanings={ContAny(): ActionSearch('\s{0,1}::', where=-1)},
+             docstring='go before next double colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous double colon', 'after previous double colon'],
+             meanings={ContAny(): ActionSearch('::\s{0,1}', direction=-1)},
+             docstring='go after previous double colon')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous double colon'],
+             meanings={ContAny(): ActionSearch('\s{0,1}::', direction=-1, where=-1)},
+             docstring='go before previous double colon')
+add_csc(acmd)
+
+#
+# tilde
+#
+acmd = CSCmd(spoken_forms=['after tilde', 'after squiggle'],
+             meanings={ContAny(): ActionSearch('~\s{0,1}')},
+             docstring='go after next tilde')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before tilde', 'before squiggle'],
+             meanings={ContAny(): ActionSearch('\s{0,1}~', where=-1)},
+             docstring='go before next tilde')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous tilde', 'previous squiggle',
+                           'after previous tilde', 'after previous squiggle'],
+             meanings={ContAny(): ActionSearch('~\s{0,1}', direction=-1)},
+             docstring='go after previous tilde')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous tilde', 'before previous squiggle'],
+             meanings={ContAny(): ActionSearch('\s{0,1}~', direction=-1, where=-1)},
+             docstring='go before previous tilde')
+add_csc(acmd)
+
+#
+# less sign
+#
+acmd = CSCmd(spoken_forms=['after less sign', 'after less than'],
+             meanings={ContAny(): ActionSearch('<\s{0,1}')},
+             docstring='go after next less sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before less sign', 'before less than'],
+             meanings={ContAny(): ActionSearch('\s{0,1}<', where=-1)},
+             docstring='go before next less sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous less sign', 'previous less than',
+                           'after previous less sign', 'after previous less than'],
+             meanings={ContAny(): ActionSearch('<\s{0,1}', direction=-1)},
+             docstring='go after previous less sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous less sign', 'before previous less than'],
+             meanings={ContAny(): ActionSearch('\s{0,1}<', direction=-1, where=-1)},
+             docstring='go before previous less sign')
+add_csc(acmd)
+
+#
+# greater sign
+#
+acmd = CSCmd(spoken_forms=['after greater sign', 'after greater than'],
+             meanings={ContAny(): ActionSearch('>\s{0,1}')},
+             docstring='go after next greater sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before greater sign', 'before greater than'],
+             meanings={ContAny(): ActionSearch('\s{0,1}>', where=-1)},
+             docstring='go before next greater sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous greater sign', 'previous greater than',
+                           'after previous greater sign', 'after previous greater than'],
+             meanings={ContAny(): ActionSearch('>\s{0,1}', direction=-1)},
+             docstring='go after previous greater sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous greater sign', 'before previous greater than'],
+             meanings={ContAny(): ActionSearch('\s{0,1}>', direction=-1, where=-1)},
+             docstring='go before previous greater sign')
+add_csc(acmd)
+
+#
+# equal sign
+#
+acmd = CSCmd(spoken_forms=['after equal sign', 'after equal'],
+             meanings={ContAny(): ActionSearch('=\s{0,1}')},
+             docstring='go after next equal sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before equal sign', 'before equal'],
+             meanings={ContAny(): ActionSearch('\s{0,1}=', where=-1)},
+             docstring='go before next equal sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['previous equal sign', 'previous equal',
+                           'after previous equal sign', 'after previous equal'],
+             meanings={ContAny(): ActionSearch('=\s{0,1}', direction=-1)},
+             docstring='go after previous equal sign')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous equal sign', 'before previous equal'],
+             meanings={ContAny(): ActionSearch('\s{0,1}=', direction=-1, where=-1)},
+             docstring='go before previous equal sign')
+add_csc(acmd)
+
+
+#
+# For moving into and out of balanced expressions
+#
+
+
+#
+# parens
+#
+acmd = CSCmd(spoken_forms=['after paren'],
+             meanings={ContAny(): ActionSearch('[\\(\\)]\s{0,1}')},
+             docstring='go after next paren (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before paren'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', where=-1)},
+             docstring='go before next paren (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous paren'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', direction=-1)},
+             docstring='go after previous paren (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous paren'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\(\\)]', direction=-1, where=-1)},
+             docstring='go before previous paren (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of parens'],
+             meanings={ContAny(): ActionSearch('[\\)]\s{0,1}')},
+             docstring='jump forward out of inner most paren pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of parens'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\(]')},
+             docstring='jump backward out of inner most paren pair')
+add_csc(acmd)
+
+#
+# brackets
+#
+acmd = CSCmd(spoken_forms=['after bracket', 'after square bracket', 'after square'],
+             meanings={ContAny(): ActionSearch('[\\[\\]]\s{0,1}')},
+             docstring='go after next bracket (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before bracket', 'before square bracket', 'before square'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', where=-1)},
+             docstring='go before next bracket (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous bracket'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', direction=-1)},
+             docstring='go after previous bracket (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous bracket',
+                           'before previous square bracket',
+                           'before previous square'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\[\\]]', direction=-1, where=-1)},
+             docstring='go before previous bracket (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of brackets', 'out of square brackets',
+                           'out of square'],
+             meanings={ContAny(): ActionSearch('[\\]]\s{0,1}')},
+             docstring='jump forward out of inner most bracket pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of brackets', 'back out of square brackets',
+                           'back out of square'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\[]')},
+             docstring='jump backward out of inner most bracket pair')
+add_csc(acmd)
+
+
+#
+# braces
+#
+acmd = CSCmd(spoken_forms=['after brace', 'after curly bracket', 'after curly'],
+             meanings={ContAny(): ActionSearch('[\\{\\}]\s{0,1}')},
+             docstring='go after next brace (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before brace', 'before curly bracket', 'before curly'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', where=-1)},
+             docstring='go before next brace (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous brace'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', direction=-1)},
+             docstring='go after previous brace (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous brace',
+                           'before previous curly bracket',
+                           'before previous curly'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\{\\}]', direction=-1, where=-1)},
+             docstring='go before previous brace (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of braces', 'out of curly brackets',
+                           'out of curlies'],
+             meanings={ContAny(): ActionSearch('[\\}]\s{0,1}')},
+             docstring='jump forward out of inner most brace pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of braces', 'back out of curly brackets',
+                           'back out of curlies'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\\{]')},
+             docstring='jump backward out of inner most brace pair')
+add_csc(acmd)
+
+#
+# angled brackets
+#
+acmd = CSCmd(spoken_forms=['after angled bracket', 'after angled'],
+             meanings={ContAny(): ActionSearch('[<>]\s{0,1}')},
+             docstring='go after next angled (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before angled bracket', 'before angled'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[<>]', where=-1)},
+             docstring='go before next angled bracket (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous angled bracket',
+                           'after previous angled'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[<>]]', direction=-1)},
+             docstring='go after previous angled bracket (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous angled bracket',
+                           'before previous angled'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[<>]', direction=-1, where=-1)},
+             docstring='go before previous angled bracket (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of angled', 'out of angled brackets'],
+             meanings={ContAny(): ActionSearch('[>]\s{0,1}')},
+             docstring='jump forward out of inner most angled bracket pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of angled', 'back out of angled brackets'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[<]')},
+             docstring='jump backward out of inner most angled bracket pair')
+add_csc(acmd)
+
+#
+# quotes
+#
+acmd = CSCmd(spoken_forms=['after quote'],
+             meanings={ContAny(): ActionSearch('["]\s{0,1}')},
+             docstring='go after next quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}["]', where=-1)},
+             docstring='go before next quote (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}["]]', direction=-1)},
+             docstring='go after previous quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}["]', direction=-1, where=-1)},
+             docstring='go before previous quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of quotes'],
+             meanings={ContAny(): ActionSearch('[">]\s{0,1}')},
+             docstring='jump forward out of inner most quote pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of quotes'],
+             meanings={ContAny(): ActionSearch('\s{0,1}["]')},
+             docstring='jump backward out of inner most quote pair')
+add_csc(acmd)
+
+#
+# single quotes
+#
+acmd = CSCmd(spoken_forms=['after single quote'],
+             meanings={ContAny(): ActionSearch('[\']\s{0,1}')},
+             docstring='go after next single quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before single quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\']', where=-1)},
+             docstring='go before next single quote (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous single quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\']]', direction=-1)},
+             docstring='go after previous single quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous single quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\']', direction=-1, where=-1)},
+             docstring='go before previous single quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of single quotes'],
+             meanings={ContAny(): ActionSearch('[\'>]\s{0,1}')},
+             docstring='jump forward out of inner most single quote pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of single quotes'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\']')},
+             docstring='jump backward out of inner most single quote pair')
+add_csc(acmd)
+
+#
+# back quotes
+#
+acmd = CSCmd(spoken_forms=['after back quote'],
+             meanings={ContAny(): ActionSearch('[`]\s{0,1}')},
+             docstring='go after next back quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before back quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[`]', where=-1)},
+             docstring='go before next back quote (opening or closing)')
+acmd = CSCmd(spoken_forms=['after previous back quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[`]]', direction=-1)},
+             docstring='go after previous back quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['before previous back quote'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[`]', direction=-1, where=-1)},
+             docstring='go before previous back quote (opening or closing)')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['out of back quotes'],
+             meanings={ContAny(): ActionSearch('[`>]\s{0,1}')},
+             docstring='jump forward out of inner most back quote pair')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back out of back quotes'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[`]')},
+             docstring='jump backward out of inner most back quote pair')
+add_csc(acmd)
+
+
+#
+# All balanced expressions
+#
+acmd = CSCmd(spoken_forms=['jump out'],
+             meanings={ContAny(): ActionSearch('[\]\)\}\'\"]\s{0,1}')},
+             docstring='jump out of innermost balanced expression')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
+             meanings={ContAny(): ActionSearch('\s{0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
+             docstring='jump backwards out of innermost balanced expression')
+add_csc(acmd)
+
+
+
+##############################################################################
+# CSCs and LSAs that apply for more than one language (but not necessarily
+# all)
+##############################################################################
+
+add_lsa(['multiply by', 'multiplied by', 'times'], 
+        {'C': ' * ', 'python': ' * ', 'perl': ' * '})
+add_lsa(['to the power', 'to the power of', 'power of'], 
+        {'C': '**', 'python': '**', 'perl': '**'})
+add_lsa(['divide by', 'divided by'],
+        {'C': ' / ', 'python': ' / ', 'perl': ' / '})
+add_lsa(['plus'], {'C': ' + ', 'python': ' + ', 'perl': ' + '})
+add_lsa(['minus'], {'C': ' - ', 'python': ' - ', 'perl': ' - '})
+add_lsa(['modulo'], {'C': ' % ', 'python': ' % '})
+add_lsa(['left shift'], {'C': ' << ', 'python': ' << ', 'perl': ' << '})
+add_lsa(['right shift'], {'C': ' >> ', 'python': ' >> ', 'perl': ' >> '})
+add_lsa(['not'], {'python': 'not ', 'C': '!', 'perl': '!'})
+add_lsa(['or'], {'python': ' or ', 'C': ' || ', 'perl': ' || '})
+add_lsa(['binary and', 'bitwise and'], {'C': ' & ', 'python': ' & '})
+add_lsa(['binary or', 'bitwise or'], {'C': ' | ', 'python': ' | '})
+add_lsa(['binary not', 'bitwise not'], {'C': '~', 'python': '~'})
+add_lsa(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'C': ' ^ ', 'python': ' ^ '})
+add_lsa(['equals', 'equal', 'is assigned', 'assign value'],
+        {'C': ' = ', 'python': ' = '})
+add_lsa(['less than', 'is less than'],
+        {'C': ' < ', 'python': ' < ', 'perl': ' < '})
+add_lsa(['greater than', 'is greater than'],
+        {'C': ' > ', 'python': ' > ', 'perl': ' > '})
+add_lsa(['less or equal to', 'is less or equal to', 'less or equal',
+        'is less or equal'],
+        {'C': ' <= ', 'python': ' <= ', 'perl': ' <= '})
+add_lsa(['greater or equal to', 'is greater or equal to', 'greater or equal',
+        'is greater or equal'],
+        {'C': ' >= ', 'python': ' >= ', 'perl': ' >= '})
+add_lsa(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+        'is different from', 'differs from', 'bang equal'],
+        {'C': ' != ', 'python': ' != ', 'perl': ' != '})
+add_lsa(['equal to', 'is equal to', 'is equal'],
+        {'C': ' == ', 'python': ' == ', 'perl': ' == '})
+add_lsa(['without arguments', 'with no arguments', 'without argument',
+        'with no argument'],
+        {'python': '()', 'perl': '()', 'C': '()'})
+acmd = CSCmd(spoken_forms=['with arguments', 'call with', 'called with'],
+             meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
+                       ContPerl(): gen_parens_pair},
+             docstring='argument list for function')
+add_csc(acmd)        
+add_lsa(['comment line', 'new comment'], {'perl': '\n# ', 'python': '\n# '})
+add_lsa(['return'], {'C': 'return ', 'python': 'return '})
+add_lsa(['empty dictionary', 'empty hash'], {'python': '{}', 'perl': '{}'})
+acmd = CSCmd(spoken_forms=['dictionary with elements', 'hash with elements', 
+                           'new dictionary', 'new hash',
+                           'dictionary with items', 'hash with items'],
+             meanings={ContPy(): ActionInsert('{', '}'),
+                       ContPerl(): ActionInsert('(', ')')},
+             docstring='dictionary with enumareted elements')
+add_csc(acmd)             
+add_lsa(['empty list'], {'python': '[]', 'perl': '()'})
+acmd = CSCmd(spoken_forms=['list with elements', 'new list',
+                           'list with items'],
+             meanings={ContPy(): ActionInsert('[', ']'),
+                       ContPerl(): ActionInsert('(', ')')},
+             docstring='list with enumareted elements')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['at index'],
+             meanings={ContPy(): ActionInsert('[', ']'),
+                       ContC(): ActionInsert('[', ']'),
+                       ContPerl(): ActionInsert('[', ']')},
+             docstring='array element access')
+add_csc(acmd)             
+acmd = CSCmd(spoken_forms=['at key'],
+             meanings={ContPy(): ActionInsert('[', ']'), 
+                       ContPerl(): ActionInsert('{', '}')},
+             docstring='dictionary/hash element access')
+add_csc(acmd)                          
+acmd = CSCmd(spoken_forms=['new statement'],
+             meanings={ContPy(): py_new_statement, ContC(): c_new_statement},
+             docstring='start new statement on next line')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['body', 'goto body'],
+             meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
+                       ContPerl(): c_goto_body},
+             docstring = 'move to body of a compound statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['for', 'for loop'],
+             meanings={ContC(): c_simple_for, ContPy(): py_simple_for,
+                       ContPerl(): c_simple_for},
+             docstring='for loop')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['while', 'while loop'],
+             meanings={ContC(): c_simple_while,
+                       ContPy(): ActionInsert('while ', ':\n'),
+                       ContPerl(): c_simple_while},
+             docstring='while loop')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['do', 'loop body', 'for body', 'while body'],
+             meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
+                       ContPerl(): c_goto_body},
+             docstring = 'move to body of loop')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['if', 'if statement'],
+             meanings={ContPy(): ActionInsert('if ', ':\n'),
+                       ContC(): ActionInsert('if (', ')\n{\n}'),
+                       ContPerl(): ActionInsert('if (', ') {\n}')},
+             docstring = 'if statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
+                           'elsif clause', 'elif', 'elif clause'],
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'elif ', ': \n'),
+                       ContC(): c_else_if,
+                       ContPerl(): perl_else_if},
+             docstring = 'else if clause of conditional statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['else clause', 'else'],
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'else:\n', ''),
+                       ContC(): c_else,
+                       ContPerl(): c_else},
+             docstring = 'else clause of conditional statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['then', 'then do', 'if body'],
+             meanings={ContPy(): py_goto_body, ContC(): c_goto_body,
+                       ContPerl(): c_goto_body},
+             docstring='move to body of a conditional')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
+                           'class definition', 'class declaration'],
+             meanings={ContC(): cpp_class_definition,
+                       ContPy(): py_class_definition},
+             docstring='class definition')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
+                           'is subclass of', 'with superclass',
+                           'with superclasses'],
+             meanings={ContC(): cpp_subclass, ContPy(): gen_parens_pair},
+             docstring='superclasses of a class')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['class body'],
+             meanings={ContC(): cpp_class_body, ContPy(): py_class_body},
+             docstring='move to body of class definition')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['define method'],
+             meanings={ContC(): c_function_declaration,
+                       ContPy(): py_method_declaration},
+             docstring='method definition')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
+             meanings={ContC(): c_function_add_argument,
+                       ContPy(): py_function_add_argument},
+             docstring='move to end of argument list of a function call or declaration')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['method body'],
+             meanings={ContC(): c_function_body, ContPy(): py_function_body},
+             docstring='move to body of a function definition')
+add_csc(acmd)
+
+
+###############################################################################
+# Python specicif stuff
+###############################################################################
+
+#
+# Python standard symbols
+#
+standard_symbols_in([vc_globals.config + os.sep + 'py_std_sym.py'])
+
+#
+# Define the native syntax of Python
+#
+define_language('python',
+                LangDef(regexp_symbol='[a-zA-Z_][a-zA-Z0-9_]*',
+                        regexps_no_symbols=['#[^\n]*\n', '"""[\s\S]*?"""',
+                                            '"([^"]|\\")*?"',
+                                            '\'([^\']|\\\')*?\'']))
+
+#
+# CSCs and LSAs specific to Python
+#
+add_lsa(['continue statement'], {'python': '\\\n'})
+add_lsa(['assert'], {'python': 'assert '})
+add_lsa(['del', 'delete', 'delete', 'delete', 'delete object',
+         'delete instance'],
+        {'python': 'del '})
+add_lsa(['raise', 'raise exception'], {'python': 'raise '})
+acmd = CSCmd(spoken_forms=['lambda'],
+             meanings={ContPy(): ActionInsert('lambda ', ': ')},
+             docstring='python lamdba function')
+add_csc(acmd)
+add_lsa(['return'], {'python': 'return '})
+add_lsa(['break'], {'python': 'break\n'})
+add_lsa(['global', 'global variable', 'global variables'],
+        {'python': 'global '})
+add_lsa(['from', 'from module'], {'python': 'from '})
+# this form used for statements : import module1, module2, etc...
+add_lsa(['import', 'import module', 'import modules'], {'python': 'import '})
+# this form used for statements like: from module symbol1, symbol2, etc...
+add_lsa(['import symbols', 'import symbol'], {'python': ' import '})
+# this form used for statements like: from module import all
+add_lsa(['import all'], {'python': ' import all'})
+acmd = CSCmd(spoken_forms=['try'],
+             meanings={ContPy(): ActionInsert('try ', ': \n')},
+             docstring='python try statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions'],
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'except ', ': \n')},
+             docstring='python except statement')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['finally', 'finally do'],
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'finally:\n', '')},
+             docstring='finally clause of python try statement')
+add_csc(acmd)
+add_lsa(['continue'], {'python': 'continue\n'})
+add_lsa(['exec'], {'python': 'exec '})
+add_lsa(['pass'], {'python': 'pass\n'})
+add_lsa(['in', 'in list'], {'python': ' in '})
+add_lsa(['triple quote', 'open triple quote', 'close triple quote'],
+        {'python': '"""'})
+add_lsa(['empty triple quotes', 'empty triple'], {'python': '""""""'})
+acmd = CSCmd(spoken_forms=['between triple quotes', 'triple quotes'],
+             meanings={ContAny(): ActionInsert('"""', '"""')},
+             docstring = 'put cursor between triple quotes: """^"""')
+add_csc(acmd)
+
+add_lsa(['three single quote', 'open three single quote',
+         'open three single', 'close three single quote',
+         'close three single'],
+         {'python': '\'\'\''})
+add_lsa(['empty three single quotes', 'empty three single'],
+         {'python': '\'\'\'\'\'\''})
+acmd = CSCmd(spoken_forms=['between three single quotes',
+                           'between three single', 'three single quotes'],
+             meanings={ContAny(): ActionInsert('\'\'\'', '\'\'\'')},
+             docstring = 'put cursor between three single quotes: \'\'\'^\'\'\'')
+add_csc(acmd)
+add_lsa(['concatenate', 'concatenate with'], {'python': ' + '})
+add_lsa(['collect arguments', 'collect rest'], {'python': '**'})
+
+# '<>' is obsolete in python ('!=' is now the encouraged form), but we include
+# it so we can select code that uses the obsolete form
+add_lsa(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+        'is different from', 'differs from', 'less greater',
+        'less than greater than'],
+        {'python': ' <> '})
+add_lsa(['is', 'is same', 'same as', 'is same as'], {'python': ' is '})
+add_lsa(['empty tuple'], {'python': '()'})
+acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
+                           'tuple with items'],
+             meanings={ContPy(): ActionInsert('(', ')')},
+             docstring='python tuple with enumareted elements')
+add_csc(acmd)
+
+
+###############################################################################
+# C/C++ specific stuff
+###############################################################################
+
+#
+# Define native syntax of C/C++
+#
+define_language('C',
+                LangDef(regexp_symbol='[a-zA-Z_][a-zA-Z0-9_]*',
+                        regexps_no_symbols=['/\*.*\*/', '//[^\n]*\n',
+                                            '"([^"]|\\")*?"',
+                                            '\'([^\']|\\\')*?\'']))
+
+
+###############################################################################
+# Add words which are missing from the SR vocab
+###############################################################################
+
+# 'un' prefix as in unspecified, untranslated etc...
+sr_interface.addWord('un')
+
+#
+# For some reason, if we don't add this word, ['sub', 'class'] is often
+# recognised as ['sub\\sub routine', 'class'] (even if I use recognitionMimic).
+# This causes problems because the spoken form of this is 'sub routine class'
+# which the interpreter doesn't understand.
+#
+# Wonder why NatSpeak insists on sending a word with spoken form
+# 'sub routine'
+#
+sr_interface.addWord('sub class\\sub class')
+
+
+if (__name__ == '__main__'): natlink.natDisconnect()
