@@ -39,12 +39,19 @@ import os
 # Various directories
 #
 home = os.environ['VCODE_HOME']
-admin = home + os.sep + 'Admin'
-config = home + os.sep + 'Config'
-data = home + os.sep + 'Data'
-doc = home + os.sep + 'Doc'
-doc_modules = doc + os.sep + 'Modules'
-state = data + os.sep + 'State'
-tmp = data + os.sep + 'Tmp'
-test_data = data + os.sep + 'TestData'
-default_config_file = config + os.sep + 'vc_config.py'
+
+admin = os.path.join(home, 'Admin')
+unit_tests_dir = os.path.join(admin, 'UnitTests')
+
+config = os.path.join(home, 'Config')
+
+data = os.path.join(home, 'Data')
+state = os.path.join(data, 'State')
+tmp = os.path.join(data, 'Tmp')
+test_data = os.path.join(data, 'TestData')
+benchmark_dir = os.path.join(data, 'Benchmark')
+
+doc = os.path.join(home, 'Doc')
+doc_modules = os.path.join(doc, 'Modules')
+
+default_config_file = os.path.join(config, 'vc_config.py')
