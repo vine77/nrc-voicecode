@@ -56,6 +56,7 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
+                    'ReformatRecentSymbols.reformat_nth': 1,
                     'SymbolResult.suggestions_list': 1,
                     'SymbolResult.possible_new_symbol_formats': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0

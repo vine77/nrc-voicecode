@@ -119,6 +119,30 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
         self.console.destroy_main_frame()
         self.mock_reformat_from_recent.Destroy()
         self.dlg.Destroy()
+
+    def assert_reformat_from_recent_invoked_with_symbol(self, symbol):
+       self.assert_(self.dlg.dlg_reformat_from_recent.was_displayed_modally,
+                    "Reformat from recent dialog was not displayed")
+       self.assert_equals(symbol, self.dlg.dlg_reformat_from_recent.symbol,
+                          "Reformat from recent dialog invoked with wrong symbol")
+
+    def assert_symbols_were_reformatted_to(self, expected_reformatting_indices, mess=''):
+       expected_reformattings = []
+       for expected_indices in expected_reformatting_indices:
+          this_symbol = self.dlg.symbols[expected_indices[0]]
+          this_old_form = this_symbol.native_symbol()
+          this_new_form = this_symbol.reformatted_to
+          this_reformatting = (this_old_form, this_new_form)
+          expected_reformattings.append(this_reformatting)
+       expected_reformattings.sort()
+
+       got_reformattings = []       
+       for a_symbol in self.dlg.user_reformatted_symbols():
+          got_reformattings.append((a_symbol.native_symbol(), a_symbol.reformatted_to))
+       got_reformattings.sort()
+       
+       self.assert_sequences_have_same_content(expected_reformattings, got_reformattings,
+                                            mess + "\nList of reformattings was wrong.")
         
     def test_fixture_initialisation(self):
         self.assert_(self.dlg != None, "Symbool reformatting model not initialised properly.")
@@ -134,18 +158,42 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
                 self.dlg.displayed_symbols(),
                "Displayed utterances were wrong.")
 
-    def assert_reformat_from_recent_invoked_with_symbol(self, symbol):
-       self.assert_(self.dlg.dlg_reformat_from_recent.was_displayed_modally,
-                    "Reformat from recent dialog was not displayed")
-       self.assert_equals(symbol, self.dlg.dlg_reformat_from_recent.symbol,
-                          "Reformat from recent dialog invoked with wrong symbol")
-
     def test_choose(self):
        self.dlg.do_choose(0)
        self.assert_equals(0, self.dlg.selected_symbol_index(),
                           "Selected symbol was wrong.")
        self.assert_reformat_from_recent_invoked_with_symbol(self.dlg.symbols[0])
        
+    def reformat_a_symbol(self, nth_symbol, iith_form_for_that_symbol, how='choose'):
+       self.dlg.do_choose(nth_symbol)
+       if how == 'choose':
+          self.dlg.dlg_reformat_from_recent.do_choose_nth_form(iith_form_for_that_symbol)
+       elif how == 'select_then_cancel':
+          self.dlg.dlg_reformat_from_recent.do_select_nth_form(iith_form_for_that_symbol)
+          self.dlg.dlg_reformat_from_recent.do_cancel()
+       elif how == 'select_then_ok':
+          self.dlg.dlg_reformat_from_recent.do_select_nth_form(iith_form_for_that_symbol)
+          self.dlg.dlg_reformat_from_recent.do_ok()
+       else:
+          raise RuntimeError("unknown value for how=%s" % how)
+       
+       
+    def test_do_ok(self):
+       self.reformat_a_symbol(1, 1)
+       self.reformat_a_symbol(0, 1)
+       self.dlg.do_ok()
+       self.assert_symbols_were_reformatted_to([(0, 1), (1, 1)])
+       
+    def test_do_cancel(self):
+       self.reformat_a_symbol(1, 1)
+       self.reformat_a_symbol(0, 1)
+       self.dlg.do_cancel()
+       self.assert_symbols_were_reformatted_to([])
+       
+    def test_do_cancel_on_reformat_from_recent_subdialog(self):
+       self.reformat_a_symbol(1, 1, how='select_then_cancel')
+       self.assert_symbols_were_reformatted_to([])
+              
 class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
     def __init__(self, name):
        MediatorConsoleWXTestCase.__init__(self, name)
@@ -189,19 +237,27 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.assert_sequences_have_same_content(expected, self.dlg.displayed_list_of_alternate_forms(),
                                                 "Displayed utterances were wrong.")
 
-    def test_fixture_initialisation(self):
-        self.assert_(self.dlg != None, "Reformat from recent dialog not initialised properly.")
-        self.assert_displayed_form_is('new_symbol_1_1')
-        self.assert_displayed_alternate_forms_are(self.sym1_1.suggestions_list())
-        self.assert_displayed_spoken_form_is(string.join(self.sym1_1.spoken_phrase()))
-
-        
     def assert_symbol_was_not_reformatted(self):
         self.assert_(not self.dlg.symbol.reformatted_to, "Symbol reformatted prematurely, or its reformatting was not undone as it should have")
 
     def assert_symbol_was_reformatted_to(self, expected_form):
         self.assert_equals(expected_form, self.dlg.symbol.reformatted_to,
                            "Symbol reformatted to the wrong form.")
+
+
+    def assert_dialog_was_not_okayed(self, mess=''):
+        self.assert_(not self.dlg.was_okayed, 
+                     mess + "\nDialog was okayed when it should NOT have.")    
+
+    def assert_dialog_was_okayed(self, mess=''):
+        self.assert_(self.dlg.was_okayed, 
+                     mess + "\nDialog was NOT okayed when it should have.")    
+
+    def test_fixture_initialisation(self):
+        self.assert_(self.dlg != None, "Reformat from recent dialog not initialised properly.")
+        self.assert_displayed_form_is('new_symbol_1_1')
+        self.assert_displayed_alternate_forms_are(self.sym1_1.suggestions_list())
+        self.assert_displayed_spoken_form_is(string.join(self.sym1_1.spoken_phrase()))
         
     def test_on_select_form(self):
         self.dlg.do_select_nth_form(2)
@@ -212,15 +268,18 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.dlg.do_choose_nth_form(2)
         self.assert_displayed_form_is(self.sym1_1.suggestions_list()[2], 'Selecting new format did not change the displayed form.')
         self.assert_symbol_was_reformatted_to(self.sym1_1.suggestions_list()[2])
+        self.assert_dialog_was_okayed()
+        
         
     def test_cancel(self):
         self.dlg.do_choose_nth_form(2)
         self.dlg.do_cancel()
         self.assert_symbol_was_not_reformatted()
+        self.assert_dialog_was_not_okayed()
         
     def test_type_form(self):
         typed_form = '__new_symbol_1_1'
         self.dlg.do_type_form(typed_form)
         self.dlg.do_ok()
         self.assert_symbol_was_reformatted_to(typed_form)
-        
+        self.assert_dialog_was_okayed()

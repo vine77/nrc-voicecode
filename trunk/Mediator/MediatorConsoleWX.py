@@ -444,9 +444,9 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         debug.trace('MediatorConsoleWX.show_recent_symbols', 'symbols=%s' % repr(symbols))
         box = ReformatRecentSymbols(self, self.main_frame, 
                     symbols, self.gram_factory)
-                    
-
-        answer = self.show_modal_dialog(box)
+        self.show_modal_dialog(box)
+        
+        
 #        self.corr_recent_pos = box.GetPositionTuple()
 #        changed = box.changed()  
 #        box.cleanup()
@@ -1779,6 +1779,19 @@ class ReformatRecentSymbols(DlgModelViewWX):
                           
     def do_cancel(self):
         return self.view().do_cancel()
+        
+    def do_ok(self):
+        return self.view().do_ok()
+        
+    def on_ok(self):
+        pass
+      
+    def on_cancel(self):
+        self.void_all_user_reformattings()
+       
+    def void_all_user_reformattings(self):
+        for a_symbol in self.symbols:
+           a_symbol.reformat_to(None)
        
     def selected_symbol_index(self):
        """returns index (in the list of displayed symbols) of the currently selected
@@ -1788,22 +1801,22 @@ class ReformatRecentSymbols(DlgModelViewWX):
     def reformat_nth(self, nth):
         symbol = self.symbols[nth]
         box = self.make_reformat_from_recent_dlg(symbol)
-        answer = self.console.show_modal_dialog(box)
-
-        if answer == wxID_OK:
-            return 'ok'
-        elif answer == wxID_CANCEL:
-            return 'cancel'
-        elif answer == wxID_CORRECT_NEXT:
-            return 'next'
-        elif answer == wxID_CORRECT_PREV:
-            return 'previous'
-        elif answer == wxID_CORRECT_MORE:
-            return 'more'
-        elif answer == wxID_DISCARD_CORRECTION:
-            return 'discard'
-# shouldn't happen, but ...
-        return None
+        self.console.show_modal_dialog(box)
+        
+    def user_reformatted_symbols(self):
+       """returns the list of symbols which were reformatted
+       by the user
+       
+       **OUTPUTS**
+       
+       *[SymbolResult]* -- the list of symbols.
+       """
+       reformatted_symbols = []
+       for a_symbol in self.symbols:
+          if a_symbol.reformatted_to:
+             reformatted_symbols.append(a_symbol)
+       return reformatted_symbols
+       
         
     def make_reformat_from_recent_dlg(self, symbol):
        """creates a dialog for reformattting
@@ -2001,8 +2014,8 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
 
         debug.trace('ReformatRecentSymbolsViewWX.__init__', '** EXITED')
         
-    def on_ok(self, event):
-        pass
+    def on_ok(self):
+        self.model().on_ok()
 
     def on_activate(self, event):
         debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
@@ -2021,7 +2034,6 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
 
         - None -
         """
-        debug.trace('ReformatRecentSymbolsViewWX.on_choose', '** event=%s' % event)
         self.model().reformat_nth(event.GetIndex())
         
     def reformat_symbol(self, symbol):   
@@ -2077,12 +2089,18 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
     def do_cancel(self):
        self.model().on_cancel()
        
+    def do_ok(self):
+       self.on_ok()
+       
 class ReformatFromRecentWX(DlgModelViewWX):
     """model-view dialog for reformatting one dictated symbol.
 
     **INSTANCE ATTRIBUTES**
 
     *SymbolResults symbol* -- the symbol to be corrected.
+    
+    *BOOL was_okayed=false* -- true IIF the dialog was OKayed as opposed to 
+    cancelled.
 
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
@@ -2093,6 +2111,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
     def __init__(self, console, parent, symbol, **args):                                      
        self.deep_construct(ReformatFromRecentWX, 
                            {'symbol': symbol,
+                            'was_okayed': false,
                             'console': console,
                             'parent': parent
                            },
@@ -2140,15 +2159,17 @@ class ReformatFromRecentWX(DlgModelViewWX):
               
     def on_choose_alternate_form(self, nth):
        self.on_select_alternate_form(nth)
-       self.symbol.reformat_to(self.symbol.suggestions_list()[nth])
+       self.on_ok()
        
     def do_cancel(self):
        self.view().do_cancel()
        
     def on_cancel(self):
+       self.was_okayed = false
        self.symbol.reformat_to(None)         
 
     def on_ok(self):
+       self.was_okayed = true
        self.symbol.reformat_to(self.chosen_form())
        
     def do_ok(self):
