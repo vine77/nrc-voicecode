@@ -2036,6 +2036,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
        self.console.win_sys.raise_main_frame()
        
     def on_select(self, event):
+       debug.trace('ReformatRecentSymbolsView.on_select', 'invoked')
        pass
        
     def do_choose(self, nth):
@@ -2118,7 +2119,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
               
     def on_choose_alternate_form(self, nth):
        self.on_select_alternate_form(nth)
-       self.on_ok()
+       self.do_ok()
        
     def do_cancel(self):
        self.view().do_cancel()
@@ -2339,6 +2340,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        self.model().on_format_pick_list_char(event)
 
     def on_choose_alternate_form(self, event):
+       debug.trace('ReformatFromRecentViewWX.on_choose_alternate_form', 'invoked')
        self.model().on_choose_alternate_form(event.GetIndex())
 
     def displayed_list_of_alternate_forms(self):
@@ -2359,6 +2361,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
 
 
     def on_select_alternate_form(self, evt):
+       debug.trace('ReformatFromRecentViewWX.on_select_alternate_form', 'invoked')
        self.model().on_select_alternate_form(evt.GetIndex())
        
     def set_alternate_form(self, written_form):
