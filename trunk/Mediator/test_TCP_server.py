@@ -72,7 +72,7 @@ class ListenThread(threading.Thread, Object.Object):
                             {})
 
 
-    def upd_curpos_sel(self):
+    def upd_curpos_sel(self, buff_name = None):
         
         """Returns a list of updates, whose effect is to synchronise the cursor position and selection.
 
@@ -87,11 +87,13 @@ class ListenThread(threading.Thread, Object.Object):
         *none* -- 
         """
 
-        buff_name = self.xed.ed.app_active_buffer_name()
+	if buff_name == None:
+	    buff_name = self.xed.ed.app_active_buffer_name()
+	buff = self.xed.ed.find_buff(buff_name)
         updates = []
 
-        updates.append({'action': 'select', 'range': self.xed.ed.get_selection(), 'buff_name': buff_name})        
-        updates.append({'action': 'goto', 'pos': self.xed.ed.cur_pos(), 'buff_name': buff_name})
+        updates.append({'action': 'select', 'range': buff.get_selection(), 'buff_name': buff_name})        
+        updates.append({'action': 'goto', 'pos': buff.cur_pos(), 'buff_name': buff_name})
 
         return updates
             
@@ -111,24 +113,35 @@ class ListenThread(threading.Thread, Object.Object):
         
         trace('test_TCP_server.execute_request', 'req=%s' % repr(req))
         
-        buff_name = self.xed.ed.app_active_buffer_name()
         action = req[0]
         args = req[1]
+	if args.has_key('buff_name'):
+	    buff_name = args['buff_name']
+	else:
+	    buff_name = self.xed.ed.app_active_buffer_name()
+	buff = self.xed.ed.find_buff(buff_name)
         if action == 'active_buffer_name':
-            self.xed.vc_talk_msgr.send_mess('active_buffer_name_resp', {'value': self.xed.ed.app_active_buffer_name()})
+            self.xed.vc_talk_msgr.send_mess('active_buffer_name_resp', 
+	        {'value': self.xed.ed.app_active_buffer_name()})
         elif action == 'language_name':
-            self.xed.vc_talk_msgr.send_mess('language_name_resp', {'value': self.xed.ed.curr_buffer().language_name()})
+            self.xed.vc_talk_msgr.send_mess('language_name_resp', 
+		{'value': buff.language_name()})
         elif action == 'newline_conventions':
-            self.xed.vc_talk_msgr.send_mess('newline_conventions_resp', {'value': self.xed.ed.curr_buffer().newline_conventions()})
+            self.xed.vc_talk_msgr.send_mess('newline_conventions_resp', 
+		{'value': buff.newline_conventions()})
         elif action == 'pref_newline_convention':
-            self.xed.vc_talk_msgr.send_mess('pref_newline_convention_resp', {'value': self.xed.ed.curr_buffer().pref_newline_convention()})                        
+            self.xed.vc_talk_msgr.send_mess('pref_newline_convention_resp', 
+		{'value': buff.pref_newline_convention()})                        
         elif action == 'cur_pos':
-            self.xed.vc_talk_msgr.send_mess('cur_pos_resp', {'value': self.xed.ed.cur_pos()})
+            self.xed.vc_talk_msgr.send_mess('cur_pos_resp', 
+		{'value': buff.cur_pos()})
 
         elif action == 'multiple_buffers':
-            self.xed.vc_talk_msgr.send_mess('multiple_buffers_resp', {'value': 0})            
+            self.xed.vc_talk_msgr.send_mess('multiple_buffers_resp', 
+	        {'value': 0})            
         elif action == 'bidirectional_selection':
-            self.xed.vc_talk_msgr.send_mess('bidirectional_selection_resp', {'value': 0})    
+            self.xed.vc_talk_msgr.send_mess('bidirectional_selection_resp', 
+	        {'value': 0})    
 	elif action == 'list_open_buffers':
 	    self.xed.vc_talk_msgr.send_mess('list_open_buffers_resp',
 		{'value': self.xed.ed.open_buffers_from_app()})
@@ -138,55 +151,72 @@ class ListenThread(threading.Thread, Object.Object):
 	    self.xed.vc_talk_msgr.send_mess('confirm_buffer_exists_resp', 
 		{'value': resp})
         elif action == 'get_selection':
-            self.xed.vc_talk_msgr.send_mess('get_selection_resp', {'value': self.xed.ed.get_selection()})
+            self.xed.vc_talk_msgr.send_mess('get_selection_resp', 
+	        {'value': buff.get_selection()})
         elif action == 'set_selection':
             range = messaging.messarg2intlist(args['range'])
             cursor_at = messaging.messarg2int(args['cursor_at'])
-            self.xed.ed.set_selection(range=range, cursor_at=cursor_at)
-            self.xed.vc_talk_msgr.send_mess('set_selection_resp', {'updates': self.upd_curpos_sel()})
+            buff.set_selection(range=range, cursor_at=cursor_at)
+            self.xed.vc_talk_msgr.send_mess('set_selection_resp', 
+	        {'updates': self.upd_curpos_sel(buff_name)})
         elif action == 'get_text':
             trace('test_TCP_server.execute_request',
                   'get_text, args[\'start\']=%s, args[\'end\']=%s' % ( args['start'], args['end']))
             start = messaging.messarg2int(args['start'])
             end = messaging.messarg2int(args['end'])
-            self.xed.vc_talk_msgr.send_mess('get_text_resp', {'value': self.xed.ed.get_text(start, end)})
-            trace('test_TCP_server.execute_request', 'request=\'get_text\', sending self.xed.ed.get_text(start, end)[0:100]=%s' % self.xed.ed.get_text(start, end)[0:100])
+            self.xed.vc_talk_msgr.send_mess('get_text_resp', 
+	        {'value': buff.get_text(start, end)})
+            trace('test_TCP_server.execute_request', 'request=\'get_text\', sending buff.get_text(start, end)[0:100]=%s' % buff.get_text(start, end)[0:100])
 
         elif action == 'get_visible':
-            self.xed.vc_talk_msgr.send_mess('get_visible_resp', {'value': self.xed.ed.get_visible()})            
+            self.xed.vc_talk_msgr.send_mess('get_visible_resp', 
+	        {'value': buff.get_visible()})            
 
         elif action == 'make_position_visible':
-            self.xed.vc_talk_msgr.send_mess('make_position_visible_resp', {'updates': self.upd_curpos_sel()})
+            self.xed.vc_talk_msgr.send_mess('make_position_visible_resp', 
+	        {'updates': self.upd_curpos_sel(buff_name)})
 
         elif action == 'len':
-            self.xed.vc_talk_msgr.send_mess('len', {'value': self.xed.ed.len()})
+            self.xed.vc_talk_msgr.send_mess('len', 
+	        {'value': buff.len()})
 
         elif action == 'insert':
             trace('test_TCP_server.execute_request',
                   'args=%s' % repr(args))
             text = args['text']
             range = messaging.messarg2intlist(args['range'])
-            self.xed.ed.insert(text, range)
-            updates = [{'action': 'insert', 'range': range, 'text': text, 'buff_name': buff_name}]
-            updates = updates + self.upd_curpos_sel()
+	    lrange = range
+	    if lrange == None:
+	        lrange = buff.get_selection()
+            buff.insert(text, range)
+            updates = [{'action': 'insert', 'range': lrange, 'text': text, 
+	        'buff_name': buff_name}]
+            updates = updates + self.upd_curpos_sel(buff_name)
             self.xed.vc_talk_msgr.send_mess('insert_resp', {'updates': updates})
             
         elif action == 'delete':
             range = messaging.messarg2intlist(args['range'])            
-            self.xed.ed.delete(range=range)
-            updates = [{'action': 'delete', 'range': range, 'buff_name': buff_name}]
-            print "-- execute_request: updates=%s, self.upd_curpos_sel()=%s" % (repr(updates), repr(self.upd_curpos_sel()))
-            updates = updates + self.upd_curpos_sel()
+	    lrange = range
+	    if lrange == None:
+	        lrange = buff.get_selection()
+            buff.delete(range=range)
+            updates = [{'action': 'delete', 'range': lrange, 
+	        'buff_name': buff_name}]
+            print "-- execute_request: updates=%s, self.upd_curpos_sel(buff_name)=%s" % (repr(updates), repr(self.upd_curpos_sel(buff_name)))
+            updates = updates + self.upd_curpos_sel(buff_name)
             self.xed.vc_talk_msgr.send_mess('delete_resp', {'updates': updates})
 
         elif action == 'goto':
             pos = messaging.messarg2int(args['pos'])
-            self.xed.ed.goto(pos)
-            self.xed.vc_talk_msgr.send_mess('goto_resp', {'updates': self.upd_curpos_sel()})
+            buff.goto(pos)
+            self.xed.vc_talk_msgr.send_mess('goto_resp', 
+	        {'updates': self.upd_curpos_sel(buff_name)})
         elif action == 'get_visible':
-            self.xed.vc_talk_msgr.send_mess('get_visible_resp', {'value': self.xed.ed.get_visible()})
+            self.xed.vc_talk_msgr.send_mess('get_visible_resp', 
+	        {'value': buff.get_visible()})
         elif action == 'recog_begin':
-            self.xed.vc_talk_msgr.send_mess('recog_begin_resp', {'value': 1}) 
+            self.xed.vc_talk_msgr.send_mess('recog_begin_resp', 
+	        {'value': 1}) 
         elif action == 'recog_end':
             #
             # *recog_end* is invoked at the end of an utterance.
@@ -198,7 +228,8 @@ class ListenThread(threading.Thread, Object.Object):
             trace('test_TCP_server.execute_request',
                   'action=\'open_file\'')
             self.xed.ed.open_file(file_name=args['file_name'])            
-            self.xed.vc_talk_msgr.send_mess('open_file_resp', {'buffer_id': args['file_name']})
+            self.xed.vc_talk_msgr.send_mess('open_file_resp', 
+	        {'buff_name': args['file_name']})
         elif action == 'close_buffer':
             trace('test_TCP_server.execute_request',
                   'action=\'close_buffer\'')
@@ -209,6 +240,11 @@ class ListenThread(threading.Thread, Object.Object):
         elif action == 'mediator_closing' or action == 'terminating':
             print "VoiceCode server was unilaterally shutdown."
             sys.exit()
+	elif action == 'updates':
+# EdSim has no user interface, so there should be no other updates
+            self.xed.vc_talk_msgr.send_mess('updates', 
+	        {'value': self.upd_curpos_sel(buff_name)})
+	    
 
     def run(self):
         """Listen for requests from VoiceCode and execute them.
@@ -225,7 +261,7 @@ class ListenThread(threading.Thread, Object.Object):
 
         while 1:
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating', 'mediator_closing'])
+                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating', 'mediator_closing', 'updates'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'

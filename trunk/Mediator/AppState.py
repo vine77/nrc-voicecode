@@ -472,6 +472,12 @@ class AppState(OwnerObject):
     is currently bound to operate on. If *None*, use editor's active
     buffer. See [curr_buffer_name] method for a description of buffer
     binding.
+
+    *FCT* change_callback --
+    change_callback( *INT* start, *INT* end, *STR* text, 
+    *INT* selection_start, *INT* selection_end, 
+    *STR* buff_name, *BOOL* program_initiated).   See set_change_callback 
+    below for details
      
     **CLASS ATTRIBUTES**
     
@@ -500,13 +506,15 @@ class AppState(OwnerObject):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0,
-                 max_history=100, print_buff_when_changed=0, 
+                 max_history=100, print_buff_when_changed=0,
+		 change_callback = None, 
 		 instance_name = None, manager = None, **attrs):
         
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
 			     'manager': manager,
+			     'change_callback': change_callback,
 			     'instance_name': instance_name,
                              'rec_utterances': [], 
                              'open_buffers': {},
@@ -575,48 +583,97 @@ class AppState(OwnerObject):
 	"""
 	self.manager = manager
 
-    def recog_begin(self, window_id):
+    def set_change_callback(self, change_callback = None):
+	"""changes the callback to a new function
+
+	**NOTE:** This method sets a change callback which will be
+	called for program-initiated changes, but may not be called for
+	user-initiated ones.
+
+	**INPUTS**
+      
+	*FCT* change_callback --
+	change_callback( *INT* start, *INT* end, *STR* text, 
+	*INT* selection_start, *INT* selection_end, 
+	*STR* buff_name, *BOOL* program_initiated)
+
+	The arguments to the change callback specify the character offsets
+	of the start and end of the changed region (before the change),
+	the text with which this region was replaced, the start and end
+	of the selected region (after the change), the name of the
+	buffer reporting the change, and whether the change was
+	initiated by the program, or by the user
+
+	Note the difference between this change_callback and the
+	TextBufferWX one: here the name of the buffer is returned,
+	rather than a reference to the underlying TextBufferWX.  
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.change_callback = change_callback
+
+    def on_change(self, buff_name, start, end, text, program_initiated):
+	"""method which should be called after the contents of a buffer
+	is changed.  If the AppState represents an external editor which
+	does not support change notification, then on_change may only be
+	called for mediator-initiated changes (including responses from
+	the external editor to mediator-initiated changes).
+
+	**INPUTS**
+
+	*STR* buff_name -- name of the modified buffer
+
+	*INT* start -- start of the modified range
+
+	*INT* end -- end of the modified range
+
+	*STR* text -- the new text replacing this range
+
+	*BOOL* program_initiated -- true if the change was
+	initiated by the mediator
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.change_callback:
+	    buff = self.find_buff(buff_name)
+	    if buff:
+		sel_start, sel_end = buff.get_selection()
+		self.change_callback(start, end, text, sel_start,
+		    sel_end, buff_name, self.update_response or 
+		    self.program_initiated)
+        
+    def recog_begin(self, window_id, block = 0):
         """Invoked at the beginning of a recognition event.
 
         The editor then returns telling VoiceCode whether or not the user
         is allowed to speak into window *window_id*.
 
-        If possible, the editor should also stop responding to user
-        input until method [recog_end()] is invoked. This is to
+        **INPUTS**
+        
+        STR *window_id* -- The ID of the window that was active when
+        the recognition began.                
+
+	*BOOL block* -- true if the speech engine can detect recog_end
+	events reliably.  If so, and if the editor is capable of doing so, 
+        the editor may (at its discretion) also stop responding to user
+        input until method [recog_end()] is invoked.  This is to
         prevent a bunch of problems that can arise if the user types
         while VoiceCode is still processing an utterance. In such
         cases, the results of the utterance interpretation can be
         unpredictable, especially when it comes to correction.
 
-        Each external editor will respond to that message as best it can.
+	**NOTE:** However, if block is false, the editor **MUST NOT**
+	stop responding, because the mediator will not be able to use
+	recog_end to tell it to resume responding to user input.  
 
-        Ideally, the editor would:
-
-        - Start recording user actions to a log
-        - execute those actions later when [recog_end()] is invoked.
-
-        If the editor is able to stop responding to user input, but is
-        not able to record them and/or execute them later, then it
-        should:
-
-        - Stop responding to user input until [recog_end()] is
-          later invoked.
-
-        If the editor is not even able to stop responding to user
-        input, then it should:
-
-        - Do nothing
-        
-
-        NOTE: This method may be invoked more than once before
-        [recog_end()] is invoked. In such cases, only the first
-        call to the method should do anything.
-
-        
-        **INPUTS**
-        
-        STR *window_id* -- The ID of the window that was active when
-        the recognition began.                
+	Also, the editor must provide a way for the user to re-enable
+	input manually, in case the mediator crashes.  If it cannot do
+	so, it should not stop responding, regardless of the value of
+	block.
 
         **OUTPUTS**
         
@@ -1335,6 +1392,8 @@ class AppState(OwnerObject):
         if buff != None:
 	    self.open_buffers[buff_name].cleanup()
             del self.open_buffers[buff_name]
+	    if self.current_manager() and self.name():
+		self.current_manager().close_buffer_cbk(self.name(), buff_name)
 	if self.is_bound_to_buffer() == buff_name:
 	    self.unbind_from_buffer()
 
@@ -1401,6 +1460,9 @@ class AppState(OwnerObject):
 		self.open_buffers[new_buff_name] = \
 		    self.open_buffers[old_buff_name]
 		del self.open_buffers[old_buff_name]
+		if self.current_manager() and self.name():
+		    self.current_manager().rename_buffer_cbk(self.name(), 
+			old_buff_name, new_buff_name)
 	    if self.is_bound_to_buffer() == old_buff_name:
 		self.bind_to_buffer(old_buff_name)
         buff = self.find_buff(new_buff_name)
@@ -1696,11 +1758,6 @@ class AppChangeSpec:
 
     **INSTANCE ATTRIBUTES**
 
-    *FCT* change_callback --
-    change_callback( *INT* start, *INT* end, *STR* text, 
-    *INT* selection_start, *INT* selection_end, 
-    *STR* buff_name, *BOOL* program_initiated).   See set_change_callback 
-    below for details
 
     **CLASS ATTRIBUTES**
 
@@ -1711,33 +1768,4 @@ class AppChangeSpec:
 	                    {'change_callback': change_callback,
 			    },
 			    args)
-
-    def set_change_callback(self, change_callback = None):
-	"""changes the callback to a new function
-
-	**INPUTS**
-      
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name)
-
-	The arguments to the change callback specify the character offsets
-	of the start and end of the changed region (before the change),
-	the text with which this region was replaced, the start and end
-	of the selected region (after the change), and the name of the
-	buffer reporting the change
-
-	Note the difference between this change_callback and the
-	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  Also,
-	this change callback is called only when the change is
-	initiated by the editor, not when the mediator calls a method
-	which makes a change.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('AppChangeSpec.set_change_callback')
 

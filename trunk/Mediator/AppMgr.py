@@ -405,6 +405,47 @@ class AppMgr(OwnerObject):
 # for now at least, this does the same thing as delete_instance
 	self.delete_instance(instance)
 
+    def close_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        # this should call NewMediatorObject, unless all buffer-specific
+	# information is stored under AppMgr.  Since I haven't decided
+	# yet where that information will be stored, do nothing for now
+	pass
+
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+	"""callback from AppState which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+        # this should call NewMediatorObject, unless all buffer-specific
+	# information is stored under AppMgr.  Since I haven't decided
+	# yet where that information will be stored, do nothing for now
+	pass
+
+
     def new_window(self, instance):
 	"""called when the editor notifies us of a new window for the 
 	specified instance

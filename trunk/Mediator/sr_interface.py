@@ -922,6 +922,7 @@ class CommandDictGrammar(DictGramBase):
         #
         # Check if Editor currently allows user to dictate in that window.
         #
+	self.app.synchronize_with_app()
         self.dictation_allowed = self.app.recog_begin(moduleInfo[2])
         
 	if self.window == 0:

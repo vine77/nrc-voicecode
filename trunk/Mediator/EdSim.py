@@ -112,7 +112,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    instance_reporting = self.instance_reporting)
 
         
-    def recog_begin(self, window_id):
+    def recog_begin(self, window_id, block = 0):
         
         """EdSim can't block user input and always allows user to dictate"""
 

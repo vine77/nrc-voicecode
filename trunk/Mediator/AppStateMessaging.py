@@ -43,6 +43,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     [Messenger] *talk_msgr* -- Messenger used to send commands
     to external application. 
+
+    BOOL *update_response* -- flag to signal that an update being
+    applied is a response to a mediator-initiated change
     
     **CLASS ATTRIBUTES**
     
@@ -56,7 +59,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
                              'listen_msgr': listen_msgr,
-                             'talk_msgr': talk_msgr},
+                             'talk_msgr': talk_msgr,
+			     'update_response': 0},
                             attrs)
 	self.multiple_buffer_support =  self._multiple_buffers_from_app()
 	self.bidirectional_selection_support = \
@@ -105,48 +109,34 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         debug.virtual('AppStateMessaging.config_from_external')
 
-    def recog_begin(self, window_id):
+    def recog_begin(self, window_id, block = 0):
         """Invoked at the beginning of a recognition event.
 
         The editor then returns telling VoiceCode whether or not the user
         is allowed to speak into window *window_id*.
 
-        If possible, the editor should also stop responding to user
-        input until method [recog_end()] is invoked. This is to
+        **INPUTS**
+        
+        STR *window_id* -- The ID of the window that was active when
+        the recognition began.                
+
+	*BOOL block* -- true if the speech engine can detect recog_end
+	events reliably.  If so, and if the editor is capable of doing so, 
+        the editor may (at its discretion) also stop responding to user
+        input until method [recog_end()] is invoked.  This is to
         prevent a bunch of problems that can arise if the user types
         while VoiceCode is still processing an utterance. In such
         cases, the results of the utterance interpretation can be
         unpredictable, especially when it comes to correction.
 
-        Each external editor will respond to that message as best it can.
+	**NOTE:** However, if block is false, the editor **MUST NOT**
+	stop responding, because the mediator will not be able to use
+	recog_end to tell it to resume responding to user input.  
 
-        Ideally, the editor would:
-
-        - Start recording user actions to a log
-        - execute those actions later when [recog_end()] is invoked.
-
-        If the editor is able to stop responding to user input, but is
-        not able to record them and/or execute them later, then it
-        should:
-
-        - Stop responding to user input until [recog_end()] is
-          later invoked.
-
-        If the editor is not even able to stop responding to user
-        input, then it should:
-
-        - Do nothing
-        
-
-        NOTE: This method may be invoked more than once before
-        [recog_end()] is invoked. In such cases, only the first
-        call to the method should do anything.
-
-        
-        **INPUTS**
-        
-        STR *window_id* -- The ID of the window that was active when
-        the recognition began.                
+	Also, the editor must provide a way for the user to re-enable
+	input manually, in case the mediator crashes.  If it cannot do
+	so, it should not stop responding, regardless of the value of
+	block.
 
         **OUTPUTS**
         
@@ -155,7 +145,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
 
-        self.talk_msgr.send_mess('recog_begin', {'window_id': window_id})
+        self.talk_msgr.send_mess('recog_begin', {'window_id': window_id, 
+	    'block': block})
         response = self.talk_msgr.get_mess(expect=['recog_begin_resp'])
         return messaging.messarg2int(response[1]['value'])
 
@@ -186,19 +177,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         - Do nothing
 
-        NOTE: This method may be invoked more than once before
-        [recog_begin()] is invoked. In such cases, only the first
-        call to the method should do anything.
+        NOTE: This method may be never be invoked
 
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        
         **INPUTS**
         
         *none* -- 
@@ -408,9 +388,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         #
         self.talk_msgr.send_mess('open_file', {'file_name': file_name})
         response = self.talk_msgr.get_mess(expect=['open_file_resp'])
-	buffer_id = response[1]['buffer_id']
+	buff_name = response[1]['buff_name']
 
-	return buffer_id
+	return buff_name
         
     def query_buffer_from_app(self, buff_name):
 	"""query the application to see if a buffer by the name of buff_name 

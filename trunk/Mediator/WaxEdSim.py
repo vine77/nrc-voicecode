@@ -106,7 +106,7 @@ class WaxEdSimPane(wxPanel):
     *FCT* change_callback --
     change_callback( *INT* start, *INT* end, *STR* text, 
     *INT* selection_start, *INT* selection_end, 
-    *STR* buff_name).   See set_change_callback 
+    *STR* buff_name, *BOOL* program_initiated).   See set_change_callback 
     below for details
 
 
@@ -325,10 +325,10 @@ class WaxEdSimPane(wxPanel):
         self.command_line.SetFocus()
     def on_editor_change(self, start, end, text, selection_start,
         selection_end, buffer, program_initiated):
-	if self.change_callback != None and not program_initiated:
+	if self.change_callback != None:
 	    buff_name = self.parent.app_control.app_active_buff_name()
 	    self.change_callback(start, end, text, selection_start,
-		selection_end, buff_name)
+		selection_end, buff_name, program_initiated)
 
     def set_change_callback(self, change_callback = None):
 	"""changes the callback to a new function
@@ -338,20 +338,18 @@ class WaxEdSimPane(wxPanel):
 	*FCT* change_callback --
 	change_callback( *INT* start, *INT* end, *STR* text, 
 	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name)
+	*STR* buff_name, *BOOL* program_initiated)
 
 	The arguments to the change callback specify the character offsets
 	of the start and end of the changed region (before the change),
 	the text with which this region was replaced, the start and end
-	of the selected region (after the change), and the name of the
-	buffer reporting the change
+	of the selected region (after the change), the name of the
+	buffer reporting the change, and whether the change was
+	program-initiated or editor-initiated.
 
 	Note the difference between this change_callback and the
 	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  Also,
-	this change callback is called only when the change is
-	initiated by the editor, not when the mediator calls a method
-	which makes a change.
+	rather than a reference to the underlying TextBufferWX.  
 
 	**OUTPUTS**
 

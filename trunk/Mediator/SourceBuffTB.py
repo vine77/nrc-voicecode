@@ -53,7 +53,18 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
     
     """
     
-    def __init__(self, underlying_buffer, **attrs):
+    def __init__(self, underlying_buffer, change_specification = 0, **attrs):
+        """
+	Create the SourceBuffTB object
+
+	**INPUTS**
+
+	*TextBuffer, VisibleBuffer, NumberedLines underlying_buffer* -- 
+	underlying TextBuffer (also supporting VisibleBuffer and NumberedLines) 
+
+	*BOOL change_specification* -- tells whether the underlying
+	buffer also supports change specification
+	"""
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3),
@@ -65,6 +76,39 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
                             )
 	self.add_owned_list(['state_srv', 'indent_srv', 'line_srv',
 	    'lang_srv'])
+	if change_specification:
+	    self.underlying.set_change_callback(self.on_underlying_change)
+
+    def on_underlying_change(start, end, text, selection_start,
+	selection_end, buffer, program_initiated):
+	"""method called by the underlying buffer to signal a change
+
+	**INPUTS**
+
+	*INT* start -- start of the changed region
+	
+	*INT* end -- end of the changed region
+	
+	*STR* text -- new text for the changed region
+
+	*INT* selection_start -- start of selection after change
+
+	*INT* selection_end -- end of selection after change
+
+	*TextBufferChangeSpecify* buffer -- underlying buffer
+	
+	*BOOL* program_initiated -- true if the change was initiated by
+	a program call to the buffer's methods
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# program-initiated changes will already call on_change, so we don't
+# want to report them twice
+	if not program_initiated:
+	    return
+	self.on_change(start, end, text, program_initiated)
 
     def file_name(self):
         return self.buff_name
@@ -179,6 +223,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	*none*
 	"""
 	self.underlying.set_text(text, start, end)
+	self.on_change(start, end, text, 1)
 
     def get_visible(self):
 	""" get start and end offsets of the currently visible region of
@@ -312,6 +357,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	else:
 	    start, end = self.make_valid_range(range)
 	self.underlying.set_text(text, start, end)
+	self.on_change(start, end, text, 1)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -408,6 +454,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	else:
 	    start, end = self.make_valid_range(range)
 	self.underlying.set_text('', start, end)
+	self.on_change(start, end, '', 1)
         
     def goto(self, pos):
 
