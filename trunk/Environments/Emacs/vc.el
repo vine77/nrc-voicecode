@@ -386,6 +386,7 @@ reply when done.")
 (if (not (boundp 'fix-else-abbrev-expansion))
     (defun fix-else-abbrev-expansion () nil))
 
+;(define-hash-table-test 'string= 'string= 'sxhash)
 (defvar vr-message-handler-hooks (make-hash-table :test 'string=)
   "This hash table associates command names with functions used to 
 process the command."

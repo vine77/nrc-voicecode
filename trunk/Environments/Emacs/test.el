@@ -1,6 +1,7 @@
 
 (setq debug-on-error t)
 (setq debug-on-quit t)
+;(c-toggle-auto-state nil)
 
 (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
 (message "**-- test.el: debug-on-error=%S\n" debug-on-error)

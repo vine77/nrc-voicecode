@@ -1459,21 +1459,6 @@ def instance_status(manager, instance):
 	    print app
     print ''
 
-def old_new_instance(manager, app_name, app, window = None):
-    print 'new instance of %s %d' % (app_name, app)
-    if window != None:
-	 print 'with window %d' % (window)
-    i_name = manager.new_instance(app_name, app, window)
-    a_name = manager.app_name(i_name)
-    if a_name != app_name:
-	print 'Warning: app names %s and %s do not match' \
-	    % (app_name, a_name)
-    a = manager.instances[i_name]
-    if a != app:
-	print 'Warning: AppStates %d and %d do not match' \
-	    % (app, a)
-    return i_name
-
 def set_window(current, window, app_name, app = None, alt_title = ""):
     current.set_info(window.ID(), window.module(), app, app_name, alt_title)
 
@@ -1488,32 +1473,32 @@ def new_buffer_for_instance(instance, buffer, before = "", after = ""):
     b.insert_indent(before, after)
     instance.print_buff_if_necessary()
 
-def new_instance(manager, current, app_name, title_prefix, app, window = None, 
+def new_instance(manager, current, app, window = None, 
 	alt_title = ""):
-    print 'new instance of %s %d' % (app_name, app)
+    print 'new instance of %s %d' % (app.app_name, app)
     check = 0
     if window != None:
 	 print 'with window %d' % (window)
 	 check = 1
-	 set_window(current, window, app_name, app, alt_title)
-    i_name = manager.new_instance(app_name, title_prefix, app, check)
+	 set_window(current, window, app.app_name, app, alt_title)
+    i_name = manager.new_instance(app, check)
     a_name = manager.app_name(i_name)
-    if a_name != app_name:
+    if a_name != app.app_name:
 	print 'Warning: app names %s and %s do not match' \
-	    % (app_name, a_name)
+	    % (app.app_name, a_name)
     a = manager.instances[i_name]
     if a != app:
 	print 'Warning: AppStates %d and %d do not match' \
 	    % (app, a)
     return i_name
 
-def new_universal_instance(manager, current, app_name, title_prefix, app, exclusive = 1):
-    print 'new universal instance of %s %d' % (app_name, app)
-    i_name = manager.new_universal_instance(app_name, title_prefix, app, exclusive)
+def new_universal_instance(manager, current, app, exclusive = 1):
+    print 'new universal instance of %s %d' % (app.app_name, app)
+    i_name = manager.new_universal_instance(app, exclusive)
     a_name = manager.app_name(i_name)
-    if a_name != app_name:
+    if a_name != app.app_name:
 	print 'Warning: app names %s and %s do not match' \
-	    % (app_name, a_name)
+	    % (app.app_name, a_name)
     a = manager.instances[i_name]
     if a != app:
 	print 'Warning: AppStates %d and %d do not match' \
@@ -1582,13 +1567,13 @@ class FakeAppState(EdSim.EdSim):
 def old_test_am_dictionaries():
     manager = AppMgr.AppMgr()
 
-    Emacs = FakeAppState(1)
-    another_Emacs = FakeAppState(2)
-    yet_another_Emacs = FakeAppState(4)
-    shell_Emacs = FakeAppState(5)
-    shell_Emacs2 = FakeAppState(6)
-    Vim = FakeAppState(3)
-    i = new_instance(manager, 'Emacs', Emacs)
+    Emacs = FakeAppState(1, app_name = 'emacs')
+    another_Emacs = FakeAppState(2, app_name = 'emacs')
+    yet_another_Emacs = FakeAppState(4, app_name = 'emacs')
+    shell_Emacs = FakeAppState(5, app_name = 'emacs')
+    shell_Emacs2 = FakeAppState(6, app_name = 'emacs')
+    Vim = FakeAppState(3, app_name = 'Vim')
+    i = new_instance(manager, Emacs)
     manager_state(manager)
     print 'new window 14'
     manager.new_window(i, 14)
@@ -1596,10 +1581,10 @@ def old_test_am_dictionaries():
     manager.new_window(i, 20)
     manager_state(manager)
 
-    j = new_instance(manager, 'Emacs', another_Emacs, 10)
+    j = new_instance(manager, another_Emacs, 10)
     manager_state(manager)
 
-    k = new_instance(manager, 'Vim for Windows', Vim)
+    k = new_instance(manager, 'Vim', Vim)
     print 'delete window 20'
     manager.delete_window(i, 20)
     manager_state(manager)
@@ -1638,7 +1623,7 @@ def test_am_dictionaries():
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
     mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
-	editor = 'Emacs')
+	editor = 'emacs')
     mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
 	editor = 'Vim')
     mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
@@ -1646,31 +1631,33 @@ def test_am_dictionaries():
     manager.add_module(mod_Emacs)
     manager.add_module(mod_Vim)
     manager.add_module(mod_telnet)
+    manager.add_prefix('emacs', 'Yak')
+    manager.add_prefix('Vim', 'Oldie')
 
-    Emacs = FakeAppState(1, 'a_file.py')
-    another_Emacs = FakeAppState(2, 'poodle.C')
-    yet_another_Emacs = FakeAppState(4, 'foo.bar')
-    shell_Emacs = FakeAppState(5, 'bug.c', shared = 1, multi = 0)
-    shell_Emacs2 = FakeAppState(6, 'dog.q', shared = 1, multi = 0)
-    Vim = FakeAppState(3, 'tests_def.py')
-    i = new_instance(manager, current, 'Emacs', 'Yak', Emacs)
+    Emacs = FakeAppState(1, 'a_file.py', app_name = 'emacs')
+    another_Emacs = FakeAppState(2, 'poodle.C', app_name = 'emacs')
+    yet_another_Emacs = FakeAppState(4, 'foo.bar', app_name = 'emacs')
+    shell_Emacs = FakeAppState(5, 'bug.c', app_name = 'emacs', shared = 1, multi = 0)
+    shell_Emacs2 = FakeAppState(6, 'dog.q', app_name = 'emacs', shared = 1, multi = 0)
+    Vim = FakeAppState(3, 'tests_def.py', app_name = 'Vim')
+    i = new_instance(manager, current, Emacs)
     manager_state(manager)
     print 'new window 14'
     windows[14] = FakeWindow(14, 'EMACS')
-    set_window(current, windows[14], 'Emacs', Emacs)
+    set_window(current, windows[14], Emacs.app_name, Emacs)
     manager.new_window(i)
     print 'new window 20'
     manager.app_instance(i).buff = 'dogs.C'
     windows[20] = FakeWindow(20, 'EMACS')
-    set_window(current, windows[20], 'Emacs', Emacs)
+    set_window(current, windows[20], Emacs.app_name, Emacs)
     manager.new_window(i)
     manager_state(manager)
 
     windows[10] = FakeWindow(10, 'EMACS')
-    j = new_instance(manager, current, 'Emacs', 'Yak', another_Emacs, windows[10])
+    j = new_instance(manager, current, another_Emacs, windows[10])
     manager_state(manager)
 
-    k = new_instance(manager, current, 'Vim for Windows', 'Victor', Vim)
+    k = new_instance(manager, current, Vim)
     print 'delete window 20'
     manager.delete_window(i, 20)
     manager_state(manager)
@@ -1678,7 +1665,7 @@ def test_am_dictionaries():
     print 'delete instance ' + j
     manager.delete_instance(j)
     windows[7] = FakeWindow(7, 'EMACS')
-    l = new_instance(manager, current, 'Emacs', 'Yak', yet_another_Emacs, windows[7])
+    l = new_instance(manager, current, yet_another_Emacs, windows[7])
     manager_state(manager)
     print 'delete instance ' + i
     manager.delete_instance(i)
@@ -1690,10 +1677,10 @@ def test_am_dictionaries():
     manager_state(manager)
     windows[94] = FakeWindow(94, 'TELNET')
 
-    m = new_instance(manager, current, 'Emacs (Exceed)', 'Yak', shell_Emacs,
+    m = new_instance(manager, current, shell_Emacs,
 	window = windows[94])
     shell_Emacs.suspend()
-    n = new_instance(manager, current, 'Emacs (Exceed)', 'Yak', shell_Emacs2,
+    n = new_instance(manager, current, shell_Emacs2,
 	window = windows[94])
     manager_state(manager)
     manager.delete_window(m, 94)
@@ -1712,7 +1699,7 @@ def test_rsm_algorithm():
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
     mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
-	editor = 'Emacs')
+	editor = 'emacs')
     mod_Vim = KnownTargetModule.DedicatedModule(module_name = 'VIM',
 	editor = 'Vim')
     mod_telnet = KnownTargetModule.RemoteShell(module_name = 'TELNET',
@@ -1724,6 +1711,9 @@ def test_rsm_algorithm():
     manager.add_module(mod_Vim)
     manager.add_module(mod_telnet)
     manager.add_module(mod_exceed)
+    manager.add_prefix('emacs', 'Yak')
+    manager.add_prefix('Vim', 'Oldie')
+    manager.add_prefix('WaxEdit', 'Floor')
 
     fish_h_before = "void move(float x, y);"
     fish_h_after = "\n"
@@ -1774,30 +1764,30 @@ if ($voiceGripOS eq 'win') {
 """
 
 
-    Emacs = FakeAppState(1, 'a_file.py')
-    another_Emacs = FakeAppState(2, 'poodle.C')
-#    yet_another_Emacs = FakeAppState(4, 'foo.bar')
-    shell_Emacs = FakeAppState(5, 'bug.c', shared = 1, multi = 0,
+    Emacs = FakeAppState(1, 'a_file.py', app_name = 'emacs')
+    another_Emacs = FakeAppState(2, 'poodle.C', app_name = 'emacs')
+#    yet_another_Emacs = FakeAppState(4, 'foo.bar', app_name = 'emacs')
+    shell_Emacs = FakeAppState(5, 'bug.c', app_name = 'emacs', shared = 1, multi = 0,
 	title_control = 0)
-    shell_Emacs2 = FakeAppState(6, 'dog.q', shared = 1, multi = 0,
+    shell_Emacs2 = FakeAppState(6, 'dog.q', app_name = 'emacs', shared = 1, multi = 0,
         title_control = 0)
 #    Vim = FakeAppState(3, 'tests_def.py')
-    text_Emacs = FakeAppState(7, 'nothing.py', shared = 1, multi = 0,
+    text_Emacs = FakeAppState(7, 'nothing.py', app_name = 'emacs', shared = 1, multi = 0,
         title_control = 0)
-    text_Emacs2 = FakeAppState(8, 'pickle.dll', shared = 1, multi = 0,
+    text_Emacs2 = FakeAppState(8, 'pickle.dll', app_name = 'emacs', shared = 1, multi = 0,
         title_control = 0)
-    xEmacs = FakeAppState(9, '.cshrc', shared = 0, multi = 1)
-    text_Vim = FakeAppState(10, '', shared = 1, multi = 0, safe_active = 0)
-    internal = FakeAppState(12, 'large_buff.py', multi = 0)
+    xEmacs = FakeAppState(9, '.cshrc', app_name = 'emacs', shared = 0, multi = 1)
+    text_Vim = FakeAppState(10, '', app_name = 'Vim', shared = 1, multi = 0, safe_active = 0)
+    internal = FakeAppState(12, 'large_buff.py', app_name = 'WaxEdit', multi = 0)
 
     windows[14] = FakeWindow(14, 'EMACS')
     print 'new instance in window 14'
-    e1 = new_instance(manager, current, 'Emacs', 'Yak', Emacs, windows[14])
+    e1 = new_instance(manager, current, Emacs, windows[14])
     instance_status(manager, e1)
     windows[20] = FakeWindow(20, 'EMACS')
     windows[50] = FakeWindow(50, 'BROWSEUI')
     print 'new window 20'
-    set_window(current, windows[20], 'Emacs', Emacs)
+    set_window(current, windows[20], Emacs.app_name, Emacs)
     new_buffer_for_instance(Emacs, "fish.C", before = fish_before, 
 	after = fish_after)
     instance_status(manager, e1)
@@ -1813,7 +1803,7 @@ if ($voiceGripOS eq 'win') {
     windows[5] = FakeWindow(5, 'TELNET')
     windows[8] = FakeWindow(8, 'TELNET')
     print 'new instance in telnet window 5'
-    se1 = new_instance(manager, current, 'Emacs', 'Yak', shell_Emacs, 
+    se1 = new_instance(manager, current, shell_Emacs, 
         windows[5])
     instance_status(manager, se1)
     manager_state(manager)
@@ -1829,7 +1819,7 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, se1)
     
-    set_window(current, windows[5], 'Emacs', shell_Emacs, 
+    set_window(current, windows[5], shell_Emacs.app_name, shell_Emacs, 
 	alt_title = 'ttssh - acappella')
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
@@ -1842,7 +1832,7 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, se1)
 
-    se2 = new_instance(manager, current, 'Emacs', 'Yak', shell_Emacs2) 
+    se2 = new_instance(manager, current, shell_Emacs2) 
     instance_status(manager, se2)
     instance_status(manager, se1)
     print 'now specifying window'
@@ -1873,7 +1863,7 @@ if ($voiceGripOS eq 'win') {
 
     windows[15] = FakeWindow(15, 'EXCEED')
     print 'new Vim instance in exceed window 15'
-    tv1 = new_instance(manager, current, 'Vim', 'Oldie', text_Vim, 
+    tv1 = new_instance(manager, current, text_Vim, 
         windows[15], alt_title = 'xterm - acappella')
     new_buffer_for_instance(text_Vim, "dog.pl", before = dog_before, 
 	after = dog_after)
@@ -1891,8 +1881,8 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, tv1)
 
-    print 'new Emacs instance in exceed window 15'
-    te1 = new_instance(manager, current, 'Emacs', 'Yak', text_Emacs, 
+    print 'new emacs instance in exceed window 15'
+    te1 = new_instance(manager, current, text_Emacs, 
         windows[15], alt_title = 'xterm - acappella')
     instance_status(manager, te1)
 
@@ -1919,15 +1909,15 @@ if ($voiceGripOS eq 'win') {
 
     print 'resuming ', tv1
     text_Vim.resume()
-    set_window(current, windows[15], 'Vim', text_Vim,
+    set_window(current, windows[15], text_Vim.app_name, text_Vim,
 	alt_title = 'xterm - acappella')
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
     instance_status(manager, tv1)
 
     windows[25] = FakeWindow(25, 'EXCEED')
-    print 'new Emacs instance in exceed window 25'
-    xe1 = new_instance(manager, current, 'Emacs', 'Yak', xEmacs, 
+    print 'new emacs instance in exceed window 25'
+    xe1 = new_instance(manager, current, xEmacs, 
         windows[25])
     instance_status(manager, xe1)
     print 'starting recognition in ', repr(current.window_info())
@@ -1936,7 +1926,7 @@ if ($voiceGripOS eq 'win') {
 
     print 'app reports new window (is current)'
     windows[26] = FakeWindow(26, 'EXCEED')
-    set_window(current, windows[26], 'Emacs', xEmacs)
+    set_window(current, windows[26], xEmacs.app_name, xEmacs)
     print 'current is', repr(current.window_info())
     manager.new_window(xe1)
     instance_status(manager, xe1)
@@ -1956,22 +1946,22 @@ if ($voiceGripOS eq 'win') {
     windows[27] = FakeWindow(27, 'EXCEED')
 
     print 'but now it is'
-    set_window(current, windows[27], 'Emacs', xEmacs)
+    set_window(current, windows[27], xEmacs.app_name, xEmacs)
     print 'current is', repr(current.window_info())
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
     instance_status(manager, xe1)
 
     windows[99] = FakeWindow(99, 'PYTHON')
-    ii1 = new_universal_instance(manager, current, 'WaxEdit', 'Floor', internal)
+    ii1 = new_universal_instance(manager, current, internal)
     print 'now it is on WaxEdit'
-    set_window(current, windows[99], 'WaxEdit', internal)
+    set_window(current, windows[99], internal.app_name, internal)
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
     instance_status(manager, ii1)
 
     print 'but now it is'
-    set_window(current, windows[27], 'Emacs', xEmacs)
+    set_window(current, windows[27], xEmacs.app_name, xEmacs)
     print 'current is', repr(current.window_info())
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)

@@ -59,7 +59,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
                             {'active_buffer_name': "",
 			    'instance_reporting': instance_reporting,
 			    'multiple': multiple},
-                            attrs)
+                            attrs, new_default = {'app_name': 'EdSim'})
 	self.add_owned('breadcrumbs_srv')
 	if self.instance_reporting:
 	    print 'EdSim.__init__'
