@@ -25,7 +25,8 @@
 import natlink, os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 
-import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
+#import AppStateEmacs, AppStateMessaging, auto_test, mediator, messaging, Object
+import AppStateMessaging, auto_test, mediator, messaging, Object
 import RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 
@@ -130,9 +131,10 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
                             args_super, 
                             {})
 
-    def new_compatible_sb(self, buff_id):
-#        print '-- AS_MessExtEdSim.new_compatible_sb: buff_id=%s' % buff_id
-        buff = SB_MessExtEdSim(app=self, buff_id=buff_id)
+    def new_compatible_sb(self, buff_name):
+#        print '-- AS_MessExtEdSim.new_compatible_sb: buff_name=%s' %
+#        buff_name
+        buff = SB_MessExtEdSim(app=self, buff_name=buff_name)
         return buff
         
 

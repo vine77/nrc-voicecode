@@ -116,6 +116,14 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('multiple_buffers_resp', {'value': 0})            
         elif action == 'bidirectional_selection':
             self.xed.vc_talk_msgr.send_mess('bidirectional_selection_resp', {'value': 0})    
+	elif action == 'list_open_buffers':
+	    self.xed.vc_talk_msgr.send_mess('list_open_buffers_resp',
+		{'value': self.xed.ed.open_buffers_from_app()})
+	elif action == 'confirm_buffer_exists':
+	    buff_name = args['buff_name']
+	    resp = self.xed.ed.query_buffer_from_app(buff_name)
+	    self.xed.vc_talk_msgr.send_mess('confirm_buffer_exists_resp', 
+		{'value': resp})
         elif action == 'get_selection':
             self.xed.vc_talk_msgr.send_mess('get_selection_resp', {'value': self.xed.ed.get_selection()})
         elif action == 'set_selection':
@@ -202,7 +210,7 @@ class ListenThread(threading.Thread, Object.Object):
         while 1:
 #            print '--  ListenThread.run: polling VoiceCode'
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'refresh_if_necessary', 'close_buffer', 'terminating'])
+                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'refresh_if_necessary', 'close_buffer', 'terminating'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'

@@ -56,7 +56,7 @@ class SourceBuff(Object):
     
     **INSTANCE ATTRIBUTES**
     
-    *STR buff_id=None* -- Unique ID for the buffer.
+    *STR buff_name=None* -- Unique name for the buffer.
     
     *AppState app* -- application object containing the buffer
 
@@ -79,11 +79,11 @@ class SourceBuff(Object):
     
     """
     
-    def __init__(self, app, buff_id=None, **attrs):
+    def __init__(self, app, buff_name=None, **attrs):
         self.init_attrs({'last_search': None})
         self.deep_construct(SourceBuff,
                             {'app': app,
-			     'buff_id': buff_id,
+			     'buff_name': buff_name,
                              'print_nlines': 3},
                             attrs
                             )

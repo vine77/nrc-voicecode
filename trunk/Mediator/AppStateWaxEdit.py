@@ -63,13 +63,13 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs,
                             )
-        self.only_buffer =  SourceBuffTB(app = self, buff_id="", \
+        self.only_buffer =  SourceBuffTB(app = self, buff_name="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
 
 
-    def new_compatible_sb(self, buff_id):
+    def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
 
         Note: The class used to instantiate the [SourceBuff] needs to
@@ -80,7 +80,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         
         **INPUTS**
                 
-        STR *buff_id* -- ID of the source buffer.
+        STR *buff_name* -- unique name of the source buffer.
         
         **OUTPUTS**
         
@@ -88,7 +88,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffTB.SourceBuffTB(app=self, buff_id=buff_id)
+        return SourceBuffTB.SourceBuffTB(app=self, buff_name=buff_name)
 
         
     def recog_begin(self, window_id):
@@ -209,7 +209,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         ..[AppState.tell_editor_to_open_file()] file:///./AppState.AppState.html#tell_editor_to_open_file"""
 
 
-        buff_id = None                
+        buff_name = None                
 	path, short = os.path.split(file_name)
 	if path:
 	    self.curr_dir = path
@@ -222,15 +222,15 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	if success:
 	    if self.curr_buffer_name() != None:
 		del self.open_buffers[self.curr_buffer_name()]
-	    self.only_buffer =  SourceBuffTB(app = self, buff_id=file_name, 
+	    self.only_buffer =  SourceBuffTB(app = self, buff_name=file_name, 
 		underlying_buffer = self.the_editor.editor_buffer(),
 		indent_level=3, indent_to_curr_level=1)
 	    self.only_buffer_name = file_name
             self.open_buffers[file_name] = self.only_buffer            
 	    self.the_editor.set_name(short)
-            buff_id = self.only_buffer.buff_id
+            buff_name = self.only_buffer.buff_name
 
-        return buff_id
+        return buff_name
 
         
     def save_file(self, full_path = None, no_prompt = 0):

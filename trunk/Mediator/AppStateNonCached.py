@@ -48,28 +48,6 @@ class AppStateNonCached(AppState.AppState):
                             {})
 
 
-    def new_compatible_sb(self, buff_id):
-        """Creates a new instance of [SourceBuff].
-
-        Note: The class used to instantiate the [SourceBuff] needs to
-        be compatible with the class of *self*. With a few exceptions
-        (if any), each subclass of *AppState* will have to redefine
-        *new_compatible_sb* in order to generate a [SourceBuff] of the
-        appropriate class.
-        
-        **INPUTS**
-                
-        STR *buff_id* -- ID of the source buffer.
-        
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
-        
-        return SourceBuffNonCached.SourceBuffnonCached(app=self, buff_id=buff_id)
-    
-
     #
     # Here will be 'pass' versions of the various editor callback functions
     # used to update VoiceCode's copy of the buffers.

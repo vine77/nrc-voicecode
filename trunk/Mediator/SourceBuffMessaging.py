@@ -67,7 +67,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         
         STR *name* -- 
         """
-        self.app.talk_msgr.send_mess('file_name', {'buff_id': self.buff_id})
+        self.app.talk_msgr.send_mess('file_name', {'buff_name': self.buff_name})
         response = self.app.talk_msgr.get_mess(expect=['file_name_resp'])
         return response[1]['value']
         

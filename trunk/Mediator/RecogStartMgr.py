@@ -32,6 +32,14 @@ from Object import Object
 import GramMgr
 
 
+# Note: While handling recognition-starting callbacks is the primary function 
+# of the recognition starting manager, the abstract base class RecogStartMgr 
+# does not define a function to handle the actual callback.  This is 
+# because the number, type, and meaning of arguments passed to that 
+# callback function may depend on the speech engine and/or the platform.
+# However, much of basic infrastructure for keeping track of the target
+# applications and windows is independent of these details.
+
 class RecogStartMgr(Object):
     """abstract class defining basic interface for keeping track of 
     target applications and windows, in order to handle

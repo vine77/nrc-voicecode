@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 18 11:36:53 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:10:50 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=&lt;CmdInterp.CmdInterp instance at 868a60&gt;</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=&lt;CmdInterp.CmdInterp instance at 8ad1f0&gt;</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_lsa</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)<SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
@@ -48,10 +48,6 @@ that is being controlled through a VoiceCode mediator.</P>
 <DL>
 
 <DT>
-[AppState] <EM>app = AppState.AppState()</EM>
-<DD>Application being run
-through the mediator.
-<DT>
 [CmdInterp] <EM>interp=CmdInterp.CmdInterp()</EM>
 <DD>Command interpreter used to
 translate pseudo-code to native code.
@@ -70,8 +66,8 @@ selecting a part of the visible code.
 to activate the grammars, or 0 to make them global.
 <DT>
 <EM>0-1 exclusive=0</EM>
-<DD>Indicates whether the mediator should use grammars that
-are exclusive (1) or non-exclusive (1)
+<DD>Indicates whether the mediator should use
+grammars that are exclusive (1) or non-exclusive (1)
 <DT>
 <EM>0-1 allResults=0</EM>
 <DD>Indicates whether or not the grammars used by the
