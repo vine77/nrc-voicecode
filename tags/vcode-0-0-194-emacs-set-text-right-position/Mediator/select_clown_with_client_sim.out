@@ -1,0 +1,2016 @@
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
+Loading test definitions...
+Configuring the mediator...
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Finished ExtLoop init...
+Running ExtLoopWin32...
+Starting server threads...
+Starting message loop...
+WARNING: virtual method 'AppStateMessaging.config_from_external' called!!!
+universal instance named "EdSim(0)"
+
+
+*******************************************************************************
+* Name        : CmdInterp
+* Description : self-test for CmdInterp.py
+*******************************************************************************
+
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+
+
+*******************************************************************************
+* Name        : EdSim
+* Description : self-test for EdSim.py
+*******************************************************************************
+
+>>> Testing EdSim.py
+
+
+>>> Opening a buffer
+*** Start of source buffer ***
+  1: <CURSOR>/* This is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Moving to position 5
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Testing breadcrumbs
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Popping 2 crumbs -> end up here:
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* Th<CURSOR>is is a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Dropping one here
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+*** Start of source buffer ***
+  1: /* This is a small t<CURSOR>est buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+>>> Popping 1 crumb -> end up here...
+*** Start of source buffer ***
+  1: /* This is<CURSOR> a small test buffer for C */
+  2: 
+  3: 
+  4: void move(float x, y)
+
+
+>>> Testing code indentation. Inserting for loop.
+  3: 
+  4: for (ii=0; ii <= maxValue; ii++)
+  5: {
+  6: <CURSOR>
+  7: }
+  8: void move(float x, y)
+  9: {
+
+
+*******************************************************************************
+* Name        : EdSim_alloc_cleanup
+* Description : Testing EdSim allocation and cleanup.
+*******************************************************************************
+
+
+*** testing cleanup with single buffer EdSim
+
+EdSim.__init__
+SourceBuff.__init__: 
+SourceBuff.remove_other_references: 
+SourceBuff.__del__: 
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+EdSim.remove_other_references
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+EdSim.__del__
+
+*** testing cleanup with multi-buffer EdSim
+
+EdSim.__init__
+SourceBuff.__init__: 
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
+
+
+>>> Testing command interpreter
+
+
+
+>>> Interpreting in a C buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: /* This is a small test buffer for C */
+  2: 
+  3: <CURSOR>
+  4: void move(float x, y)
+  5: {
+  6:   move_horiz(x);
+>>> Interpreting: ['for loop', 'loop body']
+>>> Interpreting: ['for', 'loop', 'loop', 'body']
+
+>>> Buffer is now:
+  4:    {
+  5: for (=0;  <= ; ++)
+  6:    {
+  7: <CURSOR>   
+  8:    }
+  9:    
+ 10:    }
+SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
+
+>>> Interpreting in a Python buffer
+
+>>> Current buffer is:
+
+*** Start of source buffer ***
+  1: # This is a small test buffer for Python
+  2: 
+  3: 
+  4: <CURSOR>
+  5: class AClass(ASuper):
+  6:     """This is a dummy class"""
+  7:     
+>>> Interpreting: ['for loop', 'loop body']
+
+>>> Buffer is now:
+  2: 
+  3: 
+  4: for :
+  5:    <CURSOR>
+  6: class AClass(ASuper):
+  7:     """This is a dummy class"""
+  8:     
+EdSim.remove_other_references
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: 
+SourceBuff.__del__: 
+EdSim.__del__
+
+
+*******************************************************************************
+* Name        : Object
+* Description : self-test for Object.py
+*******************************************************************************
+
+Testing exceptions for get/set
+
+
+Trying to get the value of attribute 'name', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.name=Alain, x=Alain
+
+
+Trying to set the value of attribute 'name', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.name=999, x=0
+
+
+Trying to get the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
+   -> Caught AttributeError exception: '[{'args': ('nonexistant',)}]'
+
+
+Trying to set the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
+   -> Caught NO AttributeError exception. obj.nonexistant=999, x=0
+
+Testing inheritance of constructor arguments
+   Employee1(name='Alain', salary='not enough') -> {'salary': 'not enough', 'name': 'Alain', 'citizenship': None}
+
+
+Redefining default value of *citizenship*
+   MyPerson(name='Alain') -> result={'salary': 'not enough', 'name': 'Alain', 'citizenship': None}
+
+Overriding redefined default value of *citizenship*
+   MyPerson(name='Alain', citizenship='US citizen') -> result={'marital_status': None, 'name': 'Alain', 'citizenship': 'US citizen'}
+
+Enforcing 'Canadian eh?' as the value of *citizenship*
+   Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
+
+Trying to change enforced value 'Canadian eh?' of *citizenship*
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a4f828>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+
+Person2.__init__ received init_file=C:/temp.txt
+Class with private *init_file* attribute*
+   Person2(init_file='C:/temp.txt') -> result={'name': None, 'citizenship': None}
+
+Subclassing from non-standard class AnimatedCharacter.*
+   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'name': 'Alain', 'frames_per_sec': 40, 'animation_file': 'C:/People/Alain.dat', 'citizenship': None}
+
+
+*******************************************************************************
+* Name        : SymDict
+* Description : self-test for SymDict.py
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+
+
+Parsed symbols are: 
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+Unresolved abbreviations are:
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
+
+*** End of compilation test ***
+
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\large_buff.py ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+
+
+Parsed symbols are: 
+AttributeError: ['attribute error']
+LargeNonObject: ['large non object']
+LargeObject: ['large object']
+Object: ['object']
+SmallNonObject: ['small non object']
+SmallObject: ['small object']
+__bases__: ['bases']
+__dict__: ['dict', 'dictionary']
+__init__: ['init', 'initial', 'initialize', 'intial']
+__name__: ['name']
+a_base: ['a base']
+add_test: ['add test']
+age: ['age']
+an_attr_def: ['an attr def', 'an attr definition', 'an attr default', 'an attr define', 'an attr defined', 'an attr deaf', 'an attribute def', 'an attribute definition', 'an attribute default', 'an attribute define', 'an attribute defined', 'an attribute deaf']
+an_attr_init: ['an attr init', 'an attr initial', 'an attr initialize', 'an attr intial', 'an attribute init', 'an attribute initial', 'an attribute initialize', 'an attribute intial']
+and: ['and']
+attrs: ['attributes']
+attrs_superclasses: ['attributes superclasses']
+attrs_this_class: ['attributes this class']
+autoTst: ['auto tst']
+auto_test: ['auto test']
+class: ['class']
+code: ['code']
+code_file: ['code file']
+deep_construct: ['deep construct']
+def: ['def', 'definition', 'default', 'define', 'defined', 'deaf']
+else: ['else']
+environ: ['environ', 'environment']
+exc: ['exc', 'exception']
+except: ['except']
+exceptions: ['exceptions']
+exclude_bases: ['exclude bases']
+exec: ['exec', 'execute', 'executable']
+execfile: ['execfile']
+expandvars: ['expandvars']
+for: ['for']
+has_key: ['has key']
+her_age: ['her age']
+if: ['if']
+import: ['import']
+in: ['in']
+index: ['index']
+init_attrs: ['init attributes', 'initial attributes', 'initialize attributes', 'intial attributes']
+items: ['items']
+name: ['name']
+not: ['not']
+num_times: ['num times', 'number times']
+obj: ['obj', 'object']
+operation: ['operation']
+os: ['os', 'operating system', 'o s']
+pass: ['pass']
+posixpath: ['posixpath']
+profConstrLargeNonObj: ['prof constr large non obj', 'prof constr large non object', 'profile constr large non obj', 'profile constr large non object', 'profiling constr large non obj', 'profiling constr large non object', 'professional constr large non obj', 'professional constr large non object']
+profConstrLargeObj: ['prof constr large obj', 'prof constr large object', 'profile constr large obj', 'profile constr large object', 'profiling constr large obj', 'profiling constr large object', 'professional constr large obj', 'professional constr large object']
+profConstrSmallNonObj: ['prof constr small non obj', 'prof constr small non object', 'profile constr small non obj', 'profile constr small non object', 'profiling constr small non obj', 'profiling constr small non object', 'professional constr small non obj', 'professional constr small non object']
+profConstrSmallObj: ['prof constr small obj', 'prof constr small object', 'profile constr small obj', 'profile constr small object', 'profiling constr small obj', 'profiling constr small object', 'professional constr small obj', 'professional constr small object']
+profGetLargeNonObj: ['prof get large non obj', 'prof get large non object', 'profile get large non obj', 'profile get large non object', 'profiling get large non obj', 'profiling get large non object', 'professional get large non obj', 'professional get large non object']
+profGetLargeObj: ['prof get large obj', 'prof get large object', 'profile get large obj', 'profile get large object', 'profiling get large obj', 'profiling get large object', 'professional get large obj', 'professional get large object']
+profGetSmallNonObj: ['prof get small non obj', 'prof get small non object', 'profile get small non obj', 'profile get small non object', 'profiling get small non obj', 'profiling get small non object', 'professional get small non obj', 'professional get small non object']
+profGetSmallObj: ['prof get small obj', 'prof get small object', 'profile get small obj', 'profile get small object', 'profiling get small obj', 'profiling get small object', 'professional get small obj', 'professional get small object']
+profObject: ['prof object', 'profile object', 'profiling object', 'professional object']
+profSetLargeNonObj: ['prof set large non obj', 'prof set large non object', 'profile set large non obj', 'profile set large non object', 'profiling set large non obj', 'profiling set large non object', 'professional set large non obj', 'professional set large non object']
+profSetLargeObj: ['prof set large obj', 'prof set large object', 'profile set large obj', 'profile set large object', 'profiling set large obj', 'profiling set large object', 'professional set large obj', 'professional set large object']
+profSetSmallNonObj: ['prof set small non obj', 'prof set small non object', 'profile set small non obj', 'profile set small non object', 'profiling set small non obj', 'profiling set small non object', 'professional set small non obj', 'professional set small non object']
+profSetSmallObj: ['prof set small obj', 'prof set small object', 'profile set small obj', 'profile set small object', 'profiling set small obj', 'profiling set small object', 'professional set small obj', 'professional set small object']
+prof_test: ['prof test', 'profile test', 'profiling test', 'professional test']
+profile: ['profile']
+range: ['range']
+run: ['run']
+self: ['self']
+self_test: ['self test']
+sep: ['sep', 'separator']
+setattr: ['setattr']
+stdout: ['stdout']
+str: ['str', 'string']
+sys: ['sys', 'system']
+this_class: ['this class']
+try: ['try']
+try_attribute: ['try attribute']
+write: ['write']
+x: ['x']
+_cached_symbols_as_one_string is:
+    autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
+Unresolved abbreviations are:
+'constr': appears in ['profConstrLargeNonObj', 'profConstrSmallObj', 'profConstrLargeObj', 'profConstrSmallNonObj']
+'execfile': appears in ['execfile']
+'expandvars': appears in ['expandvars']
+'posixpath': appears in ['posixpath']
+'setattr': appears in ['setattr']
+'stdout': appears in ['stdout']
+'superclasses': appears in ['attrs_superclasses']
+'tst': appears in ['autoTst']
+'x': appears in ['x']
+
+*** End of compilation test ***
+
+*** Pseudo symbol match test***
+   Source files are: ['%VCODE_HOME%\\Data\\TestData\\large_buff.py']
+   Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
+
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
+'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
+'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
+'profile Constructor Large Object' matches: [profConstrLargeObj, profile_constructor_large_object, ProfileConstructorLargeObject, profileConstructorLargeObject, PROFILE_CONSTRUCTOR_LARGE_OBJECT, profileconstructorlargeobject, PROFILECONSTRUCTORLARGEOBJECT, ]
+'profile construct large object' matches: [profConstrLargeObj, profile_construct_large_object, ProfileConstructLargeObject, profileConstructLargeObject, PROFILE_CONSTRUCT_LARGE_OBJECT, profileconstructlargeobject, PROFILECONSTRUCTLARGEOBJECT, ]
+'auto test' matches: [auto_test, autoTst, AutoTest, autoTest, AUTO_TEST, autotest, AUTOTEST, ]
+
+*** End of Pseudo Symbol Match test ***
+
+
+*** Accept symbol match test. source='%VCODE_HOME%\Data\TestData\small_buff.c' ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Parsed symbols are: 
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+Unresolved abbreviations are:
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres', 
+
+
+After accepting those symbols, known symbols are:
+
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
+this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+Unresolved abbreviations are:
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
+'x': appears in ['x']
+'y': appears in ['y']
+
+*** End of accept symbol match test ***
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+
+
+*******************************************************************************
+* Name        : am_dictionaries
+* Description : Testing AppMgr dictionary management.
+*******************************************************************************
+
+new instance of emacs 1
+
+state {
+application:  emacs
+instance:  emacs(0)
+known windows []
+} state
+
+new window 14
+SelectWinGramDummy for buffer None, window 14
+init
+new window 20
+SelectWinGramDummy for buffer None, window 20
+init
+
+state {
+application:  emacs
+instance:  emacs(0)
+window 14
+window 20
+known windows [14, 20]
+} state
+
+new instance of emacs 2
+with window 10
+SelectWinGramDummy for buffer None, window 10
+init
+
+state {
+application:  emacs
+instance:  emacs(0)
+window 14
+window 20
+instance:  emacs(1)
+window 10
+known windows [10, 14, 20]
+} state
+
+new instance of Vim 3
+delete window 20
+SelectWinGramDummy for buffer None, window 20
+deactivating
+SelectWinGramDummy for buffer None, window 20
+del
+
+state {
+application:  Vim
+instance:  Vim(0)
+application:  emacs
+instance:  emacs(0)
+window 14
+instance:  emacs(1)
+window 10
+known windows [10, 14]
+} state
+
+delete instance emacs(1)
+SelectWinGramDummy for buffer None, window 10
+deactivating
+SelectWinGramDummy for buffer None, window 10
+del
+new instance of emacs 4
+with window 7
+SelectWinGramDummy for buffer None, window 7
+init
+
+state {
+application:  Vim
+instance:  Vim(0)
+application:  emacs
+instance:  emacs(0)
+window 14
+instance:  emacs(2)
+window 7
+known windows [7, 14]
+} state
+
+delete instance emacs(0)
+SelectWinGramDummy for buffer None, window 14
+deactivating
+SelectWinGramDummy for buffer None, window 14
+del
+
+state {
+application:  Vim
+instance:  Vim(0)
+application:  emacs
+instance:  emacs(2)
+window 7
+known windows [7]
+} state
+
+delete instance Vim(0)
+delete instance emacs(2)
+SelectWinGramDummy for buffer None, window 7
+deactivating
+SelectWinGramDummy for buffer None, window 7
+del
+
+state {
+application:  Vim
+application:  emacs
+known windows []
+} state
+
+new instance of emacs 5
+with window 94
+SelectWinGramDummy for buffer None, window 94
+init
+new instance of emacs 6
+with window 94
+SelectWinGramDummy for buffer None, window 94
+init
+
+state {
+application:  Vim
+application:  emacs
+instance:  emacs(3)
+window 94
+instance:  emacs(4)
+window 94
+known windows [94]
+} state
+
+SelectWinGramDummy for buffer None, window 94
+deactivating
+SelectWinGramDummy for buffer None, window 94
+del
+
+state {
+application:  Vim
+application:  emacs
+instance:  emacs(3)
+instance:  emacs(4)
+window 94
+known windows [94]
+} state
+
+
+state {
+application:  Vim
+application:  emacs
+instance:  emacs(4)
+window 94
+known windows [94]
+} state
+
+SelectWinGramDummy for buffer None, window 94
+deactivating
+SelectWinGramDummy for buffer None, window 94
+del
+
+state {
+application:  Vim
+application:  emacs
+known windows []
+} state
+
+
+
+*******************************************************************************
+* Name        : automatic_abbreviations
+* Description : testing automatic creation of abbreviations
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+
+
+>>> Testing console command: open_file('blah.c')
+
+WARNING: source file 'blah.c' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+
+
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
+>>> Known symbols are: 
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
+this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+>>> Testing console command: print_abbreviations(1)
+
+List of abbreviations
+
+'abs' expands to ['absolute']
+'addr' expands to ['address']
+'alnum' expands to ['all numeric', 'all numberical']
+'alt' expands to ['alternate', 'alternative']
+'arg' expands to ['argument']
+'argv' expands to ['arg v', 'argument value']
+'asc' expands to ['ascii']
+'atan' expands to ['arc tangent']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
+'attr' expands to ['attribute']
+'avail' expands to ['available']
+'avg' expands to ['average']
+'beg' expands to ['begin', 'beginning']
+'bg' expands to ['back ground']
+'blk' expands to ['block', 'blocking']
+'buf' expands to ['buffer']
+'buff' expands to ['buffer']
+'builtin' expands to ['built in']
+'calc' expands to ['calculate', 'calculated', 'calculation']
+'cgi' expands to ['c g i']
+'char' expands to ['character']
+'chdir' expands to ['change dir', 'change directory']
+'chg' expands to ['change', 'changed']
+'chmod' expands to ['change mode']
+'chr' expands to ['character']
+'clr' expands to ['clear']
+'cmd' expands to ['command']
+'cmp' expands to ['compare']
+'cntrl' expands to ['control']
+'col' expands to ['column']
+'concat' expands to ['concatenate']
+'cond' expands to ['condition']
+'conf' expands to ['configure', 'configuration']
+'config' expands to ['configuration', 'configure']
+'conn' expands to ['connection', 'connected']
+'cont' expands to ['control']
+'cos' expands to ['co sine']
+'cpp' expands to ['c plus plus']
+'ctl' expands to ['control']
+'ctrl' expands to ['control']
+'cur' expands to ['cursor', 'current']
+'curr' expands to ['current']
+'db' expands to ['d b', 'data base']
+'decl' expands to ['declaration', 'declare']
+'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
+'delim' expands to ['delimiter']
+'dev' expands to ['develop', 'development', 'device']
+'dict' expands to ['dictionary']
+'dir' expands to ['directory', 'direction']
+'div' expands to ['divide']
+'doc' expands to ['document', 'documentation']
+'dom' expands to ['domain']
+'dst' expands to ['distance']
+'dtd' expands to ['d t d']
+'elem' expands to ['element']
+'ent' expands to ['entry']
+'env' expands to ['environment']
+'environ' expands to ['environment']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
+'ex' expands to ['example']
+'exc' expands to ['exception']
+'exec' expands to ['execute', 'executable']
+'expr' expands to ['expression']
+'fg' expands to ['foreground']
+'fifo' expands to ['first in first out']
+'fmt' expands to ['format']
+'fp' expands to ['file pointer']
+'func' expands to ['function']
+'gen' expands to ['general', 'generic']
+'getattr' expands to ['get attribute']
+'gid' expands to ['g i d', 'group i d']
+'glob' expands to ['global']
+'goto' expands to ['go to']
+'gr' expands to ['group']
+'hex' expands to ['hexadecimal']
+'horiz' expands to ['horizontal', 'horizontally']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
+'impl' expands to ['implementation']
+'inc' expands to ['increment', 'include']
+'incl' expands to ['include', 'included']
+'info' expands to ['information']
+'init' expands to ['initial', 'initialize', 'intial']
+'ins' expands to ['insert']
+'int' expands to ['integer']
+'interp' expands to ['interpreter']
+'intro' expands to ['introduction']
+'io' expands to ['i o']
+'ip' expands to ['i p']
+'lambd' expands to ['lambda']
+'len' expands to ['length']
+'ln' expands to ['line']
+'lnk' expands to ['link']
+'loc' expands to ['location']
+'login' expands to ['log in']
+'mem' expands to ['memory']
+'mk' expands to ['make']
+'mnt' expands to ['mount', 'mounted']
+'mod' expands to ['mode', 'modify']
+'msec' expands to ['millisecond']
+'msg' expands to ['message']
+'mtime' expands to ['m time']
+'nam' expands to ['name']
+'nntp' expands to ['n n t p']
+'no' expands to ['number']
+'num' expands to ['number']
+'obj' expands to ['object']
+'oct' expands to ['octal']
+'opt' expands to ['optional', 'option', 'optimize']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
+'par' expands to ['parameter']
+'param' expands to ['parameter']
+'pat' expands to ['pattern']
+'perm' expands to ['permission']
+'pkg' expands to ['package']
+'pos' expands to ['position', 'positioning']
+'prof' expands to ['profile', 'profiling', 'professional']
+'proto' expands to ['prototype', 'protocol']
+'pty' expands to ['p t y']
+'punct' expands to ['punctuation']
+'py' expands to ['python', 'p y']
+'rand' expands to ['random']
+'rd' expands to ['read']
+'rect' expands to ['rectangle']
+'ref' expands to ['reference']
+'reg' expands to ['regular', 'regular expression']
+'regexp' expands to ['regular expression']
+'rel' expands to ['relative']
+'repr' expands to ['represent', 'representation']
+'req' expands to ['request']
+'rexp' expands to ['regular expression']
+'rgb' expands to ['r g b']
+'rm' expands to ['remove']
+'scr' expands to ['screen']
+'sec' expands to ['second']
+'sep' expands to ['separator']
+'seq' expands to ['sequence']
+'serv' expands to ['server']
+'sig' expands to ['signal', 'special interest group']
+'sin' expands to ['sine']
+'smtp' expands to ['s m t p']
+'sock' expands to ['socket']
+'soundex' expands to ['soundex']
+'spc' expands to ['space']
+'src' expands to ['source']
+'st' expands to ['standard']
+'stat' expands to ['statistic', 'static']
+'stdin' expands to ['s t d in', 'standard input']
+'str' expands to ['string']
+'sub' expands to ['sub routine']
+'sym' expands to ['symbol']
+'sync' expands to ['synchronize']
+'sys' expands to ['system']
+'temp' expands to ['temporary']
+'termid' expands to ['term i d', 'terminal i d']
+'tmp' expands to ['temporary']
+'tok' expands to ['token']
+'trans' expands to ['transition', 'transport', 'transform', 'transformation']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
+'undef' expands to ['undefined']
+'uniq' expands to ['unique']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
+'var' expands to ['variable']
+'vert' expands to ['vertical', 'vertically']
+'win' expands to ['window']
+'xml' expands to ['x m l']
+
+
+List of unresolved abbreviations
+
+'f': appears in ['f_name', 'f_name2']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+>>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ', \\comma'], user_input='1\n')
+Associate 'this symbol is unresolved' with symbol (Enter selection):
+
+  '0': no association
+  '1': this_sym_is_unres
+  '2': this_symbol_is_unresolved (*new*)
+  '3': ThisSymbolIsUnresolved (*new*)
+  '4': thisSymbolIsUnresolved (*new*)
+  '5': THIS_SYMBOL_IS_UNRESOLVED (*new*)
+  '6': thissymbolisunresolved (*new*)
+  '7': THISSYMBOLISUNRESOLVED (*new*)
+
+> *** Start of source buffer ***
+  1: this_sym_is_unres, <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: print_abbreviations(1)
+
+List of abbreviations
+
+'abs' expands to ['absolute']
+'addr' expands to ['address']
+'alnum' expands to ['all numeric', 'all numberical']
+'alt' expands to ['alternate', 'alternative']
+'arg' expands to ['argument']
+'argv' expands to ['arg v', 'argument value']
+'asc' expands to ['ascii']
+'atan' expands to ['arc tangent']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
+'attr' expands to ['attribute']
+'avail' expands to ['available']
+'avg' expands to ['average']
+'beg' expands to ['begin', 'beginning']
+'bg' expands to ['back ground']
+'blk' expands to ['block', 'blocking']
+'buf' expands to ['buffer']
+'buff' expands to ['buffer']
+'builtin' expands to ['built in']
+'calc' expands to ['calculate', 'calculated', 'calculation']
+'cgi' expands to ['c g i']
+'char' expands to ['character']
+'chdir' expands to ['change dir', 'change directory']
+'chg' expands to ['change', 'changed']
+'chmod' expands to ['change mode']
+'chr' expands to ['character']
+'clr' expands to ['clear']
+'cmd' expands to ['command']
+'cmp' expands to ['compare']
+'cntrl' expands to ['control']
+'col' expands to ['column']
+'concat' expands to ['concatenate']
+'cond' expands to ['condition']
+'conf' expands to ['configure', 'configuration']
+'config' expands to ['configuration', 'configure']
+'conn' expands to ['connection', 'connected']
+'cont' expands to ['control']
+'cos' expands to ['co sine']
+'cpp' expands to ['c plus plus']
+'ctl' expands to ['control']
+'ctrl' expands to ['control']
+'cur' expands to ['cursor', 'current']
+'curr' expands to ['current']
+'db' expands to ['d b', 'data base']
+'decl' expands to ['declaration', 'declare']
+'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
+'delim' expands to ['delimiter']
+'dev' expands to ['develop', 'development', 'device']
+'dict' expands to ['dictionary']
+'dir' expands to ['directory', 'direction']
+'div' expands to ['divide']
+'doc' expands to ['document', 'documentation']
+'dom' expands to ['domain']
+'dst' expands to ['distance']
+'dtd' expands to ['d t d']
+'elem' expands to ['element']
+'ent' expands to ['entry']
+'env' expands to ['environment']
+'environ' expands to ['environment']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
+'ex' expands to ['example']
+'exc' expands to ['exception']
+'exec' expands to ['execute', 'executable']
+'expr' expands to ['expression']
+'fg' expands to ['foreground']
+'fifo' expands to ['first in first out']
+'fmt' expands to ['format']
+'fp' expands to ['file pointer']
+'func' expands to ['function']
+'gen' expands to ['general', 'generic']
+'getattr' expands to ['get attribute']
+'gid' expands to ['g i d', 'group i d']
+'glob' expands to ['global']
+'goto' expands to ['go to']
+'gr' expands to ['group']
+'hex' expands to ['hexadecimal']
+'horiz' expands to ['horizontal', 'horizontally']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
+'impl' expands to ['implementation']
+'inc' expands to ['increment', 'include']
+'incl' expands to ['include', 'included']
+'info' expands to ['information']
+'init' expands to ['initial', 'initialize', 'intial']
+'ins' expands to ['insert']
+'int' expands to ['integer']
+'interp' expands to ['interpreter']
+'intro' expands to ['introduction']
+'io' expands to ['i o']
+'ip' expands to ['i p']
+'lambd' expands to ['lambda']
+'len' expands to ['length']
+'ln' expands to ['line']
+'lnk' expands to ['link']
+'loc' expands to ['location']
+'login' expands to ['log in']
+'mem' expands to ['memory']
+'mk' expands to ['make']
+'mnt' expands to ['mount', 'mounted']
+'mod' expands to ['mode', 'modify']
+'msec' expands to ['millisecond']
+'msg' expands to ['message']
+'mtime' expands to ['m time']
+'nam' expands to ['name']
+'nntp' expands to ['n n t p']
+'no' expands to ['number']
+'num' expands to ['number']
+'obj' expands to ['object']
+'oct' expands to ['octal']
+'opt' expands to ['optional', 'option', 'optimize']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
+'par' expands to ['parameter']
+'param' expands to ['parameter']
+'pat' expands to ['pattern']
+'perm' expands to ['permission']
+'pkg' expands to ['package']
+'pos' expands to ['position', 'positioning']
+'prof' expands to ['profile', 'profiling', 'professional']
+'proto' expands to ['prototype', 'protocol']
+'pty' expands to ['p t y']
+'punct' expands to ['punctuation']
+'py' expands to ['python', 'p y']
+'rand' expands to ['random']
+'rd' expands to ['read']
+'rect' expands to ['rectangle']
+'ref' expands to ['reference']
+'reg' expands to ['regular', 'regular expression']
+'regexp' expands to ['regular expression']
+'rel' expands to ['relative']
+'repr' expands to ['represent', 'representation']
+'req' expands to ['request']
+'rexp' expands to ['regular expression']
+'rgb' expands to ['r g b']
+'rm' expands to ['remove']
+'scr' expands to ['screen']
+'sec' expands to ['second']
+'sep' expands to ['separator']
+'seq' expands to ['sequence']
+'serv' expands to ['server']
+'sig' expands to ['signal', 'special interest group']
+'sin' expands to ['sine']
+'smtp' expands to ['s m t p']
+'sock' expands to ['socket']
+'soundex' expands to ['soundex']
+'spc' expands to ['space']
+'src' expands to ['source']
+'st' expands to ['standard']
+'stat' expands to ['statistic', 'static']
+'stdin' expands to ['s t d in', 'standard input']
+'str' expands to ['string']
+'sub' expands to ['sub routine']
+'sym' expands to ['symbol']
+'sync' expands to ['synchronize']
+'sys' expands to ['system']
+'temp' expands to ['temporary']
+'termid' expands to ['term i d', 'terminal i d']
+'tmp' expands to ['temporary']
+'tok' expands to ['token']
+'trans' expands to ['transition', 'transport', 'transform', 'transformation']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
+'undef' expands to ['undefined']
+'uniq' expands to ['unique']
+'unres' expands to ['unresolved']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
+'var' expands to ['variable']
+'vert' expands to ['vertical', 'vertically']
+'win' expands to ['window']
+'xml' expands to ['x m l']
+
+
+List of unresolved abbreviations
+
+'f': appears in ['f_name', 'f_name2']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+>>> Testing console command: print_symbols()
+
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
+this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+>>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ', \\comma'], user_input='None')
+*** Start of source buffer ***
+  1: this_sym_is_unres, this_sym_is_unres_too, <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: print_symbols()
+
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
+this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+>>> Testing console command: print_abbreviations(1)
+
+List of abbreviations
+
+'abs' expands to ['absolute']
+'addr' expands to ['address']
+'alnum' expands to ['all numeric', 'all numberical']
+'alt' expands to ['alternate', 'alternative']
+'arg' expands to ['argument']
+'argv' expands to ['arg v', 'argument value']
+'asc' expands to ['ascii']
+'atan' expands to ['arc tangent']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
+'attr' expands to ['attribute']
+'avail' expands to ['available']
+'avg' expands to ['average']
+'beg' expands to ['begin', 'beginning']
+'bg' expands to ['back ground']
+'blk' expands to ['block', 'blocking']
+'buf' expands to ['buffer']
+'buff' expands to ['buffer']
+'builtin' expands to ['built in']
+'calc' expands to ['calculate', 'calculated', 'calculation']
+'cgi' expands to ['c g i']
+'char' expands to ['character']
+'chdir' expands to ['change dir', 'change directory']
+'chg' expands to ['change', 'changed']
+'chmod' expands to ['change mode']
+'chr' expands to ['character']
+'clr' expands to ['clear']
+'cmd' expands to ['command']
+'cmp' expands to ['compare']
+'cntrl' expands to ['control']
+'col' expands to ['column']
+'concat' expands to ['concatenate']
+'cond' expands to ['condition']
+'conf' expands to ['configure', 'configuration']
+'config' expands to ['configuration', 'configure']
+'conn' expands to ['connection', 'connected']
+'cont' expands to ['control']
+'cos' expands to ['co sine']
+'cpp' expands to ['c plus plus']
+'ctl' expands to ['control']
+'ctrl' expands to ['control']
+'cur' expands to ['cursor', 'current']
+'curr' expands to ['current']
+'db' expands to ['d b', 'data base']
+'decl' expands to ['declaration', 'declare']
+'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
+'delim' expands to ['delimiter']
+'dev' expands to ['develop', 'development', 'device']
+'dict' expands to ['dictionary']
+'dir' expands to ['directory', 'direction']
+'div' expands to ['divide']
+'doc' expands to ['document', 'documentation']
+'dom' expands to ['domain']
+'dst' expands to ['distance']
+'dtd' expands to ['d t d']
+'elem' expands to ['element']
+'ent' expands to ['entry']
+'env' expands to ['environment']
+'environ' expands to ['environment']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
+'ex' expands to ['example']
+'exc' expands to ['exception']
+'exec' expands to ['execute', 'executable']
+'expr' expands to ['expression']
+'fg' expands to ['foreground']
+'fifo' expands to ['first in first out']
+'fmt' expands to ['format']
+'fp' expands to ['file pointer']
+'func' expands to ['function']
+'gen' expands to ['general', 'generic']
+'getattr' expands to ['get attribute']
+'gid' expands to ['g i d', 'group i d']
+'glob' expands to ['global']
+'goto' expands to ['go to']
+'gr' expands to ['group']
+'hex' expands to ['hexadecimal']
+'horiz' expands to ['horizontal', 'horizontally']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
+'impl' expands to ['implementation']
+'inc' expands to ['increment', 'include']
+'incl' expands to ['include', 'included']
+'info' expands to ['information']
+'init' expands to ['initial', 'initialize', 'intial']
+'ins' expands to ['insert']
+'int' expands to ['integer']
+'interp' expands to ['interpreter']
+'intro' expands to ['introduction']
+'io' expands to ['i o']
+'ip' expands to ['i p']
+'lambd' expands to ['lambda']
+'len' expands to ['length']
+'ln' expands to ['line']
+'lnk' expands to ['link']
+'loc' expands to ['location']
+'login' expands to ['log in']
+'mem' expands to ['memory']
+'mk' expands to ['make']
+'mnt' expands to ['mount', 'mounted']
+'mod' expands to ['mode', 'modify']
+'msec' expands to ['millisecond']
+'msg' expands to ['message']
+'mtime' expands to ['m time']
+'nam' expands to ['name']
+'nntp' expands to ['n n t p']
+'no' expands to ['number']
+'num' expands to ['number']
+'obj' expands to ['object']
+'oct' expands to ['octal']
+'opt' expands to ['optional', 'option', 'optimize']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
+'par' expands to ['parameter']
+'param' expands to ['parameter']
+'pat' expands to ['pattern']
+'perm' expands to ['permission']
+'pkg' expands to ['package']
+'pos' expands to ['position', 'positioning']
+'prof' expands to ['profile', 'profiling', 'professional']
+'proto' expands to ['prototype', 'protocol']
+'pty' expands to ['p t y']
+'punct' expands to ['punctuation']
+'py' expands to ['python', 'p y']
+'rand' expands to ['random']
+'rd' expands to ['read']
+'rect' expands to ['rectangle']
+'ref' expands to ['reference']
+'reg' expands to ['regular', 'regular expression']
+'regexp' expands to ['regular expression']
+'rel' expands to ['relative']
+'repr' expands to ['represent', 'representation']
+'req' expands to ['request']
+'rexp' expands to ['regular expression']
+'rgb' expands to ['r g b']
+'rm' expands to ['remove']
+'scr' expands to ['screen']
+'sec' expands to ['second']
+'sep' expands to ['separator']
+'seq' expands to ['sequence']
+'serv' expands to ['server']
+'sig' expands to ['signal', 'special interest group']
+'sin' expands to ['sine']
+'smtp' expands to ['s m t p']
+'sock' expands to ['socket']
+'soundex' expands to ['soundex']
+'spc' expands to ['space']
+'src' expands to ['source']
+'st' expands to ['standard']
+'stat' expands to ['statistic', 'static']
+'stdin' expands to ['s t d in', 'standard input']
+'str' expands to ['string']
+'sub' expands to ['sub routine']
+'sym' expands to ['symbol']
+'sync' expands to ['synchronize']
+'sys' expands to ['system']
+'temp' expands to ['temporary']
+'termid' expands to ['term i d', 'terminal i d']
+'tmp' expands to ['temporary']
+'tok' expands to ['token']
+'trans' expands to ['transition', 'transport', 'transform', 'transformation']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
+'undef' expands to ['undefined']
+'uniq' expands to ['unique']
+'unres' expands to ['unresolved']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
+'var' expands to ['variable']
+'vert' expands to ['vertical', 'vertically']
+'win' expands to ['window']
+'xml' expands to ['x m l']
+
+
+List of unresolved abbreviations
+
+'f': appears in ['f_name', 'f_name2']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+>>> Testing console command: say(['file', 'name', ', \\comma'], user_input='1\n')
+Associate 'file name' with symbol (Enter selection):
+
+  '0': no association
+  '1': f_name
+  '2': file_name (*new*)
+  '3': FileName (*new*)
+  '4': fileName (*new*)
+  '5': FILE_NAME (*new*)
+  '6': filename (*new*)
+  '7': FILENAME (*new*)
+
+> WARNING: abbreviation 'f' not added (length < 2)
+*** Start of source buffer ***
+  1: this_sym_is_unres, this_sym_is_unres_too, f_name, <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: print_symbols()
+
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has an other abbrev']
+this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
+this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
+>>> Testing console command: print_abbreviations(1)
+
+List of abbreviations
+
+'abs' expands to ['absolute']
+'addr' expands to ['address']
+'alnum' expands to ['all numeric', 'all numberical']
+'alt' expands to ['alternate', 'alternative']
+'arg' expands to ['argument']
+'argv' expands to ['arg v', 'argument value']
+'asc' expands to ['ascii']
+'atan' expands to ['arc tangent']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
+'attr' expands to ['attribute']
+'avail' expands to ['available']
+'avg' expands to ['average']
+'beg' expands to ['begin', 'beginning']
+'bg' expands to ['back ground']
+'blk' expands to ['block', 'blocking']
+'buf' expands to ['buffer']
+'buff' expands to ['buffer']
+'builtin' expands to ['built in']
+'calc' expands to ['calculate', 'calculated', 'calculation']
+'cgi' expands to ['c g i']
+'char' expands to ['character']
+'chdir' expands to ['change dir', 'change directory']
+'chg' expands to ['change', 'changed']
+'chmod' expands to ['change mode']
+'chr' expands to ['character']
+'clr' expands to ['clear']
+'cmd' expands to ['command']
+'cmp' expands to ['compare']
+'cntrl' expands to ['control']
+'col' expands to ['column']
+'concat' expands to ['concatenate']
+'cond' expands to ['condition']
+'conf' expands to ['configure', 'configuration']
+'config' expands to ['configuration', 'configure']
+'conn' expands to ['connection', 'connected']
+'cont' expands to ['control']
+'cos' expands to ['co sine']
+'cpp' expands to ['c plus plus']
+'ctl' expands to ['control']
+'ctrl' expands to ['control']
+'cur' expands to ['cursor', 'current']
+'curr' expands to ['current']
+'db' expands to ['d b', 'data base']
+'decl' expands to ['declaration', 'declare']
+'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
+'delim' expands to ['delimiter']
+'dev' expands to ['develop', 'development', 'device']
+'dict' expands to ['dictionary']
+'dir' expands to ['directory', 'direction']
+'div' expands to ['divide']
+'doc' expands to ['document', 'documentation']
+'dom' expands to ['domain']
+'dst' expands to ['distance']
+'dtd' expands to ['d t d']
+'elem' expands to ['element']
+'ent' expands to ['entry']
+'env' expands to ['environment']
+'environ' expands to ['environment']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
+'ex' expands to ['example']
+'exc' expands to ['exception']
+'exec' expands to ['execute', 'executable']
+'expr' expands to ['expression']
+'fg' expands to ['foreground']
+'fifo' expands to ['first in first out']
+'fmt' expands to ['format']
+'fp' expands to ['file pointer']
+'func' expands to ['function']
+'gen' expands to ['general', 'generic']
+'getattr' expands to ['get attribute']
+'gid' expands to ['g i d', 'group i d']
+'glob' expands to ['global']
+'goto' expands to ['go to']
+'gr' expands to ['group']
+'hex' expands to ['hexadecimal']
+'horiz' expands to ['horizontal', 'horizontally']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
+'impl' expands to ['implementation']
+'inc' expands to ['increment', 'include']
+'incl' expands to ['include', 'included']
+'info' expands to ['information']
+'init' expands to ['initial', 'initialize', 'intial']
+'ins' expands to ['insert']
+'int' expands to ['integer']
+'interp' expands to ['interpreter']
+'intro' expands to ['introduction']
+'io' expands to ['i o']
+'ip' expands to ['i p']
+'lambd' expands to ['lambda']
+'len' expands to ['length']
+'ln' expands to ['line']
+'lnk' expands to ['link']
+'loc' expands to ['location']
+'login' expands to ['log in']
+'mem' expands to ['memory']
+'mk' expands to ['make']
+'mnt' expands to ['mount', 'mounted']
+'mod' expands to ['mode', 'modify']
+'msec' expands to ['millisecond']
+'msg' expands to ['message']
+'mtime' expands to ['m time']
+'nam' expands to ['name']
+'nntp' expands to ['n n t p']
+'no' expands to ['number']
+'num' expands to ['number']
+'obj' expands to ['object']
+'oct' expands to ['octal']
+'opt' expands to ['optional', 'option', 'optimize']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
+'par' expands to ['parameter']
+'param' expands to ['parameter']
+'pat' expands to ['pattern']
+'perm' expands to ['permission']
+'pkg' expands to ['package']
+'pos' expands to ['position', 'positioning']
+'prof' expands to ['profile', 'profiling', 'professional']
+'proto' expands to ['prototype', 'protocol']
+'pty' expands to ['p t y']
+'punct' expands to ['punctuation']
+'py' expands to ['python', 'p y']
+'rand' expands to ['random']
+'rd' expands to ['read']
+'rect' expands to ['rectangle']
+'ref' expands to ['reference']
+'reg' expands to ['regular', 'regular expression']
+'regexp' expands to ['regular expression']
+'rel' expands to ['relative']
+'repr' expands to ['represent', 'representation']
+'req' expands to ['request']
+'rexp' expands to ['regular expression']
+'rgb' expands to ['r g b']
+'rm' expands to ['remove']
+'scr' expands to ['screen']
+'sec' expands to ['second']
+'sep' expands to ['separator']
+'seq' expands to ['sequence']
+'serv' expands to ['server']
+'sig' expands to ['signal', 'special interest group']
+'sin' expands to ['sine']
+'smtp' expands to ['s m t p']
+'sock' expands to ['socket']
+'soundex' expands to ['soundex']
+'spc' expands to ['space']
+'src' expands to ['source']
+'st' expands to ['standard']
+'stat' expands to ['statistic', 'static']
+'stdin' expands to ['s t d in', 'standard input']
+'str' expands to ['string']
+'sub' expands to ['sub routine']
+'sym' expands to ['symbol']
+'sync' expands to ['synchronize']
+'sys' expands to ['system']
+'temp' expands to ['temporary']
+'termid' expands to ['term i d', 'terminal i d']
+'tmp' expands to ['temporary']
+'tok' expands to ['token']
+'trans' expands to ['transition', 'transport', 'transform', 'transformation']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
+'undef' expands to ['undefined']
+'uniq' expands to ['unique']
+'unres' expands to ['unresolved']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
+'var' expands to ['variable']
+'vert' expands to ['vertical', 'vertically']
+'win' expands to ['window']
+'xml' expands to ['x m l']
+
+
+List of unresolved abbreviations
+
+'f': appears in ['f_name', 'f_name2']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+>>> Testing console command: say(['application', 'programming', 'interface', 'function', ', \\comma'], user_input='1\n')
+Associate 'application programming interface function' with symbol (Enter selection):
+
+  '0': no association
+  '1': API_function
+  '2': application_programming_interface_function (*new*)
+  '3': ApplicationProgrammingInterfaceFunction (*new*)
+  '4': applicationProgrammingInterfaceFunction (*new*)
+  '5': APPLICATION_PROGRAMMING_INTERFACE_FUNCTION (*new*)
+  '6': applicationprogramminginterfacefunction (*new*)
+  '7': APPLICATIONPROGRAMMINGINTERFACEFUNCTION (*new*)
+
+> *** Start of source buffer ***
+  1: this_sym_is_unres, this_sym_is_unres_too, f_name, API_function, <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: print_abbreviations(1)
+
+List of abbreviations
+
+'abs' expands to ['absolute']
+'addr' expands to ['address']
+'alnum' expands to ['all numeric', 'all numberical']
+'alt' expands to ['alternate', 'alternative']
+'api' expands to ['application programming interface']
+'arg' expands to ['argument']
+'argv' expands to ['arg v', 'argument value']
+'asc' expands to ['ascii']
+'atan' expands to ['arc tangent']
+'atof' expands to ['a to f']
+'atol' expands to ['a to l']
+'attr' expands to ['attribute']
+'avail' expands to ['available']
+'avg' expands to ['average']
+'beg' expands to ['begin', 'beginning']
+'bg' expands to ['back ground']
+'blk' expands to ['block', 'blocking']
+'buf' expands to ['buffer']
+'buff' expands to ['buffer']
+'builtin' expands to ['built in']
+'calc' expands to ['calculate', 'calculated', 'calculation']
+'cgi' expands to ['c g i']
+'char' expands to ['character']
+'chdir' expands to ['change dir', 'change directory']
+'chg' expands to ['change', 'changed']
+'chmod' expands to ['change mode']
+'chr' expands to ['character']
+'clr' expands to ['clear']
+'cmd' expands to ['command']
+'cmp' expands to ['compare']
+'cntrl' expands to ['control']
+'col' expands to ['column']
+'concat' expands to ['concatenate']
+'cond' expands to ['condition']
+'conf' expands to ['configure', 'configuration']
+'config' expands to ['configuration', 'configure']
+'conn' expands to ['connection', 'connected']
+'cont' expands to ['control']
+'cos' expands to ['co sine']
+'cpp' expands to ['c plus plus']
+'ctl' expands to ['control']
+'ctrl' expands to ['control']
+'cur' expands to ['cursor', 'current']
+'curr' expands to ['current']
+'db' expands to ['d b', 'data base']
+'decl' expands to ['declaration', 'declare']
+'def' expands to ['definition', 'default', 'define', 'defined', 'deaf']
+'delim' expands to ['delimiter']
+'dev' expands to ['develop', 'development', 'device']
+'dict' expands to ['dictionary']
+'dir' expands to ['directory', 'direction']
+'div' expands to ['divide']
+'doc' expands to ['document', 'documentation']
+'dom' expands to ['domain']
+'dst' expands to ['distance']
+'dtd' expands to ['d t d']
+'elem' expands to ['element']
+'ent' expands to ['entry']
+'env' expands to ['environment']
+'environ' expands to ['environment']
+'eol' expands to ['e o l', 'end of line']
+'eval' expands to ['e val', 'evaluate']
+'ex' expands to ['example']
+'exc' expands to ['exception']
+'exec' expands to ['execute', 'executable']
+'expr' expands to ['expression']
+'fg' expands to ['foreground']
+'fifo' expands to ['first in first out']
+'fmt' expands to ['format']
+'fp' expands to ['file pointer']
+'func' expands to ['function']
+'gen' expands to ['general', 'generic']
+'getattr' expands to ['get attribute']
+'gid' expands to ['g i d', 'group i d']
+'glob' expands to ['global']
+'goto' expands to ['go to']
+'gr' expands to ['group']
+'hex' expands to ['hexadecimal']
+'horiz' expands to ['horizontal', 'horizontally']
+'html' expands to ['h t m l']
+'http' expands to ['h t t p']
+'imap' expands to ['i map']
+'impl' expands to ['implementation']
+'inc' expands to ['increment', 'include']
+'incl' expands to ['include', 'included']
+'info' expands to ['information']
+'init' expands to ['initial', 'initialize', 'intial']
+'ins' expands to ['insert']
+'int' expands to ['integer']
+'interp' expands to ['interpreter']
+'intro' expands to ['introduction']
+'io' expands to ['i o']
+'ip' expands to ['i p']
+'lambd' expands to ['lambda']
+'len' expands to ['length']
+'ln' expands to ['line']
+'lnk' expands to ['link']
+'loc' expands to ['location']
+'login' expands to ['log in']
+'mem' expands to ['memory']
+'mk' expands to ['make']
+'mnt' expands to ['mount', 'mounted']
+'mod' expands to ['mode', 'modify']
+'msec' expands to ['millisecond']
+'msg' expands to ['message']
+'mtime' expands to ['m time']
+'nam' expands to ['name']
+'nntp' expands to ['n n t p']
+'no' expands to ['number']
+'num' expands to ['number']
+'obj' expands to ['object']
+'oct' expands to ['octal']
+'opt' expands to ['optional', 'option', 'optimize']
+'os' expands to ['operating system', 'o s']
+'osf' expands to ['o s f']
+'par' expands to ['parameter']
+'param' expands to ['parameter']
+'pat' expands to ['pattern']
+'perm' expands to ['permission']
+'pkg' expands to ['package']
+'pos' expands to ['position', 'positioning']
+'prof' expands to ['profile', 'profiling', 'professional']
+'proto' expands to ['prototype', 'protocol']
+'pty' expands to ['p t y']
+'punct' expands to ['punctuation']
+'py' expands to ['python', 'p y']
+'rand' expands to ['random']
+'rd' expands to ['read']
+'rect' expands to ['rectangle']
+'ref' expands to ['reference']
+'reg' expands to ['regular', 'regular expression']
+'regexp' expands to ['regular expression']
+'rel' expands to ['relative']
+'repr' expands to ['represent', 'representation']
+'req' expands to ['request']
+'rexp' expands to ['regular expression']
+'rgb' expands to ['r g b']
+'rm' expands to ['remove']
+'scr' expands to ['screen']
+'sec' expands to ['second']
+'sep' expands to ['separator']
+'seq' expands to ['sequence']
+'serv' expands to ['server']
+'sig' expands to ['signal', 'special interest group']
+'sin' expands to ['sine']
+'smtp' expands to ['s m t p']
+'sock' expands to ['socket']
+'soundex' expands to ['soundex']
+'spc' expands to ['space']
+'src' expands to ['source']
+'st' expands to ['standard']
+'stat' expands to ['statistic', 'static']
+'stdin' expands to ['s t d in', 'standard input']
+'str' expands to ['string']
+'sub' expands to ['sub routine']
+'sym' expands to ['symbol']
+'sync' expands to ['synchronize']
+'sys' expands to ['system']
+'temp' expands to ['temporary']
+'termid' expands to ['term i d', 'terminal i d']
+'tmp' expands to ['temporary']
+'tok' expands to ['token']
+'trans' expands to ['transition', 'transport', 'transform', 'transformation']
+'tty' expands to ['t t y']
+'uid' expands to ['u i d', 'user i d']
+'undef' expands to ['undefined']
+'uniq' expands to ['unique']
+'unres' expands to ['unresolved']
+'url' expands to ['u r l']
+'uu' expands to ['u u']
+'var' expands to ['variable']
+'vert' expands to ['vertical', 'vertically']
+'win' expands to ['window']
+'xml' expands to ['x m l']
+
+
+List of unresolved abbreviations
+
+'f': appears in ['f_name', 'f_name2']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'x': appears in ['x']
+'y': appears in ['y']
+
+
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+
+
+*******************************************************************************
+* Name        : basic_correction
+* Description : Testing basic correction infrastructure with ResMgr.
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+***Testing initial state***
+
+
+0 stored utterances, as expected
+
+
+recent dictation is empty, as expected
+
+
+***Some simple dictation***
+
+
+
+>>> Testing console command: say(['class', 'clown', 'inherits', 'from', 'student'], user_input='0
+0
+')
+
+
+>>> Testing console command: say(['class', 'body'], user_input='')
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['define', 'method', 'popularity', 'method', 'body'], user_input='0
+')
+Associate 'popularity' with symbol (Enter selection):
+
+  '0': no association
+  '1': popularity (*new*)
+  '2': Popularity (*new*)
+  '3': POPULARITY (*new*)
+
+> *** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['return', '8'], user_input='')
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    return 8<CURSOR>
+
+*** End of source buffer ***
+
+***Testing state***
+
+
+WARNING: 3 stored utterances (expected 4)
+
+WARNING: 3 recently dictated utterances (expected 4)
+
+WARNING: check_recent found 3 stored utterances
+(expected 4)
+
+additional utterances were expected:
+
+***Testing scratch that***
+
+scratching 1
+
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    return 8<CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+scratch 1 succeeded as expected
+
+WARNING: 2 stored utterances (expected 3)
+
+WARNING: 2 recently dictated utterances (expected 3)
+
+WARNING: check_recent found 2 stored utterances
+(expected 3)
+
+additional utterances were expected:
+
+***Moving cursor manually***
+
+*** Start of source buffer ***
+  1: <CURSOR>def popularity(self):
+  2:    
+
+*** End of source buffer ***
+
+***Testing scratch that following manual move***
+
+scratching 1
+
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+scratch 1 succeeded as expected
+
+WARNING: 1 stored utterances (expected 2)
+
+WARNING: 1 recently dictated utterances (expected 2)
+
+WARNING: check_recent found 1 stored utterances
+(expected 2)
+
+additional utterances were expected:
+
+
+>>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'B.'], user_input='0
+2
+')
+Associate 'grades' with symbol (Enter selection):
+
+  '0': no association
+  '1': grades (*new*)
+  '2': Grades (*new*)
+  '3': GRADES (*new*)
+
+> Associate 'B.' with symbol (Enter selection):
+
+  '0': no association
+  '1': b (*new*)
+  '2': B (*new*)
+
+> *** Start of source buffer ***
+  1: def grades(self):
+  2:    return B<CURSOR>
+
+*** End of source buffer ***
+
+WARNING: 2 stored utterances (expected 3)
+
+WARNING: 2 recently dictated utterances (expected 3)
+
+WARNING: check_recent found 2 stored utterances
+(expected 3)
+
+additional utterances were expected:
+
+
+>>> Testing console command: say(['select', 'clown'], user_input='None')
+Associate 'select clown' with symbol (Enter selection):
+
+  '0': no association
+  '1': select_clown (*new*)
+  '2': SelectClown (*new*)
+  '3': selectClown (*new*)
+  '4': SELECT_CLOWN (*new*)
+  '5': selectclown (*new*)
+  '6': SELECTCLOWN (*new*)
+
+> 
+
+This is where it gets stuck. I hadn't realized this but it looks like NatSpeak doesn't recognize this as SelectPseudoCode utterance. Looking up, it looks like the utterance "class clown" never actually printed the class definition. This explains why "select clown" cannot be interpreted as a SelectXYZ command.
+
+
