@@ -341,10 +341,11 @@ class DictWinGram(WinGram):
 
         *none*
         """
+        debug.trace('DictWinGram.on_results', 'results.words()=%s, self.results_callback=%s, self.manager=%s' % 
+                    (repr(results.words()), self.results_callback, self.manager))
         self.results_callback(results.words())
         self.manager.interpret_dictation(results, \
             initial_buffer = self.buff_name)
-
 
 
 class SelectWinGram(WinGram):
@@ -785,7 +786,6 @@ class WinGramFactory(Object):
         CmdInterp.interpret_NL_cmd as the initial buffer.
 
         *INT* window -- make grammar specific to a particular window
-
         *BOOL* exclusive -- is grammar exclusive?  (prevents other
         non-exclusive grammars from getting results)
         
@@ -794,6 +794,34 @@ class WinGramFactory(Object):
         *DictWinGram* -- new dictation grammar
         """
         debug.virtual('WinGramFactory.make_dictation')
+    
+    def make_dictation_through_cmd(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new grammar that recognizes utterances that start and/or
+        end with known spoken forms (known symbols, CSCs or LSAs).
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *AppState* app -- application which is the target of the grammar
+
+        *STR* buff_name -- name of the buffer corresponding to this
+        grammar.  Buff_name will be passed to
+        CmdInterp.interpret_NL_cmd as the initial buffer.
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+        
+        **OUTPUTS**
+
+        *DictationGramSetNL* -- new pair of grammars (dictation plus command)
+        for supporting VoiceCode dictation.
+        """
+        debug.virtual('WinGramFactory.make_dictation_through_cmd')
     
     def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):
@@ -948,6 +976,8 @@ class WinGramFactory(Object):
         
         """
         debug.virtual('WinGramFactory.make_text_mode')
+
+        
     
 class DictWinGramDummy(DictWinGram):
     """dummy implementation of window-specific dictation grammar 
@@ -1051,6 +1081,26 @@ class DictWinGramDummy(DictWinGram):
             self.identify_grammar()
             print "deactivating"
         self.active = 0
+
+class DictThroughCmdGramDummy(DictWinGramDummy):
+    """dummy implementation of window-specific dictation through
+    commands grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* silent -- don't print diagnostics
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, silent = 0, **attrs):
+        self.deep_construct(DictThroughCmdGramDummy,
+            {'silent': silent}, attrs)
+        if not self.silent:
+            self.identify_grammar()
+            print "init"
+
 
 class SelectWinGramDummy(SelectWinGram):
     """dummy implementation of window-specific selection grammar 
@@ -1274,6 +1324,37 @@ class WinGramFactoryDummy(Object):
         return DictWinGramDummy(manager = manager, app = app, 
             buff_name = buff_name, window = window, exclusive =
             exclusive)
+                        
+    
+    def make_dictation_through_cmd(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new grammar that recognizes utterances that start and/or
+        end with known spoken forms (known symbols, CSCs or LSAs).
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *AppState* app -- application which is the target of the grammar
+
+        *STR* buff_name -- name of the buffer corresponding to this
+        grammar.  Buff_name will be passed to
+        CmdInterp.interpret_NL_cmd as the initial buffer.
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+        
+        **OUTPUTS**
+
+        *DictationGramSetNL* -- new pair of grammars (dictation plus command)
+        for supporting VoiceCode dictation.
+        """
+        return DictThroughCmdGramDummy(manager = manager, app = app, 
+            buff_name = buff_name, window = window, exclusive =
+            exclusive) 
     
     def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):

@@ -27,7 +27,9 @@ import sr_interface
 from sr_grammars import *
 import natlink
 import debug
+import exceptions
 from natlinkutils import *
+import string
 
 import CmdInterp, AppState
 
@@ -37,6 +39,170 @@ def compose_alternatives(words):
     for word in words[1:]:
         alternatives = alternatives + ' | ' + word
     return "( %s )" % alternatives
+
+class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
+    """natlink implementation of DictWinGram for window-specific 
+    dictation grammar interfaces
+
+    **INSTANCE ATTRIBUTES**
+
+    *CLASS* wave_playback -- class constructor for a concrete
+    subclass of WavePlayback, or None if no playback is available
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, wave_playback = None, **attrs):
+        """
+        **INPUTS**
+
+        *CLASS* wave_playback -- class constructor for a concrete
+        subclass of WavePlayback, or None if no playback is available
+        """
+        self.deep_construct(DictThroughCmdWinGramNL,
+            {'wave_playback': wave_playback}, attrs, 
+            exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        
+        
+        # AD: Set this to 0 if you don't want to genarate a dictation through
+        #     cmd grammar.
+        #     Actually, this will still generate the grammar, but it will
+        #     be empty. 
+        #     This is there as a temporary measure so I can experiment with 
+        #     turning the grammar on and off.
+        #     Should be removed once I have decided whether or not such a
+        #     grammar is a good idea.
+        self.generate_gram = 0
+        
+        self.load(self._gram_spec())
+        
+    def _gram_spec(self):
+        if not self.generate_gram:
+           # Need to provide a dummy grammar.
+           gram_spec = "<vcode_utterance> exported = fdfasdfsdfasdfdgsgsdfgdfg;"
+        else:
+           gram_spec = """<dgndictation> imported;
+                          <vcode_utterance> exported = <known_spoken_form>+ <dgndictation> | 
+                                                       <dgndictation> <known_spoken_form>+;
+                          <known_spoken_form> = <known_spoken_cmd>|<known_spoken_symbol>;
+                          """
+           gram_spec = gram_spec + self.interpreter().gram_spec_spoken_cmd("known_spoken_cmd")
+           gram_spec = gram_spec + self.interpreter().gram_spec_spoken_symbol("known_spoken_symbol")                                        
+        
+        debug.trace('DictThroughCmdWinGramNL._gram_spec', 'returning "%s"' % gram_spec)
+                       
+        return gram_spec        
+                
+    def gotBegin(self, moduleInfo):
+        debug.trace('DictThroughCmdWinGramNL.gotBegin', 'invoked')            
+        
+
+    def _set_exclusive_when_active(self, exclusive = 1):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        GrammarBase.setExclusive(self, exclusive)
+        
+    def activate(self):
+        """activates the grammar for recognition
+        tied to the current window.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('DictThroughCmdWinGramNL.activate', 
+            '%s received activate'% self.buff_name)
+        if not self.is_active():
+            debug.trace('DictThroughCmdWinGramNL.activate', 'not already active')
+            window = self.window
+            if window == None:
+                window = 0
+            debug.trace('DictThroughCmdWinGramNL.activate', 
+                'activating, window = %d, exclusive = %d' % (window,
+                self.exclusive))
+            GrammarBase.activateAll(self, window = window, 
+                exclusive = self.exclusive)                
+            self.active = 1
+
+    def remove_other_references(self):
+        GrammarBase.unload(self)
+        DictWinGram.remove_other_references(self)
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('DictThroughCmdWinGramNL.deactivate', 
+            '%s received deactivate' % self.buff_name)
+        if self.is_active():
+            debug.trace('DictThroughCmdWinGramNL.deactivate', 'was active')
+            GrammarBase.deactivate(self, "vcode_utterance")
+            self.active = 0
+
+    def set_context(self, before = "", after = ""):
+        """set the context to improve dictation accuracy
+
+        **INPUTS**
+
+        *STR* before -- one or more words said immediately before the
+        next utterance, or found in the text immediately before the
+        utterance
+
+        *STR* after -- one or more words found in the text
+        immediately after the utterance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        # AD: Note this method doesn't make sense for this class. 
+        #     Remove it later.
+        pass
+
+    def gotResultsObject(self, recogType, results):
+            debug.trace('DictThroughCmdWinGramNL.gotResultsObject', 
+                'recogType=%s, results=%s, self.exclusive=%s' % \
+                (recogType, repr(results), self.exclusive))
+            if recogType == 'self':
+                utterance = \
+                    sr_interface.SpokenUtteranceNL(results, self.wave_playback)
+                self.on_results(utterance)
+#                self.last = SpokenUtteranceNL(results)
+# not sure if yet if this is where we should store the utterance
+#                words = results.getWords(0)
+#                interp = self.interpreter()
+#                interp.interpret_NL_cmd(words, self.app,
+#                    initial_buffer = self.buff_name)
+#                self.app.print_buff_if_necessary(buff_name
+#                    = self.buff_name)
+            else:
+                 debug.trace('DictThroughCmdWinGramNL.gotResultsObject, results=%s', 
+                     repr(results))
+
 
 class DictWinGramNL(DictWinGram, DictGramBase):
     """natlink implementation of DictWinGram for window-specific 
@@ -51,6 +217,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
     *none*
     """
+        
+    
     def __init__(self, wave_playback = None, **attrs):
         """
         **INPUTS**
@@ -168,6 +336,7 @@ class DictWinGramNL(DictWinGram, DictGramBase):
                      repr(results))
              
 
+
 class SelectWinGramNL(SelectWinGram, SelectGramBase):
     """natlink implementation of SelectWinGram for window-specific 
     selection grammar interfaces
@@ -186,6 +355,9 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         SelectGramBase.__init__(self)
         self.load(selectWords = self.select_phrases, throughWord =
             self.through_word)
+            
+    def gotBegin(self, moduleInfo):
+        debug.trace('SelectWinGramNL.gotBegin', 'invoked')            
 
     def _set_exclusive_when_active(self, exclusive = 1):
         """private method which ensures that even currently active grammars 
@@ -214,6 +386,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
         *none*
         """
+        debug.trace('SelectWinGramNL._set_visible', 'visible=%s' % visible)
         SelectGramBase.setSelectText(self, visible)
 
     def activate(self, buff_name):
@@ -273,7 +446,6 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
             try:
                 bestScore = resObj.getWordInfo(0)[0][2]
                 verb = resObj.getWordInfo(0)[0][0]
-
                 #
                 # Collect selection ranges with highest score
                 #
@@ -286,6 +458,8 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                     # of the list of candidate regions).
                     #
                     wordInfo = resObj.getWordInfo(i)
+#                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo)=%s' % (i, len(wordInfo)))
+#                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo[0])=%s' % (i, len(wordInfo[0])))                    
                     if wordInfo[0][2] != bestScore:
                         #
                         # All remaining regions don't have as good a score as the
@@ -307,7 +481,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         if not true_region in ranges:
                            ranges.append(true_region)
 
-            except natlink.OutOfRange:
+            except natlink.OutOfRange, exceptions.IndexError:
                 pass
 
             spoken = self.selection_spoken_form(resObj)
@@ -602,11 +776,41 @@ class WinGramFactoryNL(WinGramFactory):
         
         **OUTPUTS**
 
-        *DictWinGram* -- new dictation grammar
+        *DictWinGramNL* -- new dictation grammar for supporting VoiceCode dictation.
         """
         return DictWinGramNL(manager = manager, app = app, 
             buff_name = buff_name, window = window, exclusive = exclusive,
             wave_playback = self.wave_playback) 
+    
+    def make_dictation_through_cmd(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new grammar that recognizes utterances that start and/or
+        end with known spoken forms (known symbols, CSCs or LSAs).
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *AppState* app -- application which is the target of the grammar
+
+        *STR* buff_name -- name of the buffer corresponding to this
+        grammar.  Buff_name will be passed to
+        CmdInterp.interpret_NL_cmd as the initial buffer.
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+        
+        **OUTPUTS**
+
+        *DictationGramSetNL* -- new pair of grammars (dictation plus command)
+        for supporting VoiceCode dictation.
+        """
+        return DictThroughCmdWinGramNL(manager = manager, app = app, 
+            buff_name = buff_name, window = window, exclusive = exclusive,
+            wave_playback = self.wave_playback)    
     
     def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):

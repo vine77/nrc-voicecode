@@ -55,6 +55,14 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                         'DictThroughCmdWinGramNL': 1,
+#                         'DictWinGram': 1,
+#                         'SelectWinGramNL': 1,
+#                         'SimpleSelection': 1,
+#                         'SelectWinGram': 1,
+#                         'DictWinGram.on_results': 1,
+#                         'ResMgrStd.interpret_dictation': 1,
+#                         'interpret_dictation': 1,
 #################################                        
 #                        'StandardFunctionCallsHelper.add_function_name': 1,
 #                        'ActionFuncCallWithParens.__init__': 1,

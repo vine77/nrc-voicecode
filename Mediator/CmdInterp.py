@@ -1389,6 +1389,9 @@ class CmdInterp(OwnerObject):
     of the mediator. This is mostly used for regression testing purposes
     where we create a new mediator in each test, and don't want to waste
     CPU time adding the same LSAs and CSCs over and over again.
+    
+    *STR _spoken_commands_gram_rule=None* -- A natspeak grammar rule that
+    matches the spoken form of any LSA or CSC.
 
     CLASS ATTRIBUTES**
 
@@ -1426,7 +1429,8 @@ class CmdInterp(OwnerObject):
                                  symbol_formatting.SymBuilderFactory(),
                              'state_interface': None,
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
-                             'add_sr_entries_for_LSAs_and_CSCs': 1},
+                             'add_sr_entries_for_LSAs_and_CSCs': 1,
+                             'spoken_commands_gram_rule': None},
                             attrs)
         self.name_parent('mediator')
         self.add_owned('known_symbols')
@@ -1506,6 +1510,75 @@ class CmdInterp(OwnerObject):
                 regexp = regexp + '\s*'
             regexp = regexp + regexp_this_word
         return regexp
+
+    def gram_spec_spoken_cmd(self, rule_name):
+        """returns a NatSpeak grammar rule that matches the spoken form of
+        any LSA or CSC.
+
+        **INPUTS**
+
+        *STR rule_name* -- name of the grammar rule
+
+
+        **OUTPUTS**
+
+        *STR rule* -- The natspeak rule.
+        """
+
+        if self.spoken_commands_gram_rule == None:
+           known_spoken_forms = {}          
+           for cmd_dict in  self.commands.items():
+              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                          '** cmd_dict=%s' % repr(cmd_dict))
+              spoken_form = string.join(cmd_dict[0])
+              known_spoken_forms[spoken_form] = 1
+                 
+           for lsa_word_trie in self.language_specific_aliases.values():
+              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                          '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
+              for an_lsa_word_trie_entry in lsa_word_trie.items():
+                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                             '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
+                 spoken_form = string.join(an_lsa_word_trie_entry[0])
+                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                             '** spoken_form=%s' % repr(spoken_form))                                                        
+                 known_spoken_forms[spoken_form] = 1
+
+           # Note: dummyghjetqwer is an unpronouceable dummy word used to 
+           #       make sure this rule will not be empty (which would cause
+           #       a crash).           
+           self.spoken_commands_gram_rule = "<%s> = dummyghjetqwer" % rule_name
+           for a_known_spoken_form in known_spoken_forms.keys():
+              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                          '** a_known_spoken_form=%s' % repr(a_known_spoken_form))
+              self.spoken_commands_gram_rule = self.spoken_commands_gram_rule + "|%s" % a_known_spoken_form
+           self.spoken_commands_gram_rule = self.spoken_commands_gram_rule + ";\n"
+                   
+        return self.spoken_commands_gram_rule
+
+    def gram_spec_spoken_symbol(self, rule_name): 
+        """returns a NatSpeak grammar rule that matches the spoken form of
+        any known symbol.
+
+        **INPUTS**
+
+        *STR rule_name* -- name of the grammar rule
+
+
+        **OUTPUTS**
+
+        *STR rule* -- The natspeak rule.
+        """
+           
+        # Note: dummyghjetqwer is an unpronouceable dummy word used to 
+        #       make sure this rule will not be empty (which would cause
+        #       a crash).           
+        gram_spec = "<%s> = dummyghjetqwer" % rule_name
+           
+           
+        # AD: For now, just hard code one entry to test the approach.
+        return "%s|raw input;\n" % gram_spec
+
 
     def get_state(self):
         """
