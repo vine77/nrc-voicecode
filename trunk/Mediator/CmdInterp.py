@@ -1392,7 +1392,10 @@ class CmdInterp(OwnerObject):
     
     *STR _spoken_commands_gram_rule=None* -- A natspeak grammar rule that
     matches the spoken form of any LSA or CSC.
-
+    
+    *STR _spoken_symbols_gram_rule=None* -- A natspeak grammar rule that
+    matches the resolved spoken forms of any known symbol.
+    
     CLASS ATTRIBUTES**
 
     *none* --
@@ -1430,7 +1433,8 @@ class CmdInterp(OwnerObject):
                              'state_interface': None,
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1,
-                             'spoken_commands_gram_rule': None},
+                             '_spoken_commands_gram_rule': None,
+                             '_spoken_symbols_gram_rule': None},
                             attrs)
         self.name_parent('mediator')
         self.add_owned('known_symbols')
@@ -1438,7 +1442,10 @@ class CmdInterp(OwnerObject):
         self.known_symbols = SymDict.SymDict(sym_file = sym_file, interp = self)
         self.styling_state = SymStyling(self.builder_factory)
         self.state_interface = InterpState(self.styling_state)
-
+        # Generate and cache the grammar specifcations
+        self.gram_spec_spoken_cmd('known_spoken_cmd')
+        self.gram_spec_spoken_symbol('known_spoken_symbol')
+        
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance
 
@@ -1525,7 +1532,7 @@ class CmdInterp(OwnerObject):
         *STR rule* -- The natspeak rule.
         """
 
-        if self.spoken_commands_gram_rule == None:
+        if self._spoken_commands_gram_rule == None:
            known_spoken_forms = {}          
            for cmd_dict in  self.commands.items():
               debug.trace('CmdInterp.gram_spec_spoken_cmd', 
@@ -1547,14 +1554,14 @@ class CmdInterp(OwnerObject):
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
            #       make sure this rule will not be empty (which would cause
            #       a crash).           
-           self.spoken_commands_gram_rule = "<%s> = dummyghjetqwer" % rule_name
+           self._spoken_commands_gram_rule = "<%s> = dummyghjetqwer" % rule_name
            for a_known_spoken_form in known_spoken_forms.keys():
               debug.trace('CmdInterp.gram_spec_spoken_cmd', 
                           '** a_known_spoken_form=%s' % repr(a_known_spoken_form))
-              self.spoken_commands_gram_rule = self.spoken_commands_gram_rule + "|%s" % a_known_spoken_form
-           self.spoken_commands_gram_rule = self.spoken_commands_gram_rule + ";\n"
+              self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + "|%s" % a_known_spoken_form
+           self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + ";\n"
                    
-        return self.spoken_commands_gram_rule
+        return self._spoken_commands_gram_rule
 
     def gram_spec_spoken_symbol(self, rule_name): 
         """returns a NatSpeak grammar rule that matches the spoken form of
@@ -1569,15 +1576,26 @@ class CmdInterp(OwnerObject):
 
         *STR rule* -- The natspeak rule.
         """
+        if self._spoken_symbols_gram_rule == None:        
+           known_spoken_forms = {}
+           for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
+              debug.trace('CmdInterp.gram_spec_spoken_symbol', 
+                          '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
+              spoken_form = string.join(a_word_trie_entry[0])
+              debug.trace('CmdInterp.gram_spec_spoken_symbol', 
+                          '** spoken_form=%s' % repr(spoken_form))                                                        
+              known_spoken_forms[spoken_form] = 1           
+                   
+           # Note: dummyghjetqwer is an unpronouceable dummy word used to 
+           #       make sure this rule will not be empty (which would cause
+           #       a crash).           
+           self._spoken_symbols_gram_rule = "<%s> = dummyghjetqwer" % rule_name                
+           for a_spoken_form in known_spoken_forms.keys():
+              self._spoken_symbols_gram_rule = self._spoken_symbols_gram_rule + "|%s" % a_spoken_form
+        
+           self._spoken_symbols_gram_rule = self._spoken_symbols_gram_rule + ";\n"        
            
-        # Note: dummyghjetqwer is an unpronouceable dummy word used to 
-        #       make sure this rule will not be empty (which would cause
-        #       a crash).           
-        gram_spec = "<%s> = dummyghjetqwer" % rule_name
-           
-           
-        # AD: For now, just hard code one entry to test the approach.
-        return "%s|raw input;\n" % gram_spec
+        return self._spoken_symbols_gram_rule
 
 
     def get_state(self):
