@@ -6,7 +6,7 @@
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
+# This program is distribut\ed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -950,9 +950,7 @@ def test_punctuation():
     commands.say(['back slash cap B.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['back slash cap bravo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     #
-#BUG:    commands.say(['quotes', 'back slash cap C.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-    commands.say(['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#BUG:    commands.say(['quotes', '\\C\\back slash cap c.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['back slash cap D.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -2832,8 +2830,8 @@ def test_mixed_kbd_and_voice_editing():
 
     request_that_user_bring_editor_to_foreground()
     
-#    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
-#    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
+    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
+    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
     test_search_for_typed_text(app, commands, kbd_evt_sim)
     test_select_typed_text_by_voice(app, commands, kbd_evt_sim)
     
@@ -2854,12 +2852,12 @@ def test_selection_set_by_kbd(app, commands, kbd_evt_sim):
 def test_search_for_typed_text(app, commands, kbd_evt_sim):
    commands.open_file(edit_this_buff_py, echo_cmd=1)
    commands.goto_line(2, echo_cmd=1)
-   kbd_evt_sim.type_text(',')
+   kbd_evt_sim.type_text(', hi')
    
    # Need to give Emacs time to notify the server of the typed text
    time.sleep(5)
    
-   kbd_evt_sim.move_cursor_by_kbd('Left', 2)
+   kbd_evt_sim.move_cursor_by_kbd('Left', 5)
    commands.say(['next', 'comma'], echo_cmd=1)
    
 def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
@@ -2872,7 +2870,7 @@ def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
    
    commands.say(['select', 'hello'], never_bypass_sr_recog=1, echo_cmd=1)
 
-#auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=-1)
+auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=-1)
 
 ##############################################################################
 # Voice Commands for compiling symbols

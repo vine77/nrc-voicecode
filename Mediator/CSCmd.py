@@ -41,7 +41,7 @@ class CSCmd(Object):
     
     *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
     possible contextual meanings for this command. Key is a context
-    and value is an action object to be fired if that context applies.
+    and value is an action objecthi to be fired if that context applies.
 
     CLASS ATTRIBUTES**
         

@@ -51,9 +51,9 @@ def dictate_pseudo_python(commands):
     
     commands.say(['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.print_symbols(['EdSim', 'ed_simulator'])
+#    commands.print_symbols(['EdSim', 'ed_simulator'])
     commands.say(['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    commands.print_symbols(['EdSim', 'ed_simulator'])
+#    commands.print_symbols(['EdSim', 'ed_simulator'])
     
     commands.say(['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
