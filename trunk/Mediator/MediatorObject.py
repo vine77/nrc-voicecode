@@ -478,18 +478,14 @@ class MediatorObject(Object.Object):
             self.owner.delete_instance_cbk(self.id, 
                 unexpected = unexpected)
 
-    def add_csc(self, acmd, add_voc_entry=1):
+    def add_csc(self, acmd):
         """Add a new Context Sensitive Command.
 
         [CSCmd] *acmd* is the command to add.
 
-        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-        for the CSC's spoken forms
-        
-
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-        self.interp.add_csc(acmd, add_voc_entry)
+        self.interp.add_csc(acmd)
 
 
     def add_lsa(self, spoken_forms, meanings):

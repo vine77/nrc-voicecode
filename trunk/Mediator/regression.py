@@ -444,7 +444,7 @@ class PersistentConfigNewMediator(Object.Object):
         debug.trace('PersistentConfigNewMediator.init_simulator_regression',
             'about to reset persistent mediator')
         self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
-            symbol_match_dlg = self.symbol_match_dlg)
+            symbol_match_dlg = self.symbol_match_dlg, add_sr_entries_for_LSAs_and_CSCs=0)
         editor = self.mediator().editor_instance(self.editor_name)
         editor.init_for_test()
         interp = self.mediator().interpreter()
