@@ -805,6 +805,13 @@ class RecogStartMgr(OwnerObject):
         *none*
         """
         debug.virtual('RecogStartMgr._recognition_starting')
+        
+    def config_text_mode_toggling(self, on_spoken_as, off_spoken_as, off_sets_nat_text_to):
+        """See [GramMgrFactory.config_text_mode_toggling]
+        
+        .. [GramMgrFactory.config_text_mode_toggling] file:///./GramMgr.GramMgrFactory.html#config_text_mode_toggling"""
+        self.GM_factory.config_text_mode_toggling(on_spoken_as, off_spoken_as, off_sets_nat_text_to)
+        
     
 class RSMInfrastructure(RecogStartMgr):
     """abstract class defining interface for an object which receives 

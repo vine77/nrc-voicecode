@@ -1512,28 +1512,9 @@ class NewMediatorObject(Object.OwnerObject):
         print message
                         
     def text_mode_toggling (self, on_spoken_as, off_spoken_as, off_sets_nat_text_to=None):
-        self._gram_factory().config_text_mode_toggling(on_spoken_as, off_spoken_as, off_sets_nat_text_to)
+        self.editors.config_text_mode_toggling(on_spoken_as, off_spoken_as, off_sets_nat_text_to)
 
-        
-    #########################################################
-    #
-    # Methods below are shorthands for accessing components of
-    # the NewMediatorObject.
-    # They are private methods that should not be invoked
-    # outside of NewMediatorObject.
-    #
-    #########################################################
-    
-    def _get_all_gram_mgrs(self):
-        return self.editors.recog_mgr.grammars
-        
-    def _recog_mgr(self):
-        return self.editors.recog_mgr
-        
-    def _gram_factory(self):
-        return self._recog_mgr().GM_factory
-        
-        
+               
 
 ###############################################################################
 # Configuration functions. These are not methods
