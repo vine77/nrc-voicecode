@@ -37,7 +37,9 @@
 )
 (defun pyf (name arg-string)
   (interactive "sName: \nsArguments: ")
-  "Inserts template code for a python function."
+  "Inserts template code for a python function.
+
+When function ends, the template for the shor/long summary of the method is selected so that it can easily be deleted with Ctrl-w"
 
   (py-method name arg-string nil)
 )
@@ -109,13 +111,17 @@
 
 (defun pyoc (class-name super-classes attrs)
   (interactive "sName: \nsSuperclasses: \nsAttributes: ")
-  "Writes template code for an subclass of Object (as defined in Object.py) and its constructor (__init__)"
+  "Writes template code for an subclass of Object (as defined in Object.py) and its constructor (__init__).
+
+When function ends, the template for the shor/long summary of the class is selected so that it can easily be deleted with Ctrl-w"
   (py-class class-name super-classes attrs 1)
 )  
 
 (defun pyc (class-name super-classes attrs)
   (interactive "sName: \nsSuperclasses: \nsAttributes: ")
-  "Writes template code for a class that is not a subclass of Object (as defined in Object.py)"
+  "Writes template code for a class that is not a subclass of Object (as defined in Object.py)
+
+When function ends, the template for the shor/long summary of the class is selected so that it can easily be deleted with Ctrl-w"
   (py-class class-name super-classes attrs nil)
 )
 
@@ -169,6 +175,7 @@
 
 (defun pyda ()
   (interactive)
+  "Inserts code for documenting a new class attribute"
   (let ((old-py-no-doc py-no-doc))
     (setq py-no-doc nil)
     (call-interactively 'py-doc-attr)
@@ -238,7 +245,6 @@ Returns a list of pairs with name and value of the argument."
     )
 )
 
-
 (defun py-constructor (attr-list super-list is-object)
   "Insert code for constructor of a class with attributes attr-list (name-value pairs) and superclasses super-list. If is-object is true, build a constructor for a subclass of Object (as defined in Object.py"
 
@@ -289,6 +295,8 @@ Returns a list of pairs with name and value of the argument."
 If module is '.', then point inside the documentation for current module
 
 If module is '', then point to documentation for module with same name as class.
+
+When function terminates, the anchor text is selected so it can be deleted with Ctrl-w and replaced by something else
 "
   (pydoc-link attr "" class module)
 )
@@ -300,6 +308,8 @@ If module is '', then point to documentation for module with same name as class.
 If module is '.', then point inside the documentation for current module
 
 If module is '', then point to documentation for module with same name as class.
+
+When function terminates, the anchor text is selected so it can be deleted with Ctrl-w and replaced by something else
 "
   (pydoc-link method method class module)
 )
@@ -311,6 +321,8 @@ If module is '', then point to documentation for module with same name as class.
 If module is '.', then point inside the documentation for current module
 
 If module is '', then point to documentation for module with same name as class.
+
+When function terminates, the anchor text is selected so it can be deleted with Ctrl-w and replaced by something else
 "
   (pydoc-link method method class module)
 )
