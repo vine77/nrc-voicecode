@@ -1,0 +1,6 @@
+*.c#
+*.py~
+*.TAGS
+*~
+TAGS
+#vcode-with-overlays.el#
