@@ -1794,6 +1794,11 @@ class ReformatRecentSymbols(DlgModelViewWX):
         symbol = self.symbols[nth]
         box = self.make_reformat_from_recent_dlg(symbol)
         self.console.show_modal_dialog(box)
+        if box.was_okayed:
+           self.do_ok()
+        else:
+           self.do_cancel()
+           
         
     def user_reformatted_symbols(self):
        """returns the list of symbols which were reformatted
@@ -1923,7 +1928,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
             style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
         set_text_font(recent)
         
-        recent.InsertColumn(0, "#")
+        recent.InsertColumn(0, "")
         recent.InsertColumn(1, "Written symbol")
         recent.InsertColumn(2, "Spoken symbol") 
         recent.InsertColumn(3, "In utterance") 
@@ -1980,6 +1985,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self, self.on_char)
 
+        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_select)
         EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
         
         
@@ -2036,38 +2042,6 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
         """
         self.model().reformat_nth(event.GetIndex())
         
-    def reformat_symbol(self, symbol):   
-       # cloned from correct_nth()     
-       pass
-#                u = self.utterances[-n]
-#        utterance = u[0]
-#        can_reinterpret = u[2]
-#        validator = CorrectionValidatorSpoken(utterance = utterance)
-#        box = CorrectFromRecentWX(console = self.console, parent = self, 
-#            utterance = utterance, validator = validator, 
-#            can_reinterpret = can_reinterpret, gram_factory = self.gram_factory,
-#            pos = self.console.corr_box_pos,
-#            last_utterance = (n == 1), 
-#            first_utterance = (n == len(self.utterances)))
-#        answer = self.console.show_modal_dialog(box)
-#        self.console.corr_box_pos = box.GetPositionTuple()
-#
-#        box.cleanup()
-#
-#        if answer == wxID_OK:
-#            return 'ok'
-#        elif answer == wxID_CANCEL:
-#            return 'cancel'
-#        elif answer == wxID_CORRECT_NEXT:
-#            return 'next'
-#        elif answer == wxID_CORRECT_PREV:
-#            return 'previous'
-#        elif answer == wxID_CORRECT_MORE:
-#            return 'more'
-#        elif answer == wxID_DISCARD_CORRECTION:
-#            return 'discard'
-## shouldn't happen, but ...
-#        return None
 
 
     def displayed_symbols(self):
@@ -2075,6 +2049,9 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelper
 
     def on_activate(self, event):
        self.console.win_sys.raise_main_frame()
+       
+    def on_select(self, event):
+       debug.not_implemented('ReformatFromRecentWX.on_select')
        
     def do_choose(self, nth):
        self.recent.Select(nth)
@@ -2331,8 +2308,8 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelpers.w
        view layer"""
        return self.txt_chosen_form.GetValue()
        
-    def on_selected(self):
-       debug.not_implemented('ReformatFromRecentViewWX.on_selected')
+    def on_select(self):
+       debug.not_implemented('ReformatFromRecentViewWX.on_select')
 
     def on_double(self):
        debug.not_implemented('ReformatFromRecentViewWX.on_double')
@@ -2387,6 +2364,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelpers.w
                      
     def cleanup(self):
        self.Destroy()
+
        
  
 # defaults for vim - otherwise ignore

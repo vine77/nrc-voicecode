@@ -1055,7 +1055,6 @@ class SymDict(OwnerObject):
             self._cached_symbols_as_one_string[first_letter] = \
                 ' ' + string.join(symbol_list, '  ')
 
-#        self.save()
 
         return self._cached_symbols_as_one_string[first_letter]
 
@@ -1400,8 +1399,6 @@ class SymDict(OwnerObject):
         *none* --
         """
 
-#        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
-#        debug.print_call_stack()
         for a_file in file_list:
             print 'Compiling symbols for file \'%s\'' \
                 % util.within_VCode(a_file)
@@ -1886,6 +1883,7 @@ class SymDict(OwnerObject):
         self.move_written_form_to_top_of_priority_list(spoken_form_used,
                                                        correct_written_form)
         self.add_symbol(correct_written_form, [spoken_form_used], tentative=0)
+        self.save()
 
     def move_written_form_to_top_of_priority_list(self, spoken_form, written_form):
         """Moves a written form to the top of the priority list for a spoken form
@@ -3034,13 +3032,7 @@ class SymDict(OwnerObject):
         self.add_symbol(the_match.native_symbol,
         user_supplied_spoken_forms=[the_match.pseudo_symbol])
 
-        #
-        # Resave the dictionary to disk
-        #
-#        self.save()
 
-#        print '-- SymDict.accept_symbol_match: upon exit, known symbols are now:'; self.print_symbols()
-            
     def cleanup_dictionary(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
         

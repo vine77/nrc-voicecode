@@ -1824,7 +1824,8 @@ class NewMediatorObject(Object.OwnerObject):
 
                           
     def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
-        """Correct the written form of a symbol.
+        """Correct the written form of a symbol. This does not
+        replace the symbol in the text.
 
         **INPUTS**
         
