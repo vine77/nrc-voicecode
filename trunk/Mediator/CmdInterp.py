@@ -512,7 +512,6 @@ class CmdInterp(OwnerObject):
         spoken_list = map(lambda word: process_initials(word[0]), cmd)
         trace('CmdInterp.interpret_massaged', 'spoken=%s' % spoken_list)
         self.interpret_spoken(spoken_list, app, initial_buffer = initial_buffer)
-        return
 
     def interpret_spoken(self, spoken_list, app, initial_buffer = None):
         """Interprets a natural language command and executes
@@ -530,6 +529,28 @@ class CmdInterp(OwnerObject):
         """
         trace('CmdInterp.interpret_spoken', 'spoken_list = %s' % spoken_list)
 
+        spoken = string.join(spoken_list)
+        phrase = string.split(spoken)
+        self.interpret_phrase(phrase, app, initial_buffer = initial_buffer)
+
+    def interpret_phrase(self, phrase, app, initial_buffer = None):
+        """Interprets a natural language command and executes
+        corresponding instructions.
+
+        *[STR]* phrase -- The list of spoken words in the command, without
+        regard to the original boundaries between words as interpreted
+        by the speech engine
+
+        *AppState app* -- the AppState interface to the editor
+        
+        *[STR] initial_buffer* -- The name of the target buffer at the 
+        start of the utterance.  Some CSCs may change the target buffer of 
+        subsequent parts of the command.  If None, then the current buffer 
+        will be used.
+        
+        """
+        trace('CmdInterp.interpret_phrase', 'phrase = %s' % phrase)
+
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
         else:
@@ -546,33 +567,33 @@ class CmdInterp(OwnerObject):
         # left
         #
 
-        while len(spoken_list) > 0:
-            trace('CmdInterp.interpret_spoken', 
-                'now, spoken_list = %s' % spoken_list)
+        while len(phrase) > 0:
+            trace('CmdInterp.interpret_phrase', 
+                'now, phrase = %s' % phrase)
 
             #
             # Identify leading CSC, LSA, symbol and ordinary word
             #
-            possible_CSCs = self.chop_spoken_CSC(spoken_list, app)
+            possible_CSCs = self.chop_CSC_phrase(phrase, app)
 
             aliases = self.language_specific_aliases
             language = app.active_language()
             chopped_LSA = ""
             LSA_consumes = 0
             if aliases.has_key(language):
-                chopped_LSA, LSA_consumes = self.chop_spoken_LSA(spoken_list, 
+                chopped_LSA, LSA_consumes = self.chop_LSA_phrase(phrase, 
                     aliases[language])
             chopped_generic_LSA, generic_LSA_consumes = \
-                self.chop_spoken_LSA(spoken_list, aliases[None])
+                self.chop_LSA_phrase(phrase, aliases[None])
 
             if LSA_consumes < generic_LSA_consumes:
                 chopped_LSA = chopped_generic_LSA
                 LSA_consumes = generic_LSA_consumes
 
             chopped_symbol, symbol_consumes = \
-                self.chop_spoken_symbol(spoken_list)
+                self.chop_symbol_phrase(phrase)
 
-            chopped_word = spoken_list[0]
+            chopped_word = phrase[0]
             word_consumes = 1
 
             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
@@ -601,10 +622,10 @@ class CmdInterp(OwnerObject):
             #
             csc_applies = 0
 
-            CSC_consumes = self.apply_CSC(app, possible_CSCs, most_definite,
-                untranslated_words, exact_symbol)
+            CSC_consumes = self.apply_CSC(app, possible_CSCs, phrase, 
+                most_definite, untranslated_words, exact_symbol)
             if CSC_consumes:
-                spoken_list = spoken_list[CSC_consumes:]
+                phrase = phrase[CSC_consumes:]
                 head_was_translated = 1
                 untranslated_words = []
                 exact_symbol = 0
@@ -621,7 +642,7 @@ class CmdInterp(OwnerObject):
                     untranslated_words = []
                     exact_symbol = 0
                 actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
-                spoken_list = spoken_list[LSA_consumes:]
+                phrase = phrase[LSA_consumes:]
                 head_was_translated = 1
 
 
@@ -643,7 +664,7 @@ class CmdInterp(OwnerObject):
                     exact_symbol = 1
                 untranslated_words.append(chopped_symbol)
 
-                spoken_list = spoken_list[symbol_consumes:]
+                phrase = phrase[symbol_consumes:]
                 head_was_translated = 1
                                          
                    
@@ -656,7 +677,7 @@ class CmdInterp(OwnerObject):
                 trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
                 untranslated_words.append( chopped_word)
                 exact_symbol = 0
-                spoken_list = spoken_list[word_consumes:]
+                phrase = phrase[word_consumes:]
                 head_was_translated = 1
 
             #
@@ -664,7 +685,7 @@ class CmdInterp(OwnerObject):
             #
             # Check if it marked the end of some untranslated text
             #
-            if (len(spoken_list) == 0) and untranslated_words:
+            if (len(phrase) == 0) and untranslated_words:
                 #
                 # A CSC or LSA was translated, or we reached end of the
                 # command, thus marking the end of a sequence of untranslated
@@ -691,13 +712,15 @@ class CmdInterp(OwnerObject):
         #
         app.recog_end()
 
-    def apply_CSC(self, app, possible_CSCs, most_definite, untranslated_words, 
-        exact_symbol):
+    def apply_CSC(self, app, possible_CSCs, spoken_list,
+        most_definite, untranslated_words, exact_symbol):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
 
         *AppState app* -- the target application
+
+        *[STR] spoken_list* -- list of spoken words
 
         *[(CSCmdDict, INT)] possible_CSCs* -- the possible CSCmds which
         might apply, together with the number of words they consume, in
@@ -1006,44 +1029,14 @@ class CmdInterp(OwnerObject):
         else:
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
         
-
-    def chop_CSC(self, command, app):
+    def chop_CSC_phrase(self, phrase, app):
         """Chops the start of a command if it starts with a CSC.
         
         **INPUTS**
         
-        *[(STR, STR)]* command -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
-
-        **OUTPUTS**
-
-        Returns a list of tuples, each of the form 
-        *(meanings, consumed)*,  where:
-        
-        *CSCmdDict meanings* -- the meanings corresponding to the spoken
-        form chopped off.
-
-        *INT* consumed* -- Number of words consumed by the CSC from
-         the command
-
-        The list is sorted in order of descending numbers of words
-        consumed
-        """
-        
-        trace('CmdInterp.chop_CSC', 'command=%s' % command)
-        spoken_list = map(lambda word: process_initials(word[0]), command)
-        trace('CmdInterp.chop_CSC', 'spoken=%s' % spoken_list)
-
-        matches = self.chop_spoken_CSC(spoken_list, app)
-        return matches
-
-    def chop_spoken_CSC(self, spoken_list, app):
-        """Chops the start of a command if it starts with a CSC.
-        
-        **INPUTS**
-        
-        *[STR]* spoken_list -- The list of spoken forms in the command
+        *[STR]* phrase -- The list of spoken words in the command, without
+        regard to the original boundaries between words as interpreted
+        by the speech engine
 
         **OUTPUTS**
 
@@ -1059,75 +1052,28 @@ class CmdInterp(OwnerObject):
         The list is sorted in order of descending numbers of words
         consumed
         """
-        spoken = string.join(spoken_list)
-        phrase = string.split(spoken)
-
         matches = self.commands.all_matches(phrase)
-        trace('CmdInterp.chop_spoken_CSC',
+        trace('CmdInterp.chop_CSC_phrase',
             '%d matches' % len(matches))
-        whole_matches = []
+        match_consumed = []
         for match in matches:
             cmd_dict, rest_spoken = match
-            words_consumed = len(phrase) - len(rest_spoken)
-            consumed_words = phrase[:words_consumed]
-            trace('CmdInterp.chop_spoken_CSC',
-                'words = %d, phrase = %s' % (words_consumed,
-                phrase[:words_consumed]))
-            whole, consumed = self.whole_words(spoken_list, consumed_words)
-            if whole:
-                t = (cmd_dict, consumed)
-                whole_matches.append(t)
+            consumed = len(phrase) - len(rest_spoken)
+            trace('CmdInterp.chop_CSC_phrase',
+                'words = %d, phrase = %s' % (consumed,
+                phrase[:consumed]))
+            match_consumed.append((cmd_dict, consumed))
 
-        return whole_matches
+        return match_consumed
                     
-    def chop_LSA(self, command, app):
-        """Chops off the beginning of a command if it is an LSA.
-                
-        **INPUTS**
-        
-        *[(STR, STR)]* cmd -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
-
-        **OUTPUTS**
-        
-        Returns a tuple *(chopped_LSA, consumed)* where:
-        
-        *STR* chopped_LSA -- The written form of the LSA that was
-         chopped off. If *None*, it means *command* did not start with
-         an LSA.
-
-        *INT* consumed* -- Number of words consumed by the LSA from
-         the command (always 1, but return it anyway because want to
-         keep same signature as chop_CSC and chop_symbol)
-        """
-        trace('CmdInterp.chop_LSA', 'command=%s' % command)
-        spoken_list = map(lambda word: process_initials(word[0]), command)
-        trace('CmdInterp.chop_LSA', 'spoken=%s' % spoken_list)
-
-        aliases = self.language_specific_aliases
-        language = app.active_language()
-        trace('CmdInterp.chop_LSA', 'language=%s' % language)
-        chopped_LSA = None
-        consumed = 0
-        if aliases.has_key(language):
-            chopped_LSA, consumed = self.chop_spoken_LSA(spoken_list, 
-                aliases[language])
-        chopped_generic, consumed_generic = self.chop_spoken_LSA(spoken_list, 
-            aliases[None])
-
-        if consumed < consumed_generic:
-            chopped_LSA = chopped_generic
-            consumed = consumed_generic
-
-        return chopped_LSA, consumed
-    
-    def chop_spoken_LSA(self, spoken_list, aliases):
+    def chop_LSA_phrase(self, phrase, aliases):
         """Chops off the beginning of a command if it is an LSA.
         
         **INPUTS**
         
-        *[STR]* spoken_list -- The list of spoken forms in the command
+        *[STR]* phrase -- The list of spoken words in the command, without
+        regard to the original boundaries between words as interpreted
+        by the speech engine
 
         *WordTrie* aliases -- the set of aliases to use for the match
 
@@ -1142,10 +1088,6 @@ class CmdInterp(OwnerObject):
         *INT* consumed* -- Number of words consumed by the LSA from
          the command
         """
-#        print spoken_list
-        spoken = string.join(spoken_list)
-        phrase = string.split(spoken)
-        #
         # See if spoken_form is in the list of active LSAs
         #
 
@@ -1153,52 +1095,17 @@ class CmdInterp(OwnerObject):
         if match[0] is None:
             return None, 0
         written_LSA, rest_spoken = match
-        words_consumed = len(phrase) - len(rest_spoken)
-        consumed_words = phrase[:words_consumed]
-# check common LSAs for all languages, if we haven't found a
-# language-specific one
-
-        whole, consumed = self.whole_words(spoken_list, consumed_words)
-        if whole:
-            return written_LSA, consumed
-        written_LSA, consumed = \
-            self.chop_spoken_LSA(spoken_list[:consumed], aliases)
+        consumed = len(phrase) - len(rest_spoken)
         return written_LSA, consumed
-        
-                
-    def chop_symbol(self, command, app):
-        """Chops off the beginning of a command if it is a known symbol.
-        
-        **INPUTS**
-        
-        *[(STR, STR)]* command -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
-
-        **OUTPUTS**
-
-        Returns a tuple *(chopped_symbol, consumed)* where:
-        
-        *STR chopped_symbol* -- spoken form of the known symbol, or None 
-        if no symbol matches the spoken form. If *None*, it means 
-        *command* did not start with a known symbol.
-
-        *INT* consumed* -- Number of words consumed by the symbol from
-         the command
-        """
-
-        trace('CmdInterp.chop_symbols', 'command=%s' % command)
-        spoken_list = map(lambda word: process_initials(word[0]), command)
-        trace('CmdInterp.chop_symbols', 'spoken=%s' % spoken_list)
-        chopped_symbol, consumed = self.chop_spoken_symbol(spoken_list)
-        return chopped_symbol, consumed
     
-    def chop_spoken_symbol(self, spoken_list):
+    def chop_symbol_phrase(self, phrase):
         """Chops off the beginning of a command if it is a known symbol.
         
         **INPUTS**
         
-        *[STR]* spoken_list -- The list of spoken forms in the command
+        *[STR]* phrase -- The list of spoken words in the command, without
+        regard to the original boundaries between words as interpreted
+        by the speech engine
 
         **OUTPUTS**
 
@@ -1211,23 +1118,14 @@ class CmdInterp(OwnerObject):
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
         """
-#        print spoken_list
-        spoken = string.join(spoken_list)
-        phrase = string.split(spoken)
         match = self.known_symbols.match_phrase(phrase)
 #        print match
         if match[0] is None:
             return None, 0
         symbols, rest_spoken = match
-        words_consumed = len(phrase) - len(rest_spoken)
-        consumed_words = phrase[:words_consumed]
-#        print 'words = %d, phrase = %s' % (words_consumed, phrase[:words_consumed])
-        whole, consumed = self.whole_words(spoken_list, consumed_words)
-        if whole:
-            return string.join(consumed_words), consumed
-        chopped_symbol, consumed = \
-            self.chop_spoken_symbol(spoken_list[:consumed])
-        return chopped_symbol, consumed
+        consumed = len(phrase) - len(rest_spoken)
+        consumed_words = phrase[:consumed]
+        return string.join(consumed_words), consumed
                 
     def whole_words(self, spoken_list, consumed_words):
         """Checks whether a list of words chopped off the spoken
@@ -1263,30 +1161,6 @@ class CmdInterp(OwnerObject):
             if total > chars_consumed:
                 return 0, i
         raise RuntimeError('total length of command less than length consumed!')
-                
-    def chop_word(self, command):
-        """Removes a single word from a command.
-        
-        **INPUTS**
-        
-        *[(STR, STR)]* command -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         clened and the written form cleaned for VoiceCode.
-
-        **OUTPUTS**
-        
-        Returns a tuple *(chopped_word, consumed)* where:
-
-        *STR* chopped_word -- The spoken form of the first word
-
-        *INT* consumed -- Number of words consumed (always 1, but
-         return it anyway because want to keep same method signature
-         as chop_CSC, chop_LSA and chop_symbol).
-        """
-        
-        chopped_word = command[0][0]
-        consumed = 1
-        return chopped_word, consumed
         
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.
