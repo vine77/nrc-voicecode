@@ -31,7 +31,8 @@ object named 'testing'
 
 import os, sys
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
-import mediator, MediatorObject, Object, SymDict, test_pseudo_python
+# import mediator, MediatorObject, Object, SymDict, test_pseudo_python
+import Object, SymDict, test_pseudo_python
 import util, unit_testing, vc_globals
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
@@ -2461,7 +2462,7 @@ def test_basic_correction():
         print msg
         return
     correction_available = testing.correction_available()
-    if instance_name == None:
+    if not correction_available:
         msg = '\n***No correction available: '
         msg = msg + 'unable to test correction features***\n'
         print msg
