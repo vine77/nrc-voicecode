@@ -330,7 +330,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 245a430>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 245f970>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3341,7 +3341,7 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 274c4f0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 2784540> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -11306,6 +11306,14 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
   1: nothing left<CURSOR>
 
 *** End of source buffer ***
+*** Start of source buffer ***
+  1: almost <CURSOR>nothing left
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: almost nobody<CURSOR> left
+
+*** End of source buffer ***
 
 
 *******************************************************************************
@@ -11364,7 +11372,7 @@ Associate 'new method' with symbol (Enter selection):
 
 
 -----------------------------------------------
-Test suite completed in:  1986.04999995 secs
+Test suite completed in:  1919.58999991 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

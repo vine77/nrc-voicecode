@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 26 23:43:42 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Dec 29 21:36:10 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -1723,7 +1723,17 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 
 <P>
 Note: the list of updates must ALWAYS include the name of the
-external app's active buffer.</P>
+external app's active buffer, and the current position and
+selection information for that buffer.</P>
+<P>
+Change updates for buffers with more than one change must be
+included in the order in which the change occurred (most recent
+last)</P>
+<P>
+Also note that position and selection information for any buffer 
+will be discarded if a subsequent update indicates changes in 
+the buffer contents, so position and selection updates should 
+generally be at the end of the list.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

@@ -2494,6 +2494,9 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
+#    return
+# inserted temporarily to help debug emacs
+
     print "\n***Moving cursor manually***\n"
     commands.goto_line(1)
 
@@ -2724,6 +2727,10 @@ def test_set_text():
     commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
     buffer = editor.curr_buffer()
     buffer.set_text('nothing left')
+    editor.print_buff_if_necessary()
+    buffer.set_text('almost ', start = 0, end = 0)
+    editor.print_buff_if_necessary()
+    buffer.set_text('body', start = 9, end = 14)
     editor.print_buff_if_necessary()
 
 

@@ -35,11 +35,12 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 debug.config_traces(status="on", 
                     active_traces={
-#                       'StateStackBasic': 1,
+                       'StateStackBasic': 1,
+                       'BufferStateBasic': 1,
 #                      'CmdInterp': 1
 #                      'CmdInterp': 1
 #                      'DictWinGramNL': 1,
-#                      'ResMgr': 1
+                      'ResMgr': 1,
 #                      'mediator.say': 1
 #                      'StateStack': 1,
 #                      'SourceBuffEdSim.restore_state': 1,
