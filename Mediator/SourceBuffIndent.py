@@ -194,6 +194,7 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
         start = self.beginning_of_line(range[0])
         end = range[1]
         code_to_unindent = self.contents()[start:end]
+#        print '-- SourceBuffIndent.decr_indent_level: code_to_unindent=\'%s\'' % code_to_unindent
 
         #
         # Unindent the code using a regexp
@@ -201,7 +202,9 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
         regexp = '(^|\n) {0,%s}' % (levels * self.indent_level)
 #        print '-- SourceBuffIndent.decr_indent_level: regexp=%s' % regexp
         unindented_code = re.sub(regexp, '\\1', code_to_unindent)
+#        print '-- SourceBuffIndent.decr_indent_level: unindented_code=\'%s\'' % unindented_code    
 
+#        print '-- SourceBuffIndent.decr_indent_level: start=%s, end=%s, len(self.contents()=%s)' % (start, end, len(self.contents()))
         self.delete((start, end))
         self.goto(start)
         self.insert(unindented_code)

@@ -27,16 +27,27 @@ def push_cmd(command):
 #
 the_mediator.interp.on_app.the_editor.frame.pane.command_prompt.cursor_always_on_top = 0
 
-push_cmd("""# This gives you a short demo of the capabilities of VoiceCode.""")
-push_cmd("""# Note that everything you will see is implemented in an editor independant fashion.""")
+push_cmd("""# This is a short demo of the capabilities of the VoiceCode programming-by-voice system.""")
+push_cmd("""# VoiceCode is a system designed to make it easy to edit source code of programs...""")
+push_cmd("""# ... using the NaturallySpeaking speech recognition system.""")
+push_cmd("""# Note that VoiceCode is implemented in an editor independant fashion.""")
 push_cmd("""# In fact, the simple editor that you see (and which we have build""")
 push_cmd("""# for the purpose of this demo) knows nothing about programming-by-voice.""")
+push_cmd("""# All the functionality that you are about to see will be usable with any editor...""")
+push_cmd("""# ... for which a link to VoiceCode is built.""")
+push_cmd("""# Because at the moment VoiceCode doesn't have an error correction dialogue...""")
+push_cmd("""# ... I will type commands voice commands into the command line at the bottom of the screen...""")
+push_cmd("""# ... instead of voicing them. But saying the commands would work just as well...""")
+push_cmd("""# but with about a 20% error rate.""")
+push_cmd("""# This error rate will decrease enventually when we are able to correct NatSpeak's errors.""")
+
 push_cmd("""# Let's look at a first example""")
 push_cmd("""say(['define', 'method',    'create', 'attribute',    'add', 'argument',    'the', 'attribute',   'method body',    'profile', 'test',    'with argument',    'the', 'attribute'])""")
 push_cmd("""# Note that I didn't have to pause between the various commands in this utterance ...""")
-push_cmd("""# But I could if I wanted to.""")
+push_cmd("""# ... but you can pause if you want at most places where this feels natural.""")
 push_cmd("""# Let's decompose that""")
-push_cmd("""say(['new statement', 'back indent',    'define method'])""")
+push_cmd("""say(['new stateme', 'back indent'])""")
+push_cmd("""say(['define method'])""")
 push_cmd("""# Typed template code for method (no need to say 'self' or 'parens') ...""")
 push_cmd("""# ... and automatically put cursor at next logical place""")
 
@@ -106,6 +117,33 @@ push_cmd("""say(['select', 'profObject\\\\profile object', '1000'])""")
 push_cmd("""say(['new statement'])""")
 
 
-push_cmd("""# Navigation Strategy 2: Approximate positionning""")
+push_cmd("""# Note that VoiceCode supports multiple ways of saying the same thing""")
+push_cmd("""# For example, to enter template for a new class, you could say:""")
+push_cmd("""say(['define class', 'hello', 'world'])""")
+push_cmd("""say(['goto body', 'back indent'])""")
+push_cmd("""say(['declare class', 'hello', 'world'])""")
+push_cmd("""say(['goto body', 'back indent'])""")
+push_cmd("""say(['class definition', 'hello', 'world'])""")
+push_cmd("""say(['goto body', 'back indent'])""")
+push_cmd("""say(['class declaration', 'hello', 'world'])""")
+push_cmd("""say(['goto body', 'back indent'])""")
+push_cmd("""say(['new class', 'hello', 'world'])""")
+push_cmd("""say(['goto body', 'back indent'])""")
+push_cmd("""# Or simply: """)
+push_cmd("""say(['class', 'hello', 'world'])""")
+
+
+push_cmd("""# Note also that those same wordings can be used across languages.""")
+push_cmd("""# For example, if I open a C++ buffer...""")
+push_cmd("""the_mediator.interp.on_app.the_editor.frame.open_file(None)""")
+push_cmd("""# ... and say:""")
+push_cmd("""say(['class', 'hello', 'world'])""")
+push_cmd("""# I get template for a C++ class instead of a Python class""")
+push_cmd("""# That's essentially it for the functionality of the current VoiceCode prototype""")
+push_cmd("""# The main pieces that are missing for a functional prototype are:""")
+push_cmd("""#    - an error correction dialogue (David Fox is implementing a first simple dialogue)""")
+push_cmd("""#    - a link to an actual editor (Wieger Wesselink is developping one for jEdit)""")
+push_cmd("""# This concludes the demo of VoiceCode.""")
+
 
 

@@ -1194,7 +1194,8 @@ acmd = CSCmd(spoken_forms=['while', 'while loop'],
                        ContPerl(): c_simple_while},
              docstring='while loop')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['do', 'loop body', 'for body', 'while body'],
+acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
+                           'while body'],
              meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
                        ContPerl(): c_goto_body},
              docstring = 'move to body of loop')
@@ -1218,13 +1219,15 @@ acmd = CSCmd(spoken_forms=['else clause', 'else'],
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['then', 'then do', 'if body'],
+acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
+                           'if body'],
              meanings={ContPy(): py_goto_body, ContC(): c_goto_body,
                        ContPerl(): c_goto_body},
              docstring='move to body of a conditional')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
-                           'class definition', 'class declaration'],
+                           'class definition', 'class declaration',
+                           'new class'],
              meanings={ContC(): cpp_class_definition,
                        ContPy(): py_class_definition},
              docstring='class definition')
@@ -1347,6 +1350,10 @@ acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
                            'tuple with items'],
              meanings={ContPy(): ActionInsert('(', ')')},
              docstring='python tuple with enumareted elements')
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['range of'],
+             meanings={ContPy(): ActionInsert('range(', ')')},
+             docstring='types range(^)')
 add_csc(acmd)
 
 
