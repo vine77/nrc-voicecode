@@ -198,7 +198,7 @@ def open_file(fname, echo_cmd=0):
     *STR fname* is the path of the file"""
 
     global the_mediator
-    if echo_cmd: echo_command('open_file', fname)
+    if echo_cmd: echo_command('open_file', util.within_VCode(fname))
     the_mediator.app.open_file(fname)
     the_mediator.interp.parse_symbols_from_file(fname)
     the_mediator.app.curr_buffer().print_buff_if_necessary()
@@ -560,7 +560,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
         *STR fname* is the path of the file"""
 
-        if echo_cmd: self.echo_command('open_file', fname)
+        if echo_cmd: self.echo_command('open_file', util.within_VCode(fname))
         self.app.open_file(fname)
         self.interp.parse_symbols_from_file(fname)
         self.app.curr_buffer().print_buff_if_necessary()
@@ -798,9 +798,9 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         if echo_cmd: self.echo_command('provoke')
         print slidjf
 
-    def print_symbols(self, echo_cmd=0):
+    def print_symbols(self, symbols = None, echo_cmd=0):
         if echo_cmd: self.echo_command('print_symbols')
-        self.interp.known_symbols.print_symbols()
+        self.interp.known_symbols.print_symbols(symbols = symbols)
 
     def print_abbreviations(self, show_unresolved=1, echo_cmd=0):
         if echo_cmd: self.echo_command('print_abbreviations', show_unresolved)

@@ -922,7 +922,9 @@ class OwnerObject(Object):
                     return error_msg
             return None
         elif type(object) == types.DictType:
-            for key in object.keys():
+            sorted = object.keys()
+            sorted.sort()
+            for key in sorted:
                 error_msg = self._cleanup_object(object[key])
                 if error_msg != None:
                     error_msg = 'value for key %s of ' % str(key)
@@ -981,7 +983,9 @@ class OwnerObject(Object):
                         else:
                             del attribute[i]
                 elif type(attribute) == types.DictType:
-                    for key in attribute.keys():
+                    sorted = attribute.keys()
+                    sorted.sort()
+                    for key in sorted:
                         error_msg = self._cleanup_object(attribute[key])
                         if error_msg != None:
                             error_msg = 'value for key %s of attribute %s\n%s\n' \
