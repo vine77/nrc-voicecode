@@ -177,3 +177,43 @@ class CorrectRecentEvent(Object.Object):
         """
         debug.virtual('CorrectRecentEvent.notify')
 
+class CorrectNthEvent(Object.Object):
+    """abstract interface for sending a message to the Correct Recent
+    dialog indicating that it should initiate user correction of a given
+    utterance.
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correction box, while letting the 
+    correct_n grammar's on_results method return immediately, so as to 
+    allow speech input to the correction box (or other windows).
+
+    Particular implementations may wxPython custom
+    events or other means to communicate with the main thread.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+        self.deep_construct(CorrectNthEvent,
+                            {},
+                            args)
+    def notify(self, recent_chosen):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *INT recent_chosen* -- the number of the utterance in the list
+        of recent utterances (e.g. 5 if the user says "Correct 5")
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('CorrectNthEvent.notify')
+

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:37:24 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Feb 18 09:42:50 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -55,9 +55,9 @@ Example: python make_doc.py Object.py
 <P>For some reason, internal references must be specified as:</P>
 
 <P>
-\.\. [anchor] this_file.html#internal_ID (for internal refs)
+\.\. [anchor] file:///./this_file.html#internal_ID (for internal refs)
 or
-\.\. [anchor] some_file.html#ID (for external refs)</P>
+\.\. [anchor] file:///some_file.html#ID (for external refs)</P>
 <P>
 instead of</P>
 <P>
@@ -68,11 +68,11 @@ the syntax "anchor":#internal_ID doesn't work either, because
 pythondoc inserts it as is).</P>
 <P>
 The problem is that while pythondoc works with
-this_file#internal_ID, neither Netscape nor IE will find
+file:///./this_file#internal_ID, neither Netscape nor IE will find
 the file unless they are started from the Doc directory.</P>
 <P>
 To deal with this problem, <EM>fix_internal_references</EM> substitutes
- and  for a null string in all the Doc/*.html files.   
+file:///./ and file:/// for a null string in all the Doc/*.html files.   
 </P>
 <H2 ID="quit" CLASS="Function">quit()</H2>
 <P>central quitting routine</P>

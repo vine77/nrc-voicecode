@@ -669,8 +669,10 @@ class WinGramMgr(GramMgrDictContext):
             self.sel_grammars[window].deactivate()
             if self.correction:
                 self.correction_grammars[window].deactivate()
-            for a_buffer in self.dict_grammars[window].values():
-                a_buffer.deactivate()
+            buffers = self.dict_grammars[window].keys()
+            buffers.sort()
+            for a_buffer in buffers:
+                self.dict_grammars[window][a_buffer].deactivate()
 
     def deactivate_all(self, window = None):
         """de-activate all buffer-specific grammars which would be
@@ -689,7 +691,9 @@ class WinGramMgr(GramMgrDictContext):
         *none*
         """
         if window == None or self.global_grammars:
-            for a_window in self.dict_grammars.keys():
+            windows = self.dict_grammars.keys()
+            windows.sort()
+            for a_window in windows:
                 self._deactivate_all_window(a_window)
         else:
             self._deactivate_all_window(window)

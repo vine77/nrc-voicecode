@@ -643,6 +643,7 @@ class SymDict(PickledObject.PickledObject):
             sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
             for an_abbreviation in sorted_unresolved:
                 symbol_list = self.unresolved_abbreviations[an_abbreviation].keys()
+                symbol_list.sort()
                 print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
 

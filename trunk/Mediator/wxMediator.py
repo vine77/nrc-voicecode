@@ -134,12 +134,9 @@ VC_TALK_PORT = 45771
 def EVT_MINE(evt_handler, evt_type, func):
     evt_handler.Connect(-1, -1, evt_type, func)
 
-# create a unique event types
-wxEVT_SOCKET_DATA = wxNewEventType()
+# create unique event types
 wxEVT_NEW_LISTEN_CONN = wxNewEventType()
 wxEVT_NEW_TALK_CONN = wxNewEventType()
-wxEVT_CORRECT_UTTERANCE = wxNewEventType()
-wxEVT_CORRECT_RECENT = wxNewEventType()
 
 class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     """main frame for the GUI mediator
@@ -400,8 +397,8 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         console = MediatorConsoleWX(self.main_frame(),
             win_sys = WinSystemMSW.WinSystemMSW())
 
-        correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
-        correct_recent_evt = CorrectRecentEventWX(self, wxEVT_CORRECT_RECENT)
+        correct_evt = CorrectUtteranceEventWX(self)
+        correct_recent_evt = CorrectRecentEventWX(self)
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
                 console = console, wave_playback = WavePlaybackWX, 
@@ -722,7 +719,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         *SocketHasDataEvent* -- the data event which will allow the
         data thread to ensure that process_ready_socks is called.
         """
-        event = SocketHasDataWX(self, wxEVT_SOCKET_DATA, id) 
+        event = SocketHasDataWX(self, id) 
         return event
 
     def create_main(self):

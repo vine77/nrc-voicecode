@@ -24,7 +24,7 @@ import Object, vc_globals
 import MediatorConsole
 import string
 from wxPython.wx import *
-from thread_communication_WX import GenericEventWX
+from thread_communication_WX import *
 import exceptions
 import os
 import threading
@@ -1151,6 +1151,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                              'utterances': utterances,
                              'gram_factory': gram_factory,
                              'first': 1,
+                             'nth_event': CorrectNthEventWX(self),
                              'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
@@ -1159,8 +1160,14 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.name_parent('console')
         self.add_owned('correct_n_gram')
         if gram_factory:
-            self.correct_n_gram = \
-                gram_factory.make_choices(choice_words = ['Correct'])
+            if wxMAJOR_VERSION > 2 or \
+                (wxMAJOR_VERSION == 2 and 
+                     (wxMINOR_VERSION > 3 or 
+                          (wxMINOR_VERSION == 3 and wxRELEASE_NUMBER >= 4)
+                     )
+                ):
+                self.correct_n_gram = \
+                    gram_factory.make_choices(choice_words = ['Correct'])
         if pos is None:
             self.CenterOnScreen()
 
@@ -1239,6 +1246,20 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.recent.EnsureVisible(last)
         self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.hook_events()
+    def hook_events(self):
+        """hook events up to our handlers
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        EVT_MINE(self, wxEVT_CORRECT_NTH_RECENT, self.on_nth_by_voice)
+
     def resize_last_column(self):
         list_client_size = self.recent.GetClientSize()
         n_cols = self.recent.GetColumnCount()
@@ -1366,7 +1387,12 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 
     def chose_by_voice(self, n):
         i = len(self.phrases) - n
-        self.chose_from_list(i)
+# send an event to notify self to bring up correct n asynchronously
+        self.nth_event.notify(i)
+
+    def on_nth_by_voice(self, event):
+# bring up correct n synchronously
+        self.chose_from_list(event.recent_chosen)
 
     def changed(self):
         """reports which utterances have been corrected

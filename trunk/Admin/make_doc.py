@@ -190,7 +190,7 @@ def runme():
     #
     # Generate the HTML doc for each module
     #
-    cmd_line = 'python ' + pydoc_path + ' -i -f HTML4 -d ' + doc_dir + ' '
+    cmd_line = 'e:\python\python.exe ' + pydoc_path + ' -i -f HTML4 -d ' + doc_dir + ' '
     for a_file in files:
            
         #
