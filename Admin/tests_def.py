@@ -4575,52 +4575,20 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
-   testing.init_simulator_regression()   
-   testing.mediator().interp.add_symbol('weirdSymbol', user_supplied_spoken_forms=['purple bunny'])
-   testing.mediator().interp.add_symbol('filepath')
-   testing.mediator().interp.add_symbol('dpath')
-   testing.mediator().interp.add_symbol('rannum')   
-   testing.mediator().interp.add_symbol('intfmt')
-   testing.mediator().interp.add_symbol('TTC')
-   testing.mediator().interp.add_symbol('YelRab')   
-   testing.mediator().interp.add_symbol('EdSim')   
-   testing.mediator().interp.add_symbol('__rab__')    
-            
-   commands.open_file('blah1.py')
+    testing.init_simulator_regression()      
+    commands.open_file('blah1.py')
 
-   # Should type EdSim
-   commands.say(['editor', 'simulator'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+    commands.say(['index', 'semi', 'variable', 'semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+  
+    commands.say(['previous semi', 'previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
-   # Should type weirdSymbol   
-   commands.say(['purple', 'bunny'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
-   # Should NOT type acos
-   commands.say(['application', 'state'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
-   # Should type filepath
-   commands.say(['file', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
-   # Should type dpath (but doesn't at the moment)
-   commands.say(['directory', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
-   # Should type TTC (but doesn't at the moment)
-   commands.say(['Toronto', 'transit', 'corporation'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
-   # Should type rannum (but doesn't at the moment)
-   commands.say(['random', 'number'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
-   # Should type YelRab (but doesn't at the moment... cause it's considered to
-   # be a run-together words eventhough the two terms are separatable)
-   commands.say(['yellow', 'rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
-   # Should NOT type intfmt
-   commands.say(['integer', 'format'] , user_input="1\n1\n1\n", echo_utterance=1)   
-   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
-   # Should NOT type __rab__ (but does at the moment)
-   commands.say(['rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
+    commands.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+    commands.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
 #add_test('temp', test_temporary, desc='temporary test')
 

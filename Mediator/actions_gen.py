@@ -239,7 +239,7 @@ class ActionBidirectional(Action):
     """
     
     def __init__(self, direction=1, **args_super):
-        self.deep_construct(Action,
+        self.deep_construct(ActionBidirectional,
                             {'direction': direction},
                             args_super,
                             {})
@@ -259,12 +259,13 @@ class ActionBidirectionalRepeat(ActionRepeatable, ActionBidirectional):
     *none* -- 
     """
     
-    def __init__(self, direction=1, **args_super):
+    def __init__(self, **args_super):
+        debug.trace('ActionBidirectionalRepeat.__init__', '** invoked')
         self.deep_construct(ActionBidirectionalRepeat,
-                            {'direction': direction},
+                            {},
                             args_super,
                             {})
-
+        
 class ActionRepeatLastCmd(Action):
     """This action just repeats the last command in the command history.
 
@@ -796,7 +797,7 @@ class FakeActionSearchOrLookback(ActionSearch, ActionBidirectionalRepeat):
     ..[ActionSearch] file:///./actions_gen.ActionSearch.html#ActionSearch"""
         
     def __init__(self, extra_space = 0, **args_super):
-        self.deep_construct(ActionSearchOrLookback, 
+        self.deep_construct(FakeActionSearchOrLookback, 
                             {'extra_space': extra_space}, 
                             args_super, 
                             {})
@@ -831,7 +832,7 @@ class ActionSearchOrLookback(ActionSearch, ActionBidirectionalRepeat):
                             {'extra_space': extra_space}, 
                             args_super, 
                             {})
-
+        
     def doc(self):
         """See [Action.doc].
 
@@ -856,6 +857,7 @@ class ActionSearchOrLookback(ActionSearch, ActionBidirectionalRepeat):
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
+        debug.trace('ActionSearchOrLookback.execute', '** invoked, self.direction=%s' % self.direction)
         buff = app.find_buff()
         if debug.tracing('ActionSearchOrLookback.execute'):
             debug.trace('ActionSearchOrLookback.execute',

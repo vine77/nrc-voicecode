@@ -407,13 +407,15 @@ class PunctuationSet(Object):
                docstring='go after next %s' % spoken)
             debug.trace('PunctuationSet._add_navigation', 'command.meanings=%s, command.spoken_forms=%s' % (command.meanings, repr(command.spoken_forms)))
             commands.add_csc(command)
+
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.next_word, spoken), 
                 '%s %s' % (self.before_word, spoken)],
                meanings = {context: ActionSearchOrLookback(regexp =
-                   expression, where = -1, extra_space = 1)},
+                   expression, direction = 1, where = -1, extra_space = 1)},
                docstring='go before next %s' % spoken)
             commands.add_csc(command)
+
             command = CSCmd(spoken_forms = \
                ['%s %s' % (self.prev_word, spoken), 
                 '%s %s %s' % (self.after_word, self.prev_word, spoken)],

@@ -408,7 +408,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         none were corrected
         """
         originals = map(lambda u: u[0].words(), utterances)
-        box = DlgCorrectRecentWX(self, self.main_frame, utterances, 
+        box = CorrectRecentWX(self, self.main_frame, utterances, 
            self.gram_factory, pos = self.corr_recent_pos)
 
         answer = self.show_modal_dialog(box)
@@ -443,7 +443,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         """
         debug.trace('MediatorConsoleWX.show_recent_symbols', 'symbols=%s' % repr(symbols))
         print "This will eventually show the recent symbols, but it is not implemented yet."
-        box = DlgReformatRecentSymbols(self, self.main_frame, 
+        box = ReformatRecentSymbols(self, self.main_frame, 
                     symbols, self.gram_factory)
 
 
@@ -557,45 +557,6 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
         debug.virtual('DlgModelViewWX.on_dismiss', self)
 
 
-
-
-class DlgModelAndViewInOneWX_DEPRECATED(DlgModelViewWX, wxDialog):
-    """wxPython implementation of a legacy dialog that implements
-    both the model AND the view in a same class.
-    
-    NOTE: THIS IS A DEPRECATED CLASS WHICH IS HERE JUST AS
-          A STOP GAP MEASURE UNTIL OLD DIALOGS CAN BE CONVERTED
-          TO DlgModelViewWX.  DO NOT CREATE NEW SUBCLASSES OF THIS.
-          INSTEAD, USE DlgModelViewWX.
-
-    **INSTANCE ATTRIBUTES**
-    
-    * None *
-
-    """
-    def __init__(self, parent, use_pos = None, **args_super):
-        debug.trace('DlgModelAndViewInOneWX_DEPRECATED.__init__', '** invoked, args_super=%s' % args_super)
-        if use_pos is None:
-            use_pos = wxDefaultPosition
-        
-        self.deep_construct(DlgModelAndViewInOneWX_DEPRECATED,
-                            {}, args_super)
-        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
-            (600, 400),
-            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-        debug.trace('DlgModelAndViewInOneWX_DEPRECATED.__init__', '** EXITED')    
-        
-    def make_view(self):
-       return self
-                                      
-    def Destroy(self):
-        # Note: Since self.view() is in fact self, we don't
-        #       invoke self.view().Destroy() because it would
-        #       cause an infinite recursion.
-        debug.trace('DlgModelAndViewInOne.Destroy', '** destroying self=%s' % self)
-        wxDialog.Destroy(self)
-
-
 class CorrectionBoxWX(DlgModelViewWX):
     """dialog for correcting misrecognized dictation results
 
@@ -649,7 +610,6 @@ class CorrectionBoxWX(DlgModelViewWX):
         *(INT, INT) pos* -- position of the box in pixels
     
         """
-        debug.trace('CorrectionBoxWX.__init__', '** invoked')
         self.console = console
         self.parent = parent
         self.utterance = utterance
@@ -1374,7 +1334,7 @@ class CorrectionValidatorSpoken(CorrectionValidator):
         self.utterance.set_spoken(string.split(corrected))
         return 1
 
-class DlgCorrectRecentWX(DlgModelViewWX):
+class CorrectRecentWX(DlgModelViewWX):
     """dialog box which lists recently dictated utterances, allowing the user 
     to select one for correction of misrecognized results or for symbol 
     reformatting
@@ -1421,7 +1381,7 @@ class DlgCorrectRecentWX(DlgModelViewWX):
         self.utterances = utterances
         self.gram_factory = gram_factory
         self.pos = pos
-        self.deep_construct(DlgCorrectRecentWX,
+        self.deep_construct(CorrectRecentWX,
                             {
                              'console': console,
                              'parent': parent, 
@@ -1433,14 +1393,14 @@ class DlgCorrectRecentWX(DlgModelViewWX):
                            )
                            
     def make_view(self):
-        return DlgView_CorrectRecentWX(self.console, self.parent, self.utterances, 
+        return CorrectRecentViewWX(self.console, self.parent, self.utterances, 
                                        self.gram_factory, pos = self.pos)
                                        
     def changed(self):
         return self.view().changed()
 
 
-class DlgView_CorrectRecentWX(wxDialog, possible_capture, Object.OwnerObject):
+class CorrectRecentViewWX(wxDialog, possible_capture, Object.OwnerObject):
     """view layer for dialog box which lists recently dictated utterances, allowing the user 
     to select one for correction of misrecognized results or for symbol 
     reformatting
@@ -1483,7 +1443,7 @@ class DlgView_CorrectRecentWX(wxDialog, possible_capture, Object.OwnerObject):
         speech grammars to the dialog box
         """
         possible_capture.__init__(self)
-        self.deep_construct(DlgView_CorrectRecentWX,
+        self.deep_construct(CorrectRecentViewWX,
                             {
                              'console': console,
                              'utterances': utterances,
@@ -1756,7 +1716,7 @@ class DlgView_CorrectRecentWX(wxDialog, possible_capture, Object.OwnerObject):
         return self.corrected.keys()
 
 
-class DlgReformatRecentSymbols(DlgModelViewWX):
+class ReformatRecentSymbols(DlgModelViewWX):
     """MODEL for dialog box which lists recently dictated symbols, allowing the user 
     to select one for reformatting
 
@@ -1798,7 +1758,7 @@ class DlgReformatRecentSymbols(DlgModelViewWX):
        self.gram_factory = gram_factory
        self.pos = pos       
        self.parent = parent
-       self.deep_construct(DlgReformatRecentSymbols, 
+       self.deep_construct(ReformatRecentSymbols, 
                            {'symbols': symbols,
                             'console': console,
                             'gram_factory': gram_factory,

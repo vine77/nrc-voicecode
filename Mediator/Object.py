@@ -651,6 +651,24 @@ class Object:
                 args_super[an_arg[0]] = an_arg[1]            
 
         #
+        # Declare and initialise new attributes which are defined by
+        # this_class.
+        #
+        # Note: We do this BEFORE invoking constructor of superclasses
+        #       because the constructors of superclasses might invoke
+        #       some virtual method whose overriden implementation
+        #       assumes that the attributes are defined.
+        #
+        #       For example, this happens often when the superclass
+        #       constructor invokes a factory method to build one of 
+        #       its members. The concrete implementation of that
+        #       factory method often needs to access attributes
+        #       of the subclass.
+        #
+        self.decl_attrs(attrs_this_class)
+
+
+        #
         # Invoke constructor of the superclasses, feeding them arguments
         # not recognised by this_class.__init__
         #
@@ -665,14 +683,6 @@ class Object:
                     msg = "keyword arguments were: %s\n" % str(args_super)
                     sys.stderr.write(msg)
                     raise
-
-                    
-
-        #
-        # Declare and initialise new attributes which are defined by
-        # this_class.
-        #
-        self.decl_attrs(attrs_this_class)
                     
     
     def decl_attrs(self, attrs):
