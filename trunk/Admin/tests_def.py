@@ -163,8 +163,8 @@ def symbol_match_test(interp, sources, pseudo_symbols):
 def test_SymDict():
     """Self test for SymDict"""
 
-    temporary = temp_factory.new_mediator()
-    interp = temporary.interpreter()
+    temp_config = temp_factory.new_config()
+    interp = temp_config.interpreter()
 #    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
 #        interp=CmdInterp.CmdInterp())
 #    a_mediator.configure()
@@ -180,7 +180,7 @@ def test_SymDict():
     accept_symbol_match_test(interp, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
 
 #    a_mediator.quit(save_speech_files=0, disconnect=0)    
-    temporary.quit()    
+    temp_config.quit()    
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
@@ -192,16 +192,16 @@ auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 # test_mediator = None
 
 
-def test_CmdInterp_mediator(temp_mediator):
+def test_CmdInterp_mediator(temp_config):
 
 # I don't think this is necessary (or correct -- we do want the mediator
 # to go out of scope) but for regression testing purposes, I'm first
 # leaving it in and then will remove it.
 #    global test_mediator
 #    test_mediator = a_mediator
-    a_mediator = temp_mediator.mediator()
-    app = temp_mediator.editor()
-    interp = temp_mediator.interpreter()
+    a_mediator = temp_config.mediator()
+    app = temp_config.editor()
+    interp = temp_config.interpreter()
     acmd = CSCmd.CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
     a_mediator.add_csc(acmd)
     acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
@@ -246,7 +246,7 @@ def test_CmdInterp_mediator(temp_mediator):
     print '\n>>> Buffer is now:'
     app.print_buff()
 
-    temp_mediator.quit()    
+    temp_config.quit()    
         
 def test_CmdInterp():
     
@@ -254,10 +254,10 @@ def test_CmdInterp():
     # Create a command interpreter connected to the editor simulator
     #
     natlink.natConnect()    
-    temporary = temp_factory.new_mediator(skip_config = 1)
+    temp_config = temp_factory.new_config(skip_config = 1)
 #     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
 #         interp=CmdInterp.CmdInterp())
-    test_CmdInterp_mediator(temporary)
+    test_CmdInterp_mediator(temp_config)
     
 
 auto_test.add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
@@ -2156,22 +2156,22 @@ def test_EdSim_alloc_cleanup():
     print '\n*** testing cleanup with single buffer EdSim\n'
     natlink.natConnect()    
     editor = EdSim.EdSim(instance_reporting = 1)
-    temporary = temp_factory.new_mediator(editor = editor, skip_config = 1)
+    temp_config = temp_factory.new_config(editor = editor, skip_config = 1)
     del editor
 #     a_mediator = MediatorObject.MediatorObject(app =
 #        EdSim.EdSim(instance_reporting = 1),
 #         interp=CmdInterp.CmdInterp())
-    test_CmdInterp_mediator(temporary)
+    test_CmdInterp_mediator(temp_config)
 
     print '\n*** testing cleanup with multi-buffer EdSim\n'
     natlink.natConnect()    
     editor = EdSim.EdSim(multiple = 1, instance_reporting = 1)
-    temporary = temp_factory.new_mediator(editor = editor, skip_config = 1)
+    temp_config = temp_factory.new_config(editor = editor, skip_config = 1)
     del editor
 #     a_mediator = MediatorObject.MediatorObject(app =
 #        EdSim.EdSim(multiple = 1, instance_reporting = 1),
 #         interp=CmdInterp.CmdInterp())
-    test_CmdInterp_mediator(temporary)
+    test_CmdInterp_mediator(temp_config)
     
 
 auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 

@@ -7,26 +7,28 @@
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class PersistentConfig</title>
+<title>Class TempConfigNewMediator</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class PersistentConfig</H1>
+<H1 CLASS="ClassName">class TempConfigNewMediator - implementation of TempConfigFactory using NewMediatorObject</H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="regression.html">regression</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">regression.PersistentConfig<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">regression.TempConfigNewMediator<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">PersistentConfig</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfig.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#regression.PersistentConfig.execute_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfig.execute_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
-    <A CLASS="DocLink" HREF="#regression.PersistentConfig.init_simulator_regression"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.PersistentConfig.init_simulator_regression</SPAN></A>(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)<SPAN CLASS="OneLiner"> # re-initialize the mediator, using the same editor application</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">TempConfigNewMediator</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigNewMediator.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigNewMediator.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigNewMediator.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigNewMediator.interpreter"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigNewMediator.interpreter</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigNewMediator.mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigNewMediator.mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigNewMediator.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigNewMediator.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -35,49 +37,44 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-abstract base class which hides the details of MediatorObject 
-and command initialization for regression tests which use a
-persistent MediatorObject.  
-</P>
-<H2 ID="regression.PersistentConfig.execute_command" CLASS="Method">regression.PersistentConfig.execute_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
-<P>None</P>
-
-<P>
-execute a command in the proper namespace, trapping any
-exceptions and printing the traceback</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>STR command</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="regression.PersistentConfig.init_simulator_regression" CLASS="Method">regression.PersistentConfig.init_simulator_regression(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)</H2>
-<P>re-initialize the mediator, using the same editor application</P>
-
-<P>
-<STRONG>NOTE:</STRONG>  This method must also ensure that the namespace in
-which the regression test definitions are/will be run with
-execfile contains an object called commands with the
-sim_commands commands as attributes.  commands can be a
-reference to the sim_commands module, if a global old
-MediatorObject is used, or an object with methods.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
 <DT>
-STR <EM>symdict_pickle_fname=None</EM>
-<DD>Name of the file containing the
-persistent version of the symbols dictionnary.
+<EM>NewMediatorObject the_mediator</EM>
+<DD>the temporary NewMediatorObject
+<DT>
+<EM>AppState the_editor</EM>
+<DD>the editor used for tests with this
+mediator
+
 </DL>
+<H2 ID="regression.TempConfigNewMediator.editor" CLASS="Method">regression.TempConfigNewMediator.editor(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
 <P>
-<STRONG>OUTPUTS</STRONG></P>
+returns a reference to the MediatorObject's internal 
+AppState (usually EdSim) editor 
+</P>
+<H2 ID="regression.TempConfigNewMediator.interpreter" CLASS="Method">regression.TempConfigNewMediator.interpreter(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
 <P>
-<EM>none</EM>
+returns a reference to the MediatorObject's CmdInterp object
+</P>
+<H2 ID="regression.TempConfigNewMediator.mediator" CLASS="Method">regression.TempConfigNewMediator.mediator(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the TempConfig's MediatorObject or
+NewMediatorObject 
+</P>
+<H2 ID="regression.TempConfigNewMediator.quit" CLASS="Method">regression.TempConfigNewMediator.quit(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+cleanup the underlying MediatorObject
 </P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
