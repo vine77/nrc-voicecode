@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:07:42 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:25:49 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,29 +25,32 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCached</SPAN>(<A CLASS="DocLink" HREF="SourceBuff.SourceBuff.html">SourceBuff</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._cur_pos_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._cur_pos_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._get_selection_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._get_selection_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves range of current selection directly from external editor.</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._get_pos_selection_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._get_pos_selection_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._get_text_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._get_text_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # retrieves a portion of the buffer directly from external editor.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._get_visible_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._get_visible_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._language_name_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._language_name_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the language a file is written in</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._newline_conventions_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._newline_conventions_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached._pref_newline_convention_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached._pref_newline_convention_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.cur_pos"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.cur_pos</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.delete_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.delete_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the file being displayed in this buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.get_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.get_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.get_pos_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.get_pos_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.get_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.get_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # retrieves a portion of the buffer from the cache.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.get_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.get_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Gets start and end positions of visible region from cache.</SPAN>
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.goto_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.goto_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.init_cache"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.init_cache</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Initializes the cache from data acquired from external buffer.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.insert_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.insert_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">text</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.language_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.language_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the language a file is written in</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.len"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.len</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # return length of buffer in characters from cache.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.newline_conventions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.newline_conventions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.pos_selection_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.pos_selection_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">selection</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.pref_newline_convention"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.pref_newline_convention</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuffCached.SourceBuffCached.set_selection_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.set_selection_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffCached.SourceBuffCached.uncache_data_after_buffer_change</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what_changed=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from SourceBuff.SourceBuff</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__getitem__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__getitem__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)<SPAN CLASS="OneLiner"> # Get a character of the buffer using the buff[i] syntax.</SPAN>
@@ -56,9 +59,11 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__setitem__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__setitem__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>, <SPAN CLASS="Argument">value</SPAN>)<SPAN CLASS="OneLiner"> # Set a character of the buffer using the buff[i] syntax.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff._state_cookie_class"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff._state_cookie_class</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.application"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.application</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.backspace"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.backspace</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)<SPAN CLASS="OneLiner"> # Delete a number of spaces before the cursor.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.beginning_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.beginning_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the beginning of line at position <EM>pos</EM></SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.closest_occurence_to_cursor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.closest_occurence_to_cursor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">occurences</SPAN>, <SPAN CLASS="Argument">direction=None</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_states"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_states</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_with_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_with_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.contents"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.contents</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves entire contents of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.cur_pos"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.cur_pos</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -69,11 +74,11 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb -- see AppState.drop_breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.end_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.end_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the end of line at position <EM>pos</EM></SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the name of the file being displayed in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_pos_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_pos_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves range of current selection</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # retrieves a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.get_visible"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.get_visible</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_end_of_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_end_of_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">end=1</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.goto_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.goto_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>)<SPAN CLASS="OneLiner"> # Go to a particular line in a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.incr_indent_level"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.incr_indent_level</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">levels=1</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)
@@ -99,6 +104,7 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.number_lines"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.number_lines</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)<SPAN CLASS="OneLiner"> # Assign numbers to lines in a string.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.on_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.on_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.pos_extremity"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.pos_extremity</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">where</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of a given extremity of a range</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.pos_selection_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.pos_selection_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">selection</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.pref_newline_convention"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.pref_newline_convention</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the form of newline that the editor prefers for this buffer.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.print_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.print_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">from_line=None</SPAN>, <SPAN CLASS="Argument">to_line=None</SPAN>)<SPAN CLASS="OneLiner"> # Prints buffer to STDOUT.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.print_buff_if_necessary"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.print_buff_if_necessary</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Prints content of current buffer if necessary.</SPAN>
@@ -109,17 +115,10 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.same_as_previous_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.same_as_previous_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction</SPAN>, <SPAN CLASS="Argument">where</SPAN>, <SPAN CLASS="Argument">match</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">unlogged=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
-    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_selection_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_selection_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.store_current_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.store_current_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.to_sync"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.to_sync</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">item</SPAN>, <SPAN CLASS="Argument">what</SPAN>, <SPAN CLASS="Argument">exclude</SPAN>)<SPAN CLASS="OneLiner"> # Determines if an item is to be synchronised</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.valid_cookie"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.valid_cookie</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -201,29 +200,12 @@ CLASS ATTRIBUTES**</P>
 ..[synchronize_with_app] AppStateCached.AppStateCached.html#synchronize
 ..[AppState] AppState.AppState.html
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
-<H2 ID="SourceBuffCached.SourceBuffCached._cur_pos_from_app" CLASS="Method">SourceBuffCached.SourceBuffCached._cur_pos_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="SourceBuffCached.SourceBuffCached._get_pos_selection_from_app" CLASS="Method">SourceBuffCached.SourceBuffCached._get_pos_selection_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
-retrieves current position of cursor directly from external
-application.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> pos
-<DD>offset into buffer of current cursor position
-
-</DL>
-<H2 ID="SourceBuffCached.SourceBuffCached._get_selection_from_app" CLASS="Method">SourceBuffCached.SourceBuffCached._get_selection_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>retrieves range of current selection directly from external editor.</P>
-
+retrieves current position of cursor and the range of 
+current selection directly from the external application</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -231,8 +213,9 @@ application.</P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
-<EM>INT</EM> (start, end)</P>
+<EM>(INT, (INT, INT))</EM> (pos, (start, end))</P>
 <P>
+pos is the offset into buffer of current cursor position
 start is the offset into the buffer of the start of the current
 selection.  end is the offset into the buffer of the character 
 following the selection (this matches Python's slice convention).
@@ -339,27 +322,6 @@ this buffer (read directly from editor).</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="SourceBuffCached.SourceBuffCached.cur_pos" CLASS="Method">SourceBuffCached.SourceBuffCached.cur_pos(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-retrieves current position of cursor .  Note: the current
-position should coincide with either the start or end of the
-selection.  </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> pos
-<DD>offset into buffer of current cursor position
-
-</DL>
 <H2 ID="SourceBuffCached.SourceBuffCached.delete_cbk" CLASS="Method">SourceBuffCached.SourceBuffCached.delete_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>)</H2>
 <P>None</P>
 
@@ -408,13 +370,12 @@ already taken care of outside of the method.</P>
 STR <EM>name</EM>
 <DD>
 </DL>
-<H2 ID="SourceBuffCached.SourceBuffCached.get_selection" CLASS="Method">SourceBuffCached.SourceBuffCached.get_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="SourceBuffCached.SourceBuffCached.get_pos_selection" CLASS="Method">SourceBuffCached.SourceBuffCached.get_pos_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
-retrieves range of current selection.  Note: the current
-position should coincide with either the start or end of the
-selection. </P>
+retrieves current position of cursor and the range of 
+current selection</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -422,8 +383,9 @@ selection. </P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
-<EM>INT</EM> (start, end)</P>
+<EM>(INT, (INT, INT))</EM> (pos, (start, end))</P>
 <P>
+pos is the offset into buffer of current cursor position
 start is the offset into the buffer of the start of the current
 selection.  end is the offset into the buffer of the character 
 following the selection (this matches Python's slice convention).
@@ -462,33 +424,6 @@ Defaults to end of buffer.</P>
 <P>
 <EM>INT</EM> (start, end)
 </P>
-<H2 ID="SourceBuffCached.SourceBuffCached.goto_cbk" CLASS="Method">SourceBuffCached.SourceBuffCached.goto_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
-<P>None</P>
-
-<P>
-External editor invokes that callback to notify VoiceCode
-of a cursor movement event.</P>
-<P>
-NOTE: This method should NOT update the V-E map, because that is
-already taken care of outside of the method.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-INT <EM>pos</EM>
-<DD>Position the cursor was moved to.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="SourceBuffCached.SourceBuffCached.init_cache" CLASS="Method">SourceBuffCached.SourceBuffCached.init_cache(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Initializes the cache from data acquired from external buffer.</P>
 
@@ -594,6 +529,33 @@ recognise for this buffer (read from cache).</P>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="SourceBuffCached.SourceBuffCached.pos_selection_cbk" CLASS="Method">SourceBuffCached.SourceBuffCached.pos_selection_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">selection</SPAN>)</H2>
+<P>None</P>
+
+<P>
+External editor invokes that callback to notify VoiceCode
+of a change in the current position or selection</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+INT <EM>pos</EM>
+<DD>Position the cursor was moved to.
+<DT>
+(INT, INT) <EM>selection</EM>
+<DD>Start and end position of selected text
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="SourceBuffCached.SourceBuffCached.pref_newline_convention" CLASS="Method">SourceBuffCached.SourceBuffCached.pref_newline_convention(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -640,27 +602,126 @@ STR <EM>new_buff_name</EM>
 <EM>none</EM></P>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
-<H2 ID="SourceBuffCached.SourceBuffCached.set_selection_cbk" CLASS="Method">SourceBuffCached.SourceBuffCached.set_selection_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)</H2>
-<P>None</P>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
 
 <P>
-External editor invokes that callback to notify VoiceCode
-of a set selection event.</P>
-<P>
-NOTE: This method should NOT update the V-E map, because that is
-already taken care of outside of the method.</P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-(INT, INT) <EM>range</EM>
-<DD>Start and end position of selected text
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
 <DT>
-INT <EM>cursor_at</EM>
-<DD>indicates whether cursor was left at the
-beginning or end of <EM>range</EM>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -774,6 +835,23 @@ containing this buffer.</P>
 <DD>application object containing the buffer
 
 </DL>
+<H2 ID="SourceBuff.SourceBuff.backspace" CLASS="Method">SourceBuff.SourceBuff.backspace(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)</H2>
+<P>Delete a number of spaces before the cursor.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+INT <EM>n_times</EM>
+<DD>number of characters to delete.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="SourceBuff.SourceBuff.beginning_of_line" CLASS="Method">SourceBuff.SourceBuff.beginning_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
 <P>Returns the position of the beginning of line at position <EM>pos</EM></P>
 
@@ -852,6 +930,47 @@ cursor. If <EM>None</EM>, consider all occurences whether before or after cursor
 <EM>INT</EM> closest_index
 <DD>Index in <EM>occurences</EM> of the closest
  occurence. If no such occurence, returns <EM>None</EM>
+</DL>
+<H2 ID="SourceBuff.SourceBuff.compare_states" CLASS="Method">SourceBuff.SourceBuff.compare_states(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+compares the buffer states at the times when
+two cookies were returned by store_current_state.  By default,
+only the buffer contents are compared, not the selection, unless
+selection == 1.  If the state corresponding to either cookie has
+been lost, compare_states will return false.</P>
+<P>
+This method does not synchronize with the editor prior to
+comparing with "current".  To ensure that the "current" state 
+is really current, the caller must synchronize.
+(This avoids having duplicate synchronize calls 
+when comparing with the current state of more than one buffer).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SourceBuffCookie</EM> first_cookie, second_cookie
+<DD>see 
+store_current_state.  Note that SourceBuffCookie is a dummy 
+type, not an actual class.  The actual type will vary with 
+SourceBuff subclass.
+<DT>
+<EM>BOOL</EM> selection
+<DD>compare selection as well as contents
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if states are the same, false if they are not, or
+it cannot be determined due to expiration of either cookie
+
 </DL>
 <H2 ID="SourceBuff.SourceBuff.compare_with_current" CLASS="Method">SourceBuff.SourceBuff.compare_with_current(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</H2>
 <P>None</P>
@@ -1066,6 +1185,14 @@ shorthand for</H3>
 STR <EM>name</EM>
 <DD>
 </DL>
+<H2 ID="SourceBuff.SourceBuff.get_pos_selection" CLASS="Method">SourceBuff.SourceBuff.get_pos_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+retrieves current position of cursor and the range of 
+current selection<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG><EM>(INT, (INT, INT))</EM> (pos, (start, end))pos is the offset into buffer of current cursor position
+start is the offset into the buffer of the start of the current
+selection.  end is the offset into the buffer of the character 
+following the selection (this matches Python's slice convention).
 <H2 ID="SourceBuff.SourceBuff.get_selection" CLASS="Method">SourceBuff.SourceBuff.get_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>retrieves range of current selection</P>
 
@@ -1098,25 +1225,6 @@ visible (matching Python's slice convention)<STRONG>INPUTS</STRONG><EM>none</EM>
 
 Moves the cursor to position <EM>INT pos</EM> of source buffer
 (and make selection empty)
-<H2 ID="SourceBuff.SourceBuff.goto_cbk" CLASS="Method">SourceBuff.SourceBuff.goto_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
-<P>None</P>
-
-External editor invokes that callback to notify VoiceCode
-of a cursor movement event.NOTE: This method should NOT update the V-E map, because that is
-already taken care of outside of the method.<STRONG>INPUTS</STRONG>
-<DL>
-
-<DT>
-INT <EM>pos</EM>
-<DD>Position the cursor was moved to.
-</DL>
-<STRONG>OUTPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="SourceBuff.SourceBuff.goto_end_of_selection" CLASS="Method">SourceBuff.SourceBuff.goto_end_of_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">end=1</SPAN>)</H2>
 <P>None</P>
 
@@ -1514,6 +1622,27 @@ the mediator
 <DD>The approriate position
 
 </DL>
+<H2 ID="SourceBuff.SourceBuff.pos_selection_cbk" CLASS="Method">SourceBuff.SourceBuff.pos_selection_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">selection</SPAN>)</H2>
+<P>None</P>
+
+External editor invokes that callback to notify VoiceCode
+of a change in the current position or selection<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+INT <EM>pos</EM>
+<DD>Position the cursor was moved to.
+<DT>
+(INT, INT) <EM>selection</EM>
+<DD>Start and end position of selected text
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="SourceBuff.SourceBuff.pref_newline_convention" CLASS="Method">SourceBuff.SourceBuff.pref_newline_convention(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Returns the form of newline that the editor prefers for this buffer.</P>
 
@@ -1703,29 +1832,6 @@ choice, as indicated by bidirectional_selection.
 Most Windows applications do not.
 </DL>
 <STRONG>OUTPUTS</STRONG><EM>none</EM>
-<H2 ID="SourceBuff.SourceBuff.set_selection_cbk" CLASS="Method">SourceBuff.SourceBuff.set_selection_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)</H2>
-<P>None</P>
-
-External editor invokes that callback to notify VoiceCode
-of a set selection event.NOTE: This method should NOT update the V-E map, because that is
-already taken care of outside of the method.<STRONG>INPUTS</STRONG>
-<DL>
-
-<DT>
-(INT, INT) <EM>range</EM>
-<DD>Start and end position of selected text
-<DT>
-INT <EM>cursor_at</EM>
-<DD>indicates whether cursor was left at the
-beginning or end of <EM>range</EM>
-</DL>
-<STRONG>OUTPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="SourceBuff.SourceBuff.set_text" CLASS="Method">SourceBuff.SourceBuff.set_text(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</H2>
 <P>changes a portion of the buffer</P>
 
@@ -1751,7 +1857,10 @@ cookies can not be pickled and retrieved.The type of cookie will vary with the c
 of SourceBuff.  The corresponding class object is 
 returned by _state_cookie_class.  However, external callers
 should not depend on the type, attributes, or methods 
-of the cookie.<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
+of the cookie.This method does not synchronize with the editor prior to
+storing the state.  The caller is responsible for synchronizing 
+if desired.  (This avoids having duplicate synchronize calls 
+when storing the current state of more than one buffer).<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG>
 <DL>
 
 <DT>
@@ -1815,122 +1924,6 @@ actual type will vary with SourceBuff subclass.
 <DD>true if cookie is valid (i.e. restore_state should be
 able to work)
 
-</DL>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.<STRONG>INPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<STRONG>OUTPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM>
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).<STRONG>INPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<STRONG>OUTPUTS</STRONG>
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:36:17 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:26:17 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -33,6 +33,11 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearchRepeat.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearchRepeat.doc</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.doc].</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionSearch</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.doc</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.doc].</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.execute</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.execute].</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from actions_gen.Action</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#actions_gen.Action.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a documentation string for the action.</SPAN>
@@ -40,16 +45,11 @@
     <A CLASS="DocLink" HREF="#actions_gen.Action.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Log the action to an application's command history</SPAN>
     <A CLASS="DocLink" HREF="#actions_gen.Action.log_execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log_execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Executes the action and logs it in the application's history.</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionBidirectional</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionBidirectional.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionSearch</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.doc</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.doc].</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.execute</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.execute].</SPAN>
-
     <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionRepeatable</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatable.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">already_repeated=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionBidirectional</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionBidirectional.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
