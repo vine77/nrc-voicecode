@@ -610,15 +610,11 @@ class CorrectionBoxWX(DlgModelViewWX):
         *(INT, INT) pos* -- position of the box in pixels
     
         """
-        self.console = console
-        self.parent = parent
-        self.utterance = utterance
-        self.validator = validator
-        self.can_reinterpret = can_reinterpret
-        self.gram_factory = gram_factory
-        self.pos = pos
         self.deep_construct(CorrectionBoxWX,
-                            {}, 
+                            {'console': console, 'parent': parent, 'parent': parent, 
+                             'utterance': utterance, 'validator': validator, 
+                             'can_reinterpret': can_reinterpret,
+                             'gram_factory': gram_factory, 'pos': pos},
                             args)
                            
     def make_view(self):
@@ -1005,9 +1001,10 @@ class CorrectNextPrevWX(CorrectionBoxWX):
     utterance should be disabled.
     """
     def __init__(self, first_utterance = 0, last_utterance = 0, **args):
-        self.decl_attrs({'first_utterance': first_utterance,
-                              'last_utterance': last_utterance})
-        self.deep_construct(CorrectNextPrevWX, {}, args)
+        self.deep_construct(CorrectNextPrevWX, 
+                            {'first_utterance': first_utterance,
+                             'last_utterance': last_utterance}, 
+                             args)
 
     def more_buttons(self, button_sizer = None):
         """optionally, add additional buttons
@@ -1376,11 +1373,6 @@ class CorrectRecentWX(DlgModelViewWX):
         *WinGramFactory gram_factory* -- the grammar factory used to add
         speech grammars to the dialog box
         """
-        self.console = console
-        self.parent = parent
-        self.utterances = utterances
-        self.gram_factory = gram_factory
-        self.pos = pos
         self.deep_construct(CorrectRecentWX,
                             {
                              'console': console,
@@ -1742,22 +1734,6 @@ class ReformatRecentSymbols(DlgModelViewWX):
     def __init__(self, console, parent, symbols, 
                  gram_factory, pos = None, **args):                                      
 
-       # NOTE: Deep construct sets attributes AFTER invoking
-       #       constructor of super classes. But we need
-       #       them to be defined BEFORE because DlgModelView.__init__()
-       #       will invoke make_view() and the later will need
-       #       the attributes to be defined.
-       #
-       #       For now, define the attributes here.
-       #
-       #       But maybe deep_construct should set the attributes
-       #       BEFORE invoking superclass constructors?
-       #       Or maybe we need to use decl_attrs()?
-       self.symbols = symbols
-       self.console = console
-       self.gram_factory = gram_factory
-       self.pos = pos       
-       self.parent = parent
        self.deep_construct(ReformatRecentSymbols, 
                            {'symbols': symbols,
                             'console': console,
