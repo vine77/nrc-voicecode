@@ -32,6 +32,13 @@ import TextBufferWX
 import wxCmdPrompt
 import wxAutoSplitterWindow
 from wxPython.wx import *
+
+try:
+    dummy_var = wxCHANGE_DIR
+    del dummy_var
+except NameError:
+    wxCHANGE_DIR = 0
+
 import WaxEdit
 
 ID_EXIT = 101
@@ -478,6 +485,7 @@ class WaxEdSimFrame(wxFrame):
             file_path = dlg.GetPath()
             
             self.pane.command_prompt._on_command("execfile('%s')" % file_path)
+	dlg.Destroy()
 
     def save_as(self, event):
 	init_dir = self.app_control.curr_dir
