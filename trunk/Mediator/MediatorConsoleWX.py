@@ -445,18 +445,12 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         box = ReformatRecentSymbols(self, self.main_frame, 
                     symbols, self.gram_factory)
         self.show_modal_dialog(box)
+        self.corr_recent_pos = box.GetPositionTuple()
         
+        box.cleanup()
+        box.Destroy()
         
-#        self.corr_recent_pos = box.GetPositionTuple()
-#        changed = box.changed()  
-#        box.cleanup()
-#        box.Destroy()
-#        if answer == wxID_OK:
-##            print 'answer was OK'
-#            return changed
-#        else:
-##            print 'answer was cancel'
-#            return None
+        return box.user_reformatted_symbols()
 
     def destroy_main_frame(self):
         """Destroy the console's main frame"""
@@ -1783,7 +1777,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
     def do_ok(self):
         return self.view().do_ok()
         
-    def on_ok(self):
+    def on_ok(self, event=None):
         pass
       
     def on_cancel(self):
@@ -2014,8 +2008,8 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
 
         debug.trace('ReformatRecentSymbolsViewWX.__init__', '** EXITED')
         
-    def on_ok(self):
-        self.model().on_ok()
+    def on_ok(self, event=None):
+        self.model().on_ok(event)
 
     def on_activate(self, event):
         debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
@@ -2168,7 +2162,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
        self.was_okayed = false
        self.symbol.reformat_to(None)         
 
-    def on_ok(self):
+    def on_ok(self, event=None):
        self.was_okayed = true
        self.symbol.reformat_to(self.chosen_form())
        
@@ -2338,8 +2332,8 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
     def on_double(self):
        debug.not_implemented('ReformatFromRecentViewWX.on_double')
 
-    def on_ok(self):
-       self.model().on_ok()
+    def on_ok(self, event=None):
+       self.model().on_ok(event)
        
     def on_activate(self, event):
        debug.not_implemented('ReformatFromRecentViewWX.on_activate')

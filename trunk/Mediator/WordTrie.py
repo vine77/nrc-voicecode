@@ -162,7 +162,7 @@ class WordTrie(Object):
         word = phrase[0]
         rest = phrase[1:]
         if not self.branches.has_key(word):
-            return None
+            return []
         return self.branches[word].complete_match(rest)
 
     def all_matches(self, phrase):

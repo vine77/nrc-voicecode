@@ -74,7 +74,6 @@ class SymbolResult(Object):
         *STR reformatted_to=None* -- alternate form that this symbol was reformatted
         to.
         """
-       
         self.deep_construct(SymbolResult,
                             {
                              'symbol': native_symbol,
@@ -89,6 +88,7 @@ class SymbolResult(Object):
                              'in_utter_interp': in_utter_interp,
                              'reformatted_to': None,
                             }, args)
+        
        
                             
     def native_symbol(self):
@@ -186,6 +186,7 @@ class SymbolResult(Object):
         
         *[STR]* -- The list from most likely to least likely.
         """
+        debug.trace('SymbolResult.suggestions_list', '** self.native_symbol()=%s, self.exact_matches()=%s' %(self.native_symbol(), self.exact_matches()))
         list = [self.native_symbol()] + self.exact_matches()
        
         sorted_possible = self.possible_matches()

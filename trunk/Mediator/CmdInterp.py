@@ -1162,7 +1162,7 @@ class SymbolConstruction(Object):
         """
         return self.symbols
 
-    def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = None,
+    def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = [],
                         inexact_matches = None, forbidden = None):
         """
         Insert a known symbol with the given written form, track the
@@ -1194,7 +1194,7 @@ class SymbolConstruction(Object):
         *none*
         """
         debug.trace('SymbolConstruction.insert_existing_symbol',
-            'symbol = %s, found_in_utter=%s' % (symbol, found_in_utter))
+            'exact_matches=%s, symbol = %s, found_in_utter=%s' % (exact_matches, symbol, found_in_utter))
             
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
@@ -1207,7 +1207,7 @@ class SymbolConstruction(Object):
         self.symbols.append(result)
         self.reset()
       
-    def insert_new_symbol(self, interp_phrase, exact_matches = None,
+    def insert_new_symbol(self, interp_phrase, exact_matches = [],
                         inexact_matches = None, forbidden = None):
         """
         Generate and insert a new symbol, track the
@@ -1237,7 +1237,7 @@ class SymbolConstruction(Object):
         *STR* -- the written form of the new symbol
         """
         debug.trace('SymbolConstruction.insert_new_symbol',
-            'interp_phrase = %s' % interp_phrase)
+            'exact_matches=%s, interp_phrase = %s' % (exact_matches, interp_phrase))
         symbol = self.builder.finish()
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
@@ -1854,11 +1854,12 @@ class CmdInterp(OwnerObject):
         trace('CmdInterp.match_untranslated_text',
               'phrase = %s' % phrase)
         complete_match = self.known_symbols.complete_match(phrase)        
+        trace('CmdInterp.match_untranslated_text', 'complete_match=%s' % complete_match)
         if symbols.exact_symbol and \
                not self.builder_factory.manually_specified():
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
-            if complete_match:
+            if len(complete_match) > 0:
                 written_symbol = self.choose_best_symbol(spoken_form, 
                     complete_match)
                 symbols.insert_existing_symbol(written_symbol, interp_phrase, complete_match)

@@ -96,7 +96,6 @@ class BadRelativeUtteranceIndex(exceptions.RuntimeError):
        msg = "Relative uttereance index %s was %s" % (rel_index, reason)
        RuntimeError.__init__(self, msg)
        self.msg = msg
-    
 
 class NewMediatorObject(Object.OwnerObject):
     """Main object for the mediator.
@@ -1522,9 +1521,8 @@ class NewMediatorObject(Object.OwnerObject):
 
     def rel_utter_index_to_utter_id(self, rel_index, instance_name):
         """Converts a relative utterance index (i.e. index from
-        the end of the list of stored utterances) to an absolute
-        index (i.e. index from the start of the stored utterances list).
-        
+        the end of the list of stored utterances) to an utterance
+        id.
         **INPUTS**
         
         INT *rel_index*  -- index to be converted.
@@ -1534,7 +1532,7 @@ class NewMediatorObject(Object.OwnerObject):
         
         **OUTPUTS**
         
-        INT *utter_id* -- absolute index
+        INT *utter_id* -- the utterance id
         """
 
         recent = self.recent_dictation(instance_name)       
@@ -1719,9 +1717,38 @@ class NewMediatorObject(Object.OwnerObject):
                 return 0
                 
         return 1
+        
+    def correct_symbol_results(self, instance_name, corrections):
+        """Correct a list of recently dictated symbols.
+        
+        **INPUTS**
 
-    def correct_recent_symbols(self, instance_name, corrections):
+        *STR instance_name* -- the name of the editor for which corrections are 
+        being done.
+
+        *[SymbolResult]* corrections -- List of symbols to reformat
+
+        **OUTPUTS**
+
+        *None*
         """
+        corrections_hash = {}
+        for a_symbol in corrections:
+           in_utter_with_id = a_symbol.in_utter_interp.utterance.utter_id
+           spoken_form = string.join(a_symbol.spoken_phrase())
+           old_written = a_symbol.native_symbol()
+           new_written = a_symbol.reformatted_to
+           
+           corrections_hash[in_utter_with_id] = \
+                  (spoken_form, old_written, new_written)
+                                    
+           a_symbol.reformat_to(None)
+           
+        self.correct_recent_symbols(instance_name, corrections_hash)
+        
+    def correct_recent_symbols(self, instance_name, corrections):
+        """Correct a list of recently dictated symbols.
+        
         **INPUTS**
 
         *STR instance_name* -- the name of the editor for which corrections are 
