@@ -713,7 +713,7 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	"""
         self.word_list = words
-        self.spoken_only = map(lambda x: x[0], word_list)
+        self.spoken_only = map(lambda x: x[0], words)
 
     def set_spoken(self, spoken_forms):
         """changes the stored list of words (after correction) so that 

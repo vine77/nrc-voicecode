@@ -253,6 +253,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
+        start, end = self.make_valid_range((start, end))
         self.underlying.set_text(text, start, end)
         self.on_change(start, end, text, 1)
 

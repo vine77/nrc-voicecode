@@ -2583,6 +2583,26 @@ class ServerNewMediator(ServerMainThread):
         del self.editors[id]
         del self.editor_names[instance_name]
 
+    def mediator_closing(self):
+        """sends mediator_closing messages to all connected editors
+
+        **INPUTS**
+    
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for id, editor in self.editors.items():
+            try:
+                editor.mediator_closing()
+            except messaging.SocketError:
+                pass
+            self.deactivate_data_thread(id)
+        self.editors = None
+        self.editor_names = None
+
     def start_other_threads(self, listener_evt, talker_evt):
         """method called to start the secondary threads which
 	monitor the VC_TALK and VC_LISTEN ports.  These threads communicate

@@ -459,6 +459,7 @@ def test_say(utterance, user_input=None):
     commands.say(utterance, user_input)
     sys.stdout.flush()
 
+
 def test_mediator_console():
     testing.init_simulator_regression()
     test_command("""clear_symbols()    """)
@@ -2177,6 +2178,511 @@ def test_EdSim_alloc_cleanup():
 auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 
     'Testing EdSim allocation and cleanup.')
 
+##############################################################################
+# Testing basic correction features of ResMgr
+##############################################################################
+def check_stored_utterances(instance_name, expected):
+    sys.stdout.flush()
+    the_mediator = testing.mediator
+    n = the_mediator.stored_utterances(instance_name)
+    if n == expected:
+        print '\n%d stored utterances, as expected\n' %n
+    else:
+        print '\nWARNING: %d stored utterances (expected %d)' % (n, expected)
+
+    recent = the_mediator.recent_dictation(instance_name)
+    if expected == 0:
+        if recent == None:
+            print '\nrecent dictation is empty, as expected\n'
+        else:
+            msg = \
+                '\nWARNING: %d recently dictated utterances (expected None)' \
+                % len(recent)
+            print msg
+    else:
+        n = 0
+        if recent != None:
+            n = len(recent)
+        if n != expected:
+            msg = \
+                '\nWARNING: %d recently dictated utterances (expected %d)' \
+                % (n, expected)
+            print msg
+        else:
+            print '\n%d recently dictated utterances, as expected\n' \
+                % n
+    sys.stdout.flush()
+   
+def check_recent(instance_name, expected_utterances, expected_status):
+    sys.stdout.flush()
+    the_mediator = testing.mediator
+    n = the_mediator.stored_utterances(instance_name)
+    recent = the_mediator.recent_dictation(instance_name)
+    expected = len(expected_utterances)
+    n_compare = expected
+    if n != expected:
+        msg = '\nWARNING: check_recent found %d stored utterances\n' % n
+        msg = msg +  '(expected %d)' % expected
+        print msg
+        n_compare = min(n, expected)
+    for i in range(1, n_compare+1):
+        expect = string.split(expected_utterances[-i])
+        received = recent[-i][0].spoken_forms()
+        status = recent[-i][1]
+        if expect != received:
+            print "\nWARNING: utterance %d doesn't match:\n" % i
+            print "expected:\n"
+            print expect
+            print "received:\n"
+            print received
+        if expected_status[-i] != status:
+            msg = "\nWARNING: status of utterance "
+            msg = msg + "%d was %d (expected %d)" \
+                % (i, status, expected_status[-i])
+            print msg
+    if n < expected:
+        print '\nadditional utterances were expected:'
+        for i in range(n_compare + 1, expected):
+            print string.split(expected_utterances[-i])
+    elif n > expected:
+        print '\nextra utterances were received:'
+        for i in range(n_compare + 1, n):
+            received = recent[-i][0].spoken_forms()
+            print received
+    sys.stdout.flush()
+
+def check_scratch_recent(instance_name, n = 1, should_fail = 0):
+    print 'scratching %d\n' %n
+    sys.stdout.flush()
+
+    the_mediator = testing.mediator
+    scratched = the_mediator.scratch_recent(instance_name, n = n)
+    msg = 'scratch %d ' % n
+    if scratched == n:
+        msg = msg + 'succeeded '
+        if should_fail:
+            msg = 'WARNING: ' +  msg + 'unexpectedly' 
+        else:
+            msg = msg + 'as expected'
+    else:
+        msg = msg + 'failed '
+        if should_fail:
+            msg = msg + 'as expected'
+        else:
+            msg = 'WARNING: ' +  msg + 'unexpectedly' 
+    print msg
+
+    sys.stdout.flush()
+    return scratched
+
+def test_reinterpret(instance_name, changed, user_input = None):
+    the_mediator = testing.mediator
+    done = None
+    try:
+        if user_input:
+            #
+            # Create temporary user input file
+            #
+            old_stdin = sys.stdin
+            temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
+            temp_file = open(temp_file_name, 'w')
+#        print 'temp file opened for writing'
+            sys.stdout.flush()
+            temp_file.write(user_input)
+            temp_file.close()
+            temp_file = open(temp_file_name, 'r')
+#        print 'temp file opened for reading'
+            sys.stdout.flush()
+            sys.stdin = temp_file
+
+        done = the_mediator.reinterpret_recent(instance_name, changed)
+
+    finally:
+        if user_input:
+            sys.stdin = old_stdin
+            temp_file.close()
+    return done
+
+
+        
+def reinterpret(instance_name, utterances, errors, user_input = None, 
+    should_fail = 0):
+    sys.stdout.flush()
+    the_mediator = testing.mediator
+    n = the_mediator.stored_utterances(instance_name)
+    recent = the_mediator.recent_dictation(instance_name)
+    n_recent = 0
+    if recent != None:
+        n_recent = len(recent)
+
+    earliest = max(errors.keys())
+    if n < earliest:
+        print "\ncan't correct error %d utterances ago" % earliest
+        print "because stored_utterances only goes back %d\n" % n
+        sys.stdout.flush()
+        return 0
+    if n_recent < earliest:
+        print "\ncan't correct error %d utterances ago" % earliest
+        print "because recent_dictation only goes back %d\n" % n_recent
+        sys.stdout.flush()
+        return 0
+    okay = 1
+    for i in errors.keys():
+        if not the_mediator.can_reinterpret(instance_name, i):
+            print "\ncan't correct error %d utterances ago" % i
+            print "because can_reinterpret returned false\n" 
+            sys.stdout.flush()
+            okay = 0
+    if not okay:
+        return 0
+
+    print 'detecting changes'
+    sys.stdout.flush()
+    changed = []
+    for i, change in errors.items():
+        print 'utterance %d: change = %s' % (i, repr(change))
+        sys.stdout.flush()
+        utterance = recent[-i][0]
+        spoken = utterance.spoken_forms()
+        wrong = 0
+        for j in range(len(spoken)):
+            try:
+                replacement = change[spoken[j]]
+                print 'word %s being replaced with %s' % (spoken[j], replacement)
+                sys.stdout.flush()
+                spoken[j] = replacement
+                wrong = 1
+            except KeyError:
+                pass
+        if wrong:
+            changed.append(i)
+# set_spoken doesn't cause adaption
+            print 'utterance %d was changed ' % i
+            sys.stdout.flush()
+            utterance.set_spoken(spoken)
+            utterances[-i] = string.join(utterance.spoken_forms())
+            print 'utterance %d was corrected' % i
+            sys.stdout.flush()
+    done = None
+    if changed:
+        print 'about to reinterpret'
+        sys.stdout.flush()
+        done = test_reinterpret(instance_name, changed, user_input = user_input)
+
+    if done == None:
+        if should_fail:
+            print '\nreinterpretation failed, as expected\n'
+        else:
+            print '\nWARNING: reinterpretation failed unexpectedly\n'
+        sys.stdout.flush()
+        return 0
+    if testing.correction_available() == 'basic':
+        if done == range(max(changed), 0, -1):
+            print '\nall utterances from %d to the present'% max(changed)
+            print 'were reinterpreted, as expected\n'
+            sys.stdout.flush()
+            return 1
+        else:
+            print '\WARNING: nonly utterances ', done, 'were reinterpreted'
+            print '(expected %d to the present)\n' % max(changed)
+            sys.stdout.flush()
+            return 0
+    else:
+        okay = 1
+        for i in changed:
+            if i not in done:
+                print '\nWARNING: utterance %d was not reinterpreted\n'
+                okay = 0
+        for i in done:
+            if i not in changed:
+                print '\nWARNING: utterance %d was unexpectedly reinterpreted\n'
+                okay = 0
+        sys.stdout.flush()
+        return okay
+
+def test_basic_correction():
+    testing.init_simulator_regression()
+    instance_name = testing.editor()
+    if instance_name == None:
+        msg = '\n***Using old Mediator object: '
+        msg = msg + 'unable to test correction features***\n'
+        print msg
+        return
+    correction_available = testing.correction_available()
+    if instance_name == None:
+        msg = '\n***No correction available: '
+        msg = msg + 'unable to test correction features***\n'
+        print msg
+        return
+    commands.open_file('blah.py')
+
+    the_mediator = testing.mediator
+    print '\n***Testing initial state***\n'
+
+    check_stored_utterances(instance_name, expected = 0)
+
+    print '\n***Some simple dictation***\n'
+
+    utterances = ['class clown inherits from student']
+    input = ['0\n0\n']
+    status = [1]
+
+    utterances.append('class body')
+    input.append('')
+    status.append(1)
+
+    utterances.append('define method popularity method body')
+    input.append('0\n')
+    status.append(1)
+
+
+    utterances.append('return 8')
+    input.append('')
+    status.append(1)
+
+    for i in range(len(utterances)):
+        split = string.split(utterances[i])
+        test_say(split, user_input = input[i])
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing scratch that***\n'
+
+    scratched = check_scratch_recent(instance_name)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print "\n***Moving cursor manually***\n"
+    commands.goto_line(0)
+
+    print '\n***Testing scratch that following manual move***\n'
+
+    scratched = check_scratch_recent(instance_name)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    utterances.append('define method grades method body return B.')
+    input.append('0\n2\n')
+    status.append(1)
+
+    split = string.split(utterances[-1])
+    test_say(split, user_input = input[-1])
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    test_say(['select', 'clown'])
+    editor = the_mediator.editors.app_instance(instance_name)
+    buffer = editor.curr_buffer()
+
+    print '\n***Manually changing text\n'
+
+    buffer.insert('president')
+    commands.show_buff()
+
+    status = len(status)*[0]
+
+    print '\n***Testing scratch that following manual change***\n'
+
+    scratched = check_scratch_recent(instance_name, should_fail = 1)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    the_mediator.reset_results_mgr()
+    editor = the_mediator.editors.app_instance(instance_name)
+    editor.init_for_test()
+
+    commands.open_file('blahblah.py')
+
+
+    utterances = ['class cloud inherits from student']
+    input = ['0\n0\n']
+    status = [1]
+
+    utterances.append('class body')
+    input.append('')
+    status.append(1)
+
+    utterances.append('fine method popularity method body')
+    input.append('0\n')
+    status.append(1)
+
+    utterances.append('return 8')
+    input.append('')
+    status.append(1)
+
+    for i in range(len(utterances)):
+        split = string.split(utterances[i])
+        test_say(split, user_input = input[i])
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing correction of recent utterance***\n'
+
+    errors = {}
+    errors[len(utterances)-2] = {'fine': 'define'}
+    reinterpret(instance_name, utterances, errors, user_input = '0\n')
+
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing correction of another recent utterance***\n'
+
+
+    errors = {}
+    errors[len(utterances)] = {'cloud': 'clown'}
+    reinterpret(instance_name, utterances, errors, user_input = '0\n'*3)
+  
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    new_utterances = ['new line']
+    new_input = ['']
+    new_status = [1]
+
+    new_utterances.append('back indent')
+    new_input.append('')
+    new_status.append(1)
+
+    new_utterances.append('excess equals 0')
+    new_input.append('0\n')
+    new_status.append(1)
+
+    for i in range(len(new_utterances)):
+        split = string.split(new_utterances[i])
+        test_say(split, user_input = new_input[i])
+
+    editor = the_mediator.editors.app_instance(instance_name)
+    buffer = editor.curr_buffer()
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Manually changing text\n'
+
+    pos = buffer.cur_pos()
+    buffer.delete(range = (pos-4, pos))
+    commands.show_buff()
+    status = len(status)*[0]
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing failed correction of a recent utterance***\n'
+
+    errors = {}
+    errors[0] = {'excess' : 'success'}
+    reinterpret(instance_name, utterances, errors, should_fail = 1,
+        user_input = '0\n'*10)
+
+    print '\n***Fixing error manually***\n'
+
+    pos = buffer.cur_pos()
+    buffer.delete(range = (pos-6, pos))
+    commands.show_buff()
+    status = len(status)*[0]
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    new_utterances = ['excess equals 1 new line']
+    new_input = ['0\n']
+    new_status = [1]
+
+    new_utterances.append('back indent')
+    new_input.append('')
+    new_status.append(1)
+
+    new_utterances.append('results at index 0 jump out equals 0')
+    new_input.append('0\n')
+    new_status.append(1)
+
+
+    for i in range(len(new_utterances)):
+        split = string.split(new_utterances[i])
+        test_say(split, user_input = new_input[i])
+
+    utterances.extend(new_utterances)
+    input.extend(new_input)
+    status.extend(new_status)
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing scratch that***\n'
+
+    scratched = check_scratch_recent(instance_name)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing correction after scratch that***\n'
+
+    errors = {}
+    errors[2] = {'excess': 'access'}
+    reinterpret(instance_name, utterances, errors, user_input = '0\n')
+  
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+
+auto_test.add_test('basic_correction', test_basic_correction, 
+    'Testing basic correction infrastructure with ResMgr.')
+
+##############################################################################
+# Testing set_text 
+##############################################################################
+def test_set_text():
+    testing.init_simulator_regression()
+    the_mediator = testing.mediator
+    instance_name = testing.editor()
+    editor = the_mediator.editors.app_instance(instance_name)
+    commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    buffer = editor.curr_buffer()
+    buffer.set_text('nothing left')
+    editor.print_buff_if_necessary()
+
+
+auto_test.add_test('set_text', test_set_text, 
+    'Testing set_text.')
 ##############################################################################
 # Use this to create temporary tests
 ##############################################################################

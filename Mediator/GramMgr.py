@@ -360,7 +360,7 @@ class GramMgrDictContext(GramMgr):
         *none*
         """
         name = self.name()
-        self.recog_mgr.interpret_dictation(self, name, result,
+        self.recog_mgr.interpret_dictation(name, result,
             initial_buffer = initial_buffer)
 
     def find_context(self, buffer):

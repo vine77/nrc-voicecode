@@ -566,7 +566,10 @@ class SourceBuff(OwnerObject):
         
         start, end = range        
         if start == None: start = 0
-        if end == None: end = self.len() - 1
+# DCF: ugh, another one of these errors:
+#          the end is after index self.len() -1 so at index self.len()
+#        if end == None: end = self.len() - 1
+        if end == None: end = self.len()
         if end < start:
             tmp = end
             end = start
