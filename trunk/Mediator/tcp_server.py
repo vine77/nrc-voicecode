@@ -115,6 +115,9 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
     def insert_indent(self, code_bef, code_after, range = None):
         self.indent_srv.insert_indent(code_bef, code_after, range)
 
+    def uses_server_side_indent(self):
+        return 1
+
     def indent(self, range = None):
         self.indent_srv.indent(range = range)
         

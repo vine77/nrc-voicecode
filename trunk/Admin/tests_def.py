@@ -2825,29 +2825,15 @@ def test_temporary():
 
     commands.open_file('blah.py')
         
-    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['define', 'method', 'initialize'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
 
-    commands.say(['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['if', 'statement', 'if', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
     
-    commands.say(['back indent'], echo_utterance=1)
+    commands.say(['variable', 'equals'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
     
-    commands.say(['method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+#    commands.say(['new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)        
     
-    commands.say(['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['else', 'clause', 'some', 'variable'], user_input='1\n')
 
-    commands.say(['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-    
-    commands.say(['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-    
-    commands.say(['back indent'], echo_utterance=1)    
-    
-    commands.say(['return', 'regular', 'expression', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
     
     
 

@@ -89,6 +89,7 @@ class SourceBuff(OwnerObject):
     INT *print_nlines* -- When printing content of buffer to STDOUT
     (*print_buff* methods), print this number of lines before and
     after current line.
+    
 
     CLASS ATTRIBUTES**
     
@@ -785,6 +786,12 @@ class SourceBuff(OwnerObject):
         """
 
         debug.virtual('SourceBuff.insert')
+
+    def uses_server_side_indent(self):
+       """Returns TRUE iif automatic indentation is done on the server side
+       using and instance of SB_ServiceIndent"""
+       
+       return 0
 
     def indent(self, range = None):
         
