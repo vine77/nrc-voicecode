@@ -38,16 +38,12 @@ add_alt_abbreviations('mode', ['mod'])
 
 add_alt_abbreviations('name', ['nam'])
 
-add_alt_abbreviations('P. Y.', ['py'])
 add_alt_abbreviations('python', ['py'])
-add_alt_abbreviations('pie', ['py'])
-
-add_alt_abbreviations('sine', ['sin'])
 
 add_alt_abbreviations('unique', ['uniq'])
 
-
-
+add_pronunciation('py', 'pie')
+add_acronym('py')
 
 
 

@@ -41,17 +41,14 @@ class CSCmd(Object):
     application where it was typed.
         
     **INSTANCE ATTRIBUTES**
+
+    **NOTE:** when CSCs are added to CmdInterp, it stores stores the
+    underlying CSCmdDict, rather than the CSC.  Therefore, any
+    additional data required by CmdInterp once it concludes that a
+    particular CSC applies must be stored in CSCmdDict.
         
     *STR spoken_forms=[]* -- list of alternatives ways that this
      command can be spoken out. 
-    
-    *contexts=*{* STR: Context *}* -- Dictionary of contexts in which
-    this command applies.  The key is a string returned by
-    Context.equivalence_key (see Context for details).
-
-    *actions=*{* STR: Action *}* -- Dictionary of actions to take in
-    the corresponding context.  The key is a string returned by
-    Context.equivalence_key (see Context for details).
 
     *CSCmdDict meanings* -- object which manages the meanings of the
     command

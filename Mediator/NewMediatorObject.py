@@ -749,7 +749,6 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_csc_set'] = do_nothing
             config_dict['add_lsa'] = do_nothing
             config_dict['add_lsa_set'] = do_nothing
-            config_dict['add_abbreviation'] = do_nothing
             config_dict['clear_standard_symbols_file_list'] = do_nothing            
             config_dict['standard_symbols_in'] = do_nothing
             config_dict['abbreviations_in'] = do_nothing
@@ -762,7 +761,6 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_lsa'] = self.add_lsa
             config_dict['add_lsa_set'] = self.add_lsa_set
             config_dict['has_lsa'] = self.has_lsa
-            config_dict['add_abbreviation'] = self.add_abbreviation
             config_dict['clear_standard_symbols_file_list'] = self.clear_standard_symbols_file_list          
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['abbreviations_in'] = self.abbreviations_in
@@ -1265,23 +1263,6 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.interp.add_lsa_set(set)
-
-    def add_abbreviation(self, abbreviation, expansions):
-        """Add an abbreviation to VoiceCode's abbreviations dictionary.
-
-        **INPUTS**
-
-        *STR* abbreviation -- the abbreviation 
-
-        *[STR]* expansions -- list of possible expansions
-
-
-        **OUTPUTS**
-
-        *none* -- 
-        """
-        self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
-
 
     def clear_standard_symbols_file_list(self):
         """Clears the list of files defining standard symbols"""
