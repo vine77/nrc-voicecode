@@ -2076,9 +2076,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
 
     def make_view(self):
        debug.trace('ReformatFromRecentWX.make_view', 'self.parent=%s' % self.parent)
-       return ReformatFromRecentViewWX(self.console, self.parent,
-                                          self.symbol,
-                                          model = self)
+       return ReformatFromRecentViewWX(self.console, self.parent, model = self)
                                           
     def reset(self, symbol):
        """reinitialise the dialog
@@ -2169,7 +2167,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
     
     *wxDialog parent* -- the parent window.
     """
-    def __init__(self, console, parent, symbol, **args):
+    def __init__(self, console, parent, **args):
             
         """
         **INPUTS**
@@ -2187,7 +2185,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         self.deep_construct(ReformatFromRecentViewWX,
                             {
                              'console': console,
-                             'symbol': symbol,
+                             'symbol': None,
                             }, args, 
                             exclude_bases = {possible_capture:1, wxDialogWithHelpers: 1}
                            )
@@ -2200,28 +2198,23 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         
         self.name_parent('console')
         
-        self.set_layout(symbol)
+        self.set_layout()
         return
         
 
-    def set_layout(self, symbol):
+    def set_layout(self):
         main_sizer = wxBoxSizer(wxVERTICAL)
 
-        spoken_form = string.join(self.symbol.spoken_phrase()),
         self.txt_intro = wxStaticText(self, wxNewId(), 
-            "&Choose or type the correct format for symbol: \n     \"%s\"" % spoken_form,
+            "dummy\ndummy",
             wxDefaultPosition, wxDefaultSize)
         set_text_font(self.txt_intro)
         main_sizer.Add(self.txt_intro, 0, wxEXPAND | wxALL)
 
-
-        # AD: Will have to add a validator for this text field later.
         self.txt_chosen_form = wxTextCtrl(self, wxNewId(), "", wxDefaultPosition,
             (550, 20), style = wxTE_NOHIDESEL)
         set_text_font(self.txt_chosen_form)
-        self.txt_chosen_form.SetValue(symbol.native_symbol())        
         main_sizer.Add(self.txt_chosen_form, 0, wxEXPAND | wxALL)
-
         
         formats_pick_list = wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
             wxDefaultSize, 
@@ -2231,14 +2224,9 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         formats_pick_list.InsertColumn(0, "")
         formats_pick_list.InsertColumn(1, "Written form")
 
-        for ii in range(len(self.symbol.suggestions_list())):
-           formats_pick_list.InsertStringItem(ii, "%d" % (ii+1))
-           formats_pick_list.SetStringItem(ii, 1, self.symbol.suggestions_list()[ii])
-
         formats_pick_list.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
         formats_pick_list.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
 
-        formats_pick_list.ScrollList(0, len(self.symbol.suggestions_list()))
         self.formats_pick_list = formats_pick_list
         main_sizer.Add(formats_pick_list, 1, wxEXPAND | wxALL)
         self.okb = wxButtonWithHelpers(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
@@ -2264,11 +2252,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         main_sizer.Fit(self)
         main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
         resize_last_column(self.formats_pick_list)
-        last = len(self.symbol.suggestions_list())-1
-        self.formats_pick_list.EnsureVisible(last)
-        self.formats_pick_list.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
-        self.formats_pick_list.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
-
 
         # AD: Keep those at the end, otherwise some of the code above
         #     could callback some Model actions which in turn could
@@ -2287,14 +2270,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
 # handler
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self, self.on_dialog_char)
-        
-#        EVT_CHAR(self.txt_chosen_form, self.on_chosen_form_char)
-#        EVT_SET_FOCUS(self.txt_chosen_form, self.on_chosen_form_set_focus)
-#        EVT_KILL_FOCUS(self.txt_chosen_form, self.on_chosen_form_kill_focus)
-
-
-        self.Raise()
-        self.txt_chosen_form.SetFocus()
 
 
     def reset(self, symbol):
@@ -2304,8 +2279,27 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        
        SymbolResult symbol -- The symbol to reinitialise with."""
 
-       self.formats_pick_list.Select(0)
+       self.symbol = symbol
+       spoken_form = string.join(self.symbol.spoken_phrase()),
+       self.txt_intro.SetLabel("&Choose or type the correct format for symbol: \n     \"%s\"" % spoken_form)
+
+       self.txt_chosen_form.SetValue(symbol.native_symbol())
+
+       for ii in range(len(self.symbol.suggestions_list())):
+           self.formats_pick_list.InsertStringItem(ii, "%d" % (ii+1))
+           self.formats_pick_list.SetStringItem(ii, 1, self.symbol.suggestions_list()[ii])
+
+       self.formats_pick_list.ScrollList(0, len(self.symbol.suggestions_list()))
+
+
+
+       if self.formats_pick_list.NumberOfRows() > 0:
+          self.formats_pick_list.Select(0)
+          
        self.formats_pick_list.SetFocus()
+
+       self.Raise()
+
 
     def intro(self):
        return self.txt_intro.GetLabel()
@@ -2320,6 +2314,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
 
     def on_double(self):
        debug.not_implemented('ReformatFromRecentViewWX.on_double')
+
 
     def on_ok(self, event=None):
        self.model().on_ok(event)
@@ -2351,7 +2346,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        self.formats_pick_list.Select(nth)
        evt = MockListSelectionEvent(nth)
        self.on_choose_alternate_form(evt)
-#>       self.formats_pick_list.Activate(nth)
 
 
     def on_select_alternate_form(self, evt):
