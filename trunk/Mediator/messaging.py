@@ -1038,6 +1038,12 @@ class MessEncoderWDDX(MessEncoder):
         *STR str_mess* -- The message encoded as a string
         """
 
+        # test for python 2.3 or later, where bool is its own type
+        if type(1) is not type(True):
+            for arg, val in mess_argvals.items():
+                if val == bool(val) and type(val) is type(True):
+                    mess_argvals[arg] = int(val)
+
         mess_argvals['message_name'] = mess_name
         str_mess = self.marshaller.dumps(mess_argvals)
 
