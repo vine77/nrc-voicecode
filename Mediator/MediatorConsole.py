@@ -483,6 +483,9 @@ class MediatorConsole(Object.OwnerObject):
         return ok
 
 
+    def correct_symbol_results(self, instance_name, reformatted_symbols):
+       self.mediator.correct_symbol_results(instance_name, reformatted_symbols)
+
     def raise_active_window(self):
         """makes the active window (within the current process) the
         foreground one (for the system)

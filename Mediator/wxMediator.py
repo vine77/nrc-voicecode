@@ -56,16 +56,18 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                    'on_ok': 1,
-                    'reformat_a_symbol': 1,
-                    'ReformatFromRecentWX.do_choose_nth_form': 1,
-                    'ReformatFromRecentWX.on_choose_alternate_form': 1,
-                    'MediatorConsoleWX.reformat_nth': 1,
-                    'test_do_ok': 1,
-                    'MediatorConsoleWX.show_modal_dialog': 1,
-                    'CorrectRecentViewWX.chose_from_list': 1,
-                    'ReformatRecentSymbolsViewWX.on_cancel': 1,
-                    'DismissModalFlagTimerWX.dismiss': 1,
+                    'SymDict.correct_symbol': 1,
+                    'NewMediatorObject.correct_symbol_results': 1,
+                    'NewMediatorObject.correct_recent_symbols': 1,
+                    'NewMediatorObject.utter_id_to_rel_utter_index': 1,
+#                    'NewMediatorObject.correct_recent_symbol': 1,
+#                    'ResMgrBasicreformat_recent_synchronous': 1,
+#                    'on_ok': 1,
+#                    'reformat_a_symbol': 1,
+#                    'ReformatFromRecentWX.do_choose_nth_form': 1,
+#                    'ReformatFromRecentWX.on_choose_alternate_form': 1,
+#                    'MediatorConsoleWX.reformat_nth': 1,
+#                    'test_do_ok': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
