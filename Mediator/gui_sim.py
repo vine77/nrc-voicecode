@@ -117,7 +117,7 @@ def init_simulator(app, symdict_pickle_fname=None,
             #
             # Remove symbols from NatSpeak's dictionary 
             #
-            the_mediator.interp.known_symbols.cleanup(resave=0)
+            the_mediator.interp.cleanup(resave=0)
 
         #
         # It could be that the_mediator has previously been initiated (e.g. if

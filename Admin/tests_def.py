@@ -49,8 +49,8 @@ def compilation_test(a_mediator, source):
     """Does a compilation test on file *source*        
     """
     print '*** Compiling symbols from file: %s ***' % util.within_VCode(source)
-    a_mediator.interp.known_symbols.cleanup()
-    a_mediator.interp.known_symbols.parse_symbols(source)
+    a_mediator.interp.cleanup()
+    a_mediator.interp.parse_symbols_from_file(source)
     print '\n\nParsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
     print 'Unresolved abbreviations are:'
@@ -68,8 +68,8 @@ def accept_symbol_match_test(a_mediator, source, symbol_matches):
     """
     print '\n\n*** Accept symbol match test. source=\'%s\' ***' \
 	% util.within_VCode(source)
-    a_mediator.interp.known_symbols.cleanup()            
-    a_mediator.interp.known_symbols.parse_symbols(source)
+    a_mediator.interp.cleanup()            
+    a_mediator.interp.parse_symbols_from_file(source)
     print 'Parsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
     print '\n\nUnresolved abbreviations are:'
@@ -128,9 +128,9 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
         #
         # Compile symbols
         #
-        a_mediator.interp.known_symbols.cleanup()        
+        a_mediator.interp.cleanup()        
         for a_source in sources:
-            a_mediator.interp.known_symbols.parse_symbols(a_source)
+            a_mediator.interp.parse_symbols_from_file(a_source)
 #        print '\n Known symbols are: \n'
 #        a_mediator.interp.known_symbols.print_symbols()
 
@@ -156,6 +156,8 @@ def test_SymDict():
         interp=CmdInterp.CmdInterp())
     a_mediator.configure()
     
+#  temporary check
+    print repr(vc_globals.test_data)
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c')
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'large_buff.py')
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
@@ -565,7 +567,7 @@ def test_select_pseudocode():
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
-auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing mediator console commands')
+auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing select pseudocode commands')
 
 
 
@@ -577,6 +579,7 @@ def test_auto_add_abbrevs():
     mediator.init_simulator_regression()
     
     test_command("""open_file('blah.c')""")
+    print repr(vc_globals.test_data)
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
     test_command("""compile_symbols(['""" + file + """'])""")
     test_command("""print_abbreviations(1)""")    

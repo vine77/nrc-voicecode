@@ -364,7 +364,7 @@ class MediatorObject(Object.Object):
         #
         # Compile standard symbols for the different languages
         #
-        self.interp.known_symbols.parse_standard_symbols(add_sr_entries=self.interp.known_symbols.sr_symbols_cleansed)
+        self.interp.parse_standard_symbols(add_sr_entries=self.interp.known_symbols.sr_symbols_cleansed)
         self.interp.known_symbols.sr_symbols_cleansed = 0
 
 #        to_configure = None
@@ -392,7 +392,7 @@ class MediatorObject(Object.Object):
         # but don't save SymDict to file (we want the symbols and
         # abbreviations to still be there when we come back.
         #
-        self.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
+        self.interp.cleanup(clean_sr_voc=clean_sr_voc)
     
         if sr_interface.speech_able():
             if self.mixed_grammar:

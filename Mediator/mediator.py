@@ -180,7 +180,7 @@ def init_simulator(symdict_pickle_fname=None,
             # Remove symbols from NatSpeak's dictionary 
             #
             pass
-            the_mediator.interp.known_symbols.cleanup(resave=0)
+            the_mediator.interp.cleanup(resave=0)
 
         #
         # It could be that the_mediator has previously been initiated (e.g. if
@@ -257,7 +257,7 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
 
     
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
-                   window=0, owns_app = 0, exclusive=1, allResults=0, 
+                   window=None, owns_app = 0, exclusive=1, allResults=0, 
 		   reuse_mediator=1,
                    disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)
 		   
@@ -314,13 +314,19 @@ def simulator_mode(options):
     finally:
       if options['e']:
 	sys.stderr = sys.__stderr__
-        
-if (__name__ == '__main__'):
-    
-    opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None, 'e', None])
-    
-#    print '-- mediator.__main__: opts=%s' % opts
 
+def run(options):
+    """run simulator from within a Python shell
+    
+    **INPUTS**
+
+    *[STR: ANY] options* -- Dictionary of options for the script.
+
+
+    **OUTPUTS**
+
+    *none* -- 
+    """
 # default parameters for cleanup
     sim_commands.__dict__['clean_sr_voc_flag']=0
     sim_commands.__dict__['save_speech_files_flag']=None
@@ -345,3 +351,10 @@ simulator_mode(opts)""")
     cleanup(sim_commands.clean_sr_voc_flag, 
 	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
         
+if (__name__ == '__main__'):
+    
+    opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None, 'e', None])
+    
+#    print '-- mediator.__main__: opts=%s' % opts
+
+    run(opts)

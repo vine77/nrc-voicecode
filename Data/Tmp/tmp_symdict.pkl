@@ -909,10 +909,10 @@ p505
 (dsS'standard_symbol_sources'
 p506
 (lp507
-S'C:\\Eclipse\\workspace\\VCode\\Config\\py_std_sym.py'
+S'H:\\Projects\\VoiceCode\\VCode\\Config\\py_std_sym.py'
 asS'pickle_fname'
 p508
-S'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+S'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 p509
 sS'_cached_symbols_as_one_string'
 p510
