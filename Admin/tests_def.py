@@ -43,6 +43,7 @@ from cont_gen import *
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
+small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
 
 #  auto_test.add_test('PyUnitTests', unit_testing.run_all_pyunit_tests,
 #                     desc='run a series of unit tests through PyUnit')
@@ -2738,6 +2739,22 @@ def test_insert_delete_commands():
 
 #auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
+
+##############################################################################
+# Voice Commands for compiling symbols
+##############################################################################
+
+def test_compile_symbols():
+   testing.init_simulator_regression()
+   commands.open_file(small_buff_py)
+   commands.clear_symbols()
+   print "Before compiling symbols, symbols are:\n"
+   commands.print_symbols()
+   commands.say(['compile symbols'])
+   print "After compiling symbols, symbols are:\n"
+   commands.print_symbols()
+   
+auto_test.add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
     
 ##############################################################################
 # Use this to create temporary tests

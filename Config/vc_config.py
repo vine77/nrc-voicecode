@@ -194,6 +194,12 @@ add_prefix('dumbEdSim', 'Dumbo')
 # CSCs and LSAs that apply for ALL languages
 #############################################################################
 
+acmd = CSCmd(spoken_forms=['compile symbols'], 
+             meanings={ContLanguage(None): ActionCompileSymbols()}, 
+             docstring='compile symbols from active buffer.')
+add_csc(acmd)
+
+
 #############################################################################
 # Punctuation marks.
 #############################################################################
