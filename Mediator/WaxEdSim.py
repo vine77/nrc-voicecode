@@ -144,10 +144,10 @@ class WaxEdSimPane(wxPanel):
         self.log = log
 	self.prompt_text = "Command> "
 	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
-	self.command_log.write('Microphone button: %d %d\n' % \
-	    (self.mic_button.GetSizeTuple()))
-	self.command_log.write('Microphone button shown = %d\n' % \
-	    (self.mic_button.IsShown()))
+#	self.command_log.write('Microphone button: %d %d\n' % \
+#	    (self.mic_button.GetSizeTuple()))
+#	self.command_log.write('Microphone button shown = %d\n' % \
+#	    (self.mic_button.IsShown()))
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
 	self.vbox.Add(self.button_line, 0)

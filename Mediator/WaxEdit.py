@@ -24,7 +24,7 @@
 
 import debug
 import sys
-import TextBufferWX
+# import TextBufferWX
 
 class WaxEdit:
     """base class for of new GUI interface to the mediator simulation
