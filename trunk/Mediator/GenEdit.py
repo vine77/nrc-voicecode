@@ -666,7 +666,9 @@ class GenEditBuffers(GenEdit):
             return 0
         self.buffers[buff_name] = buffer
         self.filenames[buff_name] = None
-        buffer.name_file("")
+# this is incorrect -- do this in GenEdit filenames and in SourceBuffTB
+# but not TextBufferChangeSpec
+#        buffer.name_file("")
         if perform_callback and self.app_control:
             self.app_control.open_buffer_cbk(buff_name)
         return 1
@@ -853,7 +855,9 @@ class GenEditBuffers(GenEdit):
         if path:
             self.curr_dir = path
         self.filenames[new_buff_name] = file_name
-        self.buffers[new_buff_name].name_file(file_name)
+# this is incorrect -- do this in GenEdit filenames and in SourceBuffTB
+# but not TextBufferChangeSpec
+#        self.buffers[new_buff_name].name_file(file_name)
         self.show_buffer(new_buff_name, perform_callback =
             user_initiated)
 #        print 'after show buffer: buffers = ', self.buffers.keys()

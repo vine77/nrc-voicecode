@@ -21,7 +21,12 @@
 
 """Various utility functions"""
 
-import getopt, os, re, stat, sys, time, types, winsound
+import getopt, os, re, stat, sys, time, types
+import sys
+if sys.platform =='win32':
+    global winsound
+    import winsound
+
 import os.path
 
 import vc_globals
@@ -257,7 +262,8 @@ def request_console_be(active=1):
             sound_file = os.path.join(vc_globals.data, 'TestData', 'may_be_inactive.wav')
             message = 'You may now leave the regression test window.\nPress <Enter> to acknowledge this message.\n> '
 
-        winsound.PlaySound(sound_file, 0)    
+        if sys.platform =='win32':
+            winsound.PlaySound(sound_file, 0)    
         sys.stdout.write(message)
         sys.stdin.readline()
         

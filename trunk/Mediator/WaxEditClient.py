@@ -24,8 +24,8 @@ editor, but with a wxPython message loop.
 """
 
 
-import os, posixpath, pythoncom, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom, win32event
+import os, posixpath, re, select, socket
+import SocketServer, string, sys, threading, time, whrandom 
 import Object
 import vc_globals
 

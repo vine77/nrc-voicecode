@@ -36,7 +36,7 @@ import messaging, Object
 import util
 import Queue
 
-from thread_communication_win32 import *
+# from thread_communication_win32 import *
 
 
 ##############################################################################
