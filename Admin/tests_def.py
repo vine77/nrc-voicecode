@@ -85,6 +85,7 @@ def compilation_test(interp, source):
     sorted_unresolved.sort()
     for an_abbreviation in sorted_unresolved:
         symbol_list = unresolved[an_abbreviation].keys()
+        symbol_list.sort()
         print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
         
     print '\n*** End of compilation test ***\n'
