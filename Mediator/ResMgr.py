@@ -196,7 +196,7 @@ class ResMgr(OwnerObject):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, UtteranceInterpretation)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
         each with:
           - a corresponding identifying number 
@@ -372,7 +372,7 @@ class ResMgrStd(ResMgr):
 
         **OUTPUTS**
 
-        *InterpretedPhrase* -- the object returned by
+        *UtteranceInterpretation* -- the object returned by
         CmdInterp.interpret_cmd_tuples
         """
         debug.trace('ResMgrStd._std_interp', 'standard interpretation')
@@ -380,7 +380,7 @@ class ResMgrStd(ResMgr):
             debug.trace('ResMgrStd._std_interp', 'about to call before')
             before(app, initial_buffer = initial_buffer)
         interp = self.interpreter()
-        interpreted = interp.interpret_cmd_from_utterance(result, app, 
+        interpreted = interp.interpret_utterance(result, app, 
             initial_buffer = initial_buffer, clear_state = clear_state)
 
         if after:
@@ -483,7 +483,7 @@ class ResMgrStd(ResMgr):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, UtteranceInterpretation)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
         each with:
           - a corresponding identifying number 
@@ -2130,7 +2130,7 @@ class ResMgrBasic(ResMgrStd):
     most recent last (technically a queue, since it has finite size and
     the oldest utterances can be dropped on push to maintain this limit)
 
-    *[InterpretedPhrase] interpreted* -- stack of recent interpreation
+    *[UtteranceInterpretation] interpreted* -- stack of recent interpreation
     results, sorted with most recent last (technically a queue, since it 
     has finite size and the oldest result can be dropped on push to 
     maintain this limit)
@@ -2192,7 +2192,7 @@ class ResMgrBasic(ResMgrStd):
         *SpokenUtterance result* -- a SpokenUtterance object
         representing the recognition results
 
-        *InterpretedPhrase interpreted* -- an object representing the
+        *UtteranceInterpretation interpreted* -- an object representing the
         results of interpretation
 
         *INT number* -- number assigned to the utterance by
@@ -2338,7 +2338,7 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, InterpretedPhrase)]* -- the n most recent 
+        *[(SpokenUtterance, INT, UtteranceInterpretation)]* -- the n most recent 
         reinterpretable dictation utterances (or all available if < n), sorted most 
         recent last, each with a corresponding identifying number and the result
         of interpreting it.
@@ -2377,7 +2377,7 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, UtteranceInterpretation)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
         each with:
           - a corresponding identifying number 

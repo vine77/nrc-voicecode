@@ -768,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01ADD7C8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x020EDA90>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3472,12 +3472,9 @@ Heard new statement return size of promised tax cuts
   9:         
 
 *** End of source buffer ***
-AD: TEST BELOW PRODUCES FAULTY OUTPUT... SYMBOL excess
-SHOULD NOT APPEAR IN LIST OF SYMBOLS BECAUSE IT WAS A MISRECOGNIZED
-THAT WAS REINTERPRETED
+Checking that 'excess' is not in recent symbols anymore:
 
 Recent interpreted symbols were: 
-   written as: 'excess', spoken as: '['excess']'
    written as: 'success', spoken as: '['success']'
    written as: 'RedBook', spoken as: '['red', 'book']'
    written as: 'act_out', spoken as: '['act', 'out']'
@@ -8354,7 +8351,7 @@ AssertionError: Nevermind, this test is supposed to fail.
 Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
 
 ----------------------------------------------------------------------
-Ran 4 tests in 0.000s
+Ran 4 tests in 0.010s
 
 FAILED (failures=4)
 
@@ -13216,7 +13213,7 @@ Heard new statement
 
 ..
 ----------------------------------------------------------------------
-Ran 2 tests in 0.060s
+Ran 2 tests in 0.040s
 
 OK
 
@@ -13531,13 +13528,13 @@ Heard select previous index equals zero
 
 ...
 ----------------------------------------------------------------------
-Ran 3 tests in 0.020s
+Ran 3 tests in 0.030s
 
 OK
 
 
 
 -----------------------------------------------
-Test suite completed in:  718.532999992 secs
+Test suite completed in:  445.24000001 secs
 -----------------------------------------------
 MessTransporter_Socket.receive_string: no data received in Thread-6
