@@ -1,4 +1,4 @@
-import os, posixpath, profile, sys
+import exceptions, os, posixpath, profile, sys
 
 class Object:
     """A base class for objects with safe attribute access methods
@@ -478,10 +478,10 @@ def try_attribute(obj, name, operation):
     x = 0
     try:
         exec(code)
-    except:
-        sys.stdout.write("Raised exception. ")
+    except AttributeError:
+        sys.stdout.write("Caught AttributeError exception.")
     else:
-        sys.stdout.write("NO exception raised. ")
+        sys.stdout.write("Caught NO AttributeError exception. ")
         str = "obj.%s=%s, x=%s" % (name, obj.name, x)
         sys.stdout.write(str)
     sys.stdout.write("\n\n")
