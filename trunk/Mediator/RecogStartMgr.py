@@ -302,7 +302,7 @@ class RecogStartMgr(OwnerObject):
         #
         if set_to:
            natlink.execScript('SetNaturalText 1')
-        debug.trace('RecogStartMgr.set_text_mode', '** upon exit, self.is_in_text_mode=%sself=%s' % (self.is_in_text_mode, self))           
+
 
     def interpret_dictation(self, instance, result, initial_buffer = None):
         """interpret the result of recognition by a dictation grammar,

@@ -3031,9 +3031,12 @@ auto_test.add_test('just_ring_bell', test_dummy_just_ring_bell, 'This dummy test
 def test_number_dictation():
    testing.init_simulator_regression()
    commands.open_file('blah.py')   
-   commands.say(['twenty-three\\twenty-three', 'fifty-four\\fifty-four'], echo_cmd=1)
+   commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0x\\oh X.', '04\\oh four'], echo_cmd=1)
    commands.say(['select', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
    commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '0x'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+   commands.say(['select', '04'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   commands.say(['select', '0x', '04'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
 auto_test.add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
 
