@@ -835,3 +835,56 @@ class CmdInterp(Object):
 
     def print_abbreviations(self):
 	self.known_symbols.print_abbreviations()
+
+    def cleanup(self, clean_sr_voc=0, clean_symdict=1, resave=1):
+        """Cleans up the symbol dictionary.
+        
+        **INPUTS**
+        
+        *BOOL* clean_sr_voc=0 -- If true, then remove symbols from SR
+        vocabulary
+
+        *BOOL* clean_symdict=1 -- If true, then removes symbols from
+         the symbol dictionary.
+
+        *BOOL resave = 1* -- If true, symbol dictionary is
+        resaved to disk after cleanup.        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+	self.known_symbols.cleanup(clean_sr_voc=0, clean_symdict=1, resave=1)
+
+    def parse_standard_symbols(self, add_sr_entries=1):
+        """Parse standard symbols for the various programming languages.
+        
+        **INPUTS**
+        
+        *BOOL* add_sr_entries = 1 -- If true, then add symbols to the
+         SR vocabulary.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+	self.known_symbols.parse_standard_symbols(add_sr_entries =
+	    add_sr_entries)
+    
+    def parse_symbols_from_files(self, file_list, add_sr_entries=1):
+        """Parse symbols from a series of source files
+
+        **INPUTS**
+
+        *[STR] file_list -- List of files to be compiled
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
+
+        **OUTPUT**
+
+        *none* --
+        """
+
+	self.known_symbols.parse_symbols_from_files(self, file_list, 
+	    add_sr_entries = add_sr_entries)

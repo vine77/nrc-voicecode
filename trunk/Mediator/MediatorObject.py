@@ -75,7 +75,8 @@ def disconnect_from_sr(disconnect, save_speech_files):
         if disconnect: sr_interface.disconnect()
             
         
-
+def do_nothing(*positional, **keywords):
+    pass
 
 class MediatorObject(Object.Object):
     """Main object for the mediator.
@@ -176,6 +177,7 @@ class MediatorObject(Object.Object):
 		self.code_select_grammar.activate()                
                         
 	config_dict = {}
+	config_dict['add_module'] = do_nothing
 	config_dict['add_csc'] = self.add_csc
 	config_dict['add_lsa'] = self.add_lsa
 	config_dict['add_abbreviation'] = self.add_abbreviation
