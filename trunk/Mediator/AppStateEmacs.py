@@ -125,7 +125,10 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         
         .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
 
-        if self.multiple_windows() and self.use_ignored_key:
+# don't use this method if window_id is None: In that case, we are doing 
+# regression testing with a universal instance, and the window with the
+# keyboard focus may not be the Emacs window.
+        if window_id and self.multiple_windows() and self.use_ignored_key:
             self.talk_msgr.send_mess('emacs_prepare_for_ignored_key')
             response = self.talk_msgr.get_mess(expect = \
                 ['emacs_prepare_for_ignored_key_resp'])
