@@ -821,7 +821,9 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 # the best of it
             msg = 'frame received close_window without prior cleanup\n'
             debug.critical_warning(msg)
-            debug.trace_call_stack('WaxFrameBase.close_window')
+# this is diagnostic information associated with the critical warning, 
+# not a trace, so it should always be printed
+            debug.print_call_stack()
             self.cleanup()
         debug.trace('WaxFrameBase.close_window', 'calling self.Close')
         self.Close()
