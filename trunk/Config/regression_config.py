@@ -143,10 +143,15 @@ add_lsa_set(python_string_qualifiers)
 add_csc_set(python_functional)
 py_std_func_calls.create(interpreter)
 
-# C-specific
+
+# C/C++-specific
 
 add_csc_set(c_preprocessor_cmds)
+add_csc_set(c_navigation)
+add_csc_set(c_type_declarations)
 add_lsa_set(c_preprocessor)
+add_lsa_set(c_syntax)
+add_lsa_set(c_reserved_words)
 
 # Emacs specific
 
