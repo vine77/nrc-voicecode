@@ -327,9 +327,8 @@ class SourceBuff(Object):
 
         if (astring != ''):
 	    lineno = startnum
-#  this would make all lines off by 1
-            if (astring[0] == '\n'):
-                lineno = startnum + 1
+#            if (astring[0] == '\n'):
+#                lineno = startnum + 1
 #  this would make all lines off by 1
                 
             for aline in lines:
@@ -391,9 +390,6 @@ class SourceBuff(Object):
 # cursor can be after last character in the buffer
         elif position > length and length > 0:
             position = length  
-# put back bugs
-#        elif position > length - 1 and length > 0:
-#            position = length -1 
         return position
         
     def move_relative(self, rel_movement):
