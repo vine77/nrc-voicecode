@@ -11,7 +11,7 @@ import glob, re, sys
 def re_tex_markup(name):
     """Returns a regexp that matches a particular tex markup."""
 
-    regexp = '\\\\begin\\{%s(ni){0,1}\\}(\\{([^\\}]*)\\}){1,2}' % name        
+    regexp = '\\\\begin\\{%s(ni){0,1}\\}(\\{([^\\}]*)\\})(\\{([^\\}]*)\\})*' % name        
     return regexp
 
 
@@ -23,13 +23,15 @@ def find_symbols(markup, content, symbol_list):
 
     regexp = re_tex_markup(markup)
     match_list = re.findall(regexp, content)
-    print '-- find_symbols: regexp=\'%s\', match_list=%s' % (regexp, match_list)
+    print '-- find_symbols: regexp=\'%s\'' % regexp
+    print '-- find_symbols: match_list=%s' % match_list
     for a_match in match_list:
-          print '-- find_symbols: a_match = %s' % a_match
-#          symbol_string = a_match.group(3) + ', ' + a_match.group(4)
-#          symbols = string.split(symbol_string, '[,\s]+')
-#          for a_symbol in symbols:
-#              symbol_list[a_symbol] = 1
+          print '-- find_symbols: a_match = %s' % repr(a_match)
+          symbol_string = a_match[2] + ', ' + a_match[4]
+          symbols = re.split('[^a-zA-Z_]+', symbol_string)
+          print '-- find_symbols: symbol_string=\'%s\', symbols=%s' % (symbol_string, symbols)
+          for a_symbol in symbols:
+              symbol_list[a_symbol] = 1
 
 symbol_list = {}
 file_list = glob.glob(sys.argv[1])

@@ -2,97 +2,113 @@
 
 import re
 import SymDict
+from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
 
-def py_empty_dictionary(app, cont):
-    """Types code for an empty Python dictionary (e.g. {}^)"""
-    app.insert_indent('{}', '')
+py_empty_dictionary = ActionInsert(code_bef='{}', code_after='',
+                                   docstring="""Types code for an empty Python dictionary (e.g. {}^)""")
 
-def py_simple_for(app, cont):
-    """Insert template code for a simple Python for loop"""
-    app.insert_indent('for ', ':\n')
+py_simple_for = ActionInsert(code_bef='for ', code_after=':\n',
+                             docstring="""Insert template code for a simple Python for loop""")
 
-def py_goto_body(app, cont):
-    """Move cursor to the body of a Python compound statement"""
-    app.search_for(':\s*\n[ \t]*\n*')
+py_goto_body = \
+    ActionSearch(regexp=':\s*\n[ \t]*\n*',
+                 docstring="""Move cursor to the body of a Python compound statement""")
 
-def py_if(app, cont):
-    """Types template code for an if statement"""
-    app.insert_indent('if ', ':\n')
+py_if = \
+    ActionInsert(code_bef='if ', code_after=':\n',
+                 docstring="""Types template code for an if statement""")
 
-def py_else_if(app, cont):
-    """Types template code for an else if statement"""
-    app.insert_indent('elif ', ':\n')
+py_else_if = \
+    ActionInsert(code_bef='elif ', code_after=':\n',
+                 docstring="""Types template code for an else if statement""")
 
-def py_else(app, cont):
-    """Types template code for an else clause."""
-    app.insert_indent('else:\n', '')
+py_else = \
+    ActionInsert(code_bef='else:\n', code_after='',
+                 docstring="""Types template code for an else clause.""")
 
-def py_logical_and(app, cont):
-    """Types a logical and with spaces"""
-    app.insert_indent(' and ', '')
+py_logical_and = \
+    ActionInsert(code_bef=' and ', code_after='',
+                 docstring="""Types a logical and with spaces""")
 
-def py_logical_equal(app, cont):
-    """Types a logical equality operator with spaces"""
-    app.insert_indent(' == ', '')
+py_logical_equal = \
+    ActionInsert(code_bef=' == ', code_after='',
+                 docstring="""Types a logical equality operator with spaces""")
 
-def py_logical_not_equal(app, cont):
-    """Types a logical inequality operator with spaces"""
-    app.insert_indent(' != ', '')
+py_logical_not_equal = \
+    ActionInsert(code_bef=' != ', code_after='',
+                 docstring="""Types a logical inequality operator with spaces""")
     
-def py_assignment(app, cont):
-    """Types an assignment operator with spaces"""
-    app.insert_indent(' = ', '')
+py_assignment = \
+    ActionInsert(code_bef=' = ', code_after='',
+                 docstring="""Types an assignment operator with spaces""")
 
-def py_new_statement(app, cont):
-    """Inserts a new line below current one"""
-    app.search_for('(\n|$)')
-    app.insert_indent('\n', '')
+py_new_statement = \
+    ActionSearchInsert(regexp='(\n|$)', code_bef='\n', code_after='',
+                       docstring = """Inserts a new line below current one""")
 
-def py_class_definition(app, cont):
-    """Inserts template code for a Python class"""
-    app.insert_indent('class ', ':\n')
+py_class_definition = \
+    ActionInsert(code_bef='class ', code_after=':\n',
+                 docstring="""Inserts template code for a Python class""")
 
-def py_class_body(app, cont):
-    """Moves cursor to the body of a class"""
-    app.search_for(':\\s*')
+py_class_body = \
+    ActionSearch(regexp=':\\s*',
+                 docstring="""Moves cursor to the body of a class""")
 
-def py_method_declaration(app, cont):
-    """Types template code for a method"""
-    app.insert_indent('def ', '(self):\n')
+py_method_declaration = \
+    ActionInsert(code_bef='def ', code_after='(self):\n',
+                 docstring="""Types template code for a method""")
 
-def py_function_add_argument(app, cont):
-    """Positions cursor for adding an argument to a Python function declaration or call"""
-    found = app.search_for('\\)\s*:{0,1}', where=-1)
-    if found:
-        #
-        # See if argument list was empty
-        #        
-        arg_list_empty = 1
-        pos = app.curr_buffer.cur_pos - 1
+class ActionPyAddArgument(Action):
+    """Positions the cursor to add arguments to a Python function call or
+    definition"""
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ActionPyAddArgument, \
+                            {}, \
+                            args_super, \
+                            {})
+
+    def execute(self, app, cont):
+        """See [Action.execute].
         
-        #
-        # Find first preceding non-space character
-        #
-        while pos >= 0:
-            if not re.match('\s', app.curr_buffer.content[pos]):
-                #
-                # The first preceding non-space character is (
-                #    => argument list is empty
-                #
-                arg_list_empty = app.curr_buffer.content[pos] == '('
-                break
-            pos = pos - 1
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        
 
-        #
-        # Insert comma if this is not the first argument in the list
-        #
-        if not arg_list_empty:
-            app.insert_indent(', ', '')
+        found = app.search_for('\\)\s*:{0,1}', where=-1)
+        if found:
+            #
+            # See if argument list was empty
+            #        
+            arg_list_empty = 1
+            pos = app.curr_buffer.cur_pos - 1
+            
+            #
+            # Find first preceding non-space character
+            #
+            while pos >= 0:
+                if not re.match('\s', app.curr_buffer.content[pos]):
+                    #
+                    # The first preceding non-space character is (
+                    #    => argument list is empty
+                    #
+                    arg_list_empty = app.curr_buffer.content[pos] == '('
+                    break
+                pos = pos - 1
 
-def py_function_body(app, cont):
-    """Moves cursor to the body of a Python method or function"""
-    app.search_for(':\s*')
+            #
+            # Insert comma if this is not the first argument in the list
+            #
+            if not arg_list_empty:
+                app.insert_indent(', ', '')
 
-def py_continue_statement(app, cont):
-    """Continues a Python statement on the next line (i.e. inserts \\\\n"""
-    app.insert_indent('\\\n', '')
+py_function_add_argument = \
+    ActionPyAddArgument()
+
+py_function_body = \
+    ActionSearch(regexp=':\s*',
+                 docstring="""Moves cursor to the body of a Python method or function""")
+
+py_continue_statement = \
+    ActionInsert(code_bef='\\\n', code_after='',
+                 docstring="""Continues a Python statement on the next line (i.e. inserts \\\\n""")
+

@@ -11,6 +11,8 @@ from Object import Object
 import EdSim, SymDict
 import sr_interface
 
+disable_dlg_select_symbol_matches = None
+
 class CmdInterp(Object):
     """Interprets Context Sensitive Commands spoken into a given application.
     
@@ -388,33 +390,37 @@ class CmdInterp(Object):
         *none* -- 
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+        
+        global disable_dlg_select_symbol_matches
 
 #        print '-- CmdInterp.dlg_select_symbol_match: called'
         untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
 
-        good_answer = 0
-        while not good_answer:
-            print 'Associate \'%s\' with symbol (Enter selection):\n' % untranslated_text
-            print '  \'0\': no association'
-            ii = 1
-            for a_match in symbol_matches:
-                sys.stdout.write('  \'%s\': %s' % (ii, a_match.native_symbol))
-                if a_match.is_new:
-                    sys.stdout.write(' (*new*)')
-                sys.stdout.write('\n')
-                ii = ii + 1
-            sys.stdout.write('\n> ')
-            answer = sys.stdin.readline()
-            answer_match = re.match('\s*([\d])+\s*', answer)
-#            print '-- CmdInterp.dlg_select_symbol_match: answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups())
-            if answer_match:
-                choice_index = int(answer_match.group(1)) - 1
-                if choice_index < len(symbol_matches) and choice_index >= -1:
-
-                    good_answer = 1
-            if not good_answer:
-                print 'Invalid answer \'%s\'' % answer
-
+        if disable_dlg_select_symbol_matches:
+            choice_index = 0
+        else:
+            good_answer = 0
+            while not good_answer:
+                print 'Associate \'%s\' with symbol (Enter selection):\n' % untranslated_text
+                print '  \'0\': no association'
+                ii = 1
+                for a_match in symbol_matches:
+                    sys.stdout.write('  \'%s\': %s' % (ii, a_match.native_symbol))
+                    if a_match.is_new:
+                        sys.stdout.write(' (*new*)')
+                    sys.stdout.write('\n')
+                    ii = ii + 1
+                sys.stdout.write('\n> ')
+                answer = sys.stdin.readline()
+                answer_match = re.match('\s*([\d])+\s*', answer)
+#                print '-- CmdInterp.dlg_select_symbol_match: answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups())
+                if answer_match:
+                    choice_index = int(answer_match.group(1)) - 1
+                    if choice_index < len(symbol_matches) and choice_index >= -1:
+                        good_answer = 1
+                if not good_answer:
+                    print 'Invalid answer \'%s\'' % answer
+                    
         #
         # Accept the match
         #
@@ -657,10 +663,14 @@ class CmdInterp(Object):
         #
         for an_active_LSA in active_LSAs:
             spoken, written = sr_interface.spoken_written_form(an_active_LSA)
+
+#            print '-- CmdInterp.is_spoken_LSA: spoken=\'%s\', spoken_form=\'%s\'' % (spoken, spoken_form)
             if spoken == spoken_form:
                 written_LSA = written
                 break
-            
+
+#        print '-- CmdInterp.is_spoken_LSA: written_LSA=%s' % written_LSA
+        
         return written_LSA
         
     def is_spoken_symbol(self, spoken_form):

@@ -3,6 +3,7 @@
 import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 
+small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'    
 
 ##############################################################################
 # Testing SymDict
@@ -473,11 +474,15 @@ auto_test.add_test('persistence', test_persistence, desc='testing persistence be
 ##############################################################################
 
 def test_redundant_translation():
-    mediator.init_simulator()
+    global small_buff_c
     
+    mediator.init_simulator()    
     test_command("""open_file('blah.c')""")
+    test_command("""compile_symbols(['""" + small_buff_c + """'])""")
     test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
     test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
+    test_say(['move_horiz\\move horizontally'], '0\n0\n')
+    test_say(['move', 'horizontally'], '0\n0\n')                 
 
 auto_test.add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
 

@@ -1,4 +1,10 @@
 
+D:\VoiceCode\VCode.testing\Admin>rem  
+
+D:\VoiceCode\VCode.testing\Admin>rem Shortcut for invoking VoiceCode regression test 
+
+D:\VoiceCode\VCode.testing\Admin>rem
+
 D:\VoiceCode\VCode.testing\Admin>cd D:\VoiceCode\VCode.testing\Admin 
 
 D:\VoiceCode\VCode.testing\Admin>python test.py all 
@@ -244,7 +250,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 85dfe0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 85bd40>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -956,7 +962,7 @@ _cached_symbols_as_one_string is:
 
 
 >>> Starting mediator with persistence
-Error reading <SymDict.SymDict instance at 86fcf0> from file 'D:\VoiceCode\VCode.testing\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 892af0> from file 'D:\VoiceCode\VCode.testing\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.testing\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file 'D:\VoiceCode\VCode.testing\Config\py_std_sym.py'
 
@@ -1387,7 +1393,7 @@ Associate 'R. E.' with symbol (Enter selection):
 > 
 
 *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    <CURSOR>
 *** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'global', 'new', 'statement']
@@ -1415,7 +1421,7 @@ Associate 'V. C. global' with symbol (Enter selection):
   '6': VCGLOBAL (*new*)
 
 > *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    import auto_test, natlink, vc_global
   3:    <CURSOR>
 *** End of source buffer ***
@@ -1441,7 +1447,7 @@ Associate 'all' with symbol (Enter selection):
   '3': ALL (*new*)
 
 > *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    import auto_test, natlink, vc_global
   3:    from actions_C_Cpp import all
   4:    <CURSOR>
@@ -1565,20 +1571,21 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 > 
 
-Associate 'symbol Ed simulator' with symbol (Enter selection):
+Associate 'Ed simulator' with symbol (Enter selection):
 
   '0': no association
-  '1': symbol_ed_simulator (*new*)
-  '2': SymbolEdSimulator (*new*)
-  '3': symbolEdSimulator (*new*)
-  '4': SYMBOL_ED_SIMULATOR (*new*)
-  '5': symboledsimulator (*new*)
-  '6': SYMBOLEDSIMULATOR (*new*)
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
 
 > *** Start of source buffer ***
   5:    from cont_gen import ContC, ContPy
   6:    from CSCmd import CSCmd
-  7:    from EdSim import symbol_ed_simulator
+  7:    from EdSim import EdSim
   8:    <CURSOR>
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
@@ -1586,7 +1593,7 @@ Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'state
 
 *** Start of source buffer ***
   6:    from CSCmd import CSCmd
-  7:    from EdSim import symbol_ed_simulator
+  7:    from EdSim import EdSim
   8:    from Object import Object
   9:    <CURSOR>
 *** End of source buffer ***
@@ -1616,7 +1623,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
   '7': SYMBOLDICTIONARY (*new*)
 
 > *** Start of source buffer ***
-  7:    from EdSim import symbol_ed_simulator
+  7:    from EdSim import EdSim
   8:    from Object import Object
   9:    import EdSim, SymDict
  10:    <CURSOR>
@@ -2036,7 +2043,7 @@ Associate 'R. E.' with symbol (Enter selection):
 > 
 
 *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    <CURSOR>
 *** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'global', 'new', 'statement']
@@ -2073,7 +2080,7 @@ Associate 'V. C. global' with symbol (Enter selection):
   '6': VCGLOBAL (*new*)
 
 > *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    import auto_test, natural_link, vc_global
   3:    <CURSOR>
 *** End of source buffer ***
@@ -2098,7 +2105,7 @@ Associate 'all' with symbol (Enter selection):
   '3': ALL (*new*)
 
 > *** Start of source buffer ***
-  1: import os, re, string, sys
+  1:    import os, re, string, sys
   2:    import auto_test, natural_link, vc_global
   3:    from actions_ccpp import all
   4:    <CURSOR>
@@ -2193,20 +2200,10 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 > 
 
-Associate 'symbol ed_simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': symbol_ed_simulator (*new*)
-  '2': SymbolEdSimulator (*new*)
-  '3': symbolEdSimulator (*new*)
-  '4': SYMBOL_ED_SIMULATOR (*new*)
-  '5': symboledsimulator (*new*)
-  '6': SYMBOLEDSIMULATOR (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   5:    from context_generic import context_c, context_python
   6:    from context_sensitive_command import context_sensitive_command
-  7:    from ed_simulator import symbol_ed_simulator
+  7:    from ed_simulator import ed_simulator
   8:    <CURSOR>
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
@@ -2221,7 +2218,7 @@ Associate 'object' with symbol (Enter selection):
 
 *** Start of source buffer ***
   6:    from context_sensitive_command import context_sensitive_command
-  7:    from ed_simulator import symbol_ed_simulator
+  7:    from ed_simulator import ed_simulator
   8:    from object import object
   9:    <CURSOR>
 *** End of source buffer ***
@@ -2239,7 +2236,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
   '6': SYMBOLDICTIONARY (*new*)
 
 > *** Start of source buffer ***
-  7:    from ed_simulator import symbol_ed_simulator
+  7:    from ed_simulator import ed_simulator
   8:    from object import object
   9:    import ed_simulator, symbol_dictionary
  10:    <CURSOR>
@@ -2820,6 +2817,31 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.testing\Data\TestData\small_buff.c'])
+
+Compiling symbols for file 'D:\VoiceCode\VCode.testing\Data\TestData\small_buff.c'
+>>> Known symbols are: 
+API_function: ['api function']
+f_name: ['f name']
+f_name2: ['f name 2']
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+os: ['os', 'operating system', 'o. s.']
+string: ['string']
+sys: ['sys', 'system']
+this_sym_has_an_other_abbrev: ['this sym has an other abbrev']
+this_sym_is_unres: ['this sym is unres']
+this_sym_is_unres_too: ['this sym is unres too']
+void: ['void']
+x: ['x']
+y: ['y']
+_cached_symbols_as_one_string is:
+    os  sys  string  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+
+
 >>> Testing console command: say(['index', ' != \\not equal to', '0'], user_input='0
 0
 ')
@@ -2847,4 +2869,20 @@ Associate 'index' with symbol (Enter selection):
 
 > *** Start of source buffer ***
   1:    index != 0index != 0<CURSOR>
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['move_horiz\\move horizontally'], user_input='0
+0
+')
+*** Start of source buffer ***
+  1:    index != 0index != 0move_horiz<CURSOR>
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['move', 'horizontally'], user_input='0
+0
+')
+*** Start of source buffer ***
+  1:    index != 0index != 0move_horizmove_horiz<CURSOR>
 *** End of source buffer ***

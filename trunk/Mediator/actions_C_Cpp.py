@@ -1,33 +1,41 @@
 """Action functions for C language """
 
-def c_simple_for(app, cont):
-    """Insert template code for a simple C for loop"""
-    app.insert_indent('for (', '=0;  <= ; ++)\n{\n\n}\n')
+from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
 
-def c_goto_body(app, cont):
-    """Move cursor to the body of a C compound statement"""
-    app.search_for('\)\s*\{[ \t]*\n*')
+c_simple_for = \
+    ActionInsert(code_bef='for (',
+                 code_after='=0;  <= ; ++)\n{\n\n}\n',
+                 docstring = """Insert template code for a simple C for loop""")
 
-def cpp_class_definition(app, cont):
-    """Insert template code for a C++ class"""
-    app.insert_indent('class ', '{\n\npublic:\n\nprivate:\n}')
+c_goto_body = \
+    ActionSearch(regexp='\)\s*\{[ \t]*\n*',
+                 docstring="""Move cursor to the body of a C compound statement""")
+
+cpp_class_definition = \
+    ActionInsert(code_bef='class ',
+                 code_after='{\n\npublic:\n\nprivate:\n}',
+                 docstring = """Insert template code for a C++ class""")
     
-def cpp_subclass(app, cont):
-    """Inserts ': ' for subclass definition"""
-    app.insert_indent(': ', '')
+cpp_subclass = \
+    ActionInsert(code_bef=': ', code_after='',
+                 docstring = """Inserts ': ' for subclass definition""")
 
-def cpp_class_body(app, cont):
-    """Moves cursor to the body of a class"""
-    app.search_for('\\{\\s*')
+cpp_class_body = \
+    ActionSearch(regexp='\\{\\s*',
+                 docstring="""Moves cursor to the body of a class""")
 
-def c_function_declaration(app, cont):
-    """Types template code for a C function or C++ method"""
-    app.insert_indent('\n*** Action c_function_declaration not implemented yet ***\n', '')
+c_function_declaration = \
+    ActionInsert(code_bef='\n*** Action c_function_declaration not implemented yet ***\n',
+                 code_after='',
+                 docstring = """Types template code for a C function or C++ method""")
 
-def c_function_add_argument(app, cont):
-    """Positions cursor for adding an argument to a C/C++ function declaration or call"""
-    app.insert_indent('\n*** Action c_function_add_argument not implemented yet ***\n', '')    
+c_function_add_argument = \
+    ActionInsert(code_bef='\n*** Action c_function_add_argument not implemented yet ***\n',
+              code_after='',
+              docstring="""Positions cursor for adding an argument to a C/C++ function declaration or call""")
 
-def c_function_body(app, cont):
-    """Moves cursor to the body of a C/C++ method or function"""
-    app.insert_indent('\n*** Action c_function_body not implemented yet ***\n', '')
+c_function_body = \
+    ActionInsert(code_bef='\n*** Action c_function_body not implemented yet ***\n',
+                 code_after='',
+                 docstring = """Moves cursor to the body of a C/C++ method or function""")
+

@@ -119,10 +119,7 @@ add_lsa(None, ['colon'], ': ')
 add_lsa(None, ['plus'], ' + ')
 add_lsa(None, ['plus sign'], '+')
 add_lsa(None, ['open bracket'], '[')
-
-# Note: this one must be {Enter}, otherwise the anonymous action that
-# inserts this text won't compile.
-add_lsa(None, ['newline', 'new line'], '{Enter}')
+add_lsa(None, ['newline', 'new line'], '\n')
 add_lsa(None, ['comma'], ', ')
 add_lsa(None, ['dot'], '.')
 
@@ -212,34 +209,34 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['then', 'if body'], meanings=[[ContPy(), py_goto_body]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;'], meanings=[[ContAny(), lambda app, cont: app.search_for(';\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;'], meanings=[[ContAny(), ActionSearch(';\s{0,1}')]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['before ;', 'before semi', 'before semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go before semi', 'go before semicolon', 'go before ;'], meanings=[[ContAny(), lambda app, cont: app.search_for('\s{0,1};', direction=-1)]])
+acmd = CSCmd(spoken_forms=['before ;', 'before semi', 'before semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go before semi', 'go before semicolon', 'go before ;'], meanings=[[ContAny(), ActionSearch('\s{0,1};', direction=-1)]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['after ,', 'after comma', 'goto comma', 'goto ,', 'go comma', 'go ,', 'go after comma', 'go after ,'], meanings=[[ContAny(), lambda app, cont: app.search_for(',\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['after ,', 'after comma', 'goto comma', 'goto ,', 'go comma', 'go ,', 'go after comma', 'go after ,'], meanings=[[ContAny(), ActionSearch(',\s{0,1}')]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['before ,', 'before comma', 'goto comma', 'goto ,', 'go comma', 'go ,', 'go before comma', 'go before ,'], meanings=[[ContAny(), lambda app, cont: app.search_for('\s{0,1},', direction=-1)]])
+acmd = CSCmd(spoken_forms=['before ,', 'before comma', 'goto comma', 'goto ,', 'go comma', 'go ,', 'go before comma', 'go before ,'], meanings=[[ContAny(), ActionSearch('\s{0,1},', direction=-1)]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['after =', 'after equal', 'goto equal', 'goto =', 'go equal', 'go =', 'go after equal', 'go after ='], meanings=[[ContAny(), lambda app, cont: app.search_for('=\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['after =', 'after equal', 'goto equal', 'goto =', 'go equal', 'go =', 'go after equal', 'go after ='], meanings=[[ContAny(), ActionSearch('=\s{0,1}')]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['before =', 'before equal', 'goto equal', 'goto =', 'go equal', 'go =', 'go before equal', 'go before ='], meanings=[[ContAny(), lambda app, cont: app.search_for('\s{0,1}=', direction=-1)]])
+acmd = CSCmd(spoken_forms=['before =', 'before equal', 'goto equal', 'goto =', 'go equal', 'go =', 'go before equal', 'go before ='], meanings=[[ContAny(), ActionSearch('\s{0,1}=', direction=-1)]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['after paren', 'after paren', 'goto paren', 'goto paren', 'go paren', 'go paren', 'go after paren', 'go after paren'], meanings=[[ContAny(), lambda app, cont: app.search_for('[\(\)]\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['after paren', 'after paren', 'goto paren', 'goto paren', 'go paren', 'go paren', 'go after paren', 'go after paren'], meanings=[[ContAny(), ActionSearch('[\(\)]\s{0,1}')]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['before paren', 'before paren', 'goto paren', 'goto paren', 'go paren', 'go paren', 'go before paren', 'go before paren'], meanings=[[ContAny(), lambda app, cont: app.search_for('\s{0,1}[\(\)]', direction=-1)]])
+acmd = CSCmd(spoken_forms=['before paren', 'before paren', 'goto paren', 'goto paren', 'go paren', 'go paren', 'go before paren', 'go before paren'], meanings=[[ContAny(), ActionSearch('\s{0,1}[\(\)]', direction=-1)]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['jump out'], meanings=[[ContAny(), lambda app, cont: app.search_for('[\]\)\}\'\"]\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['jump out'], meanings=[[ContAny(), ActionSearch('[\]\)\}\'\"]\s{0,1}')]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['jump out of paren', 'out of paren'], meanings=[[ContAny(), lambda app, cont: app.search_for('\)\s{0,1}')]])
+acmd = CSCmd(spoken_forms=['jump out of paren', 'out of paren'], meanings=[[ContAny(), ActionSearch('\)\s{0,1}')]])
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
@@ -285,7 +282,7 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['with superclasses'], meanings=[[ContPy(), gen_parens_pair]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['in list'], meanings=[[ContPy(), lambda app, cont: app.insert_indent(' in ', '')]])
+acmd = CSCmd(spoken_forms=['in list'], meanings=[[ContPy(), ActionInsert(' in ', '')]])
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['new statement'], meanings=[[ContPy(), py_new_statement]])
