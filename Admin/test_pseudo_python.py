@@ -197,7 +197,14 @@ def test_editing(testing):
    edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
    testing.init_simulator_regression()
    commands = testing.namespace()['commands']
+   symbols = testing.mediator().interp.known_symbols
+   export_file = os.path.join(vc_globals.test_data,
+   'abbrevs.test_editing.init')
+   symbols.export_abbreviations(export_file)
    commands.compile_symbols([edit_file])   
+   export_file = os.path.join(vc_globals.test_data,
+       'abbrevs.test_editing.postcompile')
+   symbols.export_abbreviations(export_file)
    
    do_edit_test(testing, edit_file, insert_import_statement_test, 'insert an import statement in middle of a file')
    do_edit_test(testing, edit_file, create_new_class_test, 'create new class')
@@ -210,6 +217,9 @@ def test_editing(testing):
    do_edit_test(testing, edit_file, nested_if_then_else_test, 'nested_if_then_else_test')   
    do_edit_test(testing, edit_file, add_else_clause_test, 'add_else_clause_test')
    do_edit_test(testing, edit_file, add_except_clause_test, 'add_except_clause_test')
+   export_file = os.path.join(vc_globals.test_data,
+       'abbrevs.test_editing.aftertest')
+   symbols.export_abbreviations(export_file)
    
 def test_python_compilation(testing):
    test_helpers.compilation_test(testing.mediator().interpreter(), os.path.join(vc_globals.test_data, 'used_to_test_python_parsing.py'))   
