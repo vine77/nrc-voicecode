@@ -859,7 +859,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
-    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S" (current-buffer) py-indent-offset tab-width)
+    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S\n" (current-buffer) py-indent-offset tab-width command-string)
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -880,11 +880,13 @@ Changes are put in a changes queue `vr-queued-changes.
  	     (last-command-event (elt event 0))
  	     (last-command-keys event)
  	     )
+	(vr-log "--** vcode-execute-command-string: command=%S\n" command)
 	(run-hooks 'pre-command-hook)
 	(command-execute command nil )
 	(run-hooks 'post-command-hook)
       )
     )
+    (vr-log "--** vcode-execute-command-string: upon exit, (point)=%S, (mark)=%S, buffer is\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
 )
 
@@ -2537,35 +2539,19 @@ change reports it sends to VCode.
 
 
 (defun vcode-cmd-decr-indent-level (vcode-request)
-  (vr-log "-- vcode-cmd-decr-indent-level: NOT IMPLEMENTED YET!!!\n")
-  (let ((mess-name (elt vcode-request 0)) 
+  (let ((mess-name (elt vcode-request 0))
 	(mess-cont (elt vcode-request 1))
-	(range) (vr-request) 
-	(indent-start) (indent-end) 
-        (reply-cont (make-hash-table :test 'string=)))
+	(range) (levels) (vr-request)
+	(indent-start) (indent-end))
+    (setq range (cl-gethash "range" mess-cont))
+    (setq indent-start (elt range 0))
+    (setq indent-end (elt range 1))
+    (setq levels (cl-gethash "levels" mess-cont))
 
-;;; FORGET ABOUT AUTO INDENT FOR NOW!!
-; 	(setq range (cl-gethash "range" mess-cont))
-; 	(setq indent-start (elt range 0))
-; 	(setq indent-end (elt range 1))
-; 	(setq vr-request (list 1
-; 			       0
-; 			       ""
-; 			       (point)
-; 			       0
-; 			       indent-start
-; 			       (- indent-end indent-start)
-; 			       1
-; 			       ??? est-ce que mess-name est a la bonne
-; 			       ??? position pour vr-request?
-; 			       mess-name))
-
-;;;
-;;; WHEN AUTO INDENTATION IS ACTUALLY IMPLEMENTED, TAKE A LOOK AT CMD-INDENT
-;;; TO FIGURE OUT HOW TO IMPLEMENT THIS
-
+    (vr-log "--** vcode-cmd-decr-indent-level: range=%S, levels=%S\n" range levels)
+    (vcode-unindent-region indent-start indent-end levels) 
     (vr-send-queued-changes)
-  )    
+  )
 )
 
 (defun vcode-insert-with-autoindented-tabs-OBSOLETE (text)
@@ -2619,38 +2605,43 @@ tabs.
 (defun vcode-unindent-region (start end n-levels)
   "Deindents region from START to END by N-LEVELS levels."
   (let (end-line)
-    (message "-- vcode-unindent-region: start=%S, end=%S, n-levels=%S" start end n-levels)
+    (vr-log "--** vcode-unindent-region: start=%S, end=%S, n-levels=%S, (point)=%S, (mark)=%S, buffer content is\n%S\n" start end n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
     (for-lines-in-region-do start end 'vcode-unindent-line (list n-levels))
+    (vr-log "-- vcode-unindent-region: upon exit, (point)=%S, (mark)=%S, buffer contains: \n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
 )
 
 
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
-  (vr-log "--** vcode-unindent-line: n-levels=%S, (point)=%S" n-levels (point))
-
-   ;;;
-   ;;; Move to the first non-blank character on the line, then simulate the
-   ;;; backspace key multiple times.
-   ;;;
-   (beginning-of-line)
-   (while (and (looking-at " ") (< (point) (point-max)))
-     (forward-char-nomark 1)
-     )
-
-   ;;;
-   ;;; Don't backspace if empty line, because that will delete the line 
-   ;;; instead of deindenting.
-   ;;;
-   (if (not (or (looking-at "$") (eq 1 (point))))
-       (progn
-        (vr-log "--** vcode-unindent-line: before deindenting line, (point)=%S" (point))
-;        (apply (backspace-invokes-this-function) (list n-levels))
-        ;;; Execute a command string containing just the backspace key
-	(vcode-execute-command-string "\177")
-        (vr-log "--** vcode-unindent-line: after deindenting line")
+  (let ((counter 0) (start-of-line))
+     (vr-log "--** vcode-unindent-line: upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+      ;;;
+      ;;; Move to the first non-blank character on the line, then simulate the
+      ;;; backspace key multiple times.
+      ;;;
+      (beginning-of-line)
+      (setq start-of-line (point))
+      (while (and (looking-at " ") (< (point) (point-max)))
+        (forward-char-nomark 1)
         )
-     (vr-log "--** vcode-unindent-line: line was blank... leave it alone")
+
+      ;;;
+      ;;; Don't backspace if empty line, because that will delete the line 
+      ;;; instead of deindenting.
+      ;;;
+      (if (not (or (eq start-of-line (point)) (eq 1 (point))))
+          (progn
+           (setq counter 0)
+	   (while (< counter n-levels)
+             ;;; Execute a command string containing just the backspace key
+	     (vcode-execute-command-string "\177")
+             (setq counter (1+ counter))
+           )
+           )
+      )
+
+     (vr-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
    )
 )
 
@@ -2669,17 +2660,19 @@ tabs.
 
 (defun for-lines-in-region-do (start end do-this args)
   (let ((current-line)(end-line))
+    (vr-log "--** for-lines-in-region-do: upon entry, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
     (save-excursion
        (setq end-line (what-line end))
        (message "-- end-line=%S\n" end-line)
        (goto-char start)
        (setq current-line (count-lines 1 (point)))
-       (while (<= (what-line (point)) end-line)
+       (while (< (what-line (point)) end-line)
+         (next-line 1)
          (message "-- processing line: current-line=%S, (point)=%S" (what-line (point)) (point))
          (apply do-this args)
-         (next-line 1)
        )
     )
+    (vr-log "--** for-lines-in-region-do: upon exit, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
 )
 
@@ -2731,16 +2724,6 @@ tabs.
     )
 )
 
-
-(defun vcode-cmd-unindent (vcode-request)
-  (vr-log "-- vcode-cmd-unindent: invoked\n")
-  (let ((mess-cont (nth 1 vcode-request))
-	(pos) (buff-name) (final-pos))
-    (setq pos (cl-gethash "pos" mess-cont))
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
-
-  (vr-log "WARNING: function vcode-cmd-unindent not implemented!!!\n")
-)
 
 (defun vcode-cmd-delete (vcode-request)
   (vr-log "WARNING: function vcode-cmd-delete not implemented!!!\n")
