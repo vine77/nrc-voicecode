@@ -154,5 +154,33 @@ class MediatorConsole(Object.OwnerObject):
         """
         debug.virtual('MediatorConsole.raise_active_window')
 
+    def already_modal(self):
+        """does the console already have a modal dialog running?
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if a modal dialog is active
+        """
+        debug.virtual('MediatorConsole.already_modal')
+
+    def dismiss_modal(self):
+        """dismisses any modal dialog boxes which the console has
+        running
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if the modal dialog box was sucessfully dismissed
+        (or if there wasn't one to start with)
+        """
+        debug.virtual('MediatorConsole.dismiss_modal')
+
 # defaults for vim - otherwise ignore
 # vim:sw=4

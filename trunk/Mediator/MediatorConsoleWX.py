@@ -24,6 +24,8 @@ import Object, vc_globals
 import MediatorConsole
 import string
 from wxPython.wx import *
+from thread_communication_WX import GenericEventWX
+import threading
 import os
 
 
@@ -41,6 +43,18 @@ import pywintypes
 
 
 """
+
+def EVT_MINE(evt_handler, evt_type, func):
+    evt_handler.Connect(-1, -1, evt_type, func)
+
+def NO_EVT_MINE(evt_handler, evt_type, func):
+    evt_handler.Disconnect(-1, -1, evt_type, func)
+
+# create a unique event types
+wxEVT_DISMISS_MODAL = wxNewEventType()
+
+wxID_DISMISS_MODAL = wxNewId()
+
 
 class WasForegroundWindowMSW(MediatorConsole.WasForegroundWindow):
     """win32 implementation of WasForegroundWindow interface for 
@@ -72,13 +86,24 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     *wxFrame main_frame* -- the main frame window of the console, which
     will be the parent for most modal dialogs
 
+    *[wxDialog] modal_dialogs* -- stack of modal dialog boxes currently
+    active
+
+    *[threading.Event] dismiss_events* -- stack of threading.Event objects 
+    used to signal the modal dialog boxes to close.  Each dialog box
+    must have an idle event which checks the state of the Event object
+    and closes, returning wxID_DISMISS_MODAL, if the Event's state
+    becomes true.
+
     **CLASS ATTRIBUTES**
     
     *none* 
     """
     def __init__(self, main_frame, **attrs):
         self.deep_construct(MediatorConsoleWX,
-                            {'main_frame': main_frame
+                            {'main_frame': main_frame,
+                             'modal_dialogs': [],
+                             'dismiss_events': []
                             },
                             attrs)
 
@@ -141,6 +166,86 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
                 break
 
 
+    def already_modal(self):
+        """does the console already have a modal dialog running?
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if a modal dialog is active
+        """
+        if self.modal_dialogs:
+            return 1
+        return 0
+
+    def push_modal(self, dialog, event):
+        """push a modal dialog box onto the stack before calling
+        ShowModal
+
+        **INPUTS**
+
+        *wxDialog* -- the dialog
+
+        *threading.Event bye* -- threading.Event object whose state will be
+        set to true if the dialog box should cancel
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.modal_dialogs.append(dialog)
+        self.dismiss_events.append(event)
+
+    def pop_modal(self):
+        """pops  a modal dialog box off the top of the stack
+
+        **INPUTS**
+
+        **OUTPUTS**
+
+        *BOOL* -- true if there was a modal dialog on the stack
+        """
+        if self.already_modal():
+            del self.modal_dialogs[-1]
+            del self.dismiss_events[-1]
+            return 1
+        return 0
+
+    def dismiss_modal(self):
+        """dismisses any modal dialog boxes which the console has
+        running
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if the modal dialog box was sucessfully dismissed
+        (or if there wasn't one to start with)
+        """
+        if not self.already_modal():
+            return 1
+# this doesn't work because of a bug in wxPython (events posted to
+# modal dialog boxes which were started from a custom event handler
+# don't get processed until the modal dialog box closes), so we'll need
+# another solution
+#        dismiss_event = GenericEventWX(wxEVT_DISMISS_MODAL)
+#        wxPostEvent(self.modal_dialogs[-1], dismiss_event)
+        bye = self.dismiss_events[-1]
+        bye.set()
+        print 'setting'
+        wxWakeUpIdle()
+        print 'waking up'
+        return 1
+
+    def on_double(self, event):
+        self.select_choice(event.GetString())
+        self.simulate_OK()
+
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
         """display a correction box for correction a complete, recent
@@ -171,12 +276,15 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         original = utterance.words()
         validator = CorrectionValidatorSpoken(utterance = utterance)
         editor_window = self.store_foreground_window()
+        bye = threading.Event()
         box = CorrectionBoxWX(self, self.main_frame, utterance, validator, 
-            can_reinterpret, self.gram_factory)
+            can_reinterpret, self.gram_factory, bye = bye)
 #        app = wxGetApp()
 #        evt = wxActivateEvent(0, true)
 #        app.ProcessEvent(evt)
+        self.push_modal(box, bye)
         answer = box.ShowModal()
+        self.pop_modal()
         box.cleanup()
         box.Destroy()
 #        print answer, utterance.spoken_forms()
@@ -190,7 +298,63 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             utterance.set_words(original)
             return 0
 
-class CorrectionBoxWX(wxDialog, Object.OwnerObject):
+class ByeByeMixIn(Object.OwnerObject):
+    """mix-in for a dialog box with an idle handler which checks a 
+    threading.Event object to see if it should simulate being dismissed.
+
+    **INSTANCE ATTRIBUTES**
+
+    *threading.Event bye* -- threading.Event object whose state will be
+    set to true if the dialog box should cancel.  The mix-in
+    has an an idle event which checks the state of the Event object
+    and calls on_dismiss if the Event's state
+    becomes true.  The dialog box should then call EndModal with return
+    value wxID_DISMISS_MODAL.
+    """
+    def __init__(self, bye, **args):
+        """
+        **INPUTS**
+
+        *threading.Event bye* -- threading.Event object whose state will be
+        set to true if the dialog box should cancel.  
+        """
+        ID_TIMER = wxNewId()
+        self.deep_construct(ByeByeMixIn,
+                            {
+                             'bye': bye,
+                             'timer': wxTimer(self, ID_TIMER)
+                            }, args)
+        EVT_TIMER(self, ID_TIMER, self.check_dismiss_flag)
+        self.timer.Start(50)
+#        EVT_IDLE(wxGetApp(), self.check_dismiss_flag)
+#        EVT_IDLE(self, self.check_dismiss_flag)
+
+    def remove_other_references(self):
+#        print 'disconnecting event?'
+        self.timer.Stop()
+        self.timer = None
+#        wxGetApp().Disconnect(-1, -1, wxEVT_IDLE)
+#        print self.Disconnect(-1, -1, wxEVT_IDLE)
+
+    def check_dismiss_flag_idle(self, event):
+#        print 'idle'
+        if self.bye.isSet():
+#           print 'set'
+            self.on_dismiss()
+            return
+        event.RequestMore()
+#        print 'not set'
+
+    def check_dismiss_flag(self, event):
+        if self.bye.isSet():
+            self.on_dismiss()
+            return
+
+    def on_dismiss(self):
+        debug.virtual('ByeByeMixIn.on_dismiss')
+
+
+class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
     """dialog box for correcting misrecognized dictation results
 
     **INSTANCE ATTRIBUTES**
@@ -220,7 +384,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         *MediatorConsoleWX console* -- the MediatorConsole object which owns
         the correction box
 
-        *wxFrame parent* -- the parent frame
+        *wxWindow parent* -- the parent wxWindow
 
         *SpokenUtterance utterance* -- the utterance itself
 
@@ -241,6 +405,11 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         *(INT, INT) pos* -- position of the box in pixels
     
         """
+        use_pos = pos
+        if pos is None:
+            use_pos = wxDefaultPosition
+        wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
+            (600, 400))
         self.deep_construct(CorrectionBoxWX,
                             {
                              'console': console,
@@ -249,8 +418,9 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
                              'choose_n_gram': None,
                              'select_n_gram': None,
                              'selection_gram': None
-                            }, args,
-                            exclude_bases = {wxDialog:1})
+                            }, args, 
+                            exclude_bases = {wxDialog: 1}
+                           )
         self.name_parent('console')
         self.add_owned('choose_n_gram')
         self.add_owned('select_n_gram')
@@ -268,11 +438,6 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
                 gram_factory.make_simple_selection(get_visible_cbk = \
                 self.get_text, get_selection_cbk = self.get_selection,
                 select_cbk = self.on_select_text)
-        use_pos = pos
-        if pos is None:
-            use_pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
-            (600, 400))
         if pos is None:
             self.Center()
         s = wxBoxSizer(wxVERTICAL)
@@ -349,6 +514,10 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
+#        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
+
+    def on_dismiss(self):
+        self.EndModal(wxID_DISMISS_MODAL)
 
     def on_playback(self, event):
         ok = self.utterance.playback()
@@ -471,8 +640,9 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         """
         button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK)
         self.ProcessEvent(button_event)
-# DCF: I'm not sure why wxPostEvent doesn't work here -- it does in the
-# my test version.
+# DCF: For some reason, wxPostEvent doesn't work right if the correction
+# box was created from within my custom event handler (though it does if
+# it was created from within an EVT_BUTTON handler)
 #        wxPostEvent(self, button_event)
 
     def on_double(self, event):

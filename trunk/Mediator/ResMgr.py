@@ -1683,6 +1683,9 @@ class ResMgrBasic(ResMgrStd):
         if n > self.stored_utterances():
             return
         number = self.numbers[-n]
+        console = self.console()
+        if console.already_modal():
+            console.dismiss_modal()
         self.correct_evt.notify(self.name, number)
     
     def was_correct_nth(self, n = 1):

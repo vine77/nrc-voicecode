@@ -883,7 +883,7 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
         cap_next = 0
         caps_on = 0
         for word in words:
-            print "word is [%s]" % word
+#            print "word is [%s]" % word
             if re.match(r'\\', word):
 #                print 'starts with slash'
                 if re.match(r'\\space-bar$', word, re.IGNORECASE):
@@ -1094,11 +1094,11 @@ class MilitarySpellingNL(MilitarySpelling, GrammarBase):
 
     def gotResults_mil_spell(self, words, fullResults):
         s = ""
-        print "milword" 
+#        print "milword" 
         cap_next = 0
         caps_on = 0
         for word in words:
-            print "milword is [%s]" % word
+#            print "milword is [%s]" % word
 #            print "word is [%s]" % word
             if re.match(r'\\', word):
 #                print 'starts with slash'
@@ -1142,7 +1142,7 @@ class MilitarySpellingNL(MilitarySpelling, GrammarBase):
                 cap_next = 0
                 continue
 
-        print 'milstring "%s"' % s
+#        print 'milstring "%s"' % s
         self.spelling_cbk(s)
 
     def activate(self, window):
@@ -1158,7 +1158,7 @@ class MilitarySpellingNL(MilitarySpelling, GrammarBase):
         *none*
         """
         if not self.active:
-            print 'activated mil'
+#            print 'activated mil'
             self.active = 1
             self.activateAll(window = window)
     
