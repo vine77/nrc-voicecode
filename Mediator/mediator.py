@@ -25,7 +25,14 @@ openfile(STR fname)
    Opens file with path name *fname* in the editor simulator
 
 say(STR utterance)
-   Interprets string *utterance* as though it had been said by a user
+   Interprets string *utterance* as though it had been said by a user.
+
+   When called in this way, the system will simulate a recognition
+   event using NatLink's <EM>recognitionMimic</EM> function.
+
+say(STR utterance, bypass_NatLink=1)
+   Same as above, except that the interpretation process will bypass
+   NatLink's <EM>recognitionMimic</EM> function.
 
 goto(INT pos)
    Moves cursor to position *pos*
@@ -46,7 +53,10 @@ listen()
    window.
 
 quit()
-   Quit the simulator. 
+   Quit the simulator.
+
+   Note that if you don't quit using this command
+   (e.g. <EM>Ctrl-C</EM>), your DOS window will hang up.   
 """
 
 import natlink
