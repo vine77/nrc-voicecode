@@ -122,7 +122,7 @@ def run():
     # This file contains the native code that we will dictate
     #
     native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
-    native_py_file = re.sub('\\\\', '\\\\\\\\', native_py_file)
+#    native_py_file = re.sub('\\\\', '\\\\\\\\', native_py_file)
 
     #
     # Dictate some pseudo python where all symbols are already known

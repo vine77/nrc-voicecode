@@ -27,9 +27,11 @@ from Object import Object
 import SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
+import util
 
-import copy, cPickle, exceptions, os, re, string
+import copy, cPickle, exceptions, os, re, string, sys
 
+import traceback
 
 language_definitions={}
 
@@ -660,7 +662,7 @@ class SymDict(PickledObject.PickledObject):
 
 #        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
         for a_file in file_list:
-            print 'Compiling symbols for file \'%s\'' % a_file
+            print 'Compiling symbols for file \'%s\'' % util.within_VCode(a_file)
             self.parse_symbols(a_file, add_sr_entries=add_sr_entries)
             
         #
