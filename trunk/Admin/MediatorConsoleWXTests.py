@@ -157,6 +157,31 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.assert_displayed_form_is('new_symbol_1_1')
         self.assert_displayed_alternate_forms_are(self.sym1_1.alternate_forms)
         
-    def test_on_select(self):
+    def assert_symbol_was_not_reformatted(self):
+        self.assert_(not self.dlg.symbol.reformatted_to, "Symbol reformatted prematurely, or its reformatting was not undone as it should have")
+
+    def assert_symbol_was_reformatted_to(self, expected_form):
+        self.assert_equals("Symbol reformatted to the wrong form.",
+                           expected_form, self.dlg.symbol.reformatted_to)
+        
+    def test_on_select_form(self):
         self.dlg.do_select_nth_form(2)
         self.assert_displayed_form_is(self.sym1_1.alternate_forms[2], 'Selecting new format did not change the displayed form.')
+        self.assert_symbol_was_not_reformatted()
+
+    def test_on_choose_form(self):
+        self.dlg.do_choose_nth_form(2)
+        self.assert_displayed_form_is(self.sym1_1.alternate_forms[2], 'Selecting new format did not change the displayed form.')
+        self.assert_symbol_was_reformatted_to(self.sym1_1.alternate_forms[2])
+        
+    def test_cancel(self):
+        self.dlg.do_choose_nth_form(2)
+        self.dlg.do_cancel()
+        self.assert_symbol_was_not_reformatted()
+        
+    def test_type_form(self):
+        typed_form = '__new_symbol_1_1'
+        self.dlg.do_type_form(typed_form)
+        self.dlg.do_ok()
+        self.assert_symbol_was_reformatted_to(typed_form)
+        
