@@ -1,88 +1,116 @@
 Todo list for VoiceCode
 =======================
 
+To do before 1st release
+========================
 
-addWord
--------
+Documentation
+-------------
 
-Joel Gould claims that Select XYZ works as long as the written form of
-XYZ doesn't have leading/trailing spaces. So addWord doesn't have to
-add redundant vocabulary entry for words whose written form only
-contains internal spaces. TEST THE CLAIM BEFORE TRYING TO IMPLEMENT
-THIS.
+Installation, user, developper
 
-getWordInfo
------------
 
-In sr_interface.getWordInfo, if no flag is specified, should use
-flag = 1 (i.e. look in backup dictionary).
+Emacs mediator link
+-------------------
 
-Select Pseudo-code
+Must be implemented
+
+
+Mediator based CachePad
+-----------------------
+
+Jonathan is working on it, but not absolutely necessary for 1st release.
+
+
+Error correction
+----------------
+
+Can't do without it. David Fox is working on it.
+
+
+User/Topic management
+---------------------
+
+Mediator should set NatSpeak so that it uses a special topic (or user
+if the version of NatSpeak doesn't have topics), to avoid polluting
+the user's regular user/topic with automatically generated entries.
+
+Symbol translation
 ------------------
 
 -- Alain
 
-  Suppose you want to select '!='. At the moment, you can't say
-  "Select not equal", because there isn't a word with form '!=\not
-  equal'. We could add such a word, but that might be a problem
-  because 'not equal' may be written differently in different
-  languages.
+  VG3 style symbol translation
 
-  We could add a new kind of statement to the config file
+  When a sequence of words in an utterance doesn't correspond to a CSC
+  or LSA (e.g. '!=\not equal to'), or a compiled symbols with known
+  spoken form (e.g. 'horiz_pos\horizontal position'), should try to
+  match the sequence to one of the compiled symbols without a known
+  spoken form (i.e. symbols that contain undefined abbreviations), a la VG3.
 
-  language_specific_alias(STR spoken_as, [(STR language, STR written_as)]
+  If a match is found, the symbol would be added to the list of
+  symbols with known spoken form (and added to NatSpeak's
+  vocabulary). It should also be possible to identify which parts of
+  the written form correspond to which words of the spoken form and
+  automatically add new known abbreviations.
 
-  where STR spoken_as is the spoken form of the word and the 2nd argument is 
-  a list showing how the word is written in different languages. 
+  If no match is found, then the system would automatically abbreviate
+  the symbol for the user and add corresponding abbrevs and voc
+  entries.
 
-  the language specific words for a given langauge would only be
-  loaded when we are editing a file of the appropriate language. That
-  is, as soon as we intercept the beginning of an utterance, we first
-  check to see the language of the current buffer. If it's the same as
-  the language for which the language specific words were loaded, we
-  do nothing. Otherwise, we delete all language specific words for the
-  previous language and load those for the current language.
+  Before doing either translations, the system should display a dialog
+  asking the user if he/she wants to create such symbols and
+  abbrevs. If the suer says no, just type the text as is.
 
-  This has been implemented and works well for selection, but there is
-  a problem for dictation of the aliases. NatSpeak will often insist
-  on sending those utterances to the Mediator as dictated text instead
-  of their written form. So, add_lsa should enable
-  translation of this also at the level of the mediator in case
-  NatSpeak fails to do so. 
+  Note that this dialog would be displayed only the first time the
+  user dictates a pseudo symbol. The next time, there would not be
+  such a dialog because NatSpeak would have a corresponding entry in
+  its vocab.
 
-  An easy way for Mediator to support translation of aliases both at
-  the NatSpeak and Mediator level would be for
-  add_lsa to automatically add a CSC with the
-  appropriate languages context and the appropriate action. This would
-  require some changes to the languages contexts (e.g. ContC,
-  ContPy). At the moment, these contexts can't be created on the fly
-  based on the name of a language, unless you do an ugly hack with
-  eval like:
+  I think this feature is absolutely necessary, otherwise, it will be
+  a real pain for users to define abbrevs for all the symbols they
+  compile.
 
-       context = eval("Cont" + language + "()") ). 
+    NOTE: there could be more than one MediatorObject modifying the
+   abbreviations file at the same time... how to keep them in sync?
 
-  It would be better to define a base class ContLanguage with
-  attribute language_name. Then, we could create a context for
-  languages X by writing:
+   Maybe the Mediator server should handle changes to the abbrevs file
+   and use a locking mechanism so that only one thread at a time could
+   update it. What happens if the thread in question dies? Need to
+   have a time out so that the server can unlock the file after a few
+   seconds (assume that the update doesn't take long).
 
-       context = ContLanguages(language_name=X)
 
-  For syntactic simplicity, we could still define ContC and ContPy as
-  actual classes (and their constructor would set language_name to the
-  appropriate value) so that we could write a CSC as:
+Text mode
+---------
 
-    acmd = CSCmd(spoken_forms=['equals', 'assigned value', 
-                               'is assigned value'], 
-			       meanings=[[ContPy(), type], 
-			                 [ContC(), c_assignment]]) 
+-- Alain
 
-  instead of:
+Need to be able to turn CSC interpretation off so that you can dictate
+comments and quoted strings. Maybe that mode could switch on/off
+automatically depending on the current mode.
 
-    acmd = CSCmd(spoken_forms=['equals', 'assigned value', 
-                               'is assigned value'], 
-			       meanings=[[ContLanguage(language_name='python'), type], 
-			                 [ContLanguage(language_name='C'), c_assignment]]) 
 
+Basic LSAs and CSCs for a few languages
+---------------------------------------
+
+Just enought to entice people into writing more.
+
+Python, C and what else?
+
+
+getWordInfo
+-----------
+
+-- Alain: this is not absolutely necessary, but it's so easy to do:
+   might as well do it.
+
+In sr_interface.getWordInfo, if no flag is specified, should use
+flag = 1 (i.e. look in backup dictionary).
+
+
+Select Pseudo-code
+------------------
 
 -- Alain
 
@@ -97,6 +125,59 @@ Select Pseudo-code
      (previous|next)* Y selects code from X up to Y. Both of X, Y can
      be optionally qualified as above by (previous|next) and
      (before|after).
+
+
+Interpreter
+-----------
+
+Should it take into account the word property (space adding?) or is
+that done automatically by VDct?
+
+Symbol compilation
+------------------
+
+-- Alain
+
+Should add symbols with word info such that a blank space is inserted after it.
+
+
+add_lsa
+-------
+
+-- Alain
+
+Right now, there is no way to edit the word info with add_lsa. In
+particular, this means you can't say whether there should be spaces
+before or after an LSA.
+
+Should modify add_lsa so it allows to specify the word info (full word
+info or just spacing?)
+
+
+-- Alain
+
+In vc_config.py, there are many commands which are implemented as CSCs
+but would be better implemented as LSAs.
+
+-- Alain
+
+At the moment, if the same words mean different things in different
+langauges, you need to define them as two separate add_lsa
+commands. It would be better if a single command allowed you to define
+different written forms for different languages.
+
+
+Can wait after 1st release
+==========================
+
+addWord
+-------
+
+Joel Gould claims that Select XYZ works as long as the written form of
+XYZ doesn't have leading/trailing spaces. So addWord doesn't have to
+add redundant vocabulary entry for words whose written form only
+contains internal spaces. TEST THE CLAIM BEFORE TRYING TO IMPLEMENT
+THIS.
 
 
 -- Alain
@@ -191,19 +272,9 @@ add_csc(spoken_forms=['for loop'], meanings=[[ContC, c_simple_for]])
 i.e. the user forgets to add () after ContC, which means he is making
 the context be the ContC class itself (as opposed to a ContC INSTANCE)
 
+
 add_lsa
 -------
-
--- Alain
-
-In vc_config.py, there are many commands which are implemented as CSCs but would be better implemented as LSAs.
-
--- Alain
-
-At the moment, if the same words mean different things in different
-langauges, you need to define them as two separate add_lsa
-commands. It would be better if a single command allowed you to define
-different written forms for different languages.
 
 -- Alain
 
@@ -257,6 +328,52 @@ spoken_forms=['after* (semi|semicolon|;)', 'go after* (semi|semicolon|;)']
 Symbol translation
 ------------------
 
-- When a word in a symbol doesn't correspond to an in-vocab word or a
+-- Alain
+
+  When a word in a symbol doesn't correspond to an in-vocab word or a
   known abbreviation, we should see if it's a concatenation or such
   words and/or abbreviations.
+
+  
+What can I say
+--------------
+
+-- Alain
+
+  The mediator console should allow the user to browse through the
+  list of CSCs and LSAs by language and topic.
+
+  The user could even ask to see what LSAs and CSCs are applicable in
+  the current context (actually, CSCs should be sufficient since a CSC
+  is generated automatically for each LSA).
+
+  This feature would use the _doc_ attributes of the Context objects
+  and the action functions.
+
+  Example of subject hierarchy for what can I say
+
+  C
+    - loops
+       for 
+       while
+       repeat
+       etc...
+    - conditionals
+       if
+       then
+       else
+       switch
+       etc...
+    - functions
+       declaring
+       calling
+    - precompiler directives
+       #include
+       etc...
+    etc...
+   Python
+    - loops
+        for
+    etc...
+       
+    
