@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:15:35 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:13:38 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,6 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppStateGenEdit</SPAN>(<A CLASS="DocLink" HREF="AppStateNonCached.AppStateNonCached.html">AppStateNonCached</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit._new_source_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit._new_source_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
@@ -44,6 +45,7 @@
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.recog_begin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>, <SPAN CLASS="Argument">block=0</SPAN>)<SPAN CLASS="OneLiner"> # Haven't figured out how to make GenEdit block user input</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.recog_end</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Haven't figured out how to make GenEdit block user input</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateGenEdit.AppStateGenEdit.suspend_notification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateGenEdit.AppStateGenEdit.suspend_notification</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the editor supports suspend notification?</SPAN>
@@ -170,6 +172,42 @@ this AppState.
 </DL>
 <P>
 ..[AS_ServiceBreadcrumbs] AppState.AS_ServiceBreadcrumbs.html</P>
+<H2 ID="AppStateGenEdit.AppStateGenEdit._new_source_buffer" CLASS="Method">AppStateGenEdit.AppStateGenEdit._new_source_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Creates a new [SourceBuff] instance and adds it to the
+list of open buffers.</P>
+<P>
+Note: this method should not only be called by other AppState
+methods, not from outside AppState, and only if such methods
+have already verified that self.open_buffers doesn't already
+have a key matching buff_name</P>
+<P>
+Note: this method does not automatically synchronize the new
+SourceBuff with an external editor.  Normally, for external editors, 
+we will be using SourceBuffCached which will be initialized with an 
+empty cache for the buffer contents, so it will be synchronized
+the first time someone tries to access the buffer contents.  The
+caller may force immediate synchronization if it is appropriate.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>unique name of the new buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SourceBuff</EM>
+<DD>the new buffer
+</DL>
 <H2 ID="AppStateGenEdit.AppStateGenEdit.active_field" CLASS="Method">AppStateGenEdit.AppStateGenEdit.active_field(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>indicates what part of the editor has the focus.</P>
 
@@ -571,6 +609,30 @@ exists.</P>
 <DD>does the buffer exist?
 
 </DL>
+<H2 ID="AppStateGenEdit.AppStateGenEdit.rename_buffer_cbk" CLASS="Method">AppStateGenEdit.AppStateGenEdit.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Editor invokes this method to notify VoiceCode that it
+has renamed an existing text buffer.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>old_buff_name</EM>
+<DD>old name of the buffer.
+<DT>
+STR <EM>new_buff_name</EM>
+<DD>new name of the buffer.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+..[SourceBuff] SourceBuff.SourceBuff.html</P>
 <H2 ID="AppStateGenEdit.AppStateGenEdit.set_instance_string" CLASS="Method">AppStateGenEdit.AppStateGenEdit.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
 <P>None</P>
 

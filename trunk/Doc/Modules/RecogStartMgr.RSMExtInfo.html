@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Sep 21 14:05:49 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:10:56 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,27 +29,6 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RSMExtInfo</SPAN>(<A CLASS="DocLink" HREF="RecogStartMgr.RSMBasic.html">RSMBasic</A>):
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMExtInfo.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMExtInfo.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">win_info</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMExtInfo.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMExtInfo.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from RecogStartMgr.RSMBasic</SPAN>
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._activate_universal_grammars"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._activate_universal_grammars</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._new_instance_known_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._new_instance_known_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._new_instance_known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._new_instance_known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._recognition_starting_known_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._recognition_starting_known_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from RecogStartMgr.RecogStartMgr</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
@@ -82,11 +61,32 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from RecogStartMgr.RSMBasic</SPAN>
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._activate_universal_grammars"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._activate_universal_grammars</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._new_instance_known_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._new_instance_known_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._new_instance_known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._new_instance_known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic._recognition_starting_known_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic._recognition_starting_known_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMBasic.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMBasic.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from RecogStartMgr.RSMInfrastructure</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
@@ -106,6 +106,7 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.activate_instance_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.activate_instance_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.app_new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.app_new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
@@ -117,10 +118,15 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a known window ID?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.known_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.known_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.recent_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.recent_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.reinterpret_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.reinterpret_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.reset_results_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.reset_results_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a shared window?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a single-window display?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window_id=None</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.stored_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.stored_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
 </PRE><H2>Description</H2><P>
@@ -173,393 +179,6 @@ objects for new instances
 <DT>
 <EM>(INT, STR, STR)</EM>
 <DD>the window id, title, and module name
-
-</DL>
-<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
-<P>attempt to call cleanup on object</P>
-
-<P>
-<STRONG>INPUTS*</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>OwnerObject object</EM>
-<DD>note: class of object is the expected
-class, but _cleanup_object doesn't assume this is correct, nor
-does it check whether the object is a subclass of
-OwnerObject, only that it is a class instance and that it
-has a cleanup attribute
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>reason for error (or None if no error).
-
-</DL>
-<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's grandparent (or great-grandparent, etc.)
-(Actually, any other reference which needs to be del'ed but not
-cleaned up)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR grandparent</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append a new attribute name to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append new attribute names to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR] owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's parent.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR parent</EM>
-<DD>name of the parent, or None if none
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the name of the parent attribute</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>name of the parent, or None if none
-
-</DL>
-<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
-remove_other_references method, after performing their own duties.
-Also, a class inheriting from two OwnerObject classes MUST
-define remove_other_references and call both subclasses'
-versions</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="RecogStartMgr.RSMBasic.__init__" CLASS="Method">RecogStartMgr.RSMBasic.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
-<P>None</P>
-
-<P>
-
-see RecogStartMgr</P>
-<H2 ID="RecogStartMgr.RSMBasic._activate_universal_grammars" CLASS="Method">RecogStartMgr.RSMBasic._activate_universal_grammars(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
-<P>None</P>
-
-<P>
-private method used to activate global grammars for the 
-universal instance, assuming that the buffer is VoiceCode-enabled</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>AppState</EM> app
-<DD>the editor application interface
-<DT>
-<EM>STR</EM> instance_name
-<DD>instance name
-<DT>
-<EM>INT</EM> window
-<DD>current window handle (used only to know which
-other grammars to deactivate 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="RecogStartMgr.RSMBasic._new_instance_known_module" CLASS="Method">RecogStartMgr.RSMBasic._new_instance_known_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)</H2>
-<P>None</P>
-
-<P>
-private method called internally to verify that the named
-instance belongs to the given unknown window.  If so, a 
-TargetWindow object is created and added to the 
-known windows map.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>the handle of the known window
-<DT>
-<EM>STR</EM> title
-<DD>the current title of the window
-<DT>
-<EM>STR</EM> instance
-<DD>the name of the instance
-<DT>
-<EM>STR</EM> module_name
-<DD>name of the module 
-<DT>
-<EM>BOOL</EM> trust
-<DD>trust that instance belongs to the window, even
-if we can't verify it definitively, because the user has
-manually specified the window
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the instance was added successfully
-
-</DL>
-<H2 ID="RecogStartMgr.RSMBasic._new_instance_known_window" CLASS="Method">RecogStartMgr.RSMBasic._new_instance_known_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)</H2>
-<P>None</P>
-
-<P>
-private method called internally to verify that the named
-instance belongs to the given known window, and if so to add 
-it to the window </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>the handle of the known window
-<DT>
-<EM>STR</EM> title
-<DD>the current title of the window
-<DT>
-<EM>STR</EM> instance
-<DD>the name of the instance
-<DT>
-<EM>BOOL</EM> trust
-<DD>trust that instance belongs to the window, even
-if we can't verify it definitively, because the user has
-manually specified the window
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the instance was added successfully
-
-</DL>
-<H2 ID="RecogStartMgr.RSMBasic._recognition_starting" CLASS="Method">RecogStartMgr.RSMBasic._recognition_starting(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-private method which a concrete subclass will call to handle
-the recognition starting event.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>window handle (unique identifier) of the current 
-window
-<DT>
-<EM>STR</EM> title
-<DD>title of the window 
-<DT>
-<EM>STR</EM> module
-<DD>filename of the application corresponding to
-this window, or None if the particular subclass of RecogStartMgr
-cannot detect it.  <STRONG>Note</STRONG>: the module may not
-be the name of the editor.  For example, for remote editors, the
-module will generally be the name of the telnet/X server
-program, and any application written in python will show up as PYTHON.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="RecogStartMgr.RSMBasic._recognition_starting_known_module" CLASS="Method">RecogStartMgr.RSMBasic._recognition_starting_known_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-private method called by _recognition_starting when the
-current window is not a previously known window, but the 
-current module is known.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>window handle (unique identifier) of the current 
-window
-<DT>
-<EM>STR</EM> title
-<DD>title of the window 
-<DT>
-<EM>STR</EM> module_name
-<DD>filename of the application corresponding to
-this window.  <STRONG>Note</STRONG>: the module may not
-be the name of the editor.  For example, for remote editors, the
-module will generally be the name of the telnet/X server
-program, and any application written in python will show up as PYTHON.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="RecogStartMgr.RSMBasic.delete_instance" CLASS="Method">RecogStartMgr.RSMBasic.delete_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method called by AppMgr to notify RecogStartMgr that an
-editor instance has been deleted</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> instance
-<DD>name of the editor instance
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if instance was known
-
-</DL>
-<H2 ID="RecogStartMgr.RSMBasic.new_universal_instance" CLASS="Method">RecogStartMgr.RSMBasic.new_universal_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method called by AppMgr to notify RecogStartMgr that a new
-test instance has been added which should use global grammars</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> instance
-<DD>name of the editor instance
-<DT>
-<EM>BOOL</EM> exclusive
-<DD>should the instance use exclusive grammars
-as well?
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the instance was added as a universal instance.
-False if there was already such a universal instance, in which case the
-new instance will be added normally, or if the instance name was
-already known.
 
 </DL>
 <H2 ID="RecogStartMgr.RecogStartMgr.__init__" CLASS="Method">RecogStartMgr.RecogStartMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
@@ -1229,6 +848,161 @@ window</P>
 window, or None if the window is unknown
 
 </DL>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's grandparent (or great-grandparent, etc.)
+(Actually, any other reference which needs to be del'ed but not
+cleaned up)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR grandparent</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR parent</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the name of the parent attribute</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the parent, or None if none
+
+</DL>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
+remove_other_references method, after performing their own duties.
+Also, a class inheriting from two OwnerObject classes MUST
+define remove_other_references and call both subclasses'
+versions</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -1358,6 +1132,238 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="RecogStartMgr.RSMBasic.__init__" CLASS="Method">RecogStartMgr.RSMBasic.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+
+see RecogStartMgr</P>
+<H2 ID="RecogStartMgr.RSMBasic._activate_universal_grammars" CLASS="Method">RecogStartMgr.RSMBasic._activate_universal_grammars(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method used to activate global grammars for the 
+universal instance, assuming that the buffer is VoiceCode-enabled</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>the editor application interface
+<DT>
+<EM>STR</EM> instance_name
+<DD>instance name
+<DT>
+<EM>INT</EM> window
+<DD>current window handle (used only to know which
+other grammars to deactivate 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMBasic._new_instance_known_module" CLASS="Method">RecogStartMgr.RSMBasic._new_instance_known_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method called internally to verify that the named
+instance belongs to the given unknown window.  If so, a 
+TargetWindow object is created and added to the 
+known windows map.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>the handle of the known window
+<DT>
+<EM>STR</EM> title
+<DD>the current title of the window
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the instance
+<DT>
+<EM>STR</EM> module_name
+<DD>name of the module 
+<DT>
+<EM>BOOL</EM> trust
+<DD>trust that instance belongs to the window, even
+if we can't verify it definitively, because the user has
+manually specified the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the instance was added successfully
+
+</DL>
+<H2 ID="RecogStartMgr.RSMBasic._new_instance_known_window" CLASS="Method">RecogStartMgr.RSMBasic._new_instance_known_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">trust=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method called internally to verify that the named
+instance belongs to the given known window, and if so to add 
+it to the window </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>the handle of the known window
+<DT>
+<EM>STR</EM> title
+<DD>the current title of the window
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the instance
+<DT>
+<EM>BOOL</EM> trust
+<DD>trust that instance belongs to the window, even
+if we can't verify it definitively, because the user has
+manually specified the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the instance was added successfully
+
+</DL>
+<H2 ID="RecogStartMgr.RSMBasic._recognition_starting" CLASS="Method">RecogStartMgr.RSMBasic._recognition_starting(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method which a concrete subclass will call to handle
+the recognition starting event.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle (unique identifier) of the current 
+window
+<DT>
+<EM>STR</EM> title
+<DD>title of the window 
+<DT>
+<EM>STR</EM> module
+<DD>filename of the application corresponding to
+this window, or None if the particular subclass of RecogStartMgr
+cannot detect it.  <STRONG>Note</STRONG>: the module may not
+be the name of the editor.  For example, for remote editors, the
+module will generally be the name of the telnet/X server
+program, and any application written in python will show up as PYTHON.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMBasic._recognition_starting_known_module" CLASS="Method">RecogStartMgr.RSMBasic._recognition_starting_known_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method called by _recognition_starting when the
+current window is not a previously known window, but the 
+current module is known.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle (unique identifier) of the current 
+window
+<DT>
+<EM>STR</EM> title
+<DD>title of the window 
+<DT>
+<EM>STR</EM> module_name
+<DD>filename of the application corresponding to
+this window.  <STRONG>Note</STRONG>: the module may not
+be the name of the editor.  For example, for remote editors, the
+module will generally be the name of the telnet/X server
+program, and any application written in python will show up as PYTHON.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMBasic.delete_instance" CLASS="Method">RecogStartMgr.RSMBasic.delete_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by AppMgr to notify RecogStartMgr that an
+editor instance has been deleted</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if instance was known
+
+</DL>
+<H2 ID="RecogStartMgr.RSMBasic.new_universal_instance" CLASS="Method">RecogStartMgr.RSMBasic.new_universal_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method called by AppMgr to notify RecogStartMgr that a new
+test instance has been added which should use global grammars</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>should the instance use exclusive grammars
+as well?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the instance was added as a universal instance.
+False if there was already such a universal instance, in which case the
+new instance will be added normally, or if the instance name was
+already known.
+
 </DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure.__init__" CLASS="Method">RecogStartMgr.RSMInfrastructure.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
@@ -1819,6 +1825,35 @@ specified instance</P>
 <DD>true if window is added
 
 </DL>
+<H2 ID="RecogStartMgr.RSMInfrastructure.can_reinterpret" CLASS="Method">RecogStartMgr.RSMInfrastructure.can_reinterpret(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
+<P>None</P>
+
+<P>
+can we safely reinterpret the nth most recent utterance
+into the specified editor</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>the depth in the editor state stack of the utterance
+to be reinterpreted
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if we can safely reinterpret that utterance
+
+</DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure.deactivate" CLASS="Method">RecogStartMgr.RSMInfrastructure.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -2084,6 +2119,94 @@ true.
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.recent_dictation" CLASS="Method">RecogStartMgr.RSMInfrastructure.recent_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a list of the most recent SpokenUtterance objects for
+the specified editor</P>
+<P>
+<STRONG>Note:</STRONG> additional dictation into the editor will increment
+the indices of specific utterances, so the mediator must not
+allow dictation into the editor between the call to 
+recent_dictation to get the utterances and the call to 
+reinterpret_recent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>the number of utterances to return, or None to return 
+all available utterances.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[(SpokenUtterance, BOOL)]</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+<P>
+Note:  These utterances should not be stored permanently, nor
+should they be modified except as part of the correction
+process.  Also, the status of whether a given utterance can be
+re-interpreted may change if the user makes other changes to the 
+</P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.reinterpret_recent" CLASS="Method">RecogStartMgr.RSMInfrastructure.reinterpret_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)</H2>
+<P>None</P>
+
+<P>
+undo the effect of one or more recent utterances into the
+specified editor, if possible, and reinterpret these utterances
+(and possibly any intervening utterances), making the
+appropriate changes to the editor buffers.</P>
+<P>
+<STRONG>Note:</STRONG> additional dictation into the editor will increment
+the indices of specific utterances, so the mediator must not
+allow dictation into the editor between the call to 
+recent_dictation to get the utterances and the call to 
+reinterpret_recent.</P>
+<P>
+<STRONG>Note:</STRONG> this method does not perform adaption of the changed
+utterances.  The caller should do that itself.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>[INT] changed</EM>
+<DD>the indices into the stack of recent
+utterances of those utterances which were corrected by the user
+</DL>
+<P>
+<STRONG>NOTE:</STRONG> particular implementations of ResMgr may reinterpret 
+all utterances subsequent to the oldest changed utterance</P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>the indices of the utterances actually reinterpreted
+(including intervening ones), sorted with the oldest first, or 
+None if no utterances could be reinterpreted
+
+</DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure.rename_buffer_cbk" CLASS="Method">RecogStartMgr.RSMInfrastructure.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
 <P>None</P>
 
@@ -2110,6 +2233,57 @@ instance has renamed a buffer</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.reset_results_mgr" CLASS="Method">RecogStartMgr.RSMInfrastructure.reset_results_mgr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+resets the ResMgr objects for a given editor, erasing any 
+stored utterance and corresponding editor state information.  
+Normally called only as part of resetting the mediator for 
+a new regression test</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor whose data should be reset, or
+None to reset ResMgr data for all editors
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.scratch_recent" CLASS="Method">RecogStartMgr.RSMInfrastructure.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+undo the effect of the most recent n utterances into the
+specified editor, if possible.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>number of utterances to undo
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances actually undone
+
+</DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure.shared_window" CLASS="Method">RecogStartMgr.RSMInfrastructure.shared_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>is window a shared window?</P>
 
@@ -2184,6 +2358,32 @@ and return 0), or None if the caller does not know the handle
 <DT>
 <EM>BOOL</EM>
 <DD>true if window is added
+
+</DL>
+<H2 ID="RecogStartMgr.RSMInfrastructure.stored_utterances" CLASS="Method">RecogStartMgr.RSMInfrastructure.stored_utterances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+queries the ResMgr to see how many dictated utterances have 
+been stored for the specified editor</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances which can be retrieved with
+recent_dictation
 
 </DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure.window_instances" CLASS="Method">RecogStartMgr.RSMInfrastructure.window_instances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
