@@ -544,6 +544,328 @@ class MessEncoder(Object.Object):
         debug.virtual('MessEncoder.decode')
         
 
+
+class MessTransporter(Object.Object):
+    """Used to send/receive strings on a connection.
+
+    Virtual class.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+            
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(MessTransporter, \
+                            {}, \
+                            args_super, \
+                            {})
+
+
+
+    def send_string(self, a_string):
+        """Sends a string on the connection.
+        
+        **INPUTS**
+        
+        *STR* a_string -- String to send
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('send_string')
+
+    def receive_string(self, num_bytes):
+        """Receives a string on the connection.
+        
+        **INPUTS**
+        
+        INT *num_bytes* -- Number of bytes to receive.
+        
+
+        **OUTPUTS**
+        
+        STR *a_string* -- The received string
+        """
+        
+        debug.virtual('receive_string')        
+
+
+
+
+    def close(self):
+        """Close the connection.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.not_implemented('close')
+
+
+class MessTransporter_Socket(MessTransporter):
+    """Used to send/receive strings on a Socket connection.
+
+    Virtual class.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *socket sock*-- The socket connection used to transport the bytes.
+    
+    CLASS ATTRIBUTES**
+            
+    *none* -- 
+    """
+    
+    def __init__(self, sock, **args_super):
+        self.deep_construct(MessTransporter_Socket, \
+                            {'sock': sock}, \
+                            args_super, \
+                            {})
+
+
+
+    def send_string(self, a_string):
+        """Sends a string on the Socket connection.
+        
+        **INPUTS**
+        
+        *STR* a_string -- String to send
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+#        print '-- send_string: sending started'
+#        print '-- send_string: sending \'%s\''% a_string
+        mess_len = len(a_string)
+        totalsent = 0
+        while totalsent < mess_len:
+#            print '-- send_string: sending "%s"' % a_string[totalsent:]
+            sent = self.sock.send(a_string[totalsent:])
+            if sent == 0:
+                raise RuntimeError, "socket connection broken"
+            totalsent = totalsent + sent
+
+#        print '-- send_string: done'           
+        
+
+    def receive_string(self, num_bytes):
+        """Receives a string on the Socket connection.
+        
+        **INPUTS**
+        
+        INT *num_bytes* -- Number of bytes to receive.
+        
+
+        **OUTPUTS**
+        
+        STR *a_string* -- The received string
+        """
+
+#        print '-- receive_string: started'
+        a_string = ''
+        while len(a_string) < num_bytes:
+            chunk = self.sock.recv(num_bytes - len(a_string))
+            if chunk == '':
+                raise RuntimeError, "socket connection broken"
+            a_string = a_string + chunk
+
+#        print '-- receive_string: received \'%s\'' % a_string
+        return a_string         
+
+
+
+    def close(self):
+        """Close the socket connection.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.sock.close()
+
+
+###############################################################################
+# WDDX-based message encoder
+###############################################################################
+
+class MessEncoderWDDX(MessEncoder):
+    """WDDX (an XML based protocol) Encoding scheme for messages.
+    
+    Used to go translates messages between the *(name, {arg:val})*
+    format and raw string format. In this format, *name* is the name
+    of the message and *{arg:val}* is a dictionary giving the name and
+    values of the various arguments of that message.
+
+    Note that the *arg*s must be strings, but the *val*s can be of any
+    encodable type. The encodable types are defined recursively as:
+
+    STR -- a simple string
+
+    [ENCODABLE] -- a list (or tuple) of encodable types.
+    
+    {STR:ENCODABLE} -- a dictionnary with string keys and encodable values
+    
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [WDDXMarshaller] *marshaller* -- Marshaller for transforming
+    Python data values into WDDX strings.
+
+    [WDDXUnmarshaller] *unmarshaller* -- Unmarshaller for transforming
+    WDDX strings into Python data values.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+
+    """
+        
+    def __init__(self, **args_super):
+        self.deep_construct(MessEncoderWDDX, 
+                            {'marshaller': WDDXMarshaller(),
+                             'unmarshaller': WDDXUnmarshaller()}, 
+                            args_super, 
+                            {})
+
+
+    def encode(self, mess_name, mess_argvals):
+        """Encodes a message as a raw string
+        
+        **INPUTS**
+
+        STR *mess_name* -- An identifier indicating what type of
+        message this is.
+        
+        {STR: ANY} *mess_argvals* -- The content of the message in
+        *{arg:val}* format.
+        
+        **OUTPUTS**
+        
+        *STR str_mess* -- The message encoded as a string
+        """
+
+        mess_argvals['message_name'] = mess_name
+        str_mess = self.marshaller.dumps(mess_argvals)
+
+        return str_mess
+
+
+    def decode(self, str_mess):
+        """Decodes a message to {arg:val} format.
+      
+        **INPUTS**
+        
+        *STR* str_mess -- The message in raw string format
+        
+        **OUTPUTS**
+        
+        *(STR, {STR: STR}) name_argvals_mess* -- First element is the
+        message name, second element is message arguments in
+        *(name, {arg:val})* format.  """
+
+#        print '-- MessEncoderWDDX.decode: str_mess=\'%s\'' % str_mess
+        mess_argvals = self.unmarshaller.loads(str_mess)
+
+        #
+        # Name of message is one of the entries in the unmarshalled dictionnary.
+        # Remove it from there.
+        #
+        mess_name = mess_argvals['message_name']
+        del mess_argvals['message_name']
+        return (mess_name, mess_argvals)
+        
+
+
+
+###############################################################################
+# Functions for converting message arguments to certain data types
+###############################################################################
+
+def messarg2int(messarg):
+    """Converts a message argument to an int.
+    
+    If the message argument is the string *'None'*, convert it to
+    the *None* object.
+    
+    **INPUTS**
+    
+    STR *messarg* -- The message argument to be converted.
+    
+    
+    **OUTPUTS**
+    
+    INT | None *as_int* -- The message argument converted to int.
+    """
+                 
+    if messarg == 'None' or messarg == '':
+        #
+        # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
+        # while MessEncoderWDDX encodes it as the empty string
+        #        
+        as_int = None
+    else:
+        as_int = int(messarg)
+        return as_int
+
+
+
+def messarg2intlist(messarg):
+    """Converts a message argument to a list of integers.
+
+    If the message argument is the string *'None'*, convert it to
+    the *None* object.
+        
+    **INPUTS**
+        
+    'None' | [STR] *messarg* -- The message argument to be converted.
+        
+
+    **OUTPUTS**
+        
+    None | [INT] *as_intlist* -- The message argument converted a list of ints.
+    """
+        
+    if messarg == 'None' or messarg == '':
+        #
+        # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
+        # while MessEncoderWDDX encodes it as the empty string
+        #
+        intlist = None
+    else:
+        intlist = []
+        for ii in range(len(messarg)):
+            intlist.append(messarg2int(messarg[ii]))
+            
+    return intlist
+
+        
+###############################################################################
+# Length prefixed Encoder (now Obsolete and replaced by MessEncoderWDDX
+# We keep it here for a while just in case
+###############################################################################
+
 class MessEncoder_LenPrefArgs(Object.Object):
     """Encoding scheme for messages with length prefixed argument values.
     
@@ -918,311 +1240,3 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         return the_dict
 
-
-class MessTransporter(Object.Object):
-    """Used to send/receive strings on a connection.
-
-    Virtual class.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    *none*-- 
-    
-    CLASS ATTRIBUTES**
-            
-    *none* -- 
-    """
-    
-    def __init__(self, **args_super):
-        self.deep_construct(MessTransporter, \
-                            {}, \
-                            args_super, \
-                            {})
-
-
-
-    def send_string(self, a_string):
-        """Sends a string on the connection.
-        
-        **INPUTS**
-        
-        *STR* a_string -- String to send
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.virtual('send_string')
-
-    def receive_string(self, num_bytes):
-        """Receives a string on the connection.
-        
-        **INPUTS**
-        
-        INT *num_bytes* -- Number of bytes to receive.
-        
-
-        **OUTPUTS**
-        
-        STR *a_string* -- The received string
-        """
-        
-        debug.virtual('receive_string')        
-
-
-
-
-    def close(self):
-        """Close the connection.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.not_implemented('close')
-
-
-class MessTransporter_Socket(MessTransporter):
-    """Used to send/receive strings on a Socket connection.
-
-    Virtual class.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    *socket sock*-- The socket connection used to transport the bytes.
-    
-    CLASS ATTRIBUTES**
-            
-    *none* -- 
-    """
-    
-    def __init__(self, sock, **args_super):
-        self.deep_construct(MessTransporter_Socket, \
-                            {'sock': sock}, \
-                            args_super, \
-                            {})
-
-
-
-    def send_string(self, a_string):
-        """Sends a string on the Socket connection.
-        
-        **INPUTS**
-        
-        *STR* a_string -- String to send
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-#        print '-- send_string: sending started'
-#        print '-- send_string: sending \'%s\''% a_string
-        mess_len = len(a_string)
-        totalsent = 0
-        while totalsent < mess_len:
-#            print '-- send_string: sending "%s"' % a_string[totalsent:]
-            sent = self.sock.send(a_string[totalsent:])
-            if sent == 0:
-                raise RuntimeError, "socket connection broken"
-            totalsent = totalsent + sent
-
-#        print '-- send_string: done'           
-        
-
-    def receive_string(self, num_bytes):
-        """Receives a string on the Socket connection.
-        
-        **INPUTS**
-        
-        INT *num_bytes* -- Number of bytes to receive.
-        
-
-        **OUTPUTS**
-        
-        STR *a_string* -- The received string
-        """
-
-#        print '-- receive_string: started'
-        a_string = ''
-        while len(a_string) < num_bytes:
-            chunk = self.sock.recv(num_bytes - len(a_string))
-            if chunk == '':
-                raise RuntimeError, "socket connection broken"
-            a_string = a_string + chunk
-
-#        print '-- receive_string: received \'%s\'' % a_string
-        return a_string         
-
-
-
-    def close(self):
-        """Close the socket connection.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        self.sock.close()
-
-
-###############################################################################
-# Experimental WDDX message encoder
-###############################################################################
-
-class MessEncoderWDDX(MessEncoder):
-    """WDDX (an XML based protocol) Encoding scheme for messages.
-    
-    Used to go translates messages between the *(name, {arg:val})*
-    format and raw string format. In this format, *name* is the name
-    of the message and *{arg:val}* is a dictionary giving the name and
-    values of the various arguments of that message.
-
-    Note that the *arg*s must be strings, but the *val*s can be of any
-    encodable type. The encodable types are defined recursively as:
-
-    STR -- a simple string
-
-    [ENCODABLE] -- a list (or tuple) of encodable types.
-    
-    {STR:ENCODABLE} -- a dictionnary with string keys and encodable values
-    
-    
-    **INSTANCE ATTRIBUTES**
-    
-    [WDDXMarshaller] *marshaller* -- Marshaller for transforming
-    Python data values into WDDX strings.
-
-    [WDDXUnmarshaller] *unmarshaller* -- Unmarshaller for transforming
-    WDDX strings into Python data values.
-    
-    CLASS ATTRIBUTES**
-    
-    *none* -- 
-
-    """
-        
-    def __init__(self, **args_super):
-        self.deep_construct(MessEncoderWDDX, 
-                            {'marshaller': WDDXMarshaller(),
-                             'unmarshaller': WDDXUnmarshaller()}, 
-                            args_super, 
-                            {})
-
-
-    def encode(self, mess_name, mess_argvals):
-        """Encodes a message as a raw string
-        
-        **INPUTS**
-
-        STR *mess_name* -- An identifier indicating what type of
-        message this is.
-        
-        {STR: ANY} *mess_argvals* -- The content of the message in
-        *{arg:val}* format.
-        
-        **OUTPUTS**
-        
-        *STR str_mess* -- The message encoded as a string
-        """
-
-        mess_argvals['message_name'] = mess_name
-        str_mess = self.marshaller.dumps(mess_argvals)
-
-        return str_mess
-
-
-    def decode(self, str_mess):
-        """Decodes a message to {arg:val} format.
-      
-        **INPUTS**
-        
-        *STR* str_mess -- The message in raw string format
-        
-        **OUTPUTS**
-        
-        *(STR, {STR: STR}) name_argvals_mess* -- First element is the
-        message name, second element is message arguments in
-        *(name, {arg:val})* format.  """
-
-        mess_argvals = self.unmarshaller.loads(str_mess)
-
-        #
-        # Name of message is one of the entries in the unmarshalled dictionnary.
-        # Remove it from there.
-        #
-        mess_name = mess_argvals['message_name']
-        del mess_argvals['message_name']
-        return (mess_name, mess_argvals)
-        
-
-
-
-###############################################################################
-# Functions for converting message arguments to certain data types
-###############################################################################
-
-def messarg2int(messarg):
-    """Converts a message argument to an int.
-    
-    If the message argument is the string *'None'*, convert it to
-    the *None* object.
-    
-    **INPUTS**
-    
-    STR *messarg* -- The message argument to be converted.
-    
-    
-    **OUTPUTS**
-    
-    INT | None *as_int* -- The message argument converted to int.
-    """
-                 
-    if messarg == 'None':
-        as_int = None
-    else:
-        as_int = int(messarg)
-        return as_int
-
-
-
-def messarg2intlist(messarg):
-    """Converts a message argument to a list of integers.
-
-    If the message argument is the string *'None'*, convert it to
-    the *None* object.
-        
-    **INPUTS**
-        
-    'None' | [STR] *messarg* -- The message argument to be converted.
-        
-
-    **OUTPUTS**
-        
-    None | [INT] *as_intlist* -- The message argument converted a list of ints.
-    """
-        
-    if messarg == 'None':
-        intlist = None
-    else:
-        intlist = []
-        for ii in range(len(messarg)):
-            intlist.append(messarg2int(messarg[ii]))
-            
-    return intlist
-
-        

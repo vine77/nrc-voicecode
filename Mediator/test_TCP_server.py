@@ -29,7 +29,7 @@ def create_tcp_mess(sock):
 
     packager = messaging.MessPackager_FixedLenSeq()
     transporter = messaging.MessTransporter_Socket(sock=sock)
-    encoder = messaging.MessEncoder_LenPrefArgs()
+    encoder = messaging.MessEncoderWDDX()
     msgr = messaging.Messenger(packager, transporter, encoder)
     
     return msgr
@@ -124,6 +124,7 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.ed.set_selection(range=range, cursor_at=cursor_at)
             self.xed.vc_talk_msgr.send_mess('set_selection_resp', {'updates': self.upd_curpos_sel()})
         elif action == 'get_text':
+            print '-- execute_request: get_text, args[\'start\']=%s, args[\'end\']=%s' % ( args['start'], args['end'])
             start = messaging.messarg2int(args['start'])
             end = messaging.messarg2int(args['end'])
             self.xed.vc_talk_msgr.send_mess('get_text_resp', {'value': self.xed.ed.get_text(start, end)})
@@ -267,7 +268,7 @@ class ExternalEdSim(Object.Object):
         #
         packager = messaging.MessPackager_FixedLenSeq()
         transporter = messaging.MessTransporter_Socket(sock=a_socket)
-        encoder = messaging.MessEncoder_LenPrefArgs()
+        encoder = messaging.MessEncoderWDDX()
         self.vc_listen_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
 
         print '-- open_vc_listener_conn: sending name of editor'
@@ -321,7 +322,7 @@ class ExternalEdSim(Object.Object):
         #
         packager = messaging.MessPackager_FixedLenSeq()
         transporter = messaging.MessTransporter_Socket(sock=a_socket)
-        encoder = messaging.MessEncoder_LenPrefArgs()
+        encoder = messaging.MessEncoderWDDX()
         self.vc_talk_msgr = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)
         
 
