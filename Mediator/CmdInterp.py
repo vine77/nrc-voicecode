@@ -1612,5 +1612,5 @@ class CmdInterp(OwnerObject):
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
-        self.known_symbols.print_abbreviations()
+        self.known_symbols.print_abbreviations(show_unresolved)
 

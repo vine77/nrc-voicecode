@@ -837,8 +837,76 @@ class ActionCompileSymbols(Action):
              print 'compile symbols command not supported with old Mediator'
 
 
-
+class ActionPrintSymbols(Action):
+    """Print the list of all known symbols.
     
+    **INSTANCE ATTRIBUTES**
+        
+    *none*
+        
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, buff_name=None, **args_super):
+        self.deep_construct(ActionPrintSymbols, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Print list of all known symbols.';
+    
+                            
+
+    def execute(self, app, cont):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        manager = app.current_manager()
+        if manager:
+           try:
+             manager.interpreter().print_symbols()
+           except AttributeError:
+             print 'print symbols command not supported with old Mediator'
+
+
+class ActionPrintAbbrevs(Action):
+    """Print the list of all abbreviations (resolved and unresolved).
+    
+    **INSTANCE ATTRIBUTES**
+        
+    *none*
+        
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, buff_name=None, **args_super):
+        self.deep_construct(ActionPrintAbbrevs, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Print list of abbreviations.';
+    
+                            
+
+    def execute(self, app, cont):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        manager = app.current_manager()
+        if manager:
+           try:
+             manager.interpreter().print_abbreviations(1)
+           except AttributeError:
+             print 'print abbreviations command not supported with old Mediator'    
     
 
 class ActionSwitchTranslation(Action):

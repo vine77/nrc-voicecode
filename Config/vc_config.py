@@ -140,11 +140,26 @@ add_prefix('dumbEdSim', 'Dumbo')
 
 ## Mediator Control
 
+#
+# These should probably be implemented as discrete commands, but
+# I don't have the time to define a command grammar for them.
+# -- AD
+#
 mediator_ctrl = CSCmdSet(name = 'mediator control',
     description = 'commands to control the mediator')
 acmd = CSCmd(spoken_forms=['compile symbols'], 
              meanings={ContLanguage(None): ActionCompileSymbols()}, 
              docstring='compile symbols from active buffer.')
+mediator_ctrl.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['show symbols', 'print symbols'], 
+             meanings={ContLanguage(None): ActionPrintSymbols()}, 
+             docstring='Print the list of all known symbols.')
+mediator_ctrl.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['show abbreviatiosn', 'print abbreviations'], 
+             meanings={ContLanguage(None): ActionPrintAbbrevs()}, 
+             docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
 

@@ -1259,8 +1259,11 @@ class NewMediatorObject(Object.OwnerObject):
         """Specify source files defining expansions and abbreviations"""
         self.interp.abbreviations_in(file_list)
 
-    def print_abbreviations(self):
-        self.interp.print_abbreviations()
+    def print_symbols(self, symbols = None):
+        self.interp.print_symbols(symbols)
+
+    def print_abbreviations(self, show_unresolved=0):
+        self.interp.print_abbreviations(show_unresolved)
 
     def add_module(self, module):
         """add a new KnownTargetModule to the AppMgr/RecogStartMgr
