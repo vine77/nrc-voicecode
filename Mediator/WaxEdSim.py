@@ -35,8 +35,6 @@ from wxPython.wx import *
 import WaxEdit
 
 ID_EXIT = 101
-ID_OPEN_FILE = 150
-ID_CONF_SCRIPT = 160
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
@@ -48,6 +46,10 @@ ID_PROMPT = 130
 ID_COMMAND_LINE = 140
 ID_MIC_BUTTON = 150
 ID_MIC_LABEL = 151
+ID_OPEN_FILE = 200
+ID_CONF_SCRIPT = 210
+ID_SAVE_FILE = 220
+ID_SAVE_AS = 230
 
 
 class WaxEdSimPane(wxPanel):
@@ -327,10 +329,13 @@ class WaxEdSimFrame(wxFrame):
 	"""necessary because of circular references: 
 	child contains reference to parent.  Note: quit_now calls
 	cleanup"""
-	self.pane.cleanup()
-	self.pane.Destroy()
-	del self.most_recent_focus
-	del self.pane
+	try:
+	    self.pane.cleanup()
+	    self.pane.Destroy()
+	    del self.most_recent_focus
+	    del self.pane
+	except AttributeError:
+	    pass
 
     def __init__(self, parent, ID, title, command_space = None):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
@@ -340,8 +345,10 @@ class WaxEdSimFrame(wxFrame):
 	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
-        file_menu.Append(ID_OPEN_FILE,"&Open","Open a file")
+        file_menu.Append(ID_OPEN_FILE,"&Open...","Open a file")
         file_menu.Append(ID_CONF_SCRIPT,"&Config Script","Execute a python configuration script for the environment (ex: a demo file)")        
+        file_menu.Append(ID_SAVE_FILE,"&Save","Save current file")
+        file_menu.Append(ID_SAVE_AS,"Save &As...","Save current file")
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
         window_menu = wxMenu()
@@ -349,7 +356,7 @@ class WaxEdSimFrame(wxFrame):
         window_menu.Append(ID_FOCUS_COMMAND, "&Command Line")
 
         format_menu = wxMenu()
-        format_menu.Append(ID_CHOOSE_FONT, "&Font")        
+        format_menu.Append(ID_CHOOSE_FONT, "&Font...")        
 
         edit_menu = wxMenu()
 
@@ -362,9 +369,12 @@ class WaxEdSimFrame(wxFrame):
         self.CreateStatusBar()
 
         self.SetMenuBar(menuBar)
+        EVT_CLOSE(self, self.on_close)
         EVT_MENU(self,ID_EXIT,self.quit_now)
         EVT_MENU(self,ID_OPEN_FILE,self.open_file)
         EVT_MENU(self,ID_CONF_SCRIPT,self.execute_file)        
+        EVT_MENU(self,ID_SAVE_FILE,self.save_file)
+        EVT_MENU(self,ID_SAVE_AS,self.save_as)
         EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
@@ -438,39 +448,68 @@ class WaxEdSimFrame(wxFrame):
         self.SetStatusText(m)
         return
     def quit_now(self, event):
-	print 'closing'
+#	print 'closing'
 	self.cleanup()
         self.Close(true)
+    def on_close(self, event):
+	self.cleanup()
+	event.Skip()
     def open_file(self, event):
 	init_dir = self.app_control.curr_dir
-        dlg = wxFileDialog(self, "Edit File", init_dir)
+        dlg = wxFileDialog(self, "Edit File", init_dir, "", "*.*",
+	    wxOPEN | wxCHANGE_DIR)
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
 # hack to get CmdInterp to scan for symbols	    
 	    self.pane.command_space['open_file'](file_path)
 #	    self.app_control.open_file(file_path)
-
+	dlg.Destroy()
 
     def execute_file(self, event):
 	init_dir = self.app_control.curr_dir
-        dlg = wxFileDialog(self, "Execute Script File", init_dir)
+        dlg = wxFileDialog(self, "Execute Script File", init_dir, "",
+	    "*.*", wxOPEN)
         answer = dlg.ShowModal()
         print '-- WaxEdSim.execute_file: answer=%s, wxID_OK=%s' % (answer, wxID_OK)
         if answer == wxID_OK:
             file_path = dlg.GetPath()
             
             self.pane.command_prompt._on_command("execfile('%s')" % file_path)
+	dlg.Destroy()
+
+    def save_as(self, event):
+	init_dir = self.app_control.curr_dir
+        dlg = wxFileDialog(self, "Save File", init_dir, "", "*.*",
+	    wxSAVE | wxCHANGE_DIR | wxOVERWRITE_PROMPT)
+        answer = dlg.ShowModal()
+        if answer == wxID_OK:
+            file_path = dlg.GetPath()
+	    self.app_control.save_file(file_path)
+	dlg.Destroy()
+
+    def save_file(self, event):
+	name = self.app_control.curr_buffer_name()
+	if name:
+	    self.app_control.save_file(name)
+	else:
+	    self.save_as(self, event)
 
     def choose_font(self, event):
 
         on_window = self.pane.editor
         current_font = on_window.GetFont()
-        dlg = wxFontDialog(self, wxFontData().SetInitialFont(current_font))
+        current_font_data = wxFontData()
+	current_font_data.SetInitialFont(current_font)
+        dlg = wxFontDialog(self, current_font_data)
+# the line below passed the return value (None?) of SetInitialFont to the
+# dialog
+#        dlg = wxFontDialog(self, wxFontData().SetInitialFont(current_font))
         dlg.ShowModal()
         chosen_font = dlg.GetFontData().GetChosenFont()
         if chosen_font:
             on_window.SetFont(chosen_font)
+	dlg.Destroy()
 
 
         
@@ -544,6 +583,34 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	*TextBufferWX* -- the TextBufferWX
 	"""
 	return self.frame.editor_buffer()
+
+    def open_file_in_buffer(self, name):
+	"""opens a new file in the existing TextBufferWX
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true on success (otherwise the existing file is left
+	there)
+	"""
+	return self.frame.editor_buffer().underlying.LoadFile(name)
+    
+    def save_file(self, full_path):
+	"""Saves the file in the existing TextBufferWX
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true on success (otherwise the existing file is left
+	there)
+	"""
+	return self.frame.editor_buffer().underlying.SaveFile(full_path)
 
     def is_active(self):
 	"""indicates whether the editor frame is active

@@ -72,7 +72,7 @@ class EdSim(AppState.AppState):
         Open file with name *STR name* and written in language *STR lang*.        
         """
         try:
-            source_file = open(name, 'rw')
+            source_file = open(name, 'r')
             source = source_file.read()
             source_file.close()
         except Exception, err:
@@ -86,6 +86,29 @@ class EdSim(AppState.AppState):
 	self.only_buffer_name = name
 
         self.open_buffers[name] = self.only_buffer
+
+    def save_file(self, full_path):
+        """Save the current buffer.
+
+        Save file with path *STR full_path*.        
+        """
+        try:
+            source_file = open(full_path, 'w')
+            source_file.write(self.curr_buffer().contents())
+            source_file.close()
+        except Exception, err:
+            return
+	path, short = os.path.split(full_path)
+	if path:
+	    self.curr_dir = path
+	old_name = self.curr_buffer_name()
+	if not old_name or old_name != full_path:
+	    self.only_buffer_name = full_path
+	    self.open_buffers[full_path] = self.only_buffer
+	    del self.open_buffers[old_name]
+	    self.the_editor.set_name(short) 
+	if self.curr_buffer_name() != None:
+	    del self.open_buffers[self.curr_buffer_name()]
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?

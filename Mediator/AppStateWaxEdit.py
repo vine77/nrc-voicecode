@@ -108,24 +108,51 @@ class AppStateWaxEdit(AppState.AppState):
 	else:
 	    path = self.curr_dir
 	    name = os.path.join(path, short)
-        try:
-            source_file = open(name, 'rw')
-            source = source_file.read()
-            source_file.close()
-        except Exception, err:
-	    return
+	success = self.the_editor.open_file_in_buffer(name)
+#         try:
+#             source_file = open(name, 'rw')
+#             source = source_file.read()
+#             source_file.close()
+#         except Exception, err:
+# 	    return
 	# WaxEdit only supports one open buffer at a time
-	if self.curr_buffer_name() != None:
-	    del self.open_buffers[self.curr_buffer_name()]
-        self.only_buffer =  SourceBuffTB(app = self, file_name=name, 
-	    underlying_buffer = self.the_editor.editor_buffer(),
-	    language=lang, indent_level=3, indent_to_curr_level=1)
-	self.only_buffer_name = name
-	self.the_editor.editor_buffer().set_text(source)
-	self.the_editor.set_name(short)
+	if success:
+	    if self.curr_buffer_name() != None:
+		del self.open_buffers[self.curr_buffer_name()]
+	    self.only_buffer =  SourceBuffTB(app = self, file_name=name, 
+		underlying_buffer = self.the_editor.editor_buffer(),
+		language=lang, indent_level=3, indent_to_curr_level=1)
+	    self.only_buffer_name = name
+#	    self.the_editor.editor_buffer().set_text(source)
+	    self.the_editor.set_name(short)
 
-        self.open_buffers[name] = self.only_buffer
+	    self.open_buffers[name] = self.only_buffer
+
         
+    def save_file(self, full_path):
+        """Save the current buffer.
+
+        Save file with path *STR full_path*.        
+        """
+	success = self.the_editor.save_file(full_path)
+#         try:
+#             source_file = open(name, 'rw')
+#             source = source_file.read()
+#             source_file.close()
+#         except Exception, err:
+# 	    return
+	# WaxEdit only supports one open buffer at a time
+	if success:
+	    path, short = os.path.split(full_path)
+	    if path:
+		self.curr_dir = path
+	    old_name = self.curr_buffer_name()
+	    if not old_name or old_name != full_path:
+		self.only_buffer_name = full_path
+		self.open_buffers[full_path] = self.only_buffer
+		del self.open_buffers[old_name]
+	    self.the_editor.set_name(short)
+
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
 

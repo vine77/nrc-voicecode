@@ -27,7 +27,8 @@ import re, string, sys
 
 from Object import Object
 
-file_language = {'c': 'C', 'h': 'C', 'py': 'python'}
+file_language = {'c': 'C', 'h': 'C', 'C': 'C', 'cpp': 'C', 'cc' : 'C', 
+  'py': 'python'}
 
 def language_name(file_name):
     """Returns the name of the language a file is written in

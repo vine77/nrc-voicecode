@@ -314,12 +314,19 @@ class AppState(Object):
 
 
 
-    def open_file(self, name):
+    def open_file(self, name, lang = None):
         """Open a file.
 
-        Open file with name *STR name*.        
+        Open file with name *STR name* and written in language *STR lang*.        
         """
         debug.virtual('AppState.open_file')
+
+    def save_file(self, full_path):
+        """Save the current buffer.
+
+        Save file with path *STR full_path*.        
+        """
+	debug.virtual('AppState.save_file')
 
     def active_language(self):
         """Returns name of active programming language.
