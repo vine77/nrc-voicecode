@@ -192,11 +192,12 @@ def simulator_mode(options):
     window = natlink.getCurrentModule()[2]
     app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
 
+    
     init_simulator(app = app, 
 	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
 	disable_dlg_select_symbol_matches = 1, window = window, 
 	editor_app = editor_app)
-    
+        
     #
     # For better error reporting, you can type some instructions here
     # instead of typing them at the console. The fact that the console

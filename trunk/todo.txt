@@ -4,6 +4,30 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+BUG in gui_sim
+--------------
+
+> > The problem happens when the phrases are too long. If I issue the
+> above
+> > say command twice in a row, the server busy message appears, and the
+> > results are incomplete. This behavior is reproducible. Even worse,
+> sometimes
+> > the application hangs after a long phrase and I need to reboot.
+> 
+> Can you send me a recipe for reproducing the bug and I'll try it on my
+> end.
+
+After reboot I do the following:
+
+1) startup gui_sim
+
+2) paste the following command into the command line and wait until the
+result is displayed
+say(['boost', 'slash', 'graph', 'slash', 'graph', 'traits', '.\\dot', 'H.',
+'P.', 'P.'])
+
+
+
 Performance
 -----------
 

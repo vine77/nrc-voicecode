@@ -191,11 +191,11 @@ def simulator_mode(options):
     if options['e']:
       sys.stderr = sys.stdout
     try:
-    
+        
       while (not sim_commands.quit_flag):
-	  sys.stdout.write('Command> ')
-	  cmd = sys.stdin.readline()
-	  execute_command(cmd)                
+        sys.stdout.write('Command> ')
+        cmd = sys.stdin.readline()
+        execute_command(cmd)                
     finally:
       if options['e']:
 	sys.stderr = sys.__stderr__
