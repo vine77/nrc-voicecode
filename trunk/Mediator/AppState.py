@@ -1724,12 +1724,12 @@ class AppState(OwnerObject):
         if self.is_bound_to_buffer() == buff_name:
             self.unbind_from_buffer()
 
-    def drop_breadcrumb(self, buffname=None, pos=None):
+    def drop_breadcrumb(self, buff_name=None, pos=None):
 
         """Drops a breadcrumb
 
         *INT pos* is the position where to drop the crumb. *STR
-         buffname* is the name of the source buffer.
+         buff_name* is the name of the source buffer.
         
         If *pos* not specified, drop breadcrumb at cursor position.
 
@@ -2016,12 +2016,10 @@ class AppState(OwnerObject):
         .. [Action] files:///./Action.Action.html"""
 
 #        print '-- AppState.get_history: nth=%s' % nth
-        hist_entry = None
-        if nth <= len(self.history):
-            entry_pos = len(self.history) - nth
-            hist_entry = self.history[entry_pos]
-        return hist_entry
-
+        try:
+            return self.history[-nth]
+        except IndexError:
+            return None
 
 
     def init_for_test(self, save = -1):

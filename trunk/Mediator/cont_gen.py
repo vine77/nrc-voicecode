@@ -102,11 +102,15 @@ class ContLastActionWas(Context):
          any of the classes in *types*.
         """
         
-        self.deep_construct(ContAny, {'types': types, 'connector': connector},
+        self.deep_construct(ContLastActionWas, {'types': types, 'connector': connector},
                             attrs)
         
     def applies(self, app):
-        (last_cont, last_action) = app.get_history(1)
+        entry = app.get_history(1)
+        if entry:
+            (last_cont, last_action) = entry
+        else:
+            return 0
         if self.connector == 'and':
             answer = 1
             for a_class in self.types:

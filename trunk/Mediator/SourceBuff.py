@@ -26,6 +26,8 @@ import debug
 from debug import trace
 import re, string, sys
 
+from exceptions import IndexError
+
 from Object import Object, OwnerObject
 
 from SourceBuffCookie import SourceBuffCookie
@@ -203,15 +205,15 @@ class SourceBuff(OwnerObject):
         SourceBuff.drop_breadcrumb is included only as a convenient
         shorthand for
 
-          buff.application().drop_breadcrumb(buffname = buff.file_name(),
+          buff.application().drop_breadcrumb(buff_name = buff.file_name(),
           pos = ...)
         
         *INT pos* is the position where to drop the crumb. *STR
-         buffname* is the name of the source buffer.
+         buff_name* is the name of the source buffer.
         
         If *pos* not specified, drop breadcrumb at cursor position.
         """
-        self.application.drop_breadcrumb(buffname = self.file_name(), pos = pos)
+        self.application.drop_breadcrumb(buff_name = self.file_name(), pos = pos)
 
 
     def language_name(self):
@@ -1121,6 +1123,44 @@ class SourceBuff(OwnerObject):
         return regexp
 
 
+    def char_search(self, char_exp, direction = 1, pos = None):
+        """performs a quick search for the next/previous character
+        matching char_exp, without moving the cursor, or logging the
+        search
+
+        **INPUTS**
+
+        *STR* char_exp -- a regular expression assumed to match one
+        character (e.g. "a", ".", "\s", "\S", "[A-Za-z]"
+
+        *INT* direction -- if positive, search forward, otherwise
+        search backward
+
+        *INT* pos -- position within buffer to start, or None for
+        current position
+
+        **OUTPUTS**
+
+        *INT* -- offset into the buffer of the next character in the
+        appropriate direction matching the expression.  If a matching
+        character was not found, char_search will raise an IndexError.
+        """
+        if pos is None:
+            pos = self.cur_pos()
+        if direction > 0:
+            d = 1
+            bound = self.len()
+        else:
+            d = -1
+            pos = pos - 1
+            bound = 0
+        x = re.compile(char_exp)        
+        while d*pos <= bound:
+            if x.match(self.contents()[pos]):
+                return pos
+            pos = pos + d
+        raise IndexError()
+
     def search_for(self, regexp, direction=1, num=1, where=1, 
         unlogged = 0):
         
@@ -1163,9 +1203,10 @@ class SourceBuff(OwnerObject):
            if a_match and pos < len(self.get_text()):
 # this allows for overlapping matches - ugh
 #               pos = a_match.start() + 1
+# this is better...
                pos = a_match.end()
-# if we get a zero length match (e.g. '$' matching end of line, then we
-# will continue to get the same match unless we advance the position
+# ... but if we get a zero length match (e.g. '$' matching end of line), 
+# then we will continue to get the same match unless we advance the position
                if a_match.start() == a_match.end():
                  pos = pos + 1
                all_matches_pos = all_matches_pos + [(a_match.start(), a_match.end())]               
@@ -1571,7 +1612,7 @@ class SourceBuff(OwnerObject):
         
         *CHAR* -- the character at position *key*
         """
-        return self.content()[key]
+        return self.contents()[key]
 
     def __setitem__(self, key, value):
         """Set a character of the buffer using the buff[i] syntax.
@@ -1599,7 +1640,7 @@ class SourceBuff(OwnerObject):
         
         *STR* -- the slice from *start* to *end*
         """
-        return self.content()[start:end]
+        return self.contents()[start:end]
 
     def __getslice__(self, start, end, value):
         """Sets slice of the buffer using the buff[start:end] = value syntax.

@@ -26,6 +26,7 @@ grammars (dictation and selection grammars)
 import debug
 import string
 from Object import Object, OwnerObject
+from exceptions import IndexError
 
 class GramMgr(OwnerObject):
     """abstract class defining basic grammar management interface.
@@ -441,28 +442,25 @@ class GramMgrDictContext(GramMgr):
         current = self.app.cur_pos(buff_name = buffer)
         selection = self.app.get_selection(buff_name = buffer)
 #        print current
-        self.app.drop_breadcrumb(buffname = buffer)
-        self.app.drop_breadcrumb(buffname = buffer)
-#        self.app.search_for(r'\S+\s+\S+', direction = -1, 
-#            num = 1, where = -1, buff_name = buffer, unlogged = 1)
-# don't log the search -- otherwise we mess up commands to repeat
-# previous user-initiated searches and punctuation navigation
-        self.app.search_for(r'\s+\S', direction = -1, 
-            num = 2, where = -1, buff_name = buffer, unlogged = 1)
-#        self.app.search_for(r'\s+\S+', direction = -1, 
-#            num = 2, where = -1, buff_name = buffer, unlogged = 1)
-        start = self.app.cur_pos(buff_name = buffer)
-#        print start
+        buff = self.app.find_buff(buff_name = buffer)
+        start = buff.cur_pos()
+        try:
+            for count in range(2):
+                start = buff.char_search('\S', direction = -1, pos = start)
+                start = buff.char_search('\s', direction = -1, pos = start)
+            start = buff.char_search('\S', direction = -1, pos = start) + 1
+        except IndexError:
+            start = 0
         before = self.app.get_text(start, current, buff_name = buffer)
-#        print before
-        self.app.pop_breadcrumbs()
-        self.app.search_for(r'\S+\s+', direction = 1, 
-            num = 2, where = 1, buff_name = buffer, unlogged = 1)
-        end = self.app.cur_pos(buff_name = buffer)
-#        print end
+        end = buff.cur_pos()
+        try:
+            end = buff.char_search('\S', pos = end)
+            end = buff.char_search('\s', pos = end)
+        except IndexError:
+            end = buff.len()
         after = self.app.get_text(current, end, buff_name = buffer)
-        self.app.pop_breadcrumbs()
-        self.app.set_selection(selection, buff_name = buffer)
+        debug.trace('GramMgrDictContext.find_context', 
+            'before, after = [%s], [%s]' % (before, after))
         return before, after
 
 
