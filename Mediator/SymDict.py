@@ -27,6 +27,7 @@ from Object import Object, OwnerObject
 import sb_services, SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, PickledObject, sr_interface, vc_globals
+import DictConverter
 import util
 from debug import trace
 import debug
@@ -42,7 +43,7 @@ import traceback
 
 language_definitions={}
 
-current_version = 1
+current_version = 2
 
 #
 # Minimum length for an abbreviation (short abbreviations tend to introduce
@@ -373,6 +374,7 @@ class ErrorReadingPersistDict(RuntimeError):
         RuntimeError.__init__(self, message)
         self.message = message
 
+
 class SymDict(OwnerObject):
     """Known symbols dictionary.
 
@@ -435,6 +437,9 @@ class SymDict(OwnerObject):
     *[STR] standard_symbol_sources* -- List of files in which standard
     symbols for different languages are defined.
 
+    *[STR] symbol_sources_read* -- List of files from which standard
+    symbols have already been scanned.
+
     *[STR] abbrev_sources* -- List of files in which
     abbreviations and expansions for symbol terms are defined.
 
@@ -472,7 +477,7 @@ class SymDict(OwnerObject):
     def __init__(self, sym_file = None, interp = None, 
                  **attrs):
 
-        # These attributes can't be set at construction time
+        # These attributes can't be set with constructor arguments
         self.decl_attrs({'_cached_symbols_as_one_string': '',
                          'spoken_form_info': {},
                          'symbol_info': {},
@@ -480,6 +485,7 @@ class SymDict(OwnerObject):
                          'alt_abbreviations': {},
                          'expansions': {},
                          'standard_symbol_sources': [],
+                         'symbol_sources_read': [],
                          'abbrev_sources': [],
                          'unresolved_abbreviations': {},
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
@@ -533,6 +539,9 @@ class SymDict(OwnerObject):
             
         try:
             db['version'] = current_version
+            db['fields'] = ['version', 'symbol_info',
+                'spoken_form_info', 'abbreviations', 'alt_abbreviations',
+                'unresolved_abbreviations', 'symbol_sources_read']
             db['symbol_info'] = self.symbol_info
 # at the moment, spoken_form_info is redundant with symbol_info, except for 
 # ordering, but I'm not sure that will always be true, or what to do 
@@ -541,6 +550,7 @@ class SymDict(OwnerObject):
             db['abbreviations'] = self.abbreviations
             db['alt_abbreviations'] = self.alt_abbreviations
             db['unresolved_abbreviations'] = self.unresolved_abbreviations
+            db['symbol_sources_read'] = self.symbol_sources_read
         except:
             msg = 'WARNING: error writing to SymDict state file %s\n' % file
             sys.stderr.write(msg)
@@ -837,6 +847,10 @@ class SymDict(OwnerObject):
         persistent symbol dictionary file, or if this SymDict instance
         was not initialized from a persisten symbol dictionary
         """
+        debug.trace('SymDict.changed_since_sym_file',
+           'symdict file modified %s' % self.file_time)
+        debug.trace('SymDict.changed_since_sym_file',
+           'file %s modified %s' % (path, util.last_mod(path)))
         if self.from_file and util.last_mod(path) <= self.file_time:
             return 0
         return 1
@@ -914,13 +928,34 @@ class SymDict(OwnerObject):
             if os.path.exists(file):
                 existing.append(file)
 
+# files no longer in standard_symbol_sources should be eliminated from
+# the list of files read, because the symbols read from them may no 
+# longer be up to date
+        files_read = []
+        for file in self.symbol_sources_read:
+            if file in self.standard_symbol_sources:
+                files_read.append(file)
+        self.symbol_sources_read = files_read
+
 #        print 'existing files:', existing
 #        print 'from_file = ', self.from_file
 #        print 'marked = ', sr_interface.is_user_marked()
+        debug.trace('SymDict.maybe_parse_standard_symbols',
+            'from_file = %d' % self.from_file)
+        debug.trace('SymDict.maybe_parse_standard_symbols',
+            'standard symbol sources: %s' % self.standard_symbol_sources)
+        debug.trace('SymDict.maybe_parse_standard_symbols',
+            'symbol sources already read: %s' % self.symbol_sources_read)
         if self.from_file and sr_interface.is_user_marked():
             files = []
             for file in existing:
-                if self.changed_since_sym_file(file):
+                debug.trace('SymDict.maybe_parse_standard_symbols',
+                    'checking file %s' % file)
+# need to scan files which have just been added to the standard symbols
+# sources list, and re-scan files changed since the persistent SymDict file 
+# was saved
+                if self.changed_since_sym_file(file) or \
+                    file not in self.symbol_sources_read:
                     files.append(file)
 #            print 'changed files:', files
         else:
@@ -963,6 +998,10 @@ class SymDict(OwnerObject):
             print 'Compiling symbols for file \'%s\'' \
                 % util.within_VCode(a_file)
             self.parse_symbols_from_file(a_file, add_sr_entries=add_sr_entries)
+# add to list of files already scanned and up to date
+            if a_file in self.standard_symbol_sources and \
+                a_file not in self.symbol_sources_read:
+                self.symbol_sources_read.append(a_file)
             
         #
         # Save dictionary to file
@@ -1964,9 +2003,13 @@ class SymDict(OwnerObject):
             debug.trace('SymDict.init_from_file',
                 'expected fields are %s' % fields)
             if version != current_version:
-                msg = 'unknown version %d' % version \
-                    + ' of the symbol dictionary file\n%s\n' % self.sym_file
-                raise ErrorReadingPersistDict(msg)
+                if not symdict_cvtr.known_version(version):
+                    debug.trace('SymDict.init_from_file',
+                        'version %d, known versions: %s' % (version,
+                        symdict_cvtr.known_versions()))
+                    msg = 'unknown version %d' % version \
+                        + ' of the symbol dictionary file\n%s\n' % self.sym_file
+                    raise ErrorReadingPersistDict(msg)
             current_field = None
             try:
                 values = {}
@@ -1986,10 +2029,23 @@ class SymDict(OwnerObject):
             return 0
 
         db.close()
-        okay = self.init_from_dictionary(values)
-        if okay:
-            self.file_time = util.last_mod(self.sym_file)
-        return okay
+        try:
+            if version != current_version:
+                try:
+                    values = symdict_cvtr.convert(values, version)
+                except DictConverter.ConversionFailure, e:
+                    msg = 'Error while trying to convert symbol dictionary file' \
+                        + '\n%s\n' % self.sym_file \
+                        + ' from version %s to %s\n' % (version, current_version)
+                    msg = msg + str(e) + '\n'
+                    raise ErrorReadingPersistDict(msg)
+            okay = self.init_from_dictionary(values)
+            if okay:
+                self.file_time = util.last_mod(self.sym_file)
+            return okay
+        except ErrorReadingPersistDict, e:
+            self._failed_read(e.message, fatal = 1)
+            return 0
 
     def init_from_dictionary(self, dict):
         """Initialises the symbol dictionary object from a dictionary of
@@ -2020,7 +2076,8 @@ class SymDict(OwnerObject):
                 raise ErrorReadingPersistDict(msg)
 ##} wrong version
             fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
-                'alt_abbreviations', 'unresolved_abbreviations']
+                'alt_abbreviations', 'unresolved_abbreviations',
+                'symbol_sources_read']
             current_field = None
             for field in fields:
                 current_field = field
@@ -2045,6 +2102,7 @@ class SymDict(OwnerObject):
             self.abbreviations = dict['abbreviations'] 
             self.alt_abbreviations = dict['alt_abbreviations'] 
             self.unresolved_abbreviations = dict['unresolved_abbreviations'] 
+            self.symbol_sources_read = dict['symbol_sources_read']
 
 # re-create expansions from abbreviations
             self.regenerate_expansions()
@@ -2152,6 +2210,114 @@ class SymDict(OwnerObject):
             collapsed_auxilliary_words = collapsed_auxilliary_words + [new_auxilliary_word]
             
         return collapsed_words, collapsed_auxilliary_words
+
+###############################################################################
+# classes for updating old versions of the persistent SymDict dictionary
+###############################################################################
+
+class SymDictSingleConverter(DictConverter.SingleVersionDictConverter):
+    def __init__(self, initial_version, final_version, **args):
+        self.deep_construct(SymDictSingleConverter, 
+            {'initial': initial_version,
+             'target': final_version
+            },
+            args)
+
+    def initial_version(self):
+        """the initial version from which DictConverter converts
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *INT* -- the initial version from which DictConverter converts
+        """
+        return self.initial
+
+    def final_version(self):
+        """the final version to which DictConverter converts
+        
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *INT* -- the final version to which DictConverter converts
+        """
+        return self.target
+
+    def dict_class(self):
+        """indicates the class corresponding to the dictionaries
+        we are converting
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *CLASS* -- the class corresponding to the dictionaries
+        """
+        return SymDict
+
+class AddSymbolSourcesRead(SymDictSingleConverter):
+
+    def __init__(self, **args):
+        self.deep_construct(AddSymbolSourcesRead, {}, args,
+           enforce_value = {'initial_version': 1,
+                            'final_version': 2})
+
+    def convert(self, original, initial_version):
+        """converts a dictionary from one version to another
+
+        NOTE: If DictConverter is unable to convert the dictionary, it
+        will raise a ConversionFailure exception
+
+        **INPUTS**
+
+        *INT initial_version* -- initial version of the dictionary
+
+        *[ANY:ANY] original* -- original dictionary
+        
+        *none*
+
+        **OUTPUTS**
+
+        *[ANY:ANY]* -- final dictionary
+        """
+        if initial_version != self.initial:
+            msg =  "unknown version %s" % initial_version
+            raise DictConverter.ConversionFailure(msg)
+        try:
+            d = copy.deepcopy(original)
+            d['symbol_sources_read'] = []
+            d['version'] = self.final_version()
+        except:
+            extype, value, trace = sys.exc_info()
+            ex = traceback.format_exception(extype, value, trace)
+            msg = 'Unexpected exception:\n'
+            for line in ex:
+                msg = msg + line
+            msg = msg + '\converting dictionary data\n'
+            msg = msg + ' read from symbol dictionary file\n%s\n' \
+                  % self.sym_file
+            msg = msg + 'from version %s to %s' % (initial_version,
+                self.final_version())
+            raise DictConverter.ConversionFailure(msg)
+        return d
+
+
+# global converter
+symdict_cvtr = DictConverter.CompoundDictConverter(SymDict, current_version)
+
+# when incrementing current_version and adding a new converter (from the
+# previous version to the current one) to the compound converter, 
+# you must it prepend the new converter to this list:
+
+symdict_cvtr.add_converter(AddSymbolSourcesRead())
 
 ###############################################################################
 # Configuration functions. These are not methods
