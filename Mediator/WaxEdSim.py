@@ -96,7 +96,21 @@ class WaxEdSimPane(wxPanel):
 
 
     """
+    def __del__(self):
+        wxBell()
 
+    def cleanup(self):
+#	wxBell()
+#	self.mic_button.SetBitmapLabel(wxNullBitmap)
+#	self.mic_button.Destroy()
+#	print 'hello'
+#	self.green_light.Destroy()
+	del self.green_light
+	del self.grey_light
+	del self.dark_grey_light
+	del self.parent
+        
+        
     def __init__(self, parent, ID, title, command_space = None):
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize,
 	    name = title)
@@ -309,6 +323,15 @@ class WaxEdSimFrame(wxFrame):
     others -- the various menus
     """
 
+    def cleanup(self):
+	"""necessary because of circular references: 
+	child contains reference to parent.  Note: quit_now calls
+	cleanup"""
+	self.pane.cleanup()
+	self.pane.Destroy()
+	del self.most_recent_focus
+	del self.pane
+
     def __init__(self, parent, ID, title, command_space = None):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
         wxSize(1000, 600))
@@ -416,6 +439,7 @@ class WaxEdSimFrame(wxFrame):
         return
     def quit_now(self, event):
 	print 'closing'
+	self.cleanup()
         self.Close(true)
     def open_file(self, event):
 	init_dir = self.app_control.curr_dir
