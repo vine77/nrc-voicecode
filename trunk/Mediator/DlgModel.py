@@ -48,5 +48,6 @@ class DlgModel(Object.OwnerObject):
         self.view = view
         self.add_owned(view)
 
-    def Close(self):
-        self.view.Close()
+        
+    def Destroy(self):
+        self.view.Destroy()

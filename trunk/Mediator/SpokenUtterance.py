@@ -26,6 +26,7 @@ and playback
 
 from Object import Object, OwnerObject
 import debug
+import string
 
 class SpokenUtterance(OwnerObject):
     """defines an abstract interface for manipulating the speech
@@ -43,6 +44,21 @@ class SpokenUtterance(OwnerObject):
         self.deep_construct(SpokenUtterance,
             {}, attrs)
 
+    def spoken_form_as_string(self):
+        """returns the spoken form of the utterance as a single 
+        string
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the spoken form
+        """
+        return string.join(self.spoken_forms())
+        
+
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
 
@@ -55,6 +71,8 @@ class SpokenUtterance(OwnerObject):
         *[STR]* -- list of spoken forms from the utterance
         """
         debug.virtual('SpokenUtterance.spoken_forms')
+        
+    
 
     def words(self):
         """returns list of words (as (spoken, written) 2-tuples) 
@@ -236,15 +254,15 @@ class MockSpokenUtterance(SpokenUtterance):
     
     **INSTANCE ATTRIBUTES**
 
-    *(STR, STR)* -- List of words in Written/Spoken form.
+    *[(STR, STR)] word_list* -- List of words in Written/Spoken form.
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, words = [], **attrs):
+    def __init__(self, word_list = [], **attrs):
         self.deep_construct(MockSpokenUtterance,
-            {'words': words}, attrs)
+            {'word_list': word_list}, attrs)
 
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
@@ -272,7 +290,7 @@ class MockSpokenUtterance(SpokenUtterance):
         *[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
         
         """
-        return self.words
+        return self.word_list
       
     def adapt(self, words):
         """changes the stored list of words so that 

@@ -768,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x020C27F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x020C69D0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -8185,6 +8185,67 @@ AssertionError: This should always fail
 Ran 2 tests in 0.000s
 
 FAILED (failures=1)
+FFFF
+======================================================================
+FAIL: test_bad_length_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 15, in test_bad_length_in_assert_sequences_have_same_content
+    self.assert_sequences_have_same_content(self.nevermind, [], [1, 2])
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 27, in assert_sequences_have_same_content
+    self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s"
+  File "C:\Python22\lib\unittest.py", line 254, in fail
+    raise self.failureException, msg
+AssertionError: Nevermind, this test is supposed to fail.
+Expeted sequence of length 0, but got sequence of length 2
+Expected list:
+   []
+Got list:
+   [1, 2]
+
+======================================================================
+FAIL: test_different_first_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 19, in test_different_first_item_in_assert_sequences_have_same_content
+    self.assert_sequences_have_same_content(self.nevermind, ['hello', 'world'], ['hello', 'universe'])
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
+  File "C:\Python22\lib\unittest.py", line 254, in fail
+    raise self.failureException, msg
+AssertionError: Nevermind, this test is supposed to fail.
+Item at position 1 was wrong. Expected 'world', but got 'universe'
+
+======================================================================
+FAIL: test_different_last_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 23, in test_different_last_item_in_assert_sequences_have_same_content
+    self.assert_sequences_have_same_content(self.nevermind, ['hello', 'world'], ['hi', 'world'])
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
+  File "C:\Python22\lib\unittest.py", line 254, in fail
+    raise self.failureException, msg
+AssertionError: Nevermind, this test is supposed to fail.
+Item at position 0 was wrong. Expected 'hello', but got 'hi'
+
+======================================================================
+FAIL: test_different_middle_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 28, in test_different_middle_item_in_assert_sequences_have_same_content
+    ['hello', 'wonderful', 'world'])
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
+  File "C:\Python22\lib\unittest.py", line 254, in fail
+    raise self.failureException, msg
+AssertionError: Nevermind, this test is supposed to fail.
+Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+FAILED (failures=4)
 
 
 *******************************************************************************
@@ -12851,9 +12912,9 @@ Heard new statement
 * Description : Testing symbol reformatting UI.
 *******************************************************************************
 
-.
+..
 ----------------------------------------------------------------------
-Ran 1 tests in 0.000s
+Ran 2 tests in 0.050s
 
 OK
 
@@ -13133,7 +13194,19 @@ Heard select previous index equals zero
   4: index = 1
 
 
+*******************************************************************************
+* Name        : wxWindowsWithHelpers
+* Description : Testing subclasses of wxWindows widgets.
+*******************************************************************************
+
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.030s
+
+OK
+
+
 
 -----------------------------------------------
-Test suite completed in:  462.705000162 secs
+Test suite completed in:  453.161999941 secs
 -----------------------------------------------
