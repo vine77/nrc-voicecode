@@ -590,5 +590,6 @@ class AppMgr(OwnerObject):
 	return None
 
 
+
 # defaults for vim - otherwise ignore
 # vim:sw=4
