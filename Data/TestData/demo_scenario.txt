@@ -1,114 +1,183 @@
     Scenario for a demo of VoiceCode
     ================================
 
-Last modified: 2003-12-02
+Last modified: 2004-10-14
 
 
+Before the demo
+---------------
+
+- DISABLE ERGOSENTERY (for Alain Desilets)
+
+- IF USING A LAPTOP AND IT IS CONNECTED THROUGH WIRELESS CONNECTION,
+  MAKE SURE THAT THE LAPTOP POWER MANAGEMENT ARE SET SO THAT IT NEVER
+  GOES TO SLEEP. IF IT GOES TO SLEEP, MEDIATOR WILL LOSE SOCKET CONNECTION
+  WITH EMACS WHEN SYSTEM GOES TO SLEEP!!!
+
+  On Alain's laptop, it is sufficient to make sure that the laptop is
+  plugged into the power outlet (it doesn't go to sleep when 
+  plugged into the outlet).
+  
 - Open file Data/TestData/large_buff.py
 
 - Compile the symbols
+    
+- Open new file demo.py  
+
+
+Start demo by writing a bubble sort method in demo.py
+-----------------------------------------------------
+   
+- Dictate it in one go without stopping to explain what is going on.
+
+- Afterwards, redictate it, stopping each step of the way to 
+  point out interesting things.
   
-- some good existing symbols to use
-  * prof_test ("profile test")
-  * init_attrs ("init attributes")
-  * profConstrSmallObj ("profile constructor small object")
+- If you need to talk about things that didn't show up during the 
+  dictation of buble sort, just dictate it on the side.
 
-- go to the end of large_buff.py and start dictating there
+- Code for the bubble sort could look something like this:
 
-- I find writing a bubble sort method works well cause it's 
-  something everybody understand and I can program it in my sleep.
+     def bubble_sort(self, list):
+        for index1 in range(len(list)):
+           for index2 in range(index1 + 1, len(list)):
+              if list[index1] < list[index2]:
+                 swap_elements(index1, index2, list)
+        return list
+        
+- Dictation might be something like this:
 
+   "define method bubble sort add argument list do the following"
+   "for each index 1 in range of length of list do the following"
+   "for each index 2 in range of index 1 plus 1 comma length of list do the following"
+   "if list at index index 1 jump out is less than list at index index 2 do the following"
+   "swap elements with arguments index 1 comma index 2 comma list new statement"
+   "back indent 3 times"
+   "return list"
+   
+- Some interesting points to highlight during dissection afterwards
+  discussed below.
+      
 
-0. Correction
-   ----------
+Natural pausing
+---------------
 
-The first time you have to do a correction, show the correction infrastructure.
-
-Point out that:
-
-- uses smart undo-redo
-
-- automatically adapts so that it won't make the same mistake again (hopefully)
-
-
-1. Code templates
-   --------------
-
-Dictate a simple class with a single method.
-
-- Didn't have to pause anywhere in particular
-  ... But could have
-
-- Some stuff gets typed automatically (eg: self and list of arguments of 
-  method)
-
-- simple navigation with "do the following", "new statement" etc...
-
-- automatic indentation
-
-- show context sensitivity by saying "if check if okay then do"
-  The first if gets interpreted as an if statement because it's at the 
-  beginning of a line, but the second if is interpreted as being part of
-  a new symbol.
+    - Never HAVE TO pause anywhere
+    
+    - But CAN pause anywhere between commands or pseudo-symbols
+      (but CANNOT pause in the middle of a command or pseudo-symbol)
 
 
-2. Symbol dictation
-   ----------------
+Correction     
+----------
 
-- Dictate some new and some known symbols with different formattings:
-   * prof_test
-   * profCOnstrSmallObj)
+    - uses smart undo-redo
 
-- Dictate a new symbol
-
-- Dictate a new class name within a "define method" utterance, and show that
-  the class was automatically formatted using CapitalHungarian formatting
-
-- When we have a symbol correction dialog working, show how that's done.
+    - automatically adapts so that it won't make the same mistake again (hopefully)
 
 
-3. Local navigation by punctuation
-   -----------------------------
+Code templates
+--------------
 
-- Navigate by different punctuation marks
+    - When you said "define method", some stuff got typed automatically 
+      (eg: self and list of arguments of method)
 
-- Show how you can qualify the search with 
-   * "previous one"
-   * "next one"
+    - Simple navigation through template with "add argument", 
+      "do the following", etc...
 
-- Show how you can repeat the commands
-   * "again"
-   * "again 2 times"
+    - Show context sensitivity of template by saying "if check if okay then do".
+      The first if gets interpreted as an if statement because it's at the 
+      beginning of a line, but the second if is interpreted as being part of
+      a new symbol.
+    
+          
+Automatic indentation and de-indentation
+----------------------------------------
 
-- Point out that there are other repeatable commands
+    - "new statement" automatically indents to the right level
+    
+    - Back indent automatically deindents to right level
+    
+    
+New symbol dictation
+--------------------
+
+   - Everytime you say something that is not a command, system 
+     formatted it as a NEW symbol (at least in the bubble sort
+     example).
+     
+   - Show how formattting of new symbols is context sensitive.
+     Dictate a new class name within a "define method" utterance, and show that
+     the class was automatically formatted using CapitalHungarian formatting. 
+     Show that another new symbol dictated outside of the class name context
+     formats it in lowercase with underscore.
+   
+Existing symbol dictation
+-------------------------
+
+   - Display demo.py and large_buff.py one above the other and compile
+     symbols from large_buff.py.
+
+   - In demo.py, dictate some existing symbols from large_buff.py.
+     Some good ones are:
+     * prof_test ("profile test")
+     * init_attrs ("init attributes" or "init attributes")
+     * profConstrSmallObj ("profile constructor small object", "prof constructor small obj")
+
+   - Show how the same existing symbol can be dictated in different ways:
+       num_times = "num times" or "number times"
 
 
-4. Local navigation by PseudoCode
-   ------------------------------
+Symbol reformatting
+-------------------
+
+    - When we have a symbol correction dialog working, show how that's done.
+    
+    - Do it for both new and existing symbols.
+
+
+Local navigation by punctuation
+-------------------------------
+
+    - Navigate by different punctuation marks
+
+    - Show how you can qualify the search with 
+      * "previous one"
+      * "next one"
+
+    - Show how you can repeat the commands
+      * "again"
+      * "again 2 times"
+
+   - Point out that there are other repeatable commands
+
+
+Local navigation by PseudoCode
+------------------------------
 
 -  move to a line by selecting parts of it
 
 - then insert a new statement above it
 
 
-5. Global navigation by switch buffer
-   ----------------------------------
+Global navigation by switch buffer
+----------------------------------
 
 - Make sure at least two buffers opened
 
 - "Emacs switch buffer", "select buffer name", "newline"
 
 
-6. Multiple ways of saying the same thing
-   --------------------------------------
+Multiple ways of saying the same thing
+--------------------------------------
 
 - "class some class"
 - "define class some class"
 - "class definition some class"
 
 
-7. Language sensitivity
-   --------------------
+Language sensitivity
+--------------------
 
 Dictate same class definition in C and Python files and show the difference. 
 

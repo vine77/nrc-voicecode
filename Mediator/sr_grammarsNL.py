@@ -759,8 +759,42 @@ class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
             GrammarBase.load(self, self.rules)
 
     def create_rules(self):
-       self.rules.append("<dummy> exported = This is a dummy rule;")
+        """create all the rules for this grammar and put them in
+        self.rules
 
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.rules = []
+        self.rules.extend(self.reformat_recent_rule())
+
+    def reformat_recent_rule(self):
+        """create the rules for the grammar recognizing Reformat Recent/n
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[STR]* -- list of strings comprising the rules needed to
+        implement the Reformat Recent commands
+        """
+        if not self.reformat_words:
+            return []
+        if not self.recent_words:
+            return []
+        reformat = compose_alternatives(self.reformat_words)
+        recent = compose_alternatives(self.recent_words)
+        rules = []
+        rules.append("<reformat_recent> exported = %s %s;" \
+            % (reformat, recent))
+        return rules
 
     def activate(self):
         """activates the grammar for recognition
@@ -984,6 +1018,8 @@ class WinGramFactoryNL(WinGramFactory):
         *BasicCorrectionWinGram* -- new basic correction grammar
         """
         return SymbolReformattingWinGramNL(manager = manager, 
+            reformat_words = self.reformat_words, 
+            recent_words = self.recent_words,
             window = window, exclusive = exclusive, 
             capitalize_rules = self.capitalize) 
 

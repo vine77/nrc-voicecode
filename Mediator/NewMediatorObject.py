@@ -395,10 +395,13 @@ class NewMediatorObject(Object.OwnerObject):
         if self.editors != None:
             return 1 # we've already got one!
         correct_words = []
+        reformat_words = []
         if self.the_console:
             correct_words = ["Correct"]
+            reformat_words = ["Reformat"]
         grammar_factory = \
             sr_grammarsNL.WinGramFactoryNL(correct_words = correct_words, 
+                reformat_words = reformat_words, 
                 recent_words = ['Recent'], wave_playback = self.wave_playback)
 # suppress Correct That if there is no console
 # allow Correct Recent, because it has at least a stub implementation

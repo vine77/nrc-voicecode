@@ -673,13 +673,21 @@ class SymbolReformattingWinGram(WinGram):
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, reformat_words = None, recent_words = None, **attrs):
         """
         **INPUTS**
 
         """
         self.deep_construct(SymbolReformattingWinGram,
-            {}, attrs)
+            {'reformat_words': reformat_words, 'recent_words': recent_words}, 
+            attrs)            
+        if reformat_words is None:
+            reformat_words = ['Reformat']
+        if recent_words is None:
+            recent_words = ['Recent']
+        self.reformat_words = map(self.capitalize_rule, reformat_words)
+        self.recent_words = map(self.capitalize_rule, recent_words)
+            
 
     def gram_type(self):
         """returns a subclass-dependent string describing the type of grammar
@@ -793,6 +801,7 @@ class WinGramFactory(Object):
         correct_words = None,
         recent_words = None,
         capitalize_rules = 0,
+        reformat_words = None,
         **attrs):
         """
         **INPUTS**
@@ -833,7 +842,8 @@ class WinGramFactory(Object):
              'scratch_words': scratch_words,
              'correct_words': correct_words,
              'recent_words': recent_words,
-             'capitalize': capitalize_rules}, 
+             'capitalize': capitalize_rules,
+             'reformat_words': reformat_words}, 
             attrs)
 
     def capitalize_rules(self, capitalize):
