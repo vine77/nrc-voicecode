@@ -167,6 +167,11 @@ class NewMediatorObject(Object.OwnerObject):
     This file will also be the default to use if reconfigure is called
     (usually only by init_simulator_regression during regression tests)
 
+    *STR user_config_file* -- user-specific file which was used to 
+    configure the mediator.
+    This file will also be the default to use if reconfigure is called
+    (usually only by init_simulator_regression during regression tests)
+
     **CLASS ATTRIBUTES**
     
     *none* --
@@ -278,7 +283,8 @@ class NewMediatorObject(Object.OwnerObject):
                              'test_next': 0,
                              'testing': 0, 
                              'pickled_interp': None,
-                             'config_file': None
+                             'config_file': None,
+                             'user_config_file': None
                             },
                             attrs,
                             {})
@@ -386,7 +392,7 @@ class NewMediatorObject(Object.OwnerObject):
         """
         return self.interp
    
-    def configure(self, config_file = None, exclude_interp = 0):
+    def configure(self, config_file = None, user_config_file = None, exclude_interp = 0):
         """Configures a mediator object based on a configuration file.
         Must be called before (and only before) run.
         
@@ -394,6 +400,9 @@ class NewMediatorObject(Object.OwnerObject):
         
         *STR* config_file -- Full path of the config file.  Defaults to
         vc_globals.default_config_file 
+
+        *STR* user_config_file -- Full path of the user config file.  
+        Defaults to vc_globals.default_user_config_file 
 
         *BOOL* exclude_interp -- if true, don't re-configure the
         interpreter
@@ -409,6 +418,7 @@ class NewMediatorObject(Object.OwnerObject):
         if exclude_interp:
             exclude = ['interp']
         self._configure_from_file(config_file = config_file,
+            user_config_file = user_config_file,
             symdict_pickle_fname = self.symdict_pickle_fname, 
             exclude = exclude)
         if self.test_next:
@@ -468,6 +478,7 @@ class NewMediatorObject(Object.OwnerObject):
 
 
     def _configure_from_file(self, exclude = None, config_file = None,
+        user_config_file = None,
         reset = 0,
         symdict_pickle_fname = None, symbol_match_dlg = None,
         add_sr_entries_for_LSAs_and_CSCs = 1,
@@ -483,6 +494,9 @@ class NewMediatorObject(Object.OwnerObject):
         
         *STR* config_file* -- Full path of the config file.  Defaults to
         the vc_globals.default_config_file 
+
+        *STR* user_config_file -- Full path of the user config file.  
+        Defaults to vc_globals.default_user_config_file 
 
         *BOOL reset* -- if true, reset the current interpreter, or
         replace it with a fresh one
@@ -524,20 +538,28 @@ class NewMediatorObject(Object.OwnerObject):
         file = config_file
         if not file:
             file = vc_globals.default_config_file
+        execfile(file, config_dict)
 # doing execfile directly actually provides better error reporting (the
 # traceback is actually reported from the proper line, even when it is
 # in another module imported from the config file).  (Probably the same
 # effect could be achieved if we put a try block in the config file
 # itself)
-        execfile(file, config_dict)
 #        try:
 #            execfile(file, config_dict)
 #        except Exception, err:
 #            print 'ERROR: in configuration file %s.\n' % file
 #            raise err
+        user_file = user_config_file
+        if not user_file:
+            if self.test_next:
+                user_file = vc_globals.regression_user_config_file
+            else:
+                user_file = vc_globals.default_user_config_file
+        execfile(user_file, config_dict)
 
 # if successful, store file name so the reconfigure method can reuse it
         self.config_file = config_file
+        self.user_config_file = user_config_file
 
         #
         # Compile standard symbols for the different languages
@@ -631,7 +653,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['print_abbreviations'] = self.print_abbreviations
 
-    def reset(self, config_file = None, symdict_pickle_fname = None,
+    def reset(self, config_file = None, user_config_file = None, 
+        symdict_pickle_fname = None,
         symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1,
         use_pickled_interp = 1):
         """reset the mediator object to continue regression testing with
@@ -642,6 +665,11 @@ class NewMediatorObject(Object.OwnerObject):
         *STR* config_file* -- Full path of the config file.  If None,
         then use the same one used previously by configure, or
         the vc_globals.default_config_file if configure
+        did not record the filename.
+
+        *STR* user_config_file* -- Full path of the user config file.  If None,
+        then use the same one used previously by configure, or
+        the vc_globals.default_user_config_file if configure
         did not record the filename.
 
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
@@ -661,8 +689,9 @@ class NewMediatorObject(Object.OwnerObject):
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
-        self.reconfigure(exclude = ['editors'], config_file =
-            config_file, reset = 1, 
+        self.reconfigure(exclude = ['editors'],
+            config_file = config_file, 
+            user_config_file = user_config_file, reset = 1, 
             symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
@@ -671,15 +700,17 @@ class NewMediatorObject(Object.OwnerObject):
         self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
 
     def reconfigure(self, exclude = None, config_file=None,
+        user_config_file = None,
         reset = 0,
         symdict_pickle_fname = None, symbol_match_dlg = None,
         add_sr_entries_for_LSAs_and_CSCs = 1,
         use_pickled_interp = 1):
         """reconfigure an existing mediator object.  Unlike configure,
         reconfigure may be called while the mediator object is already
-        running.  By default, reconfigure will use the same file used by
-        configure, or the vc_globals.default_config_file if configure
-        did not record the filename.
+        running.  By default, reconfigure will use the same files used by
+        configure, or the vc_globals.default_config_file  and
+        vc_globals.default_user_config_file if configure
+        did not record the filenames.
         
         **INPUTS**
         
@@ -690,6 +721,11 @@ class NewMediatorObject(Object.OwnerObject):
         *STR* config_file* -- Full path of the config file.  If None,
         then use the same one used previously by configure, or
         the vc_globals.default_config_file if configure
+        did not record the filename.
+
+        *STR* user_config_file* -- Full path of the user config file.  If None,
+        then use the same one used previously by configure, or
+        the vc_globals.default_user_config_file if configure
         did not record the filename.
 
         *BOOL reset* -- if true, reset the current interpreter, or
@@ -712,10 +748,14 @@ class NewMediatorObject(Object.OwnerObject):
         file = config_file
         if not file:
             file = self.config_file
+        user_file = user_config_file
+        if not user_file:
+            user_file = self.user_config_file
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
         self._configure_from_file(exclude = exclude, config_file = file,
+            user_config_file = user_config_file,
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = sym_dlg, 

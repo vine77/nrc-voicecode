@@ -482,7 +482,7 @@ class SymDict(PickledObject.PickledObject):
         *none* -- 
         """
 
-#        print '-- SymDict.add_abbreviation: abbreviation=\'%s\', expansions=%s' % (abbreviation, expansions)
+        trace('SymDict.add_abbreviation', 'abbreviation="%s", expansions=%s' % (abbreviation, expansions))
 
         global min_abbreviation_len
 
@@ -523,7 +523,7 @@ class SymDict(PickledObject.PickledObject):
                 sr_interface.addWord(expansions[ii])                
 
             if self.abbreviations.has_key(abbreviation):
-#                print '-- SymDict.add_abbreviation: existing expansions are: %s' % self.abbreviations[abbreviation]
+                trace( 'SymDict.add_abbreviation', 'existing expansions are: %s' % self.abbreviations[abbreviation])
             
                 #
                 # Add new expansions for existing abbreviation
@@ -537,13 +537,17 @@ class SymDict(PickledObject.PickledObject):
                 #
                 self.abbreviations[abbreviation] = expansions
 
-#            print '-- SymDict.add_abbreviation: after update, expansions are: %s' % self.abbreviations[abbreviation]
+            trace('SymDict.add_abbreviation', 'after update, expansions are: %s' % self.abbreviations[abbreviation])
 
             #
             # Regenerate spoken forms of symbols containing that abbreviation
             #
             if self.unresolved_abbreviations.has_key(abbreviation):
+                trace('SymDict.add_abbreviation', 
+                    '%s was previously unresolved' % abbreviation)
                 for a_symbol in self.unresolved_abbreviations[abbreviation].keys():
+                    trace('SymDict.add_abbreviation', 
+                        'updating forms for %s' % a_symbol)
                     self.update_spoken_forms(a_symbol)
                 del self.unresolved_abbreviations[abbreviation]
 

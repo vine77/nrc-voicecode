@@ -83,10 +83,10 @@ comparison_operator = 0x10000
 
 # common synonyms
 
+no_spaces = no_space_before | no_space_after
 like_comma = no_space_before
 like_backslash = no_space_before | no_space_after
 like_slash = no_space_before | no_space_after
-like_colon = no_space_before # user may want to alter this
 like_bang = unary_operator
 
 like_dot = no_space_before | no_space_after

@@ -6,7 +6,7 @@
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
 #
-# This program is distribut\ed in the hope that it will be useful,
+# This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -759,7 +759,7 @@ def test_punctuation():
 
     commands.say(['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['if', 'index', '<\\less-sign', '0', 'and\\and', 'index', '>\\greater-sign', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
+    commands.say(['if', 'index', '<\\less-than', '0', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
     commands.say(['index', '=\\equal-sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -950,7 +950,9 @@ def test_punctuation():
     commands.say(['back slash cap B.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['back slash cap bravo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     #
-#BUG:    commands.say(['quotes', '\\C\\back slash cap c.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#BUG:    commands.say(['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['quotes', 'back slash cap C.', 'back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['back slash cap D.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1272,27 +1274,27 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '<\\less-sign', '1', '<\\less-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '<\\less-than', '1', '<\\less-than', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous less-sign', 'previous less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous less-than', 'previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next less-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['0', '>\\greater-sign', '1', '>\\greater-sign', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0', '>\\greater-than', '1', '>\\greater-than', '2'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous greater-sign', 'previous greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous greater-than', 'previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['after greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before previous greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['before next greater-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    commands.say(['before next greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1476,9 +1478,11 @@ def manager_state(manager):
     print ''
     print 'state {'
     apps = manager.app_names()
+    apps.sort()
     for app in apps:
         print 'application: ', app
         instances =  manager.app_instances(app)
+        instances.sort()
         for instance in instances:
             sys.stdout.flush()
             print 'instance: ', instance
@@ -1487,6 +1491,7 @@ def manager_state(manager):
                 print 'Warning: app names %s and %s do not match' \
                     % (app, a_name)
             windows = manager.known_windows(instance)
+            windows.sort()
 #            print 'windows is ', repr(windows), type(windows), type([])
             for window in windows:
                 print 'window %d' % (window)
@@ -1496,7 +1501,9 @@ def manager_state(manager):
                     print 'Warning: instance %s not found in window list' \
                         % instance
                 sys.stdout.flush()
-    print 'known windows', manager.known_windows()
+    known_windows = manager.known_windows()
+    known_windows.sort()
+    print 'known windows', known_windows
     print '} state'
     print ''
 
@@ -1512,6 +1519,7 @@ def instance_status(manager, instance):
     else:
         print "(unknown module)"
     windows = manager.known_windows(instance)
+    windows.sort()
     print "windows: ", windows
     for window in windows:
         print "window #%d:" % window

@@ -55,7 +55,8 @@ doc = os.path.join(home, 'Doc')
 doc_modules = os.path.join(doc, 'Modules')
 
 default_config_file = os.path.join(config, 'vc_config.py')
-# default_config_file = os.path.join(config, 'new_vc_config.py')
+default_user_config_file = os.path.join(config, 'user_config.py')
+regression_user_config_file = os.path.join(config, 'regression_config.py')
 
 # Add some paths to $PYTHONPATH
 sys.path = [admin] + sys.path
