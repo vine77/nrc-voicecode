@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 19 12:01:59 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class CmdInterp</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class CmdInterp - Interprets Context Sensitive Commands spoken into a given application.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="CmdInterp.html">CmdInterp</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">CmdInterp.CmdInterp<BR>
+&nbsp;&nbsp;Object.Object<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CmdInterp</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app=&lt;AppState.AppState instance at 86f170&gt;</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.all_cmds_regexp</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches the spoken form of all voice commands</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.def_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.def_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+</PRE><H2>Description</H2><P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="file:///./AppState.AppState.html">AppState</A> <EM>app=AppState()</EM>
+<DD>application for which we are interpreting the commands
+<DT>
+<EM>{STR: [[</EM> (Context] <EM>, FCT)]} cmd_index={}</EM>
+<DD>index of CSCs. Key
+ is the spoken form of the command, value is a list of contextual
+ meanings. A contextual meaning is a pair of a <EM>context object</EM>
+ and an <EM>action function</EM> to be fired if the context applies.
+<DT>
+<EM>STR cached_regexp=''</EM>
+<DD>Regular expresion that matches the
+ spoken form of any of the CSCs.
+<DT>
+<EM>BOOL cached_regexp_is_dirty</EM>
+<DD><EM>true</EM> iif <EM>self.cached_regexp</EM> needs
+ to be regenerated based on the values in <EM>self.cmd_index</EM>
+</DL>
+<P>
+CLASS ATTRIBUTES**</P>
+<P>
+<EM>none</EM> --</P>
+<H2 ID="CmdInterp.CmdInterp.index_csc" CLASS="Method">CmdInterp.CmdInterp.index_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>)</H2>
+<P>Add a new csc to the command interpreter's command dictionary</P>
+
+<P>
+<A HREF="file:///./CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to be indexed.</P>
+<H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Interprets a natural language command and executes
+corresponding instructions.</P>
+<P>
+<EM>STR cmd</EM> is the spoken form of the command.</P>
+<H2 ID="Object.Object.def_attrs" CLASS="Method">Object.Object.def_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are set even if they do not exist in
+<EM>self.__dict__</EM>.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
