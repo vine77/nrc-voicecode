@@ -28,6 +28,7 @@ import string
 from Object import Object, OwnerObject
 import RecogStartMgr
 import TargetWindow, WinIDClient
+import AppState
 
 class InstanceInfo(Object):
     """class for storing information about editor application instances
@@ -72,7 +73,7 @@ class InstanceInfo(Object):
 	"""
 	return self.application_name
 
-class AppMgr(OwnerObject):
+class AppMgr(OwnerObject, AppState.AppCbkHandler):
     """class defining basic interface for keeping track of 
     target applications and windows
 
@@ -424,6 +425,44 @@ class AppMgr(OwnerObject):
 	# yet where that information will be stored, do nothing for now
 	pass
 
+    def open_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has opened a new buffer 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was opened
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        # this should call NewMediatorObject, unless all buffer-specific
+	# information is stored under AppMgr.  Since I haven't decided
+	# yet where that information will be stored, do nothing for now
+	pass
+
+    def curr_buff_name_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the current
+	buffer has changed
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the newly current buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# I don't think we ever need to do anything with this call (it is only
+# included in AppState for completeness of ClientEditor)
+	pass
+
+
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
 	"""callback from AppState which notifies us that the application
 	has renamed a buffer
@@ -588,7 +627,6 @@ class AppMgr(OwnerObject):
 	"""
 # WinIDClient support is not yet implemented
 	return None
-
 
 
 # defaults for vim - otherwise ignore

@@ -844,13 +844,18 @@ class OwnerObject(Object):
 	*STR* -- reason for error (or None if no error).
 	"""
 
+	if object == None:
+	    return None
 	if type(object) != types.InstanceType:
 	    return 'because it is not an object, but has type %s' % (type(object))
 	try:
 	    object.cleanup
 	except AttributeError:
 	    return 'because it does not have a cleanup method'
-	object.cleanup()
+	try:
+	    object.cleanup()
+	except error:
+	    return 'because its cleanup method threw an exception'
 	
     def cleanup(self):
         """method to cleanup circular references by cleaning up 
@@ -873,6 +878,8 @@ class OwnerObject(Object):
 	for name in reversed_names:
 	    if self.__dict__.has_key(name):
 		attribute = self.__dict__[name]
+		if attribute == None:
+		    continue
 		if type(attribute) == types.ListType:
 		    for i in range(attribute):
 			error_msg = self._cleanup_object(attribute[i])
@@ -901,7 +908,7 @@ class OwnerObject(Object):
 			del self.__dict__[name]
 		else:
 		    error_msg = 'because it is not an object, ' \
-		        + 'but has type %s' % (type(object))
+		        + 'but has type %s' % (type(attribute))
 		    error_msg = 'attribute %s\n%s\n' \
 			% (name, error_msg)
 		    debug.critical_warning(msg_prefix + error_msg)

@@ -453,10 +453,18 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 # screwed up because the application will already have made the change.
 # Basically, callbacks should never use defaults for the range
 
-        self.uncache_data_after_buffer_change()
 	SourceBuff.SourceBuff.delete_cbk(self, range)
-        old_text = self.get_text()
-        self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
+
+	if self.cache['get_text'] == None:
+# if we don't have the buffer contents cached, just get the entire
+# current contents (which should already include the deletion), thereby
+# caching it
+	    self.get_text()
+	else:
+	    old_text = self.get_text()
+	    self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
+
+	self.uncache_data_after_buffer_change(what_changed = 'get_text')
 
         
 
@@ -487,12 +495,19 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 # bad: if this gets the selection from the application, it will be all
 # screwed up because the application will already have made the change.
 # Basically, callbacks should never use defaults for the range
-        self.uncache_data_after_buffer_change()
-	SourceBuff.SourceBuff.insert_cbk(self, range, text)
-        old_text = self.get_text()
-        self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]:]
 
-        self.uncache_data_after_buffer_change()
+	SourceBuff.SourceBuff.insert_cbk(self, range, text)
+	if self.cache['get_text'] == None:
+# if we don't have the buffer contents cached, just get the entire
+# current contents (which should already include the insertion), thereby
+# caching it
+	    self.get_text()
+	else:
+	    old_text = self.get_text()
+	    self.cache['get_text'] = old_text[:range[0]] + text + \
+	        old_text[range[1]:]
+
+        self.uncache_data_after_buffer_change(what_changed = 'get_text')
         
         trace('SourceBuffCached.insert_cbk', '** upon exit, self.cache["get_text"]="%s"' % self.cache["get_text"])
 
@@ -525,7 +540,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         else:
             self.cache['cur_pos'] = range[0]
             
-        self.uncache_data_after_buffer_change('get_selection')            
+# DCF: this should only be called after changes to the buffer *contents*
+#        self.uncache_data_after_buffer_change('get_selection')            
 
     def goto_cbk(self, pos):
         

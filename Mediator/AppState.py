@@ -79,7 +79,9 @@ def use_update_class(action):
 		 'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
                  'select': SB_UpdSetSelection, 'goto': SB_UpdGoto,
                  'close_buff': AS_UpdCloseBuffer,
-                 'open_buff': AS_UpdOpenBuffer}
+                 'open_buff': AS_UpdOpenBuffer,
+		 'rename_buff': AS_UpdRenameBuffer,
+		 'new_window': AS_UpdNewWindow}
 
     
     return use_class[action]
@@ -143,6 +145,29 @@ class AS_Update(Object):
 
         ..[AppState] file:///./AppState.AppState.html"""
         debug.virtual('AS_Update.apply')        
+
+class AS_UpdNewWindow(Object):
+            
+    """Update indicating that the editor has opened a new window
+    
+    **INSTANCE ATTRIBUTES**
+
+    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, descr, **args_super):
+        self.deep_construct(AS_UpdNewWindow, 
+                            {'descr': descr}, 
+                            args_super, 
+                            {})
+        
+    def apply(self, on_app):
+        on_app.new_window_cbk()
+
 
 class AS_UpdCurrBufferName(Object):
             
@@ -211,6 +236,29 @@ class AS_UpdCloseBuffer(AS_Update):
         
     def apply(self, on_app):
         on_app.close_buffer_cbk(self.descr['buff_name'])
+
+class AS_UpdRenameBuffer(AS_Update):
+            
+    """Update class for renaming a buffer.
+    
+    **INSTANCE ATTRIBUTES**
+
+    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, descr, **args_super):
+        self.deep_construct(AS_UpdRenameBuffer, 
+                            {'descr': descr}, 
+                            args_super, 
+                            {})
+        
+    def apply(self, on_app):
+        on_app.rename_buffer_cbk(self.descr['old_buff_name'],
+	    self.descr['new_buff_name'])
 
         
 class SB_Update(AS_Update):
@@ -441,6 +489,118 @@ class SB_UpdGoto(SB_Update):
         on_buff.goto_cbk(pos=int(self.descr['pos']))
 
 	
+class AppCbkHandler(Object):
+    """abstract interface for a manager which handles callbacks from one 
+    or more AppState objects.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *none*
+     
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	self.deep_construct(AppCbkHandler, {}, args)
+
+    def close_app_cbk(self, instance, unexpected = 0):
+	"""callback from AppState which indicates that the application has 
+	closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+
+	*BOOL unexpected* -- 1 if the editor broke the connection
+	without first sending an editor_disconnecting message
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('AppCbkHandler.close_app_cbk')
+
+    def close_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('AppCbkHandler.close_buffer_cbk')
+
+    def open_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has opened a new buffer 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was opened
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('AppCbkHandler.open_buffer_cbk')
+
+    def curr_buff_name_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the current
+	buffer has changed
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the newly current buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('AppCbkHandler.curr_buff_name_cbk')
+
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+	"""callback from AppState which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+	debug.virtual('AppCbkHandler.rename_buffer_cbk')
+
+    def new_window(self, instance):
+	"""called when the editor notifies us of a new window for the 
+	specified instance
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+	*BOOL* -- true if window is added
+	"""
+	debug.virtual('AppCbkHandler.new_window')
+
 class AppState(OwnerObject):
     """Interface to the programming environment.    
 
@@ -483,14 +643,16 @@ class AppState(OwnerObject):
     of the current buffer whenever it changes (used mostly for regression
     testing external editor).
 
-    *AppMgr* manager -- the AppMgr object which owns this AppState.
+    *AppCbkHandler* manager -- the AppCbkHandler object which handles
+    callbacks from this AppState (and is usually its owner).
+
     Certain callback methods (close_app_cbk, new_buffer_cbk) will notify 
     the manager.  If we are using the old mediator infrastructure, manager 
     may be None.  Therefore, AppState must check whether manager == None
     before sending such notifications.
 
     *STR* instance_name -- the name of this editor instance, assigned by
-    AppMgr, and used to identify the editor in callbacks to the manager.
+    the manager, and used to identify the editor in callbacks to the manager.
 
     *STR* bound_buffer_name=None -- Name of the buffer that VoiceCode
     is currently bound to operate on. If *None*, use editor's active
@@ -557,7 +719,7 @@ class AppState(OwnerObject):
 	self.name_parent('manager')
       
     def name(self):
-	"""the unique name (assigned by the AppMgr) to this editor
+	"""the unique name (assigned by the the manager) to this editor
 	instance
 
 	**INPUTS**
@@ -573,7 +735,7 @@ class AppState(OwnerObject):
 
     def set_name(self, name):
 	"""assign a unique name to this editor instance.  
-	**NOTE:** only AppMgr should call this method.
+	**NOTE:** only the manager should call this method.
 
 	**INPUTS**
 
@@ -586,7 +748,7 @@ class AppState(OwnerObject):
 	self.instance_name = name
 
     def current_manager(self):
-	"""returns a reference to the AppMgr which owns this AppState
+	"""returns a reference to the the manager which owns this AppState
 
 	**INPUTS**
 
@@ -594,8 +756,8 @@ class AppState(OwnerObject):
 
 	**OUTPUTS**
 	
-	*AppMgr* -- the AppMgr object which owns this AppState, or None
-	if there is none.
+	*AppCbkHandler* -- the AppCbkHandler object which owns this 
+	AppState, or None if there is none.
 	"""
 	return self.manager
 
@@ -605,7 +767,8 @@ class AppState(OwnerObject):
 
 	**INPUTS**
 	
-	*AppMgr* manager -- the AppMgr object which owns this AppState.
+	*AppCbkHandler* manager -- the AppCbkHandler object which owns 
+	this AppState.  
 
 	**OUTPUTS**
 
@@ -643,6 +806,10 @@ class AppState(OwnerObject):
 	*none*
 	"""
 	self.change_callback = change_callback
+
+    def remove_other_references(self):
+	OwnerObject.remove_other_references(self)
+	self.change_callback = None
 
     def on_change(self, buff_name, start, end, text, program_initiated):
 	"""method which should be called after the contents of a buffer
@@ -1341,12 +1508,16 @@ class AppState(OwnerObject):
 # SourceBuff.
 		if not self.query_buffer_from_app(buff_name):
 		    return None
-                new_buff = self._new_source_buffer(buff_name)
 # This is still problematic if an existing buffer has just been renamed
 # (e.g. by "Save As...").  I'm not sure of any good way to avoid this
 # problem, except for the editor to notify AppState of renamings (or,
 # when the save is mediator-initiated, for AppState to check after the
 # save whether the buffer has been renamed).
+                new_buff = self._new_source_buffer(buff_name)
+# For external editors, SourceBuffCached will be
+# created with no content cached, so it will synchronize automatically 
+# when we try to read the contents of the buffer.
+# for now, don't force synchronization here
                 return new_buff
         else:
             return None
@@ -1393,7 +1564,15 @@ class AppState(OwnerObject):
 
 	*none*
 	"""
-	self.open_buffer_cbk(self, buff_name)
+        if not self.open_buffers.has_key(buff_name):
+# if we don't already have a buffer by that name, treat this as an
+# open_buffer_cbk
+	    self.open_buffer_cbk(self, buff_name)
+	else:
+# do nothing except pass this on to our manager
+	    if self.current_manager() and self.name():
+		self.current_manager().curr_buff_name_cbk(self.name(), buff_name)
+	    
 
     def new_window_cbk(self):
 	"""editor invokes this method to notify AppState that it has
@@ -1410,11 +1589,14 @@ class AppState(OwnerObject):
 	if self.current_manager() and self.name():
 	    self.current_manager().new_window(self.name())
 
-    def close_app_cbk(self):
+    def close_app_cbk(self, unexpected = 0):
 	"""editor invokes this method to notify AppState that it is
 	about to close, or is disconnecting from the mediator
 
 	**INPUTS**
+
+	*BOOL unexpected* -- 1 if the editor broke the connection
+	without first sending an editor_disconnecting message
 
 	*none*
 
@@ -1423,7 +1605,8 @@ class AppState(OwnerObject):
 	*none*
 	"""
 	if self.current_manager() and self.name():
-	    self.current_manager().close_app_cbk(self.name())
+	    self.current_manager().close_app_cbk(self.name(), 
+		unexpected = unexpected)
 
     def close_buffer_cbk(self, buff_name):
 	"""editor invokes this method to notify AppState that a
@@ -1537,8 +1720,19 @@ class AppState(OwnerObject):
         #
         # First make sure we don't already have a buffer by that name
         #
+	if self.current_manager() and self.name():
+	    self.current_manager().open_buffer_cbk(self.name(), buff_name)
         if not self.open_buffers.has_key(buff_name):
             self._new_source_buffer(buff_name)
+# For external editors, SourceBuffCached will be
+# created with no content cached, so it will synchronize automatically 
+# when we try to read the contents of the buffer.
+
+# we probably want to force synchronization here, but there is a
+# potential problem with that if the editor sends an open_buffer_cbk
+# followed by an insert_cbk.  I haven't figured out how to avoid 
+# that yet, so for now, we just wait and let SourceBuffCached
+# synchronize on demand.
             
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -1564,13 +1758,20 @@ class AppState(OwnerObject):
 
     def _new_source_buffer(self, buff_name):
         
-        """Creates a new [SourceBuff] instances and adds it to the
+        """Creates a new [SourceBuff] instance and adds it to the
         list of open buffers.
 
 	Note: this method should not only be called by other AppState
 	methods, not from outside AppState, and only if such methods
 	have already verified that self.open_buffers doesn't already
 	have a key matching buff_name
+
+	Note: this method does not automatically synchronize the new
+	SourceBuff with an external editor.  Normally, for external editors, 
+	we will be using SourceBuffCached which will be initialized with an 
+	empty cache for the buffer contents, so it will be synchronized
+	the first time someone tries to access the buffer contents.  The
+	caller may force immediate synchronization if it is appropriate.
         
         **INPUTS**
         
@@ -1804,21 +2005,4 @@ class AppState(OwnerObject):
         """
         
         debug.virtual('AppState.app_close_buffer')
-
-class AppChangeSpec:
-    """mix-in class for AppState which provides a change specification
-    callback
-
-    **INSTANCE ATTRIBUTES**
-
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, change_callback = None, **args):
-	self.deep_construct(AppChangeSpec,
-	                    {'change_callback': change_callback,
-			    },
-			    args)
 

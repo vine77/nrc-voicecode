@@ -240,7 +240,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	"""
 	return self.underlying.get_visible()
 
-    def make_position_visible(self, position = None):
+    def make_position_visible(self):
 	"""scroll buffer (if necessary) so that the current position
 	is visible
 
@@ -472,6 +472,10 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
 	self.underlying.goto_line(linenum, where)
+
+    def refresh(self):
+	"""Force a refresh of the buffer"""
+	self.underlying.refresh()
 
 
     def _state_cookie_class(self):
