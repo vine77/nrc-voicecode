@@ -695,6 +695,10 @@ auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testi
 
 def test_persistence():
         
+    print """As best as I can tell from SF Browse CVS, this test was 
+    introduced in revision vcode vcode-0-0-7, and broken before 
+    vcode-0-0-8, and has never since worked in the manner the 
+    printed >>> comments indicate, until now -- DCF"""
     #
     # Create make mediator console use an empty file for SymDict persistence
     #
@@ -706,31 +710,93 @@ def test_persistence():
         pass
 
     print '\n\n>>> Starting mediator with persistence'
-    testing.init_simulator_regression(symdict_pickle_fname=fname)
+# it makes more sense to use TempConfig here 
+#
+# ugh - we want abbreviations defined (so we can't use skip_config) 
+# but we don't want standard symbols defined.  How can
+# we achieve that?  Oddly enough, configuration doesn't seem to define any 
+# standard symbols - why not?
+#    temp_config = temp_factory.new_config(skip_config = 1)
+    temp_config = temp_factory.new_config()
+# here, try with no official pickle file
+#    testing.init_simulator_regression(symdict_pickle_fname=fname)
+    interp = temp_config.interpreter()
 
     #
     # Compile symbols
     #
-    test_command("""compile_symbols([r'""" + vc_globals.test_data + os.sep + """small_buff.c'])""")
+    file = vc_globals.test_data + os.sep + "small_buff.c"
+    fake_command = "compile_symbols([r'%s'])" % file
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+    sys.stdout.flush()
+    interp.parse_symbols_from_files([file])
+    print '>>> Known symbols are: '; interp.print_symbols()
+    sys.stdout.flush()
+# but manually pickle before quitting (quit would clean out the symbol
+# dictionary and reparse the standard files before pickling)
+    interp.known_symbols.pickle(alt_file = fname)
 
     #
     # Restart the mediator, with saved SymDict. The symbols should still be
     # there
     #
     print '\n\n>>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.\n'
-    test_command("""quit(save_speech_files=0, disconnect=0)""")
-    testing.init_simulator_regression(symdict_pickle_fname=fname)
-    test_command("""print_symbols()""")
+
+# DCF: Ugh: don't know if this quit command does anything:
+# SimCmdsObj.quit just sets a flag, right?
+#    test_command("""quit(save_speech_files=0, disconnect=0)""")
+    fake_command = "quit(save_speech_files=0, disconnect=0)"
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+# this actually does do something
+    temp_config.quit()
+
+# DCF: this doesn't have the desired effect.  Currently, with
+# PersistentConfig, it does a reset, but NMO uses the SymDict pickled 
+# to a string via pickle.dumps for regression testing.  If we switch 
+# to TempConfig and use new_config (which we probably should), we will 
+# still have to  modify new_config to allow for 
+#
+# (1) the ability to bypass the dumps-pickled SymDict and use the
+# specified one.
+# (2) the ability to bypass the dumps-pickled SymDict, and create
+# SymDict from scratch (but not load the standard files during
+# configuration, which would be the normal thing to do in the new
+# scheme).  Or should we skip configuration?
+
+#    testing.init_simulator_regression(symdict_pickle_fname=fname)
+# now, start with the file we created
+    temp_config = temp_factory.new_config(skip_config = 1,
+        symdict_pickle_fname = fname)
+#    temp_config = temp_factory.new_config(symdict_pickle_fname = fname)
+#    testing.init_simulator_regression(symdict_pickle_fname=fname)
+    interp = temp_config.interpreter()
+    fake_command = "print_symbols()"
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+    interp.print_symbols()
 
     #
     # Restart the mediator without saved SymDict. The symbols should not be
     # there anymore.
     #
     print '\n\n>>> Restarting mediator WITHOUT persistence. There should be NO symbols in the dictionary.\n'
-    test_command("""quit(save_speech_files=0, disconnect=0)""")
-    testing.init_simulator_regression(symdict_pickle_fname=None)
-    test_command("""print_symbols()""")
-    test_command("""quit(save_speech_files=0, disconnect=0)""")        
+    fake_command = "quit(save_speech_files=0, disconnect=0)"
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+    temp_config.quit()
+#    test_command("""quit(save_speech_files=0, disconnect=0)""")
+#    testing.init_simulator_regression(symdict_pickle_fname=None)
+# back to no file
+    temp_config = temp_factory.new_config(skip_config = 1)
+#    temp_config = temp_factory.new_config()
+#    testing.init_simulator_regression(symdict_pickle_fname=fname)
+    interp = temp_config.interpreter()
+
+    fake_command = "print_symbols()"
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+    interp.print_symbols()
+
+    fake_command = "quit(save_speech_files=0, disconnect=0)"
+    print '\n\n>>> Testing console command: %s\n' % fake_command
+    temp_config.quit()
     
 
 auto_test.add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
