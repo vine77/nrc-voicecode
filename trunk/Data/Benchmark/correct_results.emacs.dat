@@ -165,6 +165,28 @@ Heard select hello
 
 
 *******************************************************************************
+* Name        : text_mode
+* Description : Test dictation of normal text.
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Got command: say(['text', 'mode', 'on'],1
+1
+1
+,1,0,)
+is_in_text_mode=1
+Got command: say(['text', 'mode', 'off'],1
+1
+1
+,1,0,)
+is_in_text_mode=0
+
+
+*******************************************************************************
 * Name        : just_ring_bell
 * Description : This dummy test is just there to ring a bell, to notify the user of the end of the foreground tests.
 *******************************************************************************
@@ -493,7 +515,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x0200D790>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x02011C58>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -535,8 +557,6 @@ Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'x': appears in ['x']
-'y': appears in ['y']
 
 *** End of compilation test ***
 
@@ -636,7 +656,6 @@ Unresolved abbreviations are:
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
 'tst': appears in ['autoTst']
-'x': appears in ['x']
 
 *** End of compilation test ***
 
@@ -681,8 +700,6 @@ Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'x': appears in ['x']
-'y': appears in ['y']
 
 
 Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres', 
@@ -711,8 +728,6 @@ _cached_symbols_as_one_string is:
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name2', 'f_name']
-'x': appears in ['x']
-'y': appears in ['y']
 
 *** End of accept symbol match test ***
 
@@ -1104,8 +1119,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
@@ -1311,8 +1324,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1546,8 +1557,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1773,8 +1782,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1980,8 +1987,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -7439,6 +7444,17 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
+> Associate 'Ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
 >   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -7455,7 +7471,18 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-  7: from EdSim import EdSim
+Associate 'Ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
+>   7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -9654,6 +9681,26 @@ window #20:
 all instances for window:
 emacs(0)
 
+
+Setting text mode on
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
+DictWinGramDummy for buffer = 'fish.C', window 20
+deactivating
+SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+DictWinGramDummy for buffer = 'fish.C', window 20
+setting context: before = [ x, y)
+], after = [{]
+
+Setting text mode off
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
+SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+DictWinGramDummy for buffer = 'fish.C', window 20
+setting context: before = [ x, y)
+], after = [{]
+DictWinGramDummy for buffer = 'fish.C', window 20
+activating:  20  
 starting recognition in  (50, 'D:\\Projects', 'browseui')
 
 instance emacs(0)
@@ -10307,6 +10354,27 @@ window #20:
 all instances for window:
 emacs(0)
 
+-- test_rsm_algorithm: manager=<AppMgr.AppMgr instance at 0x01FBC6B8>
+
+Setting text mode on
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
+DictWinGramDummy for buffer = 'fish.C', window 20
+deactivating
+SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+DictWinGramDummy for buffer = 'fish.C', window 20
+setting context: before = [ x, y)
+], after = [{]
+
+Setting text mode off
+starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
+SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+DictWinGramDummy for buffer = 'fish.C', window 20
+setting context: before = [ x, y)
+], after = [{]
+DictWinGramDummy for buffer = 'fish.C', window 20
+activating:  20  
 starting recognition in  (50, 'D:\\Projects', 'browseui')
 
 instance emacs(0)
@@ -11582,7 +11650,7 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  232.825000048 secs
+Test suite completed in:  280.424000025 secs
 -----------------------------------------------
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+MessTransporter_Socket.receive_string: no data received in Thread-6Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
