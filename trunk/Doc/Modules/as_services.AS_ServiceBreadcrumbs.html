@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 10 13:24:26 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:44:05 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,7 +26,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AS_ServiceBreadcrumbs</SPAN>(<A CLASS="DocLink" HREF="as_services.AS_Service.html">AS_Service</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">as_services.AS_ServiceBreadcrumbs.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">breadcrumbs=[]</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#as_services.AS_ServiceBreadcrumbs.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">as_services.AS_ServiceBreadcrumbs.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
+    <A CLASS="DocLink" HREF="#as_services.AS_ServiceBreadcrumbs.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">as_services.AS_ServiceBreadcrumbs.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#as_services.AS_ServiceBreadcrumbs.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">as_services.AS_ServiceBreadcrumbs.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from as_services.AS_Service</SPAN>
@@ -78,12 +78,12 @@ CLASS ATTRIBUTES**</P>
 </DL>
 <P>
 ..[AppState] AppState.AppState.html</P>
-<H2 ID="as_services.AS_ServiceBreadcrumbs.drop_breadcrumb" CLASS="Method">as_services.AS_ServiceBreadcrumbs.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<H2 ID="as_services.AS_ServiceBreadcrumbs.drop_breadcrumb" CLASS="Method">as_services.AS_ServiceBreadcrumbs.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
 <P>Drops a breadcrumb</P>
 
 <P>
 <EM>INT pos</EM> is the position where to drop the crumb. *STR
- buffname* is the name of the source buffer.</P>
+ buff_name* is the name of the source buffer.</P>
 <P>
 If <EM>pos</EM> not specified, drop breadcrumb at cursor position.</P>
 <P>

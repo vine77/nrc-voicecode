@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:24:51 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:39:06 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -31,11 +31,6 @@
     <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplayByTitle.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplayByTitle.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplayByTitle.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplayByTitle.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from KnownTargetModule.DualModeDisplay</SPAN>
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
-    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
-
     <SPAN CLASS="InheritsHead"># Inherited from KnownTargetModule.RemoteDisplay</SPAN>
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteDisplay.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteDisplay.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.RemoteDisplay.dedicated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.RemoteDisplay.dedicated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -51,6 +46,11 @@
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.variable_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.variable_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can an editor running in this module change the window title?</SPAN>
     <A CLASS="DocLink" HREF="#KnownTargetModule.KnownTargetModule.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.KnownTargetModule.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from KnownTargetModule.DualModeDisplay</SPAN>
+    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#KnownTargetModule.DualModeDisplay.verify_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">KnownTargetModule.DualModeDisplay.verify_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -151,94 +151,6 @@ dedicated module.</P>
 <EM>BOOL</EM>
 <DD>true if the module allows the editor to change the
 window title
-
-</DL>
-<H2 ID="KnownTargetModule.DualModeDisplay.__init__" CLASS="Method">KnownTargetModule.DualModeDisplay.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
-<P>None</P>
-
-<P>
- 
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="KnownTargetModule.DualModeDisplay.new_window" CLASS="Method">KnownTargetModule.DualModeDisplay.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-factory which creates a new TargetWindow object.
-<STRONG>Note:</STRONG> the caller should first check single_display.  If it
-returns true, then the module cannot act as a window factory.
-Instead, the subwindow identification client will play that role.
-<STRONG>Also note:</STRONG> some subclasses will be unable to create a new
-window without an initial instance.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM> window
-<DD>the window handle (unique identifier) of the
-window
-<DT>
-<EM>STR</EM> title
-<DD>the current title of the window
-<DT>
-<EM>AppMgr</EM> editors
-<DD>the application manager
-<DT>
-<EM>STR</EM> instance
-<DD>the name of the initial instance belonging to
-the window, or None if there is none initially
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>TargetWindow</EM>
-<DD>a new TargetWindow object, or None
-if the module is unable to create one
-
-</DL>
-<H2 ID="KnownTargetModule.DualModeDisplay.verify_new_instance" CLASS="Method">KnownTargetModule.DualModeDisplay.verify_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)</H2>
-<P>None</P>
-
-<P>
-attempt to verify whether the window belongs to
-the named instance.  </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> title
-<DD>title of the window 
-<DT>
-<EM>STR</EM> instance
-<DD>name of the editor instance
-<DT>
-<EM>AppMgr</EM> editors
-<DD>the AppMgr object
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if verify_new_instance was able to determine that the
-window was associated with the named instance, false if it
-was able to determine that the window was not associated
-with the instance, and None if it was unable to determine.
 
 </DL>
 <H2 ID="KnownTargetModule.RemoteDisplay.__init__" CLASS="Method">KnownTargetModule.RemoteDisplay.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
@@ -488,6 +400,94 @@ window title
 
 </DL>
 <H2 ID="KnownTargetModule.KnownTargetModule.verify_new_instance" CLASS="Method">KnownTargetModule.KnownTargetModule.verify_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)</H2>
+<P>None</P>
+
+<P>
+attempt to verify whether the window belongs to
+the named instance.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> title
+<DD>title of the window 
+<DT>
+<EM>STR</EM> instance
+<DD>name of the editor instance
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the AppMgr object
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if verify_new_instance was able to determine that the
+window was associated with the named instance, false if it
+was able to determine that the window was not associated
+with the instance, and None if it was unable to determine.
+
+</DL>
+<H2 ID="KnownTargetModule.DualModeDisplay.__init__" CLASS="Method">KnownTargetModule.DualModeDisplay.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+ 
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="KnownTargetModule.DualModeDisplay.new_window" CLASS="Method">KnownTargetModule.DualModeDisplay.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+factory which creates a new TargetWindow object.
+<STRONG>Note:</STRONG> the caller should first check single_display.  If it
+returns true, then the module cannot act as a window factory.
+Instead, the subwindow identification client will play that role.
+<STRONG>Also note:</STRONG> some subclasses will be unable to create a new
+window without an initial instance.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>the window handle (unique identifier) of the
+window
+<DT>
+<EM>STR</EM> title
+<DD>the current title of the window
+<DT>
+<EM>AppMgr</EM> editors
+<DD>the application manager
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the initial instance belonging to
+the window, or None if there is none initially
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>TargetWindow</EM>
+<DD>a new TargetWindow object, or None
+if the module is unable to create one
+
+</DL>
+<H2 ID="KnownTargetModule.DualModeDisplay.verify_new_instance" CLASS="Method">KnownTargetModule.DualModeDisplay.verify_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">editors</SPAN>)</H2>
 <P>None</P>
 
 <P>
