@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Apr 08 22:11:04 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 08 13:03:19 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,11 +27,24 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AS_MessExtEdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AS_MessExtEdSim.new_compatible_sb</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from AppStateMessaging.AppStateMessaging</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_msgr=None</SPAN>, <SPAN CLASS="Argument">talk_msgr=None</SPAN>, <SPAN CLASS="Argument">id=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._multiple_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.apply_upd_descr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.apply_upd_descr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">upd_descr_list</SPAN>)<SPAN CLASS="OneLiner"> # Applies a updates provided by a list of update descriptions.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.config_from_external"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.config_from_external</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Lets the external editor configure the <EM>AppStateMessaging</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.listen_one_transaction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.listen_one_transaction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Completes a single editor-initiated transaction</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_end"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_end</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the end of a recognition event.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from AppStateCached.AppStateCached</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateCached.AppStateCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -84,24 +97,11 @@
     <SPAN CLASS="InheritsHead"># Inherited from Object.ChildObject</SPAN>
     <A CLASS="DocLink" HREF="#Object.ChildObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.ChildObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from AppStateMessaging.AppStateMessaging</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_msgr=None</SPAN>, <SPAN CLASS="Argument">talk_msgr=None</SPAN>, <SPAN CLASS="Argument">id=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._multiple_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.apply_upd_descr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.apply_upd_descr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">upd_descr_list</SPAN>)<SPAN CLASS="OneLiner"> # Applies a updates provided by a list of update descriptions.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.config_from_external"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.config_from_external</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Lets the external editor configure the <EM>AppStateMessaging</EM>.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.listen_one_transaction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.listen_one_transaction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Completes a single editor-initiated transaction</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_end"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_end</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the end of a recognition event.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to open a file.</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
 This subclass of [AppState] is designed to interact with an [EdSim]
@@ -124,21 +124,75 @@ CLASS ATTRIBUTES**</P>
 <P>
 ..[AppState] AppState.AppState.html
 ..[EdSim] EdSim.EdSim.html</P>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
+<H2 ID="AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support selections with cursor at left?</P>
 
 <P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
+Get this value directly from the external editor</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor allows setting the selection at the
+left end of the selection
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging._multiple_buffers_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple open buffers?</P>
+
+<P>
+Retrieve this information directly from the external editor.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports having multiple buffers open 
+at the same time
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.app_active_buffer_name" CLASS="Method">AppStateMessaging.AppStateMessaging.app_active_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Reads the file name of the active buffer, directly from the
+external application.</P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>file name of app's active buffer
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.app_close_buffer" CLASS="Method">AppStateMessaging.AppStateMessaging.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)</H2>
+<P>Ask the editor to close a buffer.</P>
+
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
+STR <EM>buff_name</EM>
+<DD>name of buffer to close
+<DT>
+INT <EM>save</EM>
+<DD><EM>-1</EM> -&gt; don't save the buffer
+                    <EM>0</EM> -&gt; query user if buffer needs saving
+                    <EM>1</EM> -&gt; save without querying user
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -149,101 +203,62 @@ __setattr__.</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.apply_upd_descr" CLASS="Method">AppStateMessaging.AppStateMessaging.apply_upd_descr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">upd_descr_list</SPAN>)</H2>
+<P>Applies a updates provided by a list of update descriptions.</P>
 
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
+[{STR: ANY}] <EM>upd_descr_list</EM>
+<DD>List of update descriptions
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[ [AS_Update]  ] <EM>none</EM>
+<DD>
+</DL>
+<P>
+..[AS_Update] AppState.AS_Update.html</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.bidirectional_selection" CLASS="Method">AppStateMessaging.AppStateMessaging.bidirectional_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support selections with cursor at left?</P>
+
+<P>
+Get this value directly from the external editor</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor allows setting the selection at the
+left end of the selection
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.config_from_external" CLASS="Method">AppStateMessaging.AppStateMessaging.config_from_external(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Lets the external editor configure the <EM>AppStateMessaging</EM>.</P>
+
+<P>
+Configuration is done through messages on the connection. The
+messages may vary from editor to editor.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -254,6 +269,314 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.listen_one_transaction" CLASS="Method">AppStateMessaging.AppStateMessaging.listen_one_transaction(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Completes a single editor-initiated transaction</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.multiple_buffers" CLASS="Method">AppStateMessaging.AppStateMessaging.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple open buffers?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports having multiple buffers open 
+at the same time
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.new_compatible_sb" CLASS="Method">AppStateMessaging.AppStateMessaging.new_compatible_sb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>Creates a new instance of [SourceBuff].</P>
+
+<P>
+Note: The class used to instantiate the [SourceBuff] needs to
+be compatible with the class of <EM>self</EM>. With a few exceptions
+(if any), each subclass of <EM>AppState</EM> will have to redefine
+<EM>new_compatible_sb</EM> in order to generate a [SourceBuff] of the
+appropriate class.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>unique name of the source buffer.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+..[SourceBuff] SourceBuff.SourceBuff.html</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.open_buffers_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.open_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+retrieve a list of the names of open buffers from the
+application.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of the names of open buffers
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.query_buffer_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.query_buffer_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+query the application to see if a buffer by the name of buff_name 
+exists.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer to check
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>does the buffer exist?
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.recog_begin" CLASS="Method">AppStateMessaging.AppStateMessaging.recog_begin(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)</H2>
+<P>Invoked at the beginning of a recognition event.</P>
+
+<P>
+The editor then returns telling VoiceCode whether or not the user
+is allowed to speak into window <EM>window_id</EM>.</P>
+<P>
+If possible, the editor should also stop responding to user
+input until method <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. This is to
+prevent a bunch of problems that can arise if the user types
+while VoiceCode is still processing an utterance. In such
+cases, the results of the utterance interpretation can be
+unpredictable, especially when it comes to correction.</P>
+<P>
+Each external editor will respond to that message as best it can.</P>
+<P>
+Ideally, the editor would:</P>
+
+<UL>
+
+<LI>Start recording user actions to a log
+
+<LI>execute those actions later when <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked.
+</UL>
+<P>
+If the editor is able to stop responding to user input, but is
+not able to record them and/or execute them later, then it
+should:</P>
+
+<UL>
+
+<LI>Stop responding to user input until <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is
+  later invoked.
+</UL>
+<P>
+If the editor is not even able to stop responding to user
+input, then it should:</P>
+
+<UL>
+
+<LI>Do nothing
+</UL>
+<P>
+NOTE: This method may be invoked more than once before
+<A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. In such cases, only the first
+call to the method should do anything.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>window_id</EM>
+<DD>The ID of the window that was active when
+the recognition began.                
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+BOOL <EM>can_talk</EM>
+<DD><EM>true</EM> iif editor allows user to speak into window
+with ID <EM>window_id</EM>
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.recog_end" CLASS="Method">AppStateMessaging.AppStateMessaging.recog_end(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Invoked at the end of a recognition event.</P>
+
+<P>
+This tells the editor to start responding to user
+input again, and possibly to execute any user inputs it may
+have recorded since [recog_begin()] was invoked.</P>
+<P>
+Each external editor will respond to that message as best it can.</P>
+<P>
+Ideally, the editor would:</P>
+
+<UL>
+
+<LI>Execute all actions that were logged
+<LI>Stop recording user actions to a log, and execute them as
+  they arrrive instead.
+</UL>
+<P>
+If the editor is able to stop responding to user input, but is
+not able to record them and/or execute them later, then it
+should:</P>
+
+<UL>
+
+<LI>Start responding to user input again
+</UL>
+<P>
+If the editor is not even able to stop responding to user
+input, then it should:</P>
+
+<UL>
+
+<LI>Do nothing
+</UL>
+<P>
+NOTE: This method may be invoked more than once before
+[recog_begin()] is invoked. In such cases, only the first
+call to the method should do anything.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+..[recog_begin()] AppState.AppState.html#recog_begin</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.tell_editor_to_open_file" CLASS="Method">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
+<P>Tell the external editor to open a file.</P>
+
+
+<DL>
+
+<DT>
+STR <EM>file_name</EM>
+<DD>The full path of the file to be opened.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Unique name of the buffer in which the file
+was opened.
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.updates_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
+<P>Gets a list of updates from the external app.</P>
+
+<P>
+Does this through a messaging protocol.</P>
+<P>
+Note: the list of updates must ALWAYS include the name of the
+external app's active buffer.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[STR] <EM>what</EM>
+<DD>List of items to be included/excluded in the updates.
+<DT>
+BOOL <EM>exclude</EM>
+<DD>Indicates if <EM>what</EM> is a list of items to be
+included or excluded from updates.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[ [AS_Update] ] <EM>updates</EM>
+<DD>List of updates retrieved from the
+external app.
+</DL>
+<P>
+..[AS_Update] AppState.AS_Update.html</P>
 <H2 ID="AppStateCached.AppStateCached.init_cache" CLASS="Method">AppStateCached.AppStateCached.init_cache(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Initialises the cache with data obtained from external editor.</P>
 
@@ -1285,75 +1608,21 @@ any children, and then removing the reference to the parent</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does editor support selections with cursor at left?</P>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
 
 <P>
-Get this value directly from the external editor</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if editor allows setting the selection at the
-left end of the selection
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging._multiple_buffers_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does editor support multiple open buffers?</P>
-
-<P>
-Retrieve this information directly from the external editor.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if editor supports having multiple buffers open 
-at the same time
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.app_active_buffer_name" CLASS="Method">AppStateMessaging.AppStateMessaging.app_active_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Reads the file name of the active buffer, directly from the
-external application.</P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>file name of app's active buffer
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.app_close_buffer" CLASS="Method">AppStateMessaging.AppStateMessaging.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)</H2>
-<P>Ask the editor to close a buffer.</P>
-
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-STR <EM>buff_name</EM>
-<DD>name of buffer to close
-<DT>
-INT <EM>save</EM>
-<DD><EM>-1</EM> -&gt; don't save the buffer
-                    <EM>0</EM> -&gt; query user if buffer needs saving
-                    <EM>1</EM> -&gt; save without querying user
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -1364,127 +1633,101 @@ INT <EM>save</EM>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.apply_upd_descr" CLASS="Method">AppStateMessaging.AppStateMessaging.apply_upd_descr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">upd_descr_list</SPAN>)</H2>
-<P>Applies a updates provided by a list of update descriptions.</P>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
 
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-[{STR: ANY}] <EM>upd_descr_list</EM>
-<DD>List of update descriptions
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[ [AS_Update]  ] <EM>none</EM>
-<DD>
-</DL>
-<P>
-..[AS_Update] AppState.AS_Update.html</P>
-<H2 ID="AppStateMessaging.AppStateMessaging.bidirectional_selection" CLASS="Method">AppStateMessaging.AppStateMessaging.bidirectional_selection(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does editor support selections with cursor at left?</P>
-
-<P>
-Get this value directly from the external editor</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if editor allows setting the selection at the
-left end of the selection
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.config_from_external" CLASS="Method">AppStateMessaging.AppStateMessaging.config_from_external(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Lets the external editor configure the <EM>AppStateMessaging</EM>.</P>
-
-<P>
-Configuration is done through messages on the connection. The
-messages may vary from editor to editor.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.listen_one_transaction" CLASS="Method">AppStateMessaging.AppStateMessaging.listen_one_transaction(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Completes a single editor-initiated transaction</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.multiple_buffers" CLASS="Method">AppStateMessaging.AppStateMessaging.multiple_buffers(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does editor support multiple open buffers?</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if editor supports having multiple buffers open 
-at the same time
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.new_compatible_sb" CLASS="Method">AppStateMessaging.AppStateMessaging.new_compatible_sb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>Creates a new instance of [SourceBuff].</P>
-
-<P>
-Note: The class used to instantiate the [SourceBuff] needs to
-be compatible with the class of <EM>self</EM>. With a few exceptions
-(if any), each subclass of <EM>AppState</EM> will have to redefine
-<EM>new_compatible_sb</EM> in order to generate a [SourceBuff] of the
-appropriate class.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>unique name of the source buffer.
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -1495,249 +1738,6 @@ STR <EM>buff_name</EM>
 <EM>none</EM>
 <DD>
 </DL>
-<P>
-..[SourceBuff] SourceBuff.SourceBuff.html</P>
-<H2 ID="AppStateMessaging.AppStateMessaging.open_buffers_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.open_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-retrieve a list of the names of open buffers from the
-application.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR]</EM>
-<DD>list of the names of open buffers
-
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.query_buffer_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.query_buffer_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>None</P>
-
-<P>
-query the application to see if a buffer by the name of buff_name 
-exists.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> buff_name
-<DD>name of the buffer to check
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>does the buffer exist?
-
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.recog_begin" CLASS="Method">AppStateMessaging.AppStateMessaging.recog_begin(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)</H2>
-<P>Invoked at the beginning of a recognition event.</P>
-
-<P>
-The editor then returns telling VoiceCode whether or not the user
-is allowed to speak into window <EM>window_id</EM>.</P>
-<P>
-If possible, the editor should also stop responding to user
-input until method <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. This is to
-prevent a bunch of problems that can arise if the user types
-while VoiceCode is still processing an utterance. In such
-cases, the results of the utterance interpretation can be
-unpredictable, especially when it comes to correction.</P>
-<P>
-Each external editor will respond to that message as best it can.</P>
-<P>
-Ideally, the editor would:</P>
-
-<UL>
-
-<LI>Start recording user actions to a log
-
-<LI>execute those actions later when <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked.
-</UL>
-<P>
-If the editor is able to stop responding to user input, but is
-not able to record them and/or execute them later, then it
-should:</P>
-
-<UL>
-
-<LI>Stop responding to user input until <A HREF="AppState.AppState.html#recog_end">recog_end()</A> is
-  later invoked.
-</UL>
-<P>
-If the editor is not even able to stop responding to user
-input, then it should:</P>
-
-<UL>
-
-<LI>Do nothing
-</UL>
-<P>
-NOTE: This method may be invoked more than once before
-<A HREF="AppState.AppState.html#recog_end">recog_end()</A> is invoked. In such cases, only the first
-call to the method should do anything.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>window_id</EM>
-<DD>The ID of the window that was active when
-the recognition began.                
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-BOOL <EM>can_talk</EM>
-<DD><EM>true</EM> iif editor allows user to speak into window
-with ID <EM>window_id</EM>
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.recog_end" CLASS="Method">AppStateMessaging.AppStateMessaging.recog_end(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Invoked at the end of a recognition event.</P>
-
-<P>
-This tells the editor to start responding to user
-input again, and possibly to execute any user inputs it may
-have recorded since [recog_begin()] was invoked.</P>
-<P>
-Each external editor will respond to that message as best it can.</P>
-<P>
-Ideally, the editor would:</P>
-
-<UL>
-
-<LI>Execute all actions that were logged
-<LI>Stop recording user actions to a log, and execute them as
-  they arrrive instead.
-</UL>
-<P>
-If the editor is able to stop responding to user input, but is
-not able to record them and/or execute them later, then it
-should:</P>
-
-<UL>
-
-<LI>Start responding to user input again
-</UL>
-<P>
-If the editor is not even able to stop responding to user
-input, then it should:</P>
-
-<UL>
-
-<LI>Do nothing
-</UL>
-<P>
-NOTE: This method may be invoked more than once before
-[recog_begin()] is invoked. In such cases, only the first
-call to the method should do anything.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-..[recog_begin()] AppState.AppState.html#recog_begin</P>
-<H2 ID="AppStateMessaging.AppStateMessaging.tell_editor_to_open_file" CLASS="Method">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
-<P>Tell the external editor to open a file.</P>
-
-
-<DL>
-
-<DT>
-STR <EM>file_name</EM>
-<DD>The full path of the file to be opened.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Unique name of the buffer in which the file
-was opened.
-</DL>
-<H2 ID="AppStateMessaging.AppStateMessaging.updates_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
-<P>Gets a list of updates from the external app.</P>
-
-<P>
-Does this through a messaging protocol.</P>
-<P>
-Note: the list of updates must ALWAYS include the name of the
-external app's active buffer.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[STR] <EM>what</EM>
-<DD>List of items to be included/excluded in the updates.
-<DT>
-BOOL <EM>exclude</EM>
-<DD>Indicates if <EM>what</EM> is a list of items to be
-included or excluded from updates.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[ [AS_Update] ] <EM>updates</EM>
-<DD>List of updates retrieved from the
-external app.
-</DL>
-<P>
-..[AS_Update] AppState.AS_Update.html</P>
 
 <HR>
 <TABLE ALIGN="LEFT">
