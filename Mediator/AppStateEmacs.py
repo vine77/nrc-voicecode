@@ -218,8 +218,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 # set_instance_string
         return self.can_show_instance_string
 
-    def drop_breadcrumb(self, buffname=None, pos=None):
-        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
+    def drop_breadcrumb(self, buff_name=None, pos=None):
+        self.breadcrumbs_srv.drop_breadcrumb(buff_name, pos)
 
 
     def pop_breadcrumbs(self, num=1, gothere=1):

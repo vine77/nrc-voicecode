@@ -3563,6 +3563,7 @@ tabs.
 	      (beginning-of-line)
 	    (end-of-line)
 	  )
+	  (push-mark (point))
 	)
       ('error (error "VR Error: could not go to line %S" line-num))
     )

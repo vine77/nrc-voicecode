@@ -229,18 +229,18 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
             return None
         return ('unknown')
 
-    def drop_breadcrumb(self, buffname=None, pos=None):
+    def drop_breadcrumb(self, buff_name=None, pos=None):
 
         """Drops a breadcrumb
 
         *INT pos* is the position where to drop the crumb. *STR
-         buffname* is the name of the source buffer.
+         buff_name* is the name of the source buffer.
         
         If *pos* not specified, drop breadcrumb at cursor position.
 
         If *buff* not specified either, drop breadcrumb in current buffer
 	"""
-        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
+        self.breadcrumbs_srv.drop_breadcrumb(buff_name, pos)
 
 
     def pop_breadcrumbs(self, num=1, gothere=1):

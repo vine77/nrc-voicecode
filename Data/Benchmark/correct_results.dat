@@ -330,7 +330,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 24545d0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 244acf0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2628,9 +2628,7 @@ SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 new window 7
@@ -2662,8 +2660,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 7
 activating:  7  
 DictWinGramDummy for buffer = 'dog.pl', window 7
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 7
 activating:  7  
 activating buffer fish.h for window 7
@@ -2677,7 +2674,8 @@ deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
 activating:  7  
 DictWinGramDummy for buffer = 'fish.h', window 7
-setting context: before = [ x, y);], after = []
+setting context: before = [ x, y);], after = [
+]
 DictWinGramDummy for buffer = 'fish.h', window 7
 activating:  7  
 activating buffer fowl.py for window 5
@@ -2695,9 +2693,7 @@ SelectWinGramDummy for buffer 'fowl.py', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fowl.py', window 5
 setting context: before = [ something(value):
-    print ], after = [value
-
-if ]
+    print ], after = [value]
 DictWinGramDummy for buffer = 'fowl.py', window 5
 activating:  5  
 SourceBuff.remove_other_references: fowl.py
@@ -2739,9 +2735,7 @@ SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 deactivate all
@@ -2806,9 +2800,7 @@ activating:  global  exclusive
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
 
@@ -2848,8 +2840,7 @@ SelectWinGramDummy for buffer 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', global
 activating:  global  exclusive 
 
@@ -2871,7 +2862,8 @@ activating:  global  exclusive
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
-setting context: before = [ x, y);], after = []
+setting context: before = [ x, y);], after = [
+]
 DictWinGramDummy for buffer = 'fish.h', global
 activating:  global  exclusive 
 
@@ -2897,9 +2889,7 @@ SelectWinGramDummy for buffer 'fish.h', global
 deactivating
 DictWinGramDummy for buffer = 'fowl.py', global
 setting context: before = [ something(value):
-    print ], after = [value
-
-if ]
+    print ], after = [value]
 DictWinGramDummy for buffer = 'fowl.py', global
 activating:  global  exclusive 
 
@@ -2949,9 +2939,7 @@ activating:  global  exclusive
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
 
@@ -3415,7 +3403,7 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 27341c0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 2758a20> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -9493,9 +9481,7 @@ SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
@@ -9776,8 +9762,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
@@ -9885,8 +9870,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -10150,9 +10134,7 @@ SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
@@ -10438,8 +10420,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
@@ -10563,8 +10544,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -11446,7 +11426,7 @@ Associate 'new method' with symbol (Enter selection):
 
 
 -----------------------------------------------
-Test suite completed in:  2476.75 secs
+Test suite completed in:  2010.55000007 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

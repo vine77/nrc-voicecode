@@ -1,31 +1,10 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
-running ExtLoopWin32NewMediator with ServerNewMediator
-running ExtLoopWin32NewMediator with ServerNewMediator
+creating wxMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished ExtLoop init...
-Running ExtLoopWin32...
+Finished wxMediator init...
+starting...
 Starting server threads...
-Starting message loop...
-New connection
-New connection from emacs
-awaiting corresponding talk connection
-received talk connection
-creating messengers
-configuring from external
-creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -304,10 +283,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -350,7 +329,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 13d7718>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 244c4c0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -489,7 +468,6 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
-'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -748,10 +726,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2495,7 +2473,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2649,9 +2627,7 @@ SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 new window 7
@@ -2683,8 +2659,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 7
 activating:  7  
 DictWinGramDummy for buffer = 'dog.pl', window 7
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 7
 activating:  7  
 activating buffer fish.h for window 7
@@ -2698,7 +2673,8 @@ deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
 activating:  7  
 DictWinGramDummy for buffer = 'fish.h', window 7
-setting context: before = [ x, y);], after = []
+setting context: before = [ x, y);], after = [
+]
 DictWinGramDummy for buffer = 'fish.h', window 7
 activating:  7  
 activating buffer fowl.py for window 5
@@ -2716,9 +2692,7 @@ SelectWinGramDummy for buffer 'fowl.py', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fowl.py', window 5
 setting context: before = [ something(value):
-    print ], after = [value
-
-if ]
+    print ], after = [value]
 DictWinGramDummy for buffer = 'fowl.py', window 5
 activating:  5  
 SourceBuff.remove_other_references: fowl.py
@@ -2760,9 +2734,7 @@ SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 deactivate all
@@ -2827,9 +2799,7 @@ activating:  global  exclusive
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
 
@@ -2869,8 +2839,7 @@ SelectWinGramDummy for buffer 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', global
 activating:  global  exclusive 
 
@@ -2892,7 +2861,8 @@ activating:  global  exclusive
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
-setting context: before = [ x, y);], after = []
+setting context: before = [ x, y);], after = [
+]
 DictWinGramDummy for buffer = 'fish.h', global
 activating:  global  exclusive 
 
@@ -2918,9 +2888,7 @@ SelectWinGramDummy for buffer 'fish.h', global
 deactivating
 DictWinGramDummy for buffer = 'fowl.py', global
 setting context: before = [ something(value):
-    print ], after = [value
-
-if ]
+    print ], after = [value]
 DictWinGramDummy for buffer = 'fowl.py', global
 activating:  global  exclusive 
 
@@ -2970,9 +2938,7 @@ activating:  global  exclusive
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
 
@@ -3352,7 +3318,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3436,12 +3402,12 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 11d5ca0> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 2739500> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7551,7 +7517,14 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
- 19:                           attrs)
+Associate 'R. E.' with symbol (Enter selection):
+
+  '0': no association
+  '1': re
+  '2': Re (*new*)
+  '3': RE (*new*)
+
+>  19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9274,7 +9247,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9363,7 +9336,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -9507,9 +9480,7 @@ SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
@@ -9790,8 +9761,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
@@ -9899,8 +9869,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -10164,9 +10133,7 @@ SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
-], after = [{
-  move_horiz(x);
-  ]
+], after = [{]
 DictWinGramDummy for buffer = 'fish.C', window 20
 activating:  20  
 
@@ -10452,8 +10419,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 
@@ -10577,8 +10543,7 @@ SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
-    $dirSep = ], after = ['/';
-    $curDirCom ]
+    $dirSep = ], after = ['/';]
 DictWinGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
@@ -11404,13 +11369,63 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 *** End of source buffer ***
 
 
+*******************************************************************************
+* Name        : temp
+* Description : temporary test
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+ 17:         pass
+ 18:            
+ 19: 
+ 20: <CURSOR>
+ 21: 
+ 22: class SomeOtherClass():
+ 23: 
+Heard class dummy class body
+Associate 'dummy' with symbol (Enter selection):
+
+  '0': no association
+  '1': dummy (*new*)
+  '2': Dummy (*new*)
+  '3': DUMMY (*new*)
+
+>  18:            
+ 19: 
+ 20: class dummy:
+ 21:    <CURSOR>
+ 22: 
+ 23: class SomeOtherClass():
+ 24: 
+Heard define method new method method body pass
+Associate 'new method' with symbol (Enter selection):
+
+  '0': no association
+  '1': new_method (*new*)
+  '2': NewMethod (*new*)
+  '3': newMethod (*new*)
+  '4': NEW_METHOD (*new*)
+  '5': newmethod (*new*)
+  '6': NEWMETHOD (*new*)
+
+>  20: class dummy:
+ 21:    def new_method(self):
+ 22:       pass
+ 23:    <CURSOR>
+ 24: 
+ 25: class SomeOtherClass():
+ 26: 
+
 
 
 -----------------------------------------------
-Test suite completed in:  894.45599997 secs
+Test suite completed in:  1136.19000006 secs
 -----------------------------------------------
-Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c3dc00>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-ExtLoopWin32.run returning
