@@ -21,7 +21,7 @@ This test should always be the very first one to be executed!
 * Description : Testing mixed mode (kbd + voice) editing
 *******************************************************************************
 
-The next series of tests require that the client editor be in the foreground.    
+The next series of tests require that the client editor be in the foreground.    
     
 Please do the following:
     
@@ -141,7 +141,7 @@ Heard select hello
   3: 
   4: class AClass(ASuper):
   5:     """This is a dummy class"""
-You can now safely use your computer.
+You can now safely use your computer.
     
 Press Enter to proceed with the rest of the tests.
 > 
@@ -467,7 +467,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2472450>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2449450>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -11462,7 +11462,7 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  779.560000062 secs
+Test suite completed in:  785.049999952 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
