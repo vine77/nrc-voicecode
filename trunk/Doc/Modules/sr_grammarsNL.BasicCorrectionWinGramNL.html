@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Oct 11 13:42:35 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Oct 17 14:22:44 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -39,38 +39,6 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.BasicCorrectionWinGramNL.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammarsNL.BasicCorrectionWinGramNL.scratch_rule"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.BasicCorrectionWinGramNL.scratch_rule</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # create the rules for the grammar recognizing Scratch That/n</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.BasicCorrectionWinGram</SPAN>
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GramClassBase</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.__del__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.beginCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.callIfExists</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">funcName</SPAN>, <SPAN CLASS="Argument">argList</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.hypothesisCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grammar</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">hypothesis=0</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.setExclusive</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclusive</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.unload</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GrammarBase</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleName</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>, <SPAN CLASS="Argument">noError=0</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activateAll</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activateSet</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleNames</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.appendList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleName</SPAN>, <SPAN CLASS="Argument">noError=0</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.deactivateAll</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.emptyList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gramSpec</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">hypothesis=0</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.resultsCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">wordsAndNums</SPAN>, <SPAN CLASS="Argument">resObj</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.setList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.unload</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-
     <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.WinGram</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammars.WinGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -96,6 +64,38 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GramClassBase</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.__del__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.beginCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.callIfExists</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">funcName</SPAN>, <SPAN CLASS="Argument">argList</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.hypothesisCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grammar</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">hypothesis=0</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.setExclusive</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclusive</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GramClassBase.unload</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.BasicCorrectionWinGram</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.on_correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.on_correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.BasicCorrectionWinGram.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.BasicCorrectionWinGram.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GrammarBase</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleName</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>, <SPAN CLASS="Argument">noError=0</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activateAll</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.activateSet</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleNames</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.appendList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ruleName</SPAN>, <SPAN CLASS="Argument">noError=0</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.deactivateAll</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.emptyList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gramSpec</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>, <SPAN CLASS="Argument">hypothesis=0</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.resultsCallback</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">wordsAndNums</SPAN>, <SPAN CLASS="Argument">resObj</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.setList</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listName</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.unload</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
 natlink implementation of BasicCorrectionWinGram for window-specific 
@@ -236,87 +236,6 @@ handler for scratch that command
 <EM>[STR]</EM>
 <DD>list of strings comprising the rules needed to
 implement the Scratch That and Scratch n commands
-
-</DL>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.__init__" CLASS="Method">sr_grammars.BasicCorrectionWinGram.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
-<P>None</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>WinGramMgr</EM> manager
-<DD>the grammar manager which owns this grammar
-<DT>
-<EM>[STR]</EM> scratch_words
-<DD>list of synonyms for Scratch in "Scratch
-That" and "Scratch n", or None for the default of <CODE>Scratch</CODE>
-<DT>
-<EM>[STR]</EM> correct_words
-<DD>list of synonyms for Correct in "Correct
-That" and "Correct Recent"  or None for the default of <CODE>Correct</CODE>
-<DT>
-<EM>[STR]</EM> recent_words
-<DD>list of synonyms for 
-Recent in "Correct Recent" or None for the dfault of 'Recent
-
-</DL>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_last" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_last(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method which subclass must call when the grammar 
-recognizes Correct That with nothing selected</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_recent(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method which subclass must call when the grammar 
-recognizes Correct Recent </P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="sr_grammars.BasicCorrectionWinGram.scratch_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method which subclass must call when the grammar 
-recognizes Scratch That/Scratch n, to undo the effect of the 
-most recent n utterances, if possible.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT n</EM>
-<DD>number of utterances to undo
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>INT</EM>
-<DD>number of utterances successfully undone
 
 </DL>
 <H2 ID="sr_grammars.WinGram.activate" CLASS="Method">sr_grammars.WinGram.activate(<SPAN CLASS="Argument">self</SPAN>)</H2>
@@ -702,6 +621,87 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="sr_grammars.BasicCorrectionWinGram.__init__" CLASS="Method">sr_grammars.BasicCorrectionWinGram.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">scratch_words=None</SPAN>, <SPAN CLASS="Argument">correct_words=None</SPAN>, <SPAN CLASS="Argument">recent_words=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>WinGramMgr</EM> manager
+<DD>the grammar manager which owns this grammar
+<DT>
+<EM>[STR]</EM> scratch_words
+<DD>list of synonyms for Scratch in "Scratch
+That" and "Scratch n", or None for the default of <CODE>Scratch</CODE>
+<DT>
+<EM>[STR]</EM> correct_words
+<DD>list of synonyms for Correct in "Correct
+That" and "Correct Recent"  or None for the default of <CODE>Correct</CODE>
+<DT>
+<EM>[STR]</EM> recent_words
+<DD>list of synonyms for 
+Recent in "Correct Recent" or None for the dfault of 'Recent
+
+</DL>
+<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_last" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_last(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which subclass must call when the grammar 
+recognizes Correct That with nothing selected</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.BasicCorrectionWinGram.on_correct_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.on_correct_recent(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which subclass must call when the grammar 
+recognizes Correct Recent </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.BasicCorrectionWinGram.scratch_recent" CLASS="Method">sr_grammars.BasicCorrectionWinGram.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which subclass must call when the grammar 
+recognizes Scratch That/Scratch n, to undo the effect of the 
+most recent n utterances, if possible.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT n</EM>
+<DD>number of utterances to undo
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances successfully undone
+
 </DL>
 
 <HR>
