@@ -324,15 +324,17 @@ class MockSpokenUtterance(SpokenUtterance):
     
     **INSTANCE ATTRIBUTES**
 
-    *[(STR, STR)] word_list* -- List of words in Written/Spoken form.
+    *[(STR, STR)] word_list* -- List of words in Spoken form (written
+    forms will be assumed to be identical to the spoken form).
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
     def __init__(self, word_list = [], **attrs):
+        spoken_written_list = map(lambda spoken: (spoken, spoken), word_list)
         self.deep_construct(MockSpokenUtterance,
-            {'word_list': word_list}, attrs)
+            {'word_list': spoken_written_list}, attrs)
 
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
