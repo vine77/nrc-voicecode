@@ -151,7 +151,7 @@ add_abbreviation('attr', ['attribute'])
 #  associate_language('py', 'python')
 
 ###############################################################################
-# AppMgr and RecogStartMgr (ignored by old MediatorObject)
+# AppMgr and RecogStartMgr
 ###############################################################################
 
 

@@ -687,7 +687,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 spoken = utterance
 
             print "Heard %s" % string.join(spoken)
-            self.app.recog_begin(window_id=None, block = 0)
+            self.app.recog_begin(None)
+            self.app.synchronize_with_app()
+            
+#            self.app.recog_begin(window_id=None, block = 0)
             self.interp.interpret_NL_cmd(utterance, self.app)
             self.app.recog_end()
             self.show_buff()        
@@ -795,9 +798,9 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         if echo_cmd: self.echo_command('provoke')
         print slidjf
 
-    def print_symbols(self, symbols = None, echo_cmd=0):
+    def print_symbols(self, echo_cmd=0):
         if echo_cmd: self.echo_command('print_symbols')
-        self.interp.known_symbols.print_symbols(symbols = symbols)
+        self.interp.known_symbols.print_symbols()
 
     def print_abbreviations(self, show_unresolved=1, echo_cmd=0):
         if echo_cmd: self.echo_command('print_abbreviations', show_unresolved)
