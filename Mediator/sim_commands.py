@@ -610,7 +610,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def utterance_spoken_forms(self, utterance, echo_cmd=0):
         spoken_forms = []
         for a_word in utterance:
-           spoken, written = sr_interface.spoken_written_form(a_word)
+           spoken, written = sr_interface.spoken_written_form(a_word,
+               clean_written = 0, clean_spoken = 0)
            spoken_forms.append(spoken)
         return spoken_forms
 
@@ -678,28 +679,16 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             
         if self.bypass_sr_recog and not never_bypass_sr_recog:
             trace('sim_commands.say', 'bypassing NatSpeak')
-            utterance = self.utterance_spoken_forms(utterance)
             sys.stdout.flush()
             if util.islist(utterance) or util.istuple(utterance):
-                words = []
-                #
-                # Clean up the written form in case user didn't type
-                # special characters in the form that the SR expects
-                # (e.g. '\n' instead of '{Enter}'
-                #
-                for a_word in utterance:
-                    spoken, written = sr_interface.spoken_written_form(a_word)
-                    if spoken != written:
-                        written = sr_interface.clean_written_form(written, clean_for='sr')
-                        words = words + [sr_interface.vocabulary_entry(spoken, written)]
-                    else:
-                        words = words + [written]
+                spoken = self.utterance_spoken_forms(utterance)
             else:        
-                words = re.split('\s+', utterance)
+                utterance = re.split('\s+', utterance)
+                spoken = utterance
 
-            print "Heard %s" % string.join(words)
+            print "Heard %s" % string.join(spoken)
             self.app.recog_begin(window_id=None, block = 0)
-            self.interp.interpret_NL_cmd(words, self.app)
+            self.interp.interpret_NL_cmd(utterance, self.app)
             self.app.recog_end()
             self.show_buff()        
         else:
@@ -712,9 +701,12 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 # (e.g. '\n' instead of '{Enter}'
                 #
                 for a_word in utterance:
-                    spoken, written = sr_interface.spoken_written_form(a_word)
+# don't want to clean any more
+                    spoken, written = sr_interface.spoken_written_form(a_word, 
+                        clean_written = 0, clean_spoken = 0)
                     if spoken != written:
-                        written = sr_interface.clean_written_form(written, clean_for='sr')
+# don't want to do this any more
+#                        written = sr_interface.clean_written_form(written, clean_for='sr')
                         words = words + [sr_interface.vocabulary_entry(spoken, written)]
                     else:
                         words = words + [written]
@@ -741,6 +733,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             trace('sim_commands.say', 'invoking recognitionMimic')
 #        print '-- sim_commands.say: invoking recognitionMimic'
             sys.stdout.flush()
+#            print words
             natlink.recognitionMimic(words)
             trace('sim_commands.say', 'DONE invoking recognitionMimic')
 #        print '-- sim_commands.say: DONE invoking recognitionMimic'        

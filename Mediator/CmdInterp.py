@@ -32,6 +32,315 @@ from Object import Object, OwnerObject
 import SymDict
 import sr_interface
 
+from SpacingState import *
+
+class LSAlias(Object):
+    """
+    Language-specific alias (or LSA), a word with one or more spoken 
+    forms, which is translated into a written form according to the 
+    language of the current buffer.
+    
+    Generally, all combinations of written and spoken forms for an LSA 
+    are added to the vocabulary as words, so as to enable
+    select-pseudocode.
+    
+    *STR* spoken_forms -- List of spoken form of the word.
+
+    *{STR: STR}* meanings -- Dictionary of language specific
+     meanings. Key is the language name and value is the written form
+     of the LSA for that langugage. If language name is *None*, then
+     it means that this LSA applies for all languages (I know, it
+     doesn't make much sense syntactically).
+
+    *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
+    IGNORED)
+    """
+    def __init__(self, spoken_forms, meanings, spacing = 0, **args):
+        """
+        **INPUTS**
+
+        *STR* spoken_forms -- List of spoken form of the word.
+
+        *{STR: STR}* meanings -- Dictionary of language specific
+         meanings. Key is the language name and value is the written form
+         of the LSA for that langugage. If language name is *None*, then
+         it means that this LSA applies for all languages (I know, it
+         doesn't make much sense syntactically).
+
+        *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
+        IGNORED)
+        """
+        self.deep_construct(LSAlias,
+                            {'spoken_forms': spoken_forms,
+                             'meanings': {},
+                             'spacing': spacing
+                            },
+                            args)
+
+        for language, written_as in meanings.items():
+            self.meanings[language] = written_as
+
+class CSCmdSet(Object):
+    """a collection of context-sensitive commands which may be deleted,
+    renamed, or giving synonyms prior to adding them to the command
+    interpreter.
+
+    **INSTANCE ATTRIBUTES**
+
+    *STR* name -- name of the command set (to be used for automatic 
+    generation of documentation)
+
+    *STR* description -- description of the command set (to be used 
+    for automatic generation of documentation)
+
+    *{STR: CSCmd}* commands -- map from unique command names to
+    context-sensitive commands
+    """
+    def __init__(self, name, description = None, **args):
+        """
+        **INPUTS**
+
+        *STR* name -- name of the command set (to be used for automatic 
+        generation of documentation)
+
+        *STR* description -- description of the command set (to be used 
+        for automatic generation of documentation)
+        """
+        self.deep_construct(CSCmdSet,
+                            {'name': name, 'description': description,
+                             'commands': {}}, args)
+    def add_csc(self, command, name = None):
+        """add a context-sensitive command to the set
+
+        **INPUTS**
+
+        *CSCmd command* -- the command
+
+        *STR name* -- a unique name for the command, or None to use the
+        first item in the spoken form list
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if name is None:
+            name = command.spoken_forms[0]
+        self.commands[name] = command
+
+
+    def replace_spoken(self, name, spoken_forms):
+        """replace the spoken forms of a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        *[STR] spoken_forms* -- the new spoken forms
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            self.commands[name].spoken_forms = spoken_forms[:]
+        except KeyError:
+            return 0
+        return 1
+
+    def add_spoken(self, name, spoken_forms):
+        """add the given spoken forms to a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to add
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            command = self.commands[name]
+        except KeyError:
+            return 0
+        for spoken in spoken_forms:
+            command.spoken_forms.append(spoken)
+        return 1
+
+
+    def remove_spoken(self, name, spoken_forms):
+        """remove the given spoken forms of a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            command = self.commands[name]
+        except KeyError:
+            return 0
+        new_spoken = []
+        for spoken in command.spoken_forms:
+            if spoken not in spoken_forms:
+                new_spoken.append(spoken)
+        command.spoken_forms = new_spoken
+        return 1
+
+
+    def remove_command(self, name):
+        """remove a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            del self.commands[name]
+        except KeyError:
+            return 0
+        return 1
+
+class LSAliasSet(Object):
+    """a collection of language-specific aliases which may be deleted,
+    renamed, or giving synonyms prior to adding them to the command
+    interpreter.
+
+    **INSTANCE ATTRIBUTES**
+
+    *STR* name -- name of the alias set (to be used for automatic 
+    generation of documentation)
+
+    *STR* description -- description of the alias set (to be used 
+    for automatic generation of documentation)
+
+    *{STR: CSCmd}* aliases -- map from unique names to
+    language-specific aliases
+    """
+    def __init__(self, name, description = None, **args):
+        """
+        **INPUTS**
+
+        *STR* name -- name of the alias set (to be used for automatic 
+        generation of documentation)
+
+        *STR* description -- description of the alias set (to be used 
+        for automatic generation of documentation)
+        """
+        self.deep_construct(CSCmdSet,
+                            {'name': name, 'description': description,
+                             'aliases': {}}, args)
+    def add_lsa(self, alias, name = None):
+        """add a language-specific alias to the set
+
+        **INPUTS**
+
+        *LSAlias alias* -- the alias
+
+        *STR name* -- a unique name for the alias, or None to use the
+        first item in the spoken form list
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if name is None:
+            name = alias.spoken_forms[0]
+        self.aliases[name] = alias
+
+    def replace_spoken(self, name, spoken_forms):
+        """replace the spoken forms of an alias with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the alias given when it was added
+
+        *[STR] spoken_forms* -- the new spoken forms
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a command by that name existed
+        """
+        try:
+            self.aliases[name].spoken_forms = spoken_forms[:]
+        except KeyError:
+            return 0
+        return 1
+
+    def add_spoken(self, name, spoken_forms):
+        """add the given spoken forms to a command with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the command given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to add
+
+        **OUTPUTS**
+
+        *BOOL* -- true if an alias by that name existed
+        """
+        try:
+            alias = self.aliases[name]
+        except KeyError:
+            return 0
+        for spoken in spoken_forms:
+            alias.spoken_forms.append(spoken)
+        return 1
+
+    def remove_spoken(self, name, spoken_forms):
+        """remove the given spoken forms of an alias with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the alias given when it was added
+
+        *[STR] spoken_forms* -- the spoken forms to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if an alias by that name existed
+        """
+        try:
+            alias = self.aliases[name]
+        except KeyError:
+            return 0
+        new_spoken = []
+        for spoken in alias.spoken_forms:
+            if spoken not in spoken_forms:
+                new_spoken.append(spoken)
+        alias.spoken_forms = new_spoken
+        return 1
+
+
+    def remove_alias(self, name):
+        """remove an alias with the given name
+
+        **INPUTS**
+
+        *STR name* -- unique name of the alias given when it was added
+
+        **OUTPUTS**
+
+        *BOOL* -- true if an alias by that name existed
+        """
+        try:
+            del self.aliases[name]
+        except KeyError:
+            return 0
+        return 1
+
+
 
 class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
@@ -63,7 +372,10 @@ class CmdInterp(OwnerObject):
     where we create a new mediator in each test, and don't want to waste
     CPU time adding the same LSAs and CSCs over and over again.
 
-
+    *{STR: {STR: STR}}* lsa_spacing = {} -- Key is the name of
+     a programming language (None means all languages). Value is a
+     dictionary of spacing flags over spoken form keys 
+     specific to a language.
     
     CLASS ATTRIBUTES**
 
@@ -105,6 +417,7 @@ class CmdInterp(OwnerObject):
                              'known_symbols':
                              SymDict.SymDict(pickle_fname = symdict_pickle_file), 
                              'language_specific_aliases': {},
+                             'lsa_spacing': {},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
@@ -238,6 +551,13 @@ class CmdInterp(OwnerObject):
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading CSC=\'%s\'' % chopped_CSC
                  CSCs = self.cmd_index[chopped_CSC]
                  csc_applies = 0
+# DCF: why is self.cmd_index[a_spoken_form] a list of CSCs each with
+# multiple meanings?  The meanings are a dictionary, so there is no way
+# to specify their order, so allowing a list of forms allows you to
+# prioritize between elements.  On the other hand, add_csc always
+# appends to the list, so you always have to go from general to
+# specific.  Furthermore, priority within elements is
+# undefined.  This seems like a very bad design.
                  for aCSC in CSCs:
                      csc_applies = aCSC.applies(app)
                      if (csc_applies):
@@ -800,6 +1120,8 @@ class CmdInterp(OwnerObject):
         chopped_CSC = None
         if self.cmd_index.has_key(spoken_form):
             chopped_CSC = spoken_form
+        trace('CmdInterp.is_spoken_CSC', 
+            'matched = %d' % (chopped_CSC is not None))
         return chopped_CSC
 
 
@@ -832,12 +1154,18 @@ class CmdInterp(OwnerObject):
         if aliases.has_key(language):
             if aliases[language].has_key(spoken_form):
                 written_LSA = aliases[language][spoken_form]
+                trace('CmdInterp.is_spoken_LSA', 
+                    'found language specific match')
 # check common LSAs for all languages, if we haven't found a
 # language-specific one
         if written_LSA == None and aliases.has_key(None):
             if aliases[None].has_key(spoken_form):
                 written_LSA = aliases[None][spoken_form]
+                trace('CmdInterp.is_spoken_LSA', 
+                    'found language-independent match')
 
+        trace('CmdInterp.is_spoken_LSA', 
+            'written_LSA is "%s"' % repr(written_LSA))
         return written_LSA
         
     def is_spoken_symbol(self, spoken_form, app):
@@ -886,7 +1214,6 @@ class CmdInterp(OwnerObject):
         """
 
         return choices[0]
-
     def index_csc(self, acmd):
         """Add a new csc to the command interpreter's command dictionary
 
@@ -910,6 +1237,12 @@ class CmdInterp(OwnerObject):
                 #
                 cmds_this_spoken_form = self.cmd_index[a_spoken_form]
                 cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
+# DCF: what's wrong with self.cmd_index[a_spoken_form].append(acmd)?
+# also, why is self.cmd_index[a_spoken_form] a list of CSCs each with
+# multiple meanings?  The meanings are a dictionary, so there is no way
+# to specify their order, so allowing a list of forms allows you to
+# prioritize between elements.  However, priority within elements is
+# undefined.  This seems like a very bad design.
             else:
                 #
                 # First time indexed. Create a new list of CSCs for that
@@ -929,10 +1262,10 @@ class CmdInterp(OwnerObject):
                     
                     all_words = string.split(a_spoken_form)
                     if (len(all_words) > 1 and 
-                       self.add_sr_entries_for_LSAs_and_CSCs):
-                       for word in all_words:
-                           sr_interface.addWord(word)
-
+                        self.add_sr_entries_for_LSAs_and_CSCs):
+                        for word in all_words:
+                            word = sr_interface.clean_spoken_form(word)
+                            sr_interface.addWord(word)
     def add_csc(self, acmd):
         """Add a new Context Sensitive Command. (synonym for index_csc)
 
@@ -942,51 +1275,82 @@ class CmdInterp(OwnerObject):
 
         self.index_csc(acmd)
 
+    def add_csc_set(self, set):
+        """add CSCs from a set
 
-    def add_lsa(self, spoken_forms, meanings):
+        **INPUTS**
+
+        *CSCmdSet set* -- the set of commands to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for cmd in set.commands.values():
+#            print cmd.spoken_forms
+            self.add_csc(cmd)
+
+    def add_lsa(self, an_LSA):
         """Add a language specific word.
 
-        These words get added and removed dynamically from the SR
-        vocabulary, depending on the language of the active buffer.
-
-        A redundant CSC is also added to allow translation of the LSA at
-        the level of the Mediator, in cases where NatSpeak prefers to
-        recognise the LSA as dictated text instead of a spoken/written
-        word (this often happens if the spoken form looks to much like
-        dictated text, e.g. "is not equal to").
-        
         **INPUTS**
         
-        *STR* spoken_forms -- List of spoken form of the word.
-
-        *{STR: STR}* meanings -- Dictionary of language specific
-         meanings. Key is the language name and value is the written form
-         of the LSA for that langugage. If language name is *None*, then
-         it means that this LSA applies for all languages (I know, it
-         doesn't make much sense syntactically).
+        *LSAlias an_LSA* -- the new language-specific alias
         
         **OUTPUTS**
         
         *none* -- 
         """
-        
 
-        for a_meaning in meanings.items():
-            language, written_as = a_meaning
-            for spoken_as in spoken_forms:
+        for language, written_as in an_LSA.meanings.items():
+# DCF temporary spacing hack until we put in the real system
+            hacked_written_as = written_as
+            if an_LSA.spacing & hard_space:
+                hacked_written_as = written_as + ' '
+#                print '%s hard space %d' % (an_LSA.spoken_forms[0], an_LSA.spacing)
+            elif an_LSA.spacing & hard_new_line:
+                hacked_written_as = written_as + '\n'
+            elif an_LSA.spacing & hard_paragraph:
+                hacked_written_as = written_as + '\n\n'
+            elif an_LSA.spacing & hard_tab:
+                hacked_written_as = written_as + '\t'
+            elif an_LSA.spacing == like_comma:
+                hacked_written_as = written_as + ' '
+#                print '%s like comma %d' % (an_LSA.spoken_forms[0], an_LSA.spacing)
+            written_as = string.strip(written_as)
+# now that we're using hacked_written_as for the LSA entry, there is
+# no point in keeping leading and trailing spaces in the written form
+# (and besides, they're going to go away as soon as the real spacing
+# system is set up)
+            for spoken_as in an_LSA.spoken_forms:
                 clean_spoken = sr_interface.clean_spoken_form(spoken_as)
                 entry = sr_interface.vocabulary_entry(spoken_as, written_as)
                 vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
+#                if clean_spoken == 'ellipsis':
+#                    print "ellipsis spacing %d, written-as '%s'" \
+#                        % (an_LSA.spacing, written_as)
                 
                 if not self.language_specific_aliases.has_key(language):
                     self.language_specific_aliases[language] = {}
+                    self.lsa_spacing[language] = {}
 
-                self.language_specific_aliases[language][clean_spoken] = written_as
+                self.lsa_spacing[language][clean_spoken] = an_LSA.spacing 
+
+                self.language_specific_aliases[language][clean_spoken] = hacked_written_as
+                trace('CmdInterp.add_lsa', 'language = %s' % language)
+                trace('CmdInterp.add_lsa', 
+                    'spoken, written = "%s", "%s"' % (clean_spoken,
+                    written_as))
+
 
                 #
                 # Add LSA to the SR vocabulary
                 #
                 if self.add_sr_entries_for_LSAs_and_CSCs:
+                    trace('CmdInterp.add_lsa', 
+                        'adding entry "%s"' % entry)
+#                    print 'clean_spoken, written, entry: "%s", "%s", "%s"' \
+#                        % (clean_spoken, hacked_written_as, entry)
                     sr_interface.addWord(entry)
 # we had some problems in regression testing because the individual
 # words in a spoken form were unknown, so now we add the individual
@@ -1001,9 +1365,47 @@ class CmdInterp(OwnerObject):
                 if (len(all_words) > 1 and
                     self.add_sr_entries_for_LSAs_and_CSCs):
                     for word in all_words:
+                        word = sr_interface.clean_spoken_form(word)
                         sr_interface.addWord(word)
 
+    def add_lsa_set(self, set):
+        """add LSAs from a set
+
+        **INPUTS**
+
+        *LSAliasSet set* -- the set of aliases to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for alias in set.aliases.values():
+            self.add_lsa(alias)
+
             
+    def has_lsa(self, spoken_form, language = None):
+        """check if there is already an LSA defined with this spoken
+        form
+
+        **INPUTS**
+
+        *STR spoken_form* -- spoken form to check
+
+        *STR language* -- name of the language in which to check
+
+        **OUTPUTS**
+
+        *BOOL* -- true if such an LSA exists
+        """
+        try:
+            to_check = self.language_specific_aliases[language]
+        except KeyError:
+            return 0
+        clean_spoken = sr_interface.clean_spoken_form(spoken_form)
+        if to_check.has_key(clean_spoken):
+            return 1
+        return 0
+
     def add_abbreviation(self, abbreviation, expansions, user_added = 1):
         """Add an abbreviation to VoiceCode's abbreviations dictionary.
 

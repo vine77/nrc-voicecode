@@ -23,6 +23,7 @@
 """
 
 import re
+import string
 import natlink
 from natlinkutils import *
 import actions_gen, CmdInterp
@@ -265,6 +266,16 @@ def getWordInfo(word, *rest):
 #    trace('sr_interface.getWordInfo', 'answer is %s' % answer)
     return answer
 
+def word_exists(word):
+    """check if a word exists
+
+    **INPUTS**
+
+    *STR* word -- the word
+    """
+    if natlink.getWordInfo(word) is None:
+        return 0
+    return 1
 
 def addWord(word, *rest):
     """Add a word to NatSpeak's vocabulary.
@@ -279,8 +290,11 @@ def addWord(word, *rest):
     #
     # First, fix the written form of the word
     #
-    spoken, written = spoken_written_form(word)
-    word = vocabulary_entry(spoken, written, clean_written=1)
+# DCF: no, this is stupid.  Let the caller do this if desired, but allow
+# the caller to add a word with the desired spoken form.
+
+#    spoken, written = spoken_written_form(word)
+#    word = vocabulary_entry(spoken, written, clean_written=1)
 
 
     #
@@ -289,7 +303,7 @@ def addWord(word, *rest):
     connect()
                 
     if getWordInfo(word) == None:
-#            trace('sr_interface.addWord', 'this word is new to NatSpeak')
+        trace('sr_interface.addWord', 'this word is new to NatSpeak')
                    
         if len(rest) == 0:
             flag = word_info_flag
@@ -460,7 +474,7 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     return (spoken, written)
     
 
-def vocabulary_entry(spoken_form, written_form, clean_written=1):
+def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
     """Creates a vocabulary entry with given spoken and written forms.
 
     **INPUTS**
@@ -479,9 +493,12 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 
 #    trace('sr_interface.vocabulary_entry', 'spoken_form=\'%s\', written_form=%s, clean_written=%s' % (spoken_form, repr(written_form), clean_written))
 
-    spoken_form = clean_spoken_form(spoken_form)
+# DCF: try removing this, to fix a problem with standard punctuation forms
+#    spoken_form = clean_spoken_form(spoken_form)
+# instead, just remove leading and trailing spaces
+    spoken_form = string.strip(spoken_form)
     entry = spoken_form
-    if spoken_form != written_form:
+    if (written_form is not None) and spoken_form != written_form:
         #
         # Substitute special characters in written form (e.g. {Spacebar},
         # {Enter}) to the form used in VoiceCode (e.g. ' ', '\n')
@@ -489,8 +506,11 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
         if clean_written:
             written_form = clean_written_form(written_form, clean_for='sr')
 
-        if len(written_form) > 0:
-            entry = written_form + '\\' + entry
+# DCF: ugh! no! words with empty written form should be allowed.  If you
+# want identical written and spoken forms, omit written_form so it defaults 
+# to None
+#        if len(written_form) > 0:
+        entry = written_form + '\\' + entry
 
 #    trace('sr_interface.vocabulary_entry', 'returning entry=\'%s\'' % entry)
     return entry
