@@ -37,7 +37,7 @@ class CSCmd(Object):
     **INSTANCE ATTRIBUTES**
         
     *STR spoken_forms=[]* -- list of alternatives ways that this
-     command can be spoken out. They can be regular expressions.
+     command can be spoken out. 
     
     *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
     possible contextual meanings for this command. Key is a context
@@ -56,17 +56,21 @@ class CSCmd(Object):
                              'meanings': meanings},
                             attrs)
 
-    def applies(self, app):
+    def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
 
         **INPUTS**
 
         [AppState] app is the application into which the command was spoken.
 
+        BOOL *preceding_symbol* indicates if a symbol would be inserted
+        at the current cursor position before the action corresponding
+        to this context was executed.  
+
         **OUTPUTS**
 
-        *meaning* -- meaning if a Context applies,
-        otherwise None
+        *meaning* -- meaning if a Context applies, return the (context,
+        action) pair, otherwise None
 
         """
         
@@ -79,31 +83,13 @@ class CSCmd(Object):
             cont, action = ameaning
             trace('CSCmd.interpret', 'cont=%s, cont.applies=%s, ameaning=%s, action=%s' % 
                                      (cont, cont.applies, ameaning, str(action)))
-            if (cont == None or cont.applies(app)):
+            if (cont == None or cont.applies(app, preceding_symbol)):
                 trace('CSCmd.applies', 'this context applies')
                 return ameaning
 
         return None
 
 
-
-    def interpret(self, app):
-        """Executes the command if any of its contexts applies.
-
-        [AppState] app is the application into which the command was spoken.
-
-        Returns *true* iif on of the valid contexts applied.
-        
-        .. [AppState] file://./AppState.AppState.html"""
-
-        applied = 0
-        
-        #
-        # Try each of the contextual meanings in turn until find one that
-        # applies
-        #
-        trace('CSCmd.interpret', 'self=%s, self.meanings=%s' % (self, self.meanings))
-        ameaning = self.applies(app)
         if ameaning:
             cont, action = ameaning
             trace('CSCmd.interpret', 'ameaning=%s, cont=%s, action=%s' % 

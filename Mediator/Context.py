@@ -46,15 +46,113 @@ class Context(Object):
                             attrs)
 
 
-    def applies(self, app):        
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        Currently, the recognized return values for scope, in order of
+        decreasing specificity, are: 
+
+        "last command": depends on the last command executed
+        "immediate": depends on the current line or statement in the
+            current buffer 
+        "block": depends on a wider range of code around the cursor (for
+            example, whether the cursor is inside a for loop)
+        "project": depends on whether the current file is part of a
+            project
+        "buffer": depends only on characteristics of the entire buffer
+            (for example, the language or file name)
+        "global": depends only on the global state of the mediator
+        "any": independent of context
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        debug.virtual('Context.scope')
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key, but an instance of ContPy and an instance of ContC should
+        not.
+
+        Generally, the equivalence key should be constructed from the
+        name of the Context subclass (omitting any Context or Cont
+        prefix), followed by ": " and any data required to distinguish 
+        inequivalent contexts.  Contexts with multiple pieces of data
+        should sort that data by keyname.  If there is no data, the ": " 
+        should be omitted.  Subclasses which differ from their parent class 
+        only in that they supply or enforce a value for an argument of the
+        parent constructor should return the same equivalence key as
+        their parent class would if given that value explicitly.  (So
+        ContLanguage(language = 'python') and ContPy() should both
+        return 'Language: python' (and not 'Py').
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        debug.virtual('Context.equivalence_key')
+
+    def applies(self, app, preceding_symbol = 0):        
+        """Returns *true* iif the context applies given current state
+        of an application.
+
+        Do not override this method.  Instead override the private
+        method _applies.
+
+        [AppState] *app* is the application in question.
+
+        BOOL *preceding_symbol* indicates if a symbol would be inserted
+        at the current cursor position before the action corresponding
+        to this context was executed.  
+        
+        .. [AppState] file:///./AppState.AppState.html"""
+        buffer = app.curr_buffer_name()
+        position, selection = app.get_pos_selection()
+        cursor_at = (position == selection[1])
+        answer = self._applies(app, preceding_symbol = preceding_symbol)
+        if buffer != app.curr_buffer_name():
+            raise RuntimeError("context %s switched buffers" % self)
+        newpos, newsel = app.get_pos_selection()
+        if position != newpos:
+            msg = "Warning: context %s" % self + \
+                  "\ndidn't restore the cursor position\n"
+            sys.stderr.write(msg)
+        if selection != newsel:
+            msg = "Warning: context %s" % self + \
+                  "\ndidn't restore the selection\n"
+            sys.stderr.write(msg)
+        app.set_selection(selection, cursor_at)
+        return answer
+        
+    def _applies(self, app, preceding_symbol = 0):        
         """Returns *true* iif the context applies given current state
         of an application.
 
         [AppState] *app* is the application in question.
+
+        BOOL *preceding_symbol* indicates if a symbol would be inserted
+        at the current cursor position before the action corresponding
+        to this context was executed.  
         
         .. [AppState] file:///./AppState.AppState.html"""
         
-        debug.virtual('applies')
+        debug.virtual('Context._applies')
 
 
 
