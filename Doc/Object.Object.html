@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu May 25 13:03:10 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 26 10:10:43 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -81,17 +81,19 @@ means that subclasses cannot inherit default values of ancestor
 attributes from their ancestor classes.</P>
 <P>
 The [Object] class defines a method [deep_construct], which can be
-used to create "standard" constructors which allow you to:</P>
+used to create "standard" constructors with interesting properties:</P>
 
 <UL>
 
-<LI>automatically invoke the constructor of any superclass that has a "standard" constructor
+<LI>it automatically invoke the constructor of any superclass that has a "standard" constructor
 
-<LI>initialise the value of any attribute (including ones defined by ancestor classe) by specifying its value as a named argument
+<LI>it inherits default attribute values from ancestor classes
 
-<LI>leaving the value of any attribute (including ones defined by ancestor classe) at a consistent default value, by not specifying its value as a named argument.
+<LI>you can call it without arguments to obtain a consistent default instance
 
-<LI>inherit default attribute values from ancestor classes
+<LI>you can override the default value of any attribute (including ones defined by ancestor classe) simply by passing a named argument to the constructor
+
+<LI>you can leave the value of any attribute (including ones defined by ancestor classe) at its default value, simply by not passing a named argument for that attribute
 </UL>
 <P>
 Below is a template for such a standard constructor.</P>
@@ -106,14 +108,15 @@ Below is a template for such a standard constructor.</P>
 <P>
 Here, <EM>StdClass1, ..., StdClassN</EM> are "standard" classes, that is
 classes that have standard constructor. The constructor of those
-classes can be invoked automatically because it doesn't require
-any arguments.</P>
+classes can be invoked automatically because it doesn't have
+any compulsory arguments.</P>
 <P>
 <EM>NonStdClass1, ..., NonStdClassK</EM> are "non-standard" classes,
  i.e. classes whose constructor has some compulsory arguments. The
  constructor of those non-standard classes can therefore not be
  called automatically (which is why they are set in the
- <EM>exclude_bases</EM> argument)</P>
+ <EM>exclude_bases</EM> argument and their constructor is explicitely
+ called after the call to *self.deep_construct*)</P>
 <P>
 Attributes <EM>attr1, ..., attrN</EM> are the new attributes defined by
 <EM>AClass</EM>, and <EM>val1, ..., valN</EM> are their default values.</P>
@@ -151,8 +154,6 @@ attributes are set even if they do not exist in
 <P>
 listed in <EM>exclude_bases</EM> argument). These constructors are
 called with no arguments.</P>
-<P>
-[Object].. file:///./Object.Object.html</P>
 <H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Initialises existing attributes</P>
 
