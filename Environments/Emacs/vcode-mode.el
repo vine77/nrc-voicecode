@@ -259,8 +259,14 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 
 ;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
-(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
+
+; Until we know that the new mechanism for fixing the selected-frame
+; problem works, these traces should be left on - DCF
+(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
+(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+
 
 
 ; DCF - tracing indentation problems (at Alain's suggestion)
@@ -1347,7 +1353,6 @@ speech server"
     (remove-hook 'suspend-hook 'vcode-send-suspended)
     (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
 
-
     (setq frame-title-format 
           `("%b -- " (, invocation-name "@" system-name)))
     (vr-activate-buffer nil)
@@ -1555,6 +1560,81 @@ t)
   (vr-maybe-activate-buffer (current-buffer))
 
   t)
+
+(defun vcode-restore-special-event-map ()
+"restores the original value of the special-event-map.
+
+See vcode-cmd-prepare-for-ignored-key.
+"
+  (interactive)
+  (vcode-trace "vcode-restore-special-event-map" 
+      "restoring original special event-map")
+  (setq special-event-map vcode-was-special-event-map)
+  (setq vcode-awaiting-ignored-key nil)
+)
+
+(defun vcode-cmd-prepare-for-ignored-key (vcode-request)
+"experimental substitute for vr-cmd-frame-activated
+
+This is ridiculous, but Emacs does not automatically change its
+concept of selected-frame until you type into it.  
+
+The old solution to this, inherited from vr-mode, was to have
+the server us the HWND of the foreground window and explcitly activate the
+frame that owns it.  The problem with this solution is that it requires
+that Emacs's window-id match the Windows HWNd, which won't be the case
+if Emacs is running remotely (e.g. via Exceed).
+
+Emacs lisp (Node: Focus Events) claims that a keyboard key or mouse
+button should trigger a focus event (consistent with Barry Jaspan's
+note above).  However, simulating keyboard input, at least in the way I
+tried, doesn't seem to do the trick, because Emacs knows that the
+simulated keystrokes didn't really come from a window.  In fact, I
+suspect that even if we could insert key events into the event stream at
+a lower level, we would have to explicitly include the window-id of the
+foreground frame in those events, which brings us back to where we
+started -- how do we find the window-id of the foreground frame when
+selected-frame doesn't return the correct result?
+
+So, what we're trying now is to have the VoiceCode server simulate
+keystrokes (by way of the speech engine) to trigger the focus event.
+The only problem with this approach is ensuring that those keystrokes
+don't affect the current buffer (even if the minibuffer is active).
+
+To accomplish that, we add this extra Emacs-specific message,
+emacs_prepare_for_ignored_key, which temporarily replaces the 
+special-event-map.  The replacement keymap binds the ignored key, f9, to
+a function which doesn't affect the current buffer.  Strictly speaking,
+the ignored key isn't actually ignored, it instead is bound to a
+function which restores the original special-event-map.
+
+Because the special-event-map bindings are applied immediately, before
+any other keymap bindings, the receipt of the ignored key has no effect on the
+current buffer, even if the minibuffer is active.  Fortunately, the
+special-event-map doesn't remove the ignored key before triggering a
+focus event, which is the desired effect.
+"
+  (let ((mess-cont (elt vcode-request 1)) 
+	(empty-response (make-hash-table :test 'string=))
+        )
+
+    (setq vcode-was-special-event-map (copy-keymap special-event-map))
+    (define-key special-event-map [f9] 'vcode-restore-special-event-map)
+; if we receive the emacs_prepare_for_ignored_key message, then the old
+; vr-cmd-frame-activated hack is redundant
+    (setq vcode-frame-activated-necessary nil)
+; set this flag so vcode-cmd-recognition-start can tell whether we
+; received the ignored key as expected
+    (setq vcode-awaiting-ignored-key t)
+    (vcode-trace "vcode-cmd-prepare-for-ignored-key" 
+      "setting special keymap to intercept ignored key")
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list
+      "emacs_prepare_for_ignored_key_resp" empty-response)))
+   )
+)
+
 
 (defun vr-cmd-heard-command (vr-request)
   ;;
@@ -1764,6 +1844,51 @@ command was a yank or not."
 "Another unique ID assigned to this instance of Emacs."
 )
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; variables used by the ignored key alternative to
+;; vr-cmd-frame-activated.
+;;
+;; See vcode-cmd-prepare-for-ignored-key for more details.
+
+(defvar vcode-frame-activated-necessary t
+"flag indicating whether vcode-cmd-recognition-start needs to call
+vr-cmd-frame-activated to ensure that selected-frame (and thus
+current-buffer, etc.) return the correct value.
+
+Currently, this is initially set to true, but will be cleared if we
+receive an emacs_prepare_for_ignored_key message.  This allows us to
+switch on the experimental ignored-key substitute for
+vr-cmd-frame-activated based on whether the VoiceCode server is using
+it, rather than having to manually configure both VoiceCode and
+vcode-mode to use matching settings.
+
+If the experimental test works, vr-cmd-frame-activated and this flag
+will ultimately be removed.
+
+See vcode-cmd-prepare-for-ignored-key for more details.
+"
+)
+
+(defvar vcode-awaiting-ignored-key nil
+"flag indicating that we have received the emacs_prepare_for_ignored_key
+message, but have not yet received the ignored key
+
+See vcode-cmd-prepare-for-ignored-key for more details.
+"
+)
+
+(defvar vcode-was-special-event-map nil
+"holds a backup copy of the special-event-map keymap, for restoration
+following receipt of the ignored key.  
+
+See vcode-cmd-prepare-for-ignored-key for more details.
+"
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (defun vcode-make-all-keys-self-insert ()
   
 )
@@ -1843,6 +1968,8 @@ command was a yank or not."
 	      vr-message-handler-hooks)
 
 
+  (cl-puthash 'emacs_prepare_for_ignored_key 'vcode-cmd-prepare-for-ignored-key
+	      vr-message-handler-hooks)
   (cl-puthash 'recog_begin 'vcode-cmd-recognition-start 
 	      vr-message-handler-hooks)
   (cl-puthash 'recog_end 'vcode-cmd-recognition-end 
@@ -2185,11 +2312,38 @@ a buffer"
     ;;; Tell Emacs what the active window was when we heard the utterance
     ;;;
     (setq window-id (cl-gethash 'window_id mess-cont))
-    (vcode-trace "vcode-cmd-recognition-start" "(type-of window-id)=%S, window-id=%S" (type-of window-id) window-id)
+    (vcode-trace "vcode-cmd-recognition-start" "(type-of window-id)=%S,
+    window-id=%S" (type-of window-id) window-id)
+    (vcode-trace "vcode-cmd-recognition-start" "minibuffer active? %S"
+      (if (equal (active-minibuffer-window) nil) "no" "yes"))
+; this is always returning "no"
+    (vcode-trace "vcode-cmd-recognition-start" "minibuffer depth = %S"
+      (minibuffer-depth))
+; this is always returning 0
+    (vcode-trace "vcode-cmd-recognition-start" 
+      "selected-window is minibuffer? %S"
+      (if (window-minibuffer-p (selected-window)) "yes" "no")
+    )
     (if (numberp window-id)
         (setq window-id (int-to-string window-id)))
     (vr-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
-    (vr-cmd-frame-activated window-id)
+
+
+    (if vcode-awaiting-ignored-key
+        (progn
+        ; we received the emacs_prepare_for_ignored_key message, but
+        ; failed to receive the expected ignored key before the
+        ; recog_begin message.  
+          (vcode-trace "vcode-cmd-recognition-start" 
+              "ERROR: ignored key expected, but not received")
+          (vcode-restore-special-event-map)
+          (setq vcode-frame-activated-necessary)
+        )
+    )
+    (if vcode-frame-activated-necessary
+      (vr-cmd-frame-activated window-id)
+    )
+
 ; trying my alternative form here
 ;    (vr-cmd-alt-frame-activated window-id)
 ; DCF: I don't understand why list nil was used here.  The comparison
@@ -2953,7 +3107,8 @@ change reports it sends to VCode.
       )
     (condition-case err     
 	(progn
-	  (switch-to-buffer buff-name)
+;	  (switch-to-buffer buff-name)
+	  (set-buffer buff-name)
 	  (goto-char sel-start)
 	  (set-mark sel-start)
 	  (goto-char sel-end)
@@ -3025,6 +3180,9 @@ change reports it sends to VCode.
  	(setq start (cl-gethash "start" mess-cont))
  	(setq end (cl-gethash "end" mess-cont))
         (vcode-trace "vcode-cmd-set-text" "buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
+; Is this causing new problems with scratch that with multiple windows
+; open, or did those problems predate the addition of save-excursion?
+; The latter -- DCF
         (save-excursion
             (set-buffer buff-name)
             (vcode-trace "vcode-cmd-set-text" "*** before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S, buffer contains:\n%S" (point-min) (point-max) after-change-functions (buffer-substring (point-min) (point-max)))
@@ -3247,7 +3405,8 @@ tabs.
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (condition-case err     
 	(progn 
-	  (switch-to-buffer buff-name)
+;	  (switch-to-buffer buff-name)
+          (set-buffer buff-name)
 	  (goto-char pos)
 	  (push-mark (point))
           (vr-log "--** vcode-cmd-goto: mark-active = %S\n" mark-active)

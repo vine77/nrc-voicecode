@@ -309,7 +309,7 @@ class AppStateFactorySimple(AppStateFactory):
         elif re.match('emacs', app_name):
             as_class = AppStateEmacs.AppStateEmacs
 # comment out the following line to use the old recog_begin scheme
-#            kw_args['use_ignored_key'] = 1
+            kw_args['use_ignored_key'] = 1
         else:
             print "WARNING: Unknown editor '%s'" % app_name
             print "Connection refused"
