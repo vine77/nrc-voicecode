@@ -92,6 +92,8 @@ show_buff()
    Prints the content of the current buffer
 
 listen()
+   [Unnecessary in gui_sim.py]
+
    Throws the mediator into a dictation loop. It will listen for
    dictation utterances and interpret and execute any part of the
    utterance that corresponds to a Context Sensitive Command.
@@ -99,6 +101,14 @@ listen()
    Once in 'listen' mode, you cannot type console commands until you
    have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
    window.
+
+getmic()
+    returns current microphone state as a string ('on', 'off', 'sleeping', or
+    'disabled')
+
+setmic(state)
+    sets current microphone state to the string state ('on', 'off',
+    'sleeping' are allowed)
 
 make_position_visible(INT pos)
    Scroll so that pos is visible
@@ -350,6 +360,10 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
         
     quit_flag = 1            
 
+def getmic():
+    if sr_interface.speech_able():
+        sr_interface.connect()
+        return natlink.getMicState()
 def setmic(state):
     if sr_interface.speech_able():
         sr_interface.connect()

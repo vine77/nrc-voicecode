@@ -44,6 +44,7 @@ ID_FOCUS_EDITOR = 108
 ID_PANE = 120
 ID_PROMPT = 130
 ID_COMMAND_LINE = 140
+ID_MIC_BUTTON = 150
 
 
 class WaxEdSimPane(wxPanel):
@@ -128,6 +129,12 @@ class WaxEdSimPane(wxPanel):
 	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
+	self.green_light = wxBitmap("green.bmp", wxBITMAP_TYPE_BMP)
+	self.grey_light = wxBitmap("grey.bmp", wxBITMAP_TYPE_BMP)
+	self.dark_grey_light = wxBitmap("darkgrey.bmp", wxBITMAP_TYPE_BMP)
+	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light)
+	EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
+	self.vbox.Add(self.mic_button, 0)
         self.vbox.Add(top_and_bottom, 1, wxEXPAND | wxALL, 4)
         self.vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
 
@@ -198,6 +205,27 @@ class WaxEdSimPane(wxPanel):
 	if self.most_recent_focus == 0:
 	    self.most_recent_focus = self.editor
 	self.most_recent_focus.SetFocus()
+    def on_mic_button(self, event):
+	current = self.command_space['getmic']()
+	if current == 'off':
+	    self.command_space['setmic']('on')
+	else:
+	    self.command_space['setmic']('off')
+    def update_mic_button(self, state = None):
+	if state == None:
+	    state = self.command_space['getmic']()
+	if state == 'on':
+	    self.mic_button.SetBitmapLabel(self.green_light)
+	    self.mic_button.Refresh()
+	elif state == 'off':
+	    self.mic_button.SetBitmapLabel(self.grey_light)
+	    self.mic_button.Refresh()
+	else:
+	    self.mic_button.SetBitmapLabel(self.dark_grey_light)
+	    self.mic_button.Refresh()
+    def mic_change(self, state):
+	self.command_log.write('Microphone is now '+state+'\n')
+	self.update_mic_button(state)
     def on_command_enter(self, command_line, command):
 	self.command_log.log_command(command)
 	stdout = sys.stdout
@@ -266,8 +294,8 @@ class WaxEdSimFrame(wxFrame):
 	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
-        file_menu.Append(ID_EXIT,"E&xit","Terminate")
         file_menu.Append(ID_OPEN_FILE,"&Open","Open a file")
+        file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
         window_menu = wxMenu()
         window_menu.Append(ID_FOCUS_EDITOR, "&Editor Window")
@@ -326,6 +354,10 @@ class WaxEdSimFrame(wxFrame):
 	if self.most_recent_focus == 0:
 	    self.most_recent_focus = self.pane
 	self.most_recent_focus.SetFocus()
+    def update_mic_button(self, state = None):
+	self.pane.update_mic_button(state)
+    def mic_change(self, state):
+	self.pane.mic_change(state)
     def update_status_bar(self, m):
 	"""change the message in the status bar
 
@@ -457,10 +489,11 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 
 	*none*
 	"""
-	print 'eh?\n'
-	self.frame.pane.command_log.write('Microphone is now '+state+'\n')
+	self.frame.mic_change(state)
 
 
+    def update_mic_button(self, state = None):
+	self.frame.update_mic_button(state)
     def run(self, app_control):
 	"""starts the message loop.  Note: this function does not
 	return until the GUI exits.
@@ -475,6 +508,7 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	*none*
 	"""
 	self.frame.app_control = app_control
+	self.update_mic_button()
 	self.MainLoop()
 
 def run():
