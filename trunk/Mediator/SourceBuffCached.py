@@ -51,8 +51,10 @@ class SourceBuffCached(SourceBuff.SourceBuff):
     external editor, *SourceBuffCached* should implement two methods:
 
     *readingMethod* -- This is the public method (usually a method of
-     [SourceBuff]) used to read the state. It usually just reads the
-     value from *self.cache*
+     [SourceBuff]) used to read the state. It usually checks to see if
+     the value is cached, and if so, it reads if from cache. If the
+     value is not cached, it will retrieve it from the external
+     application and cache it.
      
     *_readingMethod_from_app* -- This is a private method which reads
      the state directly from the external editor. Such methods are not
@@ -87,7 +89,6 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         self.init_cache()
 
 
-
     def init_cache(self):
         """Initializes the cache from data acquired from external buffer.
         
@@ -100,14 +101,13 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        
-        self.cache['language_name'] = self._language_name_from_app()
-        self.cache['cur_pos'] = self._cur_pos_from_app()
-        self.cache['get_selection'] = self._get_selection_from_app()
-        self.cache['get_text'] = self._get_text_from_app()
-        self.cache['get_visible'] = self._get_visible_from_app()
-        self.cache['newline_conventions'] = self._newline_conventions_from_app()
-        self.cache['pref_newline_convention'] = self._pref_newline_convention_from_app()
+
+#        print '-- SourceBuffCached.init_cache: called'
+
+        self.cache = {'language_name': None, 'cur_pos': None,
+                      'get_selection': None, 'get_text': None,
+                      'get_visible': None, 'newline_conventions': None,
+                      'pref_newline_convention': None}
 
 
     def language_name(self):
@@ -121,6 +121,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
         *STR* -- the name of the language
         """
+        if self.cache['language_name'] == None:
+            self.cache['language_name'] = self._language_name_from_app()
         return self.cache['language_name']
 
     def _language_name_from_app(self):
@@ -150,7 +152,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*INT* pos -- offset into buffer of current cursor position
 	"""
-
+        if self.cache['cur_pos'] == None:
+            self.cache['cur_pos'] = self._cur_pos_from_app()
 	return self.cache['cur_pos']
 
     def _cur_pos_from_app(self):
@@ -186,6 +189,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
+        if self.cache['get_selection'] == None:
+            self.cache['get_selection'] = self._get_selection_from_app()
 	return self.cache['get_selection']
         
 
@@ -224,8 +229,27 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*STR* -- contents of specified range of the buffer
 	"""
+#        print '-- SourceBuffCached.get_text: start=%s, end=%s' % (start, end)
+            
+        
+        if self.cache['get_text'] == None:
+            self.cache['get_text'] = self._get_text_from_app()
 
-	return self.cache['get_text']
+
+        #
+        # Note: cannot invoke self.make_valid_range() because it causes
+        #       infinite recursion, ie:
+        #       -> get_text() -> make_valid_range() -> len() -> get_text() -
+        #      | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ | 
+        #             
+        if start == None: start = 0
+        if end == None: end = len(self.cache['get_text'])
+	if end < start:
+            tmp = end
+            end = start
+            start = tmp
+
+        return self.cache['get_text'][start:end]
 
 
     def _get_text_from_app(self, start = None, end = None):
@@ -259,6 +283,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*INT* (start, end)
 	"""
+        if self.cache['get_visible'] == None:
+            self.cache['get_visible'] = self._get_visible_from_app()
 	return self.cache['get_visible']
 
     def _get_visible_from_app(self):
@@ -304,7 +330,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        
+        if self.cache['newline_conventions'] == None:
+            self.cache['newline_conventions'] = self._newline_conventions_from_app()
         return self.cache['newline_conventions']
 
     def _newline_conventions_from_app(self):
@@ -338,7 +365,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        
+        if self.cache['pref_newline_convention'] == None:
+            self.cache['pref_newline_convention'] = self._pref_newline_convention_from_app()
         return self.cache['pref_newline_convention']
 
     def _pref_newline_convention_from_app(self):
@@ -383,8 +411,19 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
         if range == None:
             range = self.get_selection()
-        old_text = self.cache['get_text']
+        old_text = self.get_text()
         self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]+1:]
+
+        #
+        # Uncache visible region.
+        #        
+        # Note: we don't recache it from external application for efficiency
+        # reasons. That's because the visible region is only needed at the
+        # beginning of an utterance, but delete_cbk() can be invoked many
+        # times within an utterance (which would result in many unecessary
+        # calls to _get_visible_from_app()).
+        #
+        self.cache['get_visible'] = None
 
     def insert_cbk(self, range, text):
         
@@ -405,13 +444,23 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        print '-- SourceBuffCached.insert_cbk: range=%s' % range
+#        print '-- SourceBuffCached.insert_cbk: range=%s, text=\'%s\'' % (range, text)
 
         if range == None:
             range = self.get_selection()        
-        old_text = self.cache['get_text']
-        self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]+1:]
-        
+        old_text = self.get_text()
+        self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]:]
+
+        #
+        # Uncache visible region.
+        #        
+        # Note: we don't recache it from external application for efficiency
+        # reasons. That's because the visible region is only needed at the
+        # beginning of an utterance, but insert_cbk() can be invoked many
+        # times within an utterance (which would result in many unecessary
+        # calls to _get_visible_from_app()).
+        #
+        self.cache['get_visible'] = None        
 
     def set_selection_cbk(self, range, cursor_at=1):
         
@@ -433,12 +482,26 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        print '-- SourceBuffCached.set_selection_cbk: called, range=%s, cursor_at=%s' % (repr(range), cursor_at)
+        
+#        print '-- SourceBuffCached.set_selection_cbk: called, range=%s, cursor_at=%s' % (repr(range), cursor_at)
+
         self.cache['get_selection'] = range
         if cursor_at > 0:
             self.cache['cur_pos'] = range[1]
         else:
             self.cache['cur_pos'] = range[0]
+
+        #
+        # Uncache visible region.
+        #        
+        # Note: we don't recache it from external application for efficiency
+        # reasons. That's because the visible region is only needed at the
+        # beginning of an utterance, but set_selection_cbk() can be invoked
+        # many times within an utterance (which would result in many unecessary
+        # calls to _get_visible_from_app()).
+        #
+        self.cache['get_visible'] = None
+            
 
     def goto_cbk(self, pos):
         
@@ -456,6 +519,16 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
-        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
+#        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
         self.cache['cur_pos'] = pos
 
+        #
+        # Uncache visible region.
+        #        
+        # Note: we don't recache it from external application for efficiency
+        # reasons. That's because the visible region is only needed at the
+        # beginning of an utterance, but goto_cbk() can be invoked many
+        # times within an utterance (which would result in many unecessary
+        # calls to _get_visible_from_app()).
+        #
+        self.cache['get_visible'] = None

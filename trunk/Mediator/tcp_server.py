@@ -1,3 +1,24 @@
+##############################################################################
+# VoiceCode, a programming-by-voice environment
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# (C)2002, National Research Council of Canada
+#
+##############################################################################
+
 """A VoiceCode server that uses TCP/IP based messaging protocol to communicate with external editors.
 
 We have two versions of the server.
@@ -55,10 +76,12 @@ This will be very slow if symdict gets large.
 ???????????????????????????????????????????????????????????????????????????????
 """
 
-import natlink, os, pythoncom, re, socket, SocketServer, sys, time, whrandom
-import select, string, threading, time, win32event
+import natlink, os, posixpath, pythoncom, re, select, socket
+import SocketServer, string, sys, threading, time, whrandom, win32event
 
-import AppStateMessaging, mediator, messaging, Object, RecogStartMgr, SourceBuffMessaging, sb_services, sim_commands, sr_interface
+import AppStateMessaging, auto_test, mediator, messaging, Object
+import RecogStartMgr, SourceBuffMessaging, sb_services
+import sim_commands, sr_interface, util
 
 
 #
@@ -86,25 +109,55 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
     [SB_ServiceIndent] *indent_srv* -- Code indentation service used to
     provide indentation at the server level.
 
+    {SB_ServiceLineManip] *lines_srv* -- Line numbering service.
+
     CLASS ATTRIBUTES**
     
     *none* -- 
 
-    ..[SB_ServiceIndent] file:///./SB_ServiceIndent.SB_ServiceIndent.html
+    ..[SB_ServiceLineManip] file:///./sb_services.SB_ServiceLineManip.html
+    ..[SB_ServiceIndent] file:///./sb_services.SB_ServiceIndent.html
     ..[SourceBuff] file:///./SourceBuff.SourceBuff.html
     ..[EdSim] file:///./EdSim.EdSim.html"""
     
     def __init__(self, **args_super):
-        print '-- SB_MessExtEdSim.__init__: called, args_super=%s' % repr(args_super)
         self.deep_construct(SB_MessExtEdSim, 
-                            {'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1)}, 
+                            {'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
+                             'lines_srv': sb_services.SB_ServiceLineManip(buff=self)}, 
                             args_super, 
                             {})
 
     def insert_indent(self, code_bef, code_after, range = None):
-        print '-- SB_MessExtEdSim.insert_indent: called'
-        self.indent_srv.insert_indent(code_bef, code_after, range)        
+        self.indent_srv.insert_indent(code_bef, code_after, range)
 
+    def indent(self, range = None):
+        self.indent_srv.indent(range = range)
+        
+    def incr_indent_level(self, levels=1, range=None):
+        self.indent_srv.incr_indent_level(levels=levels, range=range)
+
+    def decr_indent_level(self, levels=1, range=None):
+        self.indent_srv.decr_indent_level(levels=levels, range=range)
+
+    def refresh_if_necessary(self):
+	self.app.talk_msgr.send_mess('refresh_if_necessary')
+        self.app.talk_msgr.get_mess(expect=['refresh_if_necessary_resp'])
+        self.print_buff()
+        
+    def line_num_of(self, position = None):
+	return self.lines_srv.line_num_of(position)
+
+    def number_lines(self, astring, startnum=1):
+        return self.lines_srv.number_lines(astring, startnum)
+
+    def beginning_of_line(self, pos):
+        return self.lines_srv.beginning_of_line(pos)
+
+    def end_of_line(self, pos):    
+        return self.lines_srv.end_of_line(pos)
+
+    def goto_line(self, linenum, where=-1):
+        self.lines_srv.goto_line(linenum, where)
 
 class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
     """Communicates with an external [EdSim] through a messaging link.
@@ -132,7 +185,9 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
                             {})
 
     def new_compatible_sb(self, fname):
-        return SB_MessExtEdSim(app=self, fname=fname)
+#        print '-- AS_MessExtEdSim.new_compatible_sb: fname=%s' % fname
+        buff = SB_MessExtEdSim(app=self, fname=fname)
+        return buff
         
 
 
@@ -504,7 +559,7 @@ class ListenForConnThread(threading.Thread, Object.Object):
             # Accept a new connection
             (client_socket, address) = server_socket.accept()
 
-            print '-- ListenForConnThread.run: got new connection on port=%s' % self.port
+#            print '-- ListenForConnThread.run: got new connection on port=%s' % self.port
             
             #
             # Log it and Raise Win32 event to notify the main event loop that
@@ -638,7 +693,7 @@ class CheckReadySocksThread(threading.Thread, Object.Object):
                 (self.ready_socks, dum1,dum2) = select.select(to_check, [], [], 0)
                 self.ready_socks_lock.release()
                 if len(self.ready_socks) > 0:
-                    print '-- CheckReadySocksThread.run: some sockets are ready'
+#                    print '-- CheckReadySocksThread.run: some sockets are ready'
                     win32event.SetEvent(self.raise_event)
 
             # When debuggin, increase sleep time if you want to see things
@@ -742,6 +797,9 @@ class ServerSingleThread(Object.Object):
     external edtiors. NOTE: This will eventually be moved to the
     grammar manager class.
 
+    STR *test_suite=None* -- If not *None*, then upon connection by a
+    new editor run regression test suite *test_suite*.
+
     CLASS ATTRIBUTES**
     
     *none* -- 
@@ -751,7 +809,7 @@ class ServerSingleThread(Object.Object):
     ..[ListenForNewTalkersThread] file:///./tcp_server.ListenForNewTalkersThread.html
     """
     
-    def __init__(self, **args_super):
+    def __init__(self, test_suite=None, **args_super):
         self.deep_construct(ServerSingleThread, 
                             {'new_listen_socks': [],
                              'new_talk_socks': [],
@@ -763,7 +821,8 @@ class ServerSingleThread(Object.Object):
                              'evt_new_talk_conn': win32event.CreateEvent(None, 0, 0, None),
                              'evt_sockets_ready': win32event.CreateEvent(None, 0, 0, None),
                              'evt_quit': win32event.CreateEvent(None, 0, 0, None),
-                             'active_meds': []
+                             'active_meds': [],
+                             'test_suite': None
                              }, 
                             args_super, 
                             {threading.Thread: 1})
@@ -794,7 +853,7 @@ class ServerSingleThread(Object.Object):
 
         ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""
 
-        print '-- ServerSingleThread.package_sock_pair: called'
+#        print '-- ServerSingleThread.package_sock_pair: called'
         
         
         listen_msgr = messenger_factory(listen_sock)
@@ -824,24 +883,49 @@ class ServerSingleThread(Object.Object):
         # architecture of the system.
         #
         ###################################################################
-#        mediator.init_simulator_regression(disable_dlg_select_symbol_matches=1)
-        exclusive = 1
-        allResults = 0
-        print '-- ServerSingleThread.package_sock_pair: initiating mediator'
-        mediator.init_simulator(disable_dlg_select_symbol_matches=1, window=window, exclusive = exclusive, allResults = allResults)
-        print '-- ServerSingleThread.package_sock_pair: DONE initiating mediator'        
 
         #
-        # Copy the mediator to the list of active mediators.
+        # ??????????????????????????????????????????????????????????
+        # May need to use init_simulator_regression() instead
+        # if self.test_suite != None. Otherwise, external editor will
+        # have to keep the focus throughout the regression test
         #
-        mediator.the_mediator.interp.on_app = an_app_state
-        self.active_meds.append(mediator.the_mediator)
-        mediator.the_mediator = None
+        # Actually not, because regression test will invoke
+        # init_simulator_regression() which will reinitialise that
+        # mediator object with proper settings.
+        #
+        # ??????????????????????????????????????????????????????????        
+        #
+
+        if opts['t'] != None:
+            mediator.init_simulator_regression(on_app=an_app_state)
+        else:
+            exclusive = 1
+            allResults = 0
+            mediator.init_simulator(on_app=an_app_state, disable_dlg_select_symbol_matches=1, window=window, exclusive = exclusive, allResults = allResults)
 
         #
         # Add the listen socket to the list of active ones
         #
-        self.active_listen_socks[listen_sock] = an_app_state
+        self.active_listen_socks[listen_sock] = an_app_state        
+
+        #
+        # Run regression test?
+        #
+        if self.test_suite != None:
+#            print '-- ServerSingleThread.package_sock_pair: running regression test suite %s' % self.test_suite
+            args = [self.test_suite]
+            auto_test.run(args)
+            # Send a quit event to quit the server
+            win32event.SetEvent(self.evt_quit)            
+
+
+        #
+        # Copy the mediator to the list of active mediators.
+        #
+        self.active_meds.append(mediator.the_mediator)
+        mediator.the_mediator = None
+
 
 
 
@@ -991,7 +1075,7 @@ class ServerSingleThread(Object.Object):
         *none* -- 
         """
 
-        print '-- ServerSingleThread.process_ready_socks: self.ready_socks=%s' % repr(self.ready_socks)
+#        print '-- ServerSingleThread.process_ready_socks: self.ready_socks=%s' % repr(self.ready_socks)
 
         self.ready_socks_lock.acquire()
 
@@ -1038,6 +1122,12 @@ class ServerSingleThread(Object.Object):
         """
 
         #
+        # Start threads for monitoring socket connections.
+        # We make the threads daemonic so that the program exits automaticall
+        # when only those three threads are left
+        #
+
+        #
         # This thread listens for new socket connections on VC_LISTEN port.
         # New connections are stored in a list, so that the main thread
         # can later on initialise them.
@@ -1046,6 +1136,7 @@ class ServerSingleThread(Object.Object):
            ListenForNewListenersThread(new_socks=self.new_listen_socks,
                                    new_socks_lock=self.new_socks_lock,
                                    raise_event=self.evt_new_listen_conn)
+        self.new_listener_server.setDaemon(1)
         self.new_listener_server.start()
 
         #
@@ -1057,6 +1148,7 @@ class ServerSingleThread(Object.Object):
            ListenForNewTalkersThread(new_socks=self.new_talk_socks,
                                    new_socks_lock=self.new_socks_lock,
                                    raise_event=self.evt_new_talk_conn)
+        self.new_talker_server.setDaemon(1)        
         self.new_talker_server.start()
 
         #
@@ -1064,8 +1156,10 @@ class ServerSingleThread(Object.Object):
         # received new data.
         #
         self.ready_socks_checker = CheckReadySocksThread(socks_to_check=self.active_listen_socks, ready_socks=self.ready_socks, ready_socks_lock=self.ready_socks_lock, raise_event=self.evt_sockets_ready)
+        self.ready_socks_checker.setDaemon(1)
         self.ready_socks_checker.start()
 
+        
         #
         # This is the event loop. It is based on a recipe found at:
         # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/82236        
@@ -1086,14 +1180,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # A new VC_LISTEN connection was opened
                 #
-                print '-- ServerSingleThread.run: got evt_new_listen_conn'
+#                print '-- ServerSingleThread.run: got evt_new_listen_conn'
                 self.handshake_listen_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+1:
                 #
                 # A new VC_TALK connection was opened
                 #
-                print '-- ServerSingleThread.run: got evt_new_talk_conn'
+#                print '-- ServerSingleThread.run: got evt_new_talk_conn'
                 self.handshake_talk_socks()
 
                 
@@ -1101,14 +1195,14 @@ class ServerSingleThread(Object.Object):
                 #
                 # Some of the active VC_LISTEN sockets have received data
                 #
-                print '-- ServerSingleThread.run: got evt_sockets_ready'
+#                print '-- ServerSingleThread.run: got evt_sockets_ready'
                 self.process_ready_socks()
 
             elif rc == win32event.WAIT_OBJECT_0+3:
                 #
                 # Server is shutting down. Exit the event loop.
                 #
-                print '-- ServerSingleThread.run: got evt_quit'
+#                print '-- ServerSingleThread.run: got evt_quit'
                 break
                 
             elif rc == win32event.WAIT_OBJECT_0+4:
@@ -1116,7 +1210,7 @@ class ServerSingleThread(Object.Object):
                 # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
                 # Note: this must be done for COM and other windowsy
                 #   things to work.
-                print '-- ServerSingleThread.run: forwarding unknown message'
+#                print '-- ServerSingleThread.run: forwarding unknown message'
                 if pythoncom.PumpWaitingMessages():
                     break # wm_quit
                 
@@ -1133,17 +1227,18 @@ class ServerSingleThread(Object.Object):
             counter = counter + 1
 
 
-def run_server_singlethread():
+def run_server_singlethread(test_suite=None):
     """Start a single thread, single process server.
     """
 
 #    print '-- start_server_singlethread: called'
 
     a_server = ServerSingleThread()
+    a_server.test_suite = test_suite
         
     a_server.run()
     
-    print '-- start_server_multiprocesses: done'
+#    print '-- start_server_multiprocesses: done'
 
 
 ##############################################################################
@@ -1200,12 +1295,12 @@ class ServerMultiProcesses(Object.Object):
         that connection.        
         """
         
-        print '-- ServerMultiProcesses.vc_listener_handshake: called'
+#        print '-- ServerMultiProcesses.vc_listener_handshake: called'
         
         a_messenger = messenger_factory(sock)
        
 
-        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, getting app_name' % self
+#        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, getting app_name' % self
         
         #
         # Get the external application name
@@ -1213,7 +1308,7 @@ class ServerMultiProcesses(Object.Object):
         mess = a_messenger.get_mess(expect=['app_name'])
         app_name = mess[1]['value']
         
-        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, sending ID' % self
+#        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, sending ID' % self
         
         #
         # Assign a random ID to the external editor, and send it on the socket
@@ -1226,7 +1321,7 @@ class ServerMultiProcesses(Object.Object):
 
 
 
-        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, done' % self
+#        print '-- ServerMultiProcesses.vc_listener_handshake: self=%s, done' % self
         
         return (app_name, id)
 
@@ -1251,11 +1346,11 @@ class ServerMultiProcesses(Object.Object):
         
         """
 
-        print '-- ServerMultiProcesses.vc_talker_handshake: self=%s, started' % self
+#        print '-- ServerMultiProcesses.vc_talker_handshake: self=%s, started' % self
         success = 0
 
 
-        print '-- ServerMultiProcesses.vc_talker_handshake: self=%s, getting ID' % self
+#        print '-- ServerMultiProcesses.vc_talker_handshake: self=%s, getting ID' % self
         
         #
         # Read the ID previously assigned by VoiceCode to the external editor.
@@ -1268,7 +1363,7 @@ class ServerMultiProcesses(Object.Object):
         if this_id == id:
             success = 1
 
-        print '-- ServerMultiProcesses.vc_talker_handshake: returning success=%s' % success
+#        print '-- ServerMultiProcesses.vc_talker_handshake: returning success=%s' % success
         
         return success
 
@@ -1296,7 +1391,7 @@ class ServerMultiProcesses(Object.Object):
         *none* -- 
         """
 
-        print '-- ServerMultiProcesses.package_sock_pair: called'
+#        print '-- ServerMultiProcesses.package_sock_pair: called'
 
 
         #
@@ -1354,10 +1449,10 @@ class ServerMultiProcesses(Object.Object):
         *none* -- 
         """
 
-        print '-- ServerSingleThread.spawn_new_server_process: starting new server'
+#        print '-- ServerSingleThread.spawn_new_server_process: starting new server'
         vc_home = os.environ['VCODE_HOME']
         win32api.WinExec('python %s\\Mediator\\tcp_server.py' % vc_home)
-        print '-- ServerSingleThread.spawn_new_server_process: DONE starting new server'        
+#        print '-- ServerSingleThread.spawn_new_server_process: DONE starting new server'        
 
 
 
@@ -1381,11 +1476,11 @@ class ServerMultiProcesses(Object.Object):
         server_socket.bind((socket.gethostname(), VC_LISTEN_PORT))
         server_socket.listen(5)
 
-        print '-- ServerMultiProcesses.start: listening for new VC_LISTEN connection'
+#        print '-- ServerMultiProcesses.start: listening for new VC_LISTEN connection'
         (vc_listener_socket, address) = server_socket.accept()
         server_socket.close()
         
-        print '-- ServerMultiProcesses.start: received new VC_LISTEN connection'        
+#        print '-- ServerMultiProcesses.start: received new VC_LISTEN connection'        
 
         #
         # Get the window handle of active application.
@@ -1459,8 +1554,44 @@ def run_server_multiprocesses():
 #    print '-- start_server_multiprocesses: done'
     
 
+def help():
+    print """
+Usage: python tcp_server.py -ht
+
+Runs the VoiceCode TCP server.
+
+When this server is running, external editors can connect to VoiceCode through
+TCP connections on the VC_LISTEN (45770) and VC_TALK (45771) ports.
+
+OPTIONS
+-------
+
+-h :
+
+   print this help message.
+
+    
+-t testSuite:
+
+   Upon connection by a new external editor, run regression test suite
+   *testSuite* on that external editor.
+
+   (Default: None)
+    """
+
 if __name__ == '__main__':
 
+
+#    print '-- tcp_server.__main__: started'
+    opts, args = util.gopt(['h', None, 't=', None])
+
+    if opts['t'] != None:        
+        #
+        # Load definition of regression tests
+        #
+        tests_def_fname = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py')
+        execfile(tests_def_fname)        
+    
     
     sr_interface.connect()
 
@@ -1472,10 +1603,8 @@ if __name__ == '__main__':
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
-    run_server_singlethread()
+    run_server_singlethread(test_suite=opts['t'])
 #    run_server_multiprocesses()
 
 
-    print '-- __main__: before disconnect'
     sr_interface.disconnect()
-    print '-- __main__: after disconnect'    

@@ -100,7 +100,8 @@ if (__name__ == '__main__'):
         except natlink.UnknownName:
             print 'NatSpeak user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         else:
-            auto_test.run(args)        
+            auto_test.run(args)
+            
 
     #
     # Note: we call this instead of sim_commands.quit, because the

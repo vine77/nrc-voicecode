@@ -47,8 +47,9 @@ class AppStateCached(AppState.AppState):
     external editor, *AppStateCached* implements two methods:
 
     *readingMethod* -- This is the public method (usually a method of
-     [AppState]) used to read the state. It usually just reads the
-     value from s*self.cache*.
+     [AppState]) used to read the state. It usually just checks if
+     value is cached, and if so, reads it from cache. If value is not
+     cached, it retrieves it from the external editor an caches it.
 
     *_readingMethod_from_app* -- This is a private method which reads
      the state directly from the external editor. Such methods are not
@@ -136,6 +137,8 @@ class AppStateCached(AppState.AppState):
 
 	*STR* -- file name of external app's active buffer"""
 
+        if self.cache['app_active_buffer_name'] == None:
+            self.cache['app_active_buffer_name'] = self._app_active_buffer_name()
         return self.cache['app_active_buffer_name']
 
 
@@ -168,7 +171,8 @@ class AppStateCached(AppState.AppState):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-        
+        if self.cache['multiple_buffers'] == None:
+            self.cache['multiple_buffers'] = self._multiple_buffers_from_app()
         return self.cache['multiple_buffers']
 
 
@@ -204,7 +208,9 @@ class AppStateCached(AppState.AppState):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-        
+
+        if self.cache['bidirectional_selection'] == None:
+            self.cache['bidirectional_selection'] = self._bidirectional_selection_from_app()
 	return self.cache['bidirectional_selection']
 
     def _bidirectional_selection_from_app(self):
@@ -222,3 +228,29 @@ class AppStateCached(AppState.AppState):
 	left end of the selection"""
         
 	debug.virtual('AppStateCached.bidirectional_selection')
+
+    def open_file_cbk(self, name):
+        """Editor invokes this method to notify VoiceCode that it opened a new source file.
+        
+        **INPUTS**
+        
+        STR *name* -- Name of the buffer         
+
+        **OUTPUTS**
+        
+        [SourceBuff] *new_buff* -- The [SourceBuff] instance created
+        to represent this new file.
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+#        print "-- AppStateCached.open_file_cbk: name=%s" % name
+        
+        #
+        # Invoke super class' version of open_file(), then update cached
+        # data that may have changed as a result of the file opening
+        #
+        new_buff = AppState.AppState.open_file_cbk(self, name)
+
+        
+        self.cache['app_active_buffer_name'] = name
+        return new_buff

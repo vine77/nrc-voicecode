@@ -208,7 +208,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         *none* -- 
         """
-        print '-- AppStateMessaging.listen_one_transation: called'
+#        print '-- AppStateMessaging.listen_one_transation: called'
         mess = self.listen_msgr.get_mess(expect=['update'])
         mess_name = mess[0]
         mess_cont = mess[1]
@@ -316,3 +316,53 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	self.talk_msgr.send_mess('bidirectional_selection')
         response = self.talk_msgr.get_mess(expect=['bidirectional_selection_resp'])
         return response[1]['value']                
+
+
+    def open_file(self, name, lang = None):
+        """Tell the external editor to open a file.
+
+        Open file with name *STR name* and written in language *STR lang*.
+
+        Right now, this is used mostly so that the regression testing
+        procedure can tell the external editor to open a test
+        file. But in the future, it may be used to voice-enable the
+        open-file dialogue using pseudo-code dictation of file names.        
+        """
+
+#        print '-- AppStateMessaging.open_file: name=%s' % name
+        
+        #
+        # Tell external editor to open the file
+        #
+        self.talk_msgr.send_mess('open_file', {'name': name, 'lang': lang})
+        response = self.talk_msgr.get_mess(expect=['open_file_resp'])
+        
+        #
+        # Make sure we create a corresponding SourceBuff in the mediator.
+        #
+        self.open_file_cbk(name)
+
+
+    def close_buffer(self, buff_name, save):
+        """Ask the editor to close a buffer.
+        
+        **INPUTS**
+        
+        STR *buff_name* -- name of buffer to close
+        
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
+        response = self.talk_msgr.get_mess(expect=['ok'])
+        self.cache['app_active_buffer_name'] = None
+
+
+

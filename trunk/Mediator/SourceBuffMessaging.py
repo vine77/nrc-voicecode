@@ -160,9 +160,12 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*STR* -- contents of specified range of the buffer
 	"""
 
+#        print '-- SourceBuffMessaging._get_text_from_app: start=%s, end=%s' % (start, end)
+        
         args = {'start': start, 'end': end}
 	self.app.talk_msgr.send_mess('get_text', args)
         response = self.app.talk_msgr.get_mess(expect=['get_text_resp'])
+        
         return response[1]['value']
         
 
@@ -181,8 +184,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	"""
 	self.app.talk_msgr.send_mess('get_visible')
         response = self.app.talk_msgr.get_mess(expect=['get_visible_resp'])
+        return messaging.messarg2intlist(response[1]['value'])        
         
-	return response[1]['value']
 
     def make_position_visible(self, position = None):
 	"""scroll buffer (if necessary) so that  the specified position
@@ -299,11 +302,13 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*none*
 	"""
 
+#        print '-- SourceBuffMessaging.insert: text=%s, range=%s' % (text, range)
         
         args = {'text': text, 'range': range}
         self.app.talk_msgr.send_mess('insert', args)
-        response = self.app.talk_msgr.get_mess(expect=['insert_resp'])
+        response = self.app.talk_msgr.get_mess(expect=['insert_resp'])        
         self.app.apply_upd_descr(response[1]['updates'])
+
 
         
     def insert_indent(self, code_bef, code_after, range = None):
@@ -326,7 +331,6 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         args = {'code_bef': code_bef, 'code_after': code_after, 'range': range}
         self.app.talk_msgr.send_mess('insert_indent', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_indent_resp'])
-
         self.app.apply_upd_descr(response[1]['updates'])
         
 

@@ -383,6 +383,7 @@ class ActionInsert(Action):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
+#        print '-- ActionInsert.execute: self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after)
         app.insert_indent(self.code_bef, self.code_after)
 
 
@@ -581,7 +582,8 @@ class ActionSearch(ActionBidirectional):
         """See [Action.execute].
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
-        
+
+#        print '-- ActionSearch.execute: called'
         app.search_for(regexp=self.regexp, direction=self.direction,
                        num=self.num, where=self.where)
 

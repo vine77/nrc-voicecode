@@ -121,6 +121,7 @@ class CmdInterp(Object):
         """
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
+        
 	self.on_app.bind_to_buffer(initial_buffer)
 
 	untranslated_words = []
@@ -133,7 +134,6 @@ class CmdInterp(Object):
         #
         while len(cmd) > 0:
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer().cur_pos(); 
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
@@ -641,7 +641,6 @@ class CmdInterp(Object):
         #
 
 	aliases = self.language_specific_aliases
-#        print '-- CmdInterp.is_spoken_LSA: self.on_app=%s' % self.on_app
 	language = self.on_app.active_language()
 #        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
         

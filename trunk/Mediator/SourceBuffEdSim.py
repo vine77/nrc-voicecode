@@ -25,11 +25,6 @@ import re, string, sys
 from Object import Object
 import find_difference, sb_services, SourceBuffNonCached
 
-#
-# default value of window_size (unless overridden by the constructor argument)
-#
-print_window_size = 3
-
 
 class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     """concrete class representing a disconnected source buffer for the
@@ -41,8 +36,6 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     *(INT, INT)* selection_range -- the current selection as
       character offsets into contents.
     *STR content=None* -- Content of the source buffer
-    *INT window_size* -- When printing the content of the current buffer, 
-     only print this number of lines before and after the current line
     *BOOL global_selection* -- makes the 'visible' region the whole
     buffer (useful for regression testing)
 
@@ -62,7 +55,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     
     def __init__(self, indent_level=3, indent_to_curr_level=1, init_pos=0,
                  init_selection = None, initial_contents="",
-                 window_size = print_window_size, global_selection = 1,
+                 global_selection = 1,
                  **attrs):
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
@@ -73,7 +66,6 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
                             {'pos': init_pos, 
                              'selection': init_selection, 
                              'content': initial_contents, 
-			     'window_size': window_size, 
 			     'global_selection': global_selection,
                              'indent_level': indent_level,
                              'indent_to_curr_level': indent_to_curr_level,
@@ -155,9 +147,9 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	target = self.line_num_of(position)
 	top, bottom = self.lines_around_cursor()
 	if target < top:
-	    destination = target +self.window_size
+	    destination = target +self.print_nlines
 	elif target > bottom:
-	    destination = target -self.window_size
+	    destination = target -self.print_nlines
 	else:
 	    return
 	self.goto_line(destination)
@@ -230,84 +222,6 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
     def refresh(self):
 	self.print_buff()
-    
-    def print_buff(self, from_line=None, to_line=None):
-        """Prints buffer to STDOUT
-        
-        **INPUTS**
-        
-        *INT* from_line = None -- First line to be printed. If *None*, then
-        print *window_size* lines around cursor.
-
-        *INT* to_line = None -- Last line to be printed.
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        #
-        # Figure out the first and last line to be printed
-        #
-        if from_line == None:
-           from_line, to_line = self.lines_around_cursor()
-
-#	print '-- SourceBuffEdSim.print_buffer: from_line=%s, to_line=%s' % (from_line, to_line)
-        #
-        # Figure out the text before/withing/after the selection
-        #
-	selection_start, selection_end = self.get_selection()
-
-        before_content = self.get_text(0, selection_start)
-        selection_content = self.get_text(selection_start, selection_end)
-        after_content = self.get_text(selection_end)
-
-	printed = before_content
-	if selection_content == '':
-	    printed = printed + '<CURSOR>'
-	else:
-	    printed = printed + '<SEL_START>'
-	    printed = printed + selection_content
-	    printed = printed + '<SEL_END>'
-	printed = printed + after_content
-
-	lines_with_num = self.number_lines(printed, startnum = 1)
-        
-	if from_line == 1:
-	    sys.stdout.write("*** Start of source buffer ***\n")
-	for aline in lines_with_num[from_line-1:to_line]:
-	    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-	if to_line == len(lines_with_num):
-	    sys.stdout.write("\n*** End of source buffer ***\n")
-	return
-
-    def lines_around_cursor(self):
-        """Returns the line numbers of lines around cursor
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *(INT from_line, INT to_line)*
-
-        *INT from_line* -- First line of the window.
-
-        *INT to_line* -- Last line of the window.
-        """
-
-        curr_line = self.line_num_of(self.cur_pos())
-#        print '-- SourceBuffEdSim.lines_around_cursor: self.cur_pos()=%s, curr_line=%s' % (self.cur_pos(), curr_line)
-        from_line = curr_line - self.window_size
-        to_line = curr_line + self.window_size
-	if from_line < 1:
-	    from_line = 1
-	last_line = self.line_num_of(self.len())
-	if to_line > last_line:
-	    to_line = last_line
-        return from_line, to_line
         
     def move_relative_page(self, direction=1, num=1):
         """Moves up or down a certain number of pages
@@ -324,7 +238,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         *none* -- 
         """
 
-        num_lines = 2*self.window_size + 1
+        num_lines = 2*self.print_nlines + 1
         self.move_relative_line(direction=direction, num=num_lines)
 
 
@@ -443,6 +357,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
+
 	if range == None:
 	    range = self.get_selection()
 	range = self.make_valid_range(range)

@@ -419,3 +419,15 @@ Else point to the method documentation."
 	(query-replace-regexp "\n\\( *\\)print\\( *\\)'--" "\n#\\1print\\2'--")
   )
 )
+
+(defun delete-trace-outputs ()
+   "Deletes outputs of traces from an output file"
+   (interactive)
+   (while 1
+      (progn
+         (search-forward-regexp "^-- ")
+         (kill-line)
+         (backward-delete-char 4)         
+      )
+   )
+)

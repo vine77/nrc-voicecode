@@ -129,7 +129,7 @@ class SB_ServiceLang(SB_Service):
         extension = ""
         if a_match:
             extension = a_match.group(1)
-            
+
         if self.file_language.has_key(extension):
             language =  self.file_language[extension]
         return language
@@ -186,14 +186,14 @@ class SB_ServiceLineManip(SB_Service):
         # Make sure the position is within range
         #
 	if position == None:
-	    position = self.buffcur_pos()
+	    position = self.buff.cur_pos()
         position = self.buff.make_within_range(position)
 
         
         #
         # Find line number of position
         #
-        regexp = re.compile('($|%s)' % self.buff.newline_regexp())        
+        regexp = re.compile('($|%s)' % self.buff.newline_regexp())
         line_start_pos = 0
 	line_num = 1
         curr_line = 1
@@ -208,7 +208,6 @@ class SB_ServiceLineManip(SB_Service):
                     break
                 line_start_pos = a_match.start() + 1
                 curr_line = curr_line + 1                            
-
         
         return line_num
 
@@ -302,6 +301,8 @@ class SB_ServiceLineManip(SB_Service):
         *INT* beg_pos -- Position of the beginning of the line
         """
 
+#        print '-- SB_ServiceLineManip.beginning_of_line: pos=%s' % pos
+        
         contents = self.buff.contents()        
         from_pos = 0
         regexp = re.compile(self.buff.newline_regexp())
@@ -329,6 +330,8 @@ class SB_ServiceLineManip(SB_Service):
                 #
                 break                
 
+#            print '-- SB_ServiceLineManip.beginning_of_line: returning closest=%s' % closest
+            
         return closest
 
     def end_of_line(self, pos):
@@ -424,7 +427,10 @@ class SB_ServiceIndent(SB_Service):
 	**OUTPUTS**
 
 	*none*
-	"""        
+	"""
+
+#        print '-- SB_ServiceIndent.insert_indent: code_bef=\'%s\', code_after=\'%s\', range=%s' % (code_bef, code_after, range)
+        
 	if range == None:
 	    range = self.buff.get_selection()
 	range = self.buff.make_valid_range(range)
@@ -451,11 +457,11 @@ class SB_ServiceIndent(SB_Service):
         #
         # Now insert the code
         #
+
         self.buff.insert(code_bef, range)
         pos = self.buff.cur_pos()
         self.buff.insert(code_after)
         self.buff.goto(pos)
-
 
     def incr_indent_level(self, levels=1, code_range=None):
         
@@ -524,7 +530,6 @@ class SB_ServiceIndent(SB_Service):
         if range == None:
             range = self.buff.get_selection()
         range = self.buff.make_valid_range(range)
-
 
         #
         # Unindent from start of first line in range
