@@ -388,3 +388,13 @@ Else point to the method documentation."
     (substring bname 0 (- (length bname) 3))
     )
 )
+
+
+(defun comment-traces ()
+  "Comments out trace statements"
+  (interactive)
+  (save-excursion
+	(beginning-of-buffer)
+	(query-replace-regexp "\n\\( *\\)print\\( *\\)'--" "\n#\\1print\\2'--")
+  )
+)

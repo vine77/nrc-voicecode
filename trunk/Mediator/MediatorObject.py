@@ -138,11 +138,12 @@ def add_lsa(language_list, spoken_as_list, written_as):
     for language in language_list:
         for spoken_as in spoken_as_list:
             entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-#             print '-- MediatorObject.add_lsa: processing language=%s, spoken_as=%s, written_as=%s' % (language, spoken_as, written_as)
+            vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
+#            print '-- MediatorObject.add_lsa: processing language=%s, spoken_as=%s, written_as=%s, entry=%s, vc_entry=%s' % (language, spoken_as, written_as, entry, vc_entry)
             if to_configure.interp.language_specific_aliases.has_key(language):
-                to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [entry]
+                to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [vc_entry]
             else:
-                to_configure.interp.language_specific_aliases[language] = [entry]
+                to_configure.interp.language_specific_aliases[language] = [vc_entry]
             if language == None:
                 #
                 # This LSA is not tied to a particular langauge, so it
@@ -181,6 +182,10 @@ def add_lsa(language_list, spoken_as_list, written_as):
     #       sentence
     #
     add_csc(aCSC, add_voc_entry=0)
+
+#    print '-- MediatorObject.add_lsa: known LSAs are: '
+#    for a_lang in to_configure.interp.language_specific_aliases.keys():
+#        print '-- %s: %s' % (a_lang, to_configure.interp.language_specific_aliases[a_lang])
 
         
 def associate_language(extension, language):

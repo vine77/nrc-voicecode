@@ -9,7 +9,7 @@ Example: python make_doc.py Object.py
 
 import pythondoc.pythondoc
 import glob, os, posixpath, re, sys
-import util
+import util, vc_globals
 
 regs_file_name = None
 
@@ -111,9 +111,9 @@ if (__name__ == '__main__'):
    #  pythondoc.pythondoc.add_formatter('HTML4', formats)
    
    #
-   # Set documentation directory to $VCODE_HOME/Doc
+   # Set documentation directory to $VCODE_HOME/Doc/Modules
    #
-   doc_dir = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Doc')
+   doc_dir = posixpath.expandvars(vc_globals.doc_modules)
    
    #  pythondoc.pythondoc._options.add_value('main_directory', doc_dir)
    #  pythondoc.pythondoc._options.add_value('main_index', 1)

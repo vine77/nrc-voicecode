@@ -1,7 +1,7 @@
 """Define a series of regression tests for VoiceCode"""
 
 import os, sys
-import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict
+import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 
 
 ##############################################################################
@@ -394,6 +394,7 @@ def test_auto_add_abbrevs():
     #
     test_say(['this', 'symbol', 'is', 'unresolved', ', \\comma'], user_input='1\\n')
     test_command("""print_abbreviations(1)""")
+    test_command("""print_symbols()""")
 
     #
     # Match selection dialog should NOT be invoked 
@@ -468,13 +469,20 @@ auto_test.add_test('persistence', test_persistence, desc='testing persistence be
 
 
 ##############################################################################
-# Testing redundant translation of LSAs
+# Testing redundant translation of LSAs and symbols
 ##############################################################################
 
-def test_redundant_LSA_translation():
+def test_redundant_translation():
     mediator.init_simulator()
+    
     test_command("""open_file('blah.c')""")
     test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
     test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
 
-auto_test.add_test('redundant_LSA_translation', test_redundant_LSA_translation, desc='testing redundant translation of LSAs at SR and Mediator level')    
+auto_test.add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
+
+##############################################################################
+# Testing the various Python CSCs and LSAs
+##############################################################################
+auto_test.add_test('python', test_pseudo_python.run, 'testing the various Python CSCs and LSAs')
+

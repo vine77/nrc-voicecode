@@ -1,8 +1,15 @@
-import re
+import re, string, sys
 
 from Object import Object
 
 file_language = {'c': 'C', 'h': 'C', 'py': 'python'}
+
+#
+# When printing the content of the current buffer, only print this number of
+# lines before and after the current line
+#
+print_window_size = 3
+
 
 class SourceBuff(Object):
     """Class representing a source buffer.
@@ -134,4 +141,202 @@ class SourceBuff(Object):
             start2 = self.cur_pos
             end2 = self.cur_pos
         return self.region_distance(start, end, start2, end2)
+        
+
+    def print_buff(self, from_line=None, to_line=None):
+        """Prints buffer to STDOUT
+        
+        **INPUTS**
+        
+        *INT* from_line = None -- First line to be printed. If *None*, then
+        print *print_window_size* lines around cursor.
+
+        *INT* to_line = None -- Last line to be printed.
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        #
+        # Figure out the first and last line to be printed
+        #
+        if from_line == None:
+           from_line, to_line = self.lines_around_cursor()
+
+        #
+        # Figure out the text before/withing/after the selection
+        #
+        if self.selection_start != None or self.selection_end != None:
+            if self.selection_start <= self.selection_end:
+                selection_start = self.selection_start
+                selection_end = self.selection_end
+            else:
+                selection_start = self.selection_end
+                selection_end = self.selection_start
+        else:
+            selection_start = self.cur_pos
+            selection_end = self.cur_pos
+
+        before_content = self.content[:selection_start]
+        selection_content = self.content[selection_start:selection_end]
+        after_content = self.content[selection_end:]
+        
+        sys.stdout.write("*** Start of source buffer ***\n")
+
+        #
+        # Print region before the selection.
+        #
+        curr_line_num = 1
+        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
+        for aline in lines_with_num[:len(lines_with_num)-1]:
+            if curr_line_num >= from_line and curr_line_num <= to_line:
+                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+            curr_line_num = curr_line_num + 1
+            
+        if len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line:
+             lastline = lines_with_num[len(lines_with_num)-1]
+             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
+             curr_line_num = curr_line_num + 1
+        
+        if selection_content == '':
+            sys.stdout.write('<CURSOR>')            
+        else:
+            sys.stdout.write('<SEL_START>')
+
+        #
+        # Print the selection
+        #
+        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
+        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
+            firstline = lines_with_num[0]
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                if curr_line_num >= from_line and curr_line_num <= to_line:
+                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+                curr_line_num = curr_line_num + 1
+        if selection_content != '': sys.stdout.write('<SEL_END>')
+
+        #
+        # Print region after the selection
+        #
+        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
+        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
+            firstline = lines_with_num[0]
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                if curr_line_num >= from_line and curr_line_num <= to_line:
+                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+                curr_line_num = curr_line_num + 1
+        sys.stdout.write("\n*** End of source buffer ***\n")
+        
+
+
+    def lines_around_cursor(self):
+        """Returns the line numbers of lines around cursor
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *(INT from_line, INT to_line)*
+
+        *INT from_line* -- First line of the window.
+
+        *INT to_line* -- Last line of the window.
+        """
+
+        curr_line = self.line_num_of(self.cur_pos)
+        from_line = self.make_within_range(curr_line - print_window_size)
+        to_line = self.make_within_range(curr_line + print_window_size)
+        return from_line, to_line
+        
+        
+    def line_num_of(self, position):
+        """Returns the line number for a particular cursor position
+        
+        **INPUTS**
+        
+        *INT* position -- The position.
+        
+
+        **OUTPUTS**
+        
+        *INT line_num* -- The line number of that position
+        """
+        
+        #
+        # Make sure the position is within range
+        #
+        position = self.make_within_range(position)
+        
+        #
+        # Find line number of position
+        #        
+        lines = string.split(self.content, '\n')
+        line_start_pos = None
+        line_end_pos = 0
+        curr_line = 0
+        for a_line in lines:
+            curr_line = curr_line + 1
+            line_start_pos = line_end_pos
+            line_end_pos = line_end_pos + len(a_line) + 1
+            if position >= line_start_pos and position <= line_end_pos:
+                line_num = curr_line
+                break
+            
+        return line_num
+
+    def number_lines(self, astring, startnum=1):
+        """Assign numbers to lines in a string.
+
+        *STR astring* is the string in question.
+
+        *INT startnum* is the number of the first line in *astring*
+        
+        Returns a list of pairs *[(INT, STR)]* where first entry is
+        the line number and the second entry is the line.
+        
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+        lines = re.split('\n', astring)
+        result = []
+
+        if (astring != ''):
+            if (astring[0] == '\n'):
+                lineno = startnum + 1
+            else:
+                lineno = startnum
+                
+            for aline in lines:
+                result[len(result):] = [(lineno, aline)]
+                lineno = lineno + 1
+            
+        return result
+
+
+    def make_within_range(self, position):
+        """Makes sure a position is within the buffer's range.
+        
+        **INPUTS**
+        
+        *INT* position -- The position. If outside of bounds, bring it back
+        to the first or last position of the buffer.
+        
+
+        **OUTPUTS**
+        
+        *INT* position -- The possibly corrected position
+        """
+
+        if position < 0:
+            position = 0
+        elif position > len(self.content) - 1 and len(self.content) > 0:
+            position = len(self.content) - 1
+        return position
+
+        
         

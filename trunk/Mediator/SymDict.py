@@ -7,9 +7,8 @@ from SourceBuff import SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
 
-import exceptions, os, re, string, cPickle
+import copy, cPickle, exceptions, os, re, string
 
-import cPickle
 
 language_definitions={}
 
@@ -483,13 +482,16 @@ class SymDict(PickledObject.PickledObject):
         else:
             #
             # Add the abbreviation to the abbreviations dictionary
-            #            
             #
             # First make everything lowercase
             #
             abbreviation = string.lower(abbreviation)
             for ii in range(len(expansions)):
                 expansions[ii] = string.lower(expansions[ii])
+                #
+                # Make sure the expansion is the SR vocabulary
+                #
+                sr_interface.addWord(expansions[ii])                
 
             if self.abbreviations.has_key(abbreviation):
 #                print '-- SymDict.add_abbreviation: existing expansions are: %s' % self.abbreviations[abbreviation]
@@ -615,6 +617,9 @@ class SymDict(PickledObject.PickledObject):
 
         *none* --
         """
+
+#        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
+#        print '-- SymDict.parse_symbols_from_files: abbreviations are: '; self.print_abbreviations()
         
         for a_file in file_list:
             print 'Compiling symbols for file \'%s\'' % a_file
@@ -625,6 +630,8 @@ class SymDict(PickledObject.PickledObject):
         #
         self.pickle()
 
+#        print '-- SymDict.parse_symbols_from_files: upon exit, symbols are:'; self.print_symbols()
+#        print '-- SymDict.parse_symbols_from_files: upon exit, abbreviations are:'; self.print_abbreviations()
     
     def parse_symbols(self, file_name):
         """Parse symbols from a source file.
@@ -952,7 +959,6 @@ class SymDict(PickledObject.PickledObject):
             # word is a known abbreviation. Add expansions.
             #
             expansions = expansions + self.abbreviations[word]            
-#            print '-- SymDict.expand_word: expansions=\'%s\', self.abbreviations[word]=\'%s\'' % (expansions, self.abbreviations[word])
         elif self.abbreviations.has_key(single_form):
             #
             # word is the plural of an abbreviation
@@ -966,10 +972,13 @@ class SymDict(PickledObject.PickledObject):
             # (note: flag=4 means case unsensitive)
             #
             if sr_interface.getWordInfo(word, 4) == None:
+#                print '-- SymDict.expand_word: word is not a known abbreviation. Adding it to unresolved abbreviations'                
                 if self.unresolved_abbreviations.has_key(word):
                     self.unresolved_abbreviations[word][symbol] = 1
                 else:
                     self.unresolved_abbreviations[word] = {symbol: 1}
+
+#        print '-- SymDict.expand_word: returning expansions=%s' % expansions
         return expansions 
 
 
@@ -1136,6 +1145,7 @@ class SymDict(PickledObject.PickledObject):
             previous_matches[a_match] = 1
         return matches
 
+
     
 
     def format_as_symbol(self, pseudo_symbol, words):
@@ -1156,6 +1166,11 @@ class SymDict(PickledObject.PickledObject):
 
         global symbol_formats
 
+        collapsed_words, dummy = self.collapse_consec_single_chars(words)
+                            
+        #
+        # Format list of words into a symbol
+        #
         possible_forms = []
         for a_format in symbol_formats:
 
@@ -1164,7 +1179,7 @@ class SymDict(PickledObject.PickledObject):
             # modify the original in place
             #
             tmp_words = []
-            for a_word in words: tmp_words = tmp_words + [a_word]
+            for a_word in collapsed_words: tmp_words = tmp_words + [a_word]
             a_match = a_format(pseudo_symbol, tmp_words)
 
             #
@@ -1258,8 +1273,9 @@ class SymDict(PickledObject.PickledObject):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
-#        print '-- SymDict.accept_symbol_match: the_match.__dict__=%s' % (the_match.words, the_match.word_matches, the_match.__dict__)
-
+#        print '-- SymDict.accept_symbol_match: the_match.__dict__=%s' % (the_match.__dict__)
+#        print '-- SymDict.accept_symbol_match: the_match.words=%s, the_match.word_matches=%s' % (the_match.words, the_match.word_matches)        
+        
         #
         # Collapse consecutive single character abbreviations into a
         # single abbreviation
@@ -1268,36 +1284,11 @@ class SymDict(PickledObject.PickledObject):
         #      then add abbreviation cs->'context sensitive' instead of
         #      two abbrevs c->'context' and 's'->'sensitive'
         #
-#        print '-- SymDict.accept_symbol_match: the_match.words=%s, the_match.word_matches=%s' % (the_match.words, the_match.word_matches)
-        #
         # Note: need to convert word_matches from a tuple to a list
         #       because can't use a tuple as an argument for +
         #
         the_match.word_matches = list(the_match.word_matches)
-        ii = 0
-        while ii < len(the_match.word_matches):
-#            print '-- SymDict.accept_symbol_match: ii=%s, the_match.word_matches=%s, the_match.words=%s' % (ii, the_match.word_matches, the_match.words)
-            if len(the_match.word_matches[ii]) == 1:
-                # find all single character matches that follow this one
-                for jj in range(ii + 1, len(the_match.word_matches)):
-                    if len(the_match.word_matches[ii]) > 1:
-                       break
-                #
-                # matches from ii up to jj (exclusively) are single characters.
-                # collapse them.
-                #
-                old_words = the_match.words
-                the_match.words = old_words[:ii] + [string.join(old_words[ii:jj], ' ')]
-                if jj < len(old_words):
-                    the_match.words = the_match.words + old_words[jj+1:]
-
-                old_word_matches = the_match.word_matches
-#                print '-- SymDict.accept_symbol_match: ii=%s, jj=%s, old_word_matches[ii:jj]=%s' % (ii, jj, old_word_matches[ii:jj])                
-                the_match.word_matches = old_word_matches[:ii] + [string.join(old_word_matches[ii:jj], ' ')]
-                if jj < len(old_word_matches):
-                    the_match.word_matches = the_match.word_matches + old_word_matches[jj+1:]
-            ii = ii + 1
-                
+        the_match.word_matches, the_match.words = self.collapse_consec_single_chars(the_match.word_matches, the_match.words)                
                 
         #
         # Convert word_matches back to tuple for consistency
@@ -1312,7 +1303,7 @@ class SymDict(PickledObject.PickledObject):
                 self.add_abbreviation(the_match.word_matches[ii], [the_match.words[ii]], user_added=0)
 
         #
-        # Add the wordto the symbol dictionary its spoken forms if its
+        # Add the word to the symbol dictionary its spoken forms if its
         # already there
         #
         self.add_symbol(the_match.native_symbol, user_supplied_spoken_forms=the_match.pseudo_symbol)
@@ -1348,6 +1339,10 @@ class SymDict(PickledObject.PickledObject):
 
 
         self._cached_symbols_as_one_string = ''
+
+        #
+        # Delete vocabulary entries for symbols
+        #
         for (a_form, a_form_info) in self.spoken_form_info.items():
         
               #
@@ -1368,16 +1363,18 @@ class SymDict(PickledObject.PickledObject):
                       entry = sr_interface.vocabulary_entry(a_form, a_written_form)
                       sr_interface.deleteWord(entry)
 
+        #
+        # Possibly clean up the symbol dictionary itself
+        #
         if not just_sr_vocab:
+#            print '-- SymDict.vocabulary_cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
             self.spoken_form_info = {}
             self.symbol_info = {}
-
-            #
-            # Must delete references to existing symbols in
-            # unresolved_abbreviations
-            #
             for an_unresolved in self.unresolved_abbreviations.keys():
-                self.unresolved_abbreviations[an_unresolved] = {}
+#                print '-- SymDict.vocabulary_cleanup: removing unresolved abbreviation %s' % an_unresolved
+                if self.abbreviations.has_key(an_unresolved):
+                    del self.abbreviations[an_unresolved]
+            self.unresolved_abbreviations = {}
 
         #
         # Recompile sources of standard symbols
@@ -1405,13 +1402,19 @@ class SymDict(PickledObject.PickledObject):
         """
         
         self.abbreviations = {}
+
+        #
+        # Remove SR vocabulary words that correspond to unresolved abbrevs
+        #
+        for an_abbrev in unresolved_abbreviations.keys():
+            sr_interface.deleteWord(an_abbrev)
+
         self.unresolved_abbreviations = {}
 
         #
         # Resave dictionary to disk
         #
         self.pickle()
-
 
 
     def init_from_file(self):
@@ -1443,3 +1446,68 @@ class SymDict(PickledObject.PickledObject):
                 for spoken_as in a_symbol_info.spoken_forms:
                     sr_interface.addWord(sr_interface.vocabulary_entry(spoken_as, written_as))
                 
+
+
+    def collapse_consec_single_chars(self, words, auxilliary_words=None):
+        """Takes a list of words and collapse consecutive single-char words into single words
+        
+        **INPUTS**
+        
+        *[STR]* words -- List of words
+
+        *[STR]* auxilliary_words = None -- List of words of the same
+         length as *words*. Each word in list *words* corresponds to a
+         word in list *auxilliary_words* and they are collapsed in
+         sync. If None, set to be the same as *words*        
+
+        **OUTPUTS**
+
+        Returns tuple (collapsed_words, collapsed_auxilliary_words)
+        
+        *[STR]* collapsed_words -- List with consecutive single-char words collapsed.
+
+        *[STR]* collapsed_auxilliary_words -- List with consecutive
+         single-char words collapsed as per what was done to
+         *collapsed_words*.
+        
+        """
+
+        if auxilliary_words == None:
+            auxilliary_words = copy.copy(words)
+        
+        #
+        # Collapse consecutive words which are single characters into a single
+        # word
+        #
+        collapsed_words = []
+        collapsed_auxilliary_words = []
+        re_single_char = '([a-zA-Z])\.{0,1}$'
+        ii = 0
+        while ii < len(words):
+            new_word = words[ii]
+            new_auxilliary_word = auxilliary_words[ii]
+            a_match = re.match(re_single_char, new_word)
+            if a_match:
+                #
+                # This word marks the start of a sequence of single character
+                # words. new_word collects those characters.
+                #
+                new_word = a_match.group(1)
+                ii = ii + 1                
+                previous_was_char = 1
+                while ii < len(words) and previous_was_char:
+                    next_word = words[ii]
+                    next_auxilliary_word = auxilliary_words[ii]
+                    a_match = re.match(re_single_char, next_word)
+                    if a_match:
+                        ii = ii + 1
+                        new_word = new_word + next_word
+                        new_auxilliary_word = new_auxilliary_word + ' ' + next_auxilliary_word
+                    else:
+                        previous_was_char = 0
+            else:
+                ii = ii + 1
+            collapsed_words = collapsed_words + [string.lower(new_word)]
+            collapsed_auxilliary_words = collapsed_auxilliary_words + [new_auxilliary_word]
+            
+        return collapsed_words, collapsed_auxilliary_words

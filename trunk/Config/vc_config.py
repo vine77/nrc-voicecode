@@ -104,15 +104,73 @@ add_abbreviation('st', ['standard'])
 add_abbreviation('sys', ['system'])
 add_abbreviation('undef', ['undefined'])
 add_abbreviation('vert', ['vertical', 'vertically'])
-add_abbreviation('vc', ['voice code'])
 
+###############################################################################
+# Language sensitive aliases (LSAs)
+###############################################################################
+
+#
+# LSAs active for all languages
+#
+add_lsa(None, ['blank space'], ' ')
+add_lsa(None, ['asterisk'], '*')
+add_lsa(None, ['double asterisk'], '**')
+add_lsa(None, ['colon'], ': ')
+add_lsa(None, ['plus'], ' + ')
+add_lsa(None, ['plus sign'], '+')
+add_lsa(None, ['open bracket'], '[')
+
+# Note: this one must be {Enter}, otherwise the anonymous action that
+# inserts this text won't compile.
+add_lsa(None, ['newline', 'new line'], '{Enter}')
+add_lsa(None, ['comma'], ', ')
+add_lsa(None, ['dot'], '.')
+
+
+#
+# LSAs active for more than one language
+#
+add_lsa(['C', 'python'], ['equals', 'equal', 'is assigned', 'assign value'], ' = ')
+add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')
+
+# Note: different action gen_parens_pair (the later puts cursor
+# between the parens)
+add_lsa(['C', 'python'], ['without arguments', 'with no arguments', 'without argument', 'with no argument'], '()')
+
+add_lsa(['C', 'python'], ['return'], 'return ')
+
+
+add_lsa(['perl', 'python'], ['back slash s.', 'back slash s', 'back slash sierra', 'space character'], '\\s')
+
+#
+# Python specific aliases
+#
+
+# This one is used for 'import blah', said as: 'import module blah'
+add_lsa(None, ['import module', 'import modules'], 'import ')
+
+#
+# while this one is used for 'from blah import blob',
+# said as: 'from module blah import symbols blob'
+#
+add_lsa(['python'], ['import symbols', 'import symbol'], ' import ')
+
+add_lsa(['python'], ['from module'], 'from ')
+add_lsa(['python'], ['import all'], ' import all')
+add_lsa(['python'], ['not', 'not true'], 'not ')
+
+
+#
+# C specific LSAs
+#
+add_lsa(['C'], ['double colon', 'colon colon'], '::')
 
 ###############################################################################
 # Context Sensitive Commands (CSCs)
 ###############################################################################
 
 #
-# Cross language CSCs
+# CSCs useful for more than one language
 #
 acmd = CSCmd(spoken_forms=['between paren', 'between parens', 'paren pair', 'parens pair', 'with arguments', 'call with', 'called with'], meanings=[[ContC(), gen_parens_pair], [ContPy(), gen_parens_pair]])
 add_csc(acmd)
@@ -120,9 +178,18 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['bracket pair', 'brackets pair', 'at index'], meanings=[[ContC(), gen_brackets_pair], [ContPy(), gen_brackets_pair]])
 add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['brace pair', 'braces pair', 'between braces', 'between brace'], meanings=[[ContC(), gen_braces_pair], [ContPy(), gen_braces_pair]])
+add_csc(acmd)
+
 acmd = CSCmd(spoken_forms=['single quote', 'single quotes'], meanings=[[ContC(), gen_single_quotes_pair], [ContPy(), gen_single_quotes_pair]])
 add_csc(acmd)
 
+# This one moves cursor after the quotes.
+# Can't be created as an LSA because the '' cause problems in the
+# automatically generated CSC (it doesn't compile). Reevaluate this when
+# actions are made into objects
+acmd = CSCmd(spoken_forms=['empty single quote', 'empty single quotes'], meanings=[[ContC(), gen_single_quotes_pair_after], [ContPy(), gen_single_quotes_pair_after]])
+add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['quotes', 'quote'], meanings=[[ContC(), gen_quotes_pair], [ContPy(), gen_quotes_pair]])
 add_csc(acmd)
@@ -178,7 +245,23 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['define class', 'declare class', 'class definition'], meanings=[[ContC, c_class_definition], [ContPy(), py_class_definition]])
+acmd = CSCmd(spoken_forms=['define class', 'declare class', 'class definition'], meanings=[[ContC(), cpp_class_definition], [ContPy(), py_class_definition]])
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass', 'is subclass of'], meanings=[[ContC(), cpp_subclass], [ContPy(), gen_parens_pair]])
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['class body'], meanings=[[ContC(), cpp_class_body], [ContPy(), py_class_body]])
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['define method'], meanings=[[ContC(), c_function_declaration], [ContPy(), py_method_declaration]])
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['add argument', 'add arguments'], meanings=[[ContC(), c_function_add_argument], [ContPy(), py_function_add_argument]])
+add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms=['method body'], meanings=[[ContC(), c_function_body], [ContPy(), py_function_body]])
 add_csc(acmd)
 
 
@@ -208,40 +291,35 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['new statement'], meanings=[[ContPy(), py_new_statement]])
 add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['empty dictionary'], meanings=[[ContPy(), py_empty_dictionary]])
 
 
-
-###############################################################################
-# Language sensitive aliases (LSAs)
-###############################################################################
-
-#
-# Non-Language Specific Aliases (LSA)
-#
-add_lsa(None, ['blank space'], ' ')
-add_lsa(None, ['newline', 'new line'], '{Enter}')
-add_lsa(None, ['import'], 'import ')
-add_lsa(None, ['comma'], ', ')
-add_lsa(None, ['dot'], '.')
+add_csc(acmd)
 
 
 #
-# Language Specific Aliases (LSA)
+# Note: this one can't be defined as an LSA because it inserts a \n
+# (which means that the anonymous function can't compile)
+# When we replace action functions with action objects, we should revisit
+# this question
 #
-add_lsa(['C', 'python'], ['equals', 'equal', 'is assigned', 'assign value'], ' = ')
-add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')
+acmd = CSCmd(spoken_forms=['continue statement'], meanings=[[ContPy(), py_continue_statement]])
+add_csc(acmd)
 
-#
-# Python specific aliases
-#
-# add_lsa(['python'], ['import', 'import module'], 'import ')
-# add_lsa(['python'], ['import all'], ' import all ')
-# add_lsa(['python'], ['from module'], 'from ')
 
 ###############################################################################
 # Compile standard symbols for various languages
 ###############################################################################
+
+#
+# Python
+#
 standard_symbols_in([vc_globals.config + os.sep + 'py_std_sym.py'])
+
+###############################################################################
+# Add words which are missing from the SR vacab
+###############################################################################
+sr_interface.addWord('un')
 
 
 if (__name__ == '__main__'): natlink.natDisconnect()

@@ -157,7 +157,7 @@ def compile_symbols(file_list):
     the_mediator.interp.known_symbols.pickle()
 
     
-def say(utterance, user_input=None, bypass_NatLink=0):
+def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     """Simulate an utterance *STR utterance*
 
     Note that this command will not work with *Select XYZ* utterances.
@@ -182,6 +182,8 @@ def say(utterance, user_input=None, bypass_NatLink=0):
     *BOOL bypass_NatLink* -- if true, the interpretation will be done
     withouth going through NatLink's recognitionMimic function.
 
+    *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+
     Examples: say('x not equal to') -> 'x != '
               say(['x', ' != \\not equal to'] -> 'x != '
         
@@ -189,7 +191,10 @@ def say(utterance, user_input=None, bypass_NatLink=0):
     
     global the_mediator
 
-#    print '-- mediator.say: utterance=%s' % utterance    
+#    print '-- mediator.say: utterance=%s' % utterance
+
+    if echo_utterance:
+        print 'Saying: %s' % utterance
 
     if user_input:
         #
@@ -328,20 +333,17 @@ def quit():
     if sr_interface.speech_able():
         the_mediator.mixed_grammar.unload()
         the_mediator.code_select_grammar.unload()
-        natlink.natDisconnect()
 
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
 
+    sr_interface.connect('off')
     if sr_interface.speech_able:
-        natlink.natConnect()
-        natlink.setMicState('off')
-
         if symdict_pickle_fname == None and the_mediator != None:
             #
             # Remove symbols from NatSpeak's dictionary 
             #
-            the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)        
+            the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)
 
 #        print '-- mediator.init_simulator: before creating MediatorObject'    
         the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
@@ -369,6 +371,7 @@ def init_simulator(symdict_pickle_fname=None):
 #    print '-- mediator.init_mediator: at end, abbrevitions are:'; the_mediator.interp.known_symbols.print_abbreviations()
 
 def execute_command(cmd):
+#    print '-- mediator.execute_command: cmd=%s' % cmd
     try:
         exec(cmd)
     except Exception, err:
@@ -420,8 +423,7 @@ def simulator_mode(options):
         
 if (__name__ == '__main__'):
     
-    if sr_interface.speech_able():
-        natlink.natConnect()
+    sr_interface.connect()
 
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007])
 #    print '-- mediator.__main__: opts=%s' % opts
@@ -435,4 +437,5 @@ if (__name__ == '__main__'):
         simulator_mode(opts)        
 
     quit()
+    sr_interface.disconnect()
         

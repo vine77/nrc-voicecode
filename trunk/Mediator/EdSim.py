@@ -34,6 +34,40 @@ class EdSim(AppState):
         buff = self.find_buff(f_name)
         buff.cur_pos = pos
 
+    def move_relative(self, rel_movement, f_name=None):
+        """Move cursor to plus or minus a certain number of characters
+
+        if *INT rel_movement* < 0 then move to the left. Otherwise, move to the
+        right.
+        
+        If *f_name* is *None*, then use buffer [self.curr_buffer].
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+        buff = self.find_buff(f_name)
+        buff.cur_pos = buff.cur_pos + pos
+        self.set_cur_pos_within_bounds(f_name)
+
+    def set_cur_pos_within_bounds(self, f_name=None):
+        """Makes sure cursor position of a buffer is within bounds.
+        
+        **INPUTS**
+
+        *STR* f_name = None -- Name of the file visited by the target
+         buffer. If *None*, use [self.curr_buffer].
+        
+        **OUTPUTS**
+        
+        *none* --
+        
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+        buff = self.find_buff(f_name)
+        if buff.cur_pos > len(buff.content):
+            buff.cur_pos = len(buff.content)
+        if buff.cur_pos < 0:
+            buff.cur_pos = 0
+        
+
     def insert_indent(self, code_bef, code_after, start=None, end=None, f_name=None):
         """Insert code into source buffer and indent it.
 
@@ -214,35 +248,6 @@ class EdSim(AppState):
         buff.selection_end = end
         buff.cur_pos= start
         self.print_buff_content()
-
-        
-    def number_lines(self, astring, startnum=1):
-        """Assign numbers to lines in a string.
-
-        *STR astring* is the string in question.
-
-        *INT startnum* is the number of the first line in *astring*
-        
-        Returns a list of pairs *[(INT, STR)]* where first entry is
-        the line number and the second entry is the line.
-        
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
-
-        lines = re.split('\n', astring)
-        result = []
-
-        if (astring != ''):
-            if (astring[0] == '\n'):
-                lineno = startnum + 1
-            else:
-                lineno = startnum
-                
-            for aline in lines:
-                result[len(result):] = [(lineno, aline)]
-                lineno = lineno + 1
-            
-        return result
-        
         
     def search_for(self, regexp, direction=1, num=1, where=1, f_name=None):
         
@@ -260,15 +265,17 @@ class EdSim(AppState):
            *STR* f_name -- name of the file in buffer where the search
             should be done. If *None*, use [self.curr_buffer].
 
-           Returns 1 if and only if an occurence was found, and 0 otherwise.                          
+           Returns *None* if no occurence was found. Otherwise,
+           returns a match object.
+           
         .. [self.curr_buffer] file:///AppState.AppState.html"""
         
-        success = 0
+        success = None
         buff = self.find_buff(f_name)
         reobject = re.compile(regexp)
         the_match = reobject.search(buff.content, pos=buff.cur_pos)
         if (the_match):
-            success = 1
+            success = the_match
             if (where > 0):
                 buff.cur_pos = the_match.end()
             else:
