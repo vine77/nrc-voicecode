@@ -25,6 +25,8 @@ import as_services, AppStateMessaging, SourceBuffEmacs
 
 import sr_interface
 
+import time
+
 # used for keybd_event
 import win32api
 import win32con
@@ -140,6 +142,18 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 # that's not wrapped by the win32 Python extensions, so let's try this
 # for now
 #            sr_interface.send_keys('{F9}')
+ 
+#
+# Give the ignored key time to get to Emacs
+# 
+#  AD: I tried to have vcode-cmd-recognition-start sleep until 
+#      the key is received, but even with a 10 seonds sleep, it 
+#      still didn't receive it. So the server has to do the sleeping
+#
+#      On my slower home machine, I found that 0.05 secs was too
+#      short, so 0.1 secs will probably work in most cases.
+#
+            time.sleep(0.1)
 
         return AppStateMessaging.AppStateMessaging.recog_begin(self, window_id, block = block)
 

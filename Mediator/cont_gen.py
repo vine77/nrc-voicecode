@@ -129,6 +129,25 @@ class ContLastActionWas(Context):
         return answer
 
 
+#class ContCursorOnBlankLine(Context):
+#    """This context applies if the cursor is on a blank line."""
+#
+#    def __init__(self, **attrs):        
+#        self.deep_construct(ContCursorOnBlankLine, {},
+#                            attrs)
+#        
+#    def applies(self, app):
+#        old_pos = app.cur_pos()
+#        app.goto_beginning_of_line()
+#        if app.looking_at('\s*($|%s)' % app.regexp_newline()):
+#           answer = 1
+#        else:
+#           answer = 0
+#        app.goto(old_pos)
+#        
+#        return answer
+
+
 class ContAnyEvenOff(Context):
     """This context always applies, EVEN IF translation is off."""
 
