@@ -23,7 +23,7 @@
 
 
 import debug, messaging, sys
-from Object import Object
+from Object import Object, ChildObject
 
 
 """can we auto-forward stuff from App to buff"""
@@ -417,7 +417,7 @@ class SB_UpdGoto(SB_Update):
         on_buff.goto_cbk(pos=int(self.descr['pos']))
 
 	
-class AppState(Object):
+class AppState(ChildObject):
     """Interface to the programming environment.    
 
     Implements methods for manipulating and querying a programming
@@ -503,6 +503,21 @@ class AppState(Object):
                              'translation_is_off': translation_is_off,
                              'print_buff_when_changed': print_buff_when_changed},
                             attrs)
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	for buff_name in self.open_buffers.keys():
+	    self.open_buffers[buff_name].cleanup()
+	    del self.open_buffers[buff_name]
 
     def recog_begin(self, window_id):
         """Invoked at the beginning of a recognition event.
@@ -1053,6 +1068,7 @@ class AppState(Object):
 
 # this looks like the callback version, since close_buffer, which tells
 # the editor to close a buffer, is virtual
+	    self.open_buffers[buff_name].cleanup()
             del self.open_buffers[buff_name]
 	if self.is_bound_to_buffer() == buff_name:
 	    self.unbind_from_buffer()

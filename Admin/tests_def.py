@@ -171,15 +171,9 @@ auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
 test_mediator = None
 
-def test_CmdInterp():
-    
-    #
-    # Create a command interpreter connected to the editor simulator
-    #
-    natlink.natConnect()    
-    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
-        interp=CmdInterp.CmdInterp())
-    
+
+def test_CmdInterp_mediator(a_mediator):
+
 # I don't think this is necessary (or correct -- we do want the mediator
 # to go out of scope) but for regression testing purposes, I'm first
 # leaving it in and then will remove it.
@@ -231,6 +225,16 @@ def test_CmdInterp():
 
     a_mediator.quit(save_speech_files=0, disconnect=0)    
         
+def test_CmdInterp():
+    
+    #
+    # Create a command interpreter connected to the editor simulator
+    #
+    natlink.natConnect()    
+    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
+        interp=CmdInterp.CmdInterp())
+    test_CmdInterp_mediator(a_mediator)
+    
 
 auto_test.add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
 
@@ -280,6 +284,7 @@ def test_EdSim():
     sim.goto(42)
     sim.insert_indent('for (ii=0; ii <= maxValue; ii++)\n{\n', '\n}\n')
     sim.print_buff()
+    sim.cleanup()
 
 
 auto_test.add_test('EdSim', test_EdSim, desc='self-test for EdSim.py')
@@ -1557,7 +1562,7 @@ if ($voiceGripOS eq 'win') {
 """
 
     factory = sr_grammars.WinGramFactoryDummy()
-    app = EdSim.EdSim(multiple=1)
+    app = EdSim.EdSim(multiple = 1, instance_reporting = 1)
     manager = GramMgr.WinGramMgr(factory, None, app = app)
     w = 5
     w2 = 7
@@ -1581,8 +1586,36 @@ if ($voiceGripOS eq 'win') {
     print 'deactivate all'
     manager.deactivate_all()
     app.close_all_buffers(-1)
+    app.cleanup()
 
 # this test requires a dummy editor with support for multiple buffers,
 # so I have commented it out until one is available - DCF
 auto_test.add_test('dummy_grammars', test_gram_manager, 
    'Testing WinGramMgr grammar management with dummy grammars.')
+
+##############################################################################
+# Testing EdSim allocation and cleanup 
+##############################################################################
+
+def test_EdSim_alloc_cleanup():
+    #
+    # Create a command interpreter connected to the editor simulator
+    #
+
+    print '\n*** testing cleanup with single buffer EdSim\n'
+    natlink.natConnect()    
+    a_mediator = MediatorObject.MediatorObject(app =
+	EdSim.EdSim(instance_reporting = 1),
+        interp=CmdInterp.CmdInterp())
+    test_CmdInterp_mediator(a_mediator)
+
+    print '\n*** testing cleanup with multi-buffer EdSim\n'
+    natlink.natConnect()    
+    a_mediator = MediatorObject.MediatorObject(app =
+	EdSim.EdSim(multiple = 1, instance_reporting = 1),
+        interp=CmdInterp.CmdInterp())
+    test_CmdInterp_mediator(a_mediator)
+    
+
+auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 
+    'Testing EdSim allocation and cleanup.')

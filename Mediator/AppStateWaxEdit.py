@@ -66,6 +66,20 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
 
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        self.breadcrumbs_srv.cleanup()
+	AppStateNonCached.AppStateNonCached.cleanup(self)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -332,6 +346,8 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	old_name = self.curr_buffer_name()
 	if not old_name or old_name != f_path:
 	    self.active_buffer_name = f_path
+# buffer has been renamed.  add a new reference to the open_buffers map,
+# and then delete the old one
 	    self.open_buffers[f_path] = self.open_buffers[old_name]
 	    del self.open_buffers[old_name]
 	self.the_editor.set_name(short)
@@ -384,6 +400,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	if buff == None:
 	    return 0
 	self.active_buffer_name = None
+	self.open_buffers[buff_name].cleanup()
 	del self.open_buffers[buff_name]
 	return 1
         

@@ -35,6 +35,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     **INSTANCE ATTRIBUTES**
 
     *BOOL* multiple -- does the instance support multiple buffers?
+  
+    *BOOL* instance_reporting -- flag which turns on diagnostic reporting 
+    to check on proper allocation/de-allocation
 
     *STR* active_buffer_name -- name of the currently active buffer
 
@@ -50,15 +53,39 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     buffer_methods = AppState.AppState.buffer_methods[:]
     buffer_methods.append('print_buff')
     
-    def __init__(self, multiple = 0, **attrs):
+    def __init__(self, multiple = 0, instance_reporting = 0, **attrs):
         self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
         self.deep_construct(EdSim,
                             {'active_buffer_name': "",
+			    'instance_reporting': instance_reporting,
 			    'multiple': multiple},
                             attrs)
+	if self.instance_reporting:
+	    print 'EdSim.__init__'
         self.open_buffers[self.active_buffer_name] = \
-	    SourceBuffEdSim.SourceBuffEdSim(app = self, 
-	    buff_name = self.active_buffer_name, language =None)
+	    self.new_compatible_sb(buff_name = self.active_buffer_name)
+  
+    def __del__(self):
+	"destructor"
+	if self.instance_reporting:
+	    print 'EdSim.__del__'
+	
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.instance_reporting:
+	    print 'EdSim.cleanup'
+        self.breadcrumbs_srv.cleanup()
+	AppStateNonCached.AppStateNonCached.cleanup(self)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -79,7 +106,8 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_name=buff_name)
+        return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_name=buff_name, 
+	    instance_reporting = self.instance_reporting)
 
         
     def recog_begin(self, window_id):
@@ -213,7 +241,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	self.active_buffer_name = file_name
         self.open_buffers[self.active_buffer_name] = \
             SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name=file_name,
-                                            initial_contents = source)
+                                            initial_contents = source,
+					    instance_reporting =
+					    self.instance_reporting)
 
         return self.active_buffer_name
 
@@ -294,6 +324,8 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	old_name = self.curr_buffer_name()
 	if not old_name or old_name != f_path:
 	    self.active_buffer_name = f_path
+# buffer has been renamed.  add a new reference to the open_buffers map,
+# and then delete the old one
 	    self.open_buffers[f_path] = self.open_buffers[old_name]
 	    del self.open_buffers[old_name]
 	return f_path
@@ -347,6 +379,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	if buff == None:
 	    return 0
 	self.active_buffer_name = None
+	self.open_buffers[buff_name].cleanup()
 	del self.open_buffers[buff_name]
 	return 1
         

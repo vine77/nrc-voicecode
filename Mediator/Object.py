@@ -701,6 +701,42 @@ class Object:
         for an_attr_init in attrs.items():
             setattr(self, an_attr_init[0], an_attr_init[1])
 
+class ChildObject(Object):
+    """a subclass of Object which contains a reference to its parent
+    (e.g. SourceBuff to its parent AppState).  Since the parent contains
+    a reference to its children, this creates circular references, which
+    prevent the parent from automatically reaching a reference count of zero,
+    and being deleted.  To avoid this problem, the parent object should
+    call the cleanup method of the child before removing its reference
+    to the child.
+
+    **INSTANCE ATTRIBUTE**
+
+    *none* --
+
+    **CLASS ATTRIBUTE**
+
+    *none* --
+    """
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# the parent may be called something more specific than "parent", so we
+# can't define a generic cleanup here.  The specific subclasses will
+# have to do that.  Also, the child object may have children of its own,
+# in which case it should call their cleanup function first.
+        pass
+
+
 ##############################################################################
 # The remaining code is just for profile testing purposes
 # For some reason, profil tests can't be run using Admin/test.py
