@@ -714,8 +714,8 @@ class SourceBuff(OwnerObject):
         # server-side indentation. This version of insert_indent()
         # is meant for client-side indentation, so remove them
         #
-        code_bef = re.sub('\t', '', code_bef)        
-        code_after = re.sub('\t', '', code_after)      
+#        code_bef = re.sub('\t', '', code_bef)        
+#        code_after = re.sub('\t', '', code_after)      
 
 
         trace('SourceBuff.insert_indent',
@@ -1207,6 +1207,9 @@ class SourceBuff(OwnerObject):
         
         *INT* closest_index -- Index in *occurences* of the closest
          occurence. If no such occurence, returns *None*"""
+         
+        trace('SourceBuff.closest_occurence_to_cursor', '** occurences=%s, direction=%s, regexp="%s", where=%s' % 
+                                                        (repr(occurences), direction, regexp, where))
 
         closest_index = None
         
@@ -1215,20 +1218,22 @@ class SourceBuff(OwnerObject):
         # in the right direction
         #
         shortest_distance = None
-#        print self.cur_pos()
+        trace('SourceBuff.closest_occurence_to_cursor', '** cur_pos=%s' % self.cur_pos())
         for ii in range(len(occurences)):
-#            print ii, occurences[ii]
+            trace('SourceBuff.closest_occurence_to_cursor', '** ii=%s, occurences[ii]=%s' % (ii, repr(occurences[ii])))
 
             if direction == None:
                 #
                 # Don't care if closest occurence is before or after cursor
                 #
                 distance = self.region_distance(occurences[ii][0], occurences[ii][1], self.cur_pos(), self.cur_pos())
+                trace('SourceBuff.closest_occurence_to_cursor', '** distance=%s, shortest_distance=%s' % (distance, shortest_distance))
                 if ((shortest_distance == None or distance < shortest_distance)
                     and not self.same_as_previous_search(regexp, direction,
                                                          where, occurences[ii])):
                     shortest_distance = distance
                     closest_index = ii
+                trace('SourceBuff.closest_occurence_to_cursor', '** closest_index=%s' % closest_index)
             elif direction < 0:
                 #
                 # Looking for closest occurence before cursor ...
@@ -1262,6 +1267,7 @@ class SourceBuff(OwnerObject):
                         closest_index = ii
                         break
 
+        trace('SourceBuff.closest_occurence_to_cursor', '** returning closest_index=%s' % closest_index)
         return closest_index
 
     def same_as_previous_search(self, regexp, direction, where, match):
