@@ -158,7 +158,7 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*none*
 	"""
-	pass
+	debug.virtual('CmdPromptWithHistory.save_edited')
 
 
     def restore_edited(self):
@@ -175,7 +175,7 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*none*
 	"""
-	pass
+	debug.virtual('CmdPromptWithHistory.save_edited')
 
     def edited(self):
 	"""contents of saved command line past the last command in the
@@ -193,7 +193,7 @@ class CmdPromptWithHistory(CmdPrompt):
 	*STR* -- partial command previously stored with save_edited, 
 	or None if there is none.
 	"""
-	pass
+	debug.virtual('CmdPromptWithHistory.save_edited')
 
     def in_progress(self):
 	"""contents of command line currently being edited (not the one
@@ -207,7 +207,7 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*STR* -- partial command currently being edited
 	"""
-	pass
+	debug.virtual('CmdPromptWithHistory.save_edited')
 
     def index(self):
 	"""current index into stack
@@ -411,7 +411,7 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	pass
+	debug.virtual('cmd_line.write')
 
     def log_message(self, message):
 	"""log output/message.  
