@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:38:28 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:59:32 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -67,6 +67,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.possibly_init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.possibly_init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -291,8 +292,10 @@ that best matches the spoken form.</P>
 <DL>
 
 <DT>
-<EM>[STR]</EM> cmd
-<DD>The command. It is a list of written\spoken words.
+<EM>[(STR, STR)]</EM> cmd
+<DD>The command,  a list of
+ tuples of (spoken_form, written_form), with the spoken form
+ cleaned and the written form cleaned for VoiceCode.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -303,7 +306,7 @@ Returns a tuple <EM>(chopped_CSC, consumed, rest)</EM> where:</P>
 
 <DT>
 <EM>STR</EM> chopped_symbol
-<DD>The written form of the CSC that
+<DD>The spoken form of the CSC that
 was chopped off. If <EM>None</EM>, it means <EM>cmd</EM> did
 not start with a known CSC.
 <DT>
@@ -311,7 +314,7 @@ not start with a known CSC.
 <DD>Number of words consumed by the CSC from
  the command
 <DT>
-<EM>[STR]</EM> rest
+<EM>(STR, STR)</EM> rest
 <DD>is what was left of <EM>cmd</EM> after the CSC
  was chopped off.        
 
@@ -325,9 +328,10 @@ not start with a known CSC.
 <DL>
 
 <DT>
-<EM>[STR]</EM> command
-<DD>The command. It is a list of words in
-         written\spoken form.        
+<EM>[(STR, STR)]</EM> cmd
+<DD>The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 </DL>
 <P>
         <STRONG>OUTPUTS</STRONG></P>
@@ -347,9 +351,9 @@ not start with a known CSC.
          the command (always 1, but return it anyway because want to
          keep same signature as chop_CSC and chop_symbol)
 <DT>
-<EM>[STR]</EM> rest
-<DD>is what was left of <EM>command</EM> after the LSA
-         was chopped off.
+<EM>(STR, STR)</EM> rest
+<DD>is what was left of <EM>cmd</EM> after the LSA
+         was chopped off.        
         
 </DL>
 <H2 ID="CmdInterp.CmdInterp.chop_construct" CLASS="Method">CmdInterp.CmdInterp.chop_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">construct_check</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
@@ -404,8 +408,10 @@ chopped
 <DL>
 
 <DT>
-<EM>[STR]</EM> command
-<DD>The command. It is a list of written\spoken words.
+<EM>[(STR, STR)]</EM> cmd
+<DD>The command,  a list of
+ tuples of (spoken_form, written_form), with the spoken form
+ cleaned and the written form cleaned for VoiceCode.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -424,8 +430,8 @@ not start with a known symbol.
 <DD>Number of words consumed by the symbol from
  the command
 <DT>
-<EM>[STR]</EM> rest
-<DD>is what was left of <EM>command</EM> after the symbol
+<EM>(STR, STR)</EM> rest
+<DD>is what was left of <EM>cmd</EM> after the symbol
  was chopped off.        
 
 </DL>
@@ -438,8 +444,10 @@ not start with a known symbol.
 <DL>
 
 <DT>
-<EM>[STR]</EM> command
-<DD>The command. It is a list of written\spoken words.
+<EM>[(STR, STR)]</EM> cmd
+<DD>The command,  a list of
+ tuples of (spoken_form, written_form), with the spoken form
+ cleaned and the written form cleaned for VoiceCode.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -457,7 +465,7 @@ Returns a tuple <EM>(chopped_word, consumed, rest)</EM> where:</P>
  return it anyway because want to keep same method signature
  as chop_CSC, chop_LSA and chop_symbol).
 <DT>
-<EM>[STR]</EM> rest
+<EM>[(STR, STR)]</EM> rest
 <DD>Rest of the command after the word was chopped
 </DL>
 <H2 ID="CmdInterp.CmdInterp.cleanup" CLASS="Method">CmdInterp.CmdInterp.cleanup(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">clean_symdict=1</SPAN>, <SPAN CLASS="Argument">resave=1</SPAN>)</H2>
@@ -578,13 +586,16 @@ will be used.
 <P>
 Interprets a natural language command and executes
 corresponding instructions.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
 <EM>[(STR, STR)]</EM> cmd
 <DD>The command to be massaged. It's a list of
- tuples of (spoken_form, written_form).
+ tuples of (spoken_form, written_form), with the written form
+ already cleaned for VoiceCode.
 <DT>
 <EM>AppState app</EM>
 <DD>the AppState interface to the editor
@@ -595,6 +606,11 @@ start of the utterance.  Some CSCs may change the target buffer of
 subsequent parts of the command.  If None, then the current buffer 
 will be used.
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="CmdInterp.CmdInterp.interpret_massaged" CLASS="Method">CmdInterp.CmdInterp.interpret_massaged(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)</H2>
 <P>None</P>
 
@@ -605,9 +621,10 @@ corresponding instructions.</P>
 <DL>
 
 <DT>
-<EM>[STR] cmd</EM>
-<DD>The command. It is a list of written\spoken words, 
-with both forms already massaged and cleaned
+<EM>[(STR, STR)]</EM> cmd
+<DD>The command,  a list of
+ tuples of (spoken_form, written_form), with the spoken form
+ cleaned and the written form cleaned for VoiceCode.
 <DT>
 <EM>AppState app</EM>
 <DD>the AppState interface to the editor
@@ -709,7 +726,7 @@ multiple, leading or trailing blanks.</P>
 <DL>
 
 <DT>
-<EM>[STR] mod_command</EM>
+<EM>[(STR, STR)]</EM>
 <DD>The massaged command
 
 </DL>
@@ -727,9 +744,10 @@ multiple, leading or trailing blanks.</P>
 <DL>
 
 <DT>
-<EM>[(STR, STR)]</EM> command_tuples
+<EM>[(STR, STR)]</EM> cmd
 <DD>The command to be massaged. It's a list of
- tuples of (spoken_form, written_form).
+ tuples of (spoken_form, written_form), with the written form
+ already cleaned for VoiceCode.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -737,7 +755,7 @@ multiple, leading or trailing blanks.</P>
 <DL>
 
 <DT>
-<EM>[STR] mod_command</EM>
+<EM>[(STR, STR)]</EM>
 <DD>The massaged command
 
 </DL>
@@ -1077,6 +1095,31 @@ classes will be called automatically.
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
  raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.possibly_init_attrs" CLASS="Method">Object.Object.possibly_init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Initialises existing attributes, unless those attributes
+already exist</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

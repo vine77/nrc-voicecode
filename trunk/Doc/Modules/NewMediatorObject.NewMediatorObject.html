@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:37:23 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 01 12:58:50 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">NewMediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._configure_from_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._configure_from_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._new_test_editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._new_test_editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">server=1</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
@@ -66,6 +66,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.possibly_init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.possibly_init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -153,6 +154,14 @@ regression testing (ignored if test_space is None)
 regression testing (ignored if test_space is None or global_grammars
 is false)
 <DT>
+<EM>STR profile_prefix</EM>
+<DD>prefix for filename for output of profiler,
+or None if not profiling (ignored if test_space is None) 
+<DT>
+<EM>BOOL bypass_for_dictation</EM>
+<DD>when testing, bypass natlink for 
+dictation utterances (ignored if test_space is None) 
+<DT>
 <EM>BOOL test_next</EM>
 <DD>flag to indicate that the mediator should run
 regression tests using the next editor to connect
@@ -175,7 +184,7 @@ This file will also be the default to use if reconfigure is called
 ..[CmdInterp] CmdInterp.CmdInterp.html
 ..[ServerNewMediator] ServerNewMediator.tcp_server.html
 </P>
-<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">profile_prefix=None</SPAN>, <SPAN CLASS="Argument">bypass_for_dictation=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P>creates the NewMediatorObject</P>
 
 <P>
@@ -245,9 +254,13 @@ regression testing (ignored if test_space is None)
 regression testing (ignored if test_space is None or
 global_grammars is false)
 <DT>
-<EM>BOOL test_next</EM>
-<DD>flag to indicate that the mediator should run
-regression tests using the next editor to connect
+<EM>STR profile_prefix</EM>
+<DD>prefix for filename for output of profiler,
+or None if not profiling (ignored if test_space is None) 
+<DT>
+<EM>BOOL bypass_for_dictation</EM>
+<DD>when testing, bypass natlink for 
+dictation utterances (ignored if test_space is None) 
 <DT>
 STR <EM>symdict_pickle_fname=None</EM>
 <DD>Name of the file containing the
@@ -1065,6 +1078,25 @@ classes will be called automatically.
 Attributes are only set if they already exist in
  <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
  raised (provided PY_DEBUG_OBJECT=1).<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.possibly_init_attrs" CLASS="Method">Object.Object.possibly_init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>None</P>
+
+Initialises existing attributes, unless those attributes
+already exist<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
