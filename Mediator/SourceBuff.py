@@ -1242,7 +1242,7 @@ class SourceBuff(OwnerObject):
         raise IndexError()
 
     def search_for(self, regexp, direction=1, num=1, where=1, 
-        unlogged = 0):
+                   ignore_occur_at_cursor = 0, unlogged = 0):
         
         """Moves cursor to the next occurence of regular expression
            *STR regexp* in buffer.
@@ -1254,6 +1254,9 @@ class SourceBuff(OwnerObject):
 
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
+           
+           *BOOL* ignore_occur_at_cursor -- If true, then ignore any occurence
+           that spans over the current cursor position.
 
            *BOOL* unlogged -- if true, don't log the results of this
            search (used for searches done by mediator without user-initiation)
@@ -1263,9 +1266,7 @@ class SourceBuff(OwnerObject):
 
         trace('SourceBuff.search_for', 
               "regexp='%s', direction=%s, num=%s, where=%s, unlogged=%s, self.cur_pos()=%s" %
-               (regexp, direction, num, where, unlogged, self.cur_pos()))
-               
-        trace('SourceBuff.search_for', '** self.contents()=%s' % self.contents())
+               (regexp, direction, num, where, unlogged, self.cur_pos()))               
                        
         success = None
 
@@ -1284,11 +1285,29 @@ class SourceBuff(OwnerObject):
         while 1:
            a_match = reobject.search(self.get_text(), pos)
            if a_match and pos < len(self.get_text()):
-# this allows for overlapping matches - ugh
+# DFC: this allows for overlapping matches - ugh
 #               pos = a_match.start() + 1
-# this is better...
+# DFC: this is better...
+#
+# AD: I remember I had to do it this way otherwise it was causing
+#     problems. But since it passes regression testing, I guess you
+#     must have found a better way of avoiding those problems.
+#
+#     Note also that we may need to allow overlapping matches when we start looking
+#     for complexe code contexts. For example, if I want to know whether or 
+#     no the cursor is in the middle of some pattern X, then 
+#     it could be that there is an occurence of X that is at 
+#     position (s1, e1) where e1 < cur_pos(), and and another occurence
+#     at position (s2, e2) where s2 > s1 but e2 > cur_pos(). If we
+#     do not allow overlapping matches, then we will miss the occurence
+#     (s2, e2) and conclude that the cursor is not in the middle of
+#     occurence of X.
+#
+#     Maybe allowing overlapping matches should eventually be an 
+#     argument of search_for().
+# 
                pos = a_match.end()
-# ... but if we get a zero length match (e.g. '$' matching end of line), 
+#DFC:  ... but if we get a zero length match (e.g. '$' matching end of line), 
 # then we will continue to get the same match unless we advance the position
                if a_match.start() == a_match.end():
                  pos = pos + 1
@@ -1304,7 +1323,10 @@ class SourceBuff(OwnerObject):
         closest_match = self.closest_occurence_to_cursor(all_matches_pos,
                                                          regexp=regexp,
                                                          direction=direction,
+                                                         ignore_occur_at_cursor=ignore_occur_at_cursor,
                                                          where=where)
+
+        trace('SourceBuff.search_for', 'closest_match=%s' % closest_match)
 
         new_cur_pos = None
         the_match_index = None        
@@ -1339,7 +1361,8 @@ class SourceBuff(OwnerObject):
         return success
 
 
-    def closest_occurence_to_cursor(self, occurences, direction=None, regexp=None, where=1):
+    def closest_occurence_to_cursor(self, occurences, direction=None, 
+                                    regexp=None, where=1, ignore_occur_at_cursor=0):
         
         """Determines which occurence of a search pattern (or a
         *Select Pseudocode* pattern) is closest to the current cursor
@@ -1357,6 +1380,10 @@ class SourceBuff(OwnerObject):
         *INT* direction -- If negative, only consider occurences that are before
         the cursor. If positive, only consider occurences that are past the
         cursor. If *None*, consider all occurences whether before or after cursor.
+        
+        *BOOL* ignore_occur_at_cursor -- If true, then ignore any occurence
+        that spans over the current cursor position.
+        
 
         *STR* regexp -- The regular expression used to generate the
          list of occurences.
@@ -1367,9 +1394,11 @@ class SourceBuff(OwnerObject):
         *INT* closest_index -- Index in *occurences* of the closest
          occurence. If no such occurence, returns *None*"""
          
-        trace('SourceBuff.closest_occurence_to_cursor', '** occurences=%s, direction=%s, regexp="%s", where=%s' % 
-                                                        (repr(occurences), direction, regexp, where))
-
+        trace('SourceBuff.closest_occurence_to_cursor', 
+              'occurences=%s, direction=%s, regexp="%s", where=%s' % 
+              (repr(occurences), direction, regexp, where))
+        trace('SourceBuff.closest_occurence_to_cursor', 'ignore_occur_at_cursor=%s' % ignore_occur_at_cursor)
+        
         closest_index = None
         
         #
@@ -1377,22 +1406,25 @@ class SourceBuff(OwnerObject):
         # in the right direction
         #
         shortest_distance = None
-        trace('SourceBuff.closest_occurence_to_cursor', '** cur_pos=%s' % self.cur_pos())
         for ii in range(len(occurences)):
-            trace('SourceBuff.closest_occurence_to_cursor', '** ii=%s, occurences[ii]=%s' % (ii, repr(occurences[ii])))
+        
+            debug.trace('SourceBuff.closest_occurence_to_cursor', 
+                        'ii=%s, cur_pos()=%s, occurences[ii]=%s' % (ii, self.cur_pos(), occurences[ii]))
+            if (ignore_occur_at_cursor and 
+                occurences[ii][0] <= self.cur_pos() and
+                occurences[ii][1] >= self.cur_pos()):
+               continue        
 
             if direction == None:
                 #
                 # Don't care if closest occurence is before or after cursor
                 #
                 distance = self.region_distance(occurences[ii][0], occurences[ii][1], self.cur_pos(), self.cur_pos())
-                trace('SourceBuff.closest_occurence_to_cursor', '** distance=%s, shortest_distance=%s' % (distance, shortest_distance))
                 if ((shortest_distance == None or distance < shortest_distance)
                     and not self.same_as_previous_search(regexp, direction,
                                                          where, occurences[ii])):
                     shortest_distance = distance
                     closest_index = ii
-                trace('SourceBuff.closest_occurence_to_cursor', '** closest_index=%s' % closest_index)
             elif direction < 0:
                 #
                 # Looking for closest occurence before cursor ...

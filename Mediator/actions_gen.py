@@ -751,17 +751,30 @@ class ActionInsertNewClause(Action):
 
     STR *code_after=''* -- Part of the new clause to be inserted after cursor.
     
+    INT *where = -1* -- If > 0, then put cursor after the occurence of *end_of_clause_regexp*,
+    otherwise put it before.
+    
+    INT *direction = 1* -- If > 0, then search forward for the occurence of *end_of_clause_regexp*,
+    otherwise search backwards.
+    
+    BOOL *ignore_occur_at_cursor* -- If true, then ignore any occurence of *end_of_clause_regexp*
+    that contains the current cursor position.  
+    
+    
     CLASS ATTRIBUTES**
         
     *none* -- 
     """
         
     def __init__(self, end_of_clause_regexp, code_bef='',
-                 code_after='', add_lines=1, back_indent_by=1, where = -1, **args_super):
+                 code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1, 
+                 ignore_occur_at_cursor=0, **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
                             {'end_of_clause_regexp': end_of_clause_regexp, 
                              'where': where,
+                             'direction': direction,
+                             'ignore_occur_at_cursor': ignore_occur_at_cursor,
                              'add_lines': add_lines, 
                              'code_bef': code_bef, 
                              'code_after': code_after,
@@ -775,18 +788,28 @@ class ActionInsertNewClause(Action):
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
         
-        app.search_for(regexp=self.end_of_clause_regexp, where =
-            self.where)
+        app.search_for(regexp=self.end_of_clause_regexp, 
+                       where = self.where, direction = self.direction, 
+                       ignore_occur_at_cursor=self.ignore_occur_at_cursor)
 
         for ii in range(self.add_lines):
             app.insert_indent(code_bef='\n', code_after='')
+            
+            #
+            # Cursor should end up at the top of the set
+            # of lines added before the first statement
+            #
+            if self.direction < 0:
+               app.move_relative_line(direction=-1, num=1)
+#               app.goto(app.end_of_line(app.cur_pos()))
+            
 
-            #
-            # Client-side automatic indentation is usually smart enough to know
-            # if a new clause should be backindented or not. 
-            # But our language-indenpendant server-side indentation needs to be 
-            # told more explicitely. 
-            #
+        #
+        # Client-side automatic indentation is usually smart enough to know
+        # if a new clause should be backindented or not. 
+        # But our language-indenpendant server-side indentation needs to be 
+        # told more explicitely. 
+        #
         if self.back_indent_by > 0 and app.curr_buffer().uses_server_side_indent():
             app.decr_indent_level(levels=self.back_indent_by)
 

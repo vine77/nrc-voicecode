@@ -679,9 +679,14 @@ misc_aliases.add_lsa(LSAlias(['continue'], {'python': 'continue\n',
 new_statement = CSCmdSet('new statement', 
 description = 'new statement commands') 
 
-acmd = CSCmd(spoken_forms=['new statement'],
+acmd = CSCmd(spoken_forms=['new statement', 'new statement below'],
              meanings={ContPy(): py_new_statement, ContC(): c_new_statement},
              docstring='start new statement on next line')
+new_statement.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['new statement above'],
+             meanings={ContPy(): py_new_statement_above},
+             docstring='start new statement on previous line')
 new_statement.add_csc(acmd)
 
 # compound statement dictation/navigation

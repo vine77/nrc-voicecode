@@ -687,9 +687,9 @@ class AppState(OwnerObject):
     .. [curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
-    'get_selection', 'get_pos_selection',
+    'get_selection', 'get_pos_selection', 
     'goto_end_of_selection', 'set_selection', 'end_of_line',
-    'beginning_of_line',      
+    'beginning_of_line', 
     'contents', 'get_text', 'distance_to_selection', 'get_visible',
     'set_text',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
