@@ -29,6 +29,8 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
+(setq message-log-max (* 10 message-log-max))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; User options
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -579,10 +581,11 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 
 
 (defun vcode-set-after-change-functions (status)
+  (vr-log "-- vcode-set-after-change-functions: current buffer=%S" (buffer-name))
   (if status
       (progn
 	(make-local-hook 'after-change-functions)
-	(add-hook after-change-functions 'vr-report-change nil t)
+	(add-hook 'after-change-functions 'vr-report-change nil t)
 	)
     (remove-hook after-change-functions 'vr-report-change t)
     )
@@ -593,6 +596,7 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 interactively, sets the current buffer as the target buffer."
   (interactive (list (current-buffer)))
 
+  (vr-log "-- vr-activate-buffer: buffer=%S" buffer)
   (if (buffer-live-p vr-buffer)
       (save-excursion
 	(set-buffer vr-buffer)
@@ -725,12 +729,15 @@ executing.
 "
 
   (vr-log "-- vr-report-change: inserted-start=%S, inserted-end=%S, deleted-len=%S\n" inserted-start inserted-end deleted-len)
+  (vr-log "**-- vr-report-change: current buffer is %S\n" (buffer-name))
 
-  (let ((the-change nil) (the-change-as-message nil) (cmd nil))
+  (let ((the-change nil))
     (setq the-change
-	  (list (buffer-name) inserted-start inserted-end inserted-text))
-  
+	  (list (buffer-name) inserted-start inserted-end deleted-len))
+
+    (vr-log "**-- vr-report-change: the-change=%S, vr-queued-changes=%S" the-change vr-queued-changes)
     (setq vr-queued-changes (cons the-change vr-queued-changes))
+    (vr-log "**-- vr-report-change: updated vr-queued-change=%S" vr-queued-changes)
 
     (if (not vr-changes-caused-by-sr-cmd)
 	(vr-send-queued-changes)
@@ -875,13 +882,14 @@ executing.
       (vr-send-cmd change-message)
     )
     (setq vr-queued-changes nil)
+    (vr-log "**-- vr-send-queued-changes: emptied vr-queued-changes=%S" vr-queued-changes)
   )
 )
 
 (defun vr-execute-event-handler (handler vr-request)
-    (vr-log "-- vr-execute-event-handler: vr-request=%S" vr-request)
+    (vr-log "-- vr-execute-event-handler: vr-request=%S\n" vr-request)
   (let ((vr-changes-caused-by-sr-cmd (nth 0 vr-request)))
-    (vr-log "**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S" vr-changes-caused-by-sr-cmd)
+    (vr-log "**-- vr-execute-event-handler: vr-changes-caused-by-sr-cmd=%S\n" vr-changes-caused-by-sr-cmd)
     (if debug-on-error
 	;;;
 	;;; If in debug mode, let the debugger intercept errors.
@@ -1113,7 +1121,7 @@ instructions.
  (interactive "P")
   (vr-log "-- vr-mode: arg=%S\n" arg)
 
-  (vr-log "**-- vr-mode: debug-on-error=%S\n" debug-on-error)
+  (vr-log "**-- vr-mode: debug-on-error=%S, vr-queued-changes=%S\n" debug-on-error vr-queued-changes)
   (setq vr-vcode-test-client 0)
   (if speech-server
     (cond
@@ -1528,8 +1536,10 @@ in response to it."
 		    (vr-ignore-changes 
 		     (if vr-dont-report-sr-own-changes 
 			 'command-insert)))
+		(vr-log "**-- vr-exec-change-and-report-responses: adding cmd=%S to vr-queued-changes=%S\n" cmd vr-queued-changes)
 		(setq vr-queued-changes (cons cmd
 					      vr-queued-changes))
+		(vr-log "**-- vr-exec-change-and-report-responses: now, r-queued-changes=%S\n" vr-queued-changes)
 		;; exit-minibuffer is a command that does not
 		;; return properly , so to avoid timeouts waiting
 		;; for the replies, we put it in the deferred
@@ -1543,134 +1553,6 @@ in response to it."
 	)))		      
 )
 
-(defun vr-cmd-make-changes-OLD-NOT-NOT-NEEDED-ANYMORE (vr-request)
-   (vr-log "-- vr-cmd-make-changes: invoked, vr-request=%S\n" vr-request)
-
-   (if (eq (current-buffer) vr-buffer)
-      
-      (let ((start (nth 0 vr-request))
- 	    (num-chars (nth 1 vr-request))
- 	    (text (nth 2 vr-request))
- 	    (sel-start (nth 3 vr-request))
- 	    (sel-chars (nth 4 vr-request))
- 	    (indent-start (nth 5 vr-request))
- 	    (indent-length (nth 6 vr-request))
-	    (region-should-be-unindented (nth 7 vr-request))
-	    (n-indent-levels (nth 8 vr-request))
- 	    vr-queued-changes)
-
-        ;;; deb
-	(if (string= "\n" text) (vr-log "--** vr-cmd-make-changes: inserting \\n!\n"))
-        ;;; fin
-
-
-	(vr-log "--** vr-cmd-make-changes: vr-buffer is current\n")
-	(vr-log "--** vr-cmd-make-changes: start=%s, num-chars=%S, text='%S', sel-start=%S, sel-chars=%S, indent-start=%S, indent-length=%S\n" start num-chars text sel-start sel-chars indent-start indent-length)
-
- 	(if (and buffer-read-only (or (< 0 num-chars) (< 0 (length text)))
- 		 vr-sr-server-assumes-verbatim-dict)
- 	    ;; if the buffer is read-only we don't make any changes
- 	    ;; to the buffer, and instead we send the 
- 	    ;; the inverse command back. This is in effect, tells the 
- 	    ;; speech server that the text it thought got inserted as
- 	    ;; a result of the utterance, immediatly got deleted.
- 	    (progn
- 	      (vr-log "make changes:Buffer is read-only %d %d\n"
- 		      num-chars (length text))
- 	      (if vr-sr-server-assumes-verbatim-dict
- 		  (let ((cmd (list 
-			      (1- start) 
-			      (length text) 
-			      (buffer-substring start
-						(+ start num-chars)))))
- 		    (setq vr-queued-changes (cons cmd
- 						  vr-queued-changes)))
-		)
-	      )
- 		
-	  (vr-log "--** vr-cmd-make-changes: current buffer is not read only\n")
-
-	  ;; if buffer is not read-only we perform the changes as before
-	  (vr-exec-change-and-report-responses start num-chars text)
-
-	  (vr-log "--** vr-cmd-make-changes: done sending keystrokes\n")
-
-	  ;; whether or not we should put point where
-	  ;; NaturallySpeaking wants is not so easy to decide.  If
-	  ;; point is not there, dictation won't work correctly if
-	  ;; there are characters in front of point.  On the other
-	  ;; hand, keys can be bound to multiple characters, and
-	  ;; deferred functions can move point in which case
-	  ;; NaturallySpeaking has no idea where it should be.  This
-	  ;; is some kind of heuristic.
-	  (if (equal (length text) 0)
-	      ;; this is a pure selection or cursor repositioning,
-	      ;; just put it there
-	      (progn
-		(vr-log "make changes: putting point at %s\n" sel-start)
-		(goto-char sel-start))
-	    ;; Text is being inserted, so we move point to where it
-	    ;; should be relative to the end of the string we got from
-	    ;; NaturallySpeaking.  This should work even if keys are
-	    ;; bound to multiple characters, and surprisingly enough
-	    ;; even if deferred functions have moved point completely!
-	    (vr-log "make changes: positioning point relative\n")
-	    (goto-char (+ (point)
-			  (- sel-start (+ start (length text)))))
-	    )
-
-	  (vr-log "--** vr-cmd-make-changes: done with (if (equal (length text) 0)\n")
-
-	  ;;;
-	  ;;; Indent/Unindent the requested region.
-	  ;;; This will keep the cursor at the "logical" place where it 
-	  ;;; was before indentation. In other words, it won't stay at the
-	  ;;; exact char-offset where it was, but will move along with the
-	  ;;; automatic indentation.
-	  ;;;
-	  (if region-should-be-unindented
-	      (vcode-unindent-region indent-start 
-				      (+ indent-start indent-length) 
-				      n-indent-levels)
-	    (indent-region indent-start (+ indent-start indent-length) nil))
-
-
-	  (delete-overlay mouse-drag-overlay)
-	  (if (equal sel-chars 0)
-	      (delete-overlay vr-select-overlay)
-	    (move-overlay vr-select-overlay
-			  sel-start (+ sel-start sel-chars)
-			  (current-buffer))))
-
-	(vr-log "--** vr-cmd-make-changes: sending queued changes\n")
-
- 	;; in any case, we send the replies and the queued changes.
-	(if vr-changes-caused-by-sr-cmd
-	    (vr-send-reply
-	      (setq message 
-		    (run-hook-with-args 
-		     'vr-serialize-changes-hook
-		     (nreverse vr-queued-changes))))
-	  )
-
-	(vr-log "--** vr-cmd-make-changes: DONE sending queued changes)")
-
-	(if vr-deferred-deferred-function
-	    (progn
-	      (vr-log "executing deferred function in make-changes: %s\n"
-		      vr-deferred-deferred-function)
-	      (setq vr-deferred-deferred-deferred-function
-		    vr-deferred-deferred-function )
-	      (setq vr-deferred-deferred-function nil)
-	      (fix-else-abbrev-expansion)
-	      (vr-execute-command vr-deferred-deferred-deferred-function)))
- 	)
-    ;; if the current buffer is not VR-buffer
-    (vr-send-reply "-1"))
-
-   (vr-log "-- vr-cmd-make-changes: exited")
-
-t)
 
 ;; This function is called by Dragon when it begins/ends mulling over an
 ;; utterance; delay key and mouse events until it is done.  This
@@ -2225,12 +2107,12 @@ a buffer"
 	(inserted-end (nth 2 a-change))
 	(deleted-length (nth 3 a-change))
 	(a-change-hash (make-hash-table :test 'string=))
-	(deleted-start) (deleted-end) (inserted-text) (a-change-hash))
+	(deleted-start) (deleted-end) (inserted-text))
 
     (setq deleted-start inserted-start)
     (setq deleted-end (+ deleted-start deleted-length))
-    (save-execursion
-     (set-buffer buff-name)
+    (save-excursion
+     (switch-to-buffer buff-name)
      (setq inserted-text (buffer-substring inserted-start inserted-end))
     )
     (cl-puthash "range" 
@@ -2253,7 +2135,7 @@ Argument 'change-list is a list of 4ple:
 If 'vr-changes-caused-by-sr-cmd is not nil, then the message must be 
 formatted as a response message to SR command 'vr-changes-caused-by-sr-cmd.
 
-Otherwise, the message must be formated as an Emacs initiated "updates_cbk" 
+Otherwise, the message must be formated as an Emacs initiated 'updates_cbk' 
 message.
 "
 
@@ -2263,6 +2145,8 @@ message.
 	(change-list-vcode (list)) (a-change-vcode) (a-change-action)
 	(deleted-end)
 	(mess-name) (mess-cont (make-hash-table :test 'string=)))
+
+    (vr-log "**-- vcode-serialize-changes: current buffer is %S" (buffer-name))
 
     (while change-list
       (setq a-change (car change-list))
@@ -2274,7 +2158,7 @@ message.
 
       (setq change-list-vcode 
 	    (append change-list-vcode (list a-change-vcode)))
-      )
+    )
     
     ;;; Name the message that will be sent to VCode.
     ;;; Changes generated in response to VCode request "some_command"
@@ -2282,6 +2166,7 @@ message.
     ;;;
     ;;; Changes not generated in response to a VCode request:
     ;;; -> name = "updates_cbk"
+    (vr-log "**-- vr-serialize-changes: just before setting mess-name")
     (if vr-changes-caused-by-sr-cmd
 	(setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
       (setq mess-name "updates_cbk")
@@ -2375,6 +2260,12 @@ message.
   ;;; 
   ;;; kill-buffer will prompt user if buffer needs saving
   ;;;
+
+  ;;; beg
+  (vr-log "**-- vcode-kill-buffer: sleeping for 10 secs, to make sure all the pending change notifications happen before we rename the current buffer to ignorethisfie.tmp\n")
+  (sleep-for 10)
+  ;;; end
+
   (if (eq 0 save) (kill-buffer buff-name))
   (if (eq -1 save) 
       (progn
@@ -2386,7 +2277,8 @@ message.
 	;;; query user.
 	;;;
 	(write-file "ignorethisfile.tmp")
-	(kill-buffer (buffer-name))
+	(kill-buffer "ignorethisfile.tmp")
+;        (kill-buffer buff-name)
 	)
   )
   (if (eq 1 save) (progn (save-buffer) (kill-buffer buff-name)))
@@ -2414,7 +2306,7 @@ message.
     (if buff
         (vcode-kill-buffer buff-name save)
       (ding)
-      (message (format "VR Mode: could not close buffer \"%S\" buff-name"))
+      (message (format "VR Mode: could not close buffer %S" buff-name))
       (cl-puthash "value" 0 response)
     )
 
@@ -2452,7 +2344,7 @@ Also converts from VCode's 0-based positions to Emacs 1-based positions."
 may contain nil or string values, and the 1st element may be
 greater than the 2nd element."
 
-  (vr-log "-- vcode-fix-range: invoked\n")
+  (vr-log "-- vcode-fix-range: invoked, range=%S\n" range)
   (let ((start (nth 0 range)) (end (nth 1 range)) (tmp))
     (setq start (wddx-coerce-int start))
     (setq end (wddx-coerce-int end))
@@ -2672,25 +2564,28 @@ to the other"
 )
 
 (defun vcode-cmd-insert (vcode-request)
-  (vr-log "--** vcode-cmd-insert: vcode-request=%S\n" vcode-request)
+  (vr-log "-- vcode-cmd-insert: vcode-request=%S\n" vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
 	(text) (range) (vr-request) 
 	(repl-start) (repl-end))
-
 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
-	(setq buff-name (cl-gethash "buff_name" mess-cont)
+	(setq buff-name (cl-gethash "buff_name" mess-cont))
 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
-	(set-buffer buff-name)
-	(kill-region delete-start delete-end)
-	(insert text)
-	(vr-send-queued-changes)
+        (vr-log "**-- vcode-cmd-insert: buff-name=%S, current buffer=%S\n" buff-name (buffer-name))
+	(save-excursion
+	  (switch-to-buffer buff-name)
+	  (vr-log "**-- vcode-cmd-insert: switched to current buffer=%S\n" (buffer-name))
+	  (kill-region delete-start delete-end)
+	  (insert text)
+	  (vr-send-queued-changes)
+	)
     )
   (vr-log "-- vcode-cmd-insert: exited\n")
-  )
 )
+
 
 (defun vcode-cmd-indent (vcode-request)
   (vr-log "-- vcode-cmd-indent: invoked\n")
