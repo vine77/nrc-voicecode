@@ -229,8 +229,8 @@ def test_CmdInterp_mediator(temp_config):
     # e.g. 'for loop' recognised as: ['for loop\for loop']
     #
     print '>>> Interpreting: %s' % ['for loop', 'loop body']
-    interp.interpret_NL_cmd(['for loop', 'loop body'],
-        app)
+    interp.interpret_NL_cmd(['for loop', 'loop body'], app)
+
 
     #
     # Test if spoken form of CSC is recognised as multiple vocabulary entries

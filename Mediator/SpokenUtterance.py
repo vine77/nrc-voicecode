@@ -27,6 +27,7 @@ and playback
 from Object import Object, OwnerObject
 import debug
 import string
+import sr_interface
 
 class SpokenUtterance(OwnerObject):
     """defines an abstract interface for manipulating the speech
@@ -248,6 +249,31 @@ class SpokenUtterance(OwnerObject):
         
         """
         debug.virtual('SpokenUtterance.words')
+        
+    def normalized_written_spoken_forms(self):
+        """Returns a list of "normalised" written/spoken form of 
+        words in the utterance.
+
+        We normalise each word by making sure to substitute special characters 
+        (e.g. {Spacebar}) in the written form and by making sure
+        that the spoken forms is all lowercase, and contain no
+        multiple, leading or trailing blanks.
+        
+        **INPUTS**
+
+        *None*
+        
+        **OUTPUTS**
+        
+        *[(STR, STR)]* -- The normalised forms.
+        """
+        normalised = []
+        for a_word in self.words():
+            spoken, written = a_word
+            spoken = sr_interface.clean_spoken_form(spoken)
+            normalised.append((spoken, written))
+        return normalised
+
       
 class MockSpokenUtterance(SpokenUtterance):
     """Mock version of [SpokenUtterance].
