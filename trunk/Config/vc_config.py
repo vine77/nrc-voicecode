@@ -263,8 +263,8 @@ alt_US_punc.add('::', ['double colon', 'colon colon'],
 # really, + and - should have binary_operator spacing, but that might
 # mess up the regression tests, so I've left them as-is for now
 
-alt_US_punc.add("+", ['plus'])
-alt_US_punc.add("-", ['minus'])
+alt_US_punc.add(" + ", ['plus'])
+alt_US_punc.add(" - ", ['minus'])
 alt_US_punc.add('%', ['percent'])
 alt_US_punc.add('#', ['pound'], no_space_after)
 alt_US_punc.add(";", ['semi'], no_space_before)
@@ -602,6 +602,12 @@ math_ops.add_lsa(LSAlias(['plus'],
 math_ops.add_lsa(LSAlias(['minus'], 
     {'C': ' - ', 'python': ' - ', 'perl': ' - '}, spacing = binary_operator),
     name = 'subtraction')
+math_ops.add_lsa(LSAlias(['plus plus','increment'], 
+    {'C': '++', 'python': '++', 'perl': '++'}, spacing = unary_operator), 
+    name = 'addition')
+math_ops.add_lsa(LSAlias(['minus minus','decrement'], 
+    {'C': '--', 'python': '--', 'perl': '--'}, spacing = unary_operator),
+    name = 'subtraction')
 math_ops.add_lsa(LSAlias(['modulo'], {'C': ' % ', 'python': ' % '}, 
     spacing = binary_operator))
 math_ops.add_lsa(LSAlias(['left shift', 'shift left'], 
@@ -777,7 +783,7 @@ comment_commands = CSCmdSet('comment commands',
     description = "commands for dictating comments")
 
 comment_aliases.add_lsa(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'], 
-    {'perl': '\n#', 'python': '\n#'}, spacing = no_space_before))            
+    {'perl': '\n#', 'python': '\n#', 'C': '\n//'}, spacing = no_space_before))            
 acmd = CSCmd(spoken_forms=['comment above', 'add comment above', 
                            'new comment above', 'comment line above'], 
              meanings={ContLanguage('python'): ActionPyCommentAbove()}, 
@@ -815,7 +821,8 @@ acmd = CSCmd(spoken_forms=['new statement', 'new statement below'],
 new_statement.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['new statement above'],
-             meanings={ContPy(): py_new_statement_above},
+             meanings={ContPy(): py_new_statement_above,
+                       ContC(): c_new_statement_above},
              docstring='start new statement on previous line')
 new_statement.add_csc(acmd)
 
@@ -923,20 +930,38 @@ data_structures.add_csc(acmd)
 
 function_definitions = CSCmdSet('function definitions', 
     description = 'commands for defining new functions')
-acmd = CSCmd(spoken_forms=['define method', 'declare method', 'add method'],
+
+acmd = CSCmd(spoken_forms=['declare method', 'add method'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_method_declaration},
              docstring='method definition')
 function_definitions.add_csc(acmd)
-acmd = CSCmd(spoken_forms=['define function', 'declare function'],
+
+# SN: separated 'definition' and 'declaration' commands to support C/C++
+
+acmd = CSCmd(spoken_forms=['define function'],
+             meanings={ContC(): c_function_definition,
+                       ContPy(): py_function_declaration},
+             docstring='function definition')
+function_definitions.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['define method'],
+             meanings={ContC(): c_function_definition,
+                       ContPy(): py_method_declaration},
+             docstring='function definition')
+function_definitions.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['declare function'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_function_declaration},
              docstring='function definition')
 function_definitions.add_csc(acmd)
+
 acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
              meanings={ContC(): c_function_add_argument,
                        ContPy(): py_function_add_argument},
              docstring='move to end of argument list of a function call or declaration')
+
 function_definitions.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['function body', 'method body'],
              meanings={ContC(): c_function_body, ContPy(): py_function_body},
@@ -995,7 +1020,7 @@ misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
 acmd = CSCmd(spoken_forms=['continue statement'],
              meanings={ContPy(): ActionInsert('\\\n', '', 
                                      spacing = no_space_after)},
-             docstring='python lamdba function')
+             docstring='python continue statement on next line')
 
 misc_python_cmds.add_csc(acmd)
 
@@ -1225,7 +1250,7 @@ py_std_func_calls.add_function_name(['type'], 'type',
 #
 define_language('C',
                 LangDef(regexp_symbol='[a-zA-Z_][a-zA-Z0-9_]*',
-                        regexps_no_symbols=['/\*.*\*/', '//[^\n]*\n',
+                        regexps_no_symbols=['/\*[\s\S]*?\*/', '//[^\n]*\n',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
 # C preprocessor commands and aliases
@@ -1238,24 +1263,190 @@ acmd = CSCmd(spoken_forms=['header wrapper', 'wrap header'],
              docstring='insert code template for unique #include')
 c_preprocessor_cmds.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['macro if'],
-             meanings={ContC(): ActionInsert('#ifdef', '\n#endif\n')},
+acmd = CSCmd(spoken_forms=['macro if def', 'if def', 'pound if def'],
+             meanings={ContC(): ActionInsert('#ifdef ', '\n#endif\n')},
              docstring='insert code template for #ifdef')
 c_preprocessor_cmds.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['macro if not'],
-             meanings={ContC(): ActionInsert('#ifndef', '\n#endif\n')},
+acmd = CSCmd(spoken_forms=['macro if', 'pound if'],
+             meanings={ContC(): ActionInsert('#if ', '\n#endif\n')},
+             docstring='insert code template for #if')
+c_preprocessor_cmds.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['macro if N. def', 'pound if N. def', 'macro if not defined', 'pound if not defined'],
+             meanings={ContC(): ActionInsert('#ifndef ', '\n#endif\n')},
              docstring='insert code template for #ifndef')
 c_preprocessor_cmds.add_csc(acmd)
 
 c_preprocessor = LSAliasSet('C pre-processor aliases', 
 description = """aliases for dictating C pre-processor commands""")
 
-c_preprocessor.add_lsa(LSAlias(['macro define'], {'C': '#define'}))
+c_preprocessor.add_lsa(LSAlias(['macro define', 'pound define'], {'C': '#define '}))
 
-c_preprocessor.add_lsa(LSAlias(['macro include'], {'C': '#include'}))
+c_preprocessor.add_lsa(LSAlias(['macro include', 'pound include'], {'C': '#include '}))
 
-c_preprocessor.add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
+c_preprocessor.add_lsa(LSAlias(['macro undo define', 'undefine', 'pound undefine'], {'C': '#undef '}))
+
+
+
+
+# C/C++ specific syntax
+c_syntax = LSAliasSet('C/C++ -specific syntax',
+    description = 'aliases for syntactical stuff that is C/C++ specific')
+
+# could give this a more meaningful name: e.g. pointer-to-member?
+c_syntax.add_lsa(LSAlias(['arrow'],
+    {'C': '->'}))
+
+# verbal syntactic sugar
+c_syntax.add_lsa(LSAlias(['declare'],
+                         {'C': ''}))
+
+c_syntax.add_lsa(LSAlias(['address of'],
+    {'C': '&'}))
+
+c_syntax.add_lsa(LSAlias(['dereference'],
+    {'C': '*'}))
+
+c_syntax.add_lsa(LSAlias(['pointer'],
+    {'C': '* '}))
+
+# this *could* be applied to other languages, it's just hard to imagine saying 'scope operator' instead of '.'
+c_syntax.add_lsa(LSAlias(['scope','scope operator'],
+    {'C': '::'}))
+
+# this usage is C++ -specific, though the symbols are not
+# would like to use 'input' and 'output' here, but those words are too common.
+# Could make these a CSC with the requirement that cout/cin appears before the previous statement?
+c_syntax.add_lsa(LSAlias(['output pipe', 'output from'],
+    {'C': '<<'}))
+c_syntax.add_lsa(LSAlias(['input pipe', 'input to'],
+    {'C': '>>'}))
+
+
+# type declarations
+
+c_type_declarations = CSCmdSet('C/C++ type declarations',
+    description = "commands for dictating types and their declarations in C and C++")
+
+acmd = CSCmd(spoken_forms=['pointer to'],
+             meanings={ContC(): ActionInsert('', '*')},
+             docstring='insert * after cursor ("pointer to int" gives "int*"')
+c_type_declarations.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['of type'],
+             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             '', '', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous identifier, ready to dictate type')
+c_type_declarations.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['returning'],
+             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?(\([^\;\{\}\)]*)?',
+             '', '', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous function identifier (previous identifier, before any parameter list)')
+c_type_declarations.add_csc(acmd)
+
+
+# C/C++-specific navigation
+
+c_navigation = CSCmdSet('C/C++ navigation', 
+description = """Special navigational commands for C/C++""")
+
+# it would be nicer if this could look backwards...
+
+acmd = CSCmd(spoken_forms=['public member','new public member', 'public members'],
+             meanings={ContC(): ActionSearch(regexp='public:',
+                                             direction=1, where=1)},
+             docstring='move to public members')
+c_navigation.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['private member','new private member', 'private members'],
+             meanings={ContC(): ActionSearch(regexp='private:',
+                                             direction=1, where=1)},
+             docstring='move to public members')
+c_navigation.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['protected member','new protected member', 'protected members'],
+             meanings={ContC(): ActionSearch(regexp='protected:',
+                                             direction=1, where=1)},
+             docstring='move to public members')
+c_navigation.add_csc(acmd)
+
+
+# C/C++ reserved words
+
+# todo: const_cast, dynamic_cast, reinterpret_cast, static_cast, struct, union, try-catch, throw, public/private/protected, switch-case-default-break, do... loop, enum, template, typedef, typeid(), new block, a?b:c
+# handled elsewhere: continue, if-then-else, () cast, while & for loops, return
+# 'true', 'false', 'operator', 'this' not included because they probably won't get spaces after them
+# these are types and should be handled better: int, float, char, bool, double
+
+
+c_reserved_words = LSAliasSet('C/C++ keywords', 
+    description = 'aliases for reserved words in C/C++')
+
+c_reserved_words.add_lsa(LSAlias(['asm', 'assembly', 'A. S. M.'],
+        {'C': 'asm '})) # this is compiler-dependent... :-(
+c_reserved_words.add_lsa(LSAlias(['auto', 'automatic'],
+        {'C': 'auto '}))
+c_reserved_words.add_lsa(LSAlias(['char','care'],
+        {'C': 'char '}))
+c_reserved_words.add_lsa(LSAlias(['const','constant'],
+        {'C': 'const '}))
+c_reserved_words.add_lsa(LSAlias(['delete'],
+        {'C': 'delete '}))
+c_reserved_words.add_lsa(LSAlias(['double'],
+        {'C': 'double '}))
+c_reserved_words.add_lsa(LSAlias(['explicit'],
+        {'C': 'explicit '}))
+c_reserved_words.add_lsa(LSAlias(['export'],
+        {'C': 'export '})) # rare!
+c_reserved_words.add_lsa(LSAlias(['extern', 'external'],
+        {'C': 'extern '}))
+c_reserved_words.add_lsa(LSAlias(['float'],
+        {'C': 'float '}))
+c_reserved_words.add_lsa(LSAlias(['friend'],
+        {'C': 'friend '}))
+c_reserved_words.add_lsa(LSAlias(['go to'],
+        {'C': 'goto '}))
+c_reserved_words.add_lsa(LSAlias(['inline'],
+        {'C': 'inline '}))
+c_reserved_words.add_lsa(LSAlias(['int','integer'],
+        {'C': 'int '}))
+c_reserved_words.add_lsa(LSAlias(['long'],
+        {'C': 'long '}))
+c_reserved_words.add_lsa(LSAlias(['mutable'],
+        {'C': 'mutable '}))
+c_reserved_words.add_lsa(LSAlias(['namespace'],
+        {'C': 'namespace '}))
+c_reserved_words.add_lsa(LSAlias(['new'],
+        {'C': 'new '}))
+c_reserved_words.add_lsa(LSAlias(['register'],
+        {'C': 'register '}))
+c_reserved_words.add_lsa(LSAlias(['short'],
+        {'C': 'short '}))
+c_reserved_words.add_lsa(LSAlias(['signed'],
+        {'C': 'signed '}))
+c_reserved_words.add_lsa(LSAlias(['size of'],
+        {'C': 'sizeof '}))
+c_reserved_words.add_lsa(LSAlias(['static'],
+        {'C': 'static '}))
+c_reserved_words.add_lsa(LSAlias(['type name'],
+        {'C': 'typename '}))
+c_reserved_words.add_lsa(LSAlias(['unsigned'],
+        {'C': 'unsigned '}))
+c_reserved_words.add_lsa(LSAlias(['using'],
+        {'C': 'using '}))
+c_reserved_words.add_lsa(LSAlias(['virtual'],
+        {'C': 'virtual '}))
+c_reserved_words.add_lsa(LSAlias(['void'],
+        {'C': 'void '}))
+c_reserved_words.add_lsa(LSAlias(['volatile'],
+        {'C': 'volatile '}))
+c_reserved_words.add_lsa(LSAlias(['wchar_t','wide char','wide care'],
+        {'C': 'wchar_t '}))
+
+
+
 
 
 ###############################################################################
