@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:55:21 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 00:59:55 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,9 +25,9 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramMgrFactory</SPAN>(<A CLASS="DocLink" HREF="GramMgr.GramMgrFactory.html">GramMgrFactory</A>):
-    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.new_global_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.new_global_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>)<SPAN CLASS="OneLiner"> # creates a new GramMgr</SPAN>
+    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.new_global_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.new_global_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>)<SPAN CLASS="OneLiner"> # creates a new GramMgr</SPAN>
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgrFactory.using_global"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgrFactory.using_global</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -38,8 +38,8 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from GramMgr.GramMgrFactory</SPAN>
     <A CLASS="DocLink" HREF="#GramMgr.GramMgrFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#GramMgr.GramMgrFactory.new_global_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrFactory.new_global_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GramMgr.GramMgrFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>)<SPAN CLASS="OneLiner"> # creates a new GramMgr</SPAN>
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgrFactory.new_global_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrFactory.new_global_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgrFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>)<SPAN CLASS="OneLiner"> # creates a new GramMgr</SPAN>
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -50,10 +50,6 @@
 <EM>WinGramFactory</EM> gram_factory
 <DD>factory which will supply each
 WinGramMgr with new window-specific dictation and selection grammars.
-<DT>
-<EM>CmdInterp</EM> interp
-<DD>command interpreter to which dictation
-results should be sent
 <DT>
 <EM>BOOL</EM> global_grammars
 <DD>use global grammars, instead of
@@ -68,7 +64,7 @@ non-exclusive grammars from getting results (only for testing purposes)
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GramMgr.WinGramMgrFactory.__init__" CLASS="Method">GramMgr.WinGramMgrFactory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="GramMgr.WinGramMgrFactory.__init__" CLASS="Method">GramMgr.WinGramMgrFactory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -84,10 +80,6 @@ new editors</P>
 <DD>factory which will supply each
 WinGramMgr with new window-specific dictation and selection grammars.
 <DT>
-<EM>CmdInterp</EM> interp
-<DD>command interpreter to which dictation
-results should be sent
-<DT>
 <EM>BOOL</EM> global_grammars
 <DD>use global grammars, instead of
 window-specific ones (only for testing purposes)
@@ -96,7 +88,7 @@ window-specific ones (only for testing purposes)
 <DD>use exclusive grammars which prevent 
 non-exclusive grammars from getting results (only for testing purposes)
 </DL>
-<H2 ID="GramMgr.WinGramMgrFactory.new_global_manager" CLASS="Method">GramMgr.WinGramMgrFactory.new_global_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<H2 ID="GramMgr.WinGramMgrFactory.new_global_manager" CLASS="Method">GramMgr.WinGramMgrFactory.new_global_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -111,13 +103,17 @@ the value of self.global_grammars)</P>
 <EM>AppState</EM> editor
 <DD>AppState object for which to manage
 grammars
+<DT>
+<EM>RecogStartMgr recog_mgr</EM>
+<DD>the RecogStartMgr which owns this
+grammar manager
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GramMgr.WinGramMgrFactory.new_manager" CLASS="Method">GramMgr.WinGramMgrFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>)</H2>
+<H2 ID="GramMgr.WinGramMgrFactory.new_manager" CLASS="Method">GramMgr.WinGramMgrFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>)</H2>
 <P>creates a new GramMgr</P>
 
 <P>
@@ -129,6 +125,10 @@ grammars
 <EM>AppState</EM> editor
 <DD>AppState object for which to manage
 grammars
+<DT>
+<EM>RecogStartMgr recog_mgr</EM>
+<DD>the RecogStartMgr which owns this
+grammar manager
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -292,7 +292,7 @@ Attributes are only set if they already exist in
 <P>
 abstract class, no arguments
 </P>
-<H2 ID="GramMgr.GramMgrFactory.new_global_manager" CLASS="Method">GramMgr.GramMgrFactory.new_global_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<H2 ID="GramMgr.GramMgrFactory.new_global_manager" CLASS="Method">GramMgr.GramMgrFactory.new_global_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -307,13 +307,17 @@ the value of self.global_grammars)</P>
 <EM>AppState</EM> editor
 <DD>AppState object for which to manage
 grammars
+<DT>
+<EM>RecogStartMgr recog_mgr</EM>
+<DD>the RecogStartMgr which owns this
+grammar manager
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GramMgr.GramMgrFactory.new_manager" CLASS="Method">GramMgr.GramMgrFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>)</H2>
+<H2 ID="GramMgr.GramMgrFactory.new_manager" CLASS="Method">GramMgr.GramMgrFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>)</H2>
 <P>creates a new GramMgr</P>
 
 <P>
@@ -325,6 +329,10 @@ grammars
 <EM>AppState</EM> editor
 <DD>AppState object for which to manage
 grammars
+<DT>
+<EM>RecogStartMgr recog_mgr</EM>
+<DD>the RecogStartMgr which owns this
+grammar manager
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:30:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:08:12 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppStateFactory</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AppStateFactory.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.AppStateFactory.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AppStateFactory.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.AppStateFactory.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AppStateFactory.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>, <SPAN CLASS="Argument">listen_can_block=0</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -45,7 +45,7 @@ AppState for the TCP server</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="tcp_server.AppStateFactory.new_instance" CLASS="Method">tcp_server.AppStateFactory.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)</H2>
+<H2 ID="tcp_server.AppStateFactory.new_instance" CLASS="Method">tcp_server.AppStateFactory.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>, <SPAN CLASS="Argument">listen_can_block=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -71,6 +71,13 @@ VC listener side of the connection.
 [Messenger] <EM>talk_msgr</EM>
 <DD>[Messenger] instance to use for the
 VC talker side of the connection.
+<DT>
+<EM>BOOL listen_can_block</EM>
+<DD>flag indicating that the listen_msgr to
+can block on get_mess if there is no message waiting.  This flag is
+provided only for compatibility with ServerSingleThread.  All other
+servers should be set up so that listen_msgr avoids blocking and 
+simply return None if there are no messages.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

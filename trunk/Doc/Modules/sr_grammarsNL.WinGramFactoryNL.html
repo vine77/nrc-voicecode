@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:14:47 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:07:53 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramFactoryNL</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -58,7 +58,7 @@ window-specific grammars</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammarsNL.WinGramFactoryNL.make_dictation" CLASS="Method">sr_grammarsNL.WinGramFactoryNL.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)</H2>
+<H2 ID="sr_grammarsNL.WinGramFactoryNL.make_dictation" CLASS="Method">sr_grammarsNL.WinGramFactoryNL.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)</H2>
 <P>create a new dictation grammar</P>
 
 <P>
@@ -67,8 +67,9 @@ window-specific grammars</P>
 <DL>
 
 <DT>
-<EM>CmdInterp</EM> interp
-<DD>interpreter to which to forward results
+<EM>WinGramMgr</EM> manager
+<DD>the grammar manager which will own the
+grammar
 <DT>
 <EM>AppState</EM> app
 <DD>application which is the target of the grammar

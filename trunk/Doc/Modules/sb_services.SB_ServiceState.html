@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:40:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:07:32 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -40,6 +40,7 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -262,7 +263,7 @@ cleaned up)</P>
 <DL>
 
 <DT>
-<EM>STR owned</EM>
+<EM>STR grandparent</EM>
 <DD>names of owned attributes
 </DL>
 <P>
@@ -331,7 +332,7 @@ this object's parent.</P>
 <DL>
 
 <DT>
-<EM>STR owned</EM>
+<EM>STR parent</EM>
 <DD>name of the parent, or None if none
 </DL>
 <P>
@@ -339,12 +340,35 @@ this object's parent.</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the name of the parent attribute</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the parent, or None if none
+
+</DL>
 <H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
 additional cleanup to ensure that this object's references to
 its owned objects are the last remaining references</P>
+<P>
+<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
+remove_other_references method, after performing their own duties.
+Also, a class inheriting from two OwnerObject classes MUST
+define remove_other_references and call both subclasses'
+versions</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>

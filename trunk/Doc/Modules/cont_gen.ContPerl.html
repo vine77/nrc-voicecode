@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:07:21 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:06:47 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,15 +27,15 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ContPerl</SPAN>(<A CLASS="DocLink" HREF="cont_gen.ContLanguage.html">ContLanguage</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cont_gen.ContPerl.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from Context.Context</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Context.Context.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">doc_string=None</SPAN>, <SPAN CLASS="Argument">doc_topics=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#Context.Context.applies"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Context.Context.applies</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
-
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Context.Context</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Context.Context.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">doc_string=None</SPAN>, <SPAN CLASS="Argument">doc_topics=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Context.Context.applies"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Context.Context.applies</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from cont_gen.ContLanguage</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cont_gen.ContLanguage.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">language=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -44,14 +44,6 @@
 </PRE><H2>Description</H2><P>
 It is essentially a shortcut for ContLanguage(language='perl')
 </P>
-<H2 ID="Context.Context.applies" CLASS="Method">Context.Context.applies(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
-<P>None</P>
-
-<P>
-Returns <EM>true</EM> iif the context applies given current state
-of an application.</P>
-<P>
-<A HREF="AppState.AppState.html">AppState</A> <EM>app</EM> is the application in question.</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -182,6 +174,14 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="Context.Context.applies" CLASS="Method">Context.Context.applies(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Returns <EM>true</EM> iif the context applies given current state
+of an application.</P>
+<P>
+<A HREF="AppState.AppState.html">AppState</A> <EM>app</EM> is the application in question.</P>
 
 <HR>
 <TABLE ALIGN="LEFT">
