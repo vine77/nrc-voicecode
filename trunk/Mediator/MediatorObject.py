@@ -78,7 +78,7 @@ def disconnect_from_sr(disconnect, save_speech_files):
 def do_nothing(*positional, **keywords):
     pass
 
-class AppCbkFilter(Object.OwnerObject):
+class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
     """object which filters callbacks from a MediatorObject's AppState
 
     **INSTANCE ATTRIBUTES**
@@ -96,24 +96,61 @@ class AppCbkFilter(Object.OwnerObject):
 			    }, args)
 	self.name_parent('mediator')
 
-    def close_app_cbk(self, instance):
+    def close_app_cbk(self, instance, unexpected = 0):
 	"""callback from AppState which indicates that the application has 
 	closed or disconnected from the mediator
 
 	**INPUTS**
 
 	*STR* instance -- name of the application instance to be removed
-    
+      
+ 	*BOOL unexpected* -- 1 if the editor broke the connection
+	without first sending an editor_disconnecting message
+   
 	**OUTPUTS**
 
 	*none*
 	"""
 # for now at least, this does the same thing as delete_instance
-	self.mediator.close_app_cbk(instance)
+	self.mediator.close_app_cbk(instance, unexpected = unexpected)
 
     def close_buffer_cbk(self, instance, buff_name):
 	"""callback from AppState which notifies us that the application
 	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# ignored by MediatorObject
+	pass
+
+    def open_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has opened a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# ignored by MediatorObject
+	pass
+
+    def curr_buff_name_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the current
+	buffer has changed
 
 	**INPUTS**
 
@@ -249,6 +286,8 @@ class MediatorObject(Object.Object):
 	    sr_interface.CodeSelectGrammar(app = self.app,
 		window = window, exclusive = exclusive,
                 allResults = allResults)
+        if self.owns_app and self.app:
+	    self.app.set_manager(self.cbk_filter)
 #	print 'Mediator constructor: allResults = %d\n' % allResults
 #	print traceback.extract_stack()
 
@@ -371,12 +410,12 @@ class MediatorObject(Object.Object):
 	    self.code_select_grammar = None
 	if self.owns_app and self.app:
 	    self.app.cleanup()
-	    del self.app
+	    self.app = None
 	if self.cbk_filter:
 	    self.cbk_filter.cleanup()
 	    self.cbk_filter = None
                 
-    def close_app_cbk(self, instance_name):
+    def close_app_cbk(self, instance_name, unexpected = 0):
 	"""method called by our AppState to tell us that it is closing, or
 	disconnecting from the mediator.  This method is included
 	only to allow an external editor to disconnect when we are
@@ -390,13 +429,17 @@ class MediatorObject(Object.Object):
 	included only for compatibility with the usual call from
 	AppState to the AppMgr.  This implementation of MediatorObject
 	has only one editor instance, so it ignores this parameter
+      
+ 	*BOOL unexpected* -- 1 if the editor broke the connection
+	without first sending an editor_disconnecting message
 
 	**OUTPUTS**
 
 	*none*
 	"""
 	if self.owner and self.id:
-	    self.owner.delete_instance_cbk(self.id)
+	    self.owner.delete_instance_cbk(self.id, 
+		unexpected = unexpected)
 
     def add_csc(self, acmd, add_voc_entry=1):
 	"""Add a new Context Sensitive Command.

@@ -128,7 +128,6 @@ class SourceBuff(OwnerObject):
 	self.app.on_change(self.name(), start, end, text, program_initiated)
 
     def rename_buffer_cbk(self, new_buff_name):
-        
         """AppState invokes this method when 
 	AppState.rename_buffer_cbk is called to notify VoiceCode that 
 	an existing text buffer has been renamed
@@ -1303,7 +1302,6 @@ class SourceBuff(OwnerObject):
     # VoiceCode that certain events have taken place in the editor.
     #
     def delete_cbk(self, range):
-        
         """External editor invokes that callback to notify VoiceCode
         of a deletion event.
 
@@ -1364,8 +1362,7 @@ class SourceBuff(OwnerObject):
         
         *none* -- 
         """
-        
-        debug.virtual('SourceBuff.set_selection_cbk')
+	pass
 
     def goto_cbk(self, pos):
         
@@ -1383,9 +1380,7 @@ class SourceBuff(OwnerObject):
         
         *none* -- 
         """
-        
-        debug.virtual('SourceBuff.goto_cbk')
-        
+	pass
 
     def print_buff(self, from_line=None, to_line=None):
         """Prints buffer to STDOUT.

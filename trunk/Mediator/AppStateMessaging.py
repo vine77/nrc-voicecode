@@ -227,12 +227,17 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         *none* -- 
         """
         print '-- AppStateMessaging.listen_one_transation: called'
-        mess = self.listen_msgr.get_mess(expect=['update'])
+        mess = self.listen_msgr.get_mess(expect=['update',
+	    'editor_disconnecting'])
         mess_name = mess[0]
-        mess_cont = mess[1]
         if mess_name == 'update':
+	    mess_cont = mess[1]
             upd_list = mess_cont['value']
             self.apply_updates(upd_list)
+	elif mess_name == 'editor_disconnecting':
+	    self.close_app_cbk()
+	elif mess_name == 'broken_connection':
+	    self.close_app_cbk(unexpected = 1)
 
 
     def updates_from_app(self, what = None, exclude=1):
@@ -390,6 +395,36 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	buff_name = response[1]['buff_name']
 
 	return buff_name
+
+    def app_save_file(self, full_path = None, no_prompt = 0):
+        """Tell the external editor to save the current buffer.
+
+        **INPUTS**
+	
+	*STR full_path* -- full path under which to save the file, or
+	None to use the buffer name
+
+	*BOOL no_prompt* -- overwrite any existing file without
+	prompting.  No_prompt should only be set to true if the caller
+	has already prompted the user.
+
+	**OUTPUTS**
+
+	*STR* -- new buffer name if successful, or None if the save 
+	failed
+        """
+        #
+        # Tell external editor to save the file
+        #
+        self.talk_msgr.send_mess('save_file', 
+	    {'full_path': full_path,
+	     'no_prompt': no_prompt
+	    })
+        response = self.talk_msgr.get_mess(expect=['save_file_resp'])
+	buff_name = response[1]['buff_name']
+
+	return buff_name
+        
         
     def query_buffer_from_app(self, buff_name):
 	"""query the application to see if a buffer by the name of buff_name 
@@ -450,4 +485,46 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	return success
 
 
+
+class AppStateInsertIndentMess(AppStateMessaging):
+    
+    """subclass of AppStateMessaging which uses
+    SourceBuffInsertIndentMess in place of SourceBuffMessaging
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+    
+    *none*
+    """
+
+    
+    def __init__(self, **attrs):
+        self.deep_construct(AppStateInsertIndentMess, 
+                            {},
+                            attrs)
+
+    def new_compatible_sb(self, buff_name):
+        """Creates a new instance of [SourceBuff].
+
+        Note: The class used to instantiate the [SourceBuff] needs to
+        be compatible with the class of *self*. With a few exceptions
+        (if any), each subclass of *AppState* will have to redefine
+        *new_compatible_sb* in order to generate a [SourceBuff] of the
+        appropriate class.
+        
+        **INPUTS**
+                
+        STR *buff_name* -- unique name of the source buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        return SourceBuffMessaging.SourceBuffInsertIndentMess(app=self, 
+	    buff_name=buff_name)
 

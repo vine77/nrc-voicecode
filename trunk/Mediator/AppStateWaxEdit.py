@@ -571,31 +571,3 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	del self.open_buffers[buff_name]
 	return 1
 
-    def query_buffer_from_app(self, buff_name):
-	"""query the application to see if a buffer by the name of buff_name 
-	exists.
-
-        **INPUTS**
-
-	*STR* buff_name -- name of the buffer to check
-
-        **OUTPUTS**
-
-	*BOOL* -- does the buffer exist?
-	"""
-	return self.open_buffers.has_key(buff_name)
-
-    def open_buffers_from_app(self):
-	"""retrieve a list of the names of open buffers from the
-	application.
-
-        **INPUTS**
-
-	*none*
-
-        **OUTPUTS**
-
-	*[STR]* -- list of the names of open buffers
-	"""
-	return self.open_buffers.keys()
-

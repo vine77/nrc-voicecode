@@ -28,6 +28,8 @@ import vc_globals
 import os, posixpath, pythoncom, re, select, socket
 import SocketServer, string, sys, threading, time, whrandom, win32event
 
+import AppState
+
 import debug
 import EdSim
 import messaging, Object
@@ -87,6 +89,11 @@ class ClientConnection(Object.Object):
 
     STR *ID* -- unique ID assigned to this connection
 
+    Event *client_quitting* -- threading.Event 
+    used to signal to the data thread that the connection is 
+    ending, or the client is quitting
+ 
+
     **CLASS ATTRIBUTES**
     
     *none* -- 
@@ -99,7 +106,8 @@ class ClientConnection(Object.Object):
 			     'data_thread': None,
 			     'connecting': 0,
 			     'connected': 0,
-			     'ID': None
+			     'ID': None,
+			     'client_quitting': threading.Event()
                              }, 
                             args_super)
 
@@ -124,7 +132,9 @@ class ClientConnection(Object.Object):
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
 	a_msgr = messaging.messenger_factory(listen_sock)
 	queue = Queue.Queue(10)
-	thread = ListenAndQueueMsgsThread( a_msgr, queue, data_event)
+	broken_connection = ('broken_connection', {})
+	thread = ListenAndQueueMsgsThread(a_msgr, queue, data_event,
+	   self.client_quitting, broken_connection)
 	return thread
 
     def is_connected(self):
@@ -308,15 +318,15 @@ class ClientConnection(Object.Object):
 	listen_msgr = self.listen(listen_sock, data_event)
 	return talk_msgr, listen_msgr
 
-    def disconnect(self, notify = 1):
-	"""disconnect from the mediator
+    def disconnect(self):
+	"""disconnect from the mediator.  Note that ClientEditor has the
+	messengers, so it will have to be in charge of 
+	notifying the mediator that we are disconnecting 
+	(if it was client-initiated).  It should do so after this call.
 	
 	**INPUTS**
 
-	*BOOL* notify -- true if we should notify the mediator that we
-	are disconnecting.  False if we are calling disconnect in
-	response to a disconnection from the mediator and should
-	therefore disconnect silently.
+	*none*
 
 	**OUTPUTS**
 
@@ -324,6 +334,8 @@ class ClientConnection(Object.Object):
 	"""
 	if not self.is_connected():
 	    return 0
+	self.client_quitting.set()
+	return 1
 
     def listen(self, listen_sock, data_event):
         """creates and starts a data thread on the listen_sock
@@ -346,12 +358,13 @@ class ClientConnection(Object.Object):
 	data_thread.setDaemon(1)
 	data_thread.start()
 
-	listen_response_msgr = messaging.messenger_factory(listen_sock)        
+	listen_response_msgr = messaging.messenger_factory(listen_sock, 
+	    sleep = 0.05)        
         listen_msgr = messaging.MixedMessenger(listen_response_msgr, messages)
  
 	return listen_msgr
 
-class ClientEditor(Object.OwnerObject):
+class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     """abstract base class for handling messages to and from the client editor
 
     **INSTANCE ATTRIBUTES**
@@ -363,10 +376,16 @@ class ClientEditor(Object.OwnerObject):
 
     AppState *editor* -- the AppState interface to the underlying editor
 
+    STR *editor_name* -- the string which the editor uses to identify
+    itself to the ClientEditor
+
     *{STR:FCT}* msg_map -- map from message names to (unbound) methods
     taking *(self, {arg:val})* to handle that message
 
     *[STR] expect* -- list of commands expected from the mediator
+
+    *BOOL ignore_callbacks* -- flag to indicate that callbacks are
+    triggered by a mediator-initiated message and should be ignored
 
     *[{STR:ANY}] awaiting_response* -- list of responses to a
     mediator-initiated change, or None if we are not in the middle of a
@@ -388,10 +407,12 @@ class ClientEditor(Object.OwnerObject):
 			     'talk_msgr': None,
 			     'listen_msgr': None,
 			     'editor': editor,
+			     'editor_name': None,
 			     'owner': owner,
 			     'ID': ID,
 			     'msg_map': {},
 			     'expect': [],
+			     'ignore_callbacks': 0,
 			     'awaiting_response': None,
 			    },
 			    args)
@@ -409,12 +430,19 @@ class ClientEditor(Object.OwnerObject):
 	    'multiple_buffers', 'bidirectional_selection', 'get_visible', 
 	    'language_name', 'newline_conventions', 
 	    'pref_newline_convention', 'open_file', 'close_buffer', 
+	    'save_file',
 	    'terminating', 'mediator_closing', 'updates']
 	for msg_name in self.expect:
 	    method_name = 'cmd_' + msg_name
 #	    msg_handler = self.__class__.__dict__[method_name]
 	    msg_handler = getattr(self, method_name)
 	    self.msg_map[msg_name] = msg_handler
+	self.editor_name = self.editor.name()
+	if self.editor_name == None:
+	    self.editor_name = 'client'
+	    self.editor.set_name(self.editor_name)
+	self.editor.set_manager(self)
+         
 
     def disconnected(self):
 	"""method to call to let the ClientEditor know that the client
@@ -505,6 +533,125 @@ class ClientEditor(Object.OwnerObject):
 	handler = self.msg_map[cmd[0]]
 	handler(cmd[1])
 
+
+    def close_app_cbk(self, instance):
+	"""callback from AppState which indicates that the application has 
+	closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    self.talk_msgr.send_mess('editor_disconnecting')
+
+    def close_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'close_buff', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def open_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has opened a new buffer 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was opened
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'open_buff', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def curr_buff_name_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the current
+	buffer has changed
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the newly current buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'curr_buffer', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+	"""callback from AppState which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'rename_buff', 
+			   'old_buff_name': old_buff_name,
+			   'new_buff_name': new_buff_name
+			  }
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def new_window(self, instance):
+	"""called when the editor notifies us of a new window for the 
+	specified instance
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+	*BOOL* -- true if window is added
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'new_window'}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
     def cmd_multiple_buffers(self, arguments):
 	value = self.editor.multiple_buffers()
 	self.listen_msgr.send_mess('multiple_buffers_resp', 
@@ -514,7 +661,6 @@ class ClientEditor(Object.OwnerObject):
 	value = self.editor.bidirectional_selection()
 	self.listen_msgr.send_mess('bidirectional_selection_resp', 
 	   {'value': value})
-
 
     def cmd_active_buffer_name(self, arguments):
 	buff_name = self.editor.app_active_buffer_name()
@@ -789,15 +935,29 @@ class ClientEditor(Object.OwnerObject):
 
     def cmd_open_file(self, arguments):
 	file_name = arguments['file_name']
+	self.ignore_callbacks = 1
 	new_buff_name = self.editor.open_file(file_name = file_name)
+	self.ignore_callbacks = 0
 	self.listen_msgr.send_mess('open_file_resp', 
 	    {'buff_name': new_buff_name})
 
     def cmd_close_buffer(self, arguments):
 	buff_name = arguments['buff_name']
 	save = messaging.messarg2int(arguments['save'])
+	self.ignore_callbacks = 1
 	success = self.editor.app_close_buffer(buff_name, save)
+	self.ignore_callbacks = 0
 	self.listen_msgr.send_mess('close_buffer_resp', {'value': success})
+
+    def cmd_save_file(self, arguments):
+	file_name = arguments['full_path']
+	no_prompt = arguments['no_prompt']
+	self.ignore_callbacks = 1
+	new_buff_name = self.editor.save_file(full_path = full_path,
+	    no_prompt = no_prompt)
+	self.ignore_callbacks = 0
+	self.listen_msgr.send_mess('save_file_resp', 
+	    {'buff_name': new_buff_name})
 
     def cmd_terminating(self, arguments):
 	self.cmd_mediator_closing(arguments)

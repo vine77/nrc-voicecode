@@ -33,7 +33,8 @@ import debug, Object
 
 class SocketError(RuntimeError):
     def __init__(self, msg):
-        self.msg = msg
+        RuntimeError.__init__(self, msg)
+#	self.msg = msg
 
 class Messenger(Object.Object):
    
@@ -799,7 +800,8 @@ class MessTransporter_Socket(MessTransporter):
         while totalsent < mess_len:
             sent = self.sock.send(a_string[totalsent:])
             if sent == 0:
-                raise SocketError, "socket connection broken"
+                raise SocketError("socket connection broken")
+#                raise SocketError, "socket connection broken"
             totalsent = totalsent + sent
         
 
@@ -824,7 +826,8 @@ class MessTransporter_Socket(MessTransporter):
             chunk = self.sock.recv(num_bytes - len(a_string))
             trace('receive_string', 'read chunk=\'%s\'' % chunk);
             if chunk == '':
-                raise SocketError, "socket connection broken"
+                raise SocketError("socket connection broken")
+#                raise SocketError, "socket connection broken"
             a_string = a_string + chunk
 
         return a_string         
@@ -841,7 +844,8 @@ class MessTransporter_Socket(MessTransporter):
 	*BOOL* -- true if the select.select indicates that the socket
 	has data
 	"""
-	data, dummy, dummy2 = select.select([self.sock], [], [], timeout = 0)
+# poll by using timeout = 0
+	data, dummy, dummy2 = select.select([self.sock], [], [], 0)
 	return len(data) != 0
 
 

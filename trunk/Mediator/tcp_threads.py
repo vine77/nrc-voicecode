@@ -47,6 +47,7 @@ from thread_communication_win32 import *
 # ServerSingleThread.
 ##############################################################################
 
+
 class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
     """class for a thread which listens for messages using a given 
     Messenger puts completed messages on a Queue.
@@ -62,17 +63,37 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
     SocketHasDataEvent *event* -- object used to notify the main thread
     that a socket has data
 
+    Event *connection_ending* -- threading.Event object which will be set
+    to true if the connection has been terminated and the thread should die
+
+
+    (STR, {STR: STR}) conn_broken_msg -- message to put onto the Queue to 
+    indicate that the connection was broken unexpectedly.  Note that
+    because of thread timing issues, this can occur even if the
+    mediator previously received an editor_disconnecting message, or
+    even if the editor disconnected in response to a
+    mediator_closing or terminating message.  However, in the former case, 
+    AppStateMessaging should process the editor_disconnecting message
+    first, and will therefore ignore any subsequent messages in the
+    queue (including the conn_broken one).  In the latter case, the mediator 
+    should already have left the message loop, so, again, the
+    conn_broken message should not be processed.
+
     CLASS ATTRIBUTES**
     
     *none* --
 
     .. [Messenger] file:///./messenger.Messenger.html
     .. [MessengerBasic] file:///./messenger.MessengerBasic.html"""
-    def __init__(self, underlying, completed_msgs, event, **args_super):
+    def __init__(self, underlying, completed_msgs, event,
+	    connection_ending, conn_broken_msg, **args_super):
         self.deep_construct(ListenAndQueueMsgsThread, 
                             {'underlying': underlying,
 			     'completed_msgs': completed_msgs,
-			     'event': event}, 
+			     'event': event,
+			     'connection_ending': connection_ending,
+			     'conn_broken_msg': conn_broken_msg
+			    }, 
                             args_super, 
                             exclude_bases={'threading.Thread': 1})
         threading.Thread.__init__(self)
@@ -131,12 +152,27 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         *none* -- 
         """
         while 1:
-	    data = self.get_mess()
-	    self.completed_msgs.put(data)
-	    self.notify_main()
-            time.sleep(0.01)
-#            time.sleep(1)
+	    try: 
+		data = self.get_mess()
+	    except messaging.SocketError, err:
+		if self.connection_ending.isSet():
+		    break
+# connection broken unexpectedly (unless we just didn't get the
+# connection_ending event in time)
+		self.completed_msgs.put(self.conn_broken_msg)
+		self.notify_main()
+		break
 
+	    if data:
+		self.completed_msgs.put(data)
+		self.notify_main()
+#            time.sleep(0.01)
+#            time.sleep(1)
+#           waits for timeout, or until connection_ending is set
+	    self.connection_ending.wait(0.01)
+#	    self.connection_ending.wait(1.0)
+	    if self.connection_ending.isSet():
+		break
 
 class ListenNewConnThread(threading.Thread, Object.Object):
     """Abstract base class which listens for new socket connections on 
