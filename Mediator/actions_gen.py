@@ -756,10 +756,7 @@ class ActionInsertNewClause(Action):
     
     INT *direction = 1* -- If > 0, then search forward for the occurence of *end_of_clause_regexp*,
     otherwise search backwards.
-    
-    BOOL *ignore_occur_at_cursor* -- If true, then ignore any occurence of *end_of_clause_regexp*
-    that contains the current cursor position.  
-    
+        
     
     CLASS ATTRIBUTES**
         
@@ -768,13 +765,13 @@ class ActionInsertNewClause(Action):
         
     def __init__(self, end_of_clause_regexp, code_bef='',
                  code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1, 
-                 ignore_occur_at_cursor=0, **args_super):
+                 ignore_occur_right_of_cursor=0, **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
                             {'end_of_clause_regexp': end_of_clause_regexp, 
                              'where': where,
                              'direction': direction,
-                             'ignore_occur_at_cursor': ignore_occur_at_cursor,
+#                             'ignore_occur_right_of_cursor': ignore_occur_right_of_cursor,
                              'add_lines': add_lines, 
                              'code_bef': code_bef, 
                              'code_after': code_after,
@@ -787,23 +784,35 @@ class ActionInsertNewClause(Action):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
+                
         
+        if self.direction > 0:
+           ignore_occur_right_of_cursor = 0
+        else:
+           ignore_occur_right_of_cursor = 1
+           
         app.search_for(regexp=self.end_of_clause_regexp, 
                        where = self.where, direction = self.direction, 
-                       ignore_occur_at_cursor=self.ignore_occur_at_cursor)
-
+                       ignore_occur_right_of_cursor=ignore_occur_right_of_cursor)
+                       
+        #ERASE LATER
+#        print "--** after search_for, buffer contains\n"
+#        app.print_buff()
+        #END ERASE LATER
+        
+        blank_lines = ""
         for ii in range(self.add_lines):
-            app.insert_indent(code_bef='\n', code_after='')
+            blank_lines = "%s%s" % (blank_lines, app.pref_newline_convention())
             
-            #
-            # Cursor should end up at the top of the set
-            # of lines added before the first statement
-            #
-            if self.direction < 0:
-               app.move_relative_line(direction=-1, num=1)
-#               app.goto(app.end_of_line(app.cur_pos()))
+        if self.direction > 0:
+           code_bef = blank_lines
+           code_after = ""
+        else:
+           code_bef = ""
+           code_after = blank_lines
+           
+        app.insert_indent(code_bef=code_bef, code_after=code_after)
             
-
         #
         # Client-side automatic indentation is usually smart enough to know
         # if a new clause should be backindented or not. 

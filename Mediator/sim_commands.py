@@ -478,6 +478,20 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         self.app.goto_line(linenum)
         self.show_buff()
 
+    def goto_end_of_line(self, pos=None, echo_cmd=1):
+        """Go to end of the line at a particular cursor position.
+        """
+        if echo_cmd: self.echo_command('goto_end_of_line', pos)        
+        self.app.goto_end_of_line(pos)
+        self.show_buff()
+
+    def goto_beginning_of_line(self, pos=None, echo_cmd=1):
+        """Go to beginning of the line at a particular cursor position.
+        """
+        if echo_cmd: self.echo_command('goto_beginning_of_line', pos)
+        self.app.goto_beginning_of_line(pos)
+        self.show_buff()
+
     def make_position_visible(self, pos, echo_cmd=0):
         if echo_cmd: self.echo_command('make_position_visible', pos)
         self.app.make_position_visible(pos)

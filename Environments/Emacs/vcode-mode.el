@@ -2102,7 +2102,8 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'backspace 'vcode-cmd-backspace vr-deprecated-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-deprecated-message-handler-hooks)  
   (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-deprecated-message-handler-hooks)  
-
+  (cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'beginning_of_line 'vcode-cmd-beginning-of-line vr-deprecated-message-handler-hooks)  
   (cl-puthash 'mediator_closing 'vcode-cmd-mediator-closing vr-deprecated-message-handler-hooks)  
 
   ;;;
@@ -3121,6 +3122,7 @@ buffer"
 
 (defun line-num-at (pos)
   (1+ (count-lines 1 pos))
+;;;  (count-lines 1 pos)
 )
 
 (defun vcode-cmd-line-num-of (vcode-request)
@@ -3253,7 +3255,7 @@ buffer"
 (defun vcode-cmd-pref-newline-conventions (vcode-request)
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value "\n" mess-cont)
-    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "pref_newline_conventions_resp" mess-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "pref_newline_convention_resp" mess-cont)))
     )  
 )
 
@@ -3795,21 +3797,22 @@ tabs.
 	(setq which-end-as-text "beginning")
       (setq which-end-as-text "end")
     )
-;;    (vcode-trace "vcode-line-start-end-pos" 
-;;		 "pos=%S, buff-name=%S, line-num=%S, which-end=%S, which-end-as-text=%S"
-;;		 pos buff-name line-num which-end which-end-as-text)
+;    (vcode-trace "vcode-line-start-end-pos" 
+;		 "pos=%S, buff-name=%S, line-num=%S, which-end=%S, which-end-as-text=%S"
+;		 pos buff-name line-num which-end which-end-as-text)
     (save-excursion
        (condition-case err     
 	   (progn 
-         (set-buffer buff-name)
-	     (goto-line line)
+	     (set-buffer buff-name)
+	     (goto-line line-num)
    	     (if (<  which-end 0) 
 	         (beginning-of-line)
 	       (end-of-line)
 	     )
-         (setq return-pos (point))
+	     (setq return-pos (vcode-convert-pos (point) 'vcode))
+	     (vcode-trace "vcode-line-start-end-pos" "** return-pos=%S" return-pos)
 	     (cl-puthash "value" return-pos response)
-	     (setq reply-name (format "%S_of_line_resp" which-end-as-text))
+	     (setq reply-name (concat which-end-as-text "_of_line_resp"))
 	     (vr-deprecated-send-reply 
 	     (run-hook-with-args 
 	       'vr-deprecated-serialize-message-hook 

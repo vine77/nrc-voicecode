@@ -1,17 +1,9 @@
 
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
 C:\eclipse\workspace\VCode\Mediator>c:
 
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+C:\eclipse\workspace\VCode\Mediator>cd c:\eclipse\workspace\VCode\Mediator 
 
-C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
-
-C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
+C:\eclipse\workspace\VCode\Mediator>python wxMediator.py --bypass -t all        
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -633,7 +625,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02057AA0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F27AA0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -674,7 +666,7 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 
 *** End of compilation test ***
@@ -770,11 +762,8 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
-'execfile': appears in ['execfile']
-'expandvars': appears in ['expandvars']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'posixpath': appears in ['posixpath']
-'setattr': appears in ['setattr']
-'stdout': appears in ['stdout']
 
 *** End of compilation test ***
 
@@ -818,7 +807,7 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 
 
@@ -848,7 +837,7 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 *** End of accept symbol match test ***
 
@@ -1033,10 +1022,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'c:\\eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1244,7 +1233,7 @@ List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
@@ -1451,7 +1440,7 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: print_symbols()
@@ -1689,7 +1678,7 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
@@ -1918,7 +1907,7 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
@@ -2126,7 +2115,7 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
@@ -2738,7 +2727,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3577,9 +3566,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3654,6 +3644,548 @@ Heard less-than greater-than equal-sign
 
 
 *******************************************************************************
+* Name        : new_statement
+* Description : Test creation of new statements above/below current line
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
+EdSim instance EdSim(0) connected
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'empty', 'buffer']
+Heard below when empty buffer
+Associate 'below when empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_empty_buffer (*new*)
+  '2': BelowWhenEmptyBuffer (*new*)
+  '3': belowWhenEmptyBuffer (*new*)
+  '4': BELOW_WHEN_EMPTY_BUFFER (*new*)
+  '5': belowwhenemptybuffer (*new*)
+  '6': BELOWWHENEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_empty_buffer<CURSOR>
+
+*** End of source buffer ***
+Got command: goto(0,)
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: below_when_empty_buffer
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: <CURSOR>
+  3: below_when_empty_buffer
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'non', 'empty', 'buffer']
+Heard below when at first line of non empty buffer
+Associate 'below when at first line of non empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_at_first_line_of_non_empty_buffer (*new*)
+  '2': BelowWhenAtFirstLineOfNonEmptyBuffer (*new*)
+  '3': belowWhenAtFirstLineOfNonEmptyBuffer (*new*)
+  '4': BELOW_WHEN_AT_FIRST_LINE_OF_NON_EMPTY_BUFFER (*new*)
+  '5': belowwhenatfirstlineofnonemptybuffer (*new*)
+  '6': BELOWWHENATFIRSTLINEOFNONEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer<CURSOR>
+  3: below_when_empty_buffer
+
+*** End of source buffer ***
+Got command: goto(69,)
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_empty_buffer<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_empty_buffer
+  4: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
+Heard below when at last character of non empty buffer
+Associate 'below when at last character of non empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_at_last_character_of_non_empty_buffer (*new*)
+  '2': BelowWhenAtLastCharacterOfNonEmptyBuffer (*new*)
+  '3': belowWhenAtLastCharacterOfNonEmptyBuffer (*new*)
+  '4': BELOW_WHEN_AT_LAST_CHARACTER_OF_NON_EMPTY_BUFFER (*new*)
+  '5': belowwhenatlastcharacterofnonemptybuffer (*new*)
+  '6': BELOWWHENATLASTCHARACTEROFNONEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_empty_buffer
+  4: below_when_at_last_character_of_non_empty_buffer<CURSOR>
+
+*** End of source buffer ***
+Got command: goto_line(2,)
+*** Start of source buffer ***
+  1: 
+  2: <CURSOR>below_when_at_first_line_of_non_empty_buffer
+  3: below_when_empty_buffer
+  4: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: <CURSOR>
+  4: below_when_empty_buffer
+  5: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'on', 'middle', 'line', 'of', 'buffer']
+Heard below when on middle line of buffer
+Associate 'below when on middle line of buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_on_middle_line_of_buffer (*new*)
+  '2': BelowWhenOnMiddleLineOfBuffer (*new*)
+  '3': belowWhenOnMiddleLineOfBuffer (*new*)
+  '4': BELOW_WHEN_ON_MIDDLE_LINE_OF_BUFFER (*new*)
+  '5': belowwhenonmiddlelineofbuffer (*new*)
+  '6': BELOWWHENONMIDDLELINEOFBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer<CURSOR>
+  4: below_when_empty_buffer
+  5: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Got command: goto_line(3,)
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: <CURSOR>below_when_on_middle_line_of_buffer
+  4: below_when_empty_buffer
+  5: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer<CURSOR>
+  4: below_when_empty_buffer
+  5: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer
+  4: <CURSOR>
+  5: below_when_empty_buffer
+  6: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'at', 'end', 'of', 'line']
+Heard below when at end of line
+Associate 'below when at end of line' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_at_end_of_line (*new*)
+  '2': BelowWhenAtEndOfLine (*new*)
+  '3': belowWhenAtEndOfLine (*new*)
+  '4': BELOW_WHEN_AT_END_OF_LINE (*new*)
+  '5': belowwhenatendofline (*new*)
+  '6': BELOWWHENATENDOFLINE (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer
+  4: below_when_at_end_of_line<CURSOR>
+  5: below_when_empty_buffer
+  6: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Got command: goto_line(3,)
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: <CURSOR>below_when_on_middle_line_of_buffer
+  4: below_when_at_end_of_line
+  5: below_when_empty_buffer
+  6: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: <CURSOR>below_when_on_middle_line_of_buffer
+  4: below_when_at_end_of_line
+  5: below_when_empty_buffer
+  6: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer
+  4: <CURSOR>
+  5: below_when_at_end_of_line
+  6: below_when_empty_buffer
+  7: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Saying: ['below', 'when', 'at', 'beginning', 'of', 'line']
+Heard below when at beginning of line
+Associate 'below when at beginning of line' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_at_beginning_of_line (*new*)
+  '2': BelowWhenAtBeginningOfLine (*new*)
+  '3': belowWhenAtBeginningOfLine (*new*)
+  '4': BELOW_WHEN_AT_BEGINNING_OF_LINE (*new*)
+  '5': belowwhenatbeginningofline (*new*)
+  '6': BELOWWHENATBEGINNINGOFLINE (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer
+  4: below_when_at_beginning_of_line<CURSOR>
+  5: below_when_at_end_of_line
+  6: below_when_empty_buffer
+  7: below_when_at_last_character_of_non_empty_buffer
+
+*** End of source buffer ***
+Got command: goto(10,)
+*** Start of source buffer ***
+  1: 
+  2: below_whe<CURSOR>n_at_first_line_of_non_empty_buffer
+  3: below_when_on_middle_line_of_buffer
+  4: below_when_at_beginning_of_line
+  5: below_when_at_end_of_line
+Saying: ['new', 'statement', 'below']
+Heard new statement below
+*** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: <CURSOR>
+  4: below_when_on_middle_line_of_buffer
+  5: below_when_at_beginning_of_line
+  6: below_when_at_end_of_line
+Saying: ['below', 'when', 'at', 'middle', 'of', 'a', 'line']
+Heard below when at middle of a line
+Associate 'below when at middle of a line' with symbol (Enter selection):
+
+  '0': no association
+  '1': below_when_at_middle_of_a_line (*new*)
+  '2': BelowWhenAtMiddleOfALine (*new*)
+  '3': belowWhenAtMiddleOfALine (*new*)
+  '4': BELOW_WHEN_AT_MIDDLE_OF_A_LINE (*new*)
+  '5': belowwhenatmiddleofaline (*new*)
+  '6': BELOWWHENATMIDDLEOFALINE (*new*)
+
+> *** Start of source buffer ***
+  1: 
+  2: below_when_at_first_line_of_non_empty_buffer
+  3: below_when_at_middle_of_a_line<CURSOR>
+  4: below_when_on_middle_line_of_buffer
+  5: below_when_at_beginning_of_line
+  6: below_when_at_end_of_line
+WARNING: source file 'blah2.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: 
+
+*** End of source buffer ***
+Saying: ['above', 'when', 'empty', 'buffer']
+Heard above when empty buffer
+Associate 'above when empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': above_when_empty_buffer (*new*)
+  '2': AboveWhenEmptyBuffer (*new*)
+  '3': aboveWhenEmptyBuffer (*new*)
+  '4': ABOVE_WHEN_EMPTY_BUFFER (*new*)
+  '5': abovewhenemptybuffer (*new*)
+  '6': ABOVEWHENEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_empty_buffer<CURSOR>
+  2: 
+
+*** End of source buffer ***
+Got command: goto(0,)
+*** Start of source buffer ***
+  1: <CURSOR>above_when_empty_buffer
+  2: 
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: above_when_empty_buffer
+  3: 
+
+*** End of source buffer ***
+Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'non', 'empty', 'buffer']
+Heard above when at first line of non empty buffer
+Associate 'above when at first line of non empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': above_when_at_first_line_of_non_empty_buffer (*new*)
+  '2': AboveWhenAtFirstLineOfNonEmptyBuffer (*new*)
+  '3': aboveWhenAtFirstLineOfNonEmptyBuffer (*new*)
+  '4': ABOVE_WHEN_AT_FIRST_LINE_OF_NON_EMPTY_BUFFER (*new*)
+  '5': abovewhenatfirstlineofnonemptybuffer (*new*)
+  '6': ABOVEWHENATFIRSTLINEOFNONEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer<CURSOR>
+  2: above_when_empty_buffer
+  3: 
+
+*** End of source buffer ***
+Got command: goto(69,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: above_when_empty_buffer
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: above_when_empty_buffer
+  3: <CURSOR>
+  4: 
+
+*** End of source buffer ***
+Saying: ['bug', 'above', 'when', 'at', 'last', 'character', 'of', 'non', 'empty', 'buffer']
+Heard bug above when at last character of non empty buffer
+Associate 'bug above when at last character of non empty buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': bug_above_when_at_last_character_of_non_empty_buffer (*new*)
+  '2': BugAboveWhenAtLastCharacterOfNonEmptyBuffer (*new*)
+  '3': bugAboveWhenAtLastCharacterOfNonEmptyBuffer (*new*)
+  '4': BUG_ABOVE_WHEN_AT_LAST_CHARACTER_OF_NON_EMPTY_BUFFER (*new*)
+  '5': bugabovewhenatlastcharacterofnonemptybuffer (*new*)
+  '6': BUGABOVEWHENATLASTCHARACTEROFNONEMPTYBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: above_when_empty_buffer
+  3: bug_above_when_at_last_character_of_non_empty_buffer<CURSOR>
+  4: 
+
+*** End of source buffer ***
+Got command: goto_line(2,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: <CURSOR>above_when_empty_buffer
+  3: bug_above_when_at_last_character_of_non_empty_buffer
+  4: 
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: <CURSOR>
+  3: above_when_empty_buffer
+  4: bug_above_when_at_last_character_of_non_empty_buffer
+  5: 
+
+*** End of source buffer ***
+Saying: ['bug', 'above', 'when', 'on', 'middle', 'line', 'of', 'buffer']
+Heard bug above when on middle line of buffer
+Associate 'bug above when on middle line of buffer' with symbol (Enter selection):
+
+  '0': no association
+  '1': bug_above_when_on_middle_line_of_buffer (*new*)
+  '2': BugAboveWhenOnMiddleLineOfBuffer (*new*)
+  '3': bugAboveWhenOnMiddleLineOfBuffer (*new*)
+  '4': BUG_ABOVE_WHEN_ON_MIDDLE_LINE_OF_BUFFER (*new*)
+  '5': bugabovewhenonmiddlelineofbuffer (*new*)
+  '6': BUGABOVEWHENONMIDDLELINEOFBUFFER (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer<CURSOR>
+  3: above_when_empty_buffer
+  4: bug_above_when_at_last_character_of_non_empty_buffer
+  5: 
+
+*** End of source buffer ***
+Got command: goto_line(3,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: <CURSOR>above_when_empty_buffer
+  4: bug_above_when_at_last_character_of_non_empty_buffer
+  5: 
+
+*** End of source buffer ***
+Got command: goto_end_of_line(None,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: above_when_empty_buffer<CURSOR>
+  4: bug_above_when_at_last_character_of_non_empty_buffer
+  5: 
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: <CURSOR>
+  4: above_when_empty_buffer
+  5: bug_above_when_at_last_character_of_non_empty_buffer
+  6: 
+
+*** End of source buffer ***
+Saying: ['above', 'when', 'at', 'end', 'of', 'line']
+Heard above when at end of line
+Associate 'above when at end of line' with symbol (Enter selection):
+
+  '0': no association
+  '1': above_when_at_end_of_line (*new*)
+  '2': AboveWhenAtEndOfLine (*new*)
+  '3': aboveWhenAtEndOfLine (*new*)
+  '4': ABOVE_WHEN_AT_END_OF_LINE (*new*)
+  '5': abovewhenatendofline (*new*)
+  '6': ABOVEWHENATENDOFLINE (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: above_when_at_end_of_line<CURSOR>
+  4: above_when_empty_buffer
+  5: bug_above_when_at_last_character_of_non_empty_buffer
+  6: 
+
+*** End of source buffer ***
+Got command: goto_line(3,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: <CURSOR>above_when_at_end_of_line
+  4: above_when_empty_buffer
+  5: bug_above_when_at_last_character_of_non_empty_buffer
+  6: 
+
+*** End of source buffer ***
+Got command: goto_beginning_of_line(None,)
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: bug_above_when_on_middle_line_of_buffer
+  3: <CURSOR>above_when_at_end_of_line
+  4: above_when_empty_buffer
+  5: bug_above_when_at_last_character_of_non_empty_buffer
+  6: 
+
+*** End of source buffer ***
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: <CURSOR>
+  3: bug_above_when_on_middle_line_of_buffer
+  4: above_when_at_end_of_line
+  5: above_when_empty_buffer
+Saying: ['above', 'when', 'at', 'beginning', 'of', 'line']
+Heard above when at beginning of line
+Associate 'above when at beginning of line' with symbol (Enter selection):
+
+  '0': no association
+  '1': above_when_at_beginning_of_line (*new*)
+  '2': AboveWhenAtBeginningOfLine (*new*)
+  '3': aboveWhenAtBeginningOfLine (*new*)
+  '4': ABOVE_WHEN_AT_BEGINNING_OF_LINE (*new*)
+  '5': abovewhenatbeginningofline (*new*)
+  '6': ABOVEWHENATBEGINNINGOFLINE (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_first_line_of_non_empty_buffer
+  2: above_when_at_beginning_of_line<CURSOR>
+  3: bug_above_when_on_middle_line_of_buffer
+  4: above_when_at_end_of_line
+  5: above_when_empty_buffer
+Got command: goto(10,)
+*** Start of source buffer ***
+  1: above_when<CURSOR>_at_first_line_of_non_empty_buffer
+  2: above_when_at_beginning_of_line
+  3: bug_above_when_on_middle_line_of_buffer
+  4: above_when_at_end_of_line
+Saying: ['new', 'statement', 'above']
+Heard new statement above
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: above_when_at_first_line_of_non_empty_buffer
+  3: above_when_at_beginning_of_line
+  4: bug_above_when_on_middle_line_of_buffer
+Saying: ['above', 'when', 'at', 'middle', 'of', 'a', 'line']
+Heard above when at middle of a line
+Associate 'above when at middle of a line' with symbol (Enter selection):
+
+  '0': no association
+  '1': above_when_at_middle_of_a_line (*new*)
+  '2': AboveWhenAtMiddleOfALine (*new*)
+  '3': aboveWhenAtMiddleOfALine (*new*)
+  '4': ABOVE_WHEN_AT_MIDDLE_OF_A_LINE (*new*)
+  '5': abovewhenatmiddleofaline (*new*)
+  '6': ABOVEWHENATMIDDLEOFALINE (*new*)
+
+> *** Start of source buffer ***
+  1: above_when_at_middle_of_a_line<CURSOR>
+  2: above_when_at_first_line_of_non_empty_buffer
+  3: above_when_at_beginning_of_line
+  4: bug_above_when_on_middle_line_of_buffer
+
+
+*******************************************************************************
 * Name        : number_dictation
 * Description : Test number dictation
 *******************************************************************************
@@ -3708,7 +4240,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7714,17 +8246,6 @@ Associate 'ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
 >   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -7741,18 +8262,7 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
->   7: from EdSim import EdSim
+  7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -9075,6 +9585,7 @@ _cached_symbols_as_one_string is:
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
 'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'sasymbol': appears in ['ISasymbol']
 
 *** End of compilation test ***
@@ -9689,7 +10200,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9777,7 +10288,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11904,8 +12415,7 @@ se: ['se']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
 Unresolved abbreviations are:
-'openlog': appears in ['openlog']
-'s': appears in ['s']
+'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'se': appears in ['se']
 
 *** End of compilation test ***
@@ -12084,5 +12594,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  302.705000043 secs
+Test suite completed in:  308.266000032 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6
