@@ -148,7 +148,7 @@ def test_CmdInterp():
     print '\n\n>>> Testing command interpreter\n\n'
     print '\n>>> Interpreting in a C buffer'    
     print '\n>>> Current buffer is:\n'
-    a_mediator.interp.on_app.print_buff_content()
+    a_mediator.interp.on_app.print_buff()
     old_stdin = util.stdin_read_from_string('1\n')
 
     #
@@ -165,7 +165,7 @@ def test_CmdInterp():
     a_mediator.interp.interpret_NL_cmd(['for', 'loop', 'loop', 'body'])                                       
     sys.stdin = old_stdin
     print '\n>>> Buffer is now:'
-    a_mediator.interp.on_app.print_buff_content()
+    a_mediator.interp.on_app.print_buff()
     
 
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
@@ -173,12 +173,12 @@ def test_CmdInterp():
     a_mediator.interp.on_app.curr_buffer.language = 'python'
     print '\n>>> Interpreting in a Python buffer'    
     print '\n>>> Current buffer is:\n'
-    a_mediator.interp.on_app.print_buff_content()
+    a_mediator.interp.on_app.print_buff()
 
     print '>>> Interpreting: %s' % ['for loop', 'loop body']
     a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
     print '\n>>> Buffer is now:'
-    a_mediator.interp.on_app.print_buff_content()
+    a_mediator.interp.on_app.print_buff()
         
 
 auto_test.add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
@@ -199,36 +199,36 @@ def test_EdSim():
     print ">>> Testing EdSim.py"
     print "\n\n>>> Opening a buffer"
     sim.open_file(test_buff)    
-    sim.print_buff_content()
+    sim.print_buff()
 
     print "\n\n>>> Moving to position 5"
-    sim.move_to(5)
-    sim.print_buff_content()
+    sim.goto(5)
+    sim.print_buff()
 
     print "\n\n>>> Testing breadcrumbs"
-    print "\n>>> Dropping one here"; sim.print_buff_content()
+    print "\n>>> Dropping one here"; sim.print_buff()
     sim.drop_breadcrumb()
-    sim.move_to(10)
+    sim.goto(10)
     sim.drop_breadcrumb()
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
+    print "\n>>> Dropping one here"; sim.print_buff()    
     print "\n>>> Popping 2 crumbs -> end up here:"
     sim.pop_breadcrumbs(num=2)
-    sim.print_buff_content()
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
+    sim.print_buff()
+    print "\n>>> Dropping one here"; sim.print_buff()    
     sim.drop_breadcrumb()
-    sim.move_to(10)
-    print "\n>>> Dropping one here"; sim.print_buff_content()    
+    sim.goto(10)
+    print "\n>>> Dropping one here"; sim.print_buff()    
     sim.drop_breadcrumb()
-    sim.move_to(20)
-    sim.print_buff_content()
+    sim.goto(20)
+    sim.print_buff()
     sim.pop_breadcrumbs()
     print "\n>>> Popping 1 crumb -> end up here..."    
-    sim.print_buff_content()
+    sim.print_buff()
 
     print '\n\n>>> Testing code indentation. Inserting for loop.'
     sim.goto(42)
     sim.insert_indent('for (ii=0; ii <= maxValue; ii++)\n{\n', '\n}\n')
-    sim.print_buff_content()
+    sim.print_buff()
 
 
 auto_test.add_test('EdSim', test_EdSim, desc='self-test for EdSim.py')
