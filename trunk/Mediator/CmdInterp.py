@@ -1541,7 +1541,8 @@ class CmdInterp(OwnerObject):
         untranslated_text = string.join(untranslated_words)
         trace('CmdInterp.match_untranslated_text', 'untranslated_text=\'%s\'' % (untranslated_text))
 
-        if exact_symbol and not new_symbol:
+        if exact_symbol and not new_symbol \
+                and not self.builder_factory.manually_specified():
             spoken_form = untranslated_text
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
@@ -1578,7 +1579,7 @@ class CmdInterp(OwnerObject):
 
         symbol_matches = None
         trace('CmdInterp.match_untranslated_text', 'new_symbol=%s' % new_symbol)
-        if not new_symbol:
+        if not new_symbol and not self.builder_factory.manually_specified():
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
             trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
         if symbol_matches:

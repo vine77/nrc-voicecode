@@ -30,6 +30,10 @@ import exceptions
 import os
 import threading
 
+font_sz = None
+#font_sz=14
+font_wt=wxBOLD
+
 class DummyCapture:
     def __init__(self):
         pass
@@ -75,6 +79,21 @@ wxID_CORRECT_NEXT = wxNewId()
 wxID_CORRECT_PREV = wxNewId()
 wxID_CORRECT_MORE = wxNewId()
 wxID_DISCARD_CORRECTION = wxNewId()
+
+def set_text_font(control):
+    """set the font size for a control
+
+    **INPUTS**
+
+    *wxWindow control* -- The control (usually a wxTextCtrl, or
+    wxListBox) which supports SetFont 
+
+    **OUTPUTS**
+
+    *none*
+    """
+    if font_sz:
+        control.SetFont(wxFont(font_sz, wxMODERN, wxNORMAL, font_wt))
 
 class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
     """implementation of DismissModalEvent using a Python Event flag.  
@@ -525,7 +544,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         if pos is None:
             use_pos = wxDefaultPosition
         wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
-            (600, 400), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+            (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         possible_capture.__init__(self)
         self.deep_construct(CorrectionBoxWX,
                             {
@@ -562,6 +581,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         intro = wxStaticText(self, wxNewId(), 
             "&Correct the text (use spoken forms)",
             wxDefaultPosition, wxDefaultSize)
+        set_text_font(intro)
         init_value = string.join(self.utterance.spoken_forms())
         init_value = ""
 # due to a bug in wxWindows, setting the initial value of a text control
@@ -569,8 +589,9 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 #
 # instead, we now set the initial value from the validator
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
-            wxDefaultSize, style = wxTE_NOHIDESEL, validator = validator)
+            (550, 40), style = wxTE_NOHIDESEL, validator = validator)
 #        s.Add(self.text, 0, wxEXPAND | wxALL)
+        set_text_font(self.text)
         middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
 # three rows, two columns, 5 pixels between rows and columns
         number_sizer = wxBoxSizer(wxVERTICAL)
@@ -585,9 +606,11 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         for i in range(1, 10):
             st = wxStaticText(self, ID_NUMBERS + i, "%d" % i,
                 wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT)
+            set_text_font(st)
             number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
         self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
              wxDefaultSize, self.choices, wxLB_SINGLE)
+        set_text_font(self.choice_list)
         EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
         EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
         bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
@@ -606,6 +629,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                               (number_sizer, 0, wxEXPAND | wxALIGN_RIGHT),
                               (self.choice_list, 0, wxEXPAND)])
         middle_sizer.AddGrowableRow(2)
+#        middle_sizer.AddGrowableRow(1)
         middle_sizer.AddGrowableCol(1)
 # not sure why this was needed in the first place - it doesn't seem to
 # be now -- DCF
@@ -641,11 +665,15 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.Raise()
         self.text.SetFocus()
 #        print 'before autolayout: text size is ', self.text.GetSize()
+        print 'before autolayout: choice list size is ', self.choice_list.GetSize()
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
 #        print 'before fit: text size is ', self.text.GetSize()
+        print 'before fit: choice list size is ', self.choice_list.GetSize()
         s.Fit(self)
+        print 'after fit: choice list size is ', self.choice_list.GetSize()
+#        print 'after fit: text size is ', self.text.GetSize()
 #        print 'after fit: text size is ', self.text.GetSize()
 #        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
 
@@ -1248,10 +1276,12 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         intro = wxStaticText(self, wxNewId(), 
             "&Choose a phrase to correct",
             wxDefaultPosition, wxDefaultSize)
+        set_text_font(intro)
         s.Add(intro, 0, wxEXPAND | wxALL)
         recent = wxListCtrl(self, wxNewId(), wxDefaultPosition,
             wxDefaultSize, 
             style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        set_text_font(recent)
         recent.InsertColumn(0, "#")
         recent.InsertColumn(1, "Spoken phrase")
         phrases = map(lambda x: string.join(x[0].spoken_forms()),
