@@ -785,7 +785,6 @@ Associate 'this symbol is unresolved' with symbol (Enter selection):
   '6': thissymbolisunresolved (*new*)
   '7': THISSYMBOLISUNRESOLVED (*new*)
 
-> -- send_mess: mess_name='pref_newline_convention'
 *** Start of source buffer ***
   1: this_sym_is_unres, <CURSOR>
 
@@ -1451,7 +1450,6 @@ Associate 'application programming interface function' with symbol (Enter select
   '6': applicationprogramminginterfacefunction (*new*)
   '7': APPLICATIONPROGRAMMINGINTERFACEFUNCTION (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, f_name, API_function, <CURSOR>
 
@@ -2280,7 +2278,6 @@ Associate 'variable' with symbol (Enter selection):
   '2': Variable (*new*)
   '3': VARIABLE (*new*)
 
-> -- send_mess: mess_name='pref_newline_convention'
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -2288,7 +2285,6 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: variable  =  Index*2**8
   2: <CURSOR>
@@ -2324,7 +2320,6 @@ Associate 'value' with symbol (Enter selection):
   '2': Value (*new*)
   '3': VALUE (*new*)
 
-> -- send_mess: mess_name='insert'
   3: variable = Index%2 + Index%3
   4: if Index&variable:
   5:    if Index|variable|Index|Value:
@@ -2346,7 +2341,6 @@ Associate 'function' with symbol (Enter selection):
   '2': Function (*new*)
   '3': FUNCTION (*new*)
 
-> -- send_mess: mess_name='insert'
   5:    if Index|variable|Index|Value:
   6:       Index = 0;variable = 0;
   7:       Index.Function()
@@ -2368,7 +2362,6 @@ Associate 'python' with symbol (Enter selection):
   '2': Python (*new*)
   '3': PYTHON (*new*)
 
-> -- send_mess: mess_name='insert'
   7:       Index.Function()
   8:       variable = [0...10]
   9:       #!Python
@@ -2397,7 +2390,6 @@ Associate 'field' with symbol (Enter selection):
   '2': Field (*new*)
   '3': FIELD (*new*)
 
-> -- send_mess: mess_name='insert'
  10:       #!Python
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
@@ -2447,7 +2439,6 @@ Associate 'list' with symbol (Enter selection):
   '2': List (*new*)
   '3': LIST (*new*)
 
-> -- send_mess: mess_name='insert'
  16:             Function(0)
  17:             Function()
  18:             List[0]
@@ -2476,7 +2467,6 @@ Associate 'dictionary' with symbol (Enter selection):
   '2': Dictionary (*new*)
   '3': DICTIONARY (*new*)
 
-> -- send_mess: mess_name='insert'
  19:             List[0]
  20:             List[]
  21:             Dictionary{0}
@@ -2491,7 +2481,6 @@ Associate 'head' with symbol (Enter selection):
   '2': Head (*new*)
   '3': HEAD (*new*)
 
-> -- send_mess: mess_name='insert'
  20:             List[]
  21:             Dictionary{0}
  22:             <Head>
@@ -2520,7 +2509,6 @@ Associate 'string' with symbol (Enter selection):
   '2': String (*new*)
   '3': STRING (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'message' with symbol (Enter selection):
 
   '0': no association
@@ -2528,7 +2516,6 @@ Associate 'message' with symbol (Enter selection):
   '2': Message (*new*)
   '3': MESSAGE (*new*)
 
-> -- send_mess: mess_name='insert'
  23:             <Head>
  24:             <>
  25:             String = 'Message'
@@ -5488,7 +5475,6 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, sys
   2: <CURSOR>
@@ -5506,7 +5492,6 @@ Associate 'natural link' with symbol (Enter selection):
   '6': naturallink (*new*)
   '7': NATURALLINK (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'V. C. globals' with symbol (Enter selection):
 
   '0': no association
@@ -5517,7 +5502,6 @@ Associate 'V. C. globals' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
@@ -5536,7 +5520,6 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '6': actionsccpp (*new*)
   '7': ACTIONSCCPP (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
@@ -5556,7 +5539,6 @@ Associate 'application state' with symbol (Enter selection):
   '6': applicationstate (*new*)
   '7': APPLICATIONSTATE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'application state' with symbol (Enter selection):
 
   '0': no association
@@ -5568,7 +5550,6 @@ Associate 'application state' with symbol (Enter selection):
   '6': applicationstate (*new*)
   '7': APPLICATIONSTATE (*new*)
 
-> -- send_mess: mess_name='insert'
   2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
   4: from AppState import AppState
@@ -5587,7 +5568,6 @@ Associate 'context generic' with symbol (Enter selection):
   '6': contextgeneric (*new*)
   '7': CONTEXTGENERIC (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'context C.' with symbol (Enter selection):
 
   '0': no association
@@ -5611,7 +5591,6 @@ Associate 'context python' with symbol (Enter selection):
   '6': contextpython (*new*)
   '7': CONTEXTPYTHON (*new*)
 
-> -- send_mess: mess_name='insert'
   3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
@@ -5630,7 +5609,6 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
   '6': contextsensitivecmd (*new*)
   '7': CONTEXTSENSITIVECMD (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'context sensitive cmd' with symbol (Enter selection):
 
   '0': no association
@@ -5642,7 +5620,6 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
   '6': contextsensitivecmd (*new*)
   '7': CONTEXTSENSITIVECMD (*new*)
 
-> -- send_mess: mess_name='insert'
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
@@ -5661,7 +5638,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'Ed simulator' with symbol (Enter selection):
 
   '0': no association
@@ -5673,7 +5649,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> -- send_mess: mess_name='insert'
   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -5699,7 +5674,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> -- send_mess: mess_name='insert'
   7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
@@ -5717,7 +5691,6 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
-> -- send_mess: mess_name='insert'
   8: from Object import Object
   9: import EdSim, SymDict
  10: import sr_interface
@@ -5743,7 +5716,6 @@ Associate 'on application' with symbol (Enter selection):
   '6': onapplication (*new*)
   '7': ONAPPLICATION (*new*)
 
-> -- send_mess: mess_name='insert'
   9: import EdSim, SymDict
  10: import sr_interface
  11: class CmdInterp(Object):
@@ -5762,7 +5734,6 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
   '5': symdictpicklefile (*new*)
   '6': SYMDICTPICKLEFILE (*new*)
 
-> -- send_mess: mess_name='insert'
  10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
@@ -5788,7 +5759,6 @@ Associate 'un translated text start' with symbol (Enter selection):
   '6': untranslatedtextstart (*new*)
   '7': UNTRANSLATEDTEXTSTART (*new*)
 
-> -- send_mess: mess_name='insert'
  10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
@@ -5807,7 +5777,6 @@ Associate 'un translated text end' with symbol (Enter selection):
   '6': untranslatedtextend (*new*)
   '7': UNTRANSLATEDTEXTEND (*new*)
 
-> -- send_mess: mess_name='insert'
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
@@ -5833,7 +5802,6 @@ Associate 'on application' with symbol (Enter selection):
   '6': onapplication (*new*)
   '7': ONAPPLICATION (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'on application' with symbol (Enter selection):
 
   '0': no association
@@ -5845,7 +5813,6 @@ Associate 'on application' with symbol (Enter selection):
   '6': onapplication (*new*)
   '7': ONAPPLICATION (*new*)
 
-> -- send_mess: mess_name='insert'
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       self.deep_construct(CmdInterp, \
@@ -5884,7 +5851,6 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
   '5': symdictpicklefile (*new*)
   '6': SYMDICTPICKLEFILE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'SymDict pickle file' with symbol (Enter selection):
 
   '0': no association
@@ -5895,7 +5861,6 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
   '5': symdictpicklefile (*new*)
   '6': SYMDICTPICKLEFILE (*new*)
 
-> -- send_mess: mess_name='insert'
  16:       'language_specific_aliases': {}, \
  17:       'last_loaded_language': None, \
  18:       'symdict_pickle_file': symdict_pickle_file}, \
@@ -5931,7 +5896,6 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-> -- send_mess: mess_name='insert'
  19:       attrs)
  20:       
  21:    def spoken_form_regexp(self, spoken_form):
@@ -6040,7 +6004,6 @@ Associate 'this word' with symbol (Enter selection):
   '5': thisword (*new*)
   '6': THISWORD (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'hello' with symbol (Enter selection):
 
   '0': no association
@@ -6048,7 +6011,6 @@ Associate 'hello' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
-> -- send_mess: mess_name='insert'
  30:             regexp = regexp + regexp_this_word
  31:          return regexp
  32:          if not this_word:
@@ -6063,7 +6025,6 @@ Associate 'hi' with symbol (Enter selection):
   '2': Hi (*new*)
   '3': HI (*new*)
 
-> -- send_mess: mess_name='insert'
  32:          if not this_word:
  33:             this_word = 'hello'
  34:          elif this_word == hi: 
@@ -6078,7 +6039,6 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
-> -- send_mess: mess_name='insert'
  34:          elif this_word == hi: 
  35:             this_word = greetings
  36:          else:
@@ -6093,7 +6053,6 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
-> -- send_mess: mess_name='insert'
  35:             this_word = greetings
  36:          else:
  37:             this_word = 'done'
@@ -6111,7 +6070,6 @@ Associate 'some function' with symbol (Enter selection):
   '5': somefunction (*new*)
   '6': SOMEFUNCTION (*new*)
 
-> -- send_mess: mess_name='insert'
  36:          else:
  37:             this_word = 'done'
  38:             try:
@@ -6126,7 +6084,6 @@ Associate 'error' with symbol (Enter selection):
   '2': Error (*new*)
   '3': ERROR (*new*)
 
-> -- send_mess: mess_name='insert'
  38:             try:
  39:                some_function()
  40:             except : 
@@ -6144,7 +6101,6 @@ Associate 'all right' with symbol (Enter selection):
   '5': allright (*new*)
   '6': ALLRIGHT (*new*)
 
-> -- send_mess: mess_name='insert'
  40:             except : 
  41:                print 'error'
  42:             finally:
@@ -6172,7 +6128,6 @@ Associate 'O. S.' with symbol (Enter selection):
   '2': Os (*new*)
   '3': OS (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'R. E.' with symbol (Enter selection):
 
   '0': no association
@@ -6180,7 +6135,6 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'string' with symbol (Enter selection):
 
   '0': no association
@@ -6188,7 +6142,6 @@ Associate 'string' with symbol (Enter selection):
   '2': String (*new*)
   '3': STRING (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'system' with symbol (Enter selection):
 
   '0': no association
@@ -6196,7 +6149,6 @@ Associate 'system' with symbol (Enter selection):
   '2': System (*new*)
   '3': SYSTEM (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, system
   2: <CURSOR>
@@ -6213,7 +6165,6 @@ Associate 'auto test' with symbol (Enter selection):
   '5': autotest (*new*)
   '6': AUTOTEST (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'natural link' with symbol (Enter selection):
 
   '0': no association
@@ -6224,7 +6175,6 @@ Associate 'natural link' with symbol (Enter selection):
   '5': naturallink (*new*)
   '6': NATURALLINK (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'V. C. globals' with symbol (Enter selection):
 
   '0': no association
@@ -6235,7 +6185,6 @@ Associate 'V. C. globals' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
@@ -6253,7 +6202,6 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '5': actionsccpp (*new*)
   '6': ACTIONSCCPP (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
@@ -6272,7 +6220,6 @@ Associate 'application state' with symbol (Enter selection):
   '5': applicationstate (*new*)
   '6': APPLICATIONSTATE (*new*)
 
-> -- send_mess: mess_name='insert'
   2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: from application_state import application_state
@@ -6290,7 +6237,6 @@ Associate 'context generic' with symbol (Enter selection):
   '5': contextgeneric (*new*)
   '6': CONTEXTGENERIC (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'context C.' with symbol (Enter selection):
 
   '0': no association
@@ -6301,7 +6247,6 @@ Associate 'context C.' with symbol (Enter selection):
   '5': contextc (*new*)
   '6': CONTEXTC (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'context python' with symbol (Enter selection):
 
   '0': no association
@@ -6312,7 +6257,6 @@ Associate 'context python' with symbol (Enter selection):
   '5': contextpython (*new*)
   '6': CONTEXTPYTHON (*new*)
 
-> -- send_mess: mess_name='insert'
   3: from actions_ccpp import all
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
@@ -6330,7 +6274,6 @@ Associate 'context sensitive command' with symbol (Enter selection):
   '5': contextsensitivecommand (*new*)
   '6': CONTEXTSENSITIVECOMMAND (*new*)
 
-> -- send_mess: mess_name='insert'
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
@@ -6348,7 +6291,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '5': edsimulator (*new*)
   '6': EDSIMULATOR (*new*)
 
-> -- send_mess: mess_name='insert'
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
@@ -6363,7 +6305,6 @@ Associate 'object' with symbol (Enter selection):
   '2': Object (*new*)
   '3': OBJECT (*new*)
 
-> -- send_mess: mess_name='insert'
   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: from object import object
@@ -6381,7 +6322,6 @@ Associate 'symbol dictionary' with symbol (Enter selection):
   '5': symboldictionary (*new*)
   '6': SYMBOLDICTIONARY (*new*)
 
-> -- send_mess: mess_name='insert'
   7: from ed_simulator import ed_simulator
   8: from object import object
   9: import ed_simulator, symbol_dictionary
@@ -6399,7 +6339,6 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
-> -- send_mess: mess_name='insert'
   8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
@@ -6417,7 +6356,6 @@ Associate 'command interpreter' with symbol (Enter selection):
   '5': commandinterpreter (*new*)
   '6': COMMANDINTERPRETER (*new*)
 
-> -- send_mess: mess_name='insert'
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class command_interpreter(object):
@@ -6432,7 +6370,6 @@ Associate 'initialize' with symbol (Enter selection):
   '2': Initialize (*new*)
   '3': INITIALIZE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'on application' with symbol (Enter selection):
 
   '0': no association
@@ -6443,7 +6380,6 @@ Associate 'on application' with symbol (Enter selection):
   '5': onapplication (*new*)
   '6': ONAPPLICATION (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'none' with symbol (Enter selection):
 
   '0': no association
@@ -6451,7 +6387,6 @@ Associate 'none' with symbol (Enter selection):
   '2': None (*new*)
   '3': NONE (*new*)
 
-> -- send_mess: mess_name='insert'
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class command_interpreter(object):
@@ -6470,7 +6405,6 @@ Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
   '5': symboldictionarypicklefile (*new*)
   '6': SYMBOLDICTIONARYPICKLEFILE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'attributes' with symbol (Enter selection):
 
   '0': no association
@@ -6478,7 +6412,6 @@ Associate 'attributes' with symbol (Enter selection):
   '2': Attributes (*new*)
   '3': ATTRIBUTES (*new*)
 
-> -- send_mess: mess_name='insert'
  10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
@@ -6493,7 +6426,6 @@ Associate 'self' with symbol (Enter selection):
   '2': Self (*new*)
   '3': SELF (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'declare attributes' with symbol (Enter selection):
 
   '0': no association
@@ -6504,7 +6436,6 @@ Associate 'declare attributes' with symbol (Enter selection):
   '5': declareattributes (*new*)
   '6': DECLAREATTRIBUTES (*new*)
 
-> -- send_mess: mess_name='insert'
  10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
@@ -6522,7 +6453,6 @@ Associate 'un translated text start' with symbol (Enter selection):
   '5': untranslatedtextstart (*new*)
   '6': UNTRANSLATEDTEXTSTART (*new*)
 
-> -- send_mess: mess_name='insert'
  10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
@@ -6540,7 +6470,6 @@ Associate 'un translated text end' with symbol (Enter selection):
   '5': untranslatedtextend (*new*)
   '6': UNTRANSLATEDTEXTEND (*new*)
 
-> -- send_mess: mess_name='insert'
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
@@ -6558,7 +6487,6 @@ Associate 'deep construct' with symbol (Enter selection):
   '5': deepconstruct (*new*)
   '6': DEEPCONSTRUCT (*new*)
 
-> -- send_mess: mess_name='insert'
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:       self.deep_construct(command_interpreter, \
@@ -6583,7 +6511,6 @@ Associate 'known symbols' with symbol (Enter selection):
   '5': knownsymbols (*new*)
   '6': KNOWNSYMBOLS (*new*)
 
-> -- send_mess: mess_name='insert'
  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:       self.deep_construct(command_interpreter, \
  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
@@ -6601,7 +6528,6 @@ Associate 'language specific aliases' with symbol (Enter selection):
   '5': languagespecificaliases (*new*)
   '6': LANGUAGESPECIFICALIASES (*new*)
 
-> -- send_mess: mess_name='insert'
  14:       self.deep_construct(command_interpreter, \
  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:       'language_specific_aliases': {}, \
@@ -6619,7 +6545,6 @@ Associate 'last loaded language' with symbol (Enter selection):
   '5': lastloadedlanguage (*new*)
   '6': LASTLOADEDLANGUAGE (*new*)
 
-> -- send_mess: mess_name='insert'
  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:       'language_specific_aliases': {}, \
  17:       'last_loaded_language': none, \
@@ -6658,7 +6583,6 @@ Associate 'spoken form regular expression' with symbol (Enter selection):
   '5': spokenformregularexpression (*new*)
   '6': SPOKENFORMREGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'spoken form' with symbol (Enter selection):
 
   '0': no association
@@ -6669,7 +6593,6 @@ Associate 'spoken form' with symbol (Enter selection):
   '5': spokenform (*new*)
   '6': SPOKENFORM (*new*)
 
-> -- send_mess: mess_name='insert'
  19:       attributes)
  20:       
  21:    def spoken_form_regular_expression(self, spoken_form):
@@ -6684,7 +6607,6 @@ Associate 'words' with symbol (Enter selection):
   '2': Words (*new*)
   '3': WORDS (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'R. E.' with symbol (Enter selection):
 
   '0': no association
@@ -6692,7 +6614,6 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'split' with symbol (Enter selection):
 
   '0': no association
@@ -6700,7 +6621,6 @@ Associate 'split' with symbol (Enter selection):
   '2': Split (*new*)
   '3': SPLIT (*new*)
 
-> -- send_mess: mess_name='insert'
  19:       attributes)
  20:       
  21:    def spoken_form_regular_expression(self, spoken_form):
@@ -6726,7 +6646,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
  23:       re = ''
@@ -6744,7 +6663,6 @@ Associate 'a word' with symbol (Enter selection):
   '5': aword (*new*)
   '6': AWORD (*new*)
 
-> -- send_mess: mess_name='insert'
  22:       words = re.split('\s+', spoken_form)
  23:       re = ''
  24:       for a_word in words:
@@ -6759,7 +6677,6 @@ Associate 'first' with symbol (Enter selection):
   '2': First (*new*)
   '3': FIRST (*new*)
 
-> -- send_mess: mess_name='insert'
  23:       re = ''
  24:       for a_word in words:
  25:          first = a_word[0]
@@ -6775,7 +6692,6 @@ Associate 'rest' with symbol (Enter selection):
   '3': Rest (*new*)
   '4': REST (*new*)
 
-> -- send_mess: mess_name='insert'
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          re = a_word[1: ]
@@ -6793,7 +6709,6 @@ Associate 'regular expression this word' with symbol (Enter selection):
   '5': regularexpressionthisword (*new*)
   '6': REGULAREXPRESSIONTHISWORD (*new*)
 
-> -- send_mess: mess_name='insert'
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          re = a_word[1: ]
@@ -6808,7 +6723,6 @@ Associate 'lower' with symbol (Enter selection):
   '2': Lower (*new*)
   '3': LOWER (*new*)
 
-> -- send_mess: mess_name='insert'
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          re = a_word[1: ]
@@ -6823,7 +6737,6 @@ Associate 'upper' with symbol (Enter selection):
   '2': Upper (*new*)
   '3': UPPER (*new*)
 
-> -- send_mess: mess_name='insert'
  25:          first = a_word[0]
  26:          re = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
@@ -6842,7 +6755,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
  26:          re = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          if not re == '':
@@ -6861,7 +6773,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -6873,7 +6784,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          if not re == '':
  29:             re = re + '\s*'
@@ -6892,7 +6802,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -6904,7 +6813,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
  28:          if not re == '':
  29:             re = re + '\s*'
  30:             re = re + regular_expression_this_word
@@ -6930,7 +6838,6 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
-> -- send_mess: mess_name='insert'
  29:             re = re + '\s*'
  30:             re = re + regular_expression_this_word
  31:          return re
@@ -6948,7 +6855,6 @@ Associate 'this word' with symbol (Enter selection):
   '5': thisword (*new*)
   '6': THISWORD (*new*)
 
-> -- send_mess: mess_name='insert'
 Associate 'hello' with symbol (Enter selection):
 
   '0': no association
@@ -6956,7 +6862,6 @@ Associate 'hello' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
-> -- send_mess: mess_name='insert'
  30:             re = re + regular_expression_this_word
  31:          return re
  32:          if not this_word:
@@ -6971,7 +6876,6 @@ Associate 'hi' with symbol (Enter selection):
   '2': Hi (*new*)
   '3': HI (*new*)
 
-> -- send_mess: mess_name='insert'
  32:          if not this_word:
  33:             this_word = 'hello'
  34:          elif this_word == hi: 
@@ -6986,7 +6890,6 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
-> -- send_mess: mess_name='insert'
  34:          elif this_word == hi: 
  35:             this_word = greetings
  36:          else:
@@ -7001,7 +6904,6 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
-> -- send_mess: mess_name='insert'
  35:             this_word = greetings
  36:          else:
  37:             this_word = 'done'
@@ -7019,7 +6921,6 @@ Associate 'some function' with symbol (Enter selection):
   '5': somefunction (*new*)
   '6': SOMEFUNCTION (*new*)
 
-> -- send_mess: mess_name='insert'
  36:          else:
  37:             this_word = 'done'
  38:             try:
@@ -7034,7 +6935,6 @@ Associate 'error' with symbol (Enter selection):
   '2': Error (*new*)
   '3': ERROR (*new*)
 
-> -- send_mess: mess_name='insert'
  38:             try:
  39:                some_function()
  40:             except : 
@@ -7052,7 +6952,6 @@ Associate 'all right' with symbol (Enter selection):
   '5': allright (*new*)
   '6': ALLRIGHT (*new*)
 
-> -- send_mess: mess_name='insert'
  40:             except : 
  41:                print 'error'
  42:             finally:
@@ -7112,7 +7011,6 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-> -- send_mess: mess_name='pref_newline_convention'
 *** Start of source buffer ***
   1: index != 0<CURSOR>
 
@@ -7129,7 +7027,6 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-> -- send_mess: mess_name='insert'
 *** Start of source buffer ***
   1: index != 0index != 0<CURSOR>
 
@@ -7376,7 +7273,6 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-> -- send_mess: mess_name='pref_newline_convention'
 *** Start of source buffer ***
   1: index = 0
   2: <CURSOR>

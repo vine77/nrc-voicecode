@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import exceptions, sys, traceback
+import exceptions, sys, traceback, types
 
 """Functions for debugging purposes."""
 
@@ -30,7 +30,6 @@ def not_implemented(name):
 def virtual(name):
     """Prints warning message when a virtual method is called."""
     print "WARNING: virtual method '%s' called!!!" % name    
-
 
 
 def print_call_stack(print_to_file=sys.stdout):
@@ -45,4 +44,21 @@ def print_call_stack(print_to_file=sys.stdout):
         traceback.print_stack(file=print_to_file)
 
 
+def what_class(instance):
+    """Returns a string describing the class of an instance.
 
+    It works with any Python class or Python standard data types (int, float,
+    string, etc.), but not with extension classes."""
+
+    is_class = 'unknown'
+    try:
+        tmp = instance.__class__
+        is_class = tmp
+    except exceptions.AttributeError:
+        #
+        # The instance is not a python class. Maybe one of the
+        # standard python data types?
+        #
+        is_class = type(instance)
+
+    return is_class

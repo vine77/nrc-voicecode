@@ -217,22 +217,6 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         """
         return self.line_srv.line_num_of(position)
 
-    def number_lines(self, astring, startnum=1):
-        """Assign numbers to lines in a string.
-
-        Used mainly for the purpose of doing a printout of the buffer
-        content around the cursor (usually during regression testing).
-
-        *STR astring* is the string in question.
-
-        *INT startnum* is the number of the first line in *astring*
-        
-        Returns a list of pairs *[(INT, STR)]* where first entry is
-        the line number and the second entry is the line.
-        
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
-
-        return self.line_srv.number_lines(astring, startnum)        
 
     def len(self):
 	return len(self.content)

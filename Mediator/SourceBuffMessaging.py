@@ -389,5 +389,12 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
         self.app.apply_upd_descr(response[1]['updates'])
         
+    def line_num_of(self, position = None):
+	"""Ask external editor to return line number of a cursor position"""
 
 
+        args = {'pos': position}
+        self.app.talk_msgr.send_mess('line_num_of', args)
+        response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
+
+        return messaging.messarg2int(response[1]['value'])
