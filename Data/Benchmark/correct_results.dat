@@ -1,7 +1,7 @@
 
-D:\VoiceCode\VCode.bidirectional\Admin>cd D:\VoiceCode\VCode.bidirectional\Admin 
+D:\VoiceCode\VCode.noDlg\Admin>cd D:\VoiceCode\VCode.noDlg\Admin 
 
-D:\VoiceCode\VCode.bidirectional\Admin>python test.py all         
+D:\VoiceCode\VCode.noDlg\Admin>python test.py all         
 
 
 *******************************************************************************
@@ -213,7 +213,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 87ce40>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 87de20>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -228,9 +228,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c ***
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -259,8 +259,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.bidirectional\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py ***
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -361,11 +361,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.bidirectional\\Data\\TestData\\large_buff.py']
+   Source files are: ['D:\\VoiceCode\\VCode.noDlg\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -376,8 +376,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+*** Accept symbol match test. source='D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c' ***
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -436,7 +436,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -444,7 +444,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -456,9 +456,9 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1538,7 +1538,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1546,12 +1546,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.bidirectional\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1634,14 +1634,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -1831,9 +1831,9 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1883,7 +1883,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1903,15 +1903,15 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at a1dde0> from file 'D:\VoiceCode\VCode.bidirectional\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.bidirectional\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 9fec90> from file 'D:\VoiceCode\VCode.noDlg\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.noDlg\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1937,9 +1937,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1954,10 +1954,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1968,7 +1968,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1976,9 +1976,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -5057,7 +5057,7 @@ Saying: ['new statement']
 113:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -5067,10 +5067,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.bidirectional\\Data\\TestData\\native_python.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\\VoiceCode\\VCode.noDlg\\Data\\TestData\\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -5987,13 +5987,13 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
@@ -6773,7 +6773,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:    <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6781,9 +6781,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -6795,9 +6795,9 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -6869,7 +6869,7 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6877,12 +6877,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.bidirectional\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.noDlg\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6980,9 +6980,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.p
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
@@ -7651,4 +7651,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.bidirectional\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.noDlg\Config\py_std_sym.py'

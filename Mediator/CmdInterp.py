@@ -32,7 +32,6 @@ from Object import Object
 import EdSim, SymDict
 import sr_interface
 
-disable_dlg_select_symbol_matches = None
 
 class CmdInterp(Object):
     """Interprets Context Sensitive Commands spoken into a given application.
@@ -58,6 +57,9 @@ class CmdInterp(Object):
      reading/writing the symbol dictionary. If *None*, then don't
      read/write the symbol dictionary from/to file.
 
+    *BOOL disable_dlg_select_symbol_matches = None* -- If true, then
+    do not prompt the user for confirmation of new symbols.
+
     
     CLASS ATTRIBUTES**
 
@@ -67,7 +69,8 @@ class CmdInterp(Object):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+    def __init__(self, on_app=None, symdict_pickle_file=None,
+                 disable_dlg_select_symbol_matches = None, **attrs):
 
         #
         # These attributes can't be set at construction time
@@ -78,10 +81,11 @@ class CmdInterp(Object):
         # But these can
         #
         self.deep_construct(CmdInterp,
-                            {'on_app': on_app, 'cmd_index': {}, \
-                             'known_symbols': SymDict.SymDict(), \
-                             'language_specific_aliases': {},\
-                             'symdict_pickle_file': symdict_pickle_file},\
+                            {'on_app': on_app, 'cmd_index': {}, 
+                             'known_symbols': SymDict.SymDict(), 
+                             'language_specific_aliases': {},
+                             'symdict_pickle_file': symdict_pickle_file,
+                             'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches},
                             attrs)
 
 
@@ -356,11 +360,10 @@ class CmdInterp(Object):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
         
-        global disable_dlg_select_symbol_matches
 
-#        print '-- CmdInterp.dlg_select_symbol_match: called'
+#        print '-- CmdInterp.dlg_select_symbol_match: self.disable_dlg_select_symbol_matches=%s' % self.disable_dlg_select_symbol_matches
 
-        if disable_dlg_select_symbol_matches:
+        if self.disable_dlg_select_symbol_matches:
             choice_index = 0
         else:
             good_answer = 0
