@@ -25,6 +25,7 @@
 import debug
 import traceback
 import sys
+import code # for interpreting Python code at the command line
 from Object import Object
 #import wxEditor
 import TextBufferWX
@@ -77,6 +78,9 @@ class WaxEdSimPane(wxPanel):
     *{STR: ANY}* command_space -- local name space for user commands
     entered at the command line
 
+    *InteractiveInterpreter* command_line_interp -- from standard module
+    code
+
     *wxTextControl* log -- text control for log window to display
     output, error messages, and command history
 
@@ -85,6 +89,7 @@ class WaxEdSimPane(wxPanel):
     buffer.
 
     *wxTextControl* editor -- underlying text control for editor window
+
 
     """
 
@@ -130,6 +135,7 @@ class WaxEdSimPane(wxPanel):
 	self.command_space['the_pane'] = self
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
+	self.command_line_interp = code.InteractiveInterpreter(command_space)
 
         self.prompt_line.Add(self.prompt, 0, wxALL, 4)
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
@@ -191,9 +197,11 @@ class WaxEdSimPane(wxPanel):
 	    sys.stdout = self.command_log
 	    sys.stderr = self.command_log
 	    try:
-	        exec command \
-		    in sys.modules[self.__class__.__module__].__dict__, \
-		    self.command_space
+		if self.command_line_interp.runsource(command):
+		    sys.stderr.write('Error: incomplete input\n')
+#	        exec command \
+#		    in sys.modules[self.__class__.__module__].__dict__, \
+#		    self.command_space
                 #	  exec command in self.command_space
 	    except Exception, err:
 	        traceback.print_exc()
