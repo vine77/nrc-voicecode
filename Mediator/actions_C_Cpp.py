@@ -104,7 +104,7 @@ class ActionHeaderWrapper(Action):
                             {})
 
         
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""

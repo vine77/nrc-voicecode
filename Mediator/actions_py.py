@@ -63,7 +63,7 @@ class ActionPyInsertInBody(Action):
         self.deep_construct(ActionPyInsertInBody,
                             {'direction': direction},
                             args_super)
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -81,7 +81,7 @@ class ActionPyInsertInBody(Action):
 # if no blank line, insert a new one and indent it appropriately
             insert_indented_line = ActionInsert(code_bef = '\n\t', 
                 code_after = '')
-            insert_indented_line.execute(app, cont)
+            insert_indented_line.execute(app, cont, state = state)
         else:
 # if there is a blank line, just go to the end of it 
 # (and assume that it has the correct indentation)
@@ -113,7 +113,7 @@ class ActionPyAddArgument(Action):
                             args_super, \
                             {})
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
@@ -162,7 +162,7 @@ class ActionPyCommentAbove(Action):
                             args_super, \
                             {})
 
-    def execute(self, app, cont):
+    def execute(self, app, cont, state = None):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""

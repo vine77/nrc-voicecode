@@ -762,6 +762,99 @@ class NoAbbreviation(symbol_formatting.SymElement):
         """
         builder.suppress_abbreviation()
 
+class InterpState(OwnerObject):
+    """interface by which CSC actions can modify aspects of the
+    interpreter state to affect subsequent commands or the
+    interpretation process itself.
+    
+    examples:
+    - Hungarian Notation et al modifies the formatting style of the next
+      symbol
+    - No-Space will modify the spacing state (once the spacing engine is
+      implemented)
+
+    InterpState just provides methods which return other interface
+    objects.  The purpose of this architecture is to 
+    organize related interpreter state methods, while avoiding the need
+    to change the signature of the execute method whenever a new set of
+    methods are added
+
+    Note: InterpState retains ownership of all returned objects
+    """
+    def __init__(self, sym_style, **args):
+        """
+        **INPUTS**
+
+        *SymStyling sym_style* -- object providing the symbol styling 
+        interface
+        """
+        self.deep_construct(InterpState, 
+                            {
+                             'sym_style': sym_style
+                            },
+                            args)
+        self.add_owned('sym_style')
+
+    def styling_state(self):
+        """Returns a reference to an object providing the symbol styling 
+        interface
+
+        Note: InterpState retains ownership of the SymStyling object
+        """
+        return self.sym_style
+
+class SymStyling(OwnerObject):
+    """interface to the symbol styling methods of CmdInterp
+
+    """
+    def __init__(self, builder_factory, **args):
+        self.deep_construct(SymStyling, 
+            {'builder_factory': builder_factory}, args)
+
+    def expect(self, identifier):
+        """method used to tell the SymBuilderFactory to expect a
+        particular type of identifier
+
+        **INPUTS**
+
+        *STR identifier* -- name of the identifier type, or None for a
+        generic identifier
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the identifier is known
+        """
+        return self.builder_factory.expect(identifier)
+
+    def prefer(self, builder):
+        """method used to tell the SymBuilderFactory that a CSC has
+        given an explicit preference for particular SymBuilder to be
+        used for the next symbol
+
+        **INPUTS**
+
+        *STR identifier* -- name of the identifier type, or None for a
+        generic identifier
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the identifier is known
+        """
+        return self.builder_factory.prefer(builder)
+
+    def clear(self):
+        """clear expectations and preferences for the next identifier
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return self.builder_factory.clear()
+    
 class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
     
@@ -782,6 +875,13 @@ class CmdInterp(OwnerObject):
 
     *SymBuilderFactory builder_factory* -- factory for creating new
     SymBuilder objects
+
+    *InterpState state_interface* -- interface passed to
+    Action.log_execute, allowing it to affect the interpreter state for
+    subsequent commands
+
+    *SymStyling styling_state* -- interface which allows actions 
+    affect the formatting style of the next symbol
 
     BOOL *disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
@@ -827,12 +927,16 @@ class CmdInterp(OwnerObject):
                                  {None: WordTrie.WordTrie()},
                              'builder_factory':
                                  symbol_formatting.SymBuilderFactory(),
+                             'state_interface': None,
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
         self.name_parent('mediator')
         self.add_owned('known_symbols')
+        self.add_owned('state_interface')
         self.known_symbols = SymDict.SymDict(sym_file = sym_file, interp = self)
+        self.styling_state = SymStyling(self.builder_factory)
+        self.state_interface = InterpState(self.styling_state)
 
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance
@@ -975,6 +1079,12 @@ class CmdInterp(OwnerObject):
 
         untranslated_words = []
 
+# eventually, we will want to allow expectations and possibly explicit
+# formatting commands to persist across utterances if the buffer and
+# cursor position have not changed.  However, that requires a system for
+# detecting these changes, which doesn't exist yet, so for now we just
+# reset the state when we start interpreting a new utterance
+        self.styling_state.clear()
         builder = None
 
 # flag indicating whether untranslated words consists of an exact match
@@ -1083,7 +1193,7 @@ class CmdInterp(OwnerObject):
                         exact_symbol = 0
                         new_symbol = 0
                     actions_gen.ActionInsert(code_bef=chopped_LSA.written(), 
-                        code_after='').log_execute(app, None)
+                        code_after='').log_execute(app, None, self.state_interface)
                 phrase = phrase[LSA_consumes:]
                 processed_phrase = processed_phrase[LSA_consumes:]
                 head_was_translated = 1
@@ -1243,7 +1353,11 @@ class CmdInterp(OwnerObject):
             if untranslated_words:
                 self.match_untranslated_text(builder, 
                     untranslated_words, app, exact_symbol, new_symbol)
-            action.log_execute(app, context)
+# Eventually, we may want some of the styling state to persist across
+# some CSCs.  However, it is not clear how to achieve that, so for now, 
+# we just reset the state before executing the action
+            self.styling_state.clear()
+            action.log_execute(app, context, self.state_interface)
             return CSC_consumes
         return 0
 
@@ -1379,7 +1493,8 @@ class CmdInterp(OwnerObject):
                 self.known_symbols.complete_match(phrase))
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol written "%s"' % (untranslated_text))
-            actions_gen.ActionInsert(code_bef=written_symbol, code_after='').log_execute(app, None)                            
+            actions_gen.ActionInsert(code_bef=written_symbol,
+            code_after='').log_execute(app, None, self.state_interface)                            
             return
 
         # Match untranslated text to new known symbol or a known symbol with
@@ -1392,7 +1507,8 @@ class CmdInterp(OwnerObject):
         num_match = re.match(reg, untranslated_text)
         if num_match:
             untranslated_text = re.sub('\s', '', untranslated_text)        
-            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
+            actions_gen.ActionInsert(code_bef=untranslated_text,
+            code_after='').log_execute(app, None, self.state_interface)                            
             return
 
         symbol_matches = None
@@ -1405,7 +1521,8 @@ class CmdInterp(OwnerObject):
                 symbol_matches, app)
         else:
             symbol = builder.finish()
-            actions_gen.ActionInsert(code_bef=symbol, code_after='').log_execute(app, None)                
+            actions_gen.ActionInsert(code_bef=symbol,
+            code_after='').log_execute(app, None, self.state_interface)                
         
 
     def new_builder(self, app):
@@ -1553,13 +1670,15 @@ class CmdInterp(OwnerObject):
             #
             # Insert matched symbol
             #
-            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(app, None)            
+            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol,
+            code_after='').log_execute(app, None, self.state_interface)            
             if choice_index != 0:
                 trace('CmdInterp.dlg_select_symbol_match.mismatch', 
                 'selected alternative match %d: %s' % \
                 (choice_index, chosen_match.native_symbol))
         else:
-            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
+            actions_gen.ActionInsert(code_bef=untranslated_text,
+            code_after='').log_execute(app, None, self.state_interface)                        
             if untranslated_text != symbol_matches[0].native_symbol:
                 trace('CmdInterp.dlg_select_symbol_match.mismatch', 
                 'untranslated text %s != first match %s' % \

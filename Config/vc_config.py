@@ -393,6 +393,54 @@ word = CapitalizationWord(['No-Caps-Off'], caps = 'normal', one_word = 0)
 manual_formatting.add_capitalization_word(word)
 
 ######################################################################
+# Styling commands
+######################################################################
+
+manual_styling = CSCmdSet("manual symbol styling",
+    description = "manually choose the style for the following symbol")
+
+aCSC = CSCmd(spoken_forms = ['inter caps', 'cap Hungarian', 'Hungarian', 
+                             'Hungarian notation'],
+             meanings = {ContAny(): ActionStyling('std_intercaps')},
+             docstring = 'Format the next symbol in InterCaps' + \
+                 ' (a.k.a. Hungarian  notation)'
+            )
+
+manual_styling.add_csc(aCSC)
+
+aCSC = CSCmd(spoken_forms = ['no-caps Hungarian', 'lower Hungarian'],
+             meanings = {ContAny(): ActionStyling('std_lower_intercaps')},
+             docstring = 'Format the next symbol in lowerHungarianNotation'
+            )
+
+manual_styling.add_csc(aCSC)
+
+aCSC = CSCmd(spoken_forms = ['normal caps', 'join under'],
+             meanings = {ContAny(): ActionStyling('std_underscores')},
+             docstring = \
+                 'Format the next symbol with words_joined_by_underscores'
+            )
+
+manual_styling.add_csc(aCSC)
+
+aCSC = CSCmd(spoken_forms = ['all-caps style', 'all-caps join under'],
+             meanings = {ContAny(): ActionStyling('std_all_caps_underscores')},
+             docstring = \
+                 'Format the next symbol with all caps ' + \
+                 'WORDS_JOINED_BY_UNDERSCORES'
+            )
+
+manual_styling.add_csc(aCSC)
+
+aCSC = CSCmd(spoken_forms = ['run together', 'no-space style'],
+             meanings = {ContAny(): ActionStyling('std_run_together')},
+             docstring = 'Format the next symbol with words runtogether'
+            )
+
+manual_styling.add_csc(aCSC)
+
+
+######################################################################
 # Jumping out of balanced expressions
 ######################################################################
 #
@@ -1109,10 +1157,10 @@ add_identifier('operator', 'method')
 add_identifier('attribute')
 add_identifier('private attribute', 'attribute')
 
-set_builder_preferences(['std_underscore', 'std_intercaps',
-    'std_all_caps_underscore'])
-set_builder_preferences(['std_intercaps', 'std_underscore',
-    'std_all_caps_underscore'], identifier = 'class')
+set_builder_preferences(['std_underscores', 'std_intercaps',
+    'std_all_caps_underscores'])
+set_builder_preferences(['std_intercaps', 'std_underscores',
+    'std_all_caps_underscores'], identifier = 'class')
 
 ###############################################################################
 # Add words which are missing from the SR vocab
