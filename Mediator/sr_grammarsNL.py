@@ -66,30 +66,33 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
         GrammarBase.__init__(self)
         
         
-        # AD: Set this to 0 if you don't want to genarate a dictation through
-        #     cmd grammar.
-        #     Actually, this will still generate the grammar, but it will
+        # AD: Set thesee to 0 if you don't want to generate grammars for dictating
+        #     CSCs, LSAs and known symbol through a command grammar.
+        #     Actually, this will still generate the grammars, but they will
         #     be empty. 
         #     This is there as a temporary measure so I can experiment with 
-        #     turning the grammar on and off.
+        #     turning the grammars on and off.
         #     Should be removed once I have decided whether or not such a
         #     grammar is a good idea.
-        self.generate_gram = 0
+        self.generate_csc_lsa_gram = 0
+        self.generate_sym_gram = 0
         
         self.load(self._gram_spec())
         
     def _gram_spec(self):
-        if not self.generate_gram:
+        if not (self.generate_csc_lsa_gram or self.generate_sym_gram):
            # Need to provide a dummy grammar.
            gram_spec = "<vcode_utterance> exported = fdfasdfsdfasdfdgsgsdfgdfg;"
         else:
            gram_spec = """<dgndictation> imported;
                           <vcode_utterance> exported = <known_spoken_form>+ <dgndictation> | 
                                                        <dgndictation> <known_spoken_form>+;
-                          <known_spoken_form> = <known_spoken_cmd>|<known_spoken_symbol>;
+                          <known_spoken_form> = <known_spoken_cmd>|<known_spoken_symbol>;          
                           """
-           gram_spec = gram_spec + self.interpreter().gram_spec_spoken_cmd("known_spoken_cmd")
-           gram_spec = gram_spec + self.interpreter().gram_spec_spoken_symbol("known_spoken_symbol")                                        
+           gram_spec = gram_spec + \
+                       self.interpreter().gram_spec_spoken_cmd("known_spoken_cmd", not self.generate_csc_lsa_gram)
+           gram_spec = gram_spec + \
+                       self.interpreter().gram_spec_spoken_symbol("known_spoken_symbol", not self.generate_sym_gram)   
         
         debug.trace('DictThroughCmdWinGramNL._gram_spec', 'returning "%s"' % gram_spec)
                        

@@ -1442,10 +1442,7 @@ class CmdInterp(OwnerObject):
         self.known_symbols = SymDict.SymDict(sym_file = sym_file, interp = self)
         self.styling_state = SymStyling(self.builder_factory)
         self.state_interface = InterpState(self.styling_state)
-        # Generate and cache the grammar specifcations
-        self.gram_spec_spoken_cmd('known_spoken_cmd')
-        self.gram_spec_spoken_symbol('known_spoken_symbol')
-        
+                
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance
 
@@ -1518,7 +1515,7 @@ class CmdInterp(OwnerObject):
             regexp = regexp + regexp_this_word
         return regexp
 
-    def gram_spec_spoken_cmd(self, rule_name):
+    def gram_spec_spoken_cmd(self, rule_name, empty=0):
         """returns a NatSpeak grammar rule that matches the spoken form of
         any LSA or CSC.
 
@@ -1526,6 +1523,7 @@ class CmdInterp(OwnerObject):
 
         *STR rule_name* -- name of the grammar rule
 
+        *BOOL empty* --- If *false*, generate empty grammar.
 
         **OUTPUTS**
 
@@ -1533,23 +1531,24 @@ class CmdInterp(OwnerObject):
         """
 
         if self._spoken_commands_gram_rule == None:
-           known_spoken_forms = {}          
-           for cmd_dict in  self.commands.items():
-              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                          '** cmd_dict=%s' % repr(cmd_dict))
-              spoken_form = string.join(cmd_dict[0])
-              known_spoken_forms[spoken_form] = 1
-                 
-           for lsa_word_trie in self.language_specific_aliases.values():
-              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                          '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
-              for an_lsa_word_trie_entry in lsa_word_trie.items():
+           known_spoken_forms = {}
+           if not empty:          
+              for cmd_dict in  self.commands.items():
                  debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                             '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
-                 spoken_form = string.join(an_lsa_word_trie_entry[0])
-                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                             '** spoken_form=%s' % repr(spoken_form))                                                        
+                             '** cmd_dict=%s' % repr(cmd_dict))
+                 spoken_form = string.join(cmd_dict[0])
                  known_spoken_forms[spoken_form] = 1
+                 
+              for lsa_word_trie in self.language_specific_aliases.values():
+                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                             '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
+                 for an_lsa_word_trie_entry in lsa_word_trie.items():
+                    debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                                '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
+                    spoken_form = string.join(an_lsa_word_trie_entry[0])
+                    debug.trace('CmdInterp.gram_spec_spoken_cmd', 
+                                '** spoken_form=%s' % repr(spoken_form))                                                        
+                    known_spoken_forms[spoken_form] = 1
 
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
            #       make sure this rule will not be empty (which would cause
@@ -1563,13 +1562,15 @@ class CmdInterp(OwnerObject):
                    
         return self._spoken_commands_gram_rule
 
-    def gram_spec_spoken_symbol(self, rule_name): 
+    def gram_spec_spoken_symbol(self, rule_name, empty=0): 
         """returns a NatSpeak grammar rule that matches the spoken form of
         any known symbol.
 
         **INPUTS**
 
         *STR rule_name* -- name of the grammar rule
+
+        *BOOL empty* --- If *false*, generate empty grammar.
 
 
         **OUTPUTS**
@@ -1578,14 +1579,15 @@ class CmdInterp(OwnerObject):
         """
         if self._spoken_symbols_gram_rule == None:        
            known_spoken_forms = {}
-           for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
-              debug.trace('CmdInterp.gram_spec_spoken_symbol', 
-                          '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
-              spoken_form = string.join(a_word_trie_entry[0])
-              debug.trace('CmdInterp.gram_spec_spoken_symbol', 
-                          '** spoken_form=%s' % repr(spoken_form))                                                        
-              known_spoken_forms[spoken_form] = 1           
-                   
+           if not empty:
+              for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
+                 debug.trace('CmdInterp.gram_spec_spoken_symbol', 
+                             '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
+                 spoken_form = string.join(a_word_trie_entry[0])
+                 debug.trace('CmdInterp.gram_spec_spoken_symbol', 
+                             '** spoken_form=%s' % repr(spoken_form))                                                        
+                 known_spoken_forms[spoken_form] = 1           
+                      
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
            #       make sure this rule will not be empty (which would cause
            #       a crash).           
@@ -3033,6 +3035,85 @@ class CmdInterp(OwnerObject):
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
         self.known_symbols.print_abbreviations(show_unresolved)
+        
+    def generate_training_material(self, num_words=1000000,
+                                   words_per_file=10000, file_names="training"):
+        """generate files that can be used to tune NatSpeak's
+        language model to "VoiceCodese".
+        
+        **INPUTS**
+
+        *INT num_words=1 000 000* -- number of words of training
+        to be generated.
+                                   
+        *INT words_per_file=10 000* -- the training material will be split into
+        files of that length.
+        
+        *STR file_names="training"* -- Training files will have that name, with
+        an additional numeric suffix (ex: training1, training2).
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        
+        **SIDE EFFECTS**
+        
+        Files "%VCODE_HOME%/Data/Tmp/training1", etc... are created.
+        """
+        file_num = 1
+        file = None
+        while num_words > 0:
+           if file:
+              file.close()
+           file_path = os.path.join(vc_globals.tmp, "%s%s.txt" % 
+                                                   (file_names, file_num))
+           print "Generating training file: %s" % file_path
+           file = open(file_path, "w")
+           cmd_spoken_forms = self._cmd_spoken_forms()
+           sym_spoken_forms = self._sym_spoken_forms()
+           for ii in range(words_per_file/2):
+              file.write(" %s" % whrandom.choice(cmd_spoken_forms))
+              file.write(" %s" % whrandom.choice(sym_spoken_forms))
+              num_words = num_words - 2
+           file_num = file_num + 1
+
+    def _cmd_spoken_forms(self):
+       known_spoken_forms = {}     
+       debug.trace('CmdInterp._cmd_spoken_forms', 
+                   '** self.commands.items()=%s' % repr(self.commands.items()))            
+       for cmd_dict in  self.commands.items():
+          debug.trace('CmdInterp._cmd_spoken_forms', 
+                      '** cmd_dict=%s' % repr(cmd_dict))
+          spoken_form = string.join(cmd_dict[0])
+          known_spoken_forms[spoken_form] = 1
+                 
+       for lsa_word_trie in self.language_specific_aliases.values():
+          debug.trace('CmdInterp._cmd_spoken_forms', 
+                      '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
+          for an_lsa_word_trie_entry in lsa_word_trie.items():
+             debug.trace('CmdInterp._cmd_spoken_forms', 
+                             '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
+             spoken_form = string.join(an_lsa_word_trie_entry[0])
+             debug.trace('CmdInterp._cmd_spoken_forms', 
+                         '** spoken_form=%s' % repr(spoken_form))                                                        
+             known_spoken_forms[spoken_form] = 1
+                  
+       return known_spoken_forms.keys()
+       
+    def _sym_spoken_forms(self):
+       known_spoken_forms = {}
+       for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
+          debug.trace('CmdInterp._sym_spoken_forms', 
+                      '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
+          spoken_form = string.join(a_word_trie_entry[0])
+          debug.trace('CmdInterp._sym_spoken_forms', 
+                      '** spoken_form=%s' % repr(spoken_form))                                                        
+          known_spoken_forms[spoken_form] = 1           
+                      
+       return known_spoken_forms.keys()
+    
+
+        
 
 # functions, not methods
 
@@ -3050,6 +3131,7 @@ def process_initials(spoken):
     if re.match('[A-Z]\.$', spoken):
         return string.lower(spoken[0])
     return spoken
+    
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

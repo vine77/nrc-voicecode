@@ -55,6 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                         'CmdInterp._cmd_spoken_forms': 1,
 #                         'DictThroughCmdWinGramNL._gram_spec': 1,
 #                         'DictThroughCmdWinGramNL': 1,
 #                         'DictWinGram': 1,
