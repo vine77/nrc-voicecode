@@ -876,7 +876,7 @@ class WinGramFactory(Object):
 
         **INPUTS**
 
-        *[STR]* spell_words -- words which must proceed the first spelled 
+        *[STR]* spell_words -- words which must precede the first spelled 
         letter, or None for an unrestricted spelling grammar.  The latter is not
         advisable unless dictation is disabled.
 
@@ -895,7 +895,7 @@ class WinGramFactory(Object):
 
         **INPUTS**
 
-        *[STR]* spell_words -- words which must proceed the first spelled 
+        *[STR]* spell_words -- words which must precede the first spelled 
         letter, or None for an unrestricted spelling grammar.  The latter is not
         advisable unless dictation is disabled.
 
@@ -1385,7 +1385,7 @@ class NaturalSpelling(GramCommon):
 
     *BOOL* active -- is grammar active?
 
-    *[STR]* spell_words -- words which must proceed the first spelled letter, 
+    *[STR]* spell_words -- words which must precede the first spelled letter, 
     or None for an unrestricted spelling grammar.  The latter is not
     advisable unless dictation is disabled.
 
@@ -1396,10 +1396,12 @@ class NaturalSpelling(GramCommon):
     def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
         self.deep_construct(NaturalSpelling,
             {'active' : 0,
-             'spell_words': None,
+             'spell_words': spell_words,
              'spelling_cbk': spelling_cbk
             }, attrs)
-        self.spell_words = map(self.capitalize_rule, spell_words)
+
+        if spell_words:
+            self.spell_words = map(self.capitalize_rule, spell_words)
 
     def activate(self, window):
         """activates the grammar for recognition tied to a window
@@ -1442,7 +1444,7 @@ class MilitarySpelling(GramCommon):
 
     *BOOL* active -- is grammar active?
 
-    *[STR]* spell_words -- words which must proceed the first spelled letter, 
+    *[STR]* spell_words -- words which must precede the first spelled letter, 
     or None for an unrestricted spelling grammar.  
 
     *FCT(STR)* spelling_cbk -- callback to signal recognition
@@ -1451,10 +1453,11 @@ class MilitarySpelling(GramCommon):
     def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
         self.deep_construct(MilitarySpelling,
             {'active' : 0,
-             'spell_words': None,
+             'spell_words': spell_words,
              'spelling_cbk': spelling_cbk
             }, attrs)
-        self.spell_words = map(self.capitalize_rule, spell_words)
+        if spell_words:
+            self.spell_words = map(self.capitalize_rule, spell_words)
 
     def activate(self, window):
         """activates the grammar for recognition tied to a window

@@ -144,11 +144,12 @@ def symbol_match_test(interp, sources, pseudo_symbols):
         # Match the symbols
         #
         for a_symbol in pseudo_symbols:
-            matches = interp.match_pseudo_symbol(a_symbol)
+            matches, weak_matches, forbidden = \
+                interp.match_pseudo_symbol(a_symbol)
             sys.stdout.write('\'%s\' matches: [' % a_symbol) 
             if matches:
                 for a_match in matches:
-                    sys.stdout.write('%s, ' % a_match.native_symbol)
+                    sys.stdout.write('%s, ' % a_match[1])
             else: sys.stdout.write('[]')
             sys.stdout.write(']\n')
 
