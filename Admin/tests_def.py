@@ -3967,25 +3967,35 @@ add_test('profile_config', test_profile_config,
 def test_temporary():  
     testing.init_simulator_regression()
     
+    native_py_file = vc_globals.test_data + os.sep + 'native_python.py'    
+    commands.compile_symbols([native_py_file])
+        
+    #
+    # These words must be in the SR vocab, otherwise some of the say()
+    # statements will faile
+    #
+    sr_interface.addWord(sr_interface.vocabulary_entry('aliases', 'aliases'))
+    sr_interface.addWord(sr_interface.vocabulary_entry('globals', 'globals'))
+
     commands.open_file('blah.py')
-            
-    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    commands.say(['import\\import modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+        
+#    commands.say(['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['import', 'modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+        
+    commands.say(['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.say(['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+        
+    commands.say(['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
     
-    commands.say(['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.say(['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-   
-#    commands.say(['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    commands.say(['back indent'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    commands.say(['define', 'method'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    commands.say(['spoken', 'form', 'regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
 #add_test('temp', test_temporary, desc='temporary test')
 
