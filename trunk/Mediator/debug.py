@@ -104,6 +104,7 @@ def print_trace(trace_id, message, insert_nl=1):
         trace_file.write('-- %s: %s' % (trace_id, message))
         if insert_nl:
             trace_file.write('\n')
+	trace_file.flush()
 
 
 trace_fct = dont_print_trace

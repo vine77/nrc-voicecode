@@ -24,6 +24,7 @@ config_traces(status="on",
 #                             'SourceBuffEdSim': 1
                              })
 
+#config_traces(status="on", active_traces='all')
 
 def create_tcp_mess(sock):
     """Creates a TCP/IP messenger
