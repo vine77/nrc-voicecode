@@ -87,28 +87,55 @@ class EdSim(AppState.AppState):
 
         self.open_buffers[name] = self.only_buffer
 
-    def save_file(self, full_path):
+    def save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
 
-        Save file with path *STR full_path*.        
+        **INPUTS**
+	
+	*STR full_path* -- full path under which to save the file, or
+	None to use the buffer name
+
+	*BOOL no_prompt* -- overwrite any existing file without
+	prompting.  No_prompt should only be set to true if the caller
+	has already prompted the user.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was successfully saved
         """
+	f_path = full_path
+	if f_path == None:
+	    f_path = self.curr_buffer_name()
+	elif not no_prompt:
+	    if self.curr_buffer_name() != f_path \
+		  and os.path.exists(f_path):
+		print 'overwrite file %s (y/n)?' % (f_path)
+		answer = sys.stdin.readline()
+		answer = answer[:len(answer)-1]
+	       
+		while 1:
+		    if answer == 'y':
+			overwrite = 1
+			break
+		    elif answer == 'n':
+			overwrite = 0
+			return 0
+		    print "\nPlease answer 'y' or 'n'."
         try:
-            source_file = open(full_path, 'w')
+            source_file = open(f_path, 'w')
             source_file.write(self.curr_buffer().contents())
             source_file.close()
         except Exception, err:
-            return
-	path, short = os.path.split(full_path)
+            return 0
+	path, short = os.path.split(f_path)
 	if path:
 	    self.curr_dir = path
 	old_name = self.curr_buffer_name()
-	if not old_name or old_name != full_path:
-	    self.only_buffer_name = full_path
-	    self.open_buffers[full_path] = self.only_buffer
+	if not old_name or old_name != f_path:
+	    self.only_buffer_name = f_path
+	    self.open_buffers[f_path] = self.only_buffer
 	    del self.open_buffers[old_name]
-	    self.the_editor.set_name(short) 
-	if self.curr_buffer_name() != None:
-	    del self.open_buffers[self.curr_buffer_name()]
+	return 1
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?

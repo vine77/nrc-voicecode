@@ -104,12 +104,15 @@ class WaxEdit:
 	"""
 	debug.virtual('WaxEdit.open_file_in_buffer')
 
-    def save_file(self, full_path):
+    def save_file(self, full_path, no_prompt = 0):
 	"""Saves the file in the existing TextBufferWX
 
 	**INPUTS**
 
-	*none*
+	*STR full_path* -- path name of file to save
+
+	*BOOL no_prompt* -- if true, don't prompt before overwriting
+	an existing file.
 
 	**OUTPUTS**
 

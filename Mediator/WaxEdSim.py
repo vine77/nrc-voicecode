@@ -485,13 +485,14 @@ class WaxEdSimFrame(wxFrame):
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-	    self.app_control.save_file(file_path)
+# file dialog will already have prompted
+	    self.app_control.save_file(file_path, no_prompt = 1)
 	dlg.Destroy()
 
     def save_file(self, event):
 	name = self.app_control.curr_buffer_name()
 	if name:
-	    self.app_control.save_file(name)
+	    self.app_control.save_file(name, no_prompt = 1)
 	else:
 	    self.save_as(self, event)
 
@@ -598,18 +599,26 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	"""
 	return self.frame.editor_buffer().underlying.LoadFile(name)
     
-    def save_file(self, full_path):
+    def save_file(self, full_path, no_prompt = 0):
 	"""Saves the file in the existing TextBufferWX
 
 	**INPUTS**
 
-	*none*
+	*STR full_path* -- path name of file to save
+
+	*BOOL no_prompt* -- if true, don't prompt before overwriting
+	an existing file.
 
 	**OUTPUTS**
 
 	*BOOL* -- true on success (otherwise the existing file is left
 	there)
 	"""
+	if not no_prompt:
+	    answer = wxMessageBox("Replace file %s?" % (full_path), 
+		"Save File", wxYES_NO, self.frame)
+	    if answer != wxYES:
+		return 0
 	return self.frame.editor_buffer().underlying.SaveFile(full_path)
 
     def is_active(self):

@@ -183,6 +183,22 @@ def open_file(fname):
     the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
 # show_buff()
 
+def save():
+    """save current buffer"""
+    global the_mediator
+    the_mediator.interp.on_app.save_file()
+
+def save_as(fname, no_prompt = 0):
+    """save current buffer
+
+    *STR fname* is the path of the file
+    
+    *BOOL no_prompt* -- If true, don't prompt before overwriting
+    an existing file"""
+
+    global the_mediator
+    the_mediator.interp.on_app.save_file(fname, no_prompt = no_prompt)
+
 def compile_symbols(file_list):
     global the_mediator
     
