@@ -1,0 +1,530 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Oct 03 16:08:10 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class EdSim</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class EdSim - VoiceCode editor simulator.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="EdSim.html">EdSim</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">EdSim.EdSim<BR>
+&nbsp;&nbsp;AppState.AppState<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EdSim</SPAN>(<A CLASS="DocLink" HREF="AppState.AppState.html">AppState</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Moves the cursor to a position in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.goto_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.goto_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Go to a particular line in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Indent code in a source buffer region.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.insert"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.insert</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.insert_indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.insert_indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Insert code into source buffer and indent it.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.move_to"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.move_to</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.number_lines"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.number_lines</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)<SPAN CLASS="OneLiner"> # Assign numbers to lines in a string.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.select"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.select</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">rec_utterances=[]</SPAN>, <SPAN CLASS="Argument">open_buffers={}</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">active_field=None</SPAN>, <SPAN CLASS="Argument">curr_buffer=None</SPAN>, <SPAN CLASS="Argument">breadcrumbs=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Indent code in a source buffer region.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.insert"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.insert</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.insert_indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.insert_indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Insert code into source buffer and indent it.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.move_to"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.move_to</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.print_buff_content"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.print_buff_content</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Prints the content of a source  buffer to the VoiceCode console.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.select"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.select</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.select_region"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.select_region</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)<SPAN CLASS="OneLiner"> # Sets the selection in current buffer to a particular region.</SPAN>
+
+</PRE><H2>Description</H2><P>
+This class is used to simulate an external programming editor.</P>
+<P>
+Useful for debuggin VoiceCode mediator in isolation from external editor.</P>
+<P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>CLASSS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="EdSim.EdSim.delete" CLASS="Method">EdSim.EdSim.delete(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Delete text in a buffer.</P>
+
+<P>
+Delete text from position <EM>INT start</EM> to position <EM>INT end</EM> in
+source buffer with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use buffer [curr_buffer].</P>
+<P>
+If <EM>end</EM> is <EM>None</EM>, delete til end of buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, delete from position [curr_pos] of the
+buffer.</P>
+<H2 ID="EdSim.EdSim.goto" CLASS="Method">EdSim.EdSim.goto(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Moves the cursor to a position in a buffer.</P>
+
+<P>
+<EM>INT pos</EM> is the position.</P>
+<P>
+<EM>STR f_name</EM> is the name of the file associated with the
+ buffer. If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.goto_line" CLASS="Method">EdSim.EdSim.goto_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">linenum</SPAN>, <SPAN CLASS="Argument">where=-1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Go to a particular line in a buffer.</P>
+
+<P>
+<EM>INT linenum</EM> is the line number.</P>
+<P>
+<EM>INT where</EM> indicates if the cursor should go at the end
+ (*where &gt; 0*) or at the beginning (*where &lt; 0*) of the line.</P>
+<P>
+<EM>STR f_name</EM> is the name of the file associated with the
+ buffer. If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.indent" CLASS="Method">EdSim.EdSim.indent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Indent code in a source buffer region.</P>
+
+<P>
+Indent code in source buffer with name <EM>STR f_name</EM> between
+positions <EM>INT start</EM> and <EM>INT end</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.insert" CLASS="Method">EdSim.EdSim.insert(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Replace text in source buffer with name <EM>STR f_name</EM>
+between positions <EM>INT start</EM> and <EM>INT to</EM> with text *STR
+text*.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.Appstate.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="SourceBuff.SourceBuff.html">cur_pos</A> of the source buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="SourceBuff.SourceBuff.html">cur_pos</A> of source buffer.</P>
+<H2 ID="EdSim.EdSim.insert_indent" CLASS="Method">EdSim.EdSim.insert_indent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Insert code into source buffer and indent it.</P>
+
+<P>
+Replace code in source buffer with name <EM>STR f_name</EM> between
+positions <EM>INT start</EM> and <EM>INT to</EM> with the concatenation of
+code <EM>STR code_bef</EM> and <EM>str code_after</EM>. Cursor is put right
+after code <EM>STR bef</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of the source buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of source buffer.</P>
+<H2 ID="EdSim.EdSim.move_to" CLASS="Method">EdSim.EdSim.move_to(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</P>
+
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.number_lines" CLASS="Method">EdSim.EdSim.number_lines(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">astring</SPAN>, <SPAN CLASS="Argument">startnum=1</SPAN>)</H2>
+<P>Assign numbers to lines in a string.</P>
+
+<P>
+<EM>STR astring</EM> is the string in question.</P>
+<P>
+<EM>INT startnum</EM> is the number of the first line in <EM>astring</EM></P>
+<P>
+Returns a list of pairs <EM>[(INT, STR)]</EM> where first entry is
+the line number and the second entry is the line.</P>
+<H2 ID="EdSim.EdSim.open_file" CLASS="Method">EdSim.EdSim.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang=None</SPAN>)</H2>
+<P>Open a file.</P>
+
+<P>
+Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.        
+</P>
+<H2 ID="EdSim.EdSim.search_for" CLASS="Method">EdSim.EdSim.search_for(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Moves cursor to the next occurence of regular expression
+<EM>STR regexp</EM> in buffer with file name <EM>STR f_name</EM>.</P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> direction
+<DD>if positive, search forward, otherwise
+ search backward
+<DT>
+<EM>INT</EM> num
+<DD>number of occurences to search for
+<DT>
+<EM>INT</EM> where
+<DD>if positive, move cursor after the occurence,
+otherwise move it before
+<DT>
+<EM>STR</EM> f_name
+<DD>name of the file in buffer where the search
+ should be done. If <EM>None</EM>, use [self.curr_buffer].
+</DL>
+<P>
+Returns 1 if and only if an occurence was found, and 0 otherwise.                          
+        .. [self.curr_buffer] AppState.AppState.html</P>
+<H2 ID="EdSim.EdSim.select" CLASS="Method">EdSim.EdSim.select(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Selects from position <EM>INT start</EM> up to <EM>INT end</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppState.AppState.delete" CLASS="Method">AppState.AppState.delete(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Delete text in a buffer.</P>
+
+<P>
+Delete text from position <EM>INT start</EM> to position <EM>INT end</EM> in
+source buffer with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>end</EM> is <EM>None</EM>, delete til end of buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, delete from position [self.cur_pos] of the
+buffer.
+.. [self.cur_pos] AppState        
+</P>
+<H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<P>Drops a breadcrumb</P>
+
+<P>
+<EM>INT pos</EM> is the position where to drop the crumb. *STR
+ buffname* is the name of the source buffer.</P>
+<P>
+If <EM>pos</EM> not specified, drop breadcrumb at position
+[self.cur_pos] of buffer.</P>
+<P>
+If <EM>buff</EM> not specified either, drop breadcrumb <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.find_buff" CLASS="Method">AppState.AppState.find_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>Returns the open buffer with name <EM>STR buff_name</EM>.</P>
+
+<P>
+If no such buffer, returns <EM>None</EM>.</P>
+<P>
+If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.focus_is_source" CLASS="Method">AppState.AppState.focus_is_source(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)</H2>
+<P>Check if prog. env. focus is a source buffer</P>
+
+<P>
+Returns <EM>true</EM> if and only if focus of programming environment
+is a source buffer written in language <EM>STR lang_name</EM>.
+</P>
+<H2 ID="AppState.AppState.goto" CLASS="Method">AppState.AppState.goto(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Moves the cursor to position <EM>INT pos</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.indent" CLASS="Method">AppState.AppState.indent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Indent code in a source buffer region.</P>
+
+<P>
+Indent code in source buffer with name <EM>STR f_name</EM> between
+positions <EM>INT start</EM> and <EM>INT end</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.insert" CLASS="Method">AppState.AppState.insert(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Replace text in source buffer with name <EM>STR f_name</EM>
+between positions <EM>INT start</EM> and <EM>INT to</EM> with text *STR
+text*.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of the source buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of source buffer.</P>
+<H2 ID="AppState.AppState.insert_indent" CLASS="Method">AppState.AppState.insert_indent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">code_bef</SPAN>, <SPAN CLASS="Argument">code_after</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Insert code into source buffer and indent it.</P>
+
+<P>
+Replace code in source buffer with name <EM>STR f_name</EM> between
+positions <EM>INT start</EM> and <EM>INT to</EM> with the concatenation of
+code <EM>STR code_bef</EM> and <EM>str code_after</EM>. Cursor is put right
+after code <EM>STR bef</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of the source buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of source buffer.</P>
+<H2 ID="AppState.AppState.move_to" CLASS="Method">AppState.AppState.move_to(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</P>
+
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.
+</P>
+<H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<P>Open a file.</P>
+
+<P>
+Open file with name <EM>STR name</EM>.        
+</P>
+<H2 ID="AppState.AppState.pop_breadcrumbs" CLASS="Method">AppState.AppState.pop_breadcrumbs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)</H2>
+<P>Pops breadcrumbs from the breadcrumbs stack</P>
+
+<P>
+<EM>INT num</EM> is the number of crumbs to pop. If None, then pop 1 crumb.</P>
+<P>
+if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
+breadcrumb.
+</P>
+<H2 ID="AppState.AppState.print_buff_content" CLASS="Method">AppState.AppState.print_buff_content(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>)</H2>
+<P>Prints the content of a source  buffer to the VoiceCode console.</P>
+
+<P>
+<EM>[STR file_name]</EM> is the name of the source file for the buffer to
+print. If <EM>None</EM>, then print current buffer.    
+</P>
+<H2 ID="AppState.AppState.search_for" CLASS="Method">AppState.AppState.search_for(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Moves cursor to the next occurence of regular expression
+<EM>STR regexp</EM> in buffer with file name <EM>STR f_name</EM>.</P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> direction
+<DD>if positive, search forward, otherwise
+ search backward
+<DT>
+<EM>INT</EM> num
+<DD>number of occurences to search for
+<DT>
+<EM>INT</EM> where
+<DD>if positive, move cursor after the occurence,
+otherwise move it before
+<DT>
+<EM>STR</EM> f_name
+<DD>name of the file in buffer where the search
+ should be done. If <EM>None</EM>, use [self.curr_buffer].
+</DL>
+<P>
+Returns 1 if and only if an occurence was found, and 0 otherwise.                          
+        .. [self.curr_buffer] AppState.AppState.html</P>
+<H2 ID="AppState.AppState.select" CLASS="Method">AppState.AppState.select(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Selects from position <EM>INT start</EM> up to <EM>INT end</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="AppState.AppState.select_region" CLASS="Method">AppState.AppState.select_region(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)</H2>
+<P>Sets the selection in current buffer to a particular region.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> start
+<DD>start of region 
+<DT>
+<EM>INT</EM> end
+<DD>end of region 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
