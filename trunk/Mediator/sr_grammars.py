@@ -104,7 +104,7 @@ class WinGram(GramCommon, OwnerObject):
 
         *none*
         """
-        debug.virtual('WinGram._set_exclusive_when_active')
+        debug.virtual('WinGram._set_exclusive_when_active', self)
         
     def set_exclusive(self, exclusive = 1):
         """makes the grammar exclusive (or not).  Generally used only
@@ -662,6 +662,89 @@ class BasicCorrectionWinGram(WinGram):
         self.manager.correct_recent()
 
 
+class SymbolReformattingWinGram(WinGram):
+    """abstract base class for window-specific grammar for reformatting
+    symbols.
+
+    **INSTANCE ATTRIBUTES**
+
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        """
+        **INPUTS**
+
+        """
+        self.deep_construct(SymbolReformattingWinGram,
+            {}, attrs)
+
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', 'correction', or 'reformatting')
+        """
+        return 'reformatting'
+        
+    def reformat_recent(self, n = 1):
+        """method which subclass must call when the grammar 
+        recognizes Reformat That/Reformat n, to reformat the n symbols,
+        if possible.
+
+        **INPUTS**
+
+        *INT n* -- number of symbols to reformat
+
+        **OUTPUTS**
+        
+        *INT* -- number of symbols successfully reformatted
+        """
+        debug.trace('SymbolReformattingWinGram.scratch_recent', 
+            'trying to scratch %d' %n)
+#        n_done = self.manager.scratch_recent(n)
+#        debug.trace('SymbolReformattingWinGram.scratch_recent', 
+#            'actually scratched %d' %n_done)
+#        return n_done
+
+
+    def on_reformat_last(self):
+        """method which subclass must call when the grammar 
+        recognizes Reformat That with nothing selected
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+#        self.manager.correct_last()
+
+    def on_reformat_recent(self):
+        """method which subclass must call when the grammar 
+        recognizes Reformat Recent 
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+#        self.manager.correct_recent()
+
+
+
 class WinGramFactory(Object):
     """abstract base class for a factory which returns 
     window-specific grammars
@@ -888,6 +971,25 @@ class WinGramFactory(Object):
         *BasicCorrectionWinGram* -- new basic correction grammar
         """
         debug.virtual('WinGramFactory.make_correction')
+
+    def make_reformatting(self, manager, window = None, exclusive = 0):
+        """create a new symbol reformatting grammar
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *SymbolReformattingWinGram* -- new symbol reformatting grammar
+        """
+        debug.virtual('WinGramFactory.make_reformatting')
+
 
     def make_choices(self, choice_words):
         """create a new ChoiceGram choice grammar
@@ -1295,6 +1397,88 @@ class BasicCorrectionWinGramDummy(BasicCorrectionWinGram):
         self.active = 0
 
 
+class SymbolReformattingWinGramDummy(SymbolReformattingWinGram):
+    """dummy implementation of window-specific symbol reformatting grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* silent -- don't print diagnostics
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, silent = 0, **attrs):
+        self.deep_construct(SymbolReformattingWinGramDummy,
+            {'silent': silent}, attrs)
+        if not self.silent:
+            self.identify_grammar()
+            print "init"
+
+    def __del__(self):
+        if not self.silent:
+            self.identify_grammar()
+            print "del"
+
+    def identify_grammar(self):
+        """print information identifying the grammar by buffer and
+        window
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.window == None:
+            winname = "global"
+        else:
+            winname = "window %d" % self.window
+        print "SymbolReformattingWinGramDummy for window = %s" % winname
+
+    def activate(self):
+        """activates the grammar for recognition
+        tied to the current window.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.silent:
+            self.identify_grammar()
+            print "activating: ",
+            if self.window == None:
+                print "global ",
+            else:
+                print "%d " % (self.window),
+            if self.exclusive:
+                print "exclusive "
+            print ""
+        self.active = 1
+    
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.silent:
+            self.identify_grammar()
+            print "deactivating"
+        self.active = 0
+
+
 class WinGramFactoryDummy(Object):
     """implementation fo WinGramFactory with dummy grammars for
     regression testing.
@@ -1426,6 +1610,24 @@ class WinGramFactoryDummy(Object):
         return BasicCorrectionWinGramDummy(manager = manager, window = window, 
             exclusive = exclusive)
     
+    def make_reformatting(self, manager, window = None, exclusive = 0):
+        """create a new symbol reformatting grammar
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which owns this grammar
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *SymbolReformattingWinGram* -- new basic correction grammar
+        """
+        return SymbolReformattingWinGramDummy(manager = manager, window = window, 
+            exclusive = exclusive)
     
 class ChoiceGram(GramCommon):
     """abstract base class for correction window Choose n grammar
