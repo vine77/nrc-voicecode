@@ -1865,7 +1865,7 @@ class GenEditFrames(GenEditBuffers):
         init_dir = self.curr_dir
         try:
             old_file_name = self.filenames[buff_name]
-            if old_file_name is not None:
+            if not (old_file_name is None):
                 path, short = os.path.split(old_file_name)
                 if path:
                     init_dir = path

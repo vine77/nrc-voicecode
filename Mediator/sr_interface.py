@@ -361,16 +361,15 @@ def deleteWord(word, *rest):
     have ben added by the real Vocabulary Builder)"""
 
 #    trace('sr_interface.deleteWord', 'word=%s, rest=%s' % (word, rest))
-    if speech_able():
-        flag = getWordInfo(word, 4)
-        num_words = len(re.split('\s+', word))
-        if addedByVC(flag) and num_words > 1:
+    flag = getWordInfo(word)
+    num_words = len(re.split('\s+', word))
+    if addedByVC(flag) and num_words > 1:
 #            trace('sr_interface.deleteWord', 'actually deleting word %s' % word)
-            sr_user_needs_saving = 1
-            return natlink.deleteWord(word)
-        else:
+        sr_user_needs_saving = 1
+        return natlink.deleteWord(word)
+    else:
 #            trace('sr_interface.deleteWord', 'word not added by VoiceCode %s' % word)
-            return None
+        return None
 
 def clean_written_form(written_form, clean_for=None):
     """Substitutes special charactes like newline and space in written form
@@ -534,7 +533,7 @@ def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
 # instead, just remove leading and trailing spaces
     spoken_form = string.strip(spoken_form)
     entry = spoken_form
-    if (written_form is not None) and spoken_form != written_form:
+    if not (written_form is None) and spoken_form != written_form:
         #
         # Substitute special characters in written form (e.g. {Spacebar},
         # {Enter}) to the form used in VoiceCode (e.g. ' ', '\n')

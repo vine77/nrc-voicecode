@@ -303,7 +303,7 @@ class BuilderRegistry(Object):
         as a fallback if the user doesn't specify his or her own
         preferences
         """
-        return self.order
+        return copy.copy(self.order)
 
 # module-global registry
 registry = BuilderRegistry()
@@ -349,7 +349,7 @@ class SymBuilderFactory(Object):
 
         **OUTPUTS**
         """
-        if parent is not None:
+        if not (parent is None):
             if not self.identifier_types.has_key(parent):
                 raise RuntimeError('parent is unknown identifier type %s' \
                     % parent)
@@ -415,7 +415,7 @@ class SymBuilderFactory(Object):
         except KeyError:
             preferences = {}
             self.preferences[language] = preferences
-        if identifier is not None:
+        if not (identifier is None):
             if not self.identifier_types.has_key(identifier):
                 raise RuntimeError('unknown identifier type %s' % identifier)
         for builder in builders:
@@ -560,7 +560,7 @@ class SymBuilderFactory(Object):
             return None
         while 1:
             try:
-                return language_map[identifier]
+                return copy.copy(language_map[identifier])
             except KeyError:
                 debug.trace('SymBuilderFactory.by_language', 
                     'no entry for identifier %s' % identifier)
@@ -573,7 +573,7 @@ class SymBuilderFactory(Object):
 # then try parent type
             try:
                 # try parent type
-                identifier = self.identifier_types[identifier]
+                identifier = copy.copy(self.identifier_types[identifier])
                 debug.trace('SymBuilderFactory.by_language', 
                     'trying parent: %s' % identifier)
             except KeyError:
@@ -581,6 +581,7 @@ class SymBuilderFactory(Object):
                 debug.trace('SymBuilderFactory.by_language', 
                     'no parent type, try None')
                 identifier = None
+                return None
 
     def new_builder(self, buff):
         """create a new SymBuilder of the appropriate type
@@ -657,7 +658,7 @@ class ManualCaps(Object):
         if self.one_word:
             self.current_caps = self.ongoing_caps
         debug.trace('ManualCaps.capitalization_state', 
-            'state = %s' % state)
+            'state = %s' % repr(state))
         return state
 
     def change_caps(self, caps = None, one_word = 1):
@@ -813,7 +814,7 @@ class FixedCaps(ManualCaps):
         if state == 'normal':
             state = self.default_caps
         debug.trace('FixedCaps.capitalization_state', 
-            'effective state = %s' % state)
+            'effective state = %s' % repr(state))
         return state
 
 class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
@@ -854,12 +855,22 @@ class BuildInterCaps(FixedCaps, ManualSuppression, SymBuilder):
         
         *none*
         """
+        debug.trace('BuildInterCaps.add_word',
+            'default_caps = %s' % repr(self.default_caps))
         SymBuilder.add_word(self, word, original)
         if original and not self.abbreviation_state():
             word = original
         self.separator_state() 
         # no separators, but still need to check this once per add_word
+        debug.trace('BuildInterCaps.add_word',
+            'word before capitalize = %s' % repr(word))
+        debug.trace('BuildInterCaps.add_word',
+            'default_caps = %s' % repr(self.default_caps))
         word = self.capitalize(word, self.capitalization_state())
+        debug.trace('BuildInterCaps.add_word',
+            'word after capitalize = %s' % repr(word))
+        debug.trace('BuildInterCaps.add_word',
+            'default_caps = %s' % repr(self.default_caps))
         self.symbol = self.symbol + word
 
     def finish(self):
@@ -1089,7 +1100,8 @@ class BuildUnder(FixedCaps, ManualSuppression, SymBuilder):
         if state and self.symbol:
             last_char = self.symbol[-1]
             first_char = word[0]
-            if not (last_char.isdigit() or first_char.isdigit()):
+            if not (last_char.isdigit() or first_char.isdigit() \
+                    or last_char == '_' or first_char == '_'):
                 self.symbol = self.symbol + '_'
         self.symbol = self.symbol + word
         debug.trace('BuildUnder.add_word', 'symbol = %s' % repr(self.symbol))

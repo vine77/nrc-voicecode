@@ -862,15 +862,21 @@ def mod_diff(x, y):
     return filter(lambda x: x[0] != ' ', raw_diff)
 
 fake_words = {
+              'ADPCM': 0,
+              'BOM': 0,
+              'RST': 0,
+              'SND': 0,
+              'HLS': 0,
+              'NEG': 0,
+              'TZ': 0,
               'MX': 0,
               'O': 0,
               'ST': 0,
               'CMP': 0,
-              'co-\\co': 1,
+              'multi-\\multi': 1,
               'CRC': 0,
               'HSV': 0,
               'IM': 0,
-              'multi-\\multi': 1,
               'NI': 0,
               'TTY': 1,
               'UU': 0
@@ -879,7 +885,12 @@ fake_words = {
 
 def word_exists(word, flag = None):
     try:
-        return fake_words[word]
+        exists = fake_words[word]
+        if exists:
+# flag for a normal word
+            return 0
+# return value if word doesn't exist
+        return None
     except KeyError:
         return sr_interface.getWordInfo(word, flag)
 
@@ -2877,6 +2888,16 @@ def test_symbol_formatting():
     test_say(['Hungarian', 'notation', '\\No-Caps', 'dog', 'food'])
     commands.say(['new', 'statement'])
 
+    print 'Making sure manual underscores suppress automatic ones'
+    test_say(['_\\underscore', 'private', '_\\underscore', 'variable',
+        '_\\underscore'])
+    commands.say(['new', 'statement'])
+
+    print 'Making sure consecutive letters are treated as part of the same word'
+    test_say(['win', 'X.', 'P.'])
+    commands.say(['new', 'statement'])
+
+
 add_test('symbol_formatting', test_symbol_formatting, 
     'Testing styling and manual formatting of new symbols.')
 ##############################################################################
@@ -3032,10 +3053,9 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
     okay = 1
     for i in errors.keys():
         if not the_mediator.can_reinterpret(instance_name, i):
-            print "\ncan't correct error %d utterances ago" % i
-            print "because can_reinterpret returned false\n" 
+            print "\ndon't expect to be able to correct error %d utterances ago" % i
+            print "because can_reinterpret returned false, but we'll try anyway\n" 
             sys.stdout.flush()
-            okay = 0
     if not okay:
         return 0
 
@@ -3107,6 +3127,21 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
         sys.stdout.flush()
         return okay
 
+def check_symbol(interpreter, symbol, expected = 1):
+    known = interpreter.known_symbol(symbol)
+    if known:
+        spoken = interpreter.spoken_forms(symbol)
+        print "symbol %s has spoken forms %s" % (symbol, spoken)
+        if not expected:
+            print "WARNING: symbol %s should not exist" % symbol
+    else:
+        if expected:
+            print "WARNING: symbol %s was expected, but does not exist" \
+                % symbol
+        else:
+            print "symbol %s did not exist, as expected" % symbol
+    return known == expected
+
 def test_basic_correction():
     testing.init_simulator_regression()
     instance_name = testing.instance_name()
@@ -3162,9 +3197,6 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-#    return
-# inserted temporarily to help debug emacs
-
     print "\n***Moving cursor manually***\n"
     commands.goto_line(1)
 
@@ -3214,6 +3246,14 @@ def test_basic_correction():
 
     commands.open_file('blahblah.py')
 
+    interpreter = the_mediator.interpreter()
+    print '\n***Testing whether symbol "Cloud" exists before dictation***\n'
+
+    if not check_symbol(interpreter, 'Cloud', expected = 0):
+        print 'WARNING: since symbol "Cloud" already exists, '
+        print 'the check after correction may report that it exists'
+        print 'unexpectedly'
+        
 
     utterances = []
     utterances.append(string.split('class cloud inherits from student'))
@@ -3240,17 +3280,26 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
+    print '\n***Testing symbol addition***\n'
+
+
+    check_symbol(interpreter, 'Cloud')
+    check_symbol(interpreter, 'fine_method_popularity')
+
     print '\n***Testing correction of recent utterance***\n'
 
     errors = {}
     errors[len(utterances)-2] = {'fine': 'define'}
     reinterpret(instance_name, utterances, errors, user_input = '0\n')
 
-
     print '\n***Testing state***\n'
 
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
+
+    print '\n***Testing symbol removal on correction***\n'
+
+    check_symbol(interpreter, 'fine_method_popularity', expected = 0)
 
     print '\n***Testing correction of another recent utterance***\n'
 
@@ -3263,6 +3312,18 @@ def test_basic_correction():
 
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
+
+    print '\n***Testing symbol removal on correction***\n'
+
+    check_symbol(interpreter, 'Cloud', expected = 0)
+
+    print '\n***Testing whether symbol "excess" exists before dictation***\n'
+
+    if not check_symbol(interpreter, 'excess', expected = 0):
+        print 'WARNING: since symbol "excess" already exists, '
+        print 'the check after correction may report that it exists'
+        print 'unexpectedly'
+        
 
     new_utterances = []
     new_utterances.append(string.split('new line'))    
@@ -3279,6 +3340,10 @@ def test_basic_correction():
 
     for i in range(len(new_utterances)):
         test_say(new_utterances[i], user_input = new_input[i], never_bypass_sr_recog=1)
+
+    print '\n***Testing symbol addition***\n'
+
+    check_symbol(interpreter, 'excess', expected = 1)
 
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
@@ -3302,9 +3367,28 @@ def test_basic_correction():
     print '\n***Testing failed correction of a recent utterance***\n'
 
     errors = {}
-    errors[0] = {'excess' : 'success'}
+    errors[1] = {'excess' : 'success'}
     reinterpret(instance_name, utterances, errors, should_fail = 1,
         user_input = '0\n'*10)
+
+    print '\n***Testing failed symbol addition***\n'
+    print '(reinterpretation should have failed, so symbol "success" should'
+    print 'not have been added)\n'
+
+    check_symbol(interpreter, 'success', expected = 0)
+
+    print '\n***Testing symbol removal***\n'
+    print '(despite re-interpretation failure, incorrect symbol "excess"'
+    print 'should have been removed)\n'
+
+    check_symbol(interpreter, 'excess', expected = 0)
+
+    print '\n***Testing whether symbol "results" exists before dictation***\n'
+
+    if not check_symbol(interpreter, 'results', expected = 0):
+        print 'WARNING: since symbol "results" already exists, '
+        print 'the check after correction may report that it exists'
+        print 'unexpectedly'
 
     print '\n***Fixing error manually***\n'
 
@@ -3349,6 +3433,11 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
+    print '\n***Testing symbol addition***\n'
+
+    check_symbol(interpreter, 'excess', expected = 1)
+    check_symbol(interpreter, 'results', expected = 1)
+
     print '\n***Testing scratch that***\n'
 
     scratched = check_scratch_recent(instance_name)
@@ -3362,10 +3451,14 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
+    print '\n***Testing symbol removal***\n'
+
+    check_symbol(interpreter, 'results', expected = 0)
+
     print '\n***Testing correction after scratch that***\n'
 
     errors = {}
-    errors[2] = {'excess': 'access'}
+    errors[2] = {'excess': 'success'}
     reinterpret(instance_name, utterances, errors, user_input = '0\n')
   
     print '\n***Testing state***\n'
@@ -3373,10 +3466,13 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
+    print '\n***Testing symbol addition***\n'
 
-# Temporarily disable this failing test so I can continue working on Emacs client
-# without interference
-#
+    check_symbol(interpreter, 'success', expected = 1)
+
+    print '\n***Testing symbol removal***\n'
+
+    check_symbol(interpreter, 'excess', expected = 0)
 
 add_test('basic_correction', test_basic_correction, 
     'Testing basic correction infrastructure with ResMgr.')
@@ -3625,6 +3721,105 @@ def test_normal_text_dictation():
 
   
 add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', foreground = 1)   
+
+##############################################################################
+# Number dictation
+##############################################################################
+
+def print_block(block, name = 'text'):
+    s = name + ': '
+    if block is None:
+        print s + '(no block)'
+    else:
+        print s + "range: %d %d, text = %s" % \
+        (block.start(), block.end(), repr(block.text))
+
+def test_inserted_text():  
+    testing.init_simulator_regression()
+
+    editor = testing.editor()
+    
+    commands.open_file('blah.py')
+
+    t = 'x = 3'
+    print 'inserting %s' % repr(t)
+    text = editor.insert(t)
+    editor.print_buff()
+    print_block(text)
+
+    t = '\n'
+    print 'inserting %s' % repr(t)
+    text = editor.insert(t)
+    editor.print_buff()
+    print_block(text)
+
+    code_bef  = 'if '
+    code_after = ':\n\t'
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    code_bef  = 'x > 2'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    editor.search_for('\n *')
+    code_bef  = 'multi()'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    code_bef  = '\nelif '
+    code_after = ':\n\t'
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    code_bef  = 'x == 1'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+    editor.search_for('\n *')
+    code_bef  = 'solitaire()'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    code_bef  = '\nelse:\n'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+
+    code_bef  = 'dual()'
+    code_after = ''
+    print 'inserting %s, %s' % (repr(code_bef), repr(code_after))
+    before, after = editor.insert_indent(code_bef, code_after)
+    editor.print_buff()
+    print_block(before, 'before cursor')
+    print_block(after, 'after_cursor')
+            
+add_test('inserted_text', test_inserted_text, 
+  desc='Test of new reporting system for inserted text')
 
 
 ##############################################################################

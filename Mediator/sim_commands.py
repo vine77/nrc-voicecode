@@ -463,7 +463,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             #
             if user_input:
                 sys.stdin = old_stdin
-                if temp_file is not None:
+                if not (temp_file is None):
                     temp_file.close()
 
     def goto(self, pos, echo_cmd=0):

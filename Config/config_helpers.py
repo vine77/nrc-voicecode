@@ -354,7 +354,8 @@ class PunctuationSet(Object):
         """
         self.context = context
 
-    def _add_lsa(self, aliases, written, spoken_forms, spacing):
+    def _add_lsa(self, aliases, written, spoken_forms, spacing,
+        new_symbol = None):
         """private method to add an LSA for dictation of this 
         punctuation symbol
         
@@ -368,9 +369,16 @@ class PunctuationSet(Object):
         *[STR] spoken_forms* -- the spoken forms
 
         *INT spacing* -- the spacing flags (see SpacingState.py)
+
+        *STR* new_symbol -- flag indicating whether the punctuation
+        symbol part of a new identifier.  Recognized values are None if 
+        it cannot, 'start' if it can start a new symbol (e.g.
+        underscore), or 'within' if it can appear within a
+        symbol but cannot start one.
         """
         aliases.add_lsa(LSAlias(spoken_forms, 
-                        {self.language: written}, spacing))
+                        {self.language: written}, spacing, 
+                        new_symbol = new_symbol))
 
     def _add_navigation(self, commands, expression, spoken_forms):
         """private method to add CSCs for navigation by this 
@@ -531,7 +539,8 @@ class SinglePunctuation(PunctuationSet):
                             "word '%s' doesn't exist" % entry)
             if add_spoken_forms:
                 self._add_lsa(aliases, self.written_forms[i], 
-                    add_spoken_forms, self.spacing[i])
+                    add_spoken_forms, self.spacing[i], new_symbol =
+                    self.new_symbol[i])
                 if not dictation_only:
 #                    if force:
 #                        nav_spoken = []

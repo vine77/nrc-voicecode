@@ -638,7 +638,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CBB638>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E95970>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -674,8 +674,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
@@ -772,8 +786,40 @@ try: ['try']
 try_attribute: ['try attribute']
 write: ['write']
 x: ['X.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
+_cached_symbols_as_one_string[a] is:
+    autoTst  auto_test  and  attrs_this_class  attrs_superclasses  a_base  an_attr_def  attrs  an_attr_init  age  AttributeError  add_test 
+_cached_symbols_as_one_string[b] is:
+    __bases__ 
+_cached_symbols_as_one_string[c] is:
+    class  code_file  code 
+_cached_symbols_as_one_string[d] is:
+    def  deep_construct  __dict__ 
+_cached_symbols_as_one_string[e] is:
+    exceptions  environ  expandvars  execfile  exclude_bases  else  exec  except  exc 
+_cached_symbols_as_one_string[f] is:
+    for 
+_cached_symbols_as_one_string[h] is:
+    has_key  her_age 
+_cached_symbols_as_one_string[i] is:
+    import  if  __init__  in  items  init_attrs  index 
+_cached_symbols_as_one_string[l] is:
+    LargeObject  LargeNonObject 
+_cached_symbols_as_one_string[n] is:
+    not  name  num_times  __name__ 
+_cached_symbols_as_one_string[o] is:
+    os  Object  obj  operation 
+_cached_symbols_as_one_string[p] is:
+    posixpath  profile  pass  profConstrSmallObj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  prof_test 
+_cached_symbols_as_one_string[r] is:
+    range  run 
+_cached_symbols_as_one_string[s] is:
+    sys  sep  self  setattr  SmallObject  SmallNonObject  stdout  str  self_test 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_class  try_attribute  try 
+_cached_symbols_as_one_string[w] is:
+    write 
+_cached_symbols_as_one_string[x] is:
+    x 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
@@ -819,8 +865,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 Unresolved abbreviations are:
@@ -851,8 +911,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', '
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 Unresolved abbreviations are:
@@ -1104,8 +1178,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -1521,8 +1609,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ',\\comma'], user_input='None')
@@ -1550,8 +1652,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -1773,8 +1889,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -2342,6 +2472,10 @@ WARNING: source file 'blahblah.py' doesn't exist.
 
 *** End of source buffer ***
 
+***Testing whether symbol "Cloud" exists before dictation***
+
+symbol Cloud did not exist, as expected
+
 
 >>> Testing console command: say(['class', 'cloud', 'inherits', 'from', 'student'], user_input='0
 0
@@ -2390,6 +2524,11 @@ Heard return eight
 4 recently dictated utterances, as expected
 
 
+***Testing symbol addition***
+
+symbol Cloud has spoken forms ['cloud']
+symbol fine_method_popularity has spoken forms ['fine method popularity']
+
 ***Testing correction of recent utterance***
 
 detecting changes
@@ -2428,6 +2567,10 @@ were reinterpreted, as expected
 
 4 recently dictated utterances, as expected
 
+
+***Testing symbol removal on correction***
+
+symbol fine_method_popularity did not exist, as expected
 
 ***Testing correction of another recent utterance***
 
@@ -2477,6 +2620,14 @@ were reinterpreted, as expected
 4 recently dictated utterances, as expected
 
 
+***Testing symbol removal on correction***
+
+symbol Cloud did not exist, as expected
+
+***Testing whether symbol "excess" exists before dictation***
+
+symbol excess did not exist, as expected
+
 
 >>> Testing console command: say(['new', 'line'], user_input='')
 Heard new line
@@ -2511,6 +2662,10 @@ Heard excess equals zero
 
 *** End of source buffer ***
 
+***Testing symbol addition***
+
+symbol excess has spoken forms ['excess']
+
 ***Manually changing text
 
 *** Start of source buffer ***
@@ -2532,11 +2687,37 @@ Heard excess equals zero
 
 ***Testing failed correction of a recent utterance***
 
+
+don't expect to be able to correct error 1 utterances ago
+because can_reinterpret returned false, but we'll try anyway
+
 detecting changes
-utterance 0: change = {'excess': 'success'}
+utterance 1: change = {'excess': 'success'}
+word excess being replaced with success
+utterance 1 was changed 
+utterance 1 was corrected
+about to reinterpret
 
 reinterpretation failed, as expected
 
+
+***Testing failed symbol addition***
+
+(reinterpretation should have failed, so symbol "success" should
+not have been added)
+
+symbol success did not exist, as expected
+
+***Testing symbol removal***
+
+(despite re-interpretation failure, incorrect symbol "excess"
+should have been removed)
+
+symbol excess did not exist, as expected
+
+***Testing whether symbol "results" exists before dictation***
+
+symbol results did not exist, as expected
 
 ***Fixing error manually***
 
@@ -2598,6 +2779,11 @@ Heard results at index zero jump out equals zero
 10 recently dictated utterances, as expected
 
 
+***Testing symbol addition***
+
+symbol excess has spoken forms ['excess']
+symbol results has spoken forms ['results']
+
 ***Testing scratch that***
 
 scratching 1
@@ -2619,11 +2805,15 @@ scratch 1 succeeded as expected
 9 recently dictated utterances, as expected
 
 
+***Testing symbol removal***
+
+symbol results did not exist, as expected
+
 ***Testing correction after scratch that***
 
 detecting changes
-utterance 2: change = {'excess': 'access'}
-word excess being replaced with access
+utterance 2: change = {'excess': 'success'}
+word excess being replaced with success
 utterance 2 was changed 
 utterance 2 was corrected
 about to reinterpret
@@ -2636,13 +2826,13 @@ about to reinterpret
 *** End of source buffer ***
   2:     def popularity(self):
   3:         return 8
-  4: access = 1
+  4: success = 1
   5: <CURSOR>
 
 *** End of source buffer ***
   2:     def popularity(self):
   3:         return 8
-  4: access = 1
+  4: success = 1
   5: <CURSOR>
 
 *** End of source buffer ***
@@ -2659,6 +2849,14 @@ were reinterpreted, as expected
 
 9 recently dictated utterances, as expected
 
+
+***Testing symbol addition***
+
+symbol success has spoken forms ['success']
+
+***Testing symbol removal***
+
+symbol excess did not exist, as expected
 
 
 *******************************************************************************
@@ -3023,7 +3221,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Before compiling symbols, symbols are:
 
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-_cached_symbols_as_one_string is:
+_cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 Heard compile symbols
 Compiling symbols for None
@@ -3044,8 +3242,20 @@ def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 print: ['print']
 self: ['self']
 x: ['X.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  class  AClass  ASuper  def  a_method  self  x  print 
+_cached_symbols_as_one_string[a] is:
+    AClass  ASuper  a_method 
+_cached_symbols_as_one_string[c] is:
+    class 
+_cached_symbols_as_one_string[d] is:
+    def 
+_cached_symbols_as_one_string[p] is:
+    print 
+_cached_symbols_as_one_string[s] is:
+    self 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
+_cached_symbols_as_one_string[x] is:
+    x 
 
 
 *******************************************************************************
@@ -3600,6 +3810,107 @@ Heard back space 2
 
 
 *******************************************************************************
+* Name        : inserted_text
+* Description : Test of new reporting system for inserted text
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+inserting 'x = 3'
+*** Start of source buffer ***
+  1: x = 3<CURSOR>
+
+*** End of source buffer ***
+text: range: 0 5, text = 'x = 3'
+inserting '\n'
+*** Start of source buffer ***
+  1: x = 3
+  2: <CURSOR>
+
+*** End of source buffer ***
+text: range: 5 6, text = '\n'
+inserting 'if ', ':\n\t'
+*** Start of source buffer ***
+  1: x = 3
+  2: if <CURSOR>:
+  3:     
+
+*** End of source buffer ***
+before cursor: range: 6 9, text = 'if '
+after_cursor: range: 9 15, text = ':\n    '
+inserting 'x > 2', ''
+*** Start of source buffer ***
+  1: x = 3
+  2: if x > 2<CURSOR>:
+  3:     
+
+*** End of source buffer ***
+before cursor: range: 9 14, text = 'x > 2'
+after_cursor: (no block)
+inserting 'multi()', ''
+*** Start of source buffer ***
+  1: x = 3
+  2: if x > 2:
+  3:     multi()<CURSOR>
+
+*** End of source buffer ***
+before cursor: range: 20 27, text = 'multi()'
+after_cursor: (no block)
+inserting '\nelif ', ':\n\t'
+*** Start of source buffer ***
+  1: x = 3
+  2: if x > 2:
+  3:     multi()
+  4: elif <CURSOR>:
+  5:     
+
+*** End of source buffer ***
+before cursor: range: 27 33, text = '\nelif '
+after_cursor: range: 33 39, text = ':\n    '
+inserting 'x == 1', ''
+*** Start of source buffer ***
+  1: x = 3
+  2: if x > 2:
+  3:     multi()
+  4: elif x == 1<CURSOR>:
+  5:     
+
+*** End of source buffer ***
+before cursor: range: 33 39, text = 'x == 1'
+after_cursor: (no block)
+inserting 'solitaire()', ''
+  2: if x > 2:
+  3:     multi()
+  4: elif x == 1:
+  5:     solitaire()<CURSOR>
+
+*** End of source buffer ***
+before cursor: range: 45 56, text = 'solitaire()'
+after_cursor: (no block)
+inserting '\nelse:\n', ''
+  4: elif x == 1:
+  5:     solitaire()
+  6: else:
+  7:     <CURSOR>
+
+*** End of source buffer ***
+before cursor: range: 56 67, text = '\nelse:\n    '
+after_cursor: (no block)
+inserting 'dual()', ''
+  4: elif x == 1:
+  5:     solitaire()
+  6: else:
+  7:     dual()<CURSOR>
+
+*** End of source buffer ***
+before cursor: range: 67 73, text = 'dual()'
+after_cursor: (no block)
+
+
+*******************************************************************************
 * Name        : large_messages
 * Description : Send a message that has more than 1024 character (length of a message chunk)
 *******************************************************************************
@@ -3869,8 +4180,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'], user_input='None')
@@ -4399,8 +4724,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.
@@ -4429,8 +4768,6 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-   
 
 
 >>> Restarting mediator WITHOUT persistence. There should be NO symbols in the dictionary.
@@ -4444,8 +4781,6 @@ EdSim instance EdSim(0) connected
 
 >>> Testing console command: print_symbols()
 
-_cached_symbols_as_one_string is:
-   
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
@@ -7903,8 +8238,50 @@ words: ['words']
 write: ['write']
 written: ['written']
 written_as: ['written as']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
+_cached_symbols_as_one_string[a] is:
+    auto_test  actions_C_Cpp  actions_py  AppState  attrs  aword  aCSC  and  a_word  a_match  answer  answer_match  accept_symbol_match  a_spoken_form  active_language_LSAs  active_language  all_language_LSAs  acmd  add_voc_entry  addWord 
+_cached_symbols_as_one_string[b] is:
+    break 
+_cached_symbols_as_one_string[c] is:
+    cont_gen  ContC  ContPy  CSCmd  class  CmdInterp  cmd  curr_buffer  cur_pos  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  cmd_without_LSA  chop_LSA  chopped_symbol  cmd_without_symbol  chop_symbol  chopped_word  cmd_without_word  chop_word  CSCs  cmd_index  csc_applied  content  command  clean_written_form  clean_for  clean_written  choice_index  chosen_match  consumed  choose_best_symbol  choices  cmds_this_spoken_form 
+_cached_symbols_as_one_string[d] is:
+    def  decl_attrs  deep_construct  dlg_select_symbol_match  dummy  deleteWord 
+_cached_symbols_as_one_string[e] is:
+    EdSim  else  end  environ 
+_cached_symbols_as_one_string[f] is:
+    from  for  first 
+_cached_symbols_as_one_string[g] is:
+    group  good_answer  global 
+_cached_symbols_as_one_string[h] is:
+    head_was_translated  has_key 
+_cached_symbols_as_one_string[i] is:
+    import  __init__  in  if  interpret_NL_cmd  interpret  insert_indent  insert_untranslated_text  ii  is_new  int  index_csc 
+_cached_symbols_as_one_string[j] is:
+    join 
+_cached_symbols_as_one_string[k] is:
+    known_symbols 
+_cached_symbols_as_one_string[l] is:
+    lower  len  LSA_consumes  leading_spaces  leading_word  language_specific_aliases  load_language_specific_aliases  language  last_language  last_loaded_language 
+_cached_symbols_as_one_string[m] is:
+    massage_command  most_consumed  max  match_untranslated_text  mod_command  match  match_pseudo_symbol  move_to 
+_cached_symbols_as_one_string[n] is:
+    natlink  None  not  num_match  native_symbol  new_pos 
+_cached_symbols_as_one_string[o] is:
+    os  Object  on_app  or  old_pos 
+_cached_symbols_as_one_string[p] is:
+    print  print_buff_content 
+_cached_symbols_as_one_string[r] is:
+    re  regexp  rest  regexp_this_word  return  reg  readline  regexp_is_dirty 
+_cached_symbols_as_one_string[s] is:
+    string  sys  SymDict  sr_interface  self  symdict_pickle_file  spoken_form_regexp  spoken_form  split  symbol_consumes  s  spoken  spoken_written_form  sub  symbol_info  symbol_matches  stdout  stdin  start  spoken_form_info  symbols  spoken_forms  spoken_as 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  text  text_no_spaces 
+_cached_symbols_as_one_string[u] is:
+    upper  _untranslated_text_start  _untranslated_text_end  untranslated_text  upto 
+_cached_symbols_as_one_string[v] is:
+    vc_globals  vocabulary_entry 
+_cached_symbols_as_one_string[w] is:
+    words  while  word_consumes  written  write  written_as 
 AppState: ['app state']
 CSC_consumes: ['C. S. C. consumes', 'CSC consumes']
 CSCmd: ['C. S. cmd', 'C. S. command', 'CS cmd', 'CS command']
@@ -8072,8 +8449,50 @@ words: ['words']
 write: ['write']
 written: ['written']
 written_as: ['written as']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
+_cached_symbols_as_one_string[a] is:
+    auto_test  actions_C_Cpp  actions_py  AppState  attrs  aword  aCSC  and  a_word  a_match  answer  answer_match  accept_symbol_match  a_spoken_form  active_language_LSAs  active_language  all_language_LSAs  acmd  add_voc_entry  addWord 
+_cached_symbols_as_one_string[b] is:
+    break 
+_cached_symbols_as_one_string[c] is:
+    cont_gen  ContC  ContPy  CSCmd  class  CmdInterp  cmd  curr_buffer  cur_pos  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  cmd_without_LSA  chop_LSA  chopped_symbol  cmd_without_symbol  chop_symbol  chopped_word  cmd_without_word  chop_word  CSCs  cmd_index  csc_applied  content  command  clean_written_form  clean_for  clean_written  choice_index  chosen_match  consumed  choose_best_symbol  choices  cmds_this_spoken_form 
+_cached_symbols_as_one_string[d] is:
+    def  decl_attrs  deep_construct  dlg_select_symbol_match  dummy  deleteWord 
+_cached_symbols_as_one_string[e] is:
+    EdSim  else  end  environ 
+_cached_symbols_as_one_string[f] is:
+    from  for  first 
+_cached_symbols_as_one_string[g] is:
+    group  good_answer  global 
+_cached_symbols_as_one_string[h] is:
+    head_was_translated  has_key 
+_cached_symbols_as_one_string[i] is:
+    import  __init__  in  if  interpret_NL_cmd  interpret  insert_indent  insert_untranslated_text  ii  is_new  int  index_csc 
+_cached_symbols_as_one_string[j] is:
+    join 
+_cached_symbols_as_one_string[k] is:
+    known_symbols 
+_cached_symbols_as_one_string[l] is:
+    lower  len  LSA_consumes  leading_spaces  leading_word  language_specific_aliases  load_language_specific_aliases  language  last_language  last_loaded_language 
+_cached_symbols_as_one_string[m] is:
+    massage_command  most_consumed  max  match_untranslated_text  mod_command  match  match_pseudo_symbol  move_to 
+_cached_symbols_as_one_string[n] is:
+    natlink  None  not  num_match  native_symbol  new_pos 
+_cached_symbols_as_one_string[o] is:
+    os  Object  on_app  or  old_pos 
+_cached_symbols_as_one_string[p] is:
+    print  print_buff_content 
+_cached_symbols_as_one_string[r] is:
+    re  regexp  rest  regexp_this_word  return  reg  readline  regexp_is_dirty 
+_cached_symbols_as_one_string[s] is:
+    string  sys  SymDict  sr_interface  self  symdict_pickle_file  spoken_form_regexp  spoken_form  split  symbol_consumes  s  spoken  spoken_written_form  sub  symbol_info  symbol_matches  stdout  stdin  start  spoken_form_info  symbols  spoken_forms  spoken_as 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  text  text_no_spaces 
+_cached_symbols_as_one_string[u] is:
+    upper  _untranslated_text_start  _untranslated_text_end  untranslated_text  upto 
+_cached_symbols_as_one_string[v] is:
+    vc_globals  vocabulary_entry 
+_cached_symbols_as_one_string[w] is:
+    words  while  word_consumes  written  write  written_as 
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -8453,7 +8872,7 @@ Heard finally do print single quotes all right
 >>> Dictating Python when only standard symbols are known <<<
 
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-_cached_symbols_as_one_string is:
+_cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
@@ -8863,8 +9282,12 @@ is_a_symbol2: ['is A. symbol 2', 'is a symbol 2']
 isasymbol: ['isasymbol']
 isasymbol2: ['isasymbol 2']
 not_a_symbol: ['not A. symbol', 'not a symbol']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  not_a_symbol  is_a_symbol  is_a_symbol2  _is_a_symbol  _is_a_symbol2  isASymbol  isASymbol2  _isASymbol  _isASymbol2  IsASymbol  IsASymbol2  ISASYMBOL  ISASYMBOL2  isasymbol  isasymbol2  IS_A_SYMBOL  IS_A_SYMBOL2  Is_A_Symbol  isASYMBOL  ISasymbol 
+_cached_symbols_as_one_string[i] is:
+    is_a_symbol  is_a_symbol2  _is_a_symbol  _is_a_symbol2  isASymbol  isASymbol2  _isASymbol  _isASymbol2  IsASymbol  IsASymbol2  ISASYMBOL  ISASYMBOL2  isasymbol  isasymbol2  IS_A_SYMBOL  IS_A_SYMBOL2  Is_A_Symbol  isASYMBOL  ISasymbol 
+_cached_symbols_as_one_string[n] is:
+    not_a_symbol 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
 'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
@@ -8900,8 +9323,22 @@ some_other_method: ['some other method']
 some_variable: ['some variable']
 try: ['try']
 yet_another_method: ['yet another method']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  class  AClass  ASuper  def  a_method  self  some_argument  some_variable  some_array  if  do_some_stuff  do_some_more  try  a_method_with_no_arguments  pass  SomeOtherClass  some_other_method  yet_another_method 
+_cached_symbols_as_one_string[a] is:
+    AClass  ASuper  a_method  a_method_with_no_arguments 
+_cached_symbols_as_one_string[c] is:
+    class 
+_cached_symbols_as_one_string[d] is:
+    def  do_some_stuff  do_some_more 
+_cached_symbols_as_one_string[i] is:
+    if 
+_cached_symbols_as_one_string[p] is:
+    pass 
+_cached_symbols_as_one_string[s] is:
+    self  some_argument  some_variable  some_array  SomeOtherClass  some_other_method 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  try 
+_cached_symbols_as_one_string[y] is:
+    yet_another_method 
 
 *********************
 *** Executing edit test: insert an import statement in middle of a file ***
@@ -9359,8 +9796,22 @@ this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
 x: ['X.']
 y: ['Y.']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
+_cached_symbols_as_one_string[a] is:
+    API_function 
+_cached_symbols_as_one_string[f] is:
+    float  f_name  f_name2 
+_cached_symbols_as_one_string[h] is:
+    horiz_pos 
+_cached_symbols_as_one_string[m] is:
+    move  move_horiz  move_vert 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+_cached_symbols_as_one_string[v] is:
+    void 
+_cached_symbols_as_one_string[x] is:
+    x 
+_cached_symbols_as_one_string[y] is:
+    y 
 
 
 >>> Testing console command: say(['index', '!=\\not equal to', '0\\zero'], user_input='0
@@ -11654,6 +12105,42 @@ Heard new statement
  10: <CURSOR>
 
 *** End of source buffer ***
+Making sure manual underscores suppress automatic ones
+
+
+>>> Testing console command: say(['_\\underscore', 'private', '_\\underscore', 'variable', '_\\underscore'], user_input='None')
+Heard underscore private underscore variable underscore
+  7: Matters_of_State
+  8: Fish_Food
+  9: dogFood
+ 10: _private_variable_<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  8: Fish_Food
+  9: dogFood
+ 10: _private_variable_
+ 11: <CURSOR>
+
+*** End of source buffer ***
+Making sure consecutive letters are treated as part of the same word
+
+
+>>> Testing console command: say(['win', 'X.', 'P.'], user_input='None')
+Heard win X. P.
+  8: Fish_Food
+  9: dogFood
+ 10: _private_variable_
+ 11: win_xp<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  9: dogFood
+ 10: _private_variable_
+ 11: win_xp
+ 12: <CURSOR>
+
+*** End of source buffer ***
 
 
 *******************************************************************************
@@ -11670,8 +12157,12 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 openlog: ['openlog']
 s: ['S.']
 se: ['S. E.', 'se']
-_cached_symbols_as_one_string is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
+_cached_symbols_as_one_string[o] is:
+    openlog 
+_cached_symbols_as_one_string[s] is:
+    s  se 
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 Unresolved abbreviations are:
 'openlog': appears in ['openlog']
 's': appears in ['s']
@@ -11826,6 +12317,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1577.77900004 secs
+Test suite completed in:  1707.76600003 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6

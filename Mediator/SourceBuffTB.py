@@ -25,6 +25,7 @@
 import debug
 import re, string, sys
 import SourceBuff
+import AppTracker
 import sb_services, SourceBuffNonCached
 
 
@@ -375,6 +376,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
             start, end = self.make_valid_range(range)
         self.underlying.set_text(text, start, end)
         self.on_change(start, end, text, 1)
+        return AppTracker.TextBlock(text, start)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -398,7 +400,7 @@ class SourceBuffTB(SourceBuff.BackspaceMixIn,
         *none*
         """
         
-        self.indent_srv.insert_indent(code_bef, code_after, range)
+        return self.indent_srv.insert_indent(code_bef, code_after, range)
 
     def indent(self, range = None):
         """Indent code in a source buffer region.

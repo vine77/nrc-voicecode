@@ -60,157 +60,9 @@ min_abbreviation_len = 2
 # If set to 0, SR will create a spoken form entry only and the VoiceCode
 # command interpreter will translate that spoken form to a written form
 #
+
 vocabulary_symbols_with_written_form = 1
 
-
-#############################################################################
-# Symbol formatting functions
-#
-# List of formatting functions for generating new native symbols from
-# pseudo_symbols.
-#
-# Each formatting function must return a valid SymbolMatch object.
-#
-#############################################################################
-
-symbol_formats = []
-
-def fmt_lower_under(pseudo_symbol, words):
-    """Format symbol as xxx_yyy_zzz.
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-    
-    native_symbol = string.join(words, '_')
-    native_symbol_match = SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=1)
-    
-    return native_symbol_match
-    
-symbol_formats = symbol_formats + [fmt_lower_under]
-
-def fmt_cap(pseudo_symbol, words):
-    """Format symbol as XxxYxxZzz.
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-
-    native_symbol = ''
-    for a_word in words:
-        native_symbol = native_symbol + string.capitalize(a_word)
-    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=2)
-    
-symbol_formats = symbol_formats + [fmt_cap]
-
-
-def fmt_lower_cap(pseudo_symbol, words):
-    """Format symbol as xxxYyyZzz.
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-
-    native_symbol = string.lower(words[0])    
-    if len(words) > 1:
-        for a_word in words[1:]:
-            native_symbol = native_symbol + string.capitalize(a_word)
-    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=3)
-    
-symbol_formats = symbol_formats + [fmt_lower_cap]
-
-
-def fmt_upper_under(pseudo_symbol, words):
-    """Format symbol as XXX_YYY_ZZZ
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-
-    for ii in range(len(words)):
-        words[ii] = string.upper(words[ii])
-    native_symbol = string.join(words, '_')
-    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=4)
-    
-symbol_formats = symbol_formats + [fmt_upper_under]
-    
-    
-
-def fmt_join(pseudo_symbol, words):
-    """Format symbol as xxxyyyzzz
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-
-    lower_words = []
-    for a_word in words: lower_words = lower_words + [string.lower(a_word)]
-    native_symbol = string.join(lower_words, '')
-    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=5)
-    
-symbol_formats = symbol_formats + [fmt_join]
-
-
-def fmt_upper_join(pseudo_symbol, words):
-    """Format symbol as XXXYYYZZZ
-    
-    **INPUTS**
-
-    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
-    
-    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-
-    for ii in range(len(words)):
-        words[ii] = string.upper(words[ii])
-    native_symbol = string.join(words, '')
-    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=6)
-    
-symbol_formats = symbol_formats + [fmt_upper_join]
-
-
-#############################################################################
-# End of symbol formatting functions
-#############################################################################
 
 def pluralize(word):
     """Finds the plural form of a word
@@ -228,8 +80,6 @@ def pluralize(word):
     # For now, just append an 's'
     #
     return word + 's'
-
-
 
 class SymbolInfo(Object):
     """Stores information about a parsed symbol.
@@ -403,6 +253,13 @@ class SymDict(OwnerObject):
     *WordTrie* spoken_form_info -- WordTrie data structure which maps
      spoken forms to written forms of known symbols.
 
+    *{STR: 1}* tentative_symbols -- set of symbols which have been added
+    tentatively, but will be removed if the user undoes or corrects the 
+    utterance containing them, or re-formats them.  The keys are the
+    native written forms of the tentative symbols.  Tentative symbols
+    become permanent when they are inserted by re-formatting, or when
+    the user exists the mediator
+
     *{STR: [STR]}* abbreviations -- Dictionary of preferred
      abbreviations for words.  The key is the word, and the value is a
      prioritized list of abbreviations
@@ -447,10 +304,13 @@ class SymDict(OwnerObject):
      dictionnaries that list the symbols containing the unresolved
      abbreviation.
 
-    *STR* _cached_symbols_as_one_string='' -- Caches the last value
-     returned by method [symbols_as_one_string]. A value of *None*
-     indicates that the string needs to be regenerated by
+    *{STR: STR}* _cached_symbols_as_one_string -- Caches the last value
+     returned by method [symbols_as_one_string] for each initial letter.
+     A value of *None* indicates that the string needs to be regenerated by
      [symbols_as_one_string].
+
+    *{STR: {STR: 1}* _symbols_starting_with -- Caches the written forms of
+    all symbols starting with a given letter as a set
 
     *[STR] standard_symbol_sources* -- List of files in which standard
     symbols for different languages are defined.
@@ -513,9 +373,11 @@ class SymDict(OwnerObject):
         export_file = None, **attrs):
 
         # These attributes can't be set with constructor arguments
-        self.decl_attrs({'_cached_symbols_as_one_string': '',
+        self.decl_attrs({'_cached_symbols_as_one_string': {},
+                         '_symbols_starting_with': {},
                          'spoken_form_info': WordTrie.WordTrie(),
                          'symbol_info': {},
+                         'tentative_symbols': {},
                          'abbreviations': {},
                          'alt_abbreviations': {},
                          'expansions': {},
@@ -740,6 +602,35 @@ class SymDict(OwnerObject):
                 msg = 'Warning: failure to export current abbreviation\n'
                 msg = msg + 'preferences to abbrevs.py\n'
                 sys.stderr.write(msg)
+
+    def known_symbol(self, symbol):
+        """indicates whether a given symbol is known
+
+        **INPUTS**
+
+        *STR symbol* -- the written form of the symbol
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol is known
+        """
+        return self.symbol_info.has_key(symbol)
+
+    def spoken_forms(self, symbol):
+        """returns the list of spoken forms of the given symbol 
+
+        **INPUTS**
+
+        *STR symbol* -- the written form of the symbol
+
+        **OUTPUTS**
+
+        *[STR]* -- a copy of the list of spoken forms for the symbol, as
+        used in the vocabulary entries, or None if the symbol is unknown
+        """
+        if self.known_symbol(symbol):
+            return copy.copy(self.symbol_info[symbol].spoken_forms)
+        return None
 
     def match_phrase(self, phrase):
         """looks for a complete or partial (prefix) match of the
@@ -1009,8 +900,25 @@ class SymDict(OwnerObject):
         except KeyError:
             return [word]
 
-    def symbols_as_one_string(self):
-        """Returns a string that lists all the native known symbols.
+    def first_letter(self, symbol):
+        """finds the first letter (alphabetic only) of a symbol
+
+        **INPUTS**
+
+        *STR symbol* -- the written form of the symbol
+
+        **OUTPUTS**
+
+        *STR* -- the first letter
+        """
+        m = re.search('[a-zA-Z]', symbol)
+        if m:
+            return m.group().lower()
+        return None
+
+    def symbols_as_one_string(self, first_letter):
+        """Returns a string that lists all the native known symbols
+        starting with a given letter.
 
         This string is used for matching pseudo-symbols to known
         native symbols, because it's much faster than looping through
@@ -1025,17 +933,25 @@ class SymDict(OwnerObject):
         
         **OUTPUTS**
         
-        *none* --
+        *STR* -- a string that lists all the native known symbols
+        starting with a given letter, with two spaces in between each
+        symbol.
 
         .. [self._cached_symbols_as_one_string] file:///./SymDict.SymDict.html
         """
         
-        if self._cached_symbols_as_one_string == None:
+        first_letter = first_letter[0].lower()
+        if not first_letter.isalpha():
+            return None
+
+        if not self._cached_symbols_as_one_string.has_key(first_letter):
             #
             # Cached value has become stale. Regenerate it.
             #
-            self._cached_symbols_as_one_string = ''
-            symbol_list = self.symbol_info.keys()
+            s = ''
+            if not self._symbols_starting_with.has_key(first_letter):
+                self._symbols_starting_with[first_letter] = {}
+            symbol_list = self._symbols_starting_with[first_letter].keys()
             symbol_list.sort()            
             for a_symbol in symbol_list:
                 #
@@ -1047,11 +963,12 @@ class SymDict(OwnerObject):
                 #       _cached_symbols_as_one_string, and were separated by
                 #       a single space, only the first symbol would be matched
                 #
-                self._cached_symbols_as_one_string = self._cached_symbols_as_one_string + ' ' + a_symbol + ' '
+                s = s + ' ' + a_symbol + ' '
+            self._cached_symbols_as_one_string[first_letter] = s
 
 #        self.save()
 
-        return self._cached_symbols_as_one_string
+        return self._cached_symbols_as_one_string[first_letter]
 
     def print_symbols(self, symbols = None):
         """Print the content of the symbols dictionary.
@@ -1080,7 +997,11 @@ class SymDict(OwnerObject):
                 print '%s: undefined' % a_symbol
 
         if symbols is None:
-            print '_cached_symbols_as_one_string is:\n   %s' % self._cached_symbols_as_one_string
+            letters = self._cached_symbols_as_one_string.keys()
+            letters.sort()
+            for letter in letters:
+                print '_cached_symbols_as_one_string[%s] is:\n   %s' \
+                    % (letter, self._cached_symbols_as_one_string[letter])
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
@@ -1537,15 +1458,120 @@ class SymDict(OwnerObject):
             if not a_file in self.abbrev_sources:
                 self.abbrev_sources.append(a_file)
 
+    def remove_tentative_symbol(self, symbol):
+        """remove a symbol which was tentatively added
+        from the dictionary
+
+        **INPUTS**
+
+        *STR* symbol -- native symbol to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol was only tentative, and 
+        was successfully removed
+        """
+        debug.trace('SymDict.remove_tentative_symbol',
+            'symbol = %s' % symbol)
+        success = 0
+        if self.tentative_symbols.has_key(symbol):
+            debug.trace('SymDict.remove_tentative_symbol',
+                'is tentative')
+            success = self.remove_symbol(symbol)
+        debug.trace('SymDict.remove_tentative_symbol',
+            'success = %d' % success)
+        return success
+
+    def remove_symbol(self, symbol, remove_sr_entries = 1):
+        """remove a symbol from the dictionary
+
+        **INPUTS**
+
+        *STR* symbol -- native symbol to remove
+
+        *BOOL* remove_sr_entries = 1 -- If true, remove the corresponding
+        entries from the SR vocabulary.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol was known and was successfully
+        removed
+        """
+        debug.trace('SymDict.remove_symbol',
+            'symbol = %s' % symbol)
+        try:
+            symbol_info = self.symbol_info[symbol]
+        except KeyError:
+            debug.trace('SymDict.remove_symbol',
+                'unknown symbol')
+            return 0
+
+        spoken_forms = symbol_info.spoken_forms
+        for spoken_form in spoken_forms:
+            phrase = self.spoken_to_phrase(spoken_form)
+            debug.trace('SymDict.remove_symbol',
+                'removing spoken forms: phrase = \n%s' % phrase)
+            symbol_list = self.spoken_form_info.complete_match(phrase)
+            debug.trace('SymDict.remove_symbol',
+                'complete match returned %s' % symbol_list)
+            if remove_sr_entries:
+                self.remove_vocabulary_entry(symbol, spoken_form)
+            if not (symbol_list is None):
+                try:
+                    symbol_list.remove(symbol)
+                    debug.trace('SymDict.remove_symbol',
+                        'symbol_list now %s' % repr(symbol_list))
+                    if not symbol_list:
+                        remove_branch = \
+                            self.spoken_form_info.remove_phrase(phrase)
+                        if remove_branch is None:
+                            debug.trace('SymDict.remove_symbol',
+                                'failed to remove empty branch')
+                except ValueError:
+                    debug.trace('SymDict.remove_symbol',
+                        'symbol not found in symbol_list')
+                    pass
+
+        del self.symbol_info[symbol]
+        if self.tentative_symbols.has_key(symbol):
+            del self.tentative_symbols[symbol]
+
+        letter = self.first_letter(symbol)
+        del self._symbols_starting_with[letter][symbol]
+
+        if self._cached_symbols_as_one_string.has_key(letter):
+            del self._cached_symbols_as_one_string[letter]
+        return 1
+
+    def _add_symbol_starting_with(self, symbol):
+        """private method which adds a symbol to the dictionary of
+        symbols starting with a given letter
+
+        **INPUTS**
+
+        *STR symbol* -- the written form of the symbol
+
+        **OUTPUTS**
+
+        *STR* -- the first letter of the symbol
+        """
+        first_letter = self.first_letter(symbol)
+        try:
+            common = self._symbols_starting_with[first_letter]
+        except KeyError:
+            common = {}
+            self._symbols_starting_with[first_letter] = common
+        common[symbol] = 1
+        return first_letter
+
+
     def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
-                   add_sr_entries=1):
+                   tentative = 1, add_sr_entries=1):
         """Add a symbol to the dictionary
 
         **INPUTS**
         
         *STR* symbol -- Symbol to add
-
-        *BOOL* add_sr_entries = 1 -- If true, adds symbol to the SR vocabulary.
 
         *[STR] user_supplied_spoken_forms* -- Spoken forms for the
          symbol which were supplied explicitly by the user. These
@@ -1556,6 +1582,12 @@ class SymDict(OwnerObject):
          [add_abbreviation]). In such cases, the spoken form wouldn't
          automaticaly be generated by [updated_spoken_forms] and must
          therefore be added explictely by add_symbol.
+
+        *BOOL* tentative = 1 -- If true, symbol is added tentatively,
+        and can be removed on undo/correction/reformatting
+
+        *BOOL* add_sr_entries = 1 -- If true, adds symbol to the SR vocabulary.
+
         
         **OUTPUTS**
         
@@ -1568,17 +1600,25 @@ class SymDict(OwnerObject):
             
         if not self.symbol_info.has_key(symbol):
             
+            self.tentative_symbols[symbol] = tentative
+
             trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
 #            print '-- SymDict.add_symbol: this is a new symbol'
 
             #
             # Add the symbol to the string used for symbol matching
             #
+
             new_string_entry = ' %s ' % symbol
-            if self._cached_symbols_as_one_string == None:
-                self._cached_symbols_as_one_string = new_string_entry
+
+            letter = self._add_symbol_starting_with(symbol)
+
+            if not self._cached_symbols_as_one_string.has_key(letter):
+                self._cached_symbols_as_one_string[letter] = new_string_entry
             else:
-                self._cached_symbols_as_one_string = self._cached_symbols_as_one_string + new_string_entry
+                self._cached_symbols_as_one_string[letter] = \
+                    self._cached_symbols_as_one_string[letter] + \
+                    new_string_entry
 
             #
             # Add an entry to the symbol dictionary
@@ -1634,21 +1674,36 @@ class SymDict(OwnerObject):
         # Store information about the symbol and its spoken forms
         #
         for a_form in forms_this_symbol:
+            added = self.add_vocabulary_entry(symbol, a_form)
             # for user-specified forms, and acronyms, we want to use the
             # capitalization and punctuation given for the vocabulary entry
             # so we need to convert before adding to the lookup Trie 
-            clean_form = re.sub('[^a-zA-Z0-9 ]', ' ', a_form)
-            clean_form = clean_form.strip()
-            clean_form = string.lower(clean_form)
-            phrase = string.split(clean_form)
+            phrase = self.spoken_to_phrase(a_form)
             symbol_list = self.spoken_form_info.complete_match(phrase)
             if symbol_list is None:
                 symbol_list = [symbol]
             elif symbol not in symbol_list:
                 symbol_list.append(symbol)
             self.spoken_form_info.add_phrase(phrase, symbol_list)
-            if add_sr_entries:
-                self.add_vocabulary_entry(symbol, a_form)
+
+
+    def spoken_to_phrase(self, spoken_form):
+        """converts a spoken form as added to the speech engine's
+        vocabulary to the phrase used in spoken_form_info
+
+        **INPUTS**
+
+        *STR* spoken_form -- the spoken form of the vocabulary entry
+
+        **OUTPUTS**
+
+        *[STR]* -- the corresponding phrase to add to spoken_form_info
+        """
+        clean_form = re.sub('[^a-zA-Z0-9 ]', ' ', spoken_form)
+        clean_form = clean_form.strip()
+        clean_form = string.lower(clean_form)
+        phrase = string.split(clean_form)
+        return phrase
 
     def add_vocabulary_entry(self, symbol, spoken_form):
         """adds a vocabulary entry corresponding to a spoken form for a
@@ -1662,7 +1717,7 @@ class SymDict(OwnerObject):
 
         **OUTPUTS**
 
-        *none*
+        *BOOL* -- true if the word was added
         """
         #
         # Add spoken form to NatSpeak's vocab if not already there.
@@ -1700,7 +1755,47 @@ class SymDict(OwnerObject):
             if len(re.split('\s+', spoken_form)) > 1:
                 entry = sr_interface.vocabulary_entry(spoken_form)
                 
-        if entry: sr_interface.addWord(entry)        
+        if entry: 
+            added = sr_interface.addWord(entry)        
+            if added:
+                return 1
+
+        return 0
+
+    def remove_vocabulary_entry(self, symbol, spoken_form):
+        """removes a vocabulary entry corresponding to a spoken form for a
+        symbol which is being removed
+
+        **INPUTS**
+
+        *STR* symbol -- the written form of the native symbol 
+        
+        *STR* spoken_form -- its spoken form
+
+        **OUTPUTS**
+
+        *none*
+        """
+        entry = None
+        if vocabulary_symbols_with_written_form:
+            #
+            # Add the vocabulary entry as a written\\spoken
+            # form
+            #
+
+            # this condition guards against adding unknown single words
+            if spoken_form != symbol:
+                entry = sr_interface.vocabulary_entry(spoken_form, symbol)
+        else:
+            #
+            # Add just the spoken form entry
+            #
+            # since we are adding only the spoken form, the
+            # condition is stricter
+            if len(re.split('\s+', spoken_form)) > 1:
+                entry = sr_interface.vocabulary_entry(spoken_form)
+                
+        if entry: sr_interface.deleteWord(entry)        
 
 
     def get_spoken_forms(self, symbol):
@@ -1851,7 +1946,7 @@ class SymDict(OwnerObject):
 
         *[STR] expansions * -- list of possible expansions of the word.
         """
-        if (self.word_exists)(word) is not None:
+        if not ((self.word_exists)(word) is None):
             expansions = [word]
             if len(word) == 1 and word[0].isalpha():
                 acronym = string.lower(word)
@@ -1861,16 +1956,16 @@ class SymDict(OwnerObject):
         hyphenated = word + '-'
         hyphenated_pron = \
             sr_interface.vocabulary_entry(word, hyphenated)
-        if (self.word_exists)(hyphenated_pron) is not None:
+        if not ((self.word_exists)(hyphenated_pron) is None):
             return [hyphenated]
         if len(word) > 1:
             capped =  word.capitalize()
 # if capitalized form exists, assume that the word is pronouncable (even
 # without the capitalization)
-            if (self.word_exists)(capped) is not None:
+            if not ((self.word_exists)(capped) is None):
                 return [word]
         upper = word.upper()
-        if (self.word_exists)(upper) is not None:
+        if not ((self.word_exists)(upper) is None):
 # if word exists only in all-caps form, assume that the effective
 # pronunciation is as an acronym, which may not be pronouncable if not
 # all caps
@@ -2123,16 +2218,13 @@ class SymDict(OwnerObject):
         mess_symbols = lambda : "Symbols are: %s" % repr(self.symbol_info)
 #        trace('SymDict.match_pseudo_symbol', mess_symbols)
 
-        #
-        # Find all known native symbols that match *pseudo_symbol*
-        #
-        all_symbols = self.symbols_as_one_string()
 
         #
         # Remove leading/trailing blanks
         #
         pseudo_symbol = re.sub('(^\s+|\s+$)', '', pseudo_symbol)
         words = re.split('[^a-zA-Z0-9]+', pseudo_symbol)
+
 
         #
         # Remove empty words in case pseudo_symbol starts or ends with
@@ -2142,6 +2234,10 @@ class SymDict(OwnerObject):
             words = words[1:]
         if len(words) > 0 and words[len(words)-1] == '':
             words = words[:len(words)-1]
+        #
+        # Find all known native symbols that match *pseudo_symbol*
+        #
+        all_symbols = self.symbols_as_one_string(words[0][0])
 
             
 #        print '-- SymDict.match_pseudo_symbols: words=%s' % words        
@@ -2196,52 +2292,6 @@ class SymDict(OwnerObject):
                 ii = ii + 1
             previous_matches[a_match] = 1
         return matches
-
-
-    
-
-    def format_as_symbol(self, pseudo_symbol, words):
-        
-        """Returns a list of alternative ways to format a pseudo
-        symbol as a new native symbol.
-        
-        **INPUTS**
-        
-        *STR* pseudo_symbol -- Pseudo symbol to be formatted
-
-        *[STR] words -- Words in *pseudo_symbol* (to avoid redundant splitting        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        global symbol_formats
-
-        collapsed_words, dummy = self.collapse_consec_single_chars(words)
-                            
-        #
-        # Format list of words into a symbol
-        #
-        possible_forms = []
-        for a_format in symbol_formats:
-
-            #
-            # Make a copy of the words so that formating functions can't
-            # modify the original in place
-            #
-            tmp_words = []
-            for a_word in collapsed_words: tmp_words = tmp_words + [a_word]
-            a_match = a_format(pseudo_symbol, tmp_words)
-
-            #
-            # Make sure the match is labeled as new (in case the formatting
-            # function forgot to do so)
-            #
-            a_match.is_new = 1
-            possible_forms = possible_forms + [a_match]
-
-        return possible_forms
 
     def reg_pseudo_to_native_symbol(self, words):
         
@@ -2402,7 +2452,7 @@ class SymDict(OwnerObject):
         global vocabulary_symbols_with_written_form
 
 
-        self._cached_symbols_as_one_string = ''
+        self._cached_symbols_as_one_string = {}
 
         #
         # Delete vocabulary entries for symbols
@@ -2721,9 +2771,11 @@ class SymDict(OwnerObject):
             self.regenerate_expansions()
 
             #
-            # Make sure symbols have been added to SR's vocabulary
+            # Make sure symbols have been added to SR's vocabulary, and
+            # to the dictionary of symbols starting with a given letter
             #
             for written_as, symbol_info in self.symbol_info.items():
+                self._add_symbol_starting_with(written_as)
                 for spoken_as in symbol_info.spoken_forms:
                     self.add_vocabulary_entry(written_as, spoken_as)
 

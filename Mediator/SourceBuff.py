@@ -32,6 +32,8 @@ from Object import Object, OwnerObject
 
 from SourceBuffCookie import SourceBuffCookie
 
+import AppTracker
+
 import sb_mixins
 
 class SourceBuff(OwnerObject):
@@ -739,7 +741,15 @@ class SourceBuff(OwnerObject):
 
         **OUTPUTS**
 
-        *none*
+        *(before, after)* -- a tuple of AppTracker.TextBlock objects,
+        representing the text inserted before and after the cursor,
+        including any surrounding whitespace which was inserted,
+        and the final range occupied by the text inserted
+        (which is normally not the same as the range replaced).  If
+        either code_bef or code_after could not be matched to the
+        changes reported by the editor (or if one
+        of the two was empty), then the corresponding element of the
+        return tuple will be None.
         """
 
          
@@ -765,10 +775,19 @@ class SourceBuff(OwnerObject):
     
         self.indent((indent_from, self.cur_pos()))        
         final_cur_pos = self.cur_pos()
+        inserted_text = None
+        if code_bef:
+            text = self.get_text(indent_from, final_cur_pos)
+            inserted_text = AppTracker.TextBlock(text, indent_from)
+        appended_text = None
         if code_after != '':
             self.insert(code_after, (self.cur_pos(), self.cur_pos()))
+            end_pos = self.cur_pos()
             self.indent((final_cur_pos, self.cur_pos()))
             self.goto(final_cur_pos)
+            text = self.get_text(final_cur_pos, end_pos)
+            appended_text = AppTracker.TextBlock(text, final_cur_pos)
+        return inserted_text, appended_text
 
        
 

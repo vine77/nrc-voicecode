@@ -23,6 +23,9 @@
 VoiceCode via a messaging protocol."""
 
 import messaging, SourceBuffCached
+import AppTracker
+import re
+import sys
 import SourceBuffWithDiffs
 import sb_services
 from debug import trace
@@ -491,7 +494,12 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
 
         **OUTPUTS**
 
-        *none*
+        *AppTracker.TextBlock* -- a block representing the text
+        inserted including any surrounding whitespace which was inserted,
+        and the final range occupied by the text inserted
+        (which is normally not the same as the range replaced), or
+        None if the original text could not be matched to the text
+        insertion reported by the editor.
         """
 
         trace('SourceBuffMessaging.insert', 'text=%s, range=%s, self.name()=%s' % (text, range, self.name()))
@@ -503,8 +511,22 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         self.app.update_response = 1
         updates = self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
-        
-
+        buff_tracker = AppTracker.BuffInsertionTracker(buff_name =
+            self.name())
+        tracker = AppTracker.SingleBuffTracker(buff_name =
+            self.name(), tracked_buffer = buff_tracker)
+        for update in updates:
+            update.apply(tracker)
+        block = buff_tracker.block_containing(self.cur_pos())
+        inserted = block.text[:(self.cur_pos() - block.start())]
+        loose = AppTracker.LooseMatch()
+        s = r'\s*' +  loose.expr(text) + r'\s*$'
+        found = re.search(s, inserted)
+        if found:
+            return AppTracker.TextBlock(found.group(),
+                                        found.start() + block.start())
+        return None
+    
     def delete(self, range = None):
         """Delete text in a source buffer range.
 
@@ -630,7 +652,15 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
 
         **OUTPUTS**
 
-        *none*
+        *(before, after)* -- a tuple of AppTracker.TextBlock objects,
+        representing the text inserted before and after the cursor,
+        including any surrounding whitespace which was inserted,
+        and the final range occupied by the text inserted
+        (which is normally not the same as the range replaced).  If
+        either code_bef or code_after could not be matched to the
+        changes reported by the editor (or if one
+        of the two was empty), then the corresponding element of the
+        return tuple will be None.
         """
         
         trace('SourceBuffInsertIndentMess.insert_indent', '** invoked')
@@ -645,6 +675,44 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
         trace('SourceBuffInsertIndentMess.insert_indent',
             'updates = %s' % response[1]['updates'])
         self.app.update_response = 1
-        self.app.apply_upd_descr(response[1]['updates'])
+        updates = self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
+        buff_tracker = AppTracker.BuffInsertionTracker(buff_name =
+            self.name())
+        tracker = AppTracker.SingleBuffTracker(buff_name =
+            self.name(), tracked_buffer = buff_tracker)
+        for update in updates:
+            update.apply(tracker)
+#            sys.stderr.write('after update, tracker shows\n')
+#            sys.stderr.writelines(buff_tracker.show())
+        block = buff_tracker.block_containing(self.cur_pos())
+        if block:
+            inserted = block.text[:(self.cur_pos() - block.start())]
+            appended = block.text[(self.cur_pos() - block.start()):]
+            loose = AppTracker.LooseMatch()
+            appended_text = None
+            inserted_text = None
+            if code_bef:
+                s = r'\s*' +  loose.expr(code_bef) + r'\s*$'
+                found = re.search(s, inserted)
+                if found:
+                    inserted_text = AppTracker.TextBlock(found.group(),
+                                                found.start() + block.start())
+            if code_after:
+                s = r'\s*' +  loose.expr(code_after) + r'\s*'
+                found = re.match(s, appended)
+                if found:
+                    appended_text = AppTracker.TextBlock(found.group(),
+                                                self.cur_pos())
+            return inserted_text, appended_text
+        elif code_bef or code_after:
+#            sys.stderr.write('WARNING - BLOCK NOT FOUND\n')
+#            sys.stderr.write('code_bef = %s, code_after = %s' %
+#                (repr(code_bef), repr(code_after)))
+#            sys.stderr.write('pos = %d\n' % self.cur_pos())
+#            sys.stderr.write('blocks:\n')
+#            sys.stderr.writelines(buff_tracker.show())
+            return None, None
+
+
         

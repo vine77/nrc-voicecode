@@ -645,11 +645,11 @@ comparisons.add_lsa(LSAlias(['greater than', 'is greater than'],
         {'C': ' > ', 'python': ' > ', 'perl': ' > '},
         comparison_operator))
 comparisons.add_lsa(LSAlias(['less or equal to', 'is less or equal to', 'less or equal',
-        'is less or equal'],
+        'is less or equal', 'less than or equal to'],
         {'C': ' <= ', 'python': ' <= ', 'perl': ' <= '},
         comparison_operator))
 comparisons.add_lsa(LSAlias(['greater or equal to', 'is greater or equal to', 'greater or equal',
-        'is greater or equal'],
+        'is greater or equal', 'greater than or equal to'],
         {'C': ' >= ', 'python': ' >= ', 'perl': ' >= '},
         comparison_operator))
 comparisons.add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',

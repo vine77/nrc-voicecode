@@ -512,10 +512,15 @@ class SB_ServiceIndent(SB_Service):
         # Now insert the code
         #
 
-        self.buff.insert(code_bef, range)
+        inserted = None
+        appended = None
+        if code_bef:
+            inserted = self.buff.insert(code_bef, range)
         pos = self.buff.cur_pos()
-        self.buff.insert(code_after)
-        self.buff.goto(pos)
+        if code_after:
+            appended = self.buff.insert(code_after)
+            self.buff.goto(pos)
+        return inserted, appended
 
     def incr_indent_level(self, levels=1, range=None):
         
