@@ -27,6 +27,8 @@ import exceptions, string, sys, traceback, types
 def not_implemented(name):
     """Prints warning message when a stub function is called."""
     print "WARNING: stub function %s is not implemented yet!!!" % name
+    if traces_are_on():
+       print_call_stack()
 
 def virtual(name, instance=None):
     """Prints warning message when a virtual method is called."""
@@ -34,6 +36,8 @@ def virtual(name, instance=None):
     if instance:
        mess = "%s Invoked on instance %s!!!" % (mess, instance)
     print mess
+    if traces_are_on():
+       print_call_stack()
 
 def critical_warning(warn):
     """Prints a critical warning message.
@@ -67,10 +71,12 @@ def print_call_stack(print_to_file=sys.stdout):
     This is done by raising an exception, catching it and printing the
     traceback object. In Python 2, there is a more direct way of doing this.
     """
+    print_to_file.write("\nCall stack was:\n")
     try:
         raise exceptions.Exception()
     except exceptions.Exception, err:        
         traceback.print_stack(file=print_to_file)
+        print_to_file.write("\n")
 
 def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
     if trace_is_active(trace_id):
@@ -129,6 +135,11 @@ def print_trace(trace_id, message, insert_nl=1):
             trace_file.write('\n')
         trace_file.flush()
 
+def traces_are_on():
+   if trace_fct == print_trace:
+      return 1
+   else:
+      return None
 
 trace_fct = dont_print_trace
 trace_file = sys.stdout

@@ -176,7 +176,7 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         self.deep_construct(CorrectUtteranceEventWX,
                             {'evt_handler': evt_handler},
                             args)
-                            
+                                                        
 class CorrectRecentEventWX(CorrectRecentEvent):
     """implementation of CorrectRecentEvent using custom wxPython
     events

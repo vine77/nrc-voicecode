@@ -27,6 +27,7 @@
 
 """
 
+import debug, messaging
 import sys
 import string
 import shutil
@@ -38,7 +39,6 @@ from thread_communication_WX import *
 import exceptions
 import os
 import threading
-import DlgModel
 
 font_sz = None
 #font_sz=14
@@ -110,6 +110,7 @@ def set_text_font(control):
     if font_sz:
         control.SetFont(wxFont(font_sz, wxMODERN, wxNORMAL, font_wt))
 
+
 class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
     """implementation of DismissModalEvent using a Python Event flag.  
     The dialog must check this flag periodically
@@ -141,8 +142,7 @@ class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
         """
         self.bye.set()
         wxWakeUpIdle()
-
-
+    
 
 class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     """
@@ -294,12 +294,13 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         
         **INPUTS**
         
-        *Dismissable, OwnerObject dialog* -- the dialog to show
+        *DlgModelView, OwnerObject dialog* -- the dialog to show
         
         **OUTPUTS**
         
         *INT* -- the return code from ShowModal 
         """
+        debug.trace('MediatorConsoleWX.show_modal_dialog', '** dialog=%s' % dialog)
         bye = dialog.dismiss_event()
         self.push_modal(bye)
         answer = dialog.ShowModal()
@@ -407,8 +408,8 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         none were corrected
         """
         originals = map(lambda u: u[0].words(), utterances)
-        box = CorrectRecentWX(self, self.main_frame, utterances, 
-            self.gram_factory, pos = self.corr_recent_pos)
+        box = CorrectRecentWX(self, utterances, 
+            self.gram_factory, parent=self.main_frame, pos = self.corr_recent_pos)
         answer = self.show_modal_dialog(box)
         self.corr_recent_pos = box.GetPositionTuple()
         changed = box.changed()  
@@ -456,30 +457,35 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 ##            print 'answer was cancel'
 #            return None
 
-class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
-    """mix-in for a dialog box with an idle handler which checks a 
-    threading.Event object to see if it should simulate being dismissed.
+class DlgModelViewWX(MediatorConsole.DlgModelView, wxDialog):
+    """wxPython implementation of a Model-View Dialog.
 
     **INSTANCE ATTRIBUTES**
 
     *threading.Event bye* -- threading.Event object whose state will be
-    set to true if the dialog box should cancel.  The mix-in
+    set to true if the dialog box should cancel.  The class
     has a timer event which checks the state of the Event object
     and calls on_dismiss if the Event's state
     becomes true.  The dialog box should then call EndModal with return
     value wxID_DISMISS_MODAL.
+
     """
-    def __init__(self, **args):
+    def __init__(self, parent, pos=None, **args):
         """
         """
+        use_pos = pos
+        if use_pos is None:
+            use_pos = wxDefaultPosition        
+        wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
+            (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        
         ID_DISMISS_FLAG_TIMER = wxNewId()
-        self.deep_construct(ByeByeMixIn,
+        self.deep_construct(DlgModelViewWX,
                             {
                              'bye': threading.Event(),
-                             'timer': wxTimer(self, ID_DISMISS_FLAG_TIMER)
-                            }, args)
+                             'the_timer': None
+                            }, args,                             exclude_bases = {possible_capture: 1, wxDialog: 1})
         EVT_TIMER(self, ID_DISMISS_FLAG_TIMER, self.check_dismiss_flag)
-        self.timer.Start(50)
 # this doesn't work because of a bug in wxPython (modal dialog boxes 
 # which were started from a custom event handler are created from within
 # an idle event, so no other idle events get processed until 
@@ -488,10 +494,25 @@ class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
 #        EVT_IDLE(wxGetApp(), self.check_dismiss_flag)
 #        EVT_IDLE(self, self.check_dismiss_flag)
 
+    def timer(self):
+       # Note: timer cannot be created at __init__ time, because
+       #       at that point, the view for the dialog may not
+       #       have been defined.
+       if self.the_timer:
+          return the_timer
+       else:
+          ID_DISMISS_FLAG_TIMER = wxNewId()
+          self.the_timer = wxTimer(self.view(), ID_DISMISS_FLAG_TIMER)
+          self.the_timer.Start(50)
+          return self.the_timer
+          
+    def delete_timer(self):
+       the_timer = None
+
     def remove_other_references(self):
 #        print 'disconnecting event?'
-        self.timer.Stop()
-        self.timer = None
+        self.timer().Stop()
+        self.delete_timer()
 # this doesn't work because of a bug in wxPython (modal dialog boxes 
 # which were started from a custom event handler are created from within
 # an idle event, so no other idle events get processed until 
@@ -534,9 +555,9 @@ class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
             return
 
     def on_dismiss(self):
-        debug.virtual('ByeByeMixIn.on_dismiss')
+        debug.virtual('DlgModelViewWX.on_dismiss', self)
 
-class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObject):
+class CorrectionBoxWX(DlgModelViewWX, possible_capture, Object.OwnerObject):
     """dialog box for correcting misrecognized dictation results
 
     **INSTANCE ATTRIBUTES**
@@ -560,8 +581,8 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 
     *[STR] choices* -- list of alternatives
     """
-    def __init__(self, console, parent, utterance, validator, 
-            can_reinterpret, gram_factory, pos = None, **args):
+    def __init__(self, console, utterance, validator, 
+            can_reinterpret, gram_factory, **args):
         """
         **INPUTS**
 
@@ -589,11 +610,6 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         *(INT, INT) pos* -- position of the box in pixels
     
         """
-        use_pos = pos
-        if pos is None:
-            use_pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
-            (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         possible_capture.__init__(self)
         self.deep_construct(CorrectionBoxWX,
                             {
@@ -605,7 +621,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                              'select_n_gram': None,
                              'selection_gram': None
                             }, args, 
-                            exclude_bases = {possible_capture: 1, wxDialog: 1}
+                            exclude_bases = {possible_capture: 1}
                            )
         self.name_parent('console')
         self.add_owned('choose_n_gram')
@@ -624,8 +640,6 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                 gram_factory.make_simple_selection(get_visible_cbk = \
                 self.get_text, get_selection_cbk = self.get_selection,
                 select_cbk = self.on_select_text)
-        if pos is None:
-            self.CenterOnScreen()
         s = wxBoxSizer(wxVERTICAL)
         intro = wxStaticText(self, wxNewId(), 
             "&Correct the text (use spoken forms)",
@@ -1242,7 +1256,7 @@ class CorrectionValidatorSpoken(CorrectionValidator):
         self.utterance.set_spoken(string.split(corrected))
         return 1
 
-class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObject):
+class CorrectRecentWX(DlgModelViewWX, possible_capture, Object.OwnerObject):
     """dialog box which lists recently dictated utterances, allowing the user 
     to select one for correction of misrecognized results or for symbol 
     reformatting
@@ -1265,15 +1279,13 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 
     *ChoiceGram correct_n_gram* -- ChoiceGram supporting "Correct n"
     """
-    def __init__(self, console, parent, utterances, 
-            gram_factory, pos = None, **args):
+    def __init__(self, console, utterances, 
+            gram_factory, **args):
         """
         **INPUTS**
 
         *MediatorConsoleWX console* -- the MediatorConsole object which owns
         the correction box
-
-        *wxWindow parent* -- the parent wxWindow
 
         *[(SpokenUtterance, INT, BOOL)] utterances* -- the n most recent 
         dictation utterances (or all available if < n), sorted most 
@@ -1285,15 +1297,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
 
         *WinGramFactory gram_factory* -- the grammar factory used to add
         speech grammars to the dialog box
-
-        *(INT, INT) pos* -- position of the box in pixels
         """
-        use_pos = pos
-        if pos is None:
-            use_pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
-            (600, 400),
-            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         possible_capture.__init__(self)
         self.deep_construct(CorrectRecentWX,
                             {
@@ -1305,7 +1309,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                              'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
-                            exclude_bases = {possible_capture:1, wxDialog: 1}
+                            exclude_bases = {possible_capture:1}
                            )
         self.name_parent('console')
         self.add_owned('correct_n_gram')
@@ -1318,8 +1322,6 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                 ):
                 self.correct_n_gram = \
                     gram_factory.make_choices(choice_words = ['Correct'])
-        if pos is None:
-            self.CenterOnScreen()
 
         s = wxBoxSizer(wxVERTICAL)
         intro = wxStaticText(self, wxNewId(), 
@@ -1562,7 +1564,8 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         """
         return self.corrected.keys()
 
-class ReformatRecentSymbolsModel(DlgModel.DlgModel):
+
+class ReformatRecentSymbolsModel(MediatorConsole.DlgModelView):
     """MODEL for dialog box which lists recently dictated symbols, allowing the user 
     to select one for reformatting
 
@@ -1587,23 +1590,22 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
        self.deep_construct(ReformatRecentSymbolsModel, 
                            {'symbols': symbols},
                            args)
-       debug.trace('ReformatRecentSymbolsModel.__init__', 'symbols=%s' % symbols)
        self.setView(ReformatRecentSymbolsViewWX(console, parent, symbols, 
                                                 gram_factory, pos))
 
     def displayed_symbols(self):
-        return self.view.displayed_symbols()
+        return self.view().displayed_symbols()
 
     def Show(self, flag=None):
         if flag == None:
-            return self.view.Show()
+            return self.view().Show()
         else:
-            return self.view.Show(flag)
+            return self.view().Show(flag)
             
     def ShowModal(self):
-        return self.view.ShowModal()
+        return self.view().ShowModal()
 
-class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture, 
+class ReformatRecentSymbolsViewWX(MediatorConsole.DlgModelView, wxDialog, possible_capture, 
                               Object.OwnerObject):
     """dialog box which lists recently dictated symbols, allowing the user 
     to select one for reformatting
@@ -1654,7 +1656,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         possible_capture.__init__(self)
-        self.deep_construct(CorrectRecentWX,
+        self.deep_construct(ReformatRecentSymbolsViewWX,
                             {
                              'console': console,
                              'symbols': symbols,
