@@ -2756,70 +2756,46 @@ def test_compile_symbols():
    
 auto_test.add_test('compile_symbols', test_compile_symbols, 'Testing voice command for compiling symbols')
     
+    
+##############################################################################
+# Use this to create temporary tests
+##############################################################################
+
+def test_large_messages():
+    testing.init_simulator_regression()
+    commands.open_file('tmp.py')
+    commands.app.set_text(generate_string_of_approx_length(1024))
+    commands.app.print_buff()
+    
+    
+def generate_string_of_approx_length(str_len):
+   the_string = ""
+   line_len = 1
+   len_to_now = 0
+   while len_to_now < str_len:
+      the_string = "%s%s" % (the_string, line_len)
+      len_to_now = len_to_now + 1
+      line_len = line_len + 1
+      if line_len >= 9:
+         line_len = 1
+         the_string = "%s\n" % the_string
+         len_to_now = len_to_now + 1
+   return the_string
+      
+
+
+auto_test.add_test('large_messages', test_large_messages, desc='Send a message that has more than 1024 character (length of a message chunk)')
+
+
+    
+    
 ##############################################################################
 # Use this to create temporary tests
 ##############################################################################
 
 def test_temporary():
-    testing.init_simulator_regression()
-    instance_name = testing.editor()
-    if instance_name == None:
-        msg = '\n***Using old Mediator object: '
-        msg = msg + 'unable to test correction features***\n'
-        print msg
-        return
-    correction_available = testing.correction_available()
-    if instance_name == None:
-        msg = '\n***No correction available: '
-        msg = msg + 'unable to test correction features***\n'
-        print msg
-        return
-    commands.open_file('blah.py')
-
-    the_mediator = testing.mediator()
-    print '\n***Testing initial state***\n'
-
-    check_stored_utterances(instance_name, expected = 0)
-
-    print '\n***Some simple dictation***\n'
-
-    utterances = []
-    utterances.append(string.split('class clown inherits from student'))
-    input = ['0\n0\n']
-    status = [1]
-
-    utterances.append(string.split('class body'))
-    input.append('')
-    status.append(1)
-
-    utterances.append(string.split('define method popularity method body'))
-    input.append('0\n')
-    status.append(1)
-
-
-    utterances.append(string.split('return 8'))
-    input.append('')
-    status.append(1)
-
-    for i in range(len(utterances)):
-        test_say(utterances[i], user_input = input[i])
-
-    print '\n***Testing state***\n'
-
-    check_stored_utterances(instance_name, expected = len(utterances))
-    check_recent(instance_name, utterances, status)
-
-    print '\n***Testing scratch that***\n'
-
-    scratched = check_scratch_recent(instance_name)
-    if scratched:
-        del utterances[-scratched:]
-        del input[-scratched:]
-        del status[-scratched:]
-
-    check_stored_utterances(instance_name, expected = len(utterances))
-    check_recent(instance_name, utterances, status)
-
-
+   pass
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')
+
+

@@ -72,18 +72,15 @@
        ;;;
        ;;; Get a chunk of the message
        ;;;
-       (if (< (length mess) chunk-len)
-	   (setq chop-len (length mess))
-	 (setq chop-len chunk-len))
-       (setq a-chunk (substring mess 0 (1- chop-len)))
-       (setq mess (substring mess chop-len))
+       (setq a-chunk (substring mess 0 chunk-len))
+       (setq mess (substring mess chunk-len))
 
        ;;;
        ;;; Ignore single character prefix (the one indicating if this is 
        ;;; the last chunk in the message)
        ;;;
        (setq unpacked-mess (concat unpacked-mess (substring a-chunk 1)))
-       (setq bytes-read (+ bytes-read chop-len))
+       (setq bytes-read (+ bytes-read chunk-len))
      )
      (list unpacked-mess bytes-read)
    )

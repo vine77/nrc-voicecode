@@ -44,20 +44,13 @@ import sr_interface, util
 debug.config_traces(status="on", 
                     active_traces={
 #########################################################################
-# debugging basic_correction with Emacs  
-                  
-#                    'scratch_recent': 1,
-#                    'StateStackBasic': 1,
-#                    'restore_state': 1,
-#                    'SB_ServiceFullState': 1,
-#########################################################################
-                    
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,
 #                       'ResMgrBasic.interpret_dictation': 1,
-                      'send_mess': 1,
-                    'get_mess': 1,
-                      'RecogStartMgr': 1,
+#                      'send_mess': 1,
+#                    'get_mess': 1,
+#                      'MessPackager_FixedLenSeq.pack_mess': 1,
+#                      'RecogStartMgr': 1,
 #                       'get_mess':1, 
 #                       'send_mess': 1,                    
 #                       'DictWinGramNL': 1,
@@ -80,7 +73,7 @@ debug.config_traces(status="on",
 #                      'RecogStartMgr': 1,
 #                       'ResMgrBasic': 1,
 #                       'BasicCorrectionWinGram': 1,
-                      'RSMInfrastructure': 1,
+#                      'RSMInfrastructure': 1,
 #                      'WinGramMgr': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1
 #                      'synchronize': 1,

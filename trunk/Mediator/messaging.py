@@ -605,13 +605,14 @@ class MessPackager_FixedLenSeq(MessPackager):
         
         *STR packed_mess* -- The packed message
         """
-
+        trace('MessPackager_FixedLenSeq.pack_mess', '** self.chunk_len=%s' % self.chunk_len)
         packed_mess = ''
         while not mess == '':            
             #
             # Make sure you leave room for the single character prefix
             #
             a_chunk = mess[:self.chunk_len-1]
+            trace('MessPackager_FixedLenSeq.pack_mess', '** a_chunk="%s"' % a_chunk)            
 
             #
             # If this is last chunk in message, pad it with blanks to the
@@ -628,6 +629,8 @@ class MessPackager_FixedLenSeq(MessPackager):
             
             a_chunk = "%s%s" % (prefix, a_chunk)
             packed_mess = packed_mess + a_chunk
+            
+        trace('MessPackager_FixedLenSeq.pack_mess', 'returning packed_mess="%s"' % packed_mess)
 
         return packed_mess
             
