@@ -490,6 +490,9 @@ class SymDict(OwnerObject):
     must have in order to be accepted as an approximate match to a
     pseudo symbol. 
    
+    [INT] *max_auto_acronym=3* -- Maximum number of characters
+    in one word of a symbol for us to automatically generate an acronym
+    as part of the expanded forms
    
     CLASS ATTRIBUTES**
 
@@ -520,7 +523,9 @@ class SymDict(OwnerObject):
                          'unresolved_abbreviations': {},
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
                          'min_chars_for_approx_match': 4,
-                         'min_chars_run_together': 3})
+                         'min_chars_run_together': 3,
+                         'max_auto_acronym': 3
+                        })
         
         self.deep_construct(SymDict,
                             {'sym_file': sym_file,
@@ -973,12 +978,13 @@ class SymDict(OwnerObject):
         
         **OUTPUTS**
         
-        *none* -- 
+        *STR* -- the spoken form of the expanded acronym
         """
         acronym = string.lower(acronym)
         self.acronyms[acronym] = 1
         spoken = sr_interface.spoken_acronym(acronym)
         self._add_corresponding_expansion(acronym, spoken)
+        return spoken
 
     def preferred_abbreviations(self, word):
         """returns the preferred abbreviations for the given word
@@ -1232,6 +1238,45 @@ class SymDict(OwnerObject):
 # append back the old abbreviations
             self.import_abbreviations(temp_storage)
     
+    def import_recent(self):
+        """recover abbreviations and expansions from most recent export
+        file
+
+        Note: import_abbreviations (called by import_recent)
+        may raise exceptions due to problems opening the file or 
+        executing the python commands therein
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the file from which abbreviation preferences 
+        were successfully recovered, or None if they were not
+        """
+        on_exit = self.export_file + '.py'
+        on_init = self.export_file + '.on_init.py'
+        recent = None
+        exit_date = None
+        if os.path.exists(on_exit):
+            exit_date = util.last_mod(on_exit)
+            recent = on_exit
+        if os.path.exists(on_init):
+            init_date = util.last_mod(on_init)
+            if recent and init_date > exit_date:
+                recent = on_init
+        if not recent:
+            return None
+        try:
+            f = open(recent, "r")
+            self.import_abbreviations(f)
+            return recent
+        except:
+            traceback.print_exc(file = sys.stderr)
+            self.clear_abbreviations()
+            return None
+
     def finish_config(self, mark_user = 1):
         """Finish performing those parts of the SymDict
         configuration which can't take place until after the VoiceCode
@@ -1582,11 +1627,17 @@ class SymDict(OwnerObject):
         # Store information about the symbol and its spoken forms
         #
         for a_form in forms_this_symbol:
-            phrase = string.split(a_form)
+            # for user-specified forms, and acronyms, we want to use the
+            # capitalization and punctuation given for the vocabulary entry
+            # so we need to convert before adding to the lookup Trie 
+            clean_form = re.sub('[^a-zA-Z0-9 ]', ' ', a_form)
+            clean_form = clean_form.strip()
+            clean_form = string.lower(clean_form)
+            phrase = string.split(clean_form)
             symbol_list = self.spoken_form_info.complete_match(phrase)
             if symbol_list is None:
                 symbol_list = [symbol]
-            else:
+            elif symbol not in symbol_list:
                 symbol_list.append(symbol)
             self.spoken_form_info.add_phrase(phrase, symbol_list)
             #
@@ -1680,8 +1731,7 @@ class SymDict(OwnerObject):
         return the_spoken_forms
 
 
-
-    def expand_word(self, word, symbol):
+    def expand_word(self, word, symbol, only_word = 0):
         """Expands a word from a symbol to its possible spoken forms.
 
         If *word* is an in-vocabulary word simply returns *[word]*
@@ -1705,6 +1755,9 @@ class SymDict(OwnerObject):
         *STR* abbreviation -- Abbreviation to be expanded 
         
         *STR* symbol -- Symbol in which the word appeared
+
+        *BOOL* only_word -- true if the word is the only one in the
+        symbol (in which case we won't add an acronym expansion for it)
         
         **OUTPUTS**
         
@@ -1740,12 +1793,27 @@ class SymDict(OwnerObject):
             # Check if this is an unresolved abbreviation
             # (note: flag=4 means case unsensitive)
             #
-            if sr_interface.getWordInfo(word, 4) == None:
+            if sr_interface.getWordInfo(word, 4) is None:
+                hyphenated = word + '-'
+                hyphenated_pron = \
+                    sr_interface.vocabulary_entry(word, hyphenated)
+                if sr_interface.getWordInfo(hyphenated, 4) is not None:
+                    expansions = [hyphenated]
+                    return expansions
+                elif sr_interface.getWordInfo(hyphenated_pron, 4) is not None:
+                    return expansions
 #                print '-- SymDict.expand_word: word is not a known abbreviation. Adding it to unresolved abbreviations'                
                 if self.unresolved_abbreviations.has_key(word):
                     self.unresolved_abbreviations[word][symbol] = 1
                 else:
                     self.unresolved_abbreviations[word] = {symbol: 1}
+                if not only_word and len(word) <= self.max_auto_acronym:
+                    acronym = string.lower(word)
+                    spoken = sr_interface.spoken_acronym(acronym)
+                    if len(word) == 1:
+                        expansions = [spoken]
+                    else:
+                        expansions.append(spoken)
 
 #        print '-- SymDict.expand_word: returning expansions=%s' % expansions
         return expansions 
@@ -1792,6 +1860,8 @@ class SymDict(OwnerObject):
 #                    print '-- SymDict.expand_possible_forms: a_partial_form=%s, an_extension=%s' % (a_partial_form, an_extension)
                     if a_partial_form == '':
                         an_extended_partial_form = an_extension
+                    elif a_partial_form[-1] == '-':
+                        an_extended_partial_form = a_partial_form + an_extension
                     else:
                         an_extended_partial_form = a_partial_form + ' ' + an_extension
                     extended_partial_forms = extended_partial_forms + [an_extended_partial_form]
@@ -2328,25 +2398,9 @@ class SymDict(OwnerObject):
         os.remove(file)
 
         fatal = 1
-        on_exit = self.export_file + '.py'
-        on_init = self.export_file + '.on_init.py'
-        recent = None
-        exit_date = None
-        if os.path.exists(on_exit):
-            exit_date = util.last_mod(on_exit)
-            recent = on_exit
-        if os.path.exists(on_init):
-            init_date = util.last_mod(on_init)
-            if recent and init_date > exit_date:
-                recent = on_init
+        recent = self.import_recent()
         if recent:
-            try:
-                f = open(recent, "r")
-                self.import_abbreviations(f)
-                fatal = 0
-            except:
-                traceback.print_exc(file = sys.stderr)
-                self.clear_abbreviations()
+            fatal = 0
 
         msg = msg + 'We are renaming it to \n%s\n' % backup \
             + 'so that it will not recur next time you run the mediator\n'
@@ -2399,6 +2453,7 @@ class SymDict(OwnerObject):
         if file is None:
             return None
         if not os.path.exists(file):
+            self.import_recent()
             return None
         try:
             f = open(file, "r")
@@ -2567,8 +2622,11 @@ class SymDict(OwnerObject):
             #
             for written_as, symbol_info in self.symbol_info.items():
                 for spoken_as in symbol_info.spoken_forms:
-                    entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-                    sr_interface.addWord(entry)
+                    if len(re.split('\s+', spoken_as)) > 1:
+# see comment under update_spoken_forms
+                        entry = sr_interface.vocabulary_entry(spoken_as, 
+                            written_as)
+                        sr_interface.addWord(entry)
         except Exception, e:
             extype, value, trace = sys.exc_info()
             ex = traceback.format_exception(extype, value, trace)

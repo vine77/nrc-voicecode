@@ -647,7 +647,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CF26A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01951B30>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -670,8 +670,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -681,8 +681,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 Unresolved abbreviations are:
@@ -780,14 +780,13 @@ this_class: ['this class']
 try: ['try']
 try_attribute: ['try attribute']
 write: ['write']
-x: ['x']
+x: ['X.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
-'non': appears in ['LargeNonObject', 'SmallNonObject', 'profConstrLargeNonObj', 'profConstrSmallNonObj', 'profGetLargeNonObj', 'profGetSmallNonObj', 'profSetLargeNonObj', 'profSetSmallNonObj']
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
@@ -816,8 +815,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -827,8 +826,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -848,8 +847,8 @@ After accepting those symbols, known symbols are:
 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -859,8 +858,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
 this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -901,16 +900,179 @@ version number unchanged
 
 comparing symdict.dict created from scratch with
 the reference dictionary current_symdict.dict
-no differences found
+ERROR: contents of persistent SymDict dictionary appears
+to have changed, without a change in the version number.
+Both current_symdict.dict and symdict.dict
+(the latter created from scratch) have version 5
+but the following differences were found:
 
-initializing SymDict from dictionary
+item 'a' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
 
-initialization from dictionary was successful
-Abbreviation file was unchanged, as expected
-initializing fresh SymDict from dictionary
+item 'b' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
 
-initialization from dictionary was successful
-Fresh abbreviation file matches current one, as expected
+item 'c' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'f' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'g' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'h' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'm' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'n' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'p' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'r' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 's' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'u' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'v' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'w' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'x' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'y' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'z' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'a.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'b.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'c.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'f.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'g.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'h.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'm.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'n.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'p.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'r.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 's.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'u.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'v.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'w.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'x.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'y.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'z.' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'g' of attribute 'branches' of item 'adpcm' of attribute 'branches' of item 'encoding' of attribute 'branches' of item 'file' of attribute 'branches' of item 'audio' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'g.' of attribute 'branches' of item 'adpcm' of attribute 'branches' of item 'encoding' of attribute 'branches' of item 'file' of attribute 'branches' of item 'audio' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 't' of attribute 'branches' of item 'parsedate' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 't.' of attribute 'branches' of item 'parsedate' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'h' of attribute 'branches' of item 'rlecode' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'h.' of attribute 'branches' of item 'rlecode' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'u' of attribute 'branches' of item 'st' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'u.' of attribute 'branches' of item 'st' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'e' of attribute 'branches' of item 'use' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'e.' of attribute 'branches' of item 'use' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+item 'b' of attribute 'branches' of item 'weight' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'b.' of attribute 'branches' of item 'weight' of attribute 'branches' of item 'spoken_form_info'
+missing from first argument
+
+element 1 of attribute 'spoken_forms' of item 'co_firstlineno' of item 'symbol_info'
+missing from second argument
+
+
+These differences could be due to a change to
+the persistent SymDict format without a corresponding
+increment in current_version in SymDict.py.  They could
+also be due to changes to the algorithm for generating
+spoken forms for known symbols, or to the input files
+py_abbrevs.py and selected_py_sym.py in
+%VCODE_HOME%\Data\TestData
+
+If these differences do reflect changes made to
+the persistent SymDict format, you must:
+  1. increment current_version in SymDict.py
+  2. create a new SingleVersionDictConverter to
+     convert from the old version
+  3. prepend this converter to the global symdict_cvtr
+     in SymDict.py
+  4. re-run this test to verify that the old version
+     can be properly converted
+
+
+If these differences are simply due to changes
+in the input files or the algorithms, then you must
+verify the new stored symdict.dict in 
+%VCODE_HOME%\Data\TestData
+manually, and then copy it to current_symdict.dict
+in the same directory.
 
 
 *******************************************************************************
@@ -1101,8 +1263,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -1112,8 +1274,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -1302,6 +1464,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
@@ -1500,6 +1664,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1508,8 +1674,8 @@ List of unresolved abbreviations
 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -1519,8 +1685,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
 this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -1537,8 +1703,8 @@ Heard this symbol is unresolved too comma
 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -1548,8 +1714,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
 this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -1739,6 +1905,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1756,8 +1924,8 @@ WARNING: abbreviation 'f' not added (length < 2)
 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -1767,8 +1935,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this sym is unresolved', 'this symbol is unres', 'this symbol is unresolved']
 this_sym_is_unres_too: ['this sym is unres too', 'this sym is unresolved too', 'this symbol is unres too', 'this symbol is unresolved too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -1958,6 +2126,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -2155,6 +2325,8 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'y': appears in ['y']
+'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -3029,7 +3201,7 @@ class: ['class']
 def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 print: ['print']
 self: ['self']
-x: ['x']
+x: ['X.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  class  AClass  ASuper  def  a_method  self  x  print 
 
@@ -3827,8 +3999,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -3838,8 +4010,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -4357,8 +4529,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -4368,8 +4540,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -4387,8 +4559,8 @@ EdSim instance EdSim(0) connected
 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -4398,8 +4570,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
    
 
@@ -7704,10 +7876,10 @@ CSC_consumes: ['csc consumes']
 CSCmd: ['cs cmd', 'cs command']
 CSCs: ['cs cs']
 CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpreter']
-ContC: ['cont c', 'content c', 'context c']
+ContC: ['cont C.', 'content C.', 'context C.']
 ContPy: ['cont P. Y.', 'cont pie', 'cont py', 'cont python', 'content P. Y.', 'content pie', 'content py', 'content python', 'context P. Y.', 'context pie', 'context py', 'context python']
 EdSim: ['ed sim']
-LSA_consumes: ['lsa consumes']
+LSA_consumes: ['L. S. A. consumes', 'lsa consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
@@ -7721,12 +7893,12 @@ a_spoken_form: ['a spoken form']
 a_word: ['a word']
 accept_symbol_match: ['accept symbol match']
 acmd: ['acmd']
-actions_C_Cpp: ['actions c C. plus plus', 'actions c cpp']
+actions_C_Cpp: ['actions C. C. plus plus', 'actions C. cpp']
 actions_py: ['actions P. Y.', 'actions pie', 'actions py', 'actions python']
 active_language: ['active language']
 active_language_LSAs: ['active language ls as']
 addWord: ['add word']
-add_voc_entry: ['add voc entry']
+add_voc_entry: ['add V. O. C. entry', 'add voc entry']
 all_language_LSAs: ['all language ls as']
 and: ['and']
 answer: ['answer']
@@ -7739,11 +7911,11 @@ choice_index: ['choice index']
 choices: ['choices']
 choose_best_symbol: ['choose best symbol']
 chop_CSC: ['chop csc']
-chop_LSA: ['chop lsa']
+chop_LSA: ['chop L. S. A.', 'chop lsa']
 chop_symbol: ['chop symbol']
 chop_word: ['chop word']
 chopped_CSC: ['chopped csc']
-chopped_LSA: ['chopped lsa']
+chopped_LSA: ['chopped L. S. A.', 'chopped lsa']
 chopped_symbol: ['chopped symbol']
 chopped_word: ['chopped word']
 chosen_match: ['chosen match']
@@ -7754,7 +7926,7 @@ clean_written_form: ['clean written form']
 cmd: ['cmd', 'command']
 cmd_index: ['cmd index', 'command index']
 cmd_without_CSC: ['cmd without csc', 'command without csc']
-cmd_without_LSA: ['cmd without lsa', 'command without lsa']
+cmd_without_LSA: ['cmd without L. S. A.', 'cmd without lsa', 'command without L. S. A.', 'command without lsa']
 cmd_without_symbol: ['cmd without symbol', 'command without symbol']
 cmd_without_word: ['cmd without word', 'command without word']
 cmds_this_spoken_form: ['commands this spoken form']
@@ -7769,7 +7941,7 @@ decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
 def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 deleteWord: ['delete word']
-dlg_select_symbol_match: ['dlg select symbol match']
+dlg_select_symbol_match: ['D. L. G. select symbol match', 'dlg select symbol match']
 dummy: ['dummy']
 else: ['else']
 end: ['end']
@@ -7783,7 +7955,7 @@ group: ['group']
 has_key: ['has key']
 head_was_translated: ['head was translated']
 if: ['if']
-ii: ['ii']
+ii: ['I. I.', 'ii']
 import: ['import']
 in: ['in']
 index_csc: ['index csc']
@@ -7831,7 +8003,7 @@ regexp_is_dirty: ['regexp is dirty', 'regular expression is dirty']
 regexp_this_word: ['regexp this word', 'regular expression this word']
 rest: ['rest']
 return: ['return']
-s: ['s']
+s: ['S.']
 self: ['self']
 split: ['split']
 spoken: ['spoken']
@@ -7873,10 +8045,10 @@ CSC_consumes: ['csc consumes']
 CSCmd: ['cs cmd', 'cs command']
 CSCs: ['cs cs']
 CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpreter']
-ContC: ['cont c', 'content c', 'context c']
+ContC: ['cont C.', 'content C.', 'context C.']
 ContPy: ['cont P. Y.', 'cont pie', 'cont py', 'cont python', 'content P. Y.', 'content pie', 'content py', 'content python', 'context P. Y.', 'context pie', 'context py', 'context python']
 EdSim: ['ed sim']
-LSA_consumes: ['lsa consumes']
+LSA_consumes: ['L. S. A. consumes', 'lsa consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
@@ -7890,12 +8062,12 @@ a_spoken_form: ['a spoken form']
 a_word: ['a word']
 accept_symbol_match: ['accept symbol match']
 acmd: ['acmd']
-actions_C_Cpp: ['actions c C. plus plus', 'actions c cpp']
+actions_C_Cpp: ['actions C. C. plus plus', 'actions C. cpp']
 actions_py: ['actions P. Y.', 'actions pie', 'actions py', 'actions python']
 active_language: ['active language']
 active_language_LSAs: ['active language ls as']
 addWord: ['add word']
-add_voc_entry: ['add voc entry']
+add_voc_entry: ['add V. O. C. entry', 'add voc entry']
 all_language_LSAs: ['all language ls as']
 and: ['and']
 answer: ['answer']
@@ -7908,11 +8080,11 @@ choice_index: ['choice index']
 choices: ['choices']
 choose_best_symbol: ['choose best symbol']
 chop_CSC: ['chop csc']
-chop_LSA: ['chop lsa']
+chop_LSA: ['chop L. S. A.', 'chop lsa']
 chop_symbol: ['chop symbol']
 chop_word: ['chop word']
 chopped_CSC: ['chopped csc']
-chopped_LSA: ['chopped lsa']
+chopped_LSA: ['chopped L. S. A.', 'chopped lsa']
 chopped_symbol: ['chopped symbol']
 chopped_word: ['chopped word']
 chosen_match: ['chosen match']
@@ -7923,7 +8095,7 @@ clean_written_form: ['clean written form']
 cmd: ['cmd', 'command']
 cmd_index: ['cmd index', 'command index']
 cmd_without_CSC: ['cmd without csc', 'command without csc']
-cmd_without_LSA: ['cmd without lsa', 'command without lsa']
+cmd_without_LSA: ['cmd without L. S. A.', 'cmd without lsa', 'command without L. S. A.', 'command without lsa']
 cmd_without_symbol: ['cmd without symbol', 'command without symbol']
 cmd_without_word: ['cmd without word', 'command without word']
 cmds_this_spoken_form: ['commands this spoken form']
@@ -7938,7 +8110,7 @@ decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
 def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 deleteWord: ['delete word']
-dlg_select_symbol_match: ['dlg select symbol match']
+dlg_select_symbol_match: ['D. L. G. select symbol match', 'dlg select symbol match']
 dummy: ['dummy']
 else: ['else']
 end: ['end']
@@ -7952,7 +8124,7 @@ group: ['group']
 has_key: ['has key']
 head_was_translated: ['head was translated']
 if: ['if']
-ii: ['ii']
+ii: ['I. I.', 'ii']
 import: ['import']
 in: ['in']
 index_csc: ['index csc']
@@ -8000,7 +8172,7 @@ regexp_is_dirty: ['regexp is dirty', 'regular expression is dirty']
 regexp_this_word: ['regexp this word', 'regular expression this word']
 rest: ['rest']
 return: ['return']
-s: ['s']
+s: ['S.']
 self: ['self']
 split: ['split']
 spoken: ['spoken']
@@ -8086,21 +8258,21 @@ Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols
 Heard from module context sensitive command import symbols context sensitive command new statement
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
-  6: from context_sensitive_command import context_sensitive_command
+  6: from cont_sensitive_command import cont_sensitive_command
   7: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
   5: from cont_gen import ContC, ContPy
-  6: from context_sensitive_command import context_sensitive_command
+  6: from cont_sensitive_command import cont_sensitive_command
   7: from EdSim import EdSim
   8: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 Heard from module object import symbol object new statement
-  6: from context_sensitive_command import context_sensitive_command
+  6: from cont_sensitive_command import cont_sensitive_command
   7: from EdSim import EdSim
   8: from Object import Object
   9: <CURSOR>
@@ -9309,8 +9481,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['f name']
-f_name2: ['f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -9320,8 +9492,8 @@ this_sym_has_an_other_abbrev: ['this sym has an other abbrev', 'this symbol has 
 this_sym_is_unres: ['this sym is unres', 'this symbol is unres']
 this_sym_is_unres_too: ['this sym is unres too', 'this symbol is unres too']
 void: ['void']
-x: ['x']
-y: ['y']
+x: ['X.']
+y: ['Y.']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 
@@ -11651,8 +11823,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Parsed symbols are: 
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 openlog: ['openlog']
-s: ['s']
-se: ['se']
+s: ['S.']
+se: ['S. E.', 'se']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
 Unresolved abbreviations are:
@@ -11809,5 +11981,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1540.58500004 secs
+Test suite completed in:  1403.76900005 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6

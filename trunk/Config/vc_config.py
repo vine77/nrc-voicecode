@@ -686,7 +686,7 @@ functional_pairs = CSCmdSet('functional pairs',
     description = 'functional names for paired punctuation')
 
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
-                           'called with'],
+                           'called with', 'function of'],
              meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
                        ContPerl(): gen_parens_pair},
              docstring='argument list for function')
@@ -953,8 +953,7 @@ misc_python.add_lsa(LSAlias(['self dot'], {'python': 'self.'}, spacing =
 #  choose one with closest occurence to the cursor, etc...)
 #            
 
-misc_python.add_lsa(LSAlias(['self'], {'python': 'self'}, spacing =
-    no_space_after))    
+misc_python.add_lsa(LSAlias(['self'], {'python': 'self'}))
     
 misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
 

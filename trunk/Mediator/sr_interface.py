@@ -310,6 +310,8 @@ def addWord(word, *rest):
     # Make sure we are connected to SR system
     #
                 
+    if word == 'g' or word == 'g\\g':
+        raise RuntimeError('I thought we agreed not to add single letters')
     if getWordInfo(word) == None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak')
                    
