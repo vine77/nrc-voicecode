@@ -3596,6 +3596,86 @@ EdSim.__del__
 
 
 *******************************************************************************
+* Name        : explicit_indent
+* Description : Testing explicit indentation.
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['if', 'condition', 'do', 'the', 'following']
+Heard if condition do the following
+Associate 'condition' with symbol (Enter selection):
+
+  '0': no association
+  '1': condition (*new*)
+  '2': Condition (*new*)
+  '3': CONDITION (*new*)
+
+> *** Start of source buffer ***
+  1: if condition:
+  2:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['back', 'indent']
+Heard back indent
+*** Start of source buffer ***
+  1: if condition:
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['index', 'equals', 'one', 'do', 'the', 'following']
+Heard index equals one do the following
+Associate 'index' with symbol (Enter selection):
+
+  '0': no association
+  '1': index (*new*)
+  '2': Index (*new*)
+  '3': INDEX (*new*)
+
+> *** Start of source buffer ***
+  1: if condition:
+  2: index = 1<CURSOR>
+
+*** End of source buffer ***
+Saying: ['indent']
+Heard indent
+*** Start of source buffer ***
+  1: if condition:
+  2:    index = 1<CURSOR>
+
+*** End of source buffer ***
+Got command: move_relative(-3,)
+*** Start of source buffer ***
+  1: if condition:
+  2:    index <CURSOR>= 1
+
+*** End of source buffer ***
+Saying: ['back', 'indent']
+Heard back indent
+*** Start of source buffer ***
+  1: if condition:
+  2: <CURSOR>index = 1
+
+*** End of source buffer ***
+Got command: move_relative(3,)
+*** Start of source buffer ***
+  1: if condition:
+  2: ind<CURSOR>ex = 1
+
+*** End of source buffer ***
+Saying: ['indent']
+Heard indent
+*** Start of source buffer ***
+  1: if condition:
+  2:    ind<CURSOR>ex = 1
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : insert_delete
 * Description : Testing insertion and deletion commands
 *******************************************************************************

@@ -260,11 +260,12 @@ in the 'vr-deprecated-log-buff-name buffer.")
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
-;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
-;(cl-puthash "vcode-set-special-event-map-for-ignored-key" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 
+;(cl-puthash  "vcode-indent-line" 1 vcode-traces-on)
+;(cl-puthash  "vcode-cmd-incr-indent-level" 1 vcode-traces-on)
+;(cl-puthash  "vcode-indent-line" 1 vcode-traces-on)
+
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-line-start-end-pos" 1 vcode-traces-on)
 ;(cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
@@ -2130,6 +2131,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'set_text 'vcode-cmd-set-text vr-deprecated-message-handler-hooks)  
   (cl-puthash 'indent 'vcode-cmd-indent vr-deprecated-message-handler-hooks)  
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-deprecated-message-handler-hooks)
+  (cl-puthash 'incr_indent_level 'vcode-cmd-incr-indent-level vr-deprecated-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-deprecated-message-handler-hooks)  
   (cl-puthash 'backspace 'vcode-cmd-backspace vr-deprecated-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-deprecated-message-handler-hooks)  
@@ -3576,37 +3578,34 @@ change reports it sends to VCode.
   )
 )
 
-(defun vcode-insert-with-autoindented-tabs-OBSOLETE (text)
-   "Insert TEXT, but invoke 'indent-for-tab-command instead of inserting
-tabs.
-"
-   (let ((before-tab) (after-tab) (tab-pos) (tab-was-found))
-     (while (not (string= text ""))
-       ;;;
-       ;;; Find text before and after next occurence of TAB
-       ;;;
-       (setq tab-pos (string-match "\t" text))
-       (if (not tab-pos)
-	   (progn
-	     (setq tab-was-found nil)
-	     (setq tab-pos (length text))
-	   )
-	 (setq tab-was-found t)
-       )
-       (setq before-tab (substring text 0 tab-pos))
-       (if tab-was-found 
-	   (setq text (substring text (1+ tab-pos) (length text)))
-	 (setq text "")
-       )  
+(defun vcode-cmd-incr-indent-level (vcode-request)
+  (let ((mess-name (elt vcode-request 0))
+	(mess-cont (elt vcode-request 1))
+	(range) (levels) (vr-deprecated-request) (buff-name)
+	(indent-start) (indent-end))
+    (setq range (cl-gethash "range" mess-cont))
+    (setq indent-start (elt range 0))
+    (setq indent-end (elt range 1))
+    (setq levels (cl-gethash "levels" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
-       ;;;
-       ;;; Insert text before tab, and indent the tab.
-       ;;;
-       (insert before-tab)
-       (if tab-was-found (indent-for-tab-command))
-     )
-   )
+    (vcode-trace "vcode-cmd-incr-indent-level" "upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
+
+
+
+    (save-excursion
+      (set-buffer buff-name)
+
+      (set-mark nil)
+      (vcode-incr-indent-region indent-start indent-end levels) 
+
+    )
+
+   (vr-deprecated-send-queued-changes)
+
+  )
 )
+
 
 (defun vcode-indent-region (start end)
   ;;;
@@ -3628,6 +3627,13 @@ tabs.
   "Deindents region from START to END by N-LEVELS levels."
   (let (end-line)
     (for-lines-in-region-do start end 'vcode-unindent-line (list n-levels))
+  )
+)
+
+(defun vcode-incr-indent-region (start end n-levels)
+  "Indent region from START to END by N-LEVELS levels."
+  (let ()
+    (for-lines-in-region-do start end 'vcode-indent-line (list n-levels))
   )
 )
 
@@ -3669,6 +3675,22 @@ tabs.
 ;	)
 
      (vr-deprecated-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+   )
+)
+
+(defun vcode-indent-line (n-levels)
+  (interactive "nNumber of levels: ")
+  (let ((counter 0) (start-of-line))
+     (vcode-trace "vcode-indent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (setq counter 0)
+     (while (< counter n-levels)
+        ;;; Execute a command string containing just the 
+	;;; backspace key
+       (vcode-execute-command-string "\t")
+       (setq counter (1+ counter))
+     )
+
+     (vcode-trace "vcode-indent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
    )
 )
 

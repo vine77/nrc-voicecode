@@ -924,8 +924,12 @@ python_compound.add_csc(acmd)
 
 python_imports = LSAliasSet('Python import statements',
     description = "Python import module statements")
+python_imports_cscs = CSCmdSet('Python import statements',
+    description = "Python import module statements")
 
-python_imports.add_lsa(LSAlias(['from', 'from module'], {'python': 'from '}))
+python_imports_cscs.add_csc(CSCmd(spoken_forms=['from', 'from module'], 
+                            meanings={ContBlankLine('python'): ActionInsert('from ')}))
+
 # this form used for statements : import module1, module2, etc...
 python_imports.add_lsa(LSAlias(['import', 'import module', 'import modules'], {'python': 'import '}))
 # this form used for statements like: from module symbol1, symbol2, etc...
