@@ -31,10 +31,12 @@ import threading
 
 class DummyCapture:
     pass
+
+global possible_capture
 possible_capture = DummyCapture
 try:
     import wxCapture
-    global possible_capture 
+#    global possible_capture 
     possible_capture = wxCapture.ScreenShotCapture
 except exceptions.ImportError:
     pass

@@ -1688,3 +1688,29 @@ class SymDict(PickledObject.PickledObject):
             collapsed_auxilliary_words = collapsed_auxilliary_words + [new_auxilliary_word]
             
         return collapsed_words, collapsed_auxilliary_words
+
+###############################################################################
+# Configuration functions. These are not methods
+###############################################################################
+
+def define_language(name, definition):
+    """Defines the syntax of a programming language.
+
+    **INPUTS**
+
+    *STR* name -- name of the programming language
+
+    [LangDef] definition -- language definition 
+
+
+    **OUTPUTS**
+
+    *none* -- 
+
+    .. [LangDef] file:///./LangDef.LangDef.html"""
+
+    global language_definitions
+    definition.name = name
+    language_definitions[name] = definition
+
+

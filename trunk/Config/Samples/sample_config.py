@@ -86,7 +86,7 @@ add_csc_set(backspacing)
 # add punctuation sets
 #######################################
 
-# always add the standard (std_) sets after the corresponding alternative 
+# always create the standard (std_) sets after the corresponding alternative 
 # sets (or any user-defined sets).  This allows you to override the 
 # spacing behavior of standard punctuation by adding punctuation with 
 # the same spoken form to the corresponding

@@ -23,30 +23,9 @@
 # Configuration script for VoiceCode
 #
 
-#
-# Note: those import statements are not absolutely necessary because file
-#       vc_config.py is evaluated in a context where those have already
-#       been imported.
-#
-#       But having them here makes it possible to compile vc_config.py
-#       with command line:
-#
-#           python vc_config.py
-#
-#       which provides better error reportingn than when evaluated by
-#       MediatorObject.configure().
-#
-# import natlink
-# from natlinkutils import *
-
-#
 # Import configuration functions
-#
-# from MediatorObject import associate_language, define_language, \
-#      add_abbreviation, add_csc, add_lsa, print_abbreviations, \
-#      standard_symbols_in
 
-from MediatorObject import associate_language, define_language
+from SymDict import define_language
 
 # should this be here, or should the contents of these modules be added
 # to the configuration namespace by NewMediatorObject?
@@ -67,48 +46,6 @@ from actions_perl import *
 import KnownTargetModule
 
 import sr_interface
-
-#test_mediator = None
-
-if (__name__ == '__main__'):
-    if not globals().has_key('add_csc') and not locals().has_key('add_csc'):
-        import MediatorObject
-#        global test_mediator
-        test_mediator = MediatorObject.MediatorObject( \
-            interp = CmdInterp.CmdInterp())
-#        MediatorObject.to_configure = test_mediator
-        glob_names = globals()
-        test_mediator.define_config_functions(glob_names)
-#        print glob_names['add_abbreviation']
-#    add_abbreviation = MediatorObject.add_abbreviation
-#    add_csc = MediatorObject.add_csc
-#    add_lsa = MediatorObject.add_lsa
-#    print_abbreviations = MediatorObject.print_abbreviations
-#    standard_symbols_in = MediatorObject.standard_symbols_in
-#        add_abbreviation = MediatorObject.to_configure.add_abbreviation
-#        add_csc = MediatorObject.to_configure.add_csc
-#        add_lsa = MediatorObject.to_configure.add_lsa
-#        print_abbreviations = MediatorObject.to_configure.print_abbreviations
-#        standard_symbols_in = MediatorObject.to_configure.standard_symbols_in
-
-#        global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
-#            standard_symbols_in
-#        add_abbreviation = test_mediator.add_abbreviation
-#        add_csc = test_mediator.add_csc
-#        add_lsa = test_mediator.add_lsa
-#        print_abbreviations = test_mediator.print_abbreviations
-#        standard_symbols_in = test_mediator.standard_symbols_in
-        
-        if sr_interface.speech_able():
-#            natlink.natConnect()    
-            sr_interface.connect()
-
-#try:
-#    print add_abbreviation
-#    print add_abbreviation.im_self
-#except Exception, err:
-#    print 'no global add_abbreviation'
-    
 
 ##############################################################################
 # Customize from here only
