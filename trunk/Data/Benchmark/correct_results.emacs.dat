@@ -196,6 +196,7 @@ Heard select dummy
 *** End of source buffer ***
 Got command: say(['new', 'line'],None,0,0,)
 Heard new line
+--- BUG BELOW: VCode's copy of *Buffer List* is wrong.
 *** Start of source buffer ***
   1:  MR Buffer           Size  Mode         File
   2:  -- ------           ----  ----         ----
@@ -215,30 +216,30 @@ WARNING: source file 'dummy.py' doesn't exist.
   2:     
 
 *** End of source buffer ***
-Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
-Heard emacs switch to buffer
+Got command: say(['switch', 'to', 'buffer'],None,0,0,)
+Heard switch to buffer
 *** Start of source buffer ***
-  1: class Dummy<CURSOR>:
+  1: class Dummyswitch_to_buffer<CURSOR>:
   2:     
 
 *** End of source buffer ***
 Got command: say(['select', 'dummy'],None,0,0,)
 Heard select dummy
 *** Start of source buffer ***
-  1:  181  Fundamental	
-  2: 	 <SEL_START>dummy<SEL_END>.pydummy.py	 dummy.pydummy.py  		 test.pytest.py	 test.pytest.py  		
+  1: class Dummyswitch_to_bufferselect_dummy<CURSOR>:
+  2:     
 
 *** End of source buffer ***
 Got command: say(['hello'],None,0,0,)
 Heard hello
 *** Start of source buffer ***
-  1:  181  Fundamental	
-  2: 	 <SEL_START>dummy<SEL_END>.pydummy.py	 dummy.pydummy.py  		 test.pytest.py	 test.pytest.py  		 *scratch**scratch*	 *scratch**scratch*   	 *Messages**Messages*	 *Messages**Messages*  	
+  1: class Dummyswitch_to_bufferselect_dummyhello<CURSOR>:
+  2:     
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1:  181  Fundamental	
-  2: 	 <SEL_START>dummy<SEL_END>.pydummy.py	 dummy.pydummy.py  		 test.pytest.py	 test.pytest.py  		 *scratch**scratch*	 *scratch**scratch*   	 *Messages**Messages*	 *Messages**Messages*  	
+  1: class Dummyswitch_to_bufferselect_dummyhello<CURSOR>:
+  2:     
 
 *** End of source buffer ***
 

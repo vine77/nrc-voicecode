@@ -181,8 +181,10 @@ class GenEdit(Object.OwnerObject):
 
         debug.virtual('GenEdit.app_active_buffer_name')
 
-    def app_change_buffer(self, buff_name):
-        """Changes the external application's active buffer.
+    def app_change_buffer(self, buff_name=None):
+        """Changes the external application's active buffer. 
+        If *buff_name* is *None*, starts a speech-enabled dialog
+        allowing the user to select it.
 
         **INPUTS**
         

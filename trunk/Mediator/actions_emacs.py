@@ -24,6 +24,7 @@
 from actions_gen import *
 import debug
 import sr_interface
+import time
 
 class ActionEmacsListBuffers(Action):
     """open the Emacs buffer list.
@@ -58,9 +59,14 @@ class ActionEmacsListBuffers(Action):
 
         .. [AppState] file:///./AppState.AppState.html"""
         debug.trace('ActionEmacsListBuffers.execute', '** invoked')
-        sr_interface.send_keys("{Esc}xlist-buffers{Enter}")
-        sr_interface.send_keys("{Esc}xswitch-to-buffer{Enter}*Buffer List*{Enter}")
-        
+        # AD: This is probably better handled through a new
+        #     'switch_buffer_dlg' message type. But sending
+        #     keys will do for now.
+        app.app_change_buffer()
+        debug.trace('ActionEmacsListBuffers.execute', 
+                    '** app.curr_buffer().name()=%s' % app.curr_buffer().name())
+#        ActionCompileSymbols().execute(app=app, cont=cont, state=state)
+
 
     def doc(self):
         """Returns a documentation string for the action.
@@ -75,3 +81,5 @@ class ActionEmacsListBuffers(Action):
         *none* -- 
         """
         return "Opens the Emacs buffer list."
+
+        

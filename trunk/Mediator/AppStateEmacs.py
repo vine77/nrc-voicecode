@@ -22,9 +22,8 @@
 """Interface to the Emacs editor."""
 
 import as_services, AppStateMessaging, SourceBuffEmacs
-
 import sr_interface
-
+import messaging
 import time
 
 # used for keybd_event
@@ -239,6 +238,21 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def pop_breadcrumbs(self, num=1, gothere=1):
         self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
 
+    def app_change_buffer(self, buff_name=None):
+        """Changes the external application's active buffer. 
+        If *buff_name* is *None*, starts a speech-enabled dialog
+        allowing the user to select it.
+
+        **INPUTS**
         
+        STR *buff_name* -- Name of the buffer to switch to.
+       
+        **OUTPUTS**
         
+        *BOOL* -- true if buff_name exists and the application
+        successfully switches to it
+        """
+        self.talk_msgr.send_mess('change_buff', {'buff_name': buff_name})
+        response = self.talk_msgr.get_mess(expect=['change_buff_resp'])
+        return messaging.messarg2int(response[1]['value'])
         
