@@ -3,29 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:30:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:31:03 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class DataEvtSource</title>
+<title>Class TempConfigOldMediatorFactory</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class DataEvtSource</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
+<H1 CLASS="ClassName">class TempConfigOldMediatorFactory</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="regression.html">regression</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.DataEvtSource<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">regression.TempConfigOldMediatorFactory<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DataEvtSource</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.DataEvtSource.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">TempConfigOldMediatorFactory</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediatorFactory.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigOldMediatorFactory.new_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediatorFactory.new_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor=None</SPAN>, <SPAN CLASS="Argument">skip_config=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new TempConfig object</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,27 +34,24 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-abstract class which supplies a data_event for ServerMainThread 
-subclasses with external message loops.</P>
-<P>
-<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM>
+implementation of TempConfigFactory for the old MediatorObject
 </P>
-<H2 ID="tcp_server.DataEvtSource.data_event" CLASS="Method">tcp_server.DataEvtSource.data_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
-<P>None</P>
+<H2 ID="regression.TempConfigOldMediatorFactory.new_mediator" CLASS="Method">regression.TempConfigOldMediatorFactory.new_mediator(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor=None</SPAN>, <SPAN CLASS="Argument">skip_config=0</SPAN>)</H2>
+<P>create a new TempConfig object</P>
 
-<P>
-virtual method which supplies a data_event for ServerMainThread 
-subclasses </P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-STR <EM>id</EM>
-<DD>The unique ID of the listen socket
+<EM>AppState editor</EM>
+<DD>the internal test editor to use, or None to
+create a new EdSim instance
+<DT>
+<EM>BOOL skip_config</EM>
+<DD>flag allowing you to create a
+MediatorObject without configuring it 
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -62,9 +59,8 @@ STR <EM>id</EM>
 <DL>
 
 <DT>
-<EM>SocketHasDataEvent</EM>
-<DD>the data event which will allow the
-data thread to ensure that process_ready_socks is called.
+<EM>TempConfigOldMediator</EM>
+<DD>the TempConfigOldOldMediator object
 
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>

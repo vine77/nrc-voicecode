@@ -32,6 +32,7 @@ import messaging, Object
 import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 import Queue
+import regression
 
 from tcp_threads import *
 
@@ -687,6 +688,10 @@ class ServerSingleThread(Object.Object):
 	if test_client and self.test_suite != None:
 	    an_app_state.print_buff_when_changed = 1
             args = [self.test_suite]
+	    global testing
+	    testing = regression.PersistentConfigOldMediator(names = globals())
+	    global temp_factory
+	    temp_factory = regression.TempConfigOldMediatorFactory()
             auto_test.run(args)
 
 	    # notify external editor that we are quitting
@@ -1670,6 +1675,10 @@ class ServerOldMediator(ServerMainThread):
 	    sys.stderr.write("starting regression tests\n")
 	    sys.stderr.flush()
 	    try:
+		global testing
+		testing = regression.PersistentConfigOldMediator(names = globals())
+		global temp_factory
+		temp_factory = regression.TempConfigOldMediatorFactory()
 		auto_test.run(args)
             except messaging.SocketError:
 	        sys.stderr.write("broken socket while running")

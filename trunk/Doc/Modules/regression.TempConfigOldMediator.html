@@ -3,29 +3,32 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:30:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Sep 09 23:31:03 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class DataEvtSource</title>
+<title>Class TempConfigOldMediator</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class DataEvtSource</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
+<H1 CLASS="ClassName">class TempConfigOldMediator</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="regression.html">regression</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.DataEvtSource<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">regression.TempConfigOldMediator<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DataEvtSource</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.DataEvtSource.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.DataEvtSource.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">TempConfigOldMediator</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediator.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigOldMediator.editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediator.editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigOldMediator.interpreter"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediator.interpreter</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigOldMediator.mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediator.mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#regression.TempConfigOldMediator.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">regression.TempConfigOldMediator.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,39 +37,34 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-abstract class which supplies a data_event for ServerMainThread 
-subclasses with external message loops.</P>
-<P>
-<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>none</EM>
+implementation of TempConfig using old MediatorObject 
 </P>
-<H2 ID="tcp_server.DataEvtSource.data_event" CLASS="Method">tcp_server.DataEvtSource.data_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
+<H2 ID="regression.TempConfigOldMediator.editor" CLASS="Method">regression.TempConfigOldMediator.editor(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
-virtual method which supplies a data_event for ServerMainThread 
-subclasses </P>
+returns a reference to the MediatorObject's internal 
+AppState (usually EdSim) editor 
+</P>
+<H2 ID="regression.TempConfigOldMediator.interpreter" CLASS="Method">regression.TempConfigOldMediator.interpreter(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
 <P>
-<STRONG>INPUTS</STRONG></P>
+returns a reference to the MediatorObject's CmdInterp object
+</P>
+<H2 ID="regression.TempConfigOldMediator.mediator" CLASS="Method">regression.TempConfigOldMediator.mediator(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
 
-<DL>
-
-<DT>
-STR <EM>id</EM>
-<DD>The unique ID of the listen socket
-</DL>
 <P>
-<STRONG>OUTPUTS</STRONG></P>
+returns a reference to the TempConfigOldMediator's MediatorObject or
+NewMediatorObject 
+</P>
+<H2 ID="regression.TempConfigOldMediator.quit" CLASS="Method">regression.TempConfigOldMediator.quit(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
 
-<DL>
-
-<DT>
-<EM>SocketHasDataEvent</EM>
-<DD>the data event which will allow the
-data thread to ensure that process_ready_socks is called.
-
-</DL>
+<P>
+cleanup the underlying MediatorObject
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
