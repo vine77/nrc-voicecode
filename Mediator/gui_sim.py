@@ -21,7 +21,7 @@
 
 """Usage: python gui_sim.py -h
             or
-	  python gui_sim.py [-s | -t]
+          python gui_sim.py [-s | -t]
 
 Main script for VoiceCode mediator.
 
@@ -60,6 +60,8 @@ import os, profile, re, string, sys
 import traceback
 import vc_globals
 import mediator
+import debug
+
 
 # we need the module object, so we must import the whole module
 import sim_commands
@@ -74,7 +76,7 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, MediatorObject, sr_interface, util, vc_globals
 import AppStateGenEdit
-import WaxEdSim
+import WaxEdSimSpeech
 from CSCmd import CSCmd
 
 # for actions that span different languages
@@ -89,6 +91,16 @@ from actions_py import *
 
 the_mediator = None
 
+debug.config_traces(status="on", 
+                    active_traces={
+#                      'WaxEdSimSpeech': 1,
+#                      'GenEdit': 1,
+#                      'sr_interface': 1,
+#                                    'AppState': 1
+      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
+                                   },
+                                   allow_trace_id_substrings = 1)
+
 
 def cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None, 
     disconnect = 1):
@@ -97,6 +109,7 @@ def cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None,
 #    if sim_commands.the_mediator:
 #        sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
 #            save_speech_files=save_speech_files, disconnect=disconnect)
+
     the_mediator.quit(clean_sr_voc=clean_sr_voc, 
         save_speech_files=save_speech_files, disconnect=disconnect)
 
@@ -130,12 +143,12 @@ def simulator_mode(options):
 #    names['getmic'] = sim_commands.getmic
     names['getmic'] = sr_interface.get_mic
 
-    editor_app = WaxEdSim.WaxEdSim(command_space= names)
+    editor_app = WaxEdSimSpeech.WaxEdSimSpeech(command_space= names)
     module_info = natlink.getCurrentModule()
     window = module_info[2]
     print module_info
     app = editor_app.editor
-    editor_app.got_window()
+#    editor_app.got_window()
 
     the_mediator = mediator.new_simulator(on_app = app, owns_app = 0,
         symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
@@ -172,8 +185,12 @@ def simulator_mode(options):
     editor_app.run()
 
     print 'gui exited'
+    save_speech = commands.save_speech_files
+    if save_speech is None:
+# the gui now prompts if save_speech is None
+        save_speech = 0
     cleanup(the_mediator, commands.clean_sr_voc, 
-        commands.save_speech_files, commands.disconnect_flag)
+        save_speech, commands.disconnect_flag)
         
 if (__name__ == '__main__'):
     

@@ -340,6 +340,8 @@ class ClientFrameMixIn(Object.Object):
                 wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT, self)
             if proceed != wxYES:
                 return
+# mark any buffers created by the regression tests as scratch buffers
+# not needing to be saved
         self.connect(test_client = 1)
 
     def on_disconnect(self, event):
@@ -431,6 +433,21 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
                              'app_name': app_name
                             }, args)
         self.name_parent('app')
+
+    def test_ending(self):
+        """method by which the application can signal that we have
+        finished regression testing.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        for buff_name in self.open_buffers():
+            self.mark_as_scratch(buff_name)
 
     def connection_data(self):
         """ returns current default connection data
@@ -954,6 +971,8 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
                         self.client.disconnect()
                     else:
                         self.client.disconnected()
+                if self.testing_flag:
+                    self.GUI_editor.test_ending()
                 self.testing_flag = 0
                 self.client = None
         self.GUI_editor.update_connection_status()

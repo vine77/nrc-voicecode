@@ -490,7 +490,7 @@ class ResMgrStd(ResMgr):
    
    
 
-class BufferStates(Object):
+class BufferStates(OwnerObject):
     """Abstract interface which collects source buffer cookies for all
     buffers which currently exist in an application.
     """
@@ -636,7 +636,7 @@ class UnexpectedRestoreFailure(RuntimeError):
             'indicating that the cookie was valid\n'
         return warning
     
-class BufferStatesBasic(Object):
+class BufferStatesBasic(BufferStates):
     """implementation of BufferStates
 
     **INSTANCE ATTRIBUTES**
@@ -658,6 +658,7 @@ class BufferStatesBasic(Object):
                              'cookies': {}
                             },
                             args)
+        self.add_owned('cookies')
         if buffers is None:
 # really, we don't want to get this from the editor:
 # for storing the state before interpretation, we will already have
@@ -855,7 +856,7 @@ class BufferStatesBasic(Object):
                 debug.critical_warning(failed_to_fix)
             return 0
         
-class StateStack(Object):
+class StateStack(OwnerObject):
     """Abstract interface for storing a stack of
     BufferStates representing the state of an editor's buffers before
     interpretation of the most recent dictation utterances
@@ -1067,6 +1068,7 @@ class StateStackBasic(StateStack):
                              'ignore_new': ignore_new,
                              'ignore_deleted': ignore_deleted
                             }, args)
+        self.add_owned('states')
 
     def before_interp(self, app, initial_buffer = None):
         """method which must be called before interpretation of a
@@ -1346,6 +1348,8 @@ class ResMgrBasic(ResMgrStd):
                              'states': StateStackBasic(max_utterances)
                             },
                             args)
+        self.add_owned('utterances')
+        self.add_owned('states')
 
     def remove_other_references(self):
         self.correct_evt = None

@@ -182,6 +182,7 @@ add_module(mod_python)
 # strings
 add_prefix('emacs', 'Yak')
 add_prefix('WaxEdit', 'Floor')
+add_prefix('GenEdit', 'Inside')
 add_prefix('EdSim', 'Standby')
 add_prefix('dumbEdSim', 'Dumbo')
 

@@ -24,10 +24,10 @@ utterances, including recognition results, alternatives, adaption,
 and playback
 """
 
-from Object import Object
+from Object import Object, OwnerObject
 import debug
 
-class SpokenUtterance(Object):
+class SpokenUtterance(OwnerObject):
     """defines an abstract interface for manipulating the speech
     information associated with a single user utterance
 

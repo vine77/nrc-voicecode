@@ -952,7 +952,7 @@ class OwnerObject(Object):
                 if attribute == None:
                     continue
                 if type(attribute) == types.ListType:
-                    rr = range(attribute)
+                    rr = range(len(attribute))
                     rr.reverse()
                     for i in rr:
                         error_msg = self._cleanup_object(attribute[i])
