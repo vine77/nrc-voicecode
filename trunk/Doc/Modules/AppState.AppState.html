@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jul 06 11:19:21 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jul 06 17:34:56 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -43,6 +43,7 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.current_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.current_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the AppMgr which owns this AppState</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
@@ -600,6 +601,28 @@ ARE DOING!!!</P>
 </DL>
 <P>
 AppState.AppState.html#app_active_buffer_name</P>
+<H2 ID="AppState.AppState.curr_buffer_name_cbk" CLASS="Method">AppState.AppState.curr_buffer_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+editor invokes this method to notify AppState of the name of
+the current buffer.  </P>
+<P>
+<STRONG>Note:</STRONG> this should never change the bound_buffer_name</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.current_manager" CLASS="Method">AppState.AppState.current_manager(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>returns a reference to the AppMgr which owns this AppState</P>
 

@@ -212,28 +212,26 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         return messaging.messarg2intlist(response[1]['value'])        
         
 
-    def make_position_visible(self, position = None):
-	"""scroll buffer (if necessary) so that  the specified position
+    def make_position_visible(self):
+	"""scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
 
-	*INT* position -- position to make visible (defaults to the
-	current position)
+	*none*
 
 	**OUTPUTS**
 
 	*none*
 	"""
 
-        args = {'pos': position,
-	    'buff_name': self.name()}
+        args = {'buff_name': self.name()}
 	self.app.talk_msgr.send_mess('make_position_visible', args)
         response = self.app.talk_msgr.get_mess(expect=['make_position_visible_resp'])
 
-        self.app.update_response = 1
-        self.app.apply_upd_descr(response[1]['updates'])
-        self.app.update_response = 0
+#        self.app.update_response = 1
+#        self.app.apply_upd_descr(response[1]['updates'])
+#        self.app.update_response = 0
         
 
     def _len_from_app(self):

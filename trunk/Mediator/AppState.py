@@ -74,7 +74,8 @@ def use_update_class(action):
     
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
-    use_class = {'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
+    use_class = {'curr_buffer': AS_UpdCurrBufferName,
+		 'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
                  'select': SB_UpdSetSelection, 'goto': SB_UpdGoto,
                  'close_buff': AS_UpdCloseBuffer,
                  'open_buff': AS_UpdOpenBuffer}
@@ -141,6 +142,28 @@ class AS_Update(Object):
 
         ..[AppState] file:///./AppState.AppState.html"""
         debug.virtual('AS_Update.apply')        
+
+class AS_UpdCurrBufferName(Object):
+            
+    """Update indicating the current buffer name
+    
+    **INSTANCE ATTRIBUTES**
+
+    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, descr, **args_super):
+        self.deep_construct(AS_UpdCurrBufferName, 
+                            {'descr': descr}, 
+                            args_super, 
+                            {})
+        
+    def apply(self, on_app):
+        on_app.curr_buffer_name_cbk(self.descr['buff_name'])
 
 
 class AS_UpdOpenBuffer(AS_Update):
@@ -1346,6 +1369,22 @@ class AppState(OwnerObject):
 	"""
 	debug.virtual('AppState.open_buffers_from_app')
 
+    def curr_buffer_name_cbk(self, buff_name):
+        """editor invokes this method to notify AppState of the name of
+	the current buffer.  
+	
+	**Note:** this should never change the bound_buffer_name
+
+	**INPUTS**
+
+	*STR buff_name* -- name of the buffer
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.open_buffer_cbk(self, buff_name)
+
     def new_window_cbk(self):
 	"""editor invokes this method to notify AppState that it has
 	opened a new window
@@ -1582,6 +1621,10 @@ class AppState(OwnerObject):
 
         if new_buff_name != None and new_buff_name != buff_name:
 	    self.rename_buffer_cbk(buff_name, new_buff_name)
+        if new_buff_name != None:
+	    return 1
+	else:
+	    return 0
 
     def app_save_file(self, full_path = None, no_prompt = 0):
         """Tell the external editor to save the current buffer.

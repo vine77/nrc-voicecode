@@ -241,19 +241,18 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	return self.underlying.get_visible()
 
     def make_position_visible(self, position = None):
-	"""scroll buffer (if necessary) so that  the specified position
+	"""scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
 
-	*INT* position -- position to make visible (defaults to the
-	current position)
+	*none*
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.underlying.make_position_visible(position)
+	self.underlying.make_position_visible()
     
     def line_num_of(self, position = None):
 	"""

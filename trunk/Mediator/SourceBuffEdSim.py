@@ -200,16 +200,8 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	e = e + len(lines[bottom])
 	return s, e
 
-    def make_position_visible(self, position = None):
-	target = self.line_num_of(position)
-	top, bottom = self.lines_around_cursor()
-	if target < top:
-	    destination = target +self.print_nlines
-	elif target > bottom:
-	    destination = target -self.print_nlines
-	else:
-	    return
-	self.goto_line(destination)
+    def make_position_visible(self):
+        pass
 
     def line_num_of(self, position = None):
         """Returns the line number for a particular cursor position

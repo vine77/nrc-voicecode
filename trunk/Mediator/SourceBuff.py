@@ -461,14 +461,11 @@ class SourceBuff(OwnerObject):
 	"""
 	debug.virtual('SourceBuff.get_visible')
 
-    def make_position_visible(self, position = None):
-	"""scroll buffer (if necessary) so that  the specified position
+    def make_position_visible(self):
+	"""scroll buffer (if necessary) so that the current position
 	is visible
 
 	**INPUTS**
-
-	*INT* position -- position to make visible (defaults to the
-	current position)
 
 	**OUTPUTS**
 
