@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:52:31 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:41:51 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -32,6 +32,11 @@
     <A CLASS="DocLink" HREF="#wxCmdPrompt.wxCmdPromptWithHistory.restore_edited"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxCmdPrompt.wxCmdPromptWithHistory.restore_edited</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # restore previously saved partially edited new command.</SPAN>
     <A CLASS="DocLink" HREF="#wxCmdPrompt.wxCmdPromptWithHistory.save_edited"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxCmdPrompt.wxCmdPromptWithHistory.save_edited</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # store partially edited new command.</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from CmdPrompt.CmdPrompt</SPAN>
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt._on_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt._on_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt.set_command_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt.set_command_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
@@ -39,7 +44,7 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from CmdPrompt.CmdPromptWithHistory</SPAN>
-    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # create a new history stack</SPAN>
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">cursor_always_on_top=1</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)<SPAN CLASS="OneLiner"> # create a new history stack</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory._on_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory._on_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory._raw_push"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory._raw_push</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # push a command onto the stack, without changing stack_index</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.depth"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.depth</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # current depth of stack</SPAN>
@@ -52,11 +57,6 @@
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.push"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.push</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.restore_edited"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.restore_edited</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdPromptWithHistory.save_edited"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPromptWithHistory.save_edited</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from CmdPrompt.CmdPrompt</SPAN>
-    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt._on_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt._on_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)
-    <A CLASS="DocLink" HREF="#CmdPrompt.CmdPrompt.set_command_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdPrompt.set_command_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
 
 </PRE><H2>Description</H2><P>
 concrete implementation of CmdPromptWithHistory using a single
@@ -213,6 +213,64 @@ A concrete subclass of CmdPromptWithHistory must define this method.</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="CmdPrompt.CmdPrompt.__init__" CLASS="Method">CmdPrompt.CmdPrompt.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT BOOL</EM> command_callback
+<DD>command_callback( <EM>CmdPrompt</EM> cmd_line, <EM>STR</EM> command)
+-- function to be called when the user enters a command.  cmd_line
+is the CmdPrompt object.  command is the text of the command entered
+the underlying buffer.  The function should return true if the command 
+was valid.  (This is not used by CmdPrompt, but may be used by 
+subclasses)
+
+</DL>
+<H2 ID="CmdPrompt.CmdPrompt._on_command" CLASS="Method">CmdPrompt.CmdPrompt._on_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
+<P>None</P>
+
+<P>
+internal function which triggers the
+entry_callback.  Only the concrete subclass of
+CmdPrompt implementing the command entry
+should call this function</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> command
+<DD>text of the command entered (without newline)
+
+</DL>
+<H2 ID="CmdPrompt.CmdPrompt.set_command_callback" CLASS="Method">CmdPrompt.CmdPrompt.set_command_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>)</H2>
+<P>changes the callback to a new function</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT BOOL</EM> command_callback
+<DD>command_callback( <EM>CmdPrompt</EM> cmd_line, <EM>STR</EM> command)
+-- function to be called when the user enters a command.  cmd_line
+is the CmdPrompt object.  command is the text of the command entered
+the underlying buffer.  The function should return true if the command 
+was valid.  (This is not used by CmdPrompt, but may be used by 
+subclasses)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -343,7 +401,7 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="CmdPrompt.CmdPromptWithHistory.__init__" CLASS="Method">CmdPrompt.CmdPromptWithHistory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="CmdPrompt.CmdPromptWithHistory.__init__" CLASS="Method">CmdPrompt.CmdPromptWithHistory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">max_stack=None</SPAN>, <SPAN CLASS="Argument">saved_stack=None</SPAN>, <SPAN CLASS="Argument">cursor_always_on_top=1</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>create a new history stack</P>
 
 <P>
@@ -397,9 +455,11 @@ should call this function</P>
 <P>
 <EM>none</EM></P>
 <P>
-Note: the stack_index should normally be reset to zero 
-when a command is pushed onto the stack, but _raw_push does not
-perform this task.  Unless this is specifically desired, push
+Note: the stack_index should normally be moved (either reset
+to 0 or increased by one) when a command is pushed onto the
+stack, but _raw_push does not perform this task </P>
+<P>
+Unless this is specifically desired, push
 should be used instead.
 </P>
 <H2 ID="CmdPrompt.CmdPromptWithHistory.depth" CLASS="Method">CmdPrompt.CmdPromptWithHistory.depth(<SPAN CLASS="Argument">self</SPAN>)</H2>
@@ -594,64 +654,6 @@ such as the current selection and insertion point.</P>
 <EM>none</EM></P>
 <P>
 <STRONG>OUTPUT</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="CmdPrompt.CmdPrompt.__init__" CLASS="Method">CmdPrompt.CmdPrompt.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
-<P>None</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>FCT BOOL</EM> command_callback
-<DD>command_callback( <EM>CmdPrompt</EM> cmd_line, <EM>STR</EM> command)
--- function to be called when the user enters a command.  cmd_line
-is the CmdPrompt object.  command is the text of the command entered
-the underlying buffer.  The function should return true if the command 
-was valid.  (This is not used by CmdPrompt, but may be used by 
-subclasses)
-
-</DL>
-<H2 ID="CmdPrompt.CmdPrompt._on_command" CLASS="Method">CmdPrompt.CmdPrompt._on_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
-<P>None</P>
-
-<P>
-internal function which triggers the
-entry_callback.  Only the concrete subclass of
-CmdPrompt implementing the command entry
-should call this function</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM> command
-<DD>text of the command entered (without newline)
-
-</DL>
-<H2 ID="CmdPrompt.CmdPrompt.set_command_callback" CLASS="Method">CmdPrompt.CmdPrompt.set_command_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command_callback=None</SPAN>)</H2>
-<P>changes the callback to a new function</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>FCT BOOL</EM> command_callback
-<DD>command_callback( <EM>CmdPrompt</EM> cmd_line, <EM>STR</EM> command)
--- function to be called when the user enters a command.  cmd_line
-is the CmdPrompt object.  command is the text of the command entered
-the underlying buffer.  The function should return true if the command 
-was valid.  (This is not used by CmdPrompt, but may be used by 
-subclasses)
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
