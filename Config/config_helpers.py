@@ -184,7 +184,8 @@ def add_backspacing(commands, max_count = 5, primary = 'back space',
                 spoken.append(alternate)
         command = CSCmd(spoken_forms = spoken, 
             meanings = {context: ActionBackspace(n_times = i)},
-            docstring = "Backspace %d characters" % i)
+            docstring = "Backspace %d characters" % i,
+            generate_discrete_cmd = 1)
         commands.add_csc(command)
 
 def add_repeats(commands, max_count = 10, context = None, again = None, 
@@ -213,12 +214,20 @@ def add_repeats(commands, max_count = 10, context = None, again = None,
         context = ContLastActionWas([ActionRepeatable])
     if again is None:
         again = ['again', 'repeat']
+    
+    spoken_numerals = ['one', 'two', 'three', 'four', 'five', 
+                       'six', 'seven', 'eight', 'nine', 'ten']
+
     for i in range(1, max_count + 1):
         count_string = "%s" % i
-        initial_count = []
         if i == 1:
-            initial_count = ["%d %s" % (i, time)]
-        initial_count.append("%d %s" % (i, times))
+            initial_count = ["%d %s" % (1, time), "one %s" % time]
+        else:
+            initial_count = ["%d %s" % (i, times)]
+            if len(spoken_numerals) >= i:
+                initial_count.append("%s %s" % (spoken_numerals[i-1], times))
+            
+        
         commands.add_csc(CSCmd(spoken_forms = initial_count, 
             meanings = {context: ActionRepeatLastCmd(n_times = i,
             check_already_repeated = 1)},

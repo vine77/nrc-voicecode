@@ -745,8 +745,6 @@ class ActionDeleteCurrentLine(ActionRepeatable):
         debug.trace('ActionDeleteCurrentLine.execute', "** invoked")
         return app.delete_line()
 
-
-
 class ActionPaging(ActionBidirectionalRepeat):
     """Move up or down a page.
 

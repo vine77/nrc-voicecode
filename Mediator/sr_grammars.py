@@ -232,6 +232,7 @@ class WinGram(GramCommon, OwnerObject):
         *none*
         """
         words = utterance.words()
+        debug.trace('WinGram.results_callback', 'words=%s' % repr(words))
         s = self.format_utterance_message(words)
         if self.manager:
             self.manager.user_message(s)
@@ -253,6 +254,7 @@ class WinGram(GramCommon, OwnerObject):
             debug.trace('WinGram.format_utterance_message', 
                 "Full utterance was %s" % repr(words))
         return s
+
         
 class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces
@@ -309,6 +311,7 @@ class DictWinGram(WinGram):
 
         *none*
         """
+        debug.trace('DictWinGram.rename_buffer_cbk', 'new_buff_name=%s' % new_buff_name)
         self.buff_name = new_buff_name
 
     def set_context(self, before = "", after = ""):
@@ -1294,6 +1297,7 @@ class SelectWinGramDummy(SelectWinGram):
 
         *none*
         """
+        debug.trace('SelectWinGramDummy.activate', 'buff_name=%s' % buff_name)
         self.buff_name = buff_name
         self.active = 1
         if not self.silent:

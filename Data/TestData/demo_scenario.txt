@@ -25,8 +25,8 @@ Before the demo
 - Open new file demo.py  
 
 
-Start demo by writing a bubble sort method in demo.py
------------------------------------------------------
+Start demo by writing a bubble sorting class in demo.py
+-------------------------------------------------------
    
 - Dictate it in one go without stopping to explain what is going on.
 
@@ -38,23 +38,27 @@ Start demo by writing a bubble sort method in demo.py
 
 - Code for the bubble sort could look something like this:
 
-     def bubble_sort(self, list):
-        for index1 in range(len(list)):
-           for index2 in range(index1 + 1, len(list)):
-              if list[index1] < list[index2]:
-                 swap_elements(index1, index2, list)
-        return list
-        
-- Dictation might be something like this:
+class SortingStrategy:
+   def sort(self, list):
+      pass
 
-   "define method bubble sort add argument list do the following"
-   "for each index 1 in range of length of list do the following"
-   "for each index 2 in range of index 1 plus 1 comma length of list do the following"
-   "if list at index index 1 jump out is less than list at index index 2 do the following"
-   "swap elements with arguments index 1 comma index 2 comma list new statement"
-   "back indent 3 times"
-   "return list"
-   
+class BubbleSorter(SortingStrategy):
+   def sort(self, list):
+      if len(list) == 0:
+         return list
+      for index1 in range(len(list) - 1):
+         for index2 in range(index1 + 1, len(list)):
+            if list[index1] < list[index2]:
+               self.swap_elements(index1, index2, list)
+
+   def swap_elements(self, index1, index2, list):
+      temporary = list[index1]
+      list[index1] = list[index2]
+      list[index2] = temporary
+
+some_list = [1,  - 5, 2, 3, 1]
+print BubbleSorter().sort(some_list)
+        
 - Some interesting points to highlight during dissection afterwards
   discussed below.
       

@@ -7,6 +7,21 @@
 # trust_current_window(1)
 
 
+######################################################################
+# These words are abbreviations that are used in test code and
+# appear in some (but not all) versions of NatSpeak.
+#
+# Make sure they are in the vocabulary, so that the regression test
+# produces the same output independantly of the version of NatSpeak.
+######################################################################
+sr_interface.addWord('EXP')
+sr_interface.addWord('ceil')
+sr_interface.addWord('exp')
+sr_interface.addWord('VC')
+sr_interface.addWord('vc')
+sr_interface.addWord('voc')
+
+
 #
 # Slightly change the configuration of text mode toggling
 # so we can text that text_mode_toggling() works.

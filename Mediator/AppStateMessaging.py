@@ -421,10 +421,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
+        debug.trace('AppStateMessaging.apply_upd_descr', 'upd_descr_list=%s' % repr(upd_descr_list))
         updates = []
         for a_descr in upd_descr_list:
             the_update = AppState.create_update(a_descr)
             updates.append(the_update)
+            debug.trace('AppStateMessaging.apply_upd_descr', 'the_update=%s' % repr(the_update))
             the_update.apply(self)
         return updates
 

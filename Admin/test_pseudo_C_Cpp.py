@@ -91,7 +91,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['define','method','foo','scope','bar','returning','pointer','to','char'])
     commands.say(['method','body'])
     commands.say(['for','loop'])
-    commands.say(['integer','index','equals','0'])
+    commands.say(['integer','index','equals','0\\zero'])
     commands.say(['after','semi','index'])
     commands.say(['is','less','or','equal','to'])
     commands.say(['platypus','count'])
@@ -115,11 +115,11 @@ def dictate_pseudo_C_Cpp(commands):
     # switch - case - default - break
 
     commands.say(['switch','initial','character','go', 'to','body'])
-    commands.say(['case','single-quotes','a'])
+    commands.say(['case','single-quotes','a\\alpha'])
     commands.say(['after','colon','new','line','some','procedure','with','arguments','jump','out','semi','new','line','break'])
-    commands.say(['case','single-quotes','b'])
+    commands.say(['case','single-quotes','b\\bravo'])
     commands.say(['after','colon','new','line','do','something','different','parens','jump','out','semi','new','line'])
-    commands.say(['break','default','foo','bar','equals','4','semi','jump','out','new','paragraph'])
+    commands.say(['break','default','foo','bar','equals','4\\four','semi','jump','out','new','paragraph'])
 
     # typeid()
 
@@ -151,49 +151,49 @@ def dictate_pseudo_C_Cpp(commands):
 
     # if statement
 
-    commands.say(['if','the','value','less','than','4','then'])
+    commands.say(['if','the','value','less','than','4\\four','then'])
 
     # type casts
 
-    commands.say(['value','1','equals','static','cast','integer','add','argument','some','symbol'])
+    commands.say(['value','1\\one','equals','static','cast','integer','add','argument','some','symbol'])
     commands.goto_end_of_line()
     commands.say(['semi','new','statement'])
-    commands.say(['value','2','equals','reinterpret','cast','integer','add','argument','some','symbol'])
+    commands.say(['value','2\\two','equals','reinterpret','cast','integer','add','argument','some','symbol'])
     commands.say(['new','statement'])
-    commands.say(['value','3','equals','dynamic','cast','integer','add','argument','some','symbol'])
+    commands.say(['value','3\\three','equals','dynamic','cast','integer','add','argument','some','symbol'])
     commands.say(['new','statement'])
 
-    commands.say(['value','8','equals'])
+    commands.say(['value','8\\eight','equals'])
     commands.say(['constant','cast'])
     commands.say(['integer','add','argument','some','symbol'])
     commands.say(['new','statement','above'])
 
-    commands.say(['value','4','equals','some','symbol'])
+    commands.say(['value','4\\four','equals','some','symbol'])
     commands.say(['constant','cast','to'])
     commands.say(['integer'])
     commands.say(['new','statement'])
 
-    commands.say(['value','5','equals','some','symbol','dynamic','cast','to','void','pointer'])
+    commands.say(['value','5\\five','equals','some','symbol','dynamic','cast','to','void','pointer'])
     commands.say(['new','statement'])
-    commands.say(['value','7','equals','some','symbol','reinterpret','cast','to','fake','object','type'])
+    commands.say(['value','7\\seven','equals','some','symbol','reinterpret','cast','to','fake','object','type'])
     commands.say(['new','statement','above'])
-    commands.say(['value','6','equals','some','symbol','static','cast','to','void','star'])
+    commands.say(['value','6\\six','equals','some','symbol','static','cast','to','void','star'])
 
     commands.say(['next','semi'])
     commands.say(['next','semi'])
     commands.say(['again'])
 
     commands.say(['new','statement'])
-    commands.say(['yet','another','value','equals','value','5','cast','to','int\\int','pointer'])
+    commands.say(['yet','another','value','equals','value','5\\five','cast','to','int\\int','pointer'])
     commands.say(['new','statement'])
-    commands.say(['yet','another','value','equals','cast','int\\int','pointer','jump','out','value','8'])
+    commands.say(['yet','another','value','equals','cast','int\\int','pointer','jump','out','value','8\\eight'])
 
     commands.say(['after','semi','new','line'])
     commands.say(['break'])
 
     # else-if and else
 
-    commands.say(['else','if','the','value','greater','than','15','then','foo','equals','new','bar','semicolon'])
+    commands.say(['else','if','the','value','greater','than','15\\fifteen','then','foo','equals','new','bar','semicolon'])
     commands.say(['else','continue'])
 
     commands.say(['new','statement','above','testing','adding','above','with','arguments'])
@@ -205,7 +205,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['define','class','really','great','stuff'])
     commands.say(['with','superclass','important','superclass'])
     commands.say(['private','members'])
-    commands.say(['new','line','int\\int','foo','semicolon'])
+    commands.say(['new','line', 'int\\int','foo','semicolon'])
     commands.say(['jump','back','out'])
     commands.say(['new','public','member','new','line','float','pointer','bar','semi','new','line'])
     commands.say(['declare','function','testing','declaration'])

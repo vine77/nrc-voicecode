@@ -41,6 +41,7 @@ clear_symbols()
 clear_abbreviations()
    Removes all defined abbreviations from VoiceCode's symbol dictionary
 
+
 say(STR utterance, never_bypass_sr_recog=0, user_input=None)
    Interprets string *utterance* as though it had been said by a user.
 
@@ -160,6 +161,12 @@ import InstanceSpace
 # I think we can get by without CmdInterp, EdSim, MediatorObject
 # import sr_interface, util, vc_globals
 
+already_ensured_was_in_vocab = {}
+def make_sure_word_is_in_vocab(word):
+   if not already_ensured_was_in_vocab.has_key(word):
+      if sr_interface.getWordInfo(word) == None:
+         sr_interface.addWord(word)
+   already_ensured_was_in_vocab[word] = 1      
 
 
 # Set this to 0 during regression testing and > 0 during interactive testing
@@ -341,6 +348,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         """
         
         global sleep_before_recognitionMimic
+        
         if self.should_exit:
             trace('SimCmdsObj.say', 'cancelling testing')
             raise mediator_exceptions.CancelTesting()
@@ -408,6 +416,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     # (e.g. '\n' instead of '{Enter}'
                     #
                     for a_word in utterance:
+                        # Make sure word is in-vocabulary
+                        make_sure_word_is_in_vocab(a_word)
 # don't want to clean any more
                         spoken, written = sr_interface.spoken_written_form(a_word, 
                             clean_written = 0, clean_spoken = 0)
@@ -419,9 +429,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                             words = words + [written]
                 else:        
                     words = re.split('\s+', utterance)
-
+                    for a_word in words:
+                        make_sure_word_is_in_vocab(a_word)                    
 
                 trace('SimCmdsObj.say', 'words=%s' % words)
+                
 #            for word in words:
 #                print word, natlink.getWordInfo(word)
 #        print '-- mediator.say: words=%s' % words
@@ -436,16 +448,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 if sleep_before_recognitionMimic:
                     print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
                     time.sleep(sleep_before_recognitionMimic)
-                    
-                trace('SimCmdsObj.say', 'invoking recognitionMimic')
-#        print '-- SimCmdsObj.say: invoking recognitionMimic'
+
                 sys.stderr.flush()
-#            print words
+
                 natlink.recognitionMimic(words)
-                     
-                trace('SimCmdsObj.say', 'DONE invoking recognitionMimic')
                 sys.stderr.flush()
-#        print '-- SimCmdsObj.say: DONE invoking recognitionMimic'        
                 if not self.app.alive:
                     trace('SimCmdsObj.say', 'about to raise socket error')
                     sys.stderr.flush()
