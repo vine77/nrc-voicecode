@@ -83,12 +83,29 @@ def addWord(word, *rest):
 #            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
                    
             if len(rest) == 0:
-                natlink.addWord(word, word_info_flag)
+                flag = word_info_flag
             elif len(rest) == 1:
-                natlink.addWord(word, rest[0])
+                flag = rest[0]
             else:
                 return None
+                
+            natlink.addWord(word, flag)
 
+            #
+            # Note: Need to add redundant entry without special
+            # characters (e.g. {Spacebar}) in the written form,
+            # because Select XYZ will not work if XYZ has some spaces
+            # in its written form. This means that there will be two
+            # vocabulary entries in the vocabulary. The entry without
+            # spaces will always be used by Select XYZ, but
+            # unfortunately, the dictation grammar may chose the one
+            # without spaces over the one with spaces. Hopefully,
+            # user correction will address that
+            #
+            word_no_special_chars = re.sub('{Spacebar}', '', word)
+            if word_no_special_chars != word:
+#                print '-- sr_interface.addWord: adding redundant form with no spaces \'%s\'' % word_no_special_chars
+                natlink.addWord(word_no_special_chars, flag)
 
 def deleteWord(word, *rest):
     """Delete a word from NatSpeak's vocabulary.
@@ -177,8 +194,6 @@ def vocabulary_entry(spoken_form, written_form):
         entry = spoken_form
     return entry
 
-
-
 class CommandDictGrammar(DictGramBase):
     """A grammar for mixing continuous dictation and commands.
 
@@ -207,14 +222,14 @@ class CommandDictGrammar(DictGramBase):
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
-        print '-- CommandDictGrammar.gotBegin: called'
+#        print '-- CommandDictGrammar.gotBegin: called'
         self.interpreter.load_language_specific_aliases()        
         
     def gotResults(self, words):
         #
         # Interpret the commands, then print buffer content
         #
-        print 'Heard mixed dictation and commands:%s' % repr(words)
+#        print '-- CommandDictGrammar.gotResults: Heard mixed dictation and commands:%s' % repr(words)
 
         #
         # Substitute written form of words
@@ -247,12 +262,12 @@ class CodeSelectGrammar(SelectGramBase):
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
         self.interpreter.load_language_specific_aliases()
+#        print '-- CodeSelectGrammar.gotBegin: calling self.setSelectText with bufer content:\n*** Start of buffer content ***\n%s\n*** End of buffer content ***' % self.interpreter.on_app.curr_buffer.content
         self.setSelectText(self.interpreter.on_app.curr_buffer.content)
 
     def gotResults(self, words, startPos, endPos):
-        print 'Heard Select command: <%s>, startPos=%s, endPos=%s' % (string.join(words), startPos, endPos)
+#        print '-- CodeSelectGrammar.gotResults: Heard Select command: <%s>, startPos=%s, endPos=%s' % (string.join(words), startPos, endPos)
         self.interpreter.on_app.select(startPos, endPos)
-        self.interpreter.on_app.print_buff_content()
 
     def gotResultsObject(self,recogType,resObj):
         # If there are multiple matches in the text we need to scan through
@@ -274,7 +289,6 @@ class CodeSelectGrammar(SelectGramBase):
                         self.ranges = [self.interpreter.on_app.curr_buffer.content[region[0]:region[1]]]
         except natlink.OutOfRange:
             return
-
 
 
 def run():

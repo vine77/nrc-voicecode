@@ -51,6 +51,7 @@ class EdSim(AppState):
         .. [self.cur_pos] AppState
         .. [self.curr_buffer] AppState"""
 
+#        print '-- EdSim.insert_indent: code_bef=%s, code_after=%s' % (code_bef, code_after)
         buff = self.find_buff(f_name)
         start_reg = buff.cur_pos
         self.insert(code_bef, start=start, to=end, f_name=f_name)
@@ -284,85 +285,4 @@ class EdSim(AppState):
         self.curr_buffer.content = source
         self.open_buffers[name] = self.curr_buffer
         
-
-    def print_buff_content(self, file_name=None):
-        """Prints the content of a source  buffer to the VoiceCode console.
-
-        *[STR file_name]* is the name of the source file for the buffer to
-        print. If *None*, then print current buffer.    
-        """
-        buff = self.find_buff(file_name)
-        cont = self.curr_buffer.content
-
-        
-#        print '-- EdSim.print_buff_content: selection_start=%s, selection_end=%s, cur_pos=%s' % (buff.selection_start, buff.selection_end, buff.cur_pos)
-        if buff.selection_start != None or buff.selection_end != None:
-            if buff.selection_start <= buff.selection_end:
-                selection_start = buff.selection_start
-                selection_end = buff.selection_end
-            else:
-                selection_start = buff.selection_end
-                selection_end = buff.selection_start
-        else:
-            selection_start = buff.cur_pos
-            selection_end = buff.cur_pos
-
-#        print '-- EdSim.print_buff_content: selection_start=%s, selection_end=%s' % (selection_start, selection_end)
-
-        before_content = cont[:selection_start]
-        selection_content = cont[selection_start:selection_end]
-        after_content = cont[selection_end:]
-
-#        print '-- EdSim.print_buff_content: before_content=%s, selection_content=%s, after_content=%s' % (before_content, selection_content, after_content)
-        
-        sys.stdout.write("*** Start of source buffer ***\n")
-
-        #
-        # Print region before the selection.
-        #
-        curr_line_num = 1
-        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
-#        print '-- EdSim.print_buff_content: before selection lines_with_num=%s' % repr(lines_with_num)        
-        for aline in lines_with_num[:len(lines_with_num)-1]:
-            sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if (len(lines_with_num) > 0):
-             lastline = lines_with_num[len(lines_with_num)-1]
-             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
-        
-        if selection_content == '':
-            sys.stdout.write('<CURSOR>')            
-        else:
-            sys.stdout.write('<SEL_START>')
-
-        #
-        # Print the selection
-        #
-        curr_line_num = curr_line_num + len(lines_with_num) - 1
-        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
-#        print '-- EdSim.print_buff_content: selection lines_with_num=%s' % repr(lines_with_num)
-        if (len(lines_with_num) > 0):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if selection_content != '': sys.stdout.write('<SEL_END>')
-
-        #
-        # Print region after the selection
-        #
-        curr_line_num = curr_line_num + len(lines_with_num) - 1
-        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
-#        print '-- EdSim.print_buff_content: after selection lines_with_num=%s' % repr(lines_with_num)
-        if (len(lines_with_num) > 0):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))        
-        sys.stdout.write("\n*** End of source buffer ***\n")
-        
-
-
-
-
-
 

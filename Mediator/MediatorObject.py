@@ -1,6 +1,6 @@
 # print '-- MediatorObject.py: imported'
 
-import AppState, CmdInterp, Object, sr_interface, SymDict, vc_globals
+import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
 """Defines main class for the mediator.
 
@@ -81,15 +81,19 @@ class MediatorObject(Object.Object):
 # Configuration functions. These are not methods
 ###############################################################################
 
-def add_csc(acmd):
+def add_csc(acmd, add_voc_entry=1):
     """Add a new Context Sensitive Command.
 
     [CSCmd] *acmd* is the command to add.
 
+    *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+    for the CSC's spoken forms
+    
+
     .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
     global to_configure
-    to_configure.interp.index_csc(acmd)
+    to_configure.interp.index_csc(acmd, add_voc_entry)
 
 
 def add_lsa(language_list, spoken_as_list, written_as):
@@ -97,6 +101,12 @@ def add_lsa(language_list, spoken_as_list, written_as):
 
     These words get added and removed dynamically from the SR
     vocabulary, depending on the language of the active buffer.
+
+    A redundant CSC is also added to allow translation of the LSA at
+    the level of the Mediator, in cases where NatSpeak prefers to
+    recognise the LSA as dictated text instead of a spoken/written
+    word (this often happens if the spoken form looks to much like
+    dictated text, e.g. "is not equal to").
     
     **INPUTS**
     
@@ -114,23 +124,61 @@ def add_lsa(language_list, spoken_as_list, written_as):
     
     global to_configure
 
-#    print '-- config.add_lsa: language_list=%s, spoken_as_list=%s, written_as=\'%s\'' % (repr(language_list), repr(spoken_as_list), written_as)
+#    print '-- MediatorObject.add_lsa: language_list=%s, spoken_as_list=%s, written_as=\'%s\'' % (repr(language_list), repr(spoken_as_list), written_as)
+
+    
     if language_list == None:
         #
-        # For None language, add it to the SR vocabulary
+        # For None language, add entries to the SR vocabulary
         #            
-        sr_interface.addWord(entry)
+        for spoken_as in spoken_as_list:
+            entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+            sr_interface.addWord(entry)
     else:
         for language in language_list:
             for spoken_as in spoken_as_list:
-#                print '-- config.add_lsa: processing language=%s, spoken_as=%s, written_as=%s' % (language, spoken_as, written_as)
                 entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+#                print '-- MediatorObject.add_lsa: processing language=%s, spoken_as=%s, written_as=%s' % (language, spoken_as, written_as)
                 if to_configure.interp.language_specific_aliases.has_key(language):
                     to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [entry]
                 else:
                     to_configure.interp.language_specific_aliases[language] = [entry]
 
+    #
+    # Generate an anonymous action function that types the appropriate text
+    #
+    the_action = actions_gen.anonymous_action('app.insert(\'%s\')' % written_as, 'Inserts \'%s\'' % written_as)                    
 
+    #
+    # Add a CSC for translating the LSA at the mediator level.
+    # This redundant translation is necessary because if the spoken form of
+    # the LSA looks too much like dictated text (e.g. "is equal to"), NatSpeak
+    # will tend to always recognise it as dictated text instead of a
+    # spoken form/written form word. So Mediator must be able to translate
+    # it also in case NatSpeak screws up
+    #
+    if language_list == None:
+        #
+        # If no language was specified, the CSC applies in all contexts
+        #
+        the_meanings = [cont_gen.ContAny(), the_action]
+    else:
+        #
+        # Applicable contexts are the language contexts for each of the
+        # applicable languages
+        #
+        the_meanings = []
+        for a_language in language_list:
+            the_meanings = the_meanings + [[cont_gen.ContLanguage(language=a_language), the_action]]
+
+    aCSC = CSCmd.CSCmd(spoken_forms=spoken_as_list, meanings=the_meanings)
+    #
+    # Note: we add this CSC with add_voc_entry=0 because we don't want to
+    #       reenforce NatSpeak's tendancy to recognise the LSA as a dictated
+    #       sentence
+    #
+    add_csc(aCSC, add_voc_entry=0)
+        
 def associate_language(extension, language):
     """Add an association between a file extension and a programming
     language.
@@ -165,46 +213,6 @@ def add_abbreviation(abbreviation, expansions):
     """
     global to_configure
     to_configure.interp.known_symbols.abbreviations[abbreviation] = expansions
-
-
-
-def add_language_specific_word(language_list, spoken_as_list, written_as):
-    """Add a language specific word.
-
-    These words get added and removed dynamically from the SR
-    vocabulary, depending on the language of the active buffer.
-
-    **INPUTS**
-
-    *[STR]* language_list -- Names of the languages for which this
-    new word applies. If None, then add this for all languages.
-
-    *STR* spoken_as_list -- List of spoken form of the word.
-
-    *STR* written_as -- Written form of the word.
-
-    **OUTPUTS**
-
-    *none* -- 
-    """
-
-    global to_configure
-    
-#    print '-- MediatorObject.add_language_specific_word: language_list=%s, spoken_as_list=%s, written_as=\'%s\'' % (repr(language_list), repr(spoken_as_list), written_as)
-    if language_list == None:
-        #
-        # For None language, add it to the SR vocabulary
-        #            
-        sr_interface.addWord(entry)
-    else:
-        for language in language_list:
-            for spoken_as in spoken_as_list:
-#                print '-- MediatorObject.add_language_specific_word: processing language=%s, spoken_as=%s, written_as=%s' % (language, spoken_as, written_as)
-                entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-                if to_configure.interp.language_specific_words.has_key(language):
-                    to_configure.interp.language_specific_words[language] = to_configure.interp.language_specific_words[language] + [entry]
-                else:
-                    to_configure.interp.language_specific_words[language] = [entry]
 
 
 def define_language(name, definition):
