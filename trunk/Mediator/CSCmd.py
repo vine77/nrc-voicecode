@@ -199,7 +199,7 @@ class CSCmdDict(Object):
                              'actions': {}
                             },
                             attrs)
-        self._add_meanings(meanings)
+        self._add_meanings(meanings)        
 
     def clone(self):
         """returns a mixed deep-shallow copy of the object.  The

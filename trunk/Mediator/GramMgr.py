@@ -138,12 +138,17 @@ class GramMgr(OwnerObject):
         """
         if old_buff_name == new_buff_name:
             return
-        for window, buffer_grammars in self.dict_grammars.items():
+        for window, buffer_dict_grammars in self.dict_grammars.items():
             try:
-                grammar = buffer_grammars['old_buff_name']
-                grammar.rename_buffer_cbk(new_buff_name)
-                buffer_grammars['new_buff_name'] = grammar
-                del buffer_grammars['old_buff_name']
+                buffer_dict_grammars['new_buff_name'] = buffer_dict_grammars['old_buff_name']               
+                buffer_dict_grammars['old_buff_name'].rename_buffer_cbk(new_buff_name)
+
+                buffer_dict_cmd_grammars = self.dict_as_cmd_grammars['window']
+                buffer_dict_cmd_grammars['new_buff_name'] = buffer_dict_grammars['old_buff_name']                                            
+                buffer_dict_cmd_grammars['old_buff_name'].rename_buffer_cbk(new_buff_name)
+
+                del buffer_dict_grammars['old_buff_name']
+                del buffer_dict_cmd_grammars['old_buff_name']
             except KeyError:
                 pass
 
@@ -576,6 +581,9 @@ class WinGramMgr(GramMgrDictContext):
     *{INT : {STR : WinDictGram}}* dict_grammars -- map from window handles to
     map from buffer names to dictation grammars
 
+    *{INT : {STR : DictThroughCmdWinGramNL}}* dict_cmd_grammars -- map from 
+    window handles to map from buffer names to dictation through command grammars
+
     *{INT : SelectWinGram}* sel_grammars -- map from window handles to
     to selection grammars
 
@@ -625,6 +633,7 @@ class WinGramMgr(GramMgrDictContext):
                             'global_grammars': global_grammars,
                             'exclusive': exclusive,
                             'dict_grammars' : {},
+                            'dict_cmd_grammars': {},
                             'sel_grammars' : {},
                             'correction_grammars' : {},
                             'text_mode_toggling_grammars': {},
@@ -634,6 +643,7 @@ class WinGramMgr(GramMgrDictContext):
                             args)
         debug.trace("GramMgr.WinGramMgr", "** after deep_construct")                            
         self.add_owned('dict_grammars')
+        self.add_owned('dict_cmd_grammars')        
         self.add_owned('sel_grammars')
         self.add_owned('correction_grammars')
 
@@ -691,6 +701,9 @@ class WinGramMgr(GramMgrDictContext):
         for buffers in self.dict_grammars.values():
             for grammar in buffers.values():
                 grammar.set_exclusive(exclusive)
+        for buffers in self.dict_cmd_grammars.values():
+            for grammar in buffers.values():
+                grammar.set_exclusive(exclusive)                
         for grammar in self.sel_grammars.values():
             grammar.set_exclusive(exclusive)
         for grammar in self.correction_grammars.values():
@@ -728,6 +741,7 @@ class WinGramMgr(GramMgrDictContext):
         for buff_name in self.dict_grammars[window].keys():
             if buff_name != buffer:
                 self.dict_grammars[window][buff_name].deactivate()
+                self.dict_cmd_grammars[window][buff_name].deactivate()
 
 # if the dictation grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows in dict_grammars
@@ -736,6 +750,8 @@ class WinGramMgr(GramMgrDictContext):
                 if a_window != window:
                     for buff_name in self.dict_grammars[a_window].keys():
                         self.dict_grammars[a_window][buff_name].deactivate()
+                        self.dict_cmd_grammars[a_window][buff_name].deactivate()
+
 
 #  set visible range and buffer for selection grammar
         self.sel_grammars[window].activate(buffer)
@@ -770,11 +786,13 @@ class WinGramMgr(GramMgrDictContext):
 
         if is_in_text_mode:
             self.dict_grammars[window][buffer].deactivate()
+            self.dict_cmd_grammars[window][buffer].deactivate()
         else:
 #  set dictation context
             before, after = self.find_context(buffer)
             self.dict_grammars[window][buffer].set_context(before, after)
             self.dict_grammars[window][buffer].activate()
+            self.dict_cmd_grammars[window][buffer].activate()            
     
     def activate_sink(self, window):
         """activate dummy dictation grammar as a sink to intercept
@@ -802,6 +820,11 @@ class WinGramMgr(GramMgrDictContext):
             self.factory.make_dictation(self, self.app, 0, 
                 window = a_window, exclusive = self.exclusive)
         self.dict_grammars[window][0].activate()
+        self.dict_cmd_grammars[window][0] = \
+            self.factory.make_dictation_through_cmd(self, self.app, 0, 
+                window = a_window, exclusive = self.exclusive)
+        self.dict_cmd_grammars[window][0].activate()
+
 
     def _deactivate_all_window(self, window):
         """de-activate all buffer-specific grammars which would be
@@ -827,6 +850,7 @@ class WinGramMgr(GramMgrDictContext):
             buffers.sort()
             for a_buffer in buffers:
                 self.dict_grammars[window][a_buffer].deactivate()
+                self.dict_cmd_grammars[window][a_buffer].deactivate()                
 
     def deactivate_all(self, window = None):
         """de-activate all buffer-specific grammars which would be
@@ -884,6 +908,11 @@ class WinGramMgr(GramMgrDictContext):
                     self.factory.make_dictation(self, self.app, 
                     buffer, window = a_window, 
                     exclusive = self.exclusive)
+                self.dict_cmd_grammars[window][buffer] = \
+                    self.factory.make_dictation_through_cmd(self, self.app, 
+                    buffer, window = a_window, 
+                    exclusive = self.exclusive)
+                    
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the application
@@ -919,6 +948,7 @@ class WinGramMgr(GramMgrDictContext):
         """
         if not self.dict_grammars.has_key(window):
             self.dict_grammars[window] = {}
+            self.dict_cmd_grammars[window] = {}            
         if not self.sel_grammars.has_key(window):
             a_window = window
             if self.global_grammars:
@@ -980,8 +1010,13 @@ class WinGramMgr(GramMgrDictContext):
         if self.dict_grammars.has_key(window):
             for a_buffer in self.dict_grammars[window].keys():
                 self.dict_grammars[window][a_buffer].cleanup()
-                del self.dict_grammars[window][a_buffer]
+                self.dict_cmd_grammars[window][a_buffer].cleanup()
+                del self.dict_grammars[window][a_buffer]                
+                del self.dict_cmd_grammars[window][a_buffer]
+                
             del self.dict_grammars[window]
+            del self.dict_cmd_grammars[window]
+            
 
     def buffer_closed(self, buffer):
         """clean up and destroy all grammars for a buffer which 

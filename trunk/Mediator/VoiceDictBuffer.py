@@ -439,7 +439,7 @@ class VoiceDictBuffer(TextBuffer.TextBufferChangeSpecify,
         **OUTPUTS**
 
         *none*
-        """
+        """        
         start, end = range
         if end < start:
             self.underlying.setVisibleText(0)

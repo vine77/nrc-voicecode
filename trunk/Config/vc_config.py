@@ -799,7 +799,7 @@ compound_statements.add_csc(acmd)
 ctrl_structures = CSCmdSet('control structures', 
     description = 'commands for dictation and navigation of control structures')
 
-acmd = CSCmd(spoken_forms=['for', 'for loop'],
+acmd = CSCmd(spoken_forms=['for', 'for loop', 'for each'],
              meanings={ContC(): c_simple_for, 
                        ContBlankLine('python'): py_simple_for,
                        ContPerl(): c_simple_for},
