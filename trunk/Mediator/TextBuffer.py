@@ -633,19 +633,99 @@ class NumberedLines(Object):
 	"""
 	debug.virtual('NumberedLines.line_num_of')
 
-    def position_of_line(self, line = None):
-	"""returns the position of the start of the specified line 
+    def lines(self):
+	"""return number of lines in the buffer
+	
+	**INPUTS**
+	
+	*none*
+	
+	**OUTPUT**
+	
+	*int* -- number of lines in the buffer (incomplete lines are
+	counted, so this is always > 0
+	"""
+	debug.virtual('NumberedLines.lines')
+
+    def range_of_line(self, line = None):
+	"""returns the character range corresponding to the specified line 
+	(not including the newline)
+
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, last line is used.
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- offsets into the buffer of the start and end of
+	the line.
+	"""
+	debug.virtual('NumberedLines.range_of_line')
+
+    def range_of_lines(self, first_line, last_line):
+	"""returns the character range corresponding to the specified range
+	of lines (not including the final newline)
+
+	**INPUTS**
+
+	*INT first_line, second_line* -- line numbers (starting with 0)
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- offsets into the buffer of the start and end of
+	the range of lines.
+	"""
+	debug.virtual('NumberedLines.range_of_lines')
+    
+    def ranges_of_lines(self, first_line, last_line):
+	"""returns a list of the character ranges corresponding to the 
+	specified range of lines (not including the final newline of
+	each line)
+
+	**INPUTS**
+
+	*INT first_line, second_line* -- line numbers (starting with 0)
+
+	**OUTPUTS**
+
+	*[(INT, INT), ...]* -- offsets into the buffer of the start and end of
+	the each line in the range of lines.
+	"""
+	debug.virtual('NumberedLines.ranges_of_lines')
+
+    def get_line(self, line = None):
+	"""returns the contents of the specified line 
+	(not including the newline)
+	**INPUTS**
+
+	*INT line* -- line number (starting with 0).  Defaults to current line.
+	If line is out of range, last line is used.
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- offsets into the buffer of the start and end of
+	the line.
+	"""
+	start, end = self.range_of_line(line)
+	return self.get_text(start, end)
+
+    def position_of_line(self, line = None, where = -1):
+	"""returns the position of the start or end of the specified line 
 
 	**INPUTS**
 
 	*INT line* -- line number (starting with 0).  Defaults to current line.
 	If line is out of range, returns position of end of buffer.
 
+        *INT where* indicates whether the position of the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line
+	 should be returned.
+
 	**OUTPUTS**
 
-	*INT* -- position of start of that line.
+	*INT* -- position of start/end of that line.
 	"""
-
 	debug.virtual('NumberedLines.position_of_line')
 
     def line_length(self, line = None):
@@ -663,14 +743,15 @@ class NumberedLines(Object):
 
 	debug.virtual('NumberedLines.line_length')
 
-    def goto_line(self, line = None):
-	"""moves cursor to start of the specified line
-
-	**INPUTS**
+    def goto_line(self, line = None, where = -1):
+        """Go to a particular line in a buffer.
 
 	*INT line* -- line number (starting with 0).  Defaults to current line.
 	If line is greater than the number of lines, goes to the end of
 	the buffer.
+
+        *INT where* indicates if the cursor should go at the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line.
 
 	**OUTPUTS**
 
