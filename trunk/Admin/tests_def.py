@@ -1527,6 +1527,7 @@ def test_punctuation():
     commands.say(['before previous backquote'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
     commands.say(['back out of backquotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['new statement'], user_input='2\n2\n2\n2\n', echo_utterance=1)
+        
 
     commands.quit(save_speech_files=0, disconnect=0)    
 
@@ -3318,9 +3319,17 @@ def test_temporary():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
    commands.open_file('blah.py')
-   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)   
-   commands.goto(2, echo_cmd=1)
-   commands.goto_beginning_of_line(echo_cmd=1)
+   
+   commands.say(['new', 'statement'], echo_utterance=1)
+#   commands.say(['back', 'indent', 'five', 'times'], echo_utterance=1)
+   commands.say(['between', 'parens'], echo_utterance=1)
+   commands.say(['before', 'previous', 'paren'], echo_utterance=1)      
+   
+#   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)   
+#   commands.goto(2, echo_cmd=1)
+#   commands.goto_beginning_of_line(echo_cmd=1)
+   
+   
    
 #add_test('temp', test_temporary, desc='temporary test')
 

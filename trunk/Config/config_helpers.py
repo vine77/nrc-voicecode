@@ -365,14 +365,14 @@ class PunctuationSet(Object):
                 '%s %s %s' % (self.after_word, self.next_word, spoken)],
                meanings = {context: ActionSearchBidirectionalRepeat(regexp =
                expression + 
-                   r'\s{0,1}')},
+                   r'[ \t]{0,1}')},
                docstring='go after next %s' % spoken)
             debug.trace('PunctuationSet._add_navigation', 'command.meanings=%s, command.spoken_forms=%s' % (command.meanings, repr(command.spoken_forms)))
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.next_word, spoken), 
                 '%s %s' % (self.before_word, spoken)],
-               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'\s{0,1}' +
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'[ \t]{0,1}' +
                    expression, where = -1)},
                docstring='go before next %s' % spoken)
             commands.add_csc(command)
@@ -381,12 +381,12 @@ class PunctuationSet(Object):
                 '%s %s %s' % (self.after_word, self.prev_word, spoken)],
                meanings = {context: ActionSearchBidirectionalRepeat(regexp =
                expression + 
-                   r'\s{0,1}', direction = -1)},
+                   r'[ \t]{0,1}', direction = -1)},
                docstring='go after previous %s' % spoken)
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.prev_word, spoken)],
-               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'\s{0,1}' +
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'[ \t]{0,1}' +
                    expression, where = -1, direction = -1)},
                docstring='go before previous %s' % spoken)
             commands.add_csc(command)
@@ -683,7 +683,7 @@ class PairedPunctuation(PunctuationSet):
                 spoken_forms.append("%s %s" % (self.out_of, spoken))
             command = CSCmd(spoken_forms,
                meanings = {context: ActionSearchBidirectionalRepeat(regexp = close_escaped + 
-                   r'\s{0,1}')},
+                   r'[ \t]{0,1}')},
                docstring=doc)
             commands.add_csc(command)
             if self.back:
@@ -694,7 +694,7 @@ class PairedPunctuation(PunctuationSet):
                     back_spoken_forms.append(self.back + " " + spoken_form)
                 command = CSCmd(back_spoken_forms,
                    meanings = {context: ActionSearchBidirectionalRepeat(regexp = \
-                           r'\s{0,1}' + open_escaped, 
+                           r'[ \t]{0,1}' + open_escaped, 
                            direction = -1, where = -1)},
                    docstring=doc)
                 commands.add_csc(command)
