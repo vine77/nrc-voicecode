@@ -406,9 +406,9 @@ class SourceBuff(Object):
 	
 	*(INT, INT)* -- increasing range within bounds
 	"""
-        if start = None: start = 0
-        if end = None: end = self.len() - 1
-	start, end = range
+	start, end = range        
+        if start == None: start = 0
+        if end == None: end = self.len() - 1
 	if end < start:
 	    start, end = range[1], range[0]
 	start = self.make_within_range(start)
