@@ -206,6 +206,8 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
     *choose_n_gram* -- ChoiceGram supporting "Choose n"
 
     *select_n_gram* -- ChoiceGram supporting "SelectOrEdit n"
+
+    *spelling_gram* -- NaturalSpelling grammar
     """
     def __init__(self, console, parent, utterance, validator, 
             can_reinterpret, gram_factory, pos = None, **args):
@@ -248,11 +250,15 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.name_parent('console')
         self.add_owned('choose_n_gram')
         self.add_owned('select_n_gram')
+        self.add_owned('spelling_gram')
         if gram_factory:
             self.choose_n_gram = \
                 gram_factory.make_choices(choice_words = ['Choose'])
             self.select_n_gram = \
                 gram_factory.make_choices(choice_words = ['Select', 'Edit'])
+            self.spelling_gram = \
+                gram_factory.make_natural_spelling(spelling_cbk = \
+                self.on_spelling)
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
@@ -266,7 +272,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
             wxDefaultPosition, wxDefaultSize)
         init_value = string.join(self.utterance.spoken_forms())
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
-            wxDefaultSize, validator = validator)
+            wxDefaultSize, style = wxTE_NOHIDESEL, validator = validator)
         s.Add(self.text, 0, wxEXPAND | wxALL)
         middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
 # three rows, two columns, 5 pixels between rows and columns
@@ -323,10 +329,12 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
         s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
         ok_button.SetDefault()
-        print 'ids', ok_button.GetId(), wxID_OK
+#        print 'ids', ok_button.GetId(), wxID_OK
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
         EVT_ACTIVATE(self, self.on_activate)
         EVT_CHAR(self.text, self.on_char_text)
+        EVT_SET_FOCUS(self.text, self.on_focus_text)
+        EVT_KILL_FOCUS(self.text, self.on_kill_focus_text)
         self.Raise()
         self.text.SetFocus()
         self.SetAutoLayout(true)
@@ -337,6 +345,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         ok = self.utterance.playback()
         if not ok:
             self.playback_button.Disable()
+        self.text.SetFocus()
 
     def on_char_text(self, event):
         k = event.GetKeyCode()
@@ -354,6 +363,30 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.choice_list.SetSelection(n)
         self.select_choice(self.choices[n])
 
+    def on_focus_text(self, event):
+        print 'activating'
+        if self.spelling_gram:
+            self.spelling_gram.activate(self.GetHandle())
+
+    def on_kill_focus_text(self, event):
+        print 'deactivating'
+        if self.spelling_gram:
+            self.spelling_gram.deactivate()
+
+    def on_spelling(self, letters):
+        """callback called by natural spelling grammar
+
+        **INPUTS**
+
+        *STR* letters -- string of recognized letters
+
+        **OUTPUTS**
+
+        *none*
+        """
+        print 'spelled "%s"' % letters
+        self.text.WriteText(letters)
+
     def on_select(self, n):
         """callback called by Select/Edit n grammar to indicate which
         choice was selected
@@ -366,7 +399,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
 
         *none*
         """
-        if n <= self.choice_list.Number():
+        if n <= self.choice_list.GetCount():
             self.choice_list.SetSelection(n - 1)
             self.select_choice(self.choices[n-1])
 
@@ -382,7 +415,7 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
 
         *none*
         """
-        if n <= self.choice_list.Number():
+        if n <= self.choice_list.GetCount():
             self.choice_list.SetSelection(n - 1)
             self.select_choice(self.choices[n-1])
             self.simulate_OK()

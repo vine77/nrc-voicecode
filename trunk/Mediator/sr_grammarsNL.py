@@ -36,7 +36,7 @@ def compose_alternatives(words):
     alternatives = first
     for word in words[1:]:
         alternatives = alternatives + ' | ' + word
-    return alternatives
+    return "( %s )" % alternatives
 
 class DictWinGramNL(DictWinGram, DictGramBase):
     """natlink implementation of DictWinGram for window-specific 
@@ -386,8 +386,8 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
             return []
         scratch = compose_alternatives(self.scratch_words)
         rules = []
-        rules.append("<scratch_that> exported = ( %s ) That;" % scratch)
-        rules.append("<scratch_n> exported = ( %s ) {count};" % scratch)
+        rules.append("<scratch_that> exported = %s That;" % scratch)
+        rules.append("<scratch_n> exported = %s {count};" % scratch)
         self.lists['count'] = ['1', '2', '3', '4', '5']
         return rules
 
@@ -407,7 +407,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
             return []
         correct = compose_alternatives(self.correct_words)
         rules = []
-        rules.append("<correct_that> exported = ( %s ) That;" % correct)
+        rules.append("<correct_that> exported = %s That;" % correct)
         return rules
 
     def correct_recent_rule(self):
@@ -429,7 +429,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         correct = compose_alternatives(self.correct_words)
         recent = compose_alternatives(self.recent_words)
         rules = []
-        rules.append("<correct_recent> exported = ( %s ) ( %s );" \
+        rules.append("<correct_recent> exported = %s %s;" \
             % (correct, recent))
         return rules
 
@@ -626,6 +626,26 @@ class WinGramFactoryNL(WinGramFactory):
         *ChoiceGram* -- new choice grammar
         """
         return ChoiceGramNL(choice_words = choice_words)
+
+    def make_natural_spelling(self, spell_words = None, spelling_cbk = None):
+        """create a new NaturalSpelling grammar
+
+        **INPUTS**
+
+        *[STR]* spell_words -- words which must proceed the first spelled 
+        letter, or None for an unrestricted spelling grammar.  The latter is not
+        advisable unless dictation is disabled.
+
+        *FCT(STR)* spelling_cbk -- callback to signal recognition.
+        Currently, the letters or numbers spelled are returned as a single 
+        string (with double-o, etc. expanded)
+
+        **OUTPUTS**
+
+        *NaturalSpelling* -- the spelling grammar
+        """
+        return NaturalSpellingNL(spell_words = spell_words, spelling_cbk =
+            spelling_cbk)
    
 class ChoiceGramNL(ChoiceGram, GrammarBase):
     """natlink implementation of ChoiceGram
@@ -682,7 +702,7 @@ class ChoiceGramNL(ChoiceGram, GrammarBase):
         first = self.choice_words[0]
         choose = compose_alternatives(self.choice_words)
         rules = []
-        rules.append("<choose_n> exported = ( %s ) {count};" % choose)
+        rules.append("<choose_n> exported = %s {count};" % choose)
         self.lists['count'] = map(str, range(1, 10))
         self.rules = rules
 
@@ -738,4 +758,145 @@ class ChoiceGramNL(ChoiceGram, GrammarBase):
     def gotResults_choose_n(self, words, fullResults):
         count = int(words[1])
         self.choice_cbk(count)
+
+class NaturalSpellingNL(NaturalSpelling, GrammarBase):
+    """natlink implemenation of NaturalSpelling 
+
+    **INSTANCE ATTRIBUTES**
+
+    *[STR] rules* -- list of rules for this grammar in natlink's format
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(NaturalSpellingNL,
+            {
+             'rules': [],
+            }, attrs, 
+            exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+
+    def create_rules(self):
+        """create all the rules for this grammar and put them in
+        self.rules
+
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        rules = ["<dgnletters> imported;"]
+        spell = ""
+        if self.spell_words:
+            spell = compose_alternatives(self.spell_words) + " "
+        rules.append("<natural_spelling> exported = %s<dgnletters>;" % spell) 
+        self.rules = rules
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to a window
+        with the given handle
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.active:
+            self.active = 1
+            self.activateAll(window = window)
+    
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.active:
+            self.active = 0
+            self.deactivateAll()
+    
+    def cleanup(self):
+        """method which must be called by the owner prior to deleting
+        the grammar, to ensure that it doesn't have circular references
+        to the owner
+        """
+        self.deactivate()
+        GrammarBase.unload(self)
+        NaturalSpelling.cleanup(self)
+
+    def gotResults_dgnletters(self, words, fullResults):
+        s = ""
+        cap_next = 0
+        caps_on = 0
+        for word in words:
+#            print "word is [%s]" % word
+            if re.match(r'\\', word):
+#                print 'starts with slash'
+                if re.match(r'\\space-bar$', word, re.IGNORECASE):
+                    cap_next = 0
+                    s = s + ' '
+                    continue
+                if re.match(r'\\Cap$', word, re.IGNORECASE):
+                    cap_next = 1
+                    continue
+                elif re.match(r'\\Caps-On$', word, re.IGNORECASE):
+                    caps_on = 1
+                    continue
+                elif re.match(r'\\Caps-Off$', word, re.IGNORECASE):
+                    caps_on = 0
+                    cap_next = 0
+                    continue
+                elif re.match(r'\\All-Caps-Off', word, re.IGNORECASE):
+                    caps_on = 0
+                    cap_next = 0
+                    continue
+                elif re.match(r'\\All-Caps', word, re.IGNORECASE):
+                    caps_on = 1
+                    continue
+                continue
+#            print "testing letter"
+            letter_match = re.match(r'([A-Za-z])\\\\l', word)
+            if letter_match:
+                c = letter_match.group(1)
+#                print "matches letter %s" % c
+                if cap_next or caps_on:
+                    c = string.upper(c)
+#                print "matches letter %s" % c
+                s = s + c
+                cap_next = 0
+                continue
+#            print "testing double"
+            double_match = re.match(r'double-([A-Za-z])\\\\l', word)
+            if double_match:
+                c = double_match.group(1) * 2
+#                print "matches double %s" % c
+                if cap_next or caps_on:
+                    c = string.upper(c)
+#                print "matches double %s" % c
+                s = s + c
+                cap_next = 0
+                continue
+#            print "testing digit"
+            spoken, written = sr_interface.spoken_written_form()
+            if cap_next or caps_on:
+                written = string.upper(written)
+            s = s + written
+            cap_next = 0
+
+        self.spelling_cbk(s)
 

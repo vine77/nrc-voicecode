@@ -660,7 +660,26 @@ class WinGramFactory(Object):
         *ChoiceGram* -- new choice grammar
         """
         debug.virtual('WinGramFactory.make_choices')
-    
+
+    def make_natural_spelling(self, spell_words = None, spelling_cbk = None):
+        """create a new NaturalSpelling grammar
+
+        **INPUTS**
+
+        *[STR]* spell_words -- words which must proceed the first spelled 
+        letter, or None for an unrestricted spelling grammar.  The latter is not
+        advisable unless dictation is disabled.
+
+        *FCT(STR)* spelling_cbk -- callback to signal recognition.
+        Currently, the letters or numbers spelled are returned as a single 
+        string (with double-o, etc. expanded)
+
+        **OUTPUTS**
+
+        *NaturalSpelling* -- the spelling grammar
+        """
+        debug.virtual('WinGramFactory.make_natural_spelling')
+
     
 class DictWinGramDummy(DictWinGram):
     """dummy implementation of window-specific dictation grammar 
@@ -1084,3 +1103,114 @@ class ChoiceGram(Object):
         *none*
         """
         debug.virtual('ChoiceGram.deactivate')
+
+class NaturalSpelling(Object):
+    """abstract base class for natural spelling grammar (i.e. a b c, not
+    alpha bravo charlie)
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* active -- is grammar active?
+
+    *[STR]* spell_words -- words which must proceed the first spelled letter, 
+    or None for an unrestricted spelling grammar.  The latter is not
+    advisable unless dictation is disabled.
+
+    *FCT(STR)* spelling_cbk -- callback to signal recognition.
+    Currently, the letters or numbers spelled are returned as a single string
+    (with double-o, etc. expanded)
+    """
+    def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
+        self.deep_construct(NaturalSpelling,
+            {'active' : 0,
+             'spell_words': spell_words,
+             'spelling_cbk': spelling_cbk
+            }, attrs)
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to a window
+        with the given handle
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('NaturalSpelling.activate')
+
+    def cleanup(self):
+        """method which must be called by the owner prior to deleting
+        the grammar, to ensure that it doesn't have circular references
+        to the owner
+        """
+        self.spelling_cbk = None
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('NaturalSpelling.deactivate')
+
+class MilitarySpelling(Object):
+    """abstract base class for military (alpha-bravo-charlie) spelling grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* active -- is grammar active?
+
+    *[STR]* spell_words -- words which must proceed the first spelled letter, 
+    or None for an unrestricted spelling grammar.  
+    Currently, the letters spelled are returned as a single string
+
+    *FCT(STR)* spelling_cbk -- callback to signal recognition
+    """
+    def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
+        self.deep_construct(MilitarySpelling,
+            {'active' : 0,
+             'spell_words': spell_words,
+             'spelling_cbk': spelling_cbk
+            }, attrs)
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to a window
+        with the given handle
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('NaturalSpelling.activate')
+
+    def cleanup(self):
+        """method which must be called by the owner prior to deleting
+        the grammar, to ensure that it doesn't have circular references
+        to the owner
+        """
+        debug.virtual('NaturalSpelling.cleanup')
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('NaturalSpelling.deactivate')

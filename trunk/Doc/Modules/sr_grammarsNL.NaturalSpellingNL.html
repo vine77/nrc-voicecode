@@ -7,33 +7,31 @@
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class ChoiceGramNL</title>
+<title>Class NaturalSpellingNL</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class ChoiceGramNL - natlink implementation of ChoiceGram</H1>
+<H1 CLASS="ClassName">class NaturalSpellingNL - natlink implemenation of NaturalSpelling </H1>
 <P CLASS="DeclaredIn">Declared in module <A HREF="sr_grammarsNL.html">sr_grammarsNL</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammarsNL.ChoiceGramNL<BR>
-&nbsp;&nbsp;sr_grammars.ChoiceGram<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammarsNL.NaturalSpellingNL<BR>
+&nbsp;&nbsp;sr_grammars.NaturalSpelling<BR>
 &nbsp;&nbsp;natlinkutils.GrammarBase<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ChoiceGramNL</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.ChoiceGram.html">ChoiceGram</A>, <A CLASS="DocLink" HREF="natlinkutils.GrammarBase.html">GrammarBase</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammarsNL.ChoiceGramNL.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">choice_cbk</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammarsNL.ChoiceGramNL.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammarsNL.ChoiceGramNL.create_rules"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.create_rules</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammarsNL.ChoiceGramNL.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.empty_lists</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.gotResults_choose_n</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">fullResults</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.ChoiceGramNL.load_lists</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">NaturalSpellingNL</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.NaturalSpelling.html">NaturalSpelling</A>, <A CLASS="DocLink" HREF="natlinkutils.GrammarBase.html">GrammarBase</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammarsNL.NaturalSpellingNL.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammarsNL.NaturalSpellingNL.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammarsNL.NaturalSpellingNL.create_rules"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.create_rules</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammarsNL.NaturalSpellingNL.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.gotResults_dgnletters</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">fullResults</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.NaturalSpellingNL.load</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from natlinkutils.GrammarBase</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">natlinkutils.GrammarBase.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -67,11 +65,11 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.ChoiceGram</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.ChoiceGram.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">choice_words</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.ChoiceGram.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.ChoiceGram.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">choice_cbk</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.ChoiceGram.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.ChoiceGram.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.ChoiceGram.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.ChoiceGram.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.NaturalSpelling</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.NaturalSpelling.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.NaturalSpelling.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.NaturalSpelling.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.NaturalSpelling.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.NaturalSpelling.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.NaturalSpelling.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.NaturalSpelling.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -79,18 +77,11 @@
 <DL>
 
 <DT>
-<EM>FCT(INT)</EM> choice_cbk
-<DD>callback to signal recognition
-<DT>
 <EM>[STR] rules</EM>
 <DD>list of rules for this grammar in natlink's format
-<DT>
-<EM>{STR: [STR]} lists</EM>
-<DD>map from list names to the initial values
-to be assigned to them once the grammar is loaded
 
 </DL>
-<H2 ID="sr_grammarsNL.ChoiceGramNL.activate" CLASS="Method">sr_grammarsNL.ChoiceGramNL.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">choice_cbk</SPAN>)</H2>
+<H2 ID="sr_grammarsNL.NaturalSpellingNL.activate" CLASS="Method">sr_grammarsNL.NaturalSpellingNL.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -102,21 +93,15 @@ with the given handle</P>
 <DL>
 
 <DT>
-<EM>INT n</EM>
-<DD>the maximum choice number
-<DT>
 <EM>INT</EM> window
 <DD>window handle (unique identifier) for the window
-<DT>
-<EM>FCT(INT)</EM> choice_cbk
-<DD>callback to signal recognition
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammarsNL.ChoiceGramNL.cleanup" CLASS="Method">sr_grammarsNL.ChoiceGramNL.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammarsNL.NaturalSpellingNL.cleanup" CLASS="Method">sr_grammarsNL.NaturalSpellingNL.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -124,7 +109,7 @@ method which must be called by the owner prior to deleting
 the grammar, to ensure that it doesn't have circular references
 to the owner
 </P>
-<H2 ID="sr_grammarsNL.ChoiceGramNL.create_rules" CLASS="Method">sr_grammarsNL.ChoiceGramNL.create_rules(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammarsNL.NaturalSpellingNL.create_rules" CLASS="Method">sr_grammarsNL.NaturalSpellingNL.create_rules(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -139,7 +124,7 @@ self.rules</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammarsNL.ChoiceGramNL.deactivate" CLASS="Method">sr_grammarsNL.ChoiceGramNL.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammarsNL.NaturalSpellingNL.deactivate" CLASS="Method">sr_grammarsNL.NaturalSpellingNL.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>disable recognition from this grammar</P>
 
 <P>
@@ -281,7 +266,7 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="sr_grammars.ChoiceGram.activate" CLASS="Method">sr_grammars.ChoiceGram.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">choice_cbk</SPAN>)</H2>
+<H2 ID="sr_grammars.NaturalSpelling.activate" CLASS="Method">sr_grammars.NaturalSpelling.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -293,21 +278,15 @@ with the given handle</P>
 <DL>
 
 <DT>
-<EM>INT n</EM>
-<DD>the maximum choice number
-<DT>
 <EM>INT</EM> window
 <DD>window handle (unique identifier) for the window
-<DT>
-<EM>FCT(INT)</EM> choice_cbk
-<DD>callback to signal recognition
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammars.ChoiceGram.cleanup" CLASS="Method">sr_grammars.ChoiceGram.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammars.NaturalSpelling.cleanup" CLASS="Method">sr_grammars.NaturalSpelling.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -315,7 +294,7 @@ method which must be called by the owner prior to deleting
 the grammar, to ensure that it doesn't have circular references
 to the owner
 </P>
-<H2 ID="sr_grammars.ChoiceGram.deactivate" CLASS="Method">sr_grammars.ChoiceGram.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="sr_grammars.NaturalSpelling.deactivate" CLASS="Method">sr_grammars.NaturalSpelling.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>disable recognition from this grammar</P>
 
 <P>
