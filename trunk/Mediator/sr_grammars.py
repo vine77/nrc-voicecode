@@ -634,7 +634,7 @@ class WinGramFactoryDummy(Object):
     *none*
     """
     def __init__(self, silent = 0, **attrs):
-	"""no arguments: abstract base class
+	"""
 	**INPUTS**
 
 	*none*

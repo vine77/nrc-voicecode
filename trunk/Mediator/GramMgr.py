@@ -170,6 +170,21 @@ class GramMgr(Object):
 	"""
 	debug.virtual('GramMgr.buffer_closed')
     
+    def using_global(self):
+	"""checks whether GramMgr creates global grammars, rather than 
+	window-specific ones
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the GramMgr produces global grammars
+	"""
+	debug.virtual('GramMgr.using_global')
+
+    
 class GramMgrFactory(Object):
     """factory which produces GramMgr objects for new application
     instances
@@ -455,10 +470,11 @@ class WinGramMgr(GramMgrDictContext):
 
 	*none*
 	"""
+	if self.sel_grammars.has_key(window):
+	    self._deactivate_all_window(window)
+	    del self.sel_grammars[window]
 	if self.dict_grammars.has_key(window):
 	    del self.dict_grammars[window]
-	if self.sel_grammars.has_key(window):
-	    del self.sel_grammars[window]
 
     def buffer_closed(self, buffer):
 	"""clean up and destroy all grammars for a buffer which 
@@ -477,8 +493,20 @@ class WinGramMgr(GramMgrDictContext):
 	    if buffers.has_key(buffer):
 		del buffers[buffer]
 
-# defaults for vim - otherwise ignore
-# vim:sw=4
+    def using_global(self):
+	"""checks whether GramMgr creates global grammars, rather than 
+	window-specific ones
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the global_grammars flag has been set to
+	produce global grammars
+	"""
+	return self.global_grammars
 
 class WinGramMgrFactory(GramMgrFactory):
     """implements GramMgrFactory for WinGramMgr
@@ -528,6 +556,21 @@ class WinGramMgrFactory(GramMgrFactory):
 			     'exclusive': exclusive
 			    }, args)
 
+    def using_global(self):
+	"""checks whether the GramMgr objects created by the factory use
+	global grammars, rather than window-specific ones
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the factory has been set to produce GramMgr
+	objects with the global_grammars flag set
+	"""
+	return self.global_grammars
+
     def new_manager(self, editor):
 	"""creates a new GramMgr
 
@@ -543,4 +586,7 @@ class WinGramMgrFactory(GramMgrFactory):
 	return WinGramMgr(app = editor, factory = self.gram_factory,
 	    interp = self.interp,
 	    global_grammars = self.global_grammars, exclusive = self.exclusive)
+
+# defaults for vim - otherwise ignore
+# vim:sw=4
 

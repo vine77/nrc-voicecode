@@ -535,12 +535,16 @@ class RSMInfrastructure(RecogStartMgr):
     *BOOL* active -- flag indicating whether the RecogStartMgr is
     active
 
+    *BOOL* trust_current_window -- 1 if RSM should trust that a current
+    window corresponds to the editor when the editor first connects to
+    VoiceCode, or when it notifies VoiceCode of a new window.
+
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, editors, GM_factory, **args):
+    def __init__(self, editors, GM_factory, trust_current_window = 0, **args):
 	"""
 	**INPUTS**
 
@@ -549,6 +553,11 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
 	objects for new instances
+
+	*BOOL* trust_current_window -- 1 if RSM should trust that a current
+	window corresponds to the editor when the editor first connects to
+	VoiceCode, or when it notifies VoiceCode of a new window.
+
 	
 	"""
         self.deep_construct(RSMInfrastructure,
@@ -557,6 +566,7 @@ class RSMInfrastructure(RecogStartMgr):
 			     'GM_factory': GM_factory,
 			     'grammars': {},
 			     'windows': {},
+                             'trust_current_window': trust_current_window,
 			     'modules': {},
 			     'instances': {}
 			    },
@@ -797,6 +807,8 @@ class RSMInfrastructure(RecogStartMgr):
 	    module = self.modules[module_name]
 	    title_escape = module.title_escape_sequence()
 	    app.title_escape_sequence(title_escape[0], title_escape[1])
+	if success:
+	    self.grammars[instance].new_window(window_id)
 	return success
 
     
@@ -830,6 +842,7 @@ class RSMInfrastructure(RecogStartMgr):
 	    module = self.modules[module_name]
 	    title_escape = module.title_escape_sequence()
 	    app.title_escape_sequence(title_escape[0], title_escape[1])
+	self.grammars[instance].new_window(window)
 	return 1
 
     def _new_instance_known_window(self, window, title, instance, 
@@ -904,10 +917,11 @@ class RSMInfrastructure(RecogStartMgr):
 	if check_window:
 	    window, title, module_name = self.window_info()
 	    if self.known_window(window):
-		self._new_instance_known_window(window, title, instance)
+		self._new_instance_known_window(window, title, instance,
+		    trust = self.trust_current_window)
 	    elif self.known_module(module_name):
 		self._new_instance_known_module(window, title, 
-		    instance, module_name)
+		    instance, module_name, trust = self.trust_current_window)
 
     def delete_instance(self, instance):
 	"""method called by AppMgr to notify RecogStartMgr that an
@@ -986,7 +1000,7 @@ class RSMInfrastructure(RecogStartMgr):
 	    if module_name != old_module:
 		return 0
 	return self._new_instance_known_module(window, title, 
-		instance, module_name)
+		instance, module_name, trust = self.trust_current_window)
 
     def delete_window(self, instance, window):
 	"""remove window from list of known windows
@@ -1011,6 +1025,7 @@ class RSMInfrastructure(RecogStartMgr):
 	if self.windows[window].instances() == 0:
 	    del self.windows[window]
 	self.instances[instance].delete_window(window)
+	self.grammars[instance].delete_window(window)
 	return 1
     
     def activate_instance_window(self, instance, window):
@@ -1058,7 +1073,10 @@ class RSMInfrastructure(RecogStartMgr):
 	    self.grammars[instance_name].activate(buff_name, window)
 	else:
 	    self.grammars[instance_name].deactivate_all(window)
-	for editor in self.windows[window].instance_names():
+	others = self.windows[window].instance_names()
+	if self.GM_factory.using_global():
+	    others = self.known_instances()
+	for editor in others:
 	    if editor != instance_name:
 		self.grammars[editor].deactivate_all(window)
 	
@@ -1184,8 +1202,6 @@ class RSMBasic(RSMInfrastructure):
     (or onBegin/gotBegin) callbacks
 
     **INSTANCE ATTRIBUTES**
-
-    *none*
 
     **CLASS ATTRIBUTES**
     

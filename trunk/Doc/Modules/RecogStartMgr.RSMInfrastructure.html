@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 08 12:33:23 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Jun 09 12:05:10 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RSMInfrastructure</SPAN>(<A CLASS="DocLink" HREF="RecogStartMgr.RecogStartMgr.html">RecogStartMgr</A>):
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._activate_grammars"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._activate_grammars</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._add_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._add_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window_id=None</SPAN>, <SPAN CLASS="Argument">module=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._add_instance_to_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._add_instance_to_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
@@ -134,13 +134,18 @@ information about editor application instances
 <EM>BOOL</EM> active
 <DD>flag indicating whether the RecogStartMgr is
 active
+<DT>
+<EM>BOOL</EM> trust_current_window
+<DD>1 if RSM should trust that a current
+window corresponds to the editor when the editor first connects to
+VoiceCode, or when it notifies VoiceCode of a new window.
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="RecogStartMgr.RSMInfrastructure.__init__" CLASS="Method">RecogStartMgr.RSMInfrastructure.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RSMInfrastructure.__init__" CLASS="Method">RecogStartMgr.RSMInfrastructure.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editors</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -156,6 +161,11 @@ information about editor application instances
 <EM>GramMgrFactory</EM> GM_factory
 <DD>GramMgrFactory to create GramMgr
 objects for new instances
+<DT>
+<EM>BOOL</EM> trust_current_window
+<DD>1 if RSM should trust that a current
+window corresponds to the editor when the editor first connects to
+VoiceCode, or when it notifies VoiceCode of a new window.
 </DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure._activate_grammars" CLASS="Method">RecogStartMgr.RSMInfrastructure._activate_grammars(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
