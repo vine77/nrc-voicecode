@@ -24,6 +24,7 @@ import re, string, sys
 
 from Object import Object
 import debug, find_difference, sb_services, SourceBuffNonCached, util
+from debug import trace
 
 
 class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):

@@ -142,9 +142,10 @@ class Messenger(Object.Object):
         *none* response -- 
         """
 
-        trace('send_mess', 'mess_name=\'%s\'' % (mess_name))
+        trace('send_mess', 'mess_name=\'%s\'' % mess_name)
+        trace('send_mess', 'mess_argvals=\'%s\'' % mess_argvals)        
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
-        pkd_mess = self.packager.pack_mess(unpkd_mess)
+        pkd_mess = self.packager.pack_mess(unpkd_mess)        
         self.packager.send_packed_mess(pkd_mess, self.transporter)
 
 
@@ -172,6 +173,9 @@ class Messenger(Object.Object):
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
 
+        trace('get_mess', 'got it!')
+        trace('get_mess', 'name_argvals_mess=%s' % repr(name_argvals_mess))
+        
         return name_argvals_mess
         
 
@@ -350,6 +354,8 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         .. [MessTransporter] file:///./messaging.MessTransporter.html"""
 
+        trace('messaging.MessPackager_FixedLenSeq.get_packed_mess:',
+              'invoked')
         #
         # Read the fixed length messages until we get one that starts with 1
         #
@@ -357,6 +363,9 @@ class MessPackager_FixedLenSeq(MessPackager):
         last_chunk = 0
         while not (last_chunk == '1'):
             a_chunk = transporter.receive_string(self.chunk_len)
+            trace('messaging.MessPackager_FixedLenSeq.get_packed_mess:',
+                  'read a_chunk="%s"' % a_chunk)
+            
             pkd_message = pkd_message + a_chunk
             last_chunk = a_chunk[0]
 
@@ -757,6 +766,9 @@ class MessEncoderWDDX(MessEncoder):
         message name, second element is message arguments in
         *(name, {arg:val})* format.  """
 
+        trace('messaging.MessEncoderWDDX.decode',
+              'decoding str_mess="%s"' % str_mess)
+        
         mess_argvals = self.unmarshaller.loads(str_mess)
 
         #

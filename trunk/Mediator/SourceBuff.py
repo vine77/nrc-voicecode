@@ -22,7 +22,8 @@
 """Interface to a buffer being edited in the programming environment"""
 
 
-import debug, util
+import debug
+from debug import trace
 import re, string, sys
 
 from Object import Object, ChildObject, OwnerObject
@@ -87,7 +88,7 @@ class SourceBuff(OwnerObject):
                              'print_nlines': 3},
                             attrs
                             )
-	self.name_parent('app')
+        self.name_parent('app')        
 
     def name(self):
         """returns the name of the buffer
@@ -687,8 +688,22 @@ class SourceBuff(OwnerObject):
 
 	*none*
 	"""
+
+        trace('SourceBuff.insert_indent',
+              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
+        if range == None:
+            range = self.get_selection()
+        range = self.make_valid_range(range)
         
-        debug.virtual('SourceBuff.insert_indent')
+        indent_from = range[0]
+        self.insert(code_bef, range)
+        
+        self.indent((indent_from, self.cur_pos()))        
+        final_cur_pos = self.cur_pos()
+        if code_after != '':
+            self.insert(code_after, (self.cur_pos(), self.cur_pos()))
+            self.indent((final_cur_pos, self.cur_pos()))
+            self.goto(final_cur_pos)
 
     def insert(self, text, range = None):
         """Replace text in range with 
