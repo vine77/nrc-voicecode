@@ -97,6 +97,7 @@ class Action(Object.Object):
         
         *none* -- 
         """
+        trace('Action.log', 'invoked')
         app.log_cmd(cont, self)
 
 
@@ -236,6 +237,7 @@ class ActionRepeatLastCmd(Action):
         See [Action.execute] for description of arguments.
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        trace('ActionRepeatLastCmd.log', 'invoked')
         pass
 
     def execute(self, app, cont):
@@ -290,6 +292,7 @@ class ActionRepeatBidirectCmd(Action):
         See [Action.execute] for description of arguments.
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        trace('ActionRepeatBidirectCmd.log', 'invoked')
         pass
 
     def execute(self, app, cont):
@@ -321,7 +324,7 @@ class ActionRepeatBidirectCmd(Action):
         ActionRepeatLastCmd().log_execute(app, cont)
 
 
-class ActionSelectPseudoCode(ActionBidirectionalRepeat):
+class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
     """This action sets the selection in a buffer to a range specified through a 
     SelectPseudoCode utterance.
 
@@ -336,6 +339,10 @@ class ActionSelectPseudoCode(ActionBidirectionalRepeat):
 
     *INT cursor_at=1* -- If positive, put cursor at end of
      selection. Otherwise, put it at beginning.
+     
+    *BOOL mark_selection=1* -- If *TRUE*, then select the pseudocode that was uttered. 
+    Otherwise, just move the cursor to the start or end of the selection.
+    
 
 
     *STR buff_name=None* -- Name of file where to set selection. If
@@ -346,14 +353,22 @@ class ActionSelectPseudoCode(ActionBidirectionalRepeat):
     *none* -- 
     """
     
-    def __init__(self, possible_ranges, select_range_no, cursor_at=1, buff_name=None, **args_super):
-        self.deep_construct(ActionSelectPseudoCode,
+    def __init__(self, possible_ranges, select_range_no, mark_selection, cursor_at=1, buff_name=None, 
+                       **args_super):
+        self.deep_construct(ActionNavigateByPseudoCode,
                             {'possible_ranges': possible_ranges, 
                              'select_range_no': select_range_no, 
                              'cursor_at': cursor_at,
+                             'mark_selection': mark_selection,
                              'buff_name': buff_name},
                             args_super,
                             {})
+        #
+        # We position *select_range_no* one position away from where it should be. That's because
+        # when the action gets executed, it will be moved one position in the appropriate 
+        # direction.
+        #
+        self.select_range_no = self.select_range_no - self.direction        
 
     def execute(self, app, cont):
         """Selects a region in a buffer.
@@ -362,9 +377,14 @@ class ActionSelectPseudoCode(ActionBidirectionalRepeat):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
-        
-        app.set_selection(range=self.possible_ranges[self.select_range_no], 
-                          cursor_at=self.cursor_at, buff_name=self.buff_name)
+
+        self.select_range_no = self.select_range_no + self.direction
+        if self.mark_selection:
+            app.set_selection(range=self.possible_ranges[self.select_range_no], 
+                              cursor_at=self.cursor_at, buff_name=self.buff_name)
+        else:
+            app.goto_range(self.possible_ranges[self.select_range_no], self.cursor_at, 
+                           buff_name=self.buff_name)
 
         
 class ActionInsert(Action):

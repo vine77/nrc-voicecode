@@ -1277,7 +1277,7 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 ;;; 	(process-send-string vr-deprecated-dns-cmds (vr-deprecated-etonl (length msg)))
 
 	(process-send-string vr-deprecated-dns-cmds msg))
-    (message "vr-deprecated Mode DNS reply channel is not open!"))
+    (message "VCode Mode DNS reply channel is not open!"))
   )
 
 (defun vr-deprecated-send-cmd (msg)
@@ -1289,7 +1289,7 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 ;;;	(process-send-string vr-deprecated-emacs-cmds (vr-deprecated-etonl (length msg)))
 
 	(process-send-string vr-deprecated-emacs-cmds msg))
-    (message "vr-deprecated Mode command channel is not open: %s" msg)))
+    (message "VCode Mode command channel is not open: %s" msg)))
 
 ;; ewww
 (defun vr-deprecated-etonl (i)
@@ -1326,7 +1326,7 @@ off -> on, {on,sleeping} -> off."
 ;; Subprocess initialization, including voice commands.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-deprecated-connect (host port)
+(defun vcode-connect (host port)
   (condition-case e
       (progn
  	(setq vr-deprecated-emacs-cmds (open-network-stream "vr-deprecated-emacs" nil
@@ -1429,10 +1429,10 @@ instructions.
     )
   )
 
-  (vr-deprecated-mode-activate arg)
+  (vcode-mode-activate arg)
 )
 
-(defun vr-deprecated-mode-activate (arg)
+(defun vcode-mode-activate (arg)
   "Activates the vr-deprecated mode, after it has been configured for a particular
 speech server"
 
@@ -1452,7 +1452,7 @@ speech server"
 	(run-hooks 'vr-deprecated-mode-setup-hook)
 
 	(if vr-deprecated-host
-	    (vr-deprecated-connect vr-deprecated-host vr-deprecated-port)
+	    (vcode-connect vr-deprecated-host vr-deprecated-port)
 
 ;	  (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name vr-deprecated-command
 ;					  "-child"
@@ -3785,9 +3785,9 @@ tabs.
 )
 
 (defun vcode-cmd-mediator-closing (vcode-request)
-   (vr-deprecated-mode-activate nil)
+   (vcode-mode-activate nil)
 ; huh? this tries to connect again when we get a mediator closing
 ; message.  Maybe Alain meant deactivate
-;  (vr-deprecated-mode-activate 'vcode)
+;  (vcode-mode-activate 'vcode)
 )
 

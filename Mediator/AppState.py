@@ -693,7 +693,7 @@ class AppState(OwnerObject):
     'set_text',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
     'move_relative', 'insert', 'indent', 'insert_indent', 
-    'delete', 'goto', 'goto_line', 'move_relative_line',
+    'delete', 'goto', 'goto_line', 'goto_range', 'move_relative_line',
     'move_relative_page', 'search_for', 'log_search',
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',

@@ -884,6 +884,21 @@ class SourceBuff(OwnerObject):
          (*where > 0*) or at the beginning (*where < 0*) of the line.
         """
         debug.virtual('SourceBuff.goto_line')
+        
+    def goto_range(self, range, where):
+        """Goes to one extremity of a range
+        
+        (INT, INT) *range* -- range to go to
+        
+        INT *where* -- if > 0, go to the end of *range*, otherwise to 
+        the start"""
+        
+        if where > 0:
+            pos = range[1]
+        else:
+            pos = range[0]
+        self.goto(pos)
+        
 
                 
     def print_buff_if_necessary(self):
