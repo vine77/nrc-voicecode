@@ -15,7 +15,6 @@ C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Finished wxMediator init...
 starting...
@@ -634,7 +633,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0203BAF8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02048D50>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -649,11 +648,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
@@ -683,7 +680,6 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\large_buff.py ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
@@ -787,7 +783,6 @@ Unresolved abbreviations are:
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
@@ -800,7 +795,6 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
 *** Accept symbol match test. source='%VCODE_HOME%\Data\TestData\small_buff.c' ***
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
@@ -858,7 +852,6 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
@@ -2822,7 +2815,6 @@ Heard next one
   2: 
   3: 
   4: 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Before compiling symbols, symbols are:
 
@@ -3380,7 +3372,6 @@ WARNING: source file 'tmp.py' doesn't exist.
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 
 
@@ -3661,75 +3652,32 @@ Heard twenty-three fifty-four comma zero point oh four
   1: 2354, 0.04<CURSOR>
 
 *** End of source buffer ***
-Got command: say(['select', '23\\twenty-three', '54\\fifty-four'],0
-,1,0,)
-Heard select twenty-three fifty-four
-Associate 'select' with symbol (Enter selection):
-
-  '0': no association
-  '1': select (*new*)
-  '2': Select (*new*)
-  '3': SELECT (*new*)
-
-> *** Start of source buffer ***
-  1: 2354, 0.04select2354<CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: 2354, 0.04select2354<CURSOR>
-
-*** End of source buffer ***
-Got command: say(['select', 'twenty', 'three', 'fifty', 'four'],0
-,1,0,)
-Heard select twenty three fifty four
-*** Start of source buffer ***
-  1: 2354, 0.04select<SEL_START>2354<SEL_END>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: 2354, 0.04select<SEL_START>2354<SEL_END>
-
-*** End of source buffer ***
 Got command: say(['select', '23', '54'],0
 ,1,0,)
-Heard select twenty-three fifty-four
-Associate 'select' with symbol (Enter selection):
-
-  '0': no association
-  '1': select (*new*)
-  '2': Select (*new*)
-  '3': SELECT (*new*)
-
-> *** Start of source buffer ***
-  1: 2354, 0.04selectselect2354<CURSOR>
-
-*** End of source buffer ***
+Heard select 23 54
 *** Start of source buffer ***
-  1: 2354, 0.04selectselect2354<CURSOR>
+  1: <SEL_START>2354<SEL_END>, 0.04
 
 *** End of source buffer ***
 Got command: say(['select', '0\\zero', '.\\point'],0
 ,1,0,)
 Heard select zero point
 *** Start of source buffer ***
-  1: 2354, <SEL_START>0.<SEL_END>04selectselect2354
+  1: 2354, <SEL_START>0.<SEL_END>04
 
 *** End of source buffer ***
-Got command: say(['select', '0\\zero', '.\\point'],0
-,1,0,)
-Heard select zero point
 Got command: say(['select', '04\\oh four'],0
 ,1,0,)
 Heard select oh four
 *** Start of source buffer ***
-  1: 2354, 0.<SEL_START>04<SEL_END>selectselect2354
+  1: 2354, 0.<SEL_START>04<SEL_END>
 
 *** End of source buffer ***
-Got command: say(['select', '0\\zero', '.\\point', 'oh', 'four'],0
+Got command: say(['select', '0\\zero', '.\\point', '04\\oh four'],0
 ,1,0,)
 Heard select zero point oh four
 *** Start of source buffer ***
-  1: 2354, <SEL_START>0.04<SEL_END>selectselect2354
+  1: 2354, <SEL_START>0.04<SEL_END>
 
 *** End of source buffer ***
 
@@ -3746,7 +3694,6 @@ As best as I can tell from SF Browse CVS, this test was
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
@@ -3780,7 +3727,6 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
@@ -8992,6 +8938,7 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 
+
 *******************************************************************************
 * Name        : python_editing
 * Description : testing the various CSCs and LSAs for editing Python
@@ -11864,7 +11811,6 @@ Associate 'open log' with symbol (Enter selection):
 *** End of source buffer ***
 
 
-
 *******************************************************************************
 * Name        : v7_select
 * Description : testing oddities in select pseudocode with Natspeak 7
@@ -11996,7 +11942,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  324.27699995 secs
+Test suite completed in:  298.409000039 secs
 -----------------------------------------------
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'

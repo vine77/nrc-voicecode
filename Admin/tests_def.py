@@ -3118,28 +3118,35 @@ add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text
 
 def test_number_dictation():
    testing.init_simulator_regression()
+   app = testing.editor()   
+   
    commands.open_file('blah.py')   
    commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'], echo_cmd=1)
-# not sure why this doesn't work for me (DCF), but does? for Alain
-   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   app = testing.editor()
-   app.print_buff()
+   
+# Works for DFC, but not for Alain
+#   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+#   app.print_buff()
 
-# this works for DCF but apparently not for Alain
-   commands.say(['select', 'twenty', 'three', 'fifty', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   app.print_buff()
-# what about this?
+# Works for DCF but not for Alain
+#   commands.say(['select', 'twenty', 'three', 'fifty', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+#   app.print_buff()
+
+# This works for Alain, how about DFC?
    commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   app.print_buff()
-# or this?
+#   app.print_buff()
+   
 # (this fails with badWord, because there is no word '2354' in the
 # vocabulary - DCF)
 #   commands.say(['select', '2354'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
 
+# This works for Alain
    commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
-   commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+# This works for Alain
    commands.say(['select', '04\\oh four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
-   commands.say(['select', '0\\zero', '.\\point', 'oh', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
+# This doesn't work for Alain   
+#   commands.say(['select', '0\\zero', '.\\point', 'oh', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
+# But this works for Alain
+   commands.say(['select', '0\\zero', '.\\point', '04\\oh four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")         
 
 add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
