@@ -76,10 +76,6 @@ def cleanup(clean_sr_voc=0):
         the_mediator.mixed_grammar.unload()
         the_mediator.code_select_grammar.unload()
 
-def setmic(state):
-    if not os.environ.has_key('VCODE_NOSPEECH'):
-        natlink.setMicState(state)
-
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
 
