@@ -4,19 +4,23 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
-BUG in Select PseudoCode
-------------------------
+Performance
+-----------
 
-This:
+Command translation seems very slow. Profile it to figure out what is
+making it so slow.
 
-open_file('blah.py')
-say(['for', 'index', 'equals', '0', 'loop body'])
-say(['for', 'index', 'equals', '0', 'loop body'])
-move(-50)
-say_select(['select', 'index', '=\\equals', '0'])
 
-ends up selecting second occurence of 'index = 0' instead of the first
-(which is closest to the cursor).
+Keep doing that
+---------------
+
+Implement a keep "doing that" suffix command that will keep doing the
+repeatable command at a specified time interval (a new attribute of
+repeatable). Then "Stop", "Reverse", "faster", "slower" would affect
+the command being repeated.
+
+Need to implement a Mode object. This will remember what mode the mediator is in. "Keep doing that" would make the mode be a ModeKeepRepeating object. Context objects (like ContAny()) would check to make sure that the mode is "None". There would be some context objects like ContModeKeepRepeating that would check that the mode is of a particular class. 
+
 
 
 BUGS in pseudo python
@@ -26,11 +30,6 @@ BUGS in pseudo python
 
 uncomment python symbols in py_std_sym.py
 
-Performance
------------
-
-Command translation seems very slow. Profile it to figure out what is
-making it so slow.
 
 Division of labour between EdSim, AppState and SourceBuff
 ---------------------------------------------------------

@@ -1,3 +1,24 @@
+##############################################################################
+# VoiceCode, a programming-by-voice environment
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# (C)2000, National Research Council of Canada
+#
+##############################################################################
+
 """State information for the programming environment."""
 
 
@@ -413,6 +434,8 @@ class SourceBuff(Object):
         elif position > length and length > 0:
             position = length  
         return position
+
+
         
     def move_relative(self, rel_movement):
         """Move cursor to plus or minus a certain number of characters
@@ -429,7 +452,48 @@ class SourceBuff(Object):
 	"""
         pos = self.cur_pos()+rel_movement
 	self.goto(pos)
+
+    def move_relative_line(self, direction=1, num=1):
+        """Moves up or down a certain number of lines
         
+        **INPUTS**
+        
+        *INT* direction=1 -- If positive, line down. If negative, line up.
+        
+        *INT* num=1 -- Number of pages to move.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        #
+        # Note: if moving downwards, put cursor after \n. Otherwise, put it
+        # before.
+        #
+        self.search_for(regexp='(^|$|\n)', direction=direction,
+                        where=direction, num=num)
+
+
+    def move_relative_page(self, direction=1, num=1):
+        """Moves up or down a certain number of pages
+        
+        **INPUTS**
+        
+        *INT* direction=1 -- If positive, page down. If negative, page up.
+        
+        *INT* num=1 -- Number of pages to move.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('move_relative_page')
+
+
 
 # DCF - fix - never replaces selection, and independent defaults for
 # start and end don't support replacing selection - 
@@ -524,25 +588,6 @@ class SourceBuff(Object):
 	"""
 	debug.virtual('SourceBuff.goto_line')
 
-
-
-    def move_page(self, direction=1, num=1):
-        """Moves up or down a certain number of pages
-        
-        **INPUTS**
-        
-        *INT* direction=1 -- If positive, page down. If negative, page up.
-        
-        *INT* num=1 -- Number of pages to move.
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.virtual('move_page')
-
                 
     def refresh_if_needed(self):
 	"""Refresh buffer if necessary"""
@@ -602,6 +647,7 @@ class SourceBuff(Object):
 
 #        print '-- SourceBuff.search_for: closest_match=%s' % closest_match
         new_cur_pos = None
+        the_match_index = None        
         if closest_match != None:
             if direction > 0:
                 the_match_index = closest_match + num - 1
@@ -612,11 +658,8 @@ class SourceBuff(Object):
                 if the_match_index < 0:
                     the_match_index = 0
 
-#            print '-- SourceBuff.search_for: the_match_index=%s' % the_match_index                                      
-            if where > 0:
-                new_cur_pos = all_matches_pos[the_match_index][1]
-            else:
-                new_cur_pos = all_matches_pos[the_match_index][0]
+#            print '-- SourceBuff.search_for: the_match_index=%s' % the_match_index
+            new_cur_pos = self.pos_extremity(all_matches_pos[the_match_index], where)
 
 #        print '-- SourceBuff.search_for: new_cur_pos=%s' % new_cur_pos
 
@@ -624,7 +667,9 @@ class SourceBuff(Object):
         # Log the search so we don't keep bringing back same occurence
         # if the user repeats the same search.
         #
-        self.last_search = (regexp, direction, where, new_cur_pos)
+        the_match = None
+        if the_match_index != None: the_match = all_matches_pos[the_match_index]
+        self.log_search (regexp, direction, where, the_match)
         
         if new_cur_pos != None:
             self.goto(new_cur_pos)
@@ -663,7 +708,7 @@ class SourceBuff(Object):
         *INT* closest_index -- Index in *occurences* of the closest
          occurence. If no such occurence, returns *None*"""
 
-#        print '-- SourceBuff.closest_occurence_to_cursor: occurences=%s, direction=%s, regexp=%s' % (repr(occurences), direction, regexp)
+#        print '-- SourceBuff.closest_occurence_to_cursor: self.cur_pos()=%s, occurences=%s, direction=%s, regexp=%s' % (self.cur_pos(), repr(occurences), direction, regexp)
 
         closest_index = None
         
@@ -719,7 +764,6 @@ class SourceBuff(Object):
 #        print '-- SourceBuff.closest_occurence_to_cursor: returning closest_index=%s' % closest_index                
         return closest_index
 
-
     def same_as_previous_search(self, regexp, direction, where, match):
         
         """Determines whether a particular match found by *search_for* is the
@@ -745,13 +789,62 @@ class SourceBuff(Object):
 
         ..[search_for] file:///./SourceBuff.SourceBuff.html#search_for"""
 
+#        print '-- SourceBuff.same_as_previous_search: regexp=%s, direction=%s, where=%s, match=%s' % (regexp, direction, where, match)
+#        print '-- SourceBuff.same_as_previous_search: self.last_search=%s' % repr(self.last_search)
+
+        #
+        # We consider this to be the same occurence as last search iif:
+        #
+        # a. Start/end position of both occurences are the same
+        # b. Both occurences were found using same *regexp*
+        # c. Both occurences were found using same *where*
+        # d. Cursor hasn't moved since last search.
+        #
+        # Condition d. is because if the user moves the cursor to an other
+        # location and redoes the same search again, he/she probably means
+        # to do a new search starting from this new cursor location.
+        #
+        # Note that two occurences may be deemed identical even if they were
+        # found using different *direction*. This is because if the user does
+        # a search forward and then reverses the direction, we don't want
+        # to go back to the occurence found in the forward direction (instead
+        # we want to go directly to the one preceding).
+        #
+        # On the other hand, two occurences will be deemed identical only if
+        # they were found using same *where* (condition c.). This is so you can
+        # search for an occurence and then move the cursor to the beginning/end
+        # of that occurence using a command like: "before that" or "after that"
+        #
         answer = 0
-        if self.last_search != None and (regexp, direction, where, match) == self.last_search[0:4]:
+        if (self.last_search != None and
+            match == self.last_search[3] and            
+            regexp == self.last_search[0] and
+            where == self.last_search[2] and
+            self.cur_pos() == self.pos_extremity(self.last_search[3], self.last_search[2])):
                 answer = 1
-                    
+
+#        print '-- SourceBuff.same_as_previous_search: returning answer=%s' % answer
         return answer
           
+    def pos_extremity(self, range, where):
+        """Returns the position of a given extremity of a range
 
+        **INPUTS**
+
+        *(INT, INT) range* -- Start and end position of the range
+
+        *INT where* -- If positive, return position of end of
+         range. Otherwise, return start position.
+
+        **OUTPUTS**
+
+        *INT* -- The approriate position
+        """
+        if where > 0:
+            answer = range[1]
+        else:
+            answer = range[0]
+        return answer
 
     def log_search(self, regexp, direction, where, match):
         """Logs the result of most recent search or selection operation, so

@@ -1,3 +1,24 @@
+##############################################################################
+# VoiceCode, a programming-by-voice environment
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# (C)2000, National Research Council of Canada
+#
+##############################################################################
+
 #
 # Configuration script for VoiceCode
 #
@@ -907,7 +928,7 @@ add_csc(acmd)
 
 
 #############################################################################
-# Repeating/Qualifying last command
+# Repeating last command
 #############################################################################
 
 
@@ -1022,6 +1043,26 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['again 10 time', 'repeat 10 time'],
              meanings={ContLastActionWas(ActionRepeatable): ActionRepeatLastCmd(n_times=10)},
              docstring='Repeat last command')
+add_csc(acmd)
+
+
+#############################################################################
+# Changing direction of last command
+#############################################################################
+
+acmd = CSCmd(spoken_forms=['reverse', 'reverse direction'],
+             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=None)},
+             docstring='Reverses the direction of previous command')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['backward', 'upward', 'leftward', 'previous one'],
+             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=-1)},
+             docstring='Repeats the previous command in backward/up/left direction.')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['forward', 'downward', 'rightward', 'next one'],
+             meanings={ContLastActionWas(ActionBidirectional): ActionRepeatBidirectCmd(n_times=1, direction=1)},
+             docstring='Repeats the previous command in forward/down/right direction.')
 add_csc(acmd)
 
 
