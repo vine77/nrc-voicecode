@@ -933,6 +933,7 @@ class SymbolResult(Object):
     def __init__(self, native_symbol, spoken_phrase, exact_matches,
                  as_inserted, buff_name,
                  builder_preferences, possible_matches = None,
+                 forbidden = None,
                  new_symbol = 0, **args):
         """
         ** INPUTS **
@@ -960,9 +961,14 @@ class SymbolResult(Object):
         *BOOL new_symbol* -- true if the symbol was a new symbol,
         false if it matched an existing symbol
         
-        *[STR] possible_matches* -- written forms of known symbols
-        which are possible (but not exact) matchs to the spoken form
-        of this symbol, or None if none have been generated yet
+        *[(INT, STR)] possible_matches* -- list of (confidence score,
+        written_form) tuples for possible (but not exact) matches to 
+        the spoken form of this symbol.
+        
+        *[(INT, STR)] forbidden* -- list of (confidence score,
+        written_form) tuples for forbidden inexact matches (but
+        which may be displayed as alternatives in the exact symbols
+        tab of the re-formatting dialog)
         """
         self.deep_construct(SymbolResult,
                             {
@@ -973,6 +979,7 @@ class SymbolResult(Object):
                              'builders': builder_preferences,
                              'exact': exact_matches,
                              'possible': possible_matches,
+                             'forbidden': forbidden,
                              'was_new': new_symbol
                             }, args)
     def native_symbol(self):
@@ -1020,10 +1027,26 @@ class SymbolResult(Object):
 
         **OUTPUTS**
 
-        *[STR]* -- the possible matches, or None if none have been
-        generated yet
+        *[(INT, STR)]* -- the confidence score and written forms of 
+        possible matches, or None if none have been generated yet
         """
         return self.possible
+    
+    def forbidden_matches(self):
+        """
+        Returns a prioritized list of possible (but not exact) matches
+        to known symbols
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *[(INT, STR)]* -- the confidence score and written forms of 
+        forbidden matches, or None if none have been generated yet
+        """
+        return self.forbidden
                  
 class InterpretedPhrase(Object):
     """
@@ -1163,6 +1186,8 @@ class SymbolConstruction(Object):
         for word in spoken_form:
             word_element = self.interp.make_word_element(word)
             word_element.add_to(self.builder)
+        trace('SymbolConstruction.add_symbol',
+              'allow_inexact = %d' % self.allow_inexact)
             
     def add_word(self, word):
         """
@@ -1183,6 +1208,8 @@ class SymbolConstruction(Object):
             self.new_builder()
         word_element = self.interp.make_word_element(word)
         word_element.add_to(self.builder)
+        trace('SymbolConstruction.add_word',
+              'allow_inexact = %d' % self.allow_inexact)
 
     def add_alias(self, alias, spoken_form):
         """
@@ -1199,12 +1226,18 @@ class SymbolConstruction(Object):
         *none*
         """
         self.exact_symbol = 0
-        self.allow_inexact = 0
+        trace('SymbolConstruction.add_alias',
+              'allow_inexact = %d' % self.allow_inexact)
         if self.builder is None:
             self.new_builder()
         written = alias.written()
         if written:
             self.untranslated_words.append(written)
+            if not written.isalnum():
+                self.allow_inexact = 0
+        trace('SymbolConstruction.add_alias',
+              'written = %s, now allow_inexact = %d' % \
+              (written, self.allow_inexact))
         element = alias.make_element(spoken_form)
         element.add_to(self.builder)
 
@@ -1222,6 +1255,8 @@ class SymbolConstruction(Object):
         self.current_preferences = None
         self.exact_symbol = 0
         self.allow_inexact = 1
+        trace('SymbolConstruction.reset',
+              'allow_inexact = %d' % self.allow_inexact)
 
     def words(self):
         """
@@ -1233,8 +1268,9 @@ class SymbolConstruction(Object):
         """return the accumulated list of SymbolResult objects
         """
         return self.symbols
+
     def insert_existing(self, symbol, exact_matches = None,
-                        inexact_matches = None):
+                        inexact_matches = None, forbidden = None):
         """
         Insert a known symbol with the given written form, track the
         associated changes, and create a SymbolResult
@@ -1247,26 +1283,34 @@ class SymbolConstruction(Object):
         *[STR] exact_matches* -- a prioritized list of exact matches
         to known symbols
       
-        *[STR] inexact_matches* -- written forms of known symbols
-        which are possible (but not exact) matchs to the spoken form
-        of this symbol, or None if none have been generated yet
+        *[(INT, STR)] inexact_matches* -- list of (confidence score,
+        written form) for known symbols which are possible (but not exact) 
+        matches to the spoken form of this symbol, or None if none 
+        have been generated yet.
+
+        *[(INT, STR)] forbidden* -- list of (confidence score,
+        written form) for known symbols which are forbidden inexact
+        matches, or None if none have been generated yet.
+        
 
         ** OUTPUTS **
 
         *none*
         """
+        debug.trace('SymbolConstruction.insert_existing',
+            'symbol = %s' % repr(symbol))
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
         result = SymbolResult(symbol, self.words(),
                               exact_matches,
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
-                              inexact_matches)
+                              inexact_matches, forbidden)
         self.symbols.append(result)
         self.reset()
       
     def insert_new_symbol(self, exact_matches = None,
-                        inexact_matches = None):
+                        inexact_matches = None, forbidden = None):
         """
         Generate and insert a new symbol, track the
         associated changes, and create a SymbolResult
@@ -1277,22 +1321,30 @@ class SymbolConstruction(Object):
         *[STR] exact_matches* -- a prioritized list of exact matches
         to known symbols
       
-        *[STR] inexact_matches* -- written forms of known symbols
-        which are possible (but not exact) matchs to the spoken form
-        of this symbol, or None if none have been generated yet
+        *[(INT, STR)] inexact_matches* -- list of (confidence score,
+        written form) for known symbols which are possible (but not exact) 
+        matches to the spoken form of this symbol, or None if none 
+        have been generated yet.
+
+        *[(INT, STR)] forbidden* -- list of (confidence score,
+        written form) for known symbols which are forbidden inexact
+        matches, or None if none have been generated yet.
+        
 
         ** OUTPUTS **
 
         *STR* -- the written form of the new symbol
         """
         symbol = self.builder.finish()
+        debug.trace('SymbolConstruction.insert_new_symbol',
+            'symbol = %s' % repr(symbol))
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
         result = SymbolResult(symbol, self.words(),
                               exact_matches,
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
-                              inexact_matches, new_symbol = 1)
+                              inexact_matches, forbidden, new_symbol = 1)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
         self.reset()
@@ -1964,22 +2016,59 @@ class CmdInterp(OwnerObject):
             return
 
         symbol_matches = None
+        inexact_matches = None
+        forbidden = None
+        trace('CmdInterp.match_untranslated_text',
+              'allow_inexact, manual = %d, %d' % (symbols.allow_inexact,
+              self.builder_factory.manually_specified()))
         if symbols.allow_inexact and \
                 not self.builder_factory.manually_specified():
-            symbol_matches = \
-                self.known_symbols.match_pseudo_symbol(untranslated_text)
+            symbol_matches, weak_matches, forbidden = \
+                self.match_pseudo_symbol(untranslated_text)
             trace('CmdInterp.match_untranslated_text',
                   'symbol_matches=%s' % symbol_matches)
+            symbol_matches = self.adjust_match_scores(symbol_matches)
+            weak_matches = self.adjust_match_scores(weak_matches)
+            forbidden = self.adjust_match_scores(forbidden)
+            inexact_matches = symbol_matches[:] + weak_matches
         if symbol_matches:
-            natives = map(lambda match: match.native_symbol, symbol_matches)
-            symbols.insert_existing(natives[0],
+            trace('CmdInterp.match_untranslated_text',
+                  'symbol_matches=%s' % symbol_matches)
+            symbols.insert_existing(symbol_matches[0][1],
                                     exact_matches = complete_match,
-                                    inexact_matches = natives)
+                                    inexact_matches = inexact_matches,
+                                    forbidden = forbidden)
         else:
-            symbol = symbols.insert_new_symbol(exact_matches = complete_match)
+            symbol = \
+                symbols.insert_new_symbol(exact_matches = complete_match,
+                                          inexact_matches = inexact_matches,
+                                          forbidden = forbidden)
         
         self.styling_state.clear()
         return
+
+    def adjust_match_scores(self, symbol_matches):
+        """
+        Adjust the scores of inexact matches to take into account
+        additional factors (such as the original file and language of
+        the known_symbol), and resort the matches
+
+        **INPUTS**
+
+        *[(INT, STR)]* -- list of inexact matches, with confidence
+        scores between 0 and 1 and the written_forms of the symbol
+
+        ** OUTPUTS **
+
+        *[(INT, STR)]* -- a similar list, with adjusted scores
+        """
+        # for now, don't adjust scores
+        matches = []
+        for score, match in symbol_matches:
+            matches.append((score, match))
+        matches.sort()
+        matches.reverse()
+        return matches
         
     def add_symbol(self, symbol, user_supplied_spoken_forms=[], \
                    tentative = 1, add_sr_entries=1):
@@ -2685,10 +2774,12 @@ class CmdInterp(OwnerObject):
 
         **OUTPUTS**
         
-        *[* [SymbolMatch] *]* -- Prioritized list of symbol matches.
-
-        
-        .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+        *(good_matches, weak_matches, forbidden)* --
+        prioritized lists of good, weak (below threshold) and
+        forbidden matches, with each match being a 2-tuple of confidence
+        score between 0 and 1 (inclusive), and the written form of
+        the native symbol
+        """
         return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
     
     def remove_tentative_symbol(self, symbol):

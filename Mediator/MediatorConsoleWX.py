@@ -19,6 +19,14 @@
 #
 ##############################################################################
 
+"""implementation of the MediatorConsole interface for a wxPython GUI mediator
+(e.g. wxMediator)
+
+**MODULE VARIABLES**
+
+
+"""
+
 import sys
 import shutil
 import Object, vc_globals
@@ -56,13 +64,6 @@ except exceptions.ImportError:
 import win32gui
 import pywintypes
 
-"""implementation of the MediatorConsole interface for a wxPython GUI mediator
-(e.g. wxMediator)
-
-**MODULE VARIABLES**
-
-
-"""
 
 def EVT_MINE(evt_handler, evt_type, func):
     evt_handler.Connect(-1, -1, evt_type, func)

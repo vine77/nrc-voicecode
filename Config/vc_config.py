@@ -1106,20 +1106,74 @@ python_functional.add_csc(acmd)
 # CSCs for calling standard python functions and methods
 
 py_standard_function_calls = CSCmdSet('standard function calls', 
-    description = 'CSCs for calling predefined functions and methods definitions')    
+    description = \
+    'CSCs for calling predefined functions and methods definitions')    
+
 py_std_func_calls = StandardFunctionCallsHelper('python')
+
 # py_std_func_calls.add_function_name(['A. two B. base sixty four'], 'a2b_base64')
 # py_std_func_calls.add_function_name(['A. two B. H. Q. X.'], 'a2b_hqx')
 # py_std_func_calls.add_function_name(['A. two B. U. U.'], 'a2b_uu')
-py_std_func_calls.add_function_name(['abs', 'absolute', 'absolute value'], 'abs')
-py_std_func_calls.add_function_name(['underscore abs', 'underscore absolute', 'underscore absolute value'], '__abs__')
+
+py_std_func_calls.add_function_name(['abs', 'absolute', 'absolute value'], 
+    'abs')
+
+py_std_func_calls.add_function_name(['exponential'], 'exp')
+py_std_func_calls.add_function_name(['floor'], 'floor')
+py_std_func_calls.add_function_name(['ceiling'], 'ceil')
+
+py_std_func_calls.add_function_name(['F. abs', 'F.  absolute', 
+    'F. absolute value', 'float abs', 'float absolute', 
+    'float absolute value'], 'fabs')
+
+py_std_func_calls.add_function_name(['underscore abs', 'underscore absolute', 
+    'underscore absolute value'], '__abs__')
+
 py_std_func_calls.add_function_name(['abs path', 'absolute path'], 'abspath')
+
 py_std_func_calls.add_function_name(['accept'], 'accept')
 py_std_func_calls.add_function_name(['accept two D. year'], 'accept2dyear')
+
 py_std_func_calls.add_function_name(['access'], 'access')
+
+py_std_func_calls.add_function_name(['cos', 'cosine'], 'cos')
+py_std_func_calls.add_function_name(['sine'], 'sin')
+py_std_func_calls.add_function_name(['tangent', 'tan'], 'tan')
+
 py_std_func_calls.add_function_name(['A. cos', 'arc cos', 'arc cosine'], 'acos')
-py_std_func_calls.add_function_name(['A. cos H.', 'arc cos H.', 'arc cosine H.', 'hyperbolic arc cosine'], 'acosh')
+py_std_func_calls.add_function_name(['A. sine', 'arc sine'], 'asin')
+py_std_func_calls.add_function_name(['A. tan', 'arc tangent', 
+    'arc tan'], 'atan')
+py_std_func_calls.add_function_name(['A. tan 2', 'arc tangent 2', 
+    'arc tan 2'], 'atan2')
+
+py_std_func_calls.add_function_name(['square root'], 'sqrt')
+
+py_std_func_calls.add_function_name(['hyperbolic sine', 'sine H.'],
+    'sinh')
+py_std_func_calls.add_function_name(['hyperbolic cosine', 'cosine H.', 
+    'cos H.'], 'sinh')
+py_std_func_calls.add_function_name(['hyperbolic tangent', 'tan H.'],
+    'tanh')
+
+py_std_func_calls.add_function_name(['A. tan H.', 'arc tan H.', 
+    'arc tangent H.', 'hyperbolic arc tangent'], 'atanh')
+
+py_std_func_calls.add_function_name(['log', 'logarithm'], 'log')
+
+py_std_func_calls.add_function_name(['log 10', 'log base 10', 
+    'logarithm base 10'], 'log10')
+
 py_std_func_calls.add_function_name(['acquire'], 'acquire')
+
+py_std_func_calls.add_function_name(['length'], 'len',
+    'short')
+py_std_func_calls.add_function_name(['string'], 'str',
+    'short')
+py_std_func_calls.add_function_name(['rep', 'representation'], 'repr',
+    'short')
+py_std_func_calls.add_function_name(['type'], 'type',
+    'short')
 
 # predefined symbols that cannot be matched to their pseud-symbol form
 #py_explicit_symbols = ExplicitSymbolSet()
