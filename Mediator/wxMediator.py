@@ -680,6 +680,10 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 # close when the frame does, allowing us to perform our own cleanup when
 # control returns from MainLoop to our run method
 
+# However, if we are in the middle of a regression test, we need some
+# way to ensure that we return to the message loop.  Therefore, we tell
+# the mediator to tell SimCmdsObj to raise a CancelTesting exception
+# when the current recognitionMimic finishes
         if self.testing:
             self.the_mediator.cancel_testing()
         debug.trace('wxMediator.quit_now', 'returning')

@@ -434,27 +434,6 @@ def test_Object():
 auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
 
 ###############################################################################
-# Testing sr_interface.connect() when VoiceCode user is not defined
-###############################################################################
-
-def test_no_sr_user():
-    sr_interface.disconnect()
-    old_vc_user_name= sr_interface.vc_user_name
-    sr_interface.vc_user_name = 'dfafasdfrqowerglgferqeandgliaugfa'    
-    print 'Trying to connect to SR system with inexistant user name'
-    try:
-        sr_interface.connect('off')
-    except natlink.UnknownName:
-        print 'natlink.UnknownName exception was sucessfully raised.'
-    except Exception, err:
-        print 'ERROR: wrong error was raised: err=%s, err.__dict__=%s' % (err, err.__dict__)
-    else:
-        print 'ERROR: natlink.UnknownName exception was NOT sucessfully raised.'
-    sr_interface.vc_user_name = old_vc_user_name
-    
-#auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with inexistant SR user')
-
-###############################################################################
 # Testing mediator.py console
 ###############################################################################
 
