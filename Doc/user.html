@@ -129,15 +129,32 @@ say(STR utterance)
    When called in this way, the system will simulate a recognition
    event using NatLink's <EM>recognitionMimic</EM> function.
 
+   Note that this command will not work with Select XYZ
+   utterances. For those, you must use the say_select command
+   described below.
+
 say(STR utterance, bypass_NatLink=1)
    Same as above, except that the interpretation process will bypass
    NatLink's <EM>recognitionMimic</EM> function.
+
+say_select([STR] utterrance)
+   Simulates a Select XYZ utterance.
+
+   Elements of list *utterance* are the individual NatSpeak vocabulary
+   entries that make the utterance. For vocabulary entries of the form
+   written\spoken form, you must specify both the written and spoken
+   form of the entry.
+
+   e.g. say_select(['Select', '!=\\not equal to'])
 
 goto(INT pos)
    Moves cursor to position *pos*
 
 goto_line(INT linenum)
    Moves cursor to the beginning of line number *linenum*
+
+select(INT start, end)
+   Selects from position *start* to position *end* in current buffer
 
 show_buff()
    Prints the content of the current buffer

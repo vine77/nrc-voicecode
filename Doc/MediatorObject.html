@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 26 17:17:06 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Oct 03 16:08:16 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -17,12 +17,11 @@
 <H1 CLASS="ModuleName">Module MediatorObject</H1>
 <PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorObject.MediatorObject.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Main object for the mediator.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_csc</SPAN></A>(<SPAN CLASS="Argument">acmd</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_language_specific_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_language_specific_word</SPAN></A>(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_csc</SPAN></A>(<SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_lsa</SPAN></A>(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#associate_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">associate_language</SPAN></A>(<SPAN CLASS="Argument">extension</SPAN>, <SPAN CLASS="Argument">language</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#define_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">define_language</SPAN></A>(<SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">definition</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Defines the syntax of a programming language.</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.newobj...Mediator\\MediatorObject.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.redund...Mediator\\MediatorObject.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">None</SPAN> <SPAN CLASS="VariableName">to_configure</SPAN> = <SPAN CLASS="VariableValue">None</SPAN></SPAN>
 </PRE><H2 ID="add_abbreviation" CLASS="Function">add_abbreviation(<SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)</H2>
 <P>Add an abbreviation to VoiceCode's abbreviations dictionary.</P>
@@ -48,41 +47,18 @@
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="add_csc" CLASS="Function">add_csc(<SPAN CLASS="Argument">acmd</SPAN>)</H2>
+<H2 ID="add_csc" CLASS="Function">add_csc(<SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</H2>
 <P>Add a new Context Sensitive Command.</P>
 
 <P>
 <A HREF="CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to add.</P>
-<H2 ID="add_language_specific_word" CLASS="Function">add_language_specific_word(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</H2>
-<P>Add a language specific word.</P>
-
-<P>
-These words get added and removed dynamically from the SR
-vocabulary, depending on the language of the active buffer.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>[STR]</EM> language_list
-<DD>Names of the languages for which this
-new word applies. If None, then add this for all languages.
-<DT>
-<EM>STR</EM> spoken_as_list
-<DD>List of spoken form of the word.
-<DT>
-<EM>STR</EM> written_as
-<DD>Written form of the word.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
+<EM>BOOL add_voc_entry = 1</EM>
+<DD>if true, add a SR vocabulary entry
+for the CSC's spoken forms
 </DL>
 <H2 ID="add_lsa" CLASS="Function">add_lsa(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</H2>
 <P>Add a language specific word.</P>
@@ -90,6 +66,12 @@ new word applies. If None, then add this for all languages.
 <P>
 These words get added and removed dynamically from the SR
 vocabulary, depending on the language of the active buffer.</P>
+<P>
+A redundant CSC is also added to allow translation of the LSA at
+the level of the Mediator, in cases where NatSpeak prefers to
+recognise the LSA as dictated text instead of a spoken/written
+word (this often happens if the spoken form looks to much like
+dictated text, e.g. "is not equal to").</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 

@@ -1,6 +1,16 @@
 Todo list for VoiceCode
 =======================
 
+
+addWord
+-------
+
+Joel Gould claims that Select XYZ works as long as the written form of
+XYZ doesn't have leading/trailing spaces. So addWord doesn't have to
+add redundant vocabulary entry for words whose written form only
+contains internal spaces. TEST THE CLAIM BEFORE TRYING TO IMPLEMENT
+THIS.
+
 getWordInfo
 -----------
 

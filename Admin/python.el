@@ -251,7 +251,7 @@ Returns a list of pairs with name and value of the argument."
 
   (py-insert-code "\n\ndef __init__(self")
   (mapcar #'(lambda (name-val) (py-insert-code (concat ", " (elt name-val 0) "=" (elt name-val 1)))) attr-list)
-  (py-insert-code ", **attrs):\n")
+  (py-insert-code ", **args_super):\n")
 
   ;;;
   ;;; Call self.deep_construct 
@@ -272,7 +272,7 @@ Returns a list of pairs with name and value of the argument."
     (py-insert-code "{}")
     )
 
-  (py-insert-code ", \\\nattrs, \\\n")
+  (py-insert-code ", \\\nargs_super, \\\n")
 
   (if (> (length exclude-list) 0)
       (progn

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 26 17:16:58 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Oct 03 16:07:56 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,12 +15,35 @@
 
 
 <H1 CLASS="ModuleName">Module actions_gen</H1>
-<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gen_brackets_pair</SPAN>(<SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Insert brackets</SPAN>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="actions_gen.AnonymousAction.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AnonymousAction</SPAN></A>(<A CLASS="DocLink" HREF="exceptions.Exception.html">Exception</A>)</SPAN><SPAN CLASS="OneLiner"> # Raised when the code for an anonymous action function has syntax errors</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#anonymous_action"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">anonymous_action</SPAN></A>(<SPAN CLASS="Argument">code</SPAN>, <SPAN CLASS="Argument">description</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # This function creates an anonymous action function.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gen_brackets_pair</SPAN>(<SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Insert brackets</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gen_parens_pair</SPAN>(<SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Insert parens</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gen_quotes_pair</SPAN>(<SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Insert quotes</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gen_single_quotes_pair</SPAN>(<SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Insert single quotes</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.newobject\\Mediator\\actions_gen.pyc'</SPAN></SPAN>
-</PRE>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">indent_code</SPAN>(<SPAN CLASS="Argument">num</SPAN>, <SPAN CLASS="Argument">code</SPAN>)</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.redund...s\\Mediator\\actions_gen.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
+</PRE><H2 ID="anonymous_action" CLASS="Function">anonymous_action(<SPAN CLASS="Argument">code</SPAN>, <SPAN CLASS="Argument">description</SPAN>)</H2>
+<P>This function creates an anonymous action function.</P>
+
+<P>
+The anonymous function gets an internal name of the form
+<EM>anonymous_action_N</EM> where <EM>N</EM> is some number.</P>
+
+<DL>
+
+<DT>
+<EM>STR code</EM>
+<DD>Code for the anoymous action function. This code
+ should assume that the application object is called <EM>app</EM>, and
+ the context object is called <EM>cont</EM>.
+<DT>
+<EM>STR description</EM>
+<DD>Description of the action function
+
+</DL>
+
 <HR>
 <TABLE ALIGN="LEFT">
 <TR><TD>
