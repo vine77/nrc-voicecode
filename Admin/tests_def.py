@@ -34,10 +34,10 @@ import time
 import posixpath
 import unittest
 from pyUnitExample import SampleTestCase
-import TestCaseWithHelpersTest, SymbolReformattingUITestCase
+import TestCaseWithHelpersTest
+import MediatorConsoleWXTests
 
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
-# import mediator, MediatorObject, Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
@@ -3640,33 +3640,22 @@ add_test('wxWindowsWithHelpers', test_wxWindowsWithHelpers, 'Testing subclasses 
 # Testing symbol reformatting UI
 ##############################################################################
 
-def test_symbol_reformatting_ui():
-   SymbolReformattingUITestCase.test_mediator = testing.mediator()
+def test_reformat_recent_dlg():
    unittest.TextTestRunner(). \
-       run(unittest.makeSuite(SymbolReformattingUITestCase.SymbolReformattingUITestCase, 'test')) 
-   test_symbol_reformatting_acceptance()
+       run(unittest.makeSuite(MediatorConsoleWXTests.ReformatRecentTestCase, 'test')) 
    
-def test_symbol_reformatting_acceptance():
-   sys.stdout.write("\n*** Starting acceptance tests:\n\n")
-   testing.init_simulator_regression()
    
-   commands.open_file('blah.py') 
-   test_say(['some', 'symbol'])
-   # AD: Hum... this doesn't actually end up invoking the dialog.
-   #     The last trace I see is that ReformatSymbolEventWX.notify() was 
-   #     invoked, but the event never gets acted upon. 
-   #     But strangely enough, when testing interactively, 'reformat recent' 
-   #     DOES invoke the dialog.
-   #     Maybe because of a difference in the event loop between test mode
-   #     and interactive mode?
-   test_say(['reformat', 'recent'])
-   print "NOTE: This test doesn't actually work. For some reason, the dialog is not invoked.\n\n"
-   print "But 'reformat recent' DOES display the dialog when I say it in interactive mode.\n\n"
-   print "Presumably because the event loop is different in testing mode than in interactive mode. Need to fix that someday.\n"
+add_test('reformat_recent_dlg', test_reformat_recent_dlg, 
+         'Testing dialog for selecting a symbol to reformat.')
 
-
+def test_reformat_from_recent_dlg():
+    pass
+#   unittest.TextTestRunner(). \
+#       run(unittest.makeSuite(MediatorConsoleWXTests.ReformatFromRecentTestCase, 'test')) 
    
-add_test('symbol_reformatting_ui', test_symbol_reformatting_ui, 'Testing symbol reformatting UI.')
+add_test('reformat_from_recent_dlg', test_reformat_from_recent_dlg, 
+         'Testing dialog for reformatting a selected symbol.')
+
 
 ##############################################################################
 # Test retrieval of recently dictated symbols
@@ -4632,6 +4621,9 @@ sort_tests()
 
 define_suite(name = 'fabfour', tests = ['SymDict', 'automatic_abbreviations',
     'mediator_console', 'python'])
+    
+define_suite(name = 'mediator_console_dlgs', 
+             tests = ['reformat_recent_dlg', 'reformat_from_recent_dlg'])
 
 # tests starting with 'CmdInterp' and ending with 'SymDict')
 define_suite_by_range(name = 'few_early', first = 'CmdInterp', last = 'SymDict')
