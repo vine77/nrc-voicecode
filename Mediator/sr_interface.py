@@ -34,6 +34,14 @@ import actions_gen, CmdInterp
 sr_is_connected = 0
 
 #
+# microphone state change callback (None for no callback
+#
+#    *FCT* mic_change_callback -- 
+#      mic_change_callback(*STR* mic_state)
+#    (optional) function to be called when the microphone state changes.
+
+sr_mic_change_callback = None
+
 # Flag that remembers whether or not the VoiceCode SR user was modified since
 # last saved
 #
@@ -84,20 +92,24 @@ def speech_able():
     return not os.environ.has_key('VCODE_NOSPEECH')
 
 
-def connect(mic_state=None):
+def connect(mic_state=None, mic_change_callback = None):
     """Connects to the SR system.
     
     **INPUTS**
     
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection. If *None*, then leave mic alone.
-    
+
+    *FCT* mic_change_callback -- 
+      mic_change_callback(*STR* mic_state)
+    (optional) function to be called when the microphone state changes.
     
     **OUTPUTS**
     
     *none* -- 
     """
     global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
+    global sr_mic_change_callback
     
 #    print '-- sr_interface.connect: mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected)
     
@@ -109,6 +121,12 @@ def connect(mic_state=None):
             openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
         if mic_state:
             natlink.setMicState(mic_state)
+	if mic_change_callback:
+	    sr_mic_change_callback = mic_change_callback
+	    natlink.setChangeCallback(change_callback)
+
+
+    
 
 def disconnect():
     """Dicsconnects from SR system.
@@ -122,11 +140,19 @@ def disconnect():
     
     *none* -- 
     """
-    global sr_is_connected
+    global sr_is_connected, sr_mic_change_callback
 
     if speech_able() and sr_is_connected:
+	if sr_mic_change_callback:
+	    natlink.setChangeCallback(None)
+	    sr_mic_change_callback = None
         natlink.natDisconnect()
     sr_is_connected = 0        
+
+def change_callback(*args):
+    if args[0] == 'mic' and sr_mic_change_callback:
+	sr_mic_change_callback(args[1])
+
 
 def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_using_topic=None):
 
