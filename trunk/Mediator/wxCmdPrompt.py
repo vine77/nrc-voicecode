@@ -177,33 +177,19 @@ class wxCmdLog(CmdLog):
                             {'log':underlying_text}, 
                             args)
   
-    def log_command(self, command):
-	"""log a command.  Must be implemented by concrete subclass
-
-	**INPUTS**
-
-	*STR* command -- command string to be logged (should not include
-	prompt or new-line)
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.log.AppendText(self.prompt + command + '\n')
-    
-    def log_message(self, message):
+    def write(self, string):
 	"""log output/message.  Must be implemented by concrete subclass
 
 	**INPUTS**
 
-	*STR* message -- message string to be logged (unlike
+	*STR* string -- message string to be logged (unlike
 	log_command, should include internal and trailing new-lines)
 
 	**OUTPUTS**
 
 	*none*
 	"""
-	self.log.AppendText(message)
+	self.log.AppendText(string)
 
 
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:59:54 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Jan 03 18:34:57 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,6 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WaxEditPane</SPAN>(<A CLASS="DocLink" HREF="wxPython.windows.wxPanel.html">wxPanel</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEditPane.__del__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEditPane.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEditPane.focus_command_line</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdSim.WaxEditPane.focus_editor</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
@@ -46,6 +47,13 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.SetPreviousHandler</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxEvtHandlerPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxPanelPtr</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.GetDefaultItem</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.InitDialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.SetDefaultItem</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxWindowPtr</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.AcceptsFocus</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
@@ -173,13 +181,6 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxWindowPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxPanelPtr</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.GetDefaultItem</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.InitDialog</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.SetDefaultItem</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanelPtr.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-
     <SPAN CLASS="InheritsHead"># Inherited from wxPython.windows.wxPanel</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">wxPython.windows.wxPanel.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">*_args</SPAN>, <SPAN CLASS="Argument">**_kwargs</SPAN>)
 
@@ -226,14 +227,10 @@ entered at the command line
 <DD>text control for log window to display
 output, error messages, and command history
 <DT>
-<EM>wxEditor</EM> wax_text_buffer
+<EM>TextBufferWX</EM> wax_text_buffer
 <DD>editor interface with change
 specification, so that we can keep track of changes to the editor
 buffer.
-<DT>
-<EM>TextBufferNotifyWX</EM> notify
-<DD>TextBufferChangeNotify wrapper for
-the editor control
 <DT>
 <EM>wxTextControl</EM> editor
 <DD>underlying text control for editor window
