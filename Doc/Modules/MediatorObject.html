@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:56:13 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:55 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,11 +18,12 @@
 <PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorObject.MediatorObject.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorObject</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Main object for the mediator.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_csc</SPAN></A>(<SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_lsa</SPAN></A>(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">add_lsa</SPAN></A>(<SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#associate_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">associate_language</SPAN></A>(<SPAN CLASS="Argument">extension</SPAN>, <SPAN CLASS="Argument">language</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#define_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">define_language</SPAN></A>(<SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">definition</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Defines the syntax of a programming language.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_abbreviations</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">standard_symbols_in</SPAN>(<SPAN CLASS="Argument">file_list</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Compile symbols defined in a series of source files</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.testing\\Mediator\\MediatorObject.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VC...Mediator\\MediatorObject.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">None</SPAN> <SPAN CLASS="VariableName">to_configure</SPAN> = <SPAN CLASS="VariableValue">None</SPAN></SPAN>
 </PRE><H2 ID="add_abbreviation" CLASS="Function">add_abbreviation(<SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)</H2>
 <P>Add an abbreviation to VoiceCode's abbreviations dictionary.</P>
@@ -61,7 +62,7 @@
 <DD>if true, add a SR vocabulary entry
 for the CSC's spoken forms
 </DL>
-<H2 ID="add_lsa" CLASS="Function">add_lsa(<SPAN CLASS="Argument">language_list</SPAN>, <SPAN CLASS="Argument">spoken_as_list</SPAN>, <SPAN CLASS="Argument">written_as</SPAN>)</H2>
+<H2 ID="add_lsa" CLASS="Function">add_lsa(<SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)</H2>
 <P>Add a language specific word.</P>
 
 <P>
@@ -79,15 +80,15 @@ dictated text, e.g. "is not equal to").</P>
 <DL>
 
 <DT>
-<EM>[STR]</EM> language_list
-<DD>Names of the languages for which this
-new word applies. If None, then add this for all languages.
-<DT>
-<EM>STR</EM> spoken_as_list
+<EM>STR</EM> spoken_forms
 <DD>List of spoken form of the word.
 <DT>
-<EM>STR</EM> written_as
-<DD>Written form of the word.
+<EM>{STR: STR}</EM> meanings
+<DD>Dictionary of language specific
+ meanings. Key is the language name and value is the written form
+ of the LSA for that langugage. If language name is <EM>None</EM>, then
+ it means that this LSA applies for all languages (I know, it
+ doesn't make much sense syntactically).
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:53:47 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:58:44 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppState</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">rec_utterances=[]</SPAN>, <SPAN CLASS="Argument">open_buffers={}</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">active_field=None</SPAN>, <SPAN CLASS="Argument">curr_buffer=None</SPAN>, <SPAN CLASS="Argument">breadcrumbs=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">translation_is_off=0</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">active_field=None</SPAN>, <SPAN CLASS="Argument">curr_buffer=None</SPAN>, <SPAN CLASS="Argument">breadcrumbs=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
@@ -96,6 +96,12 @@ SourceBuff curr_buffer=None
  the stack is a couple where the first entry is the name of the
  source buffer and the second is the position in that buffer where
  the crumb was dropped.
+<DT>
+<EM>BOOL</EM> translation_is_off
+<DD>If true, then translation of CSCs and
+ LSAs isturned off for that applications. Everything should be
+ typed as dictated text, except for commands that turn the
+ translation back on.
 </DL>
 <P>
 <STRONG>CLASSS ATTRIBUTES</STRONG></P>

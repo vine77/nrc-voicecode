@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 30 10:56:32 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:59:30 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -20,9 +20,11 @@
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#addWord"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">addWord</SPAN></A>(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Add a word to NatSpeak's vocabulary.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#addedByVC"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">addedByVC</SPAN></A>(<SPAN CLASS="Argument">flag</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#clean_written_form"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clean_written_form</SPAN></A>(<SPAN CLASS="Argument">written_form</SPAN>, <SPAN CLASS="Argument">clean_for=None</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">connect</SPAN></A>(<SPAN CLASS="Argument">mic_state=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Connects to the SR system.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#deleteWord"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">deleteWord</SPAN></A>(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Delete a word from NatSpeak's vocabulary.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">disconnect</SPAN></A>()</SPAN><SPAN CLASS="OneLiner"> # Dicsconnects from SR system.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">getWordInfo</SPAN>(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">speech_able</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">speech_able</SPAN>(<SPAN CLASS="Argument">mic_state=None</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#spoken_written_form"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">spoken_written_form</SPAN></A>(<SPAN CLASS="Argument">vocabulary_entry</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns the written and spoken forms of a NatSpeak vocabulary entry</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#vocabulary_entry"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">vocabulary_entry</SPAN></A>(<SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">written_form</SPAN>, <SPAN CLASS="Argument">clean_written=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a vocabulary entry with given spoken and written forms.</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">AltCode</SPAN> = <SPAN CLASS="VariableValue">2</SPAN></SPAN>
@@ -33,7 +35,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">SeqCode</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">SymbolError</SPAN> = <SPAN CLASS="VariableValue">'SymbolError'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">SyntaxError</SPAN> = <SPAN CLASS="VariableValue">'SyntaxError'</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.testing\\Mediator\\sr_interface.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Mediator\\sr_interface.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">add_words_as</SPAN> = <SPAN CLASS="VariableValue">'user'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">dgnwordflag_active_cap_next</SPAN> = <SPAN CLASS="VariableValue">32</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">dgnwordflag_cap_all</SPAN> = <SPAN CLASS="VariableValue">2048</SPAN></SPAN>
@@ -142,6 +144,28 @@ of a word.</P>
 <DD>The clean written form
 
 </DL>
+<H2 ID="connect" CLASS="Function">connect(<SPAN CLASS="Argument">mic_state=None</SPAN>)</H2>
+<P>Connects to the SR system.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> mic_state
+<DD><EM>'on'</EM> or <EM>'off'</EM>. State to put the mic in
+after connection. If <EM>None</EM>, then leave mic alone.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="deleteWord" CLASS="Function">deleteWord(<SPAN CLASS="Argument">word</SPAN>, <SPAN CLASS="Argument">*rest</SPAN>)</H2>
 <P>Delete a word from NatSpeak's vocabulary.</P>
 
@@ -153,6 +177,27 @@ Also, we only remove it if the word was added to the vocabulary by
 VoiceCode, i.e. if the word info has <CODE>added by Vocabulary Builder</CODE>
 flag set and if the word is a phrase (single words might actually
 have ben added by the real Vocabulary Builder)</P>
+<H2 ID="disconnect" CLASS="Function">disconnect()</H2>
+<P>Dicsconnects from SR system.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="spoken_written_form" CLASS="Function">spoken_written_form(<SPAN CLASS="Argument">vocabulary_entry</SPAN>)</H2>
 <P>Returns the written and spoken forms of a NatSpeak vocabulary entry</P>
 

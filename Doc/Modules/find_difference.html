@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:59:40 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Module find_difference</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ModuleName">Module find_difference</H1>
+<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_difference"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_difference</SPAN></A>(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_string_difference"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_string_difference</SPAN></A>(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VC...Mediator\\find_difference.py'</SPAN></SPAN>
+</PRE><H2>Description</H2><P>
+find a single changed region in a pair of strings
+</P>
+<H2 ID="find_difference" CLASS="Function">find_difference(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</H2>
+<P></P>
+
+<P>
+Finds the difference between old and new sequences, assuming that there
+is only one contiguous changed region.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SEQ ANY</EM> old
+<DD>old sequence
+<DT>
+<EM>SEQ ANY</EM> new
+<DD>new sequence
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+(start, end, change)</P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> start
+<DD>the offset into old of the range replaced or deleted
+<DT>
+<EM>INT</EM> end
+<DD>the offset into old of the item following 
+the range modified (or deleted) (this matches Python's slice convention).
+<DT>
+<EM>ANY</EM> change
+<DD>the replacement range from new
+
+</DL>
+<H2 ID="find_string_difference" CLASS="Function">find_string_difference(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</H2>
+<P></P>
+
+<P>
+Finds the difference between old and new strings, assuming that there
+is only one contiguous changed region.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> old
+<DD>old string
+<DT>
+<EM>STR</EM> new
+<DD>new string
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+(start, end, change)</P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> start
+<DD>the offset into old of the range replaced or deleted
+<DT>
+<EM>INT</EM> end
+<DD>the offset into old of the character following 
+the range modified (or deleted) (this matches Python's slice convention).
+<DT>
+<EM>STR</EM> change
+<DD>the replacement string from new
+
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
