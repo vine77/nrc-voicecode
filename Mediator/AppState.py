@@ -200,7 +200,7 @@ class AppState(Object):
 	"""
         buff = self.find_buff(buffname)
         buffname = buff.file_name
-        if not pos: pos = buff.cur_pos
+        if not pos: pos = buff.cur_pos()
         self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
 
 

@@ -127,8 +127,14 @@ class WaxEditPane(wxPanel):
         self.top_and_bottom=top_and_bottom
         editor =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
 	    wxDefaultSize,wxTE_MULTILINE)
+	flags = wxTE_MULTILINE | wxTE_READONLY
+	if sys.platform == 'win32':
+# allows log longer than 64K
+	    flags = flags | wxTE_RICH
         log =wxTextCtrl(top_and_bottom, ID_LOG, "", wxDefaultPosition,
 	    wxDefaultSize,wxTE_MULTILINE | wxTE_READONLY)
+#        log =wxTextCtrl(top_and_bottom, ID_LOG, "", wxDefaultPosition,
+#	    wxDefaultSize, flags)
         self.editor = editor
         self.log = log
 	self.prompt_text = "Command> "
@@ -148,7 +154,6 @@ class WaxEditPane(wxPanel):
 
 	thiswin = natlink.getCurrentModule()[2]
 	self.spy = SpyGrammar(self.command_log)
-	self.spy.initialize()
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
         self.vbox.Add(self.button_line, 0, wxEXPAND | wxALL, 4)
@@ -176,6 +181,7 @@ class WaxEditPane(wxPanel):
         self.prompt_line.Add(self.prompt, 0, wxALL, 4)
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
 
+	self.spy.initialize()
         self.wax_text_buffer = TextBufferWX.TextBufferWX(editor,
 	    change_callback=self.on_editor_change)
 	underlying_voice_buffer = \
@@ -192,8 +198,11 @@ class WaxEditPane(wxPanel):
         current = wxWindow_FindFocus()
 	self.command_line.SetFocus()
     def on_recog_start(self, buffer, window_matches):
+#        return
 #	self.command_log.log_message('recog starting')
+#	print 'recog start'
 	if window_matches and self.parent.activated:
+#	    print '(parent is activated, window matches)'
 	    self.command_log.log_message('(parent is activated, window matches)')
 #	    print 'parent is activated'
 	    current = wxWindow_FindFocus()
@@ -229,17 +238,19 @@ class WaxEditPane(wxPanel):
 		self.command_log.log_message('-- buffer active\n')
 #		print repr(self.voice_buffer.get_text())
 		self.voice_buffer.reactivate()
-		self.spy.reactivate()
+#		self.spy.reactivate()
 		return
 	    else:
 		self.command_log.log_message( 'wrong id')
 #	else:
 #	    print 'not active'
+#	print 'deactivating'
 	self.voice_buffer.deactivate()
-	self.spy.deactivate_spy()
+#	self.spy.deactivate_spy()
 #	self.command_log.log_message('-- buffer inactive\n')
     def on_voice_change(self, start, end, text, selection_start,
 	selection_end, buffer, program_initiated):
+#	return
 #	print 'yielding'
 	sys.stdout.flush()
 	wxSafeYield()
@@ -539,7 +550,8 @@ class SpyGrammar(GrammarBase):
         if recogType == 'reject':
             lastResult = None
         elif resObj.getWords(0)[:2] != ['repeat','that']:
-            self.log.write(repr(resObj.getWords(0)))
+            self.log.write(repr(resObj.getResults(0)))
+#            self.log.write(repr(resObj.getWords(0)))
 #	    print repr(resObj.getWords(0))
             
 def run():
