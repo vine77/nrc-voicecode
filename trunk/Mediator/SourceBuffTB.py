@@ -198,7 +198,13 @@ class SourceBuffTB(SourceBuff):
         *none* -- 
         """
         
-        debug.virtual('move_relative_page')
+	range = self.underlying.get_visible()
+	first, last = self.underlying.line_nums_of_range(range)
+	height = last -first + 1
+	if direction < 0:
+	    num = - num
+	current = self.underlying.line_num_of()
+	self.underlying.goto_line(current + num)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.

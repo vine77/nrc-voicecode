@@ -406,6 +406,26 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    pos = self.cur_pos()
 	lines = self.line_range_external(0, pos)
 	return lines[1]
+    
+    def line_nums_of_range(self, range = None):
+	"""find line numbers of a range of positions
+
+	**INPUTS**
+
+	*(INT, INT) range* -- range of character offsets into the buffer. 
+	 Defaults to the current selection.
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- corresponding pair of line numbers (starting with 0)
+	"""
+
+	if range == None:
+	    range = self.get_selection()
+	s, e = range
+	lines = self.line_range_external(s, e)
+	return lines
+    
 
     def lines(self):
 	"""return number of lines in the buffer
@@ -419,7 +439,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	*int* -- number of lines in the buffer (incomplete lines are
 	counted, so this is always > 0
 	"""
-	return self.underlying.GetNumberOfLines():
+	return self.underlying.GetNumberOfLines()
 
     def position_of_line(self, line = None, where = -1):
 	"""returns the position of the start or end of the specified line 
@@ -443,16 +463,16 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    end = self.cur_pos()
 # we don't need lines past the desired line
 	
-	lines = string.split(self.get_text(0, end), '\n')
+	lines = string.split(self.get_text(0, end), self.nl)
 	last = len(lines) - 1
 	if line == None:
 	    line = last
 	elif line > last:
 	    line = last
-	before = string.join(lines[0:line], '\n')
+	before = string.join(lines[0:line], self.nl)
 	position = len(before)
 	if (line > 0):
-	    position = position + 1
+	    position = position + len(self.nl)
 	if where > 0:
 	    position = position + self.line_length(line)
 	return position
@@ -511,16 +531,16 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	    end = self.cur_pos()
 # we don't need lines past the desired line
 	
-	lines = string.split(self.get_text(0, end), '\n')
+	lines = string.split(self.get_text(0, end), self.nl)
 	last = len(lines) - 1
 	if line == None:
 	    line = last
 	elif line > last:
 	    line = last
-	before = string.join(lines[0:line], '\n')
+	before = string.join(lines[0:line], self.nl)
 	start = len(before)
 	if line > 0:
-	    start = start + 1
+	    start = start + len(self.nl)
 	end = start + self.line_length(line)
 	return start, end
       
@@ -538,18 +558,18 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	the range of lines.
 	"""
     
-	lines = string.split(self.get_text(), '\n')
+	lines = string.split(self.get_text(), self.nl)
 	last = len(lines) - 1
-	before = string.join(lines[0:first_line], '\n')
+	before = string.join(lines[0:first_line], self.nl)
 	if last_line > last:
 	    last_line = last
 	start = len(before)
 	if first_line > 0:
-	    start = start + 1
+	    start = start + len(self.nl)
 	between = string.join(lines[first_line:last_line])
 	end = start + len(between) + self.line_length(last_line)
 	if last_line > first_line:
-	    end = end + 1
+	    end = end + len(self.nl)
 	return start, end
       
     def ranges_of_lines(self, first_line, last_line):
@@ -566,13 +586,13 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	*[(INT, INT), ...]* -- offsets into the buffer of the start and end of
 	the each line in the range of lines.
 	"""
-	lines = string.split(self.get_text(), '\n')
+	lines = string.split(self.get_text(), self.nl)
 	last = len(lines) - 1
-	before = string.join(lines[0:first_line], '\n')
+	before = string.join(lines[0:first_line], self.nl)
 	ranges = []
 	start = len(before)
 	if first_line > 0:
-	    start = start + 1
+	    start = start + len(self.nl)
 	if last_line > last:
 	    last_line = last 
 	for line in range(first_line, last_line+1):

@@ -632,6 +632,21 @@ class NumberedLines(Object):
 	*INT* -- corresponding line number (starting with 0)
 	"""
 	debug.virtual('NumberedLines.line_num_of')
+      
+    def line_nums_of_range(self, range = None):
+	"""find line numbers of a range of positions
+
+	**INPUTS**
+
+	*(INT, INT) range* -- range of character offsets into the buffer. 
+	 Defaults to the current selection.
+
+	**OUTPUTS**
+
+	*(INT, INT)* -- corresponding pair of line numbers (starting with 0)
+	"""
+
+	debug.virtual('NumberedLines.line_nums_of_range')
 
     def lines(self):
 	"""return number of lines in the buffer
