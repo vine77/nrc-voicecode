@@ -1,3 +1,17 @@
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
+
+C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -754,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0118C5A8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02317538>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1272,10 +1286,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'N:\\DavidFox\\Code\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1295,7 +1309,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -1543,7 +1557,6 @@ List of unresolved abbreviations
 'acos': appears in ['acos']
 'asin': appears in ['asin']
 'atanh': appears in ['atanh']
-'ceil': appears in ['ceil']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'sinh': appears in ['sinh']
@@ -1755,7 +1768,6 @@ List of unresolved abbreviations
 'acos': appears in ['acos']
 'asin': appears in ['asin']
 'atanh': appears in ['atanh']
-'ceil': appears in ['ceil']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'sinh': appears in ['sinh']
@@ -1784,7 +1796,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -1865,7 +1877,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -2114,7 +2126,6 @@ List of unresolved abbreviations
 'acos': appears in ['acos']
 'asin': appears in ['asin']
 'atanh': appears in ['atanh']
-'ceil': appears in ['ceil']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'sinh': appears in ['sinh']
@@ -2150,7 +2161,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -2400,7 +2411,6 @@ List of unresolved abbreviations
 'acos': appears in ['acos']
 'asin': appears in ['asin']
 'atanh': appears in ['atanh']
-'ceil': appears in ['ceil']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'sinh': appears in ['sinh']
@@ -2612,7 +2622,6 @@ List of unresolved abbreviations
 'acos': appears in ['acos']
 'asin': appears in ['asin']
 'atanh': appears in ['atanh']
-'ceil': appears in ['ceil']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'sinh': appears in ['sinh']
@@ -3681,7 +3690,7 @@ Heard check if was done without arguments new statement
 
 
 
->>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -4865,7 +4874,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5477,7 +5486,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5497,7 +5506,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -5579,7 +5588,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -5706,16 +5715,16 @@ Heard variable equals new list zero ellipsis 10 new statement
   9:         <CURSOR>
 
 *** End of source buffer ***
-Saying: ['#\\pound', '!\\bang', 'python', 'new statement']
-Heard pound bang python new statement
+Saying: ['#\\number-sign', '!\\bang', 'python', 'new statement']
+Heard number-sign bang python new statement
   7:         index.function()
   8:         variable = [0...10]
   9:         #!python
  10:         <CURSOR>
 
 *** End of source buffer ***
-Saying: ['#\\pound-sign', '!\\exclamation-mark', 'python', 'new statement']
-Heard pound-sign exclamation-mark python new statement
+Saying: ['#\\number-sign', '!\\exclamation-mark', 'python', 'new statement']
+Heard number-sign exclamation-mark python new statement
   8:         variable = [0...10]
   9:         #!python
  10:         #!python
@@ -5778,8 +5787,8 @@ Heard function empty parens new statement
  18:                 <CURSOR>
 
 *** End of source buffer ***
-Saying: ['list', '[\\open-bracket', '0\\zero', ']\\close-bracket', 'new statement']
-Heard list open-bracket zero close-bracket new statement
+Saying: ['list', '[\\open-square-bracket', '0\\zero', ']\\close-square-bracket', 'new statement']
+Heard list open-square-bracket zero close-square-bracket new statement
  16:                 function(0)
  17:                 function()
  18:                 list[0]
@@ -7010,40 +7019,40 @@ Heard new statement
 101:                 <CURSOR>
 
 *** End of source buffer ***
-Saying: ['0\\zero', '#\\pound-sign', '1\\one', '#\\pound-sign', '2\\two']
-Heard zero pound-sign one pound-sign two
+Saying: ['0\\zero', '#\\number-sign', '1\\one', '#\\number-sign', '2\\two']
+Heard zero number-sign one number-sign two
  98:                 0...1...2
  99:                 0!1!2
 100:                 0?1?2
 101:                 0#1#2<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous pound-sign', 'previous pound-sign']
-Heard previous pound-sign previous pound-sign
+Saying: ['previous number-sign', 'previous number-sign']
+Heard previous number-sign previous number-sign
  98:                 0...1...2
  99:                 0!1!2
 100:                 0?1?2
 101:                 0#<CURSOR>1#2
 
 *** End of source buffer ***
-Saying: ['after pound-sign']
-Heard after pound-sign
+Saying: ['after number-sign']
+Heard after number-sign
  98:                 0...1...2
  99:                 0!1!2
 100:                 0?1?2
 101:                 0#1#<CURSOR>2
 
 *** End of source buffer ***
-Saying: ['before previous pound-sign']
-Heard before previous pound-sign
+Saying: ['before previous number-sign']
+Heard before previous number-sign
  98:                 0...1...2
  99:                 0!1!2
 100:                 0?1?2
 101:                 0#1<CURSOR>#2
 
 *** End of source buffer ***
-Saying: ['before next pound-sign']
-Heard before next pound-sign
+Saying: ['before next number-sign']
+Heard before next number-sign
  98:                 0...1...2
  99:                 0!1!2
 100:                 0?1?2
@@ -7901,7 +7910,7 @@ CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpre
 ContC: ['cont C.', 'content C.', 'context C.']
 ContPy: ['cont P. Y.', 'cont pie', 'cont py', 'cont python', 'content P. Y.', 'content pie', 'content py', 'content python', 'context P. Y.', 'context pie', 'context py', 'context python']
 EdSim: ['ed sim']
-LSA_consumes: ['L. S. A. consumes', 'lsa consumes']
+LSA_consumes: ['L. S. A. consumes', 'LSA consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
@@ -7946,11 +7955,11 @@ choice_index: ['choice index']
 choices: ['choices']
 choose_best_symbol: ['choose best symbol']
 chop_CSC: ['chop C. S. C.', 'chop CSC']
-chop_LSA: ['chop L. S. A.', 'chop lsa']
+chop_LSA: ['chop L. S. A.', 'chop LSA']
 chop_symbol: ['chop symbol']
 chop_word: ['chop word']
 chopped_CSC: ['chopped C. S. C.', 'chopped CSC']
-chopped_LSA: ['chopped L. S. A.', 'chopped lsa']
+chopped_LSA: ['chopped L. S. A.', 'chopped LSA']
 chopped_symbol: ['chopped symbol']
 chopped_word: ['chopped word']
 chosen_match: ['chosen match']
@@ -7961,7 +7970,7 @@ clean_written_form: ['clean written form']
 cmd: ['cmd', 'command']
 cmd_index: ['cmd index', 'command index']
 cmd_without_CSC: ['cmd without C. S. C.', 'cmd without CSC', 'command without C. S. C.', 'command without CSC']
-cmd_without_LSA: ['cmd without L. S. A.', 'cmd without lsa', 'command without L. S. A.', 'command without lsa']
+cmd_without_LSA: ['cmd without L. S. A.', 'cmd without LSA', 'command without L. S. A.', 'command without LSA']
 cmd_without_symbol: ['cmd without symbol', 'command without symbol']
 cmd_without_word: ['cmd without word', 'command without word']
 cmds_this_spoken_form: ['commands this spoken form']
@@ -7982,7 +7991,7 @@ dummy: ['dummy']
 else: ['else']
 end: ['end']
 environ: ['environ', 'environment']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 first: ['first']
 floor: ['floor']
@@ -8079,7 +8088,7 @@ type: ['type']
 untranslated_text: ['untranslated text']
 upper: ['upper']
 upto: ['upto']
-vc_globals: ['V. C. globals', 'VC globals']
+vc_globals: ['V. C. globals', 'vc globals']
 vocabulary_entry: ['vocabulary entry']
 while: ['while']
 word_consumes: ['word consumes']
@@ -8139,7 +8148,7 @@ CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpre
 ContC: ['cont C.', 'content C.', 'context C.']
 ContPy: ['cont P. Y.', 'cont pie', 'cont py', 'cont python', 'content P. Y.', 'content pie', 'content py', 'content python', 'context P. Y.', 'context pie', 'context py', 'context python']
 EdSim: ['ed sim']
-LSA_consumes: ['L. S. A. consumes', 'lsa consumes']
+LSA_consumes: ['L. S. A. consumes', 'LSA consumes']
 None: ['none']
 Object: ['object']
 SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
@@ -8184,11 +8193,11 @@ choice_index: ['choice index']
 choices: ['choices']
 choose_best_symbol: ['choose best symbol']
 chop_CSC: ['chop C. S. C.', 'chop CSC']
-chop_LSA: ['chop L. S. A.', 'chop lsa']
+chop_LSA: ['chop L. S. A.', 'chop LSA']
 chop_symbol: ['chop symbol']
 chop_word: ['chop word']
 chopped_CSC: ['chopped C. S. C.', 'chopped CSC']
-chopped_LSA: ['chopped L. S. A.', 'chopped lsa']
+chopped_LSA: ['chopped L. S. A.', 'chopped LSA']
 chopped_symbol: ['chopped symbol']
 chopped_word: ['chopped word']
 chosen_match: ['chosen match']
@@ -8199,7 +8208,7 @@ clean_written_form: ['clean written form']
 cmd: ['cmd', 'command']
 cmd_index: ['cmd index', 'command index']
 cmd_without_CSC: ['cmd without C. S. C.', 'cmd without CSC', 'command without C. S. C.', 'command without CSC']
-cmd_without_LSA: ['cmd without L. S. A.', 'cmd without lsa', 'command without L. S. A.', 'command without lsa']
+cmd_without_LSA: ['cmd without L. S. A.', 'cmd without LSA', 'command without L. S. A.', 'command without LSA']
 cmd_without_symbol: ['cmd without symbol', 'command without symbol']
 cmd_without_word: ['cmd without word', 'command without word']
 cmds_this_spoken_form: ['commands this spoken form']
@@ -8220,7 +8229,7 @@ dummy: ['dummy']
 else: ['else']
 end: ['end']
 environ: ['environ', 'environment']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 first: ['first']
 floor: ['floor']
@@ -8317,7 +8326,7 @@ type: ['type']
 untranslated_text: ['untranslated text']
 upper: ['upper']
 upto: ['upto']
-vc_globals: ['V. C. globals', 'VC globals']
+vc_globals: ['V. C. globals', 'vc globals']
 vocabulary_entry: ['vocabulary entry']
 while: ['while']
 word_consumes: ['word consumes']
@@ -8762,7 +8771,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 floor: ['floor']
 len: ['len', 'length']
@@ -9246,7 +9255,7 @@ cos: ['cos', 'cosine']
 def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 do_some_more: ['do some more']
 do_some_stuff: ['do some stuff']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 floor: ['floor']
 if: ['if']
@@ -9731,7 +9740,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9751,7 +9760,7 @@ atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
 atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
 ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
-exp: ['E. X. P.', 'EXP', 'exponential']
+exp: ['exp', 'exponential']
 f_name: ['F. name']
 f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
@@ -9857,7 +9866,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'N:\DavidFox\Code\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12820,6 +12829,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  2090.81700003 secs
+Test suite completed in:  585.540999889 secs
 -----------------------------------------------
-MessTransporter_Socket.receive_string: no data received in Thread-6
