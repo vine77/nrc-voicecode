@@ -69,7 +69,7 @@ class BuffTracker(Object):
         return self.buff_name
     def rename_buffer_cbk(self, new_buff_name):
         self.buff_name = new_buff_name
-    def pos_selection_cbk(self):
+    def pos_selection_cbk(self, pos, selection):
         pass
 
 class ClosedBuffer(BuffTracker):
@@ -97,7 +97,7 @@ class ClosedBuffer(BuffTracker):
         return self.buff_name
     def rename_buffer_cbk(self, new_buff_name):
         self.buff_name = new_buff_name
-    def pos_selection_cbk(self):
+    def pos_selection_cbk(self, pos, selection):
         pass
 
 class DeadBuffer(Exception):
@@ -137,7 +137,7 @@ class ClosedBuffer(BuffTracker):
     def rename_buffer_cbk(self, new_buff_name):
         raise DeadBuffer(self.name(), 'rename_buffer_cbk',
                          {'new_buff_name': new_buff_name} )
-    def pos_selection_cbk(self):
+    def pos_selection_cbk(self, pos, selection):
         raise DeadBuffer(self.name(), 'pos_selection_cbk')
 
         
@@ -390,7 +390,7 @@ class BuffInsertionTracker(BuffTracker):
         return self.buff_name
     def rename_buffer_cbk(self, new_buff_name):
         self.buff_name = new_buff_name
-    def pos_selection_cbk(self):
+    def pos_selection_cbk(self, pos, selection):
         pass
     
 class LooseMatch(Object):
