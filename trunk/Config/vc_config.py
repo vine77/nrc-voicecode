@@ -976,7 +976,7 @@ python_statements = LSAliasSet('simple Python statements',
 python_statements.add_lsa(LSAlias(['global', 'global variable', 'global variables'],
         {'python': 'global '}))
 
-python_statements.add_lsa(LSAlias(['del', 'delete', 'delete object',
+python_statements.add_lsa(LSAlias(['del', 'delete object',
          'delete instance', 'delete item'],
         {'python': 'del '}))
 

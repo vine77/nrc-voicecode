@@ -417,16 +417,19 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         **OUTPUTS**
         
-        [ [AS_Update]  ] *none* -- 
+        [ AS_Update ] -- the list of update objects
 
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
         debug.trace('AppStateMessaging.apply_upd_descr', '** invoked')
+        updates = []
         for a_descr in upd_descr_list:
             debug.trace('AppStateMessaging.apply_upd_descr', '** a_descr=%s' % a_descr)        
             the_update = AppState.create_update(a_descr)
+            updates.append(the_update)
             the_update.apply(self)
         debug.trace('AppStateMessaging.apply_upd_descr', '** exiting')
+        return updates
 
     def app_active_buffer_name(self):
         

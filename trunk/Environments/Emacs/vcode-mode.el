@@ -2922,7 +2922,7 @@ the range specified in default"
 	(progn
 	  (setq tmp end)
 	  (setq end start)
-	  (setq start end)
+	  (setq start tmp)
 	  )      
       )
     (list start end)
