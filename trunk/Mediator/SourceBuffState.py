@@ -44,11 +44,12 @@ class SourceBuffState(SourceBuffCookie):
     
     """
     
-    def __init__(self, buff_name, contents, selection, **attrs):
+    def __init__(self, buff_name, contents, selection, cursor_at = 1, **attrs):
         self.deep_construct(SourceBuffState,
                             {'text': contents,
                             'buff_name': buff_name,
-                            'selection_range': selection},
+                            'selection_range': selection,
+                            'cursor_at_end': cursor_at},
                             attrs
                             )
 
@@ -88,13 +89,27 @@ class SourceBuffState(SourceBuffCookie):
         
         **OUTPUTS**
 
-        *INT* (start, end)
+        *(INT, INT)* -- (start, end)
 
         start is the offset into the buffer of the start of the current
         selection.  end is the offset into the buffer of the character 
         following the selection (this matches Python's slice convention).
         """
         return self.selection_range
+
+    def cursor_at(self):
+        """tells at which end of the selection the cursor was located
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *INT* -- 1 if cursor is at the end of the selection, 0 if it is
+        at the start
+        """
+        return self.cursor_at_end
 
     def contents(self):
         """returns stored contents

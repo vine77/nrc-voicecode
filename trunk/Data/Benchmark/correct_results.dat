@@ -330,7 +330,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 244acf0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 245a430>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1906,12 +1906,6 @@ scratching 1
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
-  3:       return 8<CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class clown(student):
-  2:    def popularity(self):
   3:       <CURSOR>
 
 *** End of source buffer ***
@@ -1936,12 +1930,6 @@ scratch 1 succeeded as expected
 
 scratching 1
 
-*** Start of source buffer ***
-  1: class clown(student):
-  2:    def popularity(self):
-  3:       <CURSOR>
-
-*** End of source buffer ***
 *** Start of source buffer ***
   1: class clown(student):
   2:    <CURSOR>
@@ -2098,16 +2086,6 @@ utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
   1: class cloud(student):
-  2:    fine method popularityreturn 8<CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
-  2:    fine method popularity<CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
@@ -2152,28 +2130,6 @@ word cloud being replaced with clown
 utterance 4 was changed 
 utterance 4 was corrected
 about to reinterpret
-*** Start of source buffer ***
-  1: class cloud(student):
-  2:    def popularity(self):
-  3:       return 8<CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
-  2:    def popularity(self):
-  3:       <CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student):
-  2:    <CURSOR>
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class cloud(student<CURSOR>):
-  2:    
-
-*** End of source buffer ***
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2384,12 +2340,6 @@ scratching 1
   2:    def popularity(self):
   3:       return 8
   4:    excess = 1
-  5: results[0] = 0<CURSOR>
-
-*** End of source buffer ***
-  2:    def popularity(self):
-  3:       return 8
-  4:    excess = 1
   5: <CURSOR>
 
 *** End of source buffer ***
@@ -2412,18 +2362,6 @@ word excess being replaced with access
 utterance 2 was changed 
 utterance 2 was corrected
 about to reinterpret
-  2:    def popularity(self):
-  3:       return 8
-  4:    excess = 1
-  5: <CURSOR>
-
-*** End of source buffer ***
-  2:    def popularity(self):
-  3:       return 8
-  4:    excess = 1
-  5:    <CURSOR>
-
-*** End of source buffer ***
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -3403,7 +3341,7 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 2758a20> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 274c4f0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -11426,7 +11364,7 @@ Associate 'new method' with symbol (Enter selection):
 
 
 -----------------------------------------------
-Test suite completed in:  2010.55000007 secs
+Test suite completed in:  1986.04999995 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

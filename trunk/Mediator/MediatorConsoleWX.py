@@ -101,6 +101,12 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     *wxFrame main_frame* -- the main frame window of the console, which
     will be the parent for most modal dialogs
 
+    *(INT, INT) corr_box_pos* -- most recent position of the correction
+    box
+
+    *(INT, INT) corr_recent_pos* -- most recent position of the correct
+    recent box
+
     **CLASS ATTRIBUTES**
     
     *none* 
@@ -108,6 +114,8 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     def __init__(self, main_frame, **attrs):
         self.deep_construct(MediatorConsoleWX,
                             {'main_frame': main_frame,
+                             'corr_box_pos': None,
+                             'corr_recent_pos': None
                             },
                             attrs, 
                             enforce_value = {'main_frame_handle':
@@ -234,11 +242,12 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         original = utterance.words()
         validator = CorrectionValidatorSpoken(utterance = utterance)
         box = CorrectionBoxWX(self, self.main_frame, utterance, validator, 
-            can_reinterpret, self.gram_factory)
+            can_reinterpret, self.gram_factory, pos = self.corr_box_pos)
 #        app = wxGetApp()
 #        evt = wxActivateEvent(0, true)
 #        app.ProcessEvent(evt)
         answer = self.show_modal_dialog(box)
+        self.corr_box_pos = box.GetPositionTuple()
         box.cleanup()
         box.Destroy()
         if answer == wxID_OK:
@@ -270,8 +279,9 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         """
         originals = map(lambda u: u[0].words(), utterances)
         box = CorrectRecentWX(self, self.main_frame, utterances, 
-            self.gram_factory)
+            self.gram_factory, pos = self.corr_recent_pos)
         answer = self.show_modal_dialog(box)
+        self.corr_recent_pos = box.GetPositionTuple()
         changed = box.changed()  
         box.cleanup()
         box.Destroy()
@@ -451,7 +461,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                 self.get_text, get_selection_cbk = self.get_selection,
                 select_cbk = self.on_select_text)
         if pos is None:
-            self.Center()
+            self.CenterOnScreen()
         s = wxBoxSizer(wxVERTICAL)
         intro = wxStaticText(self, wxNewId(), 
             "&Correct the text (use spoken forms)",
@@ -515,9 +525,9 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
         ok_button.SetDefault()
 # optionally, add additional buttons
-        extra_button_sizer = wxBoxSizer(wxHORIZONTAL)
-        if self.more_buttons(extra_button_sizer):
-            s.Add(extra_button_sizer, 0, wxEXPAND | wxALL, 10)
+        extra_buttons = self.more_buttons()
+        if extra_buttons:
+            s.Add(extra_buttons, 0, wxEXPAND | wxALL, 10)
         s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
 #        print 'ids', ok_button.GetId(), wxID_OK
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
@@ -533,18 +543,23 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         s.Fit(self)
 #        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
 
-    def more_buttons(self, button_sizer):
+    def more_buttons(self, button_sizer = None):
         """optionally, add additional buttons
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row
+        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        If None and if more_buttons wants to add buttons, it should
+        create a new horizontal wxBoxSizer.
+      
 
         **OUTPUTS**
 
-        *BOOL* -- true if more buttons were added
+        *wxBoxSizer* -- a reference to the same button sizer,
+        containing the added buttons, or None if none was passed to 
+        more_buttons and no more buttons were added
         """
-        return 0
+        return button_sizer
 
     def on_dismiss(self):
         self.EndModal(wxID_DISMISS_MODAL)
@@ -718,18 +733,23 @@ class CorrectNextPrevWX(CorrectionBoxWX):
                               'last_utterance': last_utterance})
         self.deep_construct(CorrectNextPrevWX, {}, args)
 
-    def more_buttons(self, button_sizer):
+    def more_buttons(self, button_sizer = None):
         """optionally, add additional buttons
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row
+        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        If None and if more_buttons wants to add buttons, it should
+        create a new horizontal wxBoxSizer.
+      
 
         **OUTPUTS**
 
-        *BOOL* -- true if more buttons were added
+        *wxBoxSizer* -- a reference to the same button sizer,
+        containing the added buttons, or None if none was passed to 
+        more_buttons and no more buttons were added
         """
-        CorrectionBoxWX.more_buttons(self, button_sizer)
+        button_sizer = CorrectionBoxWX.more_buttons(self, button_sizer)
         correct_previous = wxButton(self, wxNewId(), "Previous Phrase", 
             wxDefaultPosition, wxDefaultSize)
         correct_next = wxButton(self, wxNewId(), "Next Phrase", 
@@ -738,13 +758,16 @@ class CorrectNextPrevWX(CorrectionBoxWX):
             correct_previous.Enable(0)
         if self.last_utterance:
             correct_next.Enable(0)
+        if button_sizer is None:
+            button_sizer = wxBoxSizer(wxHORIZONTAL)
         button_sizer.Add(correct_previous, 0, wxALL)
         button_sizer.Add(correct_next, 0, wxALL)
         EVT_BUTTON(self, correct_previous.GetId(), 
             self.on_correct_previous)
         EVT_BUTTON(self, correct_next.GetId(), 
             self.on_correct_next)
-        return 1
+        return button_sizer
+
     def on_correct_previous(self, event):
         if self.Validate() and self.TransferDataFromWindow():
             self.EndModal(wxID_CORRECT_PREV)
@@ -760,18 +783,23 @@ class CorrectFromRecentWX(CorrectNextPrevWX):
     def __init__(self, **args):
         self.deep_construct(CorrectFromRecentWX, {}, args)
 
-    def more_buttons(self, button_sizer):
+    def more_buttons(self, button_sizer = None):
         """optionally, add additional buttons
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row
+        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        If None and if more_buttons wants to add buttons, it should
+        create a new horizontal wxBoxSizer.
+      
 
         **OUTPUTS**
 
-        *BOOL* -- true if more buttons were added
+        *wxBoxSizer* -- a reference to the same button sizer,
+        containing the added buttons, or None if none was passed to 
+        more_buttons and no more buttons were added
         """
-        CorrectNextPrevWX.more_buttons(self, button_sizer)
+        button_sizer = CorrectNextPrevWX.more_buttons(self, button_sizer)
         more_correction = wxButton(self, wxNewId(), "More Correction", 
             wxDefaultPosition, wxDefaultSize)
         discard_changes = wxButton(self, wxNewId(), "Discard Changes", 
@@ -780,9 +808,11 @@ class CorrectFromRecentWX(CorrectNextPrevWX):
             self.on_more_correction)
         EVT_BUTTON(self, discard_changes.GetId(), 
             self.on_discard_changes)
+        if button_sizer is None:
+            button_sizer = wxBoxSizer(wxHORIZONTAL)
         button_sizer.Add(more_correction, 0, wxALL)
         button_sizer.Add(discard_changes, 0, wxALL)
-        return 1
+        return button_sizer
 
     def on_more_correction(self, event):
         if self.Validate() and self.TransferDataFromWindow():
@@ -1088,7 +1118,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
             self.correct_n_gram = \
                 gram_factory.make_choices(choice_words = ['Correct'])
         if pos is None:
-            self.Center()
+            self.CenterOnScreen()
 
         s = wxBoxSizer(wxVERTICAL)
         intro = wxStaticText(self, wxNewId(), 
@@ -1203,9 +1233,11 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         box = CorrectFromRecentWX(console = self.console, parent = self, 
             utterance = utterance, validator = validator, 
             can_reinterpret = can_reinterpret, gram_factory = self.gram_factory,
+            pos = self.console.corr_box_pos,
             last_utterance = (n == 1), 
             first_utterance = (n == len(self.utterances)))
         answer = self.console.show_modal_dialog(box)
+        self.console.corr_box_pos = box.GetPositionTuple()
         box.cleanup()
         box.Destroy()
         if answer == wxID_OK:
@@ -1286,6 +1318,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                         self.GetHandle(), self.chose_by_voice)
                 self.first = 0
                 self.console.raise_wxWindow(self)
+                self.focus_recent()
 
     def chose_by_voice(self, n):
         i = len(self.phrases) - n
