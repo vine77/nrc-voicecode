@@ -3513,6 +3513,7 @@ def test_basic_correction():
     print "Checking that 'excess' is not in recent symbols anymore:"
     check_recent_symbols(instance_name)
     
+    
     sym_corrections = {}
     sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
     correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
@@ -3630,6 +3631,10 @@ def test_basic_correction():
     input.append('0\n')
     status.append(1)    
     test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+    
+    print '\n***Testing that symbol reformatting with empty list of reformattings does not cause a crash***\n'
+    correct_recent_symbols(instance_name, {}, user_input = '0\n')    
+    
     
 
 add_test('basic_correction', test_basic_correction, 

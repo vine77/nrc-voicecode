@@ -93,7 +93,15 @@ class BadRelativeUtteranceIndex(exceptions.RuntimeError):
     """Raised when the relative index of an utterance is wrong.
     """
     def __init__(self, rel_index, reason):
-       msg = "Relative uttereance index %s was %s" % (rel_index, reason)
+       msg = "Relative utterance index %s was %s" % (rel_index, reason)
+       RuntimeError.__init__(self, msg)
+       self.msg = msg
+       
+class BadUtteranceId(exceptions.RuntimeError):
+    """Raised when the ID of an utterance is wrong.
+    """
+    def __init__(self, utter_id, reason):
+       msg = "Utterance ID %s was %s" % (utter_id, reason)
        RuntimeError.__init__(self, msg)
        self.msg = msg
 
@@ -1542,10 +1550,33 @@ class NewMediatorObject(Object.OwnerObject):
         elif rel_index < 1:
             raise BadRelativeUtteranceIndex(rel_index, "too small")
             
-        utter_id = recent[-rel_index][1]            
-
-
+        utter_id = recent[-rel_index][1]
         return utter_id
+
+    def utter_id_to_rel_utter_index(self, utter_id, instance_name):
+        """Converts an absolute utterance ID to a relative utterance index 
+        (i.e. index from the end of the list of stored utterances) to an utterance
+        id.
+        **INPUTS**
+        
+        INT *utter_id*  -- the utterance id to be converted
+        
+        STR *instance_name* -- the editor 
+        
+        
+        **OUTPUTS**
+        
+        INT *rel_index* -- the index of that utterance, from the end of the
+        recent utterances list.
+        """
+        recent = self.recent_dictation(instance_name)
+        debug.trace('NewMediatorObject.utter_id_to_rel_utter_index', '** invoked, len(recent)=%s, range(1, len(recent)+1)= %s' % (len(recent), range(1, len(recent)+1)))
+        for rel_index in range(1, len(recent)+1):
+           debug.trace('NewMediatorObject.utter_id_to_rel_utter_index', '** rel_index=%s' % rel_index)
+           if recent[-rel_index][1] == utter_id:
+              return rel_index
+        
+        raise BadUtteranceId(utter_id, "not found in recent utterances list")
 
     def stored_utterances(self, instance_name):
         """queries the ResMgr to see how many dictated utterances have 
@@ -1734,12 +1765,13 @@ class NewMediatorObject(Object.OwnerObject):
         """
         corrections_hash = {}
         for a_symbol in corrections:
-           in_utter_with_id = a_symbol.in_utter_interp.utterance.utter_id
+           in_utter_with_id = a_symbol.in_utter_interp.utterance.id
+           in_utter_with_relative_id = self.utter_id_to_rel_utter_index(in_utter_with_id, instance_name)
            spoken_form = string.join(a_symbol.spoken_phrase())
            old_written = a_symbol.native_symbol()
            new_written = a_symbol.reformatted_to
            
-           corrections_hash[in_utter_with_id] = \
+           corrections_hash[in_utter_with_relative_id] = \
                   (spoken_form, old_written, new_written)
                                     
            a_symbol.reformat_to(None)
@@ -1755,7 +1787,8 @@ class NewMediatorObject(Object.OwnerObject):
         being done.
 
         *{INT: (STR, STR, STR)}* -- Description of the symbol corrections to be made.
-        The INT key is the index of the utterance where the correction should be made.
+        The INT key is the RELATIVE index (i.e. index from end of recent utterances list)
+        of the utterance where the correction should be made.
         The value is a 3ple of strings, specifying: 
            - the spoken form of the symbol to be corrected
            - its bad written form
@@ -1765,9 +1798,11 @@ class NewMediatorObject(Object.OwnerObject):
 
         *None*
         """
+        if len(corrections) == 0:
+           return
+           
         recent = self.recent_dictation(instance_name)
         utters_to_reinterpret_abs_indices = []
-        debug.trace('NewMediatorObject.correct_recent_symbols', 'corrections=%s' % repr(corrections))
         if self.can_correct_that_far_back(instance_name, corrections.keys()):
            for utter_rel_index in corrections.keys():
               spoken_form_used, bad_written, correct_written  \
@@ -1781,7 +1816,7 @@ class NewMediatorObject(Object.OwnerObject):
            #       That's because the same symbol may be formatted
            #       in different ways in the same file.
            #
-           #          C++ ex: CmdInterp cmd_interp;
+           #          C++ example: CmdInterp cmd_interp;
            #
            self.reinterpret_recent(instance_name, 
                                    utters_to_reinterpret_abs_indices, 

@@ -507,8 +507,8 @@ WARNING: source file 'blah.cpp' doesn't exist.
 *** End of source buffer ***
 Heard wrap header
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP8870125
-  2: #define BLAH_CPP8870125
+  1: #ifndef BLAH_CPP7941162
+  2: #define BLAH_CPP7941162
   3: 
   4: <CURSOR>
   5: #endif
@@ -518,8 +518,8 @@ Heard wrap header
 Saying: ['pound', 'include', 'quotes', 'string', 'after', 'quotes']
 Heard pound include quotes string after quotes
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP8870125
-  2: #define BLAH_CPP8870125
+  1: #ifndef BLAH_CPP7941162
+  2: #define BLAH_CPP7941162
   3: 
   4: #include "str"<CURSOR>
   5: #endif
@@ -527,7 +527,7 @@ Heard pound include quotes string after quotes
 
 *** End of source buffer ***
 Heard new line
-  2: #define BLAH_CPP8870125
+  2: #define BLAH_CPP7941162
   3: 
   4: #include "str"
   5: <CURSOR>
@@ -1887,7 +1887,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F2CB48>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01C194E8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -4859,6 +4859,9 @@ Heard new statement other symbol equals one
  16:         
 
 *** End of source buffer ***
+
+***Testing that symbol reformatting with empty list of reformattings does not cause a crash***
+
 
 
 *******************************************************************************
@@ -11511,7 +11514,7 @@ Heard move horizontally
 
 .....
 ----------------------------------------------------------------------
-Ran 5 tests in 0.160s
+Ran 5 tests in 0.170s
 
 OK
 
@@ -11523,7 +11526,7 @@ OK
 
 ......
 ----------------------------------------------------------------------
-Ran 6 tests in 0.300s
+Ran 6 tests in 0.301s
 
 OK
 
@@ -14672,5 +14675,5 @@ OK
 
 
 -----------------------------------------------
-Test suite completed in:  533.757999897 secs
+Test suite completed in:  601.714999914 secs
 -----------------------------------------------

@@ -2852,8 +2852,8 @@ class ResMgrBasic(ResMgrStd):
         console = self.console()
         symbols = self.recent_symbols()
         if symbols:
-            reformatted_symbols = console.reformat_recent(self.name, symbols)
-        self.correct_symbol_results(self.instance_name, reformatted_symbols)
+           reformatted_symbols = console.reformat_recent(self.name, symbols)
+           self.console().correct_symbol_results(self.name, reformatted_symbols)
         
 
 
