@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 12 11:26:47 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class Object</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class Object - A base class for objects with safe attribute access methods</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="Object.html">Object</A></P>
+
+
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">Object</SPAN>:
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.def_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.def_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+</PRE><H2>Description</H2><P>
+This class defines a safe <EM>__setattr__</EM> method, which raise an
+exception when trying to set the value of an inexistant attribute.</P>
+<P>
+For performance reasons, these safe attribute setting methods are
+only invoked if environment variable <EM>$PY_DEBUG_OBJECT=1</EM>.</P>
+<P>
+Note that this class does not define a safe <EM>__getattr__</EM>
+method because Python already raises an exception when trying to
+get the value of an inexistant attribute.</P>
+<P>
+Profile tests on NT indicate that:</P>
+
+<UL>
+
+<LI>the speed of constructors for Object and non-Object instances are the same
+
+<LI>the speed of attribute <EM>gets</EM> is the same for Object and non-Object instances
+
+<LI>when <EM>$PY_DEBUG_OBJECT=0</EM>, the performance of attribute <EM>sets</EM> is the same for Object and non-Object instances
+
+<LI>when <EM>$PY_DEBUG_OBJECT=1</EM>, attribute <EM>sets</EM> are about 150% slower for Object instances than for non-Object instances
+</UL>
+<P>
+<STRONG>TEMPLATE CONSTRUCTOR</STRONG></P>
+<P>
+Constructors for each of the subclasses of <EM>Object</EM> are
+responsible for adding an entry in <EM>self.__dict__</EM> corresponding
+to the attributes defined by that class (otherwise those
+attributes will be considered as undefined by the safe
+<EM>__setattr__</EM> method)</P>
+<P>
+You can do this using the <A HREF="file:///./Object.Object.html#Object.Object.def_attrs">def_attrs</A> method.</P>
+<P>
+Note however that Python does not automatically invoke the
+constructor of every superclass of a class, so your constructor
+should do this explicitly. Below is a template constructor.</P>
+
+<H3>Example:</H3>
+<PRE CLASS="Example">
+   class AClass(Super1, ..., SuperN):
+      def __init__(self, attr1=val1, ..., attrN=valN, **attrs):
+         Super1.__init__(self)
+         ...
+         SuperN.__init__(self)
+         self.def_attrs({'attr1': attr1, ..., <CODE>attrN</CODE>: attrN}
+         self.init_attrs(attrs)</PRE>
+<P>
+Where <EM>attr1, ..., attrN</EM> are the new attributes defined by
+<EM>AClass</EM>, and <EM>val1, ..., valN</EM> are their default values. </P>
+<P>
+This guarantees that in the end, you have an instance of <EM>AClass</EM>
+with <EM>all</EM> attributes (i.e. attributes for this class and all superclasses)
+defined and set to their default values.</P>
+<P>
+Note the use of dictionary <EM>attrs</EM>. This dictionary collects
+additional attribute names and values which are then passed to
+method [init_attrs] to initialise attributes defined by
+superclasses of <EM>AClass</EM>. Thus if <EM>AClass</EM> is a subclass of
+<EM>Super1</EM> and if <EM>Super1</EM> defines attribute <EM>blah</EM>, then you can
+construct an instance of <EM>AClass</EM> with <EM>blah=1</EM> using the statement:</P>
+<P>
+<EM>x = AClass(blah=1)</EM></P>
+<P>
+without the constructor of <EM>AClass</EM> having to know explicitly
+about attribute <EM>blah</EM>.</P>
+<P>
+Note that the file <EM>Admin/python.el</EM> contains an Emacs macro
+<EM>py-obclass</EM> which automatically types this kind of template code
+for a class and its constructor</P>
+<P>
+<STRONG>INSTANCE ATTRIBUTE</STRONG></P>
+<P>
+<EM>none</EM> --</P>
+<P>
+<STRONG>CLASS ATTRIBUTE</STRONG></P>
+<P>
+<EM>none</EM> --</P>
+<H2 ID="Object.Object.def_attrs" CLASS="Method">Object.Object.def_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are set even if they do not exist in
+<EM>self.__dict__</EM>.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
