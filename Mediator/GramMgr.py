@@ -604,7 +604,7 @@ class WinGramMgr(GramMgrDictContext):
         if not self.dict_grammars[window].has_key(buffer):
             self.new_buffer(buffer, window)
             
-        if is_in_text_mode:
+        if is_in_text_mode and self.correction_grammars.has_key(window):
             self.correction_grammars[window].deactivate()          
            
         for buff_name in self.dict_grammars[window].keys():
@@ -812,7 +812,7 @@ class WinGramMgr(GramMgrDictContext):
             if self.global_grammars:
                 a_window = None
             self.text_mode_toggling_grammars[window] = \
-                self.factory.make_text_mode(manager=self.app, window=a_window)
+                self.factory.make_text_mode(manager=self.app, window=a_window, exclusive=self.exclusive)
            
 
     def delete_window(self, window):

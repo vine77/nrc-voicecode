@@ -35,7 +35,7 @@ class WinGram(OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *WinGramMgr* manager -- the grammar manager which owns this grammar
+    *AppState* manager -- the grammar manager which owns this grammar
 
     *BOOL* active -- is grammar active?
 
@@ -184,6 +184,13 @@ class WinGram(OwnerObject):
         """
         s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
         return s
+        
+    def recog_mgr(self):
+       """Returns the [RecogStartMgr] that manages this grammar.
+       
+       ..[RecogStartMgr] file:///./RecogStartMgr.RecogStartMgr.html"""
+        
+       return self.manager.manager.recog_mgr                       
 
 class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces

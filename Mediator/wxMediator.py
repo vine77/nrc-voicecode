@@ -56,8 +56,6 @@ import WinSystemMSW
 debug.config_traces(status="on", 
                     active_traces={
 ###################################################################
-#                         'Object.deep_construct': 1,                    
-###################################################################
 #                        'ListenAndQueueMsgsThread': 1,
 #                        'sim_commands.say': 1,
 #                        'SB_ServiceFullState': 1,

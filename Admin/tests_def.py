@@ -1973,6 +1973,17 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, e1)
 
+    print '\nSetting text mode on'
+    manager.recog_mgr.set_text_mode(1)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+
+    print '\nSetting text mode off'
+    manager.recog_mgr.set_text_mode(0)
+    print 'starting recognition in ', repr(current.window_info())
+    start_recog(manager, current)
+    
+
     set_window(current, windows[50], None, alt_title = 'D:\Projects')
     print 'starting recognition in ', repr(current.window_info())
     start_recog(manager, current)
@@ -3004,16 +3015,12 @@ def test_normal_text_dictation():
    
    commands.open_file('blah.py')   
    commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   print "is_in_text_mode=%s" % recog_mgr.is_in_text_mode
    commands.say(['text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
+   print "is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
    
-#   recog_mgr.set_text_mode(1)
-#   print 'Setting VCode in text mode.'
-#   commands.say(['bug', 'this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'but', 'it', 'is', 'never', 'typed'], never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
-#   print 'Setting VCode in code dictation mode.'   
-#   recog_mgr.set_text_mode(0)
-#   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   
-#auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
+  
+auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
 
 
 ##############################################################################

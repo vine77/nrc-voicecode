@@ -132,7 +132,7 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.setContext(before, after)
 
     def gotResultsObject(self, recogType, results):
-            debug.trace('DictWinGramNL.gotResultsObject', 'recogType=%s, results=%s' % (recogType, repr(results)))
+            debug.trace('DictWinGramNL.gotResultsObject', 'recogType=%s, results=%s, self.exclusive=%s' % (recogType, repr(results), self.exclusive))
             if recogType == 'self':
                 utterance = \
                     sr_interface.SpokenUtteranceNL(results, self.wave_playback)
@@ -703,7 +703,7 @@ class WinGramFactoryNL(WinGramFactory):
             get_selection_cbk = get_selection_cbk, 
             select_cbk = select_cbk)
             
-    def make_text_mode(self, manager, window=None):
+    def make_text_mode(self, manager, window=None, exclusive=0):
         """Create a new grammar for toggling text-mode on and off.
         
         **INPUTS**
@@ -715,7 +715,7 @@ class WinGramFactoryNL(WinGramFactory):
         *TextModeGram* -- the command grammar for toggling text-mode.
         
         """
-        return TextModeTogglingGramNL(manager=manager, window=window)
+        return TextModeTogglingGramNL(manager=manager, window=window, exclusive=exclusive)
             
 
 class ChoiceGramNL(ChoiceGram, GrammarBase):
@@ -1358,6 +1358,7 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
     """
 
     def __init__(self, window=None, **attrs):
+        debug.trace('TextModeTogglingGramNL.__init__', 'window=%s, attrs=%s' % (window, repr(attrs)))
         self.deep_construct(TextModeTogglingGramNL,
             {}, attrs, exclude_bases = {GrammarBase:1})
         GrammarBase.__init__(self)
@@ -1414,18 +1415,17 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
                 'was active')
             GrammarBase.deactivateAll(self)
             self.active = 0
-            
+
+    def gotBegin(self, moduleInfo):
+        debug.trace('TextModeTogglingGramNL.gotBegin', '** self.exclusive=%s' % self.exclusive)
     
     def gotResults_text_mode_on(self, words, full_results):
-        print "Setting text mode on"
+        self.recog_mgr().is_in_text_mode = 1
 
     def gotResults_text_mode_off(self, words, full_results):
-        print "Setting text mode off"
+        self.recog_mgr().is_in_text_mode = 0    
 
 
-# Is this needed?
-    def gotResultsObject(self, recog_type, results):
-        if recog_type == 'self':
-            utterance = sr_interface.SpokenUtteranceNL(results)
-            self.results_callback(utterance.words())
+
+
 
