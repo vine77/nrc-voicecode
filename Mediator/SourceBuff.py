@@ -688,6 +688,120 @@ class SourceBuff(Object):
 	"""Force a refresh of the buffer"""
 	debug.virtual('SourceBuff.refresh')
 
+    def _state_cookie_class(self):
+	"""returns the class object for the type of cookie used by
+	store_current_state.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*CLASS* -- class of state cookies corresponding to this
+	SourceBuff
+
+	"""
+        debug.virtual('SourceBuff._state_cookie_class')
+	
+    def store_current_state(self):
+	"""stores the current state of the buffer, including both the
+	contents and the current selection, for subsequent restoration.
+	Store_current_state returns a "cookie" which can be passed to
+	restore_state or compare_with_current.  The type and attributes
+	of the cookie will depend on the specific subclass of
+	SourceBuff.  In the most straightforward implementation, it 
+	may include a copy of the entire contents of the
+	buffer and the selection.  In other cases, particularly when the
+	editor or SourceBuff provides an internal undo stack, it may simply be a
+	reference to a point in this stack.
+	
+	Important Notes:
+	
+        You should only pass the cookie to methods of
+	the SAME SourceBuff object from which it came.  Generally,
+	cookies can not be pickled and retrieved.
+
+	The type of cookie will vary with the concrete subclass 
+	of SourceBuff.  The corresponding class object is 
+	returned by _state_cookie_class.  However, external callers
+	should not depend on the type, attributes, or methods 
+	of the cookie.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*SourceBuffCookie* -- state cookie (see above).  Note that
+	SourceBuffCookie is a dummy type, not an actual class.  The
+	actual return type will vary with SourceBuff subclass.
+	"""
+        debug.virtual('SourceBuff.store_current_state')
+
+    def restore_state(self, cookie):
+	"""restores the buffer to its state at the time when
+	the cookie was returned by store_current_state.  Both the
+	contents and the selection will be restored.  However, other
+	data, such as the search history, may not.  The restore
+	operation can fail, which will be indicated by a return value of
+	0, so the caller should always check the return value.
+	
+	**INPUTS**
+
+	*SourceBuffCookie cookie* -- see above.  Note that
+	SourceBuffCookie is a dummy type, not an actual class.  The
+	actual type will vary with SourceBuff subclass.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if restore was successful
+
+	"""
+        debug.virtual('SourceBuff.restore_state')
+
+    def compare_with_current(self, cookie, selection = 0):
+	"""compares the current buffer state to its state at the time when
+	the cookie was returned by store_current_state.  By default,
+	only the buffer contents are compared, not the selection, unless
+	selection == 1.  If the state corresponding to the cookie has
+	been lost, compare_with_current will return false.
+
+	**INPUTS**
+
+	*SourceBuffCookie cookie* -- see store_current_state.  Note that
+	SourceBuffCookie is a dummy type, not an actual class.  The
+	actual type will vary with SourceBuff subclass.
+
+	*BOOL* selection -- compare selection as well as contents
+
+	**OUTPUTS**
+
+	*BOOL* -- true if state is the same, false if it is not, or
+	it cannot be determined due to expiration of the cookie
+	"""
+        debug.virtual('SourceBuff.compare_with_current')
+
+
+    def valid_cookie(self, cookie):
+	"""checks whether a state cookie is valid or expired.
+	If the state corresponding to the cookie has
+	been lost, valid_cookie will return false.
+
+	**INPUTS**
+
+	*SourceBuffCookie cookie* -- see store_current_state.  Note that
+	SourceBuffCookie is a dummy type, not an actual class.  The
+	actual type will vary with SourceBuff subclass.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if cookie is valid (i.e. restore_state should be
+	able to work)
+	"""
+        debug.virtual('SourceBuff.valid_cookie')
+
     def search_for(self, regexp, direction=1, num=1, where=1):
         
         """Moves cursor to the next occurence of regular expression

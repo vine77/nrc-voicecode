@@ -319,7 +319,7 @@ class WaxEdSimFrame(wxFrame):
         menuBar=wxMenuBar()
         menuBar.Append(file_menu,"&File");
         menuBar.Append(edit_menu,"&Edit");
-        menuBar.Append(format_menu,"&Format");        
+        menuBar.Append(format_menu,"F&ormat");        
         menuBar.Append(window_menu, "&Window");
 
         self.CreateStatusBar()

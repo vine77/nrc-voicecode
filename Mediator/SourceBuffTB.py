@@ -26,7 +26,9 @@ import debug
 import re, string, sys
 import SourceBuffIndent
 
+
 from Object import Object
+import SourceBuffState
 
 class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
     """implementation of (most of) SourceBuff as a wrapper around an
@@ -299,3 +301,131 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
 	self.underlying.goto_line(linenum, where)
+
+
+    def _state_cookie_class(self):
+	"""returns the class object for the type of cookie used by
+	store_current_state.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*CLASS* -- class of state cookies corresponding to this
+	SourceBuff
+
+	"""
+	return SourceBuffState.SourceBuffState
+	
+    def store_current_state(self):
+	"""stores the current state of the buffer, including both the
+	contents and the current selection, for subsequent restoration.
+	Store_current_state returns a "cookie" which can be passed to
+	restore_state or compare_with_current.  The type and attributes
+	of the cookie will depend on the specific subclass of
+	SourceBuff.  In the most straightforward implementation, it 
+	may include a copy of the entire contents of the
+	buffer and the selection.  In other cases, particularly when the
+	editor or SourceBuff provides an internal undo stack, it may simply be a
+	reference to a point in this stack.
+	
+	Important Notes:
+	
+        You should only pass the cookie to methods of
+	the SAME SourceBuff object from which it came.  Generally,
+	cookies can not be pickled and retrieved.
+
+	The type of cookie will vary with the concrete subclass 
+	of SourceBuff.  The corresponding class object is 
+	returned by _state_cookie_class.  However, external callers
+	should not depend on the type, attributes, or methods 
+	of the cookie.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*SourceBuffState* -- state cookie (see above)
+	"""
+	cookie = SourceBuffState.SourceBuffState(file_name = self.file_name, 
+	    contents = self.contents(), selection =
+	    self.get_selection())
+	return cookie
+
+    def restore_state(self, cookie):
+	"""restores the buffer to its state at the time when
+	the cookie was returned by store_current_state.  Both the
+	contents and the selection will be restored.  However, other
+	data, such as the search history, may not.  The restore
+	operation can fail, which will be indicated by a return value of
+	0, so the caller should always check the return value.
+	
+	**INPUTS**
+
+	*SourceBuffState cookie* -- see above.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if restore was successful
+
+	"""
+	if self.valid_cookie(cookie):
+	    self.set_text(cookie.contents())
+	    self.set_selection(cookie.get_selection())
+	    self.refresh_if_necessary()
+	    return 1
+	return 0
+
+
+    def compare_with_current(self, cookie, selection = 0):
+	"""compares the current buffer state to its state at the time when
+	the cookie was returned by store_current_state.  By default,
+	only the buffer contents are compared, not the selection, unless
+	selection == 1.  If the state corresponding to the cookie has
+	been lost, compare_with_current will return false.
+
+	**INPUTS**
+
+	*SourceBuffState cookie* -- see store_current_state.
+
+	*BOOL* selection -- compare selection as well as contents
+
+	**OUTPUTS**
+
+	*BOOL* -- true if state is the same, false if it is not, or
+	it cannot be determined due to expiration of the cookie
+	"""
+	if not self.valid_cookie(cookie):
+	    return 0
+# unable to make comparison, so treat as false
+	if self.contents() != cookie.contents():
+	    return 0
+	if not selection:
+	    return 1
+	return self.get_selection() == cookie.get_selection()
+	
+    def valid_cookie(self, cookie):
+	"""checks whether a state cookie is valid or expired.
+	If the state corresponding to the cookie has
+	been lost, valid_cookie will return false.
+
+	**INPUTS**
+
+	*SourceBuffState cookie* -- see store_current_state. 
+
+	**OUTPUTS**
+
+	*BOOL* -- true if cookie is valid (i.e. restore_state should be
+	able to work)
+	"""
+# this is not intended to be a complete test.  Basically, valid_cookie
+# is more important for SourceBuffs which have an internal undo-stack or
+# change history.  In the case, however, given the brute force implementation of
+# SourceBuffState, there isn't really much point in trying to detect whether 
+# the caller has forged a cookie.
+	return self.file_name == cookie.name()
+
