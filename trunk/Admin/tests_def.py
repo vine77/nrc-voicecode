@@ -2741,8 +2741,7 @@ def test_insert_delete_commands():
    commands.say(['back space 4'])
    commands.say(['back space 5'])
 
-# commenting this out until backspace is implemented in a generic way - DCF
-# auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
+auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
 
 ##############################################################################
@@ -2799,7 +2798,47 @@ auto_test.add_test('large_messages', test_large_messages, desc='Send a message t
 ##############################################################################
 
 def test_temporary():
-   pass
+    native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
+    testing.init_simulator_regression()
+    names = testing.namespace()
+    commands = names['commands']
+#    commands.compile_symbols([native_py_file])
+
+    #
+    # These words must be in the SR vocab, otherwise some of the say()
+    # statements will faile
+    #
+    sr_interface.addWord(sr_interface.vocabulary_entry('aliases', 'aliases'))
+    sr_interface.addWord(sr_interface.vocabulary_entry('globals', 'globals'))
+
+    commands.open_file('blah.py')
+        
+    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['define', 'method', 'initialize'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+
+    commands.say(['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['back indent'], echo_utterance=1)
+    
+    commands.say(['method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    commands.say(['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+    
+    commands.say(['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+    
+    commands.say(['back indent'], echo_utterance=1)    
+    
+    commands.say(['return', 'regular', 'expression', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    
+    
+
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')
 

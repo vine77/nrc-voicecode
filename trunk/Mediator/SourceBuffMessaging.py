@@ -745,6 +745,7 @@ class SourceBuffInsertIndentMess(SourceBuffMessaging):
 
         *none*
         """
+        
 # by default, assume that the remote editor does indentation.
 # Subclasses for particular editors which use mediator-based indentation 
 # can always override this choice.

@@ -735,6 +735,7 @@ class SourceBuff(OwnerObject):
         *none*
         """
 
+         
         #
         # Tabs in the code to insert are only useful when using
         # server-side indentation. This version of insert_indent()

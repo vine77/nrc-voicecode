@@ -24,7 +24,7 @@ VoiceCode via a messaging protocol."""
 
 import messaging, sb_services, SourceBuffMessaging
 
-class SourceBuffEmacs(SourceBuffMessaging.SourceBuffMessaging):
+class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
     
     """Interface to a buffer of the Emacs editor.
     

@@ -29,6 +29,14 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
+;;;deb DELETE THIS ONCE DONE DEBUGGING 'vcode-cmd-decr-indent-level
+(setq tmp-use-variant "1")
+(defun tmp-set-variant (variant)
+   (interactive "sEnter variant number: ")
+   (setq tmp-use-variant variant)
+)
+;;;fin
+
 ;;; Change this if you want to see more traces
 (setq message-log-max 5000)
 
@@ -259,13 +267,15 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 
 ;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
 
 ; Until we know that the new mechanism for fixing the selected-frame
 ; problem works, these traces should be left on - DCF
-(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
-(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
+;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
 
 
 
@@ -292,7 +302,6 @@ sent."
    (let ((all-buffs (buffer-list)) (curr-buffer))
      (while all-buffs
        (setq curr-buffer (car all-buffs))
-       (message "-- curr-buffer=%S, (buffer-name curr-buffer)=%S" curr-buffer (buffer-name curr-buffer))
        (setq all-buffs (cdr all-buffs))
        (kill-buffer curr-buffer)
      )
@@ -318,8 +327,6 @@ sent."
   (setq vr-log-read t)
   (setq vr-log-send t)
 )
-
-
 
 (defun vcode-test ()
   (interactive)
@@ -982,6 +989,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
+    (vcode-trace "vcode-execute-command-string" "command-string=%S" command-string)
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -1123,10 +1131,7 @@ Changes are put in a changes queue `vr-queued-changes.
   (vcode-trace "vr-output-filter" "invoked\n")
   (let* ((handler) (parsed) (vr-request) (vr-cmd))
     
-    (vcode-trace "vr-output-filter" "** trying to parse message\n")
     (setq parsed (vcode-try-parsing-message vr-reading-string))
-    (vcode-trace "vr-output-filter" "** done parsing message, parsed=%S\n" 
-		 parsed)
     
     (if parsed
 	(progn
@@ -1352,7 +1357,6 @@ speech server"
     (remove-hook 'kill-buffer-hook 'vr-kill-buffer)
     (remove-hook 'suspend-hook 'vcode-send-suspended)
     (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
-
     (setq frame-title-format 
           `("%b -- " (, invocation-name "@" system-name)))
     (vr-activate-buffer nil)
@@ -1497,14 +1501,6 @@ which is the list representing the command and its arguments."
   ;;
   (let ()
 
-    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame: %S\n"
-        (selected-frame))
-    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame handle: %S\n"
-        (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame handle is of type: %S\n"
-        (type-of (cdr (assoc 'window-id (frame-parameters (selected-frame))))))
-    (vcode-trace "vr-cmd-alt-frame-activated" "** init buffer: %S\n"
-        (buffer-name (current-buffer)))
     (global-set-key "\C-\M--" "")
 ; Emacs lisp (Node: Focus Events) claims that a keyboard key or mouse
 ; button should trigger a focus event (consistent with Barry Jaspan's
@@ -1930,8 +1926,6 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (add-hook 'suspend-hook 'vcode-send-suspended)
   (add-hook 'suspend-resume-hook 'vcode-send-resuming)
 
-
-
   ;;; Function for handling errors in execution of commands received from 
   ;;; VR.exe.
   (setq vr-upon-cmd-error 'vcode-send-cmd-error-message)
@@ -2001,6 +1995,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
 ;;;  (cl-puthash 'make_position_visible 'vcode-cmd-make-position-visible vr-message-handler-hooks)
   (cl-puthash 'move_relative_page 'vcode-cmd-move-relative-page vr-message-handler-hooks)  
   (cl-puthash 'insert 'vcode-cmd-insert vr-message-handler-hooks)  
+  (cl-puthash 'insert_indent 'vcode-cmd-insert-indent vr-message-handler-hooks)  
   (cl-puthash 'set_text 'vcode-cmd-set-text vr-message-handler-hooks)  
   (cl-puthash 'indent 'vcode-cmd-indent vr-message-handler-hooks)  
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
@@ -2609,10 +2604,6 @@ message.
   ;;; kill-buffer will prompt user if buffer needs saving
   ;;;
 
-  ;;; beg
-;  (vr-log "**-- vcode-kill-buffer: sleeping for 10 secs, to make sure all the pending change notifications happen before we rename the current buffer to ignorethisfie.tmp\n")
-;  (sleep-for 10)
-  ;;; end
 
   (if (eq 0 save) 
       (progn
@@ -3161,6 +3152,7 @@ change reports it sends to VCode.
 
 
 	(set-buffer buff-name)
+
 	(kill-region delete-start delete-end)
 	(set-mark nil)
 
@@ -3169,6 +3161,48 @@ change reports it sends to VCode.
 	(vr-send-queued-changes)
     )
 )
+
+(defun vcode-cmd-insert-indent (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+	(code-bef) (code-after) (range) (buff-name) (vr-request) 
+	(delete-start) (delete-end))
+	(setq code-bef (wddx-coerce-string (cl-gethash "code_bef" mess-cont)))
+	(setq code-after (wddx-coerce-string (cl-gethash "code_after" mess-cont)))
+	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
+	(setq range (cl-gethash "range" mess-cont))
+	(setq delete-start (elt range 0))
+	(setq delete-end (elt range 1))
+
+
+	(set-buffer buff-name)
+
+
+	(kill-region delete-start delete-end)
+
+;;; Do we really need to invoke code indentation? I think 
+;;; will do that automatically.
+;;;
+
+;	(set-mark (point))
+        (vcode-execute-command-string code-bef)
+;	(save-excursion
+;	  (vcode-indent-region (mark) (point))
+;	)
+
+	(save-excursion
+;	  (set-mark (point))
+	  (vcode-execute-command-string code-after)
+;	  (vcode-indent-region (mark) (point))
+;	  (set-mark nil)
+	)
+
+	(set-mark nil)
+
+	(vr-send-queued-changes)
+    )
+)
+
 
 (defun vcode-cmd-set-text (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
@@ -3189,17 +3223,15 @@ change reports it sends to VCode.
             (kill-region start end)
             (vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
             (set-mark nil)
+        )
 
         ;;;
 	;;; We don't use 'vcode-execute-command-string because set_text message
         ;;; is used to restore a buffer to a previous state (which is
         ;;; assumed to have already been indented properly)
-            (insert text)
+	(insert text)
 
-            (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
-
-            (vr-send-queued-changes)
-        )
+ 	(vr-send-queued-changes)
     )
 )
 
@@ -3238,12 +3270,14 @@ change reports it sends to VCode.
 
     (vr-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
 
-    (save-excursion
-      (set-buffer buff-name)
-      (set-mark nil)
-      (vcode-unindent-region indent-start indent-end levels) 
-      (vr-log "--** vcode-cmd-decr-indent-level: upon exit, (point)=%S, (mark)=%S, buffer contains\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
-    )
+    ;;;
+    ;;; Note: don't enclose this in a save-excursion because it causes problems
+    ;;;       with Python unindentation of single blank lin
+    ;;;
+    (set-buffer buff-name)
+
+    (set-mark nil)
+    (vcode-unindent-region indent-start indent-end levels) 
 
     (vr-send-queued-changes)
   )
@@ -3300,9 +3334,7 @@ tabs.
 (defun vcode-unindent-region (start end n-levels)
   "Deindents region from START to END by N-LEVELS levels."
   (let (end-line)
-    (vr-log "--** vcode-unindent-region: start=%S, end=%S, n-levels=%S, (point)=%S, (mark)=%S, buffer content is\n%S\n" start end n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
     (for-lines-in-region-do start end 'vcode-unindent-line (list n-levels))
-    (vr-log "-- vcode-unindent-region: upon exit, (point)=%S, (mark)=%S, buffer contains: \n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
 )
 
@@ -3314,28 +3346,34 @@ tabs.
       ;;; Move to the first non-blank character on the line, then simulate the
       ;;; backspace key multiple times.
       ;;;
-      (beginning-of-line)
-      (setq start-of-line (point))
-      (while (and (looking-at " ") (< (point) (point-max)))
-        (forward-char-nomark 1)
-        )
+      ;;; Don't enclose this in a save-excursion because it causes problems 
+      ;;; Python indentation of a blank line
+      ;;;
+;      (save-excursion
+	(beginning-of-line)
+	(setq start-of-line (point))
+	(while (and (looking-at " ") (< (point) (point-max)))
+	  (forward-char-nomark 1)
+	  )
 
-      ;;;
-      ;;; Don't backspace if empty line, because that will delete the line 
-      ;;; instead of deindenting.
-      ;;;
-      (if (not (or (eq start-of-line (point)) (eq 1 (point))))
-          (progn
-           (setq counter 0)
-	   (while (< counter n-levels)
-	     (save-excursion
-             ;;; Execute a command string containing just the backspace key
-	       (vcode-execute-command-string "\177")
-	     )
-             (setq counter (1+ counter))
+        ;;;
+        ;;; Don't backspace if empty line, because that will delete the line 
+        ;;; instead of deindenting.
+        ;;;
+	(if (not (or (eq start-of-line (point)) (eq 1 (point))))
+	    (progn
+	      (setq counter 0)
+	      (while (< counter n-levels)
+                  ;;; Execute a command string containing just the 
+		  ;;; backspace key
+;	          (vcode-execute-command-string "\177")
+;	          (vcode-execute-command-string "\127")
+	          (vcode-execute-command-string "\d")
+		  (setq counter (1+ counter))
+	      )
            )
-           )
-      )
+	  )
+;	)
 
      (vr-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
    )
@@ -3356,14 +3394,22 @@ tabs.
 
 (defun for-lines-in-region-do (start end do-this args)
   (let ((start-line) (end-line) (keep-going) (current-line))
-    (vr-log "--** for-lines-in-region-do: upon entry, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
-    (save-excursion
+
+     ;;; 
+     ;;; Don't enclose inside a save-excursion. It causes problems for
+     ;;; Python backindentation of a blank line. Basically, the cursor ends
+     ;;; up at the beginning of the line instead of at the place where
+     ;;; the cursor was when you deindented the line
+     ;;;
+     ;;; On the other hand, if you don't enclose it, you get other problems
+     ;;; when unindenting a non-blank line. Basically, the cursor is off
+     ;;; by some characters.
+     ;;;
+;    (save-excursion
        (setq end-line (what-line end))
-       (message "-- end-line=%S\n" end-line)
        (goto-char start)
        (setq keep-going t)
        (while keep-going
-         (message "-- processing line: current-line=%S, (point)=%S" (what-line (point)) (point))
          (apply do-this args)
 	 (setq current-line (what-line (point)))
          (if (<  current-line end-line)
@@ -3371,9 +3417,8 @@ tabs.
 	   (setq keep-going nil)
 	 )
        )
-       (vr-log "--** for-lines-in-region-do: before exiting save-excursion, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
-    )
-    (vr-log "--** for-lines-in-region-do: upon exit, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
+;;;
+;    )
   )
 )
 

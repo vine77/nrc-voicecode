@@ -321,6 +321,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
+	
 
         self.indent_srv.insert_indent(code_bef, code_after, range)
 
