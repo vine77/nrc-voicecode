@@ -414,6 +414,7 @@ class MediatorObject(Object.Object):
 	if self.cbk_filter:
 	    self.cbk_filter.cleanup()
 	    self.cbk_filter = None
+	del self.owner
                 
     def close_app_cbk(self, instance_name, unexpected = 0):
 	"""method called by our AppState to tell us that it is closing, or

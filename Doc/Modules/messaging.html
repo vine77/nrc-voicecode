@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:14:14 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 03 12:28:02 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,7 +15,8 @@
 
 
 <H1 CLASS="ModuleName">Module messaging</H1>
-<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessEncoder.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessEncoder</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Encoding scheme for messages.</SPAN>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.LightSleeper.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">LightSleeper</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessEncoder.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessEncoder</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Encoding scheme for messages.</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessEncoderWDDX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessEncoderWDDX</SPAN></A>(<A CLASS="DocLink" HREF="messaging.MessEncoder.html">MessEncoder</A>)</SPAN><SPAN CLASS="OneLiner"> # WDDX (an XML based protocol) Encoding scheme for messages.</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessEncoder_LenPrefArgs.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessEncoder_LenPrefArgs</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # Encoding scheme for messages with length prefixed argument values.</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessPackager.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessPackager</SPAN></A>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN><SPAN CLASS="OneLiner"> # <CODE>Shipping and receiving department</CODE> for messages.</SPAN>
@@ -26,9 +27,10 @@
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MessengerBasic.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessengerBasic</SPAN></A>(<A CLASS="DocLink" HREF="messaging.Messenger.html">Messenger</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.MixedMessenger.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MixedMessenger</SPAN></A>(<A CLASS="DocLink" HREF="messaging.Messenger.html">Messenger</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.SocketError.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SocketError</SPAN></A>(<A CLASS="DocLink" HREF="exceptions.RuntimeError.html">RuntimeError</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="messaging.WokenUp.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WokenUp</SPAN></A></SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messarg2int"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messarg2int</SPAN></A>(<SPAN CLASS="Argument">messarg</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Converts a message argument to an int.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messarg2intlist"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messarg2intlist</SPAN></A>(<SPAN CLASS="Argument">messarg</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Converts a message argument to a list of integers.</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messenger_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messenger_factory</SPAN></A>(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a messenger from proper compenents</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#messenger_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messenger_factory</SPAN></A>(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>, <SPAN CLASS="Argument">sleeper=None</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Creates a messenger from proper compenents</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\messaging.pyc'</SPAN></SPAN>
 </PRE><H2 ID="messarg2int" CLASS="Function">messarg2int(<SPAN CLASS="Argument">messarg</SPAN>)</H2>
 <P>Converts a message argument to an int.</P>
@@ -73,7 +75,7 @@ None | [INT] <EM>as_intlist</EM>
 <DD>The message argument converted a list of ints.
 
 </DL>
-<H2 ID="messenger_factory" CLASS="Function">messenger_factory(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>)</H2>
+<H2 ID="messenger_factory" CLASS="Function">messenger_factory(<SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>, <SPAN CLASS="Argument">sleeper=None</SPAN>)</H2>
 <P>Creates a messenger from proper compenents</P>
 
 <STRONG>INPUTS</STRONG>

@@ -21,6 +21,7 @@
 
 import auto_test, exceptions, os, posixpath, profile, sys
 import types
+import debug
 
 class EnforcedConstrArg(exceptions.Exception):    
     """Raised by [Object.deep_construct] when the value received for
@@ -854,7 +855,7 @@ class OwnerObject(Object):
 	    return 'because it does not have a cleanup method'
 	try:
 	    object.cleanup()
-	except error:
+	except:
 	    return 'because its cleanup method threw an exception'
 	
     def cleanup(self):
