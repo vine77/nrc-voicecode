@@ -2851,7 +2851,7 @@ class ResMgrBasic(ResMgrStd):
         debug.trace("ResMgrBasicreformat_recent_synchronous", "invoked")
         console = self.console()
         symbols = self.recent_symbols()
-        if symbol:
+        if symbols:
             console.reformat_recent(self.name, symbols)
         
 

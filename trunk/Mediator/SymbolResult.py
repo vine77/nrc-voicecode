@@ -20,6 +20,7 @@
 ##############################################################################
 
 from Object import Object
+import debug
 
 class SymbolResult(Object):
     """

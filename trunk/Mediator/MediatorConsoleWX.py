@@ -422,7 +422,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             return None
 
 
-    def show_recent_symbols(self, editor_name, utterances):
+    def show_recent_symbols(self, editor_name, symbols):
         """display a dialog box with recent symbols to allow the user to 
         select a recent symbol to reformat
 
@@ -430,10 +430,9 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         *STR editor_name* -- name of the editor instance
 
-        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        *[SymbolResult] symbols* -- symbols interpreted from the n most 
+        recent dictation utterances (it is assumed that those utterances
+        are reinterpretable).
 
         **OUTPUTS**
 
@@ -441,8 +440,9 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         those symbols which were corrected by the user, or None if
         none were corrected
         """
+        debug.trace('MediatorConsoleWX.show_recent_symbols', 'symbols=%s' % repr(symbols))
         print "This will eventually show the recent symbols, but it is not implemented yet."
-        box = ReformatRecentSymbolsModel(self, self.main_frame, utterances, 
+        box = ReformatRecentSymbolsModel(self, self.main_frame, symbols, 
                               self.gram_factory)
         answer = self.show_modal_dialog(box)
 #        self.corr_recent_pos = box.GetPositionTuple()
@@ -1646,7 +1646,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *(INT, INT) pos* -- position of the box in pixels
         """
-        debug.trace('ReformatRecentSymbolsView.__init__', 'symbols=%s' % symbols)
+        debug.trace('ReformatRecentSymbolsViewWX.__init__', 'symbols=%s' % symbols)
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
@@ -1698,7 +1698,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
         recent.InsertColumn(1, "Spoken symbol")
         recent.InsertColumn(2, "Written symbol") 
         recent.InsertColumn(3, "In utterance") 
-                         
+                                              
         phrases = map(lambda x: x.in_utter.phrase_as_string(),
                       symbols)
         index = range(len(phrases), 0, -1)            

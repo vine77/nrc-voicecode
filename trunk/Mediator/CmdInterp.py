@@ -21,6 +21,7 @@
 
 import os, re, string, sys
 import copy
+import debug
 
 import actions_gen, auto_test, vc_globals
 from debug import trace, config_warning, trace_is_active
@@ -979,7 +980,9 @@ class UtteranceInterpretation(Object):
         regard to the original boundaries between words as interpreted
         by the speech engine
         """
-        return self.utterance.words()
+        spoken_words = map(lambda x: x[0], self.utterance.words())
+        debug.trace('UtteranceInterpretation.phrase', '** returning %s' % spoken_words)
+        return spoken_words
         
     def phrase_as_string(self):
         return string.join(self.phrase())
@@ -1189,6 +1192,7 @@ class SymbolConstruction(Object):
         """
         debug.trace('SymbolConstruction.insert_existing',
             'symbol = %s' % repr(symbol))
+            
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
         result = SymbolResult(symbol, self.words(),
@@ -1795,10 +1799,7 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
         """
-        written_spoken_words = []
-        for a_word in cmd:
-           written_spoken_words.append((a_word, a_word))
-        utterance = SpokenUtterance.MockSpokenUtterance(written_spoken_words)
+        utterance = SpokenUtterance.MockSpokenUtterance(cmd)
         return self.interpret_utterance(utterance, app, initial_buffer = None,
             clear_state = 0)
 
@@ -1863,7 +1864,7 @@ class CmdInterp(OwnerObject):
                     complete_match)
                 trace('CmdInterp.match_untranslated_text', 
                     'exact symbol written "%s"' % (untranslated_text))
-                symbols.insert_existing(written_symbol, complete_match)
+                symbols.insert_existing(written_symbol, interp_phrase, complete_match)
                 self.styling_state.clear()
                 return
             else:
