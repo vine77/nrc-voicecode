@@ -2,26 +2,26 @@
 ;; Vcode Mode - integration of GNU Emacs and VoiceCode 
 ;;    http://voicecode.iit.nrc.ca/VoiceCode
 ;;
-;; Based on VR Mode by Barry Jaspan
+;; Based on vr-deprecated Mode by Barry Jaspan
 ;;
 ;; Copyright 1999 Barry Jaspan, <bjaspan@mit.edu>.  All rights reserved.
 ;;
 ;; $Id: vc.el,v 1.9 2002/08/05 22:59:58 alain_desilets Exp $
 ;;
-;; This file is part of Emacs VR Mode.
+;; This file is part of Emacs vr-deprecated Mode.
 ;;
-;; Emacs VR Mode is free software; you can redistribute it and/or modify
+;; Emacs vr-deprecated Mode is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2 of the License, or (at
 ;; your option) any later version.
 ;;
-;; Emacs VR Mode is distributed in the hope that it will be useful, but
+;; Emacs vr-deprecated Mode is distributed in the hope that it will be useful, but
 ;; WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Emacs VR Mode; if not, write to the Free Software
+;; along with Emacs vr-deprecated Mode; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
@@ -42,62 +42,62 @@
 ;;; User options
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-command "vr.exe" "*The \"vr.exe\" program to be
-invoked as the VR mode sub-process.  This can be just the name, if the
+(defvar vr-deprecated-command "vr-deprecated.exe" "*The \"vr-deprecated.exe\" program to be
+invoked as the vr-deprecated mode sub-process.  This can be just the name, if the
 program is in your PATH, or it can be a full path.")
 
-(defvar vr-host nil "*The name of the computer running the VR Mode
+(defvar vr-deprecated-host nil "*The name of the computer running the vr-deprecated Mode
 process.  If nil, the process will be started on this computer.  See
-also vr-port.")
-(setq vr-host ""127.0.0.1"")
+also vr-deprecated-port.")
+(setq vr-deprecated-host ""127.0.0.1"")
 
-(defvar vr-port 0 "*The port on which to connect to vr-host.  If
-vr-host is nil, this can be zero to tell the VR Mode process to use
+(defvar vr-deprecated-port 0 "*The port on which to connect to vr-deprecated-host.  If
+vr-deprecated-host is nil, this can be zero to tell the vr-deprecated Mode process to use
 any available port.")
-(setq vr-port 45770)
+(setq vr-deprecated-port 45770)
 
 
-(defvar vr-win-class nil
-  "*Class name of the Windows window for which VR Mode will accept
-voice input.  Whenever a window matching vr-win-class and vr-win-title
+(defvar vr-deprecated-win-class nil
+  "*Class name of the Windows window for which vr-deprecated Mode will accept
+voice input.  Whenever a window matching vr-deprecated-win-class and vr-deprecated-win-title
 (which see) is the foreground window, dictation and commands spoken
-into the microphone will be executed by VR Mode.")
-(defvar vr-win-title "emacs"
-  "*Title of the Windows window for which VR Mode will accept voice
-input.  Whenever a window matching vr-win-class (which see) and
-vr-win-title is the foreground window, dictation and commands spoken
-into the microphone will be executed by VR Mode.")
+into the microphone will be executed by vr-deprecated Mode.")
+(defvar vr-deprecated-win-title "emacs"
+  "*Title of the Windows window for which vr-deprecated Mode will accept voice
+input.  Whenever a window matching vr-deprecated-win-class (which see) and
+vr-deprecated-win-title is the foreground window, dictation and commands spoken
+into the microphone will be executed by vr-deprecated Mode.")
 
 (defvar vcode-previous-frame-title-format frame-title-format
   "*Store previous frame-title-format so we can restore it when vcode
   exits (or the mediator disconnects)"
 )
 
-(defvar vr-activation-list nil
-  "*A list of buffer name patterns which VR Mode will voice activate.
+(defvar vr-deprecated-activation-list nil
+  "*A list of buffer name patterns which vr-deprecated Mode will voice activate.
 Each element of the list is a REGEXP.  Any buffer whose name matches
 any element of the list is voice activated.  For example, with
 
-(setq vr-activation-list '(\"^\\*scratch\\*$\" \"\\.txt$\"))
+(setq vr-deprecated-activation-list '(\"^\\*scratch\\*$\" \"\\.txt$\"))
 
 the buffer named \"*scratch*\" and any buffer whose name ends with
 \".txt\" will be voice-activated.  Note that voice activation of the
-minibuffer is controlled by vr-activate-minibuffer.")
+minibuffer is controlled by vr-deprecated-activate-minibuffer.")
 
-(defvar vr-activate-minibuffer nil
+(defvar vr-deprecated-activate-minibuffer nil
   "*Flag controlling whether the minibuffer is voice-activated.")
 
-(defvar vr-voice-command-list '(vr-default-voice-commands)
+(defvar vr-deprecated-voice-command-list '(vr-deprecated-default-voice-commands)
   "*The list of Emacs interactive commands that can be invoked by
 voice.  Each element can be a command, a CONS cell containing
 spoken text and a command or key sequence, or the special symbol
-'vr-default-voice-commands, which implicitly includes the voice
-commands in vr-default-voice-command-list (which see).
+'vr-deprecated-default-voice-commands, which implicitly includes the voice
+commands in vr-deprecated-default-voice-command-list (which see).
 
 For example:
 
-(setq vr-voice-command-list
-      '(vr-default-voice-commands
+(setq vr-deprecated-voice-command-list
+      '(vr-deprecated-default-voice-commands
 	my-command
 	(\"other command\" . my-other-command)
 	(\"prefix shell command\" . [\?\\C-u \?\\M-\\S-!])))
@@ -110,16 +110,16 @@ sets up the voice commands
 	other command		M-x my-other-command
 	prefix shell command	C-u M-S-! (i.e. C-u M-x shell-command)
 
-along with all the commands on vr-default-voice-command-list.")
+along with all the commands on vr-deprecated-default-voice-command-list.")
 
-(defconst vr-default-voice-command-list
+(defconst vr-deprecated-default-voice-command-list
   '(
 
     ;; Lists
     (list "0to20" "0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20")
     
-    ;; VR Mode commands
-    ("activate buffer" . vr-add-to-activation-list)
+    ;; vr-deprecated Mode commands
+    ("activate buffer" . vr-deprecated-add-to-activation-list)
 
     ;; general emacs commands
     ("quit" . [?\C-g])
@@ -133,12 +133,12 @@ along with all the commands on vr-default-voice-command-list.")
 
     ;; Repeat control commands.  These must be invoked with funcall, not M-x,
     ;; since M-x (or any non-RET event) terminates the repeat.
-    ("faster" . "vr-repeat-mult-rate 0.5")
-    ("slower" . "vr-repeat-mult-rate 2")
-    ("stop" . "vr-repeat-stop nil")
+    ("faster" . "vr-deprecated-repeat-mult-rate 0.5")
+    ("slower" . "vr-deprecated-repeat-mult-rate 2")
+    ("stop" . "vr-deprecated-repeat-stop nil")
 
     ;; Repeat that.
-    ("repeat that <0to20> times" . vr-repeat-that)
+    ("repeat that <0to20> times" . vr-deprecated-repeat-that)
 
     ;; files
     find-file
@@ -152,7 +152,7 @@ along with all the commands on vr-default-voice-command-list.")
     kill-buffer
     switch-to-buffer-other-window
     switch-to-buffer-other-frame
-    ("resynchronize" .  vr-resynchronize)
+    ("resynchronize" .  vr-deprecated-resynchronize)
     
     ;; windows
     ("split window" . split-window-vertically)
@@ -180,18 +180,18 @@ along with all the commands on vr-default-voice-command-list.")
     ("beginning of buffer" . beginning-of-buffer)
     ("end of buffer" . end-of-buffer)
 
-    ("move up" . vr-repeat-move-up-s)
-    ("move up slow" . vr-repeat-move-up-s)
-    ("move up fast" . vr-repeat-move-up-f)
-    ("move down" . vr-repeat-move-down-s)
-    ("move down slow" . vr-repeat-move-down-s)
-    ("move down fast" . vr-repeat-move-down-f)
-    ("move left" . vr-repeat-move-left-s)
-    ("move left slow" . vr-repeat-move-left-s)
-    ("move left fast" . vr-repeat-move-left-f)
-    ("move right" . vr-repeat-move-right-s)
-    ("move right slow" . vr-repeat-move-right-s)
-    ("move right fast" . vr-repeat-move-right-f)
+    ("move up" . vr-deprecated-repeat-move-up-s)
+    ("move up slow" . vr-deprecated-repeat-move-up-s)
+    ("move up fast" . vr-deprecated-repeat-move-up-f)
+    ("move down" . vr-deprecated-repeat-move-down-s)
+    ("move down slow" . vr-deprecated-repeat-move-down-s)
+    ("move down fast" . vr-deprecated-repeat-move-down-f)
+    ("move left" . vr-deprecated-repeat-move-left-s)
+    ("move left slow" . vr-deprecated-repeat-move-left-s)
+    ("move left fast" . vr-deprecated-repeat-move-left-f)
+    ("move right" . vr-deprecated-repeat-move-right-s)
+    ("move right slow" . vr-deprecated-repeat-move-right-s)
+    ("move right fast" . vr-deprecated-repeat-move-right-f)
 
     ("move up <0to20>" . previous-line)
     ("move down <0to20>" . next-line)
@@ -217,19 +217,19 @@ along with all the commands on vr-default-voice-command-list.")
     ("kill word <0to20>" . kill-word)
     ("backward kill word <0to20>" . backward-kill-word)
     ("kill line <0to20>" . kill-line)
-    ("repeat kill line" . "vr-repeat-kill-line 0.5")
+    ("repeat kill line" . "vr-deprecated-repeat-kill-line 0.5")
     yank
     yank-pop
     ;; assumes yank-pop has key binding, else last-command==self-insert-command
     ("yank again" . yank-pop)
     ;; requires a key binding for yank, repeat yank to work!
-    ("repeat yank" . vr-repeat-yank)
+    ("repeat yank" . vr-deprecated-repeat-yank)
 
     ;; Searching
     ("I search forward" . isearch-forward)
     ("I search backward" . isearch-backward)
-    ("repeat I search forward" . vr-repeat-search-forward-s)
-    ("repeat I search backward" . vr-repeat-search-backward-s)
+    ("repeat I search forward" . vr-deprecated-repeat-search-forward-s)
+    ("repeat I search backward" . vr-deprecated-repeat-search-backward-s)
 
     ;; formatting
     fill-paragraph
@@ -239,13 +239,13 @@ along with all the commands on vr-default-voice-command-list.")
     exit-minibuffer
     )
   "*A list of standard Emacs voice commands.  This list is used as-is
-whenever vr-voice-command-list (which see) includes the symbol
-'vr-default-voice-commands, or it can be appended explicitly in a
-custom vr-voice-command-list.")
+whenever vr-deprecated-voice-command-list (which see) includes the symbol
+'vr-deprecated-default-voice-commands, or it can be appended explicitly in a
+custom vr-deprecated-voice-command-list.")
 
-(defvar vr-log-do nil "*If non-nil, VR mode prints debugging information
-in the 'vr-log-buff-name buffer.")
-(setq vr-log-do nil)
+(defvar vr-deprecated-log-do nil "*If non-nil, vr-deprecated mode prints debugging information
+in the 'vr-deprecated-log-buff-name buffer.")
+(setq vr-deprecated-log-do nil)
 
 ; DCF -- allows my Emacs 21.2 to work
 ; define hash-table-test for string=, if it isn't already defined
@@ -258,11 +258,11 @@ in the 'vr-log-buff-name buffer.")
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
-;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
-;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 
-;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
+;(cl-puthash "vr-deprecated-cmd-alt-frame-activated" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
 
@@ -282,13 +282,13 @@ in the 'vr-log-buff-name buffer.")
 ; DCF - tracing indentation problems (at Alain's suggestion)
 (cl-puthash "code-config-py-mode-for-regresion-testing" 1 vcode-traces-on)
 
-(defvar vr-log-send nil "*If non-nil, VR mode logs all data sent to the VR
-subprocess in the 'vr-log-buff-name buffer.")
+(defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
+subprocess in the 'vr-deprecated-log-buff-name buffer.")
 
-(defvar vr-log-read nil "*If non-nil, VR mode logs all data received
-from the VR subprocess in the 'vr-log-buff-name buffer.")
+(defvar vr-deprecated-log-read nil "*If non-nil, vr-deprecated mode logs all data received
+from the vr-deprecated subprocess in the 'vr-deprecated-log-buff-name buffer.")
 
-(defvar vr-log-buff-name "*Messages*" "Name of the buffer where VR log messages are 
+(defvar vr-deprecated-log-buff-name "*Messages*" "Name of the buffer where vr-deprecated log messages are 
 sent."
 )
 (setq message-log-max 100000)
@@ -311,22 +311,22 @@ sent."
 (defun vcode-mode (status)
    (interactive "P")
    (vcode-configure-for-regression-testing nil)
-   (vr-mode status "vcode")
+   (vr-deprecated-mode status "vcode")
 )
 
 (defun vcode-interactive-test ()
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-mode 1)
 )
 
 (defun vcode-log-all ()
   (interactive)
-  (setq vr-log-do t)
-  (setq vr-log-read t)
-  (setq vr-log-send t)
+  (setq vr-deprecated-log-do t)
+  (setq vr-deprecated-log-read t)
+  (setq vr-deprecated-log-send t)
 )
 
 (defun vcode-test ()
@@ -335,12 +335,12 @@ sent."
   (setq debug-on-quit t)
  
   (vcode-close-all-buffers)
-  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-configure-for-regression-testing t)
-  (vr-mode 1 "vcode-test")
+  (vr-deprecated-mode 1 "vcode-test")
   (setq vcode-is-test-editor t)
 ;  (vcode-configure-for-regression-testing nil)
-;  (vr-mode nil)
+;  (vr-deprecated-mode nil)
 )
 
 (defun vcode-config-py-mode-for-regression-testing ()
@@ -375,61 +375,61 @@ sent."
 ;; Configuration hooks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-mode-setup-hook nil
-  "Hooks that are run after VR Mode is enabled but before VR.EXE is
+(defvar vr-deprecated-mode-setup-hook nil
+  "Hooks that are run after vr-deprecated Mode is enabled but before vr-deprecated.EXE is
 successfully started (or connected to).  See also
-vr-mode-startup-hook, called later.")
+vr-deprecated-mode-startup-hook, called later.")
 
-(defvar vr-mode-cleanup-hook nil
-  "Hooks that are run after VR Mode is disabled and after VR.EXE has
+(defvar vr-deprecated-mode-cleanup-hook nil
+  "Hooks that are run after vr-deprecated Mode is disabled and after vr-deprecated.EXE has
 exited or been told to exit.")
 
-(defvar vr-mode-startup-hook nil
-  "Hooks that are run after VR Mode is enabled, VR.EXE is
-successfully started (or connected to), and after VR.EXE is initialized
+(defvar vr-deprecated-mode-startup-hook nil
+  "Hooks that are run after vr-deprecated Mode is enabled, vr-deprecated.EXE is
+successfully started (or connected to), and after vr-deprecated.EXE is initialized
 with any per-connection state such as voice commands.  See also
-vr-mode-setup-hook, called earlier.")
+vr-deprecated-mode-setup-hook, called earlier.")
 
-(defvar vr-mode-modified-hook nil
+(defvar vr-deprecated-mode-modified-hook nil
   "Hooks that are called whenever a voice activated buffer is modifed
-for any reason, invoked by the 'modified-hooks property of vr-overlay.
+for any reason, invoked by the 'modified-hooks property of vr-deprecated-overlay.
 Arguments provided are OVERLAY AFTER BEG END LEN.  If any hook returns
-non-nil, VR Mode will *not* perform its normal modification processing
-(ie: telling VR.EXE/DNS about the change).
+non-nil, vr-deprecated Mode will *not* perform its normal modification processing
+(ie: telling vr-deprecated.EXE/DNS about the change).
 
-If vr-changes-caused-by-sr-cmd is not nil, the hook has been invoked inside
-vr-cmd-make-changes, which means the current change comes from DNS,
+If vr-deprecated-changes-caused-by-sr-cmd is not nil, the hook has been invoked inside
+vr-deprecated-cmd-make-changes, which means the current change comes from DNS,
 not from the keyboard or elsewhere.
 
 Danger, Will Robinson!")
 
 
-(defvar vr-wait-for-handshake-hook nil
+(defvar vr-deprecated-wait-for-handshake-hook nil
    "This hook is invoked after opening a first network connection to the
 speech server. It should wait until Emacs has shaken hands with the speech
 server on that first connection."
 )
 
-(defvar vr-deserialize-message-hook nil
+(defvar vr-deprecated-deserialize-message-hook nil
    "This hook is used to deserialize a string message (received from the speech server) into a Lisp data structure."
 )
 
-(defvar vr-serialize-message-hook nil
+(defvar vr-deprecated-serialize-message-hook nil
   "This hook is used to serialize a Lisp data structure into a string 
 message that can be sent to the speech server."
 )
 
-(defvar vr-serialize-changes-hook nil
+(defvar vr-deprecated-serialize-changes-hook nil
   "This hook is used to serialize a list of changes to a buffer as a string
 message that can be sent to the speech server"
 )
 
-(defvar vr-send-activate-buffer-hook nil
+(defvar vr-deprecated-send-activate-buffer-hook nil
   "This hook is used to tell the speech server that Emacs wants a particular
 buffer to be speech enabled"
 )
 
-(defvar vr-send-deactivate-buffer-hook nil
+(defvar vr-deprecated-send-deactivate-buffer-hook nil
   "This hook is used to tell the speech server that Emacs wants a particular
 buffer to be speech disabled"
 )
@@ -438,71 +438,71 @@ buffer to be speech disabled"
 ;; Internal variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-mode nil
-  "Non-nil turns on VR (Voice Recognition) mode.  DO NOT SET THIS
-VARIABLE DIRECTLY.  Call M-x vr-mode instead.")
+(defvar vr-deprecated-mode nil
+  "Non-nil turns on vr-deprecated (Voice Recognition) mode.  DO NOT SET THIS
+VARIABLE DIRECTLY.  Call M-x vr-deprecated-mode instead.")
 
-(defvar vr-internal-activation-list nil
-  "The working copy of vr-activation-list.  Keeping it separate allows
-re-starting VR Mode to undo vr-add-to-activation-list.")
+(defvar vr-deprecated-internal-activation-list nil
+  "The working copy of vr-deprecated-activation-list.  Keeping it separate allows
+re-starting vr-deprecated Mode to undo vr-deprecated-add-to-activation-list.")
 
-(defvar vr-mode-line " VR"
-  "String displayed in the minor mode list when VR mode is enabled.
-In the dictation buffer, the format is VR:<micstate>.")
-(make-variable-buffer-local 'vr-mode-line)
-(if (not (assq 'vr-mode minor-mode-alist))
-    (setq minor-mode-alist (cons '(vr-mode vr-mode-line)
+(defvar vr-deprecated-mode-line " vr-deprecated"
+  "String displayed in the minor mode list when vr-deprecated mode is enabled.
+In the dictation buffer, the format is vr-deprecated:<micstate>.")
+(make-variable-buffer-local 'vr-deprecated-mode-line)
+(if (not (assq 'vr-deprecated-mode minor-mode-alist))
+    (setq minor-mode-alist (cons '(vr-deprecated-mode vr-deprecated-mode-line)
 				 minor-mode-alist)))
 
-(defvar vr-mic-state "not connected"
+(defvar vr-deprecated-mic-state "not connected"
   "String storing the microphone state for display in the mode line.")
 
-(defvar vr-process nil "The VR mode subprocess.")
+(defvar vr-deprecated-process nil "The vr-deprecated mode subprocess.")
 
-(defvar vr-emacs-cmds nil "The socket connection used to send messages 
+(defvar vr-deprecated-emacs-cmds nil "The socket connection used to send messages 
 initiated by Emacs, and to get responses from the SR server.")
 
-(defvar vr-dns-cmds nil "The socket connection used to receive messages
+(defvar vr-deprecated-dns-cmds nil "The socket connection used to receive messages
 initiated by the SR server, and to send replies to them.
 ")
 
-(defvar vr-reading-string nil "Storage for partially-read commands
-from the VR subprocess.")
+(defvar vr-deprecated-reading-string nil "Storage for partially-read commands
+from the vr-deprecated subprocess.")
 
-(defvar vr-buffer nil "The current voice-activated buffer, or nil.
-See vr-activate-buffer and vr-switch-to-buffer.")
+(defvar vr-deprecated-buffer nil "The current voice-activated buffer, or nil.
+See vr-deprecated-activate-buffer and vr-deprecated-switch-to-buffer.")
 
-(defvar vr-ignore-changes nil "see comment in vr-overlay-modified")
-(defvar vr-changes-caused-by-sr-cmd nil "see comment in vr-report-insert-delete-change")
-(defvar vr-queued-changes nil "see comment in vr-report-insert-delete-change")
-(defvar vr-dont-report-sr-own-changes t 
+(defvar vr-deprecated-ignore-changes nil "see comment in vr-deprecated-overlay-modified")
+(defvar vr-deprecated-changes-caused-by-sr-cmd nil "see comment in vr-deprecated-report-insert-delete-change")
+(defvar vr-deprecated-queued-changes nil "see comment in vr-deprecated-report-insert-delete-change")
+(defvar vr-deprecated-dont-report-sr-own-changes t 
   "If t, then we don't report the changes that have been caused directly
 by the SR. However, we do report changes done automatically by Emacs
 in response to a change done by the SR (e.g. auto-fill).")
 
-(defvar vr-cmd-executing nil
+(defvar vr-deprecated-cmd-executing nil
   "If non-nil, the command symbol heard by NaturallySpeaking and
-currently being executed by VR Mode, for which VR.EXE is expecting a
+currently being executed by vr-deprecated Mode, for which vr-deprecated.EXE is expecting a
 reply when done.")
 
-(defvar vr-resynchronize-buffer nil)
-(make-variable-buffer-local 'vr-resynchronize-buffer)
+(defvar vr-deprecated-resynchronize-buffer nil)
+(make-variable-buffer-local 'vr-deprecated-resynchronize-buffer)
 
 ;; all of these variables have to do with abbreviation expansion functions
 (defvar deferred-function nil)
-(defvar vr-deferred-deferred-function nil)
-(defvar vr-deferred-deferred-deferred-function nil)
+(defvar vr-deprecated-deferred-deferred-function nil)
+(defvar vr-deprecated-deferred-deferred-deferred-function nil)
 ;; this is necessary if people aren't using the abbreviation functions
 (if (not (boundp 'fix-else-abbrev-expansion))
     (defun fix-else-abbrev-expansion () nil))
 
 ;(define-hash-table-test 'string= 'string= 'sxhash)
-(defvar vr-message-handler-hooks (make-hash-table :test 'string=)
+(defvar vr-deprecated-message-handler-hooks (make-hash-table :test 'string=)
   "This hash table associates command names with functions used to 
 process the command."
 )
 
-(defconst vr-nonlocal-exit-commands
+(defconst vr-deprecated-nonlocal-exit-commands
   '(exit-minibuffer minibuffer-complete-and-exit)
   "These commands never exit and can't be executed in the make-changes
 loop without screwing up the I/O.") 
@@ -512,7 +512,7 @@ loop without screwing up the I/O.")
 ;; Fixes for miscellaneous interaction issues
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; for some reason activating a buffer in VR mode sometimes makes this
+;; for some reason activating a buffer in vr-deprecated mode sometimes makes this
 ;; function fail to substitute every character in the region, which in
 ;; turn makes fill-paragraph end up in an infinite loop.  The "fix"
 ;; for this is to search the region after the command has completed,
@@ -538,69 +538,69 @@ loop without screwing up the I/O.")
 (defadvice else-replicate-placeholder-string (after
 					      resynchronize-it
 					      activate compile)
-  "make VR mode resynchronize the buffer after a placeholder has been
+  "make vr-deprecated mode resynchronize the buffer after a placeholder has been
 expanded, since they often make it go out of sync."
 
-  (message "Resynchronizing VR-buffer")
-  (call-interactively 'vr-resynchronize)
+  (message "Resynchronizing vr-deprecated-buffer")
+  (call-interactively 'vr-deprecated-resynchronize)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-prefix-map nil "Prefix key used to access VR mode commands.")
-(defvar vr-map nil)
-(if vr-map
+(defvar vr-deprecated-prefix-map nil "Prefix key used to access vr-deprecated mode commands.")
+(defvar vr-deprecated-map nil)
+(if vr-deprecated-map
     nil
-  (setq vr-map (make-sparse-keymap))
-  (define-key vr-map "ws" 'vr-show-window)
-  (define-key vr-map "wh" 'vr-hide-window)
-  (define-key vr-map "B" 'vr-add-to-activation-list)
-  (define-key vr-map "b" 'vr-switch-to-buffer)
-  (define-key vr-map "m" 'vr-toggle-mic)
-  (define-key vr-map "q" 'vr-quit)
-  (define-key vr-map "\C-\M-y" 'vr-repeat-yank)
+  (setq vr-deprecated-map (make-sparse-keymap))
+  (define-key vr-deprecated-map "ws" 'vr-deprecated-show-window)
+  (define-key vr-deprecated-map "wh" 'vr-deprecated-hide-window)
+  (define-key vr-deprecated-map "B" 'vr-deprecated-add-to-activation-list)
+  (define-key vr-deprecated-map "b" 'vr-deprecated-switch-to-buffer)
+  (define-key vr-deprecated-map "m" 'vr-deprecated-toggle-mic)
+  (define-key vr-deprecated-map "q" 'vr-deprecated-quit)
+  (define-key vr-deprecated-map "\C-\M-y" 'vr-deprecated-repeat-yank)
   )
 
-(if vr-prefix-map
+(if vr-deprecated-prefix-map
     nil
-  (setq vr-prefix-map (make-sparse-keymap))
-  (define-key vr-prefix-map "\C-cv" vr-map))
+  (setq vr-deprecated-prefix-map (make-sparse-keymap))
+  (define-key vr-deprecated-prefix-map "\C-cv" vr-deprecated-map))
 
-(if (not (assq 'vr-mode minor-mode-map-alist))
+(if (not (assq 'vr-deprecated-mode minor-mode-map-alist))
     (setq minor-mode-map-alist
-	  (cons (cons 'vr-mode vr-prefix-map) minor-mode-map-alist)))
+	  (cons (cons 'vr-deprecated-mode vr-deprecated-prefix-map) minor-mode-map-alist)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Entry points for global hooks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-enter-minibuffer ()
-  (if (and vr-emacs-cmds vr-activate-minibuffer)
-      (vr-activate-buffer (current-buffer))))
+(defun vr-deprecated-enter-minibuffer ()
+  (if (and vr-deprecated-emacs-cmds vr-deprecated-activate-minibuffer)
+      (vr-deprecated-activate-buffer (current-buffer))))
 
-(defun vr-post-command ()
-  (vr-log "--** vr-post-command: invoked\n")
-  (add-hook 'post-command-hook 'vr-post-command)
-  (if vr-emacs-cmds
+(defun vr-deprecated-post-command ()
+  (vr-deprecated-log "--** vr-deprecated-post-command: invoked\n")
+  (add-hook 'post-command-hook 'vr-deprecated-post-command)
+  (if vr-deprecated-emacs-cmds
       (progn
-	(vr-maybe-activate-buffer (current-buffer))
-	(if (and vr-cmd-executing t) ;  (eq vr-cmd-executing this-command))
+	(vr-deprecated-maybe-activate-buffer (current-buffer))
+	(if (and vr-deprecated-cmd-executing t) ;  (eq vr-deprecated-cmd-executing this-command))
 ; apparently this-command is not always set to the name of the
 ; command, for example kill-line is executed with "kill-region" in
 ; this-command, so this check doesn't really work
 	    (progn
-	      (vr-send-cmd (format "command-done %s" vr-cmd-executing))
-	      (setq vr-cmd-executing nil)))
+	      (vr-deprecated-send-cmd (format "command-done %s" vr-deprecated-cmd-executing))
+	      (setq vr-deprecated-cmd-executing nil)))
 	))
-  (vr-log "--** vr-post-command: exited\n")
+  (vr-deprecated-log "--** vr-deprecated-post-command: exited\n")
 )
 
-(defun vr-kill-buffer ()
-  (if (vr-activate-buffer-p (current-buffer))
+(defun vr-deprecated-kill-buffer ()
+  (if (vr-deprecated-activate-buffer-p (current-buffer))
       (progn
-	(run-hooks 'vr-send-kill-buffer-hook)
+	(run-hooks 'vr-deprecated-send-kill-buffer-hook)
 	)
     )
 )
@@ -609,9 +609,9 @@ expanded, since they often make it go out of sync."
   "sends suspended message to the mediator to let it know that Emacs
   is (about to be) suspended"
   (let ((empty-resp (make-hash-table :test 'string=)))
-    (vr-send-cmd 
+    (vr-deprecated-send-cmd 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "suspended" empty-resp)))
+      'vr-deprecated-serialize-message-hook (list "suspended" empty-resp)))
     )
 
 )
@@ -620,9 +620,9 @@ expanded, since they often make it go out of sync."
   "sends resuming message to the mediator to let it know that Emacs
   has just resumed execution (from being suspended)"
   (let ((empty-resp (make-hash-table :test 'string=)))
-    (vr-send-cmd 
+    (vr-deprecated-send-cmd 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "resuming" empty-resp)))
+      'vr-deprecated-serialize-message-hook (list "resuming" empty-resp)))
     )
 
 )
@@ -631,7 +631,7 @@ expanded, since they often make it go out of sync."
 ;; Buffer activation control
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-filter (pred in)
+(defun vr-deprecated-filter (pred in)
   (let (out el)
     (while in
       (setq el (car in))
@@ -641,65 +641,65 @@ expanded, since they often make it go out of sync."
       )
 out))
   
-(defun vr-add-to-activation-list (buffer)
+(defun vr-deprecated-add-to-activation-list (buffer)
   "Adds BUFFER, which can be a buffer name or buffer, to the list of
 buffers that are voice activated.  Called interactively, adds the
 current buffer.
 
-The only way to undo the effect of this function is to re-start VR
+The only way to undo the effect of this function is to re-start vr-deprecated
 Mode."
-  ;; If called interactively, vr-post-command will activate the
+  ;; If called interactively, vr-deprecated-post-command will activate the
   ;; current buffer (so this function doesn't have to).
   (interactive (list (current-buffer)))
   (if (bufferp buffer)
       (setq buffer (buffer-name buffer)))
-  (if (vr-activate-buffer-p buffer)
+  (if (vr-deprecated-activate-buffer-p buffer)
       nil
-    (setq vr-internal-activation-list
+    (setq vr-deprecated-internal-activation-list
 	  (cons (concat "^" (regexp-quote buffer) "$")
-		vr-internal-activation-list))))
+		vr-deprecated-internal-activation-list))))
 
-(defun vr-resynchronize (buffer)
-  "asks VR mode to resynchronize this buffer, if it has gotten out of
+(defun vr-deprecated-resynchronize (buffer)
+  "asks vr-deprecated mode to resynchronize this buffer, if it has gotten out of
 sync.  (That shouldn't happen, in an ideal world, but...)"
   (interactive (list (current-buffer)))
   (set-buffer buffer)
-  (setq vr-resynchronize-buffer t))
+  (setq vr-deprecated-resynchronize-buffer t))
 
-(defun vr-activate-buffer-p (buffer)
+(defun vr-deprecated-activate-buffer-p (buffer)
   "Predicate indicating whether BUFFER matches any REGEXP element and
 does not match any '(not REGEXP) element of
-vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
+vr-deprecated-internal-activation-list.  BUFFER can be a buffer or a buffer name."
   (if (bufferp buffer)
       (setq buffer (buffer-name buffer)))
   (if (string-match "^ \\*Minibuf-[0-9]+\\*$" buffer)
-      vr-activate-minibuffer
-    (and (vr-filter (lambda (r) (and (stringp r) (string-match r buffer)))
-		    vr-internal-activation-list)
-	 (not (vr-filter (lambda (r) 
+      vr-deprecated-activate-minibuffer
+    (and (vr-deprecated-filter (lambda (r) (and (stringp r) (string-match r buffer)))
+		    vr-deprecated-internal-activation-list)
+	 (not (vr-deprecated-filter (lambda (r) 
 			   (and (consp r) (eq (car r) 'not)
 				(string-match (car (cdr r)) buffer)))
-			 vr-internal-activation-list)))))
+			 vr-deprecated-internal-activation-list)))))
 
-(defun vr-maybe-activate-buffer (buffer)
+(defun vr-deprecated-maybe-activate-buffer (buffer)
   ;; Deactivate whenever isearch mode is active.  This is a
   ;; "temporary" solution until isearch mode can be supported.
-;  (vr-log "--** vr-maybe-activate-buffer: invoked\n")
-  (if (and (not isearch-mode) (vr-activate-buffer-p (buffer-name buffer)))
-      (if (eq buffer vr-buffer)
+;  (vr-deprecated-log "--** vr-deprecated-maybe-activate-buffer: invoked\n")
+  (if (and (not isearch-mode) (vr-deprecated-activate-buffer-p (buffer-name buffer)))
+      (if (eq buffer vr-deprecated-buffer)
 	  nil
-	(vr-activate-buffer buffer))
-    (if vr-buffer 
-	(vr-activate-buffer nil)))
-;  (vr-log "--** vr-maybe-activate-buffer: exited\n")
+	(vr-deprecated-activate-buffer buffer))
+    (if vr-deprecated-buffer 
+	(vr-deprecated-activate-buffer nil)))
+;  (vr-deprecated-log "--** vr-deprecated-maybe-activate-buffer: exited\n")
 )
 
-(defun vr-switch-to-buffer ()
-  "Select the current VR mode target buffer in the current window."
+(defun vr-deprecated-switch-to-buffer ()
+  "Select the current vr-deprecated mode target buffer in the current window."
   (interactive)
-  (if (buffer-live-p vr-buffer)
-      (switch-to-buffer vr-buffer)
-    (error "VR target buffer no longer exists; use vr-activate-buffer")))
+  (if (buffer-live-p vr-deprecated-buffer)
+      (switch-to-buffer vr-deprecated-buffer)
+    (error "vr-deprecated target buffer no longer exists; use vr-deprecated-activate-buffer")))
 
 
 (defun vcode-set-hooks (status)
@@ -718,34 +718,34 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 
 
 (defun vcode-set-after-change-functions (status)
-  (vr-log "--** vcode-set-after-change-functions: invoked, (current-buffer)=%S, status=%S\n" (current-buffer) status)
+  (vr-deprecated-log "--** vcode-set-after-change-functions: invoked, (current-buffer)=%S, status=%S\n" (current-buffer) status)
   (if status
       (progn
 ;	(make-local-hook 'after-change-functions)
-	(add-hook 'after-change-functions 'vr-report-insert-delete-change)
+	(add-hook 'after-change-functions 'vr-deprecated-report-insert-delete-change)
 	)
-    (remove-hook 'after-change-functions 'vr-report-insert-delete-change)
+    (remove-hook 'after-change-functions 'vr-deprecated-report-insert-delete-change)
     )
-  (vr-log "--** vcode-set-after-change-functions: upon exit, (current-buffer)=%S, after-change-functions=%S\n" (current-buffer) after-change-functions)  
+  (vr-deprecated-log "--** vcode-set-after-change-functions: upon exit, (current-buffer)=%S, after-change-functions=%S\n" (current-buffer) after-change-functions)  
 )
 
-(defun vr-activate-buffer (buffer)
+(defun vr-deprecated-activate-buffer (buffer)
   "Sets the target BUFFER that will receive voice-recognized text.  Called
 interactively, sets the current buffer as the target buffer."
   (interactive (list (current-buffer)))
-  (if (buffer-live-p vr-buffer)
+  (if (buffer-live-p vr-deprecated-buffer)
       (save-excursion
-	(set-buffer vr-buffer)
-	(kill-local-variable 'vr-mode-line)))
-  (set-default 'vr-mode-line (concat " VR-" vr-mic-state))
-  (setq vr-buffer buffer)
+	(set-buffer vr-deprecated-buffer)
+	(kill-local-variable 'vr-deprecated-mode-line)))
+  (set-default 'vr-deprecated-mode-line (concat " vr-deprecated-" vr-deprecated-mic-state))
+  (setq vr-deprecated-buffer buffer)
   (if buffer
       (save-excursion
 	(set-buffer buffer)
-	(setq vr-mode-line (concat " VR:" vr-mic-state))
-	(run-hooks 'vr-send-activate-buffer)
+	(setq vr-deprecated-mode-line (concat " vr-deprecated:" vr-deprecated-mic-state))
+	(run-hooks 'vr-deprecated-send-activate-buffer)
 	)
-    (run-hooks 'vr-send-deactivate-buffer)
+    (run-hooks 'vr-deprecated-send-deactivate-buffer)
     )
   (force-mode-line-update)
   )
@@ -755,50 +755,50 @@ interactively, sets the current buffer as the target buffer."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(defvar vr-modification-stack () )
+(defvar vr-deprecated-modification-stack () )
 
 
-(defun vr-change-is-delete (beg end &optional len)
+(defun vr-deprecated-change-is-delete (beg end &optional len)
   (and (> len 0) (eq beg end))
 )
 
-(defun vr-change-is-self-insert (beg end &optional len)
+(defun vr-deprecated-change-is-self-insert (beg end &optional len)
   (and (eq len 0) 
        (eq (- end beg) 1) 
        (eq (char-after beg) last-command-char))
 )
 
-(defun vr-execute-deferred-function ()
+(defun vr-deprecated-execute-deferred-function ()
   (if deferred-function
       (progn
-	(setq vr-deferred-deferred-function deferred-function)
+	(setq vr-deprecated-deferred-deferred-function deferred-function)
 	(setq deferred-function nil)
 	(delete-backward-char 2)
 	(fix-else-abbrev-expansion)
-	(if (not (eq vr-deferred-deferred-function
+	(if (not (eq vr-deprecated-deferred-deferred-function
 		     'else-expand-placeholder))
 	    (progn
 	      ;;(call-interactively deferred-deferred-function)
-	      (setq vr-deferred-deferred-deferred-function
-		    vr-deferred-deferred-function )
-	      (setq vr-deferred-deferred-function nil)
-	      (vr-execute-command
-	       vr-deferred-deferred-deferred-function))
+	      (setq vr-deprecated-deferred-deferred-deferred-function
+		    vr-deprecated-deferred-deferred-function )
+	      (setq vr-deprecated-deferred-deferred-function nil)
+	      (vr-deprecated-execute-command
+	       vr-deprecated-deferred-deferred-deferred-function))
 
 	  )
 	))
 )
 
 (defun vcode-merge-or-prepend-change (new-change)
-  "merges the new-change with the first change in 'vr-queued-changes, if
+  "merges the new-change with the first change in 'vr-deprecated-queued-changes, if
   possible, otherwise prepends it to the list.
 
   changes can be merged if they are both of type 'change-is-insert and
   represent contiguous insertions or deletions.
   "
-(if (null vr-queued-changes)
-  (setq vr-queued-changes (cons new-change vr-queued-changes))
-  (let* ((previous-change (car vr-queued-changes))
+(if (null vr-deprecated-queued-changes)
+  (setq vr-deprecated-queued-changes (cons new-change vr-deprecated-queued-changes))
+  (let* ((previous-change (car vr-deprecated-queued-changes))
         (previous-type (car previous-change))
         (new-type (car new-change))
         (new-entry new-change)
@@ -840,7 +840,7 @@ interactively, sets the current buffer as the target buffer."
                    (end (+ previous-end (- new-end new-start)))
                    (contents (list new-buffer start end text)))
                   ; combine changes, pop previous 
-                  (setq vr-queued-changes (cdr vr-queued-changes))
+                  (setq vr-deprecated-queued-changes (cdr vr-deprecated-queued-changes))
                   (setq new-entry (list 'change-is-insert contents))
                 )
               )
@@ -851,7 +851,7 @@ interactively, sets the current buffer as the target buffer."
                    (end previous-end)
                    (contents (list new-buffer start end text)))
                   ; combine changes, pop previous 
-                  (setq vr-queued-changes (cdr vr-queued-changes))
+                  (setq vr-deprecated-queued-changes (cdr vr-deprecated-queued-changes))
                   (setq new-entry (list 'change-is-insert contents))
                 )
               )
@@ -861,23 +861,23 @@ interactively, sets the current buffer as the target buffer."
       )
     )
     ; push combined or new
-    (setq vr-queued-changes (cons new-entry vr-queued-changes))
+    (setq vr-deprecated-queued-changes (cons new-entry vr-deprecated-queued-changes))
   )
 )
 )
 
 
-(defun vr-report-insert-delete-change (inserted-start inserted-end deleted-len)
+(defun vr-deprecated-report-insert-delete-change (inserted-start inserted-end deleted-len)
 "Invoked whenever an insertion or deletion change happens on the current 
 buffer (if it is voice enabled). 
 
-Changes are put in a changes queue `vr-queued-changes.
+Changes are put in a changes queue `vr-deprecated-queued-changes.
 
-If 'vr-changes-caused-by-sr-cmd is nil, the changes were not
+If 'vr-deprecated-changes-caused-by-sr-cmd is nil, the changes were not
 done as a response to a voice command. In that case, send the 
 queued message right away.
 
-If 'vr-changes-caused-by-sr-cmd not nil, the changes have
+If 'vr-deprecated-changes-caused-by-sr-cmd not nil, the changes have
 been generated by a command from the SR server. In that case,
 leave the messages in the queue. The event handler for that command
 will send the queued changes as a big reply message, when it's done
@@ -885,48 +885,48 @@ executing.
 "
 
   (let ((the-change nil))
-    (if (vr-activate-buffer-p (current-buffer))
+    (if (vr-deprecated-activate-buffer-p (current-buffer))
 	(progn 
-	  (vr-log "--** vr-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
+	  (vr-deprecated-log "--** vr-deprecated-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
 	  (setq the-change
-		(vr-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
+		(vr-deprecated-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
 		)
 	  
-	  (vr-log "--** vr-report-insert-delete-change: the-change=%S" the-change)
+	  (vr-deprecated-log "--** vr-deprecated-report-insert-delete-change: the-change=%S" the-change)
 	  
           (vcode-merge-or-prepend-change the-change)
-;	  (setq vr-queued-changes (cons the-change vr-queued-changes))
+;	  (setq vr-deprecated-queued-changes (cons the-change vr-deprecated-queued-changes))
 	  
-	  (if (not vr-changes-caused-by-sr-cmd)
-	      (vr-send-queued-changes)
+	  (if (not vr-deprecated-changes-caused-by-sr-cmd)
+	      (vr-deprecated-send-queued-changes)
 	    )
 	  
 	  ;;
 	  ;; What does this do? Is it still necessary if we disable dabbrevs
 	  ;; and electric punctuation marks during executio of utterances?
-	  (vr-execute-deferred-function)
+	  (vr-deprecated-execute-deferred-function)
        )
     )
   )
 )
 
 
-(defun vr-report-goto-select-change (buff-name sel-start sel-end)
+(defun vr-deprecated-report-goto-select-change (buff-name sel-start sel-end)
   "Invoked whenever a change in the cursor position or marked selection 
 happens on a buffer (if it is voice enabled). 
 
-Changes are put in a changes queue `vr-queued-changes.
+Changes are put in a changes queue `vr-deprecated-queued-changes.
 "
-  (vr-log "--** vr-report-goto-select-change: buffer %S, start, end = %S, %S\n"
+  (vr-deprecated-log "--** vr-deprecated-report-goto-select-change: buffer %S, start, end = %S, %S\n"
   buff-name sel-start sel-end)
-  (setq vr-queued-changes 
+  (setq vr-deprecated-queued-changes 
 	(cons 
 ;	   (list 'change-is-select buff-name sel-start sel-end)
-	   (vr-generate-raw-change-description  'change-is-select (list buff-name sel-start sel-end))
-	   vr-queued-changes))
+	   (vr-deprecated-generate-raw-change-description  'change-is-select (list buff-name sel-start sel-end))
+	   vr-deprecated-queued-changes))
 )
 
-(defun vr-generate-raw-change-description (change-type change-data)
+(defun vr-deprecated-generate-raw-change-description (change-type change-data)
 
   (let ((change-desc) (buff-name) (inserted-start) (inserted-end) 
 	(deleted-length) (deleted-start) (deleted-end) (inserted-text))
@@ -952,7 +952,7 @@ Changes are put in a changes queue `vr-queued-changes.
   )
 )
 
-(defun vr-string-replace (src regexp repl)
+(defun vr-deprecated-string-replace (src regexp repl)
   (let ((i 0))
     (while (setq i (string-match regexp src))
       (setq src (concat (substring src 0 i)
@@ -965,18 +965,18 @@ Changes are put in a changes queue `vr-queued-changes.
 ;; Keyboard lockout during voice recognition
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-recognizing nil)
+(defvar vr-deprecated-recognizing nil)
 
-(defun vr-sleep-while-recognizing ()
+(defun vr-deprecated-sleep-while-recognizing ()
   (interactive)
   (let* ((first t) (count 0))
-    (while (and (< count 200) vr-recognizing (string= vr-mic-state "on"))
+    (while (and (< count 200) vr-deprecated-recognizing (string= vr-deprecated-mic-state "on"))
       (if first (message "Waiting for voice recognition..."))
       (setq first nil)
       (setq count (1+ count))
       (sleep-for 0 50))
     (if (eq count 200) 
-	(message "Time out in vr-sleep-while-recognizing!")
+	(message "Time out in vr-deprecated-sleep-while-recognizing!")
       (message nil))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -985,7 +985,7 @@ Changes are put in a changes queue `vr-queued-changes.
 
 (defun vcode-trace (trace-name format-string &rest s)
    (let ((buf) (win))
-     (setq buf (get-buffer-create vr-log-buff-name))
+     (setq buf (get-buffer-create vr-deprecated-log-buff-name))
      (setq win (get-buffer-window buf 't))
      (if (or (not trace-name) (is-in-hash trace-name vcode-traces-on))
         (progn
@@ -1006,10 +1006,10 @@ Changes are put in a changes queue `vr-queued-changes.
    )
 )
  
-(defun vr-log (&rest s)
-  (if vr-log-do
+(defun vr-deprecated-log (&rest s)
+  (if vr-deprecated-log-do
       (let* (
-	     (buf (get-buffer-create vr-log-buff-name))
+	     (buf (get-buffer-create vr-deprecated-log-buff-name))
 	     (win (get-buffer-window buf 't))
 	     )
 	(save-excursion
@@ -1036,45 +1036,45 @@ Changes are put in a changes queue `vr-queued-changes.
   t
 )
 
-(defun vr-sentinel (p s)
+(defun vr-deprecated-sentinel (p s)
   (if (equal s "finished\n")
       (progn
-	(if (processp vr-process)
-	    (delete-process vr-process))
-	(if (processp vr-emacs-cmds)
-	    (delete-process vr-emacs-cmds))
-	(if (processp vr-dns-cmds)
-	    (delete-process vr-dns-cmds))
-	(setq vr-process nil
-	      vr-emacs-cmds nil
-	      vr-dns-cmds nil))
-    (error "VR process exited with status \"%s\"" s)))
+	(if (processp vr-deprecated-process)
+	    (delete-process vr-deprecated-process))
+	(if (processp vr-deprecated-emacs-cmds)
+	    (delete-process vr-deprecated-emacs-cmds))
+	(if (processp vr-deprecated-dns-cmds)
+	    (delete-process vr-deprecated-dns-cmds))
+	(setq vr-deprecated-process nil
+	      vr-deprecated-emacs-cmds nil
+	      vr-deprecated-dns-cmds nil))
+    (error "vr-deprecated process exited with status \"%s\"" s)))
 
 
 
 
 ;; executes a command, and runs the appropriate hooks.  It's used by
-;; heard-command and by the deferred-function executions.  VR-command
+;; heard-command and by the deferred-function executions.  vr-deprecated-command
 ;; can either be a symbol or a list.
-(defun vr-execute-command (vr-command)
-  (let ((cmd (or (and (listp vr-command ) (car vr-command))
-		 vr-command)))
+(defun vr-deprecated-execute-command (vr-deprecated-command)
+  (let ((cmd (or (and (listp vr-deprecated-command ) (car vr-deprecated-command))
+		 vr-deprecated-command)))
 	  (run-hooks 'pre-command-hook)
  	  (condition-case err
-	      (if (and (listp vr-command) 
-		       (> (length vr-command) 1))
-		  (apply cmd (cdr vr-command))
+	      (if (and (listp vr-deprecated-command) 
+		       (> (length vr-deprecated-command) 1))
+		  (apply cmd (cdr vr-deprecated-command))
 		(call-interactively cmd))
 	    ('wrong-number-of-arguments
 	     (ding)
 	     (message
-	      "VR Mode: Wrong number of arguments calling %s"
-	      vr-command))
+	      "vr-deprecated Mode: Wrong number of arguments calling %s"
+	      vr-deprecated-command))
 	    ('wrong-type-argument 'error
 				  (ding)
-				  (message "VR Mode: %s calling %s"
+				  (message "vr-deprecated Mode: %s calling %s"
 					   (error-message-string err)
-					   vr-command )))
+					   vr-deprecated-command )))
  	  (let ((this-command cmd))
 	    (run-hooks 'post-command-hook)))
   t)
@@ -1084,17 +1084,17 @@ Changes are put in a changes queue `vr-queued-changes.
 "
   (let ((abbrev-mode-was))
     (vcode-trace "vcode-execute-command-string" "command-string=%S" command-string)
-    (vr-log "-- vcode-execute-command-string: command-string=%S" command-string)
+    (vr-deprecated-log "-- vcode-execute-command-string: command-string=%S" command-string)
     (if unread-command-events
 ;        (vcode-trace "vcode-execute-command-string"
 ;        "unread-command-events=%S" unread-command-events)
-         (vr-log "-- vcode-execute-command-string: unread-command-events=%S" 
+         (vr-deprecated-log "-- vcode-execute-command-string: unread-command-events=%S" 
              unread-command-events)
     )
     (if (input-pending-p)
 ;        (vcode-trace "vcode-execute-command-string"
 ;        "unread-command-events=%S" unread-command-events)
-         (vr-log "-- vcode-execute-command-string: input-pending" )
+         (vr-deprecated-log "-- vcode-execute-command-string: input-pending" )
     )
 
     (setq debug-on-error t)
@@ -1134,46 +1134,46 @@ Changes are put in a changes queue `vr-queued-changes.
 
 
 
-(defun vr-send-queued-changes ()
+(defun vr-deprecated-send-queued-changes ()
   "Sends the message queue.
 
-   If 'vr-changes-caused-by-sr-cmd is not nil, then these changes happened
-   in response to a SR command (and 'vr-changes-caused-by-sr-cmd is the name
+   If 'vr-deprecated-changes-caused-by-sr-cmd is not nil, then these changes happened
+   in response to a SR command (and 'vr-deprecated-changes-caused-by-sr-cmd is the name
    of that command)."
 
   (let ((change-message nil))
 
     (setq change-message
-       (run-hook-with-args 'vr-serialize-changes-hook
-			   (nreverse vr-queued-changes)))
+       (run-hook-with-args 'vr-deprecated-serialize-changes-hook
+			   (nreverse vr-deprecated-queued-changes)))
 
     ;;;
     ;;; If these changes happened in response to a command, send them on 
     ;;; the reply channel.
     ;;; Otherwise, send them on the cmd channel.
     ;;;
-    (if vr-changes-caused-by-sr-cmd
-	(vr-send-reply change-message)
-      (vr-send-cmd change-message)
+    (if vr-deprecated-changes-caused-by-sr-cmd
+	(vr-deprecated-send-reply change-message)
+      (vr-deprecated-send-cmd change-message)
     )
-    (setq vr-queued-changes nil)
+    (setq vr-deprecated-queued-changes nil)
   )
 )
 
-(defun vr-execute-event-handler (handler vr-request)
-  (let ((vr-changes-caused-by-sr-cmd (nth 0 vr-request))
-	(vr-request-mess (nth 1 vr-request)))
-    (vcode-trace "vr-execute-event-handler" "vr-changes-caused-by-sr-cmd=%S, handler=%S\n" vr-changes-caused-by-sr-cmd handler)
+(defun vr-deprecated-execute-event-handler (handler vr-deprecated-request)
+  (let ((vr-deprecated-changes-caused-by-sr-cmd (nth 0 vr-deprecated-request))
+	(vr-deprecated-request-mess (nth 1 vr-deprecated-request)))
+    (vcode-trace "vr-deprecated-execute-event-handler" "vr-deprecated-changes-caused-by-sr-cmd=%S, handler=%S\n" vr-deprecated-changes-caused-by-sr-cmd handler)
 
     ;;;
     ;;; Fix the message arguments that refer to buffer positions
     ;;; (Emacs counts from 1 while VCode counts from 1, and VCode
     ;;; may send some nil positions)
     ;;;
-    (setq vr-request 
-	  (list vr-changes-caused-by-sr-cmd
+    (setq vr-deprecated-request 
+	  (list vr-deprecated-changes-caused-by-sr-cmd
 		(vcode-fix-positions-in-message 
-		 vr-request-mess 'emacs)
+		 vr-deprecated-request-mess 'emacs)
 		))
 
     (if debug-on-error
@@ -1181,9 +1181,9 @@ Changes are put in a changes queue `vr-queued-changes.
 	;;; If in debug mode, let the debugger intercept errors.
 	;;;
         (progn
-	    (vcode-trace "vr-execute-event-handler" "Executing handler in debug mode\n")
-  	    (apply handler (list vr-request)) 
-	    (vcode-trace "vr-execute-event-handler" "Finished executing handler in debug mode\n")
+	    (vcode-trace "vr-deprecated-execute-event-handler" "Executing handler in debug mode\n")
+  	    (apply handler (list vr-deprecated-request)) 
+	    (vcode-trace "vr-deprecated-execute-event-handler" "Finished executing handler in debug mode\n")
         )
 
       ;;; 
@@ -1191,20 +1191,20 @@ Changes are put in a changes queue `vr-queued-changes.
       ;;;
       (condition-case err
           (progn 
-	    (vcode-trace "vr-execute-event-handler" "Executing handler in NON-debug mode\n")
-	    (apply handler (list vr-request))
-	    (vcode-trace "vr-execute-event-handler" "Finished Executing handler in NON-debug mode\n")
+	    (vcode-trace "vr-deprecated-execute-event-handler" "Executing handler in NON-debug mode\n")
+	    (apply handler (list vr-deprecated-request))
+	    (vcode-trace "vr-deprecated-execute-event-handler" "Finished Executing handler in NON-debug mode\n")
 	  )
 	('error 
 	 (progn
-	   (message (format "Error executing VR request %s"
-				       vr-request))
-	   (run-hook-with-args 'vr-upon-cmd-error vr-request)
+	   (message (format "Error executing vr-deprecated request %s"
+				       vr-deprecated-request))
+	   (run-hook-with-args 'vr-deprecated-upon-cmd-error vr-deprecated-request)
 	   )
 	 )
 	)
       )
-    (setq vr-changes-caused-by-sr-cmd nil)
+    (setq vr-deprecated-changes-caused-by-sr-cmd nil)
     )
 )
 
@@ -1220,13 +1220,13 @@ Changes are put in a changes queue `vr-queued-changes.
    
 	  (setq parsed 
 		(run-hook-with-args 
-		 'vr-deserialize-message-hook vr-reading-string))
+		 'vr-deprecated-deserialize-message-hook vr-deprecated-reading-string))
 	  (setq idx (elt parsed 1))
-	  (setq vr-reading-string 
-		(if (< idx (1- (length vr-reading-string)))
-		    (substring vr-reading-string (1+ idx))
+	  (setq vr-deprecated-reading-string 
+		(if (< idx (1- (length vr-deprecated-reading-string)))
+		    (substring vr-deprecated-reading-string (1+ idx))
 		  ""))
-	  (vcode-trace "vcode-try-parsing-message" "parsing worked, idx=%S, vr-reading-string=%S\n" idx vr-reading-string)
+	  (vcode-trace "vcode-try-parsing-message" "parsing worked, idx=%S, vr-deprecated-reading-string=%S\n" idx vr-deprecated-reading-string)
 
 	 )
       ('error
@@ -1238,61 +1238,61 @@ Changes are put in a changes queue `vr-queued-changes.
   )
 )
 		
-(defun vr-output-filter (p s)
-  (vcode-trace "vr-output-filter" "invoked\n")
-  (setq vr-reading-string (concat vr-reading-string s))
-  (vcode-trace "vr-output-filter" "invoked\n")
-  (let* ((handler) (parsed) (vr-request) (vr-cmd))
+(defun vr-deprecated-output-filter (p s)
+  (vcode-trace "vr-deprecated-output-filter" "invoked\n")
+  (setq vr-deprecated-reading-string (concat vr-deprecated-reading-string s))
+  (vcode-trace "vr-deprecated-output-filter" "invoked\n")
+  (let* ((handler) (parsed) (vr-deprecated-request) (vr-deprecated-cmd))
     
-    (setq parsed (vcode-try-parsing-message vr-reading-string))
+    (setq parsed (vcode-try-parsing-message vr-deprecated-reading-string))
     
     (if parsed
 	(progn
-	  (setq vr-request (elt parsed 0))
-	  (setq vr-cmd  (elt vr-request 0))
-	  (setq handler (cl-gethash vr-cmd vr-message-handler-hooks))
+	  (setq vr-deprecated-request (elt parsed 0))
+	  (setq vr-deprecated-cmd  (elt vr-deprecated-request 0))
+	  (setq handler (cl-gethash vr-deprecated-cmd vr-deprecated-message-handler-hooks))
 	  (if handler
-	      (vr-execute-event-handler handler vr-request)
+	      (vr-deprecated-execute-event-handler handler vr-deprecated-request)
   	      ;;;
 	      ;;; Process should degrade gracefully if an unknown command is 
 	      ;;; received
 	      ;;;
-	    (error "VCode Error: Received unknown command %S\n" vr-cmd)
+	    (error "VCode Error: Received unknown command %S\n" vr-deprecated-cmd)
 	    )
 	  )
       )
     )
-  (vcode-trace "vr-output-filter" "exited\n")
+  (vcode-trace "vr-deprecated-output-filter" "exited\n")
 )
      
 
-(defun vr-send-reply (msg)
-  (if (and vr-dns-cmds (eq (process-status vr-dns-cmds) 'open))
+(defun vr-deprecated-send-reply (msg)
+  (if (and vr-deprecated-dns-cmds (eq (process-status vr-deprecated-dns-cmds) 'open))
       (progn
 	(if (integerp msg)
 	    (setq msg (int-to-string msg)))
-	(if vr-log-send
-	    (vr-log "<- r %s\n" msg))
-;;; Alain what does that do? Should it be part of vr-serialize-message?
-;;; 	(process-send-string vr-dns-cmds (vr-etonl (length msg)))
+	(if vr-deprecated-log-send
+	    (vr-deprecated-log "<- r %s\n" msg))
+;;; Alain what does that do? Should it be part of vr-deprecated-serialize-message?
+;;; 	(process-send-string vr-deprecated-dns-cmds (vr-deprecated-etonl (length msg)))
 
-	(process-send-string vr-dns-cmds msg))
-    (message "VR Mode DNS reply channel is not open!"))
+	(process-send-string vr-deprecated-dns-cmds msg))
+    (message "vr-deprecated Mode DNS reply channel is not open!"))
   )
 
-(defun vr-send-cmd (msg)
-  (if (and vr-emacs-cmds (eq (process-status vr-emacs-cmds) 'open))
+(defun vr-deprecated-send-cmd (msg)
+  (if (and vr-deprecated-emacs-cmds (eq (process-status vr-deprecated-emacs-cmds) 'open))
       (progn
-	(if vr-log-send
-	    (vr-log "<- c %s\n" msg))
-;;; Should this be part of vr-serialize-message???
-;;;	(process-send-string vr-emacs-cmds (vr-etonl (length msg)))
+	(if vr-deprecated-log-send
+	    (vr-deprecated-log "<- c %s\n" msg))
+;;; Should this be part of vr-deprecated-serialize-message???
+;;;	(process-send-string vr-deprecated-emacs-cmds (vr-deprecated-etonl (length msg)))
 
-	(process-send-string vr-emacs-cmds msg))
-    (message "VR Mode command channel is not open: %s" msg)))
+	(process-send-string vr-deprecated-emacs-cmds msg))
+    (message "vr-deprecated Mode command channel is not open: %s" msg)))
 
 ;; ewww
-(defun vr-etonl (i)
+(defun vr-deprecated-etonl (i)
   (format "%c%c%c%c"
 	  (lsh (logand i 4278190080) -24)
 	  (lsh (logand i 16711680) -16)
@@ -1303,33 +1303,33 @@ Changes are put in a changes queue `vr-queued-changes.
 ;; Subprocess commands
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-quit ()
-  "Turn off VR mode, and cause the VR mode subprocess to exit cleanly."
+(defun vr-deprecated-quit ()
+  "Turn off vr-deprecated mode, and cause the vr-deprecated mode subprocess to exit cleanly."
   (interactive)
-  (vr-mode 0))
+  (vr-deprecated-mode 0))
 
-(defun vr-toggle-mic ()
+(defun vr-deprecated-toggle-mic ()
   "Toggles the state of the Dragon NaturallySpeaking microphone:
 off -> on, {on,sleeping} -> off."
   (interactive)
-  (vr-send-cmd "toggle-mic"))
+  (vr-deprecated-send-cmd "toggle-mic"))
 
-(defun vr-show-window ()
+(defun vr-deprecated-show-window ()
   (interactive)
-  (vr-send-cmd "show-window"))
+  (vr-deprecated-send-cmd "show-window"))
 
-(defun vr-hide-window ()
+(defun vr-deprecated-hide-window ()
   (interactive)
-  (vr-send-cmd "hide-window"))
+  (vr-deprecated-send-cmd "hide-window"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subprocess initialization, including voice commands.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-connect (host port)
+(defun vr-deprecated-connect (host port)
   (condition-case e
       (progn
- 	(setq vr-emacs-cmds (open-network-stream "vr-emacs" nil
+ 	(setq vr-deprecated-emacs-cmds (open-network-stream "vr-deprecated-emacs" nil
  						 host port))
 
 	;;;
@@ -1337,150 +1337,150 @@ off -> on, {on,sleeping} -> off."
 	;;; in case the speech server needs to to some handshaking on that
 	;;; connection.
 	;;;
-	(set-process-filter vr-emacs-cmds 'vr-output-filter)
-	(vr-log "connecting to speech server %s\n" vr-emacs-cmds)
+	(set-process-filter vr-deprecated-emacs-cmds 'vr-deprecated-output-filter)
+	(vr-deprecated-log "connecting to speech server %s\n" vr-deprecated-emacs-cmds)
 	
 	;;;
 	;;; Possibly wait until Emacs has shaken hands with speech server
 	;;; before opening second network stream.
 	;;;
-	(run-hooks 'vr-wait-for-handshake-hook)
+	(run-hooks 'vr-deprecated-wait-for-handshake-hook)
 
-	(setq vr-dns-cmds (open-network-stream "vr-dns" nil host (1+ port)))
-	(process-kill-without-query vr-emacs-cmds)
-	(process-kill-without-query vr-dns-cmds)
-	(set-process-filter vr-dns-cmds 'vr-output-filter)
-	(if vr-process
-	    (set-process-filter vr-process nil))
+	(setq vr-deprecated-dns-cmds (open-network-stream "vr-deprecated-dns" nil host (1+ port)))
+	(process-kill-without-query vr-deprecated-emacs-cmds)
+	(process-kill-without-query vr-deprecated-dns-cmds)
+	(set-process-filter vr-deprecated-dns-cmds 'vr-deprecated-output-filter)
+	(if vr-deprecated-process
+	    (set-process-filter vr-deprecated-process nil))
 	t)
 
     ('error (progn
-	      (message "VR Mode: cannot connect to %s:%d" host port)
+	      (message "vr-deprecated Mode: cannot connect to %s:%d" host port)
 	      (message (format "Error condition was: %S" e))
-	      (vr-mode 0)
+	      (vr-deprecated-mode 0)
 	      nil)))
 )
 
 ;; functionp isn't defined in Win 95 Emacs 19.34.6 (!??!?)
-(defun vr-functionp (object)
+(defun vr-deprecated-functionp (object)
   "Non-nil if OBJECT is a type of object that can be called as a function."
   (or (subrp object) (byte-code-function-p object)
       (eq (car-safe object) 'lambda)
       (and (symbolp object) (fboundp object))))
 
-(defun vr-strip-dash (symbol)
+(defun vr-deprecated-strip-dash (symbol)
   (concat (mapcar (lambda (x) (if (eq x ?-) ?\ x)) (symbol-name symbol))))
 
 
-(defun vr-startup ()
-  "Initialize any per-execution state of the VR Mode subprocess."
+(defun vr-deprecated-startup ()
+  "Initialize any per-execution state of the vr-deprecated Mode subprocess."
 
-  (run-hooks 'vr-initialize-server-hook)
+  (run-hooks 'vr-deprecated-initialize-server-hook)
 
   ;; don't set up these hooks until after initialization has succeeded
-  (add-hook 'post-command-hook 'vr-post-command)
-  (add-hook 'minibuffer-setup-hook 'vr-enter-minibuffer)
-  (vr-maybe-activate-buffer (current-buffer))
-  (run-hooks 'vr-mode-startup-hook)
+  (add-hook 'post-command-hook 'vr-deprecated-post-command)
+  (add-hook 'minibuffer-setup-hook 'vr-deprecated-enter-minibuffer)
+  (vr-deprecated-maybe-activate-buffer (current-buffer))
+  (run-hooks 'vr-deprecated-mode-startup-hook)
   )
 
-(defun vr-kill-emacs ()
-  (vr-mode 0)
+(defun vr-deprecated-kill-emacs ()
+  (vr-deprecated-mode 0)
   (sleep-for 1)
   t)
 
-(defun vr-cmd-terminating (vr-request)
-  (let (vr-emacs-cmds)
-    (vr-mode 0))
-  (if vr-host
-      (vr-sentinel nil "finished\n"))
-  (message "VR process terminated; VR Mode turned off")
+(defun vr-deprecated-cmd-terminating (vr-deprecated-request)
+  (let (vr-deprecated-emacs-cmds)
+    (vr-deprecated-mode 0))
+  (if vr-deprecated-host
+      (vr-deprecated-sentinel nil "finished\n"))
+  (message "vr-deprecated process terminated; vr-deprecated Mode turned off")
   t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; VR Mode entry/exit
+;; vr-deprecated Mode entry/exit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-mode (arg &optional speech-server)
-  "Toggle VR mode.  With argument ARG, turn VR mode on iff ARG is
+(defun vr-deprecated-mode (arg &optional speech-server)
+  "Toggle vr-deprecated mode.  With argument ARG, turn vr-deprecated mode on iff ARG is
 positive.
 
 The optional argument 'speech-server gives the name of the speech
-server to configure VR Mode for (either 'vr,  'vcode, or 'vcode-test). 
+server to configure vr-deprecated Mode for (either 'vr-deprecated,  'vcode, or 'vcode-test). 
 
 If not specified,
-use whatever speech server VR Mode is currently configured for.
+use whatever speech server vr-deprecated Mode is currently configured for.
 
-VR mode supports Dragon NaturallySpeaking dictation, Select 'N
+vr-deprecated mode supports Dragon NaturallySpeaking dictation, Select 'N
 Say(tm), and voice commands in Emacs buffers.  See README.txt for
 instructions.
 
-\\{vr-map}"
+\\{vr-deprecated-map}"
  (interactive "P")
 
-  (setq vr-vcode-test-client 0)
+  (setq vr-deprecated-vcode-test-client 0)
   (if speech-server
     (cond
-      ((string= speech-server "vr") (vr-mode-configure-for-vr-server))
-      ((string= speech-server "vcode") (vr-mode-configure-for-vcode-server))
-      ((string= speech-server "vcode-test") (setq vr-vcode-test-client 1) (vr-mode-configure-for-vcode-server))
+      ((string= speech-server "vr-deprecated") (vr-deprecated-mode-configure-for-vr-deprecated-server))
+      ((string= speech-server "vcode") (vr-deprecated-mode-configure-for-vcode-server))
+      ((string= speech-server "vcode-test") (setq vr-deprecated-vcode-test-client 1) (vr-deprecated-mode-configure-for-vcode-server))
       
     )
   )
 
-  (vr-mode-activate arg)
+  (vr-deprecated-mode-activate arg)
 )
 
-(defun vr-mode-activate (arg)
-  "Activates the VR mode, after it has been configured for a particular
+(defun vr-deprecated-mode-activate (arg)
+  "Activates the vr-deprecated mode, after it has been configured for a particular
 speech server"
 
-  (setq vr-mode
-        (if (null arg) (not vr-mode)
+  (setq vr-deprecated-mode
+        (if (null arg) (not vr-deprecated-mode)
  	  (> (prefix-numeric-value arg) 0)))
-  (if vr-mode
-      ;; Entering VR mode
+  (if vr-deprecated-mode
+      ;; Entering vr-deprecated mode
       (progn
-	(vr-log "starting VR mode %s\n" vr-host)
-	(setq vr-reading-string nil)
-	(setq vr-mic-state "not connected")
-	(set-default 'vr-mode-line (concat " VR-" vr-mic-state))
-	(setq vr-internal-activation-list vr-activation-list)
-	(setq vr-cmd-executing nil)
-	(add-hook 'kill-emacs-hook 'vr-kill-emacs)
-	(run-hooks 'vr-mode-setup-hook)
+	(vr-deprecated-log "starting vr-deprecated mode %s\n" vr-deprecated-host)
+	(setq vr-deprecated-reading-string nil)
+	(setq vr-deprecated-mic-state "not connected")
+	(set-default 'vr-deprecated-mode-line (concat " vr-deprecated-" vr-deprecated-mic-state))
+	(setq vr-deprecated-internal-activation-list vr-deprecated-activation-list)
+	(setq vr-deprecated-cmd-executing nil)
+	(add-hook 'kill-emacs-hook 'vr-deprecated-kill-emacs)
+	(run-hooks 'vr-deprecated-mode-setup-hook)
 
-	(if vr-host
-	    (vr-connect vr-host vr-port)
+	(if vr-deprecated-host
+	    (vr-deprecated-connect vr-deprecated-host vr-deprecated-port)
 
-;	  (setq vr-process (start-process "vr" vr-log-buff-name vr-command
+;	  (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name vr-deprecated-command
 ;					  "-child"
-;					  "-port" (int-to-string vr-port)))
-	  (setq vr-process (start-process "vr" vr-log-buff-name "python" "E:\\VoiceCode\\VCode.TCP_IP\\Mediator\\tcp_server.py"))
-	  (process-kill-without-query vr-process)
-;	  (set-process-filter vr-process 'vr-output-filter)
-	  (set-process-sentinel vr-process 'vr-sentinel))
+;					  "-port" (int-to-string vr-deprecated-port)))
+	  (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name "python" "E:\\VoiceCode\\VCode.TCP_IP\\Mediator\\tcp_server.py"))
+	  (process-kill-without-query vr-deprecated-process)
+;	  (set-process-filter vr-deprecated-process 'vr-deprecated-output-filter)
+	  (set-process-sentinel vr-deprecated-process 'vr-deprecated-sentinel))
 	(vcode-set-hooks 1)
 	)
     
-    ;; Leaving VR mode
-    (remove-hook 'post-command-hook 'vr-post-command)
-    (remove-hook 'minibuffer-setup-hook 'vr-enter-minibuffer)
-    (remove-hook 'kill-buffer-hook 'vr-kill-buffer)
+    ;; Leaving vr-deprecated mode
+    (remove-hook 'post-command-hook 'vr-deprecated-post-command)
+    (remove-hook 'minibuffer-setup-hook 'vr-deprecated-enter-minibuffer)
+    (remove-hook 'kill-buffer-hook 'vr-deprecated-kill-buffer)
     (remove-hook 'suspend-hook 'vcode-send-suspended)
     (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
     (setq frame-title-format 
           `("%b -- " (, invocation-name "@" system-name)))
-    (vr-activate-buffer nil)
-    (if vr-host
-; DCF - I think this is left over from vr-mode.  We should send an
+    (vr-deprecated-activate-buffer nil)
+    (if vr-deprecated-host
+; DCF - I think this is left over from vr-deprecated-mode.  We should send an
 ; editor_disconnecting message (not just a string)
-;      (vr-send-cmd "exit")
+;      (vr-deprecated-send-cmd "exit")
         (vcode-disconnecting))
-	(vr-sentinel nil "finished\n")
+	(vr-deprecated-sentinel nil "finished\n")
     (vcode-set-after-change-functions nil)
-    (run-hooks 'vr-mode-cleanup-hook)
+    (run-hooks 'vr-deprecated-mode-cleanup-hook)
     )
  (force-mode-line-update)
 )
@@ -1488,33 +1488,33 @@ speech server"
 (defun vcode-disconnecting ()
     "sends editor_disconnecting message to the mediator"
   (let ((empty-resp (make-hash-table :test 'string=)))
-    (vr-send-cmd 
+    (vr-deprecated-send-cmd 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "editor_disconnecting" empty-resp)))
+      'vr-deprecated-serialize-message-hook (list "editor_disconnecting" empty-resp)))
     )
 
 )
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Configuration allowing vr-mode to interact with the VR.exe speech
+;;; Configuration allowing vr-deprecated-mode to interact with the vr-deprecated.exe speech
 ;;; server.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-deserialize-message (message)
-   "Parse a message serialized send by VR.exe as a sexp."
+(defun vr-deprecated-deserialize-message (message)
+   "Parse a message serialized send by vr-deprecated.exe as a sexp."
 
    (read-from-string message)
 )
 
-(defun vr-serialize-message (message)
+(defun vr-deprecated-serialize-message (message)
   "Serialises a LISP data structure into a message that can be parsed by
-   VR.exe" 
+   vr-deprecated.exe" 
 
   (let ((mess-name (car message)) (mess-content (cdr message)) (cmd))
     (cond
 
-     ;;; Alain: Later on, put conditions for all the messages that VR.exe
+     ;;; Alain: Later on, put conditions for all the messages that vr-deprecated.exe
      ;;; might need to receive.
      ((eq mess-name "change-text")
       (let ((beg (elt 0 )) ())
@@ -1530,109 +1530,109 @@ speech server"
 )
 
 
-(defun vr-initialize-server ()
-  "Initialize the VR.exe speech server with a series of voice commands and 
+(defun vr-deprecated-initialize-server ()
+  "Initialize the vr-deprecated.exe speech server with a series of voice commands and 
 grammars."
   (let ((l (lambda (x)
-	     (cond ((eq x 'vr-default-voice-commands)
-		    (mapcar l vr-default-voice-command-list))
+	     (cond ((eq x 'vr-deprecated-default-voice-commands)
+		    (mapcar l vr-deprecated-default-voice-command-list))
 		   ((symbolp x)
-		    (vr-send-cmd
+		    (vr-deprecated-send-cmd
 		     (concat "define-command "
-			     (vr-strip-dash x) "|" (symbol-name x))))
+			     (vr-deprecated-strip-dash x) "|" (symbol-name x))))
 		   ((and (listp x) (eq (car x) 'list))
-		    (vr-send-cmd
+		    (vr-deprecated-send-cmd
 		     (format "define-list %s|%s" (nth 1 x) (nth 2 x))))
 		   ((and (consp x) (vectorp (cdr x)))
-		    (vr-send-cmd
+		    (vr-deprecated-send-cmd
 		     (format "define-command %s|%s" (car x) (cdr x))))
 		   ((and (consp x) (symbolp (cdr x)))
-		    (vr-send-cmd
+		    (vr-deprecated-send-cmd
 		     (format "define-command %s|%s" (car x) (cdr x))))
 		   ((and (consp x) (stringp (cdr x)))
-		    (vr-send-cmd
+		    (vr-deprecated-send-cmd
 		     (format "define-command %s|%s" (car x) (cdr x))))
 		   (t
-		    (error "Unknown vr-voice-command-list element %s"
+		    (error "Unknown vr-deprecated-voice-command-list element %s"
 			   x))
 		   )
 	     )))
-    (mapcar l (if (eq vr-voice-command-list t)
-		  vr-default-voice-command-list
-		vr-voice-command-list)))
+    (mapcar l (if (eq vr-deprecated-voice-command-list t)
+		  vr-deprecated-default-voice-command-list
+		vr-deprecated-voice-command-list)))
 )
 
-(defun vr-send-kill-buffer ()
-   "Sends a 'kill-buffer message to VR.exe"
+(defun vr-deprecated-send-kill-buffer ()
+   "Sends a 'kill-buffer message to vr-deprecated.exe"
    (let ()
-     (vr-send-cmd  (concat "kill-buffer " (buffer-name (current-buffer))))
+     (vr-deprecated-send-cmd  (concat "kill-buffer " (buffer-name (current-buffer))))
    )
 )
 
-(defun vr-send-activate-buffer ()
-   "Sends a 'activate-buffer message to VR.exe"
+(defun vr-deprecated-send-activate-buffer ()
+   "Sends a 'activate-buffer message to vr-deprecated.exe"
    (let ()
-     (vr-send-cmd  (concat "activate-buffer " (buffer-name (vr-buffer))))
+     (vr-deprecated-send-cmd  (concat "activate-buffer " (buffer-name (vr-deprecated-buffer))))
    )
 )
 
-(defun vr-send-deactivate-buffer ()
-   "Sends a 'deactivate-buffer message to VR.exe"
+(defun vr-deprecated-send-deactivate-buffer ()
+   "Sends a 'deactivate-buffer message to vr-deprecated.exe"
    (let ()
-     (vr-send-cmd  (concat "deactivate-buffer " (buffer-name (vr-buffer))))
+     (vr-deprecated-send-cmd  (concat "deactivate-buffer " (buffer-name (vr-deprecated-buffer))))
    )
 )
 
 
 
-(defun vr-cmd-initialize (vr-request)
-  "Function that is called when the VR Mode command \"initialize\" is
+(defun vr-deprecated-cmd-initialize (vr-deprecated-request)
+  "Function that is called when the vr-deprecated Mode command \"initialize\" is
 received. The function receives a single argument, REQ,
 which is the list representing the command and its arguments."
-  (cond ((eq (nth 1 vr-request) 'succeeded)
-	 (vr-startup))
-	((eq (nth 1 vr-request) 'no-window)
-	 (vr-mode 0)
-	 (message "VR process: no window matching %s %s"
-		  vr-win-class vr-win-title))
+  (cond ((eq (nth 1 vr-deprecated-request) 'succeeded)
+	 (vr-deprecated-startup))
+	((eq (nth 1 vr-deprecated-request) 'no-window)
+	 (vr-deprecated-mode 0)
+	 (message "vr-deprecated process: no window matching %s %s"
+		  vr-deprecated-win-class vr-deprecated-win-title))
 	(t
-	 (vr-mode 0)
-	 (message "VR process initialization: %s"
-		  (nth 1 vr-request))))
+	 (vr-deprecated-mode 0)
+	 (message "vr-deprecated process initialization: %s"
+		  (nth 1 vr-deprecated-request))))
   t)
 
-(defun vr-cmd-frame-activated (wnd)
+(defun vr-deprecated-cmd-frame-activated (wnd)
 
   ;; This is ridiculous, but Emacs does not automatically change its
   ;; concept of "selected frame" until you type into it.  So, we have
   ;; the subprocess send us the HWND value and explcitly activate the
   ;; frame that owns it.  The HWND may not belong to any frame, for
-  ;; example if vr-win-class/title match a Windows window not
+  ;; example if vr-deprecated-win-class/title match a Windows window not
   ;; belonging to Emacs.  In that case, just ignore it.
   ;;
-  (let* ((frame (car (vr-filter
+  (let* ((frame (car (vr-deprecated-filter
 		      (lambda (f) (equal (cdr (assoc 'window-id
 						     (frame-parameters f)))
 					 wnd))
 		      (visible-frame-list)))))
 
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: init frame: %S\n"
         (selected-frame))
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame handle: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: init frame handle: %S\n"
         (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vr-log "--** vr-cmd-alt-frame-activated: init buffer: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: init buffer: %S\n"
         (buffer-name (current-buffer)))
     (if frame
 	(select-frame frame)
-      (message "VR Mode: %s is not an Emacs frame window handle; ignored."
+      (message "vr-deprecated Mode: %s is not an Emacs frame window handle; ignored."
 	       wnd)))
-    (vr-log "--** vr-cmd-alt-frame-activated: current frame: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: current frame: %S\n"
         (selected-frame))
-    (vr-log "--** vr-cmd-alt-frame-activated: current frame handle: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: current frame handle: %S\n"
         (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vr-log "--** vr-cmd-alt-frame-activated: current buffer: %S\n"
+    (vr-deprecated-log "--** vr-deprecated-cmd-alt-frame-activated: current buffer: %S\n"
         (buffer-name (current-buffer)))
-  (vr-maybe-activate-buffer (current-buffer))
+  (vr-deprecated-maybe-activate-buffer (current-buffer))
 
   t)
 
@@ -1658,12 +1658,12 @@ See vcode-cmd-prepare-for-ignored-key.
 )
 
 (defun vcode-cmd-prepare-for-ignored-key (vcode-request)
-"experimental substitute for vr-cmd-frame-activated
+"experimental substitute for vr-deprecated-cmd-frame-activated
 
 This is ridiculous, but Emacs does not automatically change its
 concept of selected-frame until you type into it.  
 
-The old solution to this, inherited from vr-mode, was to have
+The old solution to this, inherited from vr-deprecated-mode, was to have
 the server us the HWND of the foreground window and explcitly activate the
 frame that owns it.  The problem with this solution is that it requires
 that Emacs's window-id match the Windows HWNd, which won't be the case
@@ -1704,22 +1704,22 @@ focus event, which is the desired effect.
 
     (vcode-set-special-event-map-for-ignored-key)
 ; if we receive the emacs_prepare_for_ignored_key message, then the old
-; vr-cmd-frame-activated hack is redundant
+; vr-deprecated-cmd-frame-activated hack is redundant
     (setq vcode-frame-activated-necessary nil)
 ; set this flag so vcode-cmd-recognition-start can tell whether we
 ; received the ignored key as expected
     (setq vcode-awaiting-ignored-key t)
     (vcode-trace "vcode-cmd-prepare-for-ignored-key" 
       "setting special keymap to intercept ignored key")
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list
+      'vr-deprecated-serialize-message-hook (list
       "emacs_prepare_for_ignored_key_resp" empty-response)))
    )
 )
 
 
-(defun vr-cmd-heard-command (vr-request)
+(defun vr-deprecated-cmd-heard-command (vr-deprecated-request)
   ;;
   ;; We want to execute the command after this filter function
   ;; terminates, so add the key sequence to invoke it to the end of
@@ -1730,21 +1730,21 @@ focus event, which is the desired effect.
   ;; invoke pre-command-hook and post-command-hook so it looks as much
   ;; like a regular command as possible.
   ;;
-  ;; Set vr-cmd-executing so vr-post-command (hook) will inform VR.EXE
+  ;; Set vr-deprecated-cmd-executing so vr-deprecated-post-command (hook) will inform vr-deprecated.EXE
   ;; when the command is finished.  If cmd is an undefined key
   ;; sequence, no command will be executed, so complete immediately.
   ;;
-  (let* ((cmd (nth 1 vr-request))
+  (let* ((cmd (nth 1 vr-deprecated-request))
 	 (kseq (or (and (vectorp cmd) cmd)
 		   (where-is-internal cmd nil 'non-ascii)
 		   (concat "\M-x" (symbol-name cmd) "\n"))))
-    (setq vr-cmd-executing (if (vectorp cmd) (key-binding cmd) cmd))
-    (if (not vr-cmd-executing)
-	(vr-send-cmd "command-done undefined"))
+    (setq vr-deprecated-cmd-executing (if (vectorp cmd) (key-binding cmd) cmd))
+    (if (not vr-deprecated-cmd-executing)
+	(vr-deprecated-send-cmd "command-done undefined"))
     
     (if (not (vectorp cmd))
-	(vr-execute-command (cdr vr-request))
-      (vr-log "running %s as key sequence:\n" cmd )
+	(vr-deprecated-execute-command (cdr vr-deprecated-request))
+      (vr-deprecated-log "running %s as key sequence:\n" cmd )
       (setq unread-command-events
 	    (append unread-command-events
 		    (listify-key-sequence kseq)))
@@ -1753,15 +1753,15 @@ focus event, which is the desired effect.
   t)
 
 
-(defun vr-cmd-mic-state (vr-request)
-  (let ((state (car (cdr vr-request))))
+(defun vr-deprecated-cmd-mic-state (vr-deprecated-request)
+  (let ((state (car (cdr vr-deprecated-request))))
     (cond ((eq state 'off)
-	   (setq vr-mic-state "off"))
+	   (setq vr-deprecated-mic-state "off"))
 	  ((eq state 'on)
-	   (setq vr-mic-state "on"))
+	   (setq vr-deprecated-mic-state "on"))
 	  ((eq state 'sleep)
-	   (setq vr-mic-state "sleep")))
-    (vr-activate-buffer vr-buffer))
+	   (setq vr-deprecated-mic-state "sleep")))
+    (vr-deprecated-activate-buffer vr-deprecated-buffer))
   t)
 
 
@@ -1769,13 +1769,13 @@ focus event, which is the desired effect.
 ;; utterance; delay key and mouse events until it is done.  This
 ;; ensures that key and mouse events are not handled out of order
 ;; with respect to speech recognition events
-(defun vr-cmd-recognition (vr-request)
-  (let ((state (nth 1 vr-request)))
+(defun vr-deprecated-cmd-recognition (vr-deprecated-request)
+  (let ((state (nth 1 vr-deprecated-request)))
     (progn
-      (vr-log "recognition %s: current buffer: %s vr-buffer:%s\n"
-	      state (buffer-name) vr-buffer)
+      (vr-deprecated-log "recognition %s: current buffer: %s vr-deprecated-buffer:%s\n"
+	      state (buffer-name) vr-deprecated-buffer)
       (cond ((eq state 'begin)
-					; if recognition starts and VR
+					; if recognition starts and vr-deprecated
 					; buffer is not the current
 					; buffer, we might have a
 					; potential problem with
@@ -1784,11 +1784,11 @@ focus event, which is the desired effect.
 					; maybe-activate-buffer and
 					; see if it's not already too
 					; late.
-	     (vr-maybe-activate-buffer (current-buffer))
-	     (run-at-time 0 nil 'vr-sleep-while-recognizing)
-	     (setq vr-recognizing t))
+	     (vr-deprecated-maybe-activate-buffer (current-buffer))
+	     (run-at-time 0 nil 'vr-deprecated-sleep-while-recognizing)
+	     (setq vr-deprecated-recognizing t))
 	    ((eq state 'end)
-	     (setq vr-recognizing nil))
+	     (setq vr-deprecated-recognizing nil))
 	    (t
 	     (error "Unknown recognition state: %s" state)))))
 
@@ -1799,33 +1799,33 @@ focus event, which is the desired effect.
 ;; "Repeat that N times"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-last-heard-command-request nil
+(defvar vr-deprecated-last-heard-command-request nil
   "If non-nil, the complete, most-recently-received heard-command
-message from VR.EXE")
+message from vr-deprecated.EXE")
 
-(defun vr-repeat-that-hook (vr-request)
-  (let ((cmd (nth 1 vr-request)))
-    (if (not (eq cmd 'vr-repeat-that))
-	(setq vr-last-heard-command-request vr-request)))
+(defun vr-deprecated-repeat-that-hook (vr-deprecated-request)
+  (let ((cmd (nth 1 vr-deprecated-request)))
+    (if (not (eq cmd 'vr-deprecated-repeat-that))
+	(setq vr-deprecated-last-heard-command-request vr-deprecated-request)))
   nil)
 
-(defun vr-repeat-that (num)
+(defun vr-deprecated-repeat-that (num)
   (interactive '(1))
-  (if vr-last-heard-command-request
+  (if vr-deprecated-last-heard-command-request
       (progn
 	(while (> num 0)
-	  (run-hook-with-args-until-success 'vr-cmd-heard-command-hook
-					    vr-last-heard-command-request)
+	  (run-hook-with-args-until-success 'vr-deprecated-cmd-heard-command-hook
+					    vr-deprecated-last-heard-command-request)
 	  (setq num (1- num))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repeating commands (based on code by Steve Freund).
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar vr-repeat-rate nil
+(defvar vr-deprecated-repeat-rate nil
   "The rate at which to repeat commands, in seconds.  If nil, any
 currently repeating command will terminate.")
 
-(defun vr-repeat-cmd (freq cmd &rest args)
+(defun vr-deprecated-repeat-cmd (freq cmd &rest args)
   "Every FREQ seconds, execute (CMD ARG ...), until the user
 generates an input event such as a key press or mouse click (or
 executes a voice command that does so).
@@ -1835,73 +1835,73 @@ then discarded.  Any other event terminates the repeat and is then
 acted on as it normally would be."
   (let (ev)
     (discard-input)
-    (setq vr-repeat-rate freq)
-    (while vr-repeat-rate
+    (setq vr-deprecated-repeat-rate freq)
+    (while vr-deprecated-repeat-rate
       (apply cmd args)
-      (sit-for vr-repeat-rate)
+      (sit-for vr-deprecated-repeat-rate)
       (if (input-pending-p)
 	  (progn
 	    (setq ev (read-event))
-	    (setq vr-repeat-rate nil))))
+	    (setq vr-deprecated-repeat-rate nil))))
     (if (and ev (not (eq ev 'return)))
 	(setq unread-command-events
 	      (cons ev unread-command-events)))
     ))
 
-(defun vr-repeat-mult-rate (f)
+(defun vr-deprecated-repeat-mult-rate (f)
   "Multiply the number of seconds between each execution of the current
 repeating command by FACTOR."
-  (setq vr-repeat-rate (* vr-repeat-rate f)))
+  (setq vr-deprecated-repeat-rate (* vr-deprecated-repeat-rate f)))
 
-(defun vr-repeat-stop (d)
+(defun vr-deprecated-repeat-stop (d)
   "Terminate the current repeating command."
-  (setq vr-repeat-rate nil))
+  (setq vr-deprecated-repeat-rate nil))
 
-(defmacro vr-make-repeat-cmd (name freq cmd &rest args)
+(defmacro vr-deprecated-make-repeat-cmd (name freq cmd &rest args)
   "Define an interactive repeating command called NAME that takes no
 arguments and, every FREQ seconds, invokes the function CMD.  Uses
-vr-repeat-cmd."
-  (let ((vrc 'vr-repeat-cmd))
+vr-deprecated-repeat-cmd."
+  (let ((vrc 'vr-deprecated-repeat-cmd))
     (list 'defun name '()
-	  (format "Invoke %s every %s seconds,\nusing vr-repeat-cmd (which see)."
+	  (format "Invoke %s every %s seconds,\nusing vr-deprecated-repeat-cmd (which see)."
 		  cmd freq)
 	  '(interactive)
 	  (list 'apply (list 'quote vrc) freq (list 'quote cmd)
 		(list 'quote args)))))
 
-(vr-make-repeat-cmd vr-repeat-move-up-s 0.25 previous-line 1)
-(vr-make-repeat-cmd vr-repeat-move-up-f 0.05 previous-line 1)
-(vr-make-repeat-cmd vr-repeat-move-down-s 0.25 next-line 1)
-(vr-make-repeat-cmd vr-repeat-move-down-f 0.05 next-line 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-up-s 0.25 previous-line 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-up-f 0.05 previous-line 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-down-s 0.25 next-line 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-down-f 0.05 next-line 1)
 
-(vr-make-repeat-cmd vr-repeat-move-left-s 0.25 backward-char 1)
-(vr-make-repeat-cmd vr-repeat-move-left-f 0.05 backward-char 1)
-(vr-make-repeat-cmd vr-repeat-move-right-s 0.25 forward-char 1)
-(vr-make-repeat-cmd vr-repeat-move-right-f 0.05 forward-char 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-left-s 0.25 backward-char 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-left-f 0.05 backward-char 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-right-s 0.25 forward-char 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-right-f 0.05 forward-char 1)
 
-(vr-make-repeat-cmd vr-repeat-move-word-left-s 0.25 backward-word 1)
-(vr-make-repeat-cmd vr-repeat-move-word-left-f 0.05 backward-word 1)
-(vr-make-repeat-cmd vr-repeat-move-word-right-s 0.5 forward-word 1)
-(vr-make-repeat-cmd vr-repeat-move-word-right-f 0.05 forward-word 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-word-left-s 0.25 backward-word 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-word-left-f 0.05 backward-word 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-word-right-s 0.5 forward-word 1)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-move-word-right-f 0.05 forward-word 1)
 
-(vr-make-repeat-cmd vr-repeat-search-forward-s 0.75 isearch-repeat-forward)
-(vr-make-repeat-cmd vr-repeat-search-forward-f 0.25 isearch-repeat-forward)
-(vr-make-repeat-cmd vr-repeat-search-backward-s 0.75 isearch-repeat-backward)
-(vr-make-repeat-cmd vr-repeat-search-backward-f 0.25 isearch-repeat-backward)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-search-forward-s 0.75 isearch-repeat-forward)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-search-forward-f 0.25 isearch-repeat-forward)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-search-backward-s 0.75 isearch-repeat-backward)
+(vr-deprecated-make-repeat-cmd vr-deprecated-repeat-search-backward-f 0.25 isearch-repeat-backward)
 
-(defun vr-repeat-kill-line (freq)
-  "Invoke kill-line every FREQ seconds, using vr-repeat-cmd (which see).
+(defun vr-deprecated-repeat-kill-line (freq)
+  "Invoke kill-line every FREQ seconds, using vr-deprecated-repeat-cmd (which see).
 The lines killed with this command form a single block in the yank buffer."
   (kill-new "") 
-  (vr-repeat-cmd freq (function (lambda () (kill-line) (append-next-kill)))))
+  (vr-deprecated-repeat-cmd freq (function (lambda () (kill-line) (append-next-kill)))))
 
-(defun vr-repeat-yank (freq arg)
+(defun vr-deprecated-repeat-yank (freq arg)
   "Perform a yank from the kill ring every FREQ seconds, using
-vr-repeat-cmd (which see).  This function cycles through the yank
+vr-deprecated-repeat-cmd (which see).  This function cycles through the yank
 buffer, doing the right thing regardless of whether the previous
 command was a yank or not."
   (interactive (list 0.5 (prefix-numeric-value prefix-arg)))
-  (vr-repeat-cmd
+  (vr-deprecated-repeat-cmd
    freq (function (lambda ()
 		    (if (or (eq last-command 'yank) (eq this-command 'yank))
 			(yank-pop arg)
@@ -1912,7 +1912,7 @@ command was a yank or not."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Configuration allowing vr-mode to interact with VoiceCode speech 
+;;; Configuration allowing vr-deprecated-mode to interact with VoiceCode speech 
 ;;; server.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1939,23 +1939,23 @@ to nil?"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; variables used by the ignored key alternative to
-;; vr-cmd-frame-activated.
+;; vr-deprecated-cmd-frame-activated.
 ;;
 ;; See vcode-cmd-prepare-for-ignored-key for more details.
 
 (defvar vcode-frame-activated-necessary t
 "flag indicating whether vcode-cmd-recognition-start needs to call
-vr-cmd-frame-activated to ensure that selected-frame (and thus
+vr-deprecated-cmd-frame-activated to ensure that selected-frame (and thus
 current-buffer, etc.) return the correct value.
 
 Currently, this is initially set to true, but will be cleared if we
 receive an emacs_prepare_for_ignored_key message.  This allows us to
 switch on the experimental ignored-key substitute for
-vr-cmd-frame-activated based on whether the VoiceCode server is using
+vr-deprecated-cmd-frame-activated based on whether the VoiceCode server is using
 it, rather than having to manually configure both VoiceCode and
 vcode-mode to use matching settings.
 
-If the experimental test works, vr-cmd-frame-activated and this flag
+If the experimental test works, vr-deprecated-cmd-frame-activated and this flag
 will ultimately be removed.
 
 See vcode-cmd-prepare-for-ignored-key for more details.
@@ -1984,153 +1984,153 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   
 )
 
-(defun vr-mode-configure-for-vcode-server ()
-  "Configures VR Mode for interacting with the VoiceCode speech server."
+(defun vr-deprecated-mode-configure-for-vcode-server ()
+  "Configures vr-deprecated Mode for interacting with the VoiceCode speech server."
 
   ;;;
   ;;; VCode will do automatic indentation and stuff.
   ;;;
   (vcode-make-all-keys-self-insert)
 
-  (setq vr-dont-report-sr-own-changes nil)
+  (setq vr-deprecated-dont-report-sr-own-changes nil)
 
   ;;;
   ;;; Hook function that waits for Emacs to handshake with first 
   ;;; socket connection before connecting a second time.
   ;;;
   (setq vcode-app-id nil)
-  (setq vr-wait-for-handshake-hook 'vcode-wait-for-handshake)
+  (setq vr-deprecated-wait-for-handshake-hook 'vcode-wait-for-handshake)
 
   ;;;
   ;;; Hook functions for parsing/generating messages to/from VCode server
   ;;;
-  (setq vr-deserialize-message-hook 'vcode-deserialize-message)
-  (setq vr-serialize-message-hook 'vcode-serialize-message)
-  (setq vr-serialize-changes-hook 'vcode-serialize-changes)
+  (setq vr-deprecated-deserialize-message-hook 'vcode-deserialize-message)
+  (setq vr-deprecated-serialize-message-hook 'vcode-serialize-message)
+  (setq vr-deprecated-serialize-changes-hook 'vcode-serialize-changes)
 
   ;;;
   ;;; Hook function for starting the VCode server
   ;;;
-  (setq vr-command (substitute-in-file-name "%VCODE_HOME%/Mediator/vcode.bat"))
+  (setq vr-deprecated-command (substitute-in-file-name "%VCODE_HOME%/Mediator/vcode.bat"))
   
-  ;;; Functions for sending messages to VR.exe
-  (setq vr-send-kill-buffer-hook 'vcode-send-kill-buffer)
-  (setq vr-send-activate-buffer-hook 'vcode-send-activate-buffer)
-  (setq vr-send-deactivate-buffer-hook 'vcode-send-deactivate-buffer)
-  (add-hook 'kill-buffer-hook 'vr-kill-buffer)
+  ;;; Functions for sending messages to vr-deprecated.exe
+  (setq vr-deprecated-send-kill-buffer-hook 'vcode-send-kill-buffer)
+  (setq vr-deprecated-send-activate-buffer-hook 'vcode-send-activate-buffer)
+  (setq vr-deprecated-send-deactivate-buffer-hook 'vcode-send-deactivate-buffer)
+  (add-hook 'kill-buffer-hook 'vr-deprecated-kill-buffer)
   (add-hook 'suspend-hook 'vcode-send-suspended)
   (add-hook 'suspend-resume-hook 'vcode-send-resuming)
 
   ;;; Function for handling errors in execution of commands received from 
-  ;;; VR.exe.
-  (setq vr-upon-cmd-error 'vcode-send-cmd-error-message)
+  ;;; vr-deprecated.exe.
+  (setq vr-deprecated-upon-cmd-error 'vcode-send-cmd-error-message)
 
 
   ;;;
   ;;; Hook functions for handling messages received from VCode
   ;;; 
-  (cl-clrhash vr-message-handler-hooks)
+  (cl-clrhash vr-deprecated-message-handler-hooks)
 
   ;;;
   ;;; These messages are sent by VCode during handshake part of the 
   ;;; protocol
   ;;;
-  (cl-puthash 'send_app_name 'vcode-cmd-send-app-name vr-message-handler-hooks)
-  (cl-puthash 'your_id_is 'vcode-cmd-your-id-is vr-message-handler-hooks)
-  (cl-puthash 'send_id 'vcode-cmd-send-app-id vr-message-handler-hooks)
-  (cl-puthash 'terminating 'vr-cmd-terminating vr-message-handler-hooks)
-  (cl-puthash 'test_client_query 'vcode-cmd-test-client-query vr-message-handler-hooks)
+  (cl-puthash 'send_app_name 'vcode-cmd-send-app-name vr-deprecated-message-handler-hooks)
+  (cl-puthash 'your_id_is 'vcode-cmd-your-id-is vr-deprecated-message-handler-hooks)
+  (cl-puthash 'send_id 'vcode-cmd-send-app-id vr-deprecated-message-handler-hooks)
+  (cl-puthash 'terminating 'vr-deprecated-cmd-terminating vr-deprecated-message-handler-hooks)
+  (cl-puthash 'test_client_query 'vcode-cmd-test-client-query vr-deprecated-message-handler-hooks)
 
   ;;; These messages are sent once by VCode immediately after the 
   ;;; handshake part of the protocol
   ;;;
-  (cl-puthash 'set_instance_string 'vcode-cmd-set-instance-string vr-message-handler-hooks)
+  (cl-puthash 'set_instance_string 'vcode-cmd-set-instance-string vr-deprecated-message-handler-hooks)
 ; DCF: obsolete message 
-;  (cl-puthash 'instance_string 'vcode-cmd-get-instance-string vr-message-handler-hooks)
+;  (cl-puthash 'instance_string 'vcode-cmd-get-instance-string vr-deprecated-message-handler-hooks)
   (cl-puthash 'suspendable 'vcode-cmd-suspendable 
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'suspend_notification 'vcode-cmd-suspend-notification 
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'shared_window 'vcode-cmd-shared-window
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'multiple_windows 'vcode-cmd-multiple-windows
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
 
 
   (cl-puthash 'emacs_prepare_for_ignored_key 'vcode-cmd-prepare-for-ignored-key
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'recog_begin 'vcode-cmd-recognition-start 
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'recog_end 'vcode-cmd-recognition-end 
-	      vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
   (cl-puthash 'active_buffer_name 'vcode-cmd-active-buffer-name 
-	      vr-message-handler-hooks)
-  (cl-puthash 'open_file 'vcode-cmd-open-file vr-message-handler-hooks)
-  (cl-puthash 'updates 'vcode-cmd-updates vr-message-handler-hooks)
-  (cl-puthash 'confirm_buffer_exists 'vcode-cmd-confirm-buffer-exists vr-message-handler-hooks)
-  (cl-puthash 'list_open_buffers 'vcode-cmd-list-open-buffers vr-message-handler-hooks)
-  (cl-puthash 'close_buffer 'vcode-cmd-close-buffer vr-message-handler-hooks)
-  (cl-puthash 'file_name 'vcode-cmd-file-name vr-message-handler-hooks)
-  (cl-puthash 'language_name 'vcode-cmd-language-name vr-message-handler-hooks)
-  (cl-puthash 'line_num_of 'vcode-cmd-line-num-of vr-message-handler-hooks)
-  (cl-puthash 'cur_pos 'vcode-cmd-cur-pos vr-message-handler-hooks)
-  (cl-puthash 'get_selection 'vcode-cmd-get-selection vr-message-handler-hooks)
-  (cl-puthash 'get_pos_selection 'vcode-cmd-get-pos-selection vr-message-handler-hooks)
-  (cl-puthash 'get_text 'vcode-cmd-get-text vr-message-handler-hooks)
-  (cl-puthash 'get_visible 'vcode-cmd-get-visible vr-message-handler-hooks)
-  (cl-puthash 'len 'vcode-cmd-len vr-message-handler-hooks)
-  (cl-puthash 'newline_conventions 'vcode-cmd-newline-conventions vr-message-handler-hooks)
-  (cl-puthash 'pref_newline_convention 'vcode-cmd-pref-newline-conventions vr-message-handler-hooks)
+	      vr-deprecated-message-handler-hooks)
+  (cl-puthash 'open_file 'vcode-cmd-open-file vr-deprecated-message-handler-hooks)
+  (cl-puthash 'updates 'vcode-cmd-updates vr-deprecated-message-handler-hooks)
+  (cl-puthash 'confirm_buffer_exists 'vcode-cmd-confirm-buffer-exists vr-deprecated-message-handler-hooks)
+  (cl-puthash 'list_open_buffers 'vcode-cmd-list-open-buffers vr-deprecated-message-handler-hooks)
+  (cl-puthash 'close_buffer 'vcode-cmd-close-buffer vr-deprecated-message-handler-hooks)
+  (cl-puthash 'file_name 'vcode-cmd-file-name vr-deprecated-message-handler-hooks)
+  (cl-puthash 'language_name 'vcode-cmd-language-name vr-deprecated-message-handler-hooks)
+  (cl-puthash 'line_num_of 'vcode-cmd-line-num-of vr-deprecated-message-handler-hooks)
+  (cl-puthash 'cur_pos 'vcode-cmd-cur-pos vr-deprecated-message-handler-hooks)
+  (cl-puthash 'get_selection 'vcode-cmd-get-selection vr-deprecated-message-handler-hooks)
+  (cl-puthash 'get_pos_selection 'vcode-cmd-get-pos-selection vr-deprecated-message-handler-hooks)
+  (cl-puthash 'get_text 'vcode-cmd-get-text vr-deprecated-message-handler-hooks)
+  (cl-puthash 'get_visible 'vcode-cmd-get-visible vr-deprecated-message-handler-hooks)
+  (cl-puthash 'len 'vcode-cmd-len vr-deprecated-message-handler-hooks)
+  (cl-puthash 'newline_conventions 'vcode-cmd-newline-conventions vr-deprecated-message-handler-hooks)
+  (cl-puthash 'pref_newline_convention 'vcode-cmd-pref-newline-conventions vr-deprecated-message-handler-hooks)
 
   ;;;
   ;;; These messages are used by VCode to change the content of the buffer
   ;;;
-  (cl-puthash 'set_selection 'vcode-cmd-set-selection vr-message-handler-hooks)
+  (cl-puthash 'set_selection 'vcode-cmd-set-selection vr-deprecated-message-handler-hooks)
 ;;; Is this needed?
-;;;  (cl-puthash 'make_position_visible 'vcode-cmd-make-position-visible vr-message-handler-hooks)
-  (cl-puthash 'move_relative_page 'vcode-cmd-move-relative-page vr-message-handler-hooks)  
-  (cl-puthash 'insert 'vcode-cmd-insert vr-message-handler-hooks)  
-  (cl-puthash 'insert_indent 'vcode-cmd-insert-indent vr-message-handler-hooks)  
-  (cl-puthash 'set_text 'vcode-cmd-set-text vr-message-handler-hooks)  
-  (cl-puthash 'indent 'vcode-cmd-indent vr-message-handler-hooks)  
-  (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
-  (cl-puthash 'delete 'vcode-cmd-delete vr-message-handler-hooks)  
-  (cl-puthash 'backspace 'vcode-cmd-backspace vr-message-handler-hooks)  
-  (cl-puthash 'goto 'vcode-cmd-goto vr-message-handler-hooks)  
-  (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-message-handler-hooks)  
+;;;  (cl-puthash 'make_position_visible 'vcode-cmd-make-position-visible vr-deprecated-message-handler-hooks)
+  (cl-puthash 'move_relative_page 'vcode-cmd-move-relative-page vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'insert 'vcode-cmd-insert vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'insert_indent 'vcode-cmd-insert-indent vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'set_text 'vcode-cmd-set-text vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'indent 'vcode-cmd-indent vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-deprecated-message-handler-hooks)
+  (cl-puthash 'delete 'vcode-cmd-delete vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'backspace 'vcode-cmd-backspace vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'goto 'vcode-cmd-goto vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-deprecated-message-handler-hooks)  
 
-  (cl-puthash 'mediator_closing 'vcode-cmd-mediator-closing vr-message-handler-hooks)  
+  (cl-puthash 'mediator_closing 'vcode-cmd-mediator-closing vr-deprecated-message-handler-hooks)  
 
   ;;;
   ;;; These ones are currently not handled by VCode, but they probably should
   ;;;
-;  (cl-puthash 'heard-command 'vr-cmd-heard-command-hook vr-message-handler-hooks)
-;  (cl-puthash 'mic-state 'vr-cmd-mic-state-hook vr-message-handler-hooks)
+;  (cl-puthash 'heard-command 'vr-deprecated-cmd-heard-command-hook vr-deprecated-message-handler-hooks)
+;  (cl-puthash 'mic-state 'vr-deprecated-cmd-mic-state-hook vr-deprecated-message-handler-hooks)
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;; These messages are defined in VR.exe but don't seem useful for VCode.
+  ;;; These messages are defined in vr-deprecated.exe but don't seem useful for VCode.
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;; In VR.exe, this message is sent only to confirm
+;;; In vr-deprecated.exe, this message is sent only to confirm
 ;;; that there is indeed a window with the ID, title or class that Emacs
 ;;; sent upon connection. But VCode doesn't expect Emacs to tell it about
 ;;; its window (it decides that for itself by looking at what is the active
 ;;; window)
-;  (cl-puthash 'connected 'vcode-cmd-connected-hook vr-message-handler-hooks)
+;  (cl-puthash 'connected 'vcode-cmd-connected-hook vr-deprecated-message-handler-hooks)
 
 ;;; See comment about 'vcode-cmd-connected-hook
-;  (cl-puthash 'initialize 'vr-cmd-initialize-hook vr-message-handler-hooks)
+;  (cl-puthash 'initialize 'vr-deprecated-cmd-initialize-hook vr-deprecated-message-handler-hooks)
 
 ;;; VCode will tell Emacs that a frame is activated when
 ;;; it sends a recog_begin message
-;  (cl-puthash 'frame-activated 'vr-cmd-frame-activated-hook vr-message-handler-hooks)
+;  (cl-puthash 'frame-activated 'vr-deprecated-cmd-frame-activated-hook vr-deprecated-message-handler-hooks)
 
 
 ;;; Not needed in VCode. VCode will send different messages to make different
 ;;; kinds of changes.
-;  (cl-puthash 'make-changes 'vr-cmd-make-changes vr-message-handler-hooks)
+;  (cl-puthash 'make-changes 'vr-deprecated-cmd-make-changes vr-deprecated-message-handler-hooks)
 
 )
 
@@ -2181,9 +2181,9 @@ generated while executing VCode request 'vcode-req."
 ;   (let ((mess-name (concat (elt 0 vcode-req) "_resp"))
 ;        (mess-cont make-hash-table :test 'string=))
 ;     (cl-sethash "error" 1 mess-cont)
-;     (vr-send-reply 
+;     (vr-deprecated-send-reply 
 ;      (run-hook-with-args 
-;       'vr-serialize-message-hook (list mess-name mess-cont)))
+;       'vr-deprecated-serialize-message-hook (list mess-name mess-cont)))
 ;     )
 
 )
@@ -2205,7 +2205,7 @@ returns name of current buffer."
 
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "value" "emacs" mess-cont)
-     (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "app_name" mess-cont)))
+     (vr-deprecated-send-cmd (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "app_name" mess-cont)))
   )
 
 )
@@ -2216,8 +2216,8 @@ returns name of current buffer."
 
 
    (let ((mess-cont (make-hash-table :test 'string=)))
-     (cl-puthash "value" vr-vcode-test-client mess-cont)
-     (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "test_client_query_resp" mess-cont)))
+     (cl-puthash "value" vr-deprecated-vcode-test-client mess-cont)
+     (vr-deprecated-send-cmd (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "test_client_query_resp" mess-cont)))
   )
 
 )
@@ -2240,8 +2240,8 @@ returns name of current buffer."
 ;   (setq frame-title-format 
 ;	 `(multiple-frames "%b" (,vcode-instance-string invocation-name "@" system-name)))
 
-     (vr-send-reply (run-hook-with-args 
-		   'vr-serialize-message-hook (list "set_instance_string_resp" resp-cont)))
+     (vr-deprecated-send-reply (run-hook-with-args 
+		   'vr-deprecated-serialize-message-hook (list "set_instance_string_resp" resp-cont)))
   )
 
 )
@@ -2249,8 +2249,8 @@ returns name of current buffer."
 (defun vcode-cmd-get-instance-string (vcode-req)
    (let (resp-cont (make-hash-table :test 'string=))
      (cl-puthash "value"  vcode-instance-string resp-cont)
-     (vr-send-reply (run-hook-with-args 
-		   'vr-serialize-message-hook (list "get_instance_string_resp" resp-cont)))
+     (vr-deprecated-send-reply (run-hook-with-args 
+		   'vr-deprecated-serialize-message-hook (list "get_instance_string_resp" resp-cont)))
   )
 
 )
@@ -2264,7 +2264,7 @@ we can send it back to VoiceCode when we ask it for a second network connection.
 	 (ok-mess-cont (make-hash-table :test 'string=)))
 
 
-     (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "ok" ok-mess-cont)))
+     (vr-deprecated-send-cmd (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "ok" ok-mess-cont)))
 
      ;;;
      ;;; Wait til the very end before setting 'vcode-app-id, because that will
@@ -2290,14 +2290,14 @@ connection originates from the same Emacs instance as the first one."
 
      ;;; Then send that ID back to the server
      (cl-puthash "value" vcode-app-id mess-cont)
-     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "my_id_is" mess-cont)))
+     (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "my_id_is" mess-cont)))
 
 
      ;;;
-     ;;; Invoke 'vr-startup explicitly here because VCode server never sends an
+     ;;; Invoke 'vr-deprecated-startup explicitly here because VCode server never sends an
      ;;; 'inialize message.
      ;;;
-     (vr-startup)
+     (vr-deprecated-startup)
 
    )
 )
@@ -2322,13 +2322,13 @@ Emacs has set 'vcode-app-id to a non nil value."
      (cl-puthash "buff_name" (buffer-name) mess-cont)
      (cl-puthash "action" "close_buff" mess-cont)
 ; DCF - try this instead
-     (vr-send-cmd
+     (vr-deprecated-send-cmd
        (vcode-serialize-updates (list mess-cont)))
        
 ; DCF - AppStateMessaging is not expecting this format
-;     (vr-send-cmd (list 'updates mess-cont))
+;     (vr-deprecated-send-cmd (list 'updates mess-cont))
 ;       (run-hook-with-args 
-;	 'vr-serialize-message-hook (list "updates" mess-cont)))
+;	 'vr-deprecated-serialize-message-hook (list "updates" mess-cont)))
    )
 )
 
@@ -2338,7 +2338,7 @@ a buffer"
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "buff_name" (buffer-name) mess-cont)
      (cl-puthash "action" "curr_buffer" mess-cont)
-     (vr-send-cmd (list 'updates mess-cont))
+     (vr-deprecated-send-cmd (list 'updates mess-cont))
    )
 )
 
@@ -2348,7 +2348,7 @@ a buffer"
    (let ((mess-cont (make-hash-table :test 'string=)))
      (cl-puthash "buff_name" (buffer-name) mess-cont)
      (cl-puthash "action" "close_buff" mess-cont)
-     (vr-send-cmd (list 'updates mess-cont))
+     (vr-deprecated-send-cmd (list 'updates mess-cont))
    )
 )
 
@@ -2360,9 +2360,9 @@ a buffer"
 	 (cl-puthash "value" 0 resp-cont)
        (cl-puthash "value" 1 resp-cont)	 
      )
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "suspendable_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "suspendable_resp" resp-cont)))
    )
 )
 
@@ -2373,9 +2373,9 @@ a buffer"
 	 (cl-puthash "value" 0 resp-cont)
        (cl-puthash "value" 1 resp-cont)	 
      )
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "suspend_notification_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "suspend_notification_resp" resp-cont)))
    )
 )
 
@@ -2388,9 +2388,9 @@ a buffer"
 	 (cl-puthash "value" 1 resp-cont)
        (cl-puthash "value" 0 resp-cont)	 
      )
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "shared_window_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "shared_window_resp" resp-cont)))
    )
 )
 
@@ -2403,9 +2403,9 @@ a buffer"
 	 (cl-puthash "value" 0 resp-cont)
        (cl-puthash "value" 1 resp-cont)	 
      )
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "multiple_windows_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "multiple_windows_resp" resp-cont)))
    )
 )
 
@@ -2431,11 +2431,11 @@ a buffer"
       "selected-window is minibuffer? %S"
       (if (window-minibuffer-p (selected-window)) "yes" "no")
     )
-    (vr-log "-- vcode-cmd-recognition-start: input-pending-p is %S" 
+    (vr-deprecated-log "-- vcode-cmd-recognition-start: input-pending-p is %S" 
       (input-pending-p))
     (if (numberp window-id)
         (setq window-id (int-to-string window-id)))
-    (vr-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
+    (vr-deprecated-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
 
 
     (if vcode-awaiting-ignored-key
@@ -2456,37 +2456,37 @@ a buffer"
 ; mediator to send the ignored key.  -- DCF
 ;      (vcode-set-special-event-map-for-ignored-key)
 ;      (execute-kbd-macro [f9])
-      (vr-cmd-frame-activated window-id)
+      (vr-deprecated-cmd-frame-activated window-id)
     )
 
 ; trying my alternative form here
-;    (vr-cmd-alt-frame-activated window-id)
+;    (vr-deprecated-cmd-alt-frame-activated window-id)
 ; DCF: I don't understand why list nil was used here.  The comparison
 ; was with the window-id as a string.
-;    (vr-cmd-frame-activated (list nil (cl-gethash 'window_id mess-cont)))
+;    (vr-deprecated-cmd-frame-activated (list nil (cl-gethash 'window_id mess-cont)))
 
     ;;;
     ;;; Check if current buffer is speech enabled
     ;;;
-    (if (vr-activate-buffer-p (current-buffer))
+    (if (vr-deprecated-activate-buffer-p (current-buffer))
       (progn
 	
         ;;;
         ;;; Reformulate the request received from VCode, into a request 
-        ;;; that can be processed by the standard VR Mode function
+        ;;; that can be processed by the standard vr-deprecated Mode function
         ;;;
-	(vr-cmd-recognition (list nil 'begin))
+	(vr-deprecated-cmd-recognition (list nil 'begin))
 	(cl-puthash "value" 1 resp-cont)
 	)
       (cl-puthash "value" 0 resp-cont)
       )
-    (vr-log "active, current buffer name is %d, %S" (cl-gethash "value"
+    (vr-deprecated-log "active, current buffer name is %d, %S" (cl-gethash "value"
     resp-cont)(buffer-name (current-buffer)))
 
 
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "recog_begin_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "recog_begin_resp" resp-cont)))
     )    
   )
 
@@ -2495,13 +2495,13 @@ a buffer"
   (let ((empty-resp (make-hash-table :test 'string=)))
     ;;;
     ;;; Reformulate the request received from VCode, into a request 
-    ;;; that can be processed by the standard VR Mode function
+    ;;; that can be processed by the standard vr-deprecated Mode function
     ;;;
-    (vr-cmd-recognition (list nil 'end))
+    (vr-deprecated-cmd-recognition (list nil 'end))
     
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "recog_end_resp" empty-resp)))
+      'vr-deprecated-serialize-message-hook (list "recog_end_resp" empty-resp)))
     )
 
   )
@@ -2510,7 +2510,7 @@ a buffer"
 (defun vcode-cmd-active-buffer-name (vcode-request)
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash "value" (buffer-name) mess-cont)
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "active_buffer_name_resp" mess-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "active_buffer_name_resp" mess-cont)))
     )
   )
 
@@ -2593,7 +2593,7 @@ sent.
     (cl-puthash mess-key update-hash-list mess-cont)
 
     (run-hook-with-args 
-      'vr-serialize-message-hook (list mess-name mess-cont)))
+      'vr-deprecated-serialize-message-hook (list mess-name mess-cont)))
 )
 
 (defun vcode-serialize-changes (change-list)
@@ -2602,8 +2602,8 @@ sent.
 Argument 'change-list is a list of 5ple:
    (change-type buffer-name inserted-start inserted-end deleted-length).
 
-If 'vr-changes-caused-by-sr-cmd is not nil, then the message must be 
-formatted as a response message to SR command 'vr-changes-caused-by-sr-cmd.
+If 'vr-deprecated-changes-caused-by-sr-cmd is not nil, then the message must be 
+formatted as a response message to SR command 'vr-deprecated-changes-caused-by-sr-cmd.
 
 Otherwise, the message must be formated as an Emacs initiated 'updates' 
 message.
@@ -2635,10 +2635,10 @@ message.
     ;;;
     ;;; Changes not generated in response to a VCode request:
     ;;; -> name = "updates"
-    (if vr-changes-caused-by-sr-cmd
-	(if (string= vr-changes-caused-by-sr-cmd "updates")
+    (if vr-deprecated-changes-caused-by-sr-cmd
+	(if (string= vr-deprecated-changes-caused-by-sr-cmd "updates")
 	    (setq mess-name "updates")
-	    (setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
+	    (setq mess-name (format "%s_resp" vr-deprecated-changes-caused-by-sr-cmd))
 	)
 	(setq mess-name "updates")
       )
@@ -2648,19 +2648,19 @@ message.
     (cl-puthash mess-key change-list-vcode mess-cont)
 
     (run-hook-with-args 
-      'vr-serialize-message-hook (list mess-name mess-cont)))
+      'vr-deprecated-serialize-message-hook (list mess-name mess-cont)))
 )
 
 ; most changes sent as they occur, but there is no hook for position and
 ; selection changes, so we need to send them when the updates message
 ; requests them
 (defun vcode-cmd-updates (vcode-request)
-  (vr-report-goto-select-change 
+  (vr-deprecated-report-goto-select-change 
     (buffer-name (current-buffer)) 
     (if mark-active (mark) (point))
     (point)
   )
-  (vr-send-queued-changes) 
+  (vr-deprecated-send-queued-changes) 
 )
 
 (defun vcode-matching-test-file-name (new-file-name buffers)
@@ -2687,7 +2687,7 @@ message.
         (found-buff)
 	(response (make-hash-table :test 'string=)))
     (setq file-name (cl-gethash "file_name" mess-cont))
-    (vr-log "--** vcode-cmd-open-file: python-mode-hook =%S file-name=%S\n" file-name python-mode-hook )
+    (vr-deprecated-log "--** vcode-cmd-open-file: python-mode-hook =%S file-name=%S\n" file-name python-mode-hook )
     (setq old-buff-list (buffer-list))
     (find-file file-name)
     (setq emacs-file-name (buffer-file-name))
@@ -2705,9 +2705,9 @@ message.
         (set-visited-file-name nil)
     )
     (cl-puthash "buff_name" (buffer-name) response)
-    (vr-send-reply
+    (vr-deprecated-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "open_file_resp" response))
+      'vr-deprecated-serialize-message-hook (list "open_file_resp" response))
     )
   )
 )
@@ -2722,9 +2722,9 @@ message.
     (if (get-buffer buffer-name)
 	(cl-puthash "value" 1 response)
       (cl-puthash "value" 0 response))
-    (vr-send-reply
+    (vr-deprecated-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "confirm_buffer_exists_resp" response))
+      'vr-deprecated-serialize-message-hook (list "confirm_buffer_exists_resp" response))
     )
   )
 )
@@ -2737,16 +2737,16 @@ message.
 	(response (make-hash-table :test 'string=)))
 
     (while open-buffers
-      (if (vr-activate-buffer-p (car open-buffers))
+      (if (vr-deprecated-activate-buffer-p (car open-buffers))
 	  (setq buffer-names (append buffer-names (list (buffer-name (car open-buffers)))))
       )
       (setq open-buffers (cdr open-buffers))
       )
 
     (cl-puthash "value" buffer-names response)
-    (vr-send-reply
+    (vr-deprecated-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "list_open_buffers_resp" response))
+      'vr-deprecated-serialize-message-hook (list "list_open_buffers_resp" response))
     )
   )
 )
@@ -2760,9 +2760,9 @@ message.
     (if (and (eq file-name nil) vcode-is-test-editor)
         (setq file-name vcode-test-file-name-was))
     (cl-puthash "value" file-name response)
-    (vr-send-reply
+    (vr-deprecated-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "file_name_resp" response))
+      'vr-deprecated-serialize-message-hook (list "file_name_resp" response))
     )
   )
 )
@@ -2797,7 +2797,7 @@ message.
 	;;; Note that we remove the 'after-change-hook before writing
 	;;; to the temporary file. This is because saving to the temporary
         ;;; file caused a change to be reported on that temporary file, and
-	;;; inserted in 'vr-queued-changes. But when the change queue got
+	;;; inserted in 'vr-deprecated-queued-changes. But when the change queue got
 	;;; cleaned up, the temporary file had been closed and Emacs was 
         ;;; freezing.
 	;;;
@@ -2841,31 +2841,31 @@ message.
     ;;;
     ;;; Ignore VCode requests to close the minibuffer
     ;;;
-    (vr-log "--** vcode-cmd-close-buffer: before testing for minbufff, buff=%S\n")
+    (vr-deprecated-log "--** vcode-cmd-close-buffer: before testing for minbufff, buff=%S\n")
     (if buff 
 	(if (not (string-match "*Minbuff-" (buffer-name buff)))
 	    (progn 
-	      (vr-log "--** vcode-cmd-close-buffer: closing the buffer\n")
+	      (vr-deprecated-log "--** vcode-cmd-close-buffer: closing the buffer\n")
 	      (vcode-kill-buffer buff-name save)
 	    )
-	  (vr-log "-- ** vcode-cmd-close-buffer: this is minibuffer... not closing it\n")
+	  (vr-deprecated-log "-- ** vcode-cmd-close-buffer: this is minibuffer... not closing it\n")
 	)
       (ding)
-      (message (format "VR Mode: could not close buffer %S" buff-name))
+      (message (format "vr-deprecated Mode: could not close buffer %S" buff-name))
       (cl-puthash "value" 0 response)
     )
 
-    (vr-log "--** vcode-cmd-close-buffer: before send-reply\n")
-    (vr-send-reply
+    (vr-deprecated-log "--** vcode-cmd-close-buffer: before send-reply\n")
+    (vr-deprecated-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "close_buffer_resp" response))
+      'vr-deprecated-serialize-message-hook (list "close_buffer_resp" response))
     )
-    (vr-log "--** vcode-cmd-close-buffer: after send-reply\n")
+    (vr-deprecated-log "--** vcode-cmd-close-buffer: after send-reply\n")
   )
 )
 
 (defun vcode-cmd-language-name (vcode-request)
-  (vr-log "WARNING: function vcode-cmd-language-name not implemented!!!\n")
+  (vr-deprecated-log "WARNING: function vcode-cmd-language-name not implemented!!!\n")
   )
 
 (defun vcode-fix-pos (pos fix-for-who default-pos)
@@ -2902,7 +2902,7 @@ the range specified in default"
   (let ((start) (end) (tmp))
     (if (eq range nil)
         (progn 
-            (vr-log "--** vcode-fix-range-for-emacs: range is nil, using default\n")
+            (vr-deprecated-log "--** vcode-fix-range-for-emacs: range is nil, using default\n")
 	    (setq start (nth 0 default))
 	    (setq end (nth 1 default))
 ; defaults already in Emacs 1-based counting
@@ -3008,10 +3008,10 @@ to the other"
       (if buff-name
 	  (set-buffer buff-name)
       )	  
-      (vr-log "--** vcode-selection-of-buff-in-message: mark-active = %S\n" mark-active)
-      (vr-log "--** vcode-selection-of-buff-in-message: raw range = %S, %S\n"
+      (vr-deprecated-log "--** vcode-selection-of-buff-in-message: mark-active = %S\n" mark-active)
+      (vr-deprecated-log "--** vcode-selection-of-buff-in-message: raw range = %S, %S\n"
         (if mark-active (mark) nil) (point))
-      (vr-log "--** vcode-selection-of-buff-in-message: no-nil range = %S\n"
+      (vr-deprecated-log "--** vcode-selection-of-buff-in-message: no-nil range = %S\n"
         (vcode-make-sure-no-nil-in-selection (if mark-active (mark) nil)
         (point)))
       (vcode-make-sure-no-nil-in-selection (if mark-active (mark) nil) (point))
@@ -3086,7 +3086,7 @@ buffer"
        (if (is-in-hash "range" message)
            (progn
                (setq range (cl-gethash "range" message))
-               (vr-log "--** vcode-fix-positions-in-message: range is %S\n" range)
+               (vr-deprecated-log "--** vcode-fix-positions-in-message: range is %S\n" range)
                ;;;
                ;;; Fix possibly nil positions received from VCode
                ;;;
@@ -3118,9 +3118,9 @@ buffer"
       (set-buffer buff-name)
       (cl-puthash 'value (vcode-convert-pos (point) 'vcode) mess-cont)
     )
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "cur_pos_resp" mess-cont)))
+      'vr-deprecated-serialize-message-hook (list "cur_pos_resp" mess-cont)))
     )
 )
 
@@ -3140,9 +3140,9 @@ buffer"
       )
 
     (cl-puthash "value" line-num response)
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "line_num_of_resp" response)))
+      'vr-deprecated-serialize-message-hook (list "line_num_of_resp" response)))
     )
   )
 
@@ -3160,7 +3160,7 @@ buffer"
 	(setq to-convert (append no-nil-selection (list 'vcode)))
 	(setq selection (apply 'vcode-convert-range to-convert))
 	(setq pos (vcode-convert-pos (point) 'vcode))
-        (vr-log "--** vcode-cmd-get-pos-selection: pos = %S, selection = %S\n"
+        (vr-deprecated-log "--** vcode-cmd-get-pos-selection: pos = %S, selection = %S\n"
             pos selection)
     )
     (cl-puthash 'pos pos value)
@@ -3168,9 +3168,9 @@ buffer"
     (cl-puthash 'value 
 		value
 		response)
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "get_pos_selection_resp" response)))
+      'vr-deprecated-serialize-message-hook (list "get_pos_selection_resp" response)))
     )
   )
 
@@ -3189,9 +3189,9 @@ buffer"
 		(list (vcode-convert-pos (nth 0 selection) 'vcode)
 		      (vcode-convert-pos (nth 1 selection) 'vcode))
 		response)
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "get_selection_resp" response)))
+      'vr-deprecated-serialize-message-hook (list "get_selection_resp" response)))
     )
   )
 
@@ -3211,9 +3211,9 @@ buffer"
       (cl-puthash "value" (buffer-substring start end) resp-cont)
     )
 
-    (vr-send-reply 
+    (vr-deprecated-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "get_text_resp" resp-cont)))
+      'vr-deprecated-serialize-message-hook (list "get_text_resp" resp-cont)))
     )
   )
 
@@ -3227,7 +3227,7 @@ buffer"
       (set-buffer buff-name)
       (cl-puthash 'value (vcode-convert-range (window-start) (window-end) 'vcode) resp-cont)
     )
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" resp-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "get_visible_resp" resp-cont)))
     )  
   )
 
@@ -3240,21 +3240,21 @@ buffer"
       (set-buffer buff-name)
       (cl-puthash 'value (buffer-size) resp-cont)
     )
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" resp-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "get_visible_resp" resp-cont)))
     )  
   )
 
 (defun vcode-cmd-newline-conventions (vcode-request)
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value (list "\n") mess-cont)
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "newline_conventions_resp" mess-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "newline_conventions_resp" mess-cont)))
     )  
   )
 
 (defun vcode-cmd-pref-newline-conventions (vcode-request)
   (let ((mess-cont (make-hash-table :test 'string=)))
     (cl-puthash 'value "\n" mess-cont)
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "pref_newline_conventions_resp" mess-cont)))
+    (vr-deprecated-send-reply (run-hook-with-args 'vr-deprecated-serialize-message-hook (list "pref_newline_conventions_resp" mess-cont)))
     )  
 )
 
@@ -3268,7 +3268,7 @@ In case where we respond to VCode by just moving the cursor and/or selection,
 we need to add a dummy change report to the queued changes. This dummy change just inserts a blank string over a null region (i.e., it does nothing).
 
 This will in effect end up reporting the position of cursor and selection 
-since `vr-send-queued-changes appends that information for each and every 
+since `vr-deprecated-send-queued-changes appends that information for each and every 
 change reports it sends to VCode.
 "
   (let ()
@@ -3303,7 +3303,7 @@ change reports it sends to VCode.
 	  (set-mark sel-start)
 	  (goto-char sel-end)
 	)
-       ('error (error "VR Error: could not select region [%S, %S]" sel-start sel-end))
+       ('error (error "vr-deprecated Error: could not select region [%S, %S]" sel-start sel-end))
     )
 
     ;;;
@@ -3314,10 +3314,10 @@ change reports it sends to VCode.
     ;;; statement. That way, if there are errors, we can still report
     ;;; where Emacs actually set the selection, as opposed to where we
     ;;; expected it to go.
-    (vr-report-goto-select-change buff-name 
+    (vr-deprecated-report-goto-select-change buff-name 
 	(if mark-active (mark) (point)) (point))
 
-    (vr-send-queued-changes)
+    (vr-deprecated-send-queued-changes)
   )
 )
 
@@ -3365,7 +3365,7 @@ change reports it sends to VCode.
 ;        (execute-kbd-macro [127] n-times)
         
 
-	(vr-send-queued-changes)
+	(vr-deprecated-send-queued-changes)
     )
 )
 
@@ -3373,7 +3373,7 @@ change reports it sends to VCode.
 (defun vcode-cmd-insert (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
-	(text) (range) (vr-request) 
+	(text) (range) (vr-deprecated-request) 
 	(delete-start) (delete-end))
 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
 	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
@@ -3381,7 +3381,7 @@ change reports it sends to VCode.
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
 
-;	(vr-log "--** vcode-cmd-insert: upon entry, (point)=%S,
+;	(vr-deprecated-log "--** vcode-cmd-insert: upon entry, (point)=%S,
 ;	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, text=%S\n" 
 ;	    (point) (mark) range delete-start delete-end text)
 	(vcode-trace "vcode-cmd-insert" "upon entry, (point)=%S,
@@ -3396,14 +3396,14 @@ change reports it sends to VCode.
 
         (vcode-execute-command-string text)
 
-	(vr-send-queued-changes)
+	(vr-deprecated-send-queued-changes)
     )
 )
 
 (defun vcode-cmd-insert-indent (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
-	(code-bef) (code-after) (range) (buff-name) (vr-request) 
+	(code-bef) (code-after) (range) (buff-name) (vr-deprecated-request) 
 	(delete-start) (delete-end))
 	(setq code-bef (wddx-coerce-string (cl-gethash "code_bef" mess-cont)))
 	(setq code-after (wddx-coerce-string (cl-gethash "code_after" mess-cont)))
@@ -3449,7 +3449,7 @@ change reports it sends to VCode.
 
 	(set-mark nil)
 
-	(vr-send-queued-changes)
+	(vr-deprecated-send-queued-changes)
     )
 )
 
@@ -3489,7 +3489,7 @@ change reports it sends to VCode.
         )
 
 
- 	(vr-send-queued-changes)
+ 	(vr-deprecated-send-queued-changes)
     )
 )
 
@@ -3498,7 +3498,7 @@ change reports it sends to VCode.
 (defun vcode-cmd-indent (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
-	(range) (vr-request) (buff-name)
+	(range) (vr-deprecated-request) (buff-name)
 	(indent-start) (indent-end))
 
     (setq range (cl-gethash "range" mess-cont))
@@ -3510,7 +3510,7 @@ change reports it sends to VCode.
     (set-buffer buff-name)
     (vcode-indent-region indent-start indent-end)
 
-    (vr-send-queued-changes)
+    (vr-deprecated-send-queued-changes)
   )
 )
 
@@ -3518,7 +3518,7 @@ change reports it sends to VCode.
 (defun vcode-cmd-decr-indent-level (vcode-request)
   (let ((mess-name (elt vcode-request 0))
 	(mess-cont (elt vcode-request 1))
-	(range) (levels) (vr-request) (buff-name)
+	(range) (levels) (vr-deprecated-request) (buff-name)
 	(indent-start) (indent-end))
     (setq range (cl-gethash "range" mess-cont))
     (setq indent-start (elt range 0))
@@ -3526,7 +3526,7 @@ change reports it sends to VCode.
     (setq levels (cl-gethash "levels" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
-    (vr-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
+    (vr-deprecated-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
 
     ;;;
     ;;; Note: don't enclose this in a save-excursion because it causes problems
@@ -3537,7 +3537,7 @@ change reports it sends to VCode.
     (set-mark nil)
     (vcode-unindent-region indent-start indent-end levels) 
 
-    (vr-send-queued-changes)
+    (vr-deprecated-send-queued-changes)
   )
 )
 
@@ -3599,7 +3599,7 @@ tabs.
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
   (let ((counter 0) (start-of-line))
-     (vr-log "--** vcode-unindent-line: upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vr-deprecated-log "--** vcode-unindent-line: upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
       ;;;
       ;;; Move to the first non-blank character on the line, then simulate the
       ;;; backspace key multiple times.
@@ -3633,7 +3633,7 @@ tabs.
 	  )
 ;	)
 
-     (vr-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vr-deprecated-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
    )
 )
 
@@ -3684,7 +3684,7 @@ tabs.
 (defun vcode-cmd-delete (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
-	(text) (range) (vr-request) 
+	(text) (range) (vr-deprecated-request) 
 	(delete-start) (delete-end) (buff-name))
 
 	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
@@ -3695,7 +3695,7 @@ tabs.
 	(kill-region delete-start delete-end)
         (set-mark nil)
 
-	(vr-send-queued-changes)
+	(vr-deprecated-send-queued-changes)
     )
 )
 
@@ -3712,10 +3712,10 @@ tabs.
           (set-buffer buff-name)
 	  (goto-char pos)
 	  (push-mark (point))
-          (vr-log "--** vcode-cmd-goto: mark-active = %S\n" mark-active)
+          (vr-deprecated-log "--** vcode-cmd-goto: mark-active = %S\n" mark-active)
 	)
 
-      ('error (error "VR Error: could not go to position %S" pos))
+      ('error (error "vr-deprecated Error: could not go to position %S" pos))
     )
 
     ;;;
@@ -3734,9 +3734,9 @@ tabs.
     ;;; Cursor changes do not automatically get queued to the change queue.
     ;;; Need to do so explicitely
     ;;;
-    (vr-report-goto-select-change buff-name final-pos final-pos)
+    (vr-deprecated-report-goto-select-change buff-name final-pos final-pos)
 
-    (vr-send-queued-changes)
+    (vr-deprecated-send-queued-changes)
 
   )
 )
@@ -3758,7 +3758,7 @@ tabs.
 	  )
 	  (push-mark (point))
 	)
-      ('error (error "VR Error: could not go to line %S" line-num))
+      ('error (error "vr-deprecated Error: could not go to line %S" line-num))
     )
 
     ;;;
@@ -3777,17 +3777,17 @@ tabs.
     ;;; Cursor changes do not automatically get queued to the change queue.
     ;;; Need to do so explicitely
     ;;;
-    (vr-report-goto-select-change buff-name final-pos final-pos)
+    (vr-deprecated-report-goto-select-change buff-name final-pos final-pos)
 
-    (vr-send-queued-changes)
+    (vr-deprecated-send-queued-changes)
 
   )
 )
 
 (defun vcode-cmd-mediator-closing (vcode-request)
-   (vr-mode-activate nil)
+   (vr-deprecated-mode-activate nil)
 ; huh? this tries to connect again when we get a mediator closing
 ; message.  Maybe Alain meant deactivate
-;  (vr-mode-activate 'vcode)
+;  (vr-deprecated-mode-activate 'vcode)
 )
 
