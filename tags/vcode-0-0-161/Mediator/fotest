@@ -1,0 +1,209 @@
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+universal instance named "EdSim(0)"
+
+
+*******************************************************************************
+* Name        : basic_correction
+* Description : Testing basic correction infrastructure with ResMgr.
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+***Testing initial state***
+
+
+0 stored utterances, as expected
+
+
+recent dictation is empty, as expected
+
+
+***Some simple dictation***
+
+
+
+>>> Testing console command: say(['class', 'clown', 'inherits', 'from', 'student'], user_input='0
+0
+')
+-- DictWinGramNL.activate: blah.py received activate
+-- DictWinGramNL.activate: not already active
+-- DictWinGramNL.activate: activating, window = 0
+
+
+>>> Testing console command: say(['class', 'body'], user_input='')
+-- DictWinGramNL.activate: blah.py received activate
+-- ResMgrBasic.interpret_dictation: about to interpret
+-- ResMgrStd._std_interp: standard interpretation
+-- ResMgrStd._std_interp: about to call before
+-- ResMgrStd._std_interp: about to call after
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+-- ResMgrBasic.store: storing an utterance (already have 0)
+
+
+>>> Testing console command: say(['define', 'method', 'popularity', 'method', 'body'], user_input='0
+')
+-- DictWinGramNL.activate: blah.py received activate
+-- ResMgrBasic.interpret_dictation: about to interpret
+-- ResMgrStd._std_interp: standard interpretation
+-- ResMgrStd._std_interp: about to call before
+Associate 'popularity' with symbol (Enter selection):
+
+  '0': no association
+  '1': popularity (*new*)
+  '2': Popularity (*new*)
+  '3': POPULARITY (*new*)
+
+> -- ResMgrStd._std_interp: about to call after
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+-- ResMgrBasic.store: storing an utterance (already have 1)
+
+
+>>> Testing console command: say(['return', '8'], user_input='')
+-- DictWinGramNL.activate: blah.py received activate
+-- ResMgrBasic.interpret_dictation: about to interpret
+-- ResMgrStd._std_interp: standard interpretation
+-- ResMgrStd._std_interp: about to call before
+-- ResMgrStd._std_interp: about to call after
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    return 8<CURSOR>
+
+*** End of source buffer ***
+-- ResMgrBasic.store: storing an utterance (already have 2)
+
+***Testing state***
+
+
+WARNING: 3 stored utterances (expected 4)
+-- ResMgrBasic.recent_dictation: safe depth = 3
+
+WARNING: 3 recently dictated utterances (expected 4)
+-- ResMgrBasic.recent_dictation: safe depth = 3
+
+WARNING: check_recent found 3 stored utterances
+(expected 4)
+
+additional utterances were expected:
+
+***Testing scratch that***
+
+scratching 1
+
+-- ResMgrBasic.scratch_recent: attempting to scratch n = 1
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    return 8<CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+scratch 1 succeeded as expected
+
+WARNING: 2 stored utterances (expected 3)
+-- ResMgrBasic.recent_dictation: safe depth = 2
+
+WARNING: 2 recently dictated utterances (expected 3)
+-- ResMgrBasic.recent_dictation: safe depth = 2
+
+WARNING: check_recent found 2 stored utterances
+(expected 3)
+
+additional utterances were expected:
+
+***Moving cursor manually***
+
+*** Start of source buffer ***
+  1: <CURSOR>def popularity(self):
+  2:    
+
+*** End of source buffer ***
+
+***Testing scratch that following manual move***
+
+scratching 1
+
+-- ResMgrBasic.scratch_recent: attempting to scratch n = 1
+*** Start of source buffer ***
+  1: def popularity(self):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+scratch 1 succeeded as expected
+
+WARNING: 1 stored utterances (expected 2)
+-- ResMgrBasic.recent_dictation: safe depth = 1
+
+WARNING: 1 recently dictated utterances (expected 2)
+-- ResMgrBasic.recent_dictation: safe depth = 1
+
+WARNING: check_recent found 1 stored utterances
+(expected 2)
+
+additional utterances were expected:
+
+
+>>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'B.'], user_input='0
+2
+')
+-- DictWinGramNL.activate: blah.py received activate
+-- ResMgrBasic.interpret_dictation: about to interpret
+-- ResMgrStd._std_interp: standard interpretation
+-- ResMgrStd._std_interp: about to call before
+Associate 'grades' with symbol (Enter selection):
+
+  '0': no association
+  '1': grades (*new*)
+  '2': Grades (*new*)
+  '3': GRADES (*new*)
+
+> Associate 'B.' with symbol (Enter selection):
+
+  '0': no association
+  '1': b (*new*)
+  '2': B (*new*)
+
+> -- ResMgrStd._std_interp: about to call after
+*** Start of source buffer ***
+  1: def grades(self):
+  2:    return B<CURSOR>
+
+*** End of source buffer ***
+-- ResMgrBasic.store: storing an utterance (already have 1)
+
+WARNING: 2 stored utterances (expected 3)
+-- ResMgrBasic.recent_dictation: safe depth = 2
+
+WARNING: 2 recently dictated utterances (expected 3)
+-- ResMgrBasic.recent_dictation: safe depth = 2
+
+WARNING: check_recent found 2 stored utterances
+(expected 3)
+
+additional utterances were expected:
+
+
+>>> Testing console command: say(['select', 'clown'], user_input='None')
+-- DictWinGramNL.activate: blah.py received activate
+-- ResMgrBasic.interpret_dictation: about to interpret
+-- ResMgrStd._std_interp: standard interpretation
+-- ResMgrStd._std_interp: about to call before
