@@ -79,6 +79,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     #       on whether it is operating in single shell window or multi window
     #       environment, and whether it is in a suspended state or not.
     #
+    
+    
     def _multiple_windows_from_app(self):
         return 0
     
@@ -88,9 +90,14 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def _is_active_from_app(self):
         return 1
         
+    # Eventually, delete this method and make Emacs respond to the
+    # "suspendable" message with 0 if 'window-system is "w32" and
+    # 1 otherwise
     def suspendable(self):
         return 0
 
+    # For now, assume that Emacs will not be able to notify of suspension.
+    # Later on, see if there are hooks in Emacs allowing such notification.
     def suspend_notification(self):
         return 0
         
