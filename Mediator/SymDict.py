@@ -627,6 +627,39 @@ class SymDict(OwnerObject):
         except:
             return 0
 
+    def persistent_dict(self):
+        """creates the Python dictionary which will be stored as a
+        persistent version of the symbol dictionary.
+
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+        
+        *{STR: ANY}* -- the dictionary.  Note that this dictionary
+        contains references to attributes of self, so it should not be
+        modified.
+        """
+        d = {}
+# any objects stored must be correctly unpickled even if their classes
+# are modified.
+        d['version'] = current_version
+        d['symbol_info'] = self.symbol_info
+# at the moment, spoken_form_info is redundant with symbol_info, except for 
+# ordering, but I'm not sure that will always be true, or what to do 
+# about ordering, so for now let's just store both
+        d['spoken_form_info'] = self.spoken_form_info
+        d['abbreviations'] = self.abbreviations
+        d['alt_abbreviations'] = self.alt_abbreviations
+        d['acronyms'] = self.acronyms
+        d['pronunciations'] = self.pronunciations
+        d['extra_expansions'] = self.extra_expansions
+        d['abbreviations'] = self.abbreviations
+        d['unresolved_abbreviations'] = self.unresolved_abbreviations
+        d['symbol_sources_read'] = self.symbol_sources_read
+        return d
+
     def save(self, file = None, export_abbreviations = 1):
         """save persistent attributes to a file
 
@@ -664,23 +697,8 @@ class SymDict(OwnerObject):
             sys.stderr.write(msg)
             return
             
-        d = {}
-# any objects stored must be correctly unpickled even if their classes
-# are modified.
-        d['version'] = current_version
-        d['symbol_info'] = self.symbol_info
-# at the moment, spoken_form_info is redundant with symbol_info, except for 
-# ordering, but I'm not sure that will always be true, or what to do 
-# about ordering, so for now let's just store both
-        d['spoken_form_info'] = self.spoken_form_info
-        d['abbreviations'] = self.abbreviations
-        d['alt_abbreviations'] = self.alt_abbreviations
-        d['acronyms'] = self.acronyms
-        d['pronunciations'] = self.pronunciations
-        d['extra_expansions'] = self.extra_expansions
-        d['abbreviations'] = self.abbreviations
-        d['unresolved_abbreviations'] = self.unresolved_abbreviations
-        d['symbol_sources_read'] = self.symbol_sources_read
+        d = self.persistent_dict()
+
         try:
             cPickle.dump(d, f)
         except:
@@ -736,7 +754,6 @@ class SymDict(OwnerObject):
         forms match the phrase, or None if no match was found
         """
         return self.spoken_form_info.complete_match(phrase)
-
   
     def _add_corresponding_expansion(self, abbreviation, expansion):
         """private method to add expansions for an abbreviation corresponding 
@@ -1880,8 +1897,7 @@ class SymDict(OwnerObject):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
         trace('SymDict.match_pseudo_symbol', 'pseudo_symbol=\'%s\'' % pseudo_symbol)
-        def mess_symbols():
-            return "Symbols are: %s" % repr(self.symbol_info)
+        mess_symbols = lambda : "Symbols are: %s" % repr(self.symbol_info)
         trace('SymDict.match_pseudo_symbol', mess_symbols)
 
         #
@@ -2256,8 +2272,8 @@ class SymDict(OwnerObject):
         os.remove(file)
 
         fatal = 1
-        on_exit = os.path.join(vc_globals.state, 'abbrevs.py')
-        on_init = os.path.join(vc_globals.state, 'abbrevs.on_init.py')
+        on_exit = self.export_file + '.py'
+        on_init = self.export_file + '.on_init.py'
         recent = None
         exit_date = None
         if os.path.exists(on_exit):

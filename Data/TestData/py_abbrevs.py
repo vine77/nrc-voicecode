@@ -25,6 +25,8 @@
 #############################################################################
 
 add_abbreviation('pointer', 'ptr')
+add_abbreviations('manager', ['mgr', 'mngr'])
+add_abbreviations('color', ['col', 'clr'])
 
 add_alt_abbreviations('A. to F.', ['atof'])
 add_alt_abbreviations('A. to L.', ['atol'])
