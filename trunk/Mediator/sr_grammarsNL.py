@@ -1257,6 +1257,7 @@ class SimpleSelectionNL(SimpleSelection, SelectGramBase):
         SimpleSelection.cleanup(self)
     
     def gotBegin(self, moduleInfo):
+        debug.trace('SimpleSelectionNL.gotBegin', 'invoked')
         if self.is_active() and moduleInfo[2] == self.window:
             self.recognition_starting()
 

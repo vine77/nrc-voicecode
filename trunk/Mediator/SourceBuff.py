@@ -819,16 +819,29 @@ class SourceBuff(OwnerObject):
     def delete(self, range = None):
         """Delete text in a source buffer range.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- code range to be deleted.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be deleted.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SourceBuff.delete')
+        
+    def backspace(self, n_times):
+        """Delete a number of spaces before the cursor.
+        
+        **INPUTS**
+        
+        INT *n_times* -- number of characters to delete.
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        self.delete((self.cur_pos() - n_times, self.cur_pos()))
         
     def goto(self, pos):
 

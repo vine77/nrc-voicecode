@@ -47,7 +47,7 @@ class RecogStartGram(GrammarBase):
         self.activateAll()
 
     def gotBegin(self, module_info):
-        debug.trace('RecogStartGram.gotBegin', '** invoked')
+        debug.trace('RecogStartGram.gotBegin', '** invoked, self.callback=%s' % self.callback)
         if self.callback != None:
             self.callback(module_info)
 
@@ -114,6 +114,7 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
         return self.parse_module_info(natlink.getCurrentModule())
 
     def starting(self, module_info):
+        debug.trace('RecogStartMgrNL.starting', 'self._recognition_starting=%s' % self._recognition_starting)
         apply(self._recognition_starting, self.parse_module_info(module_info))
 
 

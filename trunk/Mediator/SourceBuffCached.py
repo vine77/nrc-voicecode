@@ -291,7 +291,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
             end = start
             start = tmp
             
-        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s' % (start, end))
+        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, self.cache["get_text"][start:end]="%s"' % (start, end, self.cache['get_text'][start:end]))
         trace('SourceBuffCached.get_text', '** before returning, len(self.cache[\'get_text\'])=%s, self.cache[\'get_text\']="%s"' % (len(self.cache['get_text']), self.cache['get_text']))
 
         return self.cache['get_text'][start:end]
