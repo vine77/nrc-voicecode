@@ -118,7 +118,9 @@ class SourceBuff(Object):
         language = self.language
         if language == None and self.file_name != None:
             a_match = re.match('^.*?\.([^\.]*)$', self.file_name)
-            extension = a_match.group(1)
+	    extension = ""
+	    if a_match:
+		extension = a_match.group(1)
             if file_language.has_key(extension):
                 language =  file_language[extension]
         return language
@@ -680,7 +682,7 @@ class SourceBuff(Object):
 # several lines of context around the current cursor position.  Most
 # other editors will automatically refresh the screen on any change, so
 # they need not override this default (no-op) behavior.
-	debug.virtual('SourceBuff.refresh_if_necessary')
+	pass
 
     def refresh(self):
 	"""Force a refresh of the buffer"""
