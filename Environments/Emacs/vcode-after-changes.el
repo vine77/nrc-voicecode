@@ -613,7 +613,7 @@ Mode."
 
 (defun vr-resynchronize (buffer)
   "asks VR mode to resynchronize this buffer, if it has gotten out of
-sync.  (That shouldn't happen, in an ideal world, but..."
+sync.  (That shouldn't happen, in an ideal world, but...)"
   (interactive (list (current-buffer)))
   (set-buffer buffer)
   (setq vr-resynchronize-buffer t))
@@ -1272,12 +1272,26 @@ speech server"
     (vr-activate-buffer nil)
     (if vr-host
 	(vr-sentinel nil "finished\n")
-      (vr-send-cmd "exit"))
+; DCF - I think this is left over from vr-mode.  We should send an
+; editor_disconnecting message (not just a string)
+;      (vr-send-cmd "exit")
+        (vcode-disconnecting))
     (vcode-set-after-change-functions nil)
     (run-hooks 'vr-mode-cleanup-hook)
     )
  (force-mode-line-update)
 )
+
+(defun vcode-disconnecting ()
+    "sends editor_disconnecting message to the mediator"
+  (let ((empty-resp (make-hash-table :test 'string=)))
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "editor_disconnecting" empty-resp)))
+    )
+
+)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration allowing vr-mode to interact with the VR.exe speech
@@ -2573,12 +2587,13 @@ buffer"
 	(selection) (to-convert) (no-nil-selection) (pos) (buff-name))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (save-excursion
-      (set-buffer buff-name)
-      (setq no-nil-selection 
-        (vcode-make-sure-no-nil-in-selection (point) (mark)))
-      (setq to-convert (append no-nil-selection (list 'vcode)))
-      (setq selection (apply 'vcode-convert-range to-convert))
-      (setq pos (vcode-convert-pos (point) 'vcode))
+	(set-buffer buff-name)
+	(setq no-nil-selection 
+	    (vcode-make-sure-no-nil-in-selection 
+		(point) (if mark-active (mark))))
+	(setq to-convert (append no-nil-selection (list 'vcode)))
+	(setq selection (apply 'vcode-convert-range to-convert))
+	(setq pos (vcode-convert-pos (point) 'vcode))
     )
     (cl-puthash 'pos pos value)
     (cl-puthash 'selection selection value)
@@ -2599,7 +2614,8 @@ buffer"
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (save-excursion
       (set-buffer buff-name)
-      (setq selection (vcode-make-sure-no-nil-in-selection (point) (mark)))
+      (setq selection (vcode-make-sure-no-nil-in-selection (point) 
+	  (if mark-active (mark))))
     )
     (cl-puthash 'value 
 		(list (vcode-convert-pos (nth 0 selection) 'vcode)
@@ -2729,7 +2745,8 @@ change reports it sends to VCode.
     ;;; statement. That way, if there are errors, we can still report
     ;;; where Emacs actually set the selection, as opposed to where we
     ;;; expected it to go.
-    (vr-report-goto-select-change buff-name (mark) (point))
+    (vr-report-goto-select-change buff-name 
+	(if mark-active (mark) (point)) (point))
 
     (vr-send-queued-changes)
   )
@@ -3076,3 +3093,5 @@ tabs.
 ; message.  Maybe Alain meant deactivate
 ;  (vr-mode-activate 'vcode)
 )
+
+

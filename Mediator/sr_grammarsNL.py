@@ -943,6 +943,8 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                 continue
 #            print "testing double"
             double_match = re.match(r'double-([A-Za-z])\\\\l$', word)
+# I'm not sure if this and the alternate form below both occur, or only
+# the alternate form -- for now, leave both to be sure
             if double_match:
                 c = double_match.group(1) * 2
 #                print "matches double %s" % c
@@ -954,6 +956,9 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                 continue
 #            print "testing digit"
             spoken, written = sr_interface.spoken_written_form(word)
+            alt_double_match = re.match(r'(.*)\\double-', written)
+            if alt_double_match:
+                written = alt_double_match.group(1)
             if cap_next or caps_on:
                 written = string.upper(written)
 #            print "word: %s spoken: %s written: %s" % (word, spoken, written)
