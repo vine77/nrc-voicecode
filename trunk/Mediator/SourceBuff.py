@@ -51,16 +51,16 @@ class SourceBuffCookie(OwnerObject):
 
     def rename_buffer_cbk(self, new_buff_name):
         """callback which notifies us that the application
-	has renamed the buffer corresponding to this cookie
+        has renamed the buffer corresponding to this cookie
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SourceBuffCookie.rename_buffer_cbk')
 
 class SourceBuff(OwnerObject):
@@ -118,27 +118,27 @@ class SourceBuff(OwnerObject):
         
     def on_change(self, start, end, text, program_initiated):
         """method which should be called after the contents of a buffer
-	is changed.  If the SourceBuff represents a buffer in an 
-	external editor which does not support change notification, then 
-	on_change may only be called for mediator-initiated changes 
-	(including responses from the external editor to 
-	mediator-initiated changes).
+        is changed.  If the SourceBuff represents a buffer in an 
+        external editor which does not support change notification, then 
+        on_change may only be called for mediator-initiated changes 
+        (including responses from the external editor to 
+        mediator-initiated changes).
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of the modified range
+        *INT* start -- start of the modified range
 
-	*INT* end -- end of the modified range
+        *INT* end -- end of the modified range
 
-	*STR* text -- the new text replacing this range
+        *STR* text -- the new text replacing this range
 
-	*BOOL* program_initiated -- true if the change was initiated by
-	the mediator
+        *BOOL* program_initiated -- true if the change was initiated by
+        the mediator
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if program_initiated:
             debug.trace('SourceBuff.on_change', 
                 '(%d, %d) "%s" in %s\n' % (start, end, text, self.name()))
@@ -146,8 +146,8 @@ class SourceBuff(OwnerObject):
 
     def rename_buffer_cbk(self, new_buff_name):
         """AppState invokes this method when 
-	AppState.rename_buffer_cbk is called to notify VoiceCode that 
-	an existing text buffer has been renamed
+        AppState.rename_buffer_cbk is called to notify VoiceCode that 
+        an existing text buffer has been renamed
         
         **INPUTS**
 
@@ -210,15 +210,15 @@ class SourceBuff(OwnerObject):
 
     def application(self):
         """returns the AppState object of the application
-	containing this buffer.
+        containing this buffer.
 
         **INPUTS**        
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*AppState* -- application object containing the buffer
+        *AppState* -- application object containing the buffer
         """
         return self.app
 
@@ -226,21 +226,21 @@ class SourceBuff(OwnerObject):
 
         """Drops a breadcrumb -- see AppState.drop_breadcrumb
 
-	NOTE: the breadcrumb stack is maintained at the AppState level,
-	where both the position and the buffer are stored. 
-	There are no separate buffer-by-buffer stacks.  Therefore, it
-	would make no sense to define SourceBuff.pop_breadcrumb.
-	SourceBuff.drop_breadcrumb is included only as a convenient
-	shorthand for
+        NOTE: the breadcrumb stack is maintained at the AppState level,
+        where both the position and the buffer are stored. 
+        There are no separate buffer-by-buffer stacks.  Therefore, it
+        would make no sense to define SourceBuff.pop_breadcrumb.
+        SourceBuff.drop_breadcrumb is included only as a convenient
+        shorthand for
 
-	  buff.application().drop_breadcrumb(buffname = buff.file_name(),
-	  pos = ...)
-	
+          buff.application().drop_breadcrumb(buffname = buff.file_name(),
+          pos = ...)
+        
         *INT pos* is the position where to drop the crumb. *STR
          buffname* is the name of the source buffer.
         
         If *pos* not specified, drop breadcrumb at cursor position.
-	"""
+        """
         self.application.drop_breadcrumb(buffname = self.file_name(), pos = pos)
 
 
@@ -249,7 +249,7 @@ class SourceBuff(OwnerObject):
         
         **INPUTS**        
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
@@ -291,141 +291,167 @@ class SourceBuff(OwnerObject):
 
     def cur_pos(self):
         """retrieves current position of cursor .  Note: the current
-	position should coincide with either the start or end of the
-	selection.  
+        position should coincide with either the start or end of the
+        selection.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
-	
-	**OUTPUTS**
+        *none*
+        
+        **OUTPUTS**
 
-	*INT* pos -- offset into buffer of current cursor position
-	"""
-
-        debug.virtual('SourceBuff.cur_pos')
-
+        *INT* pos -- offset into buffer of current cursor position
+        """
+        ps = self.get_pos_selection()
+        debug.trace('SourceBuff.cur_pos', 'pos, selection = %s' % repr(ps))
+        pos = ps[0]
+        debug.trace('SourceBuff.cur_pos', 'pos = %s' % repr(pos))
+        return pos
 
     def get_selection(self):
         """retrieves range of current selection
         
-	Note: the current position should coincide with either the 
-	start or end of the selection. 
+        Note: the current position should coincide with either the 
+        start or end of the selection. 
         
-	**INPUTS**
+        **INPUTS**
         
-	*none*
+        *none*
         
-	**OUTPUTS**
+        **OUTPUTS**
         
-	*INT* (start, end)
+        *INT* (start, end)
         
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
-        debug.virtual('SourceBuff.get_selection')	
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
+        ps = self.get_pos_selection()
+        debug.trace('SourceBuff.get_selection', 'pos, selection = %s' % repr(ps))
+        selection = ps[1]
+        debug.trace('SourceBuff.get_selection', 'selection = %s' % repr(selection))
+        return selection
+
+    def get_pos_selection(self):
+        """retrieves current position of cursor and the range of 
+        current selection
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *(INT, (INT, INT))* (pos, (start, end))
+        
+        pos is the offset into buffer of current cursor position
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
+        debug.virtual('SourceBuff.get_pos_selection')
+
 
     def bidirectional_selection(self):
         """does editor support selections with cursor at left?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor allows setting the selection at the
+        left end of the selection"""
         return self.app.bidirectional_selection()
 
     def goto_end_of_selection(self, end = 1):
         """moves cursor to one end of the selection, clearing the
-	selection.
+        selection.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* end -- left (0) or right (1) end of selection
+        *INT* end -- left (0) or right (1) end of selection
 
-	**OUTPUT**
+        **OUTPUT**
 
-	*none*
-	"""
+        *none*
+        """
         target = self.get_selection()[end]
         self.goto(target)
 
     def set_selection(self, range, cursor_at = 1):
         """sets range of current selection, and sets the position to 
-	beginning or end of the selection.
+        beginning or end of the selection.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- offsets into buffer of the start and end
-	of the selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
+        *(INT, INT)* range -- offsets into buffer of the start and end
+        of the selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
 
-	*INT* cursor_at -- indicates whether the cursor should be
-	placed at the left (0) or right (1) end of the selection.  Note:
+        *INT* cursor_at -- indicates whether the cursor should be
+        placed at the left (0) or right (1) end of the selection.  Note:
         cursor_at is ignored unless the application supports this
-	choice, as indicated by bidirectional_selection.  
-	Most Windows applications do not.
+        choice, as indicated by bidirectional_selection.  
+        Most Windows applications do not.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SourceBuff.set_selection')
 
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region returned.
-	Defaults to start of buffer.
+        *INT start* is the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
+        *STR* -- contents of specified range of the buffer
+        """
         debug.virtual('SourceBuff.get_text')
 
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* is the new text.
-	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
+        *STR text* is the new text.
+        
+        *INT start* is the offset into the buffer of the text to the
+        replaced.  Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the text to be replaced (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SourceBuff.set_text')
         
 
     def contents(self):
         """retrieves entire contents of the buffer
     
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* contents 
-	"""
+        *STR* contents 
+        """
         return self.get_text()
 
     def distance_to_selection(self, start, *opt_end):
@@ -464,29 +490,29 @@ class SourceBuff(OwnerObject):
         
     def get_visible(self):
         """ get start and end offsets of the currently visible region of
-	the buffer.  End is the offset of the first character not
-	visible (matching Python's slice convention)
+        the buffer.  End is the offset of the first character not
+        visible (matching Python's slice convention)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end)
-	"""
+        *INT* (start, end)
+        """
         debug.virtual('SourceBuff.get_visible')
 
     def make_position_visible(self):
         """scroll buffer (if necessary) so that the current position
-	is visible
+        is visible
 
-	**INPUTS**
+        **INPUTS**
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SourceBuff.make_position_visible')
     
     def line_num_of(self, position = None):
@@ -540,27 +566,27 @@ class SourceBuff(OwnerObject):
     def len(self):
         """return length of buffer in characters.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* length 
-	"""
+        *INT* length 
+        """
         debug.virtual('SourceBuff.len')
 
     def make_valid_range(self, range):
         """Makes sure a region is increasing and within the buffer's range.
-	
-	**INPUTS** 
-	
-	*(INT, INT)* range -- offsets of initial range
-	
-	**OUTPUTS**
-	
-	*(INT, INT)* -- increasing range within bounds
-	"""
+        
+        **INPUTS** 
+        
+        *(INT, INT)* range -- offsets of initial range
+        
+        **OUTPUTS**
+        
+        *(INT, INT)* -- increasing range within bounds
+        """
 
 #        print '-- SourceBuff.make_valid_range: range=%s' % repr(range)
         
@@ -634,16 +660,16 @@ class SourceBuff(OwnerObject):
     def move_relative(self, rel_movement):
         """Move cursor to plus or minus a certain number of characters
         
-	**INPUTS** 
+        **INPUTS** 
         
         *INT rel_movement* -- number of characters to move, relative to 
-	current position.  If < 0 then move to the left. Otherwise, move to the
+        current position.  If < 0 then move to the left. Otherwise, move to the
         right.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pos = self.cur_pos()+rel_movement
         self.goto(pos)
 
@@ -745,17 +771,17 @@ class SourceBuff(OwnerObject):
         """Replace text in range with 
         with text
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* -- new text
+        *STR text* -- new text
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         debug.virtual('SourceBuff.insert')
 
@@ -764,15 +790,15 @@ class SourceBuff(OwnerObject):
         """Automatically indent the code in a source buffer region. Indentation
         of each line is determined automatically based on the line's context.
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         debug.virtual('SourceBuff.indent')
 
@@ -846,7 +872,7 @@ class SourceBuff(OwnerObject):
     def goto(self, pos):
 
         """Moves the cursor to position *INT pos* of source buffer
-	(and make selection empty)
+        (and make selection empty)
         """
         
         debug.virtual('SourceBuff.goto')
@@ -858,7 +884,7 @@ class SourceBuff(OwnerObject):
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
-	"""
+        """
         debug.virtual('SourceBuff.goto_line')
 
                 
@@ -884,88 +910,88 @@ class SourceBuff(OwnerObject):
 
     def _state_cookie_class(self):
         """returns the class object for the type of cookie used by
-	store_current_state.
+        store_current_state.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*CLASS* -- class of state cookies corresponding to this
-	SourceBuff
+        *CLASS* -- class of state cookies corresponding to this
+        SourceBuff
 
-	"""
+        """
         debug.virtual('SourceBuff._state_cookie_class')
         
     def store_current_state(self):
         """stores the current state of the buffer, including both the
-	contents and the current selection, for subsequent restoration.
-	Store_current_state returns a "cookie" which can be passed to
-	restore_state or compare_with_current.  The type and attributes
-	of the cookie will depend on the specific subclass of
-	SourceBuff.  In the most straightforward implementation, it 
-	may include a copy of the entire contents of the
-	buffer and the selection.  In other cases, particularly when the
-	editor or SourceBuff provides an internal undo stack, it may simply be a
-	reference to a point in this stack.
-	
-	Important Notes:
-	
+        contents and the current selection, for subsequent restoration.
+        Store_current_state returns a "cookie" which can be passed to
+        restore_state or compare_with_current.  The type and attributes
+        of the cookie will depend on the specific subclass of
+        SourceBuff.  In the most straightforward implementation, it 
+        may include a copy of the entire contents of the
+        buffer and the selection.  In other cases, particularly when the
+        editor or SourceBuff provides an internal undo stack, it may simply be a
+        reference to a point in this stack.
+        
+        Important Notes:
+        
         You should only pass the cookie to methods of
-	the SAME SourceBuff object from which it came.  Generally,
-	cookies can not be pickled and retrieved.
+        the SAME SourceBuff object from which it came.  Generally,
+        cookies can not be pickled and retrieved.
 
-	The type of cookie will vary with the concrete subclass 
-	of SourceBuff.  The corresponding class object is 
-	returned by _state_cookie_class.  However, external callers
-	should not depend on the type, attributes, or methods 
-	of the cookie.
+        The type of cookie will vary with the concrete subclass 
+        of SourceBuff.  The corresponding class object is 
+        returned by _state_cookie_class.  However, external callers
+        should not depend on the type, attributes, or methods 
+        of the cookie.
 
         This method does not synchronize with the editor prior to
         storing the state.  The caller is responsible for synchronizing 
         if desired.  (This avoids having duplicate synchronize calls 
         when storing the current state of more than one buffer).
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*SourceBuffCookie* -- state cookie (see above).  Note that
-	SourceBuffCookie is a dummy class.  The
-	actual return type will vary with SourceBuff subclass.
-	"""
+        *SourceBuffCookie* -- state cookie (see above).  Note that
+        SourceBuffCookie is a dummy class.  The
+        actual return type will vary with SourceBuff subclass.
+        """
         debug.virtual('SourceBuff.store_current_state')
 
     def restore_state(self, cookie):
         """restores the buffer to its state at the time when
-	the cookie was returned by store_current_state.  Both the
-	contents and the selection will be restored.  However, other
-	data, such as the search history, may not.  The restore
-	operation can fail, which will be indicated by a return value of
-	0, so the caller should always check the return value.
-	
-	**INPUTS**
+        the cookie was returned by store_current_state.  Both the
+        contents and the selection will be restored.  However, other
+        data, such as the search history, may not.  The restore
+        operation can fail, which will be indicated by a return value of
+        0, so the caller should always check the return value.
+        
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see above.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SourceBuff subclass.
+        *SourceBuffCookie cookie* -- see above.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if restore was successful
+        *BOOL* -- true if restore was successful
 
-	"""
+        """
         debug.virtual('SourceBuff.restore_state')
 
     def compare_states(self, first_cookie, second_cookie, selection = 0):
         """compares the buffer states at the times when
-	two cookies were returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to either cookie has
-	been lost, compare_states will return false.
+        two cookies were returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to either cookie has
+        been lost, compare_states will return false.
 
         This method does not synchronize with the editor prior to
         comparing with "current".  To ensure that the "current" state 
@@ -973,62 +999,62 @@ class SourceBuff(OwnerObject):
         (This avoids having duplicate synchronize calls 
         when comparing with the current state of more than one buffer).
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
         store_current_state.  Note that SourceBuffCookie is a dummy 
         type, not an actual class.  The actual type will vary with 
         SourceBuff subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if states are the same, false if they are not, or
-	it cannot be determined due to expiration of either cookie
-	"""
+        *BOOL* -- true if states are the same, false if they are not, or
+        it cannot be determined due to expiration of either cookie
+        """
         debug.virtual('SourceBuff.compare_states')
 
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
-	the cookie was returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to the cookie has
-	been lost, compare_with_current will return false.
+        the cookie was returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see store_current_state.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SourceBuff subclass.
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if state is the same, false if it is not, or
-	it cannot be determined due to expiration of the cookie
-	"""
+        *BOOL* -- true if state is the same, false if it is not, or
+        it cannot be determined due to expiration of the cookie
+        """
         debug.virtual('SourceBuff.compare_with_current')
 
 
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
-	If the state corresponding to the cookie has
-	been lost, valid_cookie will return false.
+        If the state corresponding to the cookie has
+        been lost, valid_cookie will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see store_current_state.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SourceBuff subclass.
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if cookie is valid (i.e. restore_state should be
-	able to work)
-	"""
+        *BOOL* -- true if cookie is valid (i.e. restore_state should be
+        able to work)
+        """
         debug.virtual('SourceBuff.valid_cookie')
 
 
@@ -1252,7 +1278,7 @@ class SourceBuff(OwnerObject):
                 # Looking for closest occurence before cursor ...
                 #
 #                if occurences[ii][0] >= self.cur_pos():
-# make sure the entire match is before the cursor	
+# make sure the entire match is before the cursor
                 if occurences[ii][1] > self.cur_pos():
                     #
                     # ... but we have passed cursor.
@@ -1434,39 +1460,15 @@ class SourceBuff(OwnerObject):
         trace('SourceBuff.isnert_cbk.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         self.on_change(range[0], range[1], text, 0)
 
-    def set_selection_cbk(self, range, cursor_at=1):
-        
+    def pos_selection_cbk(self, pos, selection):
         """External editor invokes that callback to notify VoiceCode
-        of a set selection event.
+        of a change in the current position or selection
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
-        **INPUTS**
-        
-        (INT, INT) *range* -- Start and end position of selected text
-
-
-        INT *cursor_at* -- indicates whether cursor was left at the
-        beginning or end of *range*
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        pass
-
-    def goto_cbk(self, pos):
-        
-        """External editor invokes that callback to notify VoiceCode
-        of a cursor movement event.
-
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
         
         INT *pos* -- Position the cursor was moved to.
+
+        (INT, INT) *selection* -- Start and end position of selected text
         
         **OUTPUTS**
         
@@ -1555,10 +1557,10 @@ class SourceBuff(OwnerObject):
                                                 % (curr_line, self.cur_pos(), self.print_nlines, from_line, to_line))                
         if from_line < 1:
             from_line = 1
-        last_line = self.line_num_of(self.len())	    
+        last_line = self.line_num_of(self.len())    
         trace('SourceBuff.lines_around_cursor', '** self.len()=%s, last_line=%s' % (self.len(), last_line))
         if to_line > last_line:
-            to_line = last_line	    
+            to_line = last_line    
         return from_line, to_line
 
 

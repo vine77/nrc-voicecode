@@ -32,6 +32,8 @@
 ;;; Change this if you want to see more traces
 (setq message-log-max 10000)
 
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; User options
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -73,7 +75,7 @@ the buffer named \"*scratch*\" and any buffer whose name ends with
 \".txt\" will be voice-activated.  Note that voice activation of the
 minibuffer is controlled by vr-activate-minibuffer.")
 
-(defvar vr-activate-minibuffer t
+(defvar vr-activate-minibuffer nil
   "*Flag controlling whether the minibuffer is voice-activated.")
 
 (defvar vr-voice-command-list '(vr-default-voice-commands)
@@ -236,12 +238,24 @@ custom vr-voice-command-list.")
 in the 'vr-log-buff-name buffer.")
 (setq vr-log-do nil)
 
+; DCF -- allows my Emacs 21.2 to work
+; define hash-table-test for string=, if it isn't already defined
+; (and if define-hash-table-test itself is defined)
+(if (fboundp 'define-hash-table-test)
+    (if (eq (get 'string= 'hash-table-test) nil)
+	(define-hash-table-test 'string= 'string= 'sxhash)
+    )
+)
+
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-get-text" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-set-text" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
+
+; DCF - tracing indentation problems (at Alain's suggestion)
+(cl-puthash "code-config-py-mode-for-regresion-testing" 1 vcode-traces-on)
 
 (defvar vr-log-send nil "*If non-nil, VR mode logs all data sent to the VR
 subprocess in the 'vr-log-buff-name buffer.")
@@ -270,6 +284,26 @@ sent."
    )
 )
 
+(defun vcode-interactive-test ()
+  (interactive)
+  (setq debug-on-error t)
+  (setq debug-on-quit t)
+ 
+;  (vcode-close-all-buffers)
+  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (vcode-configure-for-regression-testing nil)
+  (vr-mode 1 "vcode")
+;  (vcode-configure-for-regression-testing t)
+;  (vr-mode nil)
+)
+
+(defun vcode-log-all ()
+  (interactive)
+  (setq vr-log-do t)
+  (setq vr-log-read t)
+  (setq vr-log-send t)
+)
+
 (defun vcode-test ()
   (interactive)
   (setq debug-on-error t)
@@ -284,9 +318,18 @@ sent."
 )
 
 (defun vcode-config-py-mode-for-regression-testing ()
+; DCF - tracing indentation problems (at Alain's suggestion)
+   (vcode-trace "vcode-config-py-mode-for-regresion-testing" 
+   "invoked, (current-buffer)=%S" (current-buffer))
+
    (setq py-smart-indentation nil) 
    (setq py-indent-offset 3)
    (setq tab-width 999)
+; DCF - tracing indentation problems (at Alain's suggestion)
+   (vcode-trace "vcode-config-py-mode-for-regresion-testing" 
+   "py-indent-offset=%S" py-indent-offset)
+
+
 )
 
 (defun vcode-configure-for-regression-testing (status)
@@ -1645,6 +1688,7 @@ command was a yank or not."
   (cl-puthash 'active_buffer_name 'vcode-cmd-active-buffer-name 
 	      vr-message-handler-hooks)
   (cl-puthash 'open_file 'vcode-cmd-open-file vr-message-handler-hooks)
+  (cl-puthash 'updates 'vcode-cmd-updates vr-message-handler-hooks)
   (cl-puthash 'confirm_buffer_exists 'vcode-cmd-confirm-buffer-exists vr-message-handler-hooks)
   (cl-puthash 'list_open_buffers 'vcode-cmd-list-open-buffers vr-message-handler-hooks)
   (cl-puthash 'close_buffer 'vcode-cmd-close-buffer vr-message-handler-hooks)
@@ -1653,11 +1697,12 @@ command was a yank or not."
   (cl-puthash 'line_num_of 'vcode-cmd-line-num-of vr-message-handler-hooks)
   (cl-puthash 'cur_pos 'vcode-cmd-cur-pos vr-message-handler-hooks)
   (cl-puthash 'get_selection 'vcode-cmd-get-selection vr-message-handler-hooks)
+  (cl-puthash 'get_pos_selection 'vcode-cmd-get-pos-selection vr-message-handler-hooks)
   (cl-puthash 'get_text 'vcode-cmd-get-text vr-message-handler-hooks)
   (cl-puthash 'get_visible 'vcode-cmd-get-visible vr-message-handler-hooks)
   (cl-puthash 'len 'vcode-cmd-len vr-message-handler-hooks)
   (cl-puthash 'newline_conventions 'vcode-cmd-newline-conventions vr-message-handler-hooks)
-  (cl-puthash 'pef_newline_convention 'vcode-cmd-pref-newline-conventions vr-message-handler-hooks)
+  (cl-puthash 'pref_newline_convention 'vcode-cmd-pref-newline-conventions vr-message-handler-hooks)
 
   ;;;
   ;;; These messages are used by VCode to change the content of the buffer
@@ -1993,7 +2038,7 @@ a buffer"
   )
 )
 
-
+; obsolete - replaced with vcode-pos-select-change-hash
 (defun vcode-generate-select-change-hash (a-change)
   (let ((buff-name (nth 0 a-change))
 	(sel-start (nth 1 a-change))
@@ -2009,12 +2054,28 @@ a buffer"
   )
 )
 
+(defun vcode-generate-pos-select-change-hash (a-change)
+  (let ((buff-name (nth 0 a-change))
+	(sel-start (nth 1 a-change))
+	(sel-end (nth 2 a-change))
+	(select-change-hash (make-hash-table :test 'string=))
+	(range nil))
+    (cl-puthash "action" "pos_selection" select-change-hash)
+    (setq range (vcode-convert-range 
+      (min sel-start sel-end) (max sel-start sel-end) 'vcode))
+    (cl-puthash "selection" range select-change-hash)
+    (cl-puthash "pos" (vcode-convert-pos sel-end 'vcode) select-change-hash)
+    (cl-puthash "buff_name" buff-name select-change-hash)
+    select-change-hash
+  )
+)
+
 
 (defun vcode-generate-change-hash (a-change)
 
     (if (eq (nth 0 a-change) 'change-is-insert)
 	(setq a-change-hash (vcode-generate-insert-change-hash (nth 1 a-change)))
-      (setq a-change-hash (vcode-generate-select-change-hash (nth 1 a-change)))
+      (setq a-change-hash (vcode-generate-pos-select-change-hash (nth 1 a-change)))
     )
     a-change-hash
 )
@@ -2028,7 +2089,7 @@ Argument 'change-list is a list of 5ple:
 If 'vr-changes-caused-by-sr-cmd is not nil, then the message must be 
 formatted as a response message to SR command 'vr-changes-caused-by-sr-cmd.
 
-Otherwise, the message must be formated as an Emacs initiated 'updates_cbk' 
+Otherwise, the message must be formated as an Emacs initiated 'updates' 
 message.
 "
 
@@ -2036,7 +2097,7 @@ message.
 	(deleted-length) (inserted-text)
 	(change-list-vcode (list)) (a-change-vcode) (a-change-action)
 	(deleted-end)
-	(mess-name) (mess-cont (make-hash-table :test 'string=)))
+	(mess-name) (mess-key "updates") (mess-cont (make-hash-table :test 'string=)))
 
 
     (while change-list
@@ -2057,16 +2118,34 @@ message.
     ;;; -> name = "some_command_resp"
     ;;;
     ;;; Changes not generated in response to a VCode request:
-    ;;; -> name = "updates_cbk"
+    ;;; -> name = "updates"
     (if vr-changes-caused-by-sr-cmd
-	(setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
-      (setq mess-name "updates_cbk")
+	(if (string= vr-changes-caused-by-sr-cmd "updates")
+	    (setq mess-name "updates")
+	    (setq mess-name (format "%s_resp" vr-changes-caused-by-sr-cmd))
+	)
       )
-    (cl-puthash "updates" change-list-vcode mess-cont)
+    (if (string= mess-name "updates")
+	(setq mess-key "value")
+    )
+    (cl-puthash mess-key change-list-vcode mess-cont)
 
     (run-hook-with-args 
       'vr-serialize-message-hook (list mess-name mess-cont)))
 )
+
+; most changes sent as they occur, but there is no hook for position and
+; selection changes, so we need to send them when the updates message
+; requests them
+(defun vcode-cmd-updates (vcode-request)
+  (vr-report-goto-select-change 
+    (buffer-name (current-buffer)) 
+    (point)
+    (if (mark) (mark) (point))
+  )
+  (vr-send-queued-changes) 
+)
+
 
 (defun vcode-cmd-open-file (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
@@ -2263,7 +2342,47 @@ Also converts from VCode's 0-based positions to Emacs 1-based positions."
   pos
 )
 
-(defun vcode-fix-range (range for-who default-range)
+(defun vcode-fix-range-for-emacs (range default)
+  "Fixes a position range received from VCode server. This range
+may be nil or contain string values, and the 1st element may be
+greater than the 2nd element. If the range is nil, use
+the range specified in default"
+
+  (let ((start) (end) (tmp))
+    (if (eq range nil)
+        (progn 
+	    (setq start (nth 0 default))
+	    (setq end (nth 1 default))
+; defaults already in Emacs 1-based counting
+	)
+	(setq start (wddx-coerce-int (nth 0 range)))
+	(setq end (wddx-coerce-int (nth 1 range)))
+; but range needs to be converted to Emacs 1-based counting
+	(setq start (vcode-convert-pos start 'emacs))
+	(setq end (vcode-convert-pos end 'emacs))
+    )
+
+    (if (> start end)
+	(progn
+	  (setq tmp end)
+	  (setq end start)
+	  (setq start end)
+	  )      
+      )
+    (list start end)
+  )
+)
+
+; NO!!!
+; range arguments are never (start nil) or (nil start).  They are always
+; (start end) or simply nil (i.e. Python None), and in the latter case,
+; default to the start and end of the selection for the specified buffer
+
+; When we want to use start is nil to mean beginning of buffer or end is
+; nil to mean end of buffer, we use separate start and end arguments
+; -- DCF:
+
+(defun bad-vcode-fix-range (range for-who default-range)
   "Fixes a position range received from VCode server. This range
 may contain nil or string values, and the 1st element may be
 greater than the 2nd element. If one of the values in 'rage is nil, 
@@ -2327,6 +2446,21 @@ to the other"
    (not (eq (cl-gethash key table 'entrywasnotintable) 'entrywasnotintable))
 )
 
+(defun vcode-selection-of-buff-in-message (mess)
+  "Identifies the start and end of the current selection in the buffer 
+  to which VCode message 'mess applies. If no buffer listed in the
+  message, use the current buffer"
+  (let ((buff-name))
+    (save-excursion
+      (setq buff-name (cl-gethash "buff_name" mess nil))
+      (if buff-name
+	  (set-buffer buff-name)
+      )	  
+      (vcode-make-sure-no-nil-in-selection (mark) (point))
+    )
+  )
+)  
+
 
 (defun vcode-bounds-of-buff-in-message (mess)
   "Identifies the start and end of the buffer to which VCode message 
@@ -2348,7 +2482,7 @@ buffer"
 ;;; and 1-based counting
 ;;;
 (defun vcode-fix-positions-in-message (message fix-for-who)
-   (let ((pos) (range) (default-pos))
+   (let ((pos) (range) (default-pos) )
      (dolist (position-field '("pos" "position" "start" "end")) 
        (if (is-in-hash position-field message)
 	   (progn
@@ -2373,13 +2507,16 @@ buffer"
      (if (is-in-hash "range" message)
 	 (progn
 	     (setq range (cl-gethash "range" message))
+	     (vr-log "--** vcode-fix-positions-in-message: range is %S\n" range)
              ;;;
              ;;; Fix possibly nil positions received from VCode
              ;;;
 	     (if (eq fix-for-who 'emacs)
-	         (setq range (vcode-fix-range 
-			      range fix-for-who 
-			      (vcode-bounds-of-buff-in-message message))))
+		 (setq range (vcode-fix-range-for-emacs 
+			      range 
+			      (vcode-selection-of-buff-in-message message))
+		 )
+             )
 	     (cl-puthash "range" range  message)
 	 )
      )
@@ -2426,6 +2563,31 @@ buffer"
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "line_num_of_resp" response)))
+    )
+  )
+
+(defun vcode-cmd-get-pos-selection (vcode-request)
+  (let ((mess-cont (nth 1 vcode-request))
+        (response (make-hash-table :test 'string=))
+	(value (make-hash-table :test 'string=))
+	(selection) (to-convert) (no-nil-selection) (pos) (buff-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (set-buffer buff-name)
+      (setq no-nil-selection 
+        (vcode-make-sure-no-nil-in-selection (point) (mark)))
+      (setq to-convert (append no-nil-selection (list 'vcode)))
+      (setq selection (apply 'vcode-convert-range to-convert))
+      (setq pos (vcode-convert-pos (point) 'vcode))
+    )
+    (cl-puthash 'pos pos value)
+    (cl-puthash 'selection selection value)
+    (cl-puthash 'value 
+		value
+		response)
+    (vr-send-reply 
+     (run-hook-with-args 
+      'vr-serialize-message-hook (list "get_pos_selection_resp" response)))
     )
   )
 
@@ -2596,6 +2758,11 @@ change reports it sends to VCode.
 	(setq range (cl-gethash "range" mess-cont))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
+
+	(vr-log "--** vcode-cmd-insert: upon entry, (point)=%S,
+	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, text=%S\n" 
+	    (point) (mark) range delete-start delete-end text)
+
 
 	(set-buffer buff-name)
 	(kill-region delete-start delete-end)
@@ -2839,6 +3006,7 @@ tabs.
 	(progn 
 	  (switch-to-buffer buff-name)
 	  (goto-char pos)
+	  (push-mark (point))
 	)
 
       ('error (error "VR Error: could not go to position %S" pos))
@@ -2903,5 +3071,8 @@ tabs.
 )
 
 (defun vcode-cmd-mediator-closing (vcode-request)
-  (vr-mode-activate 'vcode)
+   (vr-mode-activate nil)
+; huh? this tries to connect again when we get a mediator closing
+; message.  Maybe Alain meant deactivate
+;  (vr-mode-activate 'vcode)
 )

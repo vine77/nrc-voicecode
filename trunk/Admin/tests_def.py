@@ -2223,6 +2223,7 @@ def check_stored_utterances(instance_name, expected):
             print msg
     else:
         n = 0
+#        print 'recent is %s' % repr(recent)
         if recent != None:
             n = len(recent)
         if n != expected:
@@ -2407,7 +2408,7 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
             sys.stdout.flush()
             return 1
         else:
-            print '\WARNING: nonly utterances ', done, 'were reinterpreted'
+            print '\WARNING: only utterances ', done, 'were reinterpreted'
             print '(expected %d to the present)\n' % max(changed)
             sys.stdout.flush()
             return 0
@@ -2515,6 +2516,7 @@ def test_basic_correction():
 
     buffer.insert('president')
     commands.show_buff()
+
 
     status = len(status)*[0]
 

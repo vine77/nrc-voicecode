@@ -189,6 +189,8 @@ class SB_ServiceLineManip(SB_Service):
         #
         # Make sure the position is within range
         #
+        debug.trace('SB_ServiceLineManip.line_num_of',
+            'position = %s' % position)
         if position == None:
             position = self.buff.cur_pos()
             position = self.buff.make_within_range(position)
@@ -201,18 +203,36 @@ class SB_ServiceLineManip(SB_Service):
         line_start_pos = 0
         line_num = 1
         curr_line = 1
+#        print self.buff.len()
+        debug.trace('SB_ServiceLineManip.line_num_of',
+            'position = %s' % position)
+        length = self.buff.len()
         while (1):
             a_match = regexp.search(self.buff.contents(), line_start_pos)
             if not a_match:
                 break
             else:
                 line_end_pos = a_match.start()
+#                if line_end_pos < 10:
+#                    debug.trace('SB_ServiceLineManip.line_num_of',
+#                        'found line end at %d' % line_end_pos)
                 if position >= line_start_pos and position <= line_end_pos:
                     line_num = curr_line
                     break
-                line_start_pos = a_match.start() + 1
+                if a_match.end() == a_match.start():
+# don't want to get stuck if we have a zero-length match (i.e. to $)
+                    line_start_pos = a_match.start() + 1
+                else:
+# if newline_regexp includes \r\n and \n, we don't want to see \r\n, 
+# match \r\n, then advance the start of the search by one and match \n as
+# an additional new line.
+                    line_start_pos = a_match.end()
+                if line_start_pos > length:
+                    break
                 curr_line = curr_line + 1                            
         
+        debug.trace('SB_ServiceLineManip.line_num_of',
+            'returning %d' % line_num)
         return line_num
 
 
@@ -916,7 +936,7 @@ class SB_ServiceFullState(SB_ServiceState):
         debug.trace('SB_ServiceFullState.restore_state', 
                     '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
         #deb
-        if 0:
+        if debug.trace_is_active('SB_ServiceFullState.restore_state'):
             debug.trace('SB_ServiceFullState.restore_state', '*** before set_text, buffer contaisns')
             self.buff.print_buff_if_necessary()                    
         #fin
@@ -924,7 +944,7 @@ class SB_ServiceFullState(SB_ServiceState):
         self.buff.set_text(cookie.contents())
         
         #deb
-        if 0:
+        if debug.trace_is_active('SB_ServiceFullState.restore_state'):
             debug.trace('SB_ServiceFullState.restore_state', '*** before set_selection, buffer contaisns')
             self.buff.print_buff_if_necessary()                    
         #fin

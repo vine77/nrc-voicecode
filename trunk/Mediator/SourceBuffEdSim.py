@@ -153,14 +153,11 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
         return self.lang_srv.language_name()
 
-    def cur_pos(self):
-        return self.pos
-
-    def get_selection(self):
+    def get_pos_selection(self):
         if self.selection == None:
             self.selection = (self.cur_pos(), self.cur_pos())
-        return self.selection
-    
+        return (self.pos, self.selection)
+
     def set_selection(self, range, cursor_at = 1):
         start, end = self.make_valid_range(range)
         self.selection = (start, end)

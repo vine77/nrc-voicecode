@@ -25,6 +25,7 @@
 from Object import Object, OwnerObject
 import debug
 import re
+import threading
 
 import CmdInterp, AppState
 from SpokenUtterance import *
@@ -1047,6 +1048,9 @@ class StateStackBasic(StateStack):
     *BOOL ignore_deleted* -- should we ignore buffers which no
     longer exist in the current state, and simply restore the states of
     the buffers which still exist?
+
+    *INT call_count* -- TEMPORARY counter used to track calls to
+    recent_dictation for debugging purposes - DCF
     """
     def __init__(self, max_depth, ignore_new = 1, ignore_deleted = 0, **args):
         """
@@ -1065,6 +1069,7 @@ class StateStackBasic(StateStack):
         """
         self.deep_construct(StateStackBasic, 
                             {
+                             'call_count': 0,
                              'states': [],
                              'after_utterance': None,
                              'max_depth': max_depth,
@@ -1173,6 +1178,10 @@ class StateStackBasic(StateStack):
         *INT* -- the depth in the state stack to which we can
         safely restore the editor
         """
+        self.call_count = self.call_count + 1
+        call_count = self.call_count
+        debug.trace('StateStackBasic.safe_depth', 
+            'call %d' % call_count)
         if len(self.states) == 0:
             debug.trace('StateStackBasic.safe_depth', 'empty stack')
             return 0
@@ -1180,11 +1189,18 @@ class StateStackBasic(StateStack):
             debug.trace('StateStackBasic.safe_depth', 
                 'no state after utterance')
             return 0
+        if debug.trace_is_active('StateStackBasic.safe_depth'):
+            debug.trace('StateStackBasic.safe_depth',
+                 'called from thread %s' %
+                 threading.currentThread().getName())
+#            debug.print_call_stack()
 # have to synchronize to ensure that we've processed any pending updates
 # and that "current" is really current.
         debug.trace('StateStackBasic.safe_depth', 
             'about to synchronize')
         app.synchronize_with_app()
+        debug.trace('StateStackBasic.safe_depth', 
+            'call %d' % call_count)
         debug.trace('StateStackBasic.safe_depth', 
             'just synchronized, about to compare')
         same = self.after_utterance.compare_with_current(app, 
@@ -1350,6 +1366,9 @@ class ResMgrBasic(ResMgrStd):
     *INT next_number* -- next number to be assigned to the next new
     utterance
 
+    *INT call_count* -- TEMPORARY counter used to track calls to
+    recent_dictation for debugging purposes - DCF
+
     *StateStackBasic states* -- stack representing the state of the editor 
     application before/after recent utterances
     """
@@ -1362,6 +1381,7 @@ class ResMgrBasic(ResMgrStd):
                              'numbers': [],
                              'next_number': 0,
                              'initial_buffers': [],
+                             'call_count': 0,
                              'states': StateStackBasic(max_utterances)
                             },
                             args)
@@ -1421,6 +1441,10 @@ class ResMgrBasic(ResMgrStd):
         *none*
         """
         debug.trace('ResMgrBasic.interpret_dictation', 'about to interpret')
+        if debug.trace_is_active('ResMgrBasic.interpret_dictation'):
+            debug.trace('ResMgrBasic.interpret_dictation',
+                 'called from thread %s' %
+                 threading.currentThread().getName())
         app = self.editor()
         ResMgrStd._std_interp(self, result, 
             app, 
@@ -1496,16 +1520,34 @@ class ResMgrBasic(ResMgrStd):
         buffer during
         """
         available = self.stored_utterances()
+        self.call_count = self.call_count + 1
+        call_count = self.call_count
+        debug.trace('ResMgrBasic.recent_dictation', 
+            'call %d' % call_count)
+        debug.trace('ResMgrBasic.recent_dictation', '%s requested' % n)
+        debug.trace('ResMgrBasic.recent_dictation', '%d available' % available)
         if available == 0:
             return None
         if n == None:
             m = available
         else:
             m = min(n, available)
+        if debug.trace_is_active('ResMgrBasic.recent_dictation'):
+            debug.trace('ResMgrBasic.recent_dictation',
+                 'called from thread %s' %
+                 threading.currentThread().getName())
         safe = self.states.safe_depth(self.editor())
+        debug.trace('ResMgrBasic.recent_dictation', 
+            'call %d' % call_count)
+        if debug.trace_is_active('ResMgrBasic.recent_dictation'):
+            debug.trace('ResMgrBasic.recent_dictation',
+                 'called from thread %s' %
+                 threading.currentThread().getName())
         debug.trace('ResMgrBasic.recent_dictation', 'safe depth = %d' % safe)
         utterances = []
         for i in range(m, 0, -1):
+            debug.trace('ResMgrBasic.recent_dictation', 
+                'adding %s, safe = %d' % (self.utterances[-i], i <= safe))
             utterances.append((self.utterances[-i], i <= safe))
         return utterances
    

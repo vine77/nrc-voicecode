@@ -134,7 +134,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         **INPUTS**        
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
@@ -149,7 +149,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         **INPUTS**        
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
@@ -160,8 +160,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
     def rename_buffer_cbk(self, new_buff_name):
         
         """AppState invokes this method when 
-	AppState.rename_buffer_cbk is called to notify VoiceCode that 
-	an existing text buffer has been renamed
+        AppState.rename_buffer_cbk is called to notify VoiceCode that 
+        an existing text buffer has been renamed
         
         **INPUTS**
 
@@ -177,83 +177,53 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         self.cache['language_name'] = None
         self.cache['file_name'] = None
 
-    def cur_pos(self):
-        """retrieves current position of cursor .  Note: the current
-	position should coincide with either the start or end of the
-	selection.  
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* pos -- offset into buffer of current cursor position
-	"""
-        if self.cache['cur_pos'] == None:
-            self.cache['cur_pos'] = self._cur_pos_from_app()
-        return self.cache['cur_pos']
-
-    def _cur_pos_from_app(self):
+    def get_pos_selection(self):
+        """retrieves current position of cursor and the range of 
+        current selection
         
-        """retrieves current position of cursor directly from external
-	application.
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* pos -- offset into buffer of current cursor position
-	"""
-
-        debug.virtual('SourceBuffCached._cur_pos_from_app')        
-
-    def get_selection(self):
-        """retrieves range of current selection.  Note: the current
-	position should coincide with either the start or end of the
-	selection. 
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* (start, end)
-
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
-        trace('SourceBuffCached.get_selection', 'first, check cache...')
-        if self.cache['get_selection'] == None:
-            self.cache['get_selection'] = self._get_selection_from_app()
-            trace('SourceBuffCached.get_selection', 'cache empty')
-        trace('SourceBuffCached.get_selection', 
-            'sel is %s' % repr(self.cache['get_selection']))
-        return self.cache['get_selection']
+        **INPUTS**
         
-
-    def _get_selection_from_app(self):
-        """retrieves range of current selection directly from external editor.
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* (start, end)
-
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
+        *none*
         
-        debug.virtual('SourceBuffCached._get_selection_from_app')	
+        **OUTPUTS**
+        
+        *(INT, (INT, INT))* (pos, (start, end))
+        
+        pos is the offset into buffer of current cursor position
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
+        trace('SourceBuffCached.get_pos_selection', 'first, check cache...')
+        if self.cache['get_selection'] == None or \
+            self.cache['cur_pos'] == None:
+            pos, range = self._get_pos_selection_from_app()
+            trace('SourceBuffCached.get_pos_selection',
+                'pos = %s' % repr(pos))
+            trace('SourceBuffCached.get_pos_selection',
+                'range = %s' % repr(range))
+            self.cache['cur_pos'] = pos
+            self.cache['get_selection'] = range
+        return self.cache['cur_pos'], self.cache['get_selection']
 
+    def _get_pos_selection_from_app(self):
+        """retrieves current position of cursor and the range of 
+        current selection directly from the external application
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *(INT, (INT, INT))* (pos, (start, end))
+        
+        pos is the offset into buffer of current cursor position
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
+        debug.virtual('SourceBuff._get_pos_selection_from_app')
 
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer from the cache.
@@ -300,19 +270,19 @@ class SourceBuffCached(SourceBuff.SourceBuff):
     def _get_text_from_app(self, start = None, end = None):
         """retrieves a portion of the buffer directly from external editor.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT start* is the start of the region returned.
-	Defaults to start of buffer.
+        *INT start* is the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
+        *STR* -- contents of specified range of the buffer
+        """
 
         debug.virtual('SourceBuffCached._get_text_from_app')
 
@@ -320,14 +290,14 @@ class SourceBuffCached(SourceBuff.SourceBuff):
     def get_visible(self):
         """Gets start and end positions of visible region from cache.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end)
-	"""
+        *INT* (start, end)
+        """
         if self.cache['get_visible'] == None:
             self.cache['get_visible'] = self._get_visible_from_app()
         return self.cache['get_visible']
@@ -335,29 +305,29 @@ class SourceBuffCached(SourceBuff.SourceBuff):
     def _get_visible_from_app(self):
         
         """Gets start and end positions of visible region directly
-	from external editor.
+        from external editor.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end)
-	"""
+        *INT* (start, end)
+        """
         debug.virtual('SourceBuff._get_visible_from_app')        
 
     def len(self):
         """return length of buffer in characters from cache.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* length 
-	"""
+        *INT* length 
+        """
         return len(self.contents())
 
 
@@ -375,6 +345,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         *none* -- 
         """
+#        debug.print_call_stack()
         if self.cache['newline_conventions'] == None:
             self.cache['newline_conventions'] = self._newline_conventions_from_app()
         return self.cache['newline_conventions']
@@ -517,62 +488,28 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         trace('SourceBuffCached.insert_cbk', '** upon exit, self.cache["cur_pos"]=%s, self.cache["get_text"]="%s"' % (self.cache["cur_pos"], self.cache["get_text"]))
 
-    def set_selection_cbk(self, range, cursor_at=1):
-        
+    def pos_selection_cbk(self, pos, selection):
         """External editor invokes that callback to notify VoiceCode
-        of a set selection event.
+        of a change in the current position or selection
 
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
-        **INPUTS**
-        
-        (INT, INT) *range* -- Start and end position of selected text
-
-
-        INT *cursor_at* -- indicates whether cursor was left at the
-        beginning or end of *range*
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-#        print '-- SourceBuffCached.set_selection_cbk: called, range=%s, cursor_at=%s' % (repr(range), cursor_at)
-
-        trace('SourceBuffCached.set_selection_cbk',
-            'selection is %d, %d' % (range[0], range[1]))
-        self.cache['get_selection'] = range
-        trace('SourceBuffCached.set_selection_cbk',
-            'cursor at %d' % cursor_at)
-        if cursor_at > 0:
-            self.cache['cur_pos'] = range[1]
-        else:
-            self.cache['cur_pos'] = range[0]
-            
-# DCF: this should only be called after changes to the buffer *contents*
-#        self.uncache_data_after_buffer_change('get_selection')            
-
-    def goto_cbk(self, pos):
-        
-        """External editor invokes that callback to notify VoiceCode
-        of a cursor movement event.
-
-        NOTE: This method should NOT update the V-E map, because that is
-        already taken care of outside of the method.
-        
         **INPUTS**
         
         INT *pos* -- Position the cursor was moved to.
+
+        (INT, INT) *selection* -- Start and end position of selected text
         
         **OUTPUTS**
         
         *none* -- 
         """
-#        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
-        trace('SourceBuffCached.goto_cbk', 'position is %d' % pos)
+        trace('SourceBuffCached.pos_selection_cbk',
+            'pos is %d, selection is %d, %d' % (pos, selection[0],
+            selection[1]))
+        self.cache['get_selection'] = selection
         self.cache['cur_pos'] = pos
-
+            
+# DCF: this should only be called after changes to the buffer *contents*
+#        self.uncache_data_after_buffer_change('get_selection')            
 
     def uncache_data_after_buffer_change(self, what_changed=None):
         trace('SourceBuffCached.uncache_data_after_buffer_change',

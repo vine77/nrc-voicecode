@@ -78,7 +78,7 @@ def use_update_class(action):
         
     use_class = {'curr_buffer': AS_UpdCurrBufferName,
                  'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
-                 'select': SB_UpdSetSelection, 'goto': SB_UpdGoto,
+                 'pos_selection': SB_UpdPosSelection,
                  'close_buff': AS_UpdCloseBuffer,
                  'open_buff': AS_UpdOpenBuffer,
                  'rename_buff': AS_UpdRenameBuffer,
@@ -419,9 +419,9 @@ class SB_UpdInsert(SB_Update):
         range = messaging.messarg2intlist(self.descr['range'])        
         on_buff.insert_cbk(range=range, text=self.descr['text'])
         
-
-class SB_UpdSetSelection(SB_Update):
-    """Update class for setting the selection.
+class SB_UpdPosSelection(SB_Update):
+    """Update class for setting both the cursor position and the current
+    selection.
     
     **INSTANCE ATTRIBUTES**
     
@@ -433,7 +433,7 @@ class SB_UpdSetSelection(SB_Update):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(SB_UpdSetSelection,
+        self.deep_construct(SB_UpdPosSelection,
                             {}, 
                             args_super, 
                             {})
@@ -451,52 +451,16 @@ class SB_UpdSetSelection(SB_Update):
         
         *none* -- 
         """
+# By using a single update for both position and range, we avoid
+# the situation where one update is received by itself and
+# we don't know whether the other property has also changed
+        pos = messaging.messarg2int(self.descr['pos'])
+        selection = messaging.messarg2intlist(self.descr['selection'])
+        on_buff.pos_selection_cbk(pos = pos, selection = selection)
+# here, we don't necessarily guarantee that pos coincides with one end
+# of the range, at least not for now - DCF.
+# However, set_selection and goto do.
 
-        cursor_at = None
-        if self.descr.has_key('cursor_at'):
-            cursor_at = int(self.descr['cursor_at'])
-        range = messaging.messarg2intlist(self.descr['range'])
-        if cursor_at != None:
-            on_buff.set_selection_cbk(range=range, cursor_at=cursor_at)
-        else:
-            on_buff.set_selection_cbk(range)
-
-
-class SB_UpdGoto(SB_Update):
-    """Update class for moing the cursor.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    *none*-- 
-    
-    CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, **args_super):
-        self.deep_construct(SB_UpdGoto,
-                            {}, 
-                            args_super, 
-                            {})
-
-    def apply_to_buff(self, on_buff):
-        
-        """Carry out a cursor movementupdate on a specific buffer.
-        
-        **INPUTS**
-        
-        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        on_buff.goto_cbk(pos=int(self.descr['pos']))
-
-        
 class AppCbkHandler(Object):
     """abstract interface for a manager which handles callbacks from one 
     or more AppState objects.
@@ -514,127 +478,127 @@ class AppCbkHandler(Object):
 
     def close_app_cbk(self, instance, unexpected = 0):
         """callback from AppState which indicates that the application has 
-	closed or disconnected from the mediator
+        closed or disconnected from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance to be removed
+        *STR* instance -- name of the application instance to be removed
 
-	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppCbkHandler.close_app_cbk')
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has closed a buffer
+        has closed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppCbkHandler.close_buffer_cbk')
 
     def open_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has opened a new buffer 
+        has opened a new buffer 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was opened
+        *STR* buff_name -- name of the buffer which was opened
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppCbkHandler.open_buffer_cbk')
 
     def curr_buff_name_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the current
-	buffer has changed
+        buffer has changed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the newly current buffer 
+        *STR* buff_name -- name of the newly current buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppCbkHandler.curr_buff_name_cbk')
 
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
         """callback from AppState which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppCbkHandler.rename_buffer_cbk')
 
     def new_window(self, instance):
         """called when the editor notifies us of a new window for the 
-	specified instance
+        specified instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window is added
-	"""
+        *BOOL* -- true if window is added
+        """
         debug.virtual('AppCbkHandler.new_window')
 
     def suspend_cbk(self, instance):
         """called when the editor notifies us that its process is about
         to be suspended
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         debug.virtual('AppCbkHandler.suspend_cbk')
 
     def resume_cbk(self, instance):
         """called when the editor notifies us that its process has 
         resumed after having been suspended 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         debug.virtual('AppCbkHandler.resume_cbk')
 
 class AppState(OwnerObject):
@@ -716,7 +680,8 @@ class AppState(OwnerObject):
     .. [curr_buffer_name] file:///./AppState.AppState.html#curr_buffer_name"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
-    'get_selection', 'goto_end_of_selection', 'set_selection', 
+    'get_selection', 'get_pos_selection', 
+    'goto_end_of_selection', 'set_selection', 
     'contents', 'get_text', 'distance_to_selection', 'get_visible',
     'set_text',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
@@ -757,91 +722,91 @@ class AppState(OwnerObject):
       
     def name(self):
         """the unique name (assigned by the the manager) to this editor
-	instance
+        instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the name of the instance, or None if the manager has
-	not given it one.
-	"""
+        *STR* -- the name of the instance, or None if the manager has
+        not given it one.
+        """
         return self.instance_name
 
     def set_name(self, name):
         """assign a unique name to this editor instance.  
-	**NOTE:** only the manager should call this method.
+        **NOTE:** only the manager should call this method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- the name of the instance
+        *STR* name -- the name of the instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.instance_name = name
 
     def current_manager(self):
         """returns a reference to the the manager which owns this AppState
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*AppCbkHandler* -- the AppCbkHandler object which owns this 
-	AppState, or None if there is none.
-	"""
+        **OUTPUTS**
+        
+        *AppCbkHandler* -- the AppCbkHandler object which owns this 
+        AppState, or None if there is none.
+        """
         return self.manager
 
     def set_manager(self, manager):
         """indicates the AppState's manager.  Normally called only by 
-	the manager.  
+        the manager.  
 
-	**INPUTS**
-	
-	*AppCbkHandler* manager -- the AppCbkHandler object which owns 
-	this AppState.  
+        **INPUTS**
+        
+        *AppCbkHandler* manager -- the AppCbkHandler object which owns 
+        this AppState.  
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.manager = manager
 
     def set_change_callback(self, change_callback = None):
         """changes the callback to a new function
 
-	**NOTE:** This method sets a change callback which will be
-	called for program-initiated changes, but may not be called for
-	user-initiated ones.
+        **NOTE:** This method sets a change callback which will be
+        called for program-initiated changes, but may not be called for
+        user-initiated ones.
 
-	**INPUTS**
+        **INPUTS**
       
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name, *BOOL* program_initiated)
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *STR* buff_name, *BOOL* program_initiated)
 
-	The arguments to the change callback specify the character offsets
-	of the start and end of the changed region (before the change),
-	the text with which this region was replaced, the start and end
-	of the selected region (after the change), the name of the
-	buffer reporting the change, and whether the change was
-	initiated by the program, or by the user
+        The arguments to the change callback specify the character offsets
+        of the start and end of the changed region (before the change),
+        the text with which this region was replaced, the start and end
+        of the selected region (after the change), the name of the
+        buffer reporting the change, and whether the change was
+        initiated by the program, or by the user
 
-	Note the difference between this change_callback and the
-	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  
+        Note the difference between this change_callback and the
+        TextBufferWX one: here the name of the buffer is returned,
+        rather than a reference to the underlying TextBufferWX.  
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.change_callback = change_callback
 
     def remove_other_references(self):
@@ -850,28 +815,28 @@ class AppState(OwnerObject):
 
     def on_change(self, buff_name, start, end, text, program_initiated):
         """method which should be called after the contents of a buffer
-	is changed.  If the AppState represents an external editor which
-	does not support change notification, then on_change may only be
-	called for mediator-initiated changes (including responses from
-	the external editor to mediator-initiated changes).
+        is changed.  If the AppState represents an external editor which
+        does not support change notification, then on_change may only be
+        called for mediator-initiated changes (including responses from
+        the external editor to mediator-initiated changes).
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buff_name -- name of the modified buffer
+        *STR* buff_name -- name of the modified buffer
 
-	*INT* start -- start of the modified range
+        *INT* start -- start of the modified range
 
-	*INT* end -- end of the modified range
+        *INT* end -- end of the modified range
 
-	*STR* text -- the new text replacing this range
+        *STR* text -- the new text replacing this range
 
-	*BOOL* program_initiated -- true if the change was
-	initiated by the mediator
+        *BOOL* program_initiated -- true if the change was
+        initiated by the mediator
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.change_callback:
             buff = self.find_buff(buff_name)
             if buff:
@@ -891,8 +856,8 @@ class AppState(OwnerObject):
         STR *window_id* -- The ID of the window that was active when
         the recognition began.                
 
-	*BOOL block* -- true if the speech engine can detect recog_end
-	events reliably.  If so, and if the editor is capable of doing so, 
+        *BOOL block* -- true if the speech engine can detect recog_end
+        events reliably.  If so, and if the editor is capable of doing so, 
         the editor may (at its discretion) also stop responding to user
         input until method [recog_end()] is invoked.  This is to
         prevent a bunch of problems that can arise if the user types
@@ -900,14 +865,14 @@ class AppState(OwnerObject):
         cases, the results of the utterance interpretation can be
         unpredictable, especially when it comes to correction.
 
-	**NOTE:** However, if block is false, the editor **MUST NOT**
-	stop responding, because the mediator will not be able to use
-	recog_end to tell it to resume responding to user input.  
+        **NOTE:** However, if block is false, the editor **MUST NOT**
+        stop responding, because the mediator will not be able to use
+        recog_end to tell it to resume responding to user input.  
 
-	Also, the editor must provide a way for the user to re-enable
-	input manually, in case the mediator crashes.  If it cannot do
-	so, it should not stop responding, regardless of the value of
-	block.
+        Also, the editor must provide a way for the user to re-enable
+        input manually, in case the mediator crashes.  If it cannot do
+        so, it should not stop responding, regardless of the value of
+        block.
 
         **OUTPUTS**
         
@@ -994,24 +959,24 @@ class AppState(OwnerObject):
 
     def mediator_closing(self):
         """method called to inform AppState that the mediator is
-	closing.    Internal editors should exit.  They may prompt the
-	user to save modified files, but must not allow the user to
-	cancel and leave the editor running.  External editors should
-	disconnect but not close.  **Note:** this method should not
-	block.  For external editors, that means the corresponding
-	message should have a response for which to wait.  Otherwise, a
-	single hung or disconnected editor hang the mediator and prevent
-	it from closing or from notifying the rest of the connected
-	editors that it was closing.  
+        closing.    Internal editors should exit.  They may prompt the
+        user to save modified files, but must not allow the user to
+        cancel and leave the editor running.  External editors should
+        disconnect but not close.  **Note:** this method should not
+        block.  For external editors, that means the corresponding
+        message should have a response for which to wait.  Otherwise, a
+        single hung or disconnected editor hang the mediator and prevent
+        it from closing or from notifying the rest of the connected
+        editors that it was closing.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('AppState.mediator_closing')
         
     def process_pending_updates(self):
@@ -1054,10 +1019,9 @@ class AppState(OwnerObject):
         if updates == None:
             self.process_pending_updates()
             updates = self.updates_from_app(what, exclude)
-            debug.trace('AppState.synchronize', 
+            debug.trace('AppState.synchronize_with_app', 
                 'received updates:\n%s\n' % repr(updates))
         self.apply_updates(updates)
-
 
 
     def apply_updates(self, updates):
@@ -1105,7 +1069,7 @@ class AppState(OwnerObject):
 
     def curr_buffer(self):
         """Returns the SourceBuff corresponding to the default editor buffer,
-	or the current buffer if the default is not set
+        or the current buffer if the default is not set
         
         If no such buffer, returns *None*.
         
@@ -1116,7 +1080,7 @@ class AppState(OwnerObject):
     def curr_buffer_name(self):
         
         """Returns the file name of the buffer that VoiceCode
-	currently operates on.
+        currently operates on.
 
         This may or may not be the same as the active buffer in the
         editor (this is returned by method [app_active_buffer_name]).
@@ -1135,9 +1099,9 @@ class AppState(OwnerObject):
         WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU KNOW WHAT YOU
         ARE DOING!!!
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- file name of current buffer
+        *STR* -- file name of current buffer
 
         file:///./AppState.AppState.html#app_active_buffer_name"""
 
@@ -1155,7 +1119,7 @@ class AppState(OwnerObject):
     def app_active_buffer_name(self):
         
         """Returns the file name of the buffer currently active in the
-	external application.
+        external application.
 
         Note that this may or may not be the same the buffer that
         VoiceCode is currently bound to (see [curr_buffer_name]
@@ -1165,9 +1129,9 @@ class AppState(OwnerObject):
 
         *none* --
         
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- file name of current buffer
+        *STR* -- file name of current buffer
 
         file:///./AppState.AppState.html#curr_buffer_name"""
 
@@ -1252,7 +1216,7 @@ class AppState(OwnerObject):
         """Changes the active buffer.
 
         Will also bind the AppState to that buffer if the application is
-	currently bound to a buffer.
+        currently bound to a buffer.
         See [curr_buffer_name] for a description of
         buffer binding.
 
@@ -1263,7 +1227,7 @@ class AppState(OwnerObject):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the external application
-	successfully switches to it
+        successfully switches to it
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
@@ -1295,7 +1259,7 @@ class AppState(OwnerObject):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the external application
-	successfully switches to it
+        successfully switches to it
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
@@ -1304,41 +1268,41 @@ class AppState(OwnerObject):
     def is_active(self):
         """is the editor application active (not suspended)?
 
-	Usually true, except for remote editors running in a (Unix)
-	shell.  GUI editors tend to minimize instead of suspending, so
-	their process should still be active.
+        Usually true, except for remote editors running in a (Unix)
+        shell.  GUI editors tend to minimize instead of suspending, so
+        their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is active (i.e. has not been suspended)
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is active (i.e. has not been suspended)
+        """
         debug.virtual('AppState.is_active')
 
     def is_active_is_safe(self):
         """can is_active safely be queried, without blocking?
 
-	For example, Emacs provides a suspend-hook and a
-	suspend-resume-hook, so a properly written AppStateEmacs can
-	set a flag on suspend and clear it on resume, and will therefore
-	be able to respond to is_active without querying Emacs.
+        For example, Emacs provides a suspend-hook and a
+        suspend-resume-hook, so a properly written AppStateEmacs can
+        set a flag on suspend and clear it on resume, and will therefore
+        be able to respond to is_active without querying Emacs.
 
-	Also, except for remote editors running in a (Unix)
-	shell, this is usually true.  GUI editors tend to minimize 
-	instead of suspending, so their process should still be active.
+        Also, except for remote editors running in a (Unix)
+        shell, this is usually true.  GUI editors tend to minimize 
+        instead of suspending, so their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if is_active can be queried without blocking,
-	even if the editor has been suspended. 
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if is_active can be queried without blocking,
+        even if the editor has been suspended. 
+        """
         debug.virtual('AppState.is_active_is_safe')
 
     def suspendable(self):
@@ -1347,22 +1311,22 @@ class AppState(OwnerObject):
         GUI editors which fork, allowing the command-line command to exit).  
         If so, this makes querying the editor to is if it is_active unsafe. 
 
-	Usually false for Windows and most GUI editors.
+        Usually false for Windows and most GUI editors.
 
         **NOTE:** this method is used to determine how to implement
         is_active and whether is_active_is_safe.  It is generally 
         called only by an AppState subclass (or a ClientEditor wrapper) 
         and only when the editor first starts or connects to the mediator.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in an environment where 
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in an environment where 
         it can be suspended
-	"""
+        """
         debug.virtual('AppState.suspendable')
 
     def suspend_notification(self):
@@ -1373,186 +1337,186 @@ class AppState(OwnerObject):
         called only by an AppState subclass (or a ClientEditor wrapper) 
         and only when the editor first starts or connects to the mediator.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if the editor can (and will) notify the mediator
+        **OUTPUTS**
+        
+        *BOOL* -- true if the editor can (and will) notify the mediator
         prior to its process being suspended and once it has been resumed.
-	"""
+        """
         debug.virtual('AppState.suspend_notification')
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
-	another editor instance (because it is a shell window,
-	and this instance could be suspended or closed)
+        another editor instance (because it is a shell window,
+        and this instance could be suspended or closed)
 
-	Usually false for GUI editors.
+        Usually false for GUI editors.
 
-	Note: remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will also appear to be
-	shared windows.  However, the mediator will perform a separate 
-	check to detect this, so for remote editors which do not share windows 
-	on the remote system, AppState.shared_window should report
-	false.
-	
-	**INPUTS**
+        Note: remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will also appear to be
+        shared windows.  However, the mediator will perform a separate 
+        check to detect this, so for remote editors which do not share windows 
+        on the remote system, AppState.shared_window should report
+        false.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in a potentially shared window
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in a potentially shared window
+        """
         
         debug.virtual('AppState.shared_window')
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
-	editor is capable of setting the window title to include this string, 
-	it should (and then should return this string when the
-	instance_string method is called.  
+        editor is capable of setting the window title to include this string, 
+        it should (and then should return this string when the
+        instance_string method is called.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- the identifying string to be included in the
-	window title if possible.
+        *STR* instance_string -- the identifying string to be included in the
+        window title if possible.
 
-	**OUTPUTS**
-	
+        **OUTPUTS**
+        
         *BOOL* -- true if the editor can and will include the instance 
         string in its window title for all windows containing editor buffers
-	"""
+        """
         debug.virtual('AppState.set_instance_string')
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
-	should be a substring of the window title)
+        should be a substring of the window title)
 
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not be able to set 
-	the overall title.  
-	However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	identifying title strings should still return the appropriate
-	string.
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not be able to set 
+        the overall title.  
+        However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        identifying title strings should still return the appropriate
+        string.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*STR* -- the identifying string, or None if the editor was not given 
-	such a string or cannot set the window title.
-	"""
+        **OUTPUTS**
+        
+        *STR* -- the identifying string, or None if the editor was not given 
+        such a string or cannot set the window title.
+        """
         debug.virtual('AppState.instance_string')
 
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
-	sequence which can be used to set the module's window title, if
-	any.  If the editor has its own mechanism for setting the window
-	title, it should simply ignore this method.  
+        sequence which can be used to set the module's window title, if
+        any.  If the editor has its own mechanism for setting the window
+        title, it should simply ignore this method.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* before -- the escape sequence to be sent before the string
-	to place in the window title, or the empty string if there is no
-	escape sequence
+        *STR* before -- the escape sequence to be sent before the string
+        to place in the window title, or the empty string if there is no
+        escape sequence
 
-	*STR* after -- the escape sequence which terminates the window
-	title value
+        *STR* after -- the escape sequence which terminates the window
+        title value
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
-	"""
+        """
         debug.virtual('AppState.title_escape_sequence')
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         
         debug.virtual('AppState.multiple_windows')
 
     def multiple_buffers(self):
         """does editor support multiple open buffers?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
         
         debug.virtual('AppState.multiple_buffers')
 
     def bidirectional_selection(self):
         """does editor support selections with cursor at left?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor allows setting the selection at the
+        left end of the selection"""
         
         debug.virtual('AppState.bidirectional_selection')
 
     def active_field(self):
         """indicates what part of the editor has the focus.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(STR)* -- Name of the active Field. Elements of
-	the array refer to a sequence of objects in the user interface
-	that lead to the active field.
+        *(STR)* -- Name of the active Field. Elements of
+        the array refer to a sequence of objects in the user interface
+        that lead to the active field.
 
-	If *None*, then the buffer [self.curr_buffer()] has the focus. 
+        If *None*, then the buffer [self.curr_buffer()] has the focus. 
 
-	Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
-	as', 'file name')*.
+        Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
+        as', 'file name')*.
 
-	Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
-	where find-buffer is the name of the command that was invoked and
-	buffer-name refers to the argument that is being asked for.
-	"""
+        Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
+        where find-buffer is the name of the command that was invoked and
+        buffer-name refers to the argument that is being asked for.
+        """
 
         #
         # For now, we don't support voice enabling fields of the external
@@ -1621,46 +1585,46 @@ class AppState(OwnerObject):
 
     def query_buffer_from_app(self, buff_name):
         """query the application to see if a buffer by the name of buff_name 
-	exists.
+        exists.
 
         **INPUTS**
 
-	*STR* buff_name -- name of the buffer to check
+        *STR* buff_name -- name of the buffer to check
 
         **OUTPUTS**
 
-	*BOOL* -- does the buffer exist?
-	"""
+        *BOOL* -- does the buffer exist?
+        """
         debug.virtual('AppState.query_buffer_from_app')
 
     def open_buffers_from_app(self):
         """retrieve a list of the names of open buffers from the
-	application.
+        application.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
         debug.virtual('AppState.open_buffers_from_app')
 
     def curr_buffer_name_cbk(self, buff_name):
         """editor invokes this method to notify AppState of the name of
-	the current buffer.  
-	
-	**Note:** this should never change the bound_buffer_name
+        the current buffer.  
+        
+        **Note:** this should never change the bound_buffer_name
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- name of the buffer
+        *STR buff_name* -- name of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if not self.open_buffers.has_key(buff_name):
 # if we don't already have a buffer by that name, treat this as an
 # open_buffer_cbk
@@ -1673,16 +1637,16 @@ class AppState(OwnerObject):
 
     def new_window_cbk(self):
         """editor invokes this method to notify AppState that it has
-	opened a new window
+        opened a new window
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.current_manager() and self.name():
             self.current_manager().new_window(self.name())
 
@@ -1690,14 +1654,14 @@ class AppState(OwnerObject):
         """called when the editor notifies us that its process is about
         to be suspended
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         if self.current_manager() and self.name():
             self.current_manager().suspend_cbk(self.name())
 
@@ -1705,32 +1669,32 @@ class AppState(OwnerObject):
         """called when the editor notifies us that its process has 
         resumed after having been suspended 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         if self.current_manager() and self.name():
             self.current_manager().resume_cbk(self.name())
 
     def close_app_cbk(self, unexpected = 0):
         """editor invokes this method to notify AppState that it is
-	about to close, or is disconnecting from the mediator
+        about to close, or is disconnecting from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('AppState.close_app_cbk', 
             'AppState received close app callback')
         if self.current_manager() and self.name():
@@ -1741,16 +1705,16 @@ class AppState(OwnerObject):
 
     def close_buffer_cbk(self, buff_name):
         """editor invokes this method to notify AppState that a
-	buffer has been closed
+        buffer has been closed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* buff_name -- the name of the buffer which has been closed
+        *STR* buff_name -- the name of the buffer which has been closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         buff = self.find_buff(buff_name)
         if buff != None:
             self.open_buffers[buff_name].cleanup()
@@ -1770,7 +1734,7 @@ class AppState(OwnerObject):
         If *pos* not specified, drop breadcrumb at cursor position.
 
         If *buff* not specified either, drop breadcrumb in current buffer
-	"""
+        """
         debug.virtual('AppState.drop_breadcrumb')
 
     def pop_breadcrumbs(self, num=1, gothere=1):
@@ -1797,10 +1761,10 @@ class AppState(OwnerObject):
         STR *buff_name* -- Unique name of the buffer in which the file
         was opened. Returns *None* if the editor was not able to open
         the file.  Note: if no file by the name file_name exists, the 
-	regression tests expect the editor to open an empty buffer with
-	that name.  Therefore, tell_editor_to_open_file should only fail
-	if the user cancels the open file command (e.g. if there is an
-	unsaved buffer)
+        regression tests expect the editor to open an empty buffer with
+        that name.  Therefore, tell_editor_to_open_file should only fail
+        if the user cancels the open file command (e.g. if there is an
+        unsaved buffer)
         """
         
         debug.virtual('AppState.tell_editor_to_open_file')
@@ -1900,17 +1864,17 @@ class AppState(OwnerObject):
         """Creates a new [SourceBuff] instance and adds it to the
         list of open buffers.
 
-	Note: this method should not only be called by other AppState
-	methods, not from outside AppState, and only if such methods
-	have already verified that self.open_buffers doesn't already
-	have a key matching buff_name
+        Note: this method should not only be called by other AppState
+        methods, not from outside AppState, and only if such methods
+        have already verified that self.open_buffers doesn't already
+        have a key matching buff_name
 
-	Note: this method does not automatically synchronize the new
-	SourceBuff with an external editor.  Normally, for external editors, 
-	we will be using SourceBuffCached which will be initialized with an 
-	empty cache for the buffer contents, so it will be synchronized
-	the first time someone tries to access the buffer contents.  The
-	caller may force immediate synchronization if it is appropriate.
+        Note: this method does not automatically synchronize the new
+        SourceBuff with an external editor.  Normally, for external editors, 
+        we will be using SourceBuffCached which will be initialized with an 
+        empty cache for the buffer contents, so it will be synchronized
+        the first time someone tries to access the buffer contents.  The
+        caller may force immediate synchronization if it is appropriate.
         
         **INPUTS**
         
@@ -1918,7 +1882,7 @@ class AppState(OwnerObject):
         
         **OUTPUTS**
 
-	*SourceBuff* -- the new buffer
+        *SourceBuff* -- the new buffer
         
         """
 
@@ -1953,17 +1917,17 @@ class AppState(OwnerObject):
         """Tell the external editor to save the current buffer.
 
         **INPUTS**
-	
-	*STR full_path* -- full path under which to save the file, or
-	None to use the existing file name or prompt
+        
+        *STR full_path* -- full path under which to save the file, or
+        None to use the existing file name or prompt
 
-	*BOOL no_prompt* -- overwrite any existing file without
-	prompting.  No_prompt should only be set to true if the caller
-	has already prompted the user.
+        *BOOL no_prompt* -- overwrite any existing file without
+        prompting.  No_prompt should only be set to true if the caller
+        has already prompted the user.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if file was saved successfully
+        *BOOL* -- true if file was saved successfully
         """
         buff_name = self.curr_buffer_name()
         new_buff_name = self.app_save_file(full_path, no_prompt)
@@ -1979,18 +1943,18 @@ class AppState(OwnerObject):
         """Tell the external editor to save the current buffer.
 
         **INPUTS**
-	
-	*STR full_path* -- full path under which to save the file, or
-	None to use the existing file name or prompt
+        
+        *STR full_path* -- full path under which to save the file, or
+        None to use the existing file name or prompt
 
-	*BOOL no_prompt* -- overwrite any existing file without
-	prompting.  No_prompt should only be set to true if the caller
-	has already prompted the user.
+        *BOOL no_prompt* -- overwrite any existing file without
+        prompting.  No_prompt should only be set to true if the caller
+        has already prompted the user.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- new buffer name if successful, or None if the save 
-	failed
+        *STR* -- new buffer name if successful, or None if the save 
+        failed
         """
         debug.virtual('AppState.app_save_file')
 

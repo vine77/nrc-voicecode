@@ -2287,6 +2287,7 @@ class ExtLoopWin32(Object.OwnerObject):
         talker_evt = Win32InterThreadEvent(self.evt_new_talk_conn)
         server = self.server()
         sys.stderr.write('Starting server threads...\n')
+        sys.stderr.flush()
         server.start_other_threads(listener_evt, talker_evt)
 
         #

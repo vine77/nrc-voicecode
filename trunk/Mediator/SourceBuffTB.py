@@ -157,41 +157,24 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         """
         return self.lang_srv.language_name()    
 
-    def cur_pos(self):
-        """retrieves current position of cursor .  Note: the current
-	position should coincide with either the start or end of the
-	selection.  
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* pos -- offset into buffer of current cursor position
-	"""
-
-        return self.underlying.cur_pos()
-
-
-    def get_selection(self):
-        """retrieves range of current selection.  Note: the current
-	position should coincide with either the start or end of the
-	selection. 
-
-	**INPUTS**
-
-	*none*
-	
-	**OUTPUTS**
-
-	*INT* (start, end)
-
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
-        return self.underlying.get_selection()
+    def get_pos_selection(self):
+        """retrieves current position of cursor and the range of 
+        current selection
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *(INT, (INT, INT))* (pos, (start, end))
+        
+        pos is the offset into buffer of current cursor position
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
+        return (self.underlying.cur_pos(), self.underlying.get_selection())
 
     def set_selection(self, range, cursor_at = 1):
         """sets range of current selection, and sets the position to 
