@@ -27,10 +27,10 @@ class CSCmd(Object):
     .. [Context] file:///./Context.Context.html"""
         
     def __init__(self, spoken_forms=[], meanings=[], **attrs):
-        Object.__init__(self)
-        self.def_attrs({'spoken_forms': spoken_forms, 'meanings': meanings})
-        self.init_attrs(attrs)
-
+        self.deep_construct(CSCmd,
+                            {'spoken_forms': spoken_forms,\
+                             'meanings': meanings},
+                            attrs)
 
 
     def interpret(self, app):
