@@ -3,28 +3,45 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 02 15:36:45 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 02 15:36:51 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SourceBuffCookie</title>
+<title>Class ActionSearchRepeat</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
+<H1 CLASS="ClassName">class ActionSearchRepeat - Moves cursor to occurence of a regular expression.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="actions_gen.html">actions_gen</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
-&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">actions_gen.ActionSearchRepeat<BR>
+&nbsp;&nbsp;<A HREF="actions_gen.ActionSearch.html">actions_gen.ActionSearch</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="actions_gen.ActionBidirectional.html">actions_gen.ActionBidirectional</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="actions_gen.Action.html">actions_gen.Action</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;<A HREF="actions_gen.ActionRepeatable.html">actions_gen.ActionRepeatable</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="actions_gen.Action.html">actions_gen.Action</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ActionSearchRepeat</SPAN>(<A CLASS="DocLink" HREF="actions_gen.ActionSearch.html">ActionSearch</A>, <A CLASS="DocLink" HREF="actions_gen.ActionRepeatable.html">ActionRepeatable</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearchRepeat.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearchRepeat.doc</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.doc].</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.Action</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#actions_gen.Action.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a documentation string for the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Execute the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Log the action to an application's command history</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log_execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log_execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Executes the action and logs it in the application's history.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionBidirectional</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionBidirectional.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -32,21 +49,128 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionSearch</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.doc</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.doc].</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionSearch.execute</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.execute].</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionRepeatable</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatable.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">already_repeated=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+
 </PRE><H2>Description</H2><P>
-SourceBuffCookie itself is simply a dummy class which acts as a
-placeholder.  Its only purpose is to serve as ostensible return or 
-argument type for various pure virtual SourceBuff functions.  The
-actual return or argument type will be a subclass of
-SourceBuffCookie which will vary with SourceBuff subclass.</P>
+Contrarily to [ActionSearch], this class of search can be repeated
+or qualified by subsequent commands (e.g. <CODE>again 3 times</CODE>,
+'previous one').</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 <P>
-<EM>None</EM></P>
+<EM>none</EM> --</P>
 <P>
-<STRONG>CLASS ATTRIBUTES</STRONG></P>
+CLASS ATTRIBUTES**</P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <P>
-<EM>None</EM>
-</P>
+..[ActionSearch] actions_gen.ActionSearch.html#ActionSearch</P>
+<H2 ID="actions_gen.Action.doc" CLASS="Method">actions_gen.Action.doc(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns a documentation string for the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.execute" CLASS="Method">actions_gen.Action.execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Execute the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>Application on which to execute the action
+<DT>
+[Context] app_cont
+<DD>Context of the application that
+determines the parameters of how the action will be executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log" CLASS="Method">actions_gen.Action.log(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Log the action to an application's command history</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[AppState] app
+<DD>Application to log the action with.
+<DT>
+[Context] cont
+<DD>Context in which the action was executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log_execute" CLASS="Method">actions_gen.Action.log_execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Executes the action and logs it in the application's history.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>The application to execute and log the action on.
+<DT>
+<A HREF="Context.Context.html">Context</A> cont
+<DD>The context object that determines the parameters
+of how the action will be executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

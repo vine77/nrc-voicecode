@@ -3,28 +3,31 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 02 15:36:45 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 02 15:36:51 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SourceBuffCookie</title>
+<title>Class ActionRepeatBidirectCmd</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
+<H1 CLASS="ClassName">class ActionRepeatBidirectCmd</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="actions_gen.html">actions_gen</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
-&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">actions_gen.ActionRepeatBidirectCmd<BR>
+&nbsp;&nbsp;<A HREF="actions_gen.Action.html">actions_gen.Action</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ActionRepeatBidirectCmd</SPAN>(<A CLASS="DocLink" HREF="actions_gen.Action.html">Action</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatBidirectCmd.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times=1</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#actions_gen.ActionRepeatBidirectCmd.execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatBidirectCmd.execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)
+    <A CLASS="DocLink" HREF="#actions_gen.ActionRepeatBidirectCmd.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatBidirectCmd.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Logs the repeat actions.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -32,21 +35,48 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.Action</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#actions_gen.Action.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a documentation string for the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Execute the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Log the action to an application's command history</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log_execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log_execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Executes the action and logs it in the application's history.</SPAN>
+
 </PRE><H2>Description</H2><P>
-SourceBuffCookie itself is simply a dummy class which acts as a
-placeholder.  Its only purpose is to serve as ostensible return or 
-argument type for various pure virtual SourceBuff functions.  The
-actual return or argument type will be a subclass of
-SourceBuffCookie which will vary with SourceBuff subclass.</P>
+This action repeats the last command only if it was a bidirectional
+action. It may also change the direction of the action.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
-<P>
-<EM>None</EM></P>
-<P>
+
+<DL>
+
+<DT>
+<EM>INT direction=1</EM>
+<DD>New direction for the action to be
+ repeated. If positive, forward/right/down direction. If negative,
+ backward/left/up direction. If <EM>None</EM> reverse the direction.<P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.ActionRepeatBidirectCmd.execute" CLASS="Method">actions_gen.ActionRepeatBidirectCmd.execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>None</P>
+
 <P>
-<EM>None</EM>
-</P>
+Repeats the last command in the command history <A HREF="actions_gen.ActionRepeatLastCmd.html">self.n_times</A>, if
+it was a bidirectional action. It may also change its direction.</P>
+<P>
+See <A HREF="actions_gen.Action.html#execute">Action.execute</A> for description of arguments.</P>
+<H2 ID="actions_gen.ActionRepeatBidirectCmd.log" CLASS="Method">actions_gen.ActionRepeatBidirectCmd.log(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Logs the repeat actions.</P>
+
+<P>
+Actually, it just does nothing because instead, the repeated action
+will log itself when it is repeated.</P>
+<P>
+See <A HREF="actions_gen.Action.html#execute">Action.execute</A> for description of arguments.</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -167,6 +197,101 @@ Attributes are only set if they already exist in
 <EM>{STR: ANY}</EM> attrs
 <DD>dictionary with attribute name as the keys and
  default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.doc" CLASS="Method">actions_gen.Action.doc(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns a documentation string for the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.execute" CLASS="Method">actions_gen.Action.execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Execute the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>Application on which to execute the action
+<DT>
+[Context] app_cont
+<DD>Context of the application that
+determines the parameters of how the action will be executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log" CLASS="Method">actions_gen.Action.log(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Log the action to an application's command history</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[AppState] app
+<DD>Application to log the action with.
+<DT>
+[Context] cont
+<DD>Context in which the action was executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log_execute" CLASS="Method">actions_gen.Action.log_execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Executes the action and logs it in the application's history.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>The application to execute and log the action on.
+<DT>
+<A HREF="Context.Context.html">Context</A> cont
+<DD>The context object that determines the parameters
+of how the action will be executed.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
