@@ -1989,12 +1989,10 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
     def on_ok(self, event=None):
         self.model().on_ok(event)
         self.EndModal(wxID_OK)
-
         
     def on_cancel(self, event=None):
         self.model().on_cancel(event)
         self.EndModal(wxID_CANCEL)
-
 
     def on_activate(self, event):
         pass
@@ -2006,7 +2004,6 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         keycode = event.GetKeyCode()
         if self.recent.HandleUpOrDownArrow(keycode):
            return
-           
         event.Skip()
 
     def on_choose_selected_symbol(self):
@@ -2353,7 +2350,8 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
     def do_choose_nth_form(self, nth):
        self.formats_pick_list.Select(nth)
        evt = MockListSelectionEvent(nth)
-       return self.on_choose_alternate_form(evt)
+       self.on_choose_alternate_form(evt)
+#>       self.formats_pick_list.Activate(nth)
 
 
     def on_select_alternate_form(self, evt):
