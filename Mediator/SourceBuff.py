@@ -88,6 +88,20 @@ class SourceBuff(Object):
                             attrs
                             )
 
+    def name(self):
+        """returns the name of the buffer
+        
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+        
+        STR -- name of the buffer."""
+	return self.buff_name
+        
+
+
     def rename_buffer_cbk(self, new_buff_name):
         
         """AppState invokes this method when 

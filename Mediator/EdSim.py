@@ -136,7 +136,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	return self.only_buffer_name
 
-    def change_buffer_dont_bind_from_app(self, buff_name=None):
+    def app_change_buffer(self, buff_name=None):
 	"""Changes the external application's active buffer.
 
         This variant only changes the buffer in the external
@@ -153,11 +153,16 @@ class EdSim(AppStateNonCached.AppStateNonCached):
        
         **OUTPUTS**
         
-        *none* --         
+        *BOOL* -- true if buff_name exists and the external application
+	successfully switches to it
         
+            
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        self.only_buffer_name = buff_name
+        if self.query_buffer_from_app(buff_name):
+	    self.active_buffer_name = buff_name
+	    return 1
+	return 0
     
 
     def drop_breadcrumb(self, buffname=None, pos=None):
@@ -195,6 +200,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
             source_file.close()
         except Exception, err:
             source = ''
+# If the file was not opened successfully, treat it as an empty file
+# (contrary to the docstring for tell_editor_to_open_file) because
+# otherwise the regression testing gets messed up.
 	if self.curr_buffer_name() != None:
 	    del self.open_buffers[self.curr_buffer_name()]
 
@@ -205,7 +213,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         self.open_buffers[file_name] = self.only_buffer               
 
 
-        return self.only_buffer.buff_name
+        return self.only_buffer.name()
 
     def query_buffer_from_app(self, buff_name):
 	"""query the application to see if a buffer by the name of buff_name 

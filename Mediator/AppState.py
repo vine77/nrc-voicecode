@@ -860,7 +860,7 @@ class AppState(Object):
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        if self.change_app_buffer(buff_name):
+        if self.app_change_buffer(buff_name):
 	    if self.is_bound_to_buffer() != None:
 		self.bind_to_buffer(buff_name)
 	    self.synchronize_with_app()
@@ -868,7 +868,7 @@ class AppState(Object):
 	return 0
 
 
-    def change_app_buffer(self, buff_name):
+    def app_change_buffer(self, buff_name):
 
 	"""Changes the external application's active buffer.
 
@@ -892,7 +892,7 @@ class AppState(Object):
         
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        debug.virtual('change_app_buffer')
+        debug.virtual('AppState.app_change_buffer')
 
 
 
@@ -1092,7 +1092,7 @@ class AppState(Object):
         
         """
         
-        debug.not_implemented('AppState.tell_editor_to_open_file')
+        debug.virtual('AppState.tell_editor_to_open_file')
         
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         
