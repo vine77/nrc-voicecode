@@ -1564,7 +1564,7 @@ class CmdInterp(OwnerObject):
         #
 
         while len(phrase_str) > 0:
-            trace('CmdInterp.interpret_phrase', 
+            trace('CmdInterp.interpret_utterance', 
                 'now, phrase_str = %s' % phrase_str)
                 
             #
@@ -1594,9 +1594,9 @@ class CmdInterp(OwnerObject):
 
             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
 
-            trace('CmdInterp.interpret_phrase', 
+            trace('CmdInterp.interpret_utterance', 
             'possible_CSCs=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (possible_CSCs, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
-            trace('CmdInterp.interpret_phrase', 
+            trace('CmdInterp.interpret_utterance', 
                 'most_definite = %d' % most_definite)
             head_was_translated = 0
 
@@ -1630,7 +1630,7 @@ class CmdInterp(OwnerObject):
                 #
                 # LSA consumed the most words from command. Insert it.
                 #
-                trace('CmdInterp.interpret_phrase',
+                trace('CmdInterp.interpret_utterance',
                       'processing leading LSA=\'%s\'' % chopped_LSA)
                 
                 preceding_symbol = not symbols.empty()
@@ -1660,7 +1660,7 @@ class CmdInterp(OwnerObject):
                 #       class SomeClass you may name the new class
                 #       SomeprefixSomeClass or SomeClassSomepostfix.
                 #
-                trace('CmdInterp.interpret_phrase',
+                trace('CmdInterp.interpret_utterance',
                       'processing leading symbol=\'%s\'' % chopped_symbol)
                 symbols.add_symbol(chopped_symbol)
 
@@ -1674,7 +1674,7 @@ class CmdInterp(OwnerObject):
                 # Just chop off the first word and insert it, marking
                 # it as untranslated text.
                 #                 
-                trace('CmdInterp.interpret_phrase',
+                trace('CmdInterp.interpret_utterance',
                       'processing leading word=\'%s\'' % chopped_word)
                 symbols.add_word(chopped_word)
 
@@ -1693,13 +1693,13 @@ class CmdInterp(OwnerObject):
                 # text. Try to match untranslated text to a known (or new)
                 # symbol.
                 #
-                trace('CmdInterp.interpret_phrase',
+                trace('CmdInterp.interpret_utterance',
                       'found the end of some untranslated text')
                 self.match_untranslated_text(symbols, app, interp_phrase)
 
-            if trace_is_active('CmdInterp.interpret_phrase'):
+            if trace_is_active('CmdInterp.interpret_utterance'):
                 untranslated_text = string.join(symbols.words())
-                trace('CmdInterp.interpret_phrase',
+                trace('CmdInterp.interpret_utterance',
                       'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
         interp_phrase.symbol_results = symbols.inserted_symbols()

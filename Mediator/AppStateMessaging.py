@@ -922,7 +922,6 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         return success
 
 
-
 class AppStateInsertIndentMess(AppStateMessaging):
     
     """subclass of AppStateMessaging which uses

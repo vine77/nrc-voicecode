@@ -559,6 +559,22 @@ acmd = CSCmd(spoken_forms=['forward', 'downward', 'rightward', 'next one'],
 change_direction.add_csc(acmd)
 
 
+#############################################################################
+# Navigation within a buffer
+#############################################################################
+
+navigation_within_buffer = CSCmdSet(name = 'move up or down the page', 
+                             description = "move up or down the page")
+
+acmd = CSCmd(spoken_forms=['page down'],
+             meanings={ContAny(): ActionPaging(n_times=1, direction=1)},
+             docstring='Move down a page')
+navigation_within_buffer.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['page up'],
+             meanings={ContAny(): ActionPaging(n_times=1, direction=-1)},
+             docstring='Move up a page')
+navigation_within_buffer.add_csc(acmd)
 
 #############################################################################
 # Insertions and deletions
@@ -570,6 +586,37 @@ change_direction.add_csc(acmd)
 
 backspacing  = CSCmdSet(name = 'backspace multiple times',
     description = "backspace 1 to n times.")
+
+insertion_deletions  = CSCmdSet(name = 'insert and deleting text',
+                                descriptions = "commands for inserting and deleting text")
+acmd = CSCmd(spoken_forms = ['delete that line'],
+             meanings = {ContAny(): ActionDeleteCurrentLine()},
+                         docstring = "delete line at cursor")
+insertion_deletions.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms = ['delete that'],
+             meanings = {ContTextIsSelected(): ActionDeleteSelectedText()},
+             docstring = "copy selected text")
+insertion_deletions.add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms = ['copy that',  'emacs copy that'],
+             meanings = {ContTextIsSelected(): ActionCopySelectedText()},
+             docstring = "copy selected text",
+             generate_discrete_cmd = 1)
+insertion_deletions.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms = ['paste that'],
+             meanings = {ContAny(): ActionPasteClipboard()},
+             docstring = "paste text from the clipboard")
+insertion_deletions.add_csc(acmd)
+
+
+acmd = CSCmd(spoken_forms = ['cut that'],
+             meanings = {ContTextIsSelected(): ActionCutSelectedText()},
+             docstring = "copy selected text")
+insertion_deletions.add_csc(acmd)
+
 
 
 ##############################################################################

@@ -266,16 +266,8 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-(cl-puthash  "vcode-merge-or-prepend-change" 1 vcode-traces-on)
 
-;(cl-puthash  "vcode-generate-raw-change-description" 1 vcode-traces-on)
-;(cl-puthash  "vr-deprecated-output-filter" 1 vcode-traces-on)
-;(cl-puthash  "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
-;(cl-puthash  "vr-deprecated-serialize-message" 1 vcode-traces-on)
-;(cl-puthash  "vr-deprecated-send-reply" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-change-buff" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
-;(cl-puthash  "vcode-execute-command-string" 1 vcode-traces-on)
+(cl-puthash  "vcode-cmd-copy-selection" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
@@ -2272,6 +2264,9 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-deprecated-message-handler-hooks)
   (cl-puthash 'incr_indent_level 'vcode-cmd-incr-indent-level vr-deprecated-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'copy_selection 'vcode-cmd-copy-selection vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'cut_selection 'vcode-cmd-cut-selection vr-deprecated-message-handler-hooks)  
+  (cl-puthash 'paste 'vcode-cmd-paste vr-deprecated-message-handler-hooks)  
   (cl-puthash 'backspace 'vcode-cmd-backspace vr-deprecated-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-deprecated-message-handler-hooks)  
   (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-deprecated-message-handler-hooks)  
@@ -3610,9 +3605,11 @@ change reports it sends to VCode.
     (setq num (cl-gethash "num" mess-cont))
     (set-buffer buff-name)
     (if (>= direction 0)
-	(scroll-down-nomark num)
-      (scroll-up-nomark num))
+	(scroll-up-nomark num)
+      (scroll-down-nomark num))
   )
+
+  (vcode-send-queued-changes)
 )
 
 (defun vcode-cmd-backspace (vcode-request)
@@ -3989,6 +3986,60 @@ change reports it sends to VCode.
 
 	(vcode-send-queued-changes)
     )
+)
+
+
+(defun vcode-cmd-copy-selection (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+        (buff nil))
+
+     (save-excursion
+       (setq buff (cl-gethash 'buff_name mess-cont))
+
+       (set-buffer buff)
+
+       (message "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (mark) (point))
+       (vcode-trace "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (mark) (point))
+
+       (copy-region-as-kill-nomark (mark) (point))
+       (vcode-trace "vcode-cmd-copy-selection" "after copy, (mark)=%S, (point)=%S" (mark) (point))
+       (vcode-report-goto-select-change (buffer-name) (mark) (point))
+     )
+
+     (vcode-send-queued-changes)
+
+  )
+)
+
+
+(defun vcode-cmd-cut-selection (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+	(buff nil))
+
+     (save-excursion
+       (setq buff (cl-gethash 'buff_name mess-cont))
+       (set-buffer buff)
+       (kill-region (mark) (point))
+       (vcode-send-queued-changes)
+     )
+  )
+)
+
+
+(defun vcode-cmd-paste (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+	(buff nil))
+
+     (save-excursion
+       (setq buff (cl-gethash 'buff_name mess-cont))
+       (set-buffer buff)
+       (yank)
+     )
+     (vcode-send-queued-changes)
+  )
 )
 
 

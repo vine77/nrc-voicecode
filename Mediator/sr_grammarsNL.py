@@ -805,6 +805,7 @@ class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
         rules = []
         rules.append("<reformat_recent> exported = %s %s;" \
             % (reformat, recent))
+                    
         return rules
 
     def activate(self):
@@ -869,6 +870,149 @@ class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
         *none*
         """
         GrammarBase.setExclusive(self, exclusive)
+
+class DiscreteCSCsAndLSAsNL(DiscreteCSCsAndLSAsWinGram, GrammarBase):
+    """This grammar recognises CSCs and LSAs whose spoken form happens to
+    be a NatSpeak discrete command (ex: "copy that"). Whithout this grammar, 
+    the NatSpeak discrete command would take precedence over the VCode 
+    LSA or CSA.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *[STR] LSAs* -- spoken forms of the discrete LSAs
+     
+    *[STR] CSCs* -- spoken forms of the discrete CSCs
+
+    *[STR] rules* -- list of rules for this grammar
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(DiscreteCSCsAndLSAsNL,
+            {'rules': [], LSAs: [], CSCs: []}, attrs, 
+            exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def gotResults_discrete_LSA(self, words, fullResults):
+        """handler for a discrete LSA
+        """
+        pass
+#        self.manager.interpret_something(????)
+
+    def gotResults_discrete_CSC(self, words, fullResults):
+        """handler for a discrete LSA
+        """
+        pass
+#        self.manager.interpret_something(????)
+        
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+
+    def create_rules(self):
+        """create all the rules for this grammar and put them in
+        self.rules
+
+        **INPUTS** 
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.rules = []
+        LSA_rule = None
+        if len(self.LSAs) > 0:
+            LSA_rule = "<discrete_LSA> exported = "
+            first = 1
+            for a_LSA in self.LSAs:
+               if not first:
+                  first = None
+                  LSA_rule = "%s|" % LSA_rule
+               LSA_rule = "%s%s" % (LSA_rule, a_LSA)
+            LSA_rule = "%s;" % LSA_rule
+                  
+        CSC_rule = None
+        if len(self.CSCs) > 0:
+            CSC_rule = "<discrete_CSC> exported = "
+            first = 1
+            for a_CSC in self.CSCs:
+               if not first:
+                  first = None
+                  CSC_rule = "%s|" % CSC_rule
+               CSC_rule = "%s%s" % (CSC_rule, a_CSC)
+            CSC_rule = "%s;" % CSC_rule
+            
+        return [LSA_rule, CSC_rule]
+
+    def activate(self):
+        """activates the grammar for recognition
+        tied to the current window.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('DiscreteCSCsAndLSAsNL.activate', 
+            'received activate')
+        if not self.is_active():
+            debug.trace('DiscreteCSCsAndLSAsNL.activate', 
+                'not already active')
+            window = self.window
+            if window == None:
+                window = 0
+            GrammarBase.activateAll(self, window = window, 
+                exclusive = self.exclusive)
+            self.active = 1
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('DiscreteCSCsAndLSAsNL.activate', 
+            'received deactivate')
+        if self.is_active():
+            debug.trace('DiscreteCSCsAndLSAsNL.activate', 
+                'was active')
+            GrammarBase.deactivateAll(self)
+            self.active = 0
+
+    def remove_other_references(self):
+        GrammarBase.unload(self)
+        SymbolReformattingWinGram.remove_other_references(self)
+        
+    def _set_exclusive_when_active(self, exclusive):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        GrammarBase.setExclusive(self, exclusive)
+
     
 class WinGramFactoryNL(WinGramFactory):
     """natlink implementation of factory which returns 
@@ -1031,6 +1175,27 @@ class WinGramFactoryNL(WinGramFactory):
         return SymbolReformattingWinGramNL(manager = manager, 
             reformat_words = self.reformat_words, 
             recent_words = self.recent_words,
+            window = window, exclusive = exclusive, 
+            capitalize_rules = self.capitalize) 
+
+    def make_discrete_csc_lsa(self, manager, window = None, exclusive = 0):
+        """create a new grammar for recognising discrete CSCs and LSAs
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *DiscreteCSCsAndLSAsNL* -- new basic correction grammar
+        """
+        return DiscreteCSCsAndLSAsNL(manager = manager, 
             window = window, exclusive = exclusive, 
             capitalize_rules = self.capitalize) 
 

@@ -77,7 +77,8 @@ def use_update_class(action):
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
     use_class = {'curr_buffer': AS_UpdCurrBufferName,
-                 'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
+                 'delete': SB_UpdDelete,
+                 'insert': SB_UpdInsert,
                  'buff_contents': SB_UpdBuffContents,
                  'pos_selection': SB_UpdPosSelection,
                  'close_buff': AS_UpdCloseBuffer,
@@ -730,7 +731,8 @@ class AppState(OwnerObject):
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'syntax_nav_supported',
     'find_matching', 'beginning_of_statement',
-    'delete', 'goto', 'goto_line', 
+    'delete', 'delete_line', 'copy_selection', 'cut_selection', 'paste',
+    'goto', 'goto_line', 
     'goto_end_of_line', 'goto_beginning_of_line',
     'goto_range', 'move_relative_line',
     'move_relative_page', 'search_for', 'log_search', 'looking_at', 

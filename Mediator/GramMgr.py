@@ -221,7 +221,6 @@ class GramMgr(OwnerObject):
         name = self.name()
         self.recog_mgr.reformat_recent(name)
 
-
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
         its owned objects are the last remaining references
