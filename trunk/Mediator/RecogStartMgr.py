@@ -1005,7 +1005,10 @@ class RSMInfrastructure(RecogStartMgr):
 
         *none*
         """
+        debug.trace('RSMInfrastructure.interpret_dictation', 
+                    'instance=%s, result=%s' % (instance, repr(result.words())))
         if self.known_instance(instance):
+            debug.trace('RSMInfrastructure.interpret_dictation', 'known instance')
             self.results[instance].interpret_dictation(result,
                 initial_buffer = initial_buffer)
 
@@ -1166,6 +1169,7 @@ class RSMInfrastructure(RecogStartMgr):
 
         *INT* -- number of utterances actually undone
         """
+        debug.trace('RSMInfrastructure.scratch_recent', 'instance_name=%s, n=%s' % (instance_name, n) )
         try:
             debug.trace('RSMInfrastructure.scratch_recent', 
                 'instance %s' % instance_name)
@@ -1411,8 +1415,10 @@ class RSMInfrastructure(RecogStartMgr):
             else:
                 window, title, module_name = window_info
             if self.known_window(window):
+                debug.trace('RSMInfrastructure.new_instance',
+                            'window_info = %s' % window_info)             
                 self._new_instance_known_window(window, title, instance,
-                    trust = self.trust_current_window)
+                                                trust = self.trust_current_window)
             elif self.known_module(module_name):
                 self._new_instance_known_module(window, title, 
                     instance, module_name, trust = self.trust_current_window)
@@ -1719,6 +1725,8 @@ class RSMInfrastructure(RecogStartMgr):
 	*none*
 	"""
         if self.active:
+            debug.trace('RSMInfrastructure.new_instance',
+                        'window, title, module_name = %d, %s, %s' % (window, title, module_name)) 
             if self.known_window(window):
                 self._recognition_starting_known_window( window, title)
             elif self.known_module(module_name):

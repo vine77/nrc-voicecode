@@ -43,6 +43,16 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+                    
+#########################################################################
+# debugging basic_correction with Emacs  
+                  
+#                    'scratch_recent': 1,
+#                    'StateStackBasic': 1,
+#                    'restore_state': 1,
+#                    'SB_ServiceFullState': 1,
+#########################################################################
+                    
 #                      'send_mess': 1,
 #                      'get_mess': 1,
 #                      'RecogStartMgr': 1,

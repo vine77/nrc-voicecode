@@ -714,8 +714,8 @@ class SourceBuff(OwnerObject):
         # server-side indentation. This version of insert_indent()
         # is meant for client-side indentation, so remove them
         #
-#        code_bef = re.sub('\t', '', code_bef)        
-#        code_after = re.sub('\t', '', code_after)      
+        code_bef = re.sub('\t', '', code_bef)        
+        code_after = re.sub('\t', '', code_after)      
 
 
         trace('SourceBuff.insert_indent',

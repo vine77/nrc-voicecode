@@ -890,27 +890,46 @@ class SB_ServiceFullState(SB_ServiceState):
         return cookie
 
     def restore_state(self, cookie):
-        """restores the buffer to its state at the time when
-	the cookie was returned by store_current_state.  Both the
-	contents and the selection will be restored.  However, other
-	data, such as the search history, may not.  The restore
-	operation can fail, which will be indicated by a return value of
-	0, so the caller should always check the return value.
+        """
+        restores the buffer to its state at the time when
+        the cookie was returned by store_current_state.  Both the
+        contents and the selection will be restored.  However, other
+        data, such as the search history, may not.  The restore
+        operation can fail, which will be indicated by a return value of
+        0, so the caller should always check the return value.
 	
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see above.
+        *SourceBuffState cookie* -- see above.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if restore was successful
+        *BOOL* -- true if restore was successful
 
-	"""
+        """
+        debug.trace('SB_ServiceFullState.restore_state', 'cookie=%s' % cookie)
         if not self.valid_cookie(cookie):
+            debug.trace('SB_ServiceFullState.restore_state', '*** returning 0')
             return 0
+        debug.trace('SB_ServiceFullState.restore_state', 
+                    '*** cookie.contents=\n%s\n' % cookie.contents())
+        debug.trace('SB_ServiceFullState.restore_state', 
+                    '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
+        #deb
+        debug.trace('SB_ServiceFullState.restore_state', '*** before set_text, buffer contaisns')
+        self.buff.print_buff_if_necessary()                    
+        #fin
+                    
         self.buff.set_text(cookie.contents())
+        
+        #deb
+        debug.trace('SB_ServiceFullState.restore_state', '*** before set_selection, buffer contaisns')
+        self.buff.print_buff_if_necessary()                    
+        #fin
+        
         self.buff.set_selection(cookie.get_selection())
         self.buff.print_buff_if_necessary()
+        debug.trace('SB_ServiceFullState.restore_state', '*** returning 1')        
         return 1
       
     def compare_states(self, first_cookie, second_cookie, selection = 0):

@@ -2743,24 +2743,64 @@ def test_insert_delete_commands():
 
 def test_temporary():
     testing.init_simulator_regression()
-    the_mediator = testing.mediator()
     instance_name = testing.editor()
-    if instance_name: 
-        editor = the_mediator.editors.app_instance(instance_name)
-    else:
-        editor = the_mediator.app
-    commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
-    buffer = editor.curr_buffer()
-    
-# This command doesn't work with Emacs. Emacs doesn't repor ton the deletion of the buffer
-# content
-    buffer.set_text('nothing left')
-    
-# Does insert command have same problem?    
-# Answer: YES
-#    buffer.insert(text="nothing left", range=(0,50))
+    if instance_name == None:
+        msg = '\n***Using old Mediator object: '
+        msg = msg + 'unable to test correction features***\n'
+        print msg
+        return
+    correction_available = testing.correction_available()
+    if instance_name == None:
+        msg = '\n***No correction available: '
+        msg = msg + 'unable to test correction features***\n'
+        print msg
+        return
+    commands.open_file('blah.py')
 
-    editor.print_buff_if_necessary()
+    the_mediator = testing.mediator()
+    print '\n***Testing initial state***\n'
+
+    check_stored_utterances(instance_name, expected = 0)
+
+    print '\n***Some simple dictation***\n'
+
+    utterances = []
+    utterances.append(string.split('class clown inherits from student'))
+    input = ['0\n0\n']
+    status = [1]
+
+    utterances.append(string.split('class body'))
+    input.append('')
+    status.append(1)
+
+    utterances.append(string.split('define method popularity method body'))
+    input.append('0\n')
+    status.append(1)
+
+
+    utterances.append(string.split('return 8'))
+    input.append('')
+    status.append(1)
+
+    for i in range(len(utterances)):
+        test_say(utterances[i], user_input = input[i])
+
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing scratch that***\n'
+
+    scratched = check_scratch_recent(instance_name)
+    if scratched:
+        del utterances[-scratched:]
+        del input[-scratched:]
+        del status[-scratched:]
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
 
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')

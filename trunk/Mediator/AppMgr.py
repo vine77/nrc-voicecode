@@ -281,6 +281,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         *INT* -- number of utterances actually undone
         """
+        debug.trace('AppMgr.scratch_recent', 'instance_name=%s, n=%s' % (instance_name, n))
         return self.recog_mgr.scratch_recent(instance_name, n = n)
 
     def reinterpret_recent(self, instance_name, changed):

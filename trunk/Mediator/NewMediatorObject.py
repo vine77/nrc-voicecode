@@ -1057,6 +1057,7 @@ class NewMediatorObject(Object.OwnerObject):
 
         *INT* -- number of utterances actually undone
         """
+        debug.trace('NewMediatorObject.scratch_recent', 'instance_name=%s, n=%s' % (instance_name, n))
         return self.editors.scratch_recent(instance_name, n = n)
 
     def reinterpret_recent(self, instance_name, changed):
