@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:15:05 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 19 18:25:07 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -31,6 +31,7 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.corresponding_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.corresponding_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns the current filename associated with a given buffer</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.generate_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.generate_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditBuffers.modified_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditBuffers.modified_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -72,6 +73,7 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.editor_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.editor_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEdit.file_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.file_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # returns the current filename associated with a given buffer</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether an editor frame is active</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.mic_change"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.mic_change</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">state</SPAN>)<SPAN CLASS="OneLiner"> # function to receive microphone state change callbacks</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEdit.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEdit.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
@@ -241,6 +243,28 @@ the GUI which corresponds to buffer buff_name</P>
 <DT>
 <EM>TextBufferChangeSpec</EM>
 <DD>the TextBufferChangeSpec
+
+</DL>
+<H2 ID="GenEdit.GenEditBuffers.file_name" CLASS="Method">GenEdit.GenEditBuffers.file_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>returns the current filename associated with a given buffer</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the filename
 
 </DL>
 <H2 ID="GenEdit.GenEditBuffers.generate_buffer_name" CLASS="Method">GenEdit.GenEditBuffers.generate_buffer_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
@@ -1079,6 +1103,28 @@ in the GUI which corresponds to buffer buff_name</P>
 <STRONG>OUTPUTS</STRONG>
 <EM>BOOL</EM> -- true if editor window has the focus
 </P>
+<H2 ID="GenEdit.GenEdit.file_name" CLASS="Method">GenEdit.GenEdit.file_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>returns the current filename associated with a given buffer</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>the name of the buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the filename
+
+</DL>
 <H2 ID="GenEdit.GenEdit.is_active" CLASS="Method">GenEdit.GenEdit.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>indicates whether an editor frame is active</P>
 
