@@ -804,6 +804,8 @@ happens on a buffer (if it is voice enabled).
 
 Changes are put in a changes queue `vr-queued-changes.
 "
+  (vr-log "--** vr-report-goto-select-change: buffer %S, start, end = %S, %S\n"
+  buff-name sel-start sel-end)
   (setq vr-queued-changes 
 	(cons 
 ;	   (list 'change-is-select buff-name sel-start sel-end)
@@ -2249,8 +2251,8 @@ message.
 (defun vcode-cmd-updates (vcode-request)
   (vr-report-goto-select-change 
     (buffer-name (current-buffer)) 
+    (if mark-active (mark) (point))
     (point)
-    (if (mark) (mark) (point))
   )
   (vr-send-queued-changes) 
 )
@@ -2460,6 +2462,7 @@ the range specified in default"
   (let ((start) (end) (tmp))
     (if (eq range nil)
         (progn 
+            (vr-log "--** vcode-fix-range-for-emacs: range is nil, using default\n")
 	    (setq start (nth 0 default))
 	    (setq end (nth 1 default))
 ; defaults already in Emacs 1-based counting
@@ -2565,7 +2568,13 @@ to the other"
       (if buff-name
 	  (set-buffer buff-name)
       )	  
-      (vcode-make-sure-no-nil-in-selection (mark) (point))
+      (vr-log "--** vcode-selection-of-buff-in-message: mark-active = %S\n" mark-active)
+      (vr-log "--** vcode-selection-of-buff-in-message: raw range = %S, %S\n"
+        (if mark-active (mark) nil) (point))
+      (vr-log "--** vcode-selection-of-buff-in-message: no-nil range = %S\n"
+        (vcode-make-sure-no-nil-in-selection (if mark-active (mark) nil)
+        (point)))
+      (vcode-make-sure-no-nil-in-selection (if mark-active (mark) nil) (point))
     )
   )
 )  
@@ -2689,6 +2698,8 @@ buffer"
 	(setq to-convert (append no-nil-selection (list 'vcode)))
 	(setq selection (apply 'vcode-convert-range to-convert))
 	(setq pos (vcode-convert-pos (point) 'vcode))
+        (vr-log "--** vcode-cmd-get-pos-selection: pos = %S, selection = %S\n"
+            pos selection)
     )
     (cl-puthash 'pos pos value)
     (cl-puthash 'selection selection value)
@@ -3119,6 +3130,7 @@ tabs.
 	  (switch-to-buffer buff-name)
 	  (goto-char pos)
 	  (push-mark (point))
+          (vr-log "--** vcode-cmd-goto: mark-active = %S\n" mark-active)
 	)
 
       ('error (error "VR Error: could not go to position %S" pos))

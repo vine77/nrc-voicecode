@@ -37,7 +37,8 @@ py_goto_body = \
                  docstring="""Move cursor to the body of a Python compound statement""")
 
 py_new_statement = \
-    ActionInsertNewClause(end_of_clause_regexp='(\n|$)', add_lines = 1, 
+    ActionInsertNewClause(end_of_clause_regexp='(\n|$)', where = -1, 
+                          add_lines = 1, 
                           code_bef='', code_after='',
                            back_indent_by=0,
                            docstring = """Inserts a new line below current one""")
@@ -46,9 +47,43 @@ py_class_definition = \
     ActionInsert(code_bef='class ', code_after=':\n\t',
                  docstring="""Inserts template code for a Python class""")
 
-py_class_body = \
+py_old_class_body = \
     ActionSearch(regexp=':\\s*',
                  docstring="""Moves cursor to the body of a class""")
+
+class ActionPyInsertInBody(Action):
+    """Inserts a new line at the start of the block of the previous or 
+    following compound statement"""
+    def __init__(self, direction = 1, **args_super):
+        self.deep_construct(ActionPyInsertInBody,
+                            {'direction': direction},
+                            args_super)
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        match = app.search_for(regexp=':.*', direction = self.direction,
+            unlogged = 1)
+        if not match:
+            return
+# check if the next line is blank.  If the previous search succeeded, then 
+# we should be at the end of the line containing the ":" and the next
+# character should be a newline (unless we are at the end of the buffer).  
+# In either case, this next search, with where = -1, should not move the
+# cursor.
+        match = app.search_for('\n\s*(\n|$)', where = -1, unlogged = 1)
+        if not match:
+# if no blank line, insert a new one and indent it appropriately
+            insert_indented_line = ActionInsert(code_bef = '\n\t', 
+                code_after = '')
+            insert_indented_line.execute(app, cont)
+        else:
+# if there is a blank line, just go to the end of it 
+# (and assume that it has the correct indentation)
+            match = app.search_for('\n\s*', unlogged = 1)
+
+py_class_body = \
+    ActionPyInsertInBody()
 
 py_method_declaration = \
     ActionInsert(code_bef='def ', code_after='(self):\n\t',
@@ -100,6 +135,10 @@ class ActionPyAddArgument(Action):
 py_function_add_argument = \
     ActionPyAddArgument()
 
-py_function_body = \
+py_old_function_body = \
     ActionSearch(regexp=':\s*',
                  docstring="""Moves cursor to the body of a Python method or function""")
+
+py_function_body = \
+    ActionPyInsertInBody()
+

@@ -853,7 +853,7 @@ class AppState(OwnerObject):
 
         **INPUTS**
         
-        STR *window_id* -- The ID of the window that was active when
+        INT *window_id* -- The ID of the window that was active when
         the recognition began.                
 
         *BOOL block* -- true if the speech engine can detect recog_end

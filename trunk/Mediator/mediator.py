@@ -152,7 +152,7 @@ def new_simulator(symdict_pickle_fname=None,
     
     **OUTPUT**
 
-    *none*
+    *MediatorObject*
 
     ..[AppState] file:///./AppState.AppState.html
     ..[EdSim] file:///./EdSim.EdSim.html

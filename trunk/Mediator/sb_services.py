@@ -481,8 +481,16 @@ class SB_ServiceIndent(SB_Service):
         #        
         if self.indent_to_curr_level:
             curr_level = self.indentation_at(range[0])
+            debug.trace('SB_ServiceIndent.insert_indent',
+                'code_bef was %s' % repr(code_bef))
             code_bef = self.indent_by_spaces(code_bef, curr_level)
+            debug.trace('SB_ServiceIndent.insert_indent',
+                'code_bef now %s' % repr(code_bef))
+            debug.trace('SB_ServiceIndent.insert_indent',
+                'code_after was %s' % repr(code_after))
             code_after = self.indent_by_spaces(code_after, curr_level)
+            debug.trace('SB_ServiceIndent.insert_indent',
+                'code_after now %s' % repr(code_after))
 
         #
         # Now insert the code
@@ -645,8 +653,8 @@ class SB_ServiceIndent(SB_Service):
         """
         
         content = self.buff.contents()
-        pos_newline = None
-        pos_line_start = pos
+        original_pos = pos
+        pos_nonblank = pos
 	debug.trace('SB_ServiceIndent.indentation_at',
 	    'len(content) = %d, pos = %d' % (len(content), pos))
 
@@ -654,26 +662,22 @@ class SB_ServiceIndent(SB_Service):
         # Go back from pos until we meet a newline character. Remember position
         # of closest non blank.
         #
-        keep_going = 1        
-        while keep_going:
+        while pos > 0:
             pos = pos - 1
-            if pos >= 0:
-                if not re.match('\s', content[pos]):
-                    pos_line_start = pos
-                if re.match(self.buff.newline_regexp(), content[pos]):
-                    # reached beginning of line
-                    keep_going = 0
-            else:
-                #
-                # Reached pos = 0
-                #
-                keep_going = 0
+            if re.match(self.buff.newline_regexp(), content[pos]):
+                pos = pos + 1
+                break
+            if not re.match('\s', content[pos]):
+                pos_nonblank = pos
 
         #
-        # Compute number of spaces. Note that *pos* went 1 character
-        # passed the beginning of the line
+        # Compute number of spaces. 
         #
-        num_spaces = pos_line_start - (pos + 1)
+        num_spaces = pos_nonblank - pos
+	debug.trace('SB_ServiceIndent.indentation_at',
+	    'line through pos was %s' % repr(content[pos:original_pos+1]))
+	debug.trace('SB_ServiceIndent.indentation_at',
+	    'num_spaces was %d' % num_spaces)
         
         return num_spaces
 

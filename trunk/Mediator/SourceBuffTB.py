@@ -71,7 +71,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	"""
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
-                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3),
+                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
                          'state_srv': sb_services.SB_ServiceFullState(buff=self)})
         self.deep_construct(SourceBuffTB,
