@@ -48,7 +48,6 @@ class RecogStartGram(GrammarBase):
 # constructor convention, so you shouldn't pass keyword arguments
 # through to it.
 #        apply(GrammarBase.__init__, [self], args)
-        debug.trace('RecogStartGram.__init__', '** invoked, self=%s' % self)        
 
     def initialize(self, callback = None):
         self.callback = callback
@@ -80,7 +79,6 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     """
 
     def __init__(self, **args):
-        debug.trace('RecogStartMgrNL.__init__', '** self=%s' % self)
         self.deep_construct(RecogStartMgrNL,
                             {'start_gram': RecogStartGram(),
                             },

@@ -1622,11 +1622,7 @@ class SourceBuff(OwnerObject):
         trace('SourceBuff.closest_occurence_to_cursor', 
               'occurences=%s, direction=%s, regexp="%s", where=%s' % 
               (repr(occurences), direction, regexp, where))
-              
-        trace('SourceBuff.closest_occurence_to_cursor', 
-              '** ignore_overlapping_with_cursor=%s, ignore_left_of_cursor=%s, ignore_right_of_cursor=%s' %
-                 (ignore_overlapping_with_cursor, ignore_left_of_cursor, ignore_right_of_cursor))
-        
+                      
         closest_index = None
         
         #
@@ -1687,33 +1683,24 @@ class SourceBuff(OwnerObject):
                         closest_index = ii
                         break
 
-        trace('SourceBuff.closest_occurence_to_cursor', '** returning closest_index=%s' % closest_index)
         return closest_index
 
     def ignore_occurence(self, occurence, ignore_overlapping_with_cursor,
                          ignore_left_of_cursor, ignore_right_of_cursor):
 
-        debug.trace('SourceBuff.ignore_occurence',
-                    'occurence=%s, ignore_overlapping_with_cursor=%s, ignore_left_of_cursor=%s, ignore_right_of_cursor=%s' %
-                    (occurence, ignore_overlapping_with_cursor,ignore_left_of_cursor, ignore_right_of_cursor) )
-
         if (ignore_overlapping_with_cursor and 
             occurence[0] <= self.cur_pos() and
             occurence[1] >= self.cur_pos()):
-            debug.trace('SourceBuff.ignore_occurence', '** ignoring overlapping')
             return 1
                         
         if (ignore_left_of_cursor and 
             occurence[1] == self.cur_pos()):
-            debug.trace('SourceBuff.ignore_occurence', '** ignoring left')            
             return 1
 
         if (ignore_right_of_cursor and 
             occurence[0] == self.cur_pos()):
-            debug.trace('SourceBuff.ignore_occurence', '** ignoring right')                        
             return 1
 
-        debug.trace('SourceBuff.ignore_occurence', '** NOT ignoring')                                    
         return 0
 
     def same_as_previous_search(self, regexp, direction, where, match,
@@ -2054,12 +2041,9 @@ class SourceBuff(OwnerObject):
         curr_line = self.line_num_of(self.cur_pos())
         from_line = curr_line - self.print_nlines
         to_line = curr_line + self.print_nlines
-        trace('SourceBuff.lines_around_cursor', '** curr_line=%s, self.cur_pos()=%s, self.print_nlines=%s, from_line=%s, to_line=%s' 
-                                                % (curr_line, self.cur_pos(), self.print_nlines, from_line, to_line))                
         if from_line < 0:
             from_line = 0
         last_line = self.line_num_of(self.len())    
-        trace('SourceBuff.lines_around_cursor', '** self.len()=%s, last_line=%s' % (self.len(), last_line))
         if to_line > last_line:
             to_line = last_line    
         return from_line, to_line

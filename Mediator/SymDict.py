@@ -276,7 +276,7 @@ class SymDict(OwnerObject):
     utterance containing them, or re-formats them.  The keys are the
     native written forms of the tentative symbols.  Tentative symbols
     become permanent when they are inserted by re-formatting, or when
-    the user exists the mediator
+    the user exists the mediator.
 
     *{STR: [STR]}* abbreviations -- Dictionary of preferred
      abbreviations for words.  The key is the word, and the value is a
@@ -1544,6 +1544,24 @@ class SymDict(OwnerObject):
             if not a_file in self.abbrev_sources:
                 self.abbrev_sources.append(a_file)
 
+    def symbol_is_tentative(self, symbol):
+        """Indicates whether or not a symbol is tentative and can be
+        removed as a consequence of a correction.
+
+        **INPUTS**
+
+        *STR* symbol -- native symbol to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol was only tentative.
+        """
+        is_tentative = 0
+        if self.tentative_symbols.has_key(symbol) and self.tentative_symbols[symbol]:
+           is_tentative = 1
+        return is_tentative
+    
+
     def remove_symbol_if_tentative(self, symbol):
         """remove a symbol which was tentatively added
         from the dictionary
@@ -1560,7 +1578,7 @@ class SymDict(OwnerObject):
         debug.trace('SymDict.remove_symbol_if_tentative',
             'symbol = %s' % symbol)
         success = 0
-        if self.tentative_symbols.has_key(symbol):
+        if self.symbol_is_tentative(symbol):
             debug.trace('SymDict.remove_symbol_if_tentative',
                 'is tentative')
             success = self.remove_symbol(symbol)
@@ -1859,18 +1877,12 @@ class SymDict(OwnerObject):
         priority of *bad_written_form* and *correct_written_form* for
         *spoken_form*.        
         """
-        debug.trace('SymDict.correct_symbol', '** invoked')
-        
-        
-        # TODO: Find the priority list of written forms for spoken_form, and 
-        #       move correct_written_form to the top of it (make sure to delete
-        #       old entry if there was one).
-        # 
+        debug.trace('SymDict.correct_symbol', 
+                    'spoken_form_used=%s, bad_written_form=%s, correct_written_form=%s' % 
+                    (spoken_form_used, bad_written_form, correct_written_form))
         self.move_written_form_to_top_of_priority_list(spoken_form_used,
                                                        correct_written_form)
         self.add_symbol(correct_written_form, [spoken_form_used], tentative=0)
-        self.remove_symbol_if_tentative(bad_written_form)        
-
 
     def move_written_form_to_top_of_priority_list(self, spoken_form, written_form):
         """Moves a written form to the top of the priority list for a spoken form
@@ -1887,7 +1899,9 @@ class SymDict(OwnerObject):
         *none* -- 
         
         """
-        written_forms_priority_list = self.match_phrase(spoken_form)[0]
+        debug.trace('SymDict.move_written_form_to_top_of_priority_list', 
+                    'spoken_form=%s, written_form=%s, string.split(spoken_form)=%s' % (spoken_form, written_form, repr(string.split(spoken_form))))
+        written_forms_priority_list = self.match_phrase(string.split(spoken_form))[0]
         debug.trace('SymDict.move_written_form_to_top_of_priority_list',
                     "written_forms_priority_list=%s" % repr(written_forms_priority_list))
         if (written_forms_priority_list == None):
@@ -1895,9 +1909,9 @@ class SymDict(OwnerObject):
         written_forms_priority_list = \
            util.remove_occurences_from_list(written_form, written_forms_priority_list)
         written_forms_priority_list = [written_form] + written_forms_priority_list
-        self.spoken_form_info.add_phrase(spoken_form, written_forms_priority_list)
+        self.spoken_form_info.add_phrase(string.split(spoken_form), written_forms_priority_list)
         debug.trace('SymDict.move_written_form_to_top_of_priority_list',
-                    "** after bumping, written_forms_priority_list=%s" % repr(written_forms_priority_list))        
+                    "** after bumping, written_forms_priority_list=%s" % repr(self.match_phrase(spoken_form)[0]))        
         debug.trace('SymDict.move_written_form_to_top_of_priority_list',
                     "after bumping, priority list =%s" % repr(self.match_phrase(spoken_form)[0]))        
 

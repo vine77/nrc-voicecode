@@ -363,7 +363,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         debug.trace('AppMgr.scratch_recent', 'instance_name=%s, n=%s' % (instance_name, n))
         return self.recog_mgr.scratch_recent(instance_name, n = n)
 
-    def reinterpret_recent(self, instance_name, changed):
+    def reinterpret_recent(self, instance_name, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -379,6 +379,10 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
+
 
         **OUTPUTS**
 
@@ -387,7 +391,8 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         with the oldest first, or None if no utterances could be 
         reinterpreted
         """
-        return self.recog_mgr.reinterpret_recent(instance_name, changed)
+        return self.recog_mgr.reinterpret_recent(instance_name, 
+                                                 changed, delete_tentative_syms)
    
     def can_reinterpret(self, instance_name, n):
         """can we safely reinterpret the nth most recent utterance
@@ -446,7 +451,6 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         *none*
         """
-        debug.trace('AppMgr.correct_recent', '** invoked')
         if not self.known_instance(instance_name):
             return
         self.recog_mgr.correct_recent_synchronous(instance_name)

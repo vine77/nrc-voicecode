@@ -35,7 +35,6 @@ class ContEmacs(Context):
        
     def _applies(self, app, preceding_symbol = 0):
 
-       debug.trace('ContEmacs._applies', '** returning %s' % isinstance(app, AppStateEmacs.AppStateEmacs))
        return isinstance(app, AppStateEmacs.AppStateEmacs)
 
     def scope(self):

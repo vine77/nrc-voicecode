@@ -657,7 +657,6 @@ class Object:
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
                 try:
-#                    debug.trace('Object.deep_construct', '** invoking constructor of %s with arguments %s' % (a_base, repr(args_super)))
                     apply(a_base.__init__, [self], args_super)
                 except TypeError:
                     msg = "TypeError while initializing base %s of class %s\n" \

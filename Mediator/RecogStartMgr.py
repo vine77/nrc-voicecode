@@ -863,7 +863,6 @@ class RSMInfrastructure(RecogStartMgr):
         ResMgr objects
 
         """
-        debug.trace('RSMInfrastructure.__init__', '** self=%s' % self)        
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
                              'GM_factory': GM_factory,
@@ -1201,7 +1200,6 @@ class RSMInfrastructure(RecogStartMgr):
 
         *none*
         """
-        debug.trace('RSMInfrastructure.correct_recent_synchronous', '** invoked')
         if self.known_instance(instance):
             self.results[instance].correct_recent_synchronous()
 
@@ -1345,7 +1343,7 @@ class RSMInfrastructure(RecogStartMgr):
                 'unknown instance %s' % instance_name)
             return 0
 
-    def reinterpret_recent(self, instance_name, changed):
+    def reinterpret_recent(self, instance_name, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -1361,6 +1359,10 @@ class RSMInfrastructure(RecogStartMgr):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
+
 
         **OUTPUTS**
 
@@ -1369,9 +1371,8 @@ class RSMInfrastructure(RecogStartMgr):
         with the oldest first, or None if no utterances could be 
         reinterpreted
         """
-        debug.trace('RSMInfrastructure.reinterpret_recent', '** invoked')
         try:
-            return self.results[instance_name].reinterpret_recent(changed)
+            return self.results[instance_name].reinterpret_recent(changed, delete_tentative_syms)
         except KeyError:
             return None
    
@@ -1968,7 +1969,6 @@ class RSMBasic(RSMInfrastructure):
         see RecogStartMgr
 
         """
-        debug.trace('RSMBasic.__init__', '** self=%s' % self)                
         self.deep_construct(RSMBasic,
                             {'universal': None
                             },

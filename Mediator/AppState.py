@@ -2132,8 +2132,6 @@ class AppState(OwnerObject):
         
         *none* -- 
         """
-
-        debug.trace('AppState.close_all_buffers', '** called')
         for a_buff_name in self.open_buffers.keys():
             self.close_buffer(a_buff_name, save)
 

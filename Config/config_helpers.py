@@ -1460,8 +1460,6 @@ class StandardFunctionCallsHelper(Object):
         """
         if not interp:
            return    
-        debug.trace('StandardFunctionCallsHelper.create', 
-            '** interp=%s' % interp)
         commands = CSCmdSet('%s standard functions' % (self.language),
                      description = 'common functions for %s' % self.language)
 
