@@ -323,3 +323,13 @@
     coerced-value
     )
 )
+
+(defun wddx-coerce-string (value)
+ "Coerce the value into a string, or the empty string if it's nil."
+ (let ((coerced-value value))
+   (if (not coerced-value)
+       (setq coerced-value "")
+     )
+   coerced-value
+   )
+)
