@@ -54,7 +54,6 @@ class GramMgr(OwnerObject):
     *none*
     """
 
-#NEW
     def __init__(self, recog_mgr, app, instance_name, 
                  text_mode_on_spoken_as=None, text_mode_off_spoken_as=None,
                  text_mode_off_sets_nat_text_to=1, **args):
@@ -75,27 +74,6 @@ class GramMgr(OwnerObject):
                              'text_mode_on_spoken_as': text_mode_on_spoken_as,
                              'text_mode_off_spoken_as': text_mode_off_spoken_as,
                              'text_mode_off_sets_nat_text_to': text_mode_off_sets_nat_text_to,
-                            },
-                            args)
-        self.name_parent('recog_mgr')
-
-#ORIG
-    def __init__ORIG(self, recog_mgr, app, instance_name, 
-                 **args):
-        """constructor
-        
-        **INPUTS**
-
-        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
-        grammar manager
-        
-        *AppState* app -- the application to which the buffers belong
-
-        *STR instance_name* -- the name of this AppState instance 
-        """
-        self.deep_construct(GramMgr,
-                            {'recog_mgr': recog_mgr, 'app': app,
-                             'instance_name': instance_name,                             
                             },
                             args)
         self.name_parent('recog_mgr')
@@ -408,6 +386,7 @@ class GramMgr(OwnerObject):
         *BOOL* -- true if the GramMgr produces global grammars
         """
         debug.virtual('GramMgr.using_global')
+
         
     
 class GramMgrFactory(Object):

@@ -954,5 +954,8 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         return None
 
 
+    def config_text_mode_toggling(self, on_spoken_as, off_spoken_as, off_sets_nat_text_to):
+        self.recog_mgr.config_text_mode_toggling(on_spoken_as, off_spoken_as, off_sets_nat_text_to)
+
 # defaults for vim - otherwise ignore
 # vim:sw=4
