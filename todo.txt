@@ -4,6 +4,16 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+
+Regression testing
+------------------
+
+When -s 0 (i.e. user doesn't plan to switch between windows), use
+local non-exclusive grammars instead of global exclusive ones. This
+more closely approximates the way that VoiceCode is used in actual
+production setting.
+
+
 BUG in setmic
 -------------
 

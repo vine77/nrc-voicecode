@@ -97,9 +97,18 @@ class MediatorObject(Object.Object):
     [CodeSelectGrammar] code_select_grammar = None -- Grammar for
     selecting a part of the visible code.
 
-    *INT window*  -- MSW window handle of the top-level window in which
+    *INT window=0*  -- MSW window handle of the top-level window in which
     to activate the grammars, or 0 to make them global.
 
+    *0-1 exclusive=0* -- Indicates whether the mediator should use grammars that
+    are exclusive (1) or non-exclusive (1)
+
+    *0-1 allResults=0* -- Indicates whether or not the grammars used by the
+    mediator should receive all recognition results (even those intercepted by
+    other grammars). Typically set to 0, except when running regression test
+    (in which case, VoiceCode must receive all recognition results, even if
+    user is working in an other window).
+        
     CLASS ATTRIBUTES**
     
     *none* --
@@ -109,23 +118,25 @@ class MediatorObject(Object.Object):
     ..[CommandDictGrammar] file:///./sr_interface.CommandDictGrammar.html
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
-    def __init__(self, interp=CmdInterp.CmdInterp(), window = 0, \
-                       **attrs):
-#        print '-- MediatorObject.__init__: called'        
+    def __init__(self, interp=CmdInterp.CmdInterp(), window = 0, exclusive=0,
+                 allResults = 0, **attrs):
+#        print '-- MediatorObject.__init__: called, window=%s' % window
         sr_interface.connect('off')        
-        self.deep_construct(MediatorObject, \
-                            {'interp': interp, \
-                             'mixed_grammar': None, \
+        self.deep_construct(MediatorObject,
+                            {'interp': interp,
+                             'mixed_grammar': None,
                              'code_select_grammar': None,
-			     'window': window}, \
-                            attrs, \
+			     'window': window},
+                            attrs,
                             {})
         self.mixed_grammar = \
 	    sr_interface.CommandDictGrammar(interpreter=self.interp, 
-	        window = window)
+	        window = window, exclusive = exclusive,
+                allResults = allResults)
         self.code_select_grammar = \
 	    sr_interface.CodeSelectGrammar(interpreter=self.interp,
-		window = window)
+		window = window, exclusive = exclusive,
+                allResults = allResults)
 
 
     def configure(self, config_file=vc_globals.default_config_file):
@@ -133,8 +144,8 @@ class MediatorObject(Object.Object):
         
         **INPUTS**
         
-        *STR* config_file = vc_globals.default_config_file -- Full path of the config 
-        
+        *STR* config_file = vc_globals.default_config_file -- Full path of the config
+
 
         **OUTPUTS**
         
@@ -143,16 +154,16 @@ class MediatorObject(Object.Object):
         global to_configure
         
         to_configure = self
-
+        
         if sr_interface.speech_able():
 #            print '-- MediatorObject.configure: loading grammars'
-            to_configure.mixed_grammar.load()
+            to_configure.mixed_grammar.load(allResults=to_configure.mixed_grammar.allResults)
 	    if self.window == 0:
-		to_configure.mixed_grammar.activate(self.window)
+		to_configure.mixed_grammar.activate()
             to_configure.code_select_grammar.load_with_verbs()
 	    if self.window == 0:
-		to_configure.code_select_grammar.activate(self.window)                
-        
+		to_configure.code_select_grammar.activate()                
+                        
         try:
             execfile(config_file)
         except Exception, err:

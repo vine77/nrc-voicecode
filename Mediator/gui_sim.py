@@ -93,8 +93,8 @@ def cleanup(clean_sr_voc=0):
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
 def init_simulator(app, symdict_pickle_fname=None, 
-    disable_dlg_select_symbol_matches = None, window = 0, editor_app =
-    None):
+    disable_dlg_select_symbol_matches = None, window = 0, exclusive = 0,
+    allResults = 0, editor_app = None):
 
 #    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
     
@@ -126,7 +126,7 @@ def init_simulator(app, symdict_pickle_fname=None,
             the_mediator.quit(save_speech_files=0, disconnect=0)            
             
             
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=app), window = window)
+        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=app), window = window, exclusive=exclusive, allResults=allResults)
 
         #
         # Read the symbol dictionary from file
@@ -197,7 +197,7 @@ def simulator_mode(options):
     
     init_simulator(app = app, 
 	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-	disable_dlg_select_symbol_matches = 1, window = window, 
+	disable_dlg_select_symbol_matches = 1, window = window,
 	editor_app = editor_app)
         
     #

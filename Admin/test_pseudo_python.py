@@ -21,8 +21,7 @@
 
 import os, profile, re
 import mediator, sr_interface, vc_globals
-
-
+    
 def dictate_pseudo_python():
     
     #
@@ -129,7 +128,7 @@ def run():
     # Dictate some pseudo python where all symbols are already known
     #
     print '>>> Dictating Python when all symbols are known <<<\n'
-    mediator.init_simulator()
+    mediator.init_simulator_regression()
     mediator.compile_symbols([native_py_file])
     mediator.print_symbols()
     dictate_pseudo_python()
@@ -138,6 +137,6 @@ def run():
     # Dictate some pseudo python where only standard symbols are already known
     #
     print '\n>>> Dictating Python when only standard symbols are known <<<\n'    
-    mediator.init_simulator()
+    mediator.init_simulator_regression()
     mediator.print_symbols()
     dictate_pseudo_python()    

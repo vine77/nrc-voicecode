@@ -84,16 +84,28 @@ from actions_py import *
 
 the_mediator = None
 
+#
+# Handle of the DOS window in which mediator is running
+#
+sr_interface.connect()
+console_win_handle = natlink.getCurrentModule()[2]
+
 def cleanup(clean_sr_voc=0):
-    global the_mediator
+    global the_mediator, console_win_handle
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
-def init_simulator(symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None):
 
-#    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
+def init_simulator(symdict_pickle_fname=None,
+                   disable_dlg_select_symbol_matches = None,
+                   window=None, exclusive=0, allResults=0):
+
+#    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s, window=%s, exclusive=%s, allResults=%s' % (disable_dlg_select_symbol_matches, window, exclusive, allResults)
     
     global the_mediator
+    
+    if window == None:
+        window = console_win_handle
 
     try:
         sr_interface.connect('off')
@@ -118,7 +130,7 @@ def init_simulator(symdict_pickle_fname=None, disable_dlg_select_symbol_matches 
             the_mediator.quit(save_speech_files=0, disconnect=0)            
             
             
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()), window=window, exclusive=exclusive, allResults=allResults)
 
         #
         # Read the symbol dictionary from file
@@ -146,6 +158,16 @@ def init_simulator(symdict_pickle_fname=None, disable_dlg_select_symbol_matches 
     sim_commands.command_space['home'] = home
     sim_commands.command_space['testdata'] = \
         os.path.join(home, 'Data', 'TestData')
+
+def init_simulator_regression(symdict_pickle_fname=None):
+    
+    """Initialises the simulator using a global exclusive grammar so that
+    the user can continue to work in other applications using the keyboard
+    while the regression test is running"""
+    
+    init_simulator(symdict_pickle_fname=symdict_pickle_fname, window=0,
+                   exclusive=1, allResults=0)                   
+    
 
 def execute_command(cmd):
 #    print '-- mediator.execute_command: cmd=%s' % cmd
