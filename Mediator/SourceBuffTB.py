@@ -63,23 +63,8 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
                             {'underlying': underlying_buffer},
                             attrs
                             )
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        self.lang_srv.cleanup()
-	self.line_srv.cleanup()
-	self.indent_srv.cleanup()
-	self.state_srv.cleanup()
-	SourceBuffNonCached.SourceBuffNonCached.cleanup(self)
+	self.add_owned_list(['state_srv', 'indent_srv', 'line_srv',
+	    'lang_srv'])
 
     def file_name(self):
         return self.buff_name

@@ -49,20 +49,7 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffMessaging):
                             {},
                             attrs
                             )
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        self.lang_srv.cleanup()
-	SourceBuffMessaging.SourceBuffMessaging.cleanup(self)
+	self.add_owned('lang_srv')
 
     def language_name(self):
         """Returns the name of the language a file is written in.

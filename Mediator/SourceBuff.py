@@ -25,7 +25,7 @@
 import debug, util
 import re, string, sys
 
-from Object import Object, ChildObject
+from Object import Object, ChildObject, OwnerObject
 
 
 class SourceBuffCookie(Object):
@@ -48,7 +48,7 @@ class SourceBuffCookie(Object):
     def __init__(self, **attrs):
         self.deep_construct(SourceBuffCookie, {}, attrs)
 
-class SourceBuff(ChildObject):
+class SourceBuff(OwnerObject):
     """Interface to a buffer being edited in the programming environment
    
     This abstract class defines interface for manipulating buffer containing
@@ -87,20 +87,7 @@ class SourceBuff(ChildObject):
                              'print_nlines': 3},
                             attrs
                             )
-
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        del self.app
+	self.name_parent('app')
 
     def name(self):
         """returns the name of the buffer

@@ -80,6 +80,8 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
                             attrs
                             )
 
+	self.add_owned_list(['state_srv', 'indent_srv', 'line_srv', 'lang_srv'])
+
 	if self.instance_reporting:
 	    print 'SourceBuff.__init__:', util.within_VCode(self.name())
 	self.pos = self.make_within_range(self.pos)
@@ -114,10 +116,10 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	if self.instance_reporting:
 	    print 'SourceBuff.rename_buffer_cbk:', self.name(), new_buff_name
 	self.SourceBuffNonCached.rename_buffer_cbk(new_buff_name)
-	
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
+      
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
 
 	**INPUTS**
 
@@ -127,13 +129,11 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 
 	*none*
 	"""
+# subclasses must call their parent class's remove_other_references
+# function, before performing their own duties
 	if self.instance_reporting:
-	    print 'SourceBuff.cleanup:', util.within_VCode(self.name())
-        self.lang_srv.cleanup()
-	self.line_srv.cleanup()
-	self.indent_srv.cleanup()
-	self.state_srv.cleanup()
-	SourceBuffNonCached.SourceBuffNonCached.cleanup(self)
+	    print 'SourceBuff.remove_other_references:', util.within_VCode(self.name())
+	SourceBuffNonCached.SourceBuffNonCached.remove_other_references(self)
 
     def file_name(self):
         return self.name()

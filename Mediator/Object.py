@@ -20,6 +20,7 @@
 ##############################################################################
 
 import auto_test, exceptions, os, posixpath, profile, sys
+import types
 
 class EnforcedConstrArg(exceptions.Exception):    
     """Raised by [Object.deep_construct] when the value received for
@@ -735,6 +736,187 @@ class ChildObject(Object):
 # have to do that.  Also, the child object may have children of its own,
 # in which case it should call their cleanup function first.
         pass
+
+class OwnerObject(Object):
+    """a subclass of Object which contains a reference to its parent, or
+    which owns references to some of its children.  Any object which 
+    contains a reference to its parent (e.g. SourceBuff to its 
+    parent AppState) must have exactly one owner.  
+    Since the parent contains a reference to its children, this creates 
+    circular references, which prevent the parent from automatically 
+    reaching a reference count of zero, and being deleted.  To avoid this 
+    problem, the parent object should call the cleanup method of the 
+    child before removing its reference to the child.
+
+    **INSTANCE ATTRIBUTE**
+
+    *[STR] owned_objects* -- list of attribute names of objects owned 
+    by self (whose cleanup method should be called when this object's 
+    owner calls this object's cleanup method).  Note: if the attribute
+    corresponding to an element of owned_objects is a list, cleanup will
+    be called on the elements of the list.  Similarly, if the
+    corresponding attribute is a map, cleanup will be
+    called on the values of the map.
+
+    *STR parent_name* -- name of attribute containing reference to the parent
+    object, or None if no reference to parent
+
+    **CLASS ATTRIBUTE**
+
+    *none* --
+    """
+    def __init__(self, **attrs):
+	self.deep_construct(OwnerObject,
+			    {'parent_name': None,
+			    'owned_objects': []},
+			    attrs)
+
+    def name_parent(self, parent = None):
+	"""specify the name of the attribute containing a reference to 
+	this object's parent.
+
+	**INPUTS**
+
+	*STR owned* -- name of the parent, or None if none
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.parent_name = parent
+
+    def add_owned(self, owned):
+	"""append a new attribute name to the list of owned objects
+
+	**INPUTS**
+
+	*STR owned* -- names of owned attributes
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.owned_objects.append(owned)
+
+
+    def add_owned_list(self, owned):
+	"""append new attribute names to the list of owned objects
+
+	**INPUTS**
+
+	*[STR] owned* -- names of owned attributes
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.owned_objects.extend(owned)
+
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# subclasses must call their parent class's remove_other_references
+# function, before performing their own duties
+	pass
+
+    def _cleanup_object(self, object):
+	"""attempt to call cleanup on object
+
+        **INPUTS***
+
+	*OwnerObject object* -- note: class of object is the expected
+	class, but _cleanup_object doesn't assume this is correct, nor
+	does it check whether the object is a subclass of
+	OwnerObject, only that it is a class instance and that it
+	has a cleanup attribute
+
+	**OUTPUTS**
+
+	*STR* -- reason for error (or None if no error).
+	"""
+
+	if type(object) != types.InstanceType:
+	    return 'because it is not an object, but has type %s' % (type(object))
+	try:
+	    object.cleanup
+	except AttributeError:
+	    return 'because it does not have a cleanup method'
+	object.cleanup()
+	
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.remove_other_references()
+    
+	reversed_names = self.owned_objects
+	reversed_names.reverse()
+	msg_prefix = 'Warning: while cleaning up %s,\nunable to cleanup ' \
+	    % repr(self)
+	for name in reversed_names:
+	    if self.__dict__.has_key(name):
+		attribute = self.__dict__[name]
+		if type(attribute) == types.ListType:
+		    for i in range(attribute):
+			error_msg = self._cleanup_object(attribute[i])
+			if error_msg != None:
+			    error_msg = 'element %d of attribute %s\n%s\n' \
+				% (i, name, error_msg)
+			    debug.critical_warning(msg_prefix + error_msg)
+			else:
+			    del attribute[i]
+		elif type(attribute) == types.DictType:
+		    for key in attribute.keys():
+			error_msg = self._cleanup_object(attribute[key])
+			if error_msg != None:
+			    error_msg = 'value for key %s of attribute %s\n%s\n' \
+				% (str(key), name, error_msg)
+			    debug.critical_warning(msg_prefix + error_msg)
+			else:
+			    del attribute[key]
+		elif type(attribute) == types.InstanceType:
+		    error_msg = self._cleanup_object(attribute)
+		    if error_msg != None:
+			error_msg = 'attribute %s\n%s\n' \
+			    % (name, error_msg)
+			debug.critical_warning(msg_prefix + error_msg)
+		    else:
+			del self.__dict__[name]
+		else:
+		    error_msg = 'because it is not an object, ' \
+		        + 'but has type %s' % (type(object))
+		    error_msg = 'attribute %s\n%s\n' \
+			% (name, error_msg)
+		    debug.critical_warning(msg_prefix + error_msg)
+		    del self.__dict__[name]
+
+	    else:
+		error_msg = 'because the attribute does not exist\n'
+		error_msg = 'attribute %s\n%s' \
+		    % (name, error_msg)
+		debug.critical_warning(msg_prefix + error_msg)
+	
+	if self.parent_name != None \
+		and self.__dict__.has_key(self.parent_name):
+	    del self.__dict__[self.parent_name]
+
 
 
 ##############################################################################

@@ -31,6 +31,19 @@ def virtual(name):
     """Prints warning message when a virtual method is called."""
     print "WARNING: virtual method '%s' called!!!" % name    
 
+def critical_warning(warn):
+    """Prints a critical warning message.
+    
+    A critical warning usually indicates a bug in the code which should
+    be reported and resolved, but in a circumstance where the best 
+    immediate response is to ignore and continue running.  For example, 
+    if an error is detected by an object destructor or during cleanup, it 
+    may be advisable to proceed to free the rest of the resources used
+    by the object."""
+#   for now, just write to stderr.  Later, we may want to log this to a
+#   file and/or tell the user to submit a bug report
+    sys.stderr.write(warn)
+
 
 def print_call_stack(print_to_file=sys.stdout):
     """Prints the call stack.

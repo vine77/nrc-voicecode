@@ -22,7 +22,7 @@
 """Regression testing script"""
 
 import os, natlink, posixpath, sys
-import debug.MediatorObject, sim_commands, sr_interface, vc_globals
+import debug, MediatorObject, sim_commands, sr_interface, vc_globals
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
