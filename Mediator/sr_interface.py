@@ -42,6 +42,7 @@ sr_is_connected = 0
 
 sr_mic_change_callback = None
 
+#
 # Flag that remembers whether or not the VoiceCode SR user was modified since
 # last saved
 #
@@ -99,7 +100,7 @@ def connect(mic_state=None, mic_change_callback = None):
     
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection. If *None*, then leave mic alone.
-
+    
     *FCT* mic_change_callback -- 
       mic_change_callback(*STR* mic_state)
     (optional) function to be called when the microphone state changes.
@@ -126,8 +127,6 @@ def connect(mic_state=None, mic_change_callback = None):
 	    natlink.setChangeCallback(change_callback)
 
 
-    
-
 def disconnect():
     """Dicsconnects from SR system.
     
@@ -148,6 +147,7 @@ def disconnect():
 	    sr_mic_change_callback = None
         natlink.natDisconnect()
     sr_is_connected = 0        
+
 
 def change_callback(*args):
     if args[0] == 'mic' and sr_mic_change_callback:
@@ -339,6 +339,53 @@ def clean_written_form(written_form, clean_for=None):
     return cleansed_form
     
 
+def clean_spoken_form(spoken_form):
+    """Cleans a spoken form.
+    word.
+    
+    **INPUTS**
+    
+    *STR* spoken_form -- Spoken form to be cleansed
+    
+     **OUTPUTS**
+    
+    *STR* clean_form -- The cleansed form.
+    """
+
+#    print '-- sr_interface.clean_spoken_form: spoken_form=\'%s\'' % spoken_form
+
+    clean_form = spoken_form
+
+    # AD
+    # Note: if spoken form is 'X.' where X is some capital letter, then leave
+    # spoken form alone. Otherwise
+    #   say(['O.'])
+    # ends up calling
+    #   recognitionMimic(['O.\\o'])
+    #
+    if not re.match('[A-Z].$', clean_form):
+
+        #
+        # Lower case
+        #
+        clean_form = string.lower(clean_form)
+
+        #
+        # Replace non alphanumericals by spaces.
+        # 
+        clean_form = re.sub('[^a-z0-9]+', ' ', clean_form)    
+         
+        #
+        # Remove leading, trailing and multiple blanks
+        #
+        clean_form = re.sub('\s+', ' ', clean_form)
+        clean_form = re.sub('^\s+', '', clean_form)
+        clean_form = re.sub('\s+$', '', clean_form)
+
+#    print '-- sr_interface.clean_spoken_form: returning clean_form=\'%s\'' % clean_form
+    return clean_form
+
+
 def spoken_written_form(vocabulary_entry):
     """Returns the written and spoken forms of a NatSpeak vocabulary entry
     
@@ -371,8 +418,11 @@ def spoken_written_form(vocabulary_entry):
     # form that the SR expects (e.g. {Spacebar}, {Enter})
     #
     written = clean_written_form(written, clean_for='vc')
-#    written = re.sub('\\{Enter\\}', '\n', written)
-#    written = re.sub('\\{Spacebar\\}', ' ', written)
+
+    #
+    # Clean spoken form
+    #
+    spoken = clean_spoken_form(spoken)
 
 #    print '-- sr_interface.spoken_written_form: spoken=\'%s\', written=\'%s\'' % (spoken, written)
 
@@ -398,6 +448,7 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 
 #    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s, clean_written=%s' % (spoken_form, repr(written_form), clean_written)
 
+    spoken_form = clean_spoken_form(spoken_form)
     entry = spoken_form
     if spoken_form != written_form:
         #
@@ -586,8 +637,6 @@ class CodeSelectGrammar(SelectGramBase):
                 where = -1
             if re.search('after', verb, 1):
                 where = 1
-
-#            print '--** CodeSelectGrammar.gotResultsObject: direction=%s, where=%s, mark_selection=%s' % (direction, where, mark_selection)                
 
             #
             # Collect selection ranges with highest score

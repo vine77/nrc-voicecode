@@ -4,6 +4,56 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+BUG
+---
+
+When I tried to test a variant of Wieger's > example.  I said 'value
+greater than 5' and got value_greater_than_10, both with say(...) and
+actually dictating it.
+
+Then, when I exited and tried to run gui_sim again, it crashed
+while trying to read the known symbols in from the pickle file.  I
+unpickled the file manually without adding the words to natspeak, to see 
+what the problem was.  It appears that SymDict.symbol_info contains an entry
+x = symbol_info['value_greater_than_5']  
+with 
+
+x.spoken_forms = ['value greater than 5', 'v', 'a', 'l', 'u', 'e', ' ', 
+'g', 'r', 't', '-', 'h', 'n', '5']
+
+Thus SymDict.init_from_file tries to add words
+
+value_greater_than_5\value greater than 5
+
+but also
+
+value_greater_than_5\v
+value_greater_than_5\a
+
+etc.
+
+When it gets to the word with spoken form ' ', which is not a legal
+spoken form, natlink.addWord throws an exception natlink.InvalidWord.
+Since init_from_file doesn't catch this exception, gui_sym.py crashes.
+
+This may be the cause of Wieger's inability to run the simulator twice
+in a row.
+
+The addWord behaviour seems to be different when the new symbol is
+initially added, since that doesn't trigger the error.
+
+Note that the SymDict is pickled on exit even if you don't save your
+speech files.  This should probably be changed.
+
+David
+
+P.S.  For robustness, init_from_file should catch this exception and
+print a warning and/or delete the bad entry, instead of crashing, though
+this obviously doesn't solve the underlying problem of the bad spoken
+forms but at least makes it possible to continue testing without having
+to be familiar enough with the mediator code to know to find and delete
+the pickle file.
+
 Performance
 -----------
 

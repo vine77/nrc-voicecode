@@ -486,6 +486,7 @@ class SymDict(PickledObject.PickledObject):
         # word, i.e. an in-vocabulary word that is not a written\spoken word
         # (e.g. don't generate 'is' -> 'I. S.').
         #
+#        print '-- SymDict.add_abbreviation: min_abbreviation_len=%s' % min_abbreviation_len
         if len(abbreviation) < min_abbreviation_len and \
            sr_interface.getWordInfo(abbreviation, 4) != None:
                spelled_expansion = string.upper(abbreviation)
@@ -508,7 +509,7 @@ class SymDict(PickledObject.PickledObject):
             #
             abbreviation = string.lower(abbreviation)
             for ii in range(len(expansions)):
-                expansions[ii] = string.lower(expansions[ii])
+                expansions[ii] = sr_interface.clean_spoken_form(expansions[ii])
                 #
                 # Make sure the expansion is the SR vocabulary
                 #
@@ -1007,11 +1008,13 @@ class SymDict(PickledObject.PickledObject):
             #
             # word is a known abbreviation. Add expansions.
             #
+#            print '-- SymDict.expand_word: found expansions: %s' % repr(self.abbreviations[word])
             expansions = expansions + self.abbreviations[word]            
         elif self.abbreviations.has_key(single_form):
             #
             # word is the plural of an abbreviation
             #
+#            print '-- SymDict.expand_word: is plural of: \'%s\', which expands to: %s' % (single_form, self.abbreviations[single_form])
             expansions = map(lambda an_expansion: pluralize(an_expansion), self.abbreviations[single_form])
         else:
             #
