@@ -493,7 +493,6 @@ class CmdInterp(OwnerObject):
         return regexp
 
     def interpret_massaged(self, cmd, app, initial_buffer = None):
-
         """Interprets a natural language command and executes
         corresponding instructions.
 
@@ -534,11 +533,9 @@ class CmdInterp(OwnerObject):
              # Identify leading CSC, LSA, symbol and ordinary word
              #
              possible_CSCs = self.chop_CSC(cmd, app)
-             chopped_LSA, LSA_consumes, cmd_without_LSA = \
-                 self.chop_LSA(cmd, app)
-             chopped_symbol, symbol_consumes, cmd_without_symbol = \
-                 self.chop_symbol(cmd, app)
-             chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
+             chopped_LSA, LSA_consumes = self.chop_LSA(cmd, app)
+             chopped_symbol, symbol_consumes = self.chop_symbol(cmd, app)
+             chopped_word, word_consumes = self.chop_word(cmd)             
              most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
 
              trace('CmdInterp.interpret_massaged', 
@@ -570,7 +567,7 @@ class CmdInterp(OwnerObject):
                  preceding_symbol = 1
              
              for match in possible_CSCs:
-                 meanings, CSC_consumes, cmd_without_CSC = match
+                 meanings, CSC_consumes = match
                  trace('CmdInterp.interpret_massaged', 
                      'possible CSC %s, consumes %d' % \
                      (meanings, CSC_consumes))
@@ -603,16 +600,10 @@ class CmdInterp(OwnerObject):
                      untranslated_words = []
                      exact_symbol = 0
                  action.log_execute(app, context)
+                 cmd = cmd[CSC_consumes:]
+                 head_was_translated = 1
                  break
 
-             if csc_applies:
-                 #
-                 # Found a CSC that applies
-                 # Chop the CSC from the command
-                 #
-                 cmd = cmd_without_CSC
-                 head_was_translated = 1
-             
              if not head_was_translated and LSA_consumes == most_definite:
                  #
                  # LSA consumed the most words from command. Insert it.
@@ -625,7 +616,7 @@ class CmdInterp(OwnerObject):
                      untranslated_words = []
                      exact_symbol = 0
                  actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
-                 cmd = cmd_without_LSA
+                 cmd = cmd[LSA_consumes:]
                  head_was_translated = 1
 
 
@@ -647,7 +638,7 @@ class CmdInterp(OwnerObject):
                      exact_symbol = 1
                  untranslated_words.append(chopped_symbol)
 
-                 cmd = cmd_without_symbol
+                 cmd = cmd[symbol_consumes:]
                  head_was_translated = 1
                                           
                     
@@ -660,7 +651,7 @@ class CmdInterp(OwnerObject):
                  trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
                  untranslated_words.append( chopped_word)
                  exact_symbol = 0
-                 cmd = cmd_without_word
+                 cmd = cmd[word_consumes:]
                  head_was_translated = 1
 
              #
@@ -763,15 +754,9 @@ class CmdInterp(OwnerObject):
             'pre-massaged cmd=%s' % command_tuples)
         for a_word in command_tuples:
             spoken, written = a_word
-# redundant
-#            written = sr_interface.clean_written_form(written, clean_for='vc')
             spoken = sr_interface.clean_spoken_form(spoken)
-#            spoken = re.sub('\s+', ' ', spoken)
-#            spoken = re.sub('\s+', ' ', spoken)
-#            spoken = re.sub('(^\s+|\s+$)', '', spoken)
             mod_command.append((spoken, written))
         return mod_command
-
 
     def massage_command(self, command):
         """Massages a command to prepare it for interpretation.
@@ -903,7 +888,6 @@ class CmdInterp(OwnerObject):
         
 
         trace('CmdInterp.dlg_select_symbol_match', 'self.disable_dlg_select_symbol_matches=%s' % self.disable_dlg_select_symbol_matches)
-#        print '-- CmdInterp.dlg_select_symbol_match: self.disable_dlg_select_symbol_matches=%s' % self.disable_dlg_select_symbol_matches
 
         if self.disable_dlg_select_symbol_matches:
             choice_index = 0
@@ -949,10 +933,8 @@ class CmdInterp(OwnerObject):
             # Insert matched symbol
             #
             actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(app, None)            
-#            app.insert_indent(chosen_match.native_symbol, '')
         else:
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
-#            app.insert_indent(untranslated_text, '')
         
 
     def chop_CSC(self, command, app):
@@ -967,16 +949,13 @@ class CmdInterp(OwnerObject):
         **OUTPUTS**
 
         Returns a list of tuples, each of the form 
-        *(chopped_CSC, consumed, rest)*,  where:
+        *(chopped_CSC, consumed)*,  where:
         
         *CSCmdDict meanings* -- the meanings corresponding to the spoken
         form chopped off.
 
         *INT* consumed* -- Number of words consumed by the CSC from
          the command
-
-        *[STR]* rest -- The remaining of *cmd* after the construct has been
-        chopped
 
         The list is sorted in order of descending numbers of words
         consumed
@@ -987,14 +966,7 @@ class CmdInterp(OwnerObject):
         trace('CmdInterp.chop_CSC', 'spoken=%s' % spoken_list)
 
         matches = self.chop_spoken_CSC(spoken_list, app)
-        full_matches = []
-        
-        for match in matches:
-            cmd_dict, consumed = match
-            trace('CmdInterp.chop_CSC', 'consumed=%s' % consumed)
-            full_matches.append((cmd_dict, consumed, command[consumed:]))
-
-        return full_matches
+        return matches
 
     def chop_spoken_CSC(self, spoken_list, app):
         """Chops the start of a command if it starts with a CSC.
@@ -1049,7 +1021,7 @@ class CmdInterp(OwnerObject):
 
         **OUTPUTS**
         
-        Returns a tuple *(chopped_LSA, consumed, rest)* where:
+        Returns a tuple *(chopped_LSA, consumed)* where:
         
         *STR* chopped_LSA -- The written form of the LSA that was
          chopped off. If *None*, it means *command* did not start with
@@ -1058,12 +1030,8 @@ class CmdInterp(OwnerObject):
         *INT* consumed* -- Number of words consumed by the LSA from
          the command (always 1, but return it anyway because want to
          keep same signature as chop_CSC and chop_symbol)
-
-        *[STR]* rest -- The remaining of *cmd* after the construct has been
-        chopped
         """
         trace('CmdInterp.chop_LSA', 'command=%s' % command)
-#        if not app.translation_is_off:
         spoken_list = map(lambda word: process_initials(word[0]), command)
         trace('CmdInterp.chop_LSA', 'spoken=%s' % spoken_list)
 
@@ -1082,7 +1050,7 @@ class CmdInterp(OwnerObject):
             chopped_LSA = chopped_generic
             consumed = consumed_generic
 
-        return chopped_LSA, consumed, command[consumed:]
+        return chopped_LSA, consumed
     
     def chop_spoken_LSA(self, spoken_list, aliases):
         """Chops off the beginning of a command if it is an LSA.
@@ -1139,7 +1107,7 @@ class CmdInterp(OwnerObject):
 
         **OUTPUTS**
 
-        Returns a tuple *(chopped_symbol, consumed, rest)* where:
+        Returns a tuple *(chopped_symbol, consumed)* where:
         
         *STR chopped_symbol* -- spoken form of the known symbol, or None 
         if no symbol matches the spoken form. If *None*, it means 
@@ -1147,17 +1115,13 @@ class CmdInterp(OwnerObject):
 
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
-
-        *[STR]* rest -- The remaining of *command* after the construct has been
-        chopped
         """
 
         trace('CmdInterp.chop_symbols', 'command=%s' % command)
-#        if not app.translation_is_off:
         spoken_list = map(lambda word: process_initials(word[0]), command)
         trace('CmdInterp.chop_symbols', 'spoken=%s' % spoken_list)
         chopped_symbol, consumed = self.chop_spoken_symbol(spoken_list)
-        return chopped_symbol, consumed, command[consumed:]
+        return chopped_symbol, consumed
     
     def chop_spoken_symbol(self, spoken_list):
         """Chops off the beginning of a command if it is a known symbol.
@@ -1241,172 +1205,18 @@ class CmdInterp(OwnerObject):
 
         **OUTPUTS**
         
-        Returns a tuple *(chopped_word, consumed, rest)* where:
+        Returns a tuple *(chopped_word, consumed)* where:
 
         *STR* chopped_word -- The spoken form of the first word
 
         *INT* consumed -- Number of words consumed (always 1, but
          return it anyway because want to keep same method signature
          as chop_CSC, chop_LSA and chop_symbol).
-
-        *[STR]* rest -- The remaining of *command* after the construct has been
-        chopped
-        
         """
         
         chopped_word = command[0][0]
         consumed = 1
-        rest = command[1:]
-        return chopped_word, consumed, rest
-        
-    def chop_construct(self, cmd, construct_check, app):
-        """Look at NL command to see if it starts with a
-        particular kind of construct (e.g. CSC, LSA, symbol)
-        
-        **INPUTS**
-        
-        *[(STR, STR)]* cmd -- The command,  a list of
-         tuples of (spoken_form, written_form), with the spoken form
-         cleaned and the written form cleaned for VoiceCode.
-
-        *METHOD* construct_check(self, STR) returns STR -- Method used
-         to check wether a string corresponds to the type of construct
-         we are looking for. For LSA and symbol constructs, it returns
-         the construct's written form. For CSCs, it returns its spoken
-         form. If the string doesn't correspond to the proper construtct,
-         it returns *None*.
-
-         
-        **OUTPUTS**
-        
-        *(chopped_construct, consumed, rest)*
-
-        *STR* chopped_construct -- Spoken form of the construct
-        chopped from the command
-
-        *INT* consumed -- Number of words consumed from *cmd*
-
-        *[STR]* rest -- The remaining of *cmd* after the construct has been
-        chopped
-        """
-
-        trace('CmdInterp.chop_construct', 'construct_check=%s' % repr(construct_check))
-#        print '-- CmdInterp.chop_construct: construct_check=%s' % repr(construct_check)
-
-        chopped_construct, consumed, rest = None, 0, cmd
-
-        #
-        # Create list of spoken forms of the words in command
-        #
-        words = []
-        for a_word in cmd:
-            a_word = a_word[0]
-            words = words + [a_word]
-
-        #
-        # Starting with the whole command and dropping words from the end,
-        # check if that corresponds to the spoken form of a known CSC.
-        #
-        upto = len(words)
-        while upto:
-            a_spoken_form = string.join(words[:upto], ' ')
-# not completely redundant because the original spoken form might have
-# contained initials (e.g. "M" or "M.") which would not have cleaned 
-#            individually
-            a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
-            trace('CmdInterp.chop_construct', 'upto=%s, a_spoken_form=%s' % (upto, a_spoken_form))
-#            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
-
-            chopped_construct = construct_check(self, a_spoken_form, app)
-            trace('CmdInterp.chop_construct', 'after construct_check')
-#            print '-- CmdInterp.chop_construct: after construct_check'
-            if chopped_construct != None:
-                #
-                # This corresponds to the spoken form of a construct and it's
-                # the longest one we'll ever find.
-                #
-                trace('CmdInterp.chop_construct', 'matches known construct \'%s\'' % a_spoken_form)
-#                print '-- CmdInterp.chop_construct: matches known construct \'%s\'' % a_spoken_form
-                rest = cmd[upto:]
-                consumed = upto
-                break
-            upto = upto - 1
-
-        trace('CmdInterp.chop_construct', 'returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest)))
-#        print '-- CmdInterp.chop_construct: returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest))
-        return chopped_construct, consumed, rest
-
-
-    def is_spoken_CSC(self, spoken_form, app):
-        """Checks if a string is the spoken form of a CSC.
-        
-        **INPUTS**
-        
-        *STR* spoken_form -- String to be checked
-
-        *AppState* app -- the editor for which we are interpreting a
-        command
-
-        **OUTPUTS**
-        
-        *STR* -- spoken form of the matching CSCmd, or None if there is
-        no matching CSC.
-        """
-        trace('CmdInterp.is_spoken_CSC', 'spoken_form=%s' % spoken_form)
-        chopped_CSC = None
-        if self.cmd_index.has_key(spoken_form):
-            chopped_CSC = spoken_form
-        trace('CmdInterp.is_spoken_CSC', 
-            'matched = %d' % (chopped_CSC is not None))
-        return chopped_CSC
-
-
-
-    def is_spoken_LSA(self, spoken_form, app):
-        """Checks if a string is the spoken form of an LSA.
-        
-        **INPUTS**
-        
-        *STR* spoken_form -- String to be checked
-
-        *AppState* app -- the editor for which we are interpreting a
-        command
-        
-        **OUTPUTS**
-
-        *STR* -- written form of the matching LSAlias, or None if there is
-        no matching LSA.
-        """
-        trace('CmdInterp.is_spoken_LSA', 'spoken_form = \'%s\'' % spoken_form)
-#        print '-- CmdInterp.is_spoken_LSA: spoken_form = \'%s\'' % spoken_form
-
-        written_LSA = None
-        
-        #
-        # See if spoken_form is in the list of active LSAs
-        #
-
-        aliases = self.language_specific_aliases
-        language = app.active_language()
-        trace('CmdInterp.is_spoken_LSA', 'language=%s' % language)
-#        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
-        
-        if aliases.has_key(language):
-            if aliases[language].has_key(spoken_form):
-                written_LSA = aliases[language][spoken_form]
-                trace('CmdInterp.is_spoken_LSA', 
-                    'found language specific match')
-# check common LSAs for all languages, if we haven't found a
-# language-specific one
-        if written_LSA == None and aliases.has_key(None):
-            if aliases[None].has_key(spoken_form):
-                written_LSA = aliases[None][spoken_form]
-                trace('CmdInterp.is_spoken_LSA', 
-                    'found language-independent match')
-
-        trace('CmdInterp.is_spoken_LSA', 
-            'written_LSA is "%s"' % repr(written_LSA))
-        return written_LSA
+        return chopped_word, consumed
         
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.
@@ -1534,7 +1344,6 @@ class CmdInterp(OwnerObject):
             hacked_written_as = written_as
             if an_LSA.spacing & hard_space:
                 hacked_written_as = written_as + ' '
-#                print '%s hard space %d' % (an_LSA.spoken_forms[0], an_LSA.spacing)
             elif an_LSA.spacing & hard_new_line:
                 hacked_written_as = written_as + '\n'
             elif an_LSA.spacing & hard_paragraph:
@@ -1832,7 +1641,6 @@ class CmdInterp(OwnerObject):
         *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
         """
 
-#        print '-- SymDict.parse_symbols: file_name=%s' % file_name
         self.known_symbols.parse_symbols_from_file(file_name, 
             add_sr_entries = add_sr_entries)
                 
