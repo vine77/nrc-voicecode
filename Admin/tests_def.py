@@ -2901,8 +2901,8 @@ def test_reinterpret(instance_name, changed, user_input = None):
     return done
 
 
+    
 def correct_recent_symbols(instance_name, corrections, user_input):
-    debug.trace('tests_def.correct_recent_symbols', 'corrections=%s' % repr(corrections))
     sys.stdout.flush()
     the_mediator = testing.mediator()
     the_mediator.correct_recent_symbols(instance_name, corrections)
