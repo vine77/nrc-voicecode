@@ -1,0 +1,219 @@
+"""State information for the programming environment."""
+
+
+import debug, sys
+from Object import Object
+
+
+"""can we auto-forward stuff from App to buff"""
+
+# (C)2000 David C. Fox
+
+class ForwardToBuffer:
+    """subsidiary class used to forward buffer-specific messages from
+    AppState to SourceBuff
+
+    **INSTANCE ATTRIBUTES**
+
+    *AppState* application -- forwarding application
+
+    *FCT* ( *SourceBuff* , ...) -- method to call
+
+    **CLASS ATTRIBUTES**
+    
+    *none* --
+
+    """
+    def __init__(self, application, method):
+	self.application = application
+	self.method = method
+    def __call__(self, *positional, **keys):
+	f_name = None
+	if keys.has_key("f_name"):
+	    which = keys["f_name"]
+	    del keys["f_name"]
+	buffer = self.application.find_buff(f_name)
+	if buffer:
+	    return apply(getattr(buffer, self.method), positional, keys)
+	
+class AppState(Object):
+    """State information for the programming environment.    
+
+    Stores information about the state of the programming environment
+    being run through the Mediator.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *STR app_name=None* -- name of the programming environment
+    
+    *[* [[SpeechCommand]] *] rec_utterances=[]* -- Array of recent
+     utterances that have been recognised. Each utterance is a list of
+     [SpeechComand] objects that speech commands that have been
+     interpreted for that utterance.
+    
+    *{STR: * [SourceBuff] *} open_buffers={}* -- List of source buffers that
+     are currently open in the programming environment.
+    
+    *STR curr_dir=None* -- Current directory for the programming environment
+    
+    *(STR) active_field=None* -- Name of the active Field. Elements of
+     the array refer to a sequence of objects in the user interface
+     that lead to the active field.
+
+     If *None*, then the buffer [self.curr_buffer] has the focus. 
+
+     Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
+     as', 'file name')*.
+
+     Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
+     where find-buffer is the name of the command that was invoked and
+     buffer-name refers to the argument that is being asked for.
+
+    SourceBuff curr_buffer=None -- Current source buffer
+
+    *BOOL* translation_is_off -- If true, then translation of CSCs and
+     LSAs isturned off for that applications. Everything should be
+     typed as dictated text, except for commands that turn the
+     translation back on.
+
+    **CLASS ATTRIBUTES**
+    
+    *(STR)* buffer_methods -- list of names of buffer methods which
+    AppState should forward to SourceBuff.  Subclasses of AppState
+    should include those from AppState and add their own 
+
+    .. [SpeechCommand] file:///./SpeechCommand.SpeechCommand.html
+    .. [SourceBuff] file:///SourceBuff.SourceBuff.html
+    .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+    buffer_methods = ['is_language', 'region_distance', 'cur_pos',
+    'get_selection', 'goto_end_of_selection', 'set_selection',
+    'contents', 'get_text', 'distance_to_selection', 'get_visible',
+    'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
+    'move_relative', 'insert', 'indent', 'insert_indent', 
+    'delete', 'goto', 'goto_line', 'search_for', 'refresh_if_needed', 'refresh']
+
+    def __getattr__( self, name):
+	if name in self.buffer_methods:
+	    return ForwardToBuffer(self, name)
+	raise AttributeError(name)
+    
+    def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
+                 active_field=None, curr_buffer=None, 
+                 **attrs):
+        self.deep_construct(AppState, 
+                            {'app_name': app_name,
+                             'rec_utterances': [], 
+                             'open_buffers': {},
+                             'curr_dir': curr_dir, 
+                             'active_field': active_field,
+                             'curr_buffer': curr_buffer,
+                             'translation_is_off': translation_is_off},
+                            attrs)
+
+
+    def bidirectional_selection(self):
+      	"""does editor support selections with cursor at left?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUS**
+	
+	*BOOL* -- true if editor allows setting the selection at the
+	left end of the selection"""
+	pass
+
+    def focus_is_source(self, lang_name):
+        """Check if prog. env. focus is a source buffer
+
+        Returns *true* if and only if focus of programming environment
+        is a source buffer written in language *STR lang_name*.
+        """
+
+        if (self.active_field != None):
+            answer = (lang_name == None) or (self.curr_buffer.is_languaage(lang_name))
+        return answer
+
+    def find_buff(self, buff_name=None):
+        """Returns the open buffer with name *STR buff_name*.
+        
+        If no such buffer, returns *None*.
+        
+        If *buff_name* is *None*, return [self.curr_buffer].
+
+        .. [self.curr_buffer] file:///AppState.AppState.html
+        """
+        if (buff_name == None):
+            return self.curr_buffer
+        elif (self.open_buffers.has_key(buff_name)):
+            return self.open_buffers[buff_name]
+        #
+        # Buffer not found
+        #
+        return None
+
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at position
+        [self.cur_pos] of buffer.
+
+        If *buff* not specified either, drop breadcrumb [self.curr_buffer].
+	"""
+	pass
+
+        buff = self.find_buff(buffname)
+        buffname = buff.file_name
+        if not pos: pos = buff.cur_pos
+        self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+	pass
+        stacklen = len(self.breadcrumbs)
+        lastbuff, lastpos = self.breadcrumbs[stacklen - num]
+        self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
+        if gothere:
+            self.goto(lastpos, f_name=lastbuff)
+
+
+
+    def open_file(self, name):
+        """Open a file.
+
+        Open file with name *STR name*.        
+        """
+        debug.virtual('AppState.open_file')
+
+    def active_language(self):
+        """Returns name of active programming language.
+
+        If no active programming language, then returns *None*.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *STR* language -- Name of active programming language (*None*
+        if no programming language is active).
+        """
+        
+        language = None
+        if self.curr_buffer != None:
+            language = self.curr_buffer.language
+        return language
