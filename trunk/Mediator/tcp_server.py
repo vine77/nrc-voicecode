@@ -414,10 +414,10 @@ class CheckReadySocksThread(threading.Thread, Object.Object):
             to_check = self.socks_to_check.keys()
             if len(to_check) > 0:
                 self.ready_socks_lock.acquire()                
-		print '-- CheckReadySocksThread.run: self.ready_socks=%s' % id(self.ready_socks)
+#		print '-- CheckReadySocksThread.run: self.ready_socks=%s' % id(self.ready_socks)
                 (new_ready_socks, dum1,dum2) = select.select(to_check, [], [], 0)
 		self.ready_socks.extend(new_ready_socks)
-		print '-- CheckReadySocksThread.run: after select, id(self.ready_socks)=%s, self.ready_socks=%s' % (id(self.ready_socks), repr(self.ready_socks))
+#		print '-- CheckReadySocksThread.run: after select, id(self.ready_socks)=%s, self.ready_socks=%s' % (id(self.ready_socks), repr(self.ready_socks))
                 self.ready_socks_lock.release()
                 if len(self.ready_socks) > 0:
                     print '-- CheckReadySocksThread.run: some sockets are ready'
