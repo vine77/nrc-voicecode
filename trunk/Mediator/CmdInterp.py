@@ -823,8 +823,9 @@ class CmdInterp(OwnerObject):
             spoken_form = untranslated_text
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
+            phrase = string.split(spoken_form)
             written_symbol = self.choose_best_symbol(spoken_form, 
-                self.known_symbols.spoken_form_info[spoken_form].symbols)
+                self.known_symbols.complete_match(phrase))
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol written "%s"' % (untranslated_text))
             actions_gen.ActionInsert(code_bef=written_symbol, code_after='').log_execute(app, None)                            
@@ -1018,7 +1019,7 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[(STR, STR)]* cmd -- The command,  a list of
+        *[(STR, STR)]* command -- The command,  a list of
          tuples of (spoken_form, written_form), with the spoken form
          cleaned and the written form cleaned for VoiceCode.
 
@@ -1026,29 +1027,76 @@ class CmdInterp(OwnerObject):
 
         Returns a tuple *(chopped_symbol, consumed, rest)* where:
         
-        *STR* -- spoken form of the known symbol, or None if no symbol
-        matches the spoken form. If *None*, it means *command* did
-        not start with a known symbol.
+        *STR chopped_symbol* -- spoken form of the known symbol, or None 
+        if no symbol matches the spoken form. If *None*, it means 
+        *command* did not start with a known symbol.
 
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
 
-        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        *[STR]* rest -- The remaining of *command* after the construct has been
         chopped
         """
 
         trace('CmdInterp.chop_symbols', 'command=%s' % command)
 #        if not app.translation_is_off:
-        return self.chop_construct(command, CmdInterp.is_spoken_symbol, app)
-#        else:
-#            return None, 0, command
+        spoken_list = map(lambda word: process_initials(word[0]), command)
+        trace('CmdInterp.chop_symbols', 'spoken=%s' % spoken_list)
+        chopped_symbol, consumed = self.chop_spoken_symbol(spoken_list)
+        return chopped_symbol, consumed, command[consumed:]
     
+    def chop_spoken_symbol(self, spoken_list):
+        """Chops off the beginning of a command if it is a known symbol.
+        
+        **INPUTS**
+        
+        *[STR]* command -- The list of spoken forms in the command
+
+        **OUTPUTS**
+
+        Returns a tuple *(chopped_symbol, consumed)* where:
+        
+        *STR chopped_symbol* -- spoken form of the known symbol, or None 
+        if no symbol matches the spoken form. If *None*, it means 
+        *command* did not start with a known symbol.
+
+        *INT* consumed* -- Number of words consumed by the symbol from
+         the command
+        """
+#        print spoken_list
+        spoken = string.join(spoken_list)
+        phrase = string.split(spoken)
+        match = self.known_symbols.match_phrase(phrase)
+#        print match
+        if match[0] is None:
+            return None, 0
+        symbols, rest_spoken = match
+        words_consumed = len(phrase) - len(rest_spoken)
+        spoken = string.join(phrase[:words_consumed])
+        chars_consumed = len(spoken)
+        consumed = 0
+        total = -1
+#        print 'words = %d, phrase = %s' % (words_consumed, phrase[:words_consumed])
+#        print 'len(spoken) = %d' % chars_consumed
+        for i in range(len(spoken_list)):
+            total = total + len(spoken_list[i]) + 1
+#            print total, spoken_list[:i]
+            if total == chars_consumed:
+                consumed = i + 1
+                return spoken, consumed
+            if total > chars_consumed:
+                omitted = spoken_list[i:]
+                chopped_symbol, consumed = \
+                    self.chop_spoken_symbol(spoken_list[:i])
+                return chopped_symbol, consumed
+        raise RuntimeError('total length of command less than length consumed!')
+                
     def chop_word(self, command):
         """Removes a single word from a command.
         
         **INPUTS**
         
-        *[(STR, STR)]* cmd -- The command,  a list of
+        *[(STR, STR)]* command -- The command,  a list of
          tuples of (spoken_form, written_form), with the spoken form
          cleaned and the written form cleaned for VoiceCode.
 
@@ -1062,7 +1110,7 @@ class CmdInterp(OwnerObject):
          return it anyway because want to keep same method signature
          as chop_CSC, chop_LSA and chop_symbol).
 
-        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        *[STR]* rest -- The remaining of *command* after the construct has been
         chopped
         
         """
@@ -1078,8 +1126,9 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[STR]* cmd -- The words in the NL command (in their written\spoken
-        form).
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         *METHOD* construct_check(self, STR) returns STR -- Method used
          to check wether a string corresponds to the type of construct
@@ -1220,33 +1269,6 @@ class CmdInterp(OwnerObject):
             'written_LSA is "%s"' % repr(written_LSA))
         return written_LSA
         
-    def is_spoken_symbol(self, spoken_form, app):
-        """Checks if a string is the spoken form of a known symbol.
-        
-        **INPUTS**
-        
-        *STR* spoken_form -- String to be checked
-
-        *AppState* app -- the editor for which we are interpreting a
-        command
-        
-        **OUTPUTS**
-
-        *STR* -- spoken form of the known symbol, or None if no symbol
-        matches the spoken form
-        """
-
-#        trace('CmdInterp.is_spoken_symbol', 'spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info))
-#        print '-- CmdInterp.is_spoken_symbol: spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info)
-        
-        symbol = None
-        if self.known_symbols.spoken_form_info.has_key(spoken_form):
-            symbol = spoken_form
-
-        trace('CmdInterp.is_spoken_symbol', 'returning symbol=\'%s\'' % symbol)
-        
-        return symbol
-
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.
 
@@ -1695,3 +1717,19 @@ class CmdInterp(OwnerObject):
         """Prints the known and unresolved abbreviations."""
         self.known_symbols.print_abbreviations(show_unresolved)
 
+# functions, not methods
+
+def process_initials(spoken):
+    """strips the period from initials
+
+    **INPUTS**
+
+    *STR spoken* -- spoken form
+
+    **OUTPUTS**
+
+    *STR* -- spoken form, but with 'A.' -> 'a', etc.
+    """
+    if re.match('[A-Z]\.', spoken):
+        return string.lower(spoken[0])
+    return spoken
