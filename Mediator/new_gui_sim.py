@@ -57,16 +57,18 @@ from wxMediator import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+                        'SB_ServiceIndent':1,
+                        'ActionInsertNewClause':1,
 #      'SimpleSelection':1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
 #                        'get_mess': 1,
-                        'RSMInfrastructure': 1,
-                        'RecogStartMgr': 1,
-                        'ResMgr': 1,
+#                        'RSMInfrastructure': 1,
+#                        'RecogStartMgr': 1,
+#                        'ResMgr': 1,
 #                      'SelectWinGram': 1,
-                      'DictWinGram': 1,
-                        'GramMgr': 1,
+#                      'DictWinGram': 1,
+#                        'GramMgr': 1,
 #                        'BasicCorrectionWinGram': 1,
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,

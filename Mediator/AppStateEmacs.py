@@ -86,8 +86,10 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 # here.  This doesn't prevent Emacs from opening multiple frames, but it
 # does prevent the mediator from associating new windows (after the
 # first one) with the same instance
-    def _multiple_windows_from_app(self):
-        return 0
+
+# commented out temporarily for testing 
+#    def _multiple_windows_from_app(self):
+#        return 0
     
 # DCF: emacs now handles this message, so we can use the default version
 # from AppStateMessaging

@@ -1033,11 +1033,11 @@ add_csc(acmd)
 # All balanced expressions
 #
 acmd = CSCmd(spoken_forms=['jump out'],
-             meanings={ContAny(): ActionSearchRepeat(regexp='[\]\)\}\'\"]\s{0,1}')},
+             meanings={ContAny(): ActionSearchRepeat(regexp='[\]\)\}\'\"] {0,1}')},
              docstring='jump out of innermost balanced expression')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
-             meanings={ContAny(): ActionSearchRepeat(regexp='\s{0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchRepeat(regexp=' {0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
              docstring='jump backwards out of innermost balanced expression')
 add_csc(acmd)
 
@@ -1297,7 +1297,7 @@ acmd = CSCmd(spoken_forms=['list with elements', 'new list',
                        ContPerl(): ActionInsert('(', ')')},
              docstring='list with enumareted elements')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['at index'],
+acmd = CSCmd(spoken_forms=['at index', 'indexed by'],
              meanings={ContPy(): ActionInsert('[', ']'),
                        ContC(): ActionInsert('[', ']'),
                        ContPerl(): ActionInsert('[', ']')},
@@ -1342,13 +1342,15 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'elif ', ': \n\t'),
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 
+                           code_bef = 'elif ', code_after = ': \n\t'),
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'else:\n\t', ''),
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 
+                          code_bef = 'else:\n\t', code_after = ''),
                        ContC(): c_else,
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
