@@ -27,13 +27,6 @@
 
 (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
 
-;;;deb DELETE THIS ONCE DONE DEBUGGING 'vcode-cmd-decr-indent-level
-(setq tmp-use-variant "1")
-(defun tmp-set-variant (variant)
-   (interactive "sEnter variant number: ")
-   (setq tmp-use-variant variant)
-)
-;;;fin
 
 ;;; Change this if you want to see more traces
 (setq message-log-max 5000)
@@ -1105,8 +1098,10 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
          (vr-deprecated-log "-- vcode-execute-command-string: input-pending" )
     )
 
-    (setq debug-on-error t)
-    (setq debug-on-quit t)
+;;; AD: Why set those? They make Emacs run in debug mode even
+;;;     when users are using VCode for real.
+;;    (setq debug-on-error t)
+;;    (setq debug-on-quit t)
 
     ;;
     ;; Convert the string to a list of Emacs events

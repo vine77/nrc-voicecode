@@ -3442,8 +3442,28 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
-   pass
-
+    testing.init_simulator_regression()
+    
+    commands.open_file('blah.py')
+            
+    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+   
+#    commands.say(['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['back indent'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['define', 'method'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['spoken', 'form', 'regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
 #add_test('temp', test_temporary, desc='temporary test')
 
 

@@ -56,7 +56,10 @@ import WinSystemMSW
 debug.config_traces(status="on", 
                     active_traces={
 #                       'AppStateMessaging.apply_upd_descr': 1,
-#                       'ContEmacsInMinibuffer._applies': 1,
+#                        'SourceBuffEmacs.insert_indent': 1,
+#                        'SourceBuffEmacs.insert': 1,     
+#                        'SourceBuffInsertIndentMess.insert_indent': 1,     
+#                        'SourceBuffEmacs.insert_up_to_newline': 1,              
 #                         "ContBlankLine.applies": 1,
 #                        'ActionInsertNewClause.execute': 1,
 #                        'SourceBuff.closest_occurence_to_cursor': 1,
