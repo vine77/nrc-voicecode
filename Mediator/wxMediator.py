@@ -57,6 +57,7 @@ debug.config_traces(status="off",
                     active_traces={
 #################################     
                     
+                    'InterpretedPhrase.phrase_as_string': 1,
                     'recent_correctable_dictation': 1,
                     'ReformatRecentSymbolsViewWX.__init': 1,
                     'tests_def.check_recent_symbols': 1,

@@ -3,20 +3,24 @@ import MediatorConsoleWX
 from SymbolResult import SymbolResult
 import time
 from SpokenUtterance import MockSpokenUtterance
+from CmdInterp import MockInterpretedPhrase
 
 
 class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):    
     
-    utter1 = MockSpokenUtterance([('new', 'new'), ('symbol', 'symbol'), ('one', 'one'), ('one', 'one'), 
-                                  ('equals', ' = '), 
-                                  ('new', 'new'), ('symbol', 'symbol'), ('one', 'one'), ('two', 'two')])
+    utter1 = MockSpokenUtterance(['new', 'symbol', 'one', 'one', 'equals', 'new', 'symbol', 'one', 'two'])
+            
+                                  
     sym1_1 = SymbolResult('new_symbol_1_1', ['new', 'symbol', 'one', 'one'], None, '', None, [], 
                           in_utter=utter1)
     sym1_2 = SymbolResult('new_symbol_1_2', ['new', 'symbol', 'one', 'two'], None, '', None, [], 
-                          in_utter=utter1)    
-                                   
+                          in_utter=utter1)               
     sym_list = [sym1_1, sym1_2]
                                    
+    phrase1 = MockInterpretedPhrase(utter1.words(), sym_list, utter1)
+    sym1_1.in_utter = phrase1
+    sym1_2.in_utter = phrase1
+
     
     def __init__(self, name):
         TestCaseWithHelpers.TestCaseWithHelpers.__init__(self, name)

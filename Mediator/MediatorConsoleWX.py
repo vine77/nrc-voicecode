@@ -1699,7 +1699,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
         recent.InsertColumn(2, "Written symbol") 
         recent.InsertColumn(3, "In utterance") 
                          
-        phrases = map(lambda x: string.join(x.in_utter.spoken_forms()),
+        phrases = map(lambda x: x.in_utter.phrase_as_string(),
                       symbols)
         index = range(len(phrases), 0, -1)            
 
@@ -1725,7 +1725,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
            recent.SetStringItem(ii, 1, self.symbols[ii].native_symbol())
            recent.SetStringItem(ii, 2, string.join(self.symbols[ii].spoken_phrase()))
            recent.SetStringItem(ii, 3, 
-                                 self.symbols[ii].in_utter.spoken_form_as_string())
+                                 self.symbols[ii].in_utter.phrase_as_string())
 
         recent.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
         recent.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)

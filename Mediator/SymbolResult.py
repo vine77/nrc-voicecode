@@ -66,7 +66,7 @@ class SymbolResult(Object):
         which may be displayed as alternatives in the exact symbols
         tab of the re-formatting dialog)
         
-        *SpokenUtterance in_utter = None* -- Utterance in which that 
+        *InterpretedPhrase in_utter = None* -- Utterance in which that 
         symbol was heard.
         """
         self.deep_construct(SymbolResult,
