@@ -1,4 +1,3 @@
-
 import os, re, string, sys
 
 import auto_test, natlink, vc_globals
@@ -25,14 +24,8 @@ class CmdInterp(Object):
      meanings. A contextual meaning is a pair of a *context object*
      and an *action function* to be fired if the context applies.
 
-    [SymDict] known_symbols -- dictionary of known symbols
+    *[SymDict] known_symbols* -- dictionary of known symbols
     
-    *STR cached_regexp=''* -- Regular expresion that matches the
-     spoken form of any of the CSCs.
-
-    *BOOL cached_regexp_is_dirty* -- *true* iif *self.cached_regexp* needs
-     to be regenerated based on the values in *self.cmd_index*
-
     *{STR: [STR]}* language_specific_aliases = {} -- Key is the name of
      a programming language (None means all languages). Value is a
      list of written form\spoken form words specific to a
@@ -75,104 +68,10 @@ class CmdInterp(Object):
         self.deep_construct(CmdInterp,
                             {'on_app': on_app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
-                             'cached_regexp': '',\
-                             'cached_regexp_is_dirty': 1,\
                              'language_specific_aliases': {},\
                              'last_loaded_language': None, \
                              'symdict_pickle_file': symdict_pickle_file},\
                             attrs)
-
-#      def refresh_dict_buff(self, moduleInfo):
-#          """Refresh the dictation object's internal buffer."""
-
-#          print '-- CmdInterp.refresh_dict_buff: called'
-#          buff = self.on_app.curr_buffer
-#          text = buff.content
-#          sel_start = buff.selection_start
-#          sel_end = buff.selection_end
-#          vis_start = buff.visible_start
-#          vis_end = buff.visible_end
-        
-#          self.dictation_object.setLock(1)
-#          self.dictation_object.setText(text,0,0x7FFFFFFF)
-#  #        self.dictation_object.setTextSel(sel_start,sel_end)
-#  #        self.dictation_object.setVisibleText(vis_start,vis_end)
-
-#          #
-#          # For some reason, need to repeatadly call setLock(0) until it raises
-#          # a natlink.WrongState exception. If don't do that, refresh_editor_buff
-#          # doesn't get called for all but the first utterance (although
-#          # refresh_dict_buff gets called everytime)
-#          #
-#          while (1):
-#              try:
-#                  self.dictation_object.setLock(0)
-#              except natlink.WrongState:
-#                  break
-
-#      def refresh_editor_buff(self,del_start,del_end,newText,sel_start,sel_end):
-#          """Refresh the editor's internal buffer after a recognition
-
-#          *INT del_start, del_end* are the start and end position of text
-#           that was deleted
-
-#           *STR newText* is the text that was recognised by the dictation object.
-
-#           *INT sel_start, sel_end* are the start and end position of the selection after the recognition"""
-
-#          print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
-
-#          self.dictation_object.setLock(1)
-        
-#  ##        self.edit.SetSel(del_start,del_end)
-#  ##        self.edit.SetSel(sel_start,sel_end)
-
-#          #
-#          # Instead of inserting the text as is, interpret it as a pseudo
-#          # code command
-#          #
-#          self.interpret_NL_cmd(newText)
-#          self.on_app.print_buff_content()
-        
-
-    def all_cmds_regexp(self):
-        """Returns a regexp that matches the spoken form of all voice commands"""
-
-        if self.cached_regexp_is_dirty:
-            #
-            # Need to regenerate the regexp
-            #
-            self.cached_regexp = ''
-
-            #
-            # Sort spoken forms in decreasing order of length so that
-            # longer expressions will be used in priority
-            #            
-            all_spoken_forms = self.cmd_index.keys()
-
-            def cmp(x, y):
-                if (len(x) < len(y)): return 1
-                else: return -1
-            all_spoken_forms.sort(cmp)
-
-#            print '-- CmdInterp.all_cmds_regexp: sorted all_spoken_forms=%s' % str(all_spoken_forms)
-            
-            for a_spoken_form in all_spoken_forms:
-                #
-                # Allow arbitrary number of spaces between words
-                #
-                a_spoken_form = re.sub('\s+', '\\s+', a_spoken_form)
-
-                spoken_regexp = self.spoken_form_regexp(a_spoken_form)
-                
-                if (self.cached_regexp == ''):
-                    self.cached_regexp = spoken_regexp
-                else:
-                    self.cached_regexp = self.cached_regexp + '|' + spoken_regexp
-
-            # CSC must be followed by a delimiter
-            self.cached_regexp = '^(\s*)(' + self.cached_regexp + ')(\s*?)([^a-zA-Z0-9_]|$)'
-        return self.cached_regexp
 
 
     def spoken_form_regexp(self, spoken_form):
@@ -197,138 +96,183 @@ class CmdInterp(Object):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *STR cmd* is the spoken form of the command.
+        *[STR] cmd* -- The command. It is a list of written\spoken words.
         """
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
-#        print '-- CmdInterp.interpret_NL_cmd: self.all_cmds_regexp()=%s' % self.all_cmds_regexp()
 
         self._untranslated_text_start = None
         self._untranslated_text_end = None
-        
-        regexp = self.all_cmds_regexp()
 
+        cmd = self.massage_command(cmd)
+        
         #
         # Process the beginning of the command until there is nothing
         # left
         #
-        while (not cmd == ''):
+        while len(cmd) > 0:
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-#            print '-- CmdInterp.interpret_NL_cmd: cur_pos=%s' % self.on_app.curr_buffer.cur_pos
-#             self.on_app.print_buff_content()
+#             print '-- CmdInterp.interpret_NL_cmd: cur_pos=%s' % self.on_app.curr_buffer.cur_pos; self.on_app.print_buff_content()
 
              #
-             # Check for a CSC at the beginning of the command, and compute
-             # length of string it consumes
+             # Identify leading CSC, LSA, symbol and ordinary word
              #
-             csc_consumes = 0
-             csc_match = re.match(regexp, cmd)
-             if csc_match:
-                 csc_consumes = csc_match.end(2) - csc_match.start(2) + 1
-                 if re.match('\s', csc_match.group(3)):
-                     #
-                     # Delimiter was a space. Remove it
-                     #
-                     cmd_without_csc = cmd[csc_match.end():]
-                 else:
-                     #
-                     # Delimiter was not a space. Leave it in command.
-                     #
-                     cmd_without_csc = cmd[csc_match.end(2):]
+             chopped_CSC, CSC_consumes, cmd_without_CSC = self.chop_CSC(cmd)
+             chopped_LSA, LSA_consumes, cmd_without_LSA = self.chop_LSA(cmd)
+             chopped_symbol, symbol_consumes, cmd_without_symbol = self.chop_symbol(cmd)
+             chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
+             most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
+             head_was_translated = 0
 
              #
-             # Check if command starts with a known symbol, and compute
-             # length of string it consumes
+             # Translate CSC, LSA, symbol or ordinary word at head of command.
              #
-             (a_symbol, cmd_without_symbol) = self.chop_symbol(cmd)
-             symbol_consumes = len(cmd) - len(cmd_without_symbol)
-
-#             print '-- CmdInterp.interpret_NL_cmd: csc_consumes=%s, symbol_consumes=%s' % (csc_consumes, symbol_consumes)
-
+             # If more than one translations are possible, choose the one
+             # that consumes the most words from the command.
              #
-             # Translate either CSC or known symbol, depending on which
-             # of the two consumes the longest part of the NL command
+             # In case of ties, use this order of priority: CSC, LSA, symbol,
+             # ordinary words. This order goes from most specific to least
+             # specific, i.e.
              #
-             if csc_consumes and csc_consumes >= symbol_consumes:
+             # - CSCs usually apply in very restricted contexts only
+             # - LSAs usually apply for a specific language only
+             # - Symbols are restricted to sequences of words that are the
+             #   spoken form of a known symbol
+             # - ordinary words can be anything
+             #
+             
+             if CSC_consumes == most_consumed:
                  #
-                 # The CSC consumes more than the symbol, so translate it.
-                 # Try every possible contexts until one applies
-                 #                
-                 orig_spoken_form = csc_match.group(2)
-#                 print '-- CmdInterp.interpret_NL_cmd: matched spoken form \'%s\'' % orig_spoken_form                                
-                 indexed_spoken_form = orig_spoken_form
-                 re.sub('\s+', ' ', indexed_spoken_form)
-                 CSCs = self.cmd_index[string.lower(indexed_spoken_form)]
-                 csc_applied = 0                 
+                 # CSC consumed the most words from the command.
+                 # Try all the CSCs with this spoken form until find
+                 # one that applies in current context
+                 #
+#                 print '-- CmdInterp.interpret_NL_cmd: processing leading CSC=\'%s\'' % chopped_CSC
+                 CSCs = self.cmd_index[chopped_CSC]
+                 csc_applied = 0
                  for aCSC in CSCs:
                      csc_applied = aCSC.interpret(self.on_app)
                      if (csc_applied):
                          break
                  if csc_applied:
-                     # Found applicable context for the CSC
-#                     print '-- CmdInterp.interpret_NL_cmd: csc_applied CSC \'%s\'' % indexed_spoken_form
-                     cmd = cmd_without_csc
+                     #
+                     # Found a CSC that applies
+                     # Chop the CSC from the command
+                     #
+                     cmd = cmd_without_CSC
+                     head_was_translated = 1
+#                     print '-- CmdInterp.interpret_NL_cmd: after translating CSC, buffer is:'; self.on_app.print_buff_content()                                                  
                  else:
                      #
-                     # Found no applicable contexts so CSC couldn't consume
-                     # anything after all
+                     # As it turns out, none of the CSCs with this
+                     # spoken form apply in current context
+                     # So don't chop the CSC
                      #
-                     csc_consumes = 0
-                         
-             if symbol_consumes and symbol_consumes >= csc_consumes:
-                #
-                # Command doesn't start with CSC, or CSC consumes less than
-                # the symbol.
-                #
-                # So, insert the symbol
-                #
-                # Note: known symbols are inserted as untranslated
-                #       text because often, the user will create new symbols
-                #       by prefixing/postfixing existing ones. For example,
-                #       if you define a subclass of a known class SomeClass
-                #       you may name the new class SomeprefixSomeClass or
-                #       SomeClassSomepostfix.
-                #
-#                print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % a_symbol                                
-                self.insert_untranslated_text(a_symbol)
-                cmd = cmd_without_symbol
-                
-             if not csc_consumes and not symbol_consumes:
-                #
-                # Command starts with neither CSC or symbol.
-                # Just remove a word from the beginning of the
-                # command and insert it into the application's buffer
-                #
-#                print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'
-                amatch = re.match('(^\s*[^\s]*)', cmd)
-                leading_word = amatch.group(1)
-                self.insert_untranslated_text(leading_word)
-                cmd = cmd[amatch.end():]
+                     chopped_CSC = None
+                     CSC_consumes = 0
+                     most_consumed = max((LSA_consumes, symbol_consumes, word_consumes))
+             
+             if not head_was_translated and LSA_consumes == most_consumed:
+                 #
+                 # LSA consumed the most words from command. Insert it.
+                 #
+#                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
+                 self.on_app.insert_indent(chopped_LSA, '')
+                 cmd = cmd_without_LSA
+                 head_was_translated = 1
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating LSA, buffer is:'; self.on_app.print_buff_content()                 
 
-             if (csc_consumes or cmd == '') and \
+
+             if not head_was_translated and symbol_consumes == most_consumed:
+                 #
+                 # Symbol consumed the most words from command. Insert it.
+                 #
+                 # Note: known symbols are inserted as untranslated
+                 #       text because often, the user will create new
+                 #       symbols by prefixing/postfixing existing ones.
+                 #       For example, if you define a subclass of a known
+                 #       class SomeClass you may name the new class
+                 #       SomeprefixSomeClass or SomeClassSomepostfix.
+                 #
+#                 print '-- CmdInterp.interpret_NL_cmd: processing leading symbol=\'%s\'' % chopped_symbol                     
+                 self.insert_untranslated_text(chopped_symbol)
+                 cmd = cmd_without_symbol
+                 head_was_translated = 1
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating symbol, buffer is:'; self.on_app.print_buff_content()                     
+                                          
+                    
+             if not head_was_translated and word_consumes == most_consumed:
+                 #
+                 # Nothing special translated at begining of command.
+                 # Just chop off the first word and insert it, marking
+                 # it as untranslated text.
+                 #                 
+#                 print '-- CmdInterp.interpret_NL_cmd: processing leading word=\'%s\'' % chopped_word                                                  
+                 self.insert_untranslated_text(chopped_word)
+                 cmd = cmd_without_word
+                 head_was_translated = 1
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating ordinary word, buffer is:'; self.on_app.print_buff_content()
+
+             #
+             # Finished translating head of command.
+             #
+             # Check if it marked the end of some untranslated text
+             #
+             if (CSC_consumes or LSA_consumes or len(cmd) == 0) and \
                 self._untranslated_text_start != None:
                 #
-                # A CSC was translated, or we reached end of the
+                # A CSC or LSA was translated, or we reached end of the
                 # command, thus marking the end of a sequence of untranslated
-                # text. Try to match it to a known (or new) symbol.
+                # text. Try to match untranslated text to a known (or new)
+                # symbol.
                 #
                 self.match_untranslated_text()
 
-#             print '-- CmdInterp.interpret_NL_cmd: End of while. self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
+
+
+
+    def massage_command(self, command):
+        """Massages a command to prepare it for interpretation.
+
+        Makes sure to substitute special characters (e.g. {Spacebar})
+        in the written form of words in the command. Also, makes sure
+        that the spoken forms are all lowercase, and contain no
+        multiple, leading or trailing blanks.
+        
+        **INPUTS**
+        
+        *[STR]* command -- The command to be massaged. It's a list of
+         written\spoken words.
+        
+        **OUTPUTS**
+        
+        *[STR] mod_command* -- The massaged command
+        """
+        
+        mod_command = []
+        for a_word in command:
+            spoken, written = sr_interface.spoken_written_form(a_word)
+            written = sr_interface.clean_written_form(written, clean_for='vc')
+            spoken = re.sub('\s+', ' ', spoken)
+            spoken = re.sub('(^\s+|\s+$)', '', spoken)
+            mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
+        return mod_command
+
                                 
     def insert_untranslated_text(self, text):
         
         """Inserts some text in current buffer, and marks it as untranslated
         text.
 
-        The next time a CSC is encountered, the interpreter will try
+        The next time a CSC or LSA is encountered, the interpreter will try
         to match that text (and all untranslated text that immediatly
         precedes/follows it) to a new symbol, or a known symbol with
         unresolved spoken forms.
         
         **INPUTS**
         
-        *ST* text -- The text to be inserted
+        *STR* text -- The text to be inserted
         
 
         **OUTPUTS**
@@ -336,7 +280,17 @@ class CmdInterp(Object):
         *none* -- 
         """
 
-        self.on_app.insert_indent(text, '')
+#        print '-- CmdInterp.insert_untranslated_text: text=\'%s\',  ' % (text,  )
+
+        if self._untranslated_text_start != None:
+            #
+            # This is inserted in middle of an untranslated region.
+            # Insert space between this word and the one that preceded
+            # it in the untranslated region.
+            #
+            text = ' ' + text
+            
+        self.on_app.insert_indent(text, '')            
 
         if self._untranslated_text_start == None:
             #
@@ -344,7 +298,7 @@ class CmdInterp(Object):
             # untranslated text. Remember its start
             # position.
             #
-            # NOTE: We set start past any blanks that may
+            # NOTE: must take care to set start past any blanks that may
             # have been inserted for indentation
             #
             self._untranslated_text_start = self.on_app.curr_buffer.cur_pos - len(text)            
@@ -355,8 +309,7 @@ class CmdInterp(Object):
         #
         self._untranslated_text_end = self.on_app.curr_buffer.cur_pos
 
-#        self.on_app.print_buff_content()
-#        print '-- CmdInterp.insert_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end])
+#        print '-- CmdInterp.insert_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]); self.on_app.print_buff_content()
         
 
     def match_untranslated_text(self):
@@ -382,30 +335,23 @@ class CmdInterp(Object):
         leading_spaces = a_match.group(1)
 
 #        print '-- CmdInterp.match_untranslated_text: text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces)
-
-#          #
-#          # Remove leading blanks in untranslated region.
-#          #
-#          old_pos = self.on_app.curr_buffer.cur_pos
-#          old_pos = old_pos - len(leading_spaces)
-#          self._untranslated_text_end = self._untranslated_text_end - len(leading_spaces)
-#          self.on_app.delete(start=self._untranslated_text_start, end=self._untranslated_text_start + len(leading_spaces))
-#          self.on_app.move_to(old_pos)
                 
         #
-        # Don't bother the user if the untranslated text is just a known symbol
+        # Match untranslated text to new known symbol or a known symbol with
+        # unresolved spoken forms.
         #
-        if not self.known_symbols.symbol_info.has_key(text_no_spaces):
+        # Don't bother the user if the untranslated text is just the written
+        # form of a known symbol or if it's a number
+        #
+        reg = '[\d\s]+'
+#        print '-- CmdInterp.match_untranslated_text: reg=%s' % reg
+        num_match = re.match(reg, text_no_spaces)
+        if not self.known_symbols.symbol_info.has_key(text_no_spaces) and \
+           not num_match:
 #        print '-- CmdInterp.match_untranslated_text: trying to match untranslated text to a symbol. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end)
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
             if symbol_matches:
                 self.dlg_select_symbol_match(symbol_matches)
-
-        #
-        # There is no more untranslated region
-        #
-        self._untranslated_text_start = None
-        self._untranslated_text_end = None
         
 
     def dlg_select_symbol_match(self, symbol_matches):
@@ -438,6 +384,7 @@ class CmdInterp(Object):
 #                print '-- CmdInterp.dlg_select_symbol_match: a_match.score()=%s, a_match.__dict__=%s' % (a_match.score(), a_match.__dict__)
             sys.stdout.write('\n> ')
             answer = sys.stdin.readline()
+#            print '-- CmdInterp.dlg_select_symbol_matches: answer=\'%s\'' % answer
             answer_match = re.match('\s*([\d])+\s*', answer)
             if answer_match:
                 choice_index = int(answer_match.group(1)) - 1
@@ -472,64 +419,196 @@ class CmdInterp(Object):
         #
         self._untranslated_text_start = None
         self._untranslated_text_end = None
-            
 
-    def chop_symbol(self, command):
-        """Chops off the beginning of a string if it matches a known symbol.
 
-        If more than one symbols are possible, returns the symbol that
-        consumes the greateest number of words from command.
+    def chop_CSC(self, cmd):
+        """Chops the start of a command if it starts with a CSC.
         
         **INPUTS**
         
-        *STR* command -- the string from which we want to chop off a symbol.
-        
+        *[STR]* cmd -- The command. It is a list of written\spoken words.
 
         **OUTPUTS**
 
-        Returns a pair *(best_symbol, rest)* where:
+        Returns a tuple *(chopped_CSC, consumed, rest)* where:
         
-        *STR* best_symbol -- is the symbol that was chopped off (in native
-         format). If *None*, it means *command* did not start with a
-         symbol.
+        *STR* chopped_symbol -- The written form of the CSC that
+        was chopped off. If *None*, it means *cmd* did
+        not start with a known CSC.
 
-        *STR* rest -- is what was left of *command* after the symbol
-         was chopped off.
+        *INT* consumed* -- Number of words consumed by the CSC from
+         the command
+
+        *[STR]* rest -- is what was left of *cmd* after the CSC
+         was chopped off.        
+        """
         
+#        print '-- CmdInterp.chop_CSC: cmd=%s' % cmd
+
+        chopped_CSC, consumed, rest = None, 0, cmd
+
+        #
+        # Create list of spoken forms of the words in command
+        #
+        words = []
+        for a_word in cmd:
+            a_word, dummy = sr_interface.spoken_written_form(a_word)
+            words = words + [a_word]
+
+        #
+        # Starting with the whole command and dropping words from the end,
+        # check if that corresponds to the spoken form of a known CSC.
+        #
+        upto = len(words)
+        while upto:
+            a_spoken_form = string.join(words[:upto], ' ')
+#            print '-- CmdInterp.chop_CSC: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
+
+            if self.cmd_index.has_key(a_spoken_form):
+                #
+                # This corresponds to the spoken form of a CSC and it's the
+                # longest one we'll ever find.
+                #
+#                print '-- CmdInterp.chop_CSC: matches known CSC \'%s\'' % a_spoken_form
+                chopped_CSC = a_spoken_form
+                rest = cmd[upto:]
+                consumed = upto
+                break
+            upto = upto - 1
+        return chopped_CSC, consumed, rest
+
+
+    def chop_LSA(self, command):
+        """Chops off the first word of a command if it is an LSA.
+                
+        **INPUTS**
+        
+        *[STR]* command -- The command. It is a list of words in
+         written\spoken form.        
+
+        **OUTPUTS**
+        
+        Returns a tuple *(chopped_LSA, consumed, rest)* where:
+        
+        *STR* chopped_LSA -- The written form of the LSA that was
+         chopped off. If *None*, it means *command* did not start with
+         an LSA.
+
+        *INT* consumed* -- Number of words consumed by the LSA from
+         the command (always 1, but return it anyway because want to
+         keep same signature as chop_CSC and chop_symbol)
+
+        *[STR]* rest -- is what was left of *command* after the LSA
+         was chopped off.
+        """
+        
+#        print '-- CmdInterp.chop_LSA: command=%s' % command
+        
+        chopped_LSA, consumed, rest = None, 0, command
+        leading_word = command[0]
+
+        #
+        # Check if the LSA is in the list of LSAs for the current
+        # language, or in the list of non-language specific aliases
+        # (i.e. language=None)
+        #
+        active_language_LSAs = []
+        if self.language_specific_aliases.has_key(self.on_app.active_language()):
+            active_language_LSAs = self.language_specific_aliases[self.on_app.active_language()]
+        all_language_LSAs = []
+        if self.language_specific_aliases.has_key(None):
+            all_language_LSAs = self.language_specific_aliases[None]
+        if (leading_word in active_language_LSAs) or \
+           (leading_word in all_language_LSAs):
+            chopped_LSA = leading_word
+            rest = command[1:]
+            consumed = 1
+
+#        print '-- CmdInterp.chop_LSA: returning chopped_LSA=%s, rest=%s' % (chopped_LSA, rest)
+        return chopped_LSA, consumed, rest
+
+
+    def chop_symbol(self, command):
+        """Chops off the beginning of a command if it is a known symbol.
+        
+        **INPUTS**
+        
+        *[STR]* command -- The command. It is a list of written\spoken words.
+
+        **OUTPUTS**
+
+        Returns a tuple *(chopped_symbol, consumed, rest)* where:
+        
+        *STR* chopped_symbol -- The written form of the known symbol that
+        was chopped off. If *None*, it means *command* did
+        not start with a known symbol.
+
+        *INT* consumed* -- Number of words consumed by the symbol from
+         the command
+
+        *[STR]* rest -- is what was left of *command* after the symbol
+         was chopped off.        
         """
 
 #        print '-- CmdInterp.chop_symbols: command=%s' % command
 
-        (best_symbol, rest) = (None, command)
+        chopped_symbol, consumed, rest = None, 0, command
 
         #
-        # Split the command into words
+        # Create list of spoken forms of the words in command
         #
-        command = re.sub('(\W+)', ' \\1 ', command)
-        command = re.sub('(^\s+|\s+$)', '', command)
-        words = re.split('\s+', command)                
-        upto = len(words)
+        words = []
+        for a_word in command:
+            a_word, dummy = sr_interface.spoken_written_form(a_word)
+            words = words + [a_word]
 
         #
         # Starting with the whole command and dropping words from the end,
         # check if that corresponds to a known symbol.
         #
+        upto = len(words)
         while upto:
-            a_spoken_form = string.join(words[0:upto], ' ')
-            a_spoken_form = string.lower(a_spoken_form)
+            a_spoken_form = string.join(words[:upto], ' ')
 #            print '-- CmdInterp.chop_symbols: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
             if self.known_symbols.spoken_form_info.has_key(a_spoken_form):
                 # This corresponds to the spoken form of a symbol
 #                print '-- CmdInterp.chop_symbols: matches a known symbol'
-                best_symbol = self.choose_best_symbol(a_spoken_form, self.known_symbols.spoken_form_info[a_spoken_form].symbols)
-                words = words[upto:]
-                rest = string.join(words, ' ')
+                chopped_symbol = self.choose_best_symbol(a_spoken_form, self.known_symbols.spoken_form_info[a_spoken_form].symbols)
+                rest = command[upto:]
+                consumed = upto
                 break
             upto = upto - 1
-        return (best_symbol, rest)
+        return chopped_symbol, consumed, rest
+
+
+
+    def chop_word(self, command):
+        """Removes a single word from a command.
         
+        **INPUTS**
+        
+        *[STR]* command -- The command. It is a list of written\spoken words.
         
 
+        **OUTPUTS**
+        
+        Returns a tuple *(chopped_word, consumed, rest)* where:
+
+        *STR* chopped_word -- The spoken form of the first word
+
+        *INT* consumed -- Number of words consumed (always 1, but
+         return it anyway because want to keep same method signature
+         as chop_CSC, chop_LSA and chop_symbol).
+
+        *[STR]* rest -- Rest of the command after the word was chopped
+        
+        """
+        
+        chopped_word, dummy = sr_interface.spoken_written_form(command[0])
+        consumed = 1
+        rest = command[1:]
+        return chopped_word, consumed, rest
+        
 
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.
@@ -565,6 +644,7 @@ class CmdInterp(Object):
 
         global regexp_is_dirty
 
+#        print '-- CmdInterp.index_csc: acmd.spoken_forms=\'%s\', add_voc_entry=%s' % (acmd.spoken_forms, add_voc_entry)
         regexp_is_dirty = 1
 
         for a_spoken_form in acmd.spoken_forms:
@@ -584,6 +664,7 @@ class CmdInterp(Object):
                 # Already indexed. Just add to the list of CSCs for that
                 # spoken form
                 #
+#                print '-- CmdInterp.index_csc: spoken form \'%s\'already indexed. Not adding to SR vocabulary' % a_spoken_form
                 cmds_this_spoken_form = self.cmd_index[a_spoken_form]
                 cmds_this_spoken_form[len(cmds_this_spoken_form):] = [acmd]
             else:
@@ -591,6 +672,7 @@ class CmdInterp(Object):
                 # First time indexed. Create a new list of CSCs for that
                 # spoken form, and add it to the SR vocabulary.
                 #
+#                print '-- CmdInterp.index_csc: spoken form \'%s\' indexed for first time. Adding to SR vocabulary' % a_spoken_form
                 self.cmd_index[a_spoken_form] = [acmd]
                 if not os.environ.has_key('VCODE_NOSPEECH') and add_voc_entry:
                     sr_interface.addWord(a_spoken_form)
@@ -613,25 +695,34 @@ class CmdInterp(Object):
         *none* -- 
         """
 
-        language = self.on_app.curr_buffer.language
+        language = self.on_app.active_language()
         last_language = self.last_loaded_language
 #        print '-- CmdInterp.load_language_specific_aliases: called, language=%s, last_language=%s' % (language, last_language)
 #        print '-- CmdInterp.load_language_specific_aliases: self.language_specific_aliases[%s]=%s' % (language, self.language_specific_aliases[language])
         if language != last_language:
             #
-            # Remove words from previous language
+            # Remove words from previous language (unless it was None
+            # which means LSAs not specific to a particular language)
             #
-            if self.language_specific_aliases.has_key(last_language):
+            if last_language != None and \
+               self.language_specific_aliases.has_key(last_language):
                 for a_word in self.language_specific_aliases[last_language]:
                     sr_interface.deleteWord(a_word)
+                    spoken_as, written_as = sr_interface.spoken_written_form(a_word)
             
             #
-            # Add words for new language
+            # Add words for new language (unless language == None, which
+            # means LSAs that are not language specific)
             #
-            if self.language_specific_aliases.has_key(language):
+            if language != None and \
+               self.language_specific_aliases.has_key(language):
                 for a_word in self.language_specific_aliases[language]:
                     sr_interface.addWord(a_word)
+                    spoken_as, written_as = sr_interface.spoken_written_form(a_word)
 
             self.last_loaded_language = language
             
 #        print '-- CmdInterp.load_language_specific_aliases: finished'
+
+
+

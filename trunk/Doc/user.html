@@ -126,19 +126,35 @@ clear_symbols()
 clear_abbreviations()
    Removes all defined abbreviations from VoiceCode's symbol dictionary
 
-say(STR utterance)
+say(STR utterance, bypass_NatLink=1, user_input=None)
    Interprets string *utterance* as though it had been said by a user.
 
-   When called in this way, the system will simulate a recognition
-   event using NatLink's <EM>recognitionMimic</EM> function.
+   Note that this command will not work with *Select XYZ* utterances.
+   For those, you must use the *say_select* command.
+    
+   *utterance* can be either:
 
-   Note that this command will not work with Select XYZ
-   utterances. For those, you must use the say_select command
-   described below.
+       - a string with the written form of what should be recognised by the
+         SR system
+         e.g.: say('index not equal to 0')
 
-say(STR utterance, bypass_NatLink=1)
-   Same as above, except that the interpretation process will bypass
-   NatLink's <EM>recognitionMimic</EM> function.
+       - a list of list of words in their written\spoken form (or just
+         written if it doesn't have a spoken form different from its
+         written form).
+         e.g.: say(['index', ' != \\not equal to', '0'])
+
+    In general, it's better to specify *utterance* as a list of
+    written\spoken words because it allows to simulate exactly what
+    the SR does (e.g. what if the SR recognises an LSA as a sequence
+    of words instead of its written\spoken form?)
+
+    Argument *user_input* is a string that will be sent to the
+    mediator console's standard input. Use in automated regression
+    testing, if the *say* command requires user additional user input
+    (e.g. confirmation of a symbol match).
+     
+    If argument *bypass_NatLink* is true, the interpretation will be done
+    withouth going through NatLink's recognitionMimic function.
 
 say_select([STR] utterrance)
    Simulates a Select XYZ utterance.

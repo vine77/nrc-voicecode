@@ -38,19 +38,36 @@ clear_symbols()
 clear_abbreviations()
    Removes all defined abbreviations from VoiceCode's symbol dictionary
 
-say(STR utterance)
+say(STR utterance, bypass_NatLink=1, user_input=None)
    Interprets string *utterance* as though it had been said by a user.
 
-   When called in this way, the system will simulate a recognition
-   event using NatLink's <EM>recognitionMimic</EM> function.
+   Note that this command will not work with *Select XYZ* utterances.
+   For those, you must use the *say_select* command.
+    
+   *utterance* can be either:
+   
+       - a string with the written form of what should be recognised by the
+         SR system
+         e.g.: say('index not equal to 0')
+         
+       - a list of list of words in their written\spoken form (or just
+         written if it doesn't have a spoken form different from its
+         written form).
+         e.g.: say(['index', ' != \\not equal to', '0'])
+   
 
-   Note that this command will not work with Select XYZ
-   utterances. For those, you must use the say_select command
-   described below.
+    In general, it's better to specify *utterance* as a list of
+    written\spoken words because it allows to simulate exactly what
+    the SR does (e.g. what if the SR recognises an LSA as a sequence
+    of words instead of its written\spoken form?)
 
-say(STR utterance, bypass_NatLink=1)
-   Same as above, except that the interpretation process will bypass
-   NatLink's <EM>recognitionMimic</EM> function.
+    Argument *user_input* is a string that will be sent to the
+    mediator console's standard input. Use in automated regression
+    testing, if the *say* command requires user additional user input
+    (e.g. confirmation of a symbol match).
+     
+    If argument *bypass_NatLink* is true, the interpretation will be done
+    withouth going through NatLink's recognitionMimic function.
 
 say_select([STR] utterrance)
    Simulates a Select XYZ utterance.
@@ -146,10 +163,16 @@ def say(utterance, user_input=None, bypass_NatLink=0):
     Note that this command will not work with *Select XYZ* utterances.
     For those, you must use the [say_select] command.
     
-    *STR utterance* -- The utterance. Contrarily to [say_select]
-     command, this is a string as opposed to a list of words. Also,
-     only the spoken form of words or phrases is entered in that
-     string.
+    *STR utterance* -- The utterance. This can be a string with the
+     written form of what should be recognised by the SR system. If
+     it's a list, it should be a list of words in their written\spoken
+     form (or just written if it doesn't have a spoken form different
+     from its written form).
+
+    In general, it's better to specify *utterance* as a list of
+    written\spoken words because it allows to simulate exactly what
+    the SR does (e.g. what if the SR recognises an LSA as a sequence
+    of words instead of its written\spoken form?)
 
     *STR user_input* -- A string that will be sent to the mediator console's
      standard input. Use in automated regression testing, if the *say*
@@ -158,10 +181,15 @@ def say(utterance, user_input=None, bypass_NatLink=0):
     
     *BOOL bypass_NatLink* -- if true, the interpretation will be done
     withouth going through NatLink's recognitionMimic function.
+
+    Examples: say('x not equal to') -> 'x != '
+              say(['x', ' != \\not equal to'] -> 'x != '
         
     .. [say_select] file:///./mediator.html#say_select"""
     
     global the_mediator
+
+#    print '-- mediator.say: utterance=%s' % utterance    
 
     if user_input:
         #
@@ -175,12 +203,28 @@ def say(utterance, user_input=None, bypass_NatLink=0):
         temp_file = open(temp_file_name, 'r')
         sys.stdin = temp_file
         
-        
     if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
         the_mediator.interp.interpret_NL_cmd(utterance)
         show_buff()        
     else:
-        words = re.split('\s+', utterance)
+        if util.islist(utterance) or util.istuple(utterance):
+            words = []
+            #
+            # Clean up the written form in case use didn't type
+            # special characters in the form that the SR expects
+            # (e.g. '\n' instead of '{Enter}'
+            #
+            for a_word in utterance:
+                spoken, written = sr_interface.spoken_written_form(a_word)
+                if spoken != written:
+                    written = sr_interface.clean_written_form(written, clean_for='sr')
+                    words = words + [sr_interface.vocabulary_entry(spoken, written)]
+                else:
+                    words = words + [written]
+        else:        
+            words = re.split('\s+', utterance)
+
+#        print '-- mediator.say: words=%s' % words
         natlink.recognitionMimic(words)
 
     #
@@ -299,7 +343,7 @@ def init_simulator(symdict_pickle_fname=None):
             #
             the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)        
 
-            
+#        print '-- mediator.init_simulator: before creating MediatorObject'    
         the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
 
         #
@@ -318,9 +362,11 @@ def init_simulator(symdict_pickle_fname=None):
 #         natlink.natConnect()
 #         natlink.setMicState('off')
         the_mediator.mixed_grammar.load()
-        the_mediator.mixed_grammar.activate()
+        the_mediator.mixed_grammar.activate(0)
         the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
         the_mediator.code_select_grammar.activate()
+
+#    print '-- mediator.init_mediator: at end, abbrevitions are:'; the_mediator.interp.known_symbols.print_abbreviations()
 
 def execute_command(cmd):
     try:
@@ -358,12 +404,11 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
-    clear_symbols()
-    clear_abbreviations()
-    open_file('D:/blah.c')
+    clear_symbols()        
     compile_symbols(['D:/VoiceCode/VCode.vg3_trans/Data/TestData/small_buff.c'])
-    unresolved_abbreviations()
-    say('for loop index', user_input='1\n')
+    open_file('D:/blah.c')
+#     print_abbreviations()
+#      say('for loop index', user_input='1\n')
 #    say('this symbol is unresolved comma')
 #    quit()
 

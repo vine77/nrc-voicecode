@@ -4,7 +4,6 @@ def py_simple_for(app, cont):
     """Insert template code for a simple Python for loop"""
     app.insert_indent('for ', ':\n')
 
-
 def py_goto_body(app, cont):
     """Move cursor to the body of a Python compound statement"""
     app.search_for(':\s*\n[ \t]*\n*')
@@ -37,3 +36,7 @@ def py_assignment(app, cont):
     """Types an assignment operator with spaces"""
     app.insert_indent(' = ', '')
 
+def py_new_statement(app, cont):
+    """Inserts a new line below current one"""
+    app.search_for('(\n|$)')
+    app.insert_indent('\n', '')
