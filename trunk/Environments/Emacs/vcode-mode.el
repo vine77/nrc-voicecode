@@ -338,6 +338,7 @@ sent."
   (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-configure-for-regression-testing t)
   (vr-mode 1 "vcode-test")
+  (setq vcode-is-test-editor t)
 ;  (vcode-configure-for-regression-testing nil)
 ;  (vr-mode nil)
 )
@@ -1919,6 +1920,16 @@ command was a yank or not."
 "Another unique ID assigned to this instance of Emacs."
 )
 
+(defvar vcode-is-test-editor nil
+"Are we connected to VoiceCode to perform regression tests?"
+)
+
+(defvar vcode-test-file-name-was nil
+"What was the visited-file-name corresponding to this buffer, before we set it
+to nil?"
+)
+(make-variable-buffer-local 'vcode-test-file-name-was)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; variables used by the ignored key alternative to
@@ -2463,6 +2474,8 @@ a buffer"
 	)
       (cl-puthash "value" 0 resp-cont)
       )
+    (vr-log "active, current buffer name is %d, %S" (cl-gethash "value"
+    resp-cont)(buffer-name (current-buffer)))
 
 
     (vr-send-reply 
@@ -2644,14 +2657,47 @@ message.
   (vr-send-queued-changes) 
 )
 
+(defun vcode-matching-test-file-name (new-file-name buffers)
+    (let ((a-buff) (found-buff nil))
+        (save-excursion
+            (dolist (a-buff buffers)
+                    (set-buffer a-buff)
+                    (if (equal vcode-test-file-name-was new-file-name)
+                        (setq found-buff (buffer-name a-buff))
+                    )
+            )
+        )
+        found-buff
+    )
+)
+
 
 (defun vcode-cmd-open-file (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
 	(file-name)
+	(emacs-file-name)
+        (a-buff)
+        (old-buff-list)
+        (found-buff)
 	(response (make-hash-table :test 'string=)))
     (setq file-name (cl-gethash "file_name" mess-cont))
     (vr-log "--** vcode-cmd-open-file: python-mode-hook =%S file-name=%S\n" file-name python-mode-hook )
-    (find-file (substitute-in-file-name file-name))
+    (setq old-buff-list (buffer-list))
+    (find-file file-name)
+    (setq emacs-file-name (buffer-file-name))
+    (setq found-buff nil)
+    (if vcode-is-test-editor 
+        (setq found-buff (vcode-matching-test-file-name emacs-file-name
+            old-buff-list))
+    )
+    (if found-buff
+        (progn
+            (kill-buffer (current-buffer))
+            (switch-to-buffer found-buff)
+        )
+        (setq vcode-test-file-name-was (buffer-file-name (current-buffer)))
+        (set-visited-file-name nil)
+    )
     (cl-puthash "buff_name" (buffer-name) response)
     (vr-send-reply
      (run-hook-with-args 
@@ -2705,6 +2751,8 @@ message.
 	(buff-name) (file-name) (buff-name))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq file-name (buffer-file-name (get-buffer buff-name)))
+    (if (and (eq file-name nil) vcode-is-test-editor)
+        (setq file-name vcode-test-file-name-was))
     (cl-puthash "value" file-name response)
     (vr-send-reply
      (run-hook-with-args 
@@ -3736,5 +3784,4 @@ tabs.
 ; message.  Maybe Alain meant deactivate
 ;  (vr-mode-activate 'vcode)
 )
-
 

@@ -27,6 +27,7 @@ import debug
 import string
 import re
 from Object import Object
+import messaging
 
 class TargetWindow(Object):
     """abstract class defining interface for finding the active editor
@@ -446,7 +447,12 @@ class SharedWindow(TargetWindow):
         for instance in self.window_instances:
             app = editors.app_instance(instance)
             if app.is_active_is_safe():
-                if app.is_active():
+                try:
+                    active = app.is_active()
+                except messaging.SocketError:
+                    editors.close_app_cbk(instance, unexpected = 1)
+                    continue
+                if active:
                     return instance
                 else:
 # if not active, skip to the next app, but if we can't tell, try an

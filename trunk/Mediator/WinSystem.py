@@ -1,4 +1,4 @@
- ##############################################################################
+##############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or

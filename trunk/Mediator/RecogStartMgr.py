@@ -1761,7 +1761,11 @@ class RSMInfrastructure(RecogStartMgr):
             return
         debug.trace('RecogStartMgr._recognition_starting_known_window',
             'activating grammars')
-        self._activate_grammars(app, instance, window)
+        try:
+            self._activate_grammars(app, instance, window)
+        except messaging.SocketError:
+            self.editors.close_app_cbk(instance, unexpected = 1)
+            self._deactivate_grammars(window)
         return
 
     def _recognition_starting_known_module(self, window, title, module_name):
