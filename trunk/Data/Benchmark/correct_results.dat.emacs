@@ -340,7 +340,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a65cd0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1b82e60>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -946,6 +946,7 @@ List of unresolved abbreviations
 
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ', \\comma'], user_input='1\n')
+Heard [('this', 'this'), ('symbol', 'symbol'), ('is', 'is'), ('unresolved', 'unresolved'), ('comma', ', ')]
 Associate 'this symbol is unresolved' with symbol (Enter selection):
 
   '0': no association
@@ -1168,6 +1169,7 @@ _cached_symbols_as_one_string is:
 
 
 >>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ', \\comma'], user_input='None')
+Heard [('this symbol is unresolved too', 'this_sym_is_unres_too'), ('comma', ', ')]
 *** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, <CURSOR>
 
@@ -1379,6 +1381,7 @@ List of unresolved abbreviations
 
 
 >>> Testing console command: say(['file', 'name', ', \\comma'], user_input='1\n')
+Heard [('file', 'file'), ('name', 'name'), ('comma', ', ')]
 Associate 'file name' with symbol (Enter selection):
 
   '0': no association
@@ -1602,6 +1605,7 @@ List of unresolved abbreviations
 
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ', \\comma'], user_input='1\n')
+Heard [('application', 'application'), ('programming', 'programming'), ('interface', 'interface'), ('function', 'function'), ('comma', ', ')]
 Associate 'application programming interface function' with symbol (Enter selection):
 
   '0': no association
@@ -1837,6 +1841,7 @@ recent dictation is empty, as expected
 >>> Testing console command: say(['class', 'clown', 'inherits', 'from', 'student'], user_input='0
 0
 ')
+Heard [('class', 'class'), ('clown', 'clown'), ('inherits', 'inherits'), ('from', 'from'), ('student', 'student')]
 Associate 'clown' with symbol (Enter selection):
 
   '0': no association
@@ -1859,6 +1864,7 @@ Associate 'clown' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['class', 'body'], user_input='')
+Heard [('class', 'class'), ('body', 'body')]
 *** Start of source buffer ***
   1: class clown(student):
   2:    <CURSOR>
@@ -1868,6 +1874,7 @@ Associate 'clown' with symbol (Enter selection):
 
 >>> Testing console command: say(['define', 'method', 'popularity', 'method', 'body'], user_input='0
 ')
+Heard [('define', 'define'), ('method', 'method'), ('popularity', 'popularity'), ('method', 'method'), ('body', 'body')]
 Associate 'popularity' with symbol (Enter selection):
 
   '0': no association
@@ -1884,6 +1891,7 @@ Associate 'popularity' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['return', '8'], user_input='')
+Heard [('return', 'return'), ('8', '8')]
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -1960,6 +1968,7 @@ scratch 1 succeeded as expected
 >>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'B.'], user_input='0
 2
 ')
+Heard [('define', 'define'), ('method', 'method'), ('grades', 'grades'), ('method', 'method'), ('body', 'body'), ('return', 'return'), ('B.', 'B.')]
 Associate 'grades' with symbol (Enter selection):
 
   '0': no association
@@ -2019,6 +2028,7 @@ WARNING: source file 'blahblah.py' doesn't exist.
 >>> Testing console command: say(['class', 'cloud', 'inherits', 'from', 'student'], user_input='0
 0
 ')
+Heard [('class', 'class'), ('cloud', 'cloud'), ('inherits', 'inherits'), ('from', 'from'), ('student', 'student')]
 Associate 'cloud' with symbol (Enter selection):
 
   '0': no association
@@ -2041,6 +2051,7 @@ Associate 'cloud' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['class', 'body'], user_input='')
+Heard [('class', 'class'), ('body', 'body')]
 *** Start of source buffer ***
   1: class cloud(student):
   2:    <CURSOR>
@@ -2050,6 +2061,7 @@ Associate 'cloud' with symbol (Enter selection):
 
 >>> Testing console command: say(['fine', 'method', 'popularity', 'method', 'body'], user_input='0
 ')
+Heard [('fine', 'fine'), ('method', 'method'), ('popularity', 'popularity'), ('method', 'method'), ('body', 'body')]
 Associate 'fine method popularity' with symbol (Enter selection):
 
   '0': no association
@@ -2068,6 +2080,7 @@ Associate 'fine method popularity' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['return', '8'], user_input='')
+Heard [('return', 'return'), ('8', '8')]
 *** Start of source buffer ***
   1: class cloud(student):
   2:    fine method popularityreturn 8<CURSOR>
@@ -2232,6 +2245,7 @@ were reinterpreted, as expected
 
 
 >>> Testing console command: say(['new', 'line'], user_input='')
+Heard [('new', 'new'), ('line', 'line')]
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -2242,6 +2256,7 @@ were reinterpreted, as expected
 
 
 >>> Testing console command: say(['back indent'], user_input='')
+Heard [('back indent', 'back indent')]
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -2253,6 +2268,7 @@ were reinterpreted, as expected
 
 >>> Testing console command: say(['excess', 'equals', '0'], user_input='0
 ')
+Heard [('excess', 'excess'), ('equals', 'equals'), ('0', '0')]
 Associate 'excess' with symbol (Enter selection):
 
   '0': no association
@@ -2317,6 +2333,7 @@ reinterpretation failed, as expected
 
 >>> Testing console command: say(['excess', 'equals', '1', 'new', 'line'], user_input='0
 ')
+Heard [('excess', 'excess'), ('equals', 'equals'), ('1', '1'), ('new', 'new'), ('line', 'line')]
 Associate 'excess' with symbol (Enter selection):
 
   '0': no association
@@ -2333,6 +2350,7 @@ Associate 'excess' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['back indent'], user_input='')
+Heard [('back indent', 'back indent')]
   2:    def popularity(self):
   3:       return 8
   4: excess = 1
@@ -2343,6 +2361,7 @@ Associate 'excess' with symbol (Enter selection):
 
 >>> Testing console command: say(['results', 'at', 'index', '0', 'jump', 'out', 'equals', '0'], user_input='0
 ')
+Heard [('results', 'results'), ('at', 'at'), ('index', 'index'), ('0', '0'), ('jump', 'jump'), ('out', 'out'), ('equals', 'equals'), ('0', '0')]
 Associate 'results' with symbol (Enter selection):
 
   '0': no association
@@ -2474,6 +2493,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['after hyphen'])
 
+Heard [('after hyphen', 'after hyphen')]
  11:     This class implements various useful behaviors for generic
  12:     objects, such as:
  13: 
@@ -2485,6 +2505,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['again'])
 
+Heard [('again', 'again')]
  12:     objects, such as:
  13: 
  14:     - safe attribute setting
@@ -2496,6 +2517,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['again'])
 
+Heard [('again', 'again')]
  13: 
  14:     - safe attribute setting
  15:     - deep constructor
@@ -2507,6 +2529,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['previous one'])
 
+Heard [('previous one', 'previous one')]
  12:     objects, such as:
  13: 
  14:     - safe attribute setting
@@ -2518,6 +2541,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['previous one'])
 
+Heard [('previous one', 'previous one')]
  11:     This class implements various useful behaviors for generic
  12:     objects, such as:
  13: 
@@ -2529,6 +2553,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['next one'])
 
+Heard [('next one', 'next one')]
  12:     objects, such as:
  13: 
  14:     - safe attribute setting
@@ -2555,6 +2580,7 @@ Before compiling symbols, symbols are:
 
 _cached_symbols_as_one_string is:
    
+Heard [('compile symbols', 'compile symbols')]
 *** Start of source buffer ***
   1: <CURSOR># This is a small test buffer for Python
   2: 
@@ -3206,6 +3232,7 @@ _cached_symbols_as_one_string is:
 
 
 >>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'], user_input='None')
+Heard [('for', 'for'), ('loop', 'loop'), ('horizontal position', 'horiz_pos'), ('loop', 'loop'), ('body', 'body')]
 *** Start of source buffer ***
   1: for (horiz_pos=0;  <= ; ++)
   2: {
@@ -3249,6 +3276,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Testing console command: say(['<\less-than', '>\greater-than', '=\equal-sign'])
 
+Heard [('less than', '<'), ('greater than', '>'), ('equal sign', '=')]
 *** Start of source buffer ***
   1:  <> =<CURSOR>
 
@@ -3264,7 +3292,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 1aaa938> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 19c24b0> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -3340,6 +3368,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\012\\newline']
+Heard [('variable', 'variable'), ('blank space', ' '), ('equals', ' = '), ('space bar', ' '), ('index', 'index'), ('asterisk', '*'), ('2', '2'), ('double asterisk', '**'), ('8', '8'), ('newline', '\012')]
 Associate 'variable' with symbol (Enter selection):
 
   '0': no association
@@ -3360,6 +3389,7 @@ Associate 'variable' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement']
+Heard [('variable', 'variable'), ('equals', 'equals'), ('variable', 'variable'), ('slash', '/'), ('2', '2'), ('plus sign', '+'), ('1', '1'), ('minus sign', '-'), ('index', 'index'), ('new statement', 'new statement')]
 *** Start of source buffer ***
   1: variable  =  Index*2**8
   2: variable = variable/2+1-Index
@@ -3367,6 +3397,7 @@ Saying: ['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus sign', '1',
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement']
+Heard [('variable', 'variable'), ('equals', ' = '), ('index', 'index'), ('percent', '%'), ('2', '2'), ('plus', ' + '), ('index', 'index'), ('percent sign', '%'), ('3', '3'), ('new statement', 'new statement')]
 *** Start of source buffer ***
   1: variable  =  Index*2**8
   2: variable = variable/2+1-Index
@@ -3375,6 +3406,7 @@ Saying: ['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'in
 
 *** End of source buffer ***
 Saying: ['if', 'index', '&\\and percent', 'variable', 'then']
+Heard [('if', 'if'), ('index', 'index'), ('and percent', '&'), ('variable', 'variable'), ('then', 'then')]
   2: variable = variable/2+1-Index
   3: variable = Index%2 + Index%3
   4: if Index&variable:
@@ -3382,6 +3414,7 @@ Saying: ['if', 'index', '&\\and percent', 'variable', 'then']
 
 *** End of source buffer ***
 Saying: ['if', 'index', '|\\pipe', 'variable', '|\\pipe sign', 'index', '|\\vertical bar', 'value', 'then']
+Heard [('if', 'if'), ('index', 'index'), ('pipe', '|'), ('variable', 'variable'), ('pipe sign', '|'), ('index', 'index'), ('vertical bar', '|'), ('value', 'value'), ('then', 'then')]
 Associate 'value' with symbol (Enter selection):
 
   '0': no association
@@ -3396,6 +3429,7 @@ Associate 'value' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals', '0', ';\\semi', 'new statement']
+Heard [('index', 'index'), ('equals', ' = '), ('0', '0'), ('semicolon', ';'), ('variable', 'variable'), ('equals', ' = '), ('0', '0'), ('semi', ';'), ('new statement', 'new statement')]
   4: if Index&variable:
   5:    if Index|variable|Index|Value:
   6:       Index = 0;variable = 0;
@@ -3403,6 +3437,7 @@ Saying: ['index', ' = \\equals', '0', ';\\semicolon', 'variable', ' = \\equals',
 
 *** End of source buffer ***
 Saying: ['index', '.\\dot', 'function', '()\\without arguments', 'new statement']
+Heard [('index', 'index'), ('dot', '.'), ('function', 'function'), ('without arguments', '()'), ('new statement', 'new statement')]
 Associate 'function' with symbol (Enter selection):
 
   '0': no association
@@ -3417,6 +3452,7 @@ Associate 'function' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', 'new statement']
+Heard [('variable', 'variable'), ('equals', ' = '), ('new', 'new'), ('list', 'list'), ('0', '0'), ('ellipsis', '...'), ('10', '10'), ('new statement', 'new statement')]
   6:       Index = 0;variable = 0;
   7:       Index.Function()
   8:       variable = [0...10]
@@ -3424,6 +3460,7 @@ Saying: ['variable', ' = \\equals', 'new', 'list', '0', '...\\ellipsis', '10', '
 
 *** End of source buffer ***
 Saying: ['#\\pound', '!\\bang', 'python', 'new statement']
+Heard [('pound', '#'), ('bang', '!'), ('python', 'python'), ('new statement', 'new statement')]
 Associate 'python' with symbol (Enter selection):
 
   '0': no association
@@ -3438,6 +3475,7 @@ Associate 'python' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['#\\pound sign', '!\\exclamation mark', 'python', 'new statement']
+Heard [('pound sign', '#'), ('exclamation mark', '!'), ('python', 'python'), ('new statement', 'new statement')]
   8:       variable = [0...10]
   9:       #!Python
  10:       #!Python
@@ -3445,6 +3483,7 @@ Saying: ['#\\pound sign', '!\\exclamation mark', 'python', 'new statement']
 
 *** End of source buffer ***
 Saying: ['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then']
+Heard [('if', 'if'), ('tilde', '~'), ('index', 'index'), ('and', 'and'), ('squiggle', '~'), ('variable', 'variable'), ('then', 'then')]
   9:       #!Python
  10:       #!Python
  11:       if ~Index and ~variable:
@@ -3452,6 +3491,7 @@ Saying: ['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then']
 
 *** End of source buffer ***
 Saying: ['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement']
+Heard [('variable', 'variable'), ('double colon', '::'), ('index', 'index'), ('colon colon', '::'), ('field', 'field'), ('new statement', 'new statement')]
 Associate 'field' with symbol (Enter selection):
 
   '0': no association
@@ -3466,6 +3506,7 @@ Associate 'field' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then']
+Heard [('if', 'if'), ('index', 'index'), ('less sign', '<'), ('0', '0'), ('and', ' and '), ('index', 'index'), ('greater sign', '>'), ('minus sign', '-'), ('1', '1'), ('then', 'then')]
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
  13:          if Index<0 and Index>-1:
@@ -3473,6 +3514,7 @@ Saying: ['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater 
 
 *** End of source buffer ***
 Saying: ['index', '=\\equal sign', '0', 'new statement']
+Heard [('index', 'index'), ('equal sign', '='), ('0', '0'), ('new statement', 'new statement')]
  12:          variable::Index::Field
  13:          if Index<0 and Index>-1:
  14:             Index=0
@@ -3480,6 +3522,7 @@ Saying: ['index', '=\\equal sign', '0', 'new statement']
 
 *** End of source buffer ***
 Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new statement']
+Heard [('function', 'function'), ('open paren', '('), ('0', '0'), ('close paren', ')'), ('new statement', 'new statement')]
  13:          if Index<0 and Index>-1:
  14:             Index=0
  15:             Function(0)
@@ -3487,6 +3530,7 @@ Saying: ['function', '(\\open paren', '0', ')\\close paren', 'new statement']
 
 *** End of source buffer ***
 Saying: ['function', 'parens', '0', 'new statement']
+Heard [('function', 'function'), ('parens', 'parens'), ('0', '0'), ('new statement', 'new statement')]
  14:             Index=0
  15:             Function(0)
  16:             Function(0)
@@ -3494,6 +3538,7 @@ Saying: ['function', 'parens', '0', 'new statement']
 
 *** End of source buffer ***
 Saying: ['function', '()\\empty parens', 'new statement']
+Heard [('function', 'function'), ('empty parens', '()'), ('new statement', 'new statement')]
  15:             Function(0)
  16:             Function(0)
  17:             Function()
@@ -3501,6 +3546,7 @@ Saying: ['function', '()\\empty parens', 'new statement']
 
 *** End of source buffer ***
 Saying: ['list', '[\\open bracket', '0', ']\\close bracket', 'new statement']
+Heard [('list', 'list'), ('open bracket', '['), ('0', '0'), ('close bracket', ']'), ('new statement', 'new statement')]
 Associate 'list' with symbol (Enter selection):
 
   '0': no association
@@ -3515,6 +3561,7 @@ Associate 'list' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['list', 'brackets', '0', 'new statement']
+Heard [('list', 'list'), ('brackets', 'brackets'), ('0', '0'), ('new statement', 'new statement')]
  17:             Function()
  18:             List[0]
  19:             List[0]
@@ -3522,6 +3569,7 @@ Saying: ['list', 'brackets', '0', 'new statement']
 
 *** End of source buffer ***
 Saying: ['list', '[]\\empty brackets', 'new statement']
+Heard [('list', 'list'), ('empty brackets', '[]'), ('new statement', 'new statement')]
  18:             List[0]
  19:             List[0]
  20:             List[]
@@ -3529,6 +3577,7 @@ Saying: ['list', '[]\\empty brackets', 'new statement']
 
 *** End of source buffer ***
 Saying: ['dictionary', 'braces', '0', 'new statement']
+Heard [('dictionary', 'dictionary'), ('braces', 'braces'), ('0', '0'), ('new statement', 'new statement')]
 Associate 'dictionary' with symbol (Enter selection):
 
   '0': no association
@@ -3543,6 +3592,7 @@ Associate 'dictionary' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['<\\open angled', 'head', '>\\close angled', 'new statement']
+Heard [('open angled', '<'), ('head', 'head'), ('close angled', '>'), ('new statement', 'new statement')]
 Associate 'head' with symbol (Enter selection):
 
   '0': no association
@@ -3557,6 +3607,7 @@ Associate 'head' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['angled brackets', 'head', 'new statement']
+Heard [('angled brackets', 'angled brackets'), ('head', 'head'), ('new statement', 'new statement')]
  21:             Dictionary{0}
  22:             <Head>
  23:             <Head>
@@ -3564,6 +3615,7 @@ Saying: ['angled brackets', 'head', 'new statement']
 
 *** End of source buffer ***
 Saying: ['<>\\empty angled', 'new statement']
+Heard [('empty angled', '<>'), ('new statement', 'new statement')]
  22:             <Head>
  23:             <Head>
  24:             <>
@@ -3571,6 +3623,7 @@ Saying: ['<>\\empty angled', 'new statement']
 
 *** End of source buffer ***
 Saying: ['string', ' = \\equals', "'\\open single quote", 'message', "'\\close single quote", 'new statement']
+Heard [('string', 'string'), ('equals', ' = '), ('open single quote', "'"), ('message', 'message'), ('close single quote', "'"), ('new statement', 'new statement')]
 Associate 'string' with symbol (Enter selection):
 
   '0': no association
@@ -3592,6 +3645,7 @@ Associate 'string' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['string', 'equals', 'single', 'quotes', 'message', 'new statement']
+Heard [('string', 'string'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes'), ('message', 'message'), ('new statement', 'new statement')]
  24:             <>
  25:             String = 'Message'
  26:             String = 'Message'
@@ -3599,6 +3653,7 @@ Saying: ['string', 'equals', 'single', 'quotes', 'message', 'new statement']
 
 *** End of source buffer ***
 Saying: ["''\\empty single quotes", 'new statement']
+Heard [('empty single quotes', "''"), ('new statement', 'new statement')]
  25:             String = 'Message'
  26:             String = 'Message'
  27:             ''
@@ -3606,6 +3661,7 @@ Saying: ["''\\empty single quotes", 'new statement']
 
 *** End of source buffer ***
 Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 'new statement']
+Heard [('string', 'string'), ('equals', ' = '), ('open quote', '"'), ('message', 'message'), ('close quote', '"'), ('new statement', 'new statement')]
  26:             String = 'Message'
  27:             ''
  28:             String = "Message"
@@ -3613,6 +3669,7 @@ Saying: ['string', ' = \\equals', '"\\open quote', 'message', '"\\close quote', 
 
 *** End of source buffer ***
 Saying: ['string', 'equals', 'quotes', 'message', 'new statement']
+Heard [('string', 'string'), ('equals', 'equals'), ('quotes', 'quotes'), ('message', 'message'), ('new statement', 'new statement')]
  27:             ''
  28:             String = "Message"
  29:             String = "Message"
@@ -3620,6 +3677,7 @@ Saying: ['string', 'equals', 'quotes', 'message', 'new statement']
 
 *** End of source buffer ***
 Saying: ['""\\empty quotes', 'new statement']
+Heard [('empty quotes', '""'), ('new statement', 'new statement')]
  28:             String = "Message"
  29:             String = "Message"
  30:             ""
@@ -3627,6 +3685,7 @@ Saying: ['""\\empty quotes', 'new statement']
 
 *** End of source buffer ***
 Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close back quote', 'new statement']
+Heard [('string', 'string'), ('equals', ' = '), ('open back quote', '`'), ('message', 'message'), ('close back quote', '`'), ('new statement', 'new statement')]
  29:             String = "Message"
  30:             ""
  31:             String = `Message`
@@ -3634,6 +3693,7 @@ Saying: ['string', ' = \\equals', '`\\open back quote', 'message', '`\\close bac
 
 *** End of source buffer ***
 Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new statement']
+Heard [('string', 'string'), ('equals', ' = '), ('back', 'back'), ('quotes', 'quotes'), ('message', 'message'), ('new statement', 'new statement')]
  30:             ""
  31:             String = `Message`
  32:             String = `Message`
@@ -3641,6 +3701,7 @@ Saying: ['string', ' = \\equals', 'back', 'quotes', 'message', 'new statement']
 
 *** End of source buffer ***
 Saying: ['``\\empty back quotes', 'new statement']
+Heard [('empty back quotes', '``'), ('new statement', 'new statement')]
  31:             String = `Message`
  32:             String = `Message`
  33:             ``
@@ -3648,6 +3709,7 @@ Saying: ['``\\empty back quotes', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  31:             String = `Message`
  32:             String = `Message`
  33:             ``
@@ -3655,6 +3717,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\a\\back slash a.', 'new statement']
+Heard [('back slash a', '\\a'), ('new statement', 'new statement')]
  32:             String = `Message`
  33:             ``
  34:             "\a"
@@ -3662,6 +3725,7 @@ Saying: ['\\a\\back slash a.', 'new statement']
 
 *** End of source buffer ***
 Saying: ['\\a\\back slash alpha', 'new statement']
+Heard [('back slash alpha', '\\a'), ('new statement', 'new statement')]
  33:             ``
  34:             "\a"
  35:             \a
@@ -3669,6 +3733,7 @@ Saying: ['\\a\\back slash alpha', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  33:             ``
  34:             "\a"
  35:             \a
@@ -3676,6 +3741,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\b\\back slash b.']
+Heard [('back slash b', '\\b')]
  33:             ``
  34:             "\a"
  35:             \a
@@ -3683,6 +3749,7 @@ Saying: ['\\b\\back slash b.']
 
 *** End of source buffer ***
 Saying: ['\\b\\back slash bravo']
+Heard [('back slash bravo', '\\b')]
  33:             ``
  34:             "\a"
  35:             \a
@@ -3690,6 +3757,7 @@ Saying: ['\\b\\back slash bravo']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  34:             "\a"
  35:             \a
  36:             "\b\b"
@@ -3697,6 +3765,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  34:             "\a"
  35:             \a
  36:             "\b\b"
@@ -3704,6 +3773,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\c\\back slash c.']
+Heard [('back slash c', '\\c')]
  34:             "\a"
  35:             \a
  36:             "\b\b"
@@ -3711,6 +3781,7 @@ Saying: ['\\c\\back slash c.']
 
 *** End of source buffer ***
 Saying: ['\\c\\back slash charlie']
+Heard [('back slash charlie', '\\c')]
  34:             "\a"
  35:             \a
  36:             "\b\b"
@@ -3718,6 +3789,7 @@ Saying: ['\\c\\back slash charlie']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  35:             \a
  36:             "\b\b"
  37:             "\c\c"
@@ -3725,6 +3797,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  35:             \a
  36:             "\b\b"
  37:             "\c\c"
@@ -3732,6 +3805,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\d\\back slash d.']
+Heard [('back slash d', '\\d')]
  35:             \a
  36:             "\b\b"
  37:             "\c\c"
@@ -3739,6 +3813,7 @@ Saying: ['\\d\\back slash d.']
 
 *** End of source buffer ***
 Saying: ['\\d\\back slash delta']
+Heard [('back slash delta', '\\d')]
  35:             \a
  36:             "\b\b"
  37:             "\c\c"
@@ -3746,6 +3821,7 @@ Saying: ['\\d\\back slash delta']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  36:             "\b\b"
  37:             "\c\c"
  38:             "\d\d"
@@ -3753,6 +3829,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  36:             "\b\b"
  37:             "\c\c"
  38:             "\d\d"
@@ -3760,6 +3837,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\e\\back slash e.']
+Heard [('back slash e', '\\e')]
  36:             "\b\b"
  37:             "\c\c"
  38:             "\d\d"
@@ -3767,6 +3845,7 @@ Saying: ['\\e\\back slash e.']
 
 *** End of source buffer ***
 Saying: ['\\e\\back slash echo']
+Heard [('back slash echo', '\\e')]
  36:             "\b\b"
  37:             "\c\c"
  38:             "\d\d"
@@ -3774,6 +3853,7 @@ Saying: ['\\e\\back slash echo']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  37:             "\c\c"
  38:             "\d\d"
  39:             "\e\e"
@@ -3781,6 +3861,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  37:             "\c\c"
  38:             "\d\d"
  39:             "\e\e"
@@ -3788,6 +3869,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\f\\back slash f.']
+Heard [('back slash f', '\\f')]
  37:             "\c\c"
  38:             "\d\d"
  39:             "\e\e"
@@ -3795,6 +3877,7 @@ Saying: ['\\f\\back slash f.']
 
 *** End of source buffer ***
 Saying: ['\\f\\back slash foxtrot']
+Heard [('back slash foxtrot', '\\f')]
  37:             "\c\c"
  38:             "\d\d"
  39:             "\e\e"
@@ -3802,6 +3885,7 @@ Saying: ['\\f\\back slash foxtrot']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  38:             "\d\d"
  39:             "\e\e"
  40:             "\f\f"
@@ -3809,6 +3893,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  38:             "\d\d"
  39:             "\e\e"
  40:             "\f\f"
@@ -3816,6 +3901,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\g\\back slash g.']
+Heard [('back slash g', '\\g')]
  38:             "\d\d"
  39:             "\e\e"
  40:             "\f\f"
@@ -3823,6 +3909,7 @@ Saying: ['\\g\\back slash g.']
 
 *** End of source buffer ***
 Saying: ['\\g\\back slash golf']
+Heard [('back slash golf', '\\g')]
  38:             "\d\d"
  39:             "\e\e"
  40:             "\f\f"
@@ -3830,6 +3917,7 @@ Saying: ['\\g\\back slash golf']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  39:             "\e\e"
  40:             "\f\f"
  41:             "\g\g"
@@ -3837,6 +3925,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  39:             "\e\e"
  40:             "\f\f"
  41:             "\g\g"
@@ -3844,6 +3933,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\h\\back slash h.']
+Heard [('back slash h', '\\h')]
  39:             "\e\e"
  40:             "\f\f"
  41:             "\g\g"
@@ -3851,6 +3941,7 @@ Saying: ['\\h\\back slash h.']
 
 *** End of source buffer ***
 Saying: ['\\h\\back slash hotel']
+Heard [('back slash hotel', '\\h')]
  39:             "\e\e"
  40:             "\f\f"
  41:             "\g\g"
@@ -3858,6 +3949,7 @@ Saying: ['\\h\\back slash hotel']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  40:             "\f\f"
  41:             "\g\g"
  42:             "\h\h"
@@ -3865,6 +3957,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  40:             "\f\f"
  41:             "\g\g"
  42:             "\h\h"
@@ -3872,6 +3965,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\i\\back slash i.']
+Heard [('back slash i', '\\i')]
  40:             "\f\f"
  41:             "\g\g"
  42:             "\h\h"
@@ -3879,6 +3973,7 @@ Saying: ['\\i\\back slash i.']
 
 *** End of source buffer ***
 Saying: ['\\i\\back slash india']
+Heard [('back slash india', '\\i')]
  40:             "\f\f"
  41:             "\g\g"
  42:             "\h\h"
@@ -3886,6 +3981,7 @@ Saying: ['\\i\\back slash india']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  41:             "\g\g"
  42:             "\h\h"
  43:             "\i\i"
@@ -3893,6 +3989,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  41:             "\g\g"
  42:             "\h\h"
  43:             "\i\i"
@@ -3900,6 +3997,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\j\\back slash j.']
+Heard [('back slash j', '\\j')]
  41:             "\g\g"
  42:             "\h\h"
  43:             "\i\i"
@@ -3907,6 +4005,7 @@ Saying: ['\\j\\back slash j.']
 
 *** End of source buffer ***
 Saying: ['\\j\\back slash juliett']
+Heard [('back slash juliett', '\\j')]
  41:             "\g\g"
  42:             "\h\h"
  43:             "\i\i"
@@ -3914,6 +4013,7 @@ Saying: ['\\j\\back slash juliett']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  42:             "\h\h"
  43:             "\i\i"
  44:             "\j\j"
@@ -3921,6 +4021,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  42:             "\h\h"
  43:             "\i\i"
  44:             "\j\j"
@@ -3928,6 +4029,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\k\\back slash k.']
+Heard [('back slash k', '\\k')]
  42:             "\h\h"
  43:             "\i\i"
  44:             "\j\j"
@@ -3935,6 +4037,7 @@ Saying: ['\\k\\back slash k.']
 
 *** End of source buffer ***
 Saying: ['\\k\\back slash kilo']
+Heard [('back slash kilo', '\\k')]
  42:             "\h\h"
  43:             "\i\i"
  44:             "\j\j"
@@ -3942,6 +4045,7 @@ Saying: ['\\k\\back slash kilo']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  43:             "\i\i"
  44:             "\j\j"
  45:             "\k\k"
@@ -3949,6 +4053,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  43:             "\i\i"
  44:             "\j\j"
  45:             "\k\k"
@@ -3956,6 +4061,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\l\\back slash l.']
+Heard [('back slash l', '\\l')]
  43:             "\i\i"
  44:             "\j\j"
  45:             "\k\k"
@@ -3963,6 +4069,7 @@ Saying: ['\\l\\back slash l.']
 
 *** End of source buffer ***
 Saying: ['\\l\\back slash lima']
+Heard [('back slash lima', '\\l')]
  43:             "\i\i"
  44:             "\j\j"
  45:             "\k\k"
@@ -3970,6 +4077,7 @@ Saying: ['\\l\\back slash lima']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  44:             "\j\j"
  45:             "\k\k"
  46:             "\l\l"
@@ -3977,6 +4085,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  44:             "\j\j"
  45:             "\k\k"
  46:             "\l\l"
@@ -3984,6 +4093,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\m\\back slash m.']
+Heard [('back slash m', '\\m')]
  44:             "\j\j"
  45:             "\k\k"
  46:             "\l\l"
@@ -3991,6 +4101,7 @@ Saying: ['\\m\\back slash m.']
 
 *** End of source buffer ***
 Saying: ['\\m\\back slash mike']
+Heard [('back slash mike', '\\m')]
  44:             "\j\j"
  45:             "\k\k"
  46:             "\l\l"
@@ -3998,6 +4109,7 @@ Saying: ['\\m\\back slash mike']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  45:             "\k\k"
  46:             "\l\l"
  47:             "\m\m"
@@ -4005,6 +4117,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  45:             "\k\k"
  46:             "\l\l"
  47:             "\m\m"
@@ -4012,6 +4125,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\n\\back slash n.']
+Heard [('back slash n', '\\n')]
  45:             "\k\k"
  46:             "\l\l"
  47:             "\m\m"
@@ -4019,6 +4133,7 @@ Saying: ['\\n\\back slash n.']
 
 *** End of source buffer ***
 Saying: ['\\n\\back slash november']
+Heard [('back slash november', '\\n')]
  45:             "\k\k"
  46:             "\l\l"
  47:             "\m\m"
@@ -4026,6 +4141,7 @@ Saying: ['\\n\\back slash november']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  46:             "\l\l"
  47:             "\m\m"
  48:             "\n\n"
@@ -4033,6 +4149,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  46:             "\l\l"
  47:             "\m\m"
  48:             "\n\n"
@@ -4040,6 +4157,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\o\\back slash o.']
+Heard [('back slash o', '\\o')]
  46:             "\l\l"
  47:             "\m\m"
  48:             "\n\n"
@@ -4047,6 +4165,7 @@ Saying: ['\\o\\back slash o.']
 
 *** End of source buffer ***
 Saying: ['\\o\\back slash oscar']
+Heard [('back slash oscar', '\\o')]
  46:             "\l\l"
  47:             "\m\m"
  48:             "\n\n"
@@ -4054,6 +4173,7 @@ Saying: ['\\o\\back slash oscar']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  47:             "\m\m"
  48:             "\n\n"
  49:             "\o\o"
@@ -4061,6 +4181,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  47:             "\m\m"
  48:             "\n\n"
  49:             "\o\o"
@@ -4068,6 +4189,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\p\\back slash p.']
+Heard [('back slash p', '\\p')]
  47:             "\m\m"
  48:             "\n\n"
  49:             "\o\o"
@@ -4075,6 +4197,7 @@ Saying: ['\\p\\back slash p.']
 
 *** End of source buffer ***
 Saying: ['\\p\\back slash papa']
+Heard [('back slash papa', '\\p')]
  47:             "\m\m"
  48:             "\n\n"
  49:             "\o\o"
@@ -4082,6 +4205,7 @@ Saying: ['\\p\\back slash papa']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  48:             "\n\n"
  49:             "\o\o"
  50:             "\p\p"
@@ -4089,6 +4213,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  48:             "\n\n"
  49:             "\o\o"
  50:             "\p\p"
@@ -4096,6 +4221,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\q\\back slash q.']
+Heard [('back slash q', '\\q')]
  48:             "\n\n"
  49:             "\o\o"
  50:             "\p\p"
@@ -4103,6 +4229,7 @@ Saying: ['\\q\\back slash q.']
 
 *** End of source buffer ***
 Saying: ['\\q\\back slash quebec']
+Heard [('back slash quebec', '\\q')]
  48:             "\n\n"
  49:             "\o\o"
  50:             "\p\p"
@@ -4110,6 +4237,7 @@ Saying: ['\\q\\back slash quebec']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  49:             "\o\o"
  50:             "\p\p"
  51:             "\q\q"
@@ -4117,6 +4245,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  49:             "\o\o"
  50:             "\p\p"
  51:             "\q\q"
@@ -4124,6 +4253,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\r\\back slash r.']
+Heard [('back slash r', '\\r')]
  49:             "\o\o"
  50:             "\p\p"
  51:             "\q\q"
@@ -4131,6 +4261,7 @@ Saying: ['\\r\\back slash r.']
 
 *** End of source buffer ***
 Saying: ['\\r\\back slash romeo']
+Heard [('back slash romeo', '\\r')]
  49:             "\o\o"
  50:             "\p\p"
  51:             "\q\q"
@@ -4138,6 +4269,7 @@ Saying: ['\\r\\back slash romeo']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  50:             "\p\p"
  51:             "\q\q"
  52:             "\r\r"
@@ -4145,6 +4277,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  50:             "\p\p"
  51:             "\q\q"
  52:             "\r\r"
@@ -4152,6 +4285,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\s\\back slash s.']
+Heard [('back slash s', '\\s')]
  50:             "\p\p"
  51:             "\q\q"
  52:             "\r\r"
@@ -4159,6 +4293,7 @@ Saying: ['\\s\\back slash s.']
 
 *** End of source buffer ***
 Saying: ['\\s\\back slash sierra']
+Heard [('back slash sierra', '\\s')]
  50:             "\p\p"
  51:             "\q\q"
  52:             "\r\r"
@@ -4166,6 +4301,7 @@ Saying: ['\\s\\back slash sierra']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  51:             "\q\q"
  52:             "\r\r"
  53:             "\s\s"
@@ -4173,6 +4309,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  51:             "\q\q"
  52:             "\r\r"
  53:             "\s\s"
@@ -4180,6 +4317,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\t\\back slash t.']
+Heard [('back slash t', '\\t')]
  51:             "\q\q"
  52:             "\r\r"
  53:             "\s\s"
@@ -4187,6 +4325,7 @@ Saying: ['\\t\\back slash t.']
 
 *** End of source buffer ***
 Saying: ['\\t\\back slash tango']
+Heard [('back slash tango', '\\t')]
  51:             "\q\q"
  52:             "\r\r"
  53:             "\s\s"
@@ -4194,6 +4333,7 @@ Saying: ['\\t\\back slash tango']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  52:             "\r\r"
  53:             "\s\s"
  54:             "\t\t"
@@ -4201,6 +4341,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  52:             "\r\r"
  53:             "\s\s"
  54:             "\t\t"
@@ -4208,6 +4349,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\u\\back slash u.']
+Heard [('back slash u', '\\u')]
  52:             "\r\r"
  53:             "\s\s"
  54:             "\t\t"
@@ -4215,6 +4357,7 @@ Saying: ['\\u\\back slash u.']
 
 *** End of source buffer ***
 Saying: ['\\u\\back slash uniform']
+Heard [('back slash uniform', '\\u')]
  52:             "\r\r"
  53:             "\s\s"
  54:             "\t\t"
@@ -4222,6 +4365,7 @@ Saying: ['\\u\\back slash uniform']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  53:             "\s\s"
  54:             "\t\t"
  55:             "\u\u"
@@ -4229,6 +4373,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  53:             "\s\s"
  54:             "\t\t"
  55:             "\u\u"
@@ -4236,6 +4381,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\v\\back slash v.']
+Heard [('back slash v', '\\v')]
  53:             "\s\s"
  54:             "\t\t"
  55:             "\u\u"
@@ -4243,6 +4389,7 @@ Saying: ['\\v\\back slash v.']
 
 *** End of source buffer ***
 Saying: ['\\v\\back slash victor']
+Heard [('back slash victor', '\\v')]
  53:             "\s\s"
  54:             "\t\t"
  55:             "\u\u"
@@ -4250,6 +4397,7 @@ Saying: ['\\v\\back slash victor']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  54:             "\t\t"
  55:             "\u\u"
  56:             "\v\v"
@@ -4257,6 +4405,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  54:             "\t\t"
  55:             "\u\u"
  56:             "\v\v"
@@ -4264,6 +4413,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\w\\back slash w.']
+Heard [('back slash w', '\\w')]
  54:             "\t\t"
  55:             "\u\u"
  56:             "\v\v"
@@ -4271,6 +4421,7 @@ Saying: ['\\w\\back slash w.']
 
 *** End of source buffer ***
 Saying: ['\\w\\back slash whiskey']
+Heard [('back slash whiskey', '\\w')]
  54:             "\t\t"
  55:             "\u\u"
  56:             "\v\v"
@@ -4278,6 +4429,7 @@ Saying: ['\\w\\back slash whiskey']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  55:             "\u\u"
  56:             "\v\v"
  57:             "\w\w"
@@ -4285,6 +4437,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  55:             "\u\u"
  56:             "\v\v"
  57:             "\w\w"
@@ -4292,6 +4445,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\x\\back slash x.']
+Heard [('back slash x', '\\x')]
  55:             "\u\u"
  56:             "\v\v"
  57:             "\w\w"
@@ -4299,6 +4453,7 @@ Saying: ['\\x\\back slash x.']
 
 *** End of source buffer ***
 Saying: ['\\x\\back slash xray']
+Heard [('back slash xray', '\\x')]
  55:             "\u\u"
  56:             "\v\v"
  57:             "\w\w"
@@ -4306,6 +4461,7 @@ Saying: ['\\x\\back slash xray']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  56:             "\v\v"
  57:             "\w\w"
  58:             "\x\x"
@@ -4313,6 +4469,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  56:             "\v\v"
  57:             "\w\w"
  58:             "\x\x"
@@ -4320,6 +4477,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\y\\back slash y.']
+Heard [('back slash y', '\\y')]
  56:             "\v\v"
  57:             "\w\w"
  58:             "\x\x"
@@ -4327,6 +4485,7 @@ Saying: ['\\y\\back slash y.']
 
 *** End of source buffer ***
 Saying: ['\\y\\back slash yankee']
+Heard [('back slash yankee', '\\y')]
  56:             "\v\v"
  57:             "\w\w"
  58:             "\x\x"
@@ -4334,6 +4493,7 @@ Saying: ['\\y\\back slash yankee']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  57:             "\w\w"
  58:             "\x\x"
  59:             "\y\y"
@@ -4341,6 +4501,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  57:             "\w\w"
  58:             "\x\x"
  59:             "\y\y"
@@ -4348,6 +4509,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\z\\back slash z.']
+Heard [('back slash z', '\\z')]
  57:             "\w\w"
  58:             "\x\x"
  59:             "\y\y"
@@ -4355,6 +4517,7 @@ Saying: ['\\z\\back slash z.']
 
 *** End of source buffer ***
 Saying: ['\\z\\back slash zulu']
+Heard [('back slash zulu', '\\z')]
  57:             "\w\w"
  58:             "\x\x"
  59:             "\y\y"
@@ -4362,6 +4525,7 @@ Saying: ['\\z\\back slash zulu']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  58:             "\x\x"
  59:             "\y\y"
  60:             "\z\z"
@@ -4369,6 +4533,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  58:             "\x\x"
  59:             "\y\y"
  60:             "\z\z"
@@ -4376,6 +4541,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\A\\back slash cap a.']
+Heard [('back slash cap a', '\\A')]
  58:             "\x\x"
  59:             "\y\y"
  60:             "\z\z"
@@ -4383,6 +4549,7 @@ Saying: ['\\A\\back slash cap a.']
 
 *** End of source buffer ***
 Saying: ['\\A\\back slash cap alpha', 'new statement']
+Heard [('back slash cap alpha', '\\A'), ('new statement', 'new statement')]
  59:             "\y\y"
  60:             "\z\z"
  61:             "\A\A"
@@ -4390,6 +4557,7 @@ Saying: ['\\A\\back slash cap alpha', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  59:             "\y\y"
  60:             "\z\z"
  61:             "\A\A"
@@ -4397,6 +4565,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\B\\back slash cap b.']
+Heard [('back slash cap b', '\\B')]
  59:             "\y\y"
  60:             "\z\z"
  61:             "\A\A"
@@ -4404,6 +4573,7 @@ Saying: ['\\B\\back slash cap b.']
 
 *** End of source buffer ***
 Saying: ['\\B\\back slash cap bravo', 'new statement']
+Heard [('back slash cap bravo', '\\B'), ('new statement', 'new statement')]
  60:             "\z\z"
  61:             "\A\A"
  62:             "\B\B"
@@ -4411,6 +4581,7 @@ Saying: ['\\B\\back slash cap bravo', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  60:             "\z\z"
  61:             "\A\A"
  62:             "\B\B"
@@ -4418,6 +4589,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\D\\back slash cap d.']
+Heard [('back slash cap d', '\\D')]
  60:             "\z\z"
  61:             "\A\A"
  62:             "\B\B"
@@ -4425,6 +4597,7 @@ Saying: ['\\D\\back slash cap d.']
 
 *** End of source buffer ***
 Saying: ['\\D\\back slash cap delta', 'new statement']
+Heard [('back slash cap delta', '\\D'), ('new statement', 'new statement')]
  61:             "\A\A"
  62:             "\B\B"
  63:             "\D\D"
@@ -4432,6 +4605,7 @@ Saying: ['\\D\\back slash cap delta', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  61:             "\A\A"
  62:             "\B\B"
  63:             "\D\D"
@@ -4439,6 +4613,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\E\\back slash cap e.']
+Heard [('back slash cap e', '\\E')]
  61:             "\A\A"
  62:             "\B\B"
  63:             "\D\D"
@@ -4446,6 +4621,7 @@ Saying: ['\\E\\back slash cap e.']
 
 *** End of source buffer ***
 Saying: ['\\E\\back slash cap echo', 'new statement']
+Heard [('back slash cap echo', '\\E'), ('new statement', 'new statement')]
  62:             "\B\B"
  63:             "\D\D"
  64:             "\E\E"
@@ -4453,6 +4629,7 @@ Saying: ['\\E\\back slash cap echo', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  62:             "\B\B"
  63:             "\D\D"
  64:             "\E\E"
@@ -4460,6 +4637,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\F\\back slash cap f.']
+Heard [('back slash cap f', '\\F')]
  62:             "\B\B"
  63:             "\D\D"
  64:             "\E\E"
@@ -4467,6 +4645,7 @@ Saying: ['\\F\\back slash cap f.']
 
 *** End of source buffer ***
 Saying: ['\\F\\back slash cap foxtrot', 'new statement']
+Heard [('back slash cap foxtrot', '\\F'), ('new statement', 'new statement')]
  63:             "\D\D"
  64:             "\E\E"
  65:             "\F\F"
@@ -4474,6 +4653,7 @@ Saying: ['\\F\\back slash cap foxtrot', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  63:             "\D\D"
  64:             "\E\E"
  65:             "\F\F"
@@ -4481,6 +4661,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\G\\back slash cap g.']
+Heard [('back slash cap g', '\\G')]
  63:             "\D\D"
  64:             "\E\E"
  65:             "\F\F"
@@ -4488,6 +4669,7 @@ Saying: ['\\G\\back slash cap g.']
 
 *** End of source buffer ***
 Saying: ['\\G\\back slash cap golf', 'new statement']
+Heard [('back slash cap golf', '\\G'), ('new statement', 'new statement')]
  64:             "\E\E"
  65:             "\F\F"
  66:             "\G\G"
@@ -4495,6 +4677,7 @@ Saying: ['\\G\\back slash cap golf', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  64:             "\E\E"
  65:             "\F\F"
  66:             "\G\G"
@@ -4502,6 +4685,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\H\\back slash cap h.']
+Heard [('back slash cap h', '\\H')]
  64:             "\E\E"
  65:             "\F\F"
  66:             "\G\G"
@@ -4509,6 +4693,7 @@ Saying: ['\\H\\back slash cap h.']
 
 *** End of source buffer ***
 Saying: ['\\H\\back slash cap hotel', 'new statement']
+Heard [('back slash cap hotel', '\\H'), ('new statement', 'new statement')]
  65:             "\F\F"
  66:             "\G\G"
  67:             "\H\H"
@@ -4516,6 +4701,7 @@ Saying: ['\\H\\back slash cap hotel', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  65:             "\F\F"
  66:             "\G\G"
  67:             "\H\H"
@@ -4523,6 +4709,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\I\\back slash cap i.']
+Heard [('back slash cap i', '\\I')]
  65:             "\F\F"
  66:             "\G\G"
  67:             "\H\H"
@@ -4530,6 +4717,7 @@ Saying: ['\\I\\back slash cap i.']
 
 *** End of source buffer ***
 Saying: ['\\I\\back slash cap india', 'new statement']
+Heard [('back slash cap india', '\\I'), ('new statement', 'new statement')]
  66:             "\G\G"
  67:             "\H\H"
  68:             "\I\I"
@@ -4537,6 +4725,7 @@ Saying: ['\\I\\back slash cap india', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  66:             "\G\G"
  67:             "\H\H"
  68:             "\I\I"
@@ -4544,6 +4733,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\J\\back slash cap j.']
+Heard [('back slash cap j', '\\J')]
  66:             "\G\G"
  67:             "\H\H"
  68:             "\I\I"
@@ -4551,6 +4741,7 @@ Saying: ['\\J\\back slash cap j.']
 
 *** End of source buffer ***
 Saying: ['\\J\\back slash cap juliett', 'new statement']
+Heard [('back slash cap juliett', '\\J'), ('new statement', 'new statement')]
  67:             "\H\H"
  68:             "\I\I"
  69:             "\J\J"
@@ -4558,6 +4749,7 @@ Saying: ['\\J\\back slash cap juliett', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  67:             "\H\H"
  68:             "\I\I"
  69:             "\J\J"
@@ -4565,6 +4757,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\K\\back slash cap k.']
+Heard [('back slash cap k', '\\K')]
  67:             "\H\H"
  68:             "\I\I"
  69:             "\J\J"
@@ -4572,6 +4765,7 @@ Saying: ['\\K\\back slash cap k.']
 
 *** End of source buffer ***
 Saying: ['\\K\\back slash cap kilo', 'new statement']
+Heard [('back slash cap kilo', '\\K'), ('new statement', 'new statement')]
  68:             "\I\I"
  69:             "\J\J"
  70:             "\K\K"
@@ -4579,6 +4773,7 @@ Saying: ['\\K\\back slash cap kilo', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  68:             "\I\I"
  69:             "\J\J"
  70:             "\K\K"
@@ -4586,6 +4781,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\L\\back slash cap l.']
+Heard [('back slash cap l', '\\L')]
  68:             "\I\I"
  69:             "\J\J"
  70:             "\K\K"
@@ -4593,6 +4789,7 @@ Saying: ['\\L\\back slash cap l.']
 
 *** End of source buffer ***
 Saying: ['\\L\\back slash cap lima', 'new statement']
+Heard [('back slash cap lima', '\\L'), ('new statement', 'new statement')]
  69:             "\J\J"
  70:             "\K\K"
  71:             "\L\L"
@@ -4600,6 +4797,7 @@ Saying: ['\\L\\back slash cap lima', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  69:             "\J\J"
  70:             "\K\K"
  71:             "\L\L"
@@ -4607,6 +4805,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\M\\back slash cap m.']
+Heard [('back slash cap m', '\\M')]
  69:             "\J\J"
  70:             "\K\K"
  71:             "\L\L"
@@ -4614,6 +4813,7 @@ Saying: ['\\M\\back slash cap m.']
 
 *** End of source buffer ***
 Saying: ['\\M\\back slash cap mike', 'new statement']
+Heard [('back slash cap mike', '\\M'), ('new statement', 'new statement')]
  70:             "\K\K"
  71:             "\L\L"
  72:             "\M\M"
@@ -4621,6 +4821,7 @@ Saying: ['\\M\\back slash cap mike', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  70:             "\K\K"
  71:             "\L\L"
  72:             "\M\M"
@@ -4628,6 +4829,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\N\\back slash cap n.']
+Heard [('back slash cap n', '\\N')]
  70:             "\K\K"
  71:             "\L\L"
  72:             "\M\M"
@@ -4635,6 +4837,7 @@ Saying: ['\\N\\back slash cap n.']
 
 *** End of source buffer ***
 Saying: ['\\N\\back slash cap november', 'new statement']
+Heard [('back slash cap november', '\\N'), ('new statement', 'new statement')]
  71:             "\L\L"
  72:             "\M\M"
  73:             "\N\N"
@@ -4642,6 +4845,7 @@ Saying: ['\\N\\back slash cap november', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  71:             "\L\L"
  72:             "\M\M"
  73:             "\N\N"
@@ -4649,6 +4853,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\O\\back slash cap o.']
+Heard [('back slash cap o', '\\O')]
  71:             "\L\L"
  72:             "\M\M"
  73:             "\N\N"
@@ -4656,6 +4861,7 @@ Saying: ['\\O\\back slash cap o.']
 
 *** End of source buffer ***
 Saying: ['\\O\\back slash cap oscar', 'new statement']
+Heard [('back slash cap oscar', '\\O'), ('new statement', 'new statement')]
  72:             "\M\M"
  73:             "\N\N"
  74:             "\O\O"
@@ -4663,6 +4869,7 @@ Saying: ['\\O\\back slash cap oscar', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  72:             "\M\M"
  73:             "\N\N"
  74:             "\O\O"
@@ -4670,6 +4877,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\P\\back slash cap p.']
+Heard [('back slash cap p', '\\P')]
  72:             "\M\M"
  73:             "\N\N"
  74:             "\O\O"
@@ -4677,6 +4885,7 @@ Saying: ['\\P\\back slash cap p.']
 
 *** End of source buffer ***
 Saying: ['\\P\\back slash cap papa', 'new statement']
+Heard [('back slash cap papa', '\\P'), ('new statement', 'new statement')]
  73:             "\N\N"
  74:             "\O\O"
  75:             "\P\P"
@@ -4684,6 +4893,7 @@ Saying: ['\\P\\back slash cap papa', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  73:             "\N\N"
  74:             "\O\O"
  75:             "\P\P"
@@ -4691,6 +4901,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\Q\\back slash cap q.']
+Heard [('back slash cap q', '\\Q')]
  73:             "\N\N"
  74:             "\O\O"
  75:             "\P\P"
@@ -4698,6 +4909,7 @@ Saying: ['\\Q\\back slash cap q.']
 
 *** End of source buffer ***
 Saying: ['\\Q\\back slash cap quebec', 'new statement']
+Heard [('back slash cap quebec', '\\Q'), ('new statement', 'new statement')]
  74:             "\O\O"
  75:             "\P\P"
  76:             "\Q\Q"
@@ -4705,6 +4917,7 @@ Saying: ['\\Q\\back slash cap quebec', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  74:             "\O\O"
  75:             "\P\P"
  76:             "\Q\Q"
@@ -4712,6 +4925,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\R\\back slash cap r.']
+Heard [('back slash cap r', '\\R')]
  74:             "\O\O"
  75:             "\P\P"
  76:             "\Q\Q"
@@ -4719,6 +4933,7 @@ Saying: ['\\R\\back slash cap r.']
 
 *** End of source buffer ***
 Saying: ['\\R\\back slash cap romeo', 'new statement']
+Heard [('back slash cap romeo', '\\R'), ('new statement', 'new statement')]
  75:             "\P\P"
  76:             "\Q\Q"
  77:             "\R\R"
@@ -4726,6 +4941,7 @@ Saying: ['\\R\\back slash cap romeo', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  75:             "\P\P"
  76:             "\Q\Q"
  77:             "\R\R"
@@ -4733,6 +4949,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\S\\back slash cap s.']
+Heard [('back slash cap s', '\\S')]
  75:             "\P\P"
  76:             "\Q\Q"
  77:             "\R\R"
@@ -4740,6 +4957,7 @@ Saying: ['\\S\\back slash cap s.']
 
 *** End of source buffer ***
 Saying: ['\\S\\back slash cap sierra', 'new statement']
+Heard [('back slash cap sierra', '\\S'), ('new statement', 'new statement')]
  76:             "\Q\Q"
  77:             "\R\R"
  78:             "\S\S"
@@ -4747,6 +4965,7 @@ Saying: ['\\S\\back slash cap sierra', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  76:             "\Q\Q"
  77:             "\R\R"
  78:             "\S\S"
@@ -4754,6 +4973,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\T\\back slash cap t.']
+Heard [('back slash cap t', '\\T')]
  76:             "\Q\Q"
  77:             "\R\R"
  78:             "\S\S"
@@ -4761,6 +4981,7 @@ Saying: ['\\T\\back slash cap t.']
 
 *** End of source buffer ***
 Saying: ['\\T\\back slash cap tango', 'new statement']
+Heard [('back slash cap tango', '\\T'), ('new statement', 'new statement')]
  77:             "\R\R"
  78:             "\S\S"
  79:             "\T\T"
@@ -4768,6 +4989,7 @@ Saying: ['\\T\\back slash cap tango', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  77:             "\R\R"
  78:             "\S\S"
  79:             "\T\T"
@@ -4775,6 +4997,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\U\\back slash cap u.']
+Heard [('back slash cap u', '\\U')]
  77:             "\R\R"
  78:             "\S\S"
  79:             "\T\T"
@@ -4782,6 +5005,7 @@ Saying: ['\\U\\back slash cap u.']
 
 *** End of source buffer ***
 Saying: ['\\U\\back slash cap uniform', 'new statement']
+Heard [('back slash cap uniform', '\\U'), ('new statement', 'new statement')]
  78:             "\S\S"
  79:             "\T\T"
  80:             "\U\U"
@@ -4789,6 +5013,7 @@ Saying: ['\\U\\back slash cap uniform', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  78:             "\S\S"
  79:             "\T\T"
  80:             "\U\U"
@@ -4796,6 +5021,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\V\\back slash cap v.']
+Heard [('back slash cap v', '\\V')]
  78:             "\S\S"
  79:             "\T\T"
  80:             "\U\U"
@@ -4803,6 +5029,7 @@ Saying: ['\\V\\back slash cap v.']
 
 *** End of source buffer ***
 Saying: ['\\V\\back slash cap victor', 'new statement']
+Heard [('back slash cap victor', '\\V'), ('new statement', 'new statement')]
  79:             "\T\T"
  80:             "\U\U"
  81:             "\V\V"
@@ -4810,6 +5037,7 @@ Saying: ['\\V\\back slash cap victor', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  79:             "\T\T"
  80:             "\U\U"
  81:             "\V\V"
@@ -4817,6 +5045,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\W\\back slash cap w.']
+Heard [('back slash cap w', '\\W')]
  79:             "\T\T"
  80:             "\U\U"
  81:             "\V\V"
@@ -4824,6 +5053,7 @@ Saying: ['\\W\\back slash cap w.']
 
 *** End of source buffer ***
 Saying: ['\\W\\back slash cap whiskey', 'new statement']
+Heard [('back slash cap whiskey', '\\W'), ('new statement', 'new statement')]
  80:             "\U\U"
  81:             "\V\V"
  82:             "\W\W"
@@ -4831,6 +5061,7 @@ Saying: ['\\W\\back slash cap whiskey', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  80:             "\U\U"
  81:             "\V\V"
  82:             "\W\W"
@@ -4838,6 +5069,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\X\\back slash cap x.']
+Heard [('back slash cap x', '\\X')]
  80:             "\U\U"
  81:             "\V\V"
  82:             "\W\W"
@@ -4845,6 +5077,7 @@ Saying: ['\\X\\back slash cap x.']
 
 *** End of source buffer ***
 Saying: ['\\X\\back slash cap xray', 'new statement']
+Heard [('back slash cap xray', '\\X'), ('new statement', 'new statement')]
  81:             "\V\V"
  82:             "\W\W"
  83:             "\X\X"
@@ -4852,6 +5085,7 @@ Saying: ['\\X\\back slash cap xray', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  81:             "\V\V"
  82:             "\W\W"
  83:             "\X\X"
@@ -4859,6 +5093,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\Y\\back slash cap y.']
+Heard [('back slash cap y', '\\Y')]
  81:             "\V\V"
  82:             "\W\W"
  83:             "\X\X"
@@ -4866,6 +5101,7 @@ Saying: ['\\Y\\back slash cap y.']
 
 *** End of source buffer ***
 Saying: ['\\Y\\back slash cap yankee', 'new statement']
+Heard [('back slash cap yankee', '\\Y'), ('new statement', 'new statement')]
  82:             "\W\W"
  83:             "\X\X"
  84:             "\Y\Y"
@@ -4873,6 +5109,7 @@ Saying: ['\\Y\\back slash cap yankee', 'new statement']
 
 *** End of source buffer ***
 Saying: ['quotes']
+Heard [('quotes', 'quotes')]
  82:             "\W\W"
  83:             "\X\X"
  84:             "\Y\Y"
@@ -4880,6 +5117,7 @@ Saying: ['quotes']
 
 *** End of source buffer ***
 Saying: ['\\Z\\back slash cap z.']
+Heard [('back slash cap z', '\\Z')]
  82:             "\W\W"
  83:             "\X\X"
  84:             "\Y\Y"
@@ -4887,6 +5125,7 @@ Saying: ['\\Z\\back slash cap z.']
 
 *** End of source buffer ***
 Saying: ['\\Z\\back slash cap zulu', 'new statement']
+Heard [('back slash cap zulu', '\\Z'), ('new statement', 'new statement')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4894,6 +5133,7 @@ Saying: ['\\Z\\back slash cap zulu', 'new statement']
 
 *** End of source buffer ***
 Saying: ['index', 'semi', 'variable', 'semi']
+Heard [('index', 'index'), ('semi', 'semi'), ('variable', 'variable'), ('semi', 'semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4901,6 +5141,7 @@ Saying: ['index', 'semi', 'variable', 'semi']
 
 *** End of source buffer ***
 Saying: ['previous semi', 'previous semi']
+Heard [('previous semi', 'previous semi'), ('previous semi', 'previous semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4908,6 +5149,7 @@ Saying: ['previous semi', 'previous semi']
 
 *** End of source buffer ***
 Saying: ['after semi']
+Heard [('after semi', 'after semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4915,6 +5157,7 @@ Saying: ['after semi']
 
 *** End of source buffer ***
 Saying: ['before previous semi']
+Heard [('before previous semi', 'before previous semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4922,6 +5165,7 @@ Saying: ['before previous semi']
 
 *** End of source buffer ***
 Saying: ['after semi']
+Heard [('after semi', 'after semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4929,6 +5173,7 @@ Saying: ['after semi']
 
 *** End of source buffer ***
 Saying: ['before semi']
+Heard [('before semi', 'before semi')]
  83:             "\X\X"
  84:             "\Y\Y"
  85:             "\Z\Z"
@@ -4936,6 +5181,7 @@ Saying: ['before semi']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4943,6 +5189,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3']
+Heard [('variable', 'variable'), ('equals', ' = '), ('brackets', 'brackets'), ('0', '0'), ('comma', ','), ('1', '1'), ('comma', ','), ('3', '3')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4950,6 +5197,7 @@ Saying: ['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma'
 
 *** End of source buffer ***
 Saying: ['previous comma']
+Heard [('previous comma', 'previous comma')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4957,6 +5205,7 @@ Saying: ['previous comma']
 
 *** End of source buffer ***
 Saying: ['after comma']
+Heard [('after comma', 'after comma')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4964,6 +5213,7 @@ Saying: ['after comma']
 
 *** End of source buffer ***
 Saying: ['before previous comma']
+Heard [('before previous comma', 'before previous comma')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4971,6 +5221,7 @@ Saying: ['before previous comma']
 
 *** End of source buffer ***
 Saying: ['before next comma']
+Heard [('before next comma', 'before next comma')]
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
@@ -4978,6 +5229,7 @@ Saying: ['before next comma']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -4985,6 +5237,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
+Heard [('variable', 'variable'), ('dot', '.'), ('field', 'field'), ('dot', '.'), ('value', 'value')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -4992,6 +5245,7 @@ Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
 
 *** End of source buffer ***
 Saying: ['previous dot', 'previous dot']
+Heard [('previous dot', 'previous dot'), ('previous dot', 'previous dot')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -4999,6 +5253,7 @@ Saying: ['previous dot', 'previous dot']
 
 *** End of source buffer ***
 Saying: ['after dot']
+Heard [('after dot', 'after dot')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -5006,6 +5261,7 @@ Saying: ['after dot']
 
 *** End of source buffer ***
 Saying: ['before previous dot']
+Heard [('before previous dot', 'before previous dot')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -5013,6 +5269,7 @@ Saying: ['before previous dot']
 
 *** End of source buffer ***
 Saying: ['before next dot']
+Heard [('before next dot', 'before next dot')]
  85:             "\Z\Z"
  86:             Index;variable;
  87:             variable = [0, 1, 3]
@@ -5020,6 +5277,7 @@ Saying: ['before next dot']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5027,6 +5285,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['braces', 'variable', ': \\colon', '0', 'value', ': \\colon', '0']
+Heard [('braces', 'braces'), ('variable', 'variable'), ('colon', ': '), ('0', '0'), ('value', 'value'), ('colon', ': '), ('0', '0')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5034,6 +5293,7 @@ Saying: ['braces', 'variable', ': \\colon', '0', 'value', ': \\colon', '0']
 
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
+Heard [('previous colon', 'previous colon'), ('previous colon', 'previous colon')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5041,6 +5301,7 @@ Saying: ['previous colon', 'previous colon']
 
 *** End of source buffer ***
 Saying: ['after colon']
+Heard [('after colon', 'after colon')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5048,6 +5309,7 @@ Saying: ['after colon']
 
 *** End of source buffer ***
 Saying: ['before previous colon']
+Heard [('before previous colon', 'before previous colon')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5055,6 +5317,7 @@ Saying: ['before previous colon']
 
 *** End of source buffer ***
 Saying: ['before next colon']
+Heard [('before next colon', 'before next colon')]
  86:             Index;variable;
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
@@ -5062,6 +5325,7 @@ Saying: ['before next colon']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5069,6 +5333,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
+Heard [('variable', 'variable'), ('equals', ' = '), ('2', '2'), ('asterisk', '*'), ('3', '3'), ('asterisk', '*'), ('4', '4')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5076,6 +5341,7 @@ Saying: ['variable', ' = \\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
 
 *** End of source buffer ***
 Saying: ['previous asterisk', 'previous star']
+Heard [('previous asterisk', 'previous asterisk'), ('previous star', 'previous star')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5083,6 +5349,7 @@ Saying: ['previous asterisk', 'previous star']
 
 *** End of source buffer ***
 Saying: ['after star']
+Heard [('after star', 'after star')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5090,6 +5357,7 @@ Saying: ['after star']
 
 *** End of source buffer ***
 Saying: ['before previous asterisk']
+Heard [('before previous asterisk', 'before previous asterisk')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5097,6 +5365,7 @@ Saying: ['before previous asterisk']
 
 *** End of source buffer ***
 Saying: ['before next star']
+Heard [('before next star', 'before next star')]
  87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
@@ -5104,6 +5373,7 @@ Saying: ['before next star']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5111,6 +5381,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4']
+Heard [('variable', 'variable'), ('equals', 'equals'), ('2', '2'), ('slash', '/'), ('3', '3'), ('slash', '/'), ('4', '4')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5118,6 +5389,7 @@ Saying: ['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4']
 
 *** End of source buffer ***
 Saying: ['previous slash', 'previous slash']
+Heard [('previous slash', 'previous slash'), ('previous slash', 'previous slash')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5125,6 +5397,7 @@ Saying: ['previous slash', 'previous slash']
 
 *** End of source buffer ***
 Saying: ['after slash']
+Heard [('after slash', 'after slash')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5132,6 +5405,7 @@ Saying: ['after slash']
 
 *** End of source buffer ***
 Saying: ['before previous slash']
+Heard [('before previous slash', 'before previous slash')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5139,6 +5413,7 @@ Saying: ['before previous slash']
 
 *** End of source buffer ***
 Saying: ['before next slash']
+Heard [('before next slash', 'before next slash')]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
@@ -5146,6 +5421,7 @@ Saying: ['before next slash']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5153,6 +5429,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', '2', ' + \\plus', '3', ' + \\plus', '4']
+Heard [('variable', 'variable'), ('equals', ' = '), ('2', '2'), ('plus', ' + '), ('3', '3'), ('plus', ' + '), ('4', '4')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5160,6 +5437,7 @@ Saying: ['variable', ' = \\equals', '2', ' + \\plus', '3', ' + \\plus', '4']
 
 *** End of source buffer ***
 Saying: ['previous plus', 'previous plus']
+Heard [('previous plus', 'previous plus'), ('previous plus', 'previous plus')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5167,6 +5445,7 @@ Saying: ['previous plus', 'previous plus']
 
 *** End of source buffer ***
 Saying: ['after plus']
+Heard [('after plus', 'after plus')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5174,6 +5453,7 @@ Saying: ['after plus']
 
 *** End of source buffer ***
 Saying: ['before previous plus']
+Heard [('before previous plus', 'before previous plus')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5181,6 +5461,7 @@ Saying: ['before previous plus']
 
 *** End of source buffer ***
 Saying: ['before next plus']
+Heard [('before next plus', 'before next plus')]
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4
  91:             variable = 2/3/4
@@ -5188,6 +5469,7 @@ Saying: ['before next plus']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5195,6 +5477,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2', ' - \\minus', '3', ' - \\minus', '4']
+Heard [('variable', 'variable'), ('equals', 'equals'), ('2', '2'), ('minus', ' - '), ('3', '3'), ('minus', ' - '), ('4', '4')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5202,6 +5485,7 @@ Saying: ['variable', 'equals', '2', ' - \\minus', '3', ' - \\minus', '4']
 
 *** End of source buffer ***
 Saying: ['previous minus', 'previous minus']
+Heard [('previous minus', 'previous minus'), ('previous minus', 'previous minus')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5209,6 +5493,7 @@ Saying: ['previous minus', 'previous minus']
 
 *** End of source buffer ***
 Saying: ['after minus']
+Heard [('after minus', 'after minus')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5216,6 +5501,7 @@ Saying: ['after minus']
 
 *** End of source buffer ***
 Saying: ['before previous minus']
+Heard [('before previous minus', 'before previous minus')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5223,6 +5509,7 @@ Saying: ['before previous minus']
 
 *** End of source buffer ***
 Saying: ['before next minus']
+Heard [('before next minus', 'before next minus')]
  90:             variable = 2*3*4
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
@@ -5230,6 +5517,7 @@ Saying: ['before next minus']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5237,6 +5525,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2', ' % \\modulo', '3', ' % \\modulo', '4']
+Heard [('variable', 'variable'), ('equals', 'equals'), ('2', '2'), ('modulo', ' % '), ('3', '3'), ('modulo', ' % '), ('4', '4')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5244,6 +5533,7 @@ Saying: ['variable', 'equals', '2', ' % \\modulo', '3', ' % \\modulo', '4']
 
 *** End of source buffer ***
 Saying: ['previous percent', 'previous percent']
+Heard [('previous percent', 'previous percent'), ('previous percent', 'previous percent')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5251,6 +5541,7 @@ Saying: ['previous percent', 'previous percent']
 
 *** End of source buffer ***
 Saying: ['after percent']
+Heard [('after percent', 'after percent')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5258,6 +5549,7 @@ Saying: ['after percent']
 
 *** End of source buffer ***
 Saying: ['before previous percent']
+Heard [('before previous percent', 'before previous percent')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5265,6 +5557,7 @@ Saying: ['before previous percent']
 
 *** End of source buffer ***
 Saying: ['before next percent']
+Heard [('before next percent', 'before next percent')]
  91:             variable = 2/3/4
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
@@ -5272,6 +5565,7 @@ Saying: ['before next percent']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5279,6 +5573,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '&\\and percent', '1', '&\\and percent', '2']
+Heard [('0', '0'), ('and percent', '&'), ('1', '1'), ('and percent', '&'), ('2', '2')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5286,6 +5581,7 @@ Saying: ['0', '&\\and percent', '1', '&\\and percent', '2']
 
 *** End of source buffer ***
 Saying: ['previous and percent', 'previous and percent']
+Heard [('previous and percent', 'previous and percent'), ('previous and percent', 'previous and percent')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5293,6 +5589,7 @@ Saying: ['previous and percent', 'previous and percent']
 
 *** End of source buffer ***
 Saying: ['after and percent']
+Heard [('after and percent', 'after and percent')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5300,6 +5597,7 @@ Saying: ['after and percent']
 
 *** End of source buffer ***
 Saying: ['before previous and percent']
+Heard [('before previous and percent', 'before previous and percent')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5307,6 +5605,7 @@ Saying: ['before previous and percent']
 
 *** End of source buffer ***
 Saying: ['before next and percent']
+Heard [('before next and percent', 'before next and percent')]
  92:             variable = 2 + 3 + 4
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
@@ -5314,6 +5613,7 @@ Saying: ['before next and percent']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5321,6 +5621,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '|\\pipe', '1', '|\\pipe', '2']
+Heard [('0', '0'), ('pipe', '|'), ('1', '1'), ('pipe', '|'), ('2', '2')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5328,6 +5629,7 @@ Saying: ['0', '|\\pipe', '1', '|\\pipe', '2']
 
 *** End of source buffer ***
 Saying: ['previous pipe', 'previous pipe']
+Heard [('previous pipe', 'previous pipe'), ('previous pipe', 'previous pipe')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5335,6 +5637,7 @@ Saying: ['previous pipe', 'previous pipe']
 
 *** End of source buffer ***
 Saying: ['after pipe']
+Heard [('after pipe', 'after pipe')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5342,6 +5645,7 @@ Saying: ['after pipe']
 
 *** End of source buffer ***
 Saying: ['before previous pipe']
+Heard [('before previous pipe', 'before previous pipe')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5349,6 +5653,7 @@ Saying: ['before previous pipe']
 
 *** End of source buffer ***
 Saying: ['before next pipe']
+Heard [('before next pipe', 'before next pipe')]
  93:             variable = 2 - 3 - 4
  94:             variable = 2 % 3 % 4
  95:             0&1&2
@@ -5356,6 +5661,7 @@ Saying: ['before next pipe']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5363,6 +5669,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '...\\ellipsis', '1', '...\\ellipsis', '2']
+Heard [('0', '0'), ('ellipsis', '...'), ('1', '1'), ('ellipsis', '...'), ('2', '2')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5370,6 +5677,7 @@ Saying: ['0', '...\\ellipsis', '1', '...\\ellipsis', '2']
 
 *** End of source buffer ***
 Saying: ['previous ellipsis', 'previous ellipsis']
+Heard [('previous ellipsis', 'previous ellipsis'), ('previous ellipsis', 'previous ellipsis')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5377,6 +5685,7 @@ Saying: ['previous ellipsis', 'previous ellipsis']
 
 *** End of source buffer ***
 Saying: ['after ellipsis']
+Heard [('after ellipsis', 'after ellipsis')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5384,6 +5693,7 @@ Saying: ['after ellipsis']
 
 *** End of source buffer ***
 Saying: ['before previous ellipsis']
+Heard [('before previous ellipsis', 'before previous ellipsis')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5391,6 +5701,7 @@ Saying: ['before previous ellipsis']
 
 *** End of source buffer ***
 Saying: ['before next ellipsis']
+Heard [('before next ellipsis', 'before next ellipsis')]
  94:             variable = 2 % 3 % 4
  95:             0&1&2
  96:             0|1|2
@@ -5398,6 +5709,7 @@ Saying: ['before next ellipsis']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5405,6 +5717,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '!\\bang', '1', '!\\bang', '2']
+Heard [('0', '0'), ('bang', '!'), ('1', '1'), ('bang', '!'), ('2', '2')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5412,6 +5725,7 @@ Saying: ['0', '!\\bang', '1', '!\\bang', '2']
 
 *** End of source buffer ***
 Saying: ['previous bang', 'previous bang']
+Heard [('previous bang', 'previous bang'), ('previous bang', 'previous bang')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5419,6 +5733,7 @@ Saying: ['previous bang', 'previous bang']
 
 *** End of source buffer ***
 Saying: ['after bang']
+Heard [('after bang', 'after bang')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5426,6 +5741,7 @@ Saying: ['after bang']
 
 *** End of source buffer ***
 Saying: ['before previous bang']
+Heard [('before previous bang', 'before previous bang')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5433,6 +5749,7 @@ Saying: ['before previous bang']
 
 *** End of source buffer ***
 Saying: ['before next bang']
+Heard [('before next bang', 'before next bang')]
  95:             0&1&2
  96:             0|1|2
  97:             0...1...2
@@ -5440,6 +5757,7 @@ Saying: ['before next bang']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5447,6 +5765,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '?\\question mark', '1', '?\\question mark', '2']
+Heard [('0', '0'), ('question mark', '?'), ('1', '1'), ('question mark', '?'), ('2', '2')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5454,6 +5773,7 @@ Saying: ['0', '?\\question mark', '1', '?\\question mark', '2']
 
 *** End of source buffer ***
 Saying: ['previous question mark', 'previous question mark']
+Heard [('previous question mark', 'previous question mark'), ('previous question mark', 'previous question mark')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5461,6 +5781,7 @@ Saying: ['previous question mark', 'previous question mark']
 
 *** End of source buffer ***
 Saying: ['after question mark']
+Heard [('after question mark', 'after question mark')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5468,6 +5789,7 @@ Saying: ['after question mark']
 
 *** End of source buffer ***
 Saying: ['before previous question mark']
+Heard [('before previous question mark', 'before previous question mark')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5475,6 +5797,7 @@ Saying: ['before previous question mark']
 
 *** End of source buffer ***
 Saying: ['before next question mark']
+Heard [('before next question mark', 'before next question mark')]
  96:             0|1|2
  97:             0...1...2
  98:             0!1!2
@@ -5482,6 +5805,7 @@ Saying: ['before next question mark']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5489,6 +5813,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '#\\pound', 'sign', '1', '#\\pound', 'sign', '2']
+Heard [('0', '0'), ('pound', '#'), ('sign', 'sign'), ('1', '1'), ('pound', '#'), ('sign', 'sign'), ('2', '2')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5496,6 +5821,7 @@ Saying: ['0', '#\\pound', 'sign', '1', '#\\pound', 'sign', '2']
 
 *** End of source buffer ***
 Saying: ['previous pound sign', 'previous pound sign']
+Heard [('previous pound sign', 'previous pound sign'), ('previous pound sign', 'previous pound sign')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5503,6 +5829,7 @@ Saying: ['previous pound sign', 'previous pound sign']
 
 *** End of source buffer ***
 Saying: ['after pound sign']
+Heard [('after pound sign', 'after pound sign')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5510,6 +5837,7 @@ Saying: ['after pound sign']
 
 *** End of source buffer ***
 Saying: ['before previous pound sign']
+Heard [('before previous pound sign', 'before previous pound sign')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5517,6 +5845,7 @@ Saying: ['before previous pound sign']
 
 *** End of source buffer ***
 Saying: ['before next pound sign']
+Heard [('before next pound sign', 'before next pound sign')]
  97:             0...1...2
  98:             0!1!2
  99:             0?1?2
@@ -5524,6 +5853,7 @@ Saying: ['before next pound sign']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5531,6 +5861,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '::\\double colon', '1', '::\\double colon', '2']
+Heard [('0', '0'), ('double colon', '::'), ('1', '1'), ('double colon', '::'), ('2', '2')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5538,6 +5869,7 @@ Saying: ['0', '::\\double colon', '1', '::\\double colon', '2']
 
 *** End of source buffer ***
 Saying: ['previous double colon', 'previous double colon']
+Heard [('previous double colon', 'previous double colon'), ('previous double colon', 'previous double colon')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5545,6 +5877,7 @@ Saying: ['previous double colon', 'previous double colon']
 
 *** End of source buffer ***
 Saying: ['after double colon']
+Heard [('after double colon', 'after double colon')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5552,6 +5885,7 @@ Saying: ['after double colon']
 
 *** End of source buffer ***
 Saying: ['before previous double colon']
+Heard [('before previous double colon', 'before previous double colon')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5559,6 +5893,7 @@ Saying: ['before previous double colon']
 
 *** End of source buffer ***
 Saying: ['before next double colon']
+Heard [('before next double colon', 'before next double colon')]
  98:             0!1!2
  99:             0?1?2
 100:             0#1#2
@@ -5566,6 +5901,7 @@ Saying: ['before next double colon']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5573,6 +5909,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '~\\tilde', '1', '~\\tilde', '2']
+Heard [('0', '0'), ('tilde', '~'), ('1', '1'), ('tilde', '~'), ('2', '2')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5580,6 +5917,7 @@ Saying: ['0', '~\\tilde', '1', '~\\tilde', '2']
 
 *** End of source buffer ***
 Saying: ['previous tilde', 'previous tilde']
+Heard [('previous tilde', 'previous tilde'), ('previous tilde', 'previous tilde')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5587,6 +5925,7 @@ Saying: ['previous tilde', 'previous tilde']
 
 *** End of source buffer ***
 Saying: ['after tilde']
+Heard [('after tilde', 'after tilde')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5594,6 +5933,7 @@ Saying: ['after tilde']
 
 *** End of source buffer ***
 Saying: ['before previous tilde']
+Heard [('before previous tilde', 'before previous tilde')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5601,6 +5941,7 @@ Saying: ['before previous tilde']
 
 *** End of source buffer ***
 Saying: ['before next tilde']
+Heard [('before next tilde', 'before next tilde')]
  99:             0?1?2
 100:             0#1#2
 101:             0::1::2
@@ -5608,6 +5949,7 @@ Saying: ['before next tilde']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5615,6 +5957,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '<\\less sign', '1', '<\\less sign', '2']
+Heard [('0', '0'), ('less sign', '<'), ('1', '1'), ('less sign', '<'), ('2', '2')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5622,6 +5965,7 @@ Saying: ['0', '<\\less sign', '1', '<\\less sign', '2']
 
 *** End of source buffer ***
 Saying: ['previous less sign', 'previous less sign']
+Heard [('previous less sign', 'previous less sign'), ('previous less sign', 'previous less sign')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5629,6 +5973,7 @@ Saying: ['previous less sign', 'previous less sign']
 
 *** End of source buffer ***
 Saying: ['after less sign']
+Heard [('after less sign', 'after less sign')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5636,6 +5981,7 @@ Saying: ['after less sign']
 
 *** End of source buffer ***
 Saying: ['before previous less sign']
+Heard [('before previous less sign', 'before previous less sign')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5643,6 +5989,7 @@ Saying: ['before previous less sign']
 
 *** End of source buffer ***
 Saying: ['before next less sign']
+Heard [('before next less sign', 'before next less sign')]
 100:             0#1#2
 101:             0::1::2
 102:             0~1~2
@@ -5650,6 +5997,7 @@ Saying: ['before next less sign']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5657,6 +6005,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '>\\greater sign', '1', '>\\greater sign', '2']
+Heard [('0', '0'), ('greater sign', '>'), ('1', '1'), ('greater sign', '>'), ('2', '2')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5664,6 +6013,7 @@ Saying: ['0', '>\\greater sign', '1', '>\\greater sign', '2']
 
 *** End of source buffer ***
 Saying: ['previous greater sign', 'previous greater sign']
+Heard [('previous greater sign', 'previous greater sign'), ('previous greater sign', 'previous greater sign')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5671,6 +6021,7 @@ Saying: ['previous greater sign', 'previous greater sign']
 
 *** End of source buffer ***
 Saying: ['after greater sign']
+Heard [('after greater sign', 'after greater sign')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5678,6 +6029,7 @@ Saying: ['after greater sign']
 
 *** End of source buffer ***
 Saying: ['before previous greater sign']
+Heard [('before previous greater sign', 'before previous greater sign')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5685,6 +6037,7 @@ Saying: ['before previous greater sign']
 
 *** End of source buffer ***
 Saying: ['before next greater sign']
+Heard [('before next greater sign', 'before next greater sign')]
 101:             0::1::2
 102:             0~1~2
 103:             0<1<2
@@ -5692,6 +6045,7 @@ Saying: ['before next greater sign']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5699,6 +6053,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['0', '=\\equal sign', '1', '=\\equal sign', '2']
+Heard [('0', '0'), ('equal sign', '='), ('1', '1'), ('equal sign', '='), ('2', '2')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5706,6 +6061,7 @@ Saying: ['0', '=\\equal sign', '1', '=\\equal sign', '2']
 
 *** End of source buffer ***
 Saying: ['previous equal sign', 'previous equal sign']
+Heard [('previous equal sign', 'previous equal sign'), ('previous equal sign', 'previous equal sign')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5713,6 +6069,7 @@ Saying: ['previous equal sign', 'previous equal sign']
 
 *** End of source buffer ***
 Saying: ['after equal sign']
+Heard [('after equal sign', 'after equal sign')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5720,6 +6077,7 @@ Saying: ['after equal sign']
 
 *** End of source buffer ***
 Saying: ['before previous equal sign']
+Heard [('before previous equal sign', 'before previous equal sign')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5727,6 +6085,7 @@ Saying: ['before previous equal sign']
 
 *** End of source buffer ***
 Saying: ['before next equal sign']
+Heard [('before next equal sign', 'before next equal sign')]
 102:             0~1~2
 103:             0<1<2
 104:             0>1>2
@@ -5734,6 +6093,7 @@ Saying: ['before next equal sign']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5741,6 +6101,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between parens', '1']
+Heard [('between parens', 'between parens'), ('1', '1')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5748,6 +6109,7 @@ Saying: ['between parens', '1']
 
 *** End of source buffer ***
 Saying: ['before previous paren']
+Heard [('before previous paren', 'before previous paren')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5755,6 +6117,7 @@ Saying: ['before previous paren']
 
 *** End of source buffer ***
 Saying: ['after paren']
+Heard [('after paren', 'after paren')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5762,6 +6125,7 @@ Saying: ['after paren']
 
 *** End of source buffer ***
 Saying: ['before paren']
+Heard [('before paren', 'before paren')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5769,6 +6133,7 @@ Saying: ['before paren']
 
 *** End of source buffer ***
 Saying: ['previous paren']
+Heard [('previous paren', 'previous paren')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5776,6 +6141,7 @@ Saying: ['previous paren']
 
 *** End of source buffer ***
 Saying: ['out of parens']
+Heard [('out of parens', 'out of parens')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5783,6 +6149,7 @@ Saying: ['out of parens']
 
 *** End of source buffer ***
 Saying: ['before previous paren']
+Heard [('before previous paren', 'before previous paren')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5790,6 +6157,7 @@ Saying: ['before previous paren']
 
 *** End of source buffer ***
 Saying: ['back out of parens']
+Heard [('back out of parens', 'back out of parens')]
 103:             0<1<2
 104:             0>1>2
 105:             0=1=2
@@ -5797,6 +6165,7 @@ Saying: ['back out of parens']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5804,6 +6173,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between brackets', '1']
+Heard [('between brackets', 'between brackets'), ('1', '1')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5811,6 +6181,7 @@ Saying: ['between brackets', '1']
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
+Heard [('before previous bracket', 'before previous bracket')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5818,6 +6189,7 @@ Saying: ['before previous bracket']
 
 *** End of source buffer ***
 Saying: ['after bracket']
+Heard [('after bracket', 'after bracket')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5825,6 +6197,7 @@ Saying: ['after bracket']
 
 *** End of source buffer ***
 Saying: ['before bracket']
+Heard [('before bracket', 'before bracket')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5832,6 +6205,7 @@ Saying: ['before bracket']
 
 *** End of source buffer ***
 Saying: ['previous bracket']
+Heard [('previous bracket', 'previous bracket')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5839,6 +6213,7 @@ Saying: ['previous bracket']
 
 *** End of source buffer ***
 Saying: ['out of brackets']
+Heard [('out of brackets', 'out of brackets')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5846,6 +6221,7 @@ Saying: ['out of brackets']
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
+Heard [('before previous bracket', 'before previous bracket')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5853,6 +6229,7 @@ Saying: ['before previous bracket']
 
 *** End of source buffer ***
 Saying: ['back out of brackets']
+Heard [('back out of brackets', 'back out of brackets')]
 104:             0>1>2
 105:             0=1=2
 106:             (1)
@@ -5860,6 +6237,7 @@ Saying: ['back out of brackets']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5867,6 +6245,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between braces', '1']
+Heard [('between braces', 'between braces'), ('1', '1')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5874,6 +6253,7 @@ Saying: ['between braces', '1']
 
 *** End of source buffer ***
 Saying: ['before previous brace']
+Heard [('before previous brace', 'before previous brace')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5881,6 +6261,7 @@ Saying: ['before previous brace']
 
 *** End of source buffer ***
 Saying: ['after brace']
+Heard [('after brace', 'after brace')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5888,6 +6269,7 @@ Saying: ['after brace']
 
 *** End of source buffer ***
 Saying: ['before brace']
+Heard [('before brace', 'before brace')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5895,6 +6277,7 @@ Saying: ['before brace']
 
 *** End of source buffer ***
 Saying: ['previous brace']
+Heard [('previous brace', 'previous brace')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5902,6 +6285,7 @@ Saying: ['previous brace']
 
 *** End of source buffer ***
 Saying: ['out of braces']
+Heard [('out of braces', 'out of braces')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5909,6 +6293,7 @@ Saying: ['out of braces']
 
 *** End of source buffer ***
 Saying: ['before previous brace']
+Heard [('before previous brace', 'before previous brace')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5916,6 +6301,7 @@ Saying: ['before previous brace']
 
 *** End of source buffer ***
 Saying: ['back out of braces']
+Heard [('back out of braces', 'back out of braces')]
 105:             0=1=2
 106:             (1)
 107:             [1]
@@ -5923,6 +6309,7 @@ Saying: ['back out of braces']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5930,6 +6317,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between angled', '1']
+Heard [('between angled', 'between angled'), ('1', '1')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5937,6 +6325,7 @@ Saying: ['between angled', '1']
 
 *** End of source buffer ***
 Saying: ['before previous angled']
+Heard [('before previous angled', 'before previous angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5944,6 +6333,7 @@ Saying: ['before previous angled']
 
 *** End of source buffer ***
 Saying: ['after angled']
+Heard [('after angled', 'after angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5951,6 +6341,7 @@ Saying: ['after angled']
 
 *** End of source buffer ***
 Saying: ['before angled']
+Heard [('before angled', 'before angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5958,6 +6349,7 @@ Saying: ['before angled']
 
 *** End of source buffer ***
 Saying: ['previous angled']
+Heard [('previous angled', 'previous angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5965,6 +6357,7 @@ Saying: ['previous angled']
 
 *** End of source buffer ***
 Saying: ['out of angled']
+Heard [('out of angled', 'out of angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5972,6 +6365,7 @@ Saying: ['out of angled']
 
 *** End of source buffer ***
 Saying: ['before previous angled']
+Heard [('before previous angled', 'before previous angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5979,6 +6373,7 @@ Saying: ['before previous angled']
 
 *** End of source buffer ***
 Saying: ['back out of angled']
+Heard [('back out of angled', 'back out of angled')]
 106:             (1)
 107:             [1]
 108:             {1}
@@ -5986,6 +6381,7 @@ Saying: ['back out of angled']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -5993,6 +6389,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between single quotes', '1']
+Heard [('between single quotes', 'between single quotes'), ('1', '1')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6000,6 +6397,7 @@ Saying: ['between single quotes', '1']
 
 *** End of source buffer ***
 Saying: ['before previous single quote']
+Heard [('before previous single quote', 'before previous single quote')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6007,6 +6405,7 @@ Saying: ['before previous single quote']
 
 *** End of source buffer ***
 Saying: ['after single quote']
+Heard [('after single quote', 'after single quote')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6014,6 +6413,7 @@ Saying: ['after single quote']
 
 *** End of source buffer ***
 Saying: ['before single quote']
+Heard [('before single quote', 'before single quote')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6021,6 +6421,7 @@ Saying: ['before single quote']
 
 *** End of source buffer ***
 Saying: ['previous single quote']
+Heard [('previous single quote', 'previous single quote')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6028,6 +6429,7 @@ Saying: ['previous single quote']
 
 *** End of source buffer ***
 Saying: ['out of single quotes']
+Heard [('out of single quotes', 'out of single quotes')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6035,6 +6437,7 @@ Saying: ['out of single quotes']
 
 *** End of source buffer ***
 Saying: ['before previous single quote']
+Heard [('before previous single quote', 'before previous single quote')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6042,6 +6445,7 @@ Saying: ['before previous single quote']
 
 *** End of source buffer ***
 Saying: ['back out of single quotes']
+Heard [('back out of single quotes', 'back out of single quotes')]
 107:             [1]
 108:             {1}
 109:             <1>
@@ -6049,6 +6453,7 @@ Saying: ['back out of single quotes']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6056,6 +6461,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between quotes', '1']
+Heard [('between quotes', 'between quotes'), ('1', '1')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6063,6 +6469,7 @@ Saying: ['between quotes', '1']
 
 *** End of source buffer ***
 Saying: ['before previous quote']
+Heard [('before previous quote', 'before previous quote')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6070,6 +6477,7 @@ Saying: ['before previous quote']
 
 *** End of source buffer ***
 Saying: ['after quote']
+Heard [('after quote', 'after quote')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6077,6 +6485,7 @@ Saying: ['after quote']
 
 *** End of source buffer ***
 Saying: ['before quote']
+Heard [('before quote', 'before quote')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6084,6 +6493,7 @@ Saying: ['before quote']
 
 *** End of source buffer ***
 Saying: ['previous quote']
+Heard [('previous quote', 'previous quote')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6091,6 +6501,7 @@ Saying: ['previous quote']
 
 *** End of source buffer ***
 Saying: ['out of quotes']
+Heard [('out of quotes', 'out of quotes')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6098,6 +6509,7 @@ Saying: ['out of quotes']
 
 *** End of source buffer ***
 Saying: ['before previous quote']
+Heard [('before previous quote', 'before previous quote')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6105,6 +6517,7 @@ Saying: ['before previous quote']
 
 *** End of source buffer ***
 Saying: ['back out of quotes']
+Heard [('back out of quotes', 'back out of quotes')]
 108:             {1}
 109:             <1>
 110:             '1'
@@ -6112,6 +6525,7 @@ Saying: ['back out of quotes']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6119,6 +6533,7 @@ Saying: ['new statement']
 
 *** End of source buffer ***
 Saying: ['between back quotes', '1']
+Heard [('between back quotes', 'between back quotes'), ('1', '1')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6126,6 +6541,7 @@ Saying: ['between back quotes', '1']
 
 *** End of source buffer ***
 Saying: ['before previous back quote']
+Heard [('before previous back quote', 'before previous back quote')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6133,6 +6549,7 @@ Saying: ['before previous back quote']
 
 *** End of source buffer ***
 Saying: ['after back quote']
+Heard [('after back quote', 'after back quote')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6140,6 +6557,7 @@ Saying: ['after back quote']
 
 *** End of source buffer ***
 Saying: ['before back quote']
+Heard [('before back quote', 'before back quote')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6147,6 +6565,7 @@ Saying: ['before back quote']
 
 *** End of source buffer ***
 Saying: ['previous back quote']
+Heard [('previous back quote', 'previous back quote')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6154,6 +6573,7 @@ Saying: ['previous back quote']
 
 *** End of source buffer ***
 Saying: ['out of back quotes']
+Heard [('out of back quotes', 'out of back quotes')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6161,6 +6581,7 @@ Saying: ['out of back quotes']
 
 *** End of source buffer ***
 Saying: ['before previous back quote']
+Heard [('before previous back quote', 'before previous back quote')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6168,6 +6589,7 @@ Saying: ['before previous back quote']
 
 *** End of source buffer ***
 Saying: ['back out of back quotes']
+Heard [('back out of back quotes', 'back out of back quotes')]
 109:             <1>
 110:             '1'
 111:             "1"
@@ -6175,6 +6597,7 @@ Saying: ['back out of back quotes']
 
 *** End of source buffer ***
 Saying: ['new statement']
+Heard [('new statement', 'new statement')]
 110:             '1'
 111:             "1"
 112:             `1`
@@ -6536,6 +6959,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('O.', 'O.'), ('S.', 'S.'), ('comma', ', '), ('R.', 'R.'), ('E.', 'E.'), ('comma', ', '), ('string', 'string'), ('comma', ', '), ('system', 'system'), ('new', 'new'), ('statement', 'statement')]
 Associate 'R. E.' with symbol (Enter selection):
 
   '0': no association
@@ -6549,6 +6973,7 @@ Associate 'R. E.' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('auto', 'auto'), ('test', 'test'), ('comma', ', '), ('natural', 'natural'), ('link', 'link'), ('comma', ', '), ('V.', 'V.'), ('C.', 'C.'), ('globals', 'globals'), ('new', 'new'), ('statement', 'statement')]
 Associate 'natural link' with symbol (Enter selection):
 
   '0': no association
@@ -6577,6 +7002,7 @@ Associate 'natural link' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('actions', 'actions'), ('C.', 'C.'), ('C.', 'C.'), ('P.', 'P.'), ('P.', 'P.'), ('import all', ' import all'), ('new', 'new'), ('statement', 'statement')]
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
   '0': no association
@@ -6596,6 +7022,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('application', 'application'), ('state', 'state'), ('import', 'import'), ('symbols', 'symbols'), ('application', 'application'), ('state', 'state'), ('new', 'new'), ('statement', 'statement')]
 Associate 'application state' with symbol (Enter selection):
 
   '0': no association
@@ -6625,6 +7052,7 @@ Associate 'application state' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('context', 'context'), ('generic', 'generic'), ('import', 'import'), ('symbols', 'symbols'), ('context', 'context'), ('C.', 'C.'), ('comma', 'comma'), ('context', 'context'), ('python', 'python'), ('new', 'new'), ('statement', 'statement')]
 Associate 'context generic' with symbol (Enter selection):
 
   '0': no association
@@ -6666,6 +7094,7 @@ Associate 'context python' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('context', 'context'), ('sensitive', 'sensitive'), ('command', 'command'), ('import', 'import'), ('symbols', 'symbols'), ('context', 'context'), ('sensitive', 'sensitive'), ('command', 'command'), ('new', 'new'), ('statement', 'statement')]
 Associate 'context sensitive cmd' with symbol (Enter selection):
 
   '0': no association
@@ -6695,6 +7124,7 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('import', 'import'), ('symbol', 'symbol'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('new', 'new'), ('statement', 'statement')]
 Associate 'Ed simulator' with symbol (Enter selection):
 
   '0': no association
@@ -6724,6 +7154,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('object', 'object'), ('import', 'import'), ('symbol', 'symbol'), ('object', 'object'), ('new', 'new'), ('statement', 'statement')]
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
   8: from Object import Object
@@ -6731,6 +7162,7 @@ Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'state
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('comma', 'comma'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('new', 'new'), ('statement', 'statement')]
 Associate 'Ed simulator' with symbol (Enter selection):
 
   '0': no association
@@ -6749,6 +7181,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
+Heard [('import', 'import'), ('module', 'module'), ('S.', 'S.'), ('R.', 'R.'), ('interface', 'interface'), ('new', 'new'), ('statement', 'statement')]
 Associate 'S. R. interface' with symbol (Enter selection):
 
   '0': no association
@@ -6766,6 +7199,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
+Heard [('define', 'define'), ('class', 'class'), ('command', 'command'), ('interpreter', 'interpreter'), ('sub class', 'sub class'), ('of', 'of'), ('object', 'object'), ('class', 'class'), ('body', 'body')]
   9: import EdSim, SymDict
  10: import sr_interface
  11: class CmdInterp(Object):
@@ -6773,6 +7207,7 @@ Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'o
 
 *** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
+Heard [('define', 'define'), ('method', 'method'), ('initialize', 'initialize'), ('add', 'add'), ('argument', 'argument'), ('on', 'on'), ('application', 'application'), ('equals', 'equals'), ('none', 'none'), ('comma', 'comma')]
 Associate 'on application' with symbol (Enter selection):
 
   '0': no association
@@ -6792,6 +7227,7 @@ Associate 'on application' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
+Heard [('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('equals', 'equals'), ('none', 'none'), ('comma', 'comma'), ('double', 'double'), ('asterisk', 'asterisk'), ('attributes', 'attributes'), ('method', 'method'), ('body', 'body')]
 Associate 'SymDict pickle file' with symbol (Enter selection):
 
   '0': no association
@@ -6809,6 +7245,7 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
+Heard [('self', 'self'), ('dot', 'dot'), ('declare', 'declare'), ('attributes', 'attributes'), ('with', 'with'), ('arguments', 'arguments'), ('brace', 'brace'), ('pair', 'pair')]
  10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
@@ -6816,6 +7253,7 @@ Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', '
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('un', 'un'), ('translated', 'translated'), ('text', 'text'), ('start', 'start'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('comma', 'comma')]
 Associate 'un translated text start' with symbol (Enter selection):
 
   '0': no association
@@ -6834,6 +7272,7 @@ Associate 'un translated text start' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('un', 'un'), ('translated', 'translated'), ('text', 'text'), ('end', 'end'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('new', 'new'), ('statement', 'statement')]
 Associate 'un translated text end' with symbol (Enter selection):
 
   '0': no association
@@ -6852,6 +7291,7 @@ Associate 'un translated text end' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
+Heard [('self', 'self'), ('dot', 'dot'), ('deep', 'deep'), ('construct', 'construct'), ('with', 'with'), ('arguments', 'arguments'), ('command', 'command'), ('interpreter', 'interpreter'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       self.deep_construct(CmdInterp, \
@@ -6859,6 +7299,7 @@ Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'in
 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
+Heard [('brace', 'brace'), ('pair', 'pair'), ('single', 'single'), ('quotes', 'quotes'), ('on', 'on'), ('application', 'application'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('on', 'on'), ('application', 'application'), ('comma', 'comma')]
 Associate 'on application' with symbol (Enter selection):
 
   '0': no association
@@ -6888,6 +7329,7 @@ Associate 'on application' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('known', 'known'), ('symbols', 'symbols'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('dot', 'dot'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('without', 'without'), ('arguments', 'arguments'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       self.deep_construct(CmdInterp, \
  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
@@ -6895,6 +7337,7 @@ Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'sym
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('language', 'language'), ('specific', 'specific'), ('aliases', 'aliases'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('empty', 'empty'), ('dictionary', 'dictionary'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
  14:       self.deep_construct(CmdInterp, \
  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
  16:                            'language_specific_aliases': {}, \
@@ -6902,6 +7345,7 @@ Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', '
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('last', 'last'), ('loaded', 'loaded'), ('language', 'language'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
  16:                            'language_specific_aliases': {}, \
  17:                            'last_loaded_language': None, \
@@ -6909,6 +7353,7 @@ Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\co
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
 Associate 'SymDict pickle file' with symbol (Enter selection):
 
   '0': no association
@@ -6936,6 +7381,7 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['attributes', 'new', 'statement', 'new', 'statement']
+Heard [('attributes', 'attributes'), ('new', 'new'), ('statement', 'statement'), ('new', 'new'), ('statement', 'statement')]
  18:                            'symdict_pickle_file': symdict_pickle_file}, \
  19:                           attrs)
  20: 
@@ -6943,6 +7389,7 @@ Saying: ['attributes', 'new', 'statement', 'new', 'statement']
 
 *** End of source buffer ***
 Saying: ['back indent']
+Heard [('back indent', 'back indent')]
  18:                            'symdict_pickle_file': symdict_pickle_file}, \
  19:                           attrs)
  20: 
@@ -6950,6 +7397,7 @@ Saying: ['back indent']
 
 *** End of source buffer ***
 Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
+Heard [('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form'), ('method', 'method'), ('body', 'body')]
  19:                           attrs)
  20: 
  21: def spoken_form_regexp(self, spoken_form):
@@ -6957,6 +7405,7 @@ Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', '
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
+Heard [('words', 'words'), ('equals', 'equals'), ('R.', 'R.'), ('E.', 'E.'), ('dot', 'dot'), ('split', 'split'), ('with', 'with'), ('arguments', 'arguments')]
  19:                           attrs)
  20: 
  21: def spoken_form_regexp(self, spoken_form):
@@ -6964,6 +7413,7 @@ Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('plus', 'plus'), ('sign', 'sign'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('spoken', 'spoken'), ('form', 'form'), ('new', 'new'), ('statement', 'statement')]
  20: 
  21: def spoken_form_regexp(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
@@ -6971,6 +7421,7 @@ Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out'
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('new', 'new'), ('statement', 'statement')]
  21: def spoken_form_regexp(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
  23:    regexp = ''
@@ -6978,6 +7429,7 @@ Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 
 
 *** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
+Heard [('for', 'for'), ('loop', 'loop'), ('a', 'a'), ('word', 'word'), ('in', 'in'), ('list', 'list'), ('words', 'words'), ('loop', 'loop'), ('body', 'body')]
  22:    words = re.split('\s+', spoken_form)
  23:    regexp = ''
  24:    for a_word in words:
@@ -6985,6 +7437,7 @@ Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
 
 *** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
+Heard [('first', 'first'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('0', '0'), ('new', 'new'), ('statement', 'statement')]
  23:    regexp = ''
  24:    for a_word in words:
  25:       first = a_word[0]
@@ -6992,6 +7445,7 @@ Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
 
 *** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
+Heard [('rest', 'rest'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('1', '1'), ('colon', ':'), ('new', 'new'), ('statement', 'statement')]
  24:    for a_word in words:
  25:       first = a_word[0]
  26:       rest = a_word[1: ]
@@ -6999,6 +7453,7 @@ Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', '
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes')]
  24:    for a_word in words:
  25:       first = a_word[0]
  26:       rest = a_word[1: ]
@@ -7006,6 +7461,7 @@ Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 
 *** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
+Heard [('open', 'open'), ('bracket', 'bracket'), ('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('lower', 'lower'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first')]
  24:    for a_word in words:
  25:       first = a_word[0]
  26:       rest = a_word[1: ]
@@ -7013,6 +7469,7 @@ Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'wi
 
 *** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
+Heard [('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('upper', 'upper'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first'), ('new', 'new'), ('statement', 'statement')]
  25:       first = a_word[0]
  26:       rest = a_word[1: ]
  27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
@@ -7020,6 +7477,7 @@ Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', '
 
 *** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
+Heard [('if', 'if'), ('statement', 'statement'), ('not', 'not'), ('regular', 'regular'), ('expression', 'expression'), ('equal', 'equal'), ('to', 'to'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('if', 'if'), ('body', 'body')]
  26:       rest = a_word[1: ]
  27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
  28:       if not regexp == '':
@@ -7027,6 +7485,7 @@ Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empt
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('asterisk', 'asterisk'), ('new', 'new'), ('statement', 'statement')]
  27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
  28:       if not regexp == '':
  29:          regexp = regexp + '\s*'
@@ -7034,6 +7493,7 @@ Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'si
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('new', 'new'), ('statement', 'statement')]
  28:       if not regexp == '':
  29:          regexp = regexp + '\s*'
  30:          regexp = regexp + regexp_this_word
@@ -7041,6 +7501,7 @@ Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 're
 
 *** End of source buffer ***
 Saying: ['back indent']
+Heard [('back indent', 'back indent')]
  28:       if not regexp == '':
  29:          regexp = regexp + '\s*'
  30:          regexp = regexp + regexp_this_word
@@ -7048,6 +7509,7 @@ Saying: ['back indent']
 
 *** End of source buffer ***
 Saying: ['return', 'regular', 'expression', 'new', 'statement']
+Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression'), ('new', 'new'), ('statement', 'statement')]
  29:          regexp = regexp + '\s*'
  30:          regexp = regexp + regexp_this_word
  31: return regexp
@@ -7055,6 +7517,7 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
 
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
+Heard [('if', 'if'), ('not', 'not'), ('this', 'this'), ('word', 'word'), ('then', 'then'), ('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes'), ('hello', 'hello')]
 Associate 'this word' with symbol (Enter selection):
 
   '0': no association
@@ -7079,6 +7542,7 @@ Associate 'this word' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
+Heard [('else', 'else'), ('if', 'if'), ('this', 'this'), ('word', 'word'), ('is', 'is'), ('equal', 'equal'), ('to', 'to'), ('hi', 'hi'), ('then', 'then')]
 Associate 'hi' with symbol (Enter selection):
 
   '0': no association
@@ -7093,6 +7557,7 @@ Associate 'hi' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
+Heard [('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('greetings', 'greetings'), ('else', 'else')]
 Associate 'greetings' with symbol (Enter selection):
 
   '0': no association
@@ -7107,6 +7572,7 @@ Associate 'greetings' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
+Heard [('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes'), ('done', 'done'), ('new', 'new'), ('statement', 'statement')]
 Associate 'done' with symbol (Enter selection):
 
   '0': no association
@@ -7121,6 +7587,7 @@ Associate 'done' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
+Heard [('try', 'try'), ('some', 'some'), ('function', 'function'), ('with', 'with'), ('arguments', 'arguments')]
 Associate 'some function' with symbol (Enter selection):
 
   '0': no association
@@ -7138,6 +7605,7 @@ Associate 'some function' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
+Heard [('except', 'except'), ('do', 'do'), ('the', 'the'), ('following', 'following'), ('print', 'print'), ('single', 'single'), ('quotes', 'quotes'), ('error', 'error')]
 Associate 'error' with symbol (Enter selection):
 
   '0': no association
@@ -7152,6 +7620,7 @@ Associate 'error' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
+Heard [('finally', 'finally'), ('do', 'do'), ('print', 'print'), ('single', 'single'), ('quotes', 'quotes'), ('all', 'all'), ('right', 'right')]
 Associate 'all right' with symbol (Enter selection):
 
   '0': no association
@@ -7181,6 +7650,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('O.', 'O.'), ('S.', 'S.'), ('comma', ', '), ('R.', 'R.'), ('E.', 'E.'), ('comma', ', '), ('string', 'string'), ('comma', ', '), ('system', 'system'), ('new', 'new'), ('statement', 'statement')]
 Associate 'O. S.' with symbol (Enter selection):
 
   '0': no association
@@ -7215,6 +7685,7 @@ Associate 'O. S.' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('auto', 'auto'), ('test', 'test'), ('comma', ', '), ('natural', 'natural'), ('link', 'link'), ('comma', ', '), ('V.', 'V.'), ('C.', 'C.'), ('globals', 'globals'), ('new', 'new'), ('statement', 'statement')]
 Associate 'auto test' with symbol (Enter selection):
 
   '0': no association
@@ -7252,6 +7723,7 @@ Associate 'auto test' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('actions', 'actions'), ('C.', 'C.'), ('C.', 'C.'), ('P.', 'P.'), ('P.', 'P.'), ('import all', ' import all'), ('new', 'new'), ('statement', 'statement')]
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
   '0': no association
@@ -7270,6 +7742,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('application', 'application'), ('state', 'state'), ('import', 'import'), ('symbols', 'symbols'), ('application', 'application'), ('state', 'state'), ('new', 'new'), ('statement', 'statement')]
 Associate 'application state' with symbol (Enter selection):
 
   '0': no association
@@ -7287,6 +7760,7 @@ Associate 'application state' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('context', 'context'), ('generic', 'generic'), ('import', 'import'), ('symbols', 'symbols'), ('context', 'context'), ('C.', 'C.'), ('comma', 'comma'), ('context', 'context'), ('python', 'python'), ('new', 'new'), ('statement', 'statement')]
 Associate 'context generic' with symbol (Enter selection):
 
   '0': no association
@@ -7324,6 +7798,7 @@ Associate 'context generic' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('context', 'context'), ('sensitive', 'sensitive'), ('command', 'command'), ('import', 'import'), ('symbols', 'symbols'), ('context', 'context'), ('sensitive', 'sensitive'), ('command', 'command'), ('new', 'new'), ('statement', 'statement')]
 Associate 'context sensitive command' with symbol (Enter selection):
 
   '0': no association
@@ -7341,6 +7816,7 @@ Associate 'context sensitive command' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('import', 'import'), ('symbol', 'symbol'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('new', 'new'), ('statement', 'statement')]
 Associate 'Ed simulator' with symbol (Enter selection):
 
   '0': no association
@@ -7358,6 +7834,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
+Heard [('from', 'from'), ('module', 'module'), ('object', 'object'), ('import', 'import'), ('symbol', 'symbol'), ('object', 'object'), ('new', 'new'), ('statement', 'statement')]
 Associate 'object' with symbol (Enter selection):
 
   '0': no association
@@ -7372,6 +7849,7 @@ Associate 'object' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
+Heard [('import', 'import'), ('modules', 'modules'), ('Ed', 'Ed'), ('simulator', 'simulator'), ('comma', 'comma'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('new', 'new'), ('statement', 'statement')]
 Associate 'symbol dictionary' with symbol (Enter selection):
 
   '0': no association
@@ -7389,6 +7867,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
+Heard [('import', 'import'), ('module', 'module'), ('S.', 'S.'), ('R.', 'R.'), ('interface', 'interface'), ('new', 'new'), ('statement', 'statement')]
 Associate 'S. R. interface' with symbol (Enter selection):
 
   '0': no association
@@ -7406,6 +7885,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
+Heard [('define', 'define'), ('class', 'class'), ('command', 'command'), ('interpreter', 'interpreter'), ('sub class', 'sub class'), ('of', 'of'), ('object', 'object'), ('class', 'class'), ('body', 'body')]
 Associate 'command interpreter' with symbol (Enter selection):
 
   '0': no association
@@ -7423,6 +7903,7 @@ Associate 'command interpreter' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
+Heard [('define', 'define'), ('method', 'method'), ('initialize', 'initialize'), ('add', 'add'), ('argument', 'argument'), ('on', 'on'), ('application', 'application'), ('equals', 'equals'), ('none', 'none'), ('comma', 'comma')]
 Associate 'initialize' with symbol (Enter selection):
 
   '0': no association
@@ -7455,6 +7936,7 @@ Associate 'initialize' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
+Heard [('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('equals', 'equals'), ('none', 'none'), ('comma', 'comma'), ('double', 'double'), ('asterisk', 'asterisk'), ('attributes', 'attributes'), ('method', 'method'), ('body', 'body')]
 Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
 
   '0': no association
@@ -7479,6 +7961,7 @@ Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
+Heard [('self', 'self'), ('dot', 'dot'), ('declare', 'declare'), ('attributes', 'attributes'), ('with', 'with'), ('arguments', 'arguments'), ('brace', 'brace'), ('pair', 'pair')]
 Associate 'self' with symbol (Enter selection):
 
   '0': no association
@@ -7503,6 +7986,7 @@ Associate 'self' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('un', 'un'), ('translated', 'translated'), ('text', 'text'), ('start', 'start'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('comma', 'comma')]
 Associate 'un translated text start' with symbol (Enter selection):
 
   '0': no association
@@ -7520,6 +8004,7 @@ Associate 'un translated text start' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('un', 'un'), ('translated', 'translated'), ('text', 'text'), ('end', 'end'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('new', 'new'), ('statement', 'statement')]
 Associate 'un translated text end' with symbol (Enter selection):
 
   '0': no association
@@ -7537,6 +8022,7 @@ Associate 'un translated text end' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
+Heard [('self', 'self'), ('dot', 'dot'), ('deep', 'deep'), ('construct', 'construct'), ('with', 'with'), ('arguments', 'arguments'), ('command', 'command'), ('interpreter', 'interpreter'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
 Associate 'deep construct' with symbol (Enter selection):
 
   '0': no association
@@ -7554,6 +8040,7 @@ Associate 'deep construct' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
+Heard [('brace', 'brace'), ('pair', 'pair'), ('single', 'single'), ('quotes', 'quotes'), ('on', 'on'), ('application', 'application'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('on', 'on'), ('application', 'application'), ('comma', 'comma')]
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:       self.deep_construct(command_interpreter, \
@@ -7561,6 +8048,7 @@ Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out'
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('known', 'known'), ('symbols', 'symbols'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('dot', 'dot'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('without', 'without'), ('arguments', 'arguments'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
 Associate 'known symbols' with symbol (Enter selection):
 
   '0': no association
@@ -7578,6 +8066,7 @@ Associate 'known symbols' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('language', 'language'), ('specific', 'specific'), ('aliases', 'aliases'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('empty', 'empty'), ('dictionary', 'dictionary'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
 Associate 'language specific aliases' with symbol (Enter selection):
 
   '0': no association
@@ -7595,6 +8084,7 @@ Associate 'language specific aliases' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('last', 'last'), ('loaded', 'loaded'), ('language', 'language'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('none', 'none'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
 Associate 'last loaded language' with symbol (Enter selection):
 
   '0': no association
@@ -7612,6 +8102,7 @@ Associate 'last loaded language' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('jump', 'jump'), ('out', 'out'), ('colon', ':'), ('symbol', 'symbol'), ('dictionary', 'dictionary'), ('pickle', 'pickle'), ('file', 'file'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('continue', 'continue'), ('statement', 'statement')]
  16:                            'language_specific_aliases': {}, \
  17:                            'last_loaded_language': none, \
  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
@@ -7619,6 +8110,7 @@ Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', '
 
 *** End of source buffer ***
 Saying: ['attributes', 'new', 'statement', 'new', 'statement']
+Heard [('attributes', 'attributes'), ('new', 'new'), ('statement', 'statement'), ('new', 'new'), ('statement', 'statement')]
  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:                           attributes)
  20: 
@@ -7626,6 +8118,7 @@ Saying: ['attributes', 'new', 'statement', 'new', 'statement']
 
 *** End of source buffer ***
 Saying: ['back indent']
+Heard [('back indent', 'back indent')]
  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:                           attributes)
  20: 
@@ -7633,6 +8126,7 @@ Saying: ['back indent']
 
 *** End of source buffer ***
 Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
+Heard [('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form'), ('method', 'method'), ('body', 'body')]
 Associate 'spoken form regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7660,6 +8154,7 @@ Associate 'spoken form regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
+Heard [('words', 'words'), ('equals', 'equals'), ('R.', 'R.'), ('E.', 'E.'), ('dot', 'dot'), ('split', 'split'), ('with', 'with'), ('arguments', 'arguments')]
 Associate 'words' with symbol (Enter selection):
 
   '0': no association
@@ -7688,6 +8183,7 @@ Associate 'words' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
+Heard [('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('plus', 'plus'), ('sign', 'sign'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('spoken', 'spoken'), ('form', 'form'), ('new', 'new'), ('statement', 'statement')]
  20: 
  21: def spoken_form_regular_expression(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
@@ -7695,6 +8191,7 @@ Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out'
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('new', 'new'), ('statement', 'statement')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7713,6 +8210,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
+Heard [('for', 'for'), ('loop', 'loop'), ('a', 'a'), ('word', 'word'), ('in', 'in'), ('list', 'list'), ('words', 'words'), ('loop', 'loop'), ('body', 'body')]
 Associate 'a word' with symbol (Enter selection):
 
   '0': no association
@@ -7730,6 +8228,7 @@ Associate 'a word' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
+Heard [('first', 'first'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('0', '0'), ('new', 'new'), ('statement', 'statement')]
 Associate 'first' with symbol (Enter selection):
 
   '0': no association
@@ -7744,6 +8243,7 @@ Associate 'first' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
+Heard [('rest', 'rest'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('1', '1'), ('colon', ':'), ('new', 'new'), ('statement', 'statement')]
 Associate 'rest' with symbol (Enter selection):
 
   '0': no association
@@ -7759,6 +8259,7 @@ Associate 'rest' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes')]
 Associate 'regular expression this word' with symbol (Enter selection):
 
   '0': no association
@@ -7776,6 +8277,7 @@ Associate 'regular expression this word' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
+Heard [('open', 'open'), ('bracket', 'bracket'), ('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('lower', 'lower'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first')]
 Associate 'lower' with symbol (Enter selection):
 
   '0': no association
@@ -7790,6 +8292,7 @@ Associate 'lower' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
+Heard [('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('upper', 'upper'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first'), ('new', 'new'), ('statement', 'statement')]
 Associate 'upper' with symbol (Enter selection):
 
   '0': no association
@@ -7804,6 +8307,7 @@ Associate 'upper' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
+Heard [('if', 'if'), ('statement', 'statement'), ('not', 'not'), ('regular', 'regular'), ('expression', 'expression'), ('equal', 'equal'), ('to', 'to'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('if', 'if'), ('body', 'body')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7822,6 +8326,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('asterisk', 'asterisk'), ('new', 'new'), ('statement', 'statement')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7851,6 +8356,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('new', 'new'), ('statement', 'statement')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7880,6 +8386,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['back indent']
+Heard [('back indent', 'back indent')]
  28:       if not re == '':
  29:          re = re + '\s*'
  30:          re = re + regular_expression_this_word
@@ -7887,6 +8394,7 @@ Saying: ['back indent']
 
 *** End of source buffer ***
 Saying: ['return', 'regular', 'expression', 'new', 'statement']
+Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression'), ('new', 'new'), ('statement', 'statement')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -7905,6 +8413,7 @@ Associate 'regular expression' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
+Heard [('if', 'if'), ('not', 'not'), ('this', 'this'), ('word', 'word'), ('then', 'then'), ('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes'), ('hello', 'hello')]
 Associate 'this word' with symbol (Enter selection):
 
   '0': no association
@@ -7929,6 +8438,7 @@ Associate 'this word' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
+Heard [('else', 'else'), ('if', 'if'), ('this', 'this'), ('word', 'word'), ('is', 'is'), ('equal', 'equal'), ('to', 'to'), ('hi', 'hi'), ('then', 'then')]
 Associate 'hi' with symbol (Enter selection):
 
   '0': no association
@@ -7943,6 +8453,7 @@ Associate 'hi' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
+Heard [('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('greetings', 'greetings'), ('else', 'else')]
 Associate 'greetings' with symbol (Enter selection):
 
   '0': no association
@@ -7957,6 +8468,7 @@ Associate 'greetings' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
+Heard [('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes'), ('done', 'done'), ('new', 'new'), ('statement', 'statement')]
 Associate 'done' with symbol (Enter selection):
 
   '0': no association
@@ -7971,6 +8483,7 @@ Associate 'done' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
+Heard [('try', 'try'), ('some', 'some'), ('function', 'function'), ('with', 'with'), ('arguments', 'arguments')]
 Associate 'some function' with symbol (Enter selection):
 
   '0': no association
@@ -7988,6 +8501,7 @@ Associate 'some function' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
+Heard [('except', 'except'), ('do', 'do'), ('the', 'the'), ('following', 'following'), ('print', 'print'), ('single', 'single'), ('quotes', 'quotes'), ('error', 'error')]
 Associate 'error' with symbol (Enter selection):
 
   '0': no association
@@ -8002,6 +8516,7 @@ Associate 'error' with symbol (Enter selection):
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
+Heard [('finally', 'finally'), ('do', 'do'), ('print', 'print'), ('single', 'single'), ('quotes', 'quotes'), ('all', 'all'), ('right', 'right')]
 Associate 'all right' with symbol (Enter selection):
 
   '0': no association
@@ -8063,6 +8578,7 @@ _cached_symbols_as_one_string is:
 >>> Testing console command: say(['index', ' != \\not equal to', '0'], user_input='0
 0
 ')
+Heard [('index', 'index'), ('not equal to', ' != '), ('0', '0')]
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -8079,6 +8595,7 @@ Associate 'index' with symbol (Enter selection):
 >>> Testing console command: say(['index', 'not', 'equal', 'to', '0'], user_input='0
 0
 ')
+Heard [('index', 'index'), ('not', 'not'), ('equal', 'equal'), ('to', 'to'), ('0', '0')]
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -8095,6 +8612,7 @@ Associate 'index' with symbol (Enter selection):
 >>> Testing console command: say(['move_horiz\\move horizontally'], user_input='0
 0
 ')
+Heard [('move horizontally', 'move_horiz')]
 *** Start of source buffer ***
   1: index != 0index != 0move_horiz<CURSOR>
 
@@ -8104,6 +8622,7 @@ Associate 'index' with symbol (Enter selection):
 >>> Testing console command: say(['move', 'horizontally'], user_input='0
 0
 ')
+Heard [('move', 'move'), ('horizontally', 'horizontally')]
 *** Start of source buffer ***
   1: index != 0index != 0move_horizmove_horiz<CURSOR>
 
@@ -8134,6 +8653,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['after hyphen'])
 
+Heard [('after hyphen', 'after hyphen')]
  11:     This class implements various useful behaviors for generic
  12:     objects, such as:
  13: 
@@ -8145,6 +8665,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['again'])
 
+Heard [('again', 'again')]
  12:     objects, such as:
  13: 
  14:     - safe attribute setting
@@ -8165,6 +8686,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['after hyphen'])
 
+Heard [('after hyphen', 'after hyphen')]
  11:     This class implements various useful behaviors for generic
  12:     objects, such as:
  13: 
@@ -8176,6 +8698,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['again 3 times'])
 
+Heard [('again 3 times', 'again 3 times')]
  35: 
  36:     Profile tests on NT indicate that:
  37: 
@@ -8196,6 +8719,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['after hyphen'])
 
+Heard [('after hyphen', 'after hyphen')]
  11:     This class implements various useful behaviors for generic
  12:     objects, such as:
  13: 
@@ -8207,6 +8731,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Testing console command: say(['3 times'])
 
+Heard [('3 times', '3 times')]
  13: 
  14:     - safe attribute setting
  15:     - deep constructor
@@ -9570,6 +10095,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+Heard [('index', 'index'), ('equals', 'equals'), ('0', '0'), ('new statement', 'new statement')]
 Associate 'index' with symbol (Enter selection):
 
   '0': no association
@@ -9585,6 +10111,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['index', 'equals', '1', 'new statement'], user_input='1\n')
+Heard [('index', 'index'), ('equals', 'equals'), ('1', '1'), ('new statement', 'new statement')]
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -9594,6 +10121,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+Heard [('index', 'index'), ('equals', 'equals'), ('0', '0'), ('new statement', 'new statement')]
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -9604,6 +10132,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['index', 'equals', '1', 'new statement'], user_input='1\n')
+Heard [('index', 'index'), ('equals', 'equals'), ('1', '1'), ('new statement', 'new statement')]
   2: index = 1
   3: index = 0
   4: index = 1
@@ -9613,6 +10142,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['index', 'equals', '0', 'new statement'], user_input='1\n')
+Heard [('index', 'index'), ('equals', 'equals'), ('0', '0'), ('new statement', 'new statement')]
   3: index = 0
   4: index = 1
   5: index = 0
@@ -10136,9 +10666,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 -----------------------------------------------
-Test suite completed in:  893.825999975 secs
+Test suite completed in:  748.52700007 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bbe9e0>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at b41c60>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

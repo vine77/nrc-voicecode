@@ -296,6 +296,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         trace('sim_commands.say', 'bypassing natlink')
 #        print 'bypass'
         sys.stdout.flush()
+        print "Heard  %s" % repr(utterance)
         the_mediator.interp.interpret_NL_cmd(utterance, the_mediator.app)
         show_buff()        
     else:
@@ -618,6 +619,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             trace('sim_commands.say', 'bypassing natlink')
 #        print 'bypass'
             sys.stdout.flush()
+            print "Heard  %s" % repr(utterance)            
             self.interp.interpret_NL_cmd(utterance, the_mediator.app)
             show_buff()        
         else:

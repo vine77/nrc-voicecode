@@ -1007,6 +1007,7 @@ class CommandDictGrammar(DictGramBase):
             if recogType == 'self' or (recogType == 'other' and self.allResults):
                 self.last = SpokenUtteranceNL(results)
                 words = results.getWords(0)
+                print "Heard  %s" % repr(words)
                 self.interpreter.interpret_NL_cmd(words, self.app)
                 self.app.curr_buffer().print_buff_if_necessary()
 
