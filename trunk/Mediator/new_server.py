@@ -43,18 +43,8 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-#                    'AppStateMessaging.listen_one_transaction': 1,
-#                    'AppStateMessaging.updates_from_app': 1,
-#                    'ListenAndQueueMsgsThread': 1,
-#                    'ServerSingleThread': 1,
-#                    'ExtLoopWin32': 1, 
-#                    'SourceBuffCached.insert_cbk': 1,
-#                       'CmdInterp.interpret_NL_cmd': 1,
-#                       'CmdInterp.match_untranslated_text': 1,
-#                       'SymDict.accept_symbol_match': 1,
-#                       'SymDict.add_symbol': 1,
-#                       'SymDict.update_spoken_forms': 1,
-#                       'CmdInterp.dlg_select_symbol_match': 1,
+#                     'NewMediatorObject._configure_from_file': 1,
+#                     'NewMediatorObject.__init__': 1,
 #########################################################################
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,

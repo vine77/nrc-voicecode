@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import sys
+import exceptions, os, sys
 import messaging
 import string
 import debug
@@ -44,6 +44,8 @@ import cPickle
 ..[MediatorObject] file:///./MediatorObject.MediatorObject.html"""
 
 
+class VCodeInexistantConfigFile(exceptions.Exception):
+    """Raised when VCode tries to use a non-existant configuration file"""
 
 
 def disconnect_from_sr(disconnect, save_speech_files):
@@ -294,7 +296,9 @@ class NewMediatorObject(Object.OwnerObject):
         self.add_owned('interp')
         if self.the_console:
             self.the_console.set_mediator(self)
-        if self.test_args != None and self.test_space != None:
+        debug.trace('NewMediatorObject.__init__', '** self.test_args=%s, self.test_space=%s' 
+                    % (self.test_args, self.test_space))            
+        if self.test_args != [None] and self.test_space != None:
             self.test_next = 1
         if self.test_next:
             user = 'VCTest'
@@ -524,7 +528,9 @@ class NewMediatorObject(Object.OwnerObject):
         **OUTPUTS**
         
         *none*
-        """        
+        """   
+        debug.trace('NewMediatorObject._configure_from_file', 'config_file = "%s", user_config_file = "%s"' 
+              % (config_file, user_config_file))     
         if exclude == None:
             exclude = []
         config_dict = {}
@@ -559,11 +565,21 @@ class NewMediatorObject(Object.OwnerObject):
 #            print 'ERROR: in configuration file %s.\n' % file
 #            raise err
         user_file = user_config_file
+        debug.trace('NewMediatorObject._configure_from_file', 'initially, user_file="%s", self.test_next=%s, vc_globals.regression_user_config_file="%s", vc_globals.default_user_config_file="%s"' % 
+                    (user_file, self.test_next, vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
         if not user_file:
             if self.test_next:
                 user_file = vc_globals.regression_user_config_file
             else:
                 user_file = vc_globals.default_user_config_file
+                
+        debug.trace('NewMediatorObject._configure_from_file', 'user_file="%s"' % user_file) 
+
+        if not os.path.exists(user_file):
+           sys.stderr.write("\n\nVCode ERROR: inexistant user configuration file '%s'\n" % user_file)
+           raise VCodeInexistantConfigFile()
+
+                
         execfile(user_file, config_dict)
 
 # if successful, store file name so the reconfigure method can reuse it

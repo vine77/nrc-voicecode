@@ -468,6 +468,29 @@ def test_mediator_console():
 
 auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
 
+##############################################################################
+# Testing configuration without user_config.py file
+##############################################################################
+
+        
+def test_no_config_file():
+    """Make sure that VCode fails gracefully it tries to use a non-existant config file"""
+
+    temp_config = temp_factory.new_config()
+    a_mediator = temp_config.mediator()
+    try:
+        non_existant_file = 'non_existant_config_file.py'
+        print "Trying to confugure using non-existant file '%s'\n" % non_existant_file
+        a_mediator.configure(user_config_file = non_existant_file)
+        print "ERROR: Exception was NOT properly raised!"
+    except NewMediatorObject.VCodeInexistantConfigFile:
+        print "Exception was properly raised!"
+
+auto_test.add_test('no_config_file', test_no_config_file, desc='test configuration using non-existant file.')
+
+
+
+
 
 ###############################################################################
 # Testing Select Pseudocode console

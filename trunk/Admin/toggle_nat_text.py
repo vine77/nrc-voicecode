@@ -26,7 +26,7 @@ import natlink
 def help():
    print """
 
-Usage: python toggle_nat_text.py status
+Usage: python toggle_nat_text.py user_name status
    
 Turns NaturalText on (status=1) or off (status=0)."""
 
@@ -35,8 +35,8 @@ if __name__ == '__main__':
    if len(args) == 0:
       help()
    else:
-      sr_interface.connect()
-      natlink.execScript('SetNaturalText %s' % args[0])
+      sr_interface.connect(args[0])
+      natlink.execScript('SetNaturalText %s' % args[1])
       sr_interface.disconnect()
    
    
