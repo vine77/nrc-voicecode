@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Oct 19 16:00:54 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 21 10:42:47 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,12 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorConsoleWX</SPAN>(<A CLASS="DocLink" HREF="MediatorConsole.MediatorConsole.html">MediatorConsole</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.on_double</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.pop_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.pop_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # pops  a modal dialog box off the top of the stack</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.push_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.push_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -49,7 +54,9 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from MediatorConsole.MediatorConsole</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_gram_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_gram_factory</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
@@ -64,12 +71,40 @@
 <EM>wxFrame main_frame</EM>
 <DD>the main frame window of the console, which
 will be the parent for most modal dialogs
+<DT>
+<EM>[wxDialog] modal_dialogs</EM>
+<DD>stack of modal dialog boxes currently
+active
+<DT>
+<EM>[threading.Event] dismiss_events</EM>
+<DD>stack of threading.Event objects 
+used to signal the modal dialog boxes to close.  Each dialog box
+must have an idle event which checks the state of the Event object
+and closes, returning wxID_DISMISS_MODAL, if the Event's state
+becomes true.
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
 <EM>none</EM> 
 </P>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.already_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.already_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does the console already have a modal dialog running?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if a modal dialog is active
+
+</DL>
 <H2 ID="MediatorConsoleWX.MediatorConsoleWX.correct_utterance" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
@@ -112,6 +147,66 @@ the user approves), or if the caller will handle that later.
 <DD>true if the user made changes and approved them
 
 </DL>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.dismiss_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.dismiss_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+dismisses any modal dialog boxes which the console has
+running</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the modal dialog box was sucessfully dismissed
+(or if there wasn't one to start with)
+
+</DL>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.pop_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.pop_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>pops  a modal dialog box off the top of the stack</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if there was a modal dialog on the stack
+
+</DL>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.push_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.push_modal(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>, <SPAN CLASS="Argument">event</SPAN>)</H2>
+<P>None</P>
+
+<P>
+push a modal dialog box onto the stack before calling
+ShowModal</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>wxDialog</EM>
+<DD>the dialog
+<DT>
+<EM>threading.Event bye</EM>
+<DD>threading.Event object whose state will be
+set to true if the dialog box should cancel
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="MediatorConsoleWX.MediatorConsoleWX.raise_active_window" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.raise_active_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -449,6 +544,23 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="MediatorConsole.MediatorConsole.already_modal" CLASS="Method">MediatorConsole.MediatorConsole.already_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does the console already have a modal dialog running?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if a modal dialog is active
+
+</DL>
 <H2 ID="MediatorConsole.MediatorConsole.correct_utterance" CLASS="Method">MediatorConsole.MediatorConsole.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
@@ -489,6 +601,27 @@ the user approves), or if the caller will handle that later.
 <DT>
 <EM>BOOL</EM>
 <DD>true if the user made changes and approved them
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.dismiss_modal" CLASS="Method">MediatorConsole.MediatorConsole.dismiss_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+dismisses any modal dialog boxes which the console has
+running</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the modal dialog box was sucessfully dismissed
+(or if there wasn't one to start with)
 
 </DL>
 <H2 ID="MediatorConsole.MediatorConsole.raise_active_window" CLASS="Method">MediatorConsole.MediatorConsole.raise_active_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
