@@ -19,6 +19,8 @@
 #
 ##############################################################################
 
+import exceptions, sys, traceback
+
 """Functions for debugging purposes."""
 
 def not_implemented(name):
@@ -28,3 +30,19 @@ def not_implemented(name):
 def virtual(name):
     """Prints warning message when a virtual method is called."""
     print "WARNING: virtual method '%s' called!!!" % name    
+
+
+
+def print_call_stack(print_to_file=sys.stdout):
+    """Prints the call stack.
+
+    This is done by raising an exception, catching it and printing the
+    traceback object. In Python 2, there is a more direct way of doing this.
+    """
+    try:
+        raise exceptions.Exception()
+    except exceptions.Exception, err:        
+        traceback.print_stack(file=print_to_file)
+
+
+

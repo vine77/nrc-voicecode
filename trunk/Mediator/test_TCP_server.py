@@ -176,14 +176,8 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('refresh_if_necessary_resp')
         elif action == 'open_file':
             print '-- execute_request: action=\'open_file\''
-            self.xed.ed.open_file(name=args['name'])
-
-            #deb
-#              print '-- test_tcp_server: after open_file("%s"), buffer contains:' % args['name']
-#              self.xed.ed.print_buff()
-            #fin
-            
-            self.xed.vc_talk_msgr.send_mess('open_file_resp')
+            self.xed.ed.open_file(file_name=args['file_name'])            
+            self.xed.vc_talk_msgr.send_mess('open_file_resp', {'buffer_id': args['file_name']})
         elif action == 'close_buffer':
             print '-- execute_request: action=\'close_buffer\''
             self.xed.ed.close_buffer(buff_name=args['buff_name'], save=['save'])

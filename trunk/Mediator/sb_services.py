@@ -603,7 +603,7 @@ class SB_ServiceIndent(SB_Service):
         
         *INT* num_spaces -- Number of spaces before the start of line at *pos*
         """
-
+        
         content = self.buff.contents()
         pos_newline = None
         pos_line_start = pos

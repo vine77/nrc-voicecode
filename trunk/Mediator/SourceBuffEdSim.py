@@ -23,7 +23,7 @@
 import re, string, sys
 
 from Object import Object
-import find_difference, sb_services, SourceBuffNonCached
+import debug, find_difference, sb_services, SourceBuffNonCached
 
 
 class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
@@ -57,7 +57,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
                  init_selection = None, initial_contents="",
                  global_selection = 1,
                  **attrs):
-
+        
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self),
                          'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1)})
@@ -79,7 +79,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	s, e = self.get_selection()
 	if (s < e):
 	    self.selection = (self.pos, self.pos)
-
+            
 
     def file_name(self):
         return self.app.only_buffer_name
