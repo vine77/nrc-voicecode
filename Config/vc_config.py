@@ -203,7 +203,17 @@ acmd = CSCmd(spoken_forms=['in'], meanings=[[ContPy(), lambda app, cont: app.ins
 add_csc(acmd)
 
 #
-# Language specific aliases
+# Non-Language Specific Aliases (LSA)
+#
+add_lsa(None, ['blank space'], ' ')
+add_lsa(None, ['newline', 'new line'], '{Enter}')
+add_lsa(None, ['import'], 'import ')
+add_lsa(None, ['comma'], ', ')
+add_lsa(None, ['dot'], '.')
+
+
+#
+# Language Specific Aliases (LSA)
 #
 add_lsa(['C', 'python'], ['equals', 'equal', 'is assigned', 'assign value'], ' = ')
 add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')

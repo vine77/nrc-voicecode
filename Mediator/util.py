@@ -1,7 +1,8 @@
 """Various utility functions"""
 
-
 import getopt, os, re, stat, sys
+
+import vc_globals
 
 def dict_merge(dict1, dict2):
     """Merges two dictionaries
@@ -148,3 +149,55 @@ def last_mod(f_name):
         time = 0
         
     return time
+
+
+###############################################################################
+# For redirecting STDIN
+###############################################################################
+
+#
+# Use this temporary file to send commands to the process' own stdin
+#
+redirected_stdin_fname = vc_globals.tmp + os.sep + 'user_input.dat'
+redirected_stdin = open(redirected_stdin_fname, 'w')
+
+def stdin_read_from_string(string):
+    """Redirects process' own stdin so it reads from a string
+
+    **INPUTS**
+    
+    *[STR] string* -- String from which to read stdin
+
+    **OUTPUTS**
+
+    *FILE old_stdin* -- Stream that stdin was originally assigned to.
+    """ 
+
+    global redirected_stdin, redirected_stdin_fname
+    
+    old_stdin = sys.stdin
+
+    #
+    # Close temporary file in case it was opened by a previous call to
+    # stdin_read_from_string
+    #
+    redirected_stdin.close()
+
+    #
+    # Write the string to temporary file
+    #
+    redirected_stdin = open(redirected_stdin_fname, 'w')
+    redirected_stdin.write(string)
+    redirected_stdin.close()
+
+    #
+    # Open temporary file and assign it to stdin
+    #
+    redirected_stdin = open(redirected_stdin_fname, 'r')
+    sys.stdin = redirected_stdin
+
+    return old_stdin
+
+
+
+

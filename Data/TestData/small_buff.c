@@ -8,4 +8,9 @@ void move(float x, y)
   horiz_pos = 0;
   this_sym_is_unres = 0;
   this_sym_is_unres_too = 0;
+  this_sym_has_an_other_abbrev = 0;
+  f_name;
+  f_name2();
+  API_function(1);
+  API_function(2);
 }

@@ -35,9 +35,6 @@ clear_symbols()
    vocabulary. Spoken forms which consist of a single word are however left
    there.
 
-clear_abbreviations()
-   Removes all defined abbreviations from VoiceCode's symbol dictionary
-
 say(STR utterance)
    Interprets string *utterance* as though it had been said by a user.
 
@@ -82,16 +79,16 @@ listen()
    Once in 'listen' mode, you cannot type console commands until you
    have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
    window.
-   
-print_abbreviations(show_unresolved=1)
-   Prints out a list of the abbreviations in symbols that were parsed
-   so far. If *show_unresolved=1*, also lists unresolved abbreviations
-   and the symbols they appear in (an unresolved abbreviation is an
-   abbreviation that appeared in a symbol and is neither a speech
-   vocabulary word nor a known abbreviation).
 
-print_symbols()
-   Prints the list of symbols in the known symbols dictionary
+unresolved_abbreviations()
+   Prints out a list of the unresolved abbreviations in symbols that were
+   parsed so far. An unresolved abbreviation is an abbreviation that appeared
+   in a symbol and is neither a speech vocabulary word nor a known
+   abbreviation.
+
+   The unresolved abbreviations are printed in increasing order of length, 
+   to make it easier to spot the ones that are actually abbreviations (they
+   will tend to be short and appear at the beginning).
 
 quit()
    Quit the simulator.
@@ -115,8 +112,8 @@ from actions_C_Cpp import *
 # for Python support
 from actions_py import *
 
+the_mediator = MediatorObject.MediatorObject()
 quit_flag = 0
-the_mediator = None
 
 def open_file(fname):
     """Open a file with name in current buffer.
@@ -130,14 +127,10 @@ def open_file(fname):
 
 def compile_symbols(file_list):
     global the_mediator
-    
-    the_mediator.interp.known_symbols.parse_symbols_from_files(file_list)
+    for a_file in file_list:
+        print 'Compiling symbols for file \'%s\'' % a_file
+        the_mediator.interp.known_symbols.parse_symbols(a_file)
     print '>>> Known symbols are: '; the_mediator.interp.known_symbols.print_symbols()
-
-    #
-    # Save the symbols dictionary to file
-    #
-    the_mediator.interp.known_symbols.pickle()
 
     
 def say(utterance, user_input=None, bypass_NatLink=0):
@@ -181,6 +174,7 @@ def say(utterance, user_input=None, bypass_NatLink=0):
         show_buff()        
     else:
         words = re.split('\s+', utterance)
+#        print '-- mediator.say: words=%s' % repr(words)
         natlink.recognitionMimic(words)
 
     #
@@ -204,6 +198,7 @@ def say_select(utterance):
     
     global the_mediator
     utterance[0] = string.capitalize(utterance[0])
+#    print '-- mediator.say_select: utterance = %s' % repr(utterance)
     natlink.recognitionMimic(utterance)
 
 
@@ -248,13 +243,15 @@ def listen():
         natlink.waitForSpeech(0)
         natlink.setMicState('off')
 
-def print_symbols():
-    global the_mediator
-    the_mediator.interp.known_symbols.print_symbols()
+def unresolved_abbreviations():
+    global the_mediator        
+    print 'List of unresolved abbreviations\n'
+    sorted_unresolved = the_mediator.interp.known_symbols.unresolved_abbreviations.keys()
+    sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
+    for an_abbreviation in sorted_unresolved:
+        symbol_list = the_mediator.interp.known_symbols.unresolved_abbreviations[an_abbreviation].keys()
+        print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
-def print_abbreviations(show_unresolved=1):
-    global the_mediator
-    the_mediator.interp.known_symbols.print_abbreviations(show_unresolved) 
 
 def clear_symbols():
     #
@@ -262,58 +259,26 @@ def clear_symbols():
     #
     global the_mediator        
     the_mediator.interp.known_symbols.vocabulary_cleanup()
-
-def clear_abbreviations():
-    #
-    # Remove abbreviations from the symbol dictionary
-    #
-    global the_mediator        
-    the_mediator.interp.known_symbols.abbreviations_cleanup()
-
     
 def quit():
     global quit_flag, the_mediator
     quit_flag = 1
-
-    #
-    # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
-    # but don't save SymDict to file (we want the symbols and abbreviations to
-    # still be there when we come back.
-    #
-    the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)
+    
     if sr_interface.speech_able():
+#        print '-- mediator.quit: the_mediator=%s' % the_mediator.__dict__
         the_mediator.mixed_grammar.unload()
         the_mediator.code_select_grammar.unload()
         natlink.natDisconnect()
 
-def init_simulator(symdict_pickle_fname=None):
+def init_simulator():
     global the_mediator
 
     if sr_interface.speech_able:
         natlink.natConnect()
         natlink.setMicState('off')
 
-        if symdict_pickle_fname == None and the_mediator != None:
-            #
-            # Remove symbols from NatSpeak's dictionary 
-            #
-            the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)        
-
-            
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-
-        #
-        # Read the symbol dictionary from file
-        #
-        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
-        the_mediator.interp.known_symbols.init_from_file()
-
-        #
-        # Configure the mediator
-        #
-        the_mediator.configure()        
-
-
+    the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    the_mediator.configure()
     if sr_interface.speech_able:
 #         natlink.natConnect()
 #         natlink.setMicState('off')
@@ -349,7 +314,7 @@ def simulator_mode(options):
 
     global the_mediator
 
-    init_simulator(symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl')
+    init_simulator()
     
     #
     # For better error reporting, you can type some instructions here
@@ -358,13 +323,12 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
-    clear_symbols()
-    clear_abbreviations()
+    clear_symbols()    
     open_file('D:/blah.c')
     compile_symbols(['D:/VoiceCode/VCode.vg3_trans/Data/TestData/small_buff.c'])
-    unresolved_abbreviations()
-    say('for loop index', user_input='1\n')
-#    say('this symbol is unresolved comma')
+    say('prefix horizontal position')
+#    say('horizontal position equals this symbol is unresolved with arguments this symbol is unresolved too at index this symbol has an other abbreviation')
+#      say_select(['Select', """horiz_pos\horizontal position"""])
 #    quit()
 
 
@@ -377,6 +341,7 @@ if (__name__ == '__main__'):
     
     if sr_interface.speech_able():
         natlink.natConnect()
+#        print '-- main: checked mic state'
 
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007])
 #    print '-- mediator.__main__: opts=%s' % opts

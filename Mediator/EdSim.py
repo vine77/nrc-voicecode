@@ -51,9 +51,12 @@ class EdSim(AppState):
         .. [self.cur_pos] AppState
         .. [self.curr_buffer] AppState"""
 
-#        print '-- EdSim.insert_indent: code_bef=%s, code_after=%s' % (code_bef, code_after)
         buff = self.find_buff(f_name)
-        start_reg = buff.cur_pos
+#        print '-- EdSim.insert_indent: code_bef=%s, code_after=%s, start=%s, end=%s, cur_pos=%s, len(buff.content)=%s, content is:\n%s' % (code_bef, code_after, start, end, buff.cur_pos, len(buff.content), buff.content)        
+        if start == None:
+            start_reg = buff.cur_pos
+        else:
+            start_reg = start
         self.insert(code_bef, start=start, to=end, f_name=f_name)
         self.indent(start_reg, buff.cur_pos, f_name=f_name)
         self.drop_breadcrumb()
@@ -61,6 +64,7 @@ class EdSim(AppState):
         self.insert(code_after, f_name=f_name)
         self.indent(start_reg, buff.cur_pos, f_name=f_name)
         self.pop_breadcrumbs()
+
 
     def insert(self, text, start=None, to=None, f_name=None):
         """Replace text in source buffer with name *STR f_name*
@@ -75,14 +79,16 @@ class EdSim(AppState):
 
         .. [self.curr_buffer] file:///AppState.Appstate.html
         .. [cur_pos] file:///SourceBuff.SourceBuff.html"""
-        
+
         buff = self.find_buff(f_name)
         if (start == None): start = buff.cur_pos
         if (to == None): to = buff.cur_pos
+#        print '-- EdSim.indent: start=%s, to=%s, buff.cur_pos=%s, len(buff.content)=%s' % (start, to, buff.cur_pos, len(buff.content))                        
         before = buff.content[0:start]
         after = buff.content[to:]
         buff.content = before + text + after
         self.move_to(start + len(text), f_name)
+
         
     def indent(self, start, end, f_name=None):
         """Indent code in a source buffer region.
@@ -99,6 +105,7 @@ class EdSim(AppState):
         #
         padding = '   '
         buff = self.find_buff(f_name)
+#        print '-- EdSim.indent: start=%s, end=%s, buff.cur_pos=%s, len(buff.content)=%s' % (start, end, buff.cur_pos, len(buff.content))                
         code_to_indent = buff.content[start:end]
         self.delete(start=start, end=end, f_name=f_name)
         lines_to_indent = re.split('\n', code_to_indent)

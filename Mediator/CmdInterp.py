@@ -1,5 +1,5 @@
 
-import os, re, string
+import os, re, string, sys
 
 import auto_test, natlink, vc_globals
 from actions_C_Cpp import *
@@ -41,7 +41,18 @@ class CmdInterp(Object):
      buffer in a different language.
 
     *STR* last_loaded_language = None -- Name of the previous language
-     for which the language specific words were loaded.   
+     for which the language specific words were loaded.
+
+    *FILE symdict_pickle_file = None* -- File used to for
+     reading/writing the symbol dictionary. If *None*, then don't
+     read/write the symbol dictionary from/to file.
+
+    *INT* _untranslated_text_start = None -- Start position of the
+     current string of untranslated text inserted in current buffer.
+
+    *INT* _untranslated_text_end = None -- End position of the
+     current string of untranslated text inserted in current buffer.
+     
     
     CLASS ATTRIBUTES**
 
@@ -51,14 +62,24 @@ class CmdInterp(Object):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, on_app=None, **attrs):
+    def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+
+        #
+        # These attributes can't be set at construction time
+        #
+        self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
+
+        #
+        # But these can
+        #
         self.deep_construct(CmdInterp,
                             {'on_app': on_app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
                              'cached_regexp': '',\
                              'cached_regexp_is_dirty': 1,\
                              'language_specific_aliases': {},\
-                             'last_loaded_language': None},\
+                             'last_loaded_language': None, \
+                             'symdict_pickle_file': symdict_pickle_file},\
                             attrs)
 
 #      def refresh_dict_buff(self, moduleInfo):
@@ -148,6 +169,9 @@ class CmdInterp(Object):
                     self.cached_regexp = spoken_regexp
                 else:
                     self.cached_regexp = self.cached_regexp + '|' + spoken_regexp
+
+            # CSC must be followed by a delimiter
+            self.cached_regexp = '^(\s*)(' + self.cached_regexp + ')(\s*?)([^a-zA-Z0-9_]|$)'
         return self.cached_regexp
 
 
@@ -176,102 +200,279 @@ class CmdInterp(Object):
         *STR cmd* is the spoken form of the command.
         """
         
-        #
-        # Interpret the begining of the command until nothing left to
-        # interpret.
-        #
-
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
 #        print '-- CmdInterp.interpret_NL_cmd: self.all_cmds_regexp()=%s' % self.all_cmds_regexp()
-        regexp = '^(\s*)(' + self.all_cmds_regexp() + ')(\s*)'
+
+        self._untranslated_text_start = None
+        self._untranslated_text_end = None
+        
+        regexp = self.all_cmds_regexp()
+
+        #
+        # Process the beginning of the command until there is nothing
+        # left
+        #
         while (not cmd == ''):
-#            print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-            
-            #
-            # Check for a CSC at the beginning of the command, and compute
-            # length of string it consumes
-            #
-            csc_consumes = 0
-            csc_match = re.match(regexp, cmd)
-            if (csc_match):
-                csc_consumes = csc_match.end(2) - csc_match.start(2) + 1
+#             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
+#            print '-- CmdInterp.interpret_NL_cmd: cur_pos=%s' % self.on_app.curr_buffer.cur_pos
+#             self.on_app.print_buff_content()
 
-            #
-            # Check if command starts with a known symbol, and compute length
-            # of string it consumes
-            #
-            (a_symbol, cmd_without_symbol) = self.chop_symbol(cmd)
-            symbol_consumes = len(cmd) - len(cmd_without_symbol)
+             #
+             # Check for a CSC at the beginning of the command, and compute
+             # length of string it consumes
+             #
+             csc_consumes = 0
+             csc_match = re.match(regexp, cmd)
+             if csc_match:
+                 csc_consumes = csc_match.end(2) - csc_match.start(2) + 1
+                 if re.match('\s', csc_match.group(3)):
+                     #
+                     # Delimiter was a space. Remove it
+                     #
+                     cmd_without_csc = cmd[csc_match.end():]
+                 else:
+                     #
+                     # Delimiter was not a space. Leave it in command.
+                     #
+                     cmd_without_csc = cmd[csc_match.end(2):]
 
-#            print '-- CmdInterp.interpret_NL_cmd: csc_consumes=%s, symbol_consumes=%s' % (csc_consumes, symbol_consumes)
-            #
-            # Translate either CSC or known symbol, depending on which of the
-            # two consumes the longest part of the NL command
-            #
-            if csc_consumes and csc_consumes >= symbol_consumes:
-                #
-                # The CSC consumes more than the symbol, so translate it.
-                # Try every possible contexts until one applies
-                #                
-                cmd_without_csc = cmd[csc_match.end():]
-                orig_spoken_form = csc_match.group(2)
-#                print '-- CmdInterp.interpret_NL_cmd: matched spoken form \'%s\'' % orig_spoken_form                                
-                indexed_spoken_form = orig_spoken_form
-                re.sub('\s+', ' ', indexed_spoken_form)
-                CSCs = self.cmd_index[string.lower(indexed_spoken_form)]
-                applied = 0
-                for aCSC in CSCs:
-                    applied = aCSC.interpret(self.on_app)
-                    if (applied):
-                        break
-                if applied:
-#                    print '-- CmdInterp.interpret_NL_cmd: applied CSC \'%s\'' % indexed_spoken_form
-                    cmd = cmd_without_csc
-                else:
-                    #
-                    # None of the contexts applied.
-                    #
-                    if symbol_consumes:
-                        #
-                        # Insert the symbol after all
-                        #
-#                        print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % symbol
-                        self.on_app.insert(symbol)
-                        cmd = cmd_without_symbol
-                    else:
-                        #
-                        # Just remove a word from the beginning of the
-                        # command and insert it into the application's buffer
-                        #
-#                        print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'
-                        amatch = re.match('(^\s*[^\s]*)', cmd)
-                        self.on_app.insert_indent(amatch.group(1), '')
-                        cmd = cmd[amatch.end():]
-                        cmd = cmd_without_csc
-                
-            elif symbol_consumes:
+             #
+             # Check if command starts with a known symbol, and compute
+             # length of string it consumes
+             #
+             (a_symbol, cmd_without_symbol) = self.chop_symbol(cmd)
+             symbol_consumes = len(cmd) - len(cmd_without_symbol)
+
+#             print '-- CmdInterp.interpret_NL_cmd: csc_consumes=%s, symbol_consumes=%s' % (csc_consumes, symbol_consumes)
+
+             #
+             # Translate either CSC or known symbol, depending on which
+             # of the two consumes the longest part of the NL command
+             #
+             if csc_consumes and csc_consumes >= symbol_consumes:
+                 #
+                 # The CSC consumes more than the symbol, so translate it.
+                 # Try every possible contexts until one applies
+                 #                
+                 orig_spoken_form = csc_match.group(2)
+#                 print '-- CmdInterp.interpret_NL_cmd: matched spoken form \'%s\'' % orig_spoken_form                                
+                 indexed_spoken_form = orig_spoken_form
+                 re.sub('\s+', ' ', indexed_spoken_form)
+                 CSCs = self.cmd_index[string.lower(indexed_spoken_form)]
+                 csc_applied = 0                 
+                 for aCSC in CSCs:
+                     csc_applied = aCSC.interpret(self.on_app)
+                     if (csc_applied):
+                         break
+                 if csc_applied:
+                     # Found applicable context for the CSC
+#                     print '-- CmdInterp.interpret_NL_cmd: csc_applied CSC \'%s\'' % indexed_spoken_form
+                     cmd = cmd_without_csc
+                 else:
+                     #
+                     # Found no applicable contexts so CSC couldn't consume
+                     # anything after all
+                     #
+                     csc_consumes = 0
+                         
+             if symbol_consumes and symbol_consumes >= csc_consumes:
                 #
                 # Command doesn't start with CSC, or CSC consumes less than
                 # the symbol.
                 #
                 # So, insert the symbol
                 #
-#                print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % a_symbol                
-                self.on_app.insert_indent(a_symbol, '')
+                # Note: known symbols are inserted as untranslated
+                #       text because often, the user will create new symbols
+                #       by prefixing/postfixing existing ones. For example,
+                #       if you define a subclass of a known class SomeClass
+                #       you may name the new class SomeprefixSomeClass or
+                #       SomeClassSomepostfix.
+                #
+#                print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % a_symbol                                
+                self.insert_untranslated_text(a_symbol)
                 cmd = cmd_without_symbol
-
-            else:
+                
+             if not csc_consumes and not symbol_consumes:
                 #
                 # Command starts with neither CSC or symbol.
                 # Just remove a word from the beginning of the
                 # command and insert it into the application's buffer
                 #
-#                print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'                
+#                print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'
                 amatch = re.match('(^\s*[^\s]*)', cmd)
-                self.on_app.insert_indent(amatch.group(1), '')
+                leading_word = amatch.group(1)
+                self.insert_untranslated_text(leading_word)
                 cmd = cmd[amatch.end():]
-            
 
+             if (csc_consumes or cmd == '') and \
+                self._untranslated_text_start != None:
+                #
+                # A CSC was translated, or we reached end of the
+                # command, thus marking the end of a sequence of untranslated
+                # text. Try to match it to a known (or new) symbol.
+                #
+                self.match_untranslated_text()
+
+#             print '-- CmdInterp.interpret_NL_cmd: End of while. self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
+                                
+    def insert_untranslated_text(self, text):
+        
+        """Inserts some text in current buffer, and marks it as untranslated
+        text.
+
+        The next time a CSC is encountered, the interpreter will try
+        to match that text (and all untranslated text that immediatly
+        precedes/follows it) to a new symbol, or a known symbol with
+        unresolved spoken forms.
+        
+        **INPUTS**
+        
+        *ST* text -- The text to be inserted
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.on_app.insert_indent(text, '')
+
+        if self._untranslated_text_start == None:
+            #
+            # This was the beginning of a sequence of
+            # untranslated text. Remember its start
+            # position.
+            #
+            # NOTE: We set start past any blanks that may
+            # have been inserted for indentation
+            #
+            self._untranslated_text_start = self.on_app.curr_buffer.cur_pos - len(text)            
+        
+        #
+        # Remember end of the current sequence of untranslated
+        # text.
+        #
+        self._untranslated_text_end = self.on_app.curr_buffer.cur_pos
+
+#        self.on_app.print_buff_content()
+#        print '-- CmdInterp.insert_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end])
+        
+
+    def match_untranslated_text(self):
+        """Tries to match last sequence of untranslated text to a symbol.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+#        print '-- CmdInterp.match_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated region=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end])
+#        self.on_app.print_buff_content()
+        
+        untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
+
+        a_match = re.match('(\s*)([\s\S]*)\s*$', untranslated_text)
+        text_no_spaces = a_match.group(2)
+        leading_spaces = a_match.group(1)
+
+#        print '-- CmdInterp.match_untranslated_text: text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces)
+
+#          #
+#          # Remove leading blanks in untranslated region.
+#          #
+#          old_pos = self.on_app.curr_buffer.cur_pos
+#          old_pos = old_pos - len(leading_spaces)
+#          self._untranslated_text_end = self._untranslated_text_end - len(leading_spaces)
+#          self.on_app.delete(start=self._untranslated_text_start, end=self._untranslated_text_start + len(leading_spaces))
+#          self.on_app.move_to(old_pos)
+                
+        #
+        # Don't bother the user if the untranslated text is just a known symbol
+        #
+        if not self.known_symbols.symbol_info.has_key(text_no_spaces):
+#        print '-- CmdInterp.match_untranslated_text: trying to match untranslated text to a symbol. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end)
+            symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
+            if symbol_matches:
+                self.dlg_select_symbol_match(symbol_matches)
+
+        #
+        # There is no more untranslated region
+        #
+        self._untranslated_text_start = None
+        self._untranslated_text_end = None
+        
+
+    def dlg_select_symbol_match(self, symbol_matches):
+        """Asks the user to select a match for pseudo symbol.
+        
+        **INPUTS**
+        
+        *[SymbolMatch]* symbol_matches -- List of possible matches.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+
+        .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
+
+        untranslated_text = self.on_app.curr_buffer.content[self._untranslated_text_start:self._untranslated_text_end]
+
+        good_answer = 0
+        while not good_answer:
+            print 'Associate \'%s\' with symbol (Enter selection):\n' % untranslated_text
+            print '  \'0\': no association'
+            ii = 1
+            for a_match in symbol_matches:
+                sys.stdout.write('  \'%s\': %s' % (ii, a_match.native_symbol))
+                if a_match.is_new:
+                    sys.stdout.write(' (*new*)')
+                sys.stdout.write('\n')
+                ii = ii + 1
+#                print '-- CmdInterp.dlg_select_symbol_match: a_match.score()=%s, a_match.__dict__=%s' % (a_match.score(), a_match.__dict__)
+            sys.stdout.write('\n> ')
+            answer = sys.stdin.readline()
+            answer_match = re.match('\s*([\d])+\s*', answer)
+            if answer_match:
+                choice_index = int(answer_match.group(1)) - 1
+                if choice_index < len(symbol_matches) and choice_index >= -1:
+
+                    good_answer = 1
+            if not good_answer:
+                print 'Invalid answer \'%s\'' % answer
+
+        #
+        # Accept the match
+        #
+        if choice_index >= 0:
+            #
+            # A match was chosen. Accept it and type it instead of the
+            # untranslated text.
+            #
+            chosen_match = symbol_matches[choice_index]
+            self.known_symbols.accept_symbol_match(chosen_match)
+
+            #
+            # Insert matched symbol, then go back to where we were
+            #
+            old_pos = self.on_app.curr_buffer.cur_pos
+            self.on_app.insert_indent(chosen_match.native_symbol, '', start=self._untranslated_text_start, end=self._untranslated_text_end)
+            new_pos = old_pos + len(chosen_match.native_symbol) - (self._untranslated_text_end - self._untranslated_text_start)
+            self.on_app.move_to(new_pos)
+            
+        
+        #
+        # Now, there is no more untranslated text.
+        #
+        self._untranslated_text_start = None
+        self._untranslated_text_end = None
+            
 
     def chop_symbol(self, command):
         """Chops off the beginning of a string if it matches a known symbol.

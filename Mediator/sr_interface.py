@@ -93,7 +93,7 @@ def addWord(word, *rest):
 
             #
             # Note: Need to add redundant entry without special
-            # characters (e.g. {Spacebar}) in the written form,
+            # characters (e.g. {Spacebar}}) in the written form,
             # because Select XYZ will not work if XYZ has some spaces
             # in its written form. This means that there will be two
             # vocabulary entries in the vocabulary. The entry without
@@ -160,8 +160,9 @@ def spoken_written_form(vocabulary_entry):
         spoken = vocabulary_entry
 
     #
-    # Substitute {Spacebar}->' '
+    # Substitute {Spacebar}->' ', {Enter} -> '\n'
     #
+    written = re.sub('\\{Enter\\}', '\n', written)
     written = re.sub('\\{Spacebar\\}', ' ', written)
 
     return (spoken, written)
@@ -187,6 +188,7 @@ def vocabulary_entry(spoken_form, written_form):
     #
     # Substitute blanks in written form
     #
+    written_form = re.sub('\n', '{Enter}', written_form)
     written_form = re.sub('\s', '{Spacebar}', written_form)
     if len(written_form) > 0:
         entry = written_form + '\\' + spoken_form

@@ -4,6 +4,61 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+Symbol translation
+------------------
+
+-- Alain
+
+   a) addAbbreviation shouldn't add abbrevs that are less than 2 (or
+      3?) chars long.  should maybe print a warning also.
+
+   b) when a sequence of words is abbreviated by single letters, should create 
+      an abbreviation for the sequence instead of individaul words.
+      e.g. CSCmd: C->context, S->sensitive, Cmd->command.
+           should create abbreviations cs->"context sensitive" and cmd->command
+           instead of c->context, s->sensitive, cmd->command
+
+   c) Need to save the automaticly created abbreviations on disk (use pickler?)
+
+   NOTE: there could be more than one MediatorObject modifying the
+   abbreviations file at the same time... how to keep them in sync?
+
+   Solution: when creating a MediatorObject, the Mediator server would
+   pass it a central SymDict instance. This SymDict instance would
+   have a lock, which means that only one MediatorObject instance at a
+   time could update it.
+
+
+Make actions into objects
+-------------------------
+
+DO BEFORE HAVE DEFINED TOO MANY ACTION FUNCTIONS IN CONFIG FILE (IN
+PARTICULAR BEFORE HEAVY TESTING).
+
+This will be needed in the future for commands like "N times", "do
+that again", "keep doing that", "previous one", "next one", etc...
+
+If actions are just functions, we will be able to repeat them with "N
+times", but or "keep doing that", but we won't be able to modify the
+action with commands like "previous one" etc...
+
+If actions are objects, they can store the values of arguments that
+they were invoked with (e.g. "direction").
+
+
+Symbol compilation
+------------------
+
+Whenever a new file is open, its symbols should be compiled. This will
+be useful in contexts where source files are not on the same machine
+as the mediator (currently, compile_symbols requires that the files
+given as arguments be accessible from the mediator).
+
+
+Test thorgoughly
+----------------
+
+
 GNU copyright
 -------------
 
@@ -40,54 +95,6 @@ User/Topic management
 Mediator should set NatSpeak so that it uses a special topic (or user
 if the version of NatSpeak doesn't have topics), to avoid polluting
 the user's regular user/topic with automatically generated entries.
-
-Symbol translation
-------------------
-
--- Alain
-
-  VG3 style symbol translation
-
-  When a sequence of words in an utterance doesn't correspond to a CSC
-  or LSA (e.g. '!=\not equal to'), or a compiled symbols with known
-  spoken form (e.g. 'horiz_pos\horizontal position'), should try to
-  match the sequence to one of the compiled symbols without a known
-  spoken form (i.e. symbols that contain undefined abbreviations), a la VG3.
-
-  If a match is found, the symbol would be added to the list of
-  symbols with known spoken form (and added to NatSpeak's
-  vocabulary). It should also be possible to identify which parts of
-  the written form correspond to which words of the spoken form and
-  automatically add new known abbreviations.
-
-  If no match is found, then the system would automatically abbreviate
-  the symbol for the user and add corresponding abbrevs and voc
-  entries.
-
-  Before doing either translations, the system should display a dialog
-  asking the user if he/she wants to create such symbols and
-  abbrevs. If the suer says no, just type the text as is.
-
-  Note that this dialog would be displayed only the first time the
-  user dictates a pseudo symbol. The next time, there would not be
-  such a dialog because NatSpeak would have a corresponding entry in
-  its vocab.
-
-  I think this feature is absolutely necessary, otherwise, it will be
-  a real pain for users to define abbrevs for all the symbols they
-  compile.
-
-   NOTE: there could be more than one MediatorObject modifying the
-   abbreviations file at the same time... how to keep them in sync?
-
-   Maybe the Mediator server should handle changes to the abbrevs file
-   and use a locking mechanism so that only one thread at a time could
-   update it. What happens if the thread in question dies? Need to
-   have a time out so that the server can unlock the file after a few
-   seconds (assume that the update doesn't take long).
-
-   STATUS: Basic VG3 style symbol matching was implemented in SymDict. 
-           We now have to use it in the interpreter as described above.
 
 
 Text mode
@@ -336,6 +343,17 @@ versus '{}'). So in this case, would need to unload/reload.
 
 Need to check first if this optimisation is really needed.
 
+-- Alain
+
+At the moment, LSAs are removed from NatSpeak's vocab everytime you
+change language. That means that NatSpeak looses any adaptation it may
+have done to learn the usage pattern of those LSAs.
+
+It would be better if LSAs stayed in the vocab all the time (including
+after VoiceCode exited), but if NatSpeak recognises an LSA that's not
+the right form for the current langauge, the Interpreter will fix it
+by finding an LSA with same spoken form but for the current language.
+
 
 CSCs
 ----
@@ -423,3 +441,55 @@ What can I say
     etc...
        
     
+Abbreviations cleanup
+---------------------
+
+The console should have an abbrev_cleanup command. This would remove
+all abbrevs that are not currently used in at least one known symbol.
+
+That way, the user could compile a list of source files he currently
+cares about and run clean_abbrevs, thus removing abbreviations that
+were generated from old projects that he doesn't care about anymore.
+
+The command would display a list of abbrevs to be removed, giving the
+user a chance to keep some of them if he wanted.
+
+
+Abbreviations definition
+------------------------
+
+After compiling a series of source, system could sort abbrevs in
+decreasing order of their frequency, and then start a dialog allowing
+the user to dictate expansions for them.
+
+This would be useful for batch definition of abbrevs instead of the
+automatic as you go definition.
+
+
+SymDict
+-------
+
+-- Alain
+
+Right now, known symbols are removed from NatSpeak's vocabulary every
+time VoiceCode exits. This means NatSpeak looses all adaptation it may
+do to those symbols.
+
+It would be better to add them with spoken form x_y_z where x, y , z
+are words and leave them in the vocab all the time. That way, the user could still erase symbols relatively easily by listing all the user added symbols and removing the ones with _ in their spoken forms.
+
+Of course, this assumes that DNS will recognise x_y_z when you say "x
+y z" (i.e. tha the _s won't interfere with recognition).
+
+-- Alain
+
+format_as_symbol
+Right now, the order in which the various formats are shown depends on a fixed
+rank specified by the programmer.
+
+It would be better if the rank was dynamic, i.e. it was based on how
+often the user recently accepted a new symbol formatted in that way in
+the current language.
+
+
+SymDict

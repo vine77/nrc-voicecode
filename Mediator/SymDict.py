@@ -5,12 +5,19 @@
 from Object import Object
 from SourceBuff import SourceBuff
 from LangDef import LangDef
-import auto_test, sr_interface, vc_globals
-import os, re, string
-import CmdInterp, EdSim
+import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
 
+import exceptions, os, re, string, cPickle
+
+import cPickle
 
 language_definitions={}
+
+#
+# Minium lenght for an abbreviation (short abbreviations tend to introduce
+# too many false spoken forms, which bloats the SR's vocabulary)
+#
+min_abbreviation_len = 2
 
 #
 # Set *vocabulary_symbols_written_form* to 1 if you want VoiceCode to create a
@@ -21,6 +28,155 @@ language_definitions={}
 #
 vocabulary_symbols_with_written_form = 1
 
+
+#############################################################################
+# Symbol formatting functions
+#
+# List of formatting functions for generating new native symbols from
+# pseudo_symbols.
+#
+# Each formatting function must return a valid SymbolMatch object.
+#
+#############################################################################
+
+symbol_formats = []
+
+def fmt_lower_under(pseudo_symbol, words):
+    """Format symbol as xxx_yyy_zzz.
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+    
+    native_symbol = string.join(words, '_')
+    native_symbol_match = SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=1)
+    
+    return native_symbol_match
+    
+symbol_formats = symbol_formats + [fmt_lower_under]
+
+def fmt_cap(pseudo_symbol, words):
+    """Format symbol as XxxYxxZzz.
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+
+    native_symbol = ''
+    for a_word in words:
+        native_symbol = native_symbol + string.capitalize(a_word)
+    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=2)
+    
+symbol_formats = symbol_formats + [fmt_cap]
+
+
+def fmt_lower_cap(pseudo_symbol, words):
+    """Format symbol as xxxYyyZzz.
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+
+    native_symbol = string.lower(words[0])    
+    if len(words) > 1:
+        for a_word in words[1:]:
+            native_symbol = native_symbol + string.capitalize(a_word)
+    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=3)
+    
+symbol_formats = symbol_formats + [fmt_lower_cap]
+
+
+def fmt_upper_under(pseudo_symbol, words):
+    """Format symbol as XXX_YYY_ZZZ
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+
+    for ii in range(len(words)):
+        words[ii] = string.upper(words[ii])
+    native_symbol = string.join(words, '_')
+    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=4)
+    
+symbol_formats = symbol_formats + [fmt_upper_under]
+    
+    
+
+def fmt_join(pseudo_symbol, words):
+    """Format symbol as xxxyyyzzz
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+
+    lower_words = []
+    for a_word in words: lower_words = lower_words + [string.lower(a_word)]
+    native_symbol = string.join(lower_words, '')
+    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=5)
+    
+symbol_formats = symbol_formats + [fmt_join]
+
+
+def fmt_upper_join(pseudo_symbol, words):
+    """Format symbol as XXXYYYZZZ
+    
+    **INPUTS**
+
+    *STR pseudo_symbol* -- Pseudo symbol to be formatted as a native symbol
+    
+    *[STR]* words -- Words in *pseudo_symbol* (to avoid redundant splitting)
+    
+    **OUTPUTS**
+    
+    *none* -- 
+    """
+
+    for ii in range(len(words)):
+        words[ii] = string.upper(words[ii])
+    native_symbol = string.join(words, '')
+    return SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol = native_symbol, words=words, word_matches=words, fmt_rank=6)
+    
+symbol_formats = symbol_formats + [fmt_upper_join]
+
+
+#############################################################################
+# End of symbol formatting functions
+#############################################################################
 
 def pluralize(word):
     """Finds the plural form of a word
@@ -89,6 +245,11 @@ class SymbolMatch(Object):
     *STR native_symbol=None* -- The matched native symbol (e.g. aNewSym)
 
     *STR words=None* --  The words in *pseudo_symbol*
+
+    *BOOL is_new=0* -- If true, then the symbol is a new one
+
+    *NUM fmt_rank=10* -- For new symbol, this gives the match's rank in
+     the list of possible forms for the new symbol
     
     *{STR: STR} word_matches=None* -- Keys are words of
      *pseudo_symbol* and vallues are the matching segment in
@@ -99,12 +260,14 @@ class SymbolMatch(Object):
     *none* -- 
     """
     
-    def __init__(self, pseudo_symbol=None, native_symbol=None, words=None, word_matches=None, **args_super):
+    def __init__(self, pseudo_symbol=None, native_symbol=None, words=None, word_matches=None, is_new=0, fmt_rank=10, **args_super):
         self.deep_construct(SymbolMatch, \
                             {'pseudo_symbol': pseudo_symbol, \
                              'native_symbol': native_symbol, \
                              'words': words, \
-                             'word_matches': word_matches}, \
+                            'word_matches': word_matches, \
+                             'is_new': is_new, \
+                             'fmt_rank': fmt_rank}, \
                             args_super, \
                             {})
 
@@ -123,8 +286,23 @@ class SymbolMatch(Object):
         - the likelyhood of the abbreviations (presumably) used in *native_symbol* (not implemented yet)
         - the length of *native_symbol*
         """
-        
-        score = len(self.native_symbol)
+                         
+        if self.is_new:
+            #
+            # For matches to new symbols, score depends on the rank of the
+            # format used to create the symbol
+            #
+            # Note use of float to force float division (as opposed to integer
+            # div)
+            #
+            score = float(1)/self.fmt_rank
+        else:
+            #
+            # For matches to existing symbols, just base score on lenght of
+            # the native symbol for now
+            #
+            score = len(self.native_symbol)
+
         return score
 
     
@@ -160,7 +338,7 @@ class SymbolMatch(Object):
 
 
 
-class SymDict(Object):
+class SymDict(PickledObject.PickledObject):
     """Known symbols dictionary.
 
     This class stores information about symbols defined in source files
@@ -200,6 +378,10 @@ class SymDict(Object):
      indicates that the string needs to be regenerated by
      [symbols_as_one_string].
 
+     *STR* pickle_fname=None' -- Name
+     of the file where dictionary object is to be saved/read from. If *None*,
+     it means the object should never be saved to/read from file.
+
    
     CLASS ATTRIBUTES**
 
@@ -212,22 +394,30 @@ class SymDict(Object):
     .. [SpokenFormInfo] file:///./SymDict.SpokenFormInfo.html
     .. [symbols_as_one_string] file:///./SymDict.SymDict.html#symbols_as_one_string"""
 
-    def __init__(self, symbol_info={}, spoken_form_info={},
-                 abbreviations={}, **attrs):
+    def __init__(self, pickle_fname=None,
+                 **attrs):
 
         # These attributes can't be set at construction time
-        self.decl_attrs({'_cached_symbols_as_one_string': ''})
+        self.decl_attrs({'_cached_symbols_as_one_string': '', \
+                         'spoken_form_info': {}, \
+                         'symbol_info': {}, \
+                         'abbreviations': {}, \
+                         'unresolved_abbreviations': {}})
 
         # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
-                            {'spoken_form_info': spoken_form_info, \
-                             'symbol_info': symbol_info, \
-                             'abbreviations': abbreviations, \
-                             'unresolved_abbreviations': {}}, \
+                            {'pickle_fname': pickle_fname},
                             attrs)
 
+#          # Initialise the object from file
+#          self.unpickle()
 
-    def add_abbreviation(self, abbreviation, expansions):
+#          # Need to reset self.pickle_fname to override the value that might have
+#          # been saved in the pickle file
+#          self.pickle_fname = pickle_fname
+
+
+    def add_abbreviation(self, abbreviation, expansions, resave=0):
         """Adds an abbreviation to the symbol dictionary.
 
         If the abbreviation already exists, adds to the list of
@@ -238,6 +428,9 @@ class SymDict(Object):
         *STR* abbreviation -- the abbreviation 
         
         *[STR]* expansions -- list of possible expansions
+
+        *BOOL resave* -- If true, resave the dictionary to disk after
+         adding the abbreviation.
         
         **OUTPUTS**
         
@@ -246,30 +439,46 @@ class SymDict(Object):
 
 #        print '-- SymDict.add_abbreviation: abbreviation=\'%s\', expansions=%s' % (abbreviation, expansions)
 
-        if self.abbreviations.has_key(abbreviation):
-#            print '-- SymDict.add_abbreviation: existing expansions are: %s' % self.abbreviations[abbreviation]
-            
-            #
-            # Add new expansions for existing abbreviation
-            #
-            for an_expansion in expansions:
-                if not an_expansion in self.abbreviations[abbreviation]:
-                    self.abbreviations[abbreviation] = self.abbreviations[abbreviation] + [an_expansion]
+        global min_abbreviation_len
+        if len(abbreviation) < min_abbreviation_len:
+            print 'WARNING: abbreviation \'%s\' not added (length < %s)' % (abbreviation, min_abbreviation_len)
         else:
-            #
-            # Create new abbreviation entry
-            #
-            self.abbreviations[abbreviation] = expansions
 
-#        print '-- SymDict.add_abbreviation: after update, expansions are: %s' % self.abbreviations[abbreviation]
+            #
+            # Make everything lowercase
+            #
+            abbreviation = string.lower(abbreviation)
+            for ii in range(len(expansions)):
+                expansions[ii] = string.lower(expansions[ii])
 
-        #
-        # Regenerate spoken forms of symbols containing that abbreviation
-        #
-        if self.unresolved_abbreviations.has_key(abbreviation):
-            for a_symbol in self.unresolved_abbreviations[abbreviation].keys():
-                self.update_spoken_forms(a_symbol)
-            del self.unresolved_abbreviations[abbreviation]
+            if self.abbreviations.has_key(abbreviation):
+#                print '-- SymDict.add_abbreviation: existing expansions are: %s' % self.abbreviations[abbreviation]
+            
+                #
+                # Add new expansions for existing abbreviation
+                #
+                for an_expansion in expansions:
+                    if not an_expansion in self.abbreviations[abbreviation]:
+                        self.abbreviations[abbreviation] = self.abbreviations[abbreviation] + [an_expansion]
+            else:
+                #
+                # Create new abbreviation entry
+                #
+                self.abbreviations[abbreviation] = expansions
+
+#            print '-- SymDict.add_abbreviation: after update, expansions are: %s' % self.abbreviations[abbreviation]
+
+            #
+            # Regenerate spoken forms of symbols containing that abbreviation
+            #
+            if self.unresolved_abbreviations.has_key(abbreviation):
+                for a_symbol in self.unresolved_abbreviations[abbreviation].keys():
+                    self.update_spoken_forms(a_symbol)
+                del self.unresolved_abbreviations[abbreviation]
+
+        if resave:
+            self.pickle()
+
 
     def symbols_as_one_string(self):
         """Returns a string that lists all the native known symbols.
@@ -298,7 +507,7 @@ class SymDict(Object):
             #
             self._cached_symbols_as_one_string = ''
             symbol_list = self.symbol_info.keys()
-            symbol_list.sort()
+            symbol_list.sort()            
             for a_symbol in symbol_list:
                 #
                 # Note: symbols must be separated by two spaces because
@@ -310,7 +519,9 @@ class SymDict(Object):
                 #       a single space, only the first symbol would be matched
                 #
                 self._cached_symbols_as_one_string = self._cached_symbols_as_one_string + ' ' + a_symbol + ' '
-            
+
+        self.pickle()
+
         return self._cached_symbols_as_one_string
 
     def print_symbols(self):
@@ -333,6 +544,46 @@ class SymDict(Object):
 
         print '_cached_symbols_as_one_string is:\n   %s' % self._cached_symbols_as_one_string
 
+    def print_abbreviations(self, show_unresolved=0):
+        """Prints the known and unresolved abbreviations."""
+
+        print 'List of abbreviations\n'
+        sorted_abbreviations = self.abbreviations.keys()
+        sorted_abbreviations.sort()
+        for an_abbreviation in sorted_abbreviations:
+            print '\'%s\' expands to %s' % (an_abbreviation, self.abbreviations[an_abbreviation])
+
+        if show_unresolved:
+            print '\n\nList of unresolved abbreviations\n'
+            sorted_unresolved = self.unresolved_abbreviations.keys()
+            sorted_unresolved.sort(lambda x, y: len(x) > len(y) or (len(x) == len(y) and x < y))
+            for an_abbreviation in sorted_unresolved:
+                symbol_list = self.unresolved_abbreviations[an_abbreviation].keys()
+                print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
+
+    
+    def parse_symbols_from_files(self, file_list):
+        """Parse symbols from a series of source files
+
+        **INPUTS**
+
+        *[STR] file_list -- List of files to be compiled
+
+        **OUTPUT**
+
+        *none* --
+        """
+        
+        for a_file in file_list:
+            print 'Compiling symbols for file \'%s\'' % a_file
+            self.parse_symbols(a_file)
+
+        #
+        # Save dictionary to file
+        #
+        self.pickle()
+
+    
     def parse_symbols(self, file_name):
         """Parse symbols from a source file.
 
@@ -369,8 +620,6 @@ class SymDict(Object):
                 else:
                     source = ''
                 
-
-
     def strip_source(self, source, language_definition):
         """Removes all parts of a source file that don't contain symbols.
 
@@ -422,12 +671,15 @@ class SymDict(Object):
         return stripped_source
                                 
 
-    def add_symbol(self, symbol):
+    def add_symbol(self, symbol, resave=0):
         """Add a symbol to the dictionary
 
         **INPUTS**
         
         *STR* symbol -- Symbol to add
+
+        *BOOL resave* -- If true, resave the dictionary to disk after
+         adding the symbol.
         
         **OUTPUTS**
         
@@ -458,15 +710,19 @@ class SymDict(Object):
             # Update the symbol's spoken forms.
             #
             self.update_spoken_forms(symbol)
+
+            if resave: self.pickle()
             
 
-    def update_spoken_forms(self, symbol):
+    def update_spoken_forms(self, symbol, resave=0):
         """Updates the spoken forms of a native symbol.
 
         **INPUTS**
         
         *STR* symbol -- Native symbol for which we want to update the
          spoken forms.
+
+        *BOOL resave* -- If true, resave dictionary to disk after the update.
         
         **OUTPUTS**
         
@@ -528,6 +784,7 @@ class SymDict(Object):
                     
                 sr_interface.addWord(entry)        
 
+        if resave: self.pickle()
 
     def get_spoken_forms(self, symbol):
         """Returns a list of possible spoken forms for a symbol.
@@ -748,11 +1005,18 @@ class SymDict(Object):
         
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
+#        print '-- SymDict.match_pseudo_symbol: pseudo_symbol=\'%s\'' % pseudo_symbol
+
         #
         # Find all known native symbols that match *pseudo_symbol*
         #
         all_symbols = self.symbols_as_one_string()
-        words = re.split('\s+', pseudo_symbol)        
+
+        #
+        # Remove leading/trailing blanks
+        #
+        pseudo_symbol = re.sub('(^\s+|\s+$)', '', pseudo_symbol)
+        words = re.split('\s+', pseudo_symbol)
         regexp = self.reg_pseudo_to_native_symbol(words)
 
 #        print '-- SymDict.match_pseudo_symbol: regexp=%s, all_symbols=\'%s\'' % (regexp.__dict__, all_symbols)
@@ -762,18 +1026,81 @@ class SymDict(Object):
 #        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
 
         #
-        # Create a list of matches
+        # Create a list of matches to known symbols
         #
         matches = []
         for a_match in raw_matches:
             matches = matches + [SymbolMatch(pseudo_symbol=pseudo_symbol, native_symbol=a_match[0], words=words, word_matches=a_match[1:])]
 
+
+        #
+        # Add list of possible new symbols
+        #
+        matches = matches + self.format_as_symbol(pseudo_symbol, words)
+
         #
         # Sort the list of matches according to their scores
         #
         matches.sort(SymbolMatch.compare_scores)
+        matches.reverse()
+
+        #
+        # Remove duplicate entries (in some cases, different formatting
+        # functions for new symbol may yield same result)
+        #
+        ii = 0
+        previous_matches = {}
+        while ii < len(matches):
+            a_match = matches[ii].native_symbol
+            if previous_matches.has_key(a_match):
+                if ii + 1 < len(matches):
+                    matches = matches[:ii] + matches[ii+1:]
+                else:
+                    matches = matches[:ii]
+            else:
+                ii = ii + 1
+            previous_matches[a_match] = 1
         return matches
-  
+
+    
+
+    def format_as_symbol(self, pseudo_symbol, words):
+        
+        """Returns a list of alternative ways to format a pseudo
+        symbol as a new native symbol.
+        
+        **INPUTS**
+        
+        *STR* pseudo_symbol -- Pseudo symbol to be formatted
+
+        *[STR] words -- Words in *pseudo_symbol* (to avoid redundant splitting        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        global symbol_formats
+
+        possible_forms = []
+        for a_format in symbol_formats:
+
+            #
+            # Make a copy of the words so that formating functions can't
+            # modify the original in place
+            #
+            tmp_words = []
+            for a_word in words: tmp_words = tmp_words + [a_word]
+            a_match = a_format(pseudo_symbol, tmp_words)
+
+            #
+            # Make sure the match is labeled as new (in case the formatting
+            # function forgot to do so)
+            #
+            a_match.is_new = 1
+            possible_forms = possible_forms + [a_match]
+
+        return possible_forms
 
     def reg_pseudo_to_native_symbol(self, words):
         
@@ -816,6 +1143,7 @@ class SymDict(Object):
         reg_non_alphanums = '[^a-zA-Z0-9\s]*'
         regexp_string = ' (' + reg_non_alphanums
         for a_word in words:
+#            print '-- SymDict.reg_pseudo_to_native_symbol: a_word=%s' % a_word
             regexp_string = regexp_string + '(' + a_word[0]
             for a_remaining_char in a_word[1:]:
                 regexp_string = regexp_string + a_remaining_char + '{0,1}'
@@ -855,6 +1183,52 @@ class SymDict(Object):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
+#        print '-- SymDict.accept_symbol_match: the_match.__dict__=%s' % (the_match.words, the_match.word_matches, the_match.__dict__)
+
+        #
+        # Collapse consecutive single character abbreviations into a
+        # single abbreviation
+        # e.g. words=['context', 'sensitive']
+        #      word_matches=['c', 's']
+        #      then add abbreviation cs->'context sensitive' instead of
+        #      two abbrevs c->'context' and 's'->'sensitive'
+        #
+#        print '-- SymDict.accept_symbol_match: the_match.words=%s, the_match.word_matches=%s' % (the_match.words, the_match.word_matches)
+        #
+        # Note: need to convert word_matches from a tuple to a list
+        #       because can't use a tuple as an argument for +
+        #
+        the_match.word_matches = list(the_match.word_matches)
+        ii = 0
+        while ii < len(the_match.word_matches):
+#            print '-- SymDict.accept_symbol_match: ii=%s, the_match.word_matches=%s, the_match.words=%s' % (ii, the_match.word_matches, the_match.words)
+            if len(the_match.word_matches[ii]) == 1:
+                # find all single character matches that follow this one
+                for jj in range(ii + 1, len(the_match.word_matches)):
+                    if len(the_match.word_matches[ii]) > 1:
+                       break
+                #
+                # matches from ii up to jj (exclusively) are single characters.
+                # collapse them.
+                #
+                old_words = the_match.words
+                the_match.words = old_words[:ii] + [string.join(old_words[ii:jj], ' ')]
+                if jj < len(old_words):
+                    the_match.words = the_match.words + old_words[jj+1:]
+
+                old_word_matches = the_match.word_matches
+#                print '-- SymDict.accept_symbol_match: ii=%s, jj=%s, old_word_matches[ii:jj]=%s' % (ii, jj, old_word_matches[ii:jj])                
+                the_match.word_matches = old_word_matches[:ii] + [string.join(old_word_matches[ii:jj], ' ')]
+                if jj < len(old_word_matches):
+                    the_match.word_matches = the_match.word_matches + old_word_matches[jj+1:]
+            ii = ii + 1
+                
+                
+        #
+        # Convert word_matches back to tuple for consistency
+        #
+        the_match.word_matches = tuple(the_match.word_matches)
+        
         #
         # Add newly resolved abbreviations
         #
@@ -863,19 +1237,31 @@ class SymDict(Object):
                 self.add_abbreviation(the_match.word_matches[ii], [the_match.words[ii]])
 
         #
-        # Add the wordto the symbol dictionary, making sure to recompute
-        # its spoken forms if its already there
+        # Add the wordto the symbol dictionary its spoken forms if its
+        # already there
         #
         self.add_symbol(the_match.native_symbol)
+
+        #
+        # Resave the dictionary to disk
+        #
+        self.pickle()
+
+#        print '-- SymDict.accept_symbol_match: upon exit, known symbols are now:'; self.print_symbols()
+            
         
 
-    def vocabulary_cleanup(self):
+    def vocabulary_cleanup(self, just_sr_vocab=0, resave=1):
         """Removes symbols from the speech recognition vocabulary
         
         **INPUTS**
         
-        *none* -- 
-        
+        *BOOL just_sr_vocab = 0* -- If true, the symbols will be
+         removed from the SR's vocabulary, but not from the
+         interpreter's symbol dictionary.
+
+         *BOOL resave = 1* -- If true, symbol dictionary is
+          resaved to disk after cleanup.
 
         **OUTPUTS**
         
@@ -905,12 +1291,67 @@ class SymDict(Object):
                   for a_written_form in self.spoken_form_info[a_form].symbols:
                       entry = sr_interface.vocabulary_entry(a_form, a_written_form)
                       sr_interface.deleteWord(entry)
-                  
-        self.spoken_form_info = {}
-        self.symbol_info = {}
+
+        if not just_sr_vocab:
+            self.spoken_form_info = {}
+            self.symbol_info = {}
+
+        #
+        # Resave dictionary to disk
+        #
+        if resave: self.pickle()
             
 
+
+    def abbreviations_cleanup(self):
+        """Removes all known abbreviations from the symbols dictionary.
+        
+        **INPUTS**
+        
+        *none* -- 
         
 
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.abbreviations = {}
+        self.unresolved_abbreviations = {}
+
+        #
+        # Resave dictionary to disk
+        #
+        self.pickle()
 
 
+
+    def init_from_file(self):
+        
+        """Initialises the symbol dictionary from a persistent version
+        stored on file.
+
+        The file is *self.pickle_fname*. If *None*, don't reinitialise.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        if self.pickle_fname != None:
+            self.unpickle()
+
+            #
+            # Make sure symbols are added to SR's vocabulary
+            #
+            for a_symbol in self.symbol_info.items():
+                written_as = a_symbol[0]
+                a_symbol_info = a_symbol[1]
+                for spoken_as in a_symbol_info.spoken_forms:
+                    sr_interface.addWord(sr_interface.vocabulary_entry(spoken_as, written_as))
+                
