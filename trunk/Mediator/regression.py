@@ -407,13 +407,20 @@ class TempConfigFactory(Object.Object):
     def __init__(self, **args):
         self.deep_construct(TempConfigFactory, {}, args)
 
-    def new_config(self, editor = None):
+    def new_config(self, editor = None, skip_config = 0, 
+        symdict_pickle_fname = None):
         """create a new TempConfig object
 
         **INPUTS**
 
         *AppState editor* -- the internal test editor to use, or None to
         create a new EdSim instance
+
+        *BOOL skip_config* -- flag allowing you to create a
+        MediatorObject without configuring it 
+
+        STR *symdict_pickle_fname=None* -- Name of the file containing the
+        persistent version of the symbols dictionnary.
         """
         debug.virtual('TempConfigFactory.new_config')
 
@@ -476,7 +483,8 @@ class TempConfigNewMediatorFactory(Object.Object):
             {'symbol_match_dlg': symbol_match_dlg,
              'pickled_interp': pickled_interp}, args)
 
-    def new_config(self, editor = None, skip_config = 0):
+    def new_config(self, editor = None, skip_config = 0, 
+        symdict_pickle_fname = None):
         """create a new TempConfig object
 
         **INPUTS**
@@ -487,6 +495,9 @@ class TempConfigNewMediatorFactory(Object.Object):
         *BOOL skip_config* -- flag allowing you to create a
         MediatorObject without configuring it 
 
+        STR *symdict_pickle_fname=None* -- Name of the file containing the
+        persistent version of the symbols dictionnary.
+
         **OUTPUTS**
 
         *TempConfigNewMediator* --  the TempConfigNewMediator object
@@ -496,7 +507,8 @@ class TempConfigNewMediatorFactory(Object.Object):
             interp = cPickle.loads(self.pickled_interp)
         a_mediator = \
             NewMediatorObject.NewMediatorObject(interp = interp, 
-                symbol_match_dlg = self.symbol_match_dlg)
+                symbol_match_dlg = self.symbol_match_dlg,
+                symdict_pickle_fname = symdict_pickle_fname)
         if not skip_config:
             a_mediator.configure(testing = 1)
         if editor == None:
