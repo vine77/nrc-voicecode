@@ -3,30 +3,31 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Oct 17 23:19:41 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Oct 17 23:21:08 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class ResMgrStdFactory</title>
+<title>Class MilitarySpelling</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class ResMgrStdFactory</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="ResMgr.html">ResMgr</A></P>
+<H1 CLASS="ClassName">class MilitarySpelling - abstract base class for military (alpha-bravo-charlie) spelling grammar </H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="sr_grammars.html">sr_grammars</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">ResMgr.ResMgrStdFactory<BR>
-&nbsp;&nbsp;<A HREF="ResMgr.ResMgrFactory.html">ResMgr.ResMgrFactory</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammars.MilitarySpelling<BR>
+&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ResMgrStdFactory</SPAN>(<A CLASS="DocLink" HREF="ResMgr.ResMgrFactory.html">ResMgrFactory</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStdFactory.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#ResMgr.ResMgrStdFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrStdFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)<SPAN CLASS="OneLiner"> # returns a new ResMgr for the named instance</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MilitarySpelling</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.MilitarySpelling.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spell_words=None</SPAN>, <SPAN CLASS="Argument">spelling_cbk=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.MilitarySpelling.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.MilitarySpelling.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.MilitarySpelling.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.MilitarySpelling.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.MilitarySpelling.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.MilitarySpelling.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # disable recognition from this grammar</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -34,31 +35,64 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from ResMgr.ResMgrFactory</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrFactory.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#ResMgr.ResMgrFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)<SPAN CLASS="OneLiner"> # returns a new ResMgr for the named instance</SPAN>
-
 </PRE><H2>Description</H2><P>
-factory creating ResMgrStd objects
-</P>
-<H2 ID="ResMgr.ResMgrStdFactory.new_manager" CLASS="Method">ResMgr.ResMgrStdFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
-<P>returns a new ResMgr for the named instance</P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
+<DL>
+
+<DT>
+<EM>BOOL</EM> active
+<DD>is grammar active?
+<DT>
+<EM>[STR]</EM> spell_words
+<DD>words which must proceed the first spelled letter, 
+or None for an unrestricted spelling grammar.  
+Currently, the letters spelled are returned as a single string
+<DT>
+<EM>FCT(STR)</EM> spelling_cbk
+<DD>callback to signal recognition
+
+</DL>
+<H2 ID="sr_grammars.MilitarySpelling.activate" CLASS="Method">sr_grammars.MilitarySpelling.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+activates the grammar for recognition tied to a window
+with the given handle</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>RecogStartMgr recog_mgr</EM>
-<DD>the parent recognition starting
-manager
-<DT>
-<EM>STR instance_name</EM>
-<DD>the name of the instance whose results
-will be managed
-
+<EM>INT</EM> window
+<DD>window handle (unique identifier) for the window
 </DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.MilitarySpelling.cleanup" CLASS="Method">sr_grammars.MilitarySpelling.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method which must be called by the owner prior to deleting
+the grammar, to ensure that it doesn't have circular references
+to the owner
+</P>
+<H2 ID="sr_grammars.MilitarySpelling.deactivate" CLASS="Method">sr_grammars.MilitarySpelling.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>disable recognition from this grammar</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -188,24 +222,6 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
-</DL>
-<H2 ID="ResMgr.ResMgrFactory.new_manager" CLASS="Method">ResMgr.ResMgrFactory.new_manager(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
-<P>returns a new ResMgr for the named instance</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>RecogStartMgr recog_mgr</EM>
-<DD>the parent recognition starting
-manager
-<DT>
-<EM>STR instance_name</EM>
-<DD>the name of the instance whose results
-will be managed
-
 </DL>
 
 <HR>

@@ -413,8 +413,7 @@ def clean_spoken_form(spoken_form):
 #    trace('sr_interface.clean_spoken_form', 'returning clean_form=\'%s\'' % clean_form)
     return clean_form
 
-
-def spoken_written_form(vocabulary_entry):
+def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     """Returns the written and spoken forms of a NatSpeak vocabulary entry
     
     **INPUTS**
@@ -445,12 +444,14 @@ def spoken_written_form(vocabulary_entry):
     # Substitute special characters in written form (e.g. ' ', '\n') to the
     # form that the SR expects (e.g. {Spacebar}, {Enter})
     #
-    written = clean_written_form(written, clean_for='vc')
+    if clean_written:
+        written = clean_written_form(written, clean_for='vc')
 
     #
     # Clean spoken form
     #
-    spoken = clean_spoken_form(spoken)
+    if clean_spoken:
+        spoken = clean_spoken_form(spoken)
 
 #    trace('sr_interface.spoken_written_form', 'spoken=\'%s\', written=\'%s\'' % (spoken, written))
 
@@ -532,7 +533,7 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	"""
         # local variables needed for initialization in deep_construct
         raw_words = results.getWords(0)
-        word_list = map(spoken_written_form, raw_words)
+        word_list = map(self.spoken_written_form, raw_words)
         spoken_only = map(lambda x: x[0], word_list)
       
         self.deep_construct(SpokenUtteranceNL,
@@ -646,7 +647,6 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*[STR]* -- list of vocabulary entries in written\spoken form as used by
 	NaturallySpeaking
-
 	"""
         return map(self.entry, spoken_forms)
 
@@ -662,12 +662,8 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	**OUTPUTS**
 
 	*(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
-
-	*[STR]* spoken_forms -- list of spoken forms 
-	(written forms will be assumed to be identical)
-
 	"""
-        return spoken_written_form(entry)
+        return spoken_written_form(entry, clean_spoken = 0)
 
     def adapt(self, words):
         """changes the stored list of words so that 
