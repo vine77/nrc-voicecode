@@ -325,30 +325,6 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.app.talk_msgr.send_mess('insert', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_resp'])        
         self.app.apply_upd_descr(response[1]['updates'])
-
-
-        
-    def insert_indent(self, code_bef, code_after, range = None):
-        """Ask external editor to insert and indent some code.
-
-	**INPUTS**
-
-	*STR* code_bef -- code to be inserted before new cursor location
-        
-	*STR* code_bef -- code to be inserted after new cursor location
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-
-        args = {'code_bef': code_bef, 'code_after': code_after, 'range': range}
-        self.app.talk_msgr.send_mess('insert_indent', args)
-        response = self.app.talk_msgr.get_mess(expect=['insert_indent_resp'])
-        self.app.apply_upd_descr(response[1]['updates'])
         
 
     def delete(self, range = None):
