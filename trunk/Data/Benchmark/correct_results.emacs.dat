@@ -21,18 +21,8 @@ Got command: open_file(%VCODE_HOME%\Data\TestData\foreground.py,)
 Got command: say(['dictated', 'in', 'foreground', 'buffer'],0
 ,0,0,)
 Heard dictated in foreground buffer
-Associate 'dictated in foreground buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': dictated_in_foreground_buffer (*new*)
-  '2': DictatedInForegroundBuffer (*new*)
-  '3': dictatedInForegroundBuffer (*new*)
-  '4': DICTATED_IN_FOREGROUND_BUFFER (*new*)
-  '5': dictatedinforegroundbuffer (*new*)
-  '6': DICTATEDINFOREGROUNDBUFFER (*new*)
-
-> *** Start of source buffer ***
-  1: dictated in foreground buffer<CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+*** Start of source buffer ***
+  1: dictated_in_foreground_buffer<CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   2: # WARNING: the mediator is now running foreground tests, which may
   3: # change the contents of the foreground window.  Unless you want your
   4: # own files corrupted, this editor window MUST remain in the foreground 
@@ -47,35 +37,15 @@ WARNING: source file 'buf2.py' doesn't exist.
 Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
-Associate 'dictated in buffer 2' with symbol (Enter selection):
-
-  '0': no association
-  '1': dictated_in_buffer_2 (*new*)
-  '2': DictatedInBuffer2 (*new*)
-  '3': dictatedInBuffer2 (*new*)
-  '4': DICTATED_IN_BUFFER_2 (*new*)
-  '5': dictatedinbuffer2 (*new*)
-  '6': DICTATEDINBUFFER2 (*new*)
-
-> *** Start of source buffer ***
-  1: dictated in buffer 2<CURSOR>
+*** Start of source buffer ***
+  1: dictated_in_buffer_2<CURSOR>
 
 *** End of source buffer ***
 Got command: say(['dictated', 'in', 'buffer', 'two'],0
 ,0,0,)
 Heard dictated in buffer two
-Associate 'dictated in buffer 2' with symbol (Enter selection):
-
-  '0': no association
-  '1': dictated_in_buffer_2 (*new*)
-  '2': DictatedInBuffer2 (*new*)
-  '3': dictatedInBuffer2 (*new*)
-  '4': DICTATED_IN_BUFFER_2 (*new*)
-  '5': dictatedinbuffer2 (*new*)
-  '6': DICTATEDINBUFFER2 (*new*)
-
-> *** Start of source buffer ***
-  1: dictated in buffer 2dictated in buffer 2<CURSOR>
+*** Start of source buffer ***
+  1: dictated_in_buffer_2dictated_in_buffer_2<CURSOR>
 
 *** End of source buffer ***
 Got simulated kbd event: type_text({Esc}xdelete-other-window{Enter},)
@@ -111,14 +81,7 @@ Got simulated kbd event: move_cursor_by_kbd(Right,10,)
 Got command: say(['hello'],0
 ,0,0,)
 Heard hello
-Associate 'hello' with symbol (Enter selection):
-
-  '0': no association
-  '1': hello (*new*)
-  '2': Hello (*new*)
-  '3': HELLO (*new*)
-
->   6: # is safe for you to proceed with your work.
+  6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
   9: # This is ahello<CURSOR> small buffer for testing editing of Python code
@@ -144,14 +107,7 @@ Got simulated kbd event: set_selection_by_kbd(Right,10,)
 Got command: say(['hello'],0
 ,0,0,)
 Heard hello
-Associate 'hello' with symbol (Enter selection):
-
-  '0': no association
-  '1': hello (*new*)
-  '2': Hello (*new*)
-  '3': HELLO (*new*)
-
->   6: # is safe for you to proceed with your work.
+  6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
   9: #hello<CURSOR>hello small buffer for testing editing of Python code
@@ -272,17 +228,7 @@ Got command: say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'
 1
 ,1,0,)
 Heard this should be typed as a variable name
-Associate 'this should be typed as a variable name' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_should_be_typed_as_a_variable_name (*new*)
-  '2': ThisShouldBeTypedAsAVariableName (*new*)
-  '3': thisShouldBeTypedAsAVariableName (*new*)
-  '4': THIS_SHOULD_BE_TYPED_AS_A_VARIABLE_NAME (*new*)
-  '5': thisshouldbetypedasavariablename (*new*)
-  '6': THISSHOULDBETYPEDASAVARIABLENAME (*new*)
-
->   8: 
+  8: 
   9: # This is a small buffer for testing editing of Python code
  10: print "this should be typed as normal text"
  11: print this_should_be_typed_as_a_variable_name<CURSOR>
@@ -701,7 +647,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CD80E8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0219DED0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1363,18 +1309,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
 Heard this symbol is unresolved comma
-Associate 'this symbol is unresolved' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_sym_is_unres
-  '2': this_symbol_is_unresolved (*new*)
-  '3': ThisSymbolIsUnresolved (*new*)
-  '4': thisSymbolIsUnresolved (*new*)
-  '5': THIS_SYMBOL_IS_UNRESOLVED (*new*)
-  '6': thissymbolisunresolved (*new*)
-  '7': THISSYMBOLISUNRESOLVED (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: this_sym_is_unres, <CURSOR>
 
 *** End of source buffer ***
@@ -1810,18 +1745,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
 Heard file name comma
-Associate 'file name' with symbol (Enter selection):
-
-  '0': no association
-  '1': f_name
-  '2': file_name (*new*)
-  '3': FileName (*new*)
-  '4': fileName (*new*)
-  '5': FILE_NAME (*new*)
-  '6': filename (*new*)
-  '7': FILENAME (*new*)
-
-> WARNING: abbreviation 'f' not added (length < 2)
+WARNING: abbreviation 'f' not added (length < 2)
 *** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, f_name, <CURSOR>
 
@@ -2040,18 +1964,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
 Heard application programming interface function comma
-Associate 'application programming interface function' with symbol (Enter selection):
-
-  '0': no association
-  '1': API_function
-  '2': application_programming_interface_function (*new*)
-  '3': ApplicationProgrammingInterfaceFunction (*new*)
-  '4': applicationProgrammingInterfaceFunction (*new*)
-  '5': APPLICATION_PROGRAMMING_INTERFACE_FUNCTION (*new*)
-  '6': applicationprogramminginterfacefunction (*new*)
-  '7': APPLICATIONPROGRAMMINGINTERFACEFUNCTION (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: this_sym_is_unres, this_sym_is_unres_too, f_name, API_function, <CURSOR>
 
 *** End of source buffer ***
@@ -2279,21 +2192,7 @@ recent dictation is empty, as expected
 0
 ')
 Heard class clown inherits from student
-Associate 'clown' with symbol (Enter selection):
-
-  '0': no association
-  '1': clown (*new*)
-  '2': Clown (*new*)
-  '3': CLOWN (*new*)
-
-> Associate 'student' with symbol (Enter selection):
-
-  '0': no association
-  '1': student (*new*)
-  '2': Student (*new*)
-  '3': STUDENT (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student<CURSOR>):
   2:    
 
@@ -2312,14 +2211,7 @@ Heard class body
 >>> Testing console command: say(['define', 'method', 'popularity', 'method', 'body'], user_input='0
 ')
 Heard define method popularity method body
-Associate 'popularity' with symbol (Enter selection):
-
-  '0': no association
-  '1': popularity (*new*)
-  '2': Popularity (*new*)
-  '3': POPULARITY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
   3:       <CURSOR>
@@ -2394,23 +2286,10 @@ scratch 1 succeeded as expected
 2
 ')
 Heard define method grades method body return B.
-Associate 'grades' with symbol (Enter selection):
-
-  '0': no association
-  '1': grades (*new*)
-  '2': Grades (*new*)
-  '3': GRADES (*new*)
-
-> Associate 'b' with symbol (Enter selection):
-
-  '0': no association
-  '1': b (*new*)
-  '2': B (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student):
   2:    def grades(self):
-  3:       return B<CURSOR>
+  3:       return b<CURSOR>
 
 *** End of source buffer ***
 
@@ -2426,7 +2305,7 @@ Heard select clown
 *** Start of source buffer ***
   1: class <SEL_START>clown<SEL_END>(student):
   2:    def grades(self):
-  3:       return B
+  3:       return b
 
 *** End of source buffer ***
 
@@ -2435,7 +2314,7 @@ Heard select clown
 *** Start of source buffer ***
   1: class president<CURSOR>(student):
   2:    def grades(self):
-  3:       return B
+  3:       return b
 
 *** End of source buffer ***
 
@@ -2455,21 +2334,7 @@ WARNING: source file 'blahblah.py' doesn't exist.
 0
 ')
 Heard class cloud inherits from student
-Associate 'cloud' with symbol (Enter selection):
-
-  '0': no association
-  '1': cloud (*new*)
-  '2': Cloud (*new*)
-  '3': CLOUD (*new*)
-
-> Associate 'student' with symbol (Enter selection):
-
-  '0': no association
-  '1': student (*new*)
-  '2': Student (*new*)
-  '3': STUDENT (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class cloud(student<CURSOR>):
   2:    
 
@@ -2488,19 +2353,9 @@ Heard class body
 >>> Testing console command: say(['fine', 'method', 'popularity', 'method', 'body'], user_input='0
 ')
 Heard fine method popularity method body
-Associate 'fine method popularity' with symbol (Enter selection):
-
-  '0': no association
-  '1': fine_method_popularity (*new*)
-  '2': FineMethodPopularity (*new*)
-  '3': fineMethodPopularity (*new*)
-  '4': FINE_METHOD_POPULARITY (*new*)
-  '5': finemethodpopularity (*new*)
-  '6': FINEMETHODPOPULARITY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class cloud(student):
-  2:    fine method popularity<CURSOR>
+  2:    fine_method_popularity<CURSOR>
 
 *** End of source buffer ***
 
@@ -2509,7 +2364,7 @@ Associate 'fine method popularity' with symbol (Enter selection):
 Heard return eight
 *** Start of source buffer ***
   1: class cloud(student):
-  2:    fine method popularityreturn 8<CURSOR>
+  2:    fine_method_popularityreturn 8<CURSOR>
 
 *** End of source buffer ***
 
@@ -2535,14 +2390,7 @@ about to reinterpret
   2:    <CURSOR>
 
 *** End of source buffer ***
-Associate 'popularity' with symbol (Enter selection):
-
-  '0': no association
-  '1': popularity (*new*)
-  '2': Popularity (*new*)
-  '3': POPULARITY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class cloud(student):
   2:    def popularity(self):
   3:       <CURSOR>
@@ -2580,21 +2428,7 @@ about to reinterpret
   1: <CURSOR>
 
 *** End of source buffer ***
-Associate 'clown' with symbol (Enter selection):
-
-  '0': no association
-  '1': clown (*new*)
-  '2': Clown (*new*)
-  '3': CLOWN (*new*)
-
-> Associate 'student' with symbol (Enter selection):
-
-  '0': no association
-  '1': student (*new*)
-  '2': Student (*new*)
-  '3': STUDENT (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student<CURSOR>):
   2:    
 
@@ -2604,14 +2438,7 @@ Associate 'clown' with symbol (Enter selection):
   2:    <CURSOR>
 
 *** End of source buffer ***
-Associate 'popularity' with symbol (Enter selection):
-
-  '0': no association
-  '1': popularity (*new*)
-  '2': Popularity (*new*)
-  '3': POPULARITY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
   3:       <CURSOR>
@@ -2663,14 +2490,7 @@ Heard back indent
 >>> Testing console command: say(['excess', 'equals', 'zero'], user_input='0
 ')
 Heard excess equals zero
-Associate 'excess' with symbol (Enter selection):
-
-  '0': no association
-  '1': excess (*new*)
-  '2': Excess (*new*)
-  '3': EXCESS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
   3:       return 8
@@ -2728,14 +2548,7 @@ reinterpretation failed, as expected
 >>> Testing console command: say(['excess', 'equals', 'one', 'new', 'line'], user_input='0
 ')
 Heard excess equals one new line
-Associate 'excess' with symbol (Enter selection):
-
-  '0': no association
-  '1': excess (*new*)
-  '2': Excess (*new*)
-  '3': EXCESS (*new*)
-
->   2:    def popularity(self):
+  2:    def popularity(self):
   3:       return 8
   4: excess = 1
   5: <CURSOR>
@@ -2756,14 +2569,7 @@ Heard back indent
 >>> Testing console command: say(['results', 'at', 'index', 'zero', 'jump', 'out', 'equals', 'zero'], user_input='0
 ')
 Heard results at index zero jump out equals zero
-Associate 'results' with symbol (Enter selection):
-
-  '0': no association
-  '1': results (*new*)
-  '2': Results (*new*)
-  '3': RESULTS (*new*)
-
->   2:    def popularity(self):
+  2:    def popularity(self):
   3:       return 8
   4: excess = 1
   5: results[0] = 0<CURSOR>
@@ -2815,14 +2621,7 @@ about to reinterpret
   4: <CURSOR>
 
 *** End of source buffer ***
-Associate 'access' with symbol (Enter selection):
-
-  '0': no association
-  '1': access (*new*)
-  '2': Access (*new*)
-  '3': ACCESS (*new*)
-
->   2:    def popularity(self):
+  2:    def popularity(self):
   3:       return 8
   4: access = 1
   5: <CURSOR>
@@ -2861,34 +2660,7 @@ WARNING: source file 'blah1.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
-Associate 'line 1' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_1 (*new*)
-  '2': Line1 (*new*)
-  '3': line1 (*new*)
-  '4': LINE_1 (*new*)
-  '5': LINE1 (*new*)
-
-> Associate 'line 2' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_2 (*new*)
-  '2': Line2 (*new*)
-  '3': line2 (*new*)
-  '4': LINE_2 (*new*)
-  '5': LINE2 (*new*)
-
-> Associate 'line 3' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_3 (*new*)
-  '2': Line3 (*new*)
-  '3': line3 (*new*)
-  '4': LINE_3 (*new*)
-  '5': LINE3 (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: line_1
   2: line_2
   3: line_3<CURSOR>
@@ -2957,34 +2729,7 @@ WARNING: source file 'blah2.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three']
 Heard line one new statement line two new statement line three
-Associate 'line 1' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_1
-  '2': Line1 (*new*)
-  '3': line1 (*new*)
-  '4': LINE_1 (*new*)
-  '5': LINE1 (*new*)
-
-> Associate 'line 2' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_2
-  '2': Line2 (*new*)
-  '3': line2 (*new*)
-  '4': LINE_2 (*new*)
-  '5': LINE2 (*new*)
-
-> Associate 'line 3' with symbol (Enter selection):
-
-  '0': no association
-  '1': line_3
-  '2': Line3 (*new*)
-  '3': line3 (*new*)
-  '4': LINE_3 (*new*)
-  '5': LINE3 (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: line_1
   2: line_2
   3: line_3<CURSOR>
@@ -3074,27 +2819,7 @@ Heard for do the following
 *** End of source buffer ***
 Saying: ['security', 'level', 'equals', 'for', 'your', 'eyes', 'only', 'new', 'statement', 'back', 'indent']
 Heard security level equals for your eyes only new statement back indent
-Associate 'security level' with symbol (Enter selection):
-
-  '0': no association
-  '1': security_level (*new*)
-  '2': SecurityLevel (*new*)
-  '3': securityLevel (*new*)
-  '4': SECURITY_LEVEL (*new*)
-  '5': securitylevel (*new*)
-  '6': SECURITYLEVEL (*new*)
-
-> Associate 'for your eyes only' with symbol (Enter selection):
-
-  '0': no association
-  '1': for_your_eyes_only (*new*)
-  '2': ForYourEyesOnly (*new*)
-  '3': forYourEyesOnly (*new*)
-  '4': FOR_YOUR_EYES_ONLY (*new*)
-  '5': foryoureyesonly (*new*)
-  '6': FORYOUREYESONLY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: for :
   2:    security_level = for_your_eyes_only
   3: <CURSOR>
@@ -3111,24 +2836,7 @@ Heard while loop one do the following
 *** End of source buffer ***
 Saying: ['when', 'equals', 'while', 'processing', 'new', 'statement']
 Heard when equals while processing new statement
-Associate 'when' with symbol (Enter selection):
-
-  '0': no association
-  '1': when (*new*)
-  '2': When (*new*)
-  '3': WHEN (*new*)
-
-> Associate 'while processing' with symbol (Enter selection):
-
-  '0': no association
-  '1': while_processing (*new*)
-  '2': WhileProcessing (*new*)
-  '3': whileProcessing (*new*)
-  '4': WHILE_PROCESSING (*new*)
-  '5': whileprocessing (*new*)
-  '6': WHILEPROCESSING (*new*)
-
->   2:    security_level = for_your_eyes_only
+  2:    security_level = for_your_eyes_only
   3: while 1:
   4:    when = while_processing
   5:    <CURSOR>
@@ -3136,14 +2844,7 @@ Associate 'when' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['if', 'condition', 'do', 'the', 'following']
 Heard if condition do the following
-Associate 'condition' with symbol (Enter selection):
-
-  '0': no association
-  '1': condition (*new*)
-  '2': Condition (*new*)
-  '3': CONDITION (*new*)
-
->   3: while 1:
+  3: while 1:
   4:    when = while_processing
   5:    if condition:
   6:       <CURSOR>
@@ -3151,24 +2852,7 @@ Associate 'condition' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['check', 'equals', 'if', 'all', 'right', 'without', 'arguments', 'new', 'statement']
 Heard check equals if all right without arguments new statement
-Associate 'check' with symbol (Enter selection):
-
-  '0': no association
-  '1': check (*new*)
-  '2': Check (*new*)
-  '3': CHECK (*new*)
-
-> Associate 'if all right' with symbol (Enter selection):
-
-  '0': no association
-  '1': if_all_right (*new*)
-  '2': IfAllRight (*new*)
-  '3': ifAllRight (*new*)
-  '4': IF_ALL_RIGHT (*new*)
-  '5': ifallright (*new*)
-  '6': IFALLRIGHT (*new*)
-
->   4:    when = while_processing
+  4:    when = while_processing
   5:    if condition:
   6:       check = if_all_right()
   7:       <CURSOR>
@@ -3184,17 +2868,7 @@ Heard back indent back indent
 *** End of source buffer ***
 Saying: ['class', 'some', 'class', 'class', 'body']
 Heard class some class class body
-Associate 'some class' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_class (*new*)
-  '2': SomeClass (*new*)
-  '3': someClass (*new*)
-  '4': SOME_CLASS (*new*)
-  '5': someclass (*new*)
-  '6': SOMECLASS (*new*)
-
->   5:    if condition:
+  5:    if condition:
   6:       check = if_all_right()
   7: class some_class:
   8:    <CURSOR>
@@ -3210,24 +2884,7 @@ Heard try
 *** End of source buffer ***
 Saying: ['flag', 'equals', 'did', 'try', 'new', 'statement']
 Heard flag equals did try new statement
-Associate 'flag' with symbol (Enter selection):
-
-  '0': no association
-  '1': flag (*new*)
-  '2': Flag (*new*)
-  '3': FLAG (*new*)
-
-> Associate 'did try' with symbol (Enter selection):
-
-  '0': no association
-  '1': did_try (*new*)
-  '2': DidTry (*new*)
-  '3': didTry (*new*)
-  '4': DID_TRY (*new*)
-  '5': didtry (*new*)
-  '6': DIDTRY (*new*)
-
->   7: class some_class:
+  7: class some_class:
   8:    try:
   9:       flag = did_try
  10:       <CURSOR>
@@ -3235,17 +2892,7 @@ Associate 'flag' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['the', 'next', 'ones', 'still', 'present', 'bugs', 'new', 'statement']
 Heard the next ones still present bugs new statement
-Associate 'the next ones still present bugs' with symbol (Enter selection):
-
-  '0': no association
-  '1': the_next_ones_still_present_bugs (*new*)
-  '2': TheNextOnesStillPresentBugs (*new*)
-  '3': theNextOnesStillPresentBugs (*new*)
-  '4': THE_NEXT_ONES_STILL_PRESENT_BUGS (*new*)
-  '5': thenextonesstillpresentbugs (*new*)
-  '6': THENEXTONESSTILLPRESENTBUGS (*new*)
-
->   8:    try:
+  8:    try:
   9:       flag = did_try
  10:       the_next_ones_still_present_bugs
  11:       <CURSOR>
@@ -3253,17 +2900,7 @@ Associate 'the next ones still present bugs' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['check', 'if', 'was', 'done', 'without', 'arguments', 'new', 'statement']
 Heard check if was done without arguments new statement
-Associate 'check if was done' with symbol (Enter selection):
-
-  '0': no association
-  '1': check_if_was_done (*new*)
-  '2': CheckIfWasDone (*new*)
-  '3': checkIfWasDone (*new*)
-  '4': CHECK_IF_WAS_DONE (*new*)
-  '5': checkifwasdone (*new*)
-  '6': CHECKIFWASDONE (*new*)
-
->   9:       flag = did_try
+  9:       flag = did_try
  10:       the_next_ones_still_present_bugs
  11:       check_if_was_done()
  12:       <CURSOR>
@@ -3774,14 +3411,7 @@ WARNING: source file 'blah1.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['if', 'condition', 'do', 'the', 'following']
 Heard if condition do the following
-Associate 'condition' with symbol (Enter selection):
-
-  '0': no association
-  '1': condition (*new*)
-  '2': Condition (*new*)
-  '3': CONDITION (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: if condition:
   2:    <CURSOR>
 
@@ -3795,14 +3425,7 @@ Heard back indent
 *** End of source buffer ***
 Saying: ['index', 'equals', 'one', 'do', 'the', 'following']
 Heard index equals one do the following
-Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: if condition:
   2: index = 1<CURSOR>
 
@@ -3865,17 +3488,7 @@ WARNING: source file 'blah.py' doesn't exist.
 1
 ')
 Heard this is a very long variable name but never mind
-Associate 'this is a very long variable name but never mind' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_is_a_very_long_variable_name_but_never_mind (*new*)
-  '2': ThisIsAVeryLongVariableNameButNeverMind (*new*)
-  '3': thisIsAVeryLongVariableNameButNeverMind (*new*)
-  '4': THIS_IS_A_VERY_LONG_VARIABLE_NAME_BUT_NEVER_MIND (*new*)
-  '5': thisisaverylongvariablenamebutnevermind (*new*)
-  '6': THISISAVERYLONGVARIABLENAMEBUTNEVERMIND (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: this_is_a_very_long_variable_name_but_never_mind<CURSOR>
 
 *** End of source buffer ***
@@ -3990,14 +3603,7 @@ WARNING: source file 'blah1.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['hello']
 Heard hello
-Associate 'hello' with symbol (Enter selection):
-
-  '0': no association
-  '1': hello (*new*)
-  '2': Hello (*new*)
-  '3': HELLO (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: hello<CURSOR>
 
 *** End of source buffer ***
@@ -4309,17 +3915,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'empty', 'buffer']
 Heard below when empty buffer
-Associate 'below when empty buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_empty_buffer (*new*)
-  '2': BelowWhenEmptyBuffer (*new*)
-  '3': belowWhenEmptyBuffer (*new*)
-  '4': BELOW_WHEN_EMPTY_BUFFER (*new*)
-  '5': belowwhenemptybuffer (*new*)
-  '6': BELOWWHENEMPTYBUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_empty_buffer<CURSOR>
 
@@ -4340,17 +3936,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'first', 'line', 'of', 'a', 'buffer']
 Heard below when at first line of a buffer
-Associate 'below when at first line of a buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_at_first_line_of_a_buffer (*new*)
-  '2': BelowWhenAtFirstLineOfABuffer (*new*)
-  '3': belowWhenAtFirstLineOfABuffer (*new*)
-  '4': BELOW_WHEN_AT_FIRST_LINE_OF_A_BUFFER (*new*)
-  '5': belowwhenatfirstlineofabuffer (*new*)
-  '6': BELOWWHENATFIRSTLINEOFABUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer<CURSOR>
   3: below_when_empty_buffer
@@ -4374,17 +3960,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'last', 'character', 'of', 'a', 'buffer']
 Heard below when at last character of a buffer
-Associate 'below when at last character of a buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_at_last_character_of_a_buffer (*new*)
-  '2': BelowWhenAtLastCharacterOfABuffer (*new*)
-  '3': belowWhenAtLastCharacterOfABuffer (*new*)
-  '4': BELOW_WHEN_AT_LAST_CHARACTER_OF_A_BUFFER (*new*)
-  '5': belowwhenatlastcharacterofabuffer (*new*)
-  '6': BELOWWHENATLASTCHARACTEROFABUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer
   3: below_when_empty_buffer
@@ -4411,17 +3987,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'on', 'middle', 'line', 'of', 'buffer']
 Heard below when on middle line of buffer
-Associate 'below when on middle line of buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_on_middle_line_of_buffer (*new*)
-  '2': BelowWhenOnMiddleLineOfBuffer (*new*)
-  '3': belowWhenOnMiddleLineOfBuffer (*new*)
-  '4': BELOW_WHEN_ON_MIDDLE_LINE_OF_BUFFER (*new*)
-  '5': belowwhenonmiddlelineofbuffer (*new*)
-  '6': BELOWWHENONMIDDLELINEOFBUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer<CURSOR>
@@ -4460,17 +4026,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'end', 'of', 'line']
 Heard below when at end of line
-Associate 'below when at end of line' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_at_end_of_line (*new*)
-  '2': BelowWhenAtEndOfLine (*new*)
-  '3': belowWhenAtEndOfLine (*new*)
-  '4': BELOW_WHEN_AT_END_OF_LINE (*new*)
-  '5': belowwhenatendofline (*new*)
-  '6': BELOWWHENATENDOFLINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
@@ -4513,17 +4069,7 @@ Heard new statement below
 *** End of source buffer ***
 Saying: ['below', 'when', 'at', 'beginning', 'of', 'line']
 Heard below when at beginning of line
-Associate 'below when at beginning of line' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_at_beginning_of_line (*new*)
-  '2': BelowWhenAtBeginningOfLine (*new*)
-  '3': belowWhenAtBeginningOfLine (*new*)
-  '4': BELOW_WHEN_AT_BEGINNING_OF_LINE (*new*)
-  '5': belowwhenatbeginningofline (*new*)
-  '6': BELOWWHENATBEGINNINGOFLINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer
   3: below_when_on_middle_line_of_buffer
@@ -4551,17 +4097,7 @@ Heard new statement below
   6: below_when_at_end_of_line
 Saying: ['below', 'when', 'at', 'middle', 'of', 'a', 'line']
 Heard below when at middle of a line
-Associate 'below when at middle of a line' with symbol (Enter selection):
-
-  '0': no association
-  '1': below_when_at_middle_of_a_line (*new*)
-  '2': BelowWhenAtMiddleOfALine (*new*)
-  '3': belowWhenAtMiddleOfALine (*new*)
-  '4': BELOW_WHEN_AT_MIDDLE_OF_A_LINE (*new*)
-  '5': belowwhenatmiddleofaline (*new*)
-  '6': BELOWWHENATMIDDLEOFALINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: 
   2: below_when_at_first_line_of_a_buffer
   3: below_when_at_middle_of_a_line<CURSOR>
@@ -4582,17 +4118,7 @@ Heard new statement above
 *** End of source buffer ***
 Saying: ['above', 'when', 'empty', 'buffer']
 Heard above when empty buffer
-Associate 'above when empty buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_empty_buffer (*new*)
-  '2': AboveWhenEmptyBuffer (*new*)
-  '3': aboveWhenEmptyBuffer (*new*)
-  '4': ABOVE_WHEN_EMPTY_BUFFER (*new*)
-  '5': abovewhenemptybuffer (*new*)
-  '6': ABOVEWHENEMPTYBUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_empty_buffer<CURSOR>
   2: 
 
@@ -4613,17 +4139,7 @@ Heard new statement above
 *** End of source buffer ***
 Saying: ['above', 'when', 'at', 'first', 'line', 'of', 'a', 'buffer']
 Heard above when at first line of a buffer
-Associate 'above when at first line of a buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_at_first_line_of_a_buffer (*new*)
-  '2': AboveWhenAtFirstLineOfABuffer (*new*)
-  '3': aboveWhenAtFirstLineOfABuffer (*new*)
-  '4': ABOVE_WHEN_AT_FIRST_LINE_OF_A_BUFFER (*new*)
-  '5': abovewhenatfirstlineofabuffer (*new*)
-  '6': ABOVEWHENATFIRSTLINEOFABUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_first_line_of_a_buffer<CURSOR>
   2: above_when_empty_buffer
   3: 
@@ -4647,17 +4163,7 @@ Heard new statement above
 *** End of source buffer ***
 Saying: ['above', 'when', 'at', 'last', 'character', 'of', 'a', 'buffer']
 Heard above when at last character of a buffer
-Associate 'above when at last character of a buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_at_last_character_of_a_buffer (*new*)
-  '2': AboveWhenAtLastCharacterOfABuffer (*new*)
-  '3': aboveWhenAtLastCharacterOfABuffer (*new*)
-  '4': ABOVE_WHEN_AT_LAST_CHARACTER_OF_A_BUFFER (*new*)
-  '5': abovewhenatlastcharacterofabuffer (*new*)
-  '6': ABOVEWHENATLASTCHARACTEROFABUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_first_line_of_a_buffer
   2: above_when_empty_buffer
   3: above_when_at_last_character_of_a_buffer<CURSOR>
@@ -4684,17 +4190,7 @@ Heard new statement above
 *** End of source buffer ***
 Saying: ['above', 'when', 'on', 'middle', 'line', 'of', 'buffer']
 Heard above when on middle line of buffer
-Associate 'above when on middle line of buffer' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_on_middle_line_of_buffer (*new*)
-  '2': AboveWhenOnMiddleLineOfBuffer (*new*)
-  '3': aboveWhenOnMiddleLineOfBuffer (*new*)
-  '4': ABOVE_WHEN_ON_MIDDLE_LINE_OF_BUFFER (*new*)
-  '5': abovewhenonmiddlelineofbuffer (*new*)
-  '6': ABOVEWHENONMIDDLELINEOFBUFFER (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer<CURSOR>
   3: above_when_empty_buffer
@@ -4733,17 +4229,7 @@ Heard new statement above
 *** End of source buffer ***
 Saying: ['above', 'when', 'at', 'end', 'of', 'line']
 Heard above when at end of line
-Associate 'above when at end of line' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_at_end_of_line (*new*)
-  '2': AboveWhenAtEndOfLine (*new*)
-  '3': aboveWhenAtEndOfLine (*new*)
-  '4': ABOVE_WHEN_AT_END_OF_LINE (*new*)
-  '5': abovewhenatendofline (*new*)
-  '6': ABOVEWHENATENDOFLINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_at_end_of_line<CURSOR>
@@ -4783,17 +4269,7 @@ Heard new statement above
   6: above_when_at_last_character_of_a_buffer
 Saying: ['above', 'when', 'at', 'beginning', 'of', 'line']
 Heard above when at beginning of line
-Associate 'above when at beginning of line' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_at_beginning_of_line (*new*)
-  '2': AboveWhenAtBeginningOfLine (*new*)
-  '3': aboveWhenAtBeginningOfLine (*new*)
-  '4': ABOVE_WHEN_AT_BEGINNING_OF_LINE (*new*)
-  '5': abovewhenatbeginningofline (*new*)
-  '6': ABOVEWHENATBEGINNINGOFLINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_first_line_of_a_buffer
   2: above_when_on_middle_line_of_buffer
   3: above_when_at_beginning_of_line<CURSOR>
@@ -4815,17 +4291,7 @@ Heard new statement above
   4: above_when_at_beginning_of_line
 Saying: ['above', 'when', 'at', 'middle', 'of', 'a', 'line']
 Heard above when at middle of a line
-Associate 'above when at middle of a line' with symbol (Enter selection):
-
-  '0': no association
-  '1': above_when_at_middle_of_a_line (*new*)
-  '2': AboveWhenAtMiddleOfALine (*new*)
-  '3': aboveWhenAtMiddleOfALine (*new*)
-  '4': ABOVE_WHEN_AT_MIDDLE_OF_A_LINE (*new*)
-  '5': abovewhenatmiddleofaline (*new*)
-  '6': ABOVEWHENATMIDDLEOFALINE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: above_when_at_middle_of_a_line<CURSOR>
   2: above_when_at_first_line_of_a_buffer
   3: above_when_on_middle_line_of_buffer
@@ -4977,356 +4443,279 @@ WARNING: source file 'blah.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['variable', '\\blank space', '=\\equals', '\\space-bar', 'index', '*\\asterisk', '2\\two', '**\\double asterisk', '8\\eight', '\\New-Line']
 Heard variable blank space equals space-bar index asterisk two double asterisk eight New-Line
-Associate 'variable' with symbol (Enter selection):
-
-  '0': no association
-  '1': variable (*new*)
-  '2': Variable (*new*)
-  '3': VARIABLE (*new*)
-
-> Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
-  1: variable  =  Index*2**8
+*** Start of source buffer ***
+  1: variable  =  index*2**8
   2: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', 'variable', '/\\slash', '2\\two', '+\\plus-sign', '1\\one', '-\\minus-sign', 'index', 'new statement']
 Heard variable equals variable slash two plus-sign one minus-sign index new statement
 *** Start of source buffer ***
-  1: variable  =  Index*2**8
-  2: variable = variable/2+1-Index
+  1: variable  =  index*2**8
+  2: variable = variable/2+1-index
   3: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', 'index', '%\\percent', '2\\two', '+\\plus', 'index', '%\\percent-sign', '3\\three', 'new statement']
 Heard variable equals index percent two plus index percent-sign three new statement
 *** Start of source buffer ***
-  1: variable  =  Index*2**8
-  2: variable = variable/2+1-Index
-  3: variable = Index%2 + Index%3
+  1: variable  =  index*2**8
+  2: variable = variable/2+1-index
+  3: variable = index%2 + index%3
   4: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'index', '&\\ampersand', 'variable', 'then']
 Heard if index ampersand variable then
-  2: variable = variable/2+1-Index
-  3: variable = Index%2 + Index%3
-  4: if Index&variable:
+  2: variable = variable/2+1-index
+  3: variable = index%2 + index%3
+  4: if index&variable:
   5:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'index', '|\\pipe', 'variable', '|\\pipe-sign', 'index', '|\\vertical-bar', 'value', 'then']
 Heard if index pipe variable pipe-sign index vertical-bar value then
-Associate 'value' with symbol (Enter selection):
-
-  '0': no association
-  '1': value (*new*)
-  '2': Value (*new*)
-  '3': VALUE (*new*)
-
->   3: variable = Index%2 + Index%3
-  4: if Index&variable:
-  5:    if Index|variable|Index|Value:
+  3: variable = index%2 + index%3
+  4: if index&variable:
+  5:    if index|variable|index|value:
   6:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['index', '=\\equals', '0\\zero', ';\\semicolon', 'variable', '=\\equals', '0\\zero', ';\\semi', 'new statement']
 Heard index equals zero semicolon variable equals zero semi new statement
-  4: if Index&variable:
-  5:    if Index|variable|Index|Value:
-  6:       Index = 0; variable = 0;
+  4: if index&variable:
+  5:    if index|variable|index|value:
+  6:       index = 0; variable = 0;
   7:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['index', '.\\dot', 'function', '()\\without arguments', 'new statement']
 Heard index dot function without arguments new statement
-Associate 'function' with symbol (Enter selection):
-
-  '0': no association
-  '1': function (*new*)
-  '2': Function (*new*)
-  '3': FUNCTION (*new*)
-
->   5:    if Index|variable|Index|Value:
-  6:       Index = 0; variable = 0;
-  7:       Index.Function()
+  5:    if index|variable|index|value:
+  6:       index = 0; variable = 0;
+  7:       index.function()
   8:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10', 'new statement']
 Heard variable equals new list zero ellipsis 10 new statement
-  6:       Index = 0; variable = 0;
-  7:       Index.Function()
+  6:       index = 0; variable = 0;
+  7:       index.function()
   8:       variable = [0...10]
   9:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['#\\pound', '!\\bang', 'python', 'new statement']
 Heard pound bang python new statement
-Associate 'python' with symbol (Enter selection):
-
-  '0': no association
-  '1': python (*new*)
-  '2': Python (*new*)
-  '3': PYTHON (*new*)
-
->   7:       Index.Function()
+  7:       index.function()
   8:       variable = [0...10]
-  9:       #!Python
+  9:       #!python
  10:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['#\\pound-sign', '!\\exclamation-mark', 'python', 'new statement']
 Heard pound-sign exclamation-mark python new statement
   8:       variable = [0...10]
-  9:       #!Python
- 10:       #!Python
+  9:       #!python
+ 10:       #!python
  11:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', '~\\tilde', 'index', 'and', '~\\squiggle', 'variable', 'then']
 Heard if tilde index and squiggle variable then
-  9:       #!Python
- 10:       #!Python
- 11:       if ~Index and ~variable:
+  9:       #!python
+ 10:       #!python
+ 11:       if ~index and ~variable:
  12:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement']
 Heard variable double colon index colon colon field new statement
-Associate 'field' with symbol (Enter selection):
-
-  '0': no association
-  '1': field (*new*)
-  '2': Field (*new*)
-  '3': FIELD (*new*)
-
->  10:       #!Python
- 11:       if ~Index and ~variable:
- 12:          variable::Index::Field
+ 10:       #!python
+ 11:       if ~index and ~variable:
+ 12:          variable::index::field
  13:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'index', '<\\less-than', '0\\zero', 'and\\and', 'index', '>\\greater-than', '-\\minus-sign', '1\\one', 'then']
 Heard if index less-than zero and index greater-than minus-sign one then
- 11:       if ~Index and ~variable:
- 12:          variable::Index::Field
- 13:          if Index < 0 and Index > -1:
+ 11:       if ~index and ~variable:
+ 12:          variable::index::field
+ 13:          if index < 0 and index > -1:
  14:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['index', '=\\equal-sign', '0\\zero', 'new statement']
 Heard index equal-sign zero new statement
- 12:          variable::Index::Field
- 13:          if Index < 0 and Index > -1:
- 14:             Index=0
+ 12:          variable::index::field
+ 13:          if index < 0 and index > -1:
+ 14:             index=0
  15:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['function', '(\\open-paren', '0\\zero', ')\\close-paren', 'new statement']
 Heard function open-paren zero close-paren new statement
- 13:          if Index < 0 and Index > -1:
- 14:             Index=0
- 15:             Function(0)
+ 13:          if index < 0 and index > -1:
+ 14:             index=0
+ 15:             function(0)
  16:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['function', 'parens', '0\\zero', 'new statement']
 Heard function parens zero new statement
- 14:             Index=0
- 15:             Function(0)
- 16:             Function(0)
+ 14:             index=0
+ 15:             function(0)
+ 16:             function(0)
  17:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['function', '()\\empty parens', 'new statement']
 Heard function empty parens new statement
- 15:             Function(0)
- 16:             Function(0)
- 17:             Function()
+ 15:             function(0)
+ 16:             function(0)
+ 17:             function()
  18:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['list', '[\\open-bracket', '0\\zero', ']\\close-bracket', 'new statement']
 Heard list open-bracket zero close-bracket new statement
-Associate 'list' with symbol (Enter selection):
-
-  '0': no association
-  '1': list (*new*)
-  '2': List (*new*)
-  '3': LIST (*new*)
-
->  16:             Function(0)
- 17:             Function()
- 18:             List[0]
+ 16:             function(0)
+ 17:             function()
+ 18:             list[0]
  19:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['list', 'brackets', '0\\zero', 'new statement']
 Heard list brackets zero new statement
- 17:             Function()
- 18:             List[0]
- 19:             List[0]
+ 17:             function()
+ 18:             list[0]
+ 19:             list[0]
  20:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['list', '[]\\empty brackets', 'new statement']
 Heard list empty brackets new statement
- 18:             List[0]
- 19:             List[0]
- 20:             List[]
+ 18:             list[0]
+ 19:             list[0]
+ 20:             list[]
  21:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['dictionary', 'braces', '0\\zero', 'new statement']
 Heard dictionary braces zero new statement
-Associate 'dictionary' with symbol (Enter selection):
-
-  '0': no association
-  '1': dictionary (*new*)
-  '2': Dictionary (*new*)
-  '3': DICTIONARY (*new*)
-
->  19:             List[0]
- 20:             List[]
- 21:             Dictionary{0}
+ 19:             list[0]
+ 20:             list[]
+ 21:             dictionary{0}
  22:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['<\\open-angle', 'head', '>\\close-angle', 'new statement']
 Heard open-angle head close-angle new statement
-Associate 'head' with symbol (Enter selection):
-
-  '0': no association
-  '1': head (*new*)
-  '2': Head (*new*)
-  '3': HEAD (*new*)
-
->  20:             List[]
- 21:             Dictionary{0}
- 22:             <Head>
+ 20:             list[]
+ 21:             dictionary{0}
+ 22:             <head>
  23:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['angle brackets', 'head', 'new statement']
 Heard angle brackets head new statement
- 21:             Dictionary{0}
- 22:             <Head>
- 23:             <Head>
+ 21:             dictionary{0}
+ 22:             <head>
+ 23:             <head>
  24:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['<>\\empty angles', 'new statement']
 Heard empty angles new statement
- 22:             <Head>
- 23:             <Head>
+ 22:             <head>
+ 23:             <head>
  24:             <>
  25:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', "'\\open-single-quote", 'message', "'\\close-single-quote", 'new statement']
 Heard string equals open-single-quote message close-single-quote new statement
-Associate 'string' with symbol (Enter selection):
-
-  '0': no association
-  '1': string (*new*)
-  '2': String (*new*)
-  '3': STRING (*new*)
-
-> Associate 'message' with symbol (Enter selection):
-
-  '0': no association
-  '1': message (*new*)
-  '2': Message (*new*)
-  '3': MESSAGE (*new*)
-
->  23:             <Head>
+ 23:             <head>
  24:             <>
- 25:             String = 'Message'
+ 25:             string = 'message'
  26:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', 'equals', 'single', 'quotes', 'message', 'new statement']
 Heard string equals single quotes message new statement
  24:             <>
- 25:             String = 'Message'
- 26:             String = 'Message'
+ 25:             string = 'message'
+ 26:             string = 'message'
  27:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ["''\\empty single-quotes", 'new statement']
 Heard empty single-quotes new statement
- 25:             String = 'Message'
- 26:             String = 'Message'
+ 25:             string = 'message'
+ 26:             string = 'message'
  27:             ''
  28:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', '"\\open-quote', 'message', '"\\close-quote', 'new statement']
 Heard string equals open-quote message close-quote new statement
- 26:             String = 'Message'
+ 26:             string = 'message'
  27:             ''
- 28:             String = "Message"
+ 28:             string = "message"
  29:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', 'equals', 'quotes', 'message', 'new statement']
 Heard string equals quotes message new statement
  27:             ''
- 28:             String = "Message"
- 29:             String = "Message"
+ 28:             string = "message"
+ 29:             string = "message"
  30:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['""\\empty quotes', 'new statement']
 Heard empty quotes new statement
- 28:             String = "Message"
- 29:             String = "Message"
+ 28:             string = "message"
+ 29:             string = "message"
  30:             ""
  31:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', '`\\open-backquote', 'message', '`\\close-backquote', 'new statement']
 Heard string equals open-backquote message close-backquote new statement
- 29:             String = "Message"
+ 29:             string = "message"
  30:             ""
- 31:             String = `Message`
+ 31:             string = `message`
  32:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['string', '=\\equals', 'backquotes', 'message', 'new statement']
 Heard string equals backquotes message new statement
  30:             ""
- 31:             String = `Message`
- 32:             String = `Message`
+ 31:             string = `message`
+ 32:             string = `message`
  33:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['``\\empty backquotes', 'new statement']
 Heard empty backquotes new statement
- 31:             String = `Message`
- 32:             String = `Message`
+ 31:             string = `message`
+ 32:             string = `message`
  33:             ``
  34:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['quotes']
 Heard quotes
- 31:             String = `Message`
- 32:             String = `Message`
+ 31:             string = `message`
+ 32:             string = `message`
  33:             ``
  34:             "<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back slash A.', 'new statement']
 Heard back slash A. new statement
- 32:             String = `Message`
+ 32:             string = `message`
  33:             ``
  34:             "\a"
  35:             <CURSOR>
@@ -6753,7 +6142,7 @@ Heard index semi variable semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable; <CURSOR>
+ 87:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous semi', 'previous semi']
@@ -6761,7 +6150,7 @@ Heard previous semi previous semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; <CURSOR>variable; 
+ 87:             index; <CURSOR>variable; 
 
 *** End of source buffer ***
 Saying: ['after semi']
@@ -6769,7 +6158,7 @@ Heard after semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable; <CURSOR>
+ 87:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before previous semi']
@@ -6777,7 +6166,7 @@ Heard before previous semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable<CURSOR>; 
+ 87:             index; variable<CURSOR>; 
 
 *** End of source buffer ***
 Saying: ['after semi']
@@ -6785,7 +6174,7 @@ Heard after semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable; <CURSOR>
+ 87:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['before semi']
@@ -6793,14 +6182,14 @@ Heard before semi
  84:             "\X\X"
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable; <CURSOR>
+ 87:             index; variable; <CURSOR>
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             <CURSOR>
 
 *** End of source buffer ***
@@ -6808,7 +6197,7 @@ Saying: ['variable', '=\\equals', 'brackets', '0\\zero', ',\\comma', '1\\one', '
 Heard variable equals brackets zero comma one comma three
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3<CURSOR>]
 
 *** End of source buffer ***
@@ -6816,7 +6205,7 @@ Saying: ['previous comma']
 Heard previous comma
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
@@ -6824,7 +6213,7 @@ Saying: ['after comma']
 Heard after comma
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
@@ -6832,7 +6221,7 @@ Saying: ['before previous comma']
 Heard before previous comma
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
@@ -6840,14 +6229,14 @@ Saying: ['before next comma']
 Heard before next comma
  85:             "\Y\Y"
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
  89:             <CURSOR>
 
@@ -6855,190 +6244,190 @@ Heard new statement
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
 Heard variable dot field dot value
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value<CURSOR>
+ 89:             variable.field.value<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous dot', 'previous dot']
 Heard previous dot previous dot
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.<CURSOR>Field.Value
+ 89:             variable.<CURSOR>field.value
 
 *** End of source buffer ***
 Saying: ['after dot']
 Heard after dot
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.<CURSOR>Value
+ 89:             variable.field.<CURSOR>value
 
 *** End of source buffer ***
 Saying: ['before previous dot']
 Heard before previous dot
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field<CURSOR>.Value
+ 89:             variable.field<CURSOR>.value
 
 *** End of source buffer ***
 Saying: ['before next dot']
 Heard before next dot
  86:             "\Z\Z"
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field<CURSOR>.Value
+ 89:             variable.field<CURSOR>.value
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
+ 89:             variable.field.value
  90:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['braces', 'variable', ':\\colon', '0\\zero', 'comma', 'value', ':\\colon', '0\\zero']
 Heard braces variable colon zero comma value colon zero
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0<CURSOR>}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
 Heard previous colon previous colon
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: <CURSOR>0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: <CURSOR>0, value: 0}
 
 *** End of source buffer ***
 Saying: ['after colon']
 Heard after colon
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: <CURSOR>0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: <CURSOR>0}
 
 *** End of source buffer ***
 Saying: ['before previous colon']
 Heard before previous colon
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value<CURSOR>: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['before next colon']
 Heard before next colon
- 87:             Index; variable;
+ 87:             index; variable;
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value<CURSOR>: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', '2\\two', '*\\asterisk', '3\\three', '*\\asterisk', '4\\four']
 Heard variable equals two asterisk three asterisk four
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous asterisk', 'previous star']
 Heard previous asterisk previous star
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*<CURSOR>3*4
 
 *** End of source buffer ***
 Saying: ['after star']
 Heard after star
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous asterisk']
 Heard before previous asterisk
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['before next star']
 Heard before next star
  88:             variable = [0, 1, 3]
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', 'equals', '2\\two', '/\\slash', '3\\three', '/\\slash', '4\\four']
 Heard variable equals two slash three slash four
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous slash', 'previous slash']
 Heard previous slash previous slash
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/<CURSOR>3/4
 
 *** End of source buffer ***
 Saying: ['after slash']
 Heard after slash
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/<CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous slash']
 Heard before previous slash
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
 Saying: ['before next slash']
 Heard before next slash
- 89:             variable.Field.Value
- 90:             {variable: 0, Value: 0}
+ 89:             variable.field.value
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3<CURSOR>/4
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             <CURSOR>
@@ -7046,7 +6435,7 @@ Heard new statement
 *** End of source buffer ***
 Saying: ['variable', '=\\equals', '2\\two', '+\\plus', '3\\three', '+\\plus', '4\\four']
 Heard variable equals two plus three plus four
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + 4<CURSOR>
@@ -7054,7 +6443,7 @@ Heard variable equals two plus three plus four
 *** End of source buffer ***
 Saying: ['previous plus', 'previous plus']
 Heard previous plus previous plus
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + <CURSOR>3 + 4
@@ -7062,7 +6451,7 @@ Heard previous plus previous plus
 *** End of source buffer ***
 Saying: ['after plus']
 Heard after plus
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3 + <CURSOR>4
@@ -7070,7 +6459,7 @@ Heard after plus
 *** End of source buffer ***
 Saying: ['before previous plus']
 Heard before previous plus
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3<CURSOR> + 4
@@ -7078,7 +6467,7 @@ Heard before previous plus
 *** End of source buffer ***
 Saying: ['before next plus']
 Heard before next plus
- 90:             {variable: 0, Value: 0}
+ 90:             {variable: 0, value: 0}
  91:             variable = 2*3*4
  92:             variable = 2/3/4
  93:             variable = 2 + 3<CURSOR> + 4
@@ -8233,67 +7622,27 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Heard define class some variable class body
-Associate 'some variable' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_variable (*new*)
-  '2': SomeVariable (*new*)
-  '3': someVariable (*new*)
-  '4': SOME_VARIABLE (*new*)
-  '5': somevariable (*new*)
-  '6': SOMEVARIABLE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    <CURSOR>
 
 *** End of source buffer ***
 Heard define method some method add arguments
-Associate 'some method' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_method (*new*)
-  '2': SomeMethod (*new*)
-  '3': someMethod (*new*)
-  '4': SOME_METHOD (*new*)
-  '5': somemethod (*new*)
-  '6': SOMEMETHOD (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, <CURSOR>):
   3:       
 
 *** End of source buffer ***
 Heard collect arguments positional arguments comma
-Associate 'positional arguments' with symbol (Enter selection):
-
-  '0': no association
-  '1': positional_arguments (*new*)
-  '2': PositionalArguments (*new*)
-  '3': positionalArguments (*new*)
-  '4': POSITIONAL_ARGUMENTS (*new*)
-  '5': positionalarguments (*new*)
-  '6': POSITIONALARGUMENTS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, *positional_arguments, <CURSOR>):
   3:       
 
 *** End of source buffer ***
 Heard collect keyword arguments keyword arguments
-Associate 'keyword arguments' with symbol (Enter selection):
-
-  '0': no association
-  '1': keyword_arguments (*new*)
-  '2': KeywordArguments (*new*)
-  '3': keywordArguments (*new*)
-  '4': KEYWORD_ARGUMENTS (*new*)
-  '5': keywordarguments (*new*)
-  '6': KEYWORDARGUMENTS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments<CURSOR>):
   3:       
@@ -8307,27 +7656,7 @@ Heard class body
 
 *** End of source buffer ***
 Heard some array equals some other array sliced at one colon five new statement
-Associate 'some array' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_array (*new*)
-  '2': SomeArray (*new*)
-  '3': someArray (*new*)
-  '4': SOME_ARRAY (*new*)
-  '5': somearray (*new*)
-  '6': SOMEARRAY (*new*)
-
-> Associate 'some other array' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_other_array (*new*)
-  '2': SomeOtherArray (*new*)
-  '3': someOtherArray (*new*)
-  '4': SOME_OTHER_ARRAY (*new*)
-  '5': someotherarray (*new*)
-  '6': SOMEOTHERARRAY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
@@ -8335,17 +7664,7 @@ Associate 'some array' with symbol (Enter selection):
 
 *** End of source buffer ***
 Heard some dictionary item with key zero jump out equals one
-Associate 'some dictionary' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_dictionary (*new*)
-  '2': SomeDictionary (*new*)
-  '3': someDictionary (*new*)
-  '4': SOME_DICTIONARY (*new*)
-  '5': somedictionary (*new*)
-  '6': SOMEDICTIONARY (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
@@ -8362,17 +7681,7 @@ Heard comment above
 
 *** End of source buffer ***
 Heard this is a commented out
-Associate 'this is a commented out' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_is_a_commented_out (*new*)
-  '2': ThisIsACommentedOut (*new*)
-  '3': thisIsACommentedOut (*new*)
-  '4': THIS_IS_A_COMMENTED_OUT (*new*)
-  '5': thisisacommentedout (*new*)
-  '6': THISISACOMMENTEDOUT (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: class some_variable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
@@ -8736,49 +8045,14 @@ WARNING: source file 'blah.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
-Associate 'o s' with symbol (Enter selection):
-
-  '0': no association
-  '1': os
-  '2': Os (*new*)
-  '3': OS (*new*)
-
-> Associate 'r e' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
-Associate 'natural link' with symbol (Enter selection):
-
-  '0': no association
-  '1': natlink
-  '2': natural_link (*new*)
-  '3': NaturalLink (*new*)
-  '4': naturalLink (*new*)
-  '5': NATURAL_LINK (*new*)
-  '6': naturallink (*new*)
-  '7': NATURALLINK (*new*)
-
-> Associate 'v c globals' with symbol (Enter selection):
-
-  '0': no association
-  '1': vc_globals
-  '2': VcGlobals (*new*)
-  '3': vcGlobals (*new*)
-  '4': VC_GLOBALS (*new*)
-  '5': vcglobals (*new*)
-  '6': VCGLOBALS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: <CURSOR>
@@ -8786,18 +8060,7 @@ Associate 'natural link' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
-Associate 'actions c c p p' with symbol (Enter selection):
-
-  '0': no association
-  '1': actions_C_Cpp
-  '2': actions_ccpp (*new*)
-  '3': ActionsCcpp (*new*)
-  '4': actionsCcpp (*new*)
-  '5': ACTIONS_CCPP (*new*)
-  '6': actionsccpp (*new*)
-  '7': ACTIONSCCPP (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
@@ -8806,29 +8069,7 @@ Associate 'actions c c p p' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
 Heard from module application state import symbols application state new statement
-Associate 'application state' with symbol (Enter selection):
-
-  '0': no association
-  '1': AppState
-  '2': application_state (*new*)
-  '3': ApplicationState (*new*)
-  '4': applicationState (*new*)
-  '5': APPLICATION_STATE (*new*)
-  '6': applicationstate (*new*)
-  '7': APPLICATIONSTATE (*new*)
-
-> Associate 'application state' with symbol (Enter selection):
-
-  '0': no association
-  '1': AppState
-  '2': application_state (*new*)
-  '3': ApplicationState (*new*)
-  '4': applicationState (*new*)
-  '5': APPLICATION_STATE (*new*)
-  '6': applicationstate (*new*)
-  '7': APPLICATIONSTATE (*new*)
-
->   2: import auto_test, natlink, vc_globals
+  2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: <CURSOR>
@@ -8844,29 +8085,7 @@ Heard from module context generic import symbols context C. comma context python
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
 Heard from module context sensitive command import symbols context sensitive command new statement
-Associate 'context sensitive command' with symbol (Enter selection):
-
-  '0': no association
-  '1': CSCmd
-  '2': context_sensitive_command (*new*)
-  '3': ContextSensitiveCommand (*new*)
-  '4': contextSensitiveCommand (*new*)
-  '5': CONTEXT_SENSITIVE_COMMAND (*new*)
-  '6': contextsensitivecommand (*new*)
-  '7': CONTEXTSENSITIVECOMMAND (*new*)
-
-> Associate 'context sensitive command' with symbol (Enter selection):
-
-  '0': no association
-  '1': CSCmd
-  '2': context_sensitive_command (*new*)
-  '3': ContextSensitiveCommand (*new*)
-  '4': contextSensitiveCommand (*new*)
-  '5': CONTEXT_SENSITIVE_COMMAND (*new*)
-  '6': contextsensitivecommand (*new*)
-  '7': CONTEXTSENSITIVECOMMAND (*new*)
-
->   4: from AppState import AppState
+  4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: <CURSOR>
@@ -8874,29 +8093,7 @@ Associate 'context sensitive command' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
-Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
-> Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
->   5: from cont_gen import ContC, ContPy
+  5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
   8: <CURSOR>
@@ -8912,18 +8109,7 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
->   7: from EdSim import EdSim
+  7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -8931,17 +8117,7 @@ Associate 'ed simulator' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
-Associate 's r interface' with symbol (Enter selection):
-
-  '0': no association
-  '1': sr_interface
-  '2': SrInterface (*new*)
-  '3': srInterface (*new*)
-  '4': SR_INTERFACE (*new*)
-  '5': srinterface (*new*)
-  '6': SRINTERFACE (*new*)
-
->   8: from Object import Object
+  8: from Object import Object
   9: import EdSim, SymDict
  10: import sr_interface
  11: <CURSOR>
@@ -8957,18 +8133,7 @@ Heard define class command interpreter sub class of object class body
 *** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
 Heard define method initialize add argument on application equals none comma
-Associate 'on application' with symbol (Enter selection):
-
-  '0': no association
-  '1': on_app
-  '2': on_application (*new*)
-  '3': OnApplication (*new*)
-  '4': onApplication (*new*)
-  '5': ON_APPLICATION (*new*)
-  '6': onapplication (*new*)
-  '7': ONAPPLICATION (*new*)
-
->   9: import EdSim, SymDict
+  9: import EdSim, SymDict
  10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, <CURSOR>):
@@ -8977,18 +8142,7 @@ Associate 'on application' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
-Associate 'symbol dictionary pickle file' with symbol (Enter selection):
-
-  '0': no association
-  '1': symdict_pickle_file
-  '2': symbol_dictionary_pickle_file (*new*)
-  '3': SymbolDictionaryPickleFile (*new*)
-  '4': symbolDictionaryPickleFile (*new*)
-  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
-  '6': symboldictionarypicklefile (*new*)
-  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
-
->  10: import sr_interface
+ 10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       <CURSOR>
@@ -9004,18 +8158,7 @@ Heard self dot declare attributes with arguments brace pair
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
 Heard single quotes un translated text start jump out colon none comma
-Associate 'un translated text start' with symbol (Enter selection):
-
-  '0': no association
-  '1': _untranslated_text_start
-  '2': un_translated_text_start (*new*)
-  '3': UnTranslatedTextStart (*new*)
-  '4': unTranslatedTextStart (*new*)
-  '5': UN_TRANSLATED_TEXT_START (*new*)
-  '6': untranslatedtextstart (*new*)
-  '7': UNTRANSLATEDTEXTSTART (*new*)
-
->  10: import sr_interface
+ 10: import sr_interface
  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, <CURSOR>})
@@ -9023,18 +8166,7 @@ Associate 'un translated text start' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
-Associate 'un translated text end' with symbol (Enter selection):
-
-  '0': no association
-  '1': _untranslated_text_end
-  '2': un_translated_text_end (*new*)
-  '3': UnTranslatedTextEnd (*new*)
-  '4': unTranslatedTextEnd (*new*)
-  '5': UN_TRANSLATED_TEXT_END (*new*)
-  '6': untranslatedtextend (*new*)
-  '7': UNTRANSLATEDTEXTEND (*new*)
-
->  11: class CmdInterp(Object):
+ 11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       <CURSOR>
@@ -9050,29 +8182,7 @@ Heard self dot deep construct with arguments command interpreter comma continue 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
-Associate 'on application' with symbol (Enter selection):
-
-  '0': no association
-  '1': on_app
-  '2': on_application (*new*)
-  '3': OnApplication (*new*)
-  '4': onApplication (*new*)
-  '5': ON_APPLICATION (*new*)
-  '6': onapplication (*new*)
-  '7': ONAPPLICATION (*new*)
-
-> Associate 'on application' with symbol (Enter selection):
-
-  '0': no association
-  '1': on_app
-  '2': on_application (*new*)
-  '3': OnApplication (*new*)
-  '4': onApplication (*new*)
-  '5': ON_APPLICATION (*new*)
-  '6': onapplication (*new*)
-  '7': ONAPPLICATION (*new*)
-
->  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       self.deep_construct(CmdInterp, \
  15:                           {'on_app': on_app, <CURSOR>})
@@ -9104,29 +8214,7 @@ Heard single quotes last loaded language jump out colon none comma continue stat
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
 Heard single quotes symbol dictionary pickle file jump out colon symbol dictionary pickle file jump out comma continue statement
-Associate 'symbol dictionary pickle file' with symbol (Enter selection):
-
-  '0': no association
-  '1': symdict_pickle_file
-  '2': symbol_dictionary_pickle_file (*new*)
-  '3': SymbolDictionaryPickleFile (*new*)
-  '4': symbolDictionaryPickleFile (*new*)
-  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
-  '6': symboldictionarypicklefile (*new*)
-  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
-
-> Associate 'symbol dictionary pickle file' with symbol (Enter selection):
-
-  '0': no association
-  '1': symdict_pickle_file
-  '2': symbol_dictionary_pickle_file (*new*)
-  '3': SymbolDictionaryPickleFile (*new*)
-  '4': symbolDictionaryPickleFile (*new*)
-  '5': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
-  '6': symboldictionarypicklefile (*new*)
-  '7': SYMBOLDICTIONARYPICKLEFILE (*new*)
-
->  16:                            'language_specific_aliases': {}, \
+ 16:                            'language_specific_aliases': {}, \
  17:                            'last_loaded_language': None, \
  18:                            'symdict_pickle_file': symdict_pickle_file}, \
  19:                           <CURSOR>)
@@ -9159,14 +8247,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'r e' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
->  19:                           attrs)
+ 19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9278,24 +8359,7 @@ Heard back indent new statement
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
 Heard if not this word then this word equals single quotes hello
-Associate 'this word' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_word (*new*)
-  '2': ThisWord (*new*)
-  '3': thisWord (*new*)
-  '4': THIS_WORD (*new*)
-  '5': thisword (*new*)
-  '6': THISWORD (*new*)
-
-> Associate 'hello' with symbol (Enter selection):
-
-  '0': no association
-  '1': hello (*new*)
-  '2': Hello (*new*)
-  '3': HELLO (*new*)
-
->  30:             regexp = regexp + regexp_this_word
+ 30:             regexp = regexp + regexp_this_word
  31:          return regexp
  32:       if not this_word:
  33:          this_word = 'hello<CURSOR>'
@@ -9303,14 +8367,7 @@ Associate 'this word' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
 Heard else if this word is equal to hi then
-Associate 'hi' with symbol (Enter selection):
-
-  '0': no association
-  '1': hi (*new*)
-  '2': Hi (*new*)
-  '3': HI (*new*)
-
->  32:       if not this_word:
+ 32:       if not this_word:
  33:          this_word = 'hello'
  34:       elif this_word == hi:
  35:          <CURSOR>
@@ -9318,14 +8375,7 @@ Associate 'hi' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
 Heard this word equals greetings else
-Associate 'greetings' with symbol (Enter selection):
-
-  '0': no association
-  '1': greetings (*new*)
-  '2': Greetings (*new*)
-  '3': GREETINGS (*new*)
-
->  34:       elif this_word == hi:
+ 34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -9333,14 +8383,7 @@ Associate 'greetings' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
 Heard this word equals single quotes done new statement
-Associate 'done' with symbol (Enter selection):
-
-  '0': no association
-  '1': done (*new*)
-  '2': Done (*new*)
-  '3': DONE (*new*)
-
->  35:          this_word = greetings
+ 35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -9348,17 +8391,7 @@ Associate 'done' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
 Heard try some function with arguments
-Associate 'some function' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_function (*new*)
-  '2': SomeFunction (*new*)
-  '3': someFunction (*new*)
-  '4': SOME_FUNCTION (*new*)
-  '5': somefunction (*new*)
-  '6': SOMEFUNCTION (*new*)
-
->  36:       else:
+ 36:       else:
  37:          this_word = 'done'
  38:          try:
  39:             some_function(<CURSOR>)
@@ -9366,14 +8399,7 @@ Associate 'some function' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
 Heard except do the following print single quotes error
-Associate 'error' with symbol (Enter selection):
-
-  '0': no association
-  '1': error (*new*)
-  '2': Error (*new*)
-  '3': ERROR (*new*)
-
->  38:          try:
+ 38:          try:
  39:             some_function()
  40:          except :
  41:             print 'error<CURSOR>'
@@ -9381,17 +8407,7 @@ Associate 'error' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
 Heard finally do print single quotes all right
-Associate 'all right' with symbol (Enter selection):
-
-  '0': no association
-  '1': all_right (*new*)
-  '2': AllRight (*new*)
-  '3': allRight (*new*)
-  '4': ALL_RIGHT (*new*)
-  '5': allright (*new*)
-  '6': ALLRIGHT (*new*)
-
->  40:          except :
+ 40:          except :
  41:             print 'error'
  42:          finally:
  43:             print 'all_right<CURSOR>'
@@ -9410,72 +8426,14 @@ WARNING: source file 'blah.py' doesn't exist.
 *** End of source buffer ***
 Saying: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
-Associate 'o s' with symbol (Enter selection):
-
-  '0': no association
-  '1': os (*new*)
-  '2': Os (*new*)
-  '3': OS (*new*)
-
-> Associate 'r e' with symbol (Enter selection):
-
-  '0': no association
-  '1': re (*new*)
-  '2': Re (*new*)
-  '3': RE (*new*)
-
-> Associate 'string' with symbol (Enter selection):
-
-  '0': no association
-  '1': string (*new*)
-  '2': String (*new*)
-  '3': STRING (*new*)
-
-> Associate 'system' with symbol (Enter selection):
-
-  '0': no association
-  '1': system (*new*)
-  '2': System (*new*)
-  '3': SYSTEM (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
-Associate 'auto test' with symbol (Enter selection):
-
-  '0': no association
-  '1': auto_test (*new*)
-  '2': AutoTest (*new*)
-  '3': autoTest (*new*)
-  '4': AUTO_TEST (*new*)
-  '5': autotest (*new*)
-  '6': AUTOTEST (*new*)
-
-> Associate 'natural link' with symbol (Enter selection):
-
-  '0': no association
-  '1': natural_link (*new*)
-  '2': NaturalLink (*new*)
-  '3': naturalLink (*new*)
-  '4': NATURAL_LINK (*new*)
-  '5': naturallink (*new*)
-  '6': NATURALLINK (*new*)
-
-> Associate 'v c globals' with symbol (Enter selection):
-
-  '0': no association
-  '1': vc_globals (*new*)
-  '2': VcGlobals (*new*)
-  '3': vcGlobals (*new*)
-  '4': VC_GLOBALS (*new*)
-  '5': vcglobals (*new*)
-  '6': VCGLOBALS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: <CURSOR>
@@ -9483,17 +8441,7 @@ Associate 'auto test' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
-Associate 'actions c c p p' with symbol (Enter selection):
-
-  '0': no association
-  '1': actions_ccpp (*new*)
-  '2': ActionsCcpp (*new*)
-  '3': actionsCcpp (*new*)
-  '4': ACTIONS_CCPP (*new*)
-  '5': actionsccpp (*new*)
-  '6': ACTIONSCCPP (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
@@ -9502,17 +8450,7 @@ Associate 'actions c c p p' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
 Heard from module application state import symbols application state new statement
-Associate 'application state' with symbol (Enter selection):
-
-  '0': no association
-  '1': application_state (*new*)
-  '2': ApplicationState (*new*)
-  '3': applicationState (*new*)
-  '4': APPLICATION_STATE (*new*)
-  '5': applicationstate (*new*)
-  '6': APPLICATIONSTATE (*new*)
-
->   2: import auto_test, natural_link, vc_globals
+  2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: from application_state import application_state
   5: <CURSOR>
@@ -9520,37 +8458,7 @@ Associate 'application state' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
 Heard from module context generic import symbols context C. comma context python new statement
-Associate 'context generic' with symbol (Enter selection):
-
-  '0': no association
-  '1': context_generic (*new*)
-  '2': ContextGeneric (*new*)
-  '3': contextGeneric (*new*)
-  '4': CONTEXT_GENERIC (*new*)
-  '5': contextgeneric (*new*)
-  '6': CONTEXTGENERIC (*new*)
-
-> Associate 'context c' with symbol (Enter selection):
-
-  '0': no association
-  '1': context_c (*new*)
-  '2': ContextC (*new*)
-  '3': contextC (*new*)
-  '4': CONTEXT_C (*new*)
-  '5': contextc (*new*)
-  '6': CONTEXTC (*new*)
-
-> Associate 'context python' with symbol (Enter selection):
-
-  '0': no association
-  '1': context_python (*new*)
-  '2': ContextPython (*new*)
-  '3': contextPython (*new*)
-  '4': CONTEXT_PYTHON (*new*)
-  '5': contextpython (*new*)
-  '6': CONTEXTPYTHON (*new*)
-
->   3: from actions_ccpp import all
+  3: from actions_ccpp import all
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: <CURSOR>
@@ -9558,17 +8466,7 @@ Associate 'context generic' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
 Heard from module context sensitive command import symbols context sensitive command new statement
-Associate 'context sensitive command' with symbol (Enter selection):
-
-  '0': no association
-  '1': context_sensitive_command (*new*)
-  '2': ContextSensitiveCommand (*new*)
-  '3': contextSensitiveCommand (*new*)
-  '4': CONTEXT_SENSITIVE_COMMAND (*new*)
-  '5': contextsensitivecommand (*new*)
-  '6': CONTEXTSENSITIVECOMMAND (*new*)
-
->   4: from application_state import application_state
+  4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: <CURSOR>
@@ -9576,17 +8474,7 @@ Associate 'context sensitive command' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
-Associate 'ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': ed_simulator (*new*)
-  '2': EdSimulator (*new*)
-  '3': edSimulator (*new*)
-  '4': ED_SIMULATOR (*new*)
-  '5': edsimulator (*new*)
-  '6': EDSIMULATOR (*new*)
-
->   5: from context_generic import context_c, context_python
+  5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: <CURSOR>
@@ -9594,14 +8482,7 @@ Associate 'ed simulator' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 Heard from module object import symbol object new statement
-Associate 'object' with symbol (Enter selection):
-
-  '0': no association
-  '1': object (*new*)
-  '2': Object (*new*)
-  '3': OBJECT (*new*)
-
->   6: from context_sensitive_command import context_sensitive_command
+  6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: from object import object
   9: <CURSOR>
@@ -9609,17 +8490,7 @@ Associate 'object' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-Associate 'symbol dictionary' with symbol (Enter selection):
-
-  '0': no association
-  '1': symbol_dictionary (*new*)
-  '2': SymbolDictionary (*new*)
-  '3': symbolDictionary (*new*)
-  '4': SYMBOL_DICTIONARY (*new*)
-  '5': symboldictionary (*new*)
-  '6': SYMBOLDICTIONARY (*new*)
-
->   7: from ed_simulator import ed_simulator
+  7: from ed_simulator import ed_simulator
   8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: <CURSOR>
@@ -9627,17 +8498,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
-Associate 's r interface' with symbol (Enter selection):
-
-  '0': no association
-  '1': sr_interface (*new*)
-  '2': SrInterface (*new*)
-  '3': srInterface (*new*)
-  '4': SR_INTERFACE (*new*)
-  '5': srinterface (*new*)
-  '6': SRINTERFACE (*new*)
-
->   8: from object import object
+  8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: <CURSOR>
@@ -9645,17 +8506,7 @@ Associate 's r interface' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
 Heard define class command interpreter sub class of object class body
-Associate 'command interpreter' with symbol (Enter selection):
-
-  '0': no association
-  '1': command_interpreter (*new*)
-  '2': CommandInterpreter (*new*)
-  '3': commandInterpreter (*new*)
-  '4': COMMAND_INTERPRETER (*new*)
-  '5': commandinterpreter (*new*)
-  '6': COMMANDINTERPRETER (*new*)
-
->   9: import ed_simulator, symbol_dictionary
+  9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class command_interpreter(object):
  12:    <CURSOR>
@@ -9663,24 +8514,7 @@ Associate 'command interpreter' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
 Heard define method initialize add argument on application equals none comma
-Associate 'initialize' with symbol (Enter selection):
-
-  '0': no association
-  '1': initialize (*new*)
-  '2': Initialize (*new*)
-  '3': INITIALIZE (*new*)
-
-> Associate 'on application' with symbol (Enter selection):
-
-  '0': no association
-  '1': on_application (*new*)
-  '2': OnApplication (*new*)
-  '3': onApplication (*new*)
-  '4': ON_APPLICATION (*new*)
-  '5': onapplication (*new*)
-  '6': ONAPPLICATION (*new*)
-
->   9: import ed_simulator, symbol_dictionary
+  9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = None, <CURSOR>):
@@ -9689,24 +8523,7 @@ Associate 'initialize' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
-Associate 'symbol dictionary pickle file' with symbol (Enter selection):
-
-  '0': no association
-  '1': symbol_dictionary_pickle_file (*new*)
-  '2': SymbolDictionaryPickleFile (*new*)
-  '3': symbolDictionaryPickleFile (*new*)
-  '4': SYMBOL_DICTIONARY_PICKLE_FILE (*new*)
-  '5': symboldictionarypicklefile (*new*)
-  '6': SYMBOLDICTIONARYPICKLEFILE (*new*)
-
-> Associate 'attributes' with symbol (Enter selection):
-
-  '0': no association
-  '1': attributes (*new*)
-  '2': Attributes (*new*)
-  '3': ATTRIBUTES (*new*)
-
->  10: import sr_interface
+ 10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       <CURSOR>
@@ -9714,17 +8531,7 @@ Associate 'symbol dictionary pickle file' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
 Heard self dot declare attributes with arguments brace pair
-Associate 'declare attributes' with symbol (Enter selection):
-
-  '0': no association
-  '1': declare_attributes (*new*)
-  '2': DeclareAttributes (*new*)
-  '3': declareAttributes (*new*)
-  '4': DECLARE_ATTRIBUTES (*new*)
-  '5': declareattributes (*new*)
-  '6': DECLAREATTRIBUTES (*new*)
-
->  10: import sr_interface
+ 10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({<CURSOR>})
@@ -9732,17 +8539,7 @@ Associate 'declare attributes' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
 Heard single quotes un translated text start jump out colon none comma
-Associate 'un translated text start' with symbol (Enter selection):
-
-  '0': no association
-  '1': un_translated_text_start (*new*)
-  '2': UnTranslatedTextStart (*new*)
-  '3': unTranslatedTextStart (*new*)
-  '4': UN_TRANSLATED_TEXT_START (*new*)
-  '5': untranslatedtextstart (*new*)
-  '6': UNTRANSLATEDTEXTSTART (*new*)
-
->  10: import sr_interface
+ 10: import sr_interface
  11: class command_interpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, <CURSOR>})
@@ -9750,17 +8547,7 @@ Associate 'un translated text start' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
-Associate 'un translated text end' with symbol (Enter selection):
-
-  '0': no association
-  '1': un_translated_text_end (*new*)
-  '2': UnTranslatedTextEnd (*new*)
-  '3': unTranslatedTextEnd (*new*)
-  '4': UN_TRANSLATED_TEXT_END (*new*)
-  '5': untranslatedtextend (*new*)
-  '6': UNTRANSLATEDTEXTEND (*new*)
-
->  11: class command_interpreter(object):
+ 11: class command_interpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       <CURSOR>
@@ -9768,17 +8555,7 @@ Associate 'un translated text end' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Heard self dot deep construct with arguments command interpreter comma continue statement
-Associate 'deep construct' with symbol (Enter selection):
-
-  '0': no association
-  '1': deep_construct (*new*)
-  '2': DeepConstruct (*new*)
-  '3': deepConstruct (*new*)
-  '4': DEEP_CONSTRUCT (*new*)
-  '5': deepconstruct (*new*)
-  '6': DEEPCONSTRUCT (*new*)
-
->  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       self.deep_construct(command_interpreter, \
  15:                           <CURSOR>)
@@ -9794,17 +8571,7 @@ Heard brace pair single quotes on application jump out colon on application comm
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
 Heard single quotes known symbols jump out colon symbol dictionary dot symbol dictionary without arguments comma continue statement
-Associate 'known symbols' with symbol (Enter selection):
-
-  '0': no association
-  '1': known_symbols (*new*)
-  '2': KnownSymbols (*new*)
-  '3': knownSymbols (*new*)
-  '4': KNOWN_SYMBOLS (*new*)
-  '5': knownsymbols (*new*)
-  '6': KNOWNSYMBOLS (*new*)
-
->  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
+ 13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       self.deep_construct(command_interpreter, \
  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            <CURSOR>})
@@ -9812,17 +8579,7 @@ Associate 'known symbols' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
 Heard single quotes language specific aliases jump out colon empty dictionary comma continue statement
-Associate 'language specific aliases' with symbol (Enter selection):
-
-  '0': no association
-  '1': language_specific_aliases (*new*)
-  '2': LanguageSpecificAliases (*new*)
-  '3': languageSpecificAliases (*new*)
-  '4': LANGUAGE_SPECIFIC_ALIASES (*new*)
-  '5': languagespecificaliases (*new*)
-  '6': LANGUAGESPECIFICALIASES (*new*)
-
->  14:       self.deep_construct(command_interpreter, \
+ 14:       self.deep_construct(command_interpreter, \
  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            'language_specific_aliases': {}, \
  17:                            <CURSOR>})
@@ -9830,17 +8587,7 @@ Associate 'language specific aliases' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
 Heard single quotes last loaded language jump out colon none comma continue statement
-Associate 'last loaded language' with symbol (Enter selection):
-
-  '0': no association
-  '1': last_loaded_language (*new*)
-  '2': LastLoadedLanguage (*new*)
-  '3': lastLoadedLanguage (*new*)
-  '4': LAST_LOADED_LANGUAGE (*new*)
-  '5': lastloadedlanguage (*new*)
-  '6': LASTLOADEDLANGUAGE (*new*)
-
->  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+ 15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            'language_specific_aliases': {}, \
  17:                            'last_loaded_language': None, \
  18:                            <CURSOR>})
@@ -9864,27 +8611,7 @@ Heard attributes new statement new statement
 *** End of source buffer ***
 Saying: ['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form']
 Heard back indent define method spoken form regular expression add argument spoken form
-Associate 'spoken form regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': spoken_form_regular_expression (*new*)
-  '2': SpokenFormRegularExpression (*new*)
-  '3': spokenFormRegularExpression (*new*)
-  '4': SPOKEN_FORM_REGULAR_EXPRESSION (*new*)
-  '5': spokenformregularexpression (*new*)
-  '6': SPOKENFORMREGULAREXPRESSION (*new*)
-
-> Associate 'spoken form' with symbol (Enter selection):
-
-  '0': no association
-  '1': spoken_form (*new*)
-  '2': SpokenForm (*new*)
-  '3': spokenForm (*new*)
-  '4': SPOKEN_FORM (*new*)
-  '5': spokenform (*new*)
-  '6': SPOKENFORM (*new*)
-
->  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+ 18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:                           attributes)
  20: 
  21:    def spoken_form_regular_expression(self, spoken_form<CURSOR>):
@@ -9901,28 +8628,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'words' with symbol (Enter selection):
-
-  '0': no association
-  '1': words (*new*)
-  '2': Words (*new*)
-  '3': WORDS (*new*)
-
-> Associate 'r e' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
-> Associate 'split' with symbol (Enter selection):
-
-  '0': no association
-  '1': split (*new*)
-  '2': Split (*new*)
-  '3': SPLIT (*new*)
-
->  19:                           attributes)
+ 19:                           attributes)
  20: 
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9938,17 +8644,7 @@ Heard single quotes back slash S. plus sign jump out comma spoken form new state
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
 Heard regular expression equals empty single quotes new statement
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': regular_expression (*new*)
-  '2': RegularExpression (*new*)
-  '3': regularExpression (*new*)
-  '4': REGULAR_EXPRESSION (*new*)
-  '5': regularexpression (*new*)
-  '6': REGULAREXPRESSION (*new*)
-
->  21:    def spoken_form_regular_expression(self, spoken_form):
+ 21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
  23:       regular_expression = ''
  24:       <CURSOR>
@@ -9956,17 +8652,7 @@ Associate 'regular expression' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
 Heard for loop a word in list words loop body
-Associate 'a word' with symbol (Enter selection):
-
-  '0': no association
-  '1': a_word (*new*)
-  '2': AWord (*new*)
-  '3': aWord (*new*)
-  '4': A_WORD (*new*)
-  '5': aword (*new*)
-  '6': AWORD (*new*)
-
->  22:       words = re.split('\s+', spoken_form)
+ 22:       words = re.split('\s+', spoken_form)
  23:       regular_expression = ''
  24:       for a_word in words:
  25:          <CURSOR>
@@ -9974,14 +8660,7 @@ Associate 'a word' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0\\zero', 'new', 'statement']
 Heard first equals a word at index zero new statement
-Associate 'first' with symbol (Enter selection):
-
-  '0': no association
-  '1': first (*new*)
-  '2': First (*new*)
-  '3': FIRST (*new*)
-
->  23:       regular_expression = ''
+ 23:       regular_expression = ''
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          <CURSOR>
@@ -9989,14 +8668,7 @@ Associate 'first' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1\\one', ':\\colon', 'new', 'statement']
 Heard rest equals a word at index one colon new statement
-Associate 'rest' with symbol (Enter selection):
-
-  '0': no association
-  '1': rest (*new*)
-  '2': Rest (*new*)
-  '3': REST (*new*)
-
->  24:       for a_word in words:
+ 24:       for a_word in words:
  25:          first = a_word[0]
  26:          rest = a_word[1: ]
  27:          <CURSOR>
@@ -10004,17 +8676,7 @@ Associate 'rest' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 Heard regular expression this word equals single quotes
-Associate 'regular expression this word' with symbol (Enter selection):
-
-  '0': no association
-  '1': regular_expression_this_word (*new*)
-  '2': RegularExpressionThisWord (*new*)
-  '3': regularExpressionThisWord (*new*)
-  '4': REGULAR_EXPRESSION_THIS_WORD (*new*)
-  '5': regularexpressionthisword (*new*)
-  '6': REGULAREXPRESSIONTHISWORD (*new*)
-
->  24:       for a_word in words:
+ 24:       for a_word in words:
  25:          first = a_word[0]
  26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '<CURSOR>'
@@ -10022,14 +8684,7 @@ Associate 'regular expression this word' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
 Heard open bracket jump out plus string dot lower with arguments first
-Associate 'lower' with symbol (Enter selection):
-
-  '0': no association
-  '1': lower (*new*)
-  '2': Lower (*new*)
-  '3': LOWER (*new*)
-
->  24:       for a_word in words:
+ 24:       for a_word in words:
  25:          first = a_word[0]
  26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first<CURSOR>)
@@ -10037,14 +8692,7 @@ Associate 'lower' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
 Heard jump out plus string dot upper with arguments first new statement
-Associate 'upper' with symbol (Enter selection):
-
-  '0': no association
-  '1': upper (*new*)
-  '2': Upper (*new*)
-  '3': UPPER (*new*)
-
->  25:          first = a_word[0]
+ 25:          first = a_word[0]
  26:          rest = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          <CURSOR>
@@ -10092,24 +8740,7 @@ Heard back indent new statement
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
 Heard if not this word then this word equals single quotes hello
-Associate 'this word' with symbol (Enter selection):
-
-  '0': no association
-  '1': this_word (*new*)
-  '2': ThisWord (*new*)
-  '3': thisWord (*new*)
-  '4': THIS_WORD (*new*)
-  '5': thisword (*new*)
-  '6': THISWORD (*new*)
-
-> Associate 'hello' with symbol (Enter selection):
-
-  '0': no association
-  '1': hello (*new*)
-  '2': Hello (*new*)
-  '3': HELLO (*new*)
-
->  30:             regular_expression = regular_expression + regular_expression_this_word
+ 30:             regular_expression = regular_expression + regular_expression_this_word
  31:          return regular_expression
  32:       if not this_word:
  33:          this_word = 'hello<CURSOR>'
@@ -10117,14 +8748,7 @@ Associate 'this word' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
 Heard else if this word is equal to hi then
-Associate 'hi' with symbol (Enter selection):
-
-  '0': no association
-  '1': hi (*new*)
-  '2': Hi (*new*)
-  '3': HI (*new*)
-
->  32:       if not this_word:
+ 32:       if not this_word:
  33:          this_word = 'hello'
  34:       elif this_word == hi:
  35:          <CURSOR>
@@ -10132,14 +8756,7 @@ Associate 'hi' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
 Heard this word equals greetings else
-Associate 'greetings' with symbol (Enter selection):
-
-  '0': no association
-  '1': greetings (*new*)
-  '2': Greetings (*new*)
-  '3': GREETINGS (*new*)
-
->  34:       elif this_word == hi:
+ 34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -10147,14 +8764,7 @@ Associate 'greetings' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
 Heard this word equals single quotes done new statement
-Associate 'done' with symbol (Enter selection):
-
-  '0': no association
-  '1': done (*new*)
-  '2': Done (*new*)
-  '3': DONE (*new*)
-
->  35:          this_word = greetings
+ 35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -10162,17 +8772,7 @@ Associate 'done' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
 Heard try some function with arguments
-Associate 'some function' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_function (*new*)
-  '2': SomeFunction (*new*)
-  '3': someFunction (*new*)
-  '4': SOME_FUNCTION (*new*)
-  '5': somefunction (*new*)
-  '6': SOMEFUNCTION (*new*)
-
->  36:       else:
+ 36:       else:
  37:          this_word = 'done'
  38:          try:
  39:             some_function(<CURSOR>)
@@ -10180,14 +8780,7 @@ Associate 'some function' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
 Heard except do the following print single quotes error
-Associate 'error' with symbol (Enter selection):
-
-  '0': no association
-  '1': error (*new*)
-  '2': Error (*new*)
-  '3': ERROR (*new*)
-
->  38:          try:
+ 38:          try:
  39:             some_function()
  40:          except :
  41:             print 'error<CURSOR>'
@@ -10195,17 +8788,7 @@ Associate 'error' with symbol (Enter selection):
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
 Heard finally do print single quotes all right
-Associate 'all right' with symbol (Enter selection):
-
-  '0': no association
-  '1': all_right (*new*)
-  '2': AllRight (*new*)
-  '3': allRight (*new*)
-  '4': ALL_RIGHT (*new*)
-  '5': allright (*new*)
-  '6': ALLRIGHT (*new*)
-
->  40:          except :
+ 40:          except :
  41:             print 'error'
  42:          finally:
  43:             print 'all_right<CURSOR>'
@@ -10300,17 +8883,7 @@ _cached_symbols_as_one_string is:
   4: class AClass(ASuper):
   5:     """This is a dummy class"""
 Heard import some module
-Associate 'some module' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_module (*new*)
-  '2': SomeModule (*new*)
-  '3': someModule (*new*)
-  '4': SOME_MODULE (*new*)
-  '5': somemodule (*new*)
-  '6': SOMEMODULE (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: # This is a small buffer for testing editing of Python code
   2: import some_module<CURSOR>
   3: 
@@ -10339,14 +8912,7 @@ Associate 'some module' with symbol (Enter selection):
  22: class SomeOtherClass():
  23: 
 Heard class dummy class body
-Associate 'dummy' with symbol (Enter selection):
-
-  '0': no association
-  '1': dummy (*new*)
-  '2': Dummy (*new*)
-  '3': DUMMY (*new*)
-
->  18:            
+ 18:            
  19: 
  20: class dummy:
  21:    <CURSOR>
@@ -10354,17 +8920,7 @@ Associate 'dummy' with symbol (Enter selection):
  23: class SomeOtherClass():
  24: 
 Heard define method new method method body pass
-Associate 'new method' with symbol (Enter selection):
-
-  '0': no association
-  '1': new_method (*new*)
-  '2': NewMethod (*new*)
-  '3': newMethod (*new*)
-  '4': NEW_METHOD (*new*)
-  '5': newmethod (*new*)
-  '6': NEWMETHOD (*new*)
-
->  20: class dummy:
+ 20: class dummy:
  21:    def new_method(self):
  22:       pass
  23:    <CURSOR>
@@ -10404,17 +8960,7 @@ Heard select a super
   6:     
   7:     def a_method(self, some_argument):
 Heard new super class
-Associate 'new super class' with symbol (Enter selection):
-
-  '0': no association
-  '1': new_super_class (*new*)
-  '2': NewSuperClass (*new*)
-  '3': newSuperClass (*new*)
-  '4': NEW_SUPER_CLASS (*new*)
-  '5': newsuperclass (*new*)
-  '6': NEWSUPERCLASS (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: # This is a small buffer for testing editing of Python code
   2: 
   3: 
@@ -10445,17 +8991,7 @@ Associate 'new super class' with symbol (Enter selection):
  21: 
  22: class SomeOtherClass():
 Heard add method some method method body pass
-Associate 'some method' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_method (*new*)
-  '2': SomeMethod (*new*)
-  '3': someMethod (*new*)
-  '4': SOME_METHOD (*new*)
-  '5': somemethod (*new*)
-  '6': SOMEMETHOD (*new*)
-
->  18:            
+ 18:            
  19: def some_method(self):
  20:    pass
  21: <CURSOR>
@@ -10485,17 +9021,7 @@ Associate 'some method' with symbol (Enter selection):
   9:         if some_variable:
  10:             do_some_stuff(some_array)
 Heard add argument extra argument
-Associate 'extra argument' with symbol (Enter selection):
-
-  '0': no association
-  '1': extra_argument (*new*)
-  '2': ExtraArgument (*new*)
-  '3': extraArgument (*new*)
-  '4': EXTRA_ARGUMENT (*new*)
-  '5': extraargument (*new*)
-  '6': EXTRAARGUMENT (*new*)
-
->   4: class AClass(ASuper):
+  4: class AClass(ASuper):
   5:     """This is a dummy class"""
   6:     
   7:     def a_method(self, some_argument, extra_argument<CURSOR>):
@@ -10533,17 +9059,7 @@ Heard select some argument
   9:         if some_variable:
  10:             do_some_stuff(some_array)
 Heard new argument
-Associate 'new argument' with symbol (Enter selection):
-
-  '0': no association
-  '1': new_argument (*new*)
-  '2': NewArgument (*new*)
-  '3': newArgument (*new*)
-  '4': NEW_ARGUMENT (*new*)
-  '5': newargument (*new*)
-  '6': NEWARGUMENT (*new*)
-
->   4: class AClass(ASuper):
+  4: class AClass(ASuper):
   5:     """This is a dummy class"""
   6:     
   7:     def a_method(self, new_argument<CURSOR>):
@@ -10664,17 +9180,7 @@ Heard after paren none
  13:         try:
  14:             do_some_stuff()
 Heard new statement if some flag then
-Associate 'some flag' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_flag (*new*)
-  '2': SomeFlag (*new*)
-  '3': someFlag (*new*)
-  '4': SOME_FLAG (*new*)
-  '5': someflag (*new*)
-  '6': SOMEFLAG (*new*)
-
->  10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
  11:             do_some_more()
  12:             if some_flag:
  13:                <CURSOR>
@@ -10682,18 +9188,7 @@ Associate 'some flag' with symbol (Enter selection):
  15:         try:
  16:             do_some_stuff()
 Heard do some more stuff with arguments some argument
-Associate 'do some more stuff' with symbol (Enter selection):
-
-  '0': no association
-  '1': do_some_stuff
-  '2': do_some_more_stuff (*new*)
-  '3': DoSomeMoreStuff (*new*)
-  '4': doSomeMoreStuff (*new*)
-  '5': DO_SOME_MORE_STUFF (*new*)
-  '6': dosomemorestuff (*new*)
-  '7': DOSOMEMORESTUFF (*new*)
-
->  10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
  11:             do_some_more()
  12:             if some_flag:
  13:                do_some_stuff(some_argument<CURSOR>)
@@ -10701,27 +9196,7 @@ Associate 'do some more stuff' with symbol (Enter selection):
  15:         try:
  16:             do_some_stuff()
 Heard else do some stuff again with arguments some other argument
-Associate 'do some stuff again' with symbol (Enter selection):
-
-  '0': no association
-  '1': do_some_stuff_again (*new*)
-  '2': DoSomeStuffAgain (*new*)
-  '3': doSomeStuffAgain (*new*)
-  '4': DO_SOME_STUFF_AGAIN (*new*)
-  '5': dosomestuffagain (*new*)
-  '6': DOSOMESTUFFAGAIN (*new*)
-
-> Associate 'some other argument' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_other_argument (*new*)
-  '2': SomeOtherArgument (*new*)
-  '3': someOtherArgument (*new*)
-  '4': SOME_OTHER_ARGUMENT (*new*)
-  '5': someotherargument (*new*)
-  '6': SOMEOTHERARGUMENT (*new*)
-
->  12:             if some_flag:
+ 12:             if some_flag:
  13:                do_some_stuff(some_argument)
  14:             else:
  15:                do_some_stuff_again(some_other_argument<CURSOR>)
@@ -10729,37 +9204,7 @@ Associate 'do some stuff again' with symbol (Enter selection):
  17:         try:
  18:             do_some_stuff()
 Heard bug below dot following one will not be inserted at the right level
-Associate 'bug below' with symbol (Enter selection):
-
-  '0': no association
-  '1': bug_below (*new*)
-  '2': BugBelow (*new*)
-  '3': bugBelow (*new*)
-  '4': BUG_BELOW (*new*)
-  '5': bugbelow (*new*)
-  '6': BUGBELOW (*new*)
-
-> Associate 'following 1 will' with symbol (Enter selection):
-
-  '0': no association
-  '1': following_1_will (*new*)
-  '2': Following1Will (*new*)
-  '3': following1Will (*new*)
-  '4': FOLLOWING_1_WILL (*new*)
-  '5': following1will (*new*)
-  '6': FOLLOWING1WILL (*new*)
-
-> Associate 'be inserted at the right level' with symbol (Enter selection):
-
-  '0': no association
-  '1': be_inserted_at_the_right_level (*new*)
-  '2': BeInsertedAtTheRightLevel (*new*)
-  '3': beInsertedAtTheRightLevel (*new*)
-  '4': BE_INSERTED_AT_THE_RIGHT_LEVEL (*new*)
-  '5': beinsertedattherightlevel (*new*)
-  '6': BEINSERTEDATTHERIGHTLEVEL (*new*)
-
->  12:             if some_flag:
+ 12:             if some_flag:
  13:                do_some_stuff(some_argument)
  14:             else:
  15:                do_some_stuff_again(some_other_argumentbug_below.following_1_willnot be_inserted_at_the_right_level<CURSOR>)
@@ -10886,14 +9331,7 @@ _cached_symbols_as_one_string is:
 0
 ')
 Heard index not equal to zero
-Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: index != 0<CURSOR>
 
 *** End of source buffer ***
@@ -10903,14 +9341,7 @@ Associate 'index' with symbol (Enter selection):
 0
 ')
 Heard index not equal to zero
-Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: index != 0index != 0<CURSOR>
 
 *** End of source buffer ***
@@ -12417,14 +10848,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
 Heard index equals zero new statement
-Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: index = 0
   2: <CURSOR>
 
@@ -13081,17 +11505,7 @@ Next utterance should not match short symbol 'se'
 Got command: say(['software', 'engineering', 'comma'],1
 ,0,0,)
 Heard software engineering comma
-Associate 'software engineering' with symbol (Enter selection):
-
-  '0': no association
-  '1': software_engineering (*new*)
-  '2': SoftwareEngineering (*new*)
-  '3': softwareEngineering (*new*)
-  '4': SOFTWARE_ENGINEERING (*new*)
-  '5': softwareengineering (*new*)
-  '6': SOFTWAREENGINEERING (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: software_engineering, <CURSOR>
 
 *** End of source buffer ***
@@ -13099,17 +11513,7 @@ Next utterance should match non-separable symbol 'openlog'
 Got command: say(['open', 'log'],1
 ,0,0,)
 Heard open log
-Associate 'open log' with symbol (Enter selection):
-
-  '0': no association
-  '1': openlog
-  '2': open_log (*new*)
-  '3': OpenLog (*new*)
-  '4': openLog (*new*)
-  '5': OPEN_LOG (*new*)
-  '6': OPENLOG (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: software_engineering, openlog<CURSOR>
 
 *** End of source buffer ***
@@ -13133,14 +11537,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
 Heard index equals zero new statement
-Associate 'index' with symbol (Enter selection):
-
-  '0': no association
-  '1': index (*new*)
-  '2': Index (*new*)
-  '3': INDEX (*new*)
-
-> *** Start of source buffer ***
+*** Start of source buffer ***
   1: index = 0
   2: <CURSOR>
 
@@ -13246,6 +11643,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1477.90499997 secs
+Test suite completed in:  1469.523 secs
 -----------------------------------------------
 MessTransporter_Socket.receive_string: no data received in Thread-6

@@ -128,7 +128,7 @@ class LSAlias(Object):
         for language, written_as in meanings.items():
             self.meanings[language] = written_as
 
-class AliasMeaning(DeferInterp):
+class AliasMeaning(DeferInterp, SymDict.SymElement):
     """underlying object used by CmdInterp to store the data associated 
     with an LSAlias meaning
 
@@ -203,6 +203,20 @@ class AliasMeaning(DeferInterp):
         if self.new_symbol == 'within' and not preceding_symbol:
             return 1
         return 0
+
+    def add_to(self, builder):
+        """Add alias's written form to the symbol builder
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.add_word(self.written())
+
 
 class CSCmdSet(Object):
     """a collection of context-sensitive commands which may be deleted,
@@ -461,6 +475,111 @@ class LSAliasSet(Object):
         return 1
 
 
+class SymWord(SymDict.SymElement):
+    """a word as an element of a symbol 
+
+    **INSTANCE ATTRIBUTES**
+
+    *STR word* -- the word (possibly abbreviated)
+
+    *STR original* -- original, unabbreviated version (if word is an
+    abbreviation/substitution) or None if word is not abbreviated
+    """
+    def __init__(self, word, original = None, **args):
+        self.deep_construct(SymWord,
+                            {
+                             'word': word,
+                             'original': original
+                            },
+                            args)
+
+    def add_to(self, builder):
+        """Add alias's written form to the symbol builder
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.add_word(self.word, self.original)
+
+class CapsModifier(SymDict.SymElement):
+    """a symbol element which modifies the capitalization of subsequent
+    elements
+
+    **INSTANCE ATTRIBUTES**
+    
+    *STR caps* -- the new capitalization state: 'no-caps', 'normal', 
+    'cap', or 'all-caps'
+
+    *BOOL one_word* -- if true, modify capitalization for the next
+    word.  If false, modify for all following words until a
+    subsequent change_caps with one_word = 0.  (A subsequent call to
+    change_caps with one_word = 1 will take precedence temporarily)
+    """
+    def __init__(self, caps, one_word = 1, **args):
+        self.deep_construct(CapsModifier,
+                            {
+                             'caps': caps,
+                             'one_word': one_word
+                            },
+                            args)
+
+    def add_to(self, builder):
+        """Modify the capitalization state of the symbol builder
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.change_caps(caps, one_word)
+
+class NoSeparator(SymDict.SymElement):
+    """a symbol element which suppresses any separator before the next
+    word in the symbol
+    """
+    def __init__(self, **args):
+        self.deep_construct(NoSeparator, {}, args)
+
+    def add_to(self, builder):
+        """suppress any separator before the next word in the symbol
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.suppress_separator()
+
+class NoAbbreviation(SymDict.SymElement):
+    """a symbol element which suppresses abbreviation of the next
+    word in the symbol
+    """
+    def __init__(self, **args):
+        self.deep_construct(NoAbbreviation, {}, args)
+
+    def add_to(self, builder):
+        """suppress any abbreviation of the next word in the symbol
+
+        **INPUTS**
+
+        *SymBuilder builder*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        builder.suppress_abbreviation()
 
 class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
@@ -1150,8 +1269,16 @@ class CmdInterp(OwnerObject):
             # Insert matched symbol
             #
             actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(app, None)            
+            if choice_index != 0:
+                trace('CmdInterp.dlg_select_symbol_match.mismatch', 
+                'selected alternative match %d: %s' % \
+                (choice_index, chosen_match.native_symbol))
         else:
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
+            if untranslated_text != symbol_matches[0].native_symbol:
+                trace('CmdInterp.dlg_select_symbol_match.mismatch', 
+                'untranslated text %s != first match %s' % \
+                (untranslated_text, symbol_matches[0].native_symbol))
         
     def chop_CSC_phrase(self, phrase, app):
         """Chops the start of a command if it starts with a CSC.
