@@ -148,6 +148,10 @@ py_std_func_calls.create(interpreter)
 add_csc_set(c_preprocessor_cmds)
 add_lsa_set(c_preprocessor)
 
+# Emacs specific
+
+add_csc_set(emacs_ctrl)
+
 #######################################
 # add generated sets
 #######################################
@@ -206,6 +210,3 @@ std_quotes.create(interpreter)
 #######################################
 
 std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
-
-
-
