@@ -42,13 +42,17 @@ class RecogStartGram(GrammarBase):
         <start> exported = {emptyList};
     """
 
+    def __init__(self, **args):
+        apply(GrammarBase.__init__, [self], args)
+        debug.trace('RecogStartGram.__init__', '** invoked, self=%s' % self)        
+
     def initialize(self, callback = None):
         self.callback = callback
         self.load(self.gramSpec)
         self.activateAll()
 
     def gotBegin(self, module_info):
-        debug.trace('RecogStartGram.gotBegin', '** invoked, self.callback=%s' % self.callback)
+        debug.trace('RecogStartGram.gotBegin', '** invoked, self.callback=%s, self=%s' % (self.callback, self))
         if self.callback != None:
             self.callback(module_info)
 
@@ -72,12 +76,13 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
     """
 
     def __init__(self, **args):
+        debug.trace('RecogStartMgrNL.__init__', '** self=%s' % self)
         self.deep_construct(RecogStartMgrNL,
                             {'start_gram': RecogStartGram(),
                             },
                             args)
         self.start_gram.initialize(self.starting)
-        
+
     def remove_other_references(self):
         self.deactivate()
         self.start_gram.unload()
@@ -117,7 +122,7 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
         return self.parse_module_info(natlink.getCurrentModule())
 
     def starting(self, module_info):
-        debug.trace('RecogStartMgrNL.starting', 'self._recognition_starting=%s' % self._recognition_starting)
+        debug.trace('RecogStartMgrNL.starting', 'self._recognition_starting=%s, self=%s' % (self._recognition_starting, self))
         apply(self._recognition_starting, self.parse_module_info(module_info))
 
 

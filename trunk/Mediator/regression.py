@@ -313,13 +313,17 @@ class PersistentConfigNewMediator(Object.Object):
             'about to reset persistent mediator')
         self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = self.symbol_match_dlg, add_sr_entries_for_LSAs_and_CSCs=0)
+        debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** before editor_instance')                    
         editor = self.mediator().editor_instance(self.editor_name)
+        debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** before init_for_test')        
         editor.init_for_test()
         interp = self.mediator().interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names,
             bypass_sr_recog = self.bypass_sr_recog, testing = 1)
+        debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** before bind_methods')                    
         commands.bind_methods(self.names)
         self.names['commands'] = commands
+        debug.trace('PersistentConfigNewMediator.init_simulator_regression', '** exited')        
 
     def execute_command(self, command):
         """execute a command in the proper namespace, trapping any
@@ -505,20 +509,24 @@ class TempConfigNewMediatorFactory(Object.Object):
         interp = None
         if not skip_config and self.pickled_interp:
             interp = cPickle.loads(self.pickled_interp)
+        debug.trace('TempConfigNewMediatorFactory.new_config', '** before NewMediatorObject()')
         a_mediator = \
             NewMediatorObject.NewMediatorObject(interp = interp, 
                 symbol_match_dlg = self.symbol_match_dlg,
                 symdict_pickle_fname = symdict_pickle_fname)
+        debug.trace('TempConfigNewMediatorFactory.new_config', '** after NewMediatorObject()')                        
         if not skip_config:
             a_mediator.configure(testing = 1)
         if editor == None:
             app = EdSim.EdSim()
         else:
             app = editor
+        debug.trace('TempConfigNewMediatorFactory.new_config', '** before new_editor()')                            
         a_mediator.new_editor(app, server = 0, check_window = 0)
 # we do NOT call this a test_editor, otherwise we're in for some nasty
 # recursion (well, maybe not, since we didn't specify test_args, but
 # anyway)
+        debug.trace('TempConfigNewMediatorFactory.new_config', '** before returning')                            
         return TempConfigNewMediator(mediator = a_mediator, editor = app)
 
 

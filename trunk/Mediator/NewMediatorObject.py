@@ -260,6 +260,7 @@ class NewMediatorObject(Object.OwnerObject):
         persistent version of the symbols dictionnary.
         """
 
+        debug.trace('NewMediatorObject.__init__', 'invoked')
         self.deep_construct(NewMediatorObject,
                             {'editors': None,
                              'server': server,
@@ -293,8 +294,6 @@ class NewMediatorObject(Object.OwnerObject):
         self.add_owned('interp')
         if self.the_console:
             self.the_console.set_mediator(self)
-        debug.trace('NewMediatorObject.__init__', '** self.test_args=%s, self.test_space=%s' 
-                    % (self.test_args, self.test_space))            
         if self.test_args != [None] and self.test_space != None:
             self.test_next = 1
         if self.test_next:
@@ -316,6 +315,7 @@ class NewMediatorObject(Object.OwnerObject):
             self.new_app_mgr()
         if server:
             server.set_mediator(self)
+        debug.trace('NewMediatorObject.__init__', '** exited')            
 
     def new_app_mgr(self):
         """create a new AppMgr if one was not supplied to  the
@@ -729,7 +729,7 @@ class NewMediatorObject(Object.OwnerObject):
         
         ..[CmdInterp] file:///./CmdInterp.CmdInterp.html"""
         
-#        self.interp.add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs
+        debug.trace('NewMediatorObject.reset', 'invoked')
         old_add_entries = self.interp.add_sr_entries_for_LSAs_and_CSCs
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
@@ -743,6 +743,7 @@ class NewMediatorObject(Object.OwnerObject):
             use_pickled_interp = use_pickled_interp)
         self.reset_results_mgr()
         self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
+        debug.trace('NewMediatorObject.reset', '** exited')        
 
     def reconfigure(self, exclude = None, config_file=None,
         user_config_file = None,
@@ -790,6 +791,7 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none* -- 
         """        
+        debug.trace('NewMediatorObject.reconfigure', 'invoked')        
         file = config_file
         if not file:
             file = self.config_file
@@ -806,6 +808,7 @@ class NewMediatorObject(Object.OwnerObject):
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
             use_pickled_interp = use_pickled_interp)
+        debug.trace('NewMediatorObject.reconfigure', '** exited')                    
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
