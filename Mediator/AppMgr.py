@@ -392,13 +392,16 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	if you want to add windows to the application in the future.
 	"""
         new_name = self._add_new_instance(app)
-        self.recog_mgr.new_universal_instance(new_name, exclusive)
-#        print repr(self.app_instance(new_name))
-        return new_name
+        if self.recog_mgr.new_universal_instance(new_name, exclusive):
+            return new_name
+        else:
+            self._delete_instance(new_name)
+            return None
 
-    def _delete_instance(self, instance):
-        """private method to do the work of removing named instance 
-	from management, except for notifying the mediator
+    def delete_instance(self, instance):
+        """called by NewMediatorObject to remove named instance 
+        from management.  (because the call comes from the mediator, we
+        don't need to send a delete_editor_cbk to the mediator)
 
 	**INPUTS**
 
@@ -416,21 +419,6 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
             self.instances[instance].cleanup()
             del self.instances[instance]
 
-    def delete_instance(self, instance):
-        """remove named instance from management
-
-	**INPUTS**
-
-	*STR* instance -- name of the application instance to be removed
-    
-	**OUTPUTS**
-
-	*none*
-	"""
-# for now at least, this does the same thing as close_app_cbk
-        if self.instances.has_key(instance):
-            self.close_app_cbk(instance)
-
     def close_app_cbk(self, instance, unexpected = 0):
         """callback from AppState which indicates that the application has 
 	closed or disconnected from the mediator
@@ -445,7 +433,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 	"""
         if self.mediator:
             self.mediator.delete_editor_cbk(instance, unexpected = unexpected)
-        self._delete_instance(instance)
+        self.delete_instance(instance)
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
