@@ -3649,9 +3649,8 @@ add_test('reformat_recent_dlg', test_reformat_recent_dlg,
          'Testing dialog for selecting a symbol to reformat.')
 
 def test_reformat_from_recent_dlg():
-    pass
-#   unittest.TextTestRunner(). \
-#       run(unittest.makeSuite(MediatorConsoleWXTests.ReformatFromRecentTestCase, 'test')) 
+   unittest.TextTestRunner(). \
+       run(unittest.makeSuite(MediatorConsoleWXTests.ReformatFromRecentTestCase, 'test')) 
    
 add_test('reformat_from_recent_dlg', test_reformat_from_recent_dlg, 
          'Testing dialog for reformatting a selected symbol.')

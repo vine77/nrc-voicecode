@@ -60,6 +60,13 @@ class wxListCtrlWithHelpers(wxListCtrl):
           contents.append(row)
        return contents
        
+    def GetColumnContents(self, col_num):
+       contents = []
+       for row_num in range(self.NumberOfRows()):
+          contents.append(self.GetCellContentsString(row_num, col_num))
+       return contents
+    
+       
 class MockListSelectionEvent(wxListEvent):
     def __init__(self, nth):
        wxListEvent.__init__(self)
