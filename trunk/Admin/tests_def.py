@@ -2880,20 +2880,17 @@ auto_test.add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():
-   edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
+
    testing.init_simulator_regression()
    commands = testing.namespace()['commands']
-   commands.open_file(edit_file)
+   commands.open_file('toto.py')
 
-#   commands.goto_line(4)
-#   commands.say(['class', 'body'])
+   commands.say(['if', 'do', 'the', 'following'])
+   commands.say(['if', 'do', 'the', 'following'])   
+   commands.say(['new', 'statement', 'back', 'indent'])
+   commands.say(['else'])
 
-# here, it seems class body    
-   commands.goto_line(20)
-   commands.say(['class', 'dummy', 'class', 'body'], user_input="1\n")
-   commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
-
-    
-# auto_test.add_test('temp', test_temporary, desc='temporary test')
+   
+#auto_test.add_test('temp', test_temporary, desc='temporary test')
 
 

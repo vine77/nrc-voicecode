@@ -308,17 +308,17 @@ sent."
    )
 )
 
+(defun vcode-mode (status)
+   (interactive "P")
+   (vcode-configure-for-regression-testing nil)
+   (vr-mode status "vcode")
+)
+
 (defun vcode-interactive-test ()
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
- 
-;  (vcode-close-all-buffers)
-  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
-  (vcode-configure-for-regression-testing nil)
-  (vr-mode 1 "vcode")
-;  (vcode-configure-for-regression-testing t)
-;  (vr-mode nil)
+  (vcode-mode 1 "vcode")
 )
 
 (defun vcode-log-all ()
