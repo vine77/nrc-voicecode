@@ -318,7 +318,8 @@ sent."
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (vcode-mode 1 "vcode")
+  (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
+  (vcode-mode 1)
 )
 
 (defun vcode-log-all ()
@@ -1548,7 +1549,6 @@ grammars."
    )
 )
 
-
 (defun vr-send-activate-buffer ()
    "Sends a 'activate-buffer message to VR.exe"
    (let ()
@@ -1801,7 +1801,6 @@ message from VR.EXE")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repeating commands (based on code by Steve Freund).
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defvar vr-repeat-rate nil
   "The rate at which to repeat commands, in seconds.  If nil, any
 currently repeating command will terminate.")
@@ -1951,7 +1950,6 @@ See vcode-cmd-prepare-for-ignored-key for more details.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defun vcode-make-all-keys-self-insert ()
   
 )
@@ -2078,7 +2076,6 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   ;;;
 ;  (cl-puthash 'heard-command 'vr-cmd-heard-command-hook vr-message-handler-hooks)
 ;  (cl-puthash 'mic-state 'vr-cmd-mic-state-hook vr-message-handler-hooks)
-
 
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2233,7 +2230,8 @@ returns name of current buffer."
 we can send it back to VoiceCode when we ask it for a second network connection."
 
    (let ((mess-name (elt vcode-req 0)) (mess-cont (elt vcode-req 1))
-	 (ok-mess-cont (make-hash-table :key 'string=)))
+;	 (ok-mess-cont (make-hash-table :key 'string=)))
+	 (ok-mess-cont (make-hash-table :test 'string=)))
 
 
      (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "ok" ok-mess-cont)))
