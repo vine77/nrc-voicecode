@@ -456,6 +456,8 @@ class SB_ServiceIndent(SB_Service):
         debug.trace('SB_ServiceIndent.insert_indent',
             'code_bef="%s", code_after="%s", range=%s' \
             % (code_bef, code_after, repr(range)))
+        debug.trace('SB_ServiceIndent.insert_indent',
+            '** self.indent_level=%s, self.buff=%s' % (self.indent_level, repr(self.buff)))
         
         if range == None:
             range = self.buff.get_selection()
@@ -473,6 +475,9 @@ class SB_ServiceIndent(SB_Service):
         if self.indent_level != None:
             code_bef = self.replace_tabs(code_bef)
             code_after = self.replace_tabs(code_after)
+    	    debug.trace('SB_ServiceIndent.insert_indent',
+	            'after replacing tabs with spaces, code_bef="%s", code_after="%s"' % (code_bef, code_after))
+            
 
         #
         # Then indent the code by the number of blanks before the
@@ -1034,3 +1039,83 @@ class SB_ServiceFullState(SB_ServiceState):
 
         return self.buff.name() == cookie.name()
 
+class SB_ServiceSimulateKbdAndMouseEdits(SB_Service):
+    """Provides services for simulating editing operations carried out through
+    mouse and keyboard.
+    
+    The methods provided by this service are only used for regression testing, to
+    test mixed-mode (voice with kbd and mouse) editing scenarios.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_ServiceSimulateKbdAndMouseEdits, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def set_selection_by_kbd(self, start, end):
+        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.set_selection_by_kbd')
+        
+    def move_cursor_by_kbd(self, direction, num_steps):
+        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.move_cursor_by_kbd')    
+        
+    def type_text(self, text):
+        debug.virtual('SB_ServiceSimulateKbdAndMouseEdits.type_text')    
+        
+    def play_string_with_buffer_in_focus(self, string):
+        # Eventually, this will make sure that the buffer has the focus before
+        # playing the string. But for now, just play the string.
+        natlink.playString(string)
+
+class SB_ServiceSimulateKbdAndMouseEditsWindowsStyle(SB_ServiceSimulateKbdAndMouseEdits):
+    """Simulates editing actions through Windows style keyboard and mouse events.
+    
+    For example, it uses a sequence of Shift-Right keys to select an area of text.
+    
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_ServiceSimulateKbdAndMouseEditsWindowsStyle, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def set_selection_by_kbd(self, start, end):
+    
+        string_to_play = ''
+        self.buff.goto(start)
+        if end >= start:
+           move_with_key = '{Shift+Right}'
+        else:
+           move_with_key = '{Shift+Left}'        
+        for ii in range(abs(end-start)):
+           string_to_play = string_to_play + move_with_key
+        self.play_string_with_buffer_in_focus()
+
+        
+    def move_cursor_by_kbd(self, direction, num_steps):
+        string_to_play = ''
+        move_with_key = "{%s}" % direction
+        for ii in range(num_steps):
+           string_to_play = string_to_play + move_with_key
+        self.play_string_with_buffer_in_focus(string_to_play)
+        
+    def type_text(self, text):
+        self.play_string_with_buffer_in_focus(text)
+                            

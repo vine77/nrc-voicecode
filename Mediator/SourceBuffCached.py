@@ -23,12 +23,19 @@
 buffer is slow"""
 
 
-import debug, SourceBuff
+import debug, SourceBuffWithServices
 from debug import trace
+
+# Note: this import will not be necessary when we upgrade to Python 2.
+#       we need it so that some of the _cbk methods can invoke their
+#       SourceBuff equivalent.
+#       With Python 2, we can use the super() method to invoke a method
+#       of the superclass.
+import SourceBuff
 
 from Object import Object
 
-class SourceBuffCached(SourceBuff.SourceBuff):
+class SourceBuffCached(SourceBuffWithServices.SourceBuffWithServices):
     
     """Interface optimised for editors that communicate with VoiceCode
     through a slow link.

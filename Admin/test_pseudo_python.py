@@ -172,7 +172,7 @@ def do_edit_test(testing, edit_file, test_fct, descr=None):
    commands = names['commands']
    
    print '\n*********************\n*** Executing edit test: %s ***\n*********************\n' % descr
-
+	
    commands.open_file(edit_file)
    test_fct(commands)
    
@@ -219,8 +219,7 @@ def insert_import_statement_test(commands):
    
 def create_new_class_test(commands):   
    commands.goto_line(20)
-   commands.say(['there', 'is', 'a', 'bug', 'below'], user_input='0\n0\n0\n0\n0\n')
-   commands.say(['class', 'new', 'class', 'class', 'body'], user_input="1\n")
+   commands.say(['class', 'dummy', 'class', 'body'], user_input="1\n")
    commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
 
 def change_subclass_of_existing_class(commands):
@@ -270,4 +269,3 @@ def add_else_clause_test(commands):
 def add_except_clause_test(commands):   
    commands.goto_line(26)
    commands.say(['catch', 'exceptions'])
-
