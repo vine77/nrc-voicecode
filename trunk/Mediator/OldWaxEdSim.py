@@ -400,7 +400,7 @@ class WaxEdSimFrame(wxFrame):
         wxSize(1000, 600))
 
         self.title = title
-        self.instance_string = ""
+        self.the_instance_string = ""
         self.name = None
         self.exiting = 0
         self.app_control = None
@@ -457,10 +457,14 @@ class WaxEdSimFrame(wxFrame):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
+
 	"""
-        self.instance_string = instance_string
+        self.the_instance_string = instance_string
         self.update_title()
+        return 1
       
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
@@ -770,7 +774,7 @@ class WaxEdSim(wxApp, OldWaxEdit.WaxEdit):
 
 	*none*
 	"""
-        self.frame.set_instance_string(instance_string)
+        return self.frame.set_instance_string(instance_string)
       
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)

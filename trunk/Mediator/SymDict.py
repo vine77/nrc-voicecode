@@ -724,7 +724,8 @@ class SymDict(PickledObject.PickledObject):
 
             language_name = self.get_language_by_filename(file_name)
 #            print '-- SymDict.parse_symbols: language_name=%s' % language_name
-            self.parse_symbols(source, language_name)
+            self.parse_symbols(source, language_name, 
+                add_sr_entries = add_sr_entries)
                 
     def parse_symbols(self, contents, language_name, add_sr_entries=1):
         """Parse symbols from a string representing the contents of a 

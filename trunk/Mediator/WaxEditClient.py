@@ -49,6 +49,7 @@ debug.config_traces(status="on",
               active_traces={
 #                             'get_mess':1,
 #                             'send_mess': 1,
+#                             'ClientEditor': 1
 #                             'SourceBuffEdSim': 1
                              })
 

@@ -721,6 +721,9 @@ class NewMediatorObject(Object.OwnerObject):
         if not instance_name:
             return 0
         app = self.editors.app_instance(instance_name)
+# give the user an initial chance to save existing buffers before
+# closing them
+        app.init_for_test(save = 0)
         app.print_buff_when_changed = 1
         self.test_space['testing'] = \
             regression.PersistentConfigNewMediator(mediator = self,

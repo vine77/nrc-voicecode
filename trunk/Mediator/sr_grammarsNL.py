@@ -61,10 +61,15 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
+        debug.trace('DictWinGramNL.activate', 
+            '%s received activate'% self.buff_name)
         if not self.is_active():
+            debug.trace('DictWinGramNL.activate', 'not already active')
             window = self.window
             if window == None:
                 window = 0
+            debug.trace('DictWinGramNL.activate', 
+                'activating, window = %d' % window)
             DictGramBase.activate(self, window = window, 
                 exclusive = self.exclusive)
             self.active = 1
@@ -84,7 +89,10 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
+        debug.trace('DictWinGramNL.deactivate', 
+            '%s received deactivate' % self.buff_name)
         if self.is_active():
+            debug.trace('DictWinGramNL.deactivate', 'was active')
             DictGramBase.deactivate(self)
             self.active = 0
 

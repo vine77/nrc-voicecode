@@ -119,7 +119,7 @@ class SocketHasDataWX(SocketHasDataEvent):
 
 	*none*
 	"""
-        event = SocketDataEvent(self.evt_type, self.socket_ID)
+        event = SocketDataEventWX(self.evt_type, self.socket_ID)
         wxPostEvent(self.evt_handler, event)
 
 

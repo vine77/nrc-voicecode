@@ -935,7 +935,8 @@ class CmdInterp(Object):
 
 	*none* -- 
 	"""
-        self.known_symbols.add_abbreviation(abbreviation, expansions)
+        self.known_symbols.add_abbreviation(abbreviation, expansions,
+            user_added = user_added)
 
 
     def standard_symbols_in(self, file_list):
@@ -1030,7 +1031,8 @@ class CmdInterp(Object):
         
         *none* -- 
         """
-        self.known_symbols.cleanup(clean_sr_voc=0, clean_symdict=1, resave=1)
+        self.known_symbols.cleanup(clean_sr_voc=clean_sr_voc, 
+            clean_symdict=clean_symdict, resave=resave)
 
     def abbreviations_cleanup(self):
         """Removes all known abbreviations from the symbols dictionary.

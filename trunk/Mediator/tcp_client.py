@@ -883,8 +883,8 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def cmd_set_instance_string(self, arguments):
         instance_string = arguments['instance_string']
-        self.editor.set_instance_string(instance_string)
-        self.send_simple_response('set_instance_string_resp')
+        value = self.editor.set_instance_string(instance_string)
+        self.send_response('set_instance_string_resp', value)
 
     def cmd_get_instance_string(self, arguments):
         instance_string = self.editor.instance_string()
@@ -893,8 +893,8 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def cmd_title_escape(self, arguments):
         before = arguments['before']
         after = arguments['after']
-        self.editor.title_escape_sequence(before, after)
-        self.send_simple_response('title_escape_resp')
+        value = self.editor.title_escape_sequence(before, after)
+        self.send_response('title_escape_resp', value)
 
     def cmd_multiple_windows(self, arguments):
         value = self.editor.multiple_windows()
@@ -958,11 +958,11 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
             buff_name = self.editor.app_active_buffer_name()
         buff = self.editor.find_buff(buff_name)
         updates = []
-
-        updates.append({'action': 'select', 'range': buff.get_selection(), 
-            'buff_name': buff_name})        
-        updates.append({'action': 'goto', 'pos': buff.cur_pos(), 
-            'buff_name': buff_name})
+        if buff != None:
+            updates.append({'action': 'select', 'range': buff.get_selection(), 
+                'buff_name': buff_name})        
+            updates.append({'action': 'goto', 'pos': buff.cur_pos(), 
+                'buff_name': buff_name})
 
         return updates
         

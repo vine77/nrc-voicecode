@@ -736,6 +736,7 @@ class ServerSingleThread(Object.Object):
         # Run regression test?
         #
         if test_client and self.test_suite != None:
+            an_app_state.init_for_test(save = 0)
             an_app_state.print_buff_when_changed = 1
             args = [self.test_suite]
             global testing
@@ -1762,6 +1763,7 @@ class ServerOldMediator(ServerMainThread):
         if test_client and self.test_suite != None:
             sys.stderr.write("initializing mediator for regression tests\n")
             sys.stderr.flush()
+            instance.init_for_test(save = 0)
             mediator.init_simulator_regression(on_app=instance)
             instance.print_buff_when_changed = 1
             args = [self.test_suite]
@@ -2443,6 +2445,23 @@ class ServerNewMediator(ServerMainThread):
                             }, args)
         self.name_parent('mediator')
 
+    def remove_other_references(self):
+        """Perform any cleanup prior to quitting.  Called when the main 
+	thread has exited its event loop.  Subclasses which override
+	this method should be sure to call their parent class's version
+	after doing their own cleanup.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        self.data_events = None
+        ServerMainThread.remove_other_references(self)
+
     def is_test_server(self):
         """indicates whether this server running in test mode, and
         waiting for the next test client
@@ -2534,7 +2553,7 @@ class ServerNewMediator(ServerMainThread):
             return 0
         else:
             self.editors[id] = instance
-            self.editors[instance_name] = id
+            self.editor_names[instance_name] = id
             return 1
 
     def known_instance(self, id):
@@ -2600,8 +2619,8 @@ class ServerNewMediator(ServerMainThread):
             except messaging.SocketError:
                 pass
             self.deactivate_data_thread(id)
-        self.editors = None
-        self.editor_names = None
+        self.editors = {}
+        self.editor_names = {}
 
     def start_other_threads(self, listener_evt, talker_evt):
         """method called to start the secondary threads which

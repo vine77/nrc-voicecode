@@ -43,6 +43,7 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                       'DictWinGramNL': 1
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
@@ -95,6 +96,7 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 # for now, quit first, then cleanup (including server owned by the
 # NewMediatorObject)
 #        print 'about to quit the mediator'
+        self.the_server = None
         self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
             disconnect=1)
         Object.OwnerObject.remove_other_references(self)

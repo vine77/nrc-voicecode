@@ -463,7 +463,9 @@ class GenEdit(Object.OwnerObject):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor can and will include the 
+        instance string in its window title for all windows 
+        containing editor buffers.
 	"""
         debug.virtual('GenEdit.set_instance_string')
 
@@ -2061,11 +2063,14 @@ class GenEditFrames(GenEditBuffers):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
 	"""
         self.instance_string = instance_string
         for frame in self.frames.values():
             frame.set_instance_string(instance_string)
+        return 1
   
 class ActivateEventMixIn(Object.Object):
     """mix-in which implements GenEditFrames.is_active and active_frame_ID
