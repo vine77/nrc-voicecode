@@ -32,6 +32,7 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
     <LI><A HREF="#VCODE_NOSPEECH">Running the simulation shell without NatSpeak</A>
     <LI><A HREF="#CSCs">Context Sensitive Commands (CSCs)</A>
     <LI><A HREF="#symbols">Dictating symbols</A>
+    <LI><A HREF="#select">Selecting code</A>
     </UL>
 <LI><A HREF="#config">Configuring VoiceCode</A>
     <UL>
@@ -240,6 +241,80 @@ that you have compiled a source file where symbol
 HREF="#shellCommands">compile_symbols</A>), and that you have defined
 <EM>'preference'</EM> as the <A HREF="#abbreviations">expansion for
 abbreviation</A> 'pref'.
+
+
+<H2><A NAME="select">Selecting code</A></H2>
+
+
+VoiceCode implements a basic <EM>Select XYZ</EM> grammar. If
+<EM>XYZ</EM> is some phrase, word or even symbol that is in the
+current buffer, you can say <EM>"Select XYZ"</EM>, preceded and
+followed by a pause. This will select the occurence of <EM>XYZ</EM>
+which is closest to the cursor.
+
+<P>
+
+Do:
+
+<PRE>
+open_file('C:/Temp/blah.c')
+compile_symbols(['D:/VoiceCode/VCode/Data/TestData/small_buff.c'])
+listen()
+</PRE>
+
+(note that the exact path of file <EM>small_buff.c</EM> may differ) and say:
+
+<P>
+
+<EM>"for loop horizontal position after semi horizontal position after equal"</EM>
+
+<P>
+
+to get code:
+
+<PRE>
+for (horiz_pos = 0; horiz_pos <= <CURSOR>; ++)
+{
+
+}
+</PRE>
+
+
+Then say:
+
+<EM>"select for"</EM>
+
+<P>
+
+You will then get:
+
+<P>
+
+<PRE>
+<SEL_START>for<SEL_END> (horiz_pos = 0; horiz_pos <= ; ++)
+{
+
+}
+</PRE>
+
+If you say:
+
+<P>
+
+<EM>"select horizontal position"</EM>
+
+<P>
+
+you should get:
+
+<P>
+
+<PRE>
+for (<SEL_START>horiz_pos<SEL_END> = 0; horiz_pos <= ; ++)
+{
+
+}
+</PRE>
 
 <H2><A NAME="config">Configuring VoiceCode</A></H2>
 

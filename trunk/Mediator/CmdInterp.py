@@ -32,6 +32,16 @@ class CmdInterp(Object):
 
     *BOOL cached_regexp_is_dirty* -- *true* iif *self.cached_regexp* needs
      to be regenerated based on the values in *self.cmd_index*
+
+    *{STR: [STR]}* language_specific_words = {} -- Key is the name of
+     a programming language. Value is a list of written form\spoken
+     form words specific to a language. These words are loaded
+     automatically when we are in a source buffer of that language and
+     removed when we change to a buffer in a different language.
+
+    *STR* prev_loaded_language = None -- Name of the previous language
+     for which the language specific words were loaded.
+   
     
     CLASS ATTRIBUTES**
 
@@ -46,7 +56,9 @@ class CmdInterp(Object):
                             {'app': app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
                              'cached_regexp': '',\
-                             'cached_regexp_is_dirty': 1},\
+                             'cached_regexp_is_dirty': 1,\
+                             'language_specific_words': {},\
+                             'prev_loaded_language': None},\
                             attrs)
 
 #      def refresh_dict_buff(self, moduleInfo):

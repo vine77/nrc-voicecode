@@ -232,7 +232,7 @@ if (__name__ == '__main__'):
 #    compile_symbols(['D:/Temp/blah.py'])
 #    compile_symbols(['Actions_C.py', 'AppState.py', 'CSCmd.py', 'CmdInterp.py', 'Context.py', 'EdSim.py', 'LangDef.py', 'Object.py', 'SelfHandlingExc.py', 'SourceBuff.py', 'SymDict.py', 'VoiceDictation.py', 'actions_C_Cpp.py', 'actions_gen.py', 'actions_py.py', 'config.py', 'cont_gen.py', 'debug.py', 'mediator.py', 'safe_setattr.py', 'util.py', 'vc_globals.py'])
 #    compile_symbols(['D:/VoiceCode/VCode/Data/TestData/large_buff.py'])
-        open_file('D:/VoiceCode/VCode/Data/TestData/small_buff.c')
+#        open_file('D:/VoiceCode/VCode/Data/TestData/small_buff.c')
 #    say('for a base in')
 #    unresolved_abbreviations()
 #    clear_symbols()

@@ -47,14 +47,14 @@ def addedByVC(flag):
     """Returns *true* iif word information *flag* indicates that word
     was added by VoiceCode"""
 
-    print '-- VoiceDictation.addedByVC: flag=%s' % str(flag)
+#    print '-- sr_interfacen.addedByVC: flag=%s' % str(flag)
     if flag == None:
         indicator = 0
     elif (add_words_as == 'user'):
         indicator = (flag % int(0x00000010))        
     else:
         indicator = (flag / int(0x40000000))
-    print '-- VoiceDictation.addedByVC: indicator=%s' % indicator
+#    print '-- sr_interfacen.addedByVC: indicator=%s' % indicator
     return indicator
 
 def getWordInfo(word, *rest):    
@@ -77,9 +77,10 @@ def addWord(word, *rest):
         
     global word_info_flag
 
+#    print '-- sr_interface.addWord: adding \'%s\'' % word
     if speech_able():
         if getWordInfo(word) == None:
-#            print '-- VoiceDictation.addWord: this word is new to NatSpeak'
+#            print '-- sr_interfacen.addWord: this word is new to NatSpeak'
                    
             if len(rest) == 0:
                 natlink.addWord(word, word_info_flag)
@@ -87,7 +88,6 @@ def addWord(word, *rest):
                 natlink.addWord(word, rest[0])
             else:
                 return None
-
 
 
 def deleteWord(word, *rest):
@@ -104,13 +104,71 @@ def deleteWord(word, *rest):
     if speech_able():
         flag = getWordInfo(word, 4)
         num_words = len(re.split('\s+', word))
-#        print '-- VoiceDictation.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
+#        print '-- sr_interfacen.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
         if addedByVC(flag) and num_words > 1:
-#            print '-- VoiceDictation.deleteWord: actually deleting word %s' % word
+#            print '-- sr_interfacen.deleteWord: actually deleting word %s' % word
             return natlink.deleteWord(word)
         else:
-#            print '-- VoiceDictation.deleteWord: word not added by VoiceCode %s' % word
+#            print '-- sr_interfacen.deleteWord: word not added by VoiceCode %s' % word
             return None
+
+
+
+
+def spoken_written_form(vocabulary_entry):
+    """Returns the written and spoken forms of a NatSpeak vocabulary entry
+    
+    **INPUTS**
+    
+    *STR* vocabulary_entry -- the vocabulary entry in either
+    written or written\\spoken form.
+    
+    **OUTPUTS**
+    
+    *STR* (spoken, written) -- written and spoken forms of the vocabulary entry.
+    """
+    a_match = re.match('^([^\\\\]*)\\\\([\s\S]*)$', vocabulary_entry)
+    if a_match:
+#        print '-- sr_interface.spoken_written_form: entry \'%s\' is spoken/written form' % vocabulary_entry
+        
+        #
+        # Note: need to check for things like {Enter} in written_form
+        # ignore for now
+        #
+        written = a_match.group(1)
+        spoken = a_match.group(2)
+    else:
+#        print '-- sr_interface.spoken_written_form: entry \'%s\' is just spoken ' % vocabulary_entry        
+        written = vocabulary_entry
+        spoken = vocabulary_entry
+
+    return (spoken, written)
+    
+
+
+
+def vocabulary_entry(spoken_form, *written_form):
+    """Creates a vocabulary entry with given spoken and written forms.
+
+    **INPUTS**
+
+    *STR* spoken_form -- the spoken form 
+
+    *STR* \*written_form -- the written form (default to *spoken_form*)
+
+
+    **OUTPUTS**
+
+    *entry* -- the entry to be added to the SR vocabulary
+    """
+
+#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', *written_form=%s' % (spoken_form, repr(written_form))
+        
+    if len(written_form) > 0:
+        entry = written_form[0] + '\\' + spoken_form
+    else:
+        entry = spoken_form
+    return entry
 
 
 
@@ -142,7 +200,8 @@ class CommandDictGrammar(DictGramBase):
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
-        print '-- CommandDictGrammar.gotBegin: called'
+#        print '-- CommandDictGrammar.gotBegin: called'
+        pass
         
     def gotResults(self, words):
         #
@@ -154,16 +213,7 @@ class CommandDictGrammar(DictGramBase):
         # Substitute written form of words
         #
         for index in range(0, len(words)):
-            a_word = words[index]
-            print '-- CommandDictGrammar.gotResults: checking for special written form in %s' % a_word            
-            a_match = re.match('^([^\\\\]*)\\\\([\s\S]*)$', a_word)
-            if a_match:
-                print '-- CommandDictGrammar.gotResults: %s has a special written form' % a_word            
-                written_form = a_match.group(1)
-
-                # Note: need to check for things like {enter} in written_form
-                # ignore for now
-                words[index] = written_form
+            spoken, words[index] = spoken_written_form(words[index])
                 
         self.interpreter.interpret_NL_cmd(string.join(words))
         self.interpreter.app.print_buff_content()
@@ -177,7 +227,7 @@ class CodeSelectGrammar(SelectGramBase):
         self.isActive = 0
 
     def gotBegin(self, moduleInfo):
-        print '-- CodeSelectGrammar.gotBegin: called'
+#        print '-- CodeSelectGrammar.gotBegin: called'
         self.setSelectText(self.app.curr_buffer.content)
 
     def gotResults(self, words, startPos, endPos):
@@ -199,7 +249,7 @@ class CodeSelectGrammar(SelectGramBase):
                     return
                 else:
                     region = resObj.getSelectInfo(self.gramObj, i)
-                    print '-- CodeSelectGrammar.gotResultsObject: processingregion: %s' % repr(region)                    
+#                    print '-- CodeSelectGrammar.gotResultsObject: processingregion: %s' % repr(region)                    
                     distance = self.app.curr_buffer.distance_to_selection(region[0], region[1])
                     if closest == None or distance < closest:
                         self.ranges = [self.app.curr_buffer.content[region[0]:region[1]]]
