@@ -254,15 +254,15 @@ def addedByVC(flag):
 #    trace('sr_interfacen.addedByVC', 'indicator=%s' % indicator)
     return indicator
 
-def getWordInfo(word, *rest):
+def getWordInfo(word, flag = None):
     
 #    trace('sr_interface.getWordInfo', 'word=%s, rest=%s' % (word, rest))
     
     try:
-       if len(rest) == 0:
+       if flag is None:
            answer = natlink.getWordInfo(word)
-       elif len(rest) == 1:
-           answer = natlink.getWordInfo(word, rest[0])
+       else:
+           answer = natlink.getWordInfo(word, flag)
     except:
        # In case the word's spelling is not allowed by
        # NatSpeak
