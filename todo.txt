@@ -35,3 +35,10 @@ we could have:
 
 spoken_forms=['after* (semi|semicolon|;)', 'go after* (semi|semicolon|;)']
 
+
+Symbol translation
+------------------
+
+- When a word in a symbol doesn't correspond to an in-vocab word or a
+  known abbreviation, we should see if it's a concatenation or such
+  words and/or abbreviations.

@@ -23,8 +23,9 @@
   5: {
   6:   move_horiz(x);
   7:   move_vert(y)
-  8: }
-  9: 
+  8:     horiz_pos = 0;
+  9: }
+ 10: 
 
 *** End of source buffer ***
 
@@ -49,8 +50,9 @@
   8: {
   9:   move_horiz(x);
  10:   move_vert(y)
- 11: }
- 12: 
+ 11:     horiz_pos = 0;
+ 12: }
+ 13: 
 
 *** End of source buffer ***
 
@@ -79,7 +81,7 @@
   1: # This is a small test buffer for Python
   2: 
   3: 
-  4:    for index in :
+  4:    for index:
   5:    
   6: <CURSOR>class AClass(ASuper):
   6:     """This is a dummy class"""
@@ -108,8 +110,9 @@
   3: {
   4:   move_horiz(x);
   5:   move_vert(y)
-  6: }
-  7: 
+  6:     horiz_pos = 0;
+  7: }
+  8: 
 
 *** End of source buffer ***
 
@@ -123,8 +126,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -140,8 +144,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -154,8 +159,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -168,8 +174,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -182,8 +189,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -196,8 +204,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 *** Start of source buffer ***
@@ -208,8 +217,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -222,8 +232,9 @@
   4: {
   5:   move_horiz(x);
   6:   move_vert(y)
-  7: }
-  8: 
+  7:     horiz_pos = 0;
+  8: }
+  9: 
 
 *** End of source buffer ***
 
@@ -249,8 +260,9 @@
   9: {
  10:   move_horiz(x);
  11:   move_vert(y)
- 12: }
- 13: 
+ 12:     horiz_pos = 0;
+ 13: }
+ 14: 
 
 *** End of source buffer ***
 
@@ -277,4 +289,122 @@ Trying to get the value of attribute 'nonexistant'
 
 Trying to set the value of attribute 'nonexistant'
    -> Caught NO AttributeError exception. obj.nonexistant=999, x=0
+
+
+
+*******************************************************************************
+* Name        : SymDict
+* Description : self-test for SymDict.py
+*******************************************************************************
+
+*** Compiling symbols from file: D:\VoiceCode\VCode\Data\TestData\small_buff.c ***
+Parsed symbols are: 
+float: ['float']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+void: ['void']
+x: ['x']
+y: ['y']
+
+
+Unresolved abbreviations are:
+
+*** End of compilation test ***
+
+*** Compiling symbols from file: D:\VoiceCode\VCode\Data\TestData\large_buff.py ***
+Parsed symbols are: 
+AttributeError: ['attribute error']
+LargeNonObject: ['large non object']
+LargeObject: ['large object']
+Object: ['object']
+SmallNonObject: ['small non object']
+SmallObject: ['small object']
+__bases__: ['bases']
+__dict__: ['dict', 'dictionary']
+__init__: ['init', 'initial', 'initialize']
+__name__: ['name']
+a_base: ['a base']
+add_test: ['add test']
+age: ['age']
+an_attr_def: ['an attr def', 'an attr definition', 'an attr default', 'an attr define', 'an attr defined', 'an attr deaf', 'an attribute def', 'an attribute definition', 'an attribute default', 'an attribute define', 'an attribute defined', 'an attribute deaf']
+an_attr_init: ['an attr init', 'an attr initial', 'an attr initialize', 'an attribute init', 'an attribute initial', 'an attribute initialize']
+and: ['and']
+attrs: ['attributes']
+attrs_superclasses: ['attributes superclasses']
+attrs_this_class: ['attributes this class']
+auto_test: ['auto test']
+class: ['class']
+code: ['code']
+code_file: ['code file']
+deep_construct: ['deep construct']
+def: ['def', 'definition', 'default', 'define', 'defined', 'deaf']
+else: ['else']
+environ: ['environ', 'environment']
+exc: ['exc', 'exception']
+except: ['except']
+exceptions: ['exceptions']
+exclude_bases: ['exclude bases']
+exec: ['exec']
+execfile: ['execfile']
+expandvars: ['expandvars']
+float: ['float']
+for: ['for']
+has_key: ['has key']
+her_age: ['her age']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+if: ['if']
+import: ['import']
+in: ['in']
+index: ['index']
+init_attrs: ['init attributes', 'initial attributes', 'initialize attributes']
+items: ['items']
+move: ['move']
+move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
+move_vert: ['move vert', 'move vertical', 'move vertically']
+name: ['name']
+not: ['not']
+num_times: ['num times']
+obj: ['obj']
+operation: ['operation']
+os: ['os', 'operating system', 'O. S.']
+pass: ['pass']
+posixpath: ['posixpath']
+profConstrLargeNonObj: ['prof constr large non obj', 'profile constr large non obj', 'profiling constr large non obj', 'professional constr large non obj']
+profConstrLargeObj: ['prof constr large obj', 'profile constr large obj', 'profiling constr large obj', 'professional constr large obj']
+profConstrSmallNonObj: ['prof constr small non obj', 'profile constr small non obj', 'profiling constr small non obj', 'professional constr small non obj']
+profConstrSmallObj: ['prof constr small obj', 'profile constr small obj', 'profiling constr small obj', 'professional constr small obj']
+profGetLargeNonObj: ['prof get large non obj', 'profile get large non obj', 'profiling get large non obj', 'professional get large non obj']
+profGetLargeObj: ['prof get large obj', 'profile get large obj', 'profiling get large obj', 'professional get large obj']
+profGetSmallNonObj: ['prof get small non obj', 'profile get small non obj', 'profiling get small non obj', 'professional get small non obj']
+profGetSmallObj: ['prof get small obj', 'profile get small obj', 'profiling get small obj', 'professional get small obj']
+profObject: ['prof object', 'profile object', 'profiling object', 'professional object']
+profSetLargeNonObj: ['prof set large non obj', 'profile set large non obj', 'profiling set large non obj', 'professional set large non obj']
+profSetLargeObj: ['prof set large obj', 'profile set large obj', 'profiling set large obj', 'professional set large obj']
+profSetSmallNonObj: ['prof set small non obj', 'profile set small non obj', 'profiling set small non obj', 'professional set small non obj']
+profSetSmallObj: ['prof set small obj', 'profile set small obj', 'profiling set small obj', 'professional set small obj']
+prof_test: ['prof test', 'profile test', 'profiling test', 'professional test']
+profile: ['profile']
+range: ['range']
+run: ['run']
+self: ['self']
+self_test: ['self test']
+sep: ['sep']
+setattr: ['setattr']
+stdout: ['stdout']
+str: ['str']
+sys: ['sys', 'system']
+this_class: ['this class']
+try: ['try']
+try_attribute: ['try attribute']
+void: ['void']
+write: ['write']
+x: ['x']
+y: ['y']
+
+
+Unresolved abbreviations are:
+
+*** End of compilation test ***
 

@@ -122,7 +122,7 @@ When function ends, the template for the shor/long summary of the class is selec
   "Writes template code for a class that is not a subclass of Object (as defined in Object.py)
 
 When function ends, the template for the shor/long summary of the class is selected so that it can easily be deleted with Ctrl-w"
-  (py-class class-name super-classes attrs nil)
+  (py-class class-name super-classes attrs exclude-bases nil)
 )
 
 (defun py-class (class-name super-classes attrs exclude-bases is-object)

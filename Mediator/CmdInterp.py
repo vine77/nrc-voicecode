@@ -1,6 +1,6 @@
-import config, os, re, string
+import os, re, string
 
-import auto_test, natlink, vc_globals
+import auto_test, config, natlink, vc_globals
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
@@ -8,9 +8,10 @@ from cont_gen import ContC, ContPy
 from CSCmd import CSCmd
 from EdSim import EdSim
 from Object import Object
-from VoiceDictation import VoiceDictation
+import SymDict
+import VoiceDictation
 
-class CmdInterp(Object, VoiceDictation):
+class CmdInterp(Object, VoiceDictation.VoiceDictation):
     """Interprets Context Sensitive Commands spoken into a given application.
     
     **INSTANCE ATTRIBUTES**
@@ -22,6 +23,8 @@ class CmdInterp(Object, VoiceDictation):
      is the spoken form of the command, value is a list of contextual
      meanings. A contextual meaning is a pair of a *context object*
      and an *action function* to be fired if the context applies.
+
+    [SymDict] known_symbols -- dictionary of known symbols
     
     *STR cached_regexp=''* -- Regular expresion that matches the
      spoken form of any of the CSCs.
@@ -34,20 +37,22 @@ class CmdInterp(Object, VoiceDictation):
     *none* --
         
     .. [AppState] file:///./AppState.AppState.html
-    .. [Context] file:///./Context.Context.html"""
+    .. [Context] file:///./Context.Context.html
+    .. [SymDict] file:///./SymDict.SymDict.html"""
     
     def __init__(self, app=AppState(), **attrs):
         self.deep_construct(CmdInterp,
                             {'app': app, 'cmd_index': {}, \
+                             'known_symbols': SymDict.SymDict(), \
                              'cached_regexp': '',\
                              'cached_regexp_is_dirty': 1},\
                             attrs)
-        VoiceDictation.initialize(self, 0, self.refresh_dict_buff, self.refresh_editor_buff)
+        VoiceDictation.VoiceDictation.initialize(self, 0, self.refresh_dict_buff, self.refresh_editor_buff)
 
     def refresh_dict_buff(self, moduleInfo):
         """Refresh the dictation object's internal buffer."""
 
-#        print '-- CmdInterp.refresh_dict_buff: called'
+        print '-- CmdInterp.refresh_dict_buff: called'
         buff = self.app.curr_buffer
         text = buff.content
         sel_start = buff.selection_start
@@ -82,7 +87,7 @@ class CmdInterp(Object, VoiceDictation):
 
          *INT sel_start, sel_end* are the start and end position of the selection after the recognition"""
 
-#        print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
+        print '-- CmdInterp.refresh_editor_buff: del_start=%s,del_end=%s,newText=%s,sel_start=%s,sel_end=%s' % (del_start,del_end,newText,sel_start,sel_end)
 
         self.dictation_object.setLock(1)
         
@@ -123,7 +128,7 @@ class CmdInterp(Object, VoiceDictation):
                 #
                 # Allow arbitrary number of spaces between words
                 #
-                a_spoken_form = re.sub('\s+', '\\s*', a_spoken_form)
+                a_spoken_form = re.sub('\s+', '\\s+', a_spoken_form)
 
                 spoken_regexp = self.spoken_form_regexp(a_spoken_form)
                 
@@ -157,26 +162,43 @@ class CmdInterp(Object, VoiceDictation):
         corresponding instructions.
 
         *STR cmd* is the spoken form of the command."""
-
         
         #
         # Interpret the begining of the command until nothing left to
         # interpret.
         #
+        
 #        print '-- CmdInterp.interpret_NL_cmd: self.all_cmds_regexp()=%s' % self.all_cmds_regexp()
         regexp = '^(\s*)(' + self.all_cmds_regexp() + ')(\s*)'
         while (not cmd == ''):
-            amatch = re.match(regexp, cmd)
-            if (amatch):
+            #
+            # Check for a CSC at the beginning of the command, and compute
+            # length of string it consumes
+            #
+            csc_consumes = 0
+            csc_match = re.match(regexp, cmd)
+            if (csc_match):
+                csc_consumes = csc_match.end(2) - csc_match.start(2) + 1
 
+            #
+            # Check if command starts with a known symbol, and compute length
+            # of string it consumes
+            #
+            (a_symbol, cmd_without_symbol) = self.chop_symbol(cmd)
+            symbol_consumes = len(cmd) - len(cmd_without_symbol)
+
+#            print '-- CmdInterp.interpret_NL_cmd: csc_consumes=%s, symbol_consumes=%s' % (csc_consumes, symbol_consumes)
+            #
+            # Translate either CSC or known symbol, depending on which of the
+            # two consumes the longest part of the NL command
+            #
+            if csc_consumes and csc_consumes >= symbol_consumes:
                 #
-                # Command starts with the spoken form of a CSC. Try each 
-                # CSC that has this spoken form
+                # The CSC consumes more than the symbol, so translate it.
+                # Try every possible contexts until one applies
                 #                
-                leadblanks = amatch.group(1)
-                trailblanks = amatch.group(3)
-                after = cmd[amatch.end():]
-                orig_spoken_form = amatch.group(2)
+                cmd_without_csc = cmd[csc_match.end():]
+                orig_spoken_form = csc_match.group(2)
 #                print '-- CmdInterp.interpret_NL_cmd: matched spoken form \'%s\'' % orig_spoken_form                                
                 indexed_spoken_form = orig_spoken_form
                 re.sub('\s+', ' ', indexed_spoken_form)
@@ -186,28 +208,132 @@ class CmdInterp(Object, VoiceDictation):
                     applied = aCSC.interpret(self.app)
                     if (applied):
                         break
-                if not applied:
+                if applied:
+#                    print '-- CmdInterp.interpret_NL_cmd: applied CSC \'%s\'' % indexed_spoken_form
+                    cmd = cmd_without_csc
+                else:
                     #
-                    # None of the contex applied. Just insert what was spoken
+                    # None of the contexts applied.
                     #
-                    self.app.insert(leadblanks + orig_spoken_form + trailblanks)
-                cmd = after
+                    if symbol_consumes:
+                        #
+                        # Insert the symbol after all
+                        #
+#                        print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % symbol
+                        self.app.insert(symbol)
+                        cmd = cmd_without_symbol
+                    else:
+                        #
+                        # Just remove a word from the beginning of the
+                        # command and insert it into the application's buffer
+                        #
+#                        print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'
+                        amatch = re.match('(^\s*[^\s]*)', cmd)
+                        self.app.insert_indent(amatch.group(1), '')
+                        cmd = cmd[amatch.end():]
+                        cmd = cmd_without_csc
+                
+            elif symbol_consumes:
+                #
+                # Command doesn't start with CSC, or CSC consumes less than
+                # the symbol.
+                #
+                # So, insert the symbol
+                #
+#                print '-- CmdInterp.interpret_NL_cmd: inserted symbol %s' % a_symbol                
+                self.app.insert_indent(a_symbol, '')
+                cmd = cmd_without_symbol
+
             else:
                 #
-                # Command doesn't start with a CSC. Just remove a word from the
-                # beginning of the command and insert it into the application's
-                # buffer
+                # Command starts with neither CSC or symbol.
+                # Just remove a word from the beginning of the
+                # command and insert it into the application's buffer
                 #
-#                print '-- CmdInterp.interpret_NL_cmd: did NOT match spoken form of a command'
+#                print '-- CmdInterp.interpret_NL_cmd: inserted first word as is'                
                 amatch = re.match('(^\s*[^\s]*)', cmd)
-#                print '-- CmdInterp.interpret_NL_cmd: removing \'%s\' from cmd' % amatch.group(1)
-#                print '-- CmdInterp.interpret_NL_cmd: amatch.group(1)=\'%s\'' % amatch.group(1)
                 self.app.insert_indent(amatch.group(1), '')
                 cmd = cmd[amatch.end():]
-#                print '-- CmdInterp.interpret_NL_cmd: cmd is now \'%s\'' % cmd
 
 
+    def chop_symbol(self, command):
+        """Chops off the beginning of a string if it matches a known symbol.
 
+        If more than one symbols are possible, returns the symbol that
+        consumes the greateest number of words from command.
+        
+        **INPUTS**
+        
+        *STR* command -- the string from which we want to chop off a symbol.
+        
+
+        **OUTPUTS**
+
+        Returns a pair *(best_symbol, rest)* where:
+        
+        *STR* best_symbol -- is the symbol that was chopped off (in native
+         format). If *None*, it means *command* did not start with a
+         symbol.
+
+        *STR* rest -- is what was left of *command* after the symbol
+         was chopped off.
+        
+        """
+
+#        print '-- CmdInterp.chop_symbols: command=%s' % command
+
+        (best_symbol, rest) = (None, command)
+
+        #
+        # Split the command into words
+        #
+        command = re.sub('(\W+)', ' \\1 ', command)
+        command = re.sub('(^\s+|\s+$)', '', command)
+        words = re.split('\s+', command)                
+        upto = len(words)
+
+        #
+        # Starting with the whole command and dropping words from the end,
+        # check if that corresponds to a known symbol.
+        #
+        while upto:
+            a_spoken_form = string.join(words[0:upto], ' ')
+            a_spoken_form = string.lower(a_spoken_form)
+#            print '-- CmdInterp.chop_symbols: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
+            if self.known_symbols.spoken_form_info.has_key(a_spoken_form):
+                # This corresponds to the spoken form of a symbol
+#                print '-- CmdInterp.chop_symbols: matches a known symbol'
+                best_symbol = self.choose_best_symbol(a_spoken_form, self.known_symbols.spoken_form_info[a_spoken_form].symbols)
+                words = words[upto:]
+                rest = string.join(words, ' ')
+                break
+            upto = upto - 1
+        return (best_symbol, rest)
+        
+        
+
+
+    def choose_best_symbol(self, spoken_form, choices):
+        """Chooses the best match for a spoken form of a symbol.
+
+        For now, we just choose the first item in *choices*, but in
+        the future, we might choose the one that appears closest to
+        the cursor, or the one that used most recently, or the one
+        that best matches the spoken form.
+        
+        **INPUTS**
+        
+        *STR* spoken_form -- spoken form of the symbol. 
+        
+        *ANY* choices -- undocumented 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        return choices[0]
 
     def index_csc(self, acmd):
         """Add a new csc to the command interpreter's command dictionary
@@ -242,47 +368,47 @@ class CmdInterp(Object, VoiceDictation):
             else:
                 #
                 # First time indexed. Create a new list of CSCs for that
-                # spoken form, and add it to the SR vocabulary
+                # spoken form, and add it to the SR vocabulary.
                 #
                 self.cmd_index[a_spoken_form] = [acmd]
                 if not os.environ.has_key('VCODE_NOSPEECH'):
-                    natlink.addWord(a_spoken_form)
+                    VoiceDictation.addWord(a_spoken_form)
 
 def self_test():    
     #
     # Create a command interpreter connected to the editor simulator
     #
-    vc_globals.interp = CmdInterp(app=EdSim())
+    config.interp = CmdInterp(app=EdSim())
     acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings=[[ContC(), c_simple_for], [ContPy(), py_simple_for]])
     config.add_csc(acmd)
     acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings=[[ContC(), c_goto_body], [ContPy(), py_goto_body]])
     config.add_csc(acmd)
 
     
-    vc_globals.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
-    vc_globals.interp.app.goto(41)
+    config.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
+    config.interp.app.goto(41)
     print '\n\n>>> Testing command interpreter\n\n'
     print '\n>>> Interpreting \'for loop index loop body\' in a C buffer'    
     print '\n>>> Current buffer is:\n'
-    vc_globals.interp.app.print_buff_content()
-    vc_globals.interp.interpret_NL_cmd('for loop index loop body')
+    config.interp.app.print_buff_content()
+    config.interp.interpret_NL_cmd('for loop index loop body')
     print '\n>>> Buffer is now:'
-    vc_globals.interp.app.print_buff_content()
+    config.interp.app.print_buff_content()
     
 
-    vc_globals.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
-    vc_globals.interp.app.goto(43)
-    vc_globals.interp.app.curr_buffer.language = 'python'
+    config.interp.app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    config.interp.app.goto(43)
+    config.interp.app.curr_buffer.language = 'python'
     print '\n>>> Interpreting \'for loop index loop body\' in a Python buffer'    
     print '\n>>> Current buffer is:\n'
-    vc_globals.interp.app.print_buff_content()
-    vc_globals.interp.interpret_NL_cmd('for loop index loop body')
+    config.interp.app.print_buff_content()
+    config.interp.interpret_NL_cmd('for loop index loop body')
     print '\n>>> Buffer is now:'
-    vc_globals.interp.app.print_buff_content()
+    config.interp.app.print_buff_content()
 
 
 #
-# Initialise vc_globals.interp here instead of in vc_globals.py.
+# Initialise config.interp here instead of in vc_globals.py.
 # This is because CmdInterp.py imports vc_globals.py. But when vc_globals.py
 # is imported from CmdInterp.py, the class CmdInterp is not yet defined.
 # Therefore we couldn't access CmdInterp.CmdInterp() from within vc_globals.py
@@ -290,7 +416,10 @@ def self_test():
 #
 # This is a silly problem with Python really...
 #
-vc_globals.interp = CmdInterp(app=EdSim())
+#
+# Actually, now we have put the interp object in config.py, cause circular
+# reference problems kept creeping up.
+# config.interp = CmdInterp(app=EdSim())
 
 
 #

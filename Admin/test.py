@@ -8,7 +8,7 @@ import os, natlink, posixpath
 #
 os.environ['VCODE_NOSPEECH'] = '1'
 
-import auto_test, debug, EdSim, util
+import auto_test, util
 
 def usage():
     print """
@@ -41,9 +41,26 @@ output1, output2 :
     """
 
 
+import natlink, os, posixpath
+
+#
+# Make sure we run tests without connecting to NatSpeak
+#
+# Must do this before importing other VoiceCode files because creation and
+# initialisation of VoiceDictation may try to link with NatSpeak
+#
+os.environ['VCODE_NOSPEECH'] = '1'
+
+import auto_test, util, vc_globals
+
+
 if (__name__ == '__main__'):
-
-
+    config_file = vc_globals.config + os.sep + 'vc_config.py'
+    try:
+        execfile(config_file)
+    except Exception, err:
+        print 'ERROR: in configuration file %s.\n' % config_file
+        raise err
 
     opts, args = util.gopt(('d', None, 'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py'), 'h', None))
     
@@ -57,8 +74,9 @@ if (__name__ == '__main__'):
 
 
     #
-    # Loading VoiceDictation caused a connection to NatSpeak.
+    # Loading VoiceDictation may have caused a connection to NatSpeak.
     # Need to disconnect otherwise the DOS window hangs up after script
     # terminates.
     #
     natlink.natDisconnect()
+
