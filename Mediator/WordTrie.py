@@ -138,6 +138,32 @@ class WordTrie(Object):
             matches = self.branches[word].all_matches(rest)
         return matches
 
+    def all_phrase_values(self, prefix = None):
+        """returns a set of all phrases defined in the WordTrie,
+        starting (optionally) with a given prefix
+
+        **INPUTS**
+
+        *[STR] prefix* -- optionally, restrict the set of phrases
+        returned to those starting with this sequence of words
+
+        **OUTPUTS**
+
+        *[([STR], ANY)]* --  list of (phrase, value) tuples 
+        """
+        if prefix:
+            word = prefix[0]
+            rest = prefix[1:]
+            if self.branches.has_key(word):
+                return self.branches[word].all_phrase_values(rest)
+            return []
+        results = []
+        for word, branch in self.branches.items():
+            branch_results = branch.all_phrase_values()
+            for phrase, value in branch_results:
+                results.append([word] + phrase, value)
+        return results
+
 def test_translator(w, sentence):
     phrase = string.split(sentence)
     output = ""

@@ -27,6 +27,7 @@ from Object import Object, OwnerObject
 import sb_services, SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, PickledObject, sr_interface, vc_globals
+import WordTrie
 import DictConverter
 import util
 from debug import trace
@@ -43,7 +44,7 @@ import traceback
 
 language_definitions={}
 
-current_version = 3
+current_version = 4
 
 #
 # Minimum length for an abbreviation (short abbreviations tend to introduce
@@ -247,6 +248,9 @@ class SymbolInfo(Object):
                             attrs, \
                             {})
 
+# NOTE: This class is no longer used by SymDict, but must be kept
+# because it is used by the persistent storage of SymDict before 
+# version 4.  
 class SpokenFormInfo(Object):
     """Stores information about a spoken form for a parsed symbol.
     
@@ -395,10 +399,8 @@ class SymDict(OwnerObject):
      symbols. Key is the native written form of the symbol and the
      value is the information about that symbol.
 
-    *{STR:* [SpokenFormInfo] *}* spoken_form_info={} -- Dictionary of
-     resolved spoken forms for known symbols. The key is a resolved
-     spoken form and the value is the list of written native symbols
-     with that spoken form.
+    *WordTrie* spoken_form_info -- WordTrie data structure which maps
+     spoken forms to written forms of known symbols.
 
     *{STR: [STR]}* abbreviations -- Dictionary of preferred
      abbreviations for words.  The key is the word, and the value is a
@@ -471,7 +473,6 @@ class SymDict(OwnerObject):
         
     .. [LangDef] file:///./LangDef.LangDef.html
     .. [SymbolInfo] file:///./SymDict.SymbolInfo.html
-    .. [SpokenFormInfo] file:///./SymDict.SpokenFormInfo.html
     .. [symbols_as_one_string] file:///./SymDict.SymDict.html#symbols_as_one_string"""
 
     def __init__(self, sym_file = None, interp = None, 
@@ -479,7 +480,7 @@ class SymDict(OwnerObject):
 
         # These attributes can't be set with constructor arguments
         self.decl_attrs({'_cached_symbols_as_one_string': '',
-                         'spoken_form_info': {},
+                         'spoken_form_info': WordTrie.WordTrie(),
                          'symbol_info': {},
                          'abbreviations': {},
                          'alt_abbreviations': {},
@@ -563,6 +564,40 @@ class SymDict(OwnerObject):
 
         f.close()
 
+    def match_phrase(self, phrase):
+        """looks for a complete or partial (prefix) match of the
+        phrase to the spoken forms of known symbols.
+        returns the value corresponding to the longest prefix of the
+        given phrase which appears in the WordTrie
+
+        **INPUTS**
+
+        *[STR] phrase* -- list of words to match
+
+        **OUTPUTS**
+
+        *([STR], [STR])* -- the list of written forms of known symbols
+        corresponding to the partial phrase, together with any 
+        remaining unmatched words from the phrase
+        """
+        return self.spoken_form_info.match_phrase(phrase)
+
+    def complete_match(self, phrase):
+        """returns the list of symbols with spoken forms exactly
+        matching a given phrase
+
+        **INPUTS**
+
+        *[STR] phrase* -- list of words to match
+
+        **OUTPUTS**
+
+        *[STR]* -- list of written forms of symbols whose spoken 
+        forms match the phrase, or None if no match was found
+        """
+        return self.spoken_form_info.complete_match(phrase)
+
+  
     def _add_corresponding_expansion(self, abbreviation, expansion):
         """private method to add expansions for an abbreviation corresponding 
         to the mapping a word to its abbreviation.  
@@ -1198,7 +1233,7 @@ class SymDict(OwnerObject):
             #
             for a_spoken_form in user_supplied_spoken_forms:
                 if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
-                    self.symbol_info[symbol].spoken_forms = self.symbol_info[symbol].spoken_forms + [a_spoken_form]
+                    self.symbol_info[symbol].spoken_forms.append(a_spoken_form)
 
             trace('SymDict.add_symbol', 'new symbol spoken forms = %s' %
                 self.symbol_info[symbol].spoken_forms)
@@ -1236,10 +1271,13 @@ class SymDict(OwnerObject):
         # Store information about the symbol and its spoken forms
         #
         for a_form in forms_this_symbol:
-            if self.spoken_form_info.has_key(a_form):
-                self.spoken_form_info[a_form].symbols = self.spoken_form_info[a_form].symbols + [symbol]
+            phrase = string.split(a_form)
+            symbol_list = self.spoken_form_info.complete_match(phrase)
+            if symbol_list is None:
+                symbol_list = [symbol]
             else:
-                self.spoken_form_info[a_form] = SpokenFormInfo(symbols=[symbol])
+                symbol_list.append(symbol)
+            self.spoken_form_info.add_phrase(phrase, symbol_list)
             #
             # Add spoken form to NatSpeak's vocab if not already there.
             #
@@ -1855,7 +1893,9 @@ class SymDict(OwnerObject):
         # Delete vocabulary entries for symbols
         #
         if clean_sr_voc:
-            for (a_form, a_form_info) in self.spoken_form_info.items():
+            for (phrase, symbol_list) in \
+                self.spoken_form_info.all_phrase_values():
+                a_form = string.join(phrase)
         
                 #
                 # This spoken form was added specifically by VoiceCode.
@@ -1871,7 +1911,7 @@ class SymDict(OwnerObject):
                     #
                     # Remove every spoken\written entry in the vocabulary
                     #
-                    for a_written_form in self.spoken_form_info[a_form].symbols:
+                    for a_written_form in symbol_list:
                         entry = sr_interface.vocabulary_entry(a_form, a_written_form)
                         sr_interface.deleteWord(entry)
 
@@ -1880,7 +1920,7 @@ class SymDict(OwnerObject):
         #
         if clean_symdict:
 #            print '-- SymDict.cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
-            self.spoken_form_info = {}
+            self.spoken_form_info = WordTrie.WordTrie()
             self.symbol_info = {}
             for an_unresolved in self.unresolved_abbreviations.keys():
 #                print '-- SymDict.cleanup: removing unresolved abbreviation %s' % an_unresolved
@@ -1907,6 +1947,25 @@ class SymDict(OwnerObject):
         if resave: self.save()
             
 
+    def _version_update(self, old_version):
+        """private method to rename an old version of a persistent SymDict 
+        file after we have successfully converted it to a new version
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        file = self.sym_file
+        name, ext = os.path.splitext(file)
+        backup = name + '.%d' % old_version + ext
+        if os.path.exists(backup):
+            shutil.copyfile(backup, backup + '.bak')
+        shutil.copyfile(file, backup)
+        os.remove(file)
 
     def _failed_read(self, msg, fatal = 0):
         """private method to rename a persistent SymDict file if we fail 
@@ -2006,9 +2065,13 @@ class SymDict(OwnerObject):
                         + ' from version %s to %s\n' % (version, current_version)
                     msg = msg + str(e) + '\n'
                     raise ErrorReadingPersistDict(msg)
+                else:
+                    self._version_update(version)
             okay = self.init_from_dictionary(values)
             if okay:
                 self.file_time = util.last_mod(self.sym_file)
+                if version != current_version:
+                    self.save()
             return okay
         except ErrorReadingPersistDict, e:
             self._failed_read(e.message, fatal = 1)
@@ -2227,6 +2290,8 @@ class SymDictSingleConverter(DictConverter.SingleVersionDictConverter):
         """
         return SymDict
 
+# obsolete because we switched file formats after version 2, but leave
+# as an example for now
 class AddSymbolSourcesRead(SymDictSingleConverter):
 
     def __init__(self, **args):
@@ -2273,6 +2338,56 @@ class AddSymbolSourcesRead(SymDictSingleConverter):
             raise DictConverter.ConversionFailure(msg)
         return d
 
+class SpokenFormsAsWordTrie(SymDictSingleConverter):
+
+    def __init__(self, **args):
+        self.deep_construct(AddSymbolSourcesRead, {}, args,
+           enforce_value = {'initial_version': 3,
+                            'final_version': 4})
+
+    def convert(self, original, initial_version):
+        """converts a dictionary from one version to another
+
+        NOTE: If DictConverter is unable to convert the dictionary, it
+        will raise a ConversionFailure exception
+
+        **INPUTS**
+
+        *INT initial_version* -- initial version of the dictionary
+
+        *[ANY:ANY] original* -- original dictionary
+        
+        *none*
+
+        **OUTPUTS**
+
+        *[ANY:ANY]* -- final dictionary
+        """
+        if initial_version != self.initial:
+            msg =  "unknown version %s" % initial_version
+            raise DictConverter.ConversionFailure(msg)
+        try:
+            d = copy.deepcopy(original)
+            d['version'] = self.final_version()
+            new_spoken = WordTrie.WordTrie()
+            for spoken_form, form_info in d['spoken_form_info'].items():
+                phrase = string.split(spoken_form)
+                new_spoken.add_phrase(phrase, form_info.symbols)
+            d['spoken_form_info'] = new_spoken
+        except:
+            extype, value, trace = sys.exc_info()
+            ex = traceback.format_exception(extype, value, trace)
+            msg = 'Unexpected exception:\n'
+            for line in ex:
+                msg = msg + line
+            msg = msg + '\converting dictionary data\n'
+            msg = msg + ' read from symbol dictionary file\n%s\n' \
+                  % self.sym_file
+            msg = msg + 'from version %s to %s' % (initial_version,
+                self.final_version())
+            raise DictConverter.ConversionFailure(msg)
+        return d
+
 
 # global converter
 symdict_cvtr = DictConverter.CompoundDictConverter(SymDict, current_version)
@@ -2281,7 +2396,10 @@ symdict_cvtr = DictConverter.CompoundDictConverter(SymDict, current_version)
 # previous version to the current one) to the compound converter, 
 # you must it prepend the new converter to this list:
 
+# obsolete because we switched file formats after version 2
 #symdict_cvtr.add_converter(AddSymbolSourcesRead())
+
+symdict_cvtr.add_converter(SpokenFormsAsWordTrie())
 
 ###############################################################################
 # Configuration functions. These are not methods
