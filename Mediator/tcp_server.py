@@ -36,6 +36,7 @@ import Queue
 import regression
 
 from tcp_threads import *
+from thread_communication_win32 import *
 
 
 

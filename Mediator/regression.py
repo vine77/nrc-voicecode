@@ -28,6 +28,7 @@ import NewMediatorObject
 import CmdInterp
 import EdSim
 import sr_interface
+import traceback
 
 """Classes and methods used to set up the MediatorObject or 
 NewMediatorObject for the next new regression test

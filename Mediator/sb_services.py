@@ -735,6 +735,29 @@ class SB_ServiceState(SB_Service):
 
 	"""
         debug.virtual('SB_ServiceState.restore_state')
+      
+    def compare_states(self, first_cookie, second_cookie, selection = 0):
+        """compares the buffer states at the times when
+	two cookies were returned by store_current_state.  By default,
+	only the buffer contents are compared, not the selection, unless
+	selection == 1.  If the state corresponding to either cookie has
+	been lost, compare_states will return false.
+
+	**INPUTS**
+
+	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+	*BOOL* selection -- compare selection as well as contents
+
+	**OUTPUTS**
+
+	*BOOL* -- true if states are the same, false if they are not, or
+	it cannot be determined due to expiration of either cookie
+	"""
+        debug.virtual('SourceBuff.compare_states')
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
@@ -874,7 +897,39 @@ class SB_ServiceFullState(SB_ServiceState):
         self.buff.set_selection(cookie.get_selection())
         self.buff.print_buff_if_necessary()
         return 1
+      
+    def compare_states(self, first_cookie, second_cookie, selection = 0):
+        """compares the buffer states at the times when
+	two cookies were returned by store_current_state.  By default,
+	only the buffer contents are compared, not the selection, unless
+	selection == 1.  If the state corresponding to either cookie has
+	been lost, compare_states will return false.
 
+	**INPUTS**
+
+	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+	*BOOL* selection -- compare selection as well as contents
+
+	**OUTPUTS**
+
+	*BOOL* -- true if states are the same, false if they are not, or
+	it cannot be determined due to expiration of either cookie
+	"""
+# if unable to make comparison, treat as false
+        if not self.valid_cookie(first_cookie):
+            return 0
+        if not self.valid_cookie(second_cookie):
+            return 0
+
+        if first_cookie.contents() != second_cookie.contents():
+            return 0
+        if not selection:
+            return 1
+        return first_cookie.get_selection() == second_cookie.get_selection()
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when

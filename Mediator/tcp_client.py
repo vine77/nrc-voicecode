@@ -25,8 +25,8 @@ AppStateMessaging and communicating with it via the ServerMainThread classes in 
 
 import vc_globals
 
-import os, posixpath, pythoncom, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom, win32event
+import os, posixpath, re, select, socket
+import SocketServer, string, sys, threading, time, whrandom
 
 import AppState
 

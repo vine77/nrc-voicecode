@@ -126,6 +126,46 @@ class ResMgrStd(ResMgr):
                             },
                             args)
         
+    def _std_interp(self, result, app, initial_buffer = None, 
+        before_cbk = None, after_cbk = None):
+        """internal method for the standard sequence of calls to
+        interpret the result of recognition by a dictation grammar,
+        with callbacks to allow the caller to store the relevant 
+        information to allow for correction.
+
+        **INPUTS**
+
+        *SpokenUtterance result* -- a SpokenUtterance object
+        representing the recognition results
+
+        *AppState app* -- the AppState interface to the editor (or a
+        proxy object)
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        *FCT* before_cbk -- a callback function, 
+        before_cbk(*STR* initial_buffer), to be called before
+        interpretation starts, or None to do nothing
+
+        *FCT* after_cbk -- a callback function, 
+        after_cbk(*STR* initial_buffer), to be called after
+        interpretation is done, or None to do nothing
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if before_cbk:
+            before_cbk(initial_buffer = initial_buffer)
+        interp = self.interpreter()
+        words = result.words()
+        interp.interpret_command_tuple(words, app, 
+            initial_buffer = initial_buffer)
+        if after_cbk:
+            after_cbk(initial_buffer = initial_buffer)
+        app.print_buff_if_necessary(buff_name = self.buff_name)
+
     def interpret_dictation(self, result, initial_buffer = None):
         """interpret the result of recognition by a dictation grammar,
         and store the relevant information to allow for correction.
@@ -142,44 +182,8 @@ class ResMgrStd(ResMgr):
 
         *none*
         """
-        self.before_interp(initial_buffer = initial_buffer)
-        interp = self.interpreter()
-        words = result.words()
         app = self.recog_mgr.app_instance(self.name)
-        interp.interpret_command_tuple(words, app, 
-            initial_buffer = initial_buffer)
-        self.after_interp()
-        app.print_buff_if_necessary(buff_name = self.buff_name)
-
-
-    def before_interp(self, initial_buffer = None):
-        """hook for any additional pre-interpretation processing needed by
-        a subclass (e.g. to store buffer states to allow correction)
-        
-        **INPUTS**
-
-        *STR initial_buffer* -- the name of the initial buffer which was
-        active at recognition-starting
-
-        **OUTPUTS**
-
-        *none*
-        """
-        pass
-
-    def after_interp(self):
-        """hook for any additional post-interpretation processing needed by
-        a subclass (e.g. to store buffer states to allow correction)
-        
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *none*
-        """
-        pass
+        self._std_interp(result, app, initial_buffer = initial_buffer)
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the given editor

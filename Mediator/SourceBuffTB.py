@@ -578,6 +578,29 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	"""
         return self.state_srv.restore_state(cookie)
 
+    def compare_states(self, first_cookie, second_cookie, selection = 0):
+        """compares the buffer states at the times when
+	two cookies were returned by store_current_state.  By default,
+	only the buffer contents are compared, not the selection, unless
+	selection == 1.  If the state corresponding to either cookie has
+	been lost, compare_states will return false.
+
+	**INPUTS**
+
+	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+	*BOOL* selection -- compare selection as well as contents
+
+	**OUTPUTS**
+
+	*BOOL* -- true if states are the same, false if they are not, or
+	it cannot be determined due to expiration of either cookie
+	"""
+        return self.state_srv.compare_states(first_cookie,
+            second_cookie, selection)
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when

@@ -43,6 +43,7 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
 #                      'init_simulator_regression': 1,
