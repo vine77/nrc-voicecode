@@ -30,6 +30,7 @@ from cont_gen import ContC, ContPy
 from CSCmd import CSCmd, DuplicateContextKeys
 from Object import Object, OwnerObject
 import SymDict
+import symbol_formatting
 import sr_interface
 import WordTrie
 
@@ -128,7 +129,7 @@ class LSAlias(Object):
         for language, written_as in meanings.items():
             self.meanings[language] = written_as
 
-class AliasMeaning(DeferInterp, SymDict.SymElement):
+class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
     """underlying object used by CmdInterp to store the data associated 
     with an LSAlias meaning
 
@@ -252,7 +253,7 @@ class CapitalizationWord(Object):
                             },
                             args)
 
-class CapsModifier(DeferInterp, SymDict.SymElement):
+class CapsModifier(DeferInterp, symbol_formatting.SymElement):
     """underlying object used by CmdInterp to store the data associated 
     with a CapitalizationWord
     """
@@ -686,7 +687,7 @@ class CapitalizationWordSet(Object):
             return 0
         return 1
 
-class SymWord(SymDict.SymElement):
+class SymWord(symbol_formatting.SymElement):
     """a word as an element of a symbol 
 
     **INSTANCE ATTRIBUTES**
@@ -721,7 +722,7 @@ class SymWord(SymDict.SymElement):
         else:
             builder.add_word(self.word, self.original)
 
-class NoSeparator(SymDict.SymElement):
+class NoSeparator(symbol_formatting.SymElement):
     """a symbol element which suppresses any separator before the next
     word in the symbol
     """
@@ -741,7 +742,7 @@ class NoSeparator(SymDict.SymElement):
         """
         builder.suppress_separator()
 
-class NoAbbreviation(SymDict.SymElement):
+class NoAbbreviation(symbol_formatting.SymElement):
     """a symbol element which suppresses abbreviation of the next
     word in the symbol
     """
@@ -779,6 +780,9 @@ class CmdInterp(OwnerObject):
      a programming language (None means all languages). Value is a
      WordTrie of AliasMeaning objects over spoken form phrases
 
+    *SymBuilderFactory builder_factory* -- factory for creating new
+    SymBuilder objects
+
     BOOL *disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
     
@@ -815,20 +819,14 @@ class CmdInterp(OwnerObject):
         which owns this CmdInterp instance
         """
 
-        #
-        # These attributes can't be set at construction time
-        #
-#        self.decl_attrs({})
-
-        #
-        # But these can
-        #
         self.deep_construct(CmdInterp,
                             {'mediator': mediator,
                              'commands': WordTrie.WordTrie(), 
                              'known_symbols': None,
                              'language_specific_aliases': \
                                  {None: WordTrie.WordTrie()},
+                             'builder_factory':
+                                 symbol_formatting.SymBuilderFactory(),
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
                              'add_sr_entries_for_LSAs_and_CSCs': 1},
                             attrs)
@@ -1422,9 +1420,44 @@ class CmdInterp(OwnerObject):
 
         *SymBuilder* -- the new symbol builder
         """
-        # eventually, this should be context-dependent, but for now,
-        # just return the simplest case
-        return SymDict.BuildUnder()
+        buff = app.curr_buffer()
+        return self.builder_factory.new_builder(buff)
+
+    def add_identifier(self, identifier, parent = None):
+        """defines a new identifier type for the SymBuilderFactory
+
+        *STR identifier* -- name of the new identifier type (must NOT be
+        a known identifier type, or a RuntimeError will be raised)
+
+        *STR parent* -- name of the parent (must be a known identifier
+        type, or None, or a RuntimeError will be raised)
+
+        **OUTPUTS**
+        """
+        self.builder_factory.add_identifier(identifier, parent = parent)
+ 
+    def set_builder_preferences(self, builders, identifier = None, 
+        language = None):
+        """establishes the preferred order for symbol formatting styles
+        for a given language and identifier type
+
+        **INPUTS**
+
+        *[STR] builders* -- prioritized list of names of registered SymBuilder
+        objects. If one of the builders is unknown, set_preferences raises 
+        a RuntimeError.
+
+        *STR identifier* -- name of the identifier to which these
+        preference apply, or None to set general preferences for all
+        identifiers without their own preferences.  If the identifier type 
+        is unknown, set_preferences raises a RuntimeError.
+
+        *STR language* -- name of the language to which these
+        preference apply, or None to set general preferences for all
+        languages
+        """
+        self.builder_factory.set_preferences(builders, identifier =
+            identifier, language = language)
 
     def make_word_element(self, word):
         """creates a SymWord symbol element corresponding to a word
@@ -2185,3 +2218,6 @@ def process_initials(spoken):
     if re.match('[A-Z]\.$', spoken):
         return string.lower(spoken[0])
     return spoken
+
+# defaults for vim - otherwise ignore
+# vim:sw=4
