@@ -718,6 +718,7 @@ class AppState(OwnerObject):
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
     'get_selection', 'goto_end_of_selection', 'set_selection', 
     'contents', 'get_text', 'distance_to_selection', 'get_visible',
+    'set_text',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'delete', 'goto', 'goto_line', 'move_relative_line',
@@ -2080,8 +2081,6 @@ class AppState(OwnerObject):
         #
         self.close_all_buffers(-1)
 
-
-
     def close_all_buffers(self, save=0):
         """Tell the editor to close all buffers known to VoiceCode
         
@@ -2098,8 +2097,10 @@ class AppState(OwnerObject):
         """
 
 #        print '-- AppState.close_all_buffers: called'
-        for a_buff_name in self.open_buffers.keys():
+        for a_buff_name in self.open_buffers_from_app():
             self.close_buffer(a_buff_name, save)
+        for a_buff_name in self.open_buffers.keys():
+            self.close_buffer_cbk(a_buff_name)
 
     def close_buffer(self, buff_name, save=0):
         """close a buffer

@@ -472,6 +472,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.expect=['recog_begin', 'recog_end', 'cur_pos', 
             'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 
             'set_selection', 'get_text', 'make_position_visible', 'len', 
+            'set_text',
             'insert', 'delete', 'goto', 'active_buffer_name', 
             'file_name',
             'indent', 'insert_indent', 
@@ -736,7 +737,10 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 updates = {'action': 'close_buff', 'buff_name': buff_name}
-                update_list = [updates] + self.sel_update(buff_name)
+# this doesn't make any sense -- the buffer doesn't
+# exist any more
+#                update_list = [updates] + self.sel_update(buff_name)
+                update_list = [updates]
                 self.send_updates(update_list)
 
     def open_buffer_cbk(self, instance, buff_name):
@@ -980,6 +984,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         text = arguments['text']
         start = messaging.messarg2int(arguments['start'])
         end = messaging.messarg2int(arguments['end'])
+#        print start, end
         self.awaiting_response = []
         b_name = buff_name
         if b_name == None:

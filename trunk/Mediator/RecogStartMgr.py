@@ -156,6 +156,23 @@ class KnownInstance(Object):
         except ValueError:
             return 0
 
+    def reset_results_mgr(self):
+        """resets the ResMgr objects for a given editor, erasing any 
+        stored utterance and corresponding editor state information.  
+        Normally called only as part of resetting the mediator for 
+        a new regression test
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor whose data should be reset, or
+        None to reset ResMgr data for all editors
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.reset_results_mgr')
+  
 
 # Note: While handling recognition-starting callbacks is the primary function 
 # of the recognition starting manager, the abstract base class RecogStartMgr 
@@ -914,6 +931,157 @@ class RSMInfrastructure(RecogStartMgr):
             self.results[instance].interpret_dictation(result,
                 initial_buffer = initial_buffer)
 
+    def reset_results_mgr(self, instance_name = None):
+        """resets the ResMgr objects for a given editor, erasing any 
+        stored utterance and corresponding editor state information.  
+        Normally called only as part of resetting the mediator for 
+        a new regression test
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor whose data should be reset, or
+        None to reset ResMgr data for all editors
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if instance_name != None:
+            if self.known_instance(instance_name):
+                self.results[instance_name] = \
+                    ResMgr.ResMgrBasic(recog_mgr = self,
+                        instance_name = instance_name)
+        else:
+            for name in self.known_instances():
+                self.reset_results_mgr(name)
+  
+    def stored_utterances(self, instance_name):
+        """queries the ResMgr to see how many dictated utterances have 
+        been stored for the specified editor
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        **OUTPUTS**
+
+        *INT* -- number of utterances which can be retrieved with
+        recent_dictation
+        """
+        try:
+            return self.results[instance_name].stored_utterances()
+        except KeyError:
+            return 0
+
+    def recent_dictation(self, instance_name, n = None):
+        """returns a list of the most recent SpokenUtterance objects for
+        the specified editor
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        *INT n* -- the number of utterances to return, or None to return 
+        all available utterances.
+
+        **OUTPUTS**
+
+        *[(SpokenUtterance, BOOL)]* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        Note:  These utterances should not be stored permanently, nor
+        should they be modified except as part of the correction
+        process.  Also, the status of whether a given utterance can be
+        re-interpreted may change if the user makes other changes to the 
+        """
+        try:
+            return self.results[instance_name].recent_dictation(n = n)
+        except KeyError:
+            return None
+
+    def scratch_recent(self, instance_name, n = 1):
+        """undo the effect of the most recent n utterances into the
+        specified editor, if possible.
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        *INT n* -- number of utterances to undo
+
+        **OUTPUTS**
+
+        *INT* -- number of utterances actually undone
+        """
+        try:
+            return self.results[instance_name].scratch_recent(n = n)
+        except KeyError:
+            return 0
+
+    def reinterpret_recent(self, instance_name, changed):
+        """undo the effect of one or more recent utterances into the
+        specified editor, if possible, and reinterpret these utterances
+        (and possibly any intervening utterances), making the
+        appropriate changes to the editor buffers.
+
+        **Note:** additional dictation into the editor will increment
+        the indices of specific utterances, so the mediator must not
+        allow dictation into the editor between the call to 
+        recent_dictation to get the utterances and the call to 
+        reinterpret_recent.
+
+        **Note:** this method does not perform adaption of the changed
+        utterances.  The caller should do that itself.
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        *[INT] changed* -- the indices into the stack of recent
+        utterances of those utterances which were corrected by the user
+
+        **NOTE:** particular implementations of ResMgr may reinterpret 
+        all utterances subsequent to the oldest changed utterance
+
+        **OUTPUTS**
+
+        *[INT]* -- the indices of the utterances actually reinterpreted
+        (including intervening ones), sorted with the oldest first, or 
+        None if no utterances could be reinterpreted
+        """
+        try:
+            return self.results[instance_name].reinterpret_recent(changed)
+        except KeyError:
+            return None
+   
+    def can_reinterpret(self, instance_name, n):
+        """can we safely reinterpret the nth most recent utterance
+        into the specified editor
+
+        **INPUTS**
+
+        *STR instance_name* -- the editor 
+
+        *INT n* -- the depth in the editor state stack of the utterance
+        to be reinterpreted
+
+        **OUTPUTS**
+
+        *BOOL* -- true if we can safely reinterpret that utterance
+        """
+        try:
+            return self.results[instance_name].can_reinterpret(n = n)
+        except KeyError:
+            return 0
+   
     def _add_instance(self, instance, window_id = None, module = None):
         """private method to add a new instance with a given target
 	window and module
@@ -942,7 +1110,7 @@ class RSMInfrastructure(RecogStartMgr):
         self.grammars[instance] = \
             self.GM_factory.new_manager(app, instance_name = instance, 
                 recog_mgr = self)
-        self.results[instance] = ResMgr.ResMgrStd(recog_mgr = self,
+        self.results[instance] = ResMgr.ResMgrBasic(recog_mgr = self,
             instance_name = instance)
         return 1
 
@@ -1661,7 +1829,7 @@ class RSMBasic(RSMInfrastructure):
                 self.GM_factory.new_global_manager(app, 
                     instance_name = instance, 
                     recog_mgr = self, exclusive = exclusive)
-            self.results[instance] = ResMgr.ResMgrStd(recog_mgr = self,
+            self.results[instance] = ResMgr.ResMgrBasic(recog_mgr = self,
                 instance_name = instance)
             self.universal = instance
             return 1

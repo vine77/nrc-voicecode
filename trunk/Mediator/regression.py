@@ -42,6 +42,37 @@ class PersistentConfig(Object.Object):
     def __init__(self, **args):
         self.deep_construct(PersistentConfig, {}, args)
 
+    def editor(self):
+        """returns the instance name of the editor instance being used
+        for regression testing, if we are using NewMediatorObject,
+        otherwise None
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the editor instance, or None if we are
+        using the old MediatorObject
+        """
+        debug.virtual('PersistentConfig.editor')
+
+    def correction_available(self):
+        """indicates whether correction features are available, so that
+        tests which depend on these features can be run conditionally
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- 'basic' or 'advanced', or None if no correction is
+        available
+        """
+        debug.virtual('PersistentConfig.correction_available')
+
     def namespace(self):
         """return a reference to the namespace in which commands are
         found
@@ -116,6 +147,38 @@ class PersistentConfigOldMediator(Object.Object):
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
 
+
+    def editor(self):
+        """returns the instance name of the editor instance being used
+        for regression testing, if we are using NewMediatorObject,
+        otherwise None
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the editor instance, or None if we are
+        using the old MediatorObject
+        """
+        return None
+
+    def correction_available(self):
+        """indicates whether correction features are available, so that
+        tests which depend on these features can be run conditionally
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- 'basic' or 'advanced', or None if no correction is
+        available
+        """
+        return None
+
     def namespace(self):
         """return a reference to the namespace in which commands are
         found
@@ -179,6 +242,9 @@ class PersistentConfigNewMediator(Object.Object):
     regression test definitions file, tests_def, has been (or will be) 
     run with execfile
 
+    *STR correction* -- type of correction available with this mediator
+    ('basic', 'advanced', or None)
+
     *STR editor_name* -- the name of the editor being used for those
     regression tests using a persistent editor 
 
@@ -186,7 +252,7 @@ class PersistentConfigNewMediator(Object.Object):
     dialog/prompt.  Normally disabled except during regression
     """
     def __init__(self, mediator, editor_name, names, 
-        symbol_match_dlg = 1, **args):
+        symbol_match_dlg = 1, correction = None, **args):
         """**INPUTS**
 
 	*{STR:ANY} names* -- the namespace dictionary in which the
@@ -199,6 +265,9 @@ class PersistentConfigNewMediator(Object.Object):
         *STR editor_name* -- the name of the editor being used for those
         regression tests using a persistent editor 
 
+        *STR correction* -- type of correction available with this mediator
+        ('basic', 'advanced', or None)
+
         *BOOL symbol_match_dlg* -- use a CmdInterp with symbol match 
         dialog/prompt.  Normally disabled except during regression
 	"""
@@ -206,11 +275,41 @@ class PersistentConfigNewMediator(Object.Object):
                             {
                              'mediator': mediator,
                              'names': names,
+                             'correction': correction,
                              'editor_name': editor_name,
                              'symbol_match_dlg': symbol_match_dlg
                             }, args)
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
+
+    def editor(self):
+        """returns the instance name of the editor instance being used
+        for regression testing
+            
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the name of the editor instance
+        """
+        return self.editor_name
+
+    def correction_available(self):
+        """indicates whether correction features are available, so that
+        tests which depend on these features can be run conditionally
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- 'basic' or 'advanced', or None if no correction is
+        available
+        """
+        return self.correction
 
     def namespace(self):
         """return a reference to the namespace in which commands are

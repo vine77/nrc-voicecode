@@ -495,6 +495,8 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	*BOOL* -- true if restore was successful
 
 	"""
+        debug.trace('SourceBuffEdSim.restore_state', 
+            '%s calling state server' % self.name())
         return self.state_srv.restore_state(cookie)
       
     def compare_states(self, first_cookie, second_cookie, selection = 0):

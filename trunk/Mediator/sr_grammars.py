@@ -211,8 +211,8 @@ class DictWinGram(WinGram, OwnerObject):
 
         *none*
         """
-        self.manager.interpret_dictation(results, initial_buffer =
-            initial_buffer)
+        self.manager.interpret_dictation(results, \
+            initial_buffer = self.buff_name)
 # old implementation - now taken care of by the ResMgr
 #        interp = self.interpreter()
 #        interp.interpret_NL_cmd(words, self.app,

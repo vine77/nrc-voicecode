@@ -249,7 +249,41 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
         self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
 
 
+    def _new_source_buffer(self, buff_name):
+        
+        """Creates a new [SourceBuff] instance and adds it to the
+        list of open buffers.
 
+	Note: this method should not only be called by other AppState
+	methods, not from outside AppState, and only if such methods
+	have already verified that self.open_buffers doesn't already
+	have a key matching buff_name
+
+	Note: this method does not automatically synchronize the new
+	SourceBuff with an external editor.  Normally, for external editors, 
+	we will be using SourceBuffCached which will be initialized with an 
+	empty cache for the buffer contents, so it will be synchronized
+	the first time someone tries to access the buffer contents.  The
+	caller may force immediate synchronization if it is appropriate.
+        
+        **INPUTS**
+        
+        STR *buff_name* -- unique name of the new buffer
+        
+        **OUTPUTS**
+
+	*SourceBuff* -- the new buffer
+        
+        """
+
+#        print '-- AppState._new_source_buffer: buff_name=%s' % buff_name
+        new_buff = \
+            AppStateNonCached.AppStateNonCached._new_source_buffer(self, 
+                buff_name)
+        f_name = self.the_editor.file_name(buff_name)
+#        print '-- AppState._new_source_buffer: file name=%s' % f_name
+        new_buff.name_file(f_name)
+        return new_buff
 
     def tell_editor_to_open_file(self, file_name):
         """See [AppState.tell_editor_to_open_file()] for doc.
@@ -266,7 +300,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 # so we need to do so
                 if old_buff_name != None: 
                     self.close_buffer_cbk(old_buff_name)
-            self._new_source_buffer(buff_name)
+            buff = self._new_source_buffer(buff_name)
 
         return buff_name
 
@@ -336,8 +370,33 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 # and then delete the old one
             self.open_buffers[new_buff_name] = self.open_buffers[old_name]
             del self.open_buffers[old_name]
+        buff = self.find_buff(new_buff_name)
+        f_name = self.the_editor.file_name(buff_name)
+        buff.name_file(f_name)
         return new_buff_name
       
+    def rename_buffer_cbk(self, old_buff_name, new_buff_name):
+        
+        """Editor invokes this method to notify VoiceCode that it
+        has renamed an existing text buffer.
+        
+        **INPUTS**
+
+        STR *old_buff_name* -- old name of the buffer.
+        STR *new_buff_name* -- new name of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        AppStateNonCached.AppStateNonCached.rename_buffer_cbk(self, 
+            old_buff_name, new_buff_name)
+        buff = self.find_buff(new_buff_name)
+        if buff:
+            f_name = self.the_editor.file_name(new_buff_name)
+            buff.name_file(f_name)
+     
     def is_active(self):
         """is the editor application active (not suspended)?
 
@@ -590,7 +649,9 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
             return 0
         if self.is_bound_to_buffer() == buff_name:
             self.unbind_from_buffer()
+#        print 'ASGE close buffer, save = ', save
         success = self.the_editor.app_close_buffer(buff_name, save)
+#        print 'success = ', success
         if success:
             self.open_buffers[buff_name].cleanup()
             del self.open_buffers[buff_name]

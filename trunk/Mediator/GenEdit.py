@@ -325,7 +325,7 @@ class GenEdit(Object.OwnerObject):
 
 	*BOOL user_initiated* -- indicates whether this method was
 	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
+	In the latter case, it will not invoke the parent AppState's 
 	open buffer callback, because AppState.open_file invokes 
 	the callback itself. 
 
@@ -588,7 +588,7 @@ class GenEditBuffers(GenEdit):
 	"""
         buffer = self.buffers[buff_name]
         if buffer.modified():
-            if buffer.len() != 0 or self.filenames[buff_name] == None: 
+            if buffer.len() != 0 or self.filenames[buff_name] != None: 
 # our method of creating a new buffer when one is closed inadvertently
 # makes the new, empty buffer appear to have been modified
                 return 1
@@ -751,7 +751,7 @@ class GenEditBuffers(GenEdit):
 
 	*BOOL user_initiated* -- indicates whether this method was
 	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
+	In the latter case, it will not invoke the parent AppState's 
 	open buffer callback, because AppState.open_file invokes 
 	the callback itself. 
 
@@ -811,7 +811,7 @@ class GenEditBuffers(GenEdit):
 
 	*BOOL user_initiated* -- indicates whether this method was
 	user-initiated or whether it was called by AppState.
-	In the latter case, it will invoke the parent AppState's 
+	In the latter case, it will not invoke the parent AppState's 
 	open buffer callback, because AppState.open_file invokes 
 	the callback itself. 
 
@@ -826,7 +826,7 @@ class GenEditBuffers(GenEdit):
 	unsaved buffer) or if file_name was omitted and the user cancelled
 	the Open File dialog box
 	"""
-        if not self.multiple:
+        if not self.multiple_buffers():
             buff_name = self.app_active_buffer_name()
             if buff_name != None:
                 if self.modified_buffer(buff_name):
@@ -854,10 +854,18 @@ class GenEditBuffers(GenEdit):
             return None
         if path:
             self.curr_dir = path
-        self.filenames[new_buff_name] = file_name
+# moved to open_file_new_buffer to be before the open_buffer_cbk
+#        self.filenames[new_buff_name] = file_name
 # this is incorrect -- do this in GenEdit filenames and in SourceBuffTB
 # but not TextBufferChangeSpec
 #        self.buffers[new_buff_name].name_file(file_name)
+        if user_initiated and self.app_control:
+            if not self.multiple_buffers():
+# AppStateGenEditor.tell_editor_to_open_file does this, if necessary, 
+# but if we are user-initiated we need to do it ourselves
+                self.app_control.close_buffer_cbk(buff_name)
+# open_file_new_buffer will do this (because if it creates a new frame,
+# it needs to do the open_buffer_cbk before the new_window_cbk)
         self.show_buffer(new_buff_name, perform_callback =
             user_initiated)
 #        print 'after show buffer: buffers = ', self.buffers.keys()
@@ -957,6 +965,7 @@ class GenEditBuffers(GenEdit):
         if path:
             self.curr_dir = path
         new_buff_name = buff_name
+        self.filenames[buff_name] = f_path
         if rename_buff:
 # if the file acquired a new name, rename the buffer accordingly
             if not old_name:
@@ -969,8 +978,7 @@ class GenEditBuffers(GenEdit):
 #                print 'rename on save "%s" to "%s"' % (buff_name, new_buff_name)
                 self.rename_buffer(buff_name, new_buff_name,
                     perform_callback = user_initiated)
-            self.filenames[new_buff_name] = f_path
-            buffer.name_file(f_path)
+#            buffer.name_file(f_path)
             self.update_title(new_buff_name)
         return new_buff_name
 
@@ -1061,18 +1069,24 @@ class GenEditBuffers(GenEdit):
         """
 #        print 'closing buffer "%s"' % buff_name
 #        print 'currently buffers = ', self.buffers.keys()
+#        print 'GenEdit.app_close_buffer, save = ', save
         buffer = self.buffers[buff_name]
         if buffer == None:
             return 0
         if self.modified_buffer(buff_name):
             if save == 1:
+#                print 'saving'
                 self.save_file(buff_name)
             elif save == 0:
+#                print 'prompting'
                 proceed = self.prompt_to_save(buff_name)
                 if not proceed:
                     return 0
+#            else:
+#                print 'neither'
 #        print 'about to delete buffer "%s"' % buff_name
         self.delete_buffer(buff_name)
+#        print 'just deleted buffer "%s"' % buff_name
         return 1
 
 class GenEditFrame(Object.OwnerObject):
@@ -1709,8 +1723,10 @@ class GenEditFrames(GenEditBuffers):
             clear_buffer(buffer)
 #            print 'rename buffer on delete_buffer on last buffer in last window'
 #            print 'from "%s" to "%s"' % (buff_name, new_buff_name)
+            self.filenames[buff_name] = None
             self.rename_buffer(buff_name, new_buff_name,
                 perform_callback = 0) 
+            self.update_title(new_buff_name)
             if perform_callback and self.app_control:
                 new_buff_name = frame.frame_active_buffer_name()
                 self.app_control.curr_buffer_name_cbk(new_buff_name)
@@ -1745,6 +1761,7 @@ class GenEditFrames(GenEditBuffers):
 	the buffer closing to be cancelled.
 	"""
         frame = self.corresponding_frame(buff_name)
+#        debug.print_call_stack()
         return frame.prompt_to_save(buff_name)
 
     def overwrite_prompt(self, buff_name, full_path):
@@ -2187,6 +2204,9 @@ class GenEditSingle(GenEditFrames):
         if success:
             self.rename_buffer(old_buff_name, new_buff_name, 
                 perform_callback = 0)
+            self.filenames[new_buff_name] = file_name
+            if user_initiated and self.app_control:
+                self.app_control.open_buffer_cbk(new_buff_name)
         return success
 
     def multiple_windows(self):
@@ -2286,6 +2306,7 @@ class GenEditSimple(GenEditFrames):
             frame.cleanup()
             frame.close_window()
             return 0
+        self.filenames[new_buff_name] = file_name
         ID = self.add_frame(frame, new_buff_name, user_initiated =
             user_initiated)
         if ID != None:

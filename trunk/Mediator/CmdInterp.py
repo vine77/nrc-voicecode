@@ -311,7 +311,7 @@ class CmdInterp(Object):
         cmd = self.massage_command(cmd)
         self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
 
-    def interpret_cmd_tupes(self, cmd, app, initial_buffer = None):
+    def interpret_cmd_tuples(self, cmd, app, initial_buffer = None):
         
         """Interprets a natural language command and executes
         corresponding instructions.
@@ -492,9 +492,10 @@ class CmdInterp(Object):
                 sys.stdout.write('\n> ')
                 answer = sys.stdin.readline()
                 answer_match = re.match('\s*([\d])+\s*', answer)
-                trace('CmdInterp.dlg_select_symbol_match', 'answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups()))
-#                print '-- CmdInterp.dlg_select_symbol_match: answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups())
-                if answer_match:
+                if not answer_match:
+                    trace('CmdInterp.dlg_select_symbol_match', 'no match')
+                else:
+                    trace('CmdInterp.dlg_select_symbol_match', 'answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups()))
                     choice_index = int(answer_match.group(1)) - 1
                     if choice_index < len(symbol_matches) and choice_index >= -1:
                         good_answer = 1
