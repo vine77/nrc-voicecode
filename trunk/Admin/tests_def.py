@@ -2182,9 +2182,6 @@ auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup,
 def test_temporary():
 
     testing.init_simulator_regression()
-    test_command("""open_file('blah.c')""")
-    test_say(['for', 'loop'])
-#    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
-    test_command("""quit(save_speech_files=0, disconnect=0)""")        
+#    test_command("open_file('%s')" % small_buff_c)
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')
