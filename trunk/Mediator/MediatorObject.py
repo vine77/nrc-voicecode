@@ -86,6 +86,12 @@ class MediatorObject(Object.Object):
 
     [AppState] *app* -- interface to editor 
 
+    *BOOL owns_app* -- does the MediatorObject own the editor app?  If
+    so, it should call app.cleanup() and then delete it when it quits.
+    Normally, this should be true, except if the mediator is created for
+    regression testing purposes with an editor which is reused by the
+    next test.
+
     [CmdInterp] *interp=CmdInterp.CmdInterp()* -- Command interpreter used to
     translate pseudo-code to native code.
     
@@ -118,12 +124,13 @@ class MediatorObject(Object.Object):
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
     def __init__(self, app = None, interp=CmdInterp.CmdInterp(), 
-		 window = 0, exclusive=0,
+		 window = 0, owns_app = 1, exclusive=0,
                  allResults = 0, **attrs):
 #        print '-- MediatorObject.__init__: called, window=%s' % window
         sr_interface.connect('off')        
         self.deep_construct(MediatorObject,
                             {'app': app,
+			     'owns_app': owns_app,
 			     'interp': interp,
                              'mixed_grammar': None,
                              'code_select_grammar': None,
@@ -215,6 +222,14 @@ class MediatorObject(Object.Object):
                 self.code_select_grammar.unload()
 
             disconnect_from_sr(disconnect, save_speech_files)
+
+	if self.mixed_grammar:
+	    self.mixed_grammar.cleanup()
+	if self.code_select_grammar:
+	    self.code_select_grammar.cleanup()
+	if self.owns_app and self.app:
+	    self.app.cleanup()
+	    del self.app
                 
     def add_csc(self, acmd, add_voc_entry=1):
 	"""Add a new Context Sensitive Command.

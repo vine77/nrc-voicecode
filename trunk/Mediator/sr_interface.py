@@ -895,6 +895,10 @@ class CommandDictGrammar(DictGramBase):
 	self.last = None
         self.dictation_allowed = None
 
+    def cleanup(self):
+        del self.app
+	del self.interpreter
+
     def deactivate(self):
 #        print '-- CommandDictGramm.deactivate: called'
 	DictGramBase.deactivate(self)
@@ -1005,6 +1009,9 @@ class CodeSelectGrammar(SelectGramBase):
         self.exclusive = exclusive
         self.allResults = allResults
         self.isActive = 0
+
+    def cleanup(self):
+        del self.app
 
     def load_with_verbs(self):
        """Load the selection grammar using specific verbs

@@ -38,6 +38,9 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     *STR content=None* -- Content of the source buffer
     *BOOL global_selection* -- makes the 'visible' region the whole
     buffer (useful for regression testing)
+  
+    *BOOL* instance_reporting -- flag which turns on diagnostic reporting 
+    to check on proper allocation/de-allocation
 
     [SB_ServiceLang] *lang_srv* -- Language service used to know the
     programming language of a source file.
@@ -55,7 +58,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     
     def __init__(self, indent_level=3, indent_to_curr_level=1, init_pos=0,
                  init_selection = None, initial_contents="",
-                 global_selection = 1,
+                 global_selection = 1, instance_reporting = 0,
                  **attrs):
         
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
@@ -69,10 +72,12 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 			     'global_selection': global_selection,
                              'indent_level': indent_level,
                              'indent_to_curr_level': indent_to_curr_level,
-			     }, 
+			     'instance_reporting': instance_reporting }, 
                             attrs
                             )
 
+	if self.instance_reporting:
+	    print 'SourceBuff.__init__:', self.name()
 	self.pos = self.make_within_range(self.pos)
 	if not self.selection:
 	    self.selection = (self.pos, self.pos)
@@ -80,6 +85,50 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	if (s < e):
 	    self.selection = (self.pos, self.pos)
             
+
+    def __del__(self):
+	"destructor"
+	if self.instance_reporting:
+	    print 'SourceBuff.__del__:', self.name()
+
+    def rename_buffer_cbk(self, new_buff_name):
+        
+        """AppState invokes this method when 
+	AppState.rename_buffer_cbk is called to notify VoiceCode that 
+	an existing text buffer has been renamed
+        
+        **INPUTS**
+
+        STR *new_buff_name* -- new name of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+	if self.instance_reporting:
+	    print 'SourceBuff.rename_buffer_cbk:', self.name(), new_buff_name
+	self.SourceBuffNonCached.rename_buffer_cbk(new_buff_name)
+	
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.instance_reporting:
+	    print 'SourceBuff.cleanup:', self.name()
+        self.lang_srv.cleanup()
+	self.line_srv.cleanup()
+	self.indent_srv.cleanup()
+	SourceBuffNonCached.SourceBuffNonCached.cleanup(self)
 
     def file_name(self):
         return self.name()

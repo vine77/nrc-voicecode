@@ -52,6 +52,22 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         self.deep_construct(SourceBuffTB,
                             {'underlying': underlying_buffer},
                             attrs
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        self.lang_srv.cleanup()
+	self.line_srv.cleanup()
+	self.indent_srv.cleanup()
+	SourceBuffNonCached.SourceBuffNonCached.cleanup(self)
                             )
     def file_name(self):
         return self.buff_name
@@ -489,7 +505,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	    return 0
 	self.set_text(cookie.contents())
 	self.set_selection(cookie.get_selection())
-	self.print_buf_if_necessary()
+	self.print_buff_if_necessary()
 	return 1
 
 

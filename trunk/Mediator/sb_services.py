@@ -50,7 +50,7 @@ variant would have to be cloned and copied to the two classes.
 import Object
 import re
 
-class SB_Service(Object.Object):
+class SB_Service(Object.ChildObject):
     """Support service for SourceBuff classes.
 
     Class for defining some sort of service that can be used by various
@@ -75,6 +75,21 @@ class SB_Service(Object.Object):
                             {'buff': buff}, 
                             args_super, 
                             {})
+    def cleanup(self):
+        """method to cleanup circular references by cleaning up 
+	any children, and then removing the reference to the parent
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        del self.buff
+
+  
 
 class SB_ServiceLang(SB_Service):
 
