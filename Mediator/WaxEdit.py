@@ -37,20 +37,6 @@ class WaxEdit:
 
     *none*
     """
-    def mic_change(self, state):
-	"""function to receive microphone state change callbacks
-
-	**INPUTS**
-
-	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        pass
-# no-op by default, can be overridden
-
     def is_active(self):
 	"""indicates whether the editor frame is active
 
@@ -89,19 +75,3 @@ class WaxEdit:
 	*TextBufferWX* -- the TextBufferWX
 	"""
 	debug.virtual('WaxEdit.editor_buffer')
-    
-    def run(self, app_control):
-	"""starts the message loop.  Note: this function does not
-	return until the GUI exits.
-
-	**INPUTS**
-
-	*AppStateWaxEdit app_control* -- reference to corresponding 
-	AppState interface
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('WaxEdit.run')
-

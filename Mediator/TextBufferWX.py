@@ -55,7 +55,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
     
     *none* --
     """
-    def __init__(self, underlying_control, carriage_return_bug = 1, **args):
+    def __init__(self, underlying_control, **args):
 	"""wraps underlying wxPython wxTextCtrl
 
 	**INPUTS**
@@ -72,7 +72,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 			    'program_initiated':0,
 			    'contents_external': underlying_control.GetValue(),
 			    'contents_internal': '',
-			    'carriage_return_bug':carriage_return_bug,
+			    'carriage_return_bug':1,
 			    'nl': '\n',
 			    'crnl': '\015\n',
 			    'delta_width': 0},
@@ -253,7 +253,6 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	self.program_initiated = 1
 	self.set_selection(s, e)
 	self.underlying.WriteText(text)
-	self.make_position_visible()
 	selection_start, selection_end = self.get_selection()
 	self._on_change_specification(s, e, text, selection_start,
 	    selection_end, self.program_initiated)
@@ -365,21 +364,6 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	"""
 	return len(self.contents_internal)
 
-    def line_height(self):
-        """get number of lines per screen
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUT**
-	
-	*INT* -- number of lines which fit on the screen at a time
-	"""
-	width, height = self.underlying.GetClientSizeTuple()
-	char_height = self.underlying.GetCharHeight()
-	return height/char_height
-
     def get_visible(self):
 	""" get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
@@ -394,11 +378,13 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 	*INT* (start, end) -- visible range
 	"""
 # check this
-	screen  = self.line_height()
+	width, height = self.underlying.GetClientSizeTuple()
+	char_height = self.underlying.GetCharHeight()
 	starting_line = self.underlying.GetScrollPos(wxVERTICAL)
 	start = self.underlying.XYToPosition(0, starting_line)
-	ending_line = starting_line + screen - 1
 	lines = self.underlying.GetNumberOfLines()
+#	print 'heights', height, char_height
+	ending_line = starting_line + height/char_height - 1
 # if ending line of window goes beyond end of buffer, retrace steps
 #	print 'visible'
 	while self.underlying.XYToPosition(0, ending_line) == -1:
@@ -416,18 +402,6 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, NumberedLines):
 #	print start, end
 	return start, end
 
-    def make_position_visible(self):
-	s, e = self.get_visible()
-	p = self.cur_pos()
-	p_internal = self.external_to_internal(p, p)[0]
-	if p > s and p < e:
-	    return
-	if p > e:
-	    x, y = self.underlying.PositionToXY(p_internal)
-	    y = y - self.line_height() + 1
-	    p_internal = self.underlying.XYToPosition(x, y)
-        self.underlying.ShowPosition(p_internal)
-        
     def line_num_of( self, pos = None):
 	"""find line number of position pos
 

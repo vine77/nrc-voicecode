@@ -92,19 +92,14 @@ def cleanup(clean_sr_voc=0):
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
-def init_simulator(app, symdict_pickle_fname=None, 
-    disable_dlg_select_symbol_matches = None, window = 0, editor_app =
-    None):
+def init_simulator(app, symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None, window = 0):
 
 #    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
     
     global the_mediator
 
-    if editor_app:
-	mic_change = editor_app.mic_change
-
     try:
-        sr_interface.connect('off', mic_change_callback = mic_change)
+        sr_interface.connect('off')
     except natlink.UnknownName:
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         cleanup()        
@@ -192,10 +187,7 @@ def simulator_mode(options):
     window = natlink.getCurrentModule()[2]
     app = AppStateWaxEdit.AppStateWaxEdit(editor = editor_app)
 
-    init_simulator(app = app, 
-	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-	disable_dlg_select_symbol_matches = 1, window = window, 
-	editor_app = editor_app)
+    init_simulator(app = app, symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', disable_dlg_select_symbol_matches = 1, window = window)
     
     #
     # For better error reporting, you can type some instructions here
@@ -208,7 +200,7 @@ def simulator_mode(options):
     open_file(file_name)
     
 
-    editor_app.run(app_control = app)
+    editor_app.MainLoop()
         
 if (__name__ == '__main__'):
     

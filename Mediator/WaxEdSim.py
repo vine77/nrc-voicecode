@@ -25,7 +25,6 @@
 import debug
 import traceback
 import sys
-import code # for interpreting Python code at the command line
 from Object import Object
 #import wxEditor
 import TextBufferWX
@@ -35,7 +34,6 @@ from wxPython.wx import *
 import WaxEdit
 
 ID_EXIT = 101
-ID_OPEN_FILE = 150
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
@@ -78,9 +76,6 @@ class WaxEdSimPane(wxPanel):
     *{STR: ANY}* command_space -- local name space for user commands
     entered at the command line
 
-    *InteractiveInterpreter* command_line_interp -- from standard module
-    code
-
     *wxTextControl* log -- text control for log window to display
     output, error messages, and command history
 
@@ -89,7 +84,6 @@ class WaxEdSimPane(wxPanel):
     buffer.
 
     *wxTextControl* editor -- underlying text control for editor window
-
 
     """
 
@@ -109,19 +103,10 @@ class WaxEdSimPane(wxPanel):
 	    ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
         self.top_and_bottom=top_and_bottom
-	flags = wxTE_MULTILINE 
-	cr_bug = 1
-	if sys.platform == 'win32':
-# allows text longer than 64K
-	    flags = flags | wxTE_RICH
-# rich text uses \r only for new lines, so offsets into internal and 
-# external buffers are the same
-#	    cr_bug = 0
         editor =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
-#	    wxDefaultSize, flags)
-	    wxDefaultSize, wxTE_MULTILINE)
+	    wxDefaultSize,wxTE_MULTILINE)
         log =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
-	    wxDefaultSize, flags | wxTE_READONLY)
+	    wxDefaultSize,wxTE_MULTILINE | wxTE_READONLY)
         self.editor = editor
         self.log = log
 	self.prompt_text = "Command> "
@@ -144,16 +129,13 @@ class WaxEdSimPane(wxPanel):
 	self.command_space['the_pane'] = self
 	self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
 	    command_callback = self.on_command_enter)
-	self.command_line_interp = code.InteractiveInterpreter(command_space)
 
         self.prompt_line.Add(self.prompt, 0, wxALL, 4)
         self.prompt_line.Add(self.command_line, 1, wxALL, 4)
 
   
         self.wax_text_buffer = \
-	    TextBufferWX.TextBufferWX(self.editor, 
-	    carriage_return_bug = cr_bug,
-	    change_callback=self.on_editor_change)
+	    TextBufferWX.TextBufferWX(self.editor, change_callback=self.on_editor_change)
         self.SetAutoLayout(1)
         self.SetSizer(self.vbox)
         self.vbox.Fit(self)
@@ -208,11 +190,9 @@ class WaxEdSimPane(wxPanel):
 	    sys.stdout = self.command_log
 	    sys.stderr = self.command_log
 	    try:
-		if self.command_line_interp.runsource(command):
-		    sys.stderr.write('Error: incomplete input\n')
-#	        exec command \
-#		    in sys.modules[self.__class__.__module__].__dict__, \
-#		    self.command_space
+	        exec command \
+		    in sys.modules[self.__class__.__module__].__dict__, \
+		    self.command_space
                 #	  exec command in self.command_space
 	    except Exception, err:
 	        traceback.print_exc()
@@ -254,8 +234,6 @@ class WaxEdSimFrame(wxFrame):
     recently.  Used to restore focus to this window when the user
     switches back to this application from another.
 
-    *AppStateWaxEdit* app_control -- AppState interface
-
     others -- the various menus
     """
 
@@ -263,11 +241,9 @@ class WaxEdSimFrame(wxFrame):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
         wxSize(1000, 600))
 
-	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
-        file_menu.Append(ID_OPEN_FILE,"&Open","Open a file")
 
         window_menu = wxMenu()
         window_menu.Append(ID_FOCUS_EDITOR, "&Editor Window")
@@ -284,7 +260,6 @@ class WaxEdSimFrame(wxFrame):
 
         self.SetMenuBar(menuBar)
         EVT_MENU(self,ID_EXIT,self.quit_now)
-        EVT_MENU(self,ID_OPEN_FILE,self.open_file)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
 	    command_space = command_space)
@@ -342,14 +317,6 @@ class WaxEdSimFrame(wxFrame):
     def quit_now(self, event):
 	print 'closing'
         self.Close(true)
-    def open_file(self, event):
-	init_dir = self.app_control.curr_dir
-        dlg = wxFileDialog(self, "Edit File", init_dir)
-        answer = dlg.ShowModal()
-        if answer == wxID_OK:
-            file_path = dlg.GetPath()
-	    self.app_control.open_file(file_path)
-        
     def on_activate(self, event):
         current = wxWindow_FindFocus()
         if event.GetActive():
@@ -445,37 +412,6 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	*BOOL* -- true if editor window has the focus
 	"""
 	return self.frame.editor_has_focus()
-
-    def mic_change(self, state):
-	"""function to receive microphone state change callbacks
-
-	**INPUTS**
-
-	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	print 'eh?\n'
-	self.frame.pane.command_log.write('Microphone is now '+state+'\n')
-
-
-    def run(self, app_control):
-	"""starts the message loop.  Note: this function does not
-	return until the GUI exits.
-
-	**INPUTS**
-
-	*AppStateWaxEdit app_control* -- reference to corresponding 
-	AppState interface
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.frame.app_control = app_control
-	self.MainLoop()
 
 def run():
     app=WaxEdSim()
