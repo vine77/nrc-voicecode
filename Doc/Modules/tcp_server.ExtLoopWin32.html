@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 16:40:15 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Sep 13 09:00:59 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,9 +24,10 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ExtLoopWin32</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ExtLoopWin32.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">extra_opts=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ExtLoopWin32.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ExtLoopWin32.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ExtLoopWin32.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ExtLoopWin32.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ExtLoopWin32.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start the server as well as the ExtLoopWin32 message loop.</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_server.ExtLoopWin32.server"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ExtLoopWin32.server</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the server</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -46,16 +47,13 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
-class providing an external win32 message message loop for
-ServerOldMediator using win32event</P>
+abstract class providing an external win32 message message loop for
+concrete subclasses of ServerMainThread using win32event</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
 <DL>
 
-<DT>
-<EM>ServerOldMediator server</EM>
-<DD>the underlying server
 <DT>
 <EM>PyHandle evt_new_listen_conn</EM>
 <DD>Win32 event raised when a new
@@ -68,10 +66,6 @@ ServerOldMediator using win32event</P>
 <EM>PyHandle evt_sockets_ready</EM>
 <DD>Win32 event raised when one of the
  active VC_LISTEN sockets has unread data.
-<DT>
-STR <EM>test_suite=None</EM>
-<DD>If not <EM>None</EM>, then upon connection by a
-new editor run regression test suite <EM>test_suite</EM>.
 
 </DL>
 <H2 ID="tcp_server.ExtLoopWin32.data_event" CLASS="Method">tcp_server.ExtLoopWin32.data_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
@@ -148,6 +142,23 @@ does not behave well outside of the main thread.</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="tcp_server.ExtLoopWin32.server" CLASS="Method">tcp_server.ExtLoopWin32.server(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns a reference to the server</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>ServerOldMediator</EM>
+<DD>the underlying server
+
 </DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
