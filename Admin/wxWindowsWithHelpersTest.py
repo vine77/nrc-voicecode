@@ -61,6 +61,24 @@ class wxListCtrlTestDlg(wxDialogWithHelpers):
            last_item = self.last_item_selected[widget]
         return last_item
 
+class wxButtonWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
+   def __init__(self, name):
+      TestCaseWithHelpers.TestCaseWithHelpers.__init__(self, name)
+
+   def setUp(self):
+      self.dlg = wxListCtrlTestDlg()       
+
+   def tearDown(self):
+      self.dlg.Destroy()
+
+   def test_button_Click(self):
+      self.assert_(not self.dlg.button_was_clicked,
+                   "button started out as being clicked.")
+      self.dlg.button.Click()
+      self.assert_(self.dlg.button_was_clicked,
+                   "button was not clicked.")
+
+
 class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
         
     def __init__(self, name):
@@ -110,19 +128,4 @@ class wxDialogWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
 
     def tearDown(self):
        self.dlg.Destroy()
-
-    def test_ClickButton(self):
-       self.assert_(not self.dlg.button_was_clicked,
-                    "button started out as being clicked.")
-       self.dlg.ClickButton(self.dlg.button)
-       self.assert_(self.dlg.button_was_clicked,
-                    "button was not clicked.")
-                    
-    def test_button_Click(self):
-       self.assert_(not self.dlg.button_was_clicked,
-                    "button started out as being clicked.")
-       self.dlg.button.Click()
-       self.assert_(self.dlg.button_was_clicked,
-                    "button was not clicked.")
-
     

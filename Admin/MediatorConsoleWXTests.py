@@ -33,7 +33,6 @@ class MockReformatFromRecentWX(MediatorConsoleWX.ReformatFromRecentWX):
       
    def make_view(self):
       return MockReformatFromRecentViewWX(console = self.console, parent = self.parent,
-                                          symbol = self.symbol,
                                           model = self)   
       
    def reset(self, symbol):
@@ -216,6 +215,7 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
        self.dlg = MediatorConsoleWX.ReformatFromRecentWX \
                         (console = self.console, 
                         parent = None, symbol = self.sym1_1)
+       self.dlg.reset(self.sym1_1)
        # AD: Uncomment this if you want to see what the window looks like. 
 #       self.dlg.ShowModal()
 

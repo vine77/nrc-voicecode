@@ -3649,6 +3649,7 @@ def test_wxWindowsWithHelpers():
    suite = unittest.TestSuite()
    suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxListCtrlWithHelpersTest,'test'))
    suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxDialogWithHelpersTest,'test'))
+   suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxButtonWithHelpersTest,'test'))
 
    unittest.TextTestRunner().run(suite) 
    
