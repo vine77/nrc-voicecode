@@ -1096,7 +1096,7 @@ python_functional.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['range of'],
              meanings={ContPy(): ActionInsert('range(', ')', 
                                      spacing = no_space_after)},
-             docstring='types range(^)')
+             docstring='types range(^)')	
 acmd = CSCmd(spoken_forms=['in range of'],
              meanings={ContPy(): ActionInsert(' in range(', ')', 
                                      spacing = no_space_after)},
