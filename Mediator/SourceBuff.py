@@ -527,9 +527,13 @@ class SourceBuff(Object):
         
         debug.virtual('search_for')
 
-# DCF - replace with refresh if necessary and force refresh
     def refresh_if_needed(self):
 	"""Refresh buffer if necessary"""
+# note: this method is included primarily for the benefit of EdSim,
+# which, being a line editor, needs to refresh its display by reprinting
+# several lines of context around the current cursor position.  Most
+# other editors will automatically refresh the screen on any change, so
+# they need not override this default (no-op) behavior.
 	pass
 
     def refresh(self):

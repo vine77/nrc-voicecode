@@ -329,7 +329,12 @@ class CommandDictGrammar(DictGramBase):
 #        print '-- CommandDictGrammar.gotResults: Heard mixed dictation and commands:%s' % repr(words)
 
         self.interpreter.interpret_NL_cmd(words)
-        self.interpreter.on_app.curr_buffer.print_buff()
+# this is needed for the EdSim mediator simulator.  We want EdSim to
+# refresh at the end of interpretation of a whole utterance, not with 
+# every change to the buffer.  Other editors will usually refresh
+# instantly and automatically, so their AppState/SourceBuff
+# implementations can simply ignore the refresh_if_necessary message.
+        self.interpreter.on_app.curr_buffer.refresh_if_necessary()
         
 
 class CodeSelectGrammar(SelectGramBase):
