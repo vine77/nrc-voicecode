@@ -445,7 +445,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         print "This will eventually show the recent symbols, but it is not implemented yet."
         box = ReformatRecentSymbols(self, self.main_frame, 
                     symbols, self.gram_factory)
-
+                    
 
         answer = self.show_modal_dialog(box)
 #        self.corr_recent_pos = box.GetPositionTuple()
@@ -458,6 +458,12 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 #        else:
 ##            print 'answer was cancel'
 #            return None
+
+    def destroy_main_frame(self):
+        """Destroy the console's main frame"""
+        self.main_frame.Destroy()
+
+
 
 class DlgModelViewWX(MediatorConsole.DlgModelView):
     """wxPython implementation of a Model-View Dialog.
@@ -1740,7 +1746,6 @@ class ReformatRecentSymbols(DlgModelViewWX):
     def __init__(self, console, parent, symbols, 
                  gram_factory, pos = None, dlg_reformat_from_recent=None,
                  **args):                                      
-
        self.deep_construct(ReformatRecentSymbols, 
                            {'symbols': symbols,
                             'console': console,
@@ -1750,6 +1755,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
                             'dlg_reformat_from_recent': dlg_reformat_from_recent
                            },
                            args)
+       self.add_owned('dlg_reformat_from_recent')
 
     def make_view(self):
        return ReformatRecentSymbolsViewWX(self.console, self.parent,
@@ -1781,7 +1787,6 @@ class ReformatRecentSymbols(DlgModelViewWX):
         symbol = self.symbols[nth]
         box = self.make_reformat_from_recent_dlg(symbol)
         answer = self.console.show_modal_dialog(box)
-        box.cleanup()
 
         if answer == wxID_OK:
             return 'ok'
@@ -1810,13 +1815,13 @@ class ReformatRecentSymbols(DlgModelViewWX):
        
        *ReformatFromRecentWX* -- the dialog
        """
-       if self.reformat_from_recent_dlg:
+       if self.dlg_reformat_from_recent:
           self.dlg_reformat_from_recent.reset(symbol)
        else:
           self.dlg_reformat_from_recent = \
               MockReformatFromRecentWX(console = self.console, parent = self.view(), 
                                        symbol = symbol)
-       return self.reformat_from_recent_dlg
+       return self.dlg_reformat_from_recent
        
        
 
@@ -2080,7 +2085,6 @@ class ReformatFromRecentWX(DlgModelViewWX):
     """
 
     def __init__(self, console, parent, symbol, **args):                                      
-
        self.deep_construct(ReformatFromRecentWX, 
                            {'symbol': symbol,
                             'console': console,
@@ -2093,10 +2097,21 @@ class ReformatFromRecentWX(DlgModelViewWX):
        return ReformatFromRecentViewWX(self.console, self.parent,
                                           self.symbol,
                                           model = self)
+                                          
+    def reset(self, symbol):
+       """reinitialise the dialog
+       
+       **INPUTS**
+       
+       SymbolResult symbol -- The symbol to reinitialise with."""
+       
+       self.symbol = symbol
+       self.view().reset(symbol)
+
 
 
 class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, 
-                              Object.OwnerObject):
+                              Object.ChildObject):
     """dialog box for reformatting a single symbol.
 
     **INSTANCE ATTRIBUTES**
@@ -2142,6 +2157,17 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         
         self.name_parent('console')
 
-
+    def reset(self, symbol):
+       """reinitialise the view layer
+       
+       **INPUTS**
+       
+       SymbolResult symbol -- The symbol to reinitialise with."""
+       
+       pass        
+       
+    def cleanup(self):
+       self.Destroy()
+ 
 # defaults for vim - otherwise ignore
 # vim:sw=4
