@@ -1428,7 +1428,6 @@ class CmdInterp(OwnerObject):
     def standard_symbols_in(self, file_list):
         """Compile symbols defined in a series of source files"""
 
-#    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
 
         for a_file in file_list:
             if not a_file in self.known_symbols.standard_symbol_sources:
