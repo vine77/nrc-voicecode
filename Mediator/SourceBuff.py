@@ -19,13 +19,35 @@
 #
 ##############################################################################
 
-"""Interface to a buffer being edited in the programming environment"""
+"""State information for the programming environment."""
 
 
 import debug
 import re, string, sys
 
 from Object import Object
+
+file_language = {'c': 'C', 'h': 'C', 'C': 'C', 'cpp': 'C', 'cc' : 'C', 
+  'py': 'python'}
+
+def language_name(file_name):
+    """Returns the name of the language a file is written in
+    
+    **INPUTS**
+    
+    *STR* file_name -- name of the file 
+    
+    **OUTPUTS**
+
+    *STR* -- the name of the language
+    """
+    global file_language
+
+    #
+    # Create a temporary SourceBuff instance and return its language 
+    #
+    tmp = SourceBuff(None, file_name=file_name)
+    return tmp.language_name()
 
 
 class SourceBuffCookie(Object):
@@ -49,14 +71,16 @@ class SourceBuffCookie(Object):
         self.deep_construct(SourceBuffCookie, {}, attrs)
 
 class SourceBuff(Object):
-    """Interface to a buffer being edited in the programming environment
-   
+    """Class representing a source buffer.
+
     This abstract class defines interface for manipulating buffer containing
     source code in some programming language.
     
     **INSTANCE ATTRIBUTES**
     
-    *STR fname=None* -- Name of the source file loaded into buffer
+    *STR file_name=None* -- Name of the source file loaded into buffer
+    
+    *STR language=None* -- Name of language of the source file
     
     *AppState app* -- application object containing the buffer
 
@@ -74,62 +98,26 @@ class SourceBuff(Object):
 
     CLASS ATTRIBUTES**
     
+    *{STR: STR}* file_language -- key is a standard file extension and
+    value is the programming language associated with that extension
     """
     
-    def __init__(self, app, fname=None, **attrs):
-        self.init_attrs({'last_search': None})
+    def __init__(self, app, file_name=None, language=None, **attrs):
+        self.init_attrs({'last_search': None})        
         self.deep_construct(SourceBuff,
                             {'app': app,
-			     'fname': fname},
+			     'file_name': file_name,
+                             'language': language},
                             attrs
                             )
 
-    def file_name(self):
-        """Returns the name of the file being displayed in a buffer.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
 
-        **OUTPUTS**
-        
-        STR *name* -- 
-        """
-        
-        debug.virtual('SourceBuff.file_name')
-
-    def to_sync(self, item, what, exclude):
-        """Determines if an item is to be synchronised
-        
-        **INPUTS**
-        
-        STR *item* -- Type of item to be synchronised. Valid entries
-        are: 'buff_name', 'content', 'cur_pos', 'selection'
-
-        [STR] *what=[]* -- List of items to be included in or excluded
-        from the list of things to synchronize (depending on value of
-        *exclude*. Valid entries are: 'buff_name', 'content',
-        'cur_pos', 'selection'.  *exclude_what=1*, this should be
-        interpreted as a list of items that don't need to be
-        synchronised. If *exclude_what=0*, then it should be
-        interpreted as a list of items that need to be syncrhonized.
-
-        BOOL *exclude* -- If *true*, then *what* is a list of items to
-        be excluded from syncrhonization. Otherwise, *what* is a list
-        of itmes to be included in the synchronization.
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        in_list = (item in what)
-        if exclude:
-            answer = not in_list
-        else:
-            answer = in_list
-        return in_list
+        #
+        # Set the language name if it hasn't been set already
+        #
+        if self.language == None and self.file_name != None:
+            self.language = self.language_name()
+            
 
 
     def application(self):
@@ -146,21 +134,6 @@ class SourceBuff(Object):
         """
 	return self.app
 
-
-    def language_name(self):
-        """Returns the name of the language a file is written in
-        
-        **INPUTS**
-        
-        *none*
-        
-        **OUTPUTS**
-        
-        *STR* -- the name of the language
-        """
-        return self.lang_srv.language_name()        
-
-
     def drop_breadcrumb(self, pos=None):
 
         """Drops a breadcrumb -- see AppState.drop_breadcrumb
@@ -172,7 +145,7 @@ class SourceBuff(Object):
 	SourceBuff.drop_breadcrumb is included only as a convenient
 	shorthand for
 
-	  buff.application().drop_breadcrumb(buffname = buff.file_name(),
+	  buff.application().drop_breadcrumb(buffname = buff.file_name,
 	  pos = ...)
 	
         *INT pos* is the position where to drop the crumb. *STR
@@ -180,8 +153,7 @@ class SourceBuff(Object):
         
         If *pos* not specified, drop breadcrumb at cursor position.
 	"""
-	self.application.drop_breadcrumb(buffname = self.file_name(), pos = pos)
-
+	self.application.drop_breadcrumb(buffname = self.file_name, pos = pos)
 
     def language_name(self):
         """Returns the name of the language a file is written in
@@ -194,7 +166,17 @@ class SourceBuff(Object):
 
         *STR* -- the name of the language
         """
-        debug.virtual('SourceBuff.language_name')
+        global file_language
+
+        language = self.language
+        if language == None and self.file_name != None:
+            a_match = re.match('^.*?\.([^\.]*)$', self.file_name)
+	    extension = ""
+	    if a_match:
+		extension = a_match.group(1)
+            if file_language.has_key(extension):
+                language =  file_language[extension]
+        return language
 
 
     def is_language(self, lang):
@@ -203,7 +185,7 @@ class SourceBuff(Object):
         Outputs *true* if and only if *self* is displaying a file
         written in programming language *STR lang*.
         """
-        return (self.language_name() == lang)
+        return (self.language == lang)
 
 
     def region_distance(self, region1_start, region1_end, region2_start, region2_end):
@@ -333,27 +315,6 @@ class SourceBuff(Object):
 	"""
 	debug.virtual('SourceBuff.get_text')
 
-    def set_text(self, text, start = None, end = None):
-	"""changes a portion of the buffer
-
-	**INPUTS**
-
-	*STR text* is the new text.
-	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
-
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('SourceBuff.set_text')
-        
-
     def contents(self):
 	"""retrieves entire contents of the buffer
     
@@ -451,9 +412,6 @@ class SourceBuff(Object):
     def number_lines(self, astring, startnum=1):
         """Assign numbers to lines in a string.
 
-        Used mainly for the purpose of doing a printout of the buffer
-        content around the cursor (usually during regression testing).
-
         *STR astring* is the string in question.
 
         *INT startnum* is the number of the first line in *astring*
@@ -463,7 +421,21 @@ class SourceBuff(Object):
         
         .. [self.curr_buffer] file:///AppState.AppState.html"""
 
-        debug.virtual('SourceBuff.number_lines')
+        lines = re.split('\n', astring)
+        result = []
+
+        if (astring != ''):
+	    lineno = startnum
+#            if (astring[0] == '\n'):
+#                lineno = startnum + 1
+#  this would make all lines off by 1
+                
+            for aline in lines:
+                result[len(result):] = [(lineno, aline)]
+                lineno = lineno + 1
+            
+        return result
+
 
 
     def len(self):
@@ -534,8 +506,15 @@ class SourceBuff(Object):
         
         *INT* beg_pos -- Position of the beginning of the line
         """
-        debug.virtual('SourceBuff.beginning_of_line')
 
+        contents = self.contents()
+        if pos >= len(contents): pos = len(contents) - 1
+#        print '-- SourceBuff.beginning_of_line: pos=%s, len(contents)=%s' % (pos, len(contents))
+        while pos >= 0 and contents[pos] != '\n':
+            pos = pos - 1
+
+        beg_pos = self.make_within_range(pos + 1)
+        return beg_pos
 
     def end_of_line(self, pos):
         """Returns the position of the end of line at position *pos*
@@ -549,7 +528,12 @@ class SourceBuff(Object):
         
         *INT* end_pos -- Position of the end of the line
         """
-        debug.virtual('SourceBuff.end_of_line')
+        contents = self.contents()
+        if pos >= len(contents): pos = len(contents) - 1        
+        pos = self.make_within_range(pos)
+        a_regexp = re.compile('(\n|$)')
+        end_pos = a_regexp.search(contents, pos).start()
+        return end_pos
         
         
     def move_relative(self, rel_movement):
@@ -635,7 +619,8 @@ class SourceBuff(Object):
 	"""
         
         debug.virtual('SourceBuff.insert_indent')
-
+        
+        
     def insert(self, text, range = None):
         """Replace text in range with 
         with text
@@ -691,14 +676,14 @@ class SourceBuff(Object):
 
         debug.virtual('SourceBuff.incr_indent_level')
 
-    def decr_indent_level(self, levels=1, range=None):
+    def decr_indent_level(self, num_levels=1, range=None):
 
         """Decrease the indentation of a region of code by a certain number
         of levels.
         
         **INPUTS**
         
-        *STR* levels=1 -- Number of levels to unindent
+        *STR* num_levels=1 -- Number of levels to unindent
 
         *(INT, INT)* range=None -- Start and end position of code to be indent.
         If *None*, use current selection
@@ -871,74 +856,6 @@ class SourceBuff(Object):
 	"""
         debug.virtual('SourceBuff.valid_cookie')
 
-
-    def newline_conventions(self):
-        
-        """Returns a list of the forms of newline the editor can
-        recognise for this buffer.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.virtual('SourceBuff.newline_conventions')
-
-
-
-    def pref_newline_convention(self):
-        """Returns the form of newline that the editor prefers for this buffer.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.virtual('SourceBuff.pref_newline_convention')
-
-
-    def newline_regexp(self):
-        
-        """Returns a regexp that matches all the forms of newline that
-        the editor can recognise in this buffer.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        #
-        # We use (?: form so that the order of groups on the original
-        # regexp is not screwed up.
-        #
-        regexp = '(?:'
-        first_one = 1
-
-        for a_nl_form in self.newline_conventions():
-            if not first_one:
-                regexp = regexp + '|'
-            regexp = regexp + a_nl_form
-            first_one = 1                
-        regexp = regexp + ')'
-
-        return regexp
-
-
     def search_for(self, regexp, direction=1, num=1, where=1):
         
         """Moves cursor to the next occurence of regular expression
@@ -957,13 +874,6 @@ class SourceBuff(Object):
 
 #        print '-- SourceBuff.search_for: regexp=%s, direction=%s, num=%s, where=%s' % (regexp, direction, num, where)
         success = None
-
-        #
-        # Change the \n in the regexp so they match any of the forms
-        # recognised by the editor in this buffer
-        #
-        re.sub('\n', self.newline_regexp(), regexp)
-
         
         #
         # Find position of all matches

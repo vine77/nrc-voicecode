@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-"""Interface to the programming environment."""
+"""State information for the programming environment."""
 
 
 import debug, sys
@@ -56,171 +56,13 @@ class ForwardToBuffer:
 	buffer = self.application.find_buff(f_name)
 	if buffer:
 	    return apply(getattr(buffer, self.method), positional, keys)
-
-
-
-
-def use_update_class(action):
-    """Returns the class to be used for a particular type of update action.
-        
-    **INPUTS**
-        
-    STR *action* -- Name of the update action 
-        
-
-    **OUTPUTS**
-        
-    CLASS *upd_class* -- The class object (not an instannce) for
-    *action*. Assumed to be a subclass of [AS_Update].
-    
-    ..[AS_Update] file:///./AppState.AS_Update.html"""
-        
-    use_class = {'delete': AS_Delete}
-    return use_class[action]
-
-
-def updates_factory(upd_descr):
-        
-    """Creates an AS_Update object based on the description of the
-    update to be created.
-    
-    **INPUTS**
-    
-    {STR: ANY} *upd_descr* -- A description of the update object
-    to be created. We assume that there is at least an 'action' key
-    (used to decide which class of updates to generate).
-    
-    
-    **OUTPUTS**
-    
-    *none* -- 
-    """
-   
-    upd_class = use_update_class(upd_descr['action'])
-    upd_object = upd_class.__init__(upd_object, descr=upd_descr)
-    return upd_object
-
-
-class AS_Update(Object):
-            
-    """An object describing an update to be done on an application
-    (e.g. insert some text in a source buffer).
-
-    
-    **INSTANCE ATTRIBUTES**
-
-    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
-    
-    CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, descr, **args_super):
-        self.deep_construct(AS_Update, 
-                            {'descr': descr}, 
-                            args_super, 
-                            {})
-
-class SB_Update(AS_Update):
-            
-    """An object describing an update to be done on a source buffer or
-    an application (e.g. insert some text in a source buffer).
-
-    
-    **INSTANCE ATTRIBUTES**
-
-    STR *sb_name* -- Name of the source buff to be updated
-    
-    CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, **args_super):
-        self.deep_construct(AS_Update, 
-                            {}, 
-                            args_super, 
-                            {})
-
-    def on_buff_named(self):
-        """Returns name of the buffer on which to do the update."""
-        return self.descr['buff_name']
-
-
-
-
-    def apply(self, on_app):
-
-        """Carry out the update on the appropriate source buffer.
-
-        **INPUTS**
-        
-        [AppState] *on_app* --
-    
-        **OUTPUTS**
-        
-        *none* --
-
-        ..[AppState] file:///./AppState.AppState.html"""
-        
-        #
-        # Forward SourceBuff updates to the appropriate source buffer
-        #                
-        buff = on_app.find_buff(self.on_buff_named())
-        self.apply_to_buff(buff)
-
-    def apply_to_buff(self, on_buff):
-        
-        """Carry out a buffer update on a specific buffer.
-        
-        **INPUTS**
-        
-        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        debug.virtual('SB_Update.apply_to_buff')
-
-
-    def apply_to_VE_map(self, on_app):
-        
-        """Update the V-E map to take into account this buffer update.
-        
-        **INPUTS**
-        
-        [AppState] *on_app* -- Application on which the update is being done.
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        debug.virtual('SB_Update.apply_to_VE_map')
-        
 	
 class AppState(Object):
-    """Interface to the programming environment.    
+    """State information for the programming environment.    
 
-    Implements methods for manipulating and querying a programming
-    environment that is being driven by VoiceCode.
-
-    This is mostly a virtual class providing an abstract interface to
-    the programming environment.
-
-    But some of the methods implement concrete behaviour such as:
+    Stores information about the state of the programming environment
+    being run through the Mediator.
     
-    - managing the history of voice commands for that programming
-      environement
-
-    - dispatching certain methods to an appropriate source buffer
-      (implemented as an instance of [SourceBuff]).
-
     **INSTANCE ATTRIBUTES**
     
     *STR app_name=None* -- name of the programming environment
@@ -233,6 +75,16 @@ class AppState(Object):
     *{STR: * [SourceBuff] *} open_buffers={}* -- List of source buffers that
      are currently open in the programming environment.
     
+    *STR curr_dir=None* -- Current directory for the programming environment
+    
+    *STR default_buff_name=None* -- default buffer for buffer-specific
+     operations.  When None, current buffer will be used
+
+    *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
+     the stack is a couple where the first entry is the name of the
+     source buffer and the second is the position in that buffer where
+     the crumb was dropped.
+
     *INT* max_history=100 --  Maximum length of the command history.
 
     *BOOL* translation_is_off -- If true, then translation of CSCs and
@@ -240,11 +92,6 @@ class AppState(Object):
      typed as dictated text, except for commands that turn the
      translation back on (NOT IMPLEMENTED FOR NOW).
 
-    STR *bound_buffer_name=None* -- Name of the buffer that VoiceCode
-    is currently bound to operate on. If *None*, use editor's active
-    buffer. See [curr_buffer] method for a description of buffer
-    binding.
-     
     **CLASS ATTRIBUTES**
     
     *(STR)* buffer_methods -- list of names of buffer methods which
@@ -253,8 +100,7 @@ class AppState(Object):
 
     .. [Action] file:///./actions_gen.Action.html
     .. [Context] file:///./Context.Context.html
-    .. [SourceBuff] file:///./SourceBuff.SourceBuff.html
-    .. [curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
+    .. [SourceBuff] file:///SourceBuff.SourceBuff.html"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
     'get_selection', 'goto_end_of_selection', 'set_selection', 
@@ -271,247 +117,19 @@ class AppState(Object):
 	    return ForwardToBuffer(self, name)
 	raise AttributeError(name)
     
-    def __init__(self, app_name=None, translation_is_off=0, max_history=100,
+    def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
+                 max_history=100,
                  **attrs):
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
                              'rec_utterances': [], 
                              'open_buffers': {},
-			     'bound_buffer_name': None,
+                             'curr_dir': curr_dir, 
+			     'default_buff_name': None,
                              'max_history': max_history, 
                              'translation_is_off': translation_is_off},
                             attrs)
-
-
-
-    def recog_begin(self):
-        """Invoked at the beginning of a recognition event.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        # Give the user a visual indication that he shouldn't be
-        # typing/mousing.
-        self.recog_indicator('on')
-
-        #
-        # Ask the editor to stop responding to user kbd and mouse events
-        # (if it's able to)
-        #
-        self.stop_responding()
-
-
-    def stop_responding(self):
-        
-        """When an utterance is heard, VoiceCode invokes this to ask
-        the editor to stop responding to user input. This is to
-        prevent a bunch of problems that can arise if the user types
-        while VoiceCode is still processing an utterance. In such
-        cases, the results of the utterance interpretation can be
-        unpredictable, especially when it comes to correction.
-
-        Each external editor will respond to that message as best it can.
-
-        Ideally, the editor would:
-
-        - Start recording user actions to a log Then execute those
-        - actions later when [start_responding()] is invoked.
-
-        If the editor is able to stop responding to user input, but is
-        not able to record them and/or execute them later, then it
-        should:
-
-        - Stop responding to user input until [start_responding()] is
-          later invoked.
-
-        If the editor is not even able to stop responding to user
-        input, then it should:
-
-        - Do nothing
-        
-
-        NOTE: This method may be invoked more than once before
-        [start_responding()] is invoked. In such cases, only the first
-        call to the method should do anything.
-
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[start_responding()] file:///./AppState.AppState.html#start_responding"""
-        
-        debug.virtual('AppState.stop_responding')
-
-
-    def recog_end(self):
-        """Invoked at the end of a recognition event.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        # Tell the editor it can start responding to user kbd and mouse
-        # events again
-        self.start_responding()
-
-
-        # Give the user a visual indication that he can start typing/mousing
-        # again
-        self.recog_indicator('off')
-
-    def start_responding(self):
-        
-        """Invoked when VoiceCode has finished processing an
-        utterance. This tells the editor to start responding to user
-        input again, and possibly to execute any user inputs it may
-        have recorded since [stop_responding()] was invoked.
-        
-        Each external editor will respond to that message as best it can.
-
-        Ideally, the editor would:
-
-        - Execute all actions that were logged
-        
-        - Stop recording user actions to a log, and execute them as
-          they arrrive instead.
-        
-        If the editor is able to stop responding to user input, but is
-        not able to record them and/or execute them later, then it
-        should:
-
-        - Start responding to user input again
-
-        If the editor is not even able to stop responding to user
-        input, then it should:
-
-        - Do nothing
-
-        NOTE: This method may be invoked more than once before
-        [stop_responding()] is invoked. In such cases, only the first
-        call to the method should do anything.
-
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[stop_responding()] file:///./AppState.AppState.html#stop_responding"""
-
-        debug.virtual('AppState.start_responding')
-
-
-
-
-    def recog_indicator(self, status):
-        """Sets a \"recognition in progress\" visual indicator.
-        
-        **INPUTS**
-        
-        STR *status* -- 'on' or 'off'
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        #
-        # Do nothing for now
-        #
-        pass
-
-
-    def synchronize_with_app(self, what=[], exclude=1, updates=None):
-
-        """Make sure that VoiceCode is in sync with the state of the
-        external editor.
-        
-        **INPUTS**
-        
-        [STR] *what=[]* -- List of what is to be synchronised. Valid
-        entries are: 'buff_name', 'content', 'cur_pos', 'selection'.
-        *exclude=1*, this should be interpreted as a list of items that
-        don't need to be synchronised. If *exclude=0*, then it should be
-        interpreted as a list of items that need to be syncrhonized.
-
-        [ [AS_Update] ] updates -- Updates to be applied in the
-        synchronisation. If *None*, get updates from the external
-        editor.
-                
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        if updates == None:
-            updates = self.updates_from_app(what, exclude)
-
-
-
-    def apply_updates(self, updates):
-        """Applies a list of updates returned by the external application.
-        
-        **INPUTS**
-        
-        [ [AS_Updates] ] *updates* -- List of updates
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[AS_Updates] file:///./AppState.AS_Updates.html"""
-        
-        for an_update_descr in updates:
-            an_update = create_update(an_update_descr)
-            an_update.apply(self)
-
-
-
-    def updates_from_app(self, what=[], exclude=1):
-        """Gets a list of updates from the external app.
-
-        Note: the list of updates must ALWAYS include the name of the
-        external app's active buffer.
-        
-        **INPUTS**
-        
-        [STR] *what* -- List of items to be included/excluded in the updates.
-
-        BOOL *exclude* -- Indicates if *what* is a list of items to be
-        included or excluded from updates.
-        
-        **OUTPUTS**
-        
-        [ [AS_Update] ] *updates* -- List of updates retrieved from the
-        external app.
-        
-        ..[AS_Update] file:///./AppState.AS_Update.html"""
-        
-        debug.virtual('AppState.updates_from_app')
-
 
     def curr_buffer(self):
         """Returns the SourceBuff corresponding to the default editor buffer,
@@ -522,188 +140,56 @@ class AppState(Object):
         """
 	return self.find_buff(self.curr_buffer_name())
 
+    def curr_buffer_from_app(self):
+        """Returns the SourceBuff corresponding to the current editor buffer 
+        
+        If no such buffer, returns *None*.
+        
+        """
+	return self.find_buff(self.curr_buffer_name_from_app())
 
     def curr_buffer_name(self):
-        
-	"""Returns the file name of the buffer that VoiceCode
-	currently operates on.
-
-        This may or may not be the same as the active buffer in the
-        editor (this is returned by method [app_active_buffer_name]).
-
-        When interpreting an utterance, VoiceCode binds the *AppState* to the
-        buffer that was active in the editor at the moment when the
-        utterance started. This is so that the utterance will always
-        go to that buffer, even if the user clicks on a different
-        buffer while the utterance is still being processed.
-
-        Note however that if the user utters a command that switches
-        the active buffer in mid-utterance, VoiceCode will then bind
-        the *AppState* to that new buffer so that the rest of the utterance
-        goes there.
-
-        WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU KNOW WHAT YOU
-        ARE DOING!!!
+	"""returns the file name of the default buffer, or current buffer
+	if default is not set
 
 	**OUTPUTS**
 
-	*STR* -- file name of current buffer
+	*STR* -- file name of current buffer"""
 
-        file:///./AppState.AppState.html#app_active_buffer_name"""
+	if self.default_buff_name != None:
+	    return self.default_buff_name
+	return self.curr_buffer_name_from_app()
 
-        #
-        # Check to see if the AppState is bound to a particular buffer.
-        # If not, use the editor's active buffer.
-        #
-        buff_name = self.is_bound_to_buffer()
-        if buff_name == None:
-            buff_name = self.app_active_buffer_name()
+    def curr_buffer_name_from_app(self):
+	"""queries the application for the file name of the current buffer
 
-        return buff_name
-
-
-    def app_active_buffer_name(self):
-        
-	"""Returns the file name of the buffer currently active in the
-	external application.
-
-        Note that this may or may not be the same the buffer that
-        VoiceCode is currently bound to (see [curr_buffer_name]
-        method for a description of buffer binding).
-
-        **INPUTS**
-
-        *none* --
-        
 	**OUTPUTS**
 
-	*STR* -- file name of current buffer
+	*STR* -- file name of current buffer"""
 
-        file:///./AppState.AppState.html#curr_buffer_name"""
+	debug.virtual('curr_buffer_name')
 
-        debug.virtual('AppState.app_active_buffer_name')
+    def set_default_buffer(self, buff_name = None):
+	"""sets the default buffer, until it is cleared again
+	Note: generally, set_default_buffer is only called by
+	interpret_NL_cmd, and must be reset to None before
+	interpret_NL_cmd returns
 
+	**INPUTS**
 
-    def is_bound_to_buffer(self):
-        """Returns the name of the buffer that AppState is currently bound to.
-
-        See [curr_buffer] for a description of buffer binding.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
+	*STR buff_name* -- name of buffer to set as default
 
         **OUTPUTS**
         
-        *none* -- 
-
-        ..[curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
-        
-        return self.bound_buffer_name
-
-
-    def bind_to_buffer(self, buff_name):
-        """Binds the AppState to a particular buffer.
-
-        See [curr_buffer] for a description of buffer binding.
-        
-        **INPUTS**
-        
-        STR *buff_name* -- Name of the buffer to bind to.
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        ..[curr_buffer] file:///./AppState.AppState.html#curr_buffer"""
-        
-        self.bound_buffer_name = buff_name
-
-
-
-    def change_buffer(self, buff_name, bind=1):
-
-	"""Changes the active buffer.
-
-        May also bind the AppState to that buffer depending on the
-        value of *bind*. See [curr_buffer_name] for a description of
-        buffer binding.
-
-        **INPUTS**
-        
-        STR *buff_name* -- Name of the buffer to switch to.
-
-        BOOL *bind* -- Indicates whether or not the AppState should be
-        bound to operate on that new buffer or not.
-        
-        **OUTPUTS**
-        
-        *none* --         
-        
-        file:///./AppState.AppState.html#curr_buffer_name"""
-
-        self.change_buffer_dont_bind(buff_name)
-        if bind:
-            self.bind_to_buffer(buff_name)
-
-
-    def change_buffer_dont_bind(self, buff_name=None):
-
-	"""Changes the external application's active buffer.
-
-        This should NOT bind the *AppState* to the new buffer. This
-        should be done only by [change_buffer].
-
-        See [curr_buffer_name] for a description of buffer binding.
-        
-        WARNING: DO NOT OVERRIDE THIS METHOD UNLESS YOU KNOW WHAT YOU
-        ARE DOING!!!
-
-        **INPUTS**
-        
-        STR *buff_name=None* -- Name of the buffer to switch to.
-       
-        **OUTPUTS**
-        
-        *none* --         
-        
-        file:///./AppState.AppState.html#curr_buffer_name"""
-
-        #
-        # Change the buffer in the external application, then
-        # synchronize.
-        #
-        self.change_buffer_dont_bind_from_app(buff_name)
-        self.synchronize_with_app()
-
-
-    def change_buffer_dont_bind_from_app(self, buff_name=None):
-
-	"""Changes the external application's active buffer.
-
-        This variant only changes the buffer in the external
-        application. It does not resynchronise VoiceCode with external
-        application.
-
-        This should NOT bind the *AppState* to the new buffer. This
-        should be done only by [change_buffer].
-
-        See [curr_buffer_name] for a description of buffer binding.
-
-        **INPUTS**
-        
-        STR *buff_name=None* -- Name of the buffer to switch to.
-       
-        **OUTPUTS**
-        
-        *none* --         
-        
-        file:///./AppState.AppState.html#curr_buffer_name"""
-
-        debug.virtual('AppState.change_buffer_dont_bind_from_app')
-
+        *BOOL*  -- does a buffer by that name exist?
+	"""
+        if (buff_name == None):
+            self.default_buffer_name = None
+	    return 0
+        elif (self.open_buffers.has_key(buff_name)):
+            self.default_buffer_name = buff_name
+            return 1
+	return 0
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
@@ -716,7 +202,6 @@ class AppState(Object):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-        
 	debug.virtual('AppState.multiple_buffers')
 
     def bidirectional_selection(self):
@@ -730,7 +215,6 @@ class AppState(Object):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-        
 	debug.virtual('AppState.bidirectional_selection')
 
     def active_field(self):
@@ -755,12 +239,6 @@ class AppState(Object):
 	where find-buffer is the name of the command that was invoked and
 	buffer-name refers to the argument that is being asked for.
 	"""
-
-        #
-        # For now, we don't support voice enabling fields of the external
-        # editor. We just focus on code dictation and navigation in the
-        # source buffers.
-        #
 	return None
 
 
@@ -773,7 +251,6 @@ class AppState(Object):
 
         if (self.active_field() != None):
             answer = (lang_name == None) or (self.curr_buffer().is_language(lang_name))
-            
         return answer
 
     def find_buff(self, buff_name=None):
@@ -785,12 +262,17 @@ class AppState(Object):
 
         .. [self.curr_buffer] file:///AppState.AppState.html
         """
-
         if (buff_name == None):
+#	    print 'find current'
 	    current_name = self.curr_buffer_name()
+#	    print 'current is'
+#	    print repr(current_name)
+#	    print repr(self.open_buffers)
 	    if ((current_name != None) and 
 		(self.open_buffers.has_key(current_name))):
+#	      print 'locating ...'
 	      return self.open_buffers[current_name]
+#	    print 'No such buffer'
 	    return None
         elif (self.open_buffers.has_key(buff_name)):
             return self.open_buffers[buff_name]
@@ -798,7 +280,6 @@ class AppState(Object):
         # Buffer not found
         #
         return None
-
 
     def drop_breadcrumb(self, buffname=None, pos=None):
 
@@ -811,7 +292,11 @@ class AppState(Object):
 
         If *buff* not specified either, drop breadcrumb in current buffer
 	"""
-        debug.virtual('AppState.drop_breadcrumb')
+        buff = self.find_buff(buffname)
+        buffname = buff.file_name
+        if not pos: pos = buff.cur_pos()
+        self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
+
 
     def pop_breadcrumbs(self, num=1, gothere=1):
         """Pops breadcrumbs from the breadcrumbs stack
@@ -821,19 +306,23 @@ class AppState(Object):
         if *BOOL gothere* is true, then move cursor to the last popped
         breadcrumb.
         """
-        debug.virtual('AppState.pop_breadcrumbs')        
+        stacklen = len(self.breadcrumbs)
+        lastbuff, lastpos = self.breadcrumbs[stacklen - num]
+        self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
+        if gothere:
+            self.goto(lastpos, f_name=lastbuff)
 
 
 
     def open_file(self, name, lang = None):
-        """Tell the external editor to open a file.
+        """Open a file.
 
-        Open file with name *STR name* and written in language *STR lang*. 
+        Open file with name *STR name* and written in language *STR lang*.        
         """
         debug.virtual('AppState.open_file')
 
     def save_file(self, full_path = None, no_prompt = 0):
-        """Tell the external editor to save the current buffer.
+        """Save the current buffer.
 
         **INPUTS**
 	
@@ -864,10 +353,11 @@ class AppState(Object):
         *STR* language -- Name of active programming language (*None*
         if no programming language is active).
         """
-
-        buff = self.curr_buffer()
-        language = buff.language_name()
-        return self.curr_buffer().language_name()
+        
+        language = None
+        if self.curr_buffer() != None:
+            language = self.curr_buffer().language
+        return language
 
 
 

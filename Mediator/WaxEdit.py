@@ -90,7 +90,6 @@ class WaxEdit:
 	"""
 	debug.virtual('WaxEdit.editor_buffer')
 
-
     def open_file_in_buffer(self, name):
 	"""opens a new file in the existing TextBufferWX
 
@@ -123,7 +122,6 @@ class WaxEdit:
 	debug.virtual('WaxEdit.save_file')
 
 
-    
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
 

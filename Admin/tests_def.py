@@ -164,14 +164,12 @@ auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
 test_mediator = None
 
-def test_CmdInterp():
-    
+def test_CmdInterp():    
     #
     # Create a command interpreter connected to the editor simulator
     #
-    natlink.natConnect()    
+    natlink.natConnect()
     a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-    
 # I don't think this is necessary (or correct -- we do want the mediator
 # to go out of scope) but for regression testing purposes, I'm first
 # leaving it in and then will remove it.
@@ -180,7 +178,9 @@ def test_CmdInterp():
     acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
     a_mediator.add_csc(acmd)
     acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
-    a_mediator.add_csc(acmd)    
+    a_mediator.add_csc(acmd)
+
+    
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
     a_mediator.interp.on_app.goto(41)
     print '\n\n>>> Testing command interpreter\n\n'
@@ -462,6 +462,7 @@ def test_select_pseudocode():
     test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')        
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
 
+    print '-- hello!'
     util.request_console_be(active=1)
     
     #

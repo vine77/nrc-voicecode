@@ -24,7 +24,7 @@
 
 
 from Object import Object
-import sb_services, SourceBuff
+import SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
 import util
@@ -410,9 +410,6 @@ class SymDict(PickledObject.PickledObject):
      of the file where dictionary object is to be saved/read from. If *None*,
      it means the object should never be saved to/read from file.
 
-     [SB_ServiceLang] *lang_name_srv* -- Service used by SymDict to
-     determine a buffer's programming language.
-
    
     CLASS ATTRIBUTES**
 
@@ -435,9 +432,8 @@ class SymDict(PickledObject.PickledObject):
                          'abbreviations': {},
                          'standard_symbol_sources': [],
                          'sr_symbols_cleansed': 1,
-                         'unresolved_abbreviations': {},
-                         'lang_name_srv': sb_services.SB_ServiceLang(buff=None)})
-        
+                         'unresolved_abbreviations': {}})
+
         # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
                             {'pickle_fname': pickle_fname},
@@ -1106,8 +1102,7 @@ class SymDict(PickledObject.PickledObject):
 
         global language_definitions
         definition = None
-        
-        language_name = self.lang_name_srv.file_language_name(file_name)
+        language_name = SourceBuff.language_name(file_name)
 #        print '-- SymDict.get_language_definition: language_definitions=%s, language_name=%s' % (language_definitions, language_name)
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]

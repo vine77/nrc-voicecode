@@ -15,13 +15,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #
-# (C)2001, National Research Council of Canada
+# (C)2000, National Research Council of Canada
 #
 ##############################################################################
 
 """Classes for communicating with an external editor through a messaging protocol"""
 
-import re, types
+import re
 import Object
 
 class Messenger(Object.Object):
@@ -95,35 +95,7 @@ class Messenger(Object.Object):
 
 
 
-
-    def wrong_message(self, received, expected, just_name=1):
-        
-        """Send an error message when received message was not the
-        expected one.
-        
-        **INPUTS**
-        
-        (STR, {STR: STR}) *received* -- The received message in
-        (mess_name, {arg_name: arg_val} format.
-        
-        STR *expected* -- Name of the message that was expected. 
-
-        BOOL *just_name* -- If *true* just print the name of the
-        received message. Don't print argument values.
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        if just_name:
-            args = ''
-        else:
-            args = ', %s' % repr(received[1])
-        sys.stderr.write("ERROR: Wrong message.\n\n   Received: '%s'%s\n\nExpected one of: '%s'") % (received[0], args, repr(expected))
-
-
-    def send_mess(self, mess_name, mess_argvals={}):
+    def send_mess(self, mess_name, mess_argvals):
         
         """Sends a message to the external editor.
 
@@ -148,14 +120,12 @@ class Messenger(Object.Object):
 
 
 
-    def get_mess(self, expect=None):
+    def get_mess(self):
         """Gets a message from the external editor.
         
         **INPUTS**
         
-        [STR] *expect* -- If not *None*, then make sure the
-        message's name is listed in *expect*. If not, send an
-        error message.
+        *none* --
 
         **OUTPUTS**
         
@@ -170,10 +140,6 @@ class Messenger(Object.Object):
 #        print '-- get_mess: unpkd_mess=\'%s\'' % unpkd_mess        
         name_argvals_mess = self.encoder.decode(unpkd_mess)
 #        print '-- get_mess: received \'%s\', %s' % (name_argvals_mess[0], repr(name_argvals_mess[1]))
-
-        if not (name_argvals_mess[0] in expect):
-            self.wrong_message(name_argvals_mess, expect)
-
         return name_argvals_mess
         
 
@@ -425,20 +391,10 @@ class MessPackager_FixedLenSeq(MessPackager):
 class MessEncoder(Object.Object):
     """Encoding scheme for messages.
     
-    Used to go translates messages between the *(name, {arg:val})*
-    format and raw string format. In this format, *name* is the name
-    of the message and *{arg:val}* is a dictionary giving the name and
-    values of the various arguments of that message.
-
-    Note that the *arg*s must be strings, but the *val*s can be of any
-    encodable type. The encodable types are defined recursively as:
-
-    STR -- a simple string
-
-    [ENCODABLE] -- a list (or tuple) of encodable types.
+    Used to go translates messages between the (name, {arg:val}) format
+    and raw string format.
     
-    {STR:ENCODABLE} -- a dictionnary with string keys and encodable values
-    
+    Virtual class.
     
     **INSTANCE ATTRIBUTES**
     
@@ -457,33 +413,6 @@ class MessEncoder(Object.Object):
 
 
 
-    def malformed_mess(self, mess, when, malformation=None):
-        """Prints an error message for a malformed message.
-        
-        **INPUTS**
-        
-        STR *mess* -- The malformed message
-        
-        STR *when* -- 'd' for decoding, 'e' for encoding.
-
-        STR *malformation* -- Specific reason why the message was malformed
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        if when == 'd':
-            when_str = 'decode'
-        else:
-            when_str = 'encode'
-            
-        print 'ERROR: trying to %s malformed message:\n%s' % when_str
-        if malformation != None:
-            print 'Malformation was: \'%s\'' % malformation
-
-
     def encode(self, mess_name, mess_argvals):
         """Encodes a message as a raw string
         
@@ -492,18 +421,20 @@ class MessEncoder(Object.Object):
         STR *mess_name* -- An identifier indicating what type of
         message this is.
         
-        {STR: ANY} *mess_argvals* -- The content of the message in
-        *{arg:val}* format.
+        {STR: STR} *mess_argvals* -- Dictionnary giving the arguments of the 
+         message in {argument:value} format
         
+
         **OUTPUTS**
         
         *STR str_mess* -- The message encoded as a string
         """
-        debug.virtual('MessEncoder.encode')
+
+        debug.virtual('encode')
 
 
     def decode(self, str_mess):
-        """Decodes a message to {arg:val} format.
+        """Decodes a message to (name, {arg:val}) format.
       
         **INPUTS**
         
@@ -515,54 +446,18 @@ class MessEncoder(Object.Object):
         message name, second element is message arguments in
         *(name, {arg:val})* format.  """
 
-        debug.virtual('MessEncoder.decode')
-        
+        debug.virtual('decode')
+
 
 class MessEncoder_LenPrefArgs(Object.Object):
     """Encoding scheme for messages with length prefixed argument values.
     
-    Used to go translates messages between the (name, {arg:val})
-    format and raw string format. The format for the message is:
+    Used to go translates messages between the (name, {arg:val}) format
+    and raw string format.
+    
+    The format of messages is assumed to be:
 
-       message ::= mess_name mess_content
-
-    where:
-
-       *mess_content* -- Is a stringified description of the arguments
-        of the messsage and their values. The names of the arguments are
-        assumed to be strings, but their values can be string or more
-        complex encodable types (see [MessEncoder] documentation for
-        details on the encodable types).
-
-    The format of *mess_content* can be described as:
-
-       mess_content ::= dict_descr
-       dict_descr := length '{' [key '=' value_descr ',']* '}'
-       value_descr ::= (string_descr|list_descr|dict|descr)       
-       string_descr ::= length '<' string_content '>'
-       list_descr ::= length '[' [value_descr ',']* ']'
-       
-    where:
-
-       *length* -- the length of the string describing the content of
-        a value (i.e. the part that's enclosed by <> (for string
-        values), [] (for list values) or {} (for dict values).
-
-       *<>, [], {}* -- balanced expressions indicating whether a value
-        is a string, list or dict type (also improve human readability
-        which is useful for debugging).
-
-       *string_content* -- is just a string
-       
-
-    For example, the following string:
-
-       *set_selection 37{cursor_at=1<1>, range=11[2<15>, 1<3>]}*
-
-    Corresponds to a *set_selection* message with following arguments:
-
-        *{'cursor_at': '1', 'range': ['15', '189']}*
-        
+           mess_name arg_name1=arg_len1|arg_val1 ... arg_nameN=arg_lenN|arg_valN    
     
     **INSTANCE ATTRIBUTES**
     
@@ -571,8 +466,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
     CLASS ATTRIBUTES**
     
     *none* -- 
-
-    ..[MessEncoder] file:///./messaging.MessEncoder.html"""
+    """
         
     def __init__(self, **args_super):
         self.deep_construct(MessEncoder_LenPrefArgs, \
@@ -584,7 +478,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
     def encode(self, mess_name, mess_argvals):
         """Encodes a message as a raw string, with length prefixed argument values.
 
-        See [MessEncoder_LenPrefArgs] for details of the encoded message. 
+        See [MessEncoder_LenPrefArgs] for details of the encoded message.         
         **INPUTS**
 
         STR *mess_name* -- An identifier indicating what type of
@@ -599,85 +493,22 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-        stringified = self.encode_data_item(mess_argvals)
-        str_mess = '%s %s' % (mess_name, stringified)
+#        print '-- encode: mess_name=\'%s\', mess_argvals=%s' % (mess_name, repr(mess_argvals))
+        str_mess = mess_name + ' '
+        for an_arg in mess_argvals.keys():
+            an_arg_value = mess_argvals[an_arg]
 
-        return str_mess
-
-
-    def encode_data_item(self, item):
-        
-        """Encodes data item as a raw string, with length prefixed
-        argument values.
-
-        See [MessEncoder_LenPrefArgs] for details of the encoding of
-        data items.
-        
-        **INPUTS**
-
-        ENCODABLE *item* -- Some encodable item (see [MessEncoder] for
-        details about encodable types).isinstance(value, types.intType)
-        
-        **OUTPUTS**
-        
-        *STR str_item* -- The data item encoded as a string
-
-        .. [MessEncoder] file:///./messaging.MessEncoder.html
-        .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
-
-        print '-- encode_data_item: item=\'%s\'' % repr(item)
-
-        #
-        # Convert numbers to strings
-        #
-        if (isinstance(item, types.IntType) or
-            isinstance(item, types.LongType) or
-            isinstance(item, types.FloatType)):
-            item = repr(item)
-            print '-- encode_data_item: item=\'%s\' converted to string from a number type' % repr(item)
-        
-
-        if isinstance(item, types.StringType):
             #
-            # Data item is just a string
+            # Make sure argument value is a string
             #
-            print '-- encode_data_item: item=\'%s\' is a string' % repr(item)
-            delims = ('<', '>')
-            str_item = item
-        elif isinstance(item, types.ListType) or isinstance(item, types.TupleType):
-            #
-            # Data item is a list
-            #
-            delims = ('[', ']')
-            str_item = ''
-            first = 1
-            for an_entry in item:
-                if not first:
-                    str_item = str_item + ', '
-                str_item = str_item + self.encode_data_item(an_entry)
-                first = 0
-        elif isinstance(item, types.DictType):
-            delims = ('{', '}')
-            str_item = ''
-            first = 1
-            sorted_keys = item.keys()
-            sorted_keys.sort()
-            for a_key in sorted_keys:
-                if not first:
-                    str_item = str_item + ', '
-                str_item = str_item + a_key + '=' + self.encode_data_item(item[a_key])
-                first = 0
-
-        #
-        #  Enclose data item with appropriate delimiters and prefix it by
-        # its length
-        #
-        str_item = "%s%s%s%s" % (len(str_item), delims[0], str_item, delims[1])
-
-        print '-- encode_data_item: string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item)
-
-        return str_item
+            try:
+                dum = len(an_arg_value)
+            except:
+                an_arg_value = repr(an_arg_value)
                 
+#            print '-- encode: an_arg=%s, an_arg_value=%s' % (an_arg, an_arg_value)
+            str_mess = '%s %s=%s|%s' % (str_mess, an_arg, len(an_arg_value), an_arg_value)
+        return str_mess
 
 
     def decode(self, str_mess):
@@ -698,189 +529,65 @@ class MessEncoder_LenPrefArgs(Object.Object):
         message name, second element is message arguments in
         *(name, {arg:val})* format.
 
-        .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
+        .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""        
+        
+        argvals = {}
+        orig_mess = str_mess
 
         #
-        # Parse the name and description of the message
+        # Read the name of the message
         #
-        a_match = re.match('\s*([^\s]+)\s+([\s\S]*)', str_mess)
+        a_match = re.match('\s*([^\s]*)\s+', str_mess)
+        if not a_match:
+            raise RuntimeError, "malformed VoiceCode message '%s'" % orig_mess
+        
         mess_name = a_match.group(1)
-        descr = a_match.group(2)
+        if a_match.end() <= len(str_mess):
+            str_mess = str_mess[a_match.end():]
+        else:
+            str_mess = ''
 
         #
-        # Decode the message's description
+        # Read argument value pairs
         #
-#        try:
-        (rest, argvals) = self.decode_data_item(descr)
-        if not re.match('^\s*$', rest):
-            self.malformed_message(mess, 'd')
-#        except Exception, err:
-#            self.malformed_message(mess, 'd')
-            
+        while 1:
+
+            #
+            # Name of the argument and length of its value
+            #
+            a_match = re.match('\s*([^=]*)=([\d]+)', str_mess)
+            if not a_match:
+                #
+                # No more arguments in the message. Make sure what's left is
+                # just blanks
+                #
+                if not re.match('^\s*$', str_mess):
+                    raise RuntimeError, "malformed VoiceCode message '%s'" % orig_mess
+                #
+                # If everything is ok, break out of the loop
+                #
+                break
+                            
+            arg_name = a_match.group(1)
+            arg_len = int(a_match.group(2))
+            if a_match.end() <= len(str_mess):
+                str_mess = str_mess[a_match.end():]
+            else:
+                str_mess = ''
+
+            #
+            # Read the '|' separating the argument length from its value
+            #
+            str_mess = str_mess[1:]
+
+            #
+            # Read specified number of bytes for the argument value
+            #
+            arg_val = str_mess[:arg_len]
+            str_mess = str_mess[arg_len:]
+            argvals[arg_name] = arg_val
+
         return (mess_name, argvals)
-
-
-    def decode_data_item(self, str_item):
-        
-        """Decodes the head of a raw string to a data item.
-
-        See [MessEncoder_LenPrefArgs] for details of the encoding of data items.
-        
-        **INPUTS**
-
-        *STR str_item* -- The data item encoded as a string        
-        
-        **OUTPUTS**
-
-        (STR, ENCODABLE) (*rest_str, data_item*) -- *rest_str* is the
-        rest of *str_item* after the data item has been
-        parsed. *data_item* is the value of the data item (or
-        message).
-                
-
-        .. [MessEncoder] file:///./messaging.MessEncoder.html
-        .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
-
-        
-        #
-        # Get type and length of the data item
-        #
-        print '-- decode_data_item: str_item=\'%s\'' % str_item
-        a_match = re.match('\s*(\d+)\s*([<\\[{])', str_item)
-        length = int(a_match.group(1))
-        delim_open = a_match.group(2)
-
-        #
-        # Read chop off the description of the item
-        #
-        str_item = str_item[a_match.end():]
-        descr = str_item[:length]
-        str_item = str_item[length:]
-
-        print '-- decode_data_item: descr=\'%s\'' % descr
-        
-        #
-        # Decode appropriate data type, depending on delimiter
-        #
-        if delim_open == '<':
-            data_item = self.decode_string_descr(descr)
-            delim_close = '>'
-        elif delim_open == '[':
-            data_item = self.decode_list_descr(descr)
-            delim_close = ']'            
-        elif delim_open == '{':
-            data_item = self.decode_dict_descr(descr)
-            delim_close = '}'            
-
-        #
-        # Read past the closing delimiter
-        #
-        print '-- decode_data_item: looking for closing delimiter in \'%s\'' % str_item
-        a_match = re.match('\s*%s\s*' % delim_close, str_item)
-        str_item = str_item[a_match.end():]
-        
-        return (str_item, data_item)
-
-    def decode_string_descr(self, descr):
-        """Parses the description of a string item.
-
-        See [MessEncoder_LenPrefArgs] for details of the encoding of
-        data items.  **INPUTS**
-        
-        STR *descr* -- The string description of the list
-        
-        **OUTPUTS**
-        
-        STR *the_string* -- The decoded string value.
-
-        ..[MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
-
-        # the string description IS the string
-        return descr
-
-    def decode_list_descr(self, descr):
-        """Parses the description of a string item.
-
-        See [MessEncoder_LenPrefArgs] for details of the encoding of
-        data items.
-
-        **INPUTS**
-        
-        STR *descr* -- The string description of the list
-        
-        **OUTPUTS**
-        
-        [ENCODABLE] *the_list* -- The decoded list of encodable values.
-
-        ..[MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
-
-        #
-        # Parse description until it's all blanks
-        #
-        the_list = []
-        while not re.match('^\s*$', descr):
-
-            #
-            # Parse an entry
-            #
-            (descr, an_entry) = self.decode_data_item(descr)
-            the_list.append(an_entry)
-
-            #
-            # Parse passed the comma (if any)
-            #
-            a_match = re.match('\s*,\s*', descr)
-            if a_match:
-                descr = descr[a_match.end():]
-
-        return the_list
-
-        
-    def decode_dict_descr(self, descr):
-        """Parses the description of a dict item.
-
-        See [MessEncoder_LenPrefArgs] for details of the encoding of
-        data items.  **INPUTS**
-        
-        STR *descr* -- The string description of the list
-        
-
-        **OUTPUTS**
-        
-        (STR, {STR:ENCODABLE}) *(descr, the_dict)* -- First entry is the The decoded dict item. Keys are strings
-        and values are encodable items.
-        """
-
-        the_dict = {}
-
-        #
-        # Parse description until it's all blanks
-        #
-        while not re.match('^\s*$', descr):
-            print '-- decode_dict_descr: descr=\'%s\'' % descr
-
-            #
-            # Parse the key and value
-            #
-            a_match = re.match('\s*([^\s=]+)\s*=\s*', descr)
-            a_key = a_match.group(1)
-            descr = descr[a_match.end():]
-
-            #
-            # Decode the value
-            #
-            (descr, a_value) = self.decode_data_item(descr)
-            the_dict[a_key] = a_value
-
-            #
-            # Read past the comma (if any)
-            #
-            a_match = re.match('\s*,\s*', descr)
-            if a_match:
-                descr = descr[a_match.end():]
-            
-
-        return the_dict
 
 
 class MessTransporter(Object.Object):

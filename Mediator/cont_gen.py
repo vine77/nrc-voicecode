@@ -44,7 +44,7 @@ class ContLanguage(Context):
 
     def applies(self, app):
         buff = app.curr_buffer()
-        return (self.language == None or (buff != None and  buff.language_name() == self.language))
+        return (self.language == None or (buff != None and  buff.language == self.language))
         
 
 class ContC(ContLanguage):
