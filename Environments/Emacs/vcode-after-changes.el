@@ -2268,7 +2268,8 @@ to the other"
 ;;;
 (defun vcode-fix-positions-in-message (message fix-for-who)
    (let ((pos) (range) (default-pos))
-     (dolist (position-field '("pos" "position" "start" "end" "linenum")) 
+;     (dolist (position-field '("pos" "position" "start" "end" "linenum")) 
+     (dolist (position-field '("pos" "position" "start" "end")) 
        (if (is-in-hash position-field message)
 	   (progn
 	     (if (or (string= "pos" position-field) 
@@ -2371,7 +2372,7 @@ to the other"
 
 (defun vcode-cmd-get-visible (vcode-request)
   (let ((mess-cont (make-hash-table :test 'string=)))
-    (cl-puthash 'value (list (window-start) (window-end)) mess-cont)
+    (cl-puthash 'value (vcode-convert-range (window-start) (window-end) 'vcode) mess-cont)
     (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" mess-cont)))
     )  
   )
@@ -2749,6 +2750,7 @@ tabs.
     (setq line-num (cl-gethash "linenum" mess-cont))
     (setq go-where (cl-gethash "where" mess-cont))
     (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (vr-log "--** vcode-cmd-goto-line: buff-name=%S, line-num=%S, go-where=%S\n" buff-name line-num go-where)
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)
@@ -2756,6 +2758,7 @@ tabs.
 	  (if (= -1 go-where) 
 	      (beginning-of-line)
 	    (end-of-line)
+	    (vr-log "--** vcode-cmd-goto-line: at end of progn, (point)=%S\n" (point))
 	  )
 	)
       ('error (error "VR Error: could not go to line %S" line-num))
@@ -2769,6 +2772,7 @@ tabs.
     ;;;
     (switch-to-buffer buff-name)
     (setq final-pos (point))
+    (vr-log "--** vcode-cmd-goto-line: at end of progn, final-pos=%S\n" final-pos)
 
     ;;;
     ;;; Cursor changes do not automatically get queued to the change queue.

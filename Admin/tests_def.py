@@ -2485,7 +2485,7 @@ def test_basic_correction():
     check_recent(instance_name, utterances, status)
 
     print "\n***Moving cursor manually***\n"
-    commands.goto_line(0)
+    commands.goto_line(1)
 
     print '\n***Testing scratch that following manual move***\n'
 
@@ -2721,21 +2721,32 @@ auto_test.add_test('set_text', test_set_text,
     'Testing set_text.')
     
 ##############################################################################
+# Insertion deletion commands
+##############################################################################
+
+def test_insert_delete_commands():
+   testing.init_simulator_regression()
+   commands.open_file('blah.py')
+   commands.say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="0\n")
+   commands.say(['back space'])
+   commands.say(['2 times'])
+   commands.say(['back space 2'])   
+   commands.say(['back space 3'])
+   commands.say(['back space 4'])
+   commands.say(['back space 5'])
+
+#auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
+
+    
+##############################################################################
 # Use this to create temporary tests
 ##############################################################################
 
 def test_temporary():
     testing.init_simulator_regression()
-    commands.open_file('blah.py')    
-     
-    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['define', 'method', 'initialize', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)	
-    
-    commands.say(['if', 'statement', 'then', 'index', 'equals', 'zero', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['back indent'], echo_utterance=1)    
-    
+    commands.open_file(small_buff_c)    
+    test_command("""goto_line(1)""")    
+#    commands.goto_line(1)
 
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')

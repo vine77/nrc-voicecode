@@ -726,7 +726,7 @@ class AppState(OwnerObject):
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
     'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',
     'newline_conventions', 'pref_newline_convention',
-    'language_name', 'file_name']
+    'language_name', 'file_name', 'backspace']
 
     def __getattr__( self, name):
         if name in self.buffer_methods:

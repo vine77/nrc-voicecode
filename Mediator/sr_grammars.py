@@ -365,7 +365,7 @@ class SelectWinGram(WinGram):
             where = 1
 
 
-        debug.trace('SelectWinGram.find_closest', 'where=%s' % where)
+        debug.trace('SelectWinGram.find_closest', 'direction=%s, where=%s' % (direction, where))
  
         ranges.sort()
         closest_range_index = \
@@ -374,7 +374,7 @@ class SelectWinGram(WinGram):
                 direction=direction, where=where, 
                 buff_name = self.buff_name)
                 
-        debug.trace('SelectWinGram.find_closest', '** closest_range_index=%s' % closest_range_index)
+        debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' % (repr(ranges), closest_range_index))
         if closest_range_index == None:
             return
 
@@ -1338,7 +1338,7 @@ class SimpleSelection(WinGram):
 
         *none*
         """
-        debug.trace('SimpleSelection.recognition_starting', 'starting')
+        debug.trace('SimpleSelection.recognition_starting', 'self.is_active()=%s, self.get_visible_cbk=%S' % (self.is_active(), self.get_visible_cbk))
         if self.is_active():
             self.visible = self.get_visible_cbk()
             self.selection = self.get_selection_cbk()
@@ -1386,6 +1386,9 @@ class SimpleSelection(WinGram):
         *[(INT, INT)] -- list of ranges of offsets into visible range
         with the best recognition score
         """
+        
+        debug.trace('SimpleSelection.find_closest', 'verb=%s, spoken_form=%s, ranges=%s' % 
+                                                   (verb, spoken_form, repr(ranges)))
         
         #
         # Analyse the verb used by the user in the Select utterance

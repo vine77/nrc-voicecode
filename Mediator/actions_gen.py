@@ -651,6 +651,43 @@ class ActionSearchRepeat(ActionSearch, ActionRepeatable):
         return ActionSearch.doc(self) + """ (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one')."""
 
 
+class ActionBackspace(ActionRepeatable):
+    """Backspace a certain number of times.
+
+        
+    **INSTANCE ATTRIBUTES**
+        
+    INT *n_times* -- number of times to backspace.
+
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+
+    """
+        
+    def __init__(self, n_times=1, **args_super):
+        self.deep_construct(ActionBackspace, 
+                            {'n_times': n_times}, 
+                            args_super, 
+                            {})
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """        
+        return "Backspace %s times." % n_times
+
+    def execute(self, app, cont):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        app.backspace(self.n_times)
+
+
+
+
 class ActionInsertNewClause(Action):
 
     """Inserts a new clause in some multiple clause statement like
