@@ -63,9 +63,10 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 #
 # No need to ask Emacs for updates, because it will notify VCode of changes
 # as they happen.
+# DCF: not true - still need to get updates on current position and selection
 #        
-    def updates_from_app(self, what = None, exclude=1):        
-        return []
+#    def updates_from_app(self, what = None, exclude=1):        
+#        return []
 
     def config_from_external(self):
         pass
@@ -104,6 +105,31 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def shared_window(self):
         return 0
         
+    def title_escape_sequence(self, before = "", after = ""):
+        """gives the editor a (module-dependent) hint about the escape
+	sequence which can be used to set the module's window title, if
+	any.  If the editor has its own mechanism for setting the window
+	title, it should simply ignore this method.  
+
+	**INPUTS**
+
+	*STR* before -- the escape sequence to be sent before the string
+	to place in the window title, or the empty string if there is no
+	escape sequence
+
+	*STR* after -- the escape sequence which terminates the window
+	title value
+
+	**OUTPUTS**
+
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
+	"""
+# for right now at least, Emacs doesn't handle this message, so we
+# should just return the same value set by the earlier call to
+# set_instance_string
+        return self.can_show_instance_string
 
     def drop_breadcrumb(self, buffname=None, pos=None):
         self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)

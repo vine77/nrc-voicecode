@@ -1338,7 +1338,7 @@ class SimpleSelection(WinGram):
 
         *none*
         """
-        debug.trace('SimpleSelection.recognition_starting', 'self.is_active()=%s, self.get_visible_cbk=%S' % (self.is_active(), self.get_visible_cbk))
+        debug.trace('SimpleSelection.recognition_starting', 'self.is_active()=%s, self.get_visible_cbk=%s' % (self.is_active(), self.get_visible_cbk))
         if self.is_active():
             self.visible = self.get_visible_cbk()
             self.selection = self.get_selection_cbk()
@@ -1387,8 +1387,8 @@ class SimpleSelection(WinGram):
         with the best recognition score
         """
         
-        debug.trace('SimpleSelection.find_closest', 'verb=%s, spoken_form=%s, ranges=%s' % 
-                                                   (verb, spoken_form, repr(ranges)))
+        debug.trace('SimpleSelection.find_closest', 'verb=%s, ranges=%s' % 
+                                                   (verb, repr(ranges)))
         
         #
         # Analyse the verb used by the user in the Select utterance

@@ -116,12 +116,12 @@ class ClientConnection(Object.Object):
 
     def new_data_thread_given_event(self, listen_sock, data_event):
         """creates a new ListenAndQueueMsgsThread to monitor the
-	listen_sock
+        listen_sock
         
         **INPUTS**
 
-	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
-	to pass to the new thread
+        SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
+        to pass to the new thread
 
         STR *ID* -- The unique ID of the listen socket
         
@@ -132,7 +132,7 @@ class ClientConnection(Object.Object):
         [ListenAndQueueMsgsThread] -- the new threading.Thread object
 
         ..[ListenAndQueueMsgsThread] 
-	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
+        file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
         queue = Queue.Queue(10)
         broken_connection = ('broken_connection', {})
         self.client_quitting = threading.Event()
@@ -145,43 +145,43 @@ class ClientConnection(Object.Object):
 
     def is_connected(self):
         """tells whether the client is currently connected or connecting
-	to the mediator
+        to the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the  client is currently connected (or
-	connecting) to a mediator
-	"""
+        *BOOL* -- true if the  client is currently connected (or
+        connecting) to a mediator
+        """
         return self.connecting or self.connected
 
     def open_vc_listener_conn(self, app_name, host, listen_port,
         test_client = 0):
         """Connects to VoiceCode on the listen port
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* app_name -- name of the application to give to the
-	mediator
+        *STR* app_name -- name of the application to give to the
+        mediator
 
-	*STR* host -- name or IP address of the host on which the
-	mediator server is running.  Defaults to a server running
-	locally.
+        *STR* host -- name or IP address of the host on which the
+        mediator server is running.  Defaults to a server running
+        locally.
 
-	*INT* listen_port -- port number on which the server expects
-	new listen connections
+        *INT* listen_port -- port number on which the server expects
+        new listen connections
 
-	*BOOL* test_client -- true if this connection is for a client
-	expecting to run regression tests
+        *BOOL* test_client -- true if this connection is for a client
+        expecting to run regression tests
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*Messenger* -- a Messenger for the vc_listener connection, or 
-	None if the connection was not made successfully
-	"""
+        *Messenger* -- a Messenger for the vc_listener connection, or 
+        None if the connection was not made successfully
+        """
 
         a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         a_socket.connect((host, listen_port))
@@ -235,17 +235,17 @@ class ClientConnection(Object.Object):
         
         **INPUTS**
 
-	*STR* host -- name or IP address of the host on which the
-	mediator server is running.  Defaults to a server running
-	locally.
+        *STR* host -- name or IP address of the host on which the
+        mediator server is running.  Defaults to a server running
+        locally.
 
-	*INT* talk_port -- port number on which the server expects
-	new talk connections
+        *INT* talk_port -- port number on which the server expects
+        new talk connections
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*socket* -- socket for the talk connection, or None if the 
-	connection was not made successfully
+        *socket* -- socket for the talk connection, or None if the 
+        connection was not made successfully
         """
 
         debug.trace('ClientConnection.open_vc_talker_conn', 'started')
@@ -284,37 +284,37 @@ class ClientConnection(Object.Object):
             talk_port = None, test_client = 0):
         """connect to the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* app_name -- name of the application to give to the
-	mediator
+        *STR* app_name -- name of the application to give to the
+        mediator
 
-	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
-	to pass to the new data thread so it can notify the main thread
-	when there is a command waiting in the queue.  Unlike the
-	server, there is only one connection and one data socket per client, 
-	so we don't need to give the socket a unique ID and create a 
-	data_event based on that ID.
+        SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
+        to pass to the new data thread so it can notify the main thread
+        when there is a command waiting in the queue.  Unlike the
+        server, there is only one connection and one data socket per client, 
+        so we don't need to give the socket a unique ID and create a 
+        data_event based on that ID.
 
-	*STR* host -- name or IP address of the host on which the
-	mediator server is running.  Defaults to a server running
-	locally.
+        *STR* host -- name or IP address of the host on which the
+        mediator server is running.  Defaults to a server running
+        locally.
 
-	*INT* listen_port -- port number on which the server expects
-	new listen connections.  Defaults to VC_LISTENER_PORT
+        *INT* listen_port -- port number on which the server expects
+        new listen connections.  Defaults to VC_LISTENER_PORT
 
-	*INT* talk_port -- port number on which the server expects
-	new talk connections.  Defaults to VC_TALKER_PORT
+        *INT* talk_port -- port number on which the server expects
+        new talk connections.  Defaults to VC_TALKER_PORT
 
-	*BOOL* test_client -- true if this connection is for a client
-	expecting to run regression tests
+        *BOOL* test_client -- true if this connection is for a client
+        expecting to run regression tests
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(Messenger, MixedMessenger)* -- a tuple containing the Messenger 
-	for the talk connection and the MixedMessenger for the listen
-	connection, or None if the connection was not made successfully
-	"""
+        *(Messenger, MixedMessenger)* -- a tuple containing the Messenger 
+        for the talk connection and the MixedMessenger for the listen
+        connection, or None if the connection was not made successfully
+        """
         if self.is_connected():
             return None
         self.connecting = 1
@@ -353,18 +353,18 @@ class ClientConnection(Object.Object):
 
     def disconnect(self):
         """disconnect from the mediator.  Note that ClientEditor has the
-	messengers, so it will have to be in charge of 
-	notifying the mediator that we are disconnecting 
-	(if it was client-initiated).  It should do so after this call.
-	
-	**INPUTS**
+        messengers, so it will have to be in charge of 
+        notifying the mediator that we are disconnecting 
+        (if it was client-initiated).  It should do so after this call.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if we disconnected successfully
-	"""
+        *BOOL* -- true if we disconnected successfully
+        """
         if not self.is_connected():
             return 0
         self.connected = 0
@@ -382,10 +382,10 @@ class ClientConnection(Object.Object):
 
         **OUTPUTS**
         
-	*MixedMessenger* -- a MixedMessenger for the listen socket, which 
-	sends messages via an underlying MessengerBasic, but receives them 
-	from a Queue.
-	"""
+        *MixedMessenger* -- a MixedMessenger for the listen socket, which 
+        sends messages via an underlying MessengerBasic, but receives them 
+        from a Queue.
+        """
         
         data_thread = self.new_data_thread_given_event(listen_sock,
             data_event)
@@ -447,9 +447,9 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     """
     def __init__(self, editor, owner, ID, owns_editor = 0, **args):
         """if owns_editor is true, ClientEditor.cleanup will clean up
-	the editor AppState.  If not, ClientEditor's owner is
-	responsible for doing so.
-	"""
+        the editor AppState.  If not, ClientEditor's owner is
+        responsible for doing so.
+        """
         self.deep_construct(ClientEditor,
                             {
                              'connected': 0,
@@ -469,8 +469,9 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         if owns_editor:
             self.add_owned('editor')
         self.name_parent('owner')
-        self.expect=['recog_begin', 'recog_end', 'cur_pos', 
-            'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 
+        self.expect=['recog_begin', 'recog_end', 
+            'get_pos_selection',
+            'confirm_buffer_exists', 'list_open_buffers', 
             'set_selection', 'get_text', 'make_position_visible', 'len', 
             'set_text',
             'insert', 'delete', 'goto', 'active_buffer_name', 
@@ -507,31 +508,31 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def disconnect(self):
         """method to call to tell the ClientEditor to send a message 
-	disconnecting from the mediator
+        disconnecting from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.connected:
             self.talk_msgr.send_mess('editor_disconnecting')
         self.disconnected()
 
     def disconnected(self):
         """method to call to let the ClientEditor know that the client
-	has disconnected from the mediator
-	**INPUTS**
+        has disconnected from the mediator
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.connected = 0
         self.talk_msgr = None
         self.listen_msgr = None
@@ -539,17 +540,17 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def connect(self, talk_msgr, listen_msgr):
         """method to call to let the ClientEditor know that the client
-	has connected to the mediator, and can communicate with it by
-	means of the provided talk_msgr and listen_msgr.
+        has connected to the mediator, and can communicate with it by
+        means of the provided talk_msgr and listen_msgr.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.connected = 1
         self.talk_msgr = talk_msgr
         self.listen_msgr = listen_msgr
@@ -559,68 +560,68 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def send_updates(self, update_list):
         """send a list of updates to the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*[{STR: ANY}]* update_list -- list of update dictionaries (see
-	messaging.py for format)
+        *[{STR: ANY}]* update_list -- list of update dictionaries (see
+        messaging.py for format)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.connected:
             self.talk_msgr.send_mess('updates', {'value': update_list})
             
     def send_simple_response(self, name):
         """send a simple response without any arguments to a message 
-	to the mediator via the listen_msgr in response to a message 
-	from the mediator 
+        to the mediator via the listen_msgr in response to a message 
+        from the mediator 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of the response
+        *STR* name -- name of the response
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.connected:
             self.listen_msgr.send_mess(name)
 
     def send_updates_response(self, name, updates):
         """send a response to a message to the mediator via the 
-	listen_msgr in response to a message from the mediator,
+        listen_msgr in response to a message from the mediator,
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of the response
+        *STR* name -- name of the response
 
-	*{STR: ANY}* updates -- dictionary with arguments of the updates
-	message
+        *{STR: ANY}* updates -- dictionary with arguments of the updates
+        message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.send_response(name, updates, value_name = 'updates')
 
     def send_response(self, name, value, value_name = None):
         """send a response to a message to the mediator via the 
-	listen_msgr in response to a message from the mediator 
+        listen_msgr in response to a message from the mediator 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of the response
+        *STR* name -- name of the response
 
-	*{STR: ANY}* value -- dictionary with arguments of the message
+        *{STR: ANY}* value -- dictionary with arguments of the message
 
-	*STR value_name* --  name to use for the value (defaults to
-	'value', but occasionally 'updates' is needed)
+        *STR value_name* --  name to use for the value (defaults to
+        'value', but occasionally 'updates' is needed)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.connected:
             v_name = 'value'
             if value_name:
@@ -630,22 +631,22 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
     def on_change(self, start, end, text, selection_start,
         selection_end, buff_name, program_initiated):
         """callback from AppState to notify us of a change to one of its
-	buffers
+        buffers
 
-	*INT start, end* -- character offsets of start and end of 
-	changed region (before the change)
+        *INT start, end* -- character offsets of start and end of 
+        changed region (before the change)
 
-	*STR text* -- text with which that range was replaced
+        *STR text* -- text with which that range was replaced
 
-	*INT selection_start, selection_end* -- character offsets of the
-	selection (after the change)
+        *INT selection_start, selection_end* -- character offsets of the
+        selection (after the change)
 
-	*STR buff_name* -- buffer which was changed
+        *STR buff_name* -- buffer which was changed
 
-	*BOOL program_initiated* -- flag indicating whether the change
-	was program-initiated (i.e. in response to a command from the
-	mediator via ClientEditor) or user-initiated
-	"""
+        *BOOL program_initiated* -- flag indicating whether the change
+        was program-initiated (i.e. in response to a command from the
+        mediator via ClientEditor) or user-initiated
+        """
         updates = {'range': (start, end), 'buff_name': buff_name}
         if text == "":
             updates['action'] = 'delete'
@@ -666,22 +667,22 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
             debug.trace('ClientEditor.on_change', 'user-initiated change')
             debug.trace('ClientEditor.on_change', 
               'range, text = (%d, %d), "%s"' % (start, end, text) )
-            update_list = [updates] + self.sel_update(buff_name)
+            update_list = [updates] + self.pos_selection_update(buff_name)
             self.send_updates(update_list)
 
     def mediator_cmd(self):
         """method to call when the main thread receives a message
-	from the data thread that a command from the mediator is waiting
-	in the queue
+        from the data thread that a command from the mediator is waiting
+        in the queue
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.connected:
             cmd = self.listen_msgr.get_mess(expect = self.expect)
             if cmd:
@@ -689,17 +690,17 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def do_cmd(self, cmd):
         """perform the appropriate action in response to the command
-	from the mediator
+        from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	(STR, {STR: STR}) cmd -- The message retrieved
+        (STR, {STR: STR}) cmd -- The message retrieved
         from external editor in *(mess_name, {arg:val})* format
  
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         debug.trace('ClientEditor.do_cmd', 'cmd=%s' % repr(cmd))
         handler = self.msg_map[cmd[0]]
@@ -707,98 +708,98 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
 
     def close_app_cbk(self, instance, unexpected = 0):
         """callback from AppState which indicates that the application has 
-	closed 
+        closed 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance to be removed
+        *STR* instance -- name of the application instance to be removed
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.disconnect()
         self.owner.app_closing(self.ID)
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has closed a buffer
+        has closed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 updates = {'action': 'close_buff', 'buff_name': buff_name}
 # this doesn't make any sense -- the buffer doesn't
 # exist any more
-#                update_list = [updates] + self.sel_update(buff_name)
+#                update_list = [updates] + self.pos_selection_update(buff_name)
                 update_list = [updates]
                 self.send_updates(update_list)
 
     def open_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has opened a new buffer 
+        has opened a new buffer 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was opened
+        *STR* buff_name -- name of the buffer which was opened
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 updates = {'action': 'open_buff', 'buff_name': buff_name}
-                update_list = [updates] + self.sel_update(buff_name)
+                update_list = [updates] + self.pos_selection_update(buff_name)
                 self.send_updates(update_list)
 
     def curr_buff_name_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the current
-	buffer has changed
+        buffer has changed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the newly current buffer 
+        *STR* buff_name -- name of the newly current buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 updates = {'action': 'curr_buffer', 'buff_name': buff_name}
-                update_list = [updates] + self.sel_update(buff_name)
+                update_list = [updates] + self.pos_selection_update(buff_name)
                 self.send_updates(update_list)
 
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
         """callback from AppState which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 updates = {'action': 'rename_buff', 
@@ -806,40 +807,40 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
                            'new_buff_name': new_buff_name
                           }
                 buff_name = self.editor.curr_buffer()
-                update_list = [updates] + self.sel_update(buff_name)
+                update_list = [updates] + self.pos_selection_update(buff_name)
                 self.send_updates(update_list)
 
     def new_window(self, instance):
         """called when the editor notifies us of a new window for the 
-	specified instance
+        specified instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window is added
-	"""
+        *BOOL* -- true if window is added
+        """
         if self.editor_name == instance:
             if not self.ignore_callbacks:
                 buff_name = self.editor.app_active_buffer_name()
                 updates = {'action': 'new_window'}
-                update_list = [updates] + self.sel_update(buff_name)
+                update_list = [updates] + self.pos_selection_update(buff_name)
                 self.send_updates(update_list)
               
     def suspend_cbk(self, instance):
         """called when the editor notifies us that its process is about
         to be suspended
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         if self.connected:
             self.talk_msgr.send_mess('suspended')
 
@@ -847,14 +848,14 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         """called when the editor notifies us that its process has 
         resumed after having been suspended 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
         if self.connected:
             self.talk_msgr.send_mess('resuming')
 
@@ -922,10 +923,13 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         value = self.editor.recog_end()
         self.send_simple_response('recog_end_resp')
 
-    def cmd_cur_pos(self, arguments):
+    def cmd_get_pos_selection(self, arguments):
         buff_name = arguments['buff_name']
-        value = self.editor.cur_pos(buff_name = buff_name)
-        self.send_response('cur_pos_resp', value)
+        pos, selection = self.editor.get_pos_selection(buff_name = buff_name)
+        value = {}
+        value['pos'] = pos
+        value['selection'] = selection
+        self.send_response('get_pos_selection_resp', value)
 
     def cmd_confirm_buffer_exists(self, arguments):
         buff_name = arguments['buff_name']
@@ -936,33 +940,28 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         value = self.editor.open_buffers_from_app()
         self.send_response('list_open_buffers_resp', value)
 
-    def cmd_get_selection(self, arguments):
-        buff_name = arguments['buff_name']
-        value = self.editor.get_selection(buff_name = buff_name)
-        self.send_response('get_selection_resp', value)
- 
-    def sel_update(self, buff_name = None):
-        """create update descriptions for the current cursor location
-	and selection for a given buffer
+    def pos_selection_update(self, buff_name = None):
+        """create an update description for the current cursor location
+        and selection for a given buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR buff_name* -- name of the buffer, or None for the current
-	buffer
+        *STR buff_name* -- name of the buffer, or None for the current
+        buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[{STR:ANY}]* -- the update descriptions
-	"""
+        *[{STR:ANY}]* -- the update descriptions
+        """
         if buff_name == None:
             buff_name = self.editor.app_active_buffer_name()
         buff = self.editor.find_buff(buff_name)
         updates = []
         if buff != None:
-            updates.append({'action': 'select', 'range': buff.get_selection(), 
-                'buff_name': buff_name})        
-            updates.append({'action': 'goto', 'pos': buff.cur_pos(), 
-                'buff_name': buff_name})
+            pos, selection = buff.get_pos_selection()
+            updates = [{'action': 'pos_selection', 'selection': selection,
+                'pos': pos, 
+                'buff_name': buff_name}]        
 
         return updates
         
@@ -971,7 +970,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         range = messaging.messarg2intlist(arguments['range'])
         cursor_at = messaging.messarg2int(arguments['cursor_at'])
         self.editor.set_selection(range, cursor_at, buff_name = buff_name)
-        updates =  self.sel_update(buff_name)
+        updates =  self.pos_selection_update(buff_name)
         self.send_updates_response('set_selection_resp', updates)
 
     def cmd_get_text(self, arguments):
@@ -996,7 +995,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
             buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('set_text_resp', updates)
 
     def cmd_make_position_visible(self, arguments):
@@ -1039,7 +1038,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('indent_resp', updates)
 
     def cmd_insert(self, arguments):
@@ -1054,7 +1053,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('insert_resp', updates)
 
     def cmd_insert_indent(self, arguments):
@@ -1071,7 +1070,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('insert_indent_resp', updates)
 
     def cmd_file_name(self, arguments):
@@ -1090,7 +1089,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('delete_resp', updates)
 
     def cmd_incr_indent_level(self, arguments):
@@ -1105,7 +1104,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('incr_indent_level_resp', updates)
 
     def cmd_decr_indent_level(self, arguments):
@@ -1120,7 +1119,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.print_buff_if_necessary(buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('decr_indent_level_resp', updates)
     
     def cmd_goto(self, arguments):
@@ -1133,7 +1132,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.goto(pos, buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('goto_resp', updates)
 
     def cmd_goto_line(self, arguments):
@@ -1147,7 +1146,7 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         self.editor.goto_line(linenum, where, buff_name = buff_name)
         updates = self.awaiting_response
         self.awaiting_response = None
-        updates = updates + self.sel_update(b_name)
+        updates = updates + self.pos_selection_update(b_name)
         self.send_updates_response('goto_line_resp', updates)
     
     def cmd_get_visible(self, arguments):
@@ -1237,7 +1236,7 @@ class ClientEditorChangeSpec(ClientEditor):
 # changes.  Therefore, on_change will already handle updates, except for
 # selection and current buffer changes, so those are the only ones we
 # need to send here
-        updates =  self.sel_update()
+        updates =  self.pos_selection_update()
 #        self.send_updates([updates])
         self.send_response('updates', updates)
 
@@ -1278,18 +1277,18 @@ class UneventfulLoop(Object.OwnerObject):
     def __init__(self, multiple = 0, print_buff = 0, client_indentation = 0, 
         **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL multiple* -- should this EdSim allow for multiple open
-	buffers?
+        *BOOL multiple* -- should this EdSim allow for multiple open
+        buffers?
 
-	*BOOL print_buff* -- should this EdSim call print_buff whenever
-	the buffer changes?
+        *BOOL print_buff* -- should this EdSim call print_buff whenever
+        the buffer changes?
 
-	BOOL *client_indentation* -- if true, use the name
-	EdSimClientIndent when handshaking with the server, to ensure that
-	the server will not override indentation on the server-side.
-	"""
+        BOOL *client_indentation* -- if true, use the name
+        EdSimClientIndent when handshaking with the server, to ensure that
+        the server will not override indentation on the server-side.
+        """
         self.deep_construct(UneventfulLoop,
                             {
                              'connection': ClientConnection(),

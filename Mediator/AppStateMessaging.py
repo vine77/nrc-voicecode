@@ -305,21 +305,25 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         This return value is used by process_pending_updates to
         determine if it should call listen_one_transaction again.
         """
-        debug.trace('-- AppStateMessaging.listen_one_transaction', 'called')
+        debug.trace('AppStateMessaging.listen_one_transaction', 'called')
         expected = ['updates', 'suspended', 'resuming',
             'editor_disconnecting', 'connection_broken']
         mess = self.listen_msgr.get_mess(expect= expected)
         if mess == None:
             return 0
-        debug.trace('-- AppStateMessaging.listen_one_transaction', 
+        debug.trace('AppStateMessaging.listen_one_transaction', 
             'heard %s' % repr(mess))
         mess_name = mess[0]
-        debug.trace('-- AppStateMessaging.listen_one_transaction', 
-            'heard %s' % mess_name)
+        debug.trace('AppStateMessaging.listen_one_transaction', 
+            'heard "%s"' % mess_name)
         if mess_name == 'updates':
+            debug.trace('AppStateMessaging.listen_one_transaction', 
+                'was updates')
             mess_cont = mess[1]
+            debug.trace('AppStateMessaging.listen_one_transaction', 
+                'content was %s' % mess_cont)
             upd_list = mess_cont['value']
-            debug.trace('-- AppStateMessaging.listen_one_transaction', 
+            debug.trace('AppStateMessaging.listen_one_transaction', 
                 'updates %s' % str(upd_list))
             self.apply_updates(upd_list)
             return 1
@@ -347,6 +351,10 @@ class AppStateMessaging(AppStateCached.AppStateCached):
               self.closing = 1
               self.close_app_cbk(unexpected = 1)
             return 0
+        else:
+            debug.trace('AppStateMessaging.listen_one_transaction', 
+                'bad message')
+            return 1
 
     def process_pending_updates(self):
         """Process any pending updates which the editor has already
@@ -669,10 +677,11 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
 	"""
-        self.talk_msgr.send_mess('title_escape', 
-            {'before': before, 'after': after})
-        response = self.talk_msgr.get_mess(expect = ['title_escape_resp'])
-        self.can_show_instance_string = response[1]['value']
+        if before != "" and after != "":
+            self.talk_msgr.send_mess('title_escape', 
+                {'before': before, 'after': after})
+            response = self.talk_msgr.get_mess(expect = ['title_escape_resp'])
+            self.can_show_instance_string = response[1]['value']
         return self.can_show_instance_string
 
     def multiple_windows(self):
