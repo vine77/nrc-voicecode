@@ -19,23 +19,26 @@
 #
 ##############################################################################
 
-"""VoiceCode editor simulator."""
+"""AppState wrapper over the simple pythoon-based GUI editor (WaxEdit)."""
 
 import os, posixpath, re, sys
 import auto_test, debug
 import AppState
-from SourceBuffEdSim import SourceBuffEdSim
+from SourceBuffAppState import SourceBuffAppState
 
-class EdSim(AppState.AppState):
-    """VoiceCode editor simulator.
+class AppStateWaxEdit(AppState.AppState):
+    """This class is a an AppState wrapper on top of WaxEdit.
 
-    This class is used to simulate an external programming editor.
+    It is used to decouple from any external editor so that we can
+    test it without resorting to the IPC infrastructure for
+    communicating with external editors.
 
-    Useful for debugging VoiceCode mediator in isolation from external editor.
+    Instead of an external editor, we use WaxEdit, a simple editor written
+    in Python.
     
     **INSTANCE ATTRIBUTES**
 
-    *none* --
+    *WaxEdit* the_editor -- The WaxEdit editor wrapped into *self*.
     
     **CLASSS ATTRIBUTES**
     
@@ -45,24 +48,20 @@ class EdSim(AppState.AppState):
     buffer_methods.append('print_buff')
     
     def __init__(self, **attrs):
-        self.deep_construct(EdSim, {}, attrs)
+        self.deep_construct(AppStateWaxEdit, {}, attrs)
 
     def open_file(self, name, lang=None):
         """Open a file.
 
         Open file with name *STR name* and written in language *STR lang*.        
         """
-        try:
-            source_file = open(name, 'rw')
-            source = source_file.read()
-            source_file.close()
-        except Exception, err:
-            source = ''
-        self.curr_buffer =  SourceBuffEdSim(app = self, file_name=name, language=lang, \
+        self.the_editor.open_file(name)
+        self.curr_buffer =  SourceBuffAppState(app = self, file_name=name, language=lang, \
 	    initial_contents = source)
 
         self.open_buffers[name] = self.curr_buffer
-        
+
+
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
 
