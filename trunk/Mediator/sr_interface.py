@@ -549,6 +549,25 @@ def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
 #    trace('sr_interface.vocabulary_entry', 'returning entry=\'%s\'' % entry)
     return entry
 
+def spoken_acronym(acronym):
+    """returns the speech-engine specific spoken form for an acronym
+
+    **INPUTS**
+
+    *STR acronym* -- the acronym to expand.  The case of the
+    original acronym is ignored
+
+    **OUTPUTS**
+
+    *STR* -- the string to use for the spoken form of the acronym
+    """
+# for right now, just use a Natspeak-specific implementation
+    spoken = ''
+    for letter in acronym:
+        spoken = spoken + string.upper(letter) + '. '
+    return spoken[:-1]
+  
+
 class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     """implementation of SpokenUtterance using natlink ResObj.
     Defines an interface for manipulating the speech
