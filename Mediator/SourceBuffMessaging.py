@@ -661,6 +661,34 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.app.apply_upd_descr(response[1]['updates'])        
         self.app.update_response = 0
         
+    def backspace(self, n_times):
+        """Delete a number of spaces before the cursor.
+
+        If possible, the editor should simulate backspace keys, so as to
+        ensure that the effect of this command is identical to manual
+        backspacing.
+
+        However, if this is not possible, it can simulate backspacing as
+        closely as possible, or use BackspaceMixIn to do server-side
+        backspacing, or perform the equivalent algorithm on the client
+        side.
+ 
+        **INPUTS**
+        
+        INT *n_times* -- number of characters to delete.
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        args = {'n_times': n_times,
+            'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('backspace', args)
+        response = self.app.talk_msgr.get_mess(expect=['backspace_resp'])
+
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])        
+        self.app.update_response = 0
         
     def goto(self, pos):
 

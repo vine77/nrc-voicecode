@@ -24,13 +24,15 @@
 
 import debug
 import re, string, sys
+import SourceBuff
 import sb_services, SourceBuffNonCached
 
 
 from Object import Object
 import SourceBuffState
 
-class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
+class SourceBuffTB(SourceBuff.BackspaceMixIn, 
+        SourceBuffNonCached.SourceBuffNonCached):
     """implementation of (most of) SourceBuff as a wrapper around an
     object which inherits multiple interfaces: TextBuffer, VisibleBuffer, 
     and NumberedLines.

@@ -86,6 +86,27 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
                             enforce_value = {'main_frame_handle':
                             main_frame.GetHandle()})
 
+    def user_message(self, message, instance = None):
+        """displays a user message (usually on a MediatorConsole status 
+        line, but Natspeak-style tooltips might also be a possibility)
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        *STR instance_name* -- the editor from which the message
+        originated, or None if it is not associated with a specific
+        editor.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the MediatorConsole implementation has a means
+        of displaying user messages 
+        """
+        self.main_frame.set_status_text(message)
+        return 1
+
+
 # Hopefully, raise_active_window and raise_wxWindow are made obsolete by
 # WinSystemMSW, since the former doesn't work consistently, and the latter
 # doesn't seem to work at all under Windows NT (and presumably 2000/XP

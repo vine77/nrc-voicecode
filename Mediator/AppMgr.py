@@ -151,7 +151,8 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 # need to do this before cleanup because it is the only way to make sure
 # that the server removes its references to these instances
         for instance in self.instances.keys():
-            self.mediator.delete_editor_cbk(instance, unexpected = 0)
+            self.mediator.delete_editor_cbk(self.app_name(instance), 
+                instance, unexpected = 0)
 
         OwnerObject.remove_other_references(self)
 
@@ -204,6 +205,24 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         """
         return self.mediator.console()
          
+    def user_message(self, message, instance = None):
+        """sends a user message up the chain to the NewMediatorObject to
+        be displayed
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        *STR instance_name* -- the editor from which the message
+        originated, or None if it is not associated with a specific
+        editor.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.mediator.user_message(message, instance = instance)
+
     def reset_results_mgr(self, instance_name = None):
         """resets the ResMgr objects for a given editor, erasing any 
         stored utterance and corresponding editor state information.  
@@ -420,7 +439,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         return self.instance_names.keys()
 
     def app_name(self, instance):
-        """names of application corresponding to an instance
+        """name of application corresponding to an instance
 
 	**INPUTS**
 	
@@ -626,9 +645,11 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
 	*none*
 	"""
-        if self.mediator:
-            self.mediator.delete_editor_cbk(instance, unexpected = unexpected)
-        self.delete_instance(instance)
+        if self.known_instance(instance):
+            if self.mediator:
+                self.mediator.delete_editor_cbk(self.app_name(instance), 
+                    instance, unexpected = unexpected)
+            self.delete_instance(instance)
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application

@@ -1383,6 +1383,21 @@ class ServerMainThread(Object.OwnerObject):
         debug.virtual('ServerMainThread.possible_editor_cleanup')
 
         
+    def user_message(self, message):
+        """displays a user message via the appropriate channel
+        (e.g. stdout, or a MediatorConsole status line, or an 
+        editor-specific status line if supported.
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        **OUTPUTS**
+
+        *none*
+        """
+        print message
+
     def package_sock_pair(self, id, app_name, window_info, 
         listen_sock, talk_sock, test_client = 0):
         
@@ -1412,6 +1427,7 @@ class ServerMainThread(Object.OwnerObject):
 
         ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""        
         
+        self.user_message('creating messengers')
         disconnect_event = threading.Event()
         self.connection_ending[id] = disconnect_event
         testing = test_client and self.is_test_server()
@@ -1431,11 +1447,14 @@ class ServerMainThread(Object.OwnerObject):
         #
         # Give external editor a chance to configure the AppStateMessaging
         #
+        self.user_message('configuring from external')
         an_app_state.config_from_external()
 
+        self.user_message('creating editor instance')
         stay_alive = self._new_instance(id, an_app_state, window_info, 
             test_client)
         if stay_alive:
+#            self.user_message('created new editor instance')
             sys.stderr.write("successfully created new instance\n")
             self.data_threads[id] = data_thread
             return 1
@@ -1454,6 +1473,7 @@ class ServerMainThread(Object.OwnerObject):
                 return 0
 # with a regular client, we should still continue to run 
 # even if we fail to create a new instance
+            self.user_message('failed to create instance')
             return 1
         
     def handshake_listen_socks(self):
@@ -1489,6 +1509,7 @@ class ServerMainThread(Object.OwnerObject):
         except Queue.Empty:
             return
         
+        self.user_message('New connection')
         #
         # Create a temporary messenger for handshaking
         #
@@ -1501,6 +1522,7 @@ class ServerMainThread(Object.OwnerObject):
         mess = a_messenger.get_mess(expect=['app_name'])
         app_name = mess[1]['value']
                 
+        self.user_message('New connection from %s' % app_name)
         #
         # Assign a random ID to the external editor, and send it on the socket
         # connection.
@@ -1529,6 +1551,7 @@ class ServerMainThread(Object.OwnerObject):
         self.pending_listen_socks.append((most_rec_sock, most_rec_data))
 
         self.new_socks_lock.release()
+        self.user_message('awaiting corresponding talk connection')
         
 
     def handshake_talk_socks(self):
@@ -1548,6 +1571,7 @@ class ServerMainThread(Object.OwnerObject):
 
         stay_alive = 1
         self.new_socks_lock.acquire()
+        self.user_message('received talk connection')
 
         #
         # Loop through list of new VC_TALK sockets, handshake with them
@@ -1591,6 +1615,8 @@ class ServerMainThread(Object.OwnerObject):
             if found != None:
                 stay_alive = self.package_sock_pair(id, app_name, 
                     window_info, listen_sock, talk_sock, test_client)
+            else:
+                self.user_message('no corresponding listen connection')
                         
         self.new_socks_lock.release()        
 #        if stay_alive == 0:
@@ -2663,7 +2689,24 @@ class ServerNewMediator(ServerMainThread):
         return ServerMainThread.start_other_threads(self, 
             listener_evt, talker_evt)
 
-        
+    def user_message(self, message):
+        """displays a user message via the appropriate channel
+        (e.g. stdout, or a MediatorConsole status line, or an 
+        editor-specific status line if supported.
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.mediator:
+            self.mediator.user_message(message)
+        else:
+            ServerMainThread.user_message(message)
+
 
 
 

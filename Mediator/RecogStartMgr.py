@@ -222,6 +222,24 @@ class RecogStartMgr(OwnerObject):
                             args)
         self.name_parent('editors')
         
+    def user_message(self, message, instance = None):
+        """sends a user message up the chain to the NewMediatorObject to
+        be displayed
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        *STR instance_name* -- the editor from which the message
+        originated, or None if it is not associated with a specific
+        editor.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.editors.user_message(message, instance = instance)
+
     def set_app_mgr(self, manager):
         """fill in the reference to the parent AppMgr
 
@@ -1010,7 +1028,7 @@ class RSMInfrastructure(RecogStartMgr):
         """
         debug.trace('RSMInfrastructure.interpret_dictation', 
             'instance = %s, result = %s' % (instance, repr(result.words())))
-        print "Heard %s" % repr(result.words())
+#        print "Heard %s" % repr(result.words())
         if self.known_instance(instance):
             debug.trace('RSMInfrastructure.interpret_dictation', 
                 'known instance')
