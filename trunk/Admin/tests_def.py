@@ -157,7 +157,7 @@ def test_SymDict():
     a_mediator.configure()
     
 #  temporary check
-    print repr(vc_globals.test_data)
+#    print repr(vc_globals.test_data)
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c')
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'large_buff.py')
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
