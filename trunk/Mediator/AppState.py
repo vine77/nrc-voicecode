@@ -92,11 +92,12 @@ class AppState(Object):
     .. [self.curr_buffer] file:///AppState.AppState.html"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
-    'get_selection', 'goto_end_of_selection', 'set_selection',
+    'get_selection', 'goto_end_of_selection', 'set_selection', 
     'contents', 'get_text', 'distance_to_selection', 'get_visible',
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
     'move_relative', 'insert', 'indent', 'insert_indent', 
-    'delete', 'goto', 'goto_line', 'search_for', 'refresh_if_needed', 'refresh']
+    'delete', 'goto', 'goto_line', 'search_for', 'refresh_if_needed',
+    'refresh']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:

@@ -43,6 +43,13 @@ say(STR utterance, bypass_NatLink=1, user_input=None)
     the SR does (e.g. what if the SR recognises an LSA as a sequence
     of words instead of its written\spoken form?)
 
+    Note that if the utterance is a *Select XYZ* utterance, the first item
+    in list *utterances* should be the whole verb used in the select statement.
+
+    Example: say(['select previous', 'index', ' != \\not equal to', '0'])
+             NOT
+             say(['select', 'previous', 'index', ' != \\not equal to', '0'])
+    
     Argument *user_input* is a string that will be sent to the
     mediator console's standard input. Use in automated regression
     testing, if the *say* command requires user additional user input
@@ -50,16 +57,6 @@ say(STR utterance, bypass_NatLink=1, user_input=None)
      
     If argument *bypass_NatLink* is true, the interpretation will be done
     withouth going through NatLink's recognitionMimic function.
-
-say_select([STR] utterrance)
-   Simulates a Select XYZ utterance.
-
-   Elements of list *utterance* are the individual NatSpeak vocabulary
-   entries that make the utterance. For vocabulary entries of the form
-   written\spoken form, you must specify both the written and spoken
-   form of the entry.
-
-   e.g. say_select(['Select', '!=\\not equal to'])
 
 goto(INT pos)
    Moves cursor to position *pos*
@@ -165,9 +162,6 @@ def compile_symbols(file_list):
 def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     """Simulate an utterance *STR utterance*
 
-    Note that this command will not work with *Select XYZ* utterances.
-    For those, you must use the [say_select] command.
-    
     *STR utterance* -- The utterance. This can be a string with the
      written form of what should be recognised by the SR system. If
      it's a list, it should be a list of words in their written\spoken
@@ -191,8 +185,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 
     Examples: say('x not equal to') -> 'x != '
               say(['x', ' != \\not equal to'] -> 'x != '
-        
-    .. [say_select] file:///./sim_command.html#say_select"""
+    """
     
     global the_mediator
 
@@ -220,7 +213,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         if util.islist(utterance) or util.istuple(utterance):
             words = []
             #
-            # Clean up the written form in case use didn't type
+            # Clean up the written form in case user didn't type
             # special characters in the form that the SR expects
             # (e.g. '\n' instead of '{Enter}'
             #
@@ -234,6 +227,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         else:        
             words = re.split('\s+', utterance)
 
+
 #        print '-- mediator.say: words=%s' % words
         natlink.recognitionMimic(words)
 
@@ -243,24 +237,6 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     if user_input:
         sys.stdin = old_stdin
         temp_file.close()
-
-def say_select(utterance):
-    """Simulate a *Select XYZ* utterance
-
-
-    Elements of list *utterance* are the individual NatSpeak vocabulary
-    entries that make the utterance. For vocabulary entries of the form
-    written\spoken form, you must specify both the written and spoken
-    form of the entry.
-    
-    e.g. say_select(['Select', '!=\\not equal to'])    
-    """
-    
-    global the_mediator
-    utterance[0] = string.capitalize(utterance[0])
-    natlink.recognitionMimic(utterance)
-    show_buff()
-
 
 def goto(pos):
     """Goes to position *INT pos* of the current buffer"""

@@ -158,13 +158,6 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
-
-#      open_file('blah.py')
-#      say(['for', 'index', 'equals', '0', 'loop body'])
-#      say(['for', 'index', 'equals', '0', 'loop body'])
-#      move(-50)
-#      say_select(['select', 'index', '=\\equals', '0'])
-
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()

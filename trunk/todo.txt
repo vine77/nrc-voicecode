@@ -315,14 +315,6 @@ Error correction
 Can't do without it. David Fox is working on it.
 
 
-User/Topic management
----------------------
-
-Mediator should set NatSpeak so that it uses a special topic (or user
-if the version of NatSpeak doesn't have topics), to avoid polluting
-the user's regular user/topic with automatically generated entries.
-
-
 Text mode
 ---------
 

@@ -119,7 +119,7 @@ class MediatorObject(Object.Object):
 #            print '-- MediatorObject.configure: loading grammars'
             to_configure.mixed_grammar.load()
             to_configure.mixed_grammar.activate(0)
-            to_configure.code_select_grammar.load( ['Select', 'Correct'] )
+            to_configure.code_select_grammar.load_with_verbs()
             to_configure.code_select_grammar.activate()                
         
         try:
