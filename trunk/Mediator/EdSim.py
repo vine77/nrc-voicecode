@@ -274,27 +274,71 @@ class EdSim(AppState):
         *[STR file_name]* is the name of the source file for the buffer to
         print. If *None*, then print current buffer.    
         """
-
         buff = self.find_buff(file_name)
         pos = buff.cur_pos
         cont = self.curr_buffer.content
+
+        if buff.selection_start != None or buff.selection_end != None:
+            if buff.selecton_start <= buff.selection_end:
+                before_end = buff.selection_start - 1
+                selection_start = buff.selection_start
+                selection_end = buff.selection_end
+                after_star = selection_end + 1
+            else 
+                before_end = buff.selection_end - 1
+                selection_start = buff.selection_end
+                selection_end = buff.selection_start
+                after_star = selection_start + 1
+        else:
+            before_end = buff.cur_pos - 1
+            selection_start = buff.cur_pos
+            selection_end = buff.cur_pos
+            selection_end = buff.cur_pos + 1
+
+        before_content = cont[:before_end]
+        selection_content = cont[selection_start:selection_end]
+        after_content = cont[after_start:]
+        
         sys.stdout.write("*** Start of source buffer ***\n")
-        lines_with_num = self.number_lines(cont[0:pos])
+
+        #
+        # Print region before the selection.
+        #
+        curr_line_num = 0
+        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
         for aline in lines_with_num[:len(lines_with_num)-1]:
             sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
         if (len(lines_with_num) > 0):
              lastline = lines_with_num[len(lines_with_num)-1]
              sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
         
-        sys.stdout.write('<CURSOR>')
+        if selection_content == '':
+            sys.stdout.write('<CURSOR>')            
+        else:
+            sys.stdout.write('<SEL_START>')
 
-        lines_with_num = self.number_lines(cont[pos:], startnum=len(lines_with_num)-1)
-
+        #
+        # Print the selection
+        #
+        curr_line_num = line_index + len(lines_with_num) - 1
+        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
         if (len(lines_with_num) > 0):
             firstline = lines_with_num[0]
             sys.stdout.write('%s\n' % firstline[1])
             for aline in lines_with_num[1:]:
                 sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+        if seletion_content != '': sys.stdout.write('<SEL_END>')
+
+        #
+        # Print region after the selection
+        #
+        curr_line_num = line_index + len(lines_with_num) - 1
+        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
+        if (len(lines_with_num) > 0):
+            firstline = lines_with_num[0]
+            sys.stdout.write('%s\n' % firstline[1])
+            for aline in lines_with_num[1:]:
+                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))        
         sys.stdout.write("\n*** End of source buffer ***\n")
         
 
