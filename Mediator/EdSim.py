@@ -76,6 +76,37 @@ class EdSim(AppState.AppState):
 	left end of the selection"""
 	return 0
 
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at cursor position
+
+        If *buff* not specified either, drop breadcrumb [self.curr_buffer].
+	"""
+
+        buff = self.find_buff(buffname)
+        buffname = buff.file_name
+        if not pos: pos = buff.cur_pos()
+        self.breadcrumbs = self.breadcrumbs + [[buffname, pos]]
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+        stacklen = len(self.breadcrumbs)
+        lastbuff, lastpos = self.breadcrumbs[stacklen - num]
+        self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
+        if gothere:
+            self.goto(lastpos, f_name=lastbuff)
 
 
 
