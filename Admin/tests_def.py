@@ -3175,12 +3175,12 @@ def test_new_statement():
    commands.goto(0, echo_cmd=1)
    commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
    commands.say(['below', 'when', 'at', 'first',
-                 'line', 'of', 'non-', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+                 'line', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
 
    commands.goto(commands.app.len(), echo_cmd=1)   
    commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
    commands.say(['below', 'when', 'at', 'last', 
-                 'character', 'of', 'non-', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+                 'character', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
                  
    commands.goto_line(2, echo_cmd=1)
    commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
@@ -3219,7 +3219,7 @@ def test_new_statement():
    commands.goto(commands.app.len(), echo_cmd=1)   
    commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
    commands.say(['above', 'when', 'at', 'last', 
-                 'character', 'of', 'non-', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+                 'character', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
                  
    commands.goto_line(2, echo_cmd=1)
    commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)

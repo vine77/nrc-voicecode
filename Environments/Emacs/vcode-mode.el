@@ -10,7 +10,7 @@
 ;;
 ;; This file is part of Emacs vr-deprecated Mode.
 ;;
-;; Emacs vr-deprecated Mode is free software; you can redistribute it and/or modify
+;; Emacs vcode Mode is free software; you cltan redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2 of the License, or (at
 ;; your option) any later version.
@@ -24,6 +24,8 @@
 ;; along with Emacs vr-deprecated Mode; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
+
+(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
 
 ;;;deb DELETE THIS ONCE DONE DEBUGGING 'vcode-cmd-decr-indent-level
 (setq tmp-use-variant "1")
@@ -322,7 +324,6 @@ sent."
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
-  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-mode 1)
 )
 
@@ -450,15 +451,15 @@ VARIABLE DIRECTLY.  Call M-x vr-deprecated-mode instead.")
   "The working copy of vr-deprecated-activation-list.  Keeping it separate allows
 re-starting vr-deprecated Mode to undo vr-deprecated-add-to-activation-list.")
 
-(defvar vr-deprecated-mode-line " vr-deprecated"
+(defvar vcode-mode-line " vr-deprecated"
   "String displayed in the minor mode list when vr-deprecated mode is enabled.
 In the dictation buffer, the format is vr-deprecated:<micstate>.")
-(make-variable-buffer-local 'vr-deprecated-mode-line)
+(make-variable-buffer-local 'vcode-mode-line)
 (if (not (assq 'vr-deprecated-mode minor-mode-alist))
-    (setq minor-mode-alist (cons '(vr-deprecated-mode vr-deprecated-mode-line)
+    (setq minor-mode-alist (cons '(vr-deprecated-mode vcode-mode-line)
 				 minor-mode-alist)))
 
-(defvar vr-deprecated-mic-state "not connected"
+(defvar vcode-mode-mic-state "not connected"
   "String storing the microphone state for display in the mode line.")
 
 (defvar vr-deprecated-process nil "The vr-deprecated mode subprocess.")
@@ -740,13 +741,13 @@ interactively, sets the current buffer as the target buffer."
   (if (buffer-live-p vr-deprecated-buffer)
       (save-excursion
 	(set-buffer vr-deprecated-buffer)
-	(kill-local-variable 'vr-deprecated-mode-line)))
-  (set-default 'vr-deprecated-mode-line (concat " vr-deprecated-" vr-deprecated-mic-state))
+	(kill-local-variable 'vcode-mode-line)))
+  (set-default 'vcode-mode-line (concat " vr-deprecated-" vcode-mode-mic-state))
   (setq vr-deprecated-buffer buffer)
   (if buffer
       (save-excursion
 	(set-buffer buffer)
-	(setq vr-deprecated-mode-line (concat " vr-deprecated:" vr-deprecated-mic-state))
+	(setq vcode-mode-line (concat " vcode-mode:" vcode-mode-mic-state))
 	(run-hooks 'vr-deprecated-send-activate-buffer)
 	)
     (run-hooks 'vr-deprecated-send-deactivate-buffer)
@@ -974,7 +975,7 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 (defun vr-deprecated-sleep-while-recognizing ()
   (interactive)
   (let* ((first t) (count 0))
-    (while (and (< count 200) vr-deprecated-recognizing (string= vr-deprecated-mic-state "on"))
+    (while (and (< count 200) vr-deprecated-recognizing (string= vcode-mode-mic-state "on"))
       (if first (message "Waiting for voice recognition..."))
       (setq first nil)
       (setq count (1+ count))
@@ -1448,8 +1449,8 @@ speech server"
       (progn
 	(vr-deprecated-log "starting vr-deprecated mode %s\n" vr-deprecated-host)
 	(setq vr-deprecated-reading-string nil)
-	(setq vr-deprecated-mic-state "not connected")
-	(set-default 'vr-deprecated-mode-line (concat " vr-deprecated-" vr-deprecated-mic-state))
+	(setq vcode-mode-mic-state "not connected")
+	(set-default 'vcode-mode-line (concat " vcode-mode" vcode-mode-mic-state))
 	(setq vr-deprecated-internal-activation-list vr-deprecated-activation-list)
 	(setq vr-deprecated-cmd-executing nil)
 	(add-hook 'kill-emacs-hook 'vr-deprecated-kill-emacs)
@@ -1760,11 +1761,11 @@ focus event, which is the desired effect.
 (defun vr-deprecated-cmd-mic-state (vr-deprecated-request)
   (let ((state (car (cdr vr-deprecated-request))))
     (cond ((eq state 'off)
-	   (setq vr-deprecated-mic-state "off"))
+	   (setq vcode-mode-mic-state "off"))
 	  ((eq state 'on)
-	   (setq vr-deprecated-mic-state "on"))
+	   (setq vcode-mode-mic-state "on"))
 	  ((eq state 'sleep)
-	   (setq vr-deprecated-mic-state "sleep")))
+	   (setq vcode-mode-mic-state "sleep")))
     (vr-deprecated-activate-buffer vr-deprecated-buffer))
   t)
 
