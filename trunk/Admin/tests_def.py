@@ -37,8 +37,8 @@ from pyUnitExample import SampleTestCase
 import TestCaseWithHelpersTest, SymbolReformattingUITestCase
 
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
-# import mediator, MediatorObject, Object, SymDict, test_pseudo_python
-import Object, SymDict, test_pseudo_python
+# import mediator, MediatorObject, Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
+import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
@@ -460,7 +460,7 @@ def test_mediator_console():
     file = small_buff_c
     commands.print_abbreviations()    
     test_command("""compile_symbols([r'""" + file + """'])""")
-    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
+    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0', 'loop', 'body'])
 
     test_command("say(['select', 'horiz_pos\\horizontal position'," + \
         " '=\equals'],  never_bypass_sr_recog=1)")
@@ -1815,6 +1815,30 @@ add_test('python_compilation', python_compilation_wrapper, 'testing parsing of p
 
 
 add_test('py_misc_statements', python_misc_statements_wrapper, 'testing miscelleneous python statements.')
+
+
+##############################################################################
+# Testing C/C++ support
+##############################################################################
+def pseudo_C_Cpp_wrapper():
+    test_pseudo_C_Cpp.test_dictate_from_scratch(testing)
+
+add_test('C_Cpp', pseudo_C_Cpp_wrapper, 'testing the various CSCs and LSAs for dictating C/C++ from scratch')
+
+def pseudo_C_Cpp_editing_wrapper():    
+    test_pseudo_C_Cpp.test_editing(testing)
+    
+add_test('C_Cpp_editing', pseudo_C_Cpp_editing_wrapper, 'testing the various CSCs and LSAs for editing C/C++')
+
+def C_Cpp_compilation_wrapper():
+    test_pseudo_C_Cpp.test_C_Cpp_compilation(testing)
+
+def C_Cpp_misc_statements_wrapper():
+   test_pseudo_C_Cpp.test_misc_C_Cpp_statements(testing)
+   
+add_test('C_Cpp_compilation', C_Cpp_compilation_wrapper, 'testing parsing of C/C++ symbols.')
+
+add_test('C_Cpp_misc_statements', C_Cpp_misc_statements_wrapper, 'testing miscelleneous C/C++ statements.')
 
 
 ##############################################################################
@@ -4525,8 +4549,8 @@ def test_language_name_for_file(file_name):
 def test_language_name():
     test_language_name_for_file("dummy.py")
     test_language_name_for_file("dummy.c")
-    
-    
+    test_language_name_for_file("dummy.h")
+    test_language_name_for_file("dummy.cpp")
     
 add_test('language_name', test_language_name,
          desc='Testing language name of a buffer.')
