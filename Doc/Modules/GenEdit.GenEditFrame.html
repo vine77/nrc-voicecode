@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:45:14 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Sep 01 17:09:11 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -40,7 +40,7 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.save_as_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.save_as_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">init_dir</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.set_frame_ID"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.set_frame_ID</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)<SPAN CLASS="OneLiner"> # update the title to reflect the new instance string</SPAN>
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # show the window corresponding to this frame</SPAN>
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.show"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.show</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)<SPAN CLASS="OneLiner"> # show the window corresponding to this frame</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.switch_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.switch_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrame.update_title"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrame.update_title</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # update the window title of the frame reflect a new buffer name </SPAN>
 
@@ -414,13 +414,18 @@ GenEditFrames.add_frame, not by the GUI)
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GenEdit.GenEditFrame.show" CLASS="Method">GenEdit.GenEditFrame.show(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="GenEdit.GenEditFrame.show" CLASS="Method">GenEdit.GenEditFrame.show(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">initial=0</SPAN>)</H2>
 <P>show the window corresponding to this frame</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> initial
+<DD>is this the initial time the frame is shown?
+</DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
