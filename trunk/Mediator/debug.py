@@ -75,36 +75,48 @@ def dont_print_trace(trace_id, message, insert_nl=1):
 def print_trace(trace_id, message, insert_nl=1):
     global to_be_traced, trace_file
 
-    if to_be_traced.has_key(trace_id):
+    if to_be_traced == 'all' or to_be_traced.has_key(trace_id):
         trace_file.write('-- %s: %s' % (trace_id, message))
         if insert_nl:
             trace_file.write('\n')
 
 
-trace = dont_print_trace
+trace_fct = dont_print_trace
 trace_file = sys.stdout
 to_be_traced = {}
 
-def config_traces(print_to=None, status=None, trace_what=None):
+def trace(trace_id, message):
+    #
+    # This may look like we have an unnecessary level of indirection, i.e.
+    # why not call trace_fct() direction instead of trace()?
+    # The problem there is that if we write "from debug import trace_fct",
+    # then we import whatever function trace_fct happens to refer to at the
+    # time of import, NOT AT THE TIME OF EXECUTION. So even if we invoke
+    # config_trafces() to change trace_fct afte import, we will still be
+    # invoking the old trace_fct(), not the new one.
+    #
+    trace_fct(trace_id, message)
+
+def config_traces(print_to=None, status=None, active_traces={}):
     """Configures what traces are printed, and where"""
 
-    global trace, trace_file, to_be_traced
+    global trace_fct, trace_file, to_be_traced
 
     #
-    # trace is a function that we set on the fly. It's never defined explicitly
+    # trace_fct is a function that we set on the fly. It's never defined explicitly
     # through a *def* statement
     #
     if status:
         if status == 'on':
-            trace = print_trace
+            trace_fct = print_trace
         else:
-            trace = dont_print_trace
+            trace_fct = dont_print_trace
 
     if print_to:
         trace_file = print_to
 
-    if trace_what:
-        to_be_traced = trace_what
+    if active_traces:
+        to_be_traced = active_traces
 
         
 
