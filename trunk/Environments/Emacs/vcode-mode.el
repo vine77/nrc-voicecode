@@ -684,14 +684,17 @@ does not match any '(not REGEXP) element of
 vr-deprecated-internal-activation-list.  BUFFER can be a buffer or a buffer name."
   (if (bufferp buffer)
       (setq buffer (buffer-name buffer)))
-  (if (string-match "^ \\*Minibuf-[0-9]+\\*$" buffer)
-      vr-deprecated-activate-minibuffer
-    (and (vr-deprecated-filter (lambda (r) (and (stringp r) (string-match r buffer)))
-		    vr-deprecated-internal-activation-list)
-	 (not (vr-deprecated-filter (lambda (r) 
-			   (and (consp r) (eq (car r) 'not)
-				(string-match (car (cdr r)) buffer)))
-			 vr-deprecated-internal-activation-list)))))
+  (save-match-data
+    (if (string-match "^ \\*Minibuf-[0-9]+\\*$" buffer)
+        vr-deprecated-activate-minibuffer
+      (and (vr-deprecated-filter (lambda (r) (and (stringp r) (string-match r buffer)))
+                      vr-deprecated-internal-activation-list)
+           (not (vr-deprecated-filter (lambda (r) 
+                             (and (consp r) (eq (car r) 'not)
+                                  (string-match (car (cdr r)) buffer)))
+                           vr-deprecated-internal-activation-list))))
+  )
+)
 
 (defun vr-deprecated-maybe-activate-buffer (buffer)
   ;; Deactivate whenever isearch mode is active.  This is a

@@ -138,7 +138,7 @@ debug.config_traces(status="on",
 #                                    'delete_instance_cbk': 1,
 #                                    'listen_one_transaction': 1,
 #                                    'close_app_cbk': 1,
-#                                    'AppState': 1
+#                                    'AppState': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
