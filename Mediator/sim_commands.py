@@ -81,6 +81,9 @@ listen()
    Once in 'listen' mode, you cannot type console commands until you
    have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
    window.
+
+make_position_visible(INT pos)
+   Scroll so that pos is visible
    
 print_abbreviations(show_unresolved=1)
    Prints out a list of the abbreviations in symbols that were parsed
@@ -269,6 +272,11 @@ def goto_line(linenum):
     """Goes to line number *INT linenum* of current source buffer"""
     global the_mediator    
     the_mediator.interp.on_app.goto_line(linenum)
+    show_buff()
+
+def make_position_visible(pos):
+    global the_mediator    
+    the_mediator.interp.on_app.make_position_visible(pos)
     show_buff()
 
 def select(start, end):

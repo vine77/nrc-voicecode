@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 19 01:20:14 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 27 08:40:08 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffEdSim</SPAN>(<A CLASS="DocLink" HREF="SourceBuff.SourceBuff.html">SourceBuff</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_pos=0</SPAN>, <SPAN CLASS="Argument">init_visible=None</SPAN>, <SPAN CLASS="Argument">init_selection=None</SPAN>, <SPAN CLASS="Argument">initial_contents=''</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">init_pos=0</SPAN>, <SPAN CLASS="Argument">init_selection=None</SPAN>, <SPAN CLASS="Argument">initial_contents=''</SPAN>, <SPAN CLASS="Argument">window_size=3</SPAN>, <SPAN CLASS="Argument">global_selection=1</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.cur_pos</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffEdSim.SourceBuffEdSim.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a source buffer range.</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.get_selection</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -38,6 +38,7 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.len</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffEdSim.SourceBuffEdSim.line_num_of"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.line_num_of</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the line number for a particular cursor position</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffEdSim.SourceBuffEdSim.lines_around_cursor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.lines_around_cursor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the line numbers of lines around cursor</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.make_position_visible</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">position=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffEdSim.SourceBuffEdSim.print_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.print_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">from_line=None</SPAN>, <SPAN CLASS="Argument">to_line=None</SPAN>)<SPAN CLASS="OneLiner"> # Prints buffer to STDOUT</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuffEdSim.SourceBuffEdSim.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffEdSim.SourceBuffEdSim.set_selection</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
@@ -91,16 +92,20 @@ editor simulator EdSim.</P>
 <EM>INT pos=0</EM>
 <DD>Cursor position (in number of chars) in the buffer
 <DT>
-<EM>(INT, INT)</EM> visible_range
-<DD>the visible portion of the source buffer as
-  character offsets into contents.
-<DT>
 <EM>(INT, INT)</EM> selection_range
 <DD>the current selection as
   character offsets into contents.
 <DT>
 <EM>STR content=None</EM>
 <DD>Content of the source buffer
+<DT>
+<EM>INT window_size</EM>
+<DD>When printing the content of the current buffer, 
+ only print this number of lines before and after the current line
+<DT>
+<EM>BOOL global_selection</EM>
+<DD>makes the <CODE>visible</CODE> region the whole
+buffer (useful for regression testing)
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>
@@ -272,7 +277,7 @@ defaults to the current selection.
 <DT>
 <EM>INT</EM> from_line = None
 <DD>First line to be printed. If <EM>None</EM>, then
-print <EM>print_window_size</EM> lines around cursor.
+print <EM>window_size</EM> lines around cursor.
 <DT>
 <EM>INT</EM> to_line = None
 <DD>Last line to be printed.

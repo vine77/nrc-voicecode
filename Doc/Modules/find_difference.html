@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Dec 04 22:59:40 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 27 08:40:12 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,12 +15,51 @@
 
 
 <H1 CLASS="ModuleName">Module find_difference</H1>
-<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_difference"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_difference</SPAN></A>(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</SPAN>
+<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_count"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_count</SPAN></A>(<SPAN CLASS="Argument">s</SPAN>, <SPAN CLASS="Argument">sub</SPAN>, <SPAN CLASS="Argument">count=1</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_difference"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_difference</SPAN></A>(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#find_string_difference"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_string_difference</SPAN></A>(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VC...Mediator\\find_difference.py'</SPAN></SPAN>
-</PRE><H2>Description</H2><P>
-find a single changed region in a pair of strings
-</P>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#rfind_count"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">rfind_count</SPAN></A>(<SPAN CLASS="Argument">s</SPAN>, <SPAN CLASS="Argument">sub</SPAN>, <SPAN CLASS="Argument">count=1</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VC...ediator\\find_difference.pyc'</SPAN></SPAN>
+</PRE><H2>Description</H2>
+<OL>
+
+<LI>utilities related to finding text in strings
+
+</OL>
+<H2 ID="find_count" CLASS="Function">find_count(<SPAN CLASS="Argument">s</SPAN>, <SPAN CLASS="Argument">sub</SPAN>, <SPAN CLASS="Argument">count=1</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</H2>
+<P></P>
+
+<P>
+Generalizes string.find to find the count-th non-overlapping occurrence 
+of sub in s[start:end]</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> s
+<DD>string to search
+<DT>
+<EM>STR</EM> sub
+<DD>look for sub
+<DT>
+<EM>INT</EM> count
+<DD>ignore the first count-1 occurences
+<DT>
+<EM>INT</EM> start, end
+<DD>look in s[start:end]
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>index of count-th occurence, or -1 if there are fewer
+than count occureneces
+</DL>
 <H2 ID="find_difference" CLASS="Function">find_difference(<SPAN CLASS="Argument">old</SPAN>, <SPAN CLASS="Argument">new</SPAN>)</H2>
 <P></P>
 
@@ -94,6 +133,40 @@ the range modified (or deleted) (this matches Python's slice convention).
 <EM>STR</EM> change
 <DD>the replacement string from new
 
+</DL>
+<H2 ID="rfind_count" CLASS="Function">rfind_count(<SPAN CLASS="Argument">s</SPAN>, <SPAN CLASS="Argument">sub</SPAN>, <SPAN CLASS="Argument">count=1</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)</H2>
+<P></P>
+
+<P>
+Generalizes string.rfind to find the count-th non-overlapping occurrence 
+of sub from the end of s[start:end]</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> s
+<DD>string to search
+<DT>
+<EM>STR</EM> sub
+<DD>look for sub
+<DT>
+<EM>INT</EM> count
+<DD>ignore the first count-1 occurences
+<DT>
+<EM>INT</EM> start, end
+<DD>look in s[start:end]
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>index of count-th occurence, or -1 if there are fewer
+than count occureneces
 </DL>
 
 <HR>

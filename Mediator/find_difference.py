@@ -1,7 +1,9 @@
-"""find a single changed region in a pair of strings
+"""misc. utilities related to finding text in strings
 """
 
 # (C)2000 David C. Fox
+
+import string
 
 def find_difference(old, new):
     """Finds the difference between old and new sequences, assuming that there
@@ -65,4 +67,71 @@ def find_string_difference(old, new):
 # note, this function is probably terribly slow for long strings.
 # We may want to rewrite find_difference as an extension module in C
     return find_difference(old, new)
+    
+def find_count(s, sub, count = 1, start = None, end = None):
+    """Generalizes string.find to find the count-th non-overlapping occurrence 
+    of sub in s[start:end]
+
+    **INPUTS**
+
+    *STR* s -- string to search
+
+    *STR* sub -- look for sub
+
+    *INT* count -- ignore the first count-1 occurences
+
+    *INT* start, end -- look in s[start:end]
+
+    **OUTPUTS**
+
+    *INT* -- index of count-th occurence, or -1 if there are fewer
+    than count occureneces
+
+    """
+    first, last = start, end
+    if first == None:
+	first = 0
+    if last == None:
+	last = len(s)
+    for i in range(count - 1):
+	found = string.find(s, sub, first, last)
+	if found == -1:
+	    return found
+	first = found + len(sub)
+    return string.find(s, sub, first, last)
+		
+    
+    
+def rfind_count(s, sub, count = 1, start = None, end = None):
+    """Generalizes string.rfind to find the count-th non-overlapping occurrence 
+    of sub from the end of s[start:end]
+
+    **INPUTS**
+
+    *STR* s -- string to search
+
+    *STR* sub -- look for sub
+
+    *INT* count -- ignore the first count-1 occurences
+
+    *INT* start, end -- look in s[start:end]
+
+    **OUTPUTS**
+
+    *INT* -- index of count-th occurence, or -1 if there are fewer
+    than count occureneces
+
+    """
+    first, last = start, end
+    if first == None:
+	first = 0
+    if last == None:
+	last = len(s)
+    for i in range(count - 1):
+	found = string.rfind(s, sub, first, last)
+	if found == -1:
+	    return found
+	last = found
+    return string.rfind(s, sub, first, last)
+		
     
