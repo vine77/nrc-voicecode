@@ -391,7 +391,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	open_buffers = response[1]['value']
 	return open_buffers
 
-    def close_buffer(self, buff_name, save):
+    def app_close_buffer(self, buff_name, save):
         """Ask the editor to close a buffer.
         
         **INPUTS**
@@ -409,8 +409,10 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         """
 
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
-        response = self.talk_msgr.get_mess(expect=['ok'])
+        response = self.talk_msgr.get_mess(expect=['close_buffer_resp'])
+	success = response[1]['value']
         self.cache['app_active_buffer_name'] = None
+	return success
 
 
 

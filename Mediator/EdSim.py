@@ -236,7 +236,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	return self.open_buffers.keys()
 
 
-    def save_file(self, full_path = None, no_prompt = 0):
+    def app_save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
 
         **INPUTS**
@@ -250,7 +250,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	**OUTPUTS**
 
-	*BOOL* -- true if the file was successfully saved
+	*STR* -- new buffer name if successful, or None if the save 
+	failed
+
         """
 	f_path = full_path
 	if f_path == None:
@@ -268,14 +270,14 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 			break
 		    elif answer == 'n':
 			overwrite = 0
-			return 0
+			return None
 		    print "\nPlease answer 'y' or 'n'."
         try:
             source_file = open(f_path, 'w')
             source_file.write(self.curr_buffer().contents())
             source_file.close()
         except Exception, err:
-            return 0
+            return None
 	path, short = os.path.split(f_path)
 	if path:
 	    self.curr_dir = path
@@ -284,7 +286,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    self.only_buffer_name = f_path
 	    self.open_buffers[f_path] = self.only_buffer
 	    del self.open_buffers[old_name]
-	return 1
+	return f_path
 
 
     def multiple_buffers(self):
@@ -313,7 +315,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	left end of the selection"""
 	return 0
 
-    def close_buffer(self, buff_name, save):
+    def app_close_buffer(self, buff_name, save):
         """Close a buffer.
         
         **INPUTS**
@@ -331,10 +333,12 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
 #        print '-- EdSim.close_buffer: called'
-        if self.bound_buffer_name == buff_name:
-            self.bound_buffer_name = None
-        self.only_buffer_name = None
-        del self.open_buffers[buff_name]
+	buff = self.find_buff(buff_name)
+	if buff == None:
+	    return 0
+	self.only_buffer_name = None
+	del self.open_buffers[buff_name]
+	return 1
         
 
 

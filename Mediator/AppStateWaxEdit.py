@@ -233,7 +233,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         return buff_name
 
         
-    def save_file(self, full_path = None, no_prompt = 0):
+    def app_save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
 
         **INPUTS**
@@ -247,7 +247,9 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
 	**OUTPUTS**
 
-	*BOOL* -- true if the file was successfully saved
+	*STR* -- new buffer name if successful, or None if the save 
+	failed
+
         """
 	f_path = full_path
 	quiet = no_prompt
@@ -266,7 +268,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 # 	    return
 	# WaxEdit only supports one open buffer at a time
 	if not success:
-	    return 0
+	    return None
 	path, short = os.path.split(f_path)
 	print path
 	print short
@@ -278,7 +280,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	    self.open_buffers[f_path] = self.only_buffer
 	    del self.open_buffers[old_name]
 	self.the_editor.set_name(short)
-	return 1
+	return f_path
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
@@ -357,3 +359,31 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
 	return 0
+
+    def app_close_buffer(self, buff_name, save):
+        """Close a buffer.
+        
+        **INPUTS**
+
+        STR *buff_name* -- name of buffer to close
+
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+	buff = self.find_buff(buff_name)
+	if buff == None:
+	    return 0
+	self.only_buffer_name = None
+	del self.open_buffers[buff_name]
+	return 1
+        
+
+
+

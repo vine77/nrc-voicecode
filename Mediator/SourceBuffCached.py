@@ -156,6 +156,25 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         """
         debug.virtual('SourceBuffCached._language_name_from_app')
 
+    def rename_buffer_cbk(self, new_buff_name):
+        
+        """AppState invokes this method when 
+	AppState.rename_buffer_cbk is called to notify VoiceCode that 
+	an existing text buffer has been renamed
+        
+        **INPUTS**
+
+        STR *new_buff_name* -- new name of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+	SourceBuff.rename_buff_cbk(new_buff_name)
+        self.cache['language_name'] = None
+        self.cache['file_name'] = None
 
     def cur_pos(self):
 	"""retrieves current position of cursor .  Note: the current

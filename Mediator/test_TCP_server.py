@@ -188,8 +188,10 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('open_file_resp', {'buffer_id': args['file_name']})
         elif action == 'close_buffer':
             print '-- execute_request: action=\'close_buffer\''
-            self.xed.ed.close_buffer(buff_name=args['buff_name'], save=['save'])
-            self.xed.vc_talk_msgr.send_mess('ok')
+	    success = self.xed.ed.close_buffer(buff_name=args['buff_name'], 
+		save=['save'])
+            self.xed.vc_talk_msgr.send_mess('close_buffer_resp',
+		{'value': success})
         elif action == 'terminating':
             print "VoiceCode server was unilaterally shutdown."
             sys.exit

@@ -163,7 +163,7 @@ class AS_UpdOpenBuffer(AS_Update):
                             {})
         
     def apply(self, on_app):
-        on_app.new_source_buffer(self.descr['buff_name'])
+        on_app.open_buffer_cbk(self.descr['buff_name'])
 
         
 class AS_UpdCloseBuffer(AS_Update):
@@ -991,7 +991,17 @@ class AppState(Object):
             if self.open_buffers.has_key(buff_name):
                 return self.open_buffers[buff_name]
             else:
-                new_buff = self.new_source_buffer(buff_name)
+# Don't create a new buffer in the application, but if the application has a
+# buffer with no corresponding SourceBuff, then create a corresponding
+# SourceBuff.
+		if not self.query_buffer_from_app(buff_name):
+		    return None
+                new_buff = self._new_source_buffer(buff_name)
+# This is still problematic if an existing buffer has just been renamed
+# (e.g. by "Save As...").  I'm not sure of any good way to avoid this
+# problem, except for the editor to notify AppState of renamings (or,
+# when the save is mediator-initiated, for AppState to check after the
+# save whether the buffer has been renamed).
                 return new_buff
         else:
             return None
@@ -1037,6 +1047,8 @@ class AppState(Object):
 # this looks like the callback version, since close_buffer, which tells
 # the editor to close a buffer, is virtual
             del self.open_buffers[buff_name]
+	if self.is_bound_to_buffer() == buff_name:
+	    self.unbind_from_buffer()
 
     def drop_breadcrumb(self, buffname=None, pos=None):
 
@@ -1080,6 +1092,31 @@ class AppState(Object):
         
         debug.not_implemented('AppState.tell_editor_to_open_file')
         
+    def rename_buffer_cbk(self, old_buff_name, new_buff_name):
+        
+        """Editor invokes this method to notify VoiceCode that it
+        has renamed an existing text buffer.
+        
+        **INPUTS**
+
+        STR *old_buff_name* -- old name of the buffer.
+        STR *new_buff_name* -- new name of the buffer.
+        
+        **OUTPUTS**
+        
+        *none*
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+        if new_buff_name != old_buff_name:
+	    if not self.open_buffers.has_key(new_buff_name):
+		self.open_buffers[new_buff_name] = \
+		    self.open_buffers[old_buff_name]
+		del self.open_buffers[old_buff_name]
+	    if self.is_bound_to_buffer() == old_buff_name:
+		self.bind_to_buffer(old_buff_name)
+        buff = self.find_buff(new_buff_name)
+	buff.rename_buffer_cbk(new_buff_name)
 
     def open_buffer_cbk(self, buff_name):
         
@@ -1101,9 +1138,8 @@ class AppState(Object):
         #
         # First make sure we don't already have a buffer by that name
         #
-        buff = self.find_buff(buff_name=buff_name)
-        if not buff:
-            self.new_source_buffer(buff_name)
+        if not self.open_buffers.has_key(buff_name):
+            self._new_source_buffer(buff_name)
             
 
     def new_compatible_sb(self, buff_name):
@@ -1121,17 +1157,22 @@ class AppState(Object):
         
         **OUTPUTS**
         
-        *none* -- 
+        *SourceBuff* -- the new buffer
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
         debug.virtual('AppState.new_compatible_sb')
 
 
-    def new_source_buffer(self, buff_name):
+    def _new_source_buffer(self, buff_name):
         
         """Creates a new [SourceBuff] instances and adds it to the
         list of open buffers.
+
+	Note: this method should not only be called by other AppState
+	methods, not from outside AppState, and only if such methods
+	have already verified that self.open_buffers doesn't already
+	have a key matching buff_name
         
         **INPUTS**
         
@@ -1143,7 +1184,7 @@ class AppState(Object):
         
         """
 
-#        print '-- AppState.new_source_buffer: buff_name=%s' % buff_name
+#        print '-- AppState._new_source_buffer: buff_name=%s' % buff_name
         new_buff = self.new_compatible_sb(buff_name=buff_name)
         self.open_buffers[buff_name] = new_buff
         return new_buff
@@ -1185,9 +1226,32 @@ class AppState(Object):
 
 	**OUTPUTS**
 
-	*BOOL* -- true if the file was successfully saved
+	*BOOL* -- true if file was saved successfully
         """
-	debug.virtual('AppState.save_file')
+	buff_name = self.curr_buffer_name()
+        new_buff_name = self.app_save_file(full_path, no_prompt)
+
+        if new_buff_name != buff_name:
+	    self.rename_buffer_cbk(buff_name, new_buff_name)
+
+    def app_save_file(self, full_path = None, no_prompt = 0):
+        """Tell the external editor to save the current buffer.
+
+        **INPUTS**
+	
+	*STR full_path* -- full path under which to save the file, or
+	None to use the buffer name
+
+	*BOOL no_prompt* -- overwrite any existing file without
+	prompting.  No_prompt should only be set to true if the caller
+	has already prompted the user.
+
+	**OUTPUTS**
+
+	*STR* -- new buffer name if successful, or None if the save 
+	failed
+        """
+	debug.virtual('AppState.app_save_file')
 
     def active_language(self):
         """Returns name of active programming language.
@@ -1240,7 +1304,7 @@ class AppState(Object):
 
         **OUTPUTS**
         
-        *(* [Context], [Action]*)* hist_entry -- The context and action of the *nth* most
+        *(* [Context], [Action] *)* hist_entry -- The context and action of the *nth* most
         recent command in the application's command history.
 
         .. [Context] file:///./Context.Context.html
@@ -1299,10 +1363,29 @@ class AppState(Object):
 #        print '-- AppState.close_all_buffers: called'
         for a_buff_name in self.open_buffers.keys():
             self.close_buffer(a_buff_name, save)
-        self.open_buffers = {}
-        self.bound_buffer_name = None
 
     def close_buffer(self, buff_name, save=0):
+        """close a buffer
+        
+        **INPUTS**
+        
+        STR *buff_name* -- name of buffer to close
+
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+
+        **OUTPUTS**
+        
+        *BOOL* -- true if the editor does close the buffer
+        """
+        if self.app_close_buffer(buff_name, save):
+	    self.close_buffer_cbk(buff_name)
+	    return 1
+	return 0
+        
+
+    def app_close_buffer(self, buff_name, save=0):
         """Ask the editor to close a buffer.
         
         **INPUTS**
@@ -1315,10 +1398,10 @@ class AppState(Object):
 
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if the editor does close the buffer
         """
         
-        debug.virtual('AppState.close_buffer')
+        debug.virtual('AppState.app_close_buffer')
 
 
 
