@@ -589,6 +589,9 @@ class DlgModelView(Object.OwnerObject):
     def ShowModal(self):
         return self.view().ShowModal()
         
+    def IsModal(self):
+        return self.view().IsModal()
+        
     def GetPositionTuple(self):
         return self.view().GetPositionTuple()
         

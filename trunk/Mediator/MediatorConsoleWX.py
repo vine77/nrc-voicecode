@@ -691,7 +691,7 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                            )
         if pos is None:
            pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correction", pos,
+        wxDialog.__init__(self, parent, wxNewId(), "Correct an Utterance", pos,
             (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 
         self.name_parent('console')
@@ -724,6 +724,7 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 # instead, we now set the initial value from the validator
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
             (550, 40), style = wxTE_NOHIDESEL, validator = validator)
+
 #        s.Add(self.text, 0, wxEXPAND | wxALL)
         set_text_font(self.text)
         middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
@@ -1245,8 +1246,9 @@ class CorrectionValidator(wxPyValidator, Object.Object):
         parent = win.GetParent()
 #        parent.parent = None
 #        print 'transferring from window'
-        valid = self.convert_corrected(win.GetValue())
-#        print 'valid = %d' % valid
+        corrected_spoken = win.GetValue()
+        corrected_spoken.encode("ascii", "ignore")
+        valid = self.convert_corrected(corrected_spoken)
         return valid
 
 class CorrectionValidatorSpoken(CorrectionValidator):
@@ -1449,7 +1451,7 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                            )
         if pos is None:
            pos = wxDefaultPosition 
-        wxDialog.__init__(self, parent, wxNewId(), "Correction", pos,
+        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent Utterances", pos,
            (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         
         self.name_parent('console')
@@ -1876,7 +1878,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
-        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat Recent", use_pos,
+        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat Recent Symbols", use_pos,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
            
@@ -1992,7 +1994,9 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         
     def on_cancel(self, event=None):
         self.model().on_cancel(event)
+        debug.trace('ReformatRecentSymbolsViewWX.on_cancel', '** before EndModal, self=%s' % self)
         self.EndModal(wxID_CANCEL)
+        debug.trace('ReformatRecentSymbolsViewWX.on_cancel', '** after EndModal')
 
     def on_activate(self, event):
         pass
@@ -2192,7 +2196,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
                            
         
 
-        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat symbol", wxDefaultPosition,
+        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat a Symbol", wxDefaultPosition,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         
@@ -2321,6 +2325,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        self.EndModal(wxID_OK)
 
     def on_cancel(self, event=None):
+       debug.trace('ReformatFromRecentViewWX.on_cancel', '** invoked, self=%s' % self)
        self.model().on_cancel(event)
        self.EndModal(wxID_CANCEL)
 
@@ -2343,6 +2348,11 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        self.formats_pick_list.Select(nth)
 
     def do_choose_nth_form(self, nth):
+# AD: Eventually, when we migrate to wxPython 2.5, we'll be able
+# to invoke ActivateNth(). But for now it does not work in
+# wxPython 2.4 and the upgrade to 2.5 is a real bitch.
+# Delay it til after first release.
+#       self.formats_pick_list.ActivateNth(nth)
        self.formats_pick_list.Select(nth)
        evt = MockListSelectionEvent(nth)
        self.on_choose_alternate_form(evt)

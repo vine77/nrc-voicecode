@@ -26,7 +26,9 @@ Among other things, those helper methods are useful for unit testing GUIs
 """
 
 from wxPython.wx import *
+import util
 import debug
+
 
 class CanBeSentKeys:
     def __init__(self):
@@ -37,6 +39,17 @@ class CanBeSentKeys:
         key_event.m_keyCode = key_code
         self.ProcessEvent(key_event)
 
+class wxTextCtrlWithHelpers(wxTextCtrl):
+    def __init__(self, id, init_value, pos, size, style):
+       wxTextCtrl.__init__(self, id, init_value, pos, size, style)
+
+       
+    def GetANSIValue(self):
+       value = self.GetValue() 
+       if util.wxPython_is_unicode_build():
+          value.encode("ascii", "ignore")
+       return value
+       
 
 class wxButtonWithHelpers(wxButton):
     """A wxButton with methods for simulating user actions on it.
@@ -87,6 +100,7 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
           contents.append(self.GetCellContentsString(row_num, col_num))
        return contents
        
+   
     def ActivateNth(self, nth):
        """activates the nth item in the list and invokes the appropriate 
        event handler.
@@ -95,11 +109,12 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
        changes the selection without invoking the selection event handler.
        """   
        self.Select(nth)
-#>       evt = MockListSelectionEvent(nth)
-       evt = wxListEvent(wxEVT_LIST_ITEM_ACTIVATED, self.GetId())
-       print '-- ActivateNth: invoking ProcessEvent'
+       evt = wxListEvent(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, self.GetId())
+       
+       # AD: This fails in wxPython < 2.5 (m_itemIndex is private attribute)
+       evt.m_itemIndex = nth
+
        self.ProcessEvent(evt)
-       print '-- ActivateNth: DONE with ProcessEvent'
               
     def HandleUpOrDownArrow(self, keycode):
        """Invoke this with an up or down arrow character to move cursor
@@ -138,6 +153,14 @@ class MockListSelectionEvent(wxListEvent):
 
     def GetIndex(self):
        return self.nth
+       
+class Mock_wxListActivationEvent(wxListEvent):
+    def __init__(self, list_id, item_index):
+       wxListEvent.__init__(self, wxEVT_COMMAND_LIST_ITEM_ACTIVATED, list_id)
+       self._itemIndex = item_index
+       
+    def GetIndex(self):
+       return self._itemIndex
        
 class wxDialogWithHelpers(wxDialog):
     """a frame subclass with methods for simulating user events being

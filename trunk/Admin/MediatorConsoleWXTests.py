@@ -8,38 +8,123 @@ import string, time
 from SpokenUtterance import MockSpokenUtterance
 from CmdInterp import MockUtteranceInterpretation
 
+class DlgCanDisplayModallyWithoutBlockingMixin:
+   """use this mixin when regression testing dialogs. It makes it 
+   possible to display the dialog "modally" without actually blocking
+   for user events.
+   
+   Use this mixin for DlgModelView. 
+   
+   Use ViewCanDisplayModallyWithoutBlockingMixin for ViewLayer."""
 
-class MockReformatFromRecentWX(MediatorConsoleWX.ReformatFromRecentWX):
+   def __init__(self, **args):
+      self.deep_construct(ViewCanDisplayModallyWithoutBlockingMixin,
+                          {},
+                          args
+                          )
+                          
+   def was_displayed_modally(self):
+      return self.view().was_displayed_modally
+      
+
+
+class ViewCanDisplayModallyWithoutBlockingMixin:
+   """use this mixin when regression testing dialogs. It makes it 
+   possible to display the dialog "modally" without actually blocking
+   for user events
+
+   Use this mixin for ViewLayer.
+   
+   Use DlgCanDisplayModallyWithoutBlockingMixin for DlgModelView. 
+   """
+
+   def __init__(self, **args):
+      self.deep_construct(ViewCanDisplayModallyWithoutBlockingMixin,
+                          {'was_displayed_modally': None,
+                           'being_displayed_modally': None},
+                          args
+                          )
+                          
+   def ShowModal(self):
+      debug.trace('ViewCanDisplayModallyWithoutBlockingMixin.ShowModal', '** invoked, self=%s')
+      self.was_displayed_modally = 1
+      self.being_displayed_modally = 1
+      
+   def IsModal(self):
+      return self.being_displayed_modally
+
+   def EndModal(self, event_type):
+      debug.trace('ViewCanDisplayModallyWithoutBlockingMixin.EndModal', '** invoked')
+      self.being_displayed_modally = None
+      
+
+
+class ReformatRecentSymbols_NonBlocking(DlgCanDisplayModallyWithoutBlockingMixin,
+                                        MediatorConsoleWX.ReformatRecentSymbols):
+   """implementation of ReformatRecentSymbols that does 
+   not block for user input when it is displayed "modally"
+   """
+   def __init__(self, **args):
+      self.deep_construct(ReformatRecentSymbols_NonBlocking,
+                          {},
+                          args
+                          )
+
+   def make_view(self):
+      return ReformatRecentSymbolsViewWX_NonBlocking(console = self.console, 
+                                                     parent = self.parent,
+                                                     symbols = self.symbols,
+                                                     model = self,
+                                                     gram_factory = self.gram_factory)   
+
+class ReformatRecentSymbolsViewWX_NonBlocking(ViewCanDisplayModallyWithoutBlockingMixin,
+                                              MediatorConsoleWX.ReformatRecentSymbolsViewWX):
+   """implementation of ReformatRecentSymbolsViewWX that does 
+   not block for user input when it is displayed "modally"
+   """
+   def __init__(self, **args):
+      self.deep_construct(ReformatRecentSymbolsViewWX_NonBlocking,
+                          {},
+                          args
+                          )
+                          
+
+
+class ReformatFromRecentWX_NonBlocking(DlgCanDisplayModallyWithoutBlockingMixin,
+                               MediatorConsoleWX.ReformatFromRecentWX):
    """mock implementation of a dialog for reformatting a selected symbol.
    
    This mock implementation can be "displayed modally" without blocking.
-   
-   **INSTANCE ATTRIBUTES**
-   
-   *BOOL was_displayed_modally* -- flag indicating whether or not this dialog
-   has been displayed modally yet. Initially false.
    """
    
    def __init__(self, **args):
-      debug.trace('MockReformatFromRecentWX.__init__', '** invoked')
-      self.deep_construct(MockReformatFromRecentWX,
-                          {'was_displayed_modally': None},
+      debug.trace('ReformatFromRecentWX_NonBlocking.__init__', '** invoked')
+      self.deep_construct(ReformatFromRecentWX_NonBlocking,
+                          {},
                           args
                           )
-      debug.trace('MockReformatFromRecentWX.__init__', '** upon exit, self.view()=%s, self.view_layer=%s' % (self.view(), self.view_layer))
+      debug.trace('ReformatFromRecentWX_NonBlocking.__init__', '** upon exit, self.view()=%s, self.view_layer=%s' % (self.view(), self.view_layer))
                           
-   def ShowModal(self):
-      self.was_displayed_modally = 1
-      
+#>   def ShowModal(self):
+#>      self.was_displayed_modally = 1
+#>      self.being_displayed_modally = 1
+#>      
+#>   def IsModal(self):
+#>      return self.being_displayed_modally
+#>
+#>   def EndModal(self):
+#>      print '-- ReformatFromRecentWX_NonBlocking.EndModal: ** invoked'
+#>      self.being_displayed_modally = None
+#>            
    def make_view(self):
       return MockReformatFromRecentViewWX(console = self.console, parent = self.parent,
                                           model = self)   
-      
-   def reset(self, symbol):
-      self.was_displayed_modally = None
-      MediatorConsoleWX.ReformatFromRecentWX.reset(self, symbol)
+#>   def reset(self, symbol):
+#>      self.was_displayed_modally = None
+#>      MediatorConsoleWX.ReformatFromRecentWX.reset(self, symbol)
 
-class MockReformatFromRecentViewWX(MediatorConsoleWX.ReformatFromRecentViewWX):
+class MockReformatFromRecentViewWX(ViewCanDisplayModallyWithoutBlockingMixin,
+                                   MediatorConsoleWX.ReformatFromRecentViewWX):
    """mock implementation of the view layer for a dialog to reformat a
    seleted symbol"""
    
@@ -101,17 +186,17 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
     
     def setUp(self):
         self.mock_reformat_from_recent = \
-           MockReformatFromRecentWX(console = self.console, 
+           ReformatFromRecentWX_NonBlocking(console = self.console, 
                                      parent = None, symbol = ReformatRecentTestCase.sym1_1)
+                 
         self.dlg = \
-           MediatorConsoleWX.ReformatRecentSymbols(self.console, 
-                                                   None, 
-                                                   ReformatRecentTestCase.sym_list, 
-                                                   None,
-                                                   dlg_reformat_from_recent = self.mock_reformat_from_recent)
+           ReformatRecentSymbols_NonBlocking(console = self.console, 
+                                             parent = None, 
+                                             symbols = ReformatRecentTestCase.sym_list, 
+                                             gram_factory = None,
+                                             dlg_reformat_from_recent = self.mock_reformat_from_recent)
 
-        # AD: Uncomment this if you want to see what the window looks like. 
-#        self.dlg.ShowModal()
+        self.dlg.ShowModal()
         
                                                          
     def tearDown(self):
@@ -120,7 +205,7 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
         self.dlg.Destroy()
 
     def assert_reformat_from_recent_invoked_with_symbol(self, symbol):
-       self.assert_(self.dlg.dlg_reformat_from_recent.was_displayed_modally,
+       self.assert_(self.dlg.dlg_reformat_from_recent.was_displayed_modally(),
                     "Reformat from recent dialog was not displayed")
        self.assert_equals(symbol, self.dlg.dlg_reformat_from_recent.symbol,
                           "Reformat from recent dialog invoked with wrong symbol")
@@ -212,12 +297,11 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
                                   new_symbol=0,
                                   in_utter_interp=None)
 
-       self.dlg = MediatorConsoleWX.ReformatFromRecentWX \
+       self.dlg = ReformatFromRecentWX_NonBlocking \
                         (console = self.console, 
                         parent = None, symbol = self.sym1_1)
        self.dlg.reset(self.sym1_1)
-       # AD: Uncomment this if you want to see what the window looks like. 
-#       self.dlg.ShowModal()
+       self.dlg.ShowModal()
 
 
     def tearDown(self):
