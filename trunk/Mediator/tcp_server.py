@@ -29,6 +29,7 @@ import AppStateEmacs, AppStateMessaging, auto_test, debug, mediator
 import messaging, Object
 import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
+import Queue
 
 
 
@@ -63,7 +64,7 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
 
     {SB_ServiceLineManip] *lines_srv* -- Line numbering service.
 
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
 
@@ -115,7 +116,7 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
     
     *none*-- 
 
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
 
@@ -155,7 +156,8 @@ def messenger_factory(sock):
     packager = messaging.MessPackager_FixedLenSeq()
     transporter = messaging.MessTransporter_Socket(sock=sock)
     encoder = messaging.MessEncoderWDDX()
-    a_messenger = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)        
+    a_messenger = messaging.MessengerBasic(packager=packager, 
+	transporter=transporter, encoder=encoder)        
     return a_messenger
 
 def app_state_factory(app_name, id, listen_msgr, talk_msgr):
@@ -219,7 +221,8 @@ def vc_authentification(messenger):
 
 
 ##############################################################################
-# Classes for single-threaded version of the server
+# Classes for version of the server in which any calls to/from natlink
+# are handled by the main thread.
 ##############################################################################
 
 
@@ -239,7 +242,7 @@ class ListenForConnThread(threading.Thread, Object.Object):
     *PyHandle raise_event* -- Win32 event to be raised when a new connection
     is opened.
     
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
     """
@@ -321,7 +324,7 @@ class ListenForNewListenersThread(ListenForConnThread, Object.Object):
     
     *none*-- 
     
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
     """
@@ -342,7 +345,7 @@ class ListenForNewTalkersThread(ListenForConnThread):
     
     *none*-- 
     
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
     """
@@ -374,7 +377,7 @@ class CheckReadySocksThread(threading.Thread, Object.Object):
 
     *lock ready_socks_lock* -- Lock on the *ready_socks* list.
     
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
     """
@@ -483,7 +486,7 @@ class ServerSingleThread(Object.Object):
     STR *test_suite=None* -- If not *None*, then upon connection by a
     new editor run regression test suite *test_suite*.
 
-    CLASS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
     *none* -- 
 
@@ -881,7 +884,706 @@ class ServerSingleThread(Object.Object):
 
             counter = counter + 1
 
+##############################################################################
+# Classes for new version of the server with abstract interfaces for
+# sending messages between threads.
+#
+# calls to/from natlink are still handled by the main thread, like in
+# ServerSingleThread.
+##############################################################################
 
+class InterThreadEvent(Object.Object):
+    """abstract interface for sending a dataless message between threads.
+    Particular implementations may use win32 events or wxPython custom
+    events.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	"""abstract base class so no arguments
+	"""
+	self.deep_construct(InterThreadEvent,
+			    {},
+			    args)
+    def notify(self):
+	"""send the message, and return asynchronously
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('InterThreadEvent.notify')
+
+class SocketHasDataEvent(Object.Object):
+    """abstract interface for sending a message from to the main thread 
+    indicating that a particular socket has data waiting to be read.
+
+    The concrete subclass will have a reference to the particular
+    socket.
+    
+    Particular implementations may use win32 events or wxPython custom
+    events.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	"""abstract base class so no arguments
+	"""
+	self.deep_construct(SocketHasDataEvent,
+			    {},
+			    args)
+    def notify(self):
+	"""send the message, and return asynchronously
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('SocketHasDataEvent.notify')
+
+class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
+    """class for a thread which listens for messages using a given 
+    Messenger puts completed messages on a Queue.
+
+    **INSTANCE ATTRIBUTES**
+
+    [Messenger] *underlying* -- underlying messenger (usually
+    [MessengerBasic]) used to receive and unpack them messages.
+
+    Queue.Queue *completed_msgs* -- Queue on which to deposit the
+    completed messages.
+
+    SocketHasDataEvent *event* -- object used to notify the main thread
+    that a socket has data
+
+    CLASS ATTRIBUTES**
+    
+    *none* --
+
+    .. [Messenger] file:///./messenger.Messenger.html
+    .. [MessengerBasic] file:///./messenger.MessengerBasic.html"""
+    def __init__(self, underlying, completed_msgs, event, **args_super):
+        self.deep_construct(ListenAndQueueMsgsThread, 
+                            {'underlying': underlying,
+			     'completed_msgs': completed_msgs,
+			     'event': event}, 
+                            args_super, 
+                            exclude_bases={'threading.Thread': 1})
+        threading.Thread.__init__(self)
+
+    def message_queue(self):
+	"""returns a reference to the message queue in which the thread
+	puts completed messages
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*Queue.Queue* -- the message queue
+	"""
+	return self.completed_msgs
+
+    def get_mess(self):
+        """Gets a message from the external editor.
+        
+        **INPUTS**
+
+	*none*
+        
+        **OUTPUTS**
+        
+        (STR, {STR: STR}) name_argvals_mess -- The message retrieved
+         from external editor in *(mess_name, {arg:val})* format.
+         from external editor in *(mess_name, {arg:val})* format, or
+	 None if no message is available."""
+
+	return self.get_mess()
+        
+    def notify_main(self):
+	"""notify the main thread that there is a new message waiting in 
+	the Queue, and return asynchronously.
+	
+	**INPUTS**
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.event.notify()
+
+    def run(self):
+        """Start listening for data.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        while 1:
+	    data = self.get_mess()
+	    self.completed_msgs.put(data)
+	    self.notify_main()
+            time.sleep(0.01)
+#            time.sleep(1)
+
+
+class ListenNewConnThread(threading.Thread, Object.Object):
+    """Abstract base class which listens for new socket connections on 
+    a port number and uses an InterThreadEvent object to
+    notify the main thread about the new connection.
+
+    Concrete subclasses will define log_conn method to add each new socket 
+    to a data structure containing uninitialised connections.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    INT *port* -- Port on which to listen for connections.
+    
+    InterThreadEvent *event* -- object use to send event to the main
+    thread
+
+    **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, port, event, **args_super):
+        self.deep_construct(ListenForNewConnThread, 
+                            {'port': port, 
+			     'event': event},
+                            args_super, 
+                            exclude_bases={'threading.Thread': 1})
+        threading.Thread.__init__(self)        
+        
+    def notify_main(self):
+	"""notify the main thread that there is a new connection waiting
+	for a handshake, and return asynchronously.
+	
+	**INPUTS**
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.event.notify()
+
+    def run(self):
+        """Start listening for new connections.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind((socket.gethostname(), self.port))
+        server_socket.listen(5)
+
+        while 1:
+
+            # Accept a new connection
+            (client_socket, address) = server_socket.accept()
+
+            debug.trace('ListenForConnThread.run', 'got new connection on port=%s' % self.port)
+            
+            #
+            # Log it notify the main event loop that
+            # it should shake hands with it
+            #
+            self.log_new_conn(client_socket)
+	    self.notify_main()
+
+            #
+            # When debugging, increase this if you want to see things happen
+            # in slow motion
+            #
+            time.sleep(0.01)
+#            time.sleep(1)
+
+
+    def log_new_conn(self, client_socket):
+        
+        """Logs a newly received socket connection, so that main event
+        loop can later shake hands with it.
+        
+        **INPUTS**
+        
+        *socket client_socket* -- Newly received socket connection
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+	debug.virtual('ListenNewConnThread.log_new_conn')
+
+
+class NewConnListThread(ListenNewConnThread):
+    """Listens for new socket connections on a port number
+    and use an InterThreadEvent object to
+    notify the main thread about the new connection.
+
+    Adds each new socket to a list of uninitialised connections.
+
+    This version is used for new talker sockets, because they may not
+    come in in the same order as the previously connected new listener
+    sockets, so you have to look through the whole list anyway.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [socket] *new_socks* -- List on which to add any new connection.
+    
+    [lock] *new_socks_lock* -- Lock on the new connection list.
+
+    **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, port, new_socks, new_socks_lock, **args_super):
+        self.deep_construct(ListenNewConnThread, 
+                            {'new_socks': new_socks,
+                             'new_socks_lock': new_socks_lock},
+                            args_super)
+        
+    def log_new_conn(self, client_socket):
+        
+        """Logs a newly received socket connection, so that main event
+        loop can later shake hands with it.
+        
+        **INPUTS**
+        
+        *socket client_socket* -- Newly received socket connection
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.new_socks_lock.acquire()
+        self.new_socks.append((client_socket, [None, None, None]))
+        self.new_socks_lock.release()        
+
+class ListenNewEditorsThread(ListenNewConnThread):
+    """Listens for new socket editor connections on a port number
+    and use an InterThreadEvent object to notify the main thread about 
+    the new connection.
+
+    Adds each new socket to a Queue of uninitialised connections.
+
+    This version is used for new listener sockets, which should be
+    processed in the order they come in.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [Queue] *new_socks* -- Queue to which to add any new connection.
+
+    **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, new_socks, **args_super):
+        self.deep_construct(ListenForNewEditorsThread, 
+                            {'new_socks': new_socks},
+                            args_super)
+
+    def log_new_conn(self, client_socket):
+        
+        """Logs a newly received socket connection, so that main event
+        loop can later shake hands with it.
+        
+        **INPUTS**
+        
+        *socket client_socket* -- Newly received socket connection
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.new_socks.put(client_socket)
+    
+class ServerMainThread(Object.Object):
+    """Abstract base class for the main thread of a TCP/IP based 
+    VoiceCode server.
+
+    ServerMainThread will launch several other threads:
+    
+    ListenNewEditorsThread listens for new editors to connect on the
+    VC_LISTEN port.  It puts the new socket on the new_listen_socks
+    Queue, and notifies ServerMainThread through a InterThreadEvent.
+    This event will ensure that handshake_listen_socks is called to do
+    the initial handshaking.  Once the listen socket has completed
+    the initial handshaking, handshake_listen_socks appends it to the 
+    pending_listen_socks list.  The editor will then open a 
+    
+    NewConnListThread listens for the talker connections on the VC_TALK
+    port.  It appends the new socket to the new_talk_socks list and 
+    notifies ServerMainThread through a InterThreadEvent.  This event
+    will ensure that handshake_talk_socks is called.
+    handshake_talk_socks will go through the new_talk_socks list and
+    pair them up with the elements of the pending_listen_socks with
+    matching IDs, and will call package_sock_pair.  
+    
+    package_sock_pair will create a ListenAndQueueMsgsThread to listen 
+    for data on the listen_sock and queue complete messages.  
+    package_sock_pair will also create an instance of a subclass of 
+    AppStateMessaging, with a MixedMessenger which sends messages 
+    directly on the talk_sock, but reads them from this queue.  
+    The LAQM Thread also notifies ServerMainThread using a
+    SocketHasDataEvent.  This event will ensure that
+    process_ready_socks is called, which will call
+    listen_one_transaction on the appropriate AppStateMessaging.
+    AppStateMessaging will also get messages from the editor off of the
+    queue when it synchronizes with the editor at recognition starting
+     
+    Much of the above behaviour depends on a set of virtual 
+    functions which will be implemented by a concrete subclass of
+    ServerMainThread.  In particular, the mechanism by which 
+    InterThreadEvent and SocketHasDataEvent events ensure that the main 
+    mediator message loop calls the appropriate methods of ServerMainThread
+    will vary from one concrete subclass to another.  A necessary
+    consequence of this fact is that ServerMainThread relies on
+    virtual functions to create the subsidiary threads.
+
+    Even more drastically, in some cases ServerMainThread will contain the 
+    main message loop of the mediator, while in others, the message loop
+    which routes the events to the appropriate ServerMainThread methods
+    will reside in the GUI console.
+
+    **INSTANCE ATTRIBUTES**
+
+    [Queue] *new_listen_socks* -- Queue from which to get any new connections.
+    Each item is [(socket, (STR, STR, STR))] 
+    a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
+    port, and data about that socket. The data is itself a 3ple
+    consisting of: (a) identifier of external editor, (b) name of the
+    external editor and (c) window handle of the external editor.
+
+    *[(socket, [None, None, None])] new_talk_socks* -- the socket
+    element of each 2ple is a new (uninitialised) socked
+     on the VC_TALK port.  The data part of the 2ple is useless.
+
+    [(socket, (STR, STR, STR))] *pending_listen_socks=[]* -- Each entry is
+    a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
+    port, and data about that socket. The data is itself a 3ple
+    consisting of: (a) identifier of external editor, (b) name of the
+    external editor and (c) window handle of the external editor.
+    Socks on the pending_listen_socks list have been through
+    handshaking, but have not yet been packaged with corresponding
+    talk_socks.
+    
+    *threading.lock new_socks_lock* -- Lock used to make sure that the
+     main thread doesn't access the *new_talk_socks* list at the same 
+     time as the thread that listen for new socket connections.
+
+    [ListenNewEditorsThread] *new_listener_server* -- Thread that
+    listens for new connections on the VC_LISTEN port.
+
+    [NewConnListThread] *new_talker_server* -- Thread that
+    listens for new connections on the VC_TALK port.
+
+    {STR : ListenAndQueueMsgsThread} *data_threads* -- map from unique 
+    socket IDs to threads which poll for data from the listen messenger
+    
+    **CLASS ATTRIBUTES**
+    
+    *none* -- 
+
+    ..[AppStateMessaging] file:///./AppStateMessaging.AppStateMessaging.html
+    ..[ListenForNewListenersThread] file:///./tcp_server.ListenForNewListenersThread.html
+    ..[ListenForNewTalkersThread] file:///./tcp_server.ListenForNewTalkersThread.html
+    """
+    
+    def __init__(self, new_listen_socks, **args_super):
+        self.deep_construct(ServerSingleThread, 
+                            {'pending_listen_socks': [],
+                             'new_talk_socks': [],
+                             'new_socks_lock': threading.Lock(),
+			     'new_listen_socks': new_listen_socks,
+			     'data_threads': {},
+			     'new_listener_server': None,
+			     'new_talker_server': None,
+                             'active_meds': []
+                             }, 
+                            args_super)
+
+
+    def new_data_thread(self, id, listen_sock):
+        """creates a new ListenAndQueueMsgsThread to monitor the
+	listen_sock
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        socket *listen_sock* -- The listen socket
+        
+        **OUTPUTS**
+        
+        [ListenAndQueueMsgsThread] -- the new threading.Thread object
+
+        ..[ListenAndQueueMsgsThread] 
+	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
+	debug.virtual('ServerMainThread.new_data_thread')
+
+    def _new_instance(self, id, instance):
+        """add a new AppStateMessaging.  Called internally by
+	package_sock_pair
+        
+        **INPUTS**
+        
+        STR *id* -- The unique ID of the listen socket
+
+	AppStateMessaging *instance*  -- the new instance
+
+        **OUTPUTS**
+        
+        *none*
+	"""
+	debug.virtual('ServerMainThread._new_instance')
+        
+    def known_instance(self, id):
+	"""returns a reference to the AppStateMessaging instance 
+	associated with  the given ID
+        **INPUTS**
+        
+        STR *id* -- The unique ID of the listen socket
+
+        **OUTPUTS**
+
+	*AppStateMessaging* -- the corresponding instance
+        
+        *none*
+	"""
+	debug.virtual('ServerMainThread.known_instance')
+
+    def package_sock_pair(self, id, app_name, window, listen_sock, talk_sock):
+        
+        """Packages a listen and talk socket into an
+        [AppStateMessaging] instance
+        
+        **INPUTS**
+        
+        STR *id* -- The unique identifier assigned by VoiceCode to
+        that socket pair.
+
+        STR *app_name* -- Name of the external editor.
+
+        STR *window* -- Window handle for the external editor.
+        
+        socket *listen_sock* -- The listen socket
+        
+        socket *talk_sock* -- The talk socket
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""        
+        
+	data_thread = self.new_data_thread(id, listen_sock)
+	data_threads[id] = data_thread
+	messages = data_thread.message_queue()
+
+        talk_msgr = messenger_factory(talk_sock)        
+        listen_msgr = messaging.MixedMessenger(talk_msgr, messages)
+        an_app_state = app_state_factory(app_name, id, listen_msgr, talk_msgr)
+
+	data_thread.setDaemon(1)
+	data_thread.start()
+
+        #
+        # Give external editor a chance to configure the AppStateMessaging
+        #
+        an_app_state.config_from_external()
+
+	self.new_instance(id, an_app_state)
+
+    def handshake_listen_socks(self):
+        """Invoked when a new socket connection was opened on VC_LISTEN port.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        #
+        # Get window handle of active application.
+        #
+        window = natlink.getCurrentModule()[2]
+
+
+        #
+        # Assume active window is the application that opened the last
+        # socket conneciton in the list self.new_listen_socks.  This
+        # may not hold if two editors connect to VoiceCode back to back
+        # and rapidly.
+
+#  handshake_listen_socks should never be called if there isn't a new listen 
+#  sock, but just in case we catch the exception and ignore it
+	try:
+# 0 means don't block
+	    most_rec_sock = self.new_listen_socks.get(0)
+	except Queue.Empty:
+	    return
+        
+        #
+        # Create a temporary messenger for handshaking
+        #
+        a_messenger = messenger_factory(most_rec_sock)
+               
+        #
+        # Get the external application name
+        #
+        a_messenger.send_mess('send_app_name')
+        mess = a_messenger.get_mess(expect=['app_name'])
+        app_name = mess[1]['value']
+                
+        #
+        # Assign a random ID to the external editor, and send it on the socket
+        # connection.
+        #
+        id = '%s_%s' % (app_name, repr(whrandom.random()))
+        a_messenger.send_mess('your_id_is', {'value': id})
+        a_messenger.get_mess(expect=['ok'])
+        
+        #
+        # Assign window, id and app_name to the last socket in the list of
+        # new listen sockets
+        #
+	most_rec_data = (id, app_name, window)
+        
+# using this lock shouldn't be necessary, since only
+# handshake_talk_socks is the only other one accessing
+# pending_talk_socks, and it runs in the main thread just like we do,
+# but just in case.
+        self.new_socks_lock.acquire()
+
+	self.pending_socks_lock.append((most_rec_sock, most_rec_data))
+
+        self.new_socks_lock.release()
+        
+
+    def handshake_talk_socks(self):
+        
+        """Does a handshake on a the new socket connection that were opened on
+        VC_LISTEN port.
+        
+        **INPUTS**
+        
+        *none*
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+	self.new_socks_lock.acquire()
+
+        #
+        # Loop through list of new VC_TALK sockets, handshake with them
+        # and package them into an AppState instance with their corresponding
+        # VC_LISTEN sockets.
+        #
+        ii = 0
+        while ii < len(self.new_talk_socks):            
+
+            (talk_sock, dummy) = self.new_talk_socks[ii]
+        
+            #
+            # Shake hands with that VC_TALK socket.
+            # Get the ID of external editor that started this VC_TALK socket
+            #
+            a_msgr = messenger_factory(talk_sock)
+            a_msgr.send_mess('send_id')
+            mess = a_msgr.get_mess(expect=['my_id_is'])
+            id = mess[1]['value']
+
+            #
+            # Find the corresponding VC_LISTEN socket
+            #
+            found = None
+            jj = 0
+            while jj < len(self.pending_listen_socks):
+                (listen_sock, listen_data) = self.pending_listen_socks[jj]
+                (a_listen_id, app_name, window) = listen_data
+                if a_listen_id == id:
+                    #
+                    # Found it. Remove the two sockets from the list of
+                    # new connections.
+                    #
+                    found = (listen_sock, app_name, window)
+                    del self.pending_listen_socks[jj]
+                    del self.new_talk_socks[ii]
+                    break
+
+                jj = jj + 1
+                
+            if found != None:
+                self.package_sock_pair(id, app_name, window, listen_sock, talk_sock)
+                        
+        self.new_socks_lock.release()        
+
+
+    def process_ready_socks(self, ready_socks):
+        """Processes socket connections that have received new data.
+        
+        **INPUTS**
+
+        [STR] *ready_socks*  =[] -- List of IDs of sockets which may
+	have messages waiting
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+	for id in ready_socks:
+            an_app_state = self.known_instance(id)
+	    if an_app_state != None:
+		an_app_state.listen_one_transaction()
+        
+
+##############################################################################
+# start test standalone server
+##############################################################################
 def run_server(test_suite=None):
     """Start a single thread, single process server.
     """

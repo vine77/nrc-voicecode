@@ -3,28 +3,33 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:32:45 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:33:13 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SourceBuffCookie</title>
+<title>Class ListenAndQueueMsgsThread</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SourceBuffCookie - abstract class which represents a restore-able SourceBuff state</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
+<H1 CLASS="ClassName">class ListenAndQueueMsgsThread</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.SourceBuffCookie<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.ListenAndQueueMsgsThread<BR>
+&nbsp;&nbsp;threading.Thread<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SourceBuffCookie</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuffCookie.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenAndQueueMsgsThread</SPAN>(<A CLASS="DocLink" HREF="threading.Thread.html">Thread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenAndQueueMsgsThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">underlying</SPAN>, <SPAN CLASS="Argument">completed_msgs</SPAN>, <SPAN CLASS="Argument">event</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenAndQueueMsgsThread.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenAndQueueMsgsThread.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Gets a message from the external editor.</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_server.ListenAndQueueMsgsThread.message_queue"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenAndQueueMsgsThread.message_queue</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenAndQueueMsgsThread.notify_main"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenAndQueueMsgsThread.notify_main</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ListenAndQueueMsgsThread.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ListenAndQueueMsgsThread.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start listening for data.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -32,21 +37,124 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
+    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from threading.Thread</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__bootstrap</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__delete</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">group=None</SPAN>, <SPAN CLASS="Argument">target=None</SPAN>, <SPAN CLASS="Argument">name=None</SPAN>, <SPAN CLASS="Argument">args=()</SPAN>, <SPAN CLASS="Argument">kwargs={}</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__repr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__stop</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread._set_daemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.getName</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.isAlive</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.isDaemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.join</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">timeout=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.run</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setDaemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">daemonic</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.start</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+
 </PRE><H2>Description</H2><P>
-SourceBuffCookie itself is simply a dummy class which acts as a
-placeholder.  Its only purpose is to serve as ostensible return or 
-argument type for various pure virtual SourceBuff functions.  The
-actual return or argument type will be a subclass of
-SourceBuffCookie which will vary with SourceBuff subclass.</P>
+class for a thread which listens for messages using a given 
+Messenger puts completed messages on a Queue.</P>
 <P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="messenger.Messenger.html">Messenger</A> <EM>underlying</EM>
+<DD>underlying messenger (usually
+[MessengerBasic]) used to receive and unpack them messages.
+<DT>
+Queue.Queue <EM>completed_msgs</EM>
+<DD>Queue on which to deposit the
+completed messages.
+<DT>
+SocketHasDataEvent <EM>event</EM>
+<DD>object used to notify the main thread
+that a socket has data
+</DL>
 <P>
-<EM>None</EM></P>
+CLASS ATTRIBUTES**</P>
 <P>
-<STRONG>CLASS ATTRIBUTES</STRONG></P>
+<EM>none</EM> --</P>
+<H2 ID="tcp_server.ListenAndQueueMsgsThread.get_mess" CLASS="Method">tcp_server.ListenAndQueueMsgsThread.get_mess(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Gets a message from the external editor.</P>
+
 <P>
-<EM>None</EM>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+(STR, {STR: STR}) name_argvals_mess
+<DD>The message retrieved
+ from external editor in <EM>(mess_name, {arg:val})</EM> format.
+ from external editor in <EM>(mess_name, {arg:val})</EM> format, or
+ None if no message is available.
+</DL>
+<H2 ID="tcp_server.ListenAndQueueMsgsThread.message_queue" CLASS="Method">tcp_server.ListenAndQueueMsgsThread.message_queue(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the message queue in which the thread
+puts completed messages</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>Queue.Queue</EM>
+<DD>the message queue
+
+</DL>
+<H2 ID="tcp_server.ListenAndQueueMsgsThread.notify_main" CLASS="Method">tcp_server.ListenAndQueueMsgsThread.notify_main(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+notify the main thread that there is a new message waiting in 
+the Queue, and return asynchronously.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
 </P>
+<H2 ID="tcp_server.ListenAndQueueMsgsThread.run" CLASS="Method">tcp_server.ListenAndQueueMsgsThread.run(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Start listening for data.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 08 13:02:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Jun 21 09:32:51 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,8 +25,9 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MessTransporter_Socket</SPAN>(<A CLASS="DocLink" HREF="messaging.MessTransporter.html">MessTransporter</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">sock</SPAN>, <SPAN CLASS="Argument">sleep=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#messaging.MessTransporter_Socket.close"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.close</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Close the socket connection.</SPAN>
+    <A CLASS="DocLink" HREF="#messaging.MessTransporter_Socket.data_available"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.data_available</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # check whether the input socket has data</SPAN>
     <A CLASS="DocLink" HREF="#messaging.MessTransporter_Socket.receive_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.receive_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num_bytes</SPAN>)<SPAN CLASS="OneLiner"> # Receives a string on the Socket connection.</SPAN>
     <A CLASS="DocLink" HREF="#messaging.MessTransporter_Socket.send_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">messaging.MessTransporter_Socket.send_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">a_string</SPAN>)<SPAN CLASS="OneLiner"> # Sends a string on the Socket connection.</SPAN>
 
@@ -48,6 +49,15 @@ Virtual class.</P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 <P>
 *socket sock*-- The socket connection used to transport the bytes.</P>
+
+<DL>
+
+<DT>
+<EM>FLOAT sleep</EM>
+<DD>number of seconds to sleep if before checking again
+if the socket has no data, or None to check continuously until the
+requested number of bytes are received.
+</DL>
 <P>
 CLASS ATTRIBUTES**</P>
 
@@ -77,6 +87,24 @@ CLASS ATTRIBUTES**</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="messaging.MessTransporter_Socket.data_available" CLASS="Method">messaging.MessTransporter_Socket.data_available(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>check whether the input socket has data</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the select.select indicates that the socket
+has data
+
 </DL>
 <H2 ID="messaging.MessTransporter_Socket.receive_string" CLASS="Method">messaging.MessTransporter_Socket.receive_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num_bytes</SPAN>)</H2>
 <P>Receives a string on the Socket connection.</P>
