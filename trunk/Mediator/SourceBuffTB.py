@@ -24,7 +24,7 @@
 
 import debug
 import re, string, sys
-import SourceBuffIndent
+import sb_services, SourceBuffIndent
 
 
 from Object import Object
@@ -45,10 +45,29 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
     """
     
     def __init__(self, underlying_buffer, **attrs):
+
+        self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
+                         'indent_srv': sb_services.SB_ServiceIndent(buff=self),
+                         'line_srv': sb_services.SB_ServiceLineManip(buff=self)})
         self.deep_construct(SourceBuffTB,
                             {'underlying': underlying_buffer},
                             attrs
                             )
+    def file_name(self):
+        return self.fname
+
+    def language_name(self):
+        """Returns the name of the language a file is written in
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *STR* -- the name of the language
+        """
+        return self.lang_srv.language_name()    
 
     def cur_pos(self):
 	"""retrieves current position of cursor .  Note: the current
@@ -206,6 +225,36 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 	"""
 	return self.underlying.len()
 
+    def beginning_of_line(self, pos):
+        """Returns the position of the beginning of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the beginning of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* beg_pos -- Position of the beginning of the line
+        """
+        return self.line_srv.beginning_of_line(pos)
+
+
+    def end_of_line(self, pos):
+        """Returns the position of the end of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the end of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* end_pos -- Position of the end of the line
+        """
+        return self.line_srv.end_of_line(pos)
+
+
     def move_relative_page(self, direction=1, num=1):
         """Moves up or down a certain number of pages
         
@@ -251,6 +300,30 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 	    start, end = self.make_valid_range(range)
 	self.underlying.set_text(text, start, end)
 
+    def insert_indent(self, code_bef, code_after, range = None):
+        """Insert code into source buffer and indent it.
+
+        Replace code in range 
+        with the concatenation of
+        code *STR code_bef* and *str code_after*. Cursor is put right
+        after code *STR bef*.
+
+	**INPUTS**
+
+	*STR* code_bef -- code to be inserted before new cursor location
+        
+	*STR* code_bef -- code to be inserted after new cursor location
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        
+        self.indent_srv.insert_indent(code_bef, code_after, range)
+
     def indent(self, range = None):
         """Indent code in a source buffer region.
 
@@ -264,7 +337,46 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 	*none*
 	"""
 
-	pass
+        self.indent_srv.indent(range)
+
+    def incr_indent_level(self, levels=1, range=None):
+        
+        """Increase the indentation of a region of code by a certain
+        number of levels.
+        
+        **INPUTS**
+        
+        *INT* levels=1 -- Number of levels to indent by.
+        
+        *(INT, INT)* range=None -- Region of code to be indented 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.indent_srv.incr_indent_level(levels, range)
+
+    def decr_indent_level(self, levels=1, range=None):
+
+        """Decrease the indentation of a region of code by a certain number
+        of levels.
+        
+        **INPUTS**hello
+        
+        *STR* levels=1 -- Number of levels to unindent
+
+        *(INT, INT)* range=None -- Start and end position of code to be indent.
+        If *None*, use current selection
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.indent_srv.decr_indent_level(levels, range)
+
 
     def delete(self, range = None):
         """Delete text in a source buffer range.
@@ -434,4 +546,38 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
 	    return 0
 
 	return self.file_name == cookie.name()
+
+
+    def newline_conventions(self):
+        
+        """Returns a list of the forms of newline the editor can
+        recognise for this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        return ['\n']
+
+
+    def pref_newline_convention(self):
+        """Returns the form of newline that the editor prefers for this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        return '\n'
 

@@ -32,6 +32,35 @@ Communication protocol
   protocol. For now, this will be ignored, but later on we (i.e. Eric
   Johanssen ;-) can add a true authentification implementation.
 
+- Add an initialisation turn in handshake. The content of this
+  initialisation turn will depend on the editor. It will alow
+  developpers of editor wrapper to support some level of user
+  customisation from the editor end (as opposed to the VoiceCode end).
+
+- During handshake, Editor should tell VoiceCode if it knows how to
+  automatically indent code, or if VoiceCode should do the indentation
+  itself.
+
+  Also, need to merge the funcitonality of SourceBuffIndent into
+  SourceBuff. Basically, SourceBuff indentation methods
+  (insert_indent, indent, etc...) will either use the SourceBuffIndent
+  method or forward the event to the external editor, depending on the
+  value that the external editor provided at handshake time.
+
+  Then, get rid of AppStateIndent.
+
+- During handshake, Editor will also tell VoiceCode about various
+  things it supports (e.g. bidirectionnal selection).
+
+- Make sure that David invokes AppState.recog_start() in the global
+  got_begin() callback.
+
+- Implement AppState.recog_indicator so it does something to Dragon's
+  recognition indicator.
+
+- Test TCP connection using test_TCP_link.py
+
+- Is SourceBuffIndent and EdSimIndent still needed?
 
 Regression testing
 ------------------

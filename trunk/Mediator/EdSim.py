@@ -23,10 +23,10 @@
 
 import os, posixpath, re, sys
 import auto_test, debug
-import AppState
+import AppState, AppStateNonCached, as_services
 from SourceBuffEdSim import SourceBuffEdSim
 
-class EdSim(AppState.AppState):
+class EdSim(AppStateNonCached.AppStateNonCached):
     """VoiceCode editor simulator.
 
     This class is used to simulate an external programming editor.
@@ -39,8 +39,8 @@ class EdSim(AppState.AppState):
     
     *STR* only_buffer_name -- its name 
 
-
-    *none* --
+    [AS_ServiceBreadcrumbs] *breadcrumbs_srv* -- The VoiceCode level
+    breadcrumbs service used by EdSim.
     
     **CLASSS ATTRIBUTES**
     
@@ -50,24 +50,121 @@ class EdSim(AppState.AppState):
     buffer_methods.append('print_buff')
     
     def __init__(self, **attrs):
+        self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
         self.deep_construct(EdSim, {'only_buffer': None,
 	    'only_buffer_name': ""}, attrs)
-	self.only_buffer = SourceBuffEdSim(app = self, file_name = "",
+	self.only_buffer = SourceBuffEdSim(app = self, fname = "",
 	    language =None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
 
-    def curr_buffer_name_from_app(self):
+    def stop_responding(self):
+        
+        """EdSim can't block user input"""
 
-	"""return the name of the current buffer
+        pass
+        
+    def start_responding(self):
+        
+        """EdSim can't block user input"""
 
+        pass
+
+
+    def updates_from_app(self, what=[], exclude=1):
+        """For EdSim, no need to get updates from external editor.
+
+        We always get the state from EdSim directly, and every EdSim
+        command that writes to the buffers will update the V-E map
+        directly.
+        
+        **INPUTS**
+        
+        [STR] *what* -- List of items to be included/excluded in the updates.
+
+        BOOL *exclude* -- Indicates if *what* is a list of items to be
+        included or excluded from updates.
+        
         **OUTPUTS**
+        
+        [ [AS_Update] ] *updates* -- List of updates retrieved from the
+        external app.
+        
+        ..[AS_Update] file:///./AppState.AS_Update.html"""
+        
+        return []
 
-	*STR*  -- current buffer
-	"""
+    def app_active_buffer_name(self):
+        
+	"""Returns the file name of the buffer currently active in the
+	external application.
+
+        Note that this may or may not be the same the buffer that
+        VoiceCode is currently bound to (see [curr_buffer_name]
+        method for a description of buffer binding).
+
+        **INPUTS**
+
+        *none* --
+        
+	**OUTPUTS**
+
+	*STR* -- file name of current buffer
+
+        file:///./AppState.AppState.html#curr_buffer_name"""
+
 	return self.only_buffer_name
+
+    def change_buffer_dont_bind_from_app(self, buff_name=None):
+	"""Changes the external application's active buffer.
+
+        This variant only changes the buffer in the external
+        application. It does not resynchronise VoiceCode with external
+        application.
+
+        This should NOT bind the *AppState* to the new buffer. This
+        should be done only by [change_buffer].
+        See [curr_buffer_name] for a description of buffer binding.
+
+        **INPUTS**
+        
+        STR *buff_name=None* -- Name of the buffer to switch to.
+       
+        **OUTPUTS**
+        
+        *none* --         
+        
+        file:///./AppState.AppState.html#curr_buffer_name"""
+
+        self.only_buffer_name = buff_name
     
+
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at cursor position.
+
+        If *buff* not specified either, drop breadcrumb in current buffer
+	"""
+        self.breadcrumbs_srv.drop_breadcrumbs(buffname, pos)
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
+
+
     def open_file(self, name, lang=None):
-        """Open a file.
+        """Tell the editor to open a file.
 
         Open file with name *STR name* and written in language *STR lang*.        
         """
@@ -81,11 +178,12 @@ class EdSim(AppState.AppState):
 	    del self.open_buffers[self.curr_buffer_name()]
 
 
-        self.only_buffer =  SourceBuffEdSim(app = self, file_name=name, language=lang, \
+        self.only_buffer =  SourceBuffEdSim(app = self, fname=name, language=lang, 
 	    initial_contents = source)
 	self.only_buffer_name = name
 
         self.open_buffers[name] = self.only_buffer
+
 
     def save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
@@ -137,6 +235,7 @@ class EdSim(AppState.AppState):
 	    del self.open_buffers[old_name]
 	return 1
 
+
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
 
@@ -162,7 +261,3 @@ class EdSim(AppState.AppState):
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
 	return 0
-
-
-
-

@@ -35,6 +35,10 @@ from wxPython.wx import *
 import WaxEdit
 
 ID_EXIT = 101
+ID_OPEN_FILE = 200
+ID_CONF_SCRIPT = 210
+ID_SAVE_FILE = 220
+ID_SAVE_AS = 230
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
@@ -46,10 +50,6 @@ ID_PROMPT = 130
 ID_COMMAND_LINE = 140
 ID_MIC_BUTTON = 150
 ID_MIC_LABEL = 151
-ID_OPEN_FILE = 200
-ID_CONF_SCRIPT = 210
-ID_SAVE_FILE = 220
-ID_SAVE_AS = 230
 
 
 class WaxEdSimPane(wxPanel):
@@ -346,9 +346,9 @@ class WaxEdSimFrame(wxFrame):
 	self.activated = 0
         file_menu=wxMenu()
         file_menu.Append(ID_OPEN_FILE,"&Open...","Open a file")
-        file_menu.Append(ID_CONF_SCRIPT,"&Config Script","Execute a python configuration script for the environment (ex: a demo file)")        
+        file_menu.Append(ID_CONF_SCRIPT,"&Config Script","Execute a python configuration script for the environment (ex: a demo file)")
         file_menu.Append(ID_SAVE_FILE,"&Save","Save current file")
-        file_menu.Append(ID_SAVE_AS,"Save &As...","Save current file")
+        file_menu.Append(ID_SAVE_AS,"Save &As...","Save current file")        
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
         window_menu = wxMenu()
@@ -361,6 +361,7 @@ class WaxEdSimFrame(wxFrame):
         edit_menu = wxMenu()
 
         menuBar=wxMenuBar()
+        EVT_CLOSE(self, self.on_close)        
         menuBar.Append(file_menu,"&File");
         menuBar.Append(edit_menu,"&Edit");
         menuBar.Append(format_menu,"F&ormat");        
@@ -369,12 +370,11 @@ class WaxEdSimFrame(wxFrame):
         self.CreateStatusBar()
 
         self.SetMenuBar(menuBar)
-        EVT_CLOSE(self, self.on_close)
         EVT_MENU(self,ID_EXIT,self.quit_now)
         EVT_MENU(self,ID_OPEN_FILE,self.open_file)
-        EVT_MENU(self,ID_CONF_SCRIPT,self.execute_file)        
+        EVT_MENU(self,ID_CONF_SCRIPT,self.execute_file)
         EVT_MENU(self,ID_SAVE_FILE,self.save_file)
-        EVT_MENU(self,ID_SAVE_AS,self.save_as)
+        EVT_MENU(self,ID_SAVE_AS,self.save_as)        
         EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
@@ -453,11 +453,11 @@ class WaxEdSimFrame(wxFrame):
         self.Close(true)
     def on_close(self, event):
 	self.cleanup()
-	event.Skip()
+	event.Skip()        
     def open_file(self, event):
 	init_dir = self.app_control.curr_dir
         dlg = wxFileDialog(self, "Edit File", init_dir, "", "*.*",
-	    wxOPEN | wxCHANGE_DIR)
+ 	    wxOPEN | wxCHANGE_DIR)
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
@@ -466,17 +466,18 @@ class WaxEdSimFrame(wxFrame):
 #	    self.app_control.open_file(file_path)
 	dlg.Destroy()
 
+
+
     def execute_file(self, event):
 	init_dir = self.app_control.curr_dir
         dlg = wxFileDialog(self, "Execute Script File", init_dir, "",
-	    "*.*", wxOPEN)
+ 	    "*.*", wxOPEN)
         answer = dlg.ShowModal()
         print '-- WaxEdSim.execute_file: answer=%s, wxID_OK=%s' % (answer, wxID_OK)
         if answer == wxID_OK:
             file_path = dlg.GetPath()
             
             self.pane.command_prompt._on_command("execfile('%s')" % file_path)
-	dlg.Destroy()
 
     def save_as(self, event):
 	init_dir = self.app_control.curr_dir
@@ -489,12 +490,14 @@ class WaxEdSimFrame(wxFrame):
 	    self.app_control.save_file(file_path, no_prompt = 1)
 	dlg.Destroy()
 
+
     def save_file(self, event):
 	name = self.app_control.curr_buffer_name()
 	if name:
 	    self.app_control.save_file(name, no_prompt = 1)
 	else:
 	    self.save_as(self, event)
+
 
     def choose_font(self, event):
 
@@ -510,8 +513,7 @@ class WaxEdSimFrame(wxFrame):
         chosen_font = dlg.GetFontData().GetChosenFont()
         if chosen_font:
             on_window.SetFont(chosen_font)
-	dlg.Destroy()
-
+	dlg.Destroy()            
 
         
     def on_activate(self, event):
@@ -620,6 +622,7 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	    if answer != wxYES:
 		return 0
 	return self.frame.editor_buffer().underlying.SaveFile(full_path)
+
 
     def is_active(self):
 	"""indicates whether the editor frame is active

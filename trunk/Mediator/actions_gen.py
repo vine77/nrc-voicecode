@@ -382,7 +382,7 @@ class ActionInsert(Action):
         """See [Action.execute].
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
-        
+
         app.insert_indent(self.code_bef, self.code_after)
 
 

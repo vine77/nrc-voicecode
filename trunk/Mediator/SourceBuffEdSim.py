@@ -23,9 +23,7 @@
 import re, string, sys
 
 from Object import Object
-import SourceBuffIndent
-import find_difference
-
+import find_difference, sb_services, SourceBuffNonCached
 
 #
 # default value of window_size (unless overridden by the constructor argument)
@@ -33,7 +31,7 @@ import find_difference
 print_window_size = 3
 
 
-class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
+class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
     """concrete class representing a disconnected source buffer for the
     editor simulator EdSim.
 
@@ -48,16 +46,28 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
     *BOOL global_selection* -- makes the 'visible' region the whole
     buffer (useful for regression testing)
 
+    [SB_ServiceLang] *lang_srv* -- Language service used to know the
+    programming language of a source file.
+
+    [SB_ServiceLineManip] *line_srv* -- Service for manipulating lines.
+
+    [SB_ServiceIndent] *indent_srv* -- Code indentation service used by EdSim.
+
     CLASS ATTRIBUTES**
 
     *none*
-    """
+
+    ..[SB_ServiceLang] file:///./sb_services.SB_ServiceLang.html
+    ..[SB_ServiceLineManip] file:///./sb_services.SB_ServiceLineManip.html"""
     
     def __init__(self, indent_level=3, indent_to_curr_level=1, init_pos=0,
                  init_selection = None, initial_contents="",
                  window_size = print_window_size, global_selection = 1,
                  **attrs):
 
+        self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
+                         'line_srv': sb_services.SB_ServiceLineManip(buff=self),
+                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3, indent_to_curr_level = 1)})
 
         self.deep_construct(SourceBuffEdSim,
                             {'pos': init_pos, 
@@ -78,6 +88,24 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	if (s < e):
 	    self.selection = (self.pos, self.pos)
 
+
+    def file_name(self):
+        return self.app.only_buffer_name
+
+    def language_name(self):
+        """Returns the name of the language a file is written in
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUTS**
+        
+        *STR* -- the name of the language
+        """
+
+        return self.lang_srv.language_name()
+
     def cur_pos(self):
 	return self.pos
 
@@ -96,7 +124,7 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	    end = self.len()
 	start, end = self.make_valid_range((start, end))
 	return self.content[ start: end]
-
+    
     def set_text(self, text, start = None, end = None):
 	if start == None:
 	    start = 0
@@ -132,8 +160,68 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	    return
 	self.goto_line(destination)
 
+    def line_num_of(self, position = None):
+        """Returns the line number for a particular cursor position
+        
+        **INPUTS**
+        
+        *INT* position -- The position.
+        
+
+        **OUTPUTS**
+        
+        *INT line_num* -- The line number of that position
+        """
+        return self.line_srv.line_num_of(position)
+
+    def number_lines(self, astring, startnum=1):
+        """Assign numbers to lines in a string.
+
+        Used mainly for the purpose of doing a printout of the buffer
+        content around the cursor (usually during regression testing).
+
+        *STR astring* is the string in question.
+
+        *INT startnum* is the number of the first line in *astring*
+        
+        Returns a list of pairs *[(INT, STR)]* where first entry is
+        the line number and the second entry is the line.
+        
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+        return self.line_srv.number_lines(astring, startnum)        
+
     def len(self):
 	return len(self.content)
+
+    def beginning_of_line(self, pos):
+        """Returns the position of the beginning of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the beginning of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* beg_pos -- Position of the beginning of the line
+        """
+        return self.line_srv.beginning_of_line(pos)
+
+
+    def end_of_line(self, pos):
+        """Returns the position of the end of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the end of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* end_pos -- Position of the end of the line
+        """
+        return self.line_srv.end_of_line(pos)
 
     def refresh_if_necessary(self):
 	self.print_buff()
@@ -162,7 +250,7 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
         if from_line == None:
            from_line, to_line = self.lines_around_cursor()
 
-#	print from_line, to_line
+#	print '-- SourceBuffEdSim.print_buffer: from_line=%s, to_line=%s' % (from_line, to_line)
         #
         # Figure out the text before/withing/after the selection
         #
@@ -209,6 +297,7 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
         """
 
         curr_line = self.line_num_of(self.cur_pos())
+#        print '-- SourceBuffEdSim.lines_around_cursor: self.cur_pos()=%s, curr_line=%s' % (self.cur_pos(), curr_line)
         from_line = curr_line - self.window_size
         to_line = curr_line + self.window_size
 	if from_line < 1:
@@ -218,46 +307,6 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	    to_line = last_line
         return from_line, to_line
         
-        
-    def line_num_of(self, position = None):
-        """Returns the line number for a particular cursor position
-        
-        **INPUTS**
-        
-        *INT* position -- The position.
-        
-
-        **OUTPUTS**
-        
-        *INT line_num* -- The line number of that position
-        """
-        
-        #
-        # Make sure the position is within range
-        #
-	if position == None:
-	    position = self.cur_pos()
-        position = self.make_within_range(position)
-        
-        #
-        # Find line number of position
-        #        
-        lines = string.split(self.contents(), '\n')
-        line_start_pos = None
-        line_end_pos = 0
-	line_num = 1
-        curr_line = 0
-        for a_line in lines:
-            curr_line = curr_line + 1
-            line_start_pos = line_end_pos
-            line_end_pos = line_end_pos + len(a_line) + 1
-            if position >= line_start_pos and position < line_end_pos:
-                line_num = curr_line
-                break
-            
-        return line_num
-
-
     def move_relative_page(self, direction=1, num=1):
         """Moves up or down a certain number of pages
         
@@ -302,6 +351,30 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	self.content = before + text + after
 	self.goto(start + len(text))
 
+    def insert_indent(self, code_bef, code_after, range = None):
+        """Insert code into source buffer and indent it.
+
+        Replace code in range 
+        with the concatenation of
+        code *STR code_bef* and *str code_after*. Cursor is put right
+        after code *STR bef*.
+
+	**INPUTS**
+
+	*STR* code_bef -- code to be inserted before new cursor location
+        
+	*STR* code_bef -- code to be inserted after new cursor location
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+
+        self.indent_srv.insert_indent(code_bef, code_after, range)
+
     def indent(self, range = None):
         """Indent code in a source buffer region.
 
@@ -315,8 +388,46 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	*none*
 	"""
 
-        pass
+        self.indent_srv.indent(range)
 
+    def incr_indent_level(self, levels=1, range=None):
+        
+        """Increase the indentation of a region of code by a certain
+        number of levels.
+        
+        **INPUTS**
+        
+        *INT* levels=1 -- Number of levels to indent by.
+        
+        *(INT, INT)* range=None -- Region of code to be indented 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.indent_srv.incr_indent_level(levels, range)
+
+    def decr_indent_level(self, levels=1, range=None):
+
+        """Decrease the indentation of a region of code by a certain number
+        of levels.
+        
+        **INPUTS**
+        
+        *STR* levels=1 -- Number of levels to unindent
+
+        *(INT, INT)* range=None -- Start and end position of code to be indent.
+        If *None*, use current selection
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        self.indent_srv.decr_indent_level(levels, range)
+        
 
     def delete(self, range = None):
         """Delete text in a source buffer range.
@@ -350,6 +461,8 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
 	self.pos = pos
 	self.selection = (pos, pos)
 
+
+
     def goto_line(self, linenum, where=-1):
         """Go to a particular line in a buffer.
 
@@ -358,15 +471,38 @@ class SourceBuffEdSim(SourceBuffIndent.SourceBuffIndent):
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
-	self.goto(0)
-	ii = 1; found = 1
-	while (ii < linenum and found):
-	    found = self.search_for('\n', 1)
-	    ii = ii + 1
-        if (where > 0):
-            found = self.search_for('\n', 1)
-            if not found:
-                self.goto(self.len())
-                
+
+        self.line_srv.goto_line(linenum, where)
+
+    def newline_conventions(self):
+        
+        """Returns a list of the forms of newline the editor can
+        recognise for this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        return ['\n']
 
 
+    def pref_newline_convention(self):
+        """Returns the form of newline that the editor prefers for this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        return '\n'
