@@ -1,3 +1,4 @@
+/*
 ##############################################################################
 # VoiceCode, a programming-by-voice environment
 #
@@ -17,17 +18,6 @@
 #
 # (C)2000, National Research Council of Canada
 #
-##############################################################################
+##############################################################################*/
 
-#
-# Contains all the standard C/C++ symbols.
-# 
-# So far this list just has a few examples from Stuart's memory, for testing.
-#
-iostream
-fstream
-cout
-cerr
-assert
-ofstream
-ifstream
+THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym

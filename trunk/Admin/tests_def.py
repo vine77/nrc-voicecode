@@ -959,9 +959,10 @@ def test_SymDict_storage():
     symbol_file = os.path.join(test_data, 'selected_py_sym.py')
     symbols.standard_symbols_in([symbol_file])
      
+    C_Cpp_abbrev_file = os.path.join(test_data, 'C_Cpp_abbrevs.py')
     py_abbrev_file = os.path.join(test_data, 'py_abbrevs.py')
     std_abbrev_file = os.path.join(test_data, 'std_abbrevs.py')
-    abbrev_files = [std_abbrev_file, py_abbrev_file]
+    abbrev_files = [std_abbrev_file, py_abbrev_file, C_Cpp_abbrev_file]
 #    abbrev_files = [py_abbrev_file]
     symbols.abbreviations_in(abbrev_files)
 
