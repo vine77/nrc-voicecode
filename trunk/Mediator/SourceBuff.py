@@ -714,6 +714,39 @@ class SourceBuff(OwnerObject):
         
         debug.virtual('SourceBuff.move_relative_page')
 
+
+    def insert(self, text, range = None):
+        """Replace text in range with 
+        with text
+
+        **INPUTS**
+
+        *STR text* -- new text
+
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
+
+        **OUTPUTS**
+
+        *none*
+        """
+
+        debug.virtual('SourceBuff.insert')
+        
+
+###################################################################
+# Methods for automatic indentation.
+# Eventually make those abstract methods, and create methods in
+# SourceBuffWithServices that forward them to the indentation service
+###################################################################
+
+
+    def uses_server_side_indent(self):
+       """Returns TRUE iif automatic indentation is done on the server side
+       using and instance of SB_ServiceIndent"""
+       
+       return 0
+       
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
 
@@ -768,30 +801,7 @@ class SourceBuff(OwnerObject):
             self.indent((final_cur_pos, self.cur_pos()))
             self.goto(final_cur_pos)
 
-
-    def insert(self, text, range = None):
-        """Replace text in range with 
-        with text
-
-        **INPUTS**
-
-        *STR text* -- new text
-
-        *(INT, INT)* range -- code range to be replaced.  If None,
-        defaults to the current selection.
-
-        **OUTPUTS**
-
-        *none*
-        """
-
-        debug.virtual('SourceBuff.insert')
-
-    def uses_server_side_indent(self):
-       """Returns TRUE iif automatic indentation is done on the server side
-       using and instance of SB_ServiceIndent"""
        
-       return 0
 
     def indent(self, range = None):
         
@@ -1637,6 +1647,32 @@ class SourceBuff(OwnerObject):
         self.insert(value, (start,end))
 
 
+###################################################################
+# Methods for simulating user kbd and mouse input. Those methods
+# are only used by the regression test, in order to test mixed mode
+# (i.e. voice + mouse + kbd) editing scenarios.
+###################################################################
+    
+    def set_selection_by_kbd(self, start, end):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+        
+    def move_cursor_by_kbd(self, direction, num_steps):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+        
+    def type_text(self, text):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+    
+    def set_selection_by_kbd(self, start, end):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+       
+    def move_cursor_by_kbd(self, direction, num_steps):
+       debug.virtual('SourceBuff.simulate_move_cursor_by_kbd')
+        
+    def type_text(self, text):
+       debug.virtual('SourceBuff.simulate_type_text')
+
+
+    
 class BackspaceMixIn(Object):
     """implements the backspace method by deletion.
 

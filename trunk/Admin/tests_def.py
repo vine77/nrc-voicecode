@@ -49,6 +49,7 @@ small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
 #                     desc='run a series of unit tests through PyUnit')
 
 
+
 ##############################################################################
 # Testing SymDict
 ##############################################################################
@@ -2760,6 +2761,49 @@ auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insert
 
 
 ##############################################################################
+# Testing interaction between user inputs and speech
+##############################################################################
+
+def test_mixed_kbd_and_voice_editing():
+    testing.init_simulator_regression()
+    commands = testing.namespace()['commands']    
+    instance_name = testing.editor()
+    if instance_name: 
+        app = the_mediator.editors.app_instance(instance_name)
+    else:
+        app = the_mediator.app    
+
+    test_cursor_moved_by_kbd(app, commands)
+    test_selection_set_by_kbd(app, commands)
+    test_search_for_typed_text(app, commands)
+    test_select_typed_text_by_voice(app, commands)
+   
+def test_cursor_moved_by_kbd(app, commands):
+   commands.open_file(edit_this_buff_py)
+   app.curr_buffer().move_cursor_by_kbd('Right', 10)
+   commands.say(['hello'], user_input="0\n")
+
+def test_selection_set_by_kbd(app, commands):
+   commands.open_file(edit_this_buff_py)
+   app.curr_buffer().set_selection_by_kbd(1, 10)
+   commands.say(['hello'], user_input="0\n")
+   
+def test_search_for_typed_text(app, commands):
+   commands.open_file(edit_this_buff_py)
+   commands.goto_line(2)
+   app.curr_buffer().type_text(',')
+   app.curr_buffer().move_cursor_by_kbd('Left', 2)
+   commands.say(['next', 'comma'])
+   
+def test_select_typed_text_by_voice(app, commands):
+   commands.open_file(edit_this_buff_py)
+   commands.goto_line(2)
+   app.curr_buffer().type_text('hello')   
+   commands.say(['select', 'hello'])
+
+#auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing')
+
+##############################################################################
 # Voice Commands for compiling symbols
 ##############################################################################
 
@@ -2816,17 +2860,17 @@ def test_temporary():
    edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
    testing.init_simulator_regression()
    commands = testing.namespace()['commands']
-   commands.compile_symbols(edit_file)   
    commands.open_file(edit_file)
-   commands.goto_line(11)
-   commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
-   commands.say(['do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
-   commands.say(['else', 'do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
-   commands.say(['next', 'else', 'will', 'not', 'be', 'back', 'indented', 'to', 'the', 'right', 'level', 'by', 'emacs'], user_input="0\n0\n0\n")
-   commands.say(['else', 'do', 'some', 'stuff', 'without', 'arguments'])
-   
+
+#   commands.goto_line(4)
+#   commands.say(['class', 'body'])
+
+# here, it seems class body    
+   commands.goto_line(20)
+   commands.say(['class', 'dummy', 'class', 'body'], user_input="1\n")
+   commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
 
     
-#auto_test.add_test('temp', test_temporary, desc='temporary test')
+auto_test.add_test('temp', test_temporary, desc='temporary test')
 
 

@@ -1,10 +1,31 @@
-creating wxMediator
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished wxMediator init...
-starting...
+Finished ExtLoop init...
+Running ExtLoopWin32...
 Starting server threads...
+Starting message loop...
+New connection
+New connection from emacs
+awaiting corresponding talk connection
+received talk connection
+creating messengers
+configuring from external
+creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -35,13 +56,13 @@ EdSim instance EdSim(0) connected
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4:    {
+  4: {
   5: for (=0;  <= ; ++)
-  6:    {
+  6: {
   7: <CURSOR>   
-  8:    }
+  8: }
   9:    
- 10:    }
+ 10: }
 
 >>> Interpreting in a Python buffer
 
@@ -186,13 +207,13 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4:    {
+  4: {
   5: for (=0;  <= ; ++)
-  6:    {
+  6: {
   7: <CURSOR>   
-  8:    }
+  8: }
   9:    
- 10:    }
+ 10: }
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
@@ -251,13 +272,13 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.c
 >>> Interpreting: ['for', 'loop', 'loop', 'body']
 
 >>> Buffer is now:
-  4:    {
+  4: {
   5: for (=0;  <= ; ++)
-  6:    {
+  6: {
   7: <CURSOR>   
-  8:    }
+  8: }
   9:    
- 10:    }
+ 10: }
 SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
 
 >>> Interpreting in a Python buffer
@@ -283,10 +304,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -329,7 +350,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2444970>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 13d7718>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -468,6 +489,7 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
+'tst': appears in ['autoTst']
 
 *** End of compilation test ***
 
@@ -726,10 +748,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2473,7 +2495,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3330,7 +3352,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3414,12 +3436,12 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 27a7f20> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 11d5ca0> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7529,14 +7551,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'R. E.' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
->  19:                           attrs)
+ 19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -8736,39 +8751,21 @@ Associate 'some module' with symbol (Enter selection):
  21: 
  22: class SomeOtherClass():
  23: 
-Heard there is a bug below
-Associate 'there' with symbol (Enter selection):
+Heard class dummy class body
+Associate 'dummy' with symbol (Enter selection):
 
   '0': no association
-  '1': there (*new*)
-  '2': There (*new*)
-  '3': THERE (*new*)
+  '1': dummy (*new*)
+  '2': Dummy (*new*)
+  '3': DUMMY (*new*)
 
-> Associate 'a bug below' with symbol (Enter selection):
-
-  '0': no association
-  '1': a_bug_below (*new*)
-  '2': ABugBelow (*new*)
-  '3': aBugBelow (*new*)
-  '4': A_BUG_BELOW (*new*)
-  '5': abugbelow (*new*)
-  '6': ABUGBELOW (*new*)
-
->  17:         pass
- 18:            
+>  18:            
  19: 
- 20: there is a bug below<CURSOR>
- 21: 
- 22: class SomeOtherClass():
- 23: 
-Heard class new class class body
- 19: 
- 20: there is a bug belowclass class :
- 21:    :
- 22:    <CURSOR>
- 23: 
- 24: class SomeOtherClass():
- 25: 
+ 20: class dummy:
+ 21:    <CURSOR>
+ 22: 
+ 23: class SomeOtherClass():
+ 24: 
 Heard define method new method method body pass
 Associate 'new method' with symbol (Enter selection):
 
@@ -8780,13 +8777,13 @@ Associate 'new method' with symbol (Enter selection):
   '5': newmethod (*new*)
   '6': NEWMETHOD (*new*)
 
->  21:    :
- 22:    def new_method(self):
- 23:       pass
- 24:    <CURSOR>
- 25: 
- 26: class SomeOtherClass():
- 27: 
+>  20: class dummy:
+ 21:    def new_method(self):
+ 22:       pass
+ 23:    <CURSOR>
+ 24: 
+ 25: class SomeOtherClass():
+ 26: 
 
 *********************
 *** DONE with edit test: create new class ***
@@ -8899,7 +8896,7 @@ Associate 'some method' with symbol (Enter selection):
   7: <CURSOR>    def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
 Heard add argument extra argument
 Associate 'extra argument' with symbol (Enter selection):
 
@@ -8917,7 +8914,7 @@ Associate 'extra argument' with symbol (Enter selection):
   7:     def a_method(self, some_argument, extra_argument<CURSOR>):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
 
 *********************
 *** DONE with edit test: add_argument_to_existing_method_test ***
@@ -8939,7 +8936,7 @@ Associate 'extra argument' with symbol (Enter selection):
   7: <CURSOR>    def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
 Heard select some argument
   4: class AClass(ASuper):
   5:     """This is a dummy class"""
@@ -8947,7 +8944,7 @@ Heard select some argument
   7:     def a_method(self, <SEL_START>some_argument<SEL_END>):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
 Heard new argument
 Associate 'new argument' with symbol (Enter selection):
 
@@ -8965,7 +8962,7 @@ Associate 'new argument' with symbol (Enter selection):
   7:     def a_method(self, new_argument<CURSOR>):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
+ 10:             do_some_stuff(some_array)
 
 *********************
 *** DONE with edit test: change_existing_argument_of_a_method_test ***
@@ -8986,24 +8983,24 @@ Associate 'new argument' with symbol (Enter selection):
   7:     def a_method(self, some_argument):
   8: <CURSOR>        some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
- 11:            do_some_more()
+ 10:             do_some_stuff(some_array)
+ 11:             do_some_more()
 Heard new statement
   6:     
   7:     def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         <CURSOR>
  10:         if some_variable:
- 11:            do_some_stuff(some_array)
- 12:            do_some_more()
+ 11:             do_some_stuff(some_array)
+ 12:             do_some_more()
 Heard some array equals none
   6:     
   7:     def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         some_array = None<CURSOR>
  10:         if some_variable:
- 11:            do_some_stuff(some_array)
- 12:            do_some_more()
+ 11:             do_some_stuff(some_array)
+ 12:             do_some_more()
 
 *********************
 *** DONE with edit test: insert_line_of_code_in_method_test ***
@@ -9022,41 +9019,41 @@ Heard some array equals none
   7:     def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10: <CURSOR>           do_some_stuff(some_array)
- 11:            do_some_more()
+ 10: <CURSOR>            do_some_stuff(some_array)
+ 11:             do_some_more()
  12:            
  13:         try:
 Heard select some array
   7:     def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(<SEL_START>some_array<SEL_END>)
- 11:            do_some_more()
+ 10:             do_some_stuff(<SEL_START>some_array<SEL_END>)
+ 11:             do_some_more()
  12:            
  13:         try:
 Heard none
   7:     def a_method(self, some_argument):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(None<CURSOR>)
- 11:            do_some_more()
+ 10:             do_some_stuff(None<CURSOR>)
+ 11:             do_some_more()
  12:            
  13:         try:
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(None)
- 11: <CURSOR>           do_some_more()
+ 10:             do_some_stuff(None)
+ 11: <CURSOR>            do_some_more()
  12:            
  13:         try:
- 14:            do_some_stuff()
+ 14:             do_some_stuff()
 Heard after paren none
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(None)
- 11:            do_some_more(None<CURSOR>)
+ 10:             do_some_stuff(None)
+ 11:             do_some_more(None<CURSOR>)
  12:            
  13:         try:
- 14:            do_some_stuff()
+ 14:             do_some_stuff()
 
 *********************
 *** DONE with edit test: change_arguments_in_method_call_test ***
@@ -9074,11 +9071,11 @@ Heard after paren none
   4: class AClass(ASuper):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
- 11: <CURSOR>           do_some_more()
+ 10:             do_some_stuff(some_array)
+ 11: <CURSOR>            do_some_more()
  12:            
  13:         try:
- 14:            do_some_stuff()
+ 14:             do_some_stuff()
 Heard new statement if some flag then
 Associate 'some flag' with symbol (Enter selection):
 
@@ -9090,13 +9087,13 @@ Associate 'some flag' with symbol (Enter selection):
   '5': someflag (*new*)
   '6': SOMEFLAG (*new*)
 
->  10:            do_some_stuff(some_array)
- 11:            do_some_more()
- 12:            if some_flag:
- 13:               <CURSOR>
+>  10:             do_some_stuff(some_array)
+ 11:             do_some_more()
+ 12:             if some_flag:
+ 13:                <CURSOR>
  14:            
  15:         try:
- 16:            do_some_stuff()
+ 16:             do_some_stuff()
 Heard do some more stuff with arguments some argument
 Associate 'do_some_more stuff' with symbol (Enter selection):
 
@@ -9109,13 +9106,13 @@ Associate 'do_some_more stuff' with symbol (Enter selection):
   '6': dosomemorestuff (*new*)
   '7': DOSOMEMORESTUFF (*new*)
 
->  10:            do_some_stuff(some_array)
- 11:            do_some_more()
- 12:            if some_flag:
- 13:               do_some_stuff(some_argument<CURSOR>)
+>  10:             do_some_stuff(some_array)
+ 11:             do_some_more()
+ 12:             if some_flag:
+ 13:                do_some_stuff(some_argument<CURSOR>)
  14:            
  15:         try:
- 16:            do_some_stuff()
+ 16:             do_some_stuff()
 Heard else do some stuff again with arguments some other argument
 Associate 'do_some_stuff again' with symbol (Enter selection):
 
@@ -9137,21 +9134,59 @@ Associate 'do_some_stuff again' with symbol (Enter selection):
   '5': someotherargument (*new*)
   '6': SOMEOTHERARGUMENT (*new*)
 
->  12:            if some_flag:
- 13:               do_some_stuff(some_argument)
- 14:            else:
- 15:               do_some_stuff_again(some_other_argument<CURSOR>)
+>  12:             if some_flag:
+ 13:                do_some_stuff(some_argument)
+ 14:             else:
+ 15:                do_some_stuff_again(some_other_argument<CURSOR>)
  16:            
  17:         try:
- 18:            do_some_stuff()
+ 18:             do_some_stuff()
+Heard bug below dot following one will not be inserted at the right level
+Associate 'bug below' with symbol (Enter selection):
+
+  '0': no association
+  '1': bug_below (*new*)
+  '2': BugBelow (*new*)
+  '3': bugBelow (*new*)
+  '4': BUG_BELOW (*new*)
+  '5': bugbelow (*new*)
+  '6': BUGBELOW (*new*)
+
+> Associate 'following one will' with symbol (Enter selection):
+
+  '0': no association
+  '1': following_one_will (*new*)
+  '2': FollowingOneWill (*new*)
+  '3': followingOneWill (*new*)
+  '4': FOLLOWING_ONE_WILL (*new*)
+  '5': followingonewill (*new*)
+  '6': FOLLOWINGONEWILL (*new*)
+
+> Associate 'be inserted at the right level' with symbol (Enter selection):
+
+  '0': no association
+  '1': be_inserted_at_the_right_level (*new*)
+  '2': BeInsertedAtTheRightLevel (*new*)
+  '3': beInsertedAtTheRightLevel (*new*)
+  '4': BE_INSERTED_AT_THE_RIGHT_LEVEL (*new*)
+  '5': beinsertedattherightlevel (*new*)
+  '6': BEINSERTEDATTHERIGHTLEVEL (*new*)
+
+>  12:             if some_flag:
+ 13:                do_some_stuff(some_argument)
+ 14:             else:
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following_one_willnot be_inserted_at_the_right_level<CURSOR>)
+ 16:            
+ 17:         try:
+ 18:             do_some_stuff()
 Heard else do some stuff without arguments
- 14:            else:
- 15:               do_some_stuff_again(some_other_argument)
- 16:            else:
- 17:               do_some_stuff()<CURSOR>
+ 14:             else:
+ 15:                do_some_stuff_again(some_other_argumentbug_below.following_one_willnot be_inserted_at_the_right_level)
+ 16:             else:
+ 17:                do_some_stuff()<CURSOR>
  18:            
  19:         try:
- 20:            do_some_stuff()
+ 20:             do_some_stuff()
 
 *********************
 *** DONE with edit test: nested_if_then_else_test ***
@@ -9169,19 +9204,19 @@ Heard else do some stuff without arguments
   4: class AClass(ASuper):
   8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:            do_some_stuff(some_array)
- 11: <CURSOR>           do_some_more()
+ 10:             do_some_stuff(some_array)
+ 11: <CURSOR>            do_some_more()
  12:            
  13:         try:
- 14:            do_some_stuff()
+ 14:             do_some_stuff()
 Heard else clause
- 10:            do_some_stuff(some_array)
- 11:            do_some_more()
- 12:         else:
- 13:            <CURSOR>
+ 10:             do_some_stuff(some_array)
+ 11:             do_some_more()
+ 12:          else:
+ 13:             <CURSOR>
  14:            
  15:         try:
- 16:            do_some_stuff()
+ 16:             do_some_stuff()
 
 *********************
 *** DONE with edit test: add_else_clause_test ***
@@ -9198,22 +9233,22 @@ Heard else clause
   3: 
   4: class AClass(ASuper):
  23: 
- 24: 	def some_other_method(self):
- 25: 	   try:
- 26: <CURSOR>	      do_some_stuff()
+ 24:     def some_other_method(self):
+ 25:         try:
+ 26: <CURSOR>            do_some_stuff()
  27: 	       
- 28: 	def yet_another_method(self):
- 29: 	   pass
+ 28:     def yet_another_method(self):
+ 29:         pass
 
 *** End of source buffer ***
 Heard catch exceptions
- 24: 	def some_other_method(self):
- 25: 	   try:
- 26: 	      do_some_stuff()
- 27: 	   except <CURSOR>:
- 28: 	      
+ 24:     def some_other_method(self):
+ 25:         try:
+ 26:             do_some_stuff()
+ 27:             except <CURSOR>:
+ 28:                
  29: 	       
- 30: 	def yet_another_method(self):
+ 30:     def yet_another_method(self):
 
 *********************
 *** DONE with edit test: add_except_clause_test ***
@@ -9239,7 +9274,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9328,7 +9363,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11370,8 +11405,12 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 
+
 -----------------------------------------------
-Test suite completed in:  1333.14999998 secs
+Test suite completed in:  894.45599997 secs
 -----------------------------------------------
+Message loop ended, cleaning up
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c3dc00>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+ExtLoopWin32.run returning
