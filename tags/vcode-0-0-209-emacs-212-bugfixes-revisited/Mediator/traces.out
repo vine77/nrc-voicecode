@@ -1,0 +1,62 @@
+C:\>cd C:\Eclipse\workspace\VCode\Mediator
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
+Loading test definitions...
+-- NewMediatorObject.__init__: ** upon exit, self.test_args=['all']
+Configuring the mediator...
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Finished ExtLoop init...
+Running ExtLoopWin32...
+Starting server threads...
+Starting message loop...
+-- send_mess: self=<messaging.MessengerBasic instance at 1909f98>, mess_name='send_app_name'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 1909f98>, expecting ['app_name']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('app_name', {'value': 'emacs'})
+-- send_mess: self=<messaging.MessengerBasic instance at 1909f98>, mess_name='your_id_is'
+-- send_mess: mess_argvals='{'value': 'emacs_0.196513369548'}'
+-- get_mess: self=<messaging.MessengerBasic instance at 1909f98>, expecting ['ok']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('ok', {})
+-- send_mess: self=<messaging.MessengerBasic instance at 1909f98>, mess_name='test_client_query'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 1909f98>, expecting ['test_client_query_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('test_client_query_resp', {'value': 1.0})
+-- send_mess: self=<messaging.MessengerBasic instance at 1a74ff0>, mess_name='send_id'
+-- send_mess: mess_argvals='{}'
+-- get_mess: self=<messaging.MessengerBasic instance at 1a74ff0>, expecting ['my_id_is']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('my_id_is', {'value': 'emacs_0.196513369548'})
+-- NewMediatorObject._new_test_editor: ** self.test_args=['all'], self.global_grammars=1-- tcp_threads.ListenAndQueueMsgsThread.run: ** invoking self.get_mess()
+
+
+-- NewMediatorObject._new_test_editor: ** invoking universal_instance
+-- tcp_threads.ListenAndQueueMsgsThread.get_mess: ** invoked
+-- AppMgr.new_universal_instance: ** exclusive=1
+-- get_mess: self=<messaging.MessengerBasic instance at 198b630>, expecting None
+
+-- AppMgr._add_new_instance: ** invoked
+-- AppMgr._add_new_instance: ** app_name=emacs
+-- AppMgr._add_new_instance: ** not in self.app_names()
+-- AppMgr._add_new_instance: ** WAS in self.app_names()
+-- AppMgr._add_new_instance: ** invoking app.set_name()
+-- AppMgr._add_new_instance: ** DONE invoking app.set_name()
+-- AppMgr._add_new_instance: ** invoking app.set_instance_string()
+-- AppStateMessaging.set_instance_string: ** invoked
+-- send_mess: self=<messaging.MessengerBasic instance at 1929468>, mess_name='set_instance_string'
+-- send_mess: mess_argvals='{'instance_string': '(Yak 0)'}'
+-- get_mess: self=<messaging.MessengerBasic instance at 1929468>, expecting ['set_instance_string_resp']
+-- get_mess: got it!
+-- get_mess: name_argvals_mess=('set_instance_string_resp', {})
+-- tcp_threads.ListenAndQueueMsgsThread.get_mess: ** returning messages=('set_instance_string_resp', {})
+-- tcp_threads.ListenAndQueueMsgsThread.run: ** DONE invoking self.get_mess()
+-- tcp_threads.ListenAndQueueMsgsThread.run: ** invoking self.get_mess()
+-- tcp_threads.ListenAndQueueMsgsThread.get_mess: ** invoked
+-- get_mess: self=<messaging.MessengerBasic instance at 198b630>, expecting None
+
+
+
