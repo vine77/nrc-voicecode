@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 08 13:03:18 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon May 13 15:22:06 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -16,6 +16,7 @@
 
 <H1 CLASS="ModuleName">Module debug</H1>
 <PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">config_traces</SPAN>(<SPAN CLASS="Argument">print_to=None</SPAN>, <SPAN CLASS="Argument">status=None</SPAN>, <SPAN CLASS="Argument">active_traces={}</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Configures what traces are printed, and where</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#critical_warning"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">critical_warning</SPAN></A>(<SPAN CLASS="Argument">warn</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Prints a critical warning message.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">dont_print_trace</SPAN>(<SPAN CLASS="Argument">trace_id</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">insert_nl=1</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Just ignore traces. Used for greater efficiency.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">not_implemented</SPAN>(<SPAN CLASS="Argument">name</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Prints warning message when a stub function is called.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#print_call_stack"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_call_stack</SPAN></A>(<SPAN CLASS="Argument">print_to_file=&lt;open file '&lt;stdout&gt;', mode 'w' at 7628c0&gt;</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Prints the call stack.</SPAN>
@@ -27,7 +28,17 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">dictionary</SPAN> <SPAN CLASS="VariableName">to_be_traced</SPAN> = <SPAN CLASS="VariableValue">{}</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">trace_file</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7628c0&gt;</SPAN></SPAN>
 <SPAN CLASS="PyKeyword">alias</SPAN> <SPAN CLASS="AliasName">trace_fct</SPAN> = <SPAN CLASS="AliasFor">debug.dont_print_trace (type function)</SPAN>
-</PRE><H2 ID="print_call_stack" CLASS="Function">print_call_stack(<SPAN CLASS="Argument">print_to_file=&lt;open file '&lt;stdout&gt;', mode 'w' at 7628c0&gt;</SPAN>)</H2>
+</PRE><H2 ID="critical_warning" CLASS="Function">critical_warning(<SPAN CLASS="Argument">warn</SPAN>)</H2>
+<P>Prints a critical warning message.</P>
+
+<P>
+A critical warning usually indicates a bug in the code which should
+be reported and resolved, but in a circumstance where the best 
+immediate response is to ignore and continue running.  For example, 
+if an error is detected by an object destructor or during cleanup, it 
+may be advisable to proceed to free the rest of the resources used
+by the object.</P>
+<H2 ID="print_call_stack" CLASS="Function">print_call_stack(<SPAN CLASS="Argument">print_to_file=&lt;open file '&lt;stdout&gt;', mode 'w' at 7628c0&gt;</SPAN>)</H2>
 <P>Prints the call stack.</P>
 
 <P>

@@ -60,6 +60,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 			    'instance_reporting': instance_reporting,
 			    'multiple': multiple},
                             attrs)
+	self.add_owned('breadcrumbs_srv')
 	if self.instance_reporting:
 	    print 'EdSim.__init__'
         self.open_buffers[self.active_buffer_name] = \
@@ -69,10 +70,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	"destructor"
 	if self.instance_reporting:
 	    print 'EdSim.__del__'
-	
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
+
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
 
 	**INPUTS**
 
@@ -82,10 +83,11 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	*none*
 	"""
+# subclasses must call their parent class's remove_other_references
+# function, before performing their own duties
 	if self.instance_reporting:
-	    print 'EdSim.cleanup'
-        self.breadcrumbs_srv.cleanup()
-	AppStateNonCached.AppStateNonCached.cleanup(self)
+	    print 'EdSim.remove_other_references'
+	AppStateNonCached.AppStateNonCached.remove_other_references(self)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].

@@ -49,7 +49,7 @@ variant would have to be cloned and copied to the two classes.
 
 import Object
 
-class AS_Service(Object.ChildObject):
+class AS_Service(Object.OwnerObject):
     """Support service for AppState classes.
 
     Class for defining some sort of service that can be used by various
@@ -75,21 +75,7 @@ class AS_Service(Object.ChildObject):
                             {'app': app}, 
                             args_super, 
                             {})
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        del self.app
-
-  
+        self.name_parent('app')
 
 
 class AS_ServiceBreadcrumbs(AS_Service):

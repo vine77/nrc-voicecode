@@ -61,25 +61,11 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs,
                             )
+	self.add_owned('breadcrumbs_srv')
         self.open_buffers[self.active_buffer_name] =  \
 	    SourceBuffTB(app = self, buff_name="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
-
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        self.breadcrumbs_srv.cleanup()
-	AppStateNonCached.AppStateNonCached.cleanup(self)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].

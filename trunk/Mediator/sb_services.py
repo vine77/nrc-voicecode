@@ -52,7 +52,7 @@ import re
 
 import SourceBuffState
 
-class SB_Service(Object.ChildObject):
+class SB_Service(Object.OwnerObject):
     """Support service for SourceBuff classes.
 
     Class for defining some sort of service that can be used by various
@@ -77,20 +77,7 @@ class SB_Service(Object.ChildObject):
                             {'buff': buff}, 
                             args_super, 
                             {})
-    def cleanup(self):
-        """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        del self.buff
-
+        self.name_parent('buff')
   
 
 class SB_ServiceLang(SB_Service):

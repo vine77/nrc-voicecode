@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed May 08 13:04:00 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon May 13 15:22:26 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,14 +18,13 @@
 <P CLASS="DeclaredIn">Declared in module <A HREF="sb_services.html">sb_services</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sb_services.SB_Service<BR>
-&nbsp;&nbsp;Object.ChildObject<BR>
+&nbsp;&nbsp;Object.OwnerObject<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_Service</SPAN>(<A CLASS="DocLink" HREF="Object.ChildObject.html">ChildObject</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_Service</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_Service.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#sb_services.SB_Service.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sb_services.SB_Service.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -33,8 +32,14 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from Object.ChildObject</SPAN>
-    <A CLASS="DocLink" HREF="#Object.ChildObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.ChildObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
 Class for defining some sort of service that can be used by various
@@ -63,21 +68,6 @@ CLASS ATTRIBUTES**</P>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html
 ..[sb_services] sb_services.sb_services.html</P>
-<H2 ID="sb_services.SB_Service.cleanup" CLASS="Method">sb_services.SB_Service.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -208,12 +198,107 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="Object.ChildObject.cleanup" CLASS="Method">Object.ChildObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
 method to cleanup circular references by cleaning up 
 any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
