@@ -40,21 +40,21 @@ class InterThreadEvent(Object.Object):
     """
     def __init__(self, **args):
         """abstract base class so no arguments
-	"""
+        """
         self.deep_construct(InterThreadEvent,
                             {},
                             args)
     def notify(self):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('InterThreadEvent.notify')
 
 class SocketHasDataEvent(Object.Object):
@@ -77,21 +77,21 @@ class SocketHasDataEvent(Object.Object):
     """
     def __init__(self, **args):
         """abstract base class so no arguments
-	"""
+        """
         self.deep_construct(SocketHasDataEvent,
                             {},
                             args)
     def notify(self):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('SocketHasDataEvent.notify')
 
 class CorrectUtteranceEvent(Object.Object):
@@ -123,7 +123,7 @@ class CorrectUtteranceEvent(Object.Object):
     def notify(self, instance_name, utterance_number):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
         *STR instance_name* -- unique name identifying the editor
         instance
@@ -131,9 +131,49 @@ class CorrectUtteranceEvent(Object.Object):
         *INT utterance_number* -- the number assigned by
         ResMgr.interpret_dictation to the utterance to be corrected
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('CorrectUtteranceEvent.notify')
+
+class CorrectRecentEvent(Object.Object):
+    """abstract interface for sending a message to the main thread 
+    indicating that it should initiate a dialog for the user to select
+    and correct one or more recent utterances.
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correct recent box, while letting the 
+    correction grammar's on_results method return immediately, so as to 
+    allow speech input to the correct recent box (or other windows).
+
+    Particular implementations may use wxPython custom
+    events or other means to communicate with the main thread.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+        self.deep_construct(CorrectRecentEvent,
+                            {},
+                            args)
+    def notify(self, instance_name):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *STR instance_name* -- unique name identifying the editor
+        instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('CorrectRecentEvent.notify')
 

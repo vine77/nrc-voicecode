@@ -512,7 +512,7 @@ class BasicCorrectionWinGram(WinGram, OwnerObject):
 
         *none*
         """
-        self.manager.correct_recent(self)
+        self.manager.correct_recent()
 
 
 class WinGramFactory(Object):

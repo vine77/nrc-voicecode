@@ -357,6 +357,28 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
             return
         self.recog_mgr.correct_utterance(instance_name, utterance_number)
 
+    def correct_recent(self, instance_name):
+        """initiate user selection of a recent utterance to correct
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correct recent dialog box.  Generally, it should 
+        be called only in response to a CorrectRecent event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *STR instance_name* -- name of the application instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.known_instance(instance_name):
+            return
+        self.recog_mgr.correct_recent_synchronous(instance_name)
+
+
     def add_prefix(self, app_name, title_prefix):
         """add a title prefix for an editor application
 

@@ -97,7 +97,7 @@ class MediatorConsole(Object.OwnerObject):
 
     def correct_utterance(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
-        """display a correction box for correction a complete, recent
+        """display a correction box for correction of a complete, recent
         utterance, accept user corrections, allow the user to
         approve or cancel, and adapt the speech engine.
 
@@ -117,6 +117,25 @@ class MediatorConsole(Object.OwnerObject):
         *BOOL should_adapt* -- flag indicating whether correct_utterance
         should adapt the speech engine according to user corrections (if
         the user approves), or if the caller will handle that later.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the user made changes and approved them
+        """
+        debug.virtual('MediatorConsole.correct_utterance')
+
+    def correct_recent(self, editor_name, utterances):
+        """display a correct recent dialog box for to allow the user to 
+        select a recent utterance to correct
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
 
         **OUTPUTS**
 

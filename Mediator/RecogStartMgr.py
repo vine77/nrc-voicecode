@@ -1044,7 +1044,22 @@ class RSMInfrastructure(RecogStartMgr):
         *none*
         """
         if self.known_instance(instance):
-            self.results[instance].correct_last()
+            self.results[instance].correct_recent()
+
+    def correct_recent_synchronous(self, instance):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance):
+            self.results[instance].correct_recent_synchronous()
 
     def correct_utterance(self, instance_name, utterance_number):
         """initiate user correction of the utterance with a given

@@ -382,7 +382,7 @@ class SB_ServiceLineManip(SB_Service):
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
-	"""
+        """
         self.buff.goto(0)
         ii = 1; found = 1
         while (ii < linenum and found):
@@ -439,31 +439,31 @@ class SB_ServiceIndent(SB_Service):
         Replace code in range with the concatenation of code *STR
         code_bef* and *str code_after*. Cursor is put right after *code_bef*.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* code_bef -- code to be inserted before new cursor location
+        *STR* code_bef -- code to be inserted before new cursor location
         
-	*STR* code_bef -- code to be inserted after new cursor location
+        *STR* code_bef -- code to be inserted after new cursor location
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
 #        print '-- SB_ServiceIndent.insert_indent: code_bef=\'%s\', code_after=\'%s\', range=%s' % (code_bef, code_after, range)
         debug.trace('SB_ServiceIndent.insert_indent',
-	    'code_bef="%s", code_after="%s", range=%s' \
-	    % (code_bef, code_after, repr(range)))
+            'code_bef="%s", code_after="%s", range=%s' \
+            % (code_bef, code_after, repr(range)))
         
         if range == None:
             range = self.buff.get_selection()
         range = self.buff.make_valid_range(range)
 
         debug.trace('SB_ServiceIndent.insert_indent',
-	    'range=%s' % repr(range))
+            'range=%s' % repr(range))
 
 
         #
@@ -655,8 +655,8 @@ class SB_ServiceIndent(SB_Service):
         content = self.buff.contents()
         original_pos = pos
         pos_nonblank = pos
-	debug.trace('SB_ServiceIndent.indentation_at',
-	    'len(content) = %d, pos = %d' % (len(content), pos))
+        debug.trace('SB_ServiceIndent.indentation_at',
+            'len(content) = %d, pos = %d' % (len(content), pos))
 
         #
         # Go back from pos until we meet a newline character. Remember position
@@ -674,10 +674,10 @@ class SB_ServiceIndent(SB_Service):
         # Compute number of spaces. 
         #
         num_spaces = pos_nonblank - pos
-	debug.trace('SB_ServiceIndent.indentation_at',
-	    'line through pos was %s' % repr(content[pos:original_pos+1]))
-	debug.trace('SB_ServiceIndent.indentation_at',
-	    'num_spaces was %d' % num_spaces)
+        debug.trace('SB_ServiceIndent.indentation_at',
+            'line through pos was %s' % repr(content[pos:original_pos+1]))
+        debug.trace('SB_ServiceIndent.indentation_at',
+            'num_spaces was %d' % num_spaces)
         
         return num_spaces
 
@@ -704,139 +704,139 @@ class SB_ServiceState(SB_Service):
 
     def _state_cookie_class(self):
         """returns the class object for the type of cookie used by
-	store_current_state.
+        store_current_state.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*CLASS* -- class of state cookies corresponding to this
-	SB_ServiceState
+        *CLASS* -- class of state cookies corresponding to this
+        SB_ServiceState
 
-	"""
+        """
         debug.virtual('SB_ServiceState._state_cookie_class')
         
     def store_current_state(self):
         """stores the current state of the buffer, including both the
-	contents and the current selection, for subsequent restoration.
-	Store_current_state returns a "cookie" which can be passed to
-	restore_state or compare_with_current.  The type and attributes
-	of the cookie will depend on the specific subclass of
-	SB_ServiceState.  In the most straightforward implementation, it 
-	may include a copy of the entire contents of the
-	buffer and the selection.  In other cases, particularly when the
-	editor or SB_ServiceState provides an internal undo stack, it may simply be a
-	reference to a point in this stack.
-	
-	Important Notes:
-	
+        contents and the current selection, for subsequent restoration.
+        Store_current_state returns a "cookie" which can be passed to
+        restore_state or compare_with_current.  The type and attributes
+        of the cookie will depend on the specific subclass of
+        SB_ServiceState.  In the most straightforward implementation, it 
+        may include a copy of the entire contents of the
+        buffer and the selection.  In other cases, particularly when the
+        editor or SB_ServiceState provides an internal undo stack, it may simply be a
+        reference to a point in this stack.
+        
+        Important Notes:
+        
         You should only pass the cookie to methods of
-	the SAME SourceBuff object from which it came.  Generally,
-	cookies can not be pickled and retrieved.
+        the SAME SourceBuff object from which it came.  Generally,
+        cookies can not be pickled and retrieved.
 
-	The type of cookie will vary with the concrete subclass 
-	of SB_ServiceState.  The corresponding class object is 
-	returned by _state_cookie_class.  However, external callers
-	should not depend on the type, attributes, or methods 
-	of the cookie.
+        The type of cookie will vary with the concrete subclass 
+        of SB_ServiceState.  The corresponding class object is 
+        returned by _state_cookie_class.  However, external callers
+        should not depend on the type, attributes, or methods 
+        of the cookie.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*SourceBuffCookie* -- state cookie (see above).  Note that
-	SourceBuffCookie is a dummy class.  The
-	actual return type will vary with SB_ServiceState subclass.
-	"""
+        *SourceBuffCookie* -- state cookie (see above).  Note that
+        SourceBuffCookie is a dummy class.  The
+        actual return type will vary with SB_ServiceState subclass.
+        """
         debug.virtual('SB_ServiceState.store_current_state')
 
     def restore_state(self, cookie):
         """restores the buffer to its state at the time when
-	the cookie was returned by store_current_state.  Both the
-	contents and the selection will be restored.  However, other
-	data, such as the search history, may not.  The restore
-	operation can fail, which will be indicated by a return value of
-	0, so the caller should always check the return value.
-	
-	**INPUTS**
+        the cookie was returned by store_current_state.  Both the
+        contents and the selection will be restored.  However, other
+        data, such as the search history, may not.  The restore
+        operation can fail, which will be indicated by a return value of
+        0, so the caller should always check the return value.
+        
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see above.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SB_ServiceState subclass.
+        *SourceBuffCookie cookie* -- see above.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SB_ServiceState subclass.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if restore was successful
+        *BOOL* -- true if restore was successful
 
-	"""
+        """
         debug.virtual('SB_ServiceState.restore_state')
       
     def compare_states(self, first_cookie, second_cookie, selection = 0):
         """compares the buffer states at the times when
-	two cookies were returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to either cookie has
-	been lost, compare_states will return false.
+        two cookies were returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to either cookie has
+        been lost, compare_states will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
         store_current_state.  Note that SourceBuffCookie is a dummy 
         type, not an actual class.  The actual type will vary with 
         SourceBuff subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if states are the same, false if they are not, or
-	it cannot be determined due to expiration of either cookie
-	"""
+        *BOOL* -- true if states are the same, false if they are not, or
+        it cannot be determined due to expiration of either cookie
+        """
         debug.virtual('SourceBuff.compare_states')
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
-	the cookie was returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to the cookie has
-	been lost, compare_with_current will return false.
+        the cookie was returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see store_current_state.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SB_ServiceState subclass.
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SB_ServiceState subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if state is the same, false if it is not, or
-	it cannot be determined due to expiration of the cookie
-	"""
+        *BOOL* -- true if state is the same, false if it is not, or
+        it cannot be determined due to expiration of the cookie
+        """
         debug.virtual('SB_ServiceState.compare_with_current')
 
 
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
-	If the state corresponding to the cookie has
-	been lost, valid_cookie will return false.
+        If the state corresponding to the cookie has
+        been lost, valid_cookie will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie cookie* -- see store_current_state.  Note that
-	SourceBuffCookie is a dummy type, not an actual class.  The
-	actual type will vary with SB_ServiceState subclass.
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SB_ServiceState subclass.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if cookie is valid (i.e. restore_state should be
-	able to work)
-	"""
+        *BOOL* -- true if cookie is valid (i.e. restore_state should be
+        able to work)
+        """
         debug.virtual('SB_ServiceState.valid_cookie')
 
 class SB_ServiceFullState(SB_ServiceState):
@@ -862,52 +862,52 @@ class SB_ServiceFullState(SB_ServiceState):
 
     def _state_cookie_class(self):
         """returns the class object for the type of cookie used by
-	store_current_state.
+        store_current_state.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*CLASS* -- class of state cookies corresponding to this
-	SourceBuff
+        *CLASS* -- class of state cookies corresponding to this
+        SourceBuff
 
-	"""
+        """
         return SourceBuffState.SourceBuffState
         
     def store_current_state(self):
         """stores the current state of the buffer, including both the
-	contents and the current selection, for subsequent restoration.
-	Store_current_state returns a "cookie" which can be passed to
-	restore_state or compare_with_current.  The type and attributes
-	of the cookie will depend on the specific subclass of
-	SourceBuff.  In the most straightforward implementation, it 
-	may include a copy of the entire contents of the
-	buffer and the selection.  In other cases, particularly when the
-	editor or SourceBuff provides an internal undo stack, it may simply be a
-	reference to a point in this stack.
-	
-	Important Notes:
-	
+        contents and the current selection, for subsequent restoration.
+        Store_current_state returns a "cookie" which can be passed to
+        restore_state or compare_with_current.  The type and attributes
+        of the cookie will depend on the specific subclass of
+        SourceBuff.  In the most straightforward implementation, it 
+        may include a copy of the entire contents of the
+        buffer and the selection.  In other cases, particularly when the
+        editor or SourceBuff provides an internal undo stack, it may simply be a
+        reference to a point in this stack.
+        
+        Important Notes:
+        
         You should only pass the cookie to methods of
-	the SAME SourceBuff object from which it came.  Generally,
-	cookies can not be pickled and retrieved.
+        the SAME SourceBuff object from which it came.  Generally,
+        cookies can not be pickled and retrieved.
 
-	The type of cookie will vary with the concrete subclass 
-	of SourceBuff.  The corresponding class object is 
-	returned by _state_cookie_class.  However, external callers
-	should not depend on the type, attributes, or methods 
-	of the cookie.
+        The type of cookie will vary with the concrete subclass 
+        of SourceBuff.  The corresponding class object is 
+        returned by _state_cookie_class.  However, external callers
+        should not depend on the type, attributes, or methods 
+        of the cookie.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*SourceBuffState* -- state cookie (see above)
-	"""
+        *SourceBuffState* -- state cookie (see above)
+        """
         cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
             contents = self.buff.contents(), selection =
             self.buff.get_selection())
@@ -921,7 +921,7 @@ class SB_ServiceFullState(SB_ServiceState):
         data, such as the search history, may not.  The restore
         operation can fail, which will be indicated by a return value of
         0, so the caller should always check the return value.
-	
+        
         **INPUTS**
 
         *SourceBuffState cookie* -- see above.
@@ -960,25 +960,25 @@ class SB_ServiceFullState(SB_ServiceState):
       
     def compare_states(self, first_cookie, second_cookie, selection = 0):
         """compares the buffer states at the times when
-	two cookies were returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to either cookie has
-	been lost, compare_states will return false.
+        two cookies were returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to either cookie has
+        been lost, compare_states will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffCookie* first_cookie, second_cookie -- see 
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
         store_current_state.  Note that SourceBuffCookie is a dummy 
         type, not an actual class.  The actual type will vary with 
         SourceBuff subclass.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if states are the same, false if they are not, or
-	it cannot be determined due to expiration of either cookie
-	"""
+        *BOOL* -- true if states are the same, false if they are not, or
+        it cannot be determined due to expiration of either cookie
+        """
 # if unable to make comparison, treat as false
         if not self.valid_cookie(first_cookie):
             return 0
@@ -993,22 +993,22 @@ class SB_ServiceFullState(SB_ServiceState):
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
-	the cookie was returned by store_current_state.  By default,
-	only the buffer contents are compared, not the selection, unless
-	selection == 1.  If the state corresponding to the cookie has
-	been lost, compare_with_current will return false.
+        the cookie was returned by store_current_state.  By default,
+        only the buffer contents are compared, not the selection, unless
+        selection == 1.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see store_current_state.
+        *SourceBuffState cookie* -- see store_current_state.
 
-	*BOOL* selection -- compare selection as well as contents
+        *BOOL* selection -- compare selection as well as contents
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if state is the same, false if it is not, or
-	it cannot be determined due to expiration of the cookie
-	"""
+        *BOOL* -- true if state is the same, false if it is not, or
+        it cannot be determined due to expiration of the cookie
+        """
         if not self.valid_cookie(cookie):
             return 0
 # unable to make comparison, so treat as false
@@ -1020,18 +1020,18 @@ class SB_ServiceFullState(SB_ServiceState):
         
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
-	If the state corresponding to the cookie has
-	been lost, valid_cookie will return false.
+        If the state corresponding to the cookie has
+        been lost, valid_cookie will return false.
 
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see store_current_state. 
+        *SourceBuffState cookie* -- see store_current_state. 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if cookie is valid (i.e. restore_state should be
-	able to work)
-	"""
+        *BOOL* -- true if cookie is valid (i.e. restore_state should be
+        able to work)
+        """
 # this is not intended to be a complete test.  Basically, valid_cookie
 # is more important for SourceBuffs which have an internal undo-stack or
 # change history.  In the case, however, given the brute force implementation of

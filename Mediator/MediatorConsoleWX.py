@@ -298,6 +298,41 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             utterance.set_words(original)
             return 0
 
+    def correct_recent(self, editor_name, utterances):
+        """display a correct recent dialog box for to allow the user to 
+        select a recent utterance to correct
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the user made changes and approved them
+        """
+        editor_window = self.store_foreground_window()
+        bye = threading.Event()
+        box = CorrectRecentWX(self, self.main_frame, utterances, 
+            self.gram_factory, bye = bye)
+        self.push_modal(box, bye)
+        answer = box.ShowModal()
+        self.pop_modal()
+        box.cleanup()
+        box.Destroy()
+        editor_window.restore_to_foreground()
+        if answer == wxID_OK:
+            print 'answer was OK'
+            return 1
+        else:
+            print 'answer was cancel'
+            return 0
+
+
 class ByeByeMixIn(Object.OwnerObject):
     """mix-in for a dialog box with an idle handler which checks a 
     threading.Event object to see if it should simulate being dismissed.
@@ -367,14 +402,16 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
 
-    *choose_n_gram* -- ChoiceGram supporting "Choose n"
+    *ChoiceGram choose_n_gram* -- ChoiceGram supporting "Choose n"
 
-    *select_n_gram* -- ChoiceGram supporting "SelectOrEdit n"
+    *ChoiceGram select_n_gram* -- ChoiceGram supporting "SelectOrEdit n"
 
-    *spelling_gram* -- NaturalSpelling grammar
+    *NaturalSpelling spelling_gram* -- NaturalSpelling grammar
 
-    *selection_gram* -- SimpleSelection grammar for select-and-say in
-    the corrected text control
+    *SimpleSelection selection_gram* -- SimpleSelection grammar for 
+    select-and-say in the corrected text control
+
+    *[STR] choices* -- list of alternatives
     """
     def __init__(self, console, parent, utterance, validator, 
             can_reinterpret, gram_factory, pos = None, **args):
@@ -415,6 +452,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                              'console': console,
                              'utterance': utterance,
                              'first': 1,
+                             'choices': None,
                              'choose_n_gram': None,
                              'select_n_gram': None,
                              'selection_gram': None
@@ -892,6 +930,195 @@ class CorrectionValidatorSpoken(CorrectionValidator):
         """
         self.utterance.set_spoken(string.split(corrected))
         return 1
+
+class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
+    """dialog box which lists recently dictated utterances, allowing the user 
+    to select one for correction of misrecognized results or for symbol 
+    reformatting
+
+    **INSTANCE ATTRIBUTES**
+
+    *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+    utterances (or all available if < n), sorted most recent last, 
+    with corresponding flags indicating if the utterance can be 
+    undone and re-interpreted, or None if no utterances are stored.
+
+    *BOOL first* -- flag indicating whether this is the first time the
+    window has been activated.
+
+    *MediatorConsoleWX console* -- the MediatorConsole object which owns
+    the correction box
+
+    *ChoiceGram correct_n_gram* -- ChoiceGram supporting "Correct n"
+    """
+    def __init__(self, console, parent, utterances, 
+            gram_factory, pos = None, **args):
+        """
+        **INPUTS**
+
+        *MediatorConsoleWX console* -- the MediatorConsole object which owns
+        the correction box
+
+        *wxWindow parent* -- the parent wxWindow
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        *WinGramFactory gram_factory* -- the grammar factory used to add
+        speech grammars to the dialog box
+
+        *(INT, INT) pos* -- position of the box in pixels
+        """
+        use_pos = pos
+        if pos is None:
+            use_pos = wxDefaultPosition
+        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
+            (600, 400),
+            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        self.deep_construct(CorrectRecentWX,
+                            {
+                             'console': console,
+                             'utterances': utterances,
+                             'first': 1,
+                             'correct_n_gram': None,
+                            }, args, 
+                            exclude_bases = {wxDialog: 1}
+                           )
+        self.name_parent('console')
+        self.add_owned('correct_n_gram')
+        if gram_factory:
+            self.correct_n_gram = \
+                gram_factory.make_choices(choice_words = ['Correct'])
+        if pos is None:
+            self.Center()
+
+        s = wxBoxSizer(wxVERTICAL)
+        intro = wxStaticText(self, wxNewId(), 
+            "&Choose a phrase to correct",
+            wxDefaultPosition, wxDefaultSize)
+        s.Add(intro, 0, wxEXPAND | wxALL)
+        recent = wxListCtrl(self, wxNewId(), wxDefaultPosition,
+            wxDefaultSize, 
+            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        recent.InsertColumn(0, "#")
+        recent.InsertColumn(1, "Spoken phrase")
+        phrases = map(lambda x: string.join(x[0].spoken_forms()),
+            utterances)
+        can_reinterpret = map(lambda x: x[1], utterances)
+        index = range(len(phrases), 0, -1)
+        bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
+        yes = wxBitmap(os.path.join(bitpath, 'small_plus.bmp'), wxBITMAP_TYPE_BMP)
+        no = wxBitmap(os.path.join(bitpath, 'small_minus.bmp'), wxBITMAP_TYPE_BMP)
+        self.images = wxImageList(16, 16)
+        index_no = self.images.Add(no)
+        index_yes = self.images.Add(yes)
+# I'm guessing that LC_REPORT uses small images
+        recent.SetImageList(self.images, wxIMAGE_LIST_SMALL)
+        for i in range(len(phrases)):
+            if can_reinterpret[i]: 
+                which = index_yes
+            else:
+                which = index_no
+            recent.InsertImageStringItem(i, str(index[i]), which)
+            recent.SetStringItem(i, 1, phrases[i])
+        recent.SetColumnWidth(0, wxLIST_AUTOSIZE)
+        recent.SetColumnWidth(1, wxLIST_AUTOSIZE)
+
+        recent.ScrollList(0, len(phrases))
+        self.recent = recent
+        self.phrases = phrases
+        s.Add(recent, 1, wxEXPAND | wxALL)
+        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
+        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
+        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        b_sizer.Add(okb, 0, 0)
+        b_sizer.Add(cancelb, 0, 0)
+        s.Add(b_sizer, 0, wxEXPAND | wxALL)
+#        okb.SetDefault()
+# note: neither of these handlers gets called if a child control 
+# has the focus.
+# I thought they would be called if the focused control didn't have a
+# handler
+        EVT_ACTIVATE(self, self.on_activate)
+        EVT_CHAR(self, self.on_char)
+#        EVT_KEY_DOWN(self, self.on_key_down)
+
+#        EVT_KEY_DOWN(self.recent, self.on_recent_char)
+#        EVT_CHAR(self.recent, self.on_recent_char)
+
+        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
+        self.SetAutoLayout(true)
+        self.SetSizer(s)
+        self.Layout()
+        actual = s.GetSize()
+        minimum = s.GetMinSize()
+        list_size = self.recent.GetSize()
+        list_client_size = self.recent.GetClientSize()
+        h = list_client_size.GetHeight()
+        w = list_client_size.GetWidth()
+        s.SetItemMinSize(self.recent, w, h)
+        s.SetMinSize(wxSize(0, actual.GetHeight()))
+        q = s.GetMinSize()
+        s.Fit(self)
+        s.SetMinSize(wxSize(q.GetWidth(), 0))
+        last = len(self.phrases)-1
+        self.recent.EnsureVisible(last)
+        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+    def focus_recent(self):
+        self.recent.SetFocus()
+
+    def on_choose(self, event):
+        i = event.GetIndex()
+        print 'on_choose, %d' %i
+        self.chose_from_list(i)
+
+    def chose_from_list(self, i):
+        i = len(self.phrases) - i
+        str = 'You chose item %d: "%s"' % (i, self.phrases[-i])
+        m = wxMessageDialog(self, str, style = wxOK)
+        m.ShowModal()
+        m.Destroy()
+        self.focus_recent()
+
+    def on_ok(self, event):
+        print 'hit ok'
+        event.Skip()
+
+    def on_char(self, event):
+        k = event.GetKeyCode()
+        if k == WXK_PRIOR:
+            top = self.recent.GetTopItem()
+            page = self.recent.GetCountPerPage()
+            new_top = top-page
+            if new_top < 0:
+                new_top = 0
+            self.recent.EnsureVisible(new_top)
+        elif k == WXK_NEXT:
+            top = self.recent.GetTopItem()
+            page = self.recent.GetCountPerPage()
+            last = self.recent.GetItemCount()
+            new_bottom = top+ 2*page
+            if new_bottom >= last:
+                new_bottom = last -1
+            self.recent.EnsureVisible(new_bottom)
+        else:
+            event.Skip()
+            return
+
+    def on_activate(self, event):
+        if self.first:
+#            print 'first'
+            if event.GetActive():
+                if self.correct_n_gram:
+                    self.correct_n_gram.activate(len(self.phrases), 
+                        self.GetHandle(), self.chose_from_list)
+                self.first = 0
+                self.console.raise_wxWindow(self)
+
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
