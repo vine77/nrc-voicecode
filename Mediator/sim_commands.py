@@ -339,8 +339,7 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     if the_mediator:
         the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
         
-    quit_flag = 1        
-    
+    quit_flag = 1            
 
 
 

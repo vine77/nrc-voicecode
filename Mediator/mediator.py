@@ -163,9 +163,10 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
-#    compile_symbols(['D:/VoiceCode/VCode.testing/Data/TestDatat/native_python.py'])
-#    open_file('D:/blah.py')
 
+    open_file('blah.py')
+    say(['between parens', '1'])
+    say(['back out of parens'])
 
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
