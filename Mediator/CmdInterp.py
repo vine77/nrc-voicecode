@@ -1162,7 +1162,7 @@ class SymbolConstruction(Object):
         """
         return self.symbols
 
-    def insert_existing(self, symbol, found_in_utter, exact_matches = None,
+    def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = None,
                         inexact_matches = None, forbidden = None):
         """
         Insert a known symbol with the given written form, track the
@@ -1172,6 +1172,9 @@ class SymbolConstruction(Object):
         ** INPUTS **
 
         *STR symbol* -- the written form of the known symbol
+        
+        *UtteranceInterpretation found_in_utter* -- the interpreted 
+        utterance in which the symbol was found.
 
         *[STR] exact_matches* -- a prioritized list of exact matches
         to known symbols
@@ -1190,8 +1193,8 @@ class SymbolConstruction(Object):
 
         *none*
         """
-        debug.trace('SymbolConstruction.insert_existing',
-            'symbol = %s' % repr(symbol))
+        debug.trace('SymbolConstruction.insert_existing_symbol',
+            'symbol = %s, found_in_utter=%s' % (symbol, found_in_utter))
             
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
@@ -1200,7 +1203,7 @@ class SymbolConstruction(Object):
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
                               inexact_matches, forbidden,
-                              in_utter = found_in_utter)
+                              in_utter_interp = found_in_utter)
         self.symbols.append(result)
         self.reset()
       
@@ -1233,10 +1236,9 @@ class SymbolConstruction(Object):
 
         *STR* -- the written form of the new symbol
         """
-        from_utterance = interp_phrase.utterance
-        symbol = self.builder.finish()
         debug.trace('SymbolConstruction.insert_new_symbol',
-            'symbol = %s' % repr(symbol))
+            'interp_phrase = %s' % interp_phrase)
+        symbol = self.builder.finish()
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
         result = SymbolResult(symbol, self.words(),
@@ -1244,14 +1246,11 @@ class SymbolConstruction(Object):
                               block, self.app.curr_buffer_name(),
                               self.current_preferences,
                               inexact_matches, forbidden, new_symbol = 1,
-                              in_utter=from_utterance)
+                              in_utter_interp=interp_phrase)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
-#>        from_utterance.add_interp_symbol(result)
         interp_phrase.symbol_results.append(result)
         self.reset()
-      
-        
         
     
 class CmdInterp(OwnerObject):
@@ -1862,9 +1861,7 @@ class CmdInterp(OwnerObject):
             if complete_match:
                 written_symbol = self.choose_best_symbol(spoken_form, 
                     complete_match)
-                trace('CmdInterp.match_untranslated_text', 
-                    'exact symbol written "%s"' % (untranslated_text))
-                symbols.insert_existing(written_symbol, interp_phrase, complete_match)
+                symbols.insert_existing_symbol(written_symbol, interp_phrase, complete_match)
                 self.styling_state.clear()
                 return
             else:
@@ -1911,7 +1908,7 @@ class CmdInterp(OwnerObject):
         if symbol_matches:
             trace('CmdInterp.match_untranslated_text',
                   'symbol_matches=%s' % symbol_matches)
-            symbols.insert_existing(symbol_matches[0][1], utterance,
+            symbols.insert_existing_symbol(symbol_matches[0][1], interp_phrase,
                                     exact_matches = complete_match,
                                     inexact_matches = inexact_matches,
                                     forbidden = forbidden)

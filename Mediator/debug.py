@@ -79,6 +79,8 @@ def print_call_stack(print_to_file=sys.stdout):
         print_to_file.write("\n")
 
 def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
+    if not location_id:
+       location_id = trace_id
     if trace_is_active(trace_id):
        print_to_file.write("-- %s: call stack at location '%s' is:\n" % 
        (trace_id, location_id))
@@ -136,7 +138,7 @@ def print_trace(trace_id, message, insert_nl=1):
         trace_file.flush()
 
 def traces_are_on():
-   if trace_fct == print_trace:
+   if trace_fct is print_trace:
       return 1
    else:
       return None

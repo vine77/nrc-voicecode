@@ -499,39 +499,55 @@ class DlgModelView(Object.OwnerObject):
     *none* --    
     """
     def __init__(self, **args_super):
-        #deb
-        debug.trace('DlgModelView.__init__', 'self=%s' % self)
-#        debug.print_call_stack()
-        #deb
         self.deep_construct(DlgModelView, 
                             {'view_layer': None}, 
                             args_super)
-
-
-    def setView(self, view):
-        self.view_layer = view
+        self.set_view(self.make_view())
         
-        # Note: Backward compatibility with legacy dialogs which
-        #       implemented the view and model layer in a same class
+        # Note: Backward compatibility with legacy dialogs that
+        #       implement both the view and model layer in a same class
         if self.view_layer != self:
             self.add_owned('view_layer')
-            
+        
+    def set_view(self, view):
+        """set the view layer for this dialog.
+        
+        **INPUTS**
+        
+        *wxDialog view* -- The view layer.
+        """
+        self.view_layer = view
+                    
     def view(self):
-        # Note: Backward compatibility with legacy dialogs which
-        #       implemented the view and model layer in a same class
-        if self.view_layer:
-           return self.view_layer
-        else:
-           return self
+        """return the view layer for this dialog.
+        
+        **OUTPUTS**
+        
+        *wxDialog* -- The view layer.
+        """
+        return self.view_layer
+           
+    def make_view(self):
+       """Factory method for creating a view layer for this dialog.
+       
+       **OUTPUTS**
+       
+       *wxDialog* -- a new view layer for this dialog.
+       """
+       debug.virtual('DlgModelView.make_view', self)
         
     def Destroy(self):
-        # Note: Backward compatibility with legacy dialogs which
-        #       implemented the view and model layer in a same class
-        debug.trace('DlgModelView.Destroy', '** self.view()=%s, self=%s' % (self.view(), self))
-        if self.view() != self:
-           self.view().Destroy()
-        else:
-           wxDialog.Destroy(self)
+       """destroy the view layer for this dialog."""
+    
+       debug.trace('DlgModelView.Destroy', '** self=%s' %self)
+       debug.trace('DlgModelView.Destroy', '** destroying the view self.view()=%s' % self.view())
+       self.view().Destroy()
+        
+    def ShowModal(self):
+        return self.view().ShowModal()
+        
+    def GetPositionTuple(self):
+        return self.view().GetPositionTuple()
         
     def dismiss_event(self):
         """returns a DismissModalEvent which can be used to dismiss the
@@ -545,7 +561,7 @@ class DlgModelView(Object.OwnerObject):
 
         *DismissModalEvent* -- the event
         """
-        debug.virtual('Dismissable.dismiss_event', self)
+        debug.virtual('DlgModelView.dismiss_event', self)
 
                             
 
