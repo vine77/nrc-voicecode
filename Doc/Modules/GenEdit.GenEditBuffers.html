@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Sep 21 14:10:40 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:13:07 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -419,7 +419,7 @@ to ask the user
 <EM>BOOL user_initiated</EM>
 <DD>indicates whether this method was
 user-initiated or whether it was called by AppState.
-In the latter case, it will invoke the parent AppState's 
+In the latter case, it will not invoke the parent AppState's 
 open buffer callback, because AppState.open_file invokes 
 the callback itself. 
 </DL>
@@ -468,7 +468,7 @@ buffer
 <EM>BOOL user_initiated</EM>
 <DD>indicates whether this method was
 user-initiated or whether it was called by AppState.
-In the latter case, it will invoke the parent AppState's 
+In the latter case, it will not invoke the parent AppState's 
 open buffer callback, because AppState.open_file invokes 
 the callback itself. 
 </DL>
@@ -1311,7 +1311,7 @@ application.</P>
 <EM>BOOL user_initiated</EM>
 <DD>indicates whether this method was
 user-initiated or whether it was called by AppState.
-In the latter case, it will invoke the parent AppState's 
+In the latter case, it will not invoke the parent AppState's 
 open buffer callback, because AppState.open_file invokes 
 the callback itself. 
 </DL>

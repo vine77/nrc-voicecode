@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:07:05 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:10:51 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -34,6 +34,7 @@
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule to the AppMgr/RecogStartMgr</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.before_app_mgr_config"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.before_app_mgr_config</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_dict</SPAN>, <SPAN CLASS="Argument">ignore=0</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.before_interp_config"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.before_interp_config</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_dict</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">ignore=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.define_config_functions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.define_config_functions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.delete_editor_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.delete_editor_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
@@ -44,10 +45,15 @@
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.new_interpreter"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.new_interpreter</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new interpreter</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">save_speech_files=None</SPAN>, <SPAN CLASS="Argument">disconnect=1</SPAN>)<SPAN CLASS="OneLiner"> # Quit the mediator object</SPAN>
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.recent_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.recent_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.reconfigure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.reconfigure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.reinterpret_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.reinterpret_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.reset"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.reset</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.reset_results_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.reset_results_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.standard_symbols_in</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>)<SPAN CLASS="OneLiner"> # Compile symbols defined in a series of source files</SPAN>
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.stored_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.stored_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.trust_current_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.trust_current_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
 
@@ -454,6 +460,29 @@ dialog/prompt.  Normally disabled except during regression
 testing.  If None, use current setting.
 
 </DL>
+<H2 ID="NewMediatorObject.NewMediatorObject.can_reinterpret" CLASS="Method">NewMediatorObject.NewMediatorObject.can_reinterpret(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
+<P>None</P>
+
+can we safely reinterpret the nth most recent utterance
+into the specified editor<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>the depth in the editor state stack of the utterance
+to be reinterpreted
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if we can safely reinterpret that utterance
+
+</DL>
 <H2 ID="NewMediatorObject.NewMediatorObject.configure" CLASS="Method">NewMediatorObject.NewMediatorObject.configure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>)</H2>
 <P>None</P>
 
@@ -630,6 +659,39 @@ the SR system.
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="NewMediatorObject.NewMediatorObject.recent_dictation" CLASS="Method">NewMediatorObject.NewMediatorObject.recent_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=None</SPAN>)</H2>
+<P>None</P>
+
+returns a list of the most recent SpokenUtterance objects for
+the specified editor<STRONG>Note:</STRONG> additional dictation into the editor will increment
+the indices of specific utterances, so the mediator must not
+allow dictation into the editor between the call to 
+recent_dictation to get the utterances and the call to 
+reinterpret_recent.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>the number of utterances to return, or None to return 
+all available utterances.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>[(SpokenUtterance, BOOL)]</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+Note:  These utterances should not be stored permanently, nor
+should they be modified except as part of the correction
+process.  Also, the status of whether a given utterance can be
+re-interpreted may change if the user makes other changes to the 
 <H2 ID="NewMediatorObject.NewMediatorObject.reconfigure" CLASS="Method">NewMediatorObject.NewMediatorObject.reconfigure(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)</H2>
 <P>None</P>
 
@@ -672,6 +734,39 @@ testing.  If None, use current setting.
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="NewMediatorObject.NewMediatorObject.reinterpret_recent" CLASS="Method">NewMediatorObject.NewMediatorObject.reinterpret_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)</H2>
+<P>None</P>
+
+undo the effect of one or more recent utterances into the
+specified editor, if possible, and reinterpret these utterances
+(and possibly any intervening utterances), making the
+appropriate changes to the editor buffers.<STRONG>Note:</STRONG> additional dictation into the editor will increment
+the indices of specific utterances, so the mediator must not
+allow dictation into the editor between the call to 
+recent_dictation to get the utterances and the call to 
+reinterpret_recent.<STRONG>Note:</STRONG> this method does not perform adaption of the changed
+utterances.  The caller should do that itself.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>[INT] changed</EM>
+<DD>the indices into the stack of recent
+utterances of those utterances which were corrected by the user
+</DL>
+<STRONG>NOTE:</STRONG> particular implementations of ResMgr may reinterpret 
+all utterances subsequent to the oldest changed utterance<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>the indices of the utterances actually reinterpreted
+(including intervening ones), sorted with the oldest first, or 
+None if no utterances could be reinterpreted
+
+</DL>
 <H2 ID="NewMediatorObject.NewMediatorObject.remove_other_references" CLASS="Method">NewMediatorObject.NewMediatorObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -699,6 +794,63 @@ did not record the filename.
 <DD>use a CmdInterp with symbol match 
 dialog/prompt.  Normally disabled except during regression
 testing.  If None, use current setting.
+
+</DL>
+<H2 ID="NewMediatorObject.NewMediatorObject.reset_results_mgr" CLASS="Method">NewMediatorObject.NewMediatorObject.reset_results_mgr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)</H2>
+<P>None</P>
+
+resets the ResMgr objects for a given editor, erasing any 
+stored utterance and corresponding editor state information.  
+Normally called only as part of resetting the mediator for 
+a new regression test<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor whose data should be reset, or
+None to reset ResMgr data for all editors
+</DL>
+<STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="NewMediatorObject.NewMediatorObject.scratch_recent" CLASS="Method">NewMediatorObject.NewMediatorObject.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)</H2>
+<P>None</P>
+
+undo the effect of the most recent n utterances into the
+specified editor, if possible.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+<DT>
+<EM>INT n</EM>
+<DD>number of utterances to undo
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances actually undone
+
+</DL>
+<H2 ID="NewMediatorObject.NewMediatorObject.stored_utterances" CLASS="Method">NewMediatorObject.NewMediatorObject.stored_utterances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
+<P>None</P>
+
+queries the ResMgr to see how many dictated utterances have 
+been stored for the specified editor<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>the editor 
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances which can be retrieved with
+recent_dictation
 
 </DL>
 <H2 ID="NewMediatorObject.NewMediatorObject.trust_current_window" CLASS="Method">NewMediatorObject.NewMediatorObject.trust_current_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)</H2>
