@@ -176,7 +176,7 @@ class ConnectionSettingsDlg(wxDialog):
 	
 	
 
-class ClientFrameMixIn(Object.OwnerObject):
+class ClientFrameMixIn(Object.Object):
     """mix-in class which adds a Connection menu and related
     infrastructure to concrete subclasses of WaxFrameBasic (such as
     WaxFrame, and is designed to be used with WaxEditClient.
@@ -387,16 +387,28 @@ class ClientFrameMixIn(Object.OwnerObject):
 	disconnect_item.Enable(connected)
 
 class SimpleWaxClientFrame(SimpleWaxFrame, ClientFrameMixIn):
+    """SimpleWaxFrame + client frame interface
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+    """
     def __init__(self, **args):
 	self.deep_construct(SimpleWaxClientFrame, {}, args)
 	self.finish_construction()
 
 class WaxCmdClientFrame(WaxCmdFrame, ClientFrameMixIn):
+    """WaxCmdFrame with command line and log + client frame interface
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+    """
     def __init__(self, **args):
 	self.deep_construct(WaxCmdClientFrame, {}, args)
 	self.finish_construction()
 
-class ClientBase(GenEdit.ActivateEventMixIn):
+class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
     """Mix-in base class for WaxEdit clients, providing methods specific
     to a client editor
 
@@ -530,16 +542,23 @@ class WaxClientBase(ClientBase):
 
     *BOOL cmd_line* -- include a command-line and log window in each
     frame?
+
+    *{STR: ANY}* initial_cmd_space -- initial name space for user commands
+    entered at the command line 
     """
-    def __init__(self, frame_size = None, cmd_line = 0, **args):
+    def __init__(self, frame_size = None, cmd_line = 0, 
+	command_space = None, **args):
 	self.deep_construct(WaxClientBase, 
 	                    {'frame_size': frame_size,
-			     'cmd_line': cmd_line}, args)
+			     'cmd_line': cmd_line,
+			     'initial_cmd_space': command_space}, args)
 	if frame_size == None:
 	    if not cmd_line:
 		self.frame_size = (600, 400)
             else:
 		self.frame_size = (1000, 600)
+#	if cmd_line:
+#	    self.initial_cmd_space['testing'] = 5
 
     def new_frame(self, buff_name):
 	"""creates a new frame of the appropriate concrete class
@@ -550,26 +569,52 @@ class WaxClientBase(ClientBase):
 
 	**INPUTS**
 
-	*GenEditFrame frame* -- the new frame 
-
 	*STR buff_name* -- the name of the initial buffer for the frame
 
 	**OUTPUTS**
 
-	*INT* -- ID of the new frame, or None if the frame was not 
-	added successfully
+	*GenEditFrame* -- the new frame 
 	"""
 	if self.cmd_line:
 	    return WaxCmdClientFrame(owner = self, app_name = self.app_name,
 		ID = wxNewId(), size = self.frame_size, 
-		init_buff_name = buff_name)
+		init_buff_name = buff_name, 
+		command_space = self.initial_cmd_space)
 	return SimpleWaxClientFrame(owner = self, app_name = self.app_name,
 	    ID = wxNewId(), size = self.frame_size, 
 	    init_buff_name = buff_name)
 
 class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
+    """WaxClient with a single frame
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
     """
-    """
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
+
+	**NOTE:** subclasses must call their parent class's 
+	remove_other_references method, after performing their own duties.
+	Also, a class inheriting from two OwnerObject classes MUST
+	define remove_other_references and call both subclasses'
+	versions
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# subclasses must call their parent class's remove_other_references
+# method, after performing their own duties
+	GenEdit.GenEditSingle.remove_other_references(self)
+	WaxClientBase.remove_other_references(self)
+
+
     def __init__(self, **args):
 	self.deep_construct(WaxClientSingle, 
 	                    {
@@ -577,8 +622,35 @@ class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
 
 
 class WaxClient(WaxClientBase, GenEdit.GenEditSimple):
+    """WaxClient with multiple frames
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
     """
-    """
+    def remove_other_references(self):
+	"""additional cleanup to ensure that this object's references to
+	its owned objects are the last remaining references
+
+	**NOTE:** subclasses must call their parent class's 
+	remove_other_references method, after performing their own duties.
+	Also, a class inheriting from two OwnerObject classes MUST
+	define remove_other_references and call both subclasses'
+	versions
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# subclasses must call their parent class's remove_other_references
+# method, after performing their own duties
+	GenEdit.GenEditSimple.remove_other_references(self)
+	WaxClientBase.remove_other_references(self)
+
     def __init__(self, **args):
 	self.deep_construct(WaxClient, 
 	                    {
@@ -648,7 +720,6 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 			     'cmd_line': cmd_line,
 			     'testing_flag': 0
 			    }, args, exclude_bases = {wxApp: 1})
-	self.name_parent('app')
 	self.add_owned('GUI_editor')
 	self.add_owned('editor')
 	self.add_owned('client')
@@ -832,8 +903,6 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 	"""method called by ClientEditor when it gets a message from
 	AppState saying that it is closing
 	"""
-# ClientEditor expects this to be defined, but EdSim doesn't ever
-# generate a close_app_cbk, so we don't ever expect to receive this.
 	self.disconnect(AppState_initiated = 1)
 
     def mediator_closing(self, ID, unexpected = 0):
