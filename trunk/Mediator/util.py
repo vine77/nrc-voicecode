@@ -241,6 +241,8 @@ def istuple(instance):
 
     return isinstance(instance, types.TupleType)
 
+def isfunction(instance):
+    return isinstance(instance, types.FunctionType)
 
 ###############################################################################
 # path manipulation 

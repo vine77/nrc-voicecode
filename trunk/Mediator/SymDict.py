@@ -1514,7 +1514,10 @@ class SymDict(Object):
         
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
-#        print '-- SymDict.match_pseudo_symbol: pseudo_symbol=\'%s\'' % pseudo_symbol
+        trace('SymDict.match_pseudo_symbol', 'pseudo_symbol=\'%s\'' % pseudo_symbol)
+        def mess_symbols():
+            return "Symbols are: %s" % repr(self.symbol_info)
+        trace('SymDict.match_pseudo_symbol', mess_symbols)
 
         #
         # Find all known native symbols that match *pseudo_symbol*
