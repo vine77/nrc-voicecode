@@ -283,12 +283,6 @@ sent."
    )
 )
 
-(defun vcode-mode-OLD (status)
-   (interactive "P")
-   (vcode-configure-for-regression-testing nil)
-   (vcode-mode-toggle-to status "vcode")
-)
-
 (defun vcode-mode (&optional status)
    (interactive "P")
    (vcode-configure-for-regression-testing nil)
@@ -1423,14 +1417,14 @@ instructions.
  (interactive "P")
 
   (setq vr-deprecated-vcode-test-client 0)
-  (if speech-server
-    (cond
-      ((string= speech-server "vr-deprecated") (vr-deprecated-mode-configure-for-vr-deprecated-server))
-      ((string= speech-server "vcode") (vr-deprecated-mode-configure-for-vcode-server))
-      ((string= speech-server "vcode-test") (setq vr-deprecated-vcode-test-client 1) (vr-deprecated-mode-configure-for-vcode-server))
-      
-    )
-  )
+  (if (null speech-server)
+      (setq speech-server "vcode"))
+
+  (cond
+    ((string= speech-server "vr-deprecated") (vr-deprecated-mode-configure-for-vr-deprecated-server))
+    ((string= speech-server "vcode") (vr-deprecated-mode-configure-for-vcode-server))
+    ((string= speech-server "vcode-test") (setq vr-deprecated-vcode-test-client 1) (vr-deprecated-mode-configure-for-vcode-server))      
+   )
 
   (vcode-mode-activate arg)
 )
@@ -1439,54 +1433,64 @@ instructions.
   "Activates the vr-deprecated mode, after it has been configured for a 
    particular speech server"
 
-  (setq vr-deprecated-mode
-        (if (null arg) (not vr-deprecated-mode)
+  (setq desired-status 
+	(if (null arg) (not vr-deprecated-mode)
  	  (> (prefix-numeric-value arg) 0)))
-  (if vr-deprecated-mode
-      ;; Entering vr-deprecated mode
-      (progn
-	(vr-deprecated-log "starting vr-deprecated mode %s\n" vr-deprecated-host)
-	(setq vr-deprecated-reading-string nil)
-	(setq vcode-mode-mic-state "not connected")
-	(set-default 'vcode-mode-line (concat " vcode-mode" vcode-mode-mic-state))
-	(setq vr-deprecated-internal-activation-list vr-deprecated-activation-list)
-	(setq vr-deprecated-cmd-executing nil)
-	(add-hook 'kill-emacs-hook 'vr-deprecated-kill-emacs)
-	(run-hooks 'vr-deprecated-mode-setup-hook)
 
-	(if vr-deprecated-host
-	    (vcode-connect vr-deprecated-host vr-deprecated-port)
+  (if (equal desired-status vr-deprecated-mode)
+      ;;;
+      ;;; Don't do anything if VCode is already in the 
+      ;;; desired state
+      ;;;
+      (if desired-status 
+	  (message "VCode already connected")
+	(message "VCode already disconnected"))
 
-;	  (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name vr-deprecated-command
-;					  "-child"
-;					  "-port" (int-to-string vr-deprecated-port)))
-	  (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name "python" "E:\\VoiceCode\\VCode.TCP_IP\\Mediator\\tcp_server.py"))
-	  (process-kill-without-query vr-deprecated-process)
-;	  (set-process-filter vr-deprecated-process 'vr-deprecated-output-filter)
-	  (set-process-sentinel vr-deprecated-process 'vr-deprecated-sentinel))
-	(vcode-set-hooks 1)
-	)
+    (setq vr-deprecated-mode desired-status)
+
+    (if vr-deprecated-mode
+	;; Entering vr-deprecated mode
+	(progn
+	  (vr-deprecated-log "starting vr-deprecated mode %s\n" vr-deprecated-host)
+	  (setq vr-deprecated-reading-string nil)
+	  (setq vcode-mode-mic-state "not connected")
+	  (set-default 'vcode-mode-line (concat " vcode-mode" vcode-mode-mic-state))
+	  (setq vr-deprecated-internal-activation-list vr-deprecated-activation-list)
+	  (setq vr-deprecated-cmd-executing nil)
+	  (add-hook 'kill-emacs-hook 'vr-deprecated-kill-emacs)
+	  (run-hooks 'vr-deprecated-mode-setup-hook)
+
+	  (if vr-deprecated-host
+	      (vcode-connect vr-deprecated-host vr-deprecated-port)
+	    (setq vr-deprecated-process (start-process "vr-deprecated" vr-deprecated-log-buff-name "python" "E:\\VoiceCode\\VCode.TCP_IP\\Mediator\\tcp_server.py"))
+	    (process-kill-without-query vr-deprecated-process)
+	    (set-process-sentinel vr-deprecated-process 'vr-deprecated-sentinel))
+	  (vcode-set-hooks 1)
+	  )
     
-    ;; Leaving vr-deprecated mode
-    (remove-hook 'post-command-hook 'vr-deprecated-post-command)
-    (remove-hook 'minibuffer-setup-hook 'vr-deprecated-enter-minibuffer)
-    (remove-hook 'kill-buffer-hook 'vr-deprecated-kill-buffer)
-    (remove-hook 'suspend-hook 'vcode-send-suspended)
-    (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
-    (setq frame-title-format 
-          `("%b -- " (, invocation-name "@" system-name)))
-    (vr-deprecated-activate-buffer nil)
-    (if vr-deprecated-host
+      ;; Leaving vr-deprecated mode
+      (remove-hook 'post-command-hook 'vr-deprecated-post-command)
+      (remove-hook 'minibuffer-setup-hook 'vr-deprecated-enter-minibuffer)
+      (remove-hook 'kill-buffer-hook 'vr-deprecated-kill-buffer)
+      (remove-hook 'suspend-hook 'vcode-send-suspended)
+      (remove-hook 'suspend-resume-hook 'vcode-send-resuming)
+      (setq frame-title-format 
+	    `("%b -- " (, invocation-name "@" system-name)))
+      (vr-deprecated-activate-buffer nil)
+      (if vr-deprecated-host
 ; DCF - I think this is left over from vr-mode.  We should send an
 ; editor_disconnecting message (not just a string)
 ;      (vr-deprecated-send-cmd "exit")
-        (vcode-disconnecting))
-	(vr-deprecated-sentinel nil "finished\n")
-    (vcode-set-after-change-functions nil)
-    (run-hooks 'vr-deprecated-mode-cleanup-hook)
+	  (vcode-disconnecting))
+      (vr-deprecated-sentinel nil "finished\n")
+      (vcode-set-after-change-functions nil)
+      (run-hooks 'vr-deprecated-mode-cleanup-hook)
+      )
+    (force-mode-line-update)
     )
- (force-mode-line-update)
 )
+
+
 
 (defun vcode-disconnecting ()
     "sends editor_disconnecting message to the mediator"
@@ -2314,8 +2318,6 @@ connection originates from the same Emacs instance as the first one."
 on the first socket connection. We know the handshake has happened when
 Emacs has set 'vcode-app-id to a non nil value."
 
-
-;  (sleep-for 30)
   (while (not vcode-app-id)
     (progn
       (sleep-for 0.1)
