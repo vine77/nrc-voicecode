@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:33:01 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 24 23:28:49 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ResMgrBasicFactory</SPAN>(<A CLASS="DocLink" HREF="ResMgr.ResMgrFactory.html">ResMgrFactory</A>):
-    <A CLASS="DocLink" HREF="#ResMgr.ResMgrBasicFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrBasicFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">correct_evt</SPAN>, <SPAN CLASS="Argument">max_utterances=30</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#ResMgr.ResMgrBasicFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrBasicFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">correct_evt</SPAN>, <SPAN CLASS="Argument">correct_recent_evt</SPAN>, <SPAN CLASS="Argument">max_utterances=30</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#ResMgr.ResMgrBasicFactory.new_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">ResMgr.ResMgrBasicFactory.new_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)<SPAN CLASS="OneLiner"> # returns a new ResMgr for the named instance</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -47,9 +47,17 @@
 <EM>INT max_utterances</EM>
 <DD>the maximum number of recent dictation 
 utterances each ResMgrBasic should store
+<DT>
+<EM>CorrectUtteranceEvent correct_evt</EM>
+<DD>doorbell used to send an 
+event to bring up a correction box asynchronously
+<DT>
+<EM>CorrectRecentEvent correct_recent_evt</EM>
+<DD>doorbell used to send an 
+event to bring up a correct recent box asynchronously
 
 </DL>
-<H2 ID="ResMgr.ResMgrBasicFactory.__init__" CLASS="Method">ResMgr.ResMgrBasicFactory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">correct_evt</SPAN>, <SPAN CLASS="Argument">max_utterances=30</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="ResMgr.ResMgrBasicFactory.__init__" CLASS="Method">ResMgr.ResMgrBasicFactory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">correct_evt</SPAN>, <SPAN CLASS="Argument">correct_recent_evt</SPAN>, <SPAN CLASS="Argument">max_utterances=30</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
