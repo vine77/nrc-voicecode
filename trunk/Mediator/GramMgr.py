@@ -22,7 +22,6 @@
 """abstract class defining interface for an object managing buffer-specific 
 grammars (dictation and selection grammars)
 """
-
 import debug
 import string
 from Object import Object, OwnerObject
@@ -39,13 +38,26 @@ class GramMgr(OwnerObject):
     
     *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
     grammar manager
+    
+    *[STR] text_mode_on_spoken_as=None* -- list of spoken forms for
+    commands to set text mode on.
+    
+    *[STR] text_mode_off_spoken_as=None* -- list of spoken forms for
+    commands to set text mode off.
+    
+    *0-1 text_mode_off_sets_nat_text_to=1* -- when text mode is
+    turned off, set NatText to that value.
+    
 
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, recog_mgr, app, instance_name, **args):
+#NEW
+    def __init__(self, recog_mgr, app, instance_name, 
+                 text_mode_on_spoken_as=None, text_mode_off_spoken_as=None,
+                 text_mode_off_sets_nat_text_to=1, **args):
         """constructor
         
         **INPUTS**
@@ -59,9 +71,35 @@ class GramMgr(OwnerObject):
         """
         self.deep_construct(GramMgr,
                             {'recog_mgr': recog_mgr, 'app': app,
-                             'instance_name': instance_name},
+                             'instance_name': instance_name,
+                             'text_mode_on_spoken_as': text_mode_on_spoken_as,
+                             'text_mode_off_spoken_as': text_mode_off_spoken_as,
+                             'text_mode_off_sets_nat_text_to': text_mode_off_sets_nat_text_to,
+                            },
                             args)
         self.name_parent('recog_mgr')
+
+#ORIG
+    def __init__ORIG(self, recog_mgr, app, instance_name, 
+                 **args):
+        """constructor
+        
+        **INPUTS**
+
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
+        
+        *AppState* app -- the application to which the buffers belong
+
+        *STR instance_name* -- the name of this AppState instance 
+        """
+        self.deep_construct(GramMgr,
+                            {'recog_mgr': recog_mgr, 'app': app,
+                             'instance_name': instance_name,                             
+                            },
+                            args)
+        self.name_parent('recog_mgr')
+
 
     def set_exclusive(self, exclusive = 1):
         """makes the grammars exclusive (or not).  Generally used only
@@ -370,7 +408,7 @@ class GramMgr(OwnerObject):
         *BOOL* -- true if the GramMgr produces global grammars
         """
         debug.virtual('GramMgr.using_global')
-
+        
     
 class GramMgrFactory(Object):
     """factory which produces GramMgr objects for new application
@@ -378,16 +416,44 @@ class GramMgrFactory(Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *[STR] text_mode_on_spoken_as=None* -- list of spoken forms for
+    commands to set text mode on.
+    
+    *[STR] text_mode_off_spoken_as=None* -- list of spoken forms for
+    commands to set text mode off.
+    
+    *0-1 text_mode_off_sets_nat_text_to=1* -- when text mode is
+    turned off, set NatText to that value.
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **args):
+    def __init__(self,**args):
         """abstract class, no arguments
         """
         self.deep_construct(GramMgrFactory, {}, args)
+        
+    def config_text_mode_toggling(self, on_spoken_as, off_spoken_as, off_sets_nat_text_to=None):
+        """Configure the factory to generate grammars with
+        appropriate settings for for toggling text mode on/off.
+        
+        *[STR] on_spoken_as* -- list of spoken forms for the command that turns
+        text mode on.
+        
+        *[STR] off_spoken_as* -- list of spoken forms for the command that turns
+        text mode off.
+        
+        *BOOL off_sets_nat_text_to=None* -- specifies what the grammar should do
+        with NatText when text mode is turned off. If 1 or 0, tell the grammar
+        to set NatText to that value. If *None*, then don't change
+        the current behaviour of the toggling grammar.        
+
+        """
+        self.text_mode_on_spoken_as = on_spoken_as
+        self.text_mode_off_spoken_as = off_spoken_as
+        self.text_mode_off_sets_nat_text_to = off_sets_nat_text_to        
+        
 
     def new_manager(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
@@ -428,8 +494,8 @@ class GramMgrFactory(Object):
         *none*
         """
         debug.virtual('GramMgrFactory.new_global_manager')
-
-
+        
+        
 class GramMgrDictContext(GramMgr):
     """implements finding of dictation context
 
@@ -526,14 +592,14 @@ class WinGramMgr(GramMgrDictContext):
     *STR* correction -- string indicating the type of correction
     which is available: 'basic' or 'advanced', or None if no 
     correction is available
-
+    
     **CLASS ATTRIBUTES**
     
     *none*
     """
 
-    def __init__(self, factory, global_grammars = 0, 
-        exclusive = 0, correction = None, text_mode_toggling = None, **args):
+    def __init__(self, factory, exclusive = 0, correction = None, global_grammars = 0,
+                       text_mode_toggling = None, **args):
         """
         
         **INPUTS**
@@ -551,10 +617,12 @@ class WinGramMgr(GramMgrDictContext):
         which is available: 'basic' or 'advanced', or None if no 
         correction is available
         
-        *BOOL text_mode_toggling* -- true IIF toggling of text mode is supported.        
+        *BOOL text_mode_toggling* -- true IIF toggling of text mode is supported.                    
         """
+        debug.trace("GramMgr.WinGramMgr", "**there are %s unconsumed arguments, and they are: args=%s" % (len(args.keys()), args))
         self.deep_construct(WinGramMgr,
-                            {'factory': factory, 
+                            {
+                            'factory': factory, 
                             'global_grammars': global_grammars,
                             'exclusive': exclusive,
                             'dict_grammars' : {},
@@ -562,8 +630,10 @@ class WinGramMgr(GramMgrDictContext):
                             'correction_grammars' : {},
                             'text_mode_toggling_grammars': {},
                             'correction': correction, 
-                            'text_mode_toggling': text_mode_toggling},
+                            'text_mode_toggling': text_mode_toggling
+                            },
                             args)
+        debug.trace("GramMgr.WinGramMgr", "** after deep_construct")                            
         self.add_owned('dict_grammars')
         self.add_owned('sel_grammars')
         self.add_owned('correction_grammars')
@@ -604,7 +674,8 @@ class WinGramMgr(GramMgrDictContext):
         *none*
         """
         self.recog_mgr.set_text_mode(set_to)
-  
+                   
+        
     def set_exclusive(self, exclusive = 1):
         """makes the grammars exclusive (or not).  Generally used only
         for background regression testing
@@ -870,10 +941,19 @@ class WinGramMgr(GramMgrDictContext):
             a_window = window
             if self.global_grammars:
                 a_window = None
+#NEW                
             self.text_mode_toggling_grammars[window] = \
                 self.factory.make_text_mode(manager = self, window = a_window, 
-                exclusive=self.exclusive)
-           
+                                            exclusive=self.exclusive,
+                                            on_spoken_as=self.text_mode_on_spoken_as,
+                                            off_spoken_as=self.text_mode_off_spoken_as,
+                                            off_sets_nat_text_to=self.text_mode_off_sets_nat_text_to)
+#ORIG
+#            self.text_mode_toggling_grammars[window] = \
+#                self.factory.make_text_mode(manager = self, window = a_window, 
+#                                            exclusive=self.exclusive)
+                                            
+    
 
     def delete_window(self, window):
         """clean up and destroy all grammars for a window which 
@@ -987,7 +1067,10 @@ class WinGramMgrFactory(GramMgrFactory):
                              'global_grammars': global_grammars,
                              'exclusive': exclusive,
                              'correction': correction,
-                             'text_mode_toggling': text_mode_toggling
+                             'text_mode_toggling': text_mode_toggling,
+                             'text_mode_on_spoken_as': None,
+                             'text_mode_off_spoken_as': None,
+                             'text_mode_off_sets_nat_text_to': None,
                             }, args)
 
     def using_global(self):
@@ -1005,7 +1088,7 @@ class WinGramMgrFactory(GramMgrFactory):
         """
         return self.global_grammars
 
-    def new_manager(self, editor, instance_name, recog_mgr):
+    def new_manager_ORIG(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
 
         **INPUTS**
@@ -1030,6 +1113,36 @@ class WinGramMgrFactory(GramMgrFactory):
             global_grammars = self.global_grammars, exclusive = self.exclusive,
             correction = self.correction, text_mode_toggling = self.text_mode_toggling)
 
+#NEW
+    def new_manager(self, editor, instance_name, recog_mgr):
+        """creates a new GramMgr
+
+        **INPUTS**
+
+        *AppState* editor -- AppState object for which to manage
+        grammars
+
+        *STR instance_name* -- the name of this AppState instance 
+    
+        *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
+        grammar manager
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('WinGramMgrFactory.new_manager', 
+            'new manager: global = ' + str(self.global_grammars))
+        return WinGramMgr(app = editor, instance_name = instance_name,
+            recog_mgr = recog_mgr,
+            factory = self.gram_factory,
+            global_grammars = self.global_grammars, exclusive = self.exclusive,
+            correction = self.correction, text_mode_toggling = self.text_mode_toggling,
+            text_mode_on_spoken_as=self.text_mode_on_spoken_as, 
+            text_mode_off_spoken_as=self.text_mode_off_spoken_as, 
+            text_mode_off_sets_nat_text_to=self.text_mode_off_sets_nat_text_to)
+            
+            
     def new_global_manager(self, editor, instance_name, recog_mgr, 
         exclusive = 1):
         """creates a new GramMgr using global grammars (regardless of
@@ -1055,7 +1168,11 @@ class WinGramMgrFactory(GramMgrFactory):
             recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = 1, exclusive = exclusive,
-            correction = self.correction, text_mode_toggling = self.text_mode_toggling)
+            correction = self.correction, text_mode_toggling = self.text_mode_toggling,
+            text_mode_on_spoken_as=self.text_mode_on_spoken_as, 
+            text_mode_off_spoken_as=self.text_mode_off_spoken_as, 
+            text_mode_off_sets_nat_text_to=self.text_mode_off_sets_nat_text_to)
+            
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

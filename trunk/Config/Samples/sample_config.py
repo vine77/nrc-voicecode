@@ -6,6 +6,12 @@
 # the current window
 # trust_current_window(1)
 
+text_mode_toggling(on_spoken_as=['text mode on', 'nat text on',
+                                 'natural text on', 'code mode off', 
+                                 'coding mode off'],
+                   off_spoken_as=['text mode off', 'code mode on', 
+                                  'coding mode on'],
+                   off_sets_nat_text_to=1)
 
 # change these assignment if you are not using (NaturallySpeaking) US
 # English edition

@@ -665,13 +665,57 @@ class WinGramFactoryNL(WinGramFactory):
             recent_words = self.recent_words, 
             window = window, exclusive = exclusive) 
 
-    def make_text_mode(self, manager, window = None, exclusive = 0):
+#NEW
+    def make_text_mode(self, manager, on_spoken_as, off_spoken_as,
+            off_sets_nat_text_to, window = None, exclusive = 0):
         """Create a new grammar for toggling text-mode on and off.
         
         **INPUTS**
 
         *WinGramMgr* manager -- the grammar manager which will own the
         grammar
+        
+        *[STR] on_spoken_as* -- list of spoken forms for the command
+        that turns text mode on.
+        
+        *[STR] off_spoken_as* -- list of spoken forms for the command
+        that turns text mode off.
+             
+        *0-1 off_sets_nat_text_to* -- when setting text mode off, put
+        nat text into that state.
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *TextModeGram* -- the command grammar for toggling text-mode.
+        
+        """
+        return TextModeTogglingGramNL(on_spoken_as, off_spoken_as,
+            off_sets_nat_text_to, manager = manager, window = window, 
+            exclusive=exclusive)
+            
+#ORIG            
+    def make_text_mode_ORIG(self, manager, window = None, exclusive = 0,
+                ):
+        """Create a new grammar for toggling text-mode on and off.
+        
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+        
+        *[STR] on_spoken_as* -- list of spoken forms for the command
+        that turns text mode on.
+        
+        *[STR] off_spoken_as* -- list of spoken forms for the command
+        that turns text mode off.
+             
+        *0-1 off_sets_nat_text_to* -- when setting text mode off, put
+        nat text into that state.
 
         *INT* window -- make grammar specific to a particular window
 
@@ -685,6 +729,7 @@ class WinGramFactoryNL(WinGramFactory):
         """
         return TextModeTogglingGramNL(manager = manager, window = window, 
             exclusive=exclusive)
+            
             
     def make_choices(self, choice_words):
         """create a new ChoiceGram choice grammar
@@ -1405,17 +1450,30 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *[STR] on_spoken_as* -- list of spoken forms for the command
+    that turns text mode on.
+        
+    *[STR] off_spoken_as* -- list of spoken forms for the command
+    that turns text mode off.
+             
+    *0-1 off_sets_nat_text_to* -- when setting text mode off, put
+    nat text into that state.
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
 
-    def __init__(self, window=None, **attrs):
+    def __init__(self, on_spoken_as, off_spoken_as, 
+                       off_sets_nat_text_to,
+                       window=None, **attrs):
         debug.trace('TextModeTogglingGramNL.__init__', 'window=%s, attrs=%s' % (window, repr(attrs)))
         self.deep_construct(TextModeTogglingGramNL,
-            {}, attrs, exclude_bases = {GrammarBase:1})
+            {'on_spoken_as': on_spoken_as, 
+             'off_spoken_as': off_spoken_as, 
+              'off_sets_nat_text_to': off_sets_nat_text_to}, 
+            attrs, 
+            exclude_bases = {GrammarBase:1})
         GrammarBase.__init__(self)
         self.load(self.gram_spec())
 
@@ -1435,13 +1493,20 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
         """
         GrammarBase.setExclusive(self, exclusive)
 
-    def gram_spec(self):
-    
-       return """
-              <text_mode_on> exported = text mode on;
-              <text_mode_off> exported = text mode off;
 
-              """
+    def configure(on_spoken_as, off_spoken_as, off_sets_nat_text_to):
+        #
+        # Should change the spoken forms, regenerate the grammar
+        # rules, reload them, etc...
+        # The gotResults_text_mode_off method should set 
+        # nattext to whatever was given in off_sets_nat_text_to
+        # 
+        debug.not_implemented_yet('TextModeTogglingGramNL.configure')
+
+    def gram_spec(self):
+       spec = "<text_mode_on> exported = %s;\n<text_mode_off> exported = %s;" \
+              % (compose_alternatives(self.on_spoken_as), compose_alternatives(self.off_spoken_as))
+       return spec
     
     def activate(self):
         """activates the grammar for toggling text-mode, tied to the current window.

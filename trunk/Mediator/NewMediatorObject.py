@@ -718,6 +718,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['standard_symbols_in'] = do_nothing
             config_dict['abbreviations_in'] = do_nothing
             config_dict['print_abbreviations'] = do_nothing
+            config_dict['text_mode_toggling'] = do_nothing
         else:
             config_dict['interpreter'] = self
             config_dict['add_csc'] = self.add_csc
@@ -729,6 +730,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['abbreviations_in'] = self.abbreviations_in
             config_dict['print_abbreviations'] = self.print_abbreviations
+            config_dict['text_mode_toggling'] = self.text_mode_toggling            
 
     def reset(self, config_file = None, user_config_file = None, 
         alt_sym_file = None,
@@ -1508,6 +1510,30 @@ class NewMediatorObject(Object.OwnerObject):
             if sent and not self.testing:
                 return
         print message
+                        
+    def text_mode_toggling (self, on_spoken_as, off_spoken_as, off_sets_nat_text_to=None):
+        self._gram_factory().config_text_mode_toggling(on_spoken_as, off_spoken_as, off_sets_nat_text_to)
+
+        
+    #########################################################
+    #
+    # Methods below are shorthands for accessing components of
+    # the NewMediatorObject.
+    # They are private methods that should not be invoked
+    # outside of NewMediatorObject.
+    #
+    #########################################################
+    
+    def _get_all_gram_mgrs(self):
+        return self.editors.recog_mgr.grammars
+        
+    def _recog_mgr(self):
+        return self.editors.recog_mgr
+        
+    def _gram_factory(self):
+        return self._recog_mgr().GM_factory
+        
+        
 
 ###############################################################################
 # Configuration functions. These are not methods
