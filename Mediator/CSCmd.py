@@ -22,6 +22,7 @@
 import sys
 
 from Object import Object
+from debug import trace
 
 
 class CSCmd(Object):
@@ -76,10 +77,10 @@ class CSCmd(Object):
 #        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
         for ameaning in self.meanings.items():
             cont, action = ameaning
-#            print '-- CSCmd.interpret: cont=%s' % cont
-#            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
+            trace('CSCmd.interpret', 'cont=%s, cont.applies=%s, ameaning=%s, action=%s' % 
+                                     (cont, cont.applies, ameaning, str(action)))
             if (cont == None or cont.applies(app)):
-#                print '-- CSCmd.interpret: this context applies'
+                trace('CSCmd.interpret', 'this context applies')
                 return ameaning
 
         return None

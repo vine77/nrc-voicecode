@@ -1201,28 +1201,28 @@ add_csc(acmd)
 #############################################################################
 
 acmd = CSCmd(spoken_forms=['back space'],
-             meanings={ContAny: ActionBackspace(n_times=1)},
+             meanings={ContAny(): ActionBackspace(n_times=1)},
              docstring='Backspace one character')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back space 2'],
-             meanings={ContAny: ActionBackspace(n_times=2)},
+             meanings={ContAny(): ActionBackspace(n_times=2)},
              docstring='Backspace 2 characters')
 add_csc(acmd)
 
 
 acmd = CSCmd(spoken_forms=['back space 3'],
-             meanings={ContAny: ActionBackspace(n_times=3)},
+             meanings={ContAny(): ActionBackspace(n_times=3)},
              docstring='Backspace 3 characters')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back space 4'],
-             meanings={ContAny: ActionBackspace(n_times=4)},
+             meanings={ContAny(): ActionBackspace(n_times=4)},
              docstring='Backspace 4 characters')
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back space 5'],
-             meanings={ContAny: ActionBackspace(n_times=5)},
+             meanings={ContAny(): ActionBackspace(n_times=5)},
              docstring='Backspace 5 characters')
 add_csc(acmd)
 
