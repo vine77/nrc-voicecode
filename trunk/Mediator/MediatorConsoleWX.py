@@ -20,6 +20,7 @@
 ##############################################################################
 
 import sys
+import shutil
 import Object, vc_globals
 import MediatorConsole
 import string
@@ -254,6 +255,41 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         answer = dialog.ShowModal()
         self.pop_modal()
         return answer
+
+    def copy_user_config(self, target, directory):
+        """prompt the user for the sample user configuration file to
+        copy to the target path, and copy the file
+
+        **INPUTS**
+
+        *STR target* -- the path of the default user configuration file
+
+        *STR directory* -- the initial directory in which to look for a
+        sample configuration file to copy
+
+        **OUTPUTS**
+
+        *BOOL* -- true if a file was selected and copied to the target
+        path
+        """
+        message = """The user_config.py file does not exist.  
+              One must be created before the mediator can be started.
+              Select one of the sample user configuration files to use
+              as an initial user file (which can then be customized)."""
+        caption = "Missing user configuration file"
+        wxMessageBox(message, caption, wxOK, self.main_frame)
+        message = "Choose a sample user configuration file"
+        wild = "Python scripts (*.py)|*.py"
+        dlg = wxFileDialog(self.main_frame, message, directory, "",
+            wild, wxOPEN | wxHIDE_READONLY)
+        answer = dlg.ShowModal()
+        if answer != wxID_OK:
+            dlg.Destroy()
+            return 0
+        path = dlg.GetPath()
+        shutil.copy(path, target)
+        dlg.Destroy()
+        return 1
 
     def show_correction_box(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):

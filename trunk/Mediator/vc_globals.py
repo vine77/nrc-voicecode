@@ -50,6 +50,7 @@ state = os.path.join(data, 'State')
 tmp = os.path.join(data, 'Tmp')
 test_data = os.path.join(data, 'TestData')
 benchmark_dir = os.path.join(data, 'Benchmark')
+sample_config = os.path.join(config, 'Samples')
 
 doc = os.path.join(home, 'Doc')
 doc_modules = os.path.join(doc, 'Modules')

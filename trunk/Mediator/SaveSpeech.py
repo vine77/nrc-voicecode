@@ -36,8 +36,32 @@ class SaveSpeech(Object.Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *BOOL prompt_to_save_speech_files* -- flag indicating whether or not 
+    the user should be prompted to save speech files
     """
+    def __init__(self, prompt = 1, **args):
+        """
+        *BOOL prompt* -- true if the user should be prompted, false if
+        not
+        """
+        self.deep_construct(SaveSpeech, 
+                 {'prompt_to_save_speech_files': prompt}, args)
+
+    def should_prompt_save_speech_files(self, prompt = 1):
+        """sets a flag indicating whether or not the user should be
+        prompted to save speech files
+
+        **INPUTS**
+
+        *BOOL prompt* -- true if the user should be prompted, false if
+        not
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.prompt_to_save_speech_files = prompt
+        
     def prompt_save_speech_files(self, frame, allow_cancel = 1):
         """prompts the user to save speech files and other configuration 
         files before exiting, or to cancel.   Note:
@@ -55,6 +79,8 @@ class SaveSpeech(Object.Object):
         *BOOL* -- true if the user saved or told the mediator to quit
         without saving, false if the user cancelled.
         """
+        if not self.prompt_to_save_speech_files:
+            return 1
         flags = wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT
         if allow_cancel:
             flags = flags | wxCANCEL

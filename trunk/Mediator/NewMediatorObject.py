@@ -44,10 +44,6 @@ import cPickle
 ..[MediatorObject] file:///./MediatorObject.MediatorObject.html"""
 
 
-class VCodeInexistantConfigFile(exceptions.Exception):
-    """Raised when VCode tries to use a non-existant configuration file"""
-
-
 def disconnect_from_sr(disconnect, save_speech_files):
     """Save SR user and disconnect from SR.
     **INPUTS**
@@ -405,7 +401,7 @@ class NewMediatorObject(Object.OwnerObject):
         """
         return self.interp
    
-    def configure(self, config_file = None, user_config_file = None, exclude_interp = 0):
+    def configure(self, config_file = None, user_config_file = None, exclude_interp = 0, testing = 0):
         """Configures a mediator object based on a configuration file.
         Must be called before (and only before) run.
         
@@ -420,9 +416,12 @@ class NewMediatorObject(Object.OwnerObject):
         *BOOL* exclude_interp -- if true, don't re-configure the
         interpreter
 
+        *BOOL* testing -- true if this is part of a regression test,
+        otherwise false
+
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if mediator configuration succeeded.
         """        
 
 #        print 'Mediator configure:\n'
@@ -430,11 +429,14 @@ class NewMediatorObject(Object.OwnerObject):
         exclude = None
         if exclude_interp:
             exclude = ['interp']
-        self._configure_from_file(config_file = config_file,
+        testing = testing or self.test_next
+        okay = self._configure_from_file(config_file = config_file,
             user_config_file = user_config_file,
             symdict_pickle_fname = self.symdict_pickle_fname, 
-            exclude = exclude)
-        if self.test_next:
+            exclude = exclude, testing = testing)
+        if not okay:
+            return okay
+        if testing:
 # remove the reference to ourselves before pickling
             self.interp.set_mediator(None)
 # pickled interpreter is used only for regression testing, so 
@@ -444,6 +446,8 @@ class NewMediatorObject(Object.OwnerObject):
             self.pickled_interp = cPickle.dumps(self.interp)
             self.interp.set_mediator(self)
             self.interp.disable_dlg_select_symbol_matches = old_setting
+        return 1
+
 
     def define_config_functions(self, names, exclude = None,
             reset = 0,
@@ -495,7 +499,7 @@ class NewMediatorObject(Object.OwnerObject):
         reset = 0,
         symdict_pickle_fname = None, symbol_match_dlg = None,
         add_sr_entries_for_LSAs_and_CSCs = 1,
-        use_pickled_interp = 0):
+        use_pickled_interp = 0, testing = 0):
         """private method used by configure and reconfigure to perform
          actual configuration.
 
@@ -525,9 +529,12 @@ class NewMediatorObject(Object.OwnerObject):
         unpickling it from the copy pickled on initialization (if one is
         available)
 
+        *BOOL* testing -- true if this is part of a regression test,
+        otherwise false
+
         **OUTPUTS**
         
-        *none*
+        *BOOL* -- true if mediator configuration succeeded.
         """   
         debug.trace('NewMediatorObject._configure_from_file', 'config_file = "%s", user_config_file = "%s"' 
               % (config_file, user_config_file))     
@@ -568,17 +575,26 @@ class NewMediatorObject(Object.OwnerObject):
         debug.trace('NewMediatorObject._configure_from_file', 'initially, user_file="%s", self.test_next=%s, vc_globals.regression_user_config_file="%s", vc_globals.default_user_config_file="%s"' % 
                     (user_file, self.test_next, vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
         if not user_file:
-            if self.test_next:
+            if testing or self.test_next:
                 user_file = vc_globals.regression_user_config_file
             else:
                 user_file = vc_globals.default_user_config_file
                 
         debug.trace('NewMediatorObject._configure_from_file', 'user_file="%s"' % user_file) 
 
-        if not os.path.exists(user_file):
-           sys.stderr.write("\n\nVCode ERROR: inexistant user configuration file '%s'\n" % user_file)
-           raise VCodeInexistantConfigFile()
-
+        okay = os.path.exists(user_file)
+        if not okay:
+            console = self.console()
+            if console:
+                okay = console.copy_user_config(user_file, vc_globals.sample_config)
+            if not okay:
+                sys.stderr.write("\n\nVCode ERROR: non-existant user ")
+                sys.stderr.write("configuration file \n'%s'\n" % user_file)
+                sys.stderr.write("Create this file by copying one of the ")
+                sys.stderr.write("sample configuration files from \n")
+                sys.stderr.write("%s, and re-run the mediator.\n" \
+                    % vc_globals.sample_config)
+                return 0
                 
         execfile(user_file, config_dict)
 
@@ -594,6 +610,7 @@ class NewMediatorObject(Object.OwnerObject):
                 self.interp.known_symbols.sr_symbols_cleansed)
 # what does this mean?  
             self.interp.known_symbols.sr_symbols_cleansed = 0
+        return 1
 
     def before_app_mgr_config(self, config_dict, ignore = 0):
         """called by configure to add the functions pertaining to
@@ -846,6 +863,7 @@ class NewMediatorObject(Object.OwnerObject):
         # abbreviations to still be there when we come back.
 # DCF: contrary to this comment, this *will* save the symbol dictionary, 
 # at least according to current defaults for CmdInterp.cleanup
+# (except that we haven't specified a pickle filename)
         #
 #        print 'quitting'
         debug.trace('NewMediatorObject.quit', 'quit called')
