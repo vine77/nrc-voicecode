@@ -28,7 +28,7 @@ def language_name(self, file_name):
 	extension = a_match.group(1)
 	if file_language.has_key(extension):
 	    language =  file_language[extension]
-        return language
+    return language
 
 
 class SourceBuff(Object):

@@ -3,9 +3,6 @@
 import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 
-#deb
-import sim_commands
-#fin
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'    
 
@@ -124,7 +121,9 @@ def test_SymDict():
     symbol_match_test(a_mediator, [vc_globals.test_data + os.sep + 'large_buff.py'], pseudo_symbols)
 
     a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])    
-    accept_symbol_match_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])    
+    accept_symbol_match_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
+
+    a_mediator.quit(save_speech_files=0, disconnect=0)    
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
@@ -183,6 +182,8 @@ def test_CmdInterp():
     a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
     print '\n>>> Buffer is now:'
     a_mediator.interp.on_app.print_buff()
+
+    a_mediator.quit(save_speech_files=0, disconnect=0)    
         
 
 auto_test.add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
@@ -362,15 +363,16 @@ auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
 ###############################################################################
 
 def test_no_sr_user():
-    old_vc_user_name= sr_interface.vc_user_name
-    sr_interface.vc_user_name = 'dfafasdfrqowerglgferqeandgliaugfa'
-
     sr_interface.disconnect()
+    old_vc_user_name= sr_interface.vc_user_name
+    sr_interface.vc_user_name = 'dfafasdfrqowerglgferqeandgliaugfa'    
     print 'Trying to connect to SR system with inexistant user name'
     try:
         sr_interface.connect('off')
     except natlink.UnknownName:
         print 'natlink.UnknownName exception was sucessfully raised.'
+    except Exception, err:
+        print 'ERROR: wrong error was raised: err=%s, err.__dict__=%s' % (err, err.__dict__)
     else:
         print 'ERROR: natlink.UnknownName exception was NOT sucessfully raised.'
     sr_interface.vc_user_name = old_vc_user_name
@@ -398,6 +400,7 @@ def test_mediator_console():
     test_command("""compile_symbols(['""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
     test_command("""say_select(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
 auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
@@ -445,6 +448,7 @@ def test_auto_add_abbrevs():
     #
     test_say(['application', 'programming', 'interface', 'function', ', \\comma'], user_input='1\\n')
     test_command("""print_abbreviations(1)""")
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automatic creation of abbreviations')
 
@@ -489,6 +493,7 @@ def test_persistence():
     test_command("""quit(save_speech_files=0, disconnect=0)""")
     mediator.init_simulator(symdict_pickle_fname=None)
     test_command("""print_symbols()""")
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
     
 
 auto_test.add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
@@ -507,7 +512,8 @@ def test_redundant_translation():
     test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
     test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
     test_say(['move_horiz\\move horizontally'], '0\n0\n')
-    test_say(['move', 'horizontally'], '0\n0\n')                 
+    test_say(['move', 'horizontally'], '0\n0\n')
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 auto_test.add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
 

@@ -282,7 +282,7 @@ def make_position_visible(pos):
 def select(start, end):
     """Selects from position *start* to position *end* in current buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.select(start, end)
+    the_mediator.interp.on_app.set_selection((start, end))
     show_buff()
     
 def show_buff():
@@ -335,43 +335,12 @@ def clear_abbreviations():
 
 def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     global quit_flag, the_mediator
-    quit_flag = 1
 
-    #
-    # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
-    # but don't save SymDict to file (we want the symbols and abbreviations to
-    # still be there when we come back.
-    #
     if the_mediator:
-        the_mediator.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
+        the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
+        
+    quit_flag = 1        
     
-    if sr_interface.speech_able():
-       #
-       # Ask the user if he wants to save speech files
-       #
-       while save_speech_files == None:
-           sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
-           answer = sys.stdin.readline()
-           answer = answer[:len(answer)-1]
-           
-           if answer == 'y':
-               save_speech_files = 1
-           elif answer == 'n':
-               save_speech_files = 0
-               
-           if save_speech_files == None:
-               print "\nPlease answer 'y' or 'n'."
-
-       if save_speech_files and sr_interface.sr_user_needs_saving:
-           print 'Saving speech files. This may take a moment ...'
-           sr_interface.saveUser()
-           print 'Speech files saved.'
-
-       if the_mediator:
-           the_mediator.mixed_grammar.unload()
-           the_mediator.code_select_grammar.unload()
-
-       if disconnect: sr_interface.disconnect()
 
 
 

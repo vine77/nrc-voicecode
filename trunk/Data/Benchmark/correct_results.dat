@@ -71,13 +71,13 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
 
 
 >>> Buffer is now:
+  2: 
   3: 
   4:    for :
   5:    <CURSOR>
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
-  9:     def a_method(self, x):
 
 
 *******************************************************************************
@@ -94,7 +94,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Moving to position 5
@@ -103,7 +102,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Testing breadcrumbs
@@ -114,7 +112,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -122,7 +119,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Popping 2 crumbs -> end up here:
 *** Start of source buffer ***
@@ -130,7 +126,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -138,7 +133,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Dropping one here
 *** Start of source buffer ***
@@ -146,13 +140,11 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 *** Start of source buffer ***
   1: /* This is a small t<CURSOR>est buffer for C */
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 >>> Popping 1 crumb -> end up here...
 *** Start of source buffer ***
@@ -160,7 +152,6 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
   2: 
   3: 
   4: void move(float x, y)
-  5: {
 
 
 >>> Testing code indentation. Inserting for loop.
@@ -172,13 +163,13 @@ D:\VoiceCode\VCode.withUser\Admin>python test.py all
 
 
 
+  3: 
   4:    for (ii=0; ii <= maxValue; ii++)
   5:    {
   6:    <CURSOR>
   7:    }
   8:    void move(float x, y)
   9: {
- 10:   move_horiz(x);
 
 
 *******************************************************************************
@@ -222,7 +213,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 89ff20>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 98d4c0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -445,6 +436,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -460,6 +452,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 WARNING: source file 'D:/blah.c' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
+
+*** End of source buffer ***
 
 
 >>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.withUser\Data\TestData\small_buff.c'])
@@ -686,6 +680,8 @@ Associate 'this symbol is unresolved' with symbol (Enter selection):
 > *** Start of source buffer ***
   1:    this_sym_is_unres, <CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: print_abbreviations(1)
 
@@ -897,6 +893,8 @@ _cached_symbols_as_one_string is:
 >>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ', \\comma'], user_input='None')
 *** Start of source buffer ***
   1:    this_sym_is_unres, this_sym_is_unres_too, <CURSOR>
+
+*** End of source buffer ***
 
 
 >>> Testing console command: print_symbols()
@@ -1122,6 +1120,8 @@ Associate 'file name' with symbol (Enter selection):
 *** Start of source buffer ***
   1:    this_sym_is_unres, this_sym_is_unres_too, f_name, <CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: print_symbols()
 
@@ -1345,6 +1345,8 @@ Associate 'application programming interface function' with symbol (Enter select
 > *** Start of source buffer ***
   1:    this_sym_is_unres, this_sym_is_unres_too, f_name, API_function, <CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: print_abbreviations(1)
 
@@ -1534,11 +1536,17 @@ List of unresolved abbreviations
 'y': appears in ['y']
 
 
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+
+
 *******************************************************************************
 * Name        : mediator_console
 * Description : testing mediator console commands
 *******************************************************************************
 
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
@@ -1553,6 +1561,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 WARNING: source file 'D:/blah.c' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
+
+*** End of source buffer ***
 List of abbreviations
 
 'abs' expands to ['absolute']
@@ -1771,6 +1781,8 @@ _cached_symbols_as_one_string is:
   4:    }
   5:    
 
+*** End of source buffer ***
+
 
 >>> Testing console command: say_select(['select', 'horiz_pos\horizontal position', '=\equals'])
 
@@ -1779,9 +1791,11 @@ _cached_symbols_as_one_string is:
   2:    {
   3:    
   4:    }
-  5:    
 
-*** End of source buffer ***
+
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1801,7 +1815,8 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Error reading <SymDict.SymDict instance at 861960> from file 'D:\VoiceCode\VCode.withUser\Data\Tmp\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 878c80> from file 'D:\VoiceCode\VCode.withUser\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.withUser\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
@@ -1836,6 +1851,7 @@ _cached_symbols_as_one_string is:
 
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1853,12 +1869,18 @@ _cached_symbols_as_one_string is:
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
 
 _cached_symbols_as_one_string is:
    
+
+
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1868,6 +1890,7 @@ _cached_symbols_as_one_string is:
 
 >>> Dictating Python when all symbols are known <<<
 
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\\VoiceCode\\VCode.withUser\\Data\\TestData\\native_python.py'
@@ -2211,6 +2234,8 @@ _cached_symbols_as_one_string is:
 WARNING: source file 'D:/blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
 Associate 'R. E.' with symbol (Enter selection):
 
@@ -2224,6 +2249,8 @@ Associate 'R. E.' with symbol (Enter selection):
 *** Start of source buffer ***
   1:    import os, re, string, sys
   2:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Associate 'natural link' with symbol (Enter selection):
 
@@ -2252,6 +2279,8 @@ Associate 'natural link' with symbol (Enter selection):
   1:    import os, re, string, sys
   2:    import auto_test, natlink, vc_globals
   3:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
@@ -2266,9 +2295,13 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
 > 
 
+*** Start of source buffer ***
+  1:    import os, re, string, sys
   2:    import auto_test, natlink, vc_globals
   3:    from actions_C_Cpp import all
   4:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
 Associate 'application state' with symbol (Enter selection):
 
@@ -2294,9 +2327,12 @@ Associate 'application state' with symbol (Enter selection):
 
 > 
 
+  2:    import auto_test, natlink, vc_globals
   3:    from actions_C_Cpp import all
   4:    from AppState import AppState
   5:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
 Associate 'context generic' with symbol (Enter selection):
 
@@ -2334,9 +2370,12 @@ Associate 'context python' with symbol (Enter selection):
 
 > 
 
+  3:    from actions_C_Cpp import all
   4:    from AppState import AppState
   5:    from cont_gen import ContC, ContPy
   6:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
 Associate 'context sensitive cmd' with symbol (Enter selection):
 
@@ -2362,9 +2401,12 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
 
 > 
 
+  4:    from AppState import AppState
   5:    from cont_gen import ContC, ContPy
   6:    from CSCmd import CSCmd
   7:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Associate 'Ed simulator' with symbol (Enter selection):
 
@@ -2390,15 +2432,21 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 > 
 
+  5:    from cont_gen import ContC, ContPy
   6:    from CSCmd import CSCmd
   7:    from EdSim import EdSim
   8:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 
 
+  6:    from CSCmd import CSCmd
   7:    from EdSim import EdSim
   8:    from Object import Object
   9:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Associate 'Ed simulator' with symbol (Enter selection):
 
@@ -2413,9 +2461,12 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 > 
 
+  7:    from EdSim import EdSim
   8:    from Object import Object
   9:    import EdSim, SymDict
  10:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
 Associate 'S. R. interface' with symbol (Enter selection):
 
@@ -2429,15 +2480,21 @@ Associate 'S. R. interface' with symbol (Enter selection):
 
 > 
 
+  8:    from Object import Object
   9:    import EdSim, SymDict
  10:    import sr_interface
  11:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
 
 
+  9:    import EdSim, SymDict
  10:    import sr_interface
  11:    class CmdInterp(Object):
  12:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
 
 
@@ -2452,10 +2509,13 @@ Associate 'on application' with symbol (Enter selection):
   '6': onapplication (*new*)
   '7': ONAPPLICATION (*new*)
 
->  10:    import sr_interface
+>   9:    import EdSim, SymDict
+ 10:    import sr_interface
  11:    class CmdInterp(Object):
  12:    def __init__(self, on_app = None, <CURSOR>):
  13:    
+
+*** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Associate 'SymDict pickle file' with symbol (Enter selection):
 
@@ -2467,13 +2527,19 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
   '5': symdictpicklefile (*new*)
   '6': SYMDICTPICKLEFILE (*new*)
 
->  11:    class CmdInterp(Object):
+>  10:    import sr_interface
+ 11:    class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
+ 10:    import sr_interface
  11:    class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:    self.decl_attrs({<CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
 Associate 'un translated text start' with symbol (Enter selection):
 
@@ -2486,9 +2552,12 @@ Associate 'un translated text start' with symbol (Enter selection):
   '6': untranslatedtextstart (*new*)
   '7': UNTRANSLATEDTEXTSTART (*new*)
 
->  11:    class CmdInterp(Object):
+>  10:    import sr_interface
+ 11:    class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:    self.decl_attrs({'_untranslated_text_start': None, <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Associate 'un translated text end' with symbol (Enter selection):
 
@@ -2503,15 +2572,21 @@ Associate 'un translated text end' with symbol (Enter selection):
 
 > 
 
+ 11:    class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:    self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 
 
+ 12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:    self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:    self.deep_construct(CmdInterp, \
  15:    <CURSOR>)
+
+*** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Associate 'on application' with symbol (Enter selection):
 
@@ -2535,27 +2610,39 @@ Associate 'on application' with symbol (Enter selection):
   '6': onapplication (*new*)
   '7': ONAPPLICATION (*new*)
 
->  13:    self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
+>  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 13:    self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:    self.deep_construct(CmdInterp, \
  15:    {'on_app': on_app, <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
 
 
+ 13:    self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:    self.deep_construct(CmdInterp, \
  15:    {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
  16:    <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
+
+
+ 14:    self.deep_construct(CmdInterp, \
+ 15:    {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+ 16:    'language_specific_aliases': {}, \
+ 17:    <CURSOR>})
+
+*** End of source buffer ***
+Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
 
 
  15:    {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
  16:    'language_specific_aliases': {}, \
- 17:    <CURSOR>})
-Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
-
-
- 16:    'language_specific_aliases': {}, \
  17:    'last_loaded_language': None, \
  18:    <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
 Associate 'SymDict pickle file' with symbol (Enter selection):
 
@@ -2579,23 +2666,32 @@ Associate 'SymDict pickle file' with symbol (Enter selection):
 
 > 
 
+ 16:    'language_specific_aliases': {}, \
  17:    'last_loaded_language': None, \
  18:    'symdict_pickle_file': symdict_pickle_file}, \
  19:    <CURSOR>)
+
+*** End of source buffer ***
 Saying: ['attributes', 'new', 'statement', 'new', 'statement']
 
 
 
 
+ 18:    'symdict_pickle_file': symdict_pickle_file}, \
  19:    attrs)
  20:    
  21:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
 
 
+ 19:    attrs)
  20:    
  21:    def spoken_form_regexp(self, spoken_form):
  22:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Associate 'R. E.' with symbol (Enter selection):
 
@@ -2604,79 +2700,119 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
->  20:    
+>  19:    attrs)
+ 20:    
  21:    def spoken_form_regexp(self, spoken_form):
  22:    words = re.split(<CURSOR>)
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'back', 'slash', 'S.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 
 
+ 20:    
  21:    def spoken_form_regexp(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
  23:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
+
+
+ 21:    def spoken_form_regexp(self, spoken_form):
+ 22:    words = re.split('\s+', spoken_form)
+ 23:    regexp = ''
+ 24:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
 
 
  22:    words = re.split('\s+', spoken_form)
  23:    regexp = ''
- 24:    <CURSOR>
-Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
+ 24:    for a_word in words:
+ 25:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
 
 
  23:    regexp = ''
  24:    for a_word in words:
- 25:    <CURSOR>
-Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
+ 25:    first = a_word[0]
+ 26:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
 
 
  24:    for a_word in words:
  25:    first = a_word[0]
- 26:    <CURSOR>
-Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
-
-
- 25:    first = a_word[0]
  26:    rest = a_word[1: ]
  27:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
+ 24:    for a_word in words:
  25:    first = a_word[0]
  26:    rest = a_word[1: ]
  27:    regexp_this_word = '<CURSOR>'
+
+*** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
+ 24:    for a_word in words:
  25:    first = a_word[0]
  26:    rest = a_word[1: ]
  27:    regexp_this_word = '[' + string.lower(first<CURSOR>)
+
+*** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
+
+
+ 25:    first = a_word[0]
+ 26:    rest = a_word[1: ]
+ 27:    regexp_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
 
 
  26:    rest = a_word[1: ]
  27:    regexp_this_word = '[' + string.lower(first) + string.upper(first)
- 28:    <CURSOR>
-Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
+ 28:    if not regexp == '':
+ 29:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back', 'slash', 'S.', 'asterisk', 'new', 'statement']
 
 
  27:    regexp_this_word = '[' + string.lower(first) + string.upper(first)
  28:    if not regexp == '':
- 29:    <CURSOR>
-Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back', 'slash', 'S.', 'asterisk', 'new', 'statement']
+ 29:    regexp = regexp + '\s*'
+ 30:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
 
 
  28:    if not regexp == '':
  29:    regexp = regexp + '\s*'
- 30:    <CURSOR>
-Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
-
-
- 29:    regexp = regexp + '\s*'
  30:    regexp = regexp + regexp_this_word
  31:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['return', 'regular', 'expression']
+ 28:    if not regexp == '':
  29:    regexp = regexp + '\s*'
  30:    regexp = regexp + regexp_this_word
  31:    return regexp<CURSOR>
+
+*** End of source buffer ***
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
@@ -2684,6 +2820,8 @@ _cached_symbols_as_one_string is:
 WARNING: source file 'D:/blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'O.', 'S.', ', \\comma', 'R.', 'E.', ', \\comma', 'string', ', \\comma', 'system', 'new', 'statement']
 Associate 'O. S.' with symbol (Enter selection):
 
@@ -2718,6 +2856,8 @@ Associate 'O. S.' with symbol (Enter selection):
 *** Start of source buffer ***
   1:    import os, re, string, system
   2:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'auto', 'test', ', \\comma', 'natural', 'link', ', \\comma', 'V.', 'C.', 'globals', 'new', 'statement']
 Associate 'auto test' with symbol (Enter selection):
 
@@ -2755,6 +2895,8 @@ Associate 'auto test' with symbol (Enter selection):
   1:    import os, re, string, system
   2:    import auto_test, natural_link, vc_globals
   3:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', ' import all\\import all', 'new', 'statement']
 Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
@@ -2768,9 +2910,13 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
 
 > 
 
+*** Start of source buffer ***
+  1:    import os, re, string, system
   2:    import auto_test, natural_link, vc_globals
   3:    from actions_ccpp import all
   4:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
 Associate 'application state' with symbol (Enter selection):
 
@@ -2784,9 +2930,12 @@ Associate 'application state' with symbol (Enter selection):
 
 > 
 
+  2:    import auto_test, natural_link, vc_globals
   3:    from actions_ccpp import all
   4:    from application_state import application_state
   5:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
 Associate 'context generic' with symbol (Enter selection):
 
@@ -2820,9 +2969,12 @@ Associate 'context generic' with symbol (Enter selection):
 
 > 
 
+  3:    from actions_ccpp import all
   4:    from application_state import application_state
   5:    from context_generic import context_c, context_python
   6:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement']
 Associate 'context sensitive command' with symbol (Enter selection):
 
@@ -2836,9 +2988,12 @@ Associate 'context sensitive command' with symbol (Enter selection):
 
 > 
 
+  4:    from application_state import application_state
   5:    from context_generic import context_c, context_python
   6:    from context_sensitive_command import context_sensitive_command
   7:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
 Associate 'Ed simulator' with symbol (Enter selection):
 
@@ -2852,9 +3007,12 @@ Associate 'Ed simulator' with symbol (Enter selection):
 
 > 
 
+  5:    from context_generic import context_c, context_python
   6:    from context_sensitive_command import context_sensitive_command
   7:    from ed_simulator import ed_simulator
   8:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement']
 Associate 'object' with symbol (Enter selection):
 
@@ -2865,9 +3023,12 @@ Associate 'object' with symbol (Enter selection):
 
 > 
 
+  6:    from context_sensitive_command import context_sensitive_command
   7:    from ed_simulator import ed_simulator
   8:    from object import object
   9:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Associate 'symbol dictionary' with symbol (Enter selection):
 
@@ -2881,9 +3042,12 @@ Associate 'symbol dictionary' with symbol (Enter selection):
 
 > 
 
+  7:    from ed_simulator import ed_simulator
   8:    from object import object
   9:    import ed_simulator, symbol_dictionary
  10:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['import', 'module', 'S.', 'R.', 'interface', 'new', 'statement']
 Associate 'S. R. interface' with symbol (Enter selection):
 
@@ -2897,9 +3061,12 @@ Associate 'S. R. interface' with symbol (Enter selection):
 
 > 
 
+  8:    from object import object
   9:    import ed_simulator, symbol_dictionary
  10:    import sr_interface
  11:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
 
 
@@ -2913,9 +3080,12 @@ Associate 'command interpreter' with symbol (Enter selection):
   '5': commandinterpreter (*new*)
   '6': COMMANDINTERPRETER (*new*)
 
->  10:    import sr_interface
+>   9:    import ed_simulator, symbol_dictionary
+ 10:    import sr_interface
  11:    class command_interpreter(object):
  12:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'comma']
 
 
@@ -2943,10 +3113,13 @@ Associate 'initialize' with symbol (Enter selection):
   '2': None (*new*)
   '3': NONE (*new*)
 
->  10:    import sr_interface
+>   9:    import ed_simulator, symbol_dictionary
+ 10:    import sr_interface
  11:    class command_interpreter(object):
  12:    def initialize(self, on_application = none, <CURSOR>):
  13:    
+
+*** End of source buffer ***
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
 
@@ -2965,9 +3138,12 @@ Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
   '2': Attributes (*new*)
   '3': ATTRIBUTES (*new*)
 
->  11:    class command_interpreter(object):
+>  10:    import sr_interface
+ 11:    class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
 Associate 'self' with symbol (Enter selection):
 
@@ -2986,9 +3162,12 @@ Associate 'self' with symbol (Enter selection):
   '5': declareattributes (*new*)
   '6': DECLAREATTRIBUTES (*new*)
 
->  11:    class command_interpreter(object):
+>  10:    import sr_interface
+ 11:    class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    self.declare_attributes({<CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
 Associate 'un translated text start' with symbol (Enter selection):
 
@@ -3000,9 +3179,12 @@ Associate 'un translated text start' with symbol (Enter selection):
   '5': untranslatedtextstart (*new*)
   '6': UNTRANSLATEDTEXTSTART (*new*)
 
->  11:    class command_interpreter(object):
+>  10:    import sr_interface
+ 11:    class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    self.declare_attributes({'un_translated_text_start': none, <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Associate 'un translated text end' with symbol (Enter selection):
 
@@ -3016,9 +3198,12 @@ Associate 'un translated text end' with symbol (Enter selection):
 
 > 
 
+ 11:    class command_interpreter(object):
  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Associate 'deep construct' with symbol (Enter selection):
 
@@ -3032,13 +3217,19 @@ Associate 'deep construct' with symbol (Enter selection):
 
 > 
 
+ 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:    self.deep_construct(command_interpreter, \
  15:    <CURSOR>)
+
+*** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
+ 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
  13:    self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:    self.deep_construct(command_interpreter, \
  15:    {'on_application': on_application, <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'known', 'symbols', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'dot', 'symbol', 'dictionary', 'without', 'arguments', 'comma', 'continue', 'statement']
 Associate 'known symbols' with symbol (Enter selection):
 
@@ -3052,9 +3243,12 @@ Associate 'known symbols' with symbol (Enter selection):
 
 > 
 
+ 13:    self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
  14:    self.deep_construct(command_interpreter, \
  15:    {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:    <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'language', 'specific', 'aliases', 'jump', 'out', ':\\colon', 'empty', 'dictionary', 'comma', 'continue', 'statement']
 Associate 'language specific aliases' with symbol (Enter selection):
 
@@ -3068,9 +3262,12 @@ Associate 'language specific aliases' with symbol (Enter selection):
 
 > 
 
+ 14:    self.deep_construct(command_interpreter, \
  15:    {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:    'language_specific_aliases': {}, \
  17:    <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'last', 'loaded', 'language', 'jump', 'out', ':\\colon', 'none', 'comma', 'continue', 'statement']
 Associate 'last loaded language' with symbol (Enter selection):
 
@@ -3084,23 +3281,32 @@ Associate 'last loaded language' with symbol (Enter selection):
 
 > 
 
+ 15:    {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:    'language_specific_aliases': {}, \
  17:    'last_loaded_language': none, \
  18:    <CURSOR>})
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
 
 
+ 16:    'language_specific_aliases': {}, \
  17:    'last_loaded_language': none, \
  18:    'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:    <CURSOR>)
+
+*** End of source buffer ***
 Saying: ['attributes', 'new', 'statement', 'new', 'statement']
 
 
 
 
+ 18:    'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:    attributes)
  20:    
  21:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
 
 
@@ -3124,9 +3330,12 @@ Associate 'spoken form regular expression' with symbol (Enter selection):
   '5': spokenform (*new*)
   '6': SPOKENFORM (*new*)
 
->  20:    
+>  19:    attributes)
+ 20:    
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Associate 'words' with symbol (Enter selection):
 
@@ -3149,15 +3358,21 @@ Associate 'words' with symbol (Enter selection):
   '2': Split (*new*)
   '3': SPLIT (*new*)
 
->  20:    
+>  19:    attributes)
+ 20:    
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:    words = re.split(<CURSOR>)
+
+*** End of source buffer ***
 Saying: ['single', 'quotes', 'back', 'slash', 'S.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 
 
+ 20:    
  21:    def spoken_form_regular_expression(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
  23:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
 Associate 'regular expression' with symbol (Enter selection):
 
@@ -3172,9 +3387,12 @@ Associate 'regular expression' with symbol (Enter selection):
 
 > 
 
+ 21:    def spoken_form_regular_expression(self, spoken_form):
  22:    words = re.split('\s+', spoken_form)
  23:    re = ''
  24:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
 
 
@@ -3188,9 +3406,12 @@ Associate 'a word' with symbol (Enter selection):
   '5': aword (*new*)
   '6': AWORD (*new*)
 
->  23:    re = ''
+>  22:    words = re.split('\s+', spoken_form)
+ 23:    re = ''
  24:    for a_word in words:
  25:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
 Associate 'first' with symbol (Enter selection):
 
@@ -3201,9 +3422,12 @@ Associate 'first' with symbol (Enter selection):
 
 > 
 
+ 23:    re = ''
  24:    for a_word in words:
  25:    first = a_word[0]
  26:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
 Associate 'rest' with symbol (Enter selection):
 
@@ -3215,9 +3439,12 @@ Associate 'rest' with symbol (Enter selection):
 
 > 
 
+ 24:    for a_word in words:
  25:    first = a_word[0]
  26:    re = a_word[1: ]
  27:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 Associate 'regular expression this word' with symbol (Enter selection):
 
@@ -3229,9 +3456,12 @@ Associate 'regular expression this word' with symbol (Enter selection):
   '5': regularexpressionthisword (*new*)
   '6': REGULAREXPRESSIONTHISWORD (*new*)
 
->  25:    first = a_word[0]
+>  24:    for a_word in words:
+ 25:    first = a_word[0]
  26:    re = a_word[1: ]
  27:    regular_expression_this_word = '<CURSOR>'
+
+*** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
 Associate 'lower' with symbol (Enter selection):
 
@@ -3240,9 +3470,12 @@ Associate 'lower' with symbol (Enter selection):
   '2': Lower (*new*)
   '3': LOWER (*new*)
 
->  25:    first = a_word[0]
+>  24:    for a_word in words:
+ 25:    first = a_word[0]
  26:    re = a_word[1: ]
  27:    regular_expression_this_word = '[' + string.lower(first<CURSOR>)
+
+*** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
 Associate 'upper' with symbol (Enter selection):
 
@@ -3253,9 +3486,12 @@ Associate 'upper' with symbol (Enter selection):
 
 > 
 
+ 25:    first = a_word[0]
  26:    re = a_word[1: ]
  27:    regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
 
 
@@ -3270,9 +3506,12 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  27:    regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+>  26:    re = a_word[1: ]
+ 27:    regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:    if not re == '':
  29:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', 'back', 'slash', 'S.', 'asterisk', 'new', 'statement']
 Associate 'regular expression' with symbol (Enter selection):
 
@@ -3298,9 +3537,12 @@ Associate 'regular expression' with symbol (Enter selection):
 
 > 
 
+ 27:    regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:    if not re == '':
  29:    re = re + '\s*'
  30:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
 Associate 'regular expression' with symbol (Enter selection):
 
@@ -3326,9 +3568,12 @@ Associate 'regular expression' with symbol (Enter selection):
 
 > 
 
+ 28:    if not re == '':
  29:    re = re + '\s*'
  30:    re = re + regular_expression_this_word
  31:    <CURSOR>
+
+*** End of source buffer ***
 Saying: ['return', 'regular', 'expression']
 Associate 'regular expression' with symbol (Enter selection):
 
@@ -3341,9 +3586,12 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  29:    re = re + '\s*'
+>  28:    if not re == '':
+ 29:    re = re + '\s*'
  30:    re = re + regular_expression_this_word
  31:    return re<CURSOR>
+
+*** End of source buffer ***
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
@@ -3354,6 +3602,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -3361,6 +3610,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
 WARNING: source file 'blah.c' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
+
+*** End of source buffer ***
 
 
 >>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.withUser\Data\TestData\small_buff.c'])
@@ -3398,6 +3649,8 @@ Associate 'index' with symbol (Enter selection):
 > *** Start of source buffer ***
   1:    index != 0<CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: say(['index', 'not', 'equal', 'to', '0'], user_input='0
 0
@@ -3412,6 +3665,8 @@ Associate 'index' with symbol (Enter selection):
 > *** Start of source buffer ***
   1:    index != 0index != 0<CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: say(['move_horiz\\move horizontally'], user_input='0
 0
@@ -3419,9 +3674,19 @@ Associate 'index' with symbol (Enter selection):
 *** Start of source buffer ***
   1:    index != 0index != 0move_horiz<CURSOR>
 
+*** End of source buffer ***
+
 
 >>> Testing console command: say(['move', 'horizontally'], user_input='0
 0
 ')
 *** Start of source buffer ***
   1:    index != 0index != 0move_horizmove_horiz<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.withUser\Config\py_std_sym.py'

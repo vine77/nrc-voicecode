@@ -1,4 +1,4 @@
-import natlink
+import natlink, sys
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
 """Defines main class for the mediator.
@@ -10,6 +10,50 @@ import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interfa
 ..[MediatorObject] file:///./MediatorObject.MediatorObject.html"""
 
 to_configure = None
+
+
+
+def disconnect_from_sr(disconnect, save_speech_files):
+    """Save SR user and disconnect from SR.
+    **INPUTS**
+        
+    *BOOL* disconnect -- true iif should disconnect from SR 
+        
+    *BOOL* save_speech_files -- true iif should save user. If *None*, prompt user.
+
+        
+    **OUTPUTS**
+        
+    *none* -- 
+    """
+
+#    print '-- MediatorObject.disconnect_from_sr: disconnect=%s, save_speech_files=%s' % (disconnect, save_speech_files)
+    if sr_interface.speech_able():
+        #
+        # Ask the user if he wants to save speech files
+        #
+        while save_speech_files == None:
+            sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
+            answer = sys.stdin.readline()
+            answer = answer[:len(answer)-1]
+       
+            if answer == 'y':
+                save_speech_files = 1
+            elif answer == 'n':
+                save_speech_files = 0
+           
+            if save_speech_files == None:
+                print "\nPlease answer 'y' or 'n'."
+
+        if save_speech_files and sr_interface.sr_user_needs_saving:
+            print 'Saving speech files. This may take a moment ...'
+            sr_interface.saveUser()
+            print 'Speech files saved.'
+
+        if disconnect: sr_interface.disconnect()
+            
+        
+
 
 class MediatorObject(Object.Object):
     """Main object for the mediator.
@@ -43,6 +87,8 @@ class MediatorObject(Object.Object):
     
     def __init__(self, interp=CmdInterp.CmdInterp(), \
                        **attrs):
+#        print '-- MediatorObject.__init__: called'        
+        sr_interface.connect('off')        
         self.deep_construct(MediatorObject, \
                             {'interp': interp, \
                              'mixed_grammar': None, \
@@ -68,6 +114,13 @@ class MediatorObject(Object.Object):
         global to_configure
         
         to_configure = self
+
+        if sr_interface.speech_able():
+#            print '-- MediatorObject.configure: loading grammars'
+            to_configure.mixed_grammar.load()
+            to_configure.mixed_grammar.activate(0)
+            to_configure.code_select_grammar.load( ['Select', 'Correct'] )
+            to_configure.code_select_grammar.activate()                
         
         try:
             execfile(config_file)
@@ -83,6 +136,46 @@ class MediatorObject(Object.Object):
         
         to_configure = None
 
+    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
+        """Quit the mediator object
+
+        **INPUTS**
+        
+        *BOOL* clean_sr_voc=0 -- If true, remove all SR entries for known
+        symbols.
+
+        *BOOL* save_speech_files = None -- Indicates whether or not
+        speech files should be saved. If *None*, then ask the user.
+
+        *BOOL* disconnect = 1 -- Indicates whether or not to disconnect from
+        the SR system.
+
+        **OUTPUTS**
+        
+        *none* --
+        """
+#        print '-- MediatorObject.quit: called'
+            
+        #
+        # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
+        # but don't save SymDict to file (we want the symbols and
+        # abbreviations to still be there when we come back.
+        #
+        self.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
+    
+        if sr_interface.speech_able():
+#            print '-- MediatorObject.quit: unloading grammars'
+            if self.mixed_grammar:
+                self.mixed_grammar.unload()
+            if self.code_select_grammar:
+                self.code_select_grammar.unload()
+
+            disconnect_from_sr(disconnect, save_speech_files)
+                
+#            print '-- MediatorObject.quit: ended'
+
+
+            
     
 ###############################################################################
 # Configuration functions. These are not methods
