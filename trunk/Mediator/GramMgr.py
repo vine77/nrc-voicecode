@@ -229,7 +229,7 @@ class WinGramMgr(GramMgr):
 	if not self.dict_grammars[window].has_key(buffer):
 	    self.new_buffer(buffer, window)
 	for buff_name in self.dict_grammars[window].keys():
-	    if buff_name != buffer: 
+	    if buff_name != buffer:
 	        self.dict_grammars[window][buff_name].deactivate()
 #  set visible range and buffer for selection grammar
 	self.sel_grammars[window].activate(buffer, window)

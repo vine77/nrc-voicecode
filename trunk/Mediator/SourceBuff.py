@@ -1216,6 +1216,95 @@ class SourceBuff(Object):
         """
         self.last_search = (regexp, direction, where, match)
 
+    #
+    # Callback methods. These are invoked by the external editor to notify
+    # VoiceCode that certain events have taken place in the editor.
+    #
+    def delete_cbk(self, range):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a deletion event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end pos of range to be deleted
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('SourceBuff.delete_cbk')
+
+    def insert_cbk(self, range, text):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a deletion event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end position of text to be
+        replaced by the insertion.
+
+        STR *text* -- Text to be inserted
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('SourceBuff.insert_cbk')
+
+    def set_selection_cbk(self, range, cursor_at=1):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a set selection event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end position of selected text
+
+
+        INT *cursor_at* -- indicates whether cursor was left at the
+        beginning or end of *range*
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('SourceBuff.set_selection_cbk')
+
+    def goto_cbk(self, pos):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a cursor movement event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        INT *pos* -- Position the cursor was moved to.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('SourceBuff.goto_cbk')
+        
+
     def __getitem__(self, key):
         """Get a character of the buffer using the buff[i] syntax.
         

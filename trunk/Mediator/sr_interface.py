@@ -889,6 +889,7 @@ class CommandDictGrammar(DictGramBase):
 	self.last = None
 
     def deactivate(self):
+#        print '-- CommandDictGramm.deactivate: called'
 	DictGramBase.deactivate(self)
 	self.isActive = 0
 
@@ -913,9 +914,11 @@ class CommandDictGrammar(DictGramBase):
 	else:
 #            print '-- CommandDictGrammar.gotBegin: Local grammar but the editor doesn\'t have focus. Deactivate the grammar'
 	    self.deactivate()
+
         
     def gotResultsObject(self, recogType, results):
-#        print '-- CommandDictGramm.gotResultsObject: called, recogType=\'%s\'' % recogType
+#        print '-- CommandDictGramm.gotResultsObject: started'
+#        print '-- CommandDictGramm.gotResultsObject: self.interpreter.on_app=%s' % self.interpreter.on_app
 
         #
         # In regression testing mode (self.allResults = 1), we process all
@@ -949,6 +952,8 @@ class CommandDictGrammar(DictGramBase):
 	    words = results.getWords(0)
 	    self.interpreter.interpret_NL_cmd(words)
 	    self.interpreter.on_app.curr_buffer().refresh_if_necessary()
+
+#        print '-- CommandDictGramm.gotResults: exited'
         
 
 class CodeSelectGrammar(SelectGramBase):
@@ -1004,14 +1009,13 @@ class CodeSelectGrammar(SelectGramBase):
 	self.isActive = 1
 
     def gotBegin(self, moduleInfo):
-#        print '-- CodeSelectGrammar.gotBegin: called'
+#        print '-- CodeSelectGrammar.gotBegin: called,self.interpreter.on_app=%s, self.interpreter.on_app.curr_buffer()=%s' % (self.interpreter.on_app, self.interpreter.on_app.curr_buffer())
+
 	vis_start, vis_end = self.interpreter.on_app.curr_buffer().get_visible()
 	self.vis_start = vis_start
-#	print vis_start, vis_end
 	visible = \
 	    self.interpreter.on_app.curr_buffer().get_text(vis_start, vis_end)
 	self.setSelectText(visible)
-#	print visible[0:50]
 	if self.window == 0:
 #	    self.activate()
 	    self.setSelectText(visible)
@@ -1024,6 +1028,7 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotResultsObject(self,recogType,resObj):
 #        print '-- CodeSelectGrammar.gotResultsObject: called, recogType=\'%s\'' % recogType
+
         #
         # In regression testing mode (self.allResults = 1), we process all
         # all select utterances even if they were intercepted by an other
@@ -1140,6 +1145,7 @@ class CodeSelectGrammar(SelectGramBase):
                 # the same occurence again
                 #
                 self.interpreter.on_app.curr_buffer().log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
+
 
     def selection_spoken_form(self, resObj):
 

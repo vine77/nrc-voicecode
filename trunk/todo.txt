@@ -919,3 +919,25 @@ which can't be split into their constituents. So when expand_word
 finds a word that's neither in-vocab or known abbreviation, it should
 try to expand it as a concatenation of abbreviations and in-vocab
 words.
+
+
+Incompatibilities with pkled SymDict
+------------------------------------
+
+If you modify the attributes of SymDict, you can end up in a situation
+where the pickled SymDict is missing some attributes that the new
+SymDict class is expecting. This can result in crashes when users
+upgrade VoiceCode.
+
+To deal with this, we should do some kind of compatibility check
+between the SymDict class and the pickled instance. This could be
+something like:
+
+1. create a new SymDict from scratch.
+2. unpickle the old SymDict as old_symbols.
+3. retrieve the symbols from old_symbols and add them to the new
+dictionary (with add_symbol)
+4. ditto for old abbreviations
+5. if at any point during this copy process we encounter an exception, just ignore the pickled instance and start with a brand new blank SymDict (make sure you rename the old pickle file in case the exception was not due to an incompatibility... that way, he will not loose his pickled dictionary whenever there is a bug in the system).
+
+

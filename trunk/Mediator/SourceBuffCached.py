@@ -23,7 +23,7 @@
 buffer is slow"""
 
 
-import debug
+import debug, SourceBuff
 
 from Object import Object
 
@@ -48,7 +48,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
       exiting.
 
     For any method *readingMethod* that reads the state of the
-    external editor, *SourceBuffCached* implements two methods:
+    external editor, *SourceBuffCached* should implement two methods:
 
     *readingMethod* -- This is the public method (usually a method of
      [SourceBuff]) used to read the state. It usually just reads the
@@ -60,15 +60,10 @@ class SourceBuffCached(SourceBuff.SourceBuff):
      [synchronize_with_app] method).
 
     For any method *writingMethod* that changes the state of the
-    external editor, *SourceBuffCached* implements two methods:
-
-    *writingMethod* -- This is the public method. It does the change
-     on the external editor (i.e. invoke *_writingMethod_from_app*)
-     and then synchronises the cache with the external editor.
-
-    *_writingMethod_from_app* -- This is a private method that just
-     effects the change on the external editor, without synchronizing
-     the cache.
+    external editor, *SourceBuffCached* assumes that subclasses will
+    define *writingMethod* such that it invokes the change on the
+    external editor AND make sure to synchronise the cache with the
+    external editor.
 
     **INSTANCE ATTRIBUTES**
 
@@ -89,25 +84,31 @@ class SourceBuffCached(SourceBuff.SourceBuff):
                             {},
                             attrs
                             )
+        self.init_cache()
 
 
-    def apply_this_update(self, an_update):
-        
-        """Applies a single buffer update received from the external
-        application.
+
+    def init_cache(self):
+        """Initializes the cache from data acquired from external buffer.
         
         **INPUTS**
         
-        [SB_Update] *an_update* -- The update to be applied.
+        *none* -- 
         
 
         **OUTPUTS**
         
         *none* -- 
-
-        ..[SB_Update] file:///./AppState.SB_Update.html"""
+        """
         
-        ??? Large case statement based on the class of SB_Updates
+        self.cache['language_name'] = self._language_name_from_app()
+        self.cache['cur_pos'] = self._cur_pos_from_app()
+        self.cache['get_selection'] = self._get_selection_from_app()
+        self.cache['get_text'] = self._get_text_from_app()
+        self.cache['get_visible'] = self._get_visible_from_app()
+        self.cache['newline_conventions'] = self._newline_conventions_from_app()
+        self.cache['pref_newline_convention'] = self._pref_newline_convention_from_app()
+
 
     def language_name(self):
         """Returns the name of the language a file is written in
@@ -133,7 +134,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
         *STR* -- the name of the language
         """
-        debug.virtual('SourceBuffCached.language_name_from_app')
+        debug.virtual('SourceBuffCached._language_name_from_app')
 
 
     def cur_pos(self):
@@ -205,52 +206,6 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	"""
         
 	debug.virtual('SourceBuffCached._get_selection_from_app')	
-
-
-    def set_selection(self, range, cursor_at = 1):
-        
-	"""sets range of current selection in external editor, then
-	synchronises cache.
-
-	**INPUTS**
-
-	*(INT, INT)* range -- offsets into buffer of the start and end
-	of the selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-
-	*INT* cursor_at -- indicates whether the cursor should be
-	placed at the left (0) or right (1) end of the selection.  Note:
-        cursor_at is ignored unless the application supports this
-	choice, as indicated by bidirectional_selection.  
-	Most Windows applications do not.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self._set_selection_from_app(range, cursor_at)
-        self.synchronize_with_app()
-
-    def _set_selection_from_app(self, range, cursor_at = 1):
-	"""sets range of current selection in external editor.
-
-	**INPUTS**
-
-	*(INT, INT)* range -- offsets into buffer of the start and end
-	of the selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-
-	*INT* cursor_at -- indicates whether the cursor should be
-	placed at the left (0) or right (1) end of the selection.  Note:
-        cursor_at is ignored unless the application supports this
-	choice, as indicated by bidirectional_selection.  
-	Most Windows applications do not.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('SourceBuffCached._set_selection_from_app')        
 
 
     def get_text(self, start = None, end = None):
@@ -332,272 +287,8 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*INT* length 
 	"""
-	return len(self.cache['contents'])
+	return len(self.contents())
 
-    def insert_indent(self, code_bef, code_after, range = None):
-        """Insert code into source buffer and indent it.
-
-        Does it on external editor, then synchronizes cache.
-        
-        Replace code in range 
-        with the concatenation of
-        code *STR code_bef* and *str code_after*. Cursor is put right
-        after code *STR bef*.
-
-	**INPUTS**
-
-	*STR* code_bef -- code to be inserted before new cursor location
-        
-	*STR* code_bef -- code to be inserted after new cursor location
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        
-	self._insert_indent_from_app(code_bef, code_after, range)
-        self.synchronize_with_app()
-
-        
-    def _insert_indent_from_app(self, code_bef, code_after, range = None):
-        """Insert code into source buffer and indent it.
-
-        Does it on external editor without synchronizing cache.
-        
-        Replace code in range 
-        with the concatenation of
-        code *STR code_bef* and *str code_after*. Cursor is put right
-        after code *STR bef*.
-
-	**INPUTS**
-
-	*STR* code_bef -- code to be inserted before new cursor location
-        
-	*STR* code_bef -- code to be inserted after new cursor location
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        debug.virtual('SourceBuffCached._insert_indent_from_app')
-
-    def insert(self, text, range = None):
-        """Replace text in range with with text.
-
-        Does it on external editor, then resynchronizes the cache.
-
-	**INPUTS**
-
-	*STR text* -- new text
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-
-        self._insert_from_app(text, range)
-        self.synchronize_with_app()        
-        
-
-    def _insert_from_app(self, text, range = None):
-        """Replace text in range with with text.
-
-        Does it on external editor, without resynchronizing the cache.
-
-	**INPUTS**
-
-	*STR text* -- new text
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        debug.virtual('SourceBuffCached._insert_from_app')
-
-
-    def indent(self, range = None):
-        
-        """Automatically indent the code in a source buffer region.
-
-        Does it on external editor without resynchronizing cache.
-
-	**INPUTS**
-
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        self._indent_from_app(range)
-        self.synchronize_with_app()
-
-
-    def incr_indent_level(self, levels=1, range=None):
-        
-        """Increase the indentation of a region of code by a certain
-        number of levels.
-
-        Does it on editor and then resynchronizes cache.
-        
-        **INPUTS**
-        
-        *INT* levels=1 -- Number of levels to indent by.
-        
-        *(INT, INT)* range=None -- Region of code to be indented 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        self._incr_indent_level_from_app(levels, range)
-        self.synchronize_with_app()
-
-
-    def _incr_indent_level_from_app(self, levels, range):
-        
-        """Increase the indentation of a region of code by a certain
-        number of levels.
-
-        Does it on editor without resynchronizing cache.
-        
-        **INPUTS**
-        
-        *INT* levels=1 -- Number of levels to indent by.
-        
-        *(INT, INT)* range=None -- Region of code to be indented 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        debug.virtual('AppStateCached._incr_indent_level_from_app')
-
-
-    def decr_indent_level(self, levels=1, range=None):
-
-        """Decrease the indentation of a region of code by a certain number
-        of levels.
-
-        Does it to external editor, then resynchronises cache.
-        
-        **INPUTS**
-        
-        *STR* levels=1 -- Number of levels to unindent
-
-        *(INT, INT)* range=None -- Start and end position of code to be indent.
-        If *None*, use current selection
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        print '-- SourceBuffCached.decr_indent_level: called'
-        self._decr_indent_level_on_app(levels, range)
-
-
-    def _decr_indent_level_from_app(self, levels, range):
-
-        """Decrease the indentation of a region of code by a certain number
-        of levels.
-
-        Does it to external editor without resynchronizing cache.
-        
-        **INPUTS**
-        
-        *STR* levels=1 -- Number of levels to unindent
-
-        *(INT, INT)* range=None -- Start and end position of code to be indent.
-        If *None*, use current selection
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        debug.virtual('SourceBuffCached._decr_indent_level_from_app')
-
-    def delete(self, range = None):
-        """Delete text in a source buffer range.
-
-        Does it to external editor, then resynchronizes cache.
-
-	**INPUTS**
-
-	*(INT, INT)* range -- code range to be deleted.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        self._delete_from_app(range)
-        self.synchronize_with_app()
-        
-
-
-    def _delete_from_app(self, range):
-        """Delete text in a source buffer range.
-
-        Does it to external editor without resynchronizing cache.
-
-	**INPUTS**
-
-	*(INT, INT)* range -- code range to be deleted.  If None,
-	defaults to the current selection.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-        debug.virtual('SourceBuffCached._delete_from_app')
-
-    def goto(self, pos):
-
-        """Moves the cursor to position *INT pos* of source buffer
-	(and make selection empty)
-        """
-        
-        debug.virtual('SourceBuff.goto')
-
-    def goto(self, pos):
-
-        """Moves the cursor to position *INT pos* of source buffer
-	(and make selection empty)
-
-        Does that to the external editor, then resynchronizes cache.
-        """
-        
-        self._goto_on_app(pos)
-        self.synchronize_with_app()
-
-    def _goto_on_app(self, pos):
-
-        """Moves the cursor to position *INT pos* of source buffer
-	(and make selection empty)
-
-        Does that to the external editor without resynchronizing cache.
-        """
-        
-        debug.virtual('SourceBuffCached.goto_on_app')
 
     def newline_conventions(self):
         
@@ -650,7 +341,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         return self.cache['pref_newline_convention']
 
-    def pref_newline_convention(self):
+    def _pref_newline_convention_from_app(self):
         
         """Returns the form of newline that the editor prefers for
         this buffer (read directly from editor).
@@ -666,3 +357,105 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         """
         
         debug.virtual('SourceBuffCached._pref_newline_convention_from_app')
+
+
+    #
+    # Callback methods. These are invoked by the external editor to notify
+    # VoiceCode that certain events have taken place in the editor.
+    #
+    def delete_cbk(self, range):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a deletion event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end pos of range to be deleted
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if range == None:
+            range = self.get_selection()
+        old_text = self.cache['get_text']
+        self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]+1:]
+
+    def insert_cbk(self, range, text):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a deletion event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end position of text to be
+        replaced by the insertion.
+
+        STR *text* -- Text to be inserted
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        print '-- SourceBuffCached.insert_cbk: range=%s' % range
+
+        if range == None:
+            range = self.get_selection()        
+        old_text = self.cache['get_text']
+        self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]+1:]
+        
+
+    def set_selection_cbk(self, range, cursor_at=1):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a set selection event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        (INT, INT) *range* -- Start and end position of selected text
+
+
+        INT *cursor_at* -- indicates whether cursor was left at the
+        beginning or end of *range*
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        print '-- SourceBuffCached.set_selection_cbk: called, range=%s, cursor_at=%s' % (repr(range), cursor_at)
+        self.cache['get_selection'] = range
+        if cursor_at > 0:
+            self.cache['cur_pos'] = range[1]
+        else:
+            self.cache['cur_pos'] = range[0]
+
+    def goto_cbk(self, pos):
+        
+        """External editor invokes that callback to notify VoiceCode
+        of a cursor movement event.
+
+        NOTE: This method should NOT update the V-E map, because that is
+        already taken care of outside of the method.
+        
+        **INPUTS**
+        
+        INT *pos* -- Position the cursor was moved to.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        print '-- SourceBuffCached.goto_cbk: called,pos=%s' % pos
+        self.cache['cur_pos'] = pos
+

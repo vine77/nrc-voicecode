@@ -21,7 +21,7 @@
 
 """Classes for communicating with an external editor through a messaging protocol"""
 
-import re, types
+import re, sys, types
 import Object
 
 class Messenger(Object.Object):
@@ -120,7 +120,7 @@ class Messenger(Object.Object):
             args = ''
         else:
             args = ', %s' % repr(received[1])
-        sys.stderr.write("ERROR: Wrong message.\n\n   Received: '%s'%s\n\nExpected one of: '%s'") % (received[0], args, repr(expected))
+        sys.stderr.write("ERROR: Wrong message.\n\n   Received: '%s'%s\n\nExpected one of: %s\n\n" % (received[0], args, repr(expected)))
 
 
     def send_mess(self, mess_name, mess_argvals={}):
@@ -135,17 +135,14 @@ class Messenger(Object.Object):
         values for the message to be sent to the editor.
                 
         **OUTPUTS**
-        
+
         *none* response -- 
         """
 
-#        print '-- send_mess: mess_name=\'%s\', mess_argvals=%s' % (mess_name, repr(mess_argvals))
+        print '-- send_mess: mess_name=\'%s\', mess_argvals=%s' % (mess_name, repr(mess_argvals))
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
-#        print '-- send_mess: unpkd_mess=\'%s\'' % unpkd_mess
         pkd_mess = self.packager.pack_mess(unpkd_mess)
-#        print '-- send_mess: pkd_mess=\'%s\'' % pkd_mess        
         self.packager.send_packed_mess(pkd_mess, self.transporter)
-
 
 
     def get_mess(self, expect=None):
@@ -163,15 +160,12 @@ class Messenger(Object.Object):
          from external editor in *(mess_name, {arg:val})* format."""
 
 
-#        print '-- get_mess: started'
         pkd_mess = self.packager.get_packed_mess(self.transporter)
-#        print '-- get_mess: pkd_mess=\'%s\'' % pkd_mess                
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
-#        print '-- get_mess: unpkd_mess=\'%s\'' % unpkd_mess        
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-#        print '-- get_mess: received \'%s\', %s' % (name_argvals_mess[0], repr(name_argvals_mess[1]))
+        print '-- get_mess: received \'%s\', %s\n' % (name_argvals_mess[0], repr(name_argvals_mess[1]))
 
-        if not (name_argvals_mess[0] in expect):
+        if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
 
         return name_argvals_mess
@@ -302,9 +296,16 @@ class MessPackager_FixedLenSeq(MessPackager):
     
     def __init__(self, chunk_len=1024, **args_super):
         self.deep_construct(MessPackager_FixedLenSeq, 
-                            {'chunk_len': chunk_len}, 
+                            {'chunk_len': chunk_len,
+                             'large_white_space': None}, 
                             args_super, 
                             {})
+        #
+        # Create a large white space used for space padding
+        #
+        self.large_white_space = ''
+        for ii in range(self.chunk_len):
+            self.large_white_space = self.large_white_space + ' '
 
 
 
@@ -343,6 +344,8 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         .. [MessTransporter] file:///./messaging.MessTransporter.html"""
 
+#        print '-- get_packed_mess: started'
+
         #
         # Read the fixed length messages until we get one that starts with 1
         #
@@ -352,7 +355,9 @@ class MessPackager_FixedLenSeq(MessPackager):
             a_chunk = transporter.receive_string(self.chunk_len)
             pkd_message = pkd_message + a_chunk
             last_chunk = a_chunk[0]
-            
+
+#        print '-- get_packed_mess: done'
+        
         return pkd_message
 
 
@@ -370,9 +375,12 @@ class MessPackager_FixedLenSeq(MessPackager):
         *STR packed_mess* -- The packed message
         """
 
+#        print '-- pack_mess: started'
+#        print '-- pack_mess: mess=\'%s\''
         packed_mess = ''
         while not mess == '':
-
+#            print '-- pack_mess: start loop body'
+            
             #
             # Make sure you leave room for the single character prefix
             #
@@ -383,9 +391,13 @@ class MessPackager_FixedLenSeq(MessPackager):
             # right
             #
             num_padding = (self.chunk_len - 1) - len(mess)
-            for ii in range(num_padding):
-                a_chunk = a_chunk + ' '
+            a_chunk = a_chunk + self.large_white_space[:num_padding]
+            
+#            for ii in range(num_padding):
+#                a_chunk = a_chunk + ' '
 
+#            print '-- pack_mess: finished padding'
+            
             #
             # Is this last chunk in the message?
             # 
@@ -395,6 +407,9 @@ class MessPackager_FixedLenSeq(MessPackager):
             
             packed_mess = packed_mess + a_chunk
 
+#            print '-- pack_mess: end of loop body'
+
+#        print '-- pack_mess: done'
         return packed_mess
             
 
@@ -412,6 +427,7 @@ class MessPackager_FixedLenSeq(MessPackager):
         *STR unpacked_mess* -- The message unpacked to a raw string.
         """
 
+#        print '-- unpack_mess: started'
 #        print '-- unpack_mess: invoked with \'%s\'' % mess
         unpacked_mess = ''
         while mess != '':
@@ -419,6 +435,8 @@ class MessPackager_FixedLenSeq(MessPackager):
 #            print '-- unpack_mess: a_chunk=\'%s\'' % a_chunk
             unpacked_mess = unpacked_mess + a_chunk[1:]
             mess = mess[self.chunk_len:]
+
+#        print '-- MessPackager_FixedLenSeq.unpack_mess: done'            
         return unpacked_mess
 
 
@@ -599,9 +617,11 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
+#        print '-- encode: started'
         stringified = self.encode_data_item(mess_argvals)
         str_mess = '%s %s' % (mess_name, stringified)
-
+#        print '-- encode: done'
+        
         return str_mess
 
 
@@ -625,23 +645,24 @@ class MessEncoder_LenPrefArgs(Object.Object):
         .. [MessEncoder] file:///./messaging.MessEncoder.html
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-        print '-- encode_data_item: item=\'%s\'' % repr(item)
+#        print '-- encode_data_item: item=\'%s\'' % repr(item)
 
         #
-        # Convert numbers to strings
+        # Convert numbers and 'None' to strings
         #
         if (isinstance(item, types.IntType) or
             isinstance(item, types.LongType) or
-            isinstance(item, types.FloatType)):
+            isinstance(item, types.FloatType) or
+            item == None):
             item = repr(item)
-            print '-- encode_data_item: item=\'%s\' converted to string from a number type' % repr(item)
+#            print '-- encode_data_item: item=\'%s\' converted to string from a number type' % repr(item)
         
 
         if isinstance(item, types.StringType):
             #
             # Data item is just a string
             #
-            print '-- encode_data_item: item=\'%s\' is a string' % repr(item)
+#            print '-- encode_data_item: item=\'%s\' is a string' % repr(item)
             delims = ('<', '>')
             str_item = item
         elif isinstance(item, types.ListType) or isinstance(item, types.TupleType):
@@ -674,7 +695,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         str_item = "%s%s%s%s" % (len(str_item), delims[0], str_item, delims[1])
 
-        print '-- encode_data_item: string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item)
+#        print '-- encode_data_item: string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item)
 
         return str_item
                 
@@ -700,6 +721,8 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
+#        print '-- decode: started'
+
         #
         # Parse the name and description of the message
         #
@@ -710,13 +733,18 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Decode the message's description
         #
+#        print '-- decode: decoding the value'
 #        try:
         (rest, argvals) = self.decode_data_item(descr)
         if not re.match('^\s*$', rest):
             self.malformed_message(mess, 'd')
 #        except Exception, err:
 #            self.malformed_message(mess, 'd')
-            
+
+#        print '-- decode: done decoding the value'
+
+#        print '-- decode: ended'
+        
         return (mess_name, argvals)
 
 
@@ -745,7 +773,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Get type and length of the data item
         #
-        print '-- decode_data_item: str_item=\'%s\'' % str_item
+#        print '-- decode_data_item: str_item=\'%s\'' % str_item
         a_match = re.match('\s*(\d+)\s*([<\\[{])', str_item)
         length = int(a_match.group(1))
         delim_open = a_match.group(2)
@@ -757,7 +785,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         descr = str_item[:length]
         str_item = str_item[length:]
 
-        print '-- decode_data_item: descr=\'%s\'' % descr
+#        print '-- decode_data_item: descr=\'%s\'' % descr
         
         #
         # Decode appropriate data type, depending on delimiter
@@ -775,7 +803,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Read past the closing delimiter
         #
-        print '-- decode_data_item: looking for closing delimiter in \'%s\'' % str_item
+#        print '-- decode_data_item: looking for closing delimiter in \'%s\'' % str_item
         a_match = re.match('\s*%s\s*' % delim_close, str_item)
         str_item = str_item[a_match.end():]
         
@@ -857,7 +885,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         # Parse description until it's all blanks
         #
         while not re.match('^\s*$', descr):
-            print '-- decode_dict_descr: descr=\'%s\'' % descr
+#            print '-- decode_dict_descr: descr=\'%s\'' % descr
 
             #
             # Parse the key and value
@@ -988,7 +1016,7 @@ class MessTransporter_Socket(MessTransporter):
         
         *none* -- 
         """
-
+#        print '-- send_string: sending started'
 #        print '-- send_string: sending \'%s\''% a_string
         mess_len = len(a_string)
         totalsent = 0
@@ -1041,3 +1069,59 @@ class MessTransporter_Socket(MessTransporter):
         """
         
         self.sock.close()
+
+
+###############################################################################
+# Functions for converting message arguments to certain data types
+###############################################################################
+
+def messarg2int(messarg):
+    """Converts a message argument to an int.
+    
+    If the message argument is the string *'None'*, convert it to
+    the *None* object.
+    
+    **INPUTS**
+    
+    STR *messarg* -- The message argument to be converted.
+    
+    
+    **OUTPUTS**
+    
+    INT | None *as_int* -- The message argument converted to int.
+    """
+                 
+    if messarg == 'None':
+        as_int = None
+    else:
+        as_int = int(messarg)
+        return as_int
+
+
+
+def messarg2intlist(messarg):
+    """Converts a message argument to a list of integers.
+
+    If the message argument is the string *'None'*, convert it to
+    the *None* object.
+        
+    **INPUTS**
+        
+    'None' | [STR] *messarg* -- The message argument to be converted.
+        
+
+    **OUTPUTS**
+        
+    None | [INT] *as_intlist* -- The message argument converted a list of ints.
+    """
+        
+    if messarg == 'None':
+        intlist = None
+    else:
+        intlist = []
+        for ii in range(len(messarg)):
+            intlist.append(messarg2int(messarg[ii]))
+            
+    return intlist
+
+        

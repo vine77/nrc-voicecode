@@ -57,13 +57,39 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     buffer_methods.append('print_buff')
     
     def __init__(self, editor, **attrs):
-        self.deep_construct(AppStateWaxEdit, {'the_editor': editor, 
-	    'only_buffer': None, 'only_buffer_name' : "",
-            'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)}, attrs)
+        self.deep_construct(AppStateWaxEdit,
+                            {'the_editor': editor, 
+                             'only_buffer': None, 'only_buffer_name' : "",
+                             'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
+                            attrs,
+                            )
         self.only_buffer =  SourceBuffTB(app = self, fname="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
+
+
+    def new_compatible_sb(self, fname):
+        """Creates a new instance of [SourceBuff].
+
+        Note: The class used to instantiate the [SourceBuff] needs to
+        be compatible with the class of *self*. With a few exceptions
+        (if any), each subclass of *AppState* will have to redefine
+        *new_compatible_sb* in order to generate a [SourceBuff] of the
+        appropriate class.
+        
+        **INPUTS**
+                
+        STR *fname* -- Name of the source buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        return SourceBuffTB.SourceBuffTB(app=self, fname=fname)
+
 
     def stop_responding(self):
         

@@ -50,11 +50,3 @@ class SourceBuffNonCached(SourceBuff.SourceBuff):
                             {}, 
                             args_super, 
                             {})
-
-    def apply_this_update(self, an_update):
-        
-        """Because we always read the state directly from the editor,
-        we don't need to do anything with the updates.        
-        """
-        
-        pass

@@ -159,14 +159,15 @@ def init_simulator(symdict_pickle_fname=None,
     sim_commands.command_space['testdata'] = \
         os.path.join(home, 'Data', 'TestData')
 
-def init_simulator_regression(symdict_pickle_fname=None):
+def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None):
     
     """Initialises the simulator using a global exclusive grammar so that
     the user can continue to work in other applications using the keyboard
     while the regression test is running"""
     
     init_simulator(symdict_pickle_fname=symdict_pickle_fname, window=0,
-                   exclusive=1, allResults=0)                   
+                   exclusive=1, allResults=0,
+                   disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)                   
     
 
 def execute_command(cmd):
