@@ -258,6 +258,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (cl-puthash "py" "python" vcode-language-name-map)
 (cl-puthash "c" "C" vcode-language-name-map)
 (cl-puthash "h" "C" vcode-language-name-map)
+(cl-puthash "cpp" "C" vcode-language-name-map)
 (cl-puthash "java" "java" vcode-language-name-map)
 (cl-puthash "pl" "perl" vcode-language-name-map)
 
@@ -265,14 +266,16 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-;(cl-puthash  "vcode-merge-or-prepend-change" 1 vcode-traces-on)
+(cl-puthash  "vcode-merge-or-prepend-change" 1 vcode-traces-on)
 
 ;(cl-puthash  "vcode-generate-raw-change-description" 1 vcode-traces-on)
 ;(cl-puthash  "vr-deprecated-output-filter" 1 vcode-traces-on)
+;(cl-puthash  "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash  "vr-deprecated-serialize-message" 1 vcode-traces-on)
 ;(cl-puthash  "vr-deprecated-send-reply" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-cmd-change-buff" 1 vcode-traces-on)
-		
+;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
+;(cl-puthash  "vcode-execute-command-string" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
@@ -3690,6 +3693,8 @@ change reports it sends to VCode.
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
 
+	(vcode-trace "vcode-cmd-insert-indent" "code before=%S"
+		     code-bef)
         ;;;
         ;;; We wrap this in an exception catching block in case we try
         ;;; to dictate text in a read-only buffer like "*Completions*"
