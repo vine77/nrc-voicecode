@@ -2623,13 +2623,13 @@ change reports it sends to VCode.
 	(vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
 	(set-mark nil)
 
-;;;
-;;; 'vcode-execute-command-string is still experimental
-;;;
-;	  (insert text)
-	  (vcode-execute-command-string text)
+        ;;;
+	;;; We don't use 'vcode-execute-command-string because set_text message
+        ;;; is used to restore a buffer to a previous state (which is
+        ;;; assumed to have already been indented properly)
+	(insert text)
 
-	  (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
+	(vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
 
  	(vr-send-queued-changes)
     )
