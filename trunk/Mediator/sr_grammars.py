@@ -25,14 +25,17 @@
 from Object import Object, OwnerObject
 import debug
 import re
+import string
 import actions_gen
 
 import CmdInterp, AppState
 
-class WinGram(Object):
+class WinGram(OwnerObject):
     """abstract base class for window-specific grammar interfaces
 
     **INSTANCE ATTRIBUTES**
+
+    *WinGramMgr* manager -- the grammar manager which owns this grammar
 
     *BOOL* active -- is grammar active?
 
@@ -47,10 +50,11 @@ class WinGram(Object):
 
     *none*
     """
-    def __init__(self, window = None, exclusive = 0, **attrs):
+    def __init__(self, manager, window = None, exclusive = 0, **attrs):
         self.deep_construct(WinGram,
-            {'window' : window, 'exclusive' : exclusive, 
+            {'manager': manager, 'window' : window, 'exclusive' : exclusive, 
             'active' : 0}, attrs)
+        self.name_parent('manager')
 
     def activate(self):
         """activates the grammar for recognition
@@ -133,12 +137,58 @@ class WinGram(Object):
         """
         return self.window == None
 
-class DictWinGram(WinGram, OwnerObject):
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', or 'correction')
+        """
+        debug.virtual('WinGram.gram_type')
+        
+    def results_callback(self, words):
+        """informs the GramMgr of the results of recognition
+        
+        Note: the sole purpose of this method is to provide feedback 
+        to the user.  Any interpretation of the results and any action
+        taken based on that interpretation must be handled separately.
+        
+        **INPUTS**
+
+        *[(STR, STR)]* words* -- list of spoken, written forms 
+        representing the recognition results
+
+        **OUTPUTS**
+
+        *none*
+        """
+        s = self.format_utterance_message(words)
+        if self.manager:
+            self.manager.user_message(s)
+
+    def format_utterance_message(self, words):
+        """formats the recognition results into a user message
+        
+        **INPUTS**
+
+        *[(STR, STR)]* words* -- list of spoken, written forms 
+        representing the recognition results
+
+        **OUTPUTS**
+
+        *STR* -- the message
+        """
+        s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
+        return s
+
+class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces
 
     **INSTANCE ATTRIBUTES**
-
-    *WinGramMgr* manager -- the grammar manager which owns this grammar
 
     *AppState* app -- application which is the target of the grammar
 
@@ -150,11 +200,23 @@ class DictWinGram(WinGram, OwnerObject):
 
     *none*
     """
-    def __init__(self, manager, app, buff_name = None, **attrs):
+    def __init__(self, app, buff_name = None, **attrs):
         self.deep_construct(DictWinGram,
-            {'manager': manager, 'app': app,'buff_name': buff_name}, attrs)
-        self.name_parent('manager')
+            {'app': app,'buff_name': buff_name}, attrs)
 
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', or 'correction')
+        """
+        return 'dictation'
+        
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
 
@@ -211,6 +273,7 @@ class DictWinGram(WinGram, OwnerObject):
 
         *none*
         """
+        self.results_callback(results.words())
         self.manager.interpret_dictation(results, \
             initial_buffer = self.buff_name)
 # old implementation - now taken care of by the ResMgr
@@ -257,15 +320,23 @@ class SelectWinGram(WinGram):
             'select_words' : select_words, 'through_word' : through_word}, 
             attrs)
 
-    def cleanup(self):
-        """SelectWinGram has a reference to an AppState instance, but no
-        circular references, so strictly speaking it is only necessary
-        for the grammar manager to delete its reference to the grammar.
-        However, a dummy cleanup method allows us to avoid the need for
-        a custom cleanup method for GramMgr.
-        """
+    def remove_other_references(self):
 # not necessary, but can't hurt
         self.app = None
+
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', or 'correction')
+        """
+        return 'selection'
+        
 
     def _set_visible(self, visible):
         """internal call to set the currently visible range.
@@ -415,13 +486,11 @@ class SelectWinGram(WinGram):
             buff_name = self.buff_name)
 
 
-class BasicCorrectionWinGram(WinGram, OwnerObject):
+class BasicCorrectionWinGram(WinGram):
     """abstract base class for window-specific grammar for basic
     correction (Scratch That/n, Correct That, Correct Recent)
 
     **INSTANCE ATTRIBUTES**
-
-    *WinGramMgr* manager -- the grammar manager which owns this grammar
 
     *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
     That" and "Scratch n"
@@ -435,7 +504,7 @@ class BasicCorrectionWinGram(WinGram, OwnerObject):
 
     *none*
     """
-    def __init__(self, manager, scratch_words = None, correct_words = None,
+    def __init__(self, scratch_words = None, correct_words = None,
         recent_words = None, **attrs):
         """
         **INPUTS**
@@ -443,7 +512,7 @@ class BasicCorrectionWinGram(WinGram, OwnerObject):
         *WinGramMgr* manager -- the grammar manager which owns this grammar
 
         *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
-        That" and "Scratch n", or None for the default of 'Scratch'
+        That" and "Scratch Last n", or None for the default of 'Scratch'
 
         *[STR]* correct_words -- list of synonyms for Correct in "Correct
         That" and "Correct Recent"  or None for the default of 'Correct'
@@ -452,8 +521,7 @@ class BasicCorrectionWinGram(WinGram, OwnerObject):
         Recent in "Correct Recent" or None for the dfault of 'Recent
         """
         self.deep_construct(BasicCorrectionWinGram,
-            {'manager': manager, 
-             'scratch_words': scratch_words,
+            {'scratch_words': scratch_words,
              'correct_words': correct_words,
              'recent_words': recent_words
             }, attrs)
@@ -463,8 +531,20 @@ class BasicCorrectionWinGram(WinGram, OwnerObject):
             self.correct_words = ['Correct']
         if recent_words is None:
             self.recent_words = ['Recent']
-        self.name_parent('manager')
 
+    def gram_type(self):
+        """returns a subclass-dependent string describing the type of grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- type of grammar ('dictation', 'selection', or 'correction')
+        """
+        return 'correction'
+        
     def scratch_recent(self, n = 1):
         """method which subclass must call when the grammar 
         recognizes Scratch That/Scratch n, to undo the effect of the 
@@ -609,11 +689,14 @@ class WinGramFactory(Object):
         """
         debug.virtual('WinGramFactory.make_dictation')
     
-    def make_selection(self, app, window = None, buff_name = None,
+    def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):
         """create a new selection grammar
 
         **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the new
+        grammar
 
         *AppState* app -- application corresponding to the selection
         grammar, which is queried with buff_name for the currently
@@ -1056,11 +1139,14 @@ class WinGramFactoryDummy(Object):
             buff_name = buff_name, window = window, exclusive =
             exclusive)
     
-    def make_selection(self, app, window = None, buff_name = None,
+    def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):
         """create a new selection grammar
 
         **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the new
+        grammar
 
         *AppState* app -- application corresponding to the selection
         grammar, which is queried with buff_name for the currently
@@ -1077,7 +1163,8 @@ class WinGramFactoryDummy(Object):
 
         *SelectWinGram* -- new selection grammar
         """
-        return SelectWinGramDummy(app = app, buff_name = buff_name, 
+        return SelectWinGramDummy(manager = manager, app = app, 
+            buff_name = buff_name, 
             window = window, exclusive = exclusive)
 
     def make_correction(self, manager, window = None, exclusive = 0):
@@ -1096,7 +1183,7 @@ class WinGramFactoryDummy(Object):
 
         *BasicCorrectionWinGram* -- new basic correction grammar
         """
-        return BasicCorrectionWinGramDummy(window = window, 
+        return BasicCorrectionWinGramDummy(manager = manager, window = window, 
             exclusive = exclusive)
     
     
@@ -1296,15 +1383,14 @@ class SimpleSelection(WinGram):
         through_word = 'through', get_visible_cbk = None,
         get_selection_cbk = None, select_cbk = None, **attrs):
         self.deep_construct(SimpleSelection,
-            {
-            'select_words' : select_words, 'through_word' : through_word,
+            {'select_words' : select_words, 'through_word' : through_word,
             'get_visible_cbk': get_visible_cbk,
             'get_selection_cbk': get_selection_cbk,
             'select_cbk': select_cbk,
             'visible': None,
             'selection': None,
             'window': None}, 
-            attrs)
+            attrs, enforce_value = {'manager': None})
 
     def cleanup(self):
         """clean up the grammar and any circular references

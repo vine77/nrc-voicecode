@@ -474,7 +474,8 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
             'confirm_buffer_exists', 'list_open_buffers', 
             'set_selection', 'get_text', 'make_position_visible', 'len', 
             'set_text',
-            'insert', 'delete', 'goto', 'active_buffer_name', 
+            'insert', 'delete', 'backspace',
+            'goto', 'active_buffer_name', 
             'file_name',
             'indent', 'insert_indent', 
             'incr_indent_level',
@@ -1077,6 +1078,20 @@ class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
         buff_name = arguments['buff_name']
         value = self.editor.file_name(buff_name = buff_name)
         self.send_response('file_name_resp', value)
+
+    def cmd_backspace(self, arguments):
+        buff_name = arguments['buff_name']
+        n_times = messaging.messarg2int(arguments['n_times'])
+        self.awaiting_response = []
+        b_name = buff_name
+        if b_name == None:
+            b_name = self.editor.curr_buffer()
+        self.editor.backspace(n_times, buff_name = buff_name)
+        self.editor.print_buff_if_necessary(buff_name = buff_name)
+        updates = self.awaiting_response
+        self.awaiting_response = None
+        updates = updates + self.pos_selection_update(b_name)
+        self.send_updates_response('backspace_resp', updates)
 
     def cmd_delete(self, arguments):
         buff_name = arguments['buff_name']

@@ -23,11 +23,13 @@
 import re, string, sys
 
 from Object import Object
+import SourceBuff
 import debug, find_difference, sb_services, SourceBuffNonCached, util
 from debug import trace
 
 
-class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
+class SourceBuffEdSim(SourceBuff.BackspaceMixIn, 
+    SourceBuffNonCached.SourceBuffNonCached):
     """concrete class representing a disconnected source buffer for the
     editor simulator EdSim.
 

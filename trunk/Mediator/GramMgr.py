@@ -75,6 +75,22 @@ class GramMgr(OwnerObject):
         """
         return self.instance_name
 
+    def user_message(self, message):
+        """sends a user message up the chain to the NewMediatorObject to
+        be displayed
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.recog_mgr:
+            self.recog_mgr.user_message(message, 
+                instance = self.name())
+
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the application
 	has renamed a buffer
@@ -144,7 +160,7 @@ class GramMgr(OwnerObject):
         *INT* -- number of utterances successfully undone
         """
         name = self.name()
-        debug.trace('WinGramMgr.scratch_recent', 
+        debug.trace('GramMgr.scratch_recent', 
             'instance name = %s' % name)
         return self.recog_mgr.scratch_recent(name, n)
 
@@ -705,8 +721,8 @@ class WinGramMgr(GramMgrDictContext):
                 a_window = None
             debug.trace('WinGramMgr.new_window', 
                 'window, a_window: %s, %s' % (str(window), str(a_window)))
-            self.sel_grammars[window] = self.factory.make_selection(self.app,
-                a_window, exclusive = self.exclusive)
+            self.sel_grammars[window] = self.factory.make_selection(self, 
+                self.app, a_window, exclusive = self.exclusive)
         if self.correction and not self.correction_grammars.has_key(window):
             a_window = window
             if self.global_grammars:

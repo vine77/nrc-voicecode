@@ -227,6 +227,8 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     def gotResultsObject(self,recogType,resObj):
         debug.trace('SelectWinGramNL.gotResultsObject', '** invoked, resObj=%s' % repr(resObj))
         if recogType == 'self':
+            utterance = sr_interface.SpokenUtteranceNL(resObj)
+            self.results_callback(utterance.words())
             debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self')        
             # If there are multiple matches in the text we need to scan through
             # the list of choices to find every entry which has the highest.
@@ -374,7 +376,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         scratch = compose_alternatives(self.scratch_words)
         rules = []
         rules.append("<scratch_that> exported = %s That;" % scratch)
-        rules.append("<scratch_n> exported = %s {count};" % scratch)
+        rules.append("<scratch_n> exported = %s Last {count};" % scratch)
         self.lists['count'] = ['1', '2', '3', '4', '5']
         return rules
 
@@ -495,6 +497,11 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
             'heard correct recent')
         self.on_correct_recent()
+
+    def gotResultsObject(self, recog_type, results):
+        if recog_type == 'self':
+            utterance = sr_interface.SpokenUtteranceNL(results)
+            self.results_callback(utterance.words())
     
 class WinGramFactoryNL(WinGramFactory):
     """natlink implementation of factory which returns 
@@ -551,11 +558,14 @@ class WinGramFactoryNL(WinGramFactory):
             buff_name = buff_name, window = window, exclusive = exclusive,
             wave_playback = self.wave_playback) 
     
-    def make_selection(self, app, window = None, buff_name = None,
+    def make_selection(self, manager, app, window = None, buff_name = None,
         exclusive = 0):
         """create a new selection grammar
 
         **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
 
         *AppState* app -- application corresponding to the selection
         grammar, which is queried with buff_name for the currently
@@ -575,7 +585,8 @@ class WinGramFactoryNL(WinGramFactory):
 
         *SelectWinGram* -- new selection grammar
         """
-        return SelectWinGramNL(app = app, buff_name = buff_name, select_words =
+        return SelectWinGramNL(manager = manager, app = app, 
+            buff_name = buff_name, select_words =
             self.select_words, through_word = self.through_word, 
             window = window, exclusive = exclusive) 
     

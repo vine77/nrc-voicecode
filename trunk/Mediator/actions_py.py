@@ -89,6 +89,10 @@ py_method_declaration = \
     ActionInsert(code_bef='def ', code_after='(self):\n\t',
                  docstring="""Types template code for a method""")
 
+py_function_declaration = \
+    ActionInsert(code_bef='def ', code_after='():\n\t',
+                 docstring="""Types template code for a function""")
+
 class ActionPyAddArgument(Action):
     """Positions the cursor to add arguments to a Python function call or
     definition"""

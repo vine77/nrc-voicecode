@@ -29,15 +29,18 @@ from AppState import AppState
 from cont_gen import ContC, ContPy
 from CSCmd import CSCmd
 from EdSim import EdSim
-from Object import Object
+from Object import Object, OwnerObject
 import EdSim, SymDict
 import sr_interface
 
 
-class CmdInterp(Object):
+class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
     
     **INSTANCE ATTRIBUTES**
+
+    *NewMediatorObject mediator* -- reference to the parent mediator
+    which owns this CmdInterp instance
 
     *{STR: [[* (Context] *, FCT)]} cmd_index={}* -- index of CSCs. Key
      is the spoken form of the command, value is a list of contextual
@@ -64,7 +67,8 @@ class CmdInterp(Object):
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
     def __init__(self, symdict_pickle_file=None,
-                 disable_dlg_select_symbol_matches = None, **attrs):
+                 disable_dlg_select_symbol_matches = None, mediator =
+                 None, **attrs):
         
         """
 	**INPUTS**
@@ -75,6 +79,9 @@ class CmdInterp(Object):
 
 	*BOOL disable_dlg_select_symbol_matches = None* -- If true, then
 	do not prompt the user for confirmation of new symbols.
+
+        *NewMediatorObject mediator* -- reference to the parent mediator
+        which owns this CmdInterp instance
 	"""
 
         #
@@ -86,13 +93,47 @@ class CmdInterp(Object):
         # But these can
         #
         self.deep_construct(CmdInterp,
-                            {'cmd_index': {}, 
+                            {'mediator': mediator,
+                             'cmd_index': {}, 
                              'known_symbols':
                              SymDict.SymDict(pickle_fname = symdict_pickle_file), 
                              'language_specific_aliases': {},
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches},
                             attrs)
+        self.name_parent('mediator')
 
+    def set_mediator(self, mediator):
+        """sets the parent mediator which owns this CmdInterp instance
+
+        **INPUTS**
+
+        *NewMediatorObject mediator* -- reference to the parent mediator
+        which owns this CmdInterp instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.mediator = mediator
+
+    def user_message(self, message, instance = None):
+        """sends a user message up the chain to the NewMediatorObject to
+        be displayed
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        *STR instance_name* -- the editor from which the message
+        originated, or None if it is not associated with a specific
+        editor.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.mediator:
+            self.mediator.user_message(message, instance = instance)
 
     def spoken_form_regexp(self, spoken_form):
         """Returns a regexp that matches a spoken form of a command.

@@ -859,6 +859,15 @@ class SourceBuff(OwnerObject):
         
     def backspace(self, n_times):
         """Delete a number of spaces before the cursor.
+
+        If possible, the editor should simulate backspace keys, so as to
+        ensure that the effect of this command is identical to manual
+        backspacing.
+
+        However, if this is not possible, it can simulate backspacing as
+        closely as possible, or use BackspaceMixIn to do server-side
+        backspacing, or perform the equivalent algorithm on the client
+        side.
         
         **INPUTS**
         
@@ -868,18 +877,7 @@ class SourceBuff(OwnerObject):
         
         *none*
         """
-        
-        #
-        # Note: this uses the DEL key which is what Emacs uses for Backspace
-        #       Eventually, we will have to use DEL or BS depending on the 
-        #       Editor. This should be an attribute of SourceBuff
-        #
-        #       -- AlainDesilets
-        #
-        bs_string = ""
-        for ii in range(n_times):
-           bs_string = "%s%s" % (bs_string, chr(127))
-        self.insert(bs_string)
+        debug.virtual('SourceBuff.backspace')
         
     def goto(self, pos):
 
@@ -1632,3 +1630,32 @@ class SourceBuff(OwnerObject):
         self.insert(value, (start,end))
 
 
+class BackspaceMixIn(Object):
+    """implements the backspace method by deletion.
+
+    To use, derive a new class from this class and SourceBuff (or an
+    existing subclass of SourceBuff).  Make sure that this class appears
+    before SourceBuff (or its subclass) in the list of parent classes. 
+    """
+    def __init__(self, **args):
+        self.deep_construct(BackspaceMixIn, {}, args)
+
+    def backspace(self, n_times):
+        """Delete a number of spaces before the cursor.
+        
+        **INPUTS**
+        
+        INT *n_times* -- number of characters to delete.
+        
+        **OUTPUTS**
+        
+        *none*
+        """
+        start, end = self.get_selection()
+        if start == end:  # selection is empty
+            start = start - n_times
+        else:
+            start = start - (n_times - 1)
+        start = max(0, start)
+        self.delete(range = (start, end))
+        

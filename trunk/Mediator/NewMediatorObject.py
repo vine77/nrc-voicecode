@@ -20,6 +20,7 @@
 ##############################################################################
 
 import sys
+import string
 import debug
 #import traceback
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
@@ -150,6 +151,9 @@ class NewMediatorObject(Object.OwnerObject):
     *BOOL test_next* -- flag to indicate that the mediator should run
     regression tests using the next editor to connect
 
+    *BOOL testing* -- flag indicating that the mediator is currently
+    running regression tests.
+
     *STR config_file* -- file which was used to configure the mediator.
     This file will also be the default to use if reconfigure is called
     (usually only by init_simulator_regression during regression tests)
@@ -256,6 +260,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'symbol_match_dlg': symbol_match_dlg,
                              'exclusive': exclusive,
                              'test_next': 0,
+                             'testing': 0, 
                              'config_file': None
                             },
                             attrs,
@@ -263,11 +268,15 @@ class NewMediatorObject(Object.OwnerObject):
         self.add_owned('server')
         self.add_owned('editors')
         self.add_owned('the_console')
+        self.add_owned('interp')
         if self.the_console:
             self.the_console.set_mediator(self)
         if self.interp == None:
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
                 symbol_match_dlg = symbol_match_dlg)
+        else:
+            self.interp.set_mediator(self)
+
         if self.editors == None:
             self.new_app_mgr()
         if server:
@@ -327,7 +336,8 @@ class NewMediatorObject(Object.OwnerObject):
             self.interp.cleanup()
         self.interp = \
             CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
-                disable_dlg_select_symbol_matches = not symbol_match_dlg)
+                disable_dlg_select_symbol_matches = not symbol_match_dlg, 
+                mediator = self)
 
     def console(self):
         """returns a reference to the MediatorConsole which provides the
@@ -697,11 +707,13 @@ class NewMediatorObject(Object.OwnerObject):
 
 #        self.cleanup()
                 
-    def delete_editor_cbk(self, instance_name, unexpected = 0):
+    def delete_editor_cbk(self, app_name, instance_name, unexpected = 0):
         """callback from the application manager indicating that
         an editor closed or disconnected from the mediator
 
         **INPUTS**
+
+        *STR app_name* -- name of the editor 
 
         *STR instance_name* -- name of the application instance
 
@@ -725,6 +737,11 @@ class NewMediatorObject(Object.OwnerObject):
         except KeyError:
             pass
         else: 
+            s = '%s instance %s disconnected' % (app_name, instance_name)
+            if unexpected:
+                s = s + ' unexpectedly'
+# don't use instance argument because instance we've disconnected
+            self.user_message(s)
             self.server.delete_instance_cbk(instance_name, 
                 unexpected = unexpected)
 
@@ -789,7 +806,9 @@ class NewMediatorObject(Object.OwnerObject):
         self.test_space['temp_factory'] = \
              regression.TempConfigNewMediatorFactory(symbol_match_dlg = \
              self.symbol_match_dlg_regression)
+        self.testing = 1
         auto_test.run(self.test_args)
+        self.testing = 0
         app.mediator_closing()
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg)
         self.editors.delete_instance(instance_name)
@@ -832,6 +851,10 @@ class NewMediatorObject(Object.OwnerObject):
                 return None
         instance_name = self.editors.new_instance(app, 
             check_window = check_window, window_info = window_info)
+# don't use instance argument to user_message here, because the editor
+# should display its own message on connection
+        self.user_message('%s instance %s connected' %
+            (self.editors.app_name(instance_name), instance_name))
         if server:
             if self.server == None:
                 msg = 'WARNING: new_editor called with server = 1, but mediator has no server\n'
@@ -1159,6 +1182,30 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.editors.correct_recent(instance_name)
+    
+    def user_message(self, message, instance = None):
+        """displays a user message via the appropriate channel
+        (e.g. stdout, or a MediatorConsole status line, or an 
+        editor-specific status line if supported.
+
+        **INPUTS**
+
+        *STR message* -- the message
+
+        *STR instance_name* -- the editor from which the message
+        originated, or None if it is not associated with a specific
+        editor.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.the_console:
+            sent = self.the_console.user_message(message, 
+                instance = instance)
+            if sent and not self.testing:
+                return
+        print message
 
 ###############################################################################
 # Configuration functions. These are not methods
