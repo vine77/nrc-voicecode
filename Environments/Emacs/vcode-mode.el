@@ -267,15 +267,14 @@ in the 'vr-log-buff-name buffer.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 
 ;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
 ;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 ;(cl-puthash "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
 
 ; Until we know that the new mechanism for fixing the selected-frame
 ; problem works, these traces should be left on - DCF
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
-;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
+(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
 
 
 
@@ -1501,6 +1500,12 @@ which is the list representing the command and its arguments."
   ;;
   (let ()
 
+    (vr-log "--** vr-cmd-alt-frame-activated: init frame: %S\n"
+        (selected-frame))
+    (vr-log "--** vr-cmd-alt-frame-activated: init frame handle: %S\n"
+        (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
+    (vr-log "--** vr-cmd-alt-frame-activated: init buffer: %S\n"
+        (buffer-name (current-buffer)))
     (global-set-key "\C-\M--" "")
 ; Emacs lisp (Node: Focus Events) claims that a keyboard key or mouse
 ; button should trigger a focus event (consistent with Barry Jaspan's
@@ -1556,6 +1561,15 @@ t)
   (vr-maybe-activate-buffer (current-buffer))
 
   t)
+
+(defun vcode-set-special-event-map-for-ignored-key ()
+"sets up a special-event-map with a handler for the ignored key, f9
+
+See vcode-cmd-prepare-for-ignored-key.
+"
+  (setq vcode-was-special-event-map (copy-keymap special-event-map))
+  (define-key special-event-map [f9] 'vcode-restore-special-event-map)
+)
 
 (defun vcode-restore-special-event-map ()
 "restores the original value of the special-event-map.
@@ -1614,8 +1628,7 @@ focus event, which is the desired effect.
 	(empty-response (make-hash-table :test 'string=))
         )
 
-    (setq vcode-was-special-event-map (copy-keymap special-event-map))
-    (define-key special-event-map [f9] 'vcode-restore-special-event-map)
+    (vcode-set-special-event-map-for-ignored-key)
 ; if we receive the emacs_prepare_for_ignored_key message, then the old
 ; vr-cmd-frame-activated hack is redundant
     (setq vcode-frame-activated-necessary nil)
@@ -2000,6 +2013,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'indent 'vcode-cmd-indent vr-message-handler-hooks)  
   (cl-puthash 'decr_indent_level 'vcode-cmd-decr-indent-level vr-message-handler-hooks)
   (cl-puthash 'delete 'vcode-cmd-delete vr-message-handler-hooks)  
+  (cl-puthash 'backspace 'vcode-cmd-backspace vr-message-handler-hooks)  
   (cl-puthash 'goto 'vcode-cmd-goto vr-message-handler-hooks)  
   (cl-puthash 'goto_line 'vcode-cmd-goto-line vr-message-handler-hooks)  
 
@@ -2336,6 +2350,11 @@ a buffer"
         )
     )
     (if vcode-frame-activated-necessary
+; tried this just to confirm that keyboard macros don't trigger focus
+; events (as per the Info file).  They don't, so we still need the
+; mediator to send the ignored key.  -- DCF
+;      (vcode-set-special-event-map-for-ignored-key)
+;      (execute-kbd-macro [f9])
       (vr-cmd-frame-activated window-id)
     )
 
@@ -3134,6 +3153,42 @@ change reports it sends to VCode.
       (scroll-up-nomark num))
   )
 )
+
+(defun vcode-cmd-backspace (vcode-request)
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+	(buff-name) 
+	(n-times) (many-dels))
+	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
+	(setq n-times (cl-gethash "n_times" mess-cont))
+
+
+	(set-buffer buff-name)
+
+; executing a command string of n-times dels doesn't have the same effect 
+; as actual DEL keys, when the region is non-empty,
+; so in that case we patch it up by killing the region and then sending
+; n-times - 1 dels
+        (if (and mark-active 
+                 (not (eq (mark) (point))))
+            (progn
+              (kill-region (mark) (point))
+              (setq n-times (- n-times 1))
+            )
+        )
+
+        (setq many-dels (make-string n-times 127))
+        (vcode-execute-command-string many-dels)
+; try this instead (though I don't think set-buffer will be enough here
+; -- at least it isn't when I execute this from a function called
+; manually by eval-sexp
+;        (execute-kbd-macro [127] n-times)
+        
+
+	(vr-send-queued-changes)
+    )
+)
+
 
 (defun vcode-cmd-insert (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 

@@ -2733,13 +2733,25 @@ auto_test.add_test('set_text', test_set_text,
 def test_insert_delete_commands():
    testing.init_simulator_regression()
    commands.open_file('blah.py')
-   commands.say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
-   commands.say(['back space'])
-   commands.say(['2 times'])
-   commands.say(['back space 2'])   
-   commands.say(['back space 3'])
-   commands.say(['back space 4'])
-   commands.say(['back space 5'])
+   test_say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
+   test_say(['back space'])
+   test_say(['2 times'])
+   test_say(['back space 2'])   
+   test_say(['back space 3'])
+   test_say(['back space 4'])
+   test_say(['back space 5'])
+   mediator = testing.mediator()
+   instance_name = testing.editor()
+   if instance_name:
+       editor = mediator.editor_instance(instance_name)
+   else:
+       editor = mediator.app
+   editor.set_text('some additional text')
+   test_say(['select', 'additional'])
+   test_say(['back space'])
+   editor.set_text('some additional text')
+   test_say(['select', 'additional'])
+   test_say(['back space 2'])
 
 auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
