@@ -607,8 +607,10 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
                               (self.choice_list, 0, wxEXPAND)])
         middle_sizer.AddGrowableRow(2)
         middle_sizer.AddGrowableCol(1)
-        if self.choices:
-            self.choice_list.SetSelection(1, 0)
+# not sure why this was needed in the first place - it doesn't seem to
+# be now -- DCF
+#        if self.choices:
+#            self.choice_list.SetSelection(0, 0)
         s.Add(middle_sizer, 1, wxEXPAND | wxALL)
         button_sizer = wxBoxSizer(wxHORIZONTAL)
         ok_button = wxButton(self, wxID_OK, "OK", wxDefaultPosition, 

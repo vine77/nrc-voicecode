@@ -975,8 +975,8 @@ class CmdInterp(OwnerObject):
         *INT* consumed* -- Number of words consumed by the CSC from
          the command
 
-        *(STR, STR)* rest -- is what was left of *cmd* after the CSC
-         was chopped off.        
+        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        chopped
         """
         
         trace('CmdInterp.chop_CSC', 'cmd=%s' % cmd)
@@ -1005,8 +1005,8 @@ class CmdInterp(OwnerObject):
          the command (always 1, but return it anyway because want to
          keep same signature as chop_CSC and chop_symbol)
 
-        *(STR, STR)* rest -- is what was left of *cmd* after the LSA
-         was chopped off.        
+        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        chopped
         """
         
         trace('CmdInterp.chop_LSA', 'command=%s' % command)
@@ -1026,15 +1026,15 @@ class CmdInterp(OwnerObject):
 
         Returns a tuple *(chopped_symbol, consumed, rest)* where:
         
-        *STR* chopped_symbol -- The written form of the known symbol that
-        was chopped off. If *None*, it means *command* did
+        *STR* -- spoken form of the known symbol, or None if no symbol
+        matches the spoken form. If *None*, it means *command* did
         not start with a known symbol.
 
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
 
-        *(STR, STR)* rest -- is what was left of *cmd* after the symbol
-         was chopped off.        
+        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        chopped
         """
 
         trace('CmdInterp.chop_symbols', 'command=%s' % command)
@@ -1062,7 +1062,8 @@ class CmdInterp(OwnerObject):
          return it anyway because want to keep same method signature
          as chop_CSC, chop_LSA and chop_symbol).
 
-        *[(STR, STR)]* rest -- Rest of the command after the word was chopped
+        *[STR]* rest -- The remaining of *cmd* after the construct has been
+        chopped
         
         """
         
@@ -1098,7 +1099,8 @@ class CmdInterp(OwnerObject):
         *INT* consumed -- Number of words consumed from *cmd*
 
         *[STR]* rest -- The remaining of *cmd* after the construct has been
-        chopped"""
+        chopped
+        """
 
         trace('CmdInterp.chop_construct', 'construct_check=%s' % repr(construct_check))
 #        print '-- CmdInterp.chop_construct: construct_check=%s' % repr(construct_check)
@@ -1230,7 +1232,7 @@ class CmdInterp(OwnerObject):
         
         **OUTPUTS**
 
-        *STR* -- written form of the known symbol, or None if no symbol
+        *STR* -- spoken form of the known symbol, or None if no symbol
         matches the spoken form
         """
 

@@ -43,7 +43,7 @@ import traceback
 
 language_definitions={}
 
-current_version = 2
+current_version = 3
 
 #
 # Minimum length for an abbreviation (short abbreviations tend to introduce
@@ -491,7 +491,6 @@ class SymDict(OwnerObject):
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
                          'min_chars_for_approx_match': 4})
         
-        # These attributes CAN be set at construction time
         self.deep_construct(SymDict,
                             {'sym_file': sym_file,
                              'interp': interp,
@@ -531,37 +530,38 @@ class SymDict(OwnerObject):
                 else:
                     backup = backup + '.bak'
                 shutil.copyfile(file, backup)
-            db = shelve.open(file, "n")
+            f = open(file, "w")
         except:
             msg = 'WARNING: error creating SymDict state file %s\n' % file
             sys.stderr.write(msg)
             return
             
-        try:
-            db['version'] = current_version
-            db['fields'] = ['version', 'symbol_info',
-                'spoken_form_info', 'abbreviations', 'alt_abbreviations',
-                'unresolved_abbreviations', 'symbol_sources_read']
-            db['symbol_info'] = self.symbol_info
+        d = {}
+# any objects stored must be correctly unpickled even if their classes
+# are modified.
+        d['version'] = current_version
+        d['symbol_info'] = self.symbol_info
 # at the moment, spoken_form_info is redundant with symbol_info, except for 
 # ordering, but I'm not sure that will always be true, or what to do 
 # about ordering, so for now let's just store both
-            db['spoken_form_info'] = self.spoken_form_info
-            db['abbreviations'] = self.abbreviations
-            db['alt_abbreviations'] = self.alt_abbreviations
-            db['unresolved_abbreviations'] = self.unresolved_abbreviations
-            db['symbol_sources_read'] = self.symbol_sources_read
+        d['spoken_form_info'] = self.spoken_form_info
+        d['abbreviations'] = self.abbreviations
+        d['alt_abbreviations'] = self.alt_abbreviations
+        d['unresolved_abbreviations'] = self.unresolved_abbreviations
+        d['symbol_sources_read'] = self.symbol_sources_read
+        try:
+            cPickle.dump(d, f)
         except:
             msg = 'WARNING: error writing to SymDict state file %s\n' % file
             sys.stderr.write(msg)
             traceback.print_exc()
-            db.close()
+            f.close()
             os.remove(file)
             if backup:
                 shutil.copyfile(backup, file)
             return
 
-        db.close()
+        f.close()
 
     def _add_corresponding_expansion(self, abbreviation, expansion):
         """private method to add expansions for an abbreviation corresponding 
@@ -1963,7 +1963,7 @@ class SymDict(OwnerObject):
         if not os.path.exists(file):
             return 0
         try:
-            db = shelve.open(file, "r")
+            f = open(file, "r")
         except:
             msg = 'WARNING: Failed to open symbol dictionary file\n%s\n' \
                 % file
@@ -1971,37 +1971,25 @@ class SymDict(OwnerObject):
             return 0
         try:
             try:
-                version = db['version']
+                values = cPickle.load(f)
+            except:
+                msg = 'WARNING: error reading symbol dictionary file\n%s\n' \
+                    % self.sym_file
+                raise ErrorReadingPersistDict(msg)
+            try:
+                version = values['version']
             except KeyError:
                 version = 1
             debug.trace('SymDict.init_from_file',
                 'state file version %s (current is %s)' \
                 % (version, current_version))
-# The keys() method of the database objects from bsddb, used for shelve,
-# fails in Python 2.2.2, so we're going to explicitly store the field
-# list.  Since we didn't do this in version 1, we just have to hard code
-# that case.
+        except ErrorReadingPersistDict, e:
+            f.close()
+            self._failed_read(e.message, fatal = 1)
+            return 0
 
-# (actually, the failure is just with symdict.dat.  If I create a new
-# shelve from scratch with no keys, or a single key, it works fine.  I'm
-# not sure what the problem is.)
-            if version == 1:
-                fields = ['version', 'symbol_info', 'spoken_form_info', 
-                    'abbreviations', 'alt_abbreviations', 
-                    'unresolved_abbreviations']
-                debug.trace('SymDict.init_from_file',
-                    'assuming fields %s' % fields)
-            else:
-                try:
-                    debug.trace('SymDict.init_from_file',
-                        'reading fields from file')
-                    fields = db['fields']
-                except KeyError:
-                    msg = 'missing field "fields" (list of fields) ' \
-                        + 'in symbol dictionary file\n%s\n' % self.sym_file
-                    raise ErrorReadingPersistDict(msg)
-            debug.trace('SymDict.init_from_file',
-                'expected fields are %s' % fields)
+        f.close()
+        try:
             if version != current_version:
                 if not symdict_cvtr.known_version(version):
                     debug.trace('SymDict.init_from_file',
@@ -2010,27 +1998,6 @@ class SymDict(OwnerObject):
                     msg = 'unknown version %d' % version \
                         + ' of the symbol dictionary file\n%s\n' % self.sym_file
                     raise ErrorReadingPersistDict(msg)
-            current_field = None
-            try:
-                values = {}
-                for field in fields:
-                    current_field = field
-                    debug.trace('SymDict.init_from_file',
-                        'reading field %s/%s' % (field, current_field))
-                    values[field] = db[field]
-            except:
-                msg = 'WARNING: error reading %s from symbol dictionary file\n%s\n' \
-                    % (current_field, self.sym_file)
-                raise ErrorReadingPersistDict(msg)
-
-        except ErrorReadingPersistDict, e:
-            db.close()
-            self._failed_read(e.message, fatal = 1)
-            return 0
-
-        db.close()
-        try:
-            if version != current_version:
                 try:
                     values = symdict_cvtr.convert(values, version)
                 except DictConverter.ConversionFailure, e:
@@ -2093,9 +2060,6 @@ class SymDict(OwnerObject):
             self._failed_read(msg, fatal = 1)
             return 0
 
-# should we enclose the following in a try block to catch all unexpected
-# exceptions?
-# if so, how do we get the message to pass to _failed_read?
         try:
             self.symbol_info = dict['symbol_info']
             self.spoken_form_info = dict['spoken_form_info']
@@ -2317,7 +2281,7 @@ symdict_cvtr = DictConverter.CompoundDictConverter(SymDict, current_version)
 # previous version to the current one) to the compound converter, 
 # you must it prepend the new converter to this list:
 
-symdict_cvtr.add_converter(AddSymbolSourcesRead())
+#symdict_cvtr.add_converter(AddSymbolSourcesRead())
 
 ###############################################################################
 # Configuration functions. These are not methods
