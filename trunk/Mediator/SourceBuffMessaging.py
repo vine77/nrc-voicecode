@@ -233,6 +233,24 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 #        self.app.apply_upd_descr(response[1]['updates'])
 #        self.app.update_response = 0
         
+    def line_num_of(self, position = None):
+	"""
+        Returns the line number for a particular cursor position
+        
+        **INPUTS**
+        
+        *INT* position -- The position.  (defaults to the current position)
+        
+        **OUTPUTS**
+        
+        *INT line_num* -- The line number of that position
+        """
+        
+        args = {'position': position, 'buff_name': self.name()}
+	self.app.talk_msgr.send_mess('line_num_of', args)
+        response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
+
+        return messaging.messarg2int(response[1]['value'])
 
     def _len_from_app(self):
 	"""return length of buffer in characters.
@@ -291,7 +309,45 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         response = self.app.talk_msgr.get_mess(expect=['pref_newline_convention_resp'])
         return response[1]['value']
 
+    def beginning_of_line(self, pos):
+        """Returns the position of the beginning of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the beginning of line.
+        
 
+        **OUTPUTS**
+        
+        *INT* beg_pos -- Position of the beginning of the line
+        """
+        args = {'pos': pos, 'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('beginning_of_line', args)
+        response = \
+	    self.app.talk_msgr.get_mess(expect=['beginning_of_line_resp'])
+
+        return messaging.messarg2int(response[1]['value'])
+        
+
+
+    def end_of_line(self, pos):
+        """Returns the position of the end of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the end of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* end_pos -- Position of the end of the line
+        """
+        args = {'pos': pos, 'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('end_of_line', args)
+        response = \
+	    self.app.talk_msgr.get_mess(expect=['end_of_line_resp'])
+
+        return messaging.messarg2int(response[1]['value'])
 
     def move_relative_page(self, direction=1, num=1):
         """Moves up or down a certain number of pages
@@ -315,7 +371,118 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
+
+    def insert_indent(self, code_bef, code_after, range = None):
+        """Insert code into source buffer and indent it.
+
+        Replace code in range 
+        with the concatenation of
+        code *STR code_bef* and *str code_after*. Cursor is put right
+        after code *STR bef*.
+
+	**INPUTS**
+
+	*STR* code_bef -- code to be inserted before new cursor location
         
+	*STR* code_after -- code to be inserted after new cursor location
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# by default, assume that the remote editor does indentation.
+# Subclasses for particular editors which use mediator-based indentation 
+# can always override this choice.
+        args = {'code_bef': code_bef, 'code_after': code_after, 'range': range,
+	    'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('insert_indent', args)
+        response = self.app.talk_msgr.get_mess(expect=['insert_indent_resp'])        
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
+        
+    def indent(self, range = None):
+        
+        """Automatically indent the code in a source buffer region. Indentation
+        of each line is determined automatically based on the line's context.
+
+	**INPUTS**
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# by default, assume that the remote editor does indentation.
+# Subclasses for particular editors which use mediator-based indentation 
+# can always override this choice.
+        args = {'range': range, 'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('indent', args)
+        response = self.app.talk_msgr.get_mess(expect=['indent_resp'])        
+
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
+        
+    def incr_indent_level(self, levels=1, range=None):
+        
+        """Increase the indentation of a region of code by a certain
+        number of levels.
+        
+        **INPUTS**
+        
+        *INT* levels=1 -- Number of levels to indent by.
+        
+        *(INT, INT)* range=None -- Region of code to be indented 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+# by default, assume that the remote editor does indentation.
+# Subclasses for particular editors which use mediator-based indentation 
+# can always override this choice.
+        args = {'levels': levels, 'range': range, 'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('incr_indent_level', args)
+        response = self.app.talk_msgr.get_mess(expect=['incr_indent_level_resp'])        
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
+        
+    def decr_indent_level(self, levels=1, range=None):
+
+        """Decrease the indentation of a region of code by a certain number
+        of levels.
+        
+        **INPUTS**
+        
+        *STR* levels=1 -- Number of levels to unindent
+
+        *(INT, INT)* range=None -- Start and end position of code to be indent.
+        If *None*, use current selection
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+# by default, assume that the remote editor does indentation.
+# Subclasses for particular editors which use mediator-based indentation 
+# can always override this choice.
+        args = {'levels': levels, 'range': range, 'buff_name': self.name()}
+        self.app.talk_msgr.send_mess('decr_indent_level', args)
+        response = self.app.talk_msgr.get_mess(expect=['decr_indent_level_resp'])        
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
+        
+
 
     def insert(self, text, range = None):
         
@@ -388,13 +555,19 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
         
-    def line_num_of(self, position = None):
-	"""Ask external editor to return line number of a cursor position"""
+    def goto_line(self, linenum, where=-1):
+        """Go to a particular line in a buffer.
 
+        *INT linenum* is the line number.
 
-        args = {'pos': position,
+        *INT where* indicates if the cursor should go at the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line.
+	"""
+        args = {'linenum': linenum, 'where': where,
 	    'buff_name': self.name()}
-        self.app.talk_msgr.send_mess('line_num_of', args)
-        response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
+        self.app.talk_msgr.send_mess('goto_line', args)
+        response = self.app.talk_msgr.get_mess(expect=['goto_line_resp'])
 
-        return messaging.messarg2int(response[1]['value'])
+        self.app.update_response = 1
+        self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0

@@ -501,6 +501,9 @@ class AppState(OwnerObject):
     *INT* selection_start, *INT* selection_end, 
     *STR* buff_name, *BOOL* program_initiated).   See set_change_callback 
     below for details
+
+    BOOL *update_response* -- flag to signal that an update being
+    applied is a response to a mediator-initiated change
      
     **CLASS ATTRIBUTES**
     
@@ -521,7 +524,9 @@ class AppState(OwnerObject):
     'delete', 'goto', 'goto_line', 'move_relative_line',
     'move_relative_page', 'search_for', 'log_search',
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
-    'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor']
+    'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor',
+    'newline_conventions', 'pref_newline_convention',
+    'language_name']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:
@@ -538,6 +543,7 @@ class AppState(OwnerObject):
                             {'app_name': app_name,
 			     'manager': manager,
 			     'change_callback': change_callback,
+			     'update_response': 0,
 			     'instance_name': instance_name,
                              'rec_utterances': [], 
                              'open_buffers': {},
@@ -667,7 +673,7 @@ class AppState(OwnerObject):
 		sel_start, sel_end = buff.get_selection()
 		self.change_callback(start, end, text, sel_start,
 		    sel_end, buff_name, self.update_response or 
-		    self.program_initiated)
+		    program_initiated)
         
     def recog_begin(self, window_id, block = 0):
         """Invoked at the beginning of a recognition event.
@@ -804,7 +810,7 @@ class AppState(OwnerObject):
 	debug.virtual('AppState.mediator_closing')
 	
 
-    def synchronize_with_app(self, what=[], exclude=1, updates=None):
+    def synchronize_with_app(self, what = None, exclude=1, updates=None):
 
         """Make sure that VoiceCode is in sync with the state of the
         external editor.
@@ -825,6 +831,8 @@ class AppState(OwnerObject):
         
         *none* -- 
         """
+	if what == None:
+	    what = []
         if updates == None:
             updates = self.updates_from_app(what, exclude)
         self.apply_updates(updates)
@@ -851,7 +859,7 @@ class AppState(OwnerObject):
 
 
 
-    def updates_from_app(self, what=[], exclude=1):
+    def updates_from_app(self, what = None, exclude=1):
         """Gets a list of updates from the external app.
 
         Note: the list of updates must ALWAYS include the name of the

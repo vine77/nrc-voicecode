@@ -44,9 +44,6 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     [Messenger] *talk_msgr* -- Messenger used to send commands
     to external application. 
 
-    BOOL *update_response* -- flag to signal that an update being
-    applied is a response to a mediator-initiated change
-    
     **CLASS ATTRIBUTES**
     
 
@@ -59,8 +56,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
                              'listen_msgr': listen_msgr,
-                             'talk_msgr': talk_msgr,
-			     'update_response': 0},
+                             'talk_msgr': talk_msgr
+			    },
                             attrs)
 	self.multiple_buffer_support =  self._multiple_buffers_from_app()
 	self.bidirectional_selection_support = \
@@ -238,7 +235,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
             self.apply_updates(upd_list)
 
 
-    def updates_from_app(self, what=[], exclude=1):
+    def updates_from_app(self, what = None, exclude=1):
         """Gets a list of updates from the external app.
 
         Does this through a messaging protocol.
@@ -260,6 +257,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
+	if what == None:
+	    what = []
 	self.talk_msgr.send_mess('updates')
         response = self.talk_msgr.get_mess(expect=['updates'])
 

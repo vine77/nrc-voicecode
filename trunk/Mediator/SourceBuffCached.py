@@ -456,7 +456,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         self.uncache_data_after_buffer_change()
 	SourceBuff.SourceBuff.delete_cbk(self, range)
         old_text = self.get_text()
-        self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]+1:]
+        self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
 
         
 

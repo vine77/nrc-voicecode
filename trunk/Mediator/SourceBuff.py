@@ -668,10 +668,6 @@ class SourceBuff(OwnerObject):
         
         debug.virtual('SourceBuff.move_relative_page')
 
-
-
-# DCF - fix - never replaces selection, and independent defaults for
-# start and end don't support replacing selection - 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
 
@@ -694,21 +690,26 @@ class SourceBuff(OwnerObject):
 	*none*
 	"""
 
-        trace('SourceBuff.insert_indent',
-              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
-        if range == None:
-            range = self.get_selection()
-        range = self.make_valid_range(range)
-        
-        indent_from = range[0]
-        self.insert(code_bef, range)
-        
-        self.indent((indent_from, self.cur_pos()))        
-        final_cur_pos = self.cur_pos()
-        if code_after != '':
-            self.insert(code_after, (self.cur_pos(), self.cur_pos()))
-            self.indent((final_cur_pos, self.cur_pos()))
-            self.goto(final_cur_pos)
+# all subclasses now use an indent server with a different algorithm, or
+# do indenting in the editor, so leaving this non-virtual is misleading
+
+#        trace('SourceBuff.insert_indent',
+#              'code_bef=%s, code_after=%s, range=%s' % (code_bef, code_after, range))
+#        if range == None:
+#            range = self.get_selection()
+#        range = self.make_valid_range(range)
+#        
+#        indent_from = range[0]
+#        self.insert(code_bef, range)
+#        
+#        self.indent((indent_from, self.cur_pos()))        
+#        final_cur_pos = self.cur_pos()
+#        if code_after != '':
+#            self.insert(code_after, (self.cur_pos(), self.cur_pos()))
+#            self.indent((final_cur_pos, self.cur_pos()))
+#            self.goto(final_cur_pos)
+
+        debug.virtual('SourceBuff.insert_indent')
 
     def insert(self, text, range = None):
         """Replace text in range with 

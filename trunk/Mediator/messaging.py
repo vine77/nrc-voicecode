@@ -22,6 +22,7 @@
 """Classes for communicating with an external editor through a messaging protocol"""
 
 import re, sys, types
+import copy
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
 from debug import trace
 import Queue
@@ -195,7 +196,7 @@ class MessengerBasic(Messenger):
 
 
 
-    def send_mess(self, mess_name, mess_argvals={}):
+    def send_mess(self, mess_name, mess_argvals=None):
         
         """Sends a message to the external editor.
 
@@ -212,8 +213,12 @@ class MessengerBasic(Messenger):
         """
 
         trace('send_mess', 'mess_name=\'%s\'' % mess_name)
-        trace('send_mess', 'mess_argvals=\'%s\'' % mess_argvals)        
-        unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
+	if mess_argvals == None:
+	    tmp_args = {}
+	else:
+	    tmp_args = copy.copy(mess_argvals)
+        trace('send_mess', 'mess_argvals=\'%s\'' % tmp_args)        
+        unpkd_mess = self.encoder.encode(mess_name, tmp_args)
         pkd_mess = self.packager.pack_mess(unpkd_mess)        
         self.packager.send_packed_mess(pkd_mess, self.transporter)
 
@@ -242,6 +247,8 @@ class MessengerBasic(Messenger):
 #        trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
+	    trace('get_mess', 'wrong_message %s, expectin %s' % \
+		(repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
         trace('get_mess', 'got it!')
@@ -1387,3 +1394,27 @@ class MessEncoder_LenPrefArgs(Object.Object):
 
         return the_dict
 
+def messenger_factory(sock, sleep = None):
+    """Creates a messenger from proper compenents
+    
+    **INPUTS**
+    
+    *socket sock* -- Socket to use for creating the messenger
+    
+    
+    **OUTPUTS**
+    
+    [Messenger] *a_messenger* -- The created [Messenger] instance
+
+    ..[Messenger] file:///./messaging.Messenger.html"""
+    
+
+    #
+    # Create a messenger
+    #
+    packager = MessPackager_FixedLenSeq()
+    transporter = MessTransporter_Socket(sock=sock, sleep = sleep)
+    encoder = MessEncoderWDDX()
+    a_messenger = MessengerBasic(packager=packager, 
+	transporter=transporter, encoder=encoder)        
+    return a_messenger

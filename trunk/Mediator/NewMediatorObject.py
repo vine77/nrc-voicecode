@@ -219,7 +219,7 @@ class NewMediatorObject(Object.OwnerObject):
 #	print traceback.extract_stack()
 	self._configure_from_file(config_file = config_file)
 
-    def define_config_functions(self, names, exclude = []):
+    def define_config_functions(self, names, exclude = None):
         """Adds the appropriate configuration functions to the  given
 	namespace, to allow the configuration file to access the
 	appropriate mediator methods.  These functions are generally
@@ -238,11 +238,13 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none* 
         """        
+	if exclude == None:
+	    exclude = []
 	self.before_app_mgr_config(names, ignore = 'editors' in exclude)
 	self.before_interp_config(names, ignore = 'interp' in exclude)
 
 
-    def _configure_from_file(self, exclude = [], config_file = None):
+    def _configure_from_file(self, exclude = None, config_file = None):
 	"""private method used by configure and reconfigure to perform
 	 actual configuration.
 
@@ -259,7 +261,8 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none*
         """        
-
+	if exclude == None:
+	    exclude = []
 	config_dict = {}
 	self.define_config_functions(config_dict, exclude)
         try:
