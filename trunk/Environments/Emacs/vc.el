@@ -2456,6 +2456,32 @@ Argument 'change-list is a list of 5ple:
 )
 
 
+;;;
+;;; Kill a buffer, possibly saving it and/or asking user if she wants
+;;; to save.
+;;;
+
+(defun vcode-kill-buffer (buff-name save)
+  ;;; 
+  ;;; kill-buffer will prompt user if buffer needs saving
+  ;;;
+  (if (eq 0 save) (kill-buffer buff-name))
+  (if (eq -1 save) 
+      (progn
+	;;;
+	;;; Don't know how to kill a buffer without asking the user
+	;;; if wants to save.
+	;;; So save buffer under a temporary name, and then kill it.
+	;;; Since the temporary file will be up to date, Emacs won't
+	;;; query user.
+	;;;
+	(write-file "ignorethisfile.tmp")
+	(kill-buffer (buffer-name))
+	)
+  )
+  (if (eq 1 save) (progn (save-buffer) (kill-buffer buff-name)))
+)
+
 
 (defun vcode-cmd-close-buffer (vcode-request)
   (vr-log "-- vcode-cmd-close-buffer: invoked\n")
@@ -2476,13 +2502,7 @@ Argument 'change-list is a list of 5ple:
       )
 
     (if buff
-        (progn 
-           ;;; Don't know of a way to kill a buffer without asking for a save
-           ;;; So just save it.
-           (if (eq "-1") (erase-buffer))
-           (if (not (eq 0 save)) (save-buffer))
-           (kill-buffer buff-name)
-	)
+        (vcode-kill-buffer buff-name save)
       (ding)
       (message (format "VR Mode: could not close buffer \"%S\" buff-name"))
       (cl-puthash "value" 0 response)
