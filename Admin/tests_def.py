@@ -2744,9 +2744,24 @@ def test_insert_delete_commands():
 
 def test_temporary():
     testing.init_simulator_regression()
-    commands.open_file(small_buff_c)    
-    test_command("""goto_line(1)""")    
-#    commands.goto_line(1)
+    the_mediator = testing.mediator()
+    instance_name = testing.editor()
+    if instance_name: 
+        editor = the_mediator.editors.app_instance(instance_name)
+    else:
+        editor = the_mediator.app
+    commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    buffer = editor.curr_buffer()
+    
+# This command doesn't work with Emacs. Emacs doesn't repor ton the deletion of the buffer
+# content
+    buffer.set_text('nothing left')
+    
+# Does insert command have same problem?    
+# Answer: YES
+#    buffer.insert(text="nothing left", range=(0,50))
+
+    editor.print_buff_if_necessary()
 
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')

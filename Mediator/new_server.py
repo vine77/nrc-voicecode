@@ -51,16 +51,10 @@ debug.config_traces(status="on",
 #                       'DictWinGramNL': 1,
 #                       'sr_grammarsNL': 1,
 #                       'sr_interface': 1,  
-
-#                        'find_closest': 1,                     
+                        'set_text': 1,
 #                       'SelectWinGramNL': 1,
 #                       'SimpleSelection': 1,  
-#                       'get_text': 1,
-#                       'gotBegin': 1,
-#                       'gotResult': 1,
-
 #                       'SelectWinGram': 1,
-#                       'SourceBuff.closest_occurence_to_cursor': 1, 
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1

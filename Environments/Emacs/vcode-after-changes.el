@@ -234,7 +234,7 @@ custom vr-voice-command-list.")
 
 (defvar vr-log-do nil "*If non-nil, VR mode prints debugging information
 in the 'vr-log-buff-name buffer.")
-(setq vr-log-do t)
+(setq vr-log-do nil)
 
 (defvar vr-log-send nil "*If non-nil, VR mode logs all data sent to the VR
 subprocess in the 'vr-log-buff-name buffer.")
@@ -266,12 +266,10 @@ sent."
 
 (defun vcode-test ()
   (interactive)
-  (vr-log "--** vcode-test: started")
   (setq debug-on-error t)
   (setq debug-on-quit t)
  
   (vcode-close-all-buffers)
-  (vr-log "--** vcode-test: after close-all-buffers")
   (setq vr-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-configure-for-regression-testing t)
   (vr-mode 1 "vcode-test")
@@ -283,17 +281,14 @@ sent."
    (setq py-smart-indentation nil) 
    (setq py-indent-offset 3)
    (setq tab-width 999)
-   (vr-log "**-- vcode-config-py-mode-for-regression-testing: upon exit, py-indent-offset=%S, tab-width=%S" py-indent-offset tab-width)
 )
 
 (defun vcode-configure-for-regression-testing (status)
    (if status
        (progn 
-	 (vr-log "--** vcode-configure-for-regression-testing: adding the hook\n")
 	 (add-hook 'python-mode-hook 
 		   'vcode-config-py-mode-for-regression-testing)
        )
-     (vr-log "--** vcode-configure-for-regression-testing: removing the hook\n")
      (remove-hook 'python-mode-hook 
 		   'vcode-config-py-mode-for-regression-testing)
    )
@@ -511,6 +506,7 @@ expanded, since they often make it go out of sync."
       (vr-activate-buffer (current-buffer))))
 
 (defun vr-post-command ()
+  (vr-log "--** vr-post-command: invoked\n")
   (add-hook 'post-command-hook 'vr-post-command)
   (if vr-emacs-cmds
       (progn
@@ -522,7 +518,9 @@ expanded, since they often make it go out of sync."
 	    (progn
 	      (vr-send-cmd (format "command-done %s" vr-cmd-executing))
 	      (setq vr-cmd-executing nil)))
-	)))
+	))
+  (vr-log "--** vr-post-command: exited\n")
+)
 
 (defun vr-kill-buffer ()
   (if (vr-activate-buffer-p (current-buffer))
@@ -589,12 +587,15 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 (defun vr-maybe-activate-buffer (buffer)
   ;; Deactivate whenever isearch mode is active.  This is a
   ;; "temporary" solution until isearch mode can be supported.
+;  (vr-log "--** vr-maybe-activate-buffer: invoked\n")
   (if (and (not isearch-mode) (vr-activate-buffer-p (buffer-name buffer)))
       (if (eq buffer vr-buffer)
 	  nil
 	(vr-activate-buffer buffer))
     (if vr-buffer 
-	(vr-activate-buffer nil))))
+	(vr-activate-buffer nil)))
+;  (vr-log "--** vr-maybe-activate-buffer: exited\n")
+)
 
 (defun vr-switch-to-buffer ()
   "Select the current VR mode target buffer in the current window."
@@ -604,14 +605,17 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
     (error "VR target buffer no longer exists; use vr-activate-buffer")))
 
 
+
 (defun vcode-set-after-change-functions (status)
+  (vr-log "--** vcode-set-after-change-functions: invoked, (current-buffer)=%S, status=%S\n" (current-buffer) status)
   (if status
       (progn
-	(make-local-hook 'after-change-functions)
-	(add-hook 'after-change-functions 'vr-report-insert-delete-change nil t)
+;	(make-local-hook 'after-change-functions)
+	(add-hook 'after-change-functions 'vr-report-insert-delete-change)
 	)
-    (remove-hook 'after-change-functions 'vr-report-insert-delete-change t)
+    (remove-hook 'after-change-functions 'vr-report-insert-delete-change)
     )
+  (vr-log "--** vcode-set-after-change-functions: upon exit, (current-buffer)=%S, after-change-functions=%S\n" (current-buffer) after-change-functions)  
 )
 
 (defun vr-activate-buffer (buffer)
@@ -633,7 +637,6 @@ interactively, sets the current buffer as the target buffer."
     (run-hooks 'vr-send-deactivate-buffer)
     )
   (force-mode-line-update)
-  (vcode-set-after-change-functions 1)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -694,22 +697,27 @@ executing.
 "
 
   (let ((the-change nil))
-    (setq the-change
-          (vr-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
-;	  (list 'change-is-insert (buffer-name) inserted-start inserted-end deleted-len)
-	  )
-
-    (setq vr-queued-changes (cons the-change vr-queued-changes))
-
-    (if (not vr-changes-caused-by-sr-cmd)
-	(vr-send-queued-changes)
-	)
+    (if (vr-activate-buffer-p (current-buffer))
+	(progn 
+	  (vr-log "--** vr-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
+	  (setq the-change
+		(vr-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
+		)
 	  
-    ;;
-    ;; What does this do? Is it still necessary if we disable dabbrevs
-    ;; and electric punctuation marks during executio of utterances?
-    (vr-execute-deferred-function)
-  
+	  (vr-log "--** vr-report-insert-delete-change: the-change=%S" the-change)
+	  
+	  (setq vr-queued-changes (cons the-change vr-queued-changes))
+	  
+	  (if (not vr-changes-caused-by-sr-cmd)
+	      (vr-send-queued-changes)
+	    )
+	  
+	  ;;
+	  ;; What does this do? Is it still necessary if we disable dabbrevs
+	  ;; and electric punctuation marks during executio of utterances?
+	  (vr-execute-deferred-function)
+       )
+    )
   )
 )
 
@@ -859,7 +867,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
-    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mar)=%S buffer is\n%S\n" (current-buffer) py-indent-offset tab-width command-string (point) (mark) (buffer-substring (point-min) (point-max)))
+    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mark)=%S, after-change-functions=%S buffer is\n%S\n" (current-buffer) py-indent-offset tab-width command-string (point) (mark) after-change-functions (buffer-substring (point-min) (point-max)))
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -881,9 +889,13 @@ Changes are put in a changes queue `vr-queued-changes.
  	     (last-command-keys event)
  	     )
 	(vr-log "--** vcode-execute-command-string: command=%S\n" command)
+	(vr-log "--** vcode-execute-command-string: before pre-command-hook, after-change-functions=%S\n" after-change-functions)
 	(run-hooks 'pre-command-hook)
+	(vr-log "--** vcode-execute-command-string: after pre-command-hook, after-change-functions=%S\n" after-change-functions)
 	(command-execute command nil )
+	(vr-log "--** vcode-execute-command-string: before post-command-hook, after-change-functions=%S\n" after-change-functions)
 	(run-hooks 'post-command-hook)
+	(vr-log "--** vcode-execute-command-string: before post-command-hook, after-change-functions=%S\n" after-change-functions)
       )
     )
     (vr-log "--** vcode-execute-command-string: upon exit, (point)=%S, (mark)=%S, buffer is\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
@@ -1183,6 +1195,7 @@ speech server"
 	  (process-kill-without-query vr-process)
 ;	  (set-process-filter vr-process 'vr-output-filter)
 	  (set-process-sentinel vr-process 'vr-sentinel))
+	(vcode-set-after-change-functions 1)
 	)
     
     ;; Leaving VR mode
@@ -1193,6 +1206,7 @@ speech server"
     (if vr-host
 	(vr-sentinel nil "finished\n")
       (vr-send-cmd "exit"))
+    (vcode-set-after-change-functions nil)
     (run-hooks 'vr-mode-cleanup-hook)
     )
  (force-mode-line-update)
@@ -2024,8 +2038,8 @@ message.
 	(file-name)
 	(response (make-hash-table :test 'string=)))
     (setq file-name (cl-gethash "file_name" mess-cont))
+    (vr-log "--** vcode-cmd-open-file: python-mode-hook =%S file-name=%S\n" file-name python-mode-hook )
     (find-file (substitute-in-file-name file-name))
-    (vr-log "--** vcode-cmd-open-file: file-name=%S, py-indent-offset=%S\n" file-name py-indent-offset)
     (cl-puthash "buff_name" (buffer-name) response)
     (vr-send-reply
      (run-hook-with-args 
@@ -2122,7 +2136,6 @@ message.
 	;;; cleaned up, the temporary file had been closed and Emacs was 
         ;;; freezing.
 	;;;
-	(vcode-set-after-change-functions nil)
 
 	(write-file "ignorethisfile.tmp")
 	(kill-buffer "ignorethisfile.tmp")
@@ -2157,18 +2170,29 @@ message.
 	)
       )
 
-    (if buff
-        (vcode-kill-buffer buff-name save)
+    ;;;
+    ;;; Ignore VCode requests to close the minibuffer
+    ;;;
+    (vr-log "--** vcode-cmd-close-buffer: before testing for minbufff, buff=%S\n")
+    (if buff 
+	(if (not (string-match "*Minbuff-" (buffer-name buff)))
+	    (progn 
+	      (vr-log "--** vcode-cmd-close-buffer: closing the buffer\n")
+	      (vcode-kill-buffer buff-name save)
+	    )
+	  (vr-log "-- ** vcode-cmd-close-buffer: this is minibuffer... not closing it\n")
+	)
       (ding)
       (message (format "VR Mode: could not close buffer %S" buff-name))
       (cl-puthash "value" 0 response)
     )
 
+    (vr-log "--** vcode-cmd-close-buffer: before send-reply\n")
     (vr-send-reply
      (run-hook-with-args 
       'vr-serialize-message-hook (list "close_buffer_resp" response))
     )
-
+    (vr-log "--** vcode-cmd-close-buffer: after send-reply\n")
   )
 )
 
@@ -2484,10 +2508,6 @@ change reports it sends to VCode.
         (set-mark nil)
 
 
-;;;
-;;; 'vcode-execute-command-string is still experimental
-;;;
-;	(insert text)
         (vcode-execute-command-string text)
 
 	(vr-send-queued-changes)
@@ -2505,14 +2525,18 @@ change reports it sends to VCode.
  	(setq end (cl-gethash "end" mess-cont))
         (vr-log "--** vcode-cmd-set-text: buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
  	(set-buffer buff-name)
-        (vr-log "--** vcode-cmd-set-text: in buff-name, (point-min)=%S, (point-max)=%S\n" (point-min) (point-max))
+        (vr-log "--** vcode-cmd-set-text: before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S\n" (point-min) (point-max) after-change-functions)
  	(kill-region start end)
-        (set-mark nil)
+        (vr-log "--** vcode-cmd-set-text: after kill-region\n")
+;        (set-mark nil)
+
 ;;;
 ;;; 'vcode-execute-command-string is still experimental
 ;;;
 ; 	(insert text)
+        (vr-log "--** vcode-cmd-set-text: before inserting text\n")
 	(vcode-execute-command-string text)
+        (vr-log "--** vcode-cmd-set-text: after inserting text\n")
 
  	(vr-send-queued-changes)
     )
@@ -2615,24 +2639,6 @@ tabs.
   )
 )
 
-(defun vcode-execute-backspace ()
-   (let ((backspace-executes-this-command (key-binding "\177")))
-     (vr-log "--** vcode-execute-backspace: backspace-executes-this-command=%S\n" backspace-executes-this-command)
-
-     ;;;
-     ;;; First try it without arguments, and if it doesn't work, try 
-     ;;; it with just 1 as argument
-     ;;;
-     (condition-case err
-	 (apply backspace-executes-this-command nil)
-       ('error
-	(apply backspace-executes-this-command (list 1))
-       )
-     )
-     
-   )
-)
-
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
   (let ((counter 0) (start-of-line))
@@ -2658,7 +2664,6 @@ tabs.
 	     (save-excursion
              ;;; Execute a command string containing just the backspace key
 	       (vcode-execute-command-string "\177")
-;	       (vcode-execute-backspace)
 	     )
              (setq counter (1+ counter))
            )
@@ -2750,7 +2755,6 @@ tabs.
     (setq line-num (cl-gethash "linenum" mess-cont))
     (setq go-where (cl-gethash "where" mess-cont))
     (setq buff-name (cl-gethash "buff_name" mess-cont))
-    (vr-log "--** vcode-cmd-goto-line: buff-name=%S, line-num=%S, go-where=%S\n" buff-name line-num go-where)
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)
@@ -2758,7 +2762,6 @@ tabs.
 	  (if (= -1 go-where) 
 	      (beginning-of-line)
 	    (end-of-line)
-	    (vr-log "--** vcode-cmd-goto-line: at end of progn, (point)=%S\n" (point))
 	  )
 	)
       ('error (error "VR Error: could not go to line %S" line-num))
@@ -2772,7 +2775,6 @@ tabs.
     ;;;
     (switch-to-buffer buff-name)
     (setq final-pos (point))
-    (vr-log "--** vcode-cmd-goto-line: at end of progn, final-pos=%S\n" final-pos)
 
     ;;;
     ;;; Cursor changes do not automatically get queued to the change queue.

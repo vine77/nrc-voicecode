@@ -332,27 +332,29 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* is the new text.
+        *STR text* is the new text.
 	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
+        *INT start* is the offset into the buffer of the text to the
+        replaced.  Defaults to start of buffer.
 
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT end* is the offset into the buffer of the character following 
+        the text to be replaced (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
+        
         args = {'text': text, 'start': start, 'end': end,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('set_text', args)
         response = self.app.talk_msgr.get_mess(expect=['set_text_resp'])
         
         self.app.update_response = 1
+        trace('SourceBuffMessaging.set_text', '** received updates: %s' % repr(response[1]['updates']))
         self.app.apply_upd_descr(response[1]['updates'])
         self.app.update_response = 0
 
