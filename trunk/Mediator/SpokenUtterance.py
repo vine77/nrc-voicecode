@@ -28,6 +28,7 @@ from Object import Object, OwnerObject
 import debug
 import string
 import sr_interface
+import re
 
 class SpokenUtterance(OwnerObject):
     """defines an abstract interface for manipulating the speech
@@ -250,6 +251,18 @@ class SpokenUtterance(OwnerObject):
         """
         debug.virtual('SpokenUtterance.words')
         
+    def normalized_spoken_phrase(self):
+        """Returns the spoken form of the utterance as a list of normalised words.
+        """
+        cmd = self.normalized_written_spoken_forms()
+        spoken_list = map(lambda word: word[0], cmd)
+        spoken = string.join(spoken_list)
+        phrase = string.split(spoken) 
+        
+        processed_phrase = map(lambda word: self.normalize_initials(word), phrase)
+        return processed_phrase
+        
+        
     def normalized_written_spoken_forms(self):
         """Returns a list of "normalised" written/spoken form of 
         words in the utterance.
@@ -273,6 +286,21 @@ class SpokenUtterance(OwnerObject):
             spoken = sr_interface.clean_spoken_form(spoken)
             normalised.append((spoken, written))
         return normalised
+
+    def normalize_initials(self, spoken):
+        """strips the period from initials
+
+        **INPUTS**
+   
+        *STR spoken* -- spoken form
+
+        **OUTPUTS**
+  
+        *STR* -- spoken form, but with 'A.' -> 'a', etc.
+        """
+        if re.match('[A-Z]\.$', spoken):
+            return string.lower(spoken[0])
+        return spoken
 
       
 class MockSpokenUtterance(SpokenUtterance):
