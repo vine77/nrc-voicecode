@@ -329,7 +329,7 @@ class CommandDictGrammar(DictGramBase):
 #        print '-- CommandDictGrammar.gotResults: Heard mixed dictation and commands:%s' % repr(words)
 
         self.interpreter.interpret_NL_cmd(words)
-        self.interpreter.on_app.print_buff_content()
+        self.interpreter.on_app.curr_buffer.print_buff()
         
 
 class CodeSelectGrammar(SelectGramBase):
@@ -353,12 +353,12 @@ class CodeSelectGrammar(SelectGramBase):
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
         self.interpreter.load_language_specific_aliases()
-#        print '-- CodeSelectGrammar.gotBegin: calling self.setSelectText with bufer content:\n*** Start of buffer content ***\n%s\n*** End of buffer content ***' % self.interpreter.on_app.curr_buffer.content
-        self.setSelectText(self.interpreter.on_app.curr_buffer.content)
+#        print '-- CodeSelectGrammar.gotBegin: calling self.setSelectText with bufer content:\n*** Start of buffer content ***\n%s\n*** End of buffer content ***' % self.interpreter.on_app.curr_buffer.contents()
+        self.setSelectText(self.interpreter.on_app.curr_buffer.contents())
 
     def gotResults(self, words, startPos, endPos):
 #        print '-- CodeSelectGrammar.gotResults: Heard Select command: <%s>, startPos=%s, endPos=%s' % (string.join(words), startPos, endPos)
-        self.interpreter.on_app.select(startPos, endPos)
+        self.interpreter.on_app.set_selection((startPos, endPos))
 
     def gotResultsObject(self,recogType,resObj):
         # If there are multiple matches in the text we need to scan through
@@ -377,7 +377,7 @@ class CodeSelectGrammar(SelectGramBase):
 #                    print '-- CodeSelectGrammar.gotResultsObject: processingregion: %s' % repr(region)                    
                     distance = self.interpreter.on_app.curr_buffer.distance_to_selection(region[0], region[1])
                     if closest == None or distance < closest:
-                        self.ranges = [self.interpreter.on_app.curr_buffer.content[region[0]:region[1]]]
+                        self.ranges = [self.interpreter.on_app.curr_buffer.contents()[region[0]:region[1]]]
         except natlink.OutOfRange:
             return
 

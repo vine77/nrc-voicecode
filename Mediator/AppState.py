@@ -5,6 +5,37 @@ import debug, sys
 from Object import Object
 
 
+"""can we auto-forward stuff from App to buff"""
+
+# (C)2000 David C. Fox
+
+class ForwardToBuffer:
+    """subsidiary class used to forward buffer-specific messages from
+    AppState to SourceBuff
+
+    **INSTANCE ATTRIBUTES**
+
+    *AppState* application -- forwarding application
+
+    *FCT* ( *SourceBuff* , ...) -- method to call
+
+    **CLASS ATTRIBUTES**
+    
+    *none* --
+
+    """
+    def __init__(self, application, method):
+	self.application = application
+	self.method = method
+    def __call__(self, *positional, **keys):
+	f_name = None
+	if keys.has_key("f_name"):
+	    which = keys["f_name"]
+	    del keys["f_name"]
+	buffer = self.application.find_buff(f_name)
+	if buffer:
+	    return apply(getattr(buffer, self.method), positional, keys)
+	
 class AppState(Object):
     """State information for the programming environment.    
 
@@ -40,26 +71,35 @@ class AppState(Object):
 
     SourceBuff curr_buffer=None -- Current source buffer
 
-    *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
-     the stack is a couple where the first entry is the name of the
-     source buffer and the second is the position in that buffer where
-     the crumb was dropped.
-
     *BOOL* translation_is_off -- If true, then translation of CSCs and
      LSAs isturned off for that applications. Everything should be
      typed as dictated text, except for commands that turn the
      translation back on.
 
-    **CLASSS ATTRIBUTES**
+    **CLASS ATTRIBUTES**
     
-    *none* --
+    *(STR)* buffer_methods -- list of names of buffer methods which
+    AppState should forward to SourceBuff.  Subclasses of AppState
+    should include those from AppState and add their own 
 
     .. [SpeechCommand] file:///./SpeechCommand.SpeechCommand.html
     .. [SourceBuff] file:///SourceBuff.SourceBuff.html
     .. [self.curr_buffer] file:///AppState.AppState.html"""
+
+    buffer_methods = ['is_language', 'region_distance', 'cur_pos',
+    'get_selection', 'goto_end_of_selection', 'set_selection',
+    'contents', 'get_text', 'distance_to_selection', 'get_visible',
+    'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
+    'move_relative', 'insert', 'indent', 'insert_indent', 
+    'delete', 'goto', 'goto_line', 'search_for', 'refresh_if_needed', 'refresh']
+
+    def __getattr__( self, name):
+	if name in self.buffer_methods:
+	    return ForwardToBuffer(self, name)
+	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
-                 active_field=None, curr_buffer=None, breadcrumbs = [],
+                 active_field=None, curr_buffer=None, 
                  **attrs):
         self.deep_construct(AppState, 
                             {'app_name': app_name,
@@ -68,10 +108,22 @@ class AppState(Object):
                              'curr_dir': curr_dir, 
                              'active_field': active_field,
                              'curr_buffer': curr_buffer,
-                             'breadcrumbs': breadcrumbs,
                              'translation_is_off': translation_is_off},
                             attrs)
 
+
+    def bidirectional_selection(self):
+      	"""does editor support selections with cursor at left?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUS**
+	
+	*BOOL* -- true if editor allows setting the selection at the
+	left end of the selection"""
+	pass
 
     def focus_is_source(self, lang_name):
         """Check if prog. env. focus is a source buffer
@@ -83,29 +135,6 @@ class AppState(Object):
         if (self.active_field != None):
             answer = (lang_name == None) or (self.curr_buffer.is_languaage(lang_name))
         return answer
-
-
-
-    def move_to(self, pos, f_name=None):
-        """Move cursor to position *INT pos* of buffer *STR f_name*.
-
-        If *f_name* is *None*, then use buffer [self.curr_buffer].
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
-
-        debug.virtual('move_to')
-
-    def move_relative(self, rel_movement, f_name=None):
-        """Move cursor to plus or minus a certain number of characters
-
-        if *INT rel_movement* < 0 then move to the left. Otherwise, move to the
-        right.
-        
-        If *f_name* is *None*, then use buffer [self.curr_buffer].
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
-
-        debug.virtual('move_relative')
-        
-
 
     def find_buff(self, buff_name=None):
         """Returns the open buffer with name *STR buff_name*.
@@ -125,118 +154,6 @@ class AppState(Object):
         #
         return None
 
-
-    def insert_indent(self, code_bef, code_after, start=None, end=None, f_name=None):
-        """Insert code into source buffer and indent it.
-
-        Replace code in source buffer with name *STR f_name* between
-        positions *INT start* and *INT to* with the concatenation of
-        code *STR code_bef* and *str code_after*. Cursor is put right
-        after code *STR bef*.
-        
-        If *f_name* is *None*, use source buffer [self.curr_buffer].
-        
-        If *to* is *None*, use attribute [self.cur_pos] of the source buffer.
-        
-        If *start* is *None*, use attribute [self.cur_pos] of source buffer.
-
-        .. [self.cur_pos] AppState
-        .. [self.curr_buffer] AppState"""
-
-        debug.virtual('insert_indent')
-        
-        
-    def insert(self, text, start=None, to=None, f_name=None):
-        """Replace text in source buffer with name *STR f_name*
-        between positions *INT start* and *INT to* with text *STR
-        text*.
-        
-        If *f_name* is *None*, use source buffer [self.curr_buffer].
-        
-        If *to* is *None*, use attribute [self.cur_pos] of the source buffer.
-        
-        If *start* is *None*, use attribute [self.cur_pos] of source buffer.
-
-        .. [self.cur_pos] AppState
-        .. [self.curr_buffer] AppState"""
-        debug.virtual('insert')
-
-    def indent(self, start, end, f_name=None):
-        """Indent code in a source buffer region.
-
-        Indent code in source buffer with name *STR f_name* between
-        positions *INT start* and *INT end*.
-        
-        If *f_name* is *None*, use source buffer [self.curr_buffer].
-        
-        .. [self.curr_buffer] AppState"""
-        debug.virtual('indent')
-
-
-    def delete(self, start=None, end=None, f_name=None):
-        """Delete text in a buffer.
-
-        Delete text from position *INT start* to position *INT end* in
-        source buffer with name *STR f_name*.
-
-        If *f_name* is *None*, use buffer [self.curr_buffer].
-
-        If *end* is *None*, delete til end of buffer.
-
-        If *start* is *None*, delete from position [self.cur_pos] of the
-        buffer.
-        .. [self.cur_pos] AppState        
-        .. [self.curr_buffer] AppState"""
-        
-        debug.virtual('delete')
-        
-    def goto(self, pos, f_name=None):
-
-        """Moves the cursor to position *INT pos* of source buffer
-        associated to file with name *STR f_name*.
-
-        If *f_name* is *None*, use [self.curr_buffer].
-
-        .. [self.curr_buffer] AppState"""
-        
-        debug.virtual('goto')
-
-
-
-    def select(self, start, end, f_name=None):
-        """Selects from position *INT start* up to *INT end* of source buffer
-        associated to file with name *STR f_name*.
-
-        If *f_name* is *None*, use [self.curr_buffer].
-
-        .. [self.curr_buffer] AppState"""
-                
-        debug.virtual('select')
-
-
-    def search_for(self, regexp, direction=1, num=1, where=1, f_name=None):
-        
-        """Moves cursor to the next occurence of regular expression
-           *STR regexp* in buffer with file name *STR f_name*.
-
-           *INT* direction -- if positive, search forward, otherwise
-            search backward
-
-           *INT* num -- number of occurences to search for
-
-           *INT* where -- if positive, move cursor after the occurence,
-           otherwise move it before
-
-           *STR* f_name -- name of the file in buffer where the search
-            should be done. If *None*, use [self.curr_buffer].
-
-           Returns *None* if no occurence was found. Otherwise,
-           returns a match object.
-        .. [self.curr_buffer] file:///AppState.AppState.html"""
-        
-        debug.virtual('search_for')
-
-
     def drop_breadcrumb(self, buffname=None, pos=None):
 
         """Drops a breadcrumb
@@ -248,10 +165,8 @@ class AppState(Object):
         [self.cur_pos] of buffer.
 
         If *buff* not specified either, drop breadcrumb [self.curr_buffer].
-
-        .. [SourceBuff] file:///SourceBuff.SourceBuff.html
-        .. [self.cur_pos] AppState        
-        .. [self.curr_buffer] AppState"""
+	"""
+	pass
 
         buff = self.find_buff(buffname)
         buffname = buff.file_name
@@ -267,6 +182,7 @@ class AppState(Object):
         if *BOOL gothere* is true, then move cursor to the last popped
         breadcrumb.
         """
+	pass
         stacklen = len(self.breadcrumbs)
         lastbuff, lastpos = self.breadcrumbs[stacklen - num]
         self.breadcrumbs = self.breadcrumbs[:stacklen - num - 1]
@@ -282,38 +198,6 @@ class AppState(Object):
         """
         debug.virtual('AppState.open_file')
 
-
-
-
-    def select_region(self, start, end):
-        """Sets the selection in current buffer to a particular region.
-        
-        **INPUTS**
-        
-        *INT* start -- start of region 
-        
-        *INT* end -- end of region 
-
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        self.curr_buffer.selection_start = start
-        self.curr_buffer.selection_end = end
-        self.goto(start)
-
-
-    def print_buff_content(self, file_name=None):
-        """Prints the content of a source  buffer to the VoiceCode console.
-
-        *[STR file_name]* is the name of the source file for the buffer to
-        print. If *None*, then print current buffer.    
-        """
-        buff = self.find_buff(file_name)
-        buff.print_buff()
-        
     def active_language(self):
         """Returns name of active programming language.
 

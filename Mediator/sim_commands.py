@@ -256,6 +256,7 @@ def say_select(utterance):
     global the_mediator
     utterance[0] = string.capitalize(utterance[0])
     natlink.recognitionMimic(utterance)
+    show_buff()
 
 
 def goto(pos):
@@ -274,17 +275,17 @@ def select(start, end):
     """Selects from position *start* to position *end* in current buffer"""
     global the_mediator    
     the_mediator.interp.on_app.select(start, end)
+    show_buff()
     
 def show_buff():
     """Shows content of current source buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.print_buff_content()
+    the_mediator.interp.on_app.curr_buffer.print_buff()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""
     global the_mediator        
-    pos = the_mediator.interp.on_app.curr_buffer.cur_pos
-    the_mediator.interp.on_app.goto(pos + steps)
+    the_mediator.interp.on_app.move_relative(steps)
     show_buff()
 
 
