@@ -1,7 +1,7 @@
 """Regression testing script"""
 
 import os, natlink, posixpath, sys
-import MediatorObject, vc_globals
+import MediatorObject, sr_interface, vc_globals
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
@@ -53,11 +53,11 @@ output1, output2 :
 if (__name__ == '__main__'):
     config_file = vc_globals.config + os.sep + 'vc_config.py'
     try:
-        execfile(config_file)
+        execfile(config_file)        
     except Exception, err:
         print 'ERROR: in configuration file %s.\n' % config_file
         raise err
-
+    
     opts, args = util.gopt(('d', None, 'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py'), 'h', None))
     
     if (opts['h']):
@@ -66,14 +66,19 @@ if (__name__ == '__main__'):
         print "-d option not implemented yet.\n"
     else:
         execfile(opts['f'])
-        auto_test.run(args)
-
+        try:
+            sr_interface.connect('off')
+        except natlink.UnknownName:
+            print 'NatSpeak user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
+        else:
+            auto_test.run(args)        
 
     #
     # Loading VoiceDictation may have caused a connection to NatSpeak.
     # Need to disconnect otherwise the DOS window hangs up after script
     # terminates.
     #
+    sr_interface.saveUser()
     sr_interface.disconnect()
 
 

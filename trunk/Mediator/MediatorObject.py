@@ -43,7 +43,6 @@ class MediatorObject(Object.Object):
     
     def __init__(self, interp=CmdInterp.CmdInterp(), \
                        **attrs):
-        natlink.natConnect()        
         self.deep_construct(MediatorObject, \
                             {'interp': interp, \
                              'mixed_grammar': None, \
@@ -145,13 +144,10 @@ def add_lsa(spoken_forms, meanings):
                 to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [vc_entry]
             else:
                 to_configure.interp.language_specific_aliases[language] = [vc_entry]
-            if language == None:
-                #
-                # This LSA is not tied to a particular langauge, so it
-                # doesn't have to be dynamically added/removed
-                # Add it once and for all
-                #
-                sr_interface.addWord(entry)
+            #
+            # Add LSA to the SR vocabulary
+            #
+            sr_interface.addWord(entry)
         
 def associate_language(extension, language):
     """Add an association between a file extension and a programming

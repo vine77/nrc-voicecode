@@ -3,6 +3,10 @@
 import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 
+#deb
+import sim_commands
+#fin
+
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'    
 
 ##############################################################################
@@ -354,6 +358,26 @@ def test_Object():
 auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
 
 ###############################################################################
+# Testing sr_interface.connect() when VoiceCode user is not defined
+###############################################################################
+
+def test_no_sr_user():
+    old_vc_user_name= sr_interface.vc_user_name
+    sr_interface.vc_user_name = 'dfafasdfrqowerglgferqeandgliaugfa'
+
+    sr_interface.disconnect()
+    print 'Trying to connect to SR system with inexistant user name'
+    try:
+        sr_interface.connect('off')
+    except natlink.UnknownName:
+        print 'natlink.UnknownName exception was sucessfully raised.'
+    else:
+        print 'ERROR: natlink.UnknownName exception was NOT sucessfully raised.'
+    sr_interface.vc_user_name = old_vc_user_name
+    
+auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with inexistant SR user')
+
+###############################################################################
 # Testing mediator.py console
 ###############################################################################
 
@@ -365,7 +389,7 @@ def test_say(utterance, user_input=None):
     print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
     mediator.say(utterance, user_input)
 
-def test_mediator_console():
+def test_mediator_console():    
     mediator.init_simulator()
     test_command("""clear_symbols()    """)
     test_command("""open_file('D:/blah.c')""")
@@ -453,7 +477,7 @@ def test_persistence():
     # there
     #
     print '\n\n>>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.\n'
-    test_command("""quit()""")
+    test_command("""quit(save_speech_files=0, disconnect=0)""")
     mediator.init_simulator(symdict_pickle_fname=fname)
     test_command("""print_symbols()""")
 
@@ -462,7 +486,7 @@ def test_persistence():
     # there anymore.
     #
     print '\n\n>>> Restarting mediator WITHOUT persistence. There should be NO symbols in the dictionary.\n'
-    test_command("""quit()""")
+    test_command("""quit(save_speech_files=0, disconnect=0)""")
     mediator.init_simulator(symdict_pickle_fname=None)
     test_command("""print_symbols()""")
     

@@ -32,7 +32,7 @@ say(STR utterance, bypass_NatLink=1, user_input=None)
          SR system
          e.g.: say('index not equal to 0')
          
-       - a list of list of words in their written\spoken form (or just
+       - a list of words in their written\spoken form (or just
          written if it doesn't have a spoken form different from its
          written form).
          e.g.: say(['index', ' != \\not equal to', '0'])
@@ -192,11 +192,11 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     Examples: say('x not equal to') -> 'x != '
               say(['x', ' != \\not equal to'] -> 'x != '
         
-    .. [say_select] file:///./mediator.html#say_select"""
+    .. [say_select] file:///./sim_command.html#say_select"""
     
     global the_mediator
 
-#    print '-- mediator.say: utterance=%s' % utterance
+#    print '-- sim_commands.say: utterance=%s' % utterance
 
     if echo_utterance:
         print 'Saying: %s' % utterance
@@ -316,13 +316,14 @@ def print_symbols():
 
 def print_abbreviations(show_unresolved=1):
     global the_mediator
-    the_mediator.interp.known_symbols.print_abbreviations(show_unresolved) 
+    the_mediator.interp.known_symbols.print_abbreviations(show_unresolved)
 
 def clear_symbols():
     #
     # Remove symbols from the Speech Recognition vocabulary
     #
-    global the_mediator        
+    global the_mediator
+
     the_mediator.interp.known_symbols.cleanup()
 
 def clear_abbreviations():
@@ -332,9 +333,45 @@ def clear_abbreviations():
     global the_mediator        
     the_mediator.interp.known_symbols.abbreviations_cleanup()
 
-def quit():
-    global quit_flag
+def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
+    global quit_flag, the_mediator
     quit_flag = 1
+
+    #
+    # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
+    # but don't save SymDict to file (we want the symbols and abbreviations to
+    # still be there when we come back.
+    #
+    if the_mediator:
+        the_mediator.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
+    
+    if sr_interface.speech_able():
+       #
+       # Ask the user if he wants to save speech files
+       #
+       while save_speech_files == None:
+           sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
+           answer = sys.stdin.readline()
+           answer = answer[:len(answer)-1]
+           
+           if answer == 'y':
+               save_speech_files = 1
+           elif answer == 'n':
+               save_speech_files = 0
+               
+           if save_speech_files == None:
+               print "\nPlease answer 'y' or 'n'."
+
+       if save_speech_files and sr_interface.sr_user_needs_saving:
+           print 'Saving speech files. This may take a moment ...'
+           sr_interface.saveUser()
+           print 'Speech files saved.'
+
+       if the_mediator:
+           the_mediator.mixed_grammar.unload()
+           the_mediator.code_select_grammar.unload()
+
+       if disconnect: sr_interface.disconnect()
 
 
 

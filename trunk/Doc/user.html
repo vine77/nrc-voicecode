@@ -25,7 +25,6 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
 
 
 <UL>
-<LI><A HREF="#warning">WARNING: Use a special test user or vocabulary</A>
 <LI><A HREF="#simulation">Simulation mode</A>
     <UL>
     <LI><A HREF="#shellCommands">Simulation shell commands</A>
@@ -46,36 +45,11 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
 <LI><A HREF="#trouble">Trouble shooting</A>
    <UL>
    <LI><A HREF="#noDictation">Dictation fails</A>
+   <LI><A HREF="#undefinedUser">ERROR: <EM>SR user 'VoiceCode' not defined.</EM></A>
    </UL>
 </UL>
 
 <HR>
-
-<H2><A NAME="warning">WARNING: Use a special test user or vocabulary</A></H2>
-
-VoiceCode is currently at the prototype stage and as such, it has many
-bugs. Some of those bugs may cause your Naturally Speaking vocabulary
-to become "polluted" with thouasands of words. It may also delete or
-replace some vocabulary words which you have defined.
-
-<P>
-
-Therefore, it is strongly recommended that you use a special purpose
-test vocabulary when running VoiceCode. That way, if VoiceCode screws
-up, it will only affect that test user and/or vocabulary.
-
-<P>
-
-Note that since there is a bug in VoiceCode that prevents it from working properly when
-<A
-HREF="#noDictation">NatSpeak is already running</A>, you must:
-
-<UL>
-<LI>open NatSpeak
-<LI>make sure to select the test user and/or vocabulary
-<LI>close NatSpeak
-</UL> 
-
 
 <H2><A NAME="simulation">Simulation mode</A></H2>
 
@@ -102,8 +76,9 @@ denote the position of the cursor.
 
 <P>
 
-Note that because of <A HREF="#noDictation">a bug in the current version</A>, you must make sure
-that NatSpeak is not already running when you start the mediator. Make sure you choose the test user and/or vocabulary before exiting NatSpeak, <A HREF="#warning">to avoid thrashing your real vocabulary</A>.
+Note that because of <A HREF="#noDictation">a bug in the current
+version</A>, you must make sure that NatSpeak is not already running
+when you start the mediator.
 
 <H3><A NAME="shellCommands">Simulation shell commands</A></H3>
 
@@ -111,6 +86,11 @@ that NatSpeak is not already running when you start the mediator. Make sure you 
 The following commands are available in the VoiceCode simulation shell:
 
 <PRE>
+Valid commands are:
+
+help()
+   display (this) list of commands
+
 open_file(STR fname)
    Opens file with path name *fname* in the editor
    simulator. It also compiles a list of symbols for that file.
@@ -133,15 +113,16 @@ say(STR utterance, bypass_NatLink=1, user_input=None)
    For those, you must use the *say_select* command.
     
    *utterance* can be either:
-
+   
        - a string with the written form of what should be recognised by the
          SR system
          e.g.: say('index not equal to 0')
-
-       - a list of list of words in their written\spoken form (or just
+         
+       - a list of words in their written\spoken form (or just
          written if it doesn't have a spoken form different from its
          written form).
          e.g.: say(['index', ' != \\not equal to', '0'])
+   
 
     In general, it's better to specify *utterance* as a list of
     written\spoken words because it allows to simulate exactly what
@@ -186,22 +167,22 @@ listen()
    Once in 'listen' mode, you cannot type console commands until you
    have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
    window.
+   
+print_abbreviations(show_unresolved=1)
+   Prints out a list of the abbreviations in symbols that were parsed
+   so far. If *show_unresolved=1*, also lists unresolved abbreviations
+   and the symbols they appear in (an unresolved abbreviation is an
+   abbreviation that appeared in a symbol and is neither a speech
+   vocabulary word nor a known abbreviation).
 
-print_abbreviations()
-   Prints the list of known abbreviations and their expansions
+print_error(STR message):
+   Prints an error to stderr
 
 print_symbols()
    Prints the list of symbols in the known symbols dictionary
 
-unresolved_abbreviations()
-   Prints out a list of the unresolved abbreviations in symbols that were
-   parsed so far. An unresolved abbreviation is an abbreviation that appeared
-   in a symbol and is neither a speech vocabulary word nor a known
-   abbreviation.
-
-   The unresolved abbreviations are printed in increasing order of length, 
-   to make it easier to spot the ones that are actually abbreviations (they
-   will tend to be short and appear at the beginning).
+provoke()
+   causes an error deliberately
 
 quit()
    Quit the simulator.
@@ -690,6 +671,19 @@ The exact symptoms of this problem is that if you issue a
 control will be returned to the console.
 
 
+<H3><A NAME="undefinedUser">ERROR: <EM>SR user 'VoiceCode' not defined.</EM></A></H3>
+
+If the mediator exits with this error message, it means that you
+forgot to define the user <EM>VoiceCode</EM> in your Speech
+Recognition system. This is the special user that VoiceCode employs to
+connect to your SR system in order to not bias your regular user
+towards code dictation.
+
+<P>
+
+To solve this problem, create a <EM>VoiceCode</EM> user, then exit
+your SR system (making sure to save the new user), then restart
+VoiceCode.
 
 <hr>
 <center>
