@@ -861,6 +861,27 @@ def mod_diff(x, y):
     raw_diff = difflib.ndiff(x, y)
     return filter(lambda x: x[0] != ' ', raw_diff)
 
+fake_words = {
+              'MX': 0,
+              'O': 0,
+              'ST': 0,
+              'CMP': 0,
+              'co-': 1,
+              'CRC': 0,
+              'HSV': 0,
+              'IM': 0,
+              'NI': 0,
+              'TTY': 1,
+              'UU': 0
+              }
+#fake_words = {}
+
+def word_exists(word, flag = None):
+    try:
+        return fake_words[word]
+    except KeyError:
+        return sr_interface.getWordInfo(word, flag)
+
 def test_SymDict_storage():
     test_data = vc_globals.test_data
     export_file = os.path.join(test_data, 'abbrevs')
@@ -868,6 +889,9 @@ def test_SymDict_storage():
 # create a new SymDict, without reading from a file
     symbols = SymDict.SymDict(export_file = export_file)
     symbols.export_abbreviations(export_file + '.py')
+# this allows us to get consistent results with different versions of
+# Natspeak with different built-in vocabularies
+    symbols.word_exists = word_exists
 
     f = open(export_file + '.py', "r")
     print "Exporting abbreviations from an empty SymDict, so"
@@ -887,8 +911,11 @@ def test_SymDict_storage():
     symbol_file = os.path.join(test_data, 'selected_py_sym.py')
     symbols.standard_symbols_in([symbol_file])
      
-    abbrev_file = os.path.join(test_data, 'py_abbrevs.py')
-    symbols.abbreviations_in([abbrev_file])
+    py_abbrev_file = os.path.join(test_data, 'py_abbrevs.py')
+    std_abbrev_file = os.path.join(test_data, 'std_abbrevs.py')
+    abbrev_files = [std_abbrev_file, py_abbrev_file]
+#    abbrev_files = [py_abbrev_file]
+    symbols.abbreviations_in(abbrev_files)
 
 # make sure we read those symbol and abbreviation files
     symbols.finish_config(mark_user = 0)
@@ -902,6 +929,7 @@ def test_SymDict_storage():
     fail = DictReadFailure()
     persistent_symbols = SymDict.SymDict(export_file = export_file + '2')
     persistent_symbols.sym_file = dict_file
+    persistent_symbols.word_exists = word_exists
     d = persistent_symbols.dict_from_file(on_failure = fail.on_failure)
     if fail.failed:
         print "ERROR: failed to read \n%s:" % util.within_VCode(dict_file)
@@ -931,6 +959,7 @@ def test_SymDict_storage():
     ierr = InterceptInputError()
     recovered_symbols = SymDict.SymDict(interp = ierr, sym_file = junk_file, 
         export_file = export_file)
+    recovered_symbols.word_exists = word_exists
     if not ierr.error:
         print "ERROR: SymDict did not report an error on init from"
         print "a bad persistent SymDict"
@@ -948,7 +977,7 @@ def test_SymDict_storage():
     print "finishing configuration of the recovered SymDict"
 
     recovered_symbols.standard_symbols_in([symbol_file])
-    recovered_symbols.abbreviations_in([abbrev_file])
+    recovered_symbols.abbreviations_in(abbrev_files)
     recovered_symbols.finish_config(mark_user = 0)
 
     d_recovered = recovered_symbols.persistent_dict()
@@ -957,6 +986,13 @@ def test_SymDict_storage():
 
 # the two dictionaries should also be the same in detail
     o = DiffCrawler.ObjDiff(all = 1)
+    mod_sources = d_mod['symbol_sources_read']
+    for i in range(len(mod_sources)):
+        mod_sources[i] = os.path.basename(mod_sources[i])
+    recovered_sources = d_recovered['symbol_sources_read']
+    for i in range(len(recovered_sources)):
+        recovered_sources[i] = os.path.basename(recovered_sources[i])
+
     o.compare(d_mod, d_recovered)
     same_difference = o.differences()
     if same_difference:
@@ -979,6 +1015,7 @@ def test_SymDict_storage():
     prev_dict_file = os.path.join(test_data, 'previous_symdict.dict')
     curr_symbols = SymDict.SymDict(export_file = export_file + '.current')
     curr_symbols.sym_file = curr_dict_file
+    curr_symbols.word_exists = word_exists
     d_curr = curr_symbols.dict_from_file(on_failure = fail.on_failure)
     if fail.failed:
         print "ERROR: failed to read \n%s:" % util.within_VCode(curr_dict_file)
@@ -995,6 +1032,12 @@ def test_SymDict_storage():
 # heterogeneous containers (but not empty ones) for now, assuming that
 # the detailed comparison with ObjDiff will catch any problems in such
 # containers
+        curr_sources = d_curr['symbol_sources_read']
+        for i in range(len(curr_sources)):
+            curr_sources[i] = os.path.basename(curr_sources[i])
+        sources = d['symbol_sources_read']
+        for i in range(len(sources)):
+            sources[i] = os.path.basename(sources[i])
         s.compare(d_curr, d)
         same_difference = s.differences()
         incr_version = \

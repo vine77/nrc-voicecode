@@ -530,7 +530,8 @@ class SymDict(OwnerObject):
                          'min_chars_for_approx_match': 4,
                          'min_chars_run_together': 3,
                          'min_non_consec_chars_for_approx_match': 3,
-                         'max_auto_acronym': 3
+                         'max_auto_acronym': 3,
+                         'word_exists': sr_interface.getWordInfo
                         })
         
         self.deep_construct(SymDict,
@@ -830,8 +831,8 @@ class SymDict(OwnerObject):
         #
         # Make sure the word is the SR vocabulary
         #
-        clean_word = sr_interface.clean_spoken_form(word)
-        sr_interface.addWord(clean_word)
+#        clean_word = sr_interface.clean_spoken_form(word)
+#        sr_interface.addWord(clean_word)
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = abbreviations
         else:
@@ -859,8 +860,8 @@ class SymDict(OwnerObject):
         
         *none* -- 
         """
-        clean_word = sr_interface.clean_spoken_form(word)
-        sr_interface.addWord(clean_word)
+#        clean_word = sr_interface.clean_spoken_form(word)
+#        sr_interface.addWord(clean_word)
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = [abbreviation]
         else:
@@ -885,8 +886,8 @@ class SymDict(OwnerObject):
         
         *none* -- 
         """
-        clean_word = sr_interface.clean_spoken_form(word)
-        sr_interface.addWord(clean_word)
+#        clean_word = sr_interface.clean_spoken_form(word)
+#        sr_interface.addWord(clean_word)
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = abbreviations
         else:
@@ -914,8 +915,8 @@ class SymDict(OwnerObject):
         
         *none* -- 
         """
-        clean_word = sr_interface.clean_spoken_form(word)
-        sr_interface.addWord(clean_word)
+#        clean_word = sr_interface.clean_spoken_form(word)
+#        sr_interface.addWord(clean_word)
         if not self.alt_abbreviations.has_key(word):
             self.alt_abbreviations[word] = abbreviations
         else:
@@ -1646,38 +1647,61 @@ class SymDict(OwnerObject):
             elif symbol not in symbol_list:
                 symbol_list.append(symbol)
             self.spoken_form_info.add_phrase(phrase, symbol_list)
+            if add_sr_entries:
+                self.add_vocabulary_entry(symbol, a_form)
+
+    def add_vocabulary_entry(self, symbol, spoken_form):
+        """adds a vocabulary entry corresponding to a spoken form for a
+        symbol
+
+        **INPUTS**
+
+        *STR* symbol -- the written form of the native symbol 
+        
+        *STR* spoken_form -- its spoken form
+
+        **OUTPUTS**
+
+        *none*
+        """
+        #
+        # Add spoken form to NatSpeak's vocab if not already there.
+        #
+        # Note: We want to avoid adding single words with identical
+        # written and spoken forms to the vocabulary, because they
+        # might be unresolved abbreviations.
+        #
+        # Since we don't remove words on exit, 
+        # such words would be indistinguishable from
+        # words that have been added by the real NatSpeak
+        # Vocabulary Builder.
+        #
+        # So the next time we start VoiceCode and compile a
+        # symbol that contains that abbreviation, the
+        # abbreviation would not be logged as unresolved
+        # (because it would correspond to an in-vocabulary word)
+        #
+        entry = None
+        if vocabulary_symbols_with_written_form:
             #
-            # Add spoken form to NatSpeak's vocab if not already there.
+            # Add the vocabulary entry as a written\\spoken
+            # form
             #
-            # Note: If the spoken form is a single word, we don't
-            #       add it because it might be an unresolved
-            #       abbreviation.
+
+            # this condition guards against adding unknown single words
+            if spoken_form != symbol:
+                entry = sr_interface.vocabulary_entry(spoken_form, symbol)
+        else:
             #
-            #       This abbreviation would not be removed upon exit
-            #       of VoiceCode because it's undistinguishable from
-            #       words that have been added by the real NatSpeak
-            #       Vocabulary Builder.
+            # Add just the spoken form entry
             #
-            #       So the next time we start VoiceCode and compile a
-            #       symbol that contains that abbreviation, the
-            #       abbreviation would not be logged as unresolved
-            #       (because it would correspond to an in-vocabulary
-            #       word)
-            #
-            if len(re.split('\s+', a_form)) > 1:
-                if vocabulary_symbols_with_written_form:
-                    #
-                    # Add the vocabulary entry as a written\\spoken
-                    # form
-                    #
-                    entry = sr_interface.vocabulary_entry(a_form, symbol)
-                else:
-                    #
-                    # Add just the spoken form entry
-                    #
-                    entry = sr_interface.vocabulary_entry(a_form)
-                    
-                if add_sr_entries: sr_interface.addWord(entry)        
+            # since we are adding only the spoken form, the
+            # condition is stricter
+            if len(re.split('\s+', spoken_form)) > 1:
+                entry = sr_interface.vocabulary_entry(spoken_form)
+                
+        if entry: sr_interface.addWord(entry)        
+
 
     def get_spoken_forms(self, symbol):
         """Returns a list of possible spoken forms for a symbol.
@@ -1732,12 +1756,22 @@ class SymDict(OwnerObject):
         #
         # Generate all possible spoken forms for that symbol
         #
+        
         the_spoken_forms = self.expand_possible_forms([''], possibilities)
+                                                      
+        # don't add unknown words to the vocabulary, otherwise next
+        # time we won't be able to tell that they are unknown
+        
+# add_vocabulary_entry now filters for this
+
+#        the_spoken_forms = filter(lambda form: form != symbol,
+#                                  the_spoken_forms )
+            
 #        print '-- SymDict.get_spoken_forms: the_spoken_forms=%s' % the_spoken_forms        
         return the_spoken_forms
 
 
-    def expand_word(self, word, symbol, only_word = 0):
+    def expand_word(self, word, symbol):
         """Expands a word from a symbol to its possible spoken forms.
 
         If *word* is an in-vocabulary word simply returns *[word]*
@@ -1762,9 +1796,6 @@ class SymDict(OwnerObject):
         
         *STR* symbol -- Symbol in which the word appeared
 
-        *BOOL* only_word -- true if the word is the only one in the
-        symbol (in which case we won't add an acronym expansion for it)
-        
         **OUTPUTS**
         
         *[STR] expansions * -- list of possible expansions of the word.
@@ -1799,33 +1830,73 @@ class SymDict(OwnerObject):
             # Check if this is an unresolved abbreviation
             # (note: flag=4 means case unsensitive)
             #
-            if sr_interface.getWordInfo(word, 4) is None:
-                hyphenated = word + '-'
-                hyphenated_pron = \
-                    sr_interface.vocabulary_entry(word, hyphenated)
-                if sr_interface.getWordInfo(hyphenated, 4) is not None:
-                    expansions = [hyphenated]
-                    return expansions
-                elif sr_interface.getWordInfo(hyphenated_pron, 4) is not None:
-                    return expansions
-#                print '-- SymDict.expand_word: word is not a known abbreviation. Adding it to unresolved abbreviations'                
-                if self.unresolved_abbreviations.has_key(word):
-                    self.unresolved_abbreviations[word][symbol] = 1
-                else:
-                    self.unresolved_abbreviations[word] = {symbol: 1}
-                if not only_word and len(word) <= self.max_auto_acronym:
-                    acronym = string.lower(word)
-                    spoken = sr_interface.spoken_acronym(acronym)
-                    if len(word) == 1:
-                        expansions = [spoken]
-                    else:
-                        expansions.append(spoken)
+            expansions = self.check_word(word, symbol)
 
 #        print '-- SymDict.expand_word: returning expansions=%s' % expansions
+        expansions.sort()
         return expansions 
 
+    def check_word(self, word, symbol):
+        """Finds pronunciation expansions of a word, based on whether or
+        not it is in the vocabulary
+        based on .
 
+        **INPUTS**
+        
+        *STR* word -- word to check
+        
+        *STR* symbol -- Symbol in which the word appeared
 
+        **OUTPUTS**
+
+        *[STR] expansions * -- list of possible expansions of the word.
+        """
+        if (self.word_exists)(word) is not None:
+            expansions = [word]
+            if len(word) == 1 and word[0].isalpha():
+                acronym = string.lower(word)
+                spoken = sr_interface.spoken_acronym(acronym)
+                expansions.append(spoken)
+            return expansions
+        hyphenated = word + '-'
+        hyphenated_pron = \
+            sr_interface.vocabulary_entry(word, hyphenated)
+        if (self.word_exists)(hyphenated_pron) is not None:
+            return [hyphenated]
+        if len(word) > 1:
+            capped =  word.capitalize()
+# if capitalized form exists, assume that the word is pronouncable (even
+# without the capitalization)
+            if (self.word_exists)(capped) is not None:
+                return [word]
+        upper = word.upper()
+        if (self.word_exists)(upper) is not None:
+# if word exists only in all-caps form, assume that the effective
+# pronunciation is as an acronym, which may not be pronouncable if not
+# all caps
+            expansions = [upper]
+            if len(word) <= self.max_auto_acronym and word.isalpha():
+                acronym = string.lower(word)
+                spoken = sr_interface.spoken_acronym(acronym)
+                if len(word) == 1:
+                    expansions = [spoken]
+                else:
+                    expansions.append(spoken)
+            return expansions
+        if self.unresolved_abbreviations.has_key(word):
+            self.unresolved_abbreviations[word][symbol] = 1
+        else:
+            self.unresolved_abbreviations[word] = {symbol: 1}
+        expansions = [word]
+        if len(word) <= self.max_auto_acronym and word.isalpha():
+            acronym = string.lower(word)
+            spoken = sr_interface.spoken_acronym(acronym)
+            if len(word) == 1:
+                expansions = [spoken]
+            else:
+                expansions.append(spoken)
+        return expansions
+            
     def expand_possible_forms(self, partial_forms, further_extensions):
         """Returns a list of possible spoken forms for a symbol.
         
@@ -2654,11 +2725,8 @@ class SymDict(OwnerObject):
             #
             for written_as, symbol_info in self.symbol_info.items():
                 for spoken_as in symbol_info.spoken_forms:
-                    if len(re.split('\s+', spoken_as)) > 1:
-# see comment under update_spoken_forms
-                        entry = sr_interface.vocabulary_entry(spoken_as, 
-                            written_as)
-                        sr_interface.addWord(entry)
+                    self.add_vocabulary_entry(written_as, spoken_as)
+
         except Exception, e:
             extype, value, trace = sys.exc_info()
             ex = traceback.format_exception(extype, value, trace)
