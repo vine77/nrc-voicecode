@@ -1,3 +1,24 @@
+##############################################################################
+# VoiceCode, a programming-by-voice environment
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# (C)2000, National Research Council of Canada
+#
+##############################################################################
+
 """Action functions that span different languages"""
 
 import copy, exceptions, os, re
@@ -114,10 +135,6 @@ class Action(Object.Object):
 class ActionRepeatable(Action):
     """Base class for repeatable actions.
 
-    This class doesn't actually have any additional methods. It's just
-    used to flag a subclass as being an action class that can be
-    repeated.
-    
     **INSTANCE ATTRIBUTES**
     
     *BOOL already_repeated=0* -- If true, then the action has been repeated at
@@ -131,6 +148,28 @@ class ActionRepeatable(Action):
     def __init__(self, already_repeated=0, **args_super):
         self.deep_construct(Action,
                             {'already_repeated': already_repeated},
+                            args_super,
+                            {})
+
+class ActionBidirectional(Action):
+    """Base class for bidirectional actions, i.e. actions that can be executed
+    in one of two directions (e.g. up vs down, right vs left,
+    forward vs backward, etc.)
+   
+    **INSTANCE ATTRIBUTES**
+    
+    *INT direction=1* -- If positive, then action is executed in
+     forward/down/right/next etc. direction. If negative, the action
+     is executed in backward/up/left/previous etc. direction
+
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, direction=1, **args_super):
+        self.deep_construct(Action,
+                            {'direction': direction},
                             args_super,
                             {})
 
@@ -197,7 +236,71 @@ class ActionRepeatLastCmd(Action):
         for ii in range(self.n_times):
             last_action.log_execute(app, cont)
 
-class ActionSelect(ActionRepeatable):
+
+class ActionRepeatBidirectCmd(Action):
+    
+    """This action repeats the last command only if it was a bidirectional
+    action. It may also change the direction of the action.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *INT direction=1* -- New direction for the action to be
+     repeated. If positive, forward/right/down direction. If negative,
+     backward/left/up direction. If *None* reverse the direction.
+    
+    
+     **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, n_times=1, direction=1, **args_super):
+        self.deep_construct(ActionRepeatLastCmd, 
+                            {'direction': direction}, 
+                           args_super,
+                            {})
+
+    def log(self, app, cont):
+        """Logs the repeat actions.
+
+        Actually, it just does nothing because instead, the repeated action
+        will log itself when it is repeated.
+        
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        pass
+
+    def execute(self, app, cont):
+        """Repeats the last command in the command history [self.n_times], if
+        it was a bidirectional action. It may also change its direction.
+
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute
+        .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
+
+        print '-- ActionRepeatBidirectCmd.execute: called, self.__dict__=%s' % self.__dict__
+
+        #
+        # Change the direction of the last action.
+        #
+        (last_cont, last_action) = app.get_history(1)
+        if self.direction == None:
+            #
+            # Reverse direction of last action
+            #
+            last_action.direction = last_action.direction * -1
+        else:
+            last_action.direction = self.direction
+
+        #
+        # Repeat the last action
+        #
+        ActionRepeatLastCmd().log_execute(app, cont)
+
+
+class ActionSelect(Action):
     """This action sets the selection in a buffer.
 
     **INSTANCE ATTRIBUTES**
@@ -232,6 +335,7 @@ class ActionSelect(ActionRepeatable):
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
         
         app.set_selection(range=self.range, cursor_at=self.cursor_at, f_name=self.f_name)
+
         
 class ActionInsert(Action):
     """Action that inserts and indents code at cursor position
@@ -282,15 +386,12 @@ class ActionInsert(Action):
         return the_doc
 
 
-class ActionSearch(ActionRepeatable):
+class ActionSearch(ActionRepeatable, ActionBidirectional):
     """Moves cursor to occurence of a regular expression.
         
     **INSTANCE ATTRIBUTES**
         
     *STR* regexp=None -- Regular expression to search for.
-
-    *INT* direction=1 -- Direction of search. *Positive* means
-     forward, *negative* means backward.                         
     
     *ANY* where=1 -- Place where to put cursor w.r.t. to
     *occurence. *Positive* means after occurence, *negative* means
@@ -303,15 +404,13 @@ class ActionSearch(ActionRepeatable):
     *none* -- 
     """
         
-    def __init__(self, regexp=None, direction=1, num=1, where=1, **args_super):
-        self.deep_construct(ActionSearch, \
-                            {'regexp': regexp, \
-                             'direction': direction, \
-                             'num': num, \
-                             'where': where}, \
-                            args_super, \
+    def __init__(self, regexp=None, num=1, where=1, **args_super):
+        self.deep_construct(ActionSearch, 
+                            {'regexp': regexp, 
+                             'num': num, 
+                             'where': where}, 
+                            args_super, 
                             {})
-
 
 
     def execute(self, app, cont):
