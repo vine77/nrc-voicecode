@@ -916,15 +916,17 @@ class SB_ServiceFullState(SB_ServiceState):
         debug.trace('SB_ServiceFullState.restore_state', 
                     '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
         #deb
-        debug.trace('SB_ServiceFullState.restore_state', '*** before set_text, buffer contaisns')
-        self.buff.print_buff_if_necessary()                    
+        if 0:
+            debug.trace('SB_ServiceFullState.restore_state', '*** before set_text, buffer contaisns')
+            self.buff.print_buff_if_necessary()                    
         #fin
                     
         self.buff.set_text(cookie.contents())
         
         #deb
-        debug.trace('SB_ServiceFullState.restore_state', '*** before set_selection, buffer contaisns')
-        self.buff.print_buff_if_necessary()                    
+        if 0:
+            debug.trace('SB_ServiceFullState.restore_state', '*** before set_selection, buffer contaisns')
+            self.buff.print_buff_if_necessary()                    
         #fin
         
         self.buff.set_selection(cookie.get_selection())

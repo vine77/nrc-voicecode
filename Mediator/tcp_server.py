@@ -360,6 +360,7 @@ def parse_module_info(module_info):
     module_path, title, handle = module_info
     module = os.path.basename(module_path)
     module = os.path.splitext(module)[0]
+    module = string.lower(module)
     return handle, title, module
 
 

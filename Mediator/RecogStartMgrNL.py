@@ -26,6 +26,7 @@ appropriate grammars.
 """
 
 import debug
+import string
 import RecogStartMgr
 import natlink
 from natlinkutils import *
@@ -98,6 +99,7 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
         module_path, title, handle = module_info
         module = os.path.basename(module_path)
         module = os.path.splitext(module)[0]
+        module = string.lower(module)
         return handle, title, module
 
     def window_info(self):
@@ -109,7 +111,8 @@ class RecogStartMgrNL(RecogStartMgr.RSMBasic):
 
 	**OUTPUTS**
 
-	*(INT, STR, STR)* -- the window id, title, and module name
+	*(INT, STR, STR)* -- the window id, title, and module name.  The
+        module name should be converted to all lowercase
 	"""
         return self.parse_module_info(natlink.getCurrentModule())
 

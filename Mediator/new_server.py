@@ -43,7 +43,6 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-                    
 #########################################################################
 # debugging basic_correction with Emacs  
                   
@@ -61,7 +60,7 @@ debug.config_traces(status="on",
 #                       'DictWinGramNL': 1,
 #                       'sr_grammarsNL': 1,
 #                       'sr_interface': 1,  
-                        'set_text': 1,
+#                        'set_text': 1,
 #                       'SelectWinGramNL': 1,
 #                       'SimpleSelection': 1,  
 #                       'SelectWinGram': 1,

@@ -67,7 +67,7 @@ class KnownTargetModule(Object):
 	*none*
 	"""
         self.deep_construct(KnownTargetModule, 
-                            {'module_name': module_name,
+                            {'module_name': string.lower(module_name),
                              'title_escape': title_escape
                             }, 
                             args)
