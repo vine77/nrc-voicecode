@@ -1189,7 +1189,6 @@ class RSMInfrastructure(RecogStartMgr):
             self.results[instance].correct_recent()
 
     def reformat_recent(self, instance):
-        print "RSMInfrastructure.reformat_recent invoked... this will eventually display the reformat recent dialog, but it doesn't work yet"
         if self.known_instance(instance):
             self.results[instance].reformat_recent()
                         

@@ -55,15 +55,21 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off", 
                     active_traces={
-#################################     
-                    'CmdInterp.interpret_NL_cmd': 1,
-                    'MockSpokenUtterance.__init__': 1,
-                    'UtteranceInterpretation.phrase': 1,
-                    'MediatorConsoleWX.show_recent_symbols': 1,
-                    'ReformatRecentSymbolsModel.__init__': 1,
-                    'SymbolResult.__init__': 1,
-                    'SymbolConstruction.insert_existing': 1,
-                    'ReformatRecentSymbolsViewWX.__init__': 1,
+#################################  
+                     'ReformatRecentSymbolsModel.__init__': 1,
+                     'DlgModelView.__init__': 1,
+                     'DlgModelView.Destroy': 1,
+#                     'show_recent_utterances': 1,
+#                     'MediatorConsoleWX.show_modal_dialog': 1,   
+#                    'MediatorConsoleWX.show_recent_symbols': 1,
+#                    'CmdInterp.interpret_NL_cmd': 1,
+#                    'MockSpokenUtterance.__init__': 1,
+#                    'UtteranceInterpretation.phrase': 1,
+#                    'MediatorConsoleWX.show_recent_symbols': 1,
+#                    'ReformatRecentSymbolsModel.__init__': 1,
+#                    'SymbolResult.__init__': 1,
+#                    'SymbolConstruction.insert_existing': 1,
+#                    'ReformatRecentSymbolsViewWX.__init__': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

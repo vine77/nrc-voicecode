@@ -22,6 +22,7 @@
 import sys
 import debug
 import Object, vc_globals
+from wxPython.wx import *
 
 """Defines abstract interface for the mediator GUI console and all other
 GUI windows and dialog boxes
@@ -60,27 +61,6 @@ class DismissModalEvent(Object.Object):
         *none*
         """
         debug.virtual('DismissModalEvent.dismiss')
-
-class Dismissable(Object.Object):
-    """Mix-in for a dialog which can supply a DismissModalEvent
-
-    """
-    def __init__(self, **args):
-        self.deep_construct(Dismissable, {}, args)
-
-    def dismiss_event(self):
-        """returns a DismissModalEvent which can be used to dismiss the
-        dialog
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *DismissModalEvent* -- the event
-        """
-        debug.virtual('Dismissable.dismiss_event')
 
 class MediatorConsole(Object.OwnerObject):
     """
@@ -501,6 +481,73 @@ class MediatorConsole(Object.OwnerObject):
         """
         debug.virtual('MediatorConsole.raise_active_window')
     
+class DlgModelView(Object.OwnerObject):
+    """Symbol Model-View class for implementing dialogs.
+    
+    NOTE: Currently, this class is a bit messy because it needs
+          to be backward compatible with legacy dialogs that implemented
+          the model and the view layer in a same class.
+    
+    **INSTANCE ATTRIBUTES**
+
+    *wxDialog* view_layer -- The presentation layer for this dialog
+    (note this may be *self* if presentation layer and model
+    layer are rolled into a single same object). 
+
+    **CLASS ATTRIBUTES**
+    
+    *none* --    
+    """
+    def __init__(self, **args_super):
+        #deb
+        debug.trace('DlgModelView.__init__', 'self=%s' % self)
+#        debug.print_call_stack()
+        #deb
+        self.deep_construct(DlgModelView, 
+                            {'view_layer': None}, 
+                            args_super)
+
+
+    def setView(self, view):
+        self.view_layer = view
+        
+        # Note: Backward compatibility with legacy dialogs which
+        #       implemented the view and model layer in a same class
+        if self.view_layer != self:
+            self.add_owned('view_layer')
+            
+    def view(self):
+        # Note: Backward compatibility with legacy dialogs which
+        #       implemented the view and model layer in a same class
+        if self.view_layer:
+           return self.view_layer
+        else:
+           return self
+        
+    def Destroy(self):
+        # Note: Backward compatibility with legacy dialogs which
+        #       implemented the view and model layer in a same class
+        debug.trace('DlgModelView.Destroy', '** self.view()=%s, self=%s' % (self.view(), self))
+        if self.view() != self:
+           self.view().Destroy()
+        else:
+           wxDialog.Destroy(self)
+        
+    def dismiss_event(self):
+        """returns a DismissModalEvent which can be used to dismiss the
+        dialog
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *DismissModalEvent* -- the event
+        """
+        debug.virtual('Dismissable.dismiss_event', self)
+
+                            
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
