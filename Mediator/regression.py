@@ -478,7 +478,7 @@ class TempConfigNewMediator(Object.Object):
         """cleanup the underlying MediatorObject
         """
         self.the_editor = None
-        self.the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
+        self.the_mediator.quit(save_speech_files=0, 
             disconnect=0)
         self.the_mediator.cleanup()
         self.the_mediator = None
@@ -527,7 +527,7 @@ class TempConfigNewMediatorFactory(Object.Object):
         a_mediator = \
             NewMediatorObject.NewMediatorObject(interp = interp, 
                 symbol_match_dlg = self.symbol_match_dlg,
-                alt_sym_file = alt_sym_file)
+                alt_sym_file = alt_sym_file, temporary = 1)
         debug.trace('TempConfigNewMediatorFactory.new_config', '** after NewMediatorObject()')                        
         if not skip_config:
             a_mediator.configure(testing = 1)

@@ -184,9 +184,6 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
     *{} names* -- namespace in which to put the quit_flag
 
-    *BOOL* clean_sr_voc -- If true, remove all SR entries for known
-    symbols.
-
     *BOOL* save_speech_files -- Indicates whether or not
     speech files should be saved. If *None*, then ask the user.
 
@@ -212,7 +209,6 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                              'interp': interp,
                              'names': names,
                              'quit_flag': 0,
-                             'clean_sr_voc' : 0,
                              'testing': testing,
                              'save_speech_files' : None,
                              'bypass_sr_recog': bypass_sr_recog,
@@ -225,7 +221,6 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         """copy our internal flags which control the mediator cleanup 
         process to the namespace, in case they are being read from there
         instead of from this object"""
-        self.names['clean_sr_voc'] = self.clean_sr_voc
         self.names['save_speech_files'] = self.save_speech_files
         self.names['disconnect_flag'] = self.disconnect_flag
 
@@ -546,9 +541,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         self.names['quit_flag'] = quitting
         self.copy_flags()
 
-    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1, echo_cmd=0):
-        if echo_cmd: self.echo_command('quit', clean_sr_voc, save_speech_files, disconnect)
-        self.clean_sr_voc = clean_sr_voc
+    def quit(self, save_speech_files=None, disconnect=1, echo_cmd=0):
+        if echo_cmd: self.echo_command('quit', save_speech_files, disconnect)
         self.save_speech_files = save_speech_files
         self.disconnect_flag = disconnect
         self.signal_quitting()

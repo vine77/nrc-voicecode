@@ -209,7 +209,8 @@ class MediatorConsole(Object.OwnerObject):
         return 0
 
     def set_gram_factory(self, gram_factory):
-        """assigns a parent mediator to the console
+        """used by NewMediatorObject to specify a WinGramFactory which the 
+        console can use to speech-enable dialog boxes
 
         **INPUTS**
 

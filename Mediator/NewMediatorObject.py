@@ -202,6 +202,7 @@ class NewMediatorObject(Object.OwnerObject):
                  alt_sym_file = None,
                  symbol_match_dlg_regression = 1,
                  symbol_match_dlg = 0,
+                 temporary = 0,
                  **attrs):
         """creates the NewMediatorObject
 
@@ -267,6 +268,10 @@ class NewMediatorObject(Object.OwnerObject):
         be used in place of the default file.  Note: the default is to
         use vc_globals.sym_state_file for interactive use, but no file
         for regression testing.
+
+        *BOOL temporary* -- indicates that this NewMediatorObject is a 
+        temporary one created by TempConfigNewMediator for a single regression
+        test which require their own customized mediator
         """
 
         debug.trace('NewMediatorObject.__init__', 'invoked')
@@ -318,7 +323,7 @@ class NewMediatorObject(Object.OwnerObject):
             tests_def_fname = os.path.join(vc_globals.admin, 'tests_def.py')
             execfile(tests_def_fname, self.test_space)        
             self.test_suite = tests.create_suite(self.test_or_suite)
-        if self.test_suite:
+        if self.test_suite or temporary:
             user = 'VCTest'
         else:
 # for right now, leave this hard-coded.  Eventually, we want this to be
@@ -326,14 +331,26 @@ class NewMediatorObject(Object.OwnerObject):
 # need to connect to the speech engine before we can run vc_config and
 # user_config.
             user = 'VoiceCode'
+        debug.trace('NewMediatorObject.__init__', 
+          'connecting to natlink')
         sr_interface.connect(user, mic_state = 'off')        
+        debug.trace('NewMediatorObject.__init__', 
+          'connected to natlink')
         if self.interp == None:
+            debug.trace('NewMediatorObject.__init__', 
+              'new interpreter with sym_file %s, temporary = %d' % \
+              (repr(alt_sym_file), temporary))
             self.new_interpreter(alt_sym_file = alt_sym_file,
-                symbol_match_dlg = symbol_match_dlg)
+                symbol_match_dlg = symbol_match_dlg, 
+                temporary = temporary)
+            debug.trace('NewMediatorObject.__init__', 
+              'done creating new interpreter')
         else:
             self.interp.set_mediator(self)
 
         if self.editors == None:
+            debug.trace('NewMediatorObject.__init__', 
+              'creating new AppMgr')
             self.new_app_mgr()
         if server:
             server.set_mediator(self)
@@ -376,7 +393,7 @@ class NewMediatorObject(Object.OwnerObject):
         return 1
     
     def new_interpreter(self, alt_sym_file = None,
-        symbol_match_dlg = 0, no_circle = 0):
+        symbol_match_dlg = 0, no_circle = 0, temporary = 0):
         """create a new interpreter
 
         **INPUTS**
@@ -388,14 +405,19 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         if self.interp:
-            self.interp.cleanup_dictionary()
+# don't automatically clean up the dictionary - only do that when we
+# are explicitly requested to do so
+#            self.interp.cleanup_dictionary()
+# do clean up manually because we are deleting it before we ourselves are
+# cleaned up
+            self.interp.cleanup()
         m = self
         if no_circle:
             m = None
         sym_file = alt_sym_file
 # if no alternative file is specified, use the default SymDict state
 # file, or None if we are doing regression testing
-        if alt_sym_file is None and not self.test_suite:
+        if alt_sym_file is None and not (self.test_suite or temporary):
             sym_file = vc_globals.sym_state_file
         self.interp = \
             CmdInterp.CmdInterp(sym_file = sym_file, 
@@ -579,8 +601,9 @@ class NewMediatorObject(Object.OwnerObject):
            sym_dlg = symbol_match_dlg
         if not 'interp' in exclude:
             if use_pickled_interp and self.pickled_interp:
-                self.interp.cleanup_dictionary(clean_sr_voc = 0, clean_symdict = 0, 
-                    resave = 0)
+# clean up manually because we are deleting it before we ourselves are
+# cleaned up
+                self.interp.cleanup()
                 self.interp = cPickle.loads(self.pickled_interp)
                 self.interp.set_mediator(self)
                 exclude.append('interp')
@@ -886,36 +909,38 @@ class NewMediatorObject(Object.OwnerObject):
 # owns NewMediatorObject
         Object.OwnerObject.remove_other_references(self)
 
-    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
+    def quit(self, save_speech_files=None, disconnect=1, 
+        console_closed = 0):
         """Quit the mediator object
 
         **INPUTS**
         
-        *BOOL* clean_sr_voc=0 -- If true, remove all SR entries for known
-        symbols.
-
         *BOOL* save_speech_files = None -- Indicates whether or not
         speech files should be saved. If *None*, then ask the user.
 
         *BOOL* disconnect = 1 -- Indicates whether or not to disconnect from
         the SR system.
 
+        *BOOL* console_closed = 0 -- set to true to indicate if the call 
+        to quit is occurring because the main GUI console window was closed.
+        That way, the quit method will know to stop trying to send user
+        messages to the console
+
         **OUTPUTS**
         
         *none* --
         """            
-        #
-        # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
-        # but don't save SymDict to file (we want the symbols and
-        # abbreviations to still be there when we come back.
-# DCF: contrary to this comment, this *will* save the symbol dictionary, 
-# at least according to current defaults for CmdInterp.cleanup
-# (except that we haven't specified a pickle filename)
-        #
-#        print 'quitting'
         debug.trace('NewMediatorObject.quit', 'quit called')
-        self.interp.cleanup_dictionary(clean_sr_voc=clean_sr_voc)
-    
+
+        if console_closed and self.the_console:
+# if the call to quit is occurring because the main GUI console window 
+# was closed, clean this up early, to avoid sending user messages to
+# a non-existant window
+            self.the_console.cleanup()
+            self.the_console = None
+
+        self.interp.save_dictionary()
+
         if self.server:
             self.server.mediator_closing()
 
@@ -925,8 +950,6 @@ class NewMediatorObject(Object.OwnerObject):
 
         disconnect_from_sr(disconnect, save_speech_files)
 
-#        self.cleanup()
-                
     def delete_editor_cbk(self, app_name, instance_name, unexpected = 0):
         """callback from the application manager indicating that
         an editor closed or disconnected from the mediator
@@ -1055,7 +1078,11 @@ class NewMediatorObject(Object.OwnerObject):
         end_time = start_time
         try:
             try:
-                if server and self.test_suite.foreground_count():
+                if not server:
+                    msg = 'WARNING: Unable to run foreground tests with\n' \
+                        + 'an internal editor\n'
+                    sys.stderr.write(msg)
+                elif self.test_suite.foreground_count():
                     self.foreground_testing = 1
                     self.user_message('Starting foreground tests...')
                     time.sleep(3)
@@ -1063,10 +1090,6 @@ class NewMediatorObject(Object.OwnerObject):
                         self.profile_prefix)
                     self.user_message('Finished foreground tests...')
                     self.foreground_testing = 0
-                else:
-                    msg = 'WARNING: Unable to run foreground tests with\n' \
-                        + 'an internal editor\n'
-                    sys.stderr.write(msg)
                 if self.test_suite.background_count():
                     if self.global_grammars:
                         time.sleep(3)
@@ -1513,8 +1536,8 @@ class NewMediatorObject(Object.OwnerObject):
 
         *none*
         """
-        if self.the_console:
-            sent = self.the_console.user_message(message, 
+        if self.console():
+            sent = self.console().user_message(message, 
                 instance = instance)
             if sent and not self.testing:
                 return

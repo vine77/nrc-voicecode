@@ -244,6 +244,7 @@ class SymbolInfo(Object):
                             {'spoken_forms': spoken_forms}, \
                             attrs, \
                             {})
+
 class SpokenFormInfo(Object):
     """Stores information about a spoken form for a parsed symbol.
     
@@ -281,9 +282,8 @@ class SymbolMatch(Object):
     *NUM fmt_rank=10* -- For new symbol, this gives the match's rank in
      the list of possible forms for the new symbol
     
-    *{STR: STR} word_matches=None* -- Keys are words of
-     *pseudo_symbol* and vallues are the matching segment in
-     *native_symbol*.
+    *[STR] word_matches=None* -- List of words matching each segment of
+    native_symbol.
 
     CLASS ATTRIBUTES**
             
@@ -345,7 +345,7 @@ class SymbolMatch(Object):
         
         **INPUTS**
         
-        *[SymbolMatch]* other_match -- The other match to compare *self* to.
+        *SymbolMatch* other_match -- The other match to compare *self* to.
         
 
         **OUTPUTS**
@@ -1767,9 +1767,6 @@ class SymDict(Object):
 
 #        print '-- SymDict.accept_symbol_match: upon exit, known symbols are now:'; self.print_symbols()
             
-
-
-
     def cleanup_dictionary(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
         

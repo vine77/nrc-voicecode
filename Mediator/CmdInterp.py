@@ -1488,6 +1488,21 @@ class CmdInterp(OwnerObject):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
         return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
 
+    def save_dictionary(self, file = None):
+        """saves the symbol dictionary state
+
+        **INPUTS**
+
+        *STR file* -- name of the file in which to save the dictionary
+        (usually None to use the same file sym_file specified when
+        CmdInterp was initialized)
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.known_symbols.save(file = file)
+
     def cleanup_dictionary(self, clean_sr_voc=0, clean_symdict=1, resave=1):
         """Cleans up the symbol dictionary.
         
