@@ -253,7 +253,7 @@ def test_CmdInterp():
     #
     # Create a command interpreter connected to the editor simulator
     #
-    natlink.natConnect()    
+#    natlink.natConnect()    
     temp_config = temp_factory.new_config(skip_config = 1)
 #     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
 #         interp=CmdInterp.CmdInterp())
@@ -440,7 +440,7 @@ def test_no_sr_user():
         print 'ERROR: natlink.UnknownName exception was NOT sucessfully raised.'
     sr_interface.vc_user_name = old_vc_user_name
     
-auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with inexistant SR user')
+#auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with inexistant SR user')
 
 ###############################################################################
 # Testing mediator.py console
@@ -1355,7 +1355,7 @@ auto_test.add_test('punctuation', test_punctuation, 'testing the various Python 
 # Testing the various Python CSCs and LSAs
 ##############################################################################
 def pseudo_python_wrapper():
-    test_pseudo_python.run(testing, commands)
+    test_pseudo_python.run(testing)
 
 auto_test.add_test('python', pseudo_python_wrapper, 'testing the various Python CSCs and LSAs')
 
@@ -1646,7 +1646,7 @@ def test_am_dictionaries():
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 1)
     GM_factory = GramMgr.WinGramMgrFactory(g_factory)
     current = RecogStartMgr.CurrWindowDummy()
-    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, GM_factory = GM_factory, 
+    recog_mgr = RecogStartMgr.RSMExtInfo(GM_factory = GM_factory, 
       win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
@@ -1722,8 +1722,7 @@ def test_rsm_algorithm(trust = 0):
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 0)
     GM_factory = GramMgr.WinGramMgrFactory(g_factory)
     current = RecogStartMgr.CurrWindowDummy()
-    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, 
-        GM_factory = GM_factory, 
+    recog_mgr = RecogStartMgr.RSMExtInfo(GM_factory = GM_factory, 
         trust_current_window = trust, win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
@@ -2154,7 +2153,7 @@ def test_EdSim_alloc_cleanup():
     #
 
     print '\n*** testing cleanup with single buffer EdSim\n'
-    natlink.natConnect()    
+#    natlink.natConnect()    
     editor = EdSim.EdSim(instance_reporting = 1)
     temp_config = temp_factory.new_config(editor = editor, skip_config = 1)
     del editor
@@ -2164,7 +2163,7 @@ def test_EdSim_alloc_cleanup():
     test_CmdInterp_mediator(temp_config)
 
     print '\n*** testing cleanup with multi-buffer EdSim\n'
-    natlink.natConnect()    
+#    natlink.natConnect()    
     editor = EdSim.EdSim(multiple = 1, instance_reporting = 1)
     temp_config = temp_factory.new_config(editor = editor, skip_config = 1)
     del editor

@@ -135,7 +135,7 @@ def dictate_pseudo_python(commands):
     commands.quit(save_speech_files=0, disconnect=0)
 
 
-def run(testing, commands):
+def run(testing):
 
     #
     # This file contains the native code that we will dictate
@@ -148,6 +148,8 @@ def run(testing, commands):
     #
     print '>>> Dictating Python when all symbols are known <<<\n'
     testing.init_simulator_regression()
+    names = testing.namespace()
+    commands = names['commands']
     commands.compile_symbols([native_py_file])
     commands.print_symbols()
     dictate_pseudo_python(commands)
@@ -157,5 +159,7 @@ def run(testing, commands):
     #
     print '\n>>> Dictating Python when only standard symbols are known <<<\n'    
     testing.init_simulator_regression()
+    names = testing.namespace()
+    commands = names['commands']
     commands.print_symbols()
     dictate_pseudo_python(commands)    

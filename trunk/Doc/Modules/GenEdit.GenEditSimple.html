@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:17:15 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:15:05 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -90,7 +90,7 @@
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.delete_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.delete_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">perform_callback=1</SPAN>)<SPAN CLASS="OneLiner"> # delete a buffer </SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.editor_has_focus"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.editor_has_focus</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether the editor window has the focus</SPAN>
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.frame_activated"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.frame_activated</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">frame_ID</SPAN>, <SPAN CLASS="Argument">activated=1</SPAN>)
-    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.new_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.new_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.new_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.new_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">instance_string=None</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.on_exit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.on_exit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID=None</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.on_frame_close"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.on_frame_close</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ID</SPAN>)
     <A CLASS="DocLink" HREF="#GenEdit.GenEditFrames.open_file_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GenEdit.GenEditFrames.open_file_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # prompts for a file to open</SPAN>
@@ -1512,7 +1512,7 @@ otherwise false
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GenEdit.GenEditFrames.new_frame" CLASS="Method">GenEdit.GenEditFrames.new_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<H2 ID="GenEdit.GenEditFrames.new_frame" CLASS="Method">GenEdit.GenEditFrames.new_frame(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">instance_string=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -1529,6 +1529,10 @@ new_buffer first, followed by add_frame</P>
 <DT>
 <EM>STR buff_name</EM>
 <DD>the name of the initial buffer for the frame
+<DT>
+<EM>STR instance_string</EM>
+<DD>portion of the title string indicating 
+the name of this particular instance.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

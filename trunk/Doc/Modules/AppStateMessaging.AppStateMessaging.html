@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Sep 13 09:01:51 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:09:36 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,24 +26,52 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppStateMessaging</SPAN>(<A CLASS="DocLink" HREF="AppStateCached.AppStateCached.html">AppStateCached</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_msgr=None</SPAN>, <SPAN CLASS="Argument">talk_msgr=None</SPAN>, <SPAN CLASS="Argument">id=None</SPAN>, <SPAN CLASS="Argument">listen_can_block=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._bidirectional_selection_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._is_active_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._is_active_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._multiple_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._multiple_windows_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._multiple_windows_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple windows per instance?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging._shared_window_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging._shared_window_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.apply_upd_descr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.apply_upd_descr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">upd_descr_list</SPAN>)<SPAN CLASS="OneLiner"> # Applies a updates provided by a list of update descriptions.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.config_from_external"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.config_from_external</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Lets the external editor configure the <EM>AppStateMessaging</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.is_active"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.is_active</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # is the editor application active (not suspended)?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.is_active_is_safe"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.is_active_is_safe</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # can is_active safely be queried, without blocking?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.listen_one_transaction"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.listen_one_transaction</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Completes a single editor-initiated transaction</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.mediator_closing"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.mediator_closing</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.multiple_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.multiple_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple windows per instance?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.process_pending_updates"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.process_pending_updates</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>, <SPAN CLASS="Argument">block=0</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.recog_end"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.recog_end</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the end of a recognition event.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.suspend_notification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.suspend_notification</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the editor supports suspend notification?</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.suspendable"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.suspendable</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateMessaging.AppStateMessaging.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateMessaging.AppStateMessaging.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from AppStateCached.AppStateCached</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateCached.AppStateCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateCached.AppStateCached.init_cache"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateCached.AppStateCached.init_cache</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Initialises the cache with data obtained from external editor.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__getattr__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
@@ -95,32 +123,21 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_indicator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_indicator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">status</SPAN>)<SPAN CLASS="OneLiner"> # Sets a "recognition in progress" visual indicator.</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.resume_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.resume_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.set_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.suspend_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.suspend_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.suspend_notification"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.suspend_notification</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the editor supports suspend notification?</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.suspendable"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.suspendable</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to open a file in a new buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.unbind_from_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.unbind_from_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # unbinds the AppState from a particular buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from AppStateCached.AppStateCached</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateCached.AppStateCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppStateCached.AppStateCached.init_cache"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateCached.AppStateCached.init_cache</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Initialises the cache with data obtained from external editor.</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_grandparent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_grandparent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
-    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -154,6 +171,43 @@ can block on get_mess if there is no message waiting.  This flag is
 provided only for compatibility with ServerSingleThread.  All other
 servers should be set up so that listen_msgr avoids blocking and 
 simply return None if there are no messages.
+<DT>
+BOOL <EM>closing</EM>
+<DD>flag indicating that the external editor has
+told us it is disconnecting, or the listen socket connection has
+been broken, or the AppMgr has called cleanup
+<DT>
+BOOL <EM>multiple_buffer_support</EM>
+<DD>does the editor support multiple
+open buffers?
+<DT>
+BOOL <EM>bidirectional_selection_support</EM>
+<DD>does the editor support 
+bidirectional selection (cursor can be at either end of the
+selection)
+<DT>
+BOOL <EM>in_shared_window</EM>
+<DD>is the editor running in a potentially
+shareable window (i.e. a shell window where the editor can be
+suspended or closed without closing the window)
+<DT>
+BOOL <EM>multiple_window_support</EM>
+<DD>does the editor open multiple
+windows?
+<DT>
+BOOL <EM>is_active_safe</EM>
+<DD>an internal flag indicating whether it is
+safe to query the editor to see if it is active, or whether doing so
+when the editor is inactive will block
+<DT>
+BOOL <EM>activity_state</EM>
+<DD>an internal flag to keep track of whether
+the editor process is active or suspended
+<DT>
+BOOL <EM>query_active</EM>
+<DD>if false, the activity_state is accurate, and
+we should use it to respond to is_active.  If true, we instead 
+query the editor
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -176,6 +230,30 @@ Get this value directly from the external editor</P>
 <DD>true if editor allows setting the selection at the
 left end of the selection
 </DL>
+<H2 ID="AppStateMessaging.AppStateMessaging._is_active_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._is_active_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method to query the editor application to see if its
+process is active (not suspended)?</P>
+<P>
+Usually true, except for remote editors running in a (Unix)
+shell.  GUI editors tend to minimize instead of suspending, so
+their process should still be active.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is active (i.e. has not been suspended)
+
+</DL>
 <H2 ID="AppStateMessaging.AppStateMessaging._multiple_buffers_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._multiple_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>does editor support multiple open buffers?</P>
 
@@ -194,6 +272,68 @@ Retrieve this information directly from the external editor.</P>
 <EM>BOOL</EM>
 <DD>true if editor supports having multiple buffers open 
 at the same time
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging._multiple_windows_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._multiple_windows_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple windows per instance?</P>
+
+<P>
+Note: the purpose of this function is to allow the RecogStartMgr
+to determine whether a previously unknown window could belong to
+this known instance.  Therefore, Emacs running in text mode 
+should return false, even though it can have (sub-)windows in 
+a single frame.  </P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not appear to the mediator 
+as having separate windows.  However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+multiple windows should return true, regardless of the remote
+display method.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports opening multiple editor windows.  
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging._shared_window_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging._shared_window_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+is the editor running in a window which could be shared with
+another editor instance (because it is a shell window,
+and this instance could be suspended or closed)</P>
+<P>
+Usually false for GUI editors.</P>
+<P>
+Note: remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will also appear to be
+shared windows.  However, the mediator will perform a separate 
+check to detect this, so for remote editors which do not share windows 
+on the remote system, AppState.shared_window should report
+false.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is running in a potentially shared window
+
 </DL>
 <H2 ID="AppStateMessaging.AppStateMessaging.app_active_buffer_name" CLASS="Method">AppStateMessaging.AppStateMessaging.app_active_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
@@ -332,6 +472,84 @@ messages may vary from editor to editor.</P>
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.instance_string" CLASS="Method">AppStateMessaging.AppStateMessaging.instance_string(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the identifier string for this editor instance (which 
+should be a substring of the window title)</P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not be able to set 
+the overall title.  
+However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+identifying title strings should still return the appropriate
+string.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the identifying string, or None if the editor was not given 
+such a string or cannot set the window title.
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.is_active" CLASS="Method">AppStateMessaging.AppStateMessaging.is_active(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>is the editor application active (not suspended)?</P>
+
+<P>
+Usually true, except for remote editors running in a (Unix)
+shell.  GUI editors tend to minimize instead of suspending, so
+their process should still be active.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is active (i.e. has not been suspended)
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.is_active_is_safe" CLASS="Method">AppStateMessaging.AppStateMessaging.is_active_is_safe(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>can is_active safely be queried, without blocking?</P>
+
+<P>
+For example, Emacs provides a suspend-hook and a
+suspend-resume-hook, so a properly written AppStateEmacs can
+set a flag on suspend and clear it on resume, and will therefore
+be able to respond to is_active without querying Emacs.</P>
+<P>
+Also, except for remote editors running in a (Unix)
+shell, this is usually true.  GUI editors tend to minimize 
+instead of suspending, so their process should still be active.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if is_active can be queried without blocking,
+even if the editor has been suspended. 
+
+</DL>
 <H2 ID="AppStateMessaging.AppStateMessaging.listen_one_transaction" CLASS="Method">AppStateMessaging.AppStateMessaging.listen_one_transaction(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Completes a single editor-initiated transaction</P>
 
@@ -351,7 +569,10 @@ messages may vary from editor to editor.</P>
 
 <DT>
 <EM>BOOL</EM>
-<DD>true if an update message was read successfully
+<DD>true if an update message was read successfully, and
+it was not an editor_disconnecting or connection_broken message.
+This return value is used by process_pending_updates to
+determine if it should call listen_one_transaction again.
 
 </DL>
 <H2 ID="AppStateMessaging.AppStateMessaging.mediator_closing" CLASS="Method">AppStateMessaging.AppStateMessaging.mediator_closing(<SPAN CLASS="Argument">self</SPAN>)</H2>
@@ -393,6 +614,37 @@ editors that it was closing.  </P>
 <EM>BOOL</EM>
 <DD>true if editor supports having multiple buffers open 
 at the same time
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.multiple_windows" CLASS="Method">AppStateMessaging.AppStateMessaging.multiple_windows(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does editor support multiple windows per instance?</P>
+
+<P>
+Note: the purpose of this function is to allow the RecogStartMgr
+to determine whether a previously unknown window could belong to
+this known instance.  Therefore, Emacs running in text mode 
+should return false, even though it can have (sub-)windows in 
+a single frame.  </P>
+<P>
+Note: multiple windows of remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will not appear to the mediator 
+as having separate windows.  However, the mediator will perform a 
+separate check to detect this, so remote editors which support
+multiple windows should return true, regardless of the remote
+display method.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor supports opening multiple editor windows.  
+
 </DL>
 <H2 ID="AppStateMessaging.AppStateMessaging.new_compatible_sb" CLASS="Method">AppStateMessaging.AppStateMessaging.new_compatible_sb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Creates a new instance of [SourceBuff].</P>
@@ -585,6 +837,113 @@ NOTE: This method may be never be invoked</P>
 </DL>
 <P>
 ..[recog_begin()] AppState.AppState.html#recog_begin</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.set_instance_string" CLASS="Method">AppStateMessaging.AppStateMessaging.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specifies the identifier string for this editor instance.  If the 
+editor is capable of setting the window title to include this string, 
+it should (and then should return this string when the
+instance_string method is called.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance_string
+<DD>the identifying string to be included in the
+window title if possible.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppStateMessaging.AppStateMessaging.shared_window" CLASS="Method">AppStateMessaging.AppStateMessaging.shared_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+is the editor running in a window which could be shared with
+another editor instance (because it is a shell window,
+and this instance could be suspended or closed)</P>
+<P>
+Usually false for GUI editors.</P>
+<P>
+Note: remote editors running in a remote display
+which appears as a single window to be local operating system 
+(X servers in single window mode, VNC) will also appear to be
+shared windows.  However, the mediator will perform a separate 
+check to detect this, so for remote editors which do not share windows 
+on the remote system, AppState.shared_window should report
+false.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is running in a potentially shared window
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.suspend_notification" CLASS="Method">AppStateMessaging.AppStateMessaging.suspend_notification(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does the editor supports suspend notification?</P>
+
+<P>
+<STRONG>NOTE:</STRONG> this method is used to determine how to implement
+is_active and whether is_active_is_safe.  It is generally 
+called only by an AppState subclass (or a ClientEditor wrapper) 
+and only when the editor first starts or connects to the mediator.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the editor can (and will) notify the mediator
+prior to its process being suspended and once it has been resumed.
+
+</DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.suspendable" CLASS="Method">AppStateMessaging.AppStateMessaging.suspendable(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+is the editor running in an environment where it can be suspended?
+(if, e.g., it was started from a Unix command-line, except for 
+GUI editors which fork, allowing the command-line command to exit).  
+If so, this makes querying the editor to is if it is_active unsafe. </P>
+<P>
+Usually false for Windows and most GUI editors.</P>
+<P>
+<STRONG>NOTE:</STRONG> this method is used to determine how to implement
+is_active and whether is_active_is_safe.  It is generally 
+called only by an AppState subclass (or a ClientEditor wrapper) 
+and only when the editor first starts or connects to the mediator.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is running in an environment where 
+it can be suspended
+
+</DL>
 <H2 ID="AppStateMessaging.AppStateMessaging.tell_editor_to_open_file" CLASS="Method">AppStateMessaging.AppStateMessaging.tell_editor_to_open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
 <P>Tell the external editor to open a file.</P>
 
@@ -605,6 +964,34 @@ STR <EM>buff_name</EM>
 <DD>Unique name of the buffer in which the file
 was opened.
 </DL>
+<H2 ID="AppStateMessaging.AppStateMessaging.title_escape_sequence" CLASS="Method">AppStateMessaging.AppStateMessaging.title_escape_sequence(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)</H2>
+<P>None</P>
+
+<P>
+gives the editor a (module-dependent) hint about the escape
+sequence which can be used to set the module's window title, if
+any.  If the editor has its own mechanism for setting the window
+title, it should simply ignore this method.  </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> before
+<DD>the escape sequence to be sent before the string
+to place in the window title, or the empty string if there is no
+escape sequence
+<DT>
+<EM>STR</EM> after
+<DD>the escape sequence which terminates the window
+title value
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppStateMessaging.AppStateMessaging.updates_from_app" CLASS="Method">AppStateMessaging.AppStateMessaging.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
 <P>Gets a list of updates from the external app.</P>
 
@@ -638,6 +1025,182 @@ external app.
 </DL>
 <P>
 ..[AS_Update] AppState.AS_Update.html</P>
+<H2 ID="AppStateCached.AppStateCached.init_cache" CLASS="Method">AppStateCached.AppStateCached.init_cache(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Initialises the cache with data obtained from external editor.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's grandparent (or great-grandparent, etc.)
+(Actually, any other reference which needs to be del'ed but not
+cleaned up)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR grandparent</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR parent</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns the name of the parent attribute</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the parent, or None if none
+
+</DL>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
+remove_other_references method, after performing their own duties.
+Also, a class inheriting from two OwnerObject classes MUST
+define remove_other_references and call both subclasses'
+versions</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState._new_source_buffer" CLASS="Method">AppState.AppState._new_source_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>None</P>
 
@@ -1767,6 +2330,26 @@ STR <EM>new_buff_name</EM>
 <EM>none</EM></P>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
+<H2 ID="AppState.AppState.resume_cbk" CLASS="Method">AppState.AppState.resume_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us that its process has 
+resumed after having been suspended </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="AppState.AppState.save_file" CLASS="Method">AppState.AppState.save_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)</H2>
 <P>Tell the external editor to save the current buffer.</P>
 
@@ -1924,6 +2507,79 @@ false.</P>
 <DD>true if editor is running in a potentially shared window
 
 </DL>
+<H2 ID="AppState.AppState.suspend_cbk" CLASS="Method">AppState.AppState.suspend_cbk(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us that its process is about
+to be suspended</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppState.suspend_notification" CLASS="Method">AppState.AppState.suspend_notification(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>does the editor supports suspend notification?</P>
+
+<P>
+<STRONG>NOTE:</STRONG> this method is used to determine how to implement
+is_active and whether is_active_is_safe.  It is generally 
+called only by an AppState subclass (or a ClientEditor wrapper) 
+and only when the editor first starts or connects to the mediator.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the editor can (and will) notify the mediator
+prior to its process being suspended and once it has been resumed.
+
+</DL>
+<H2 ID="AppState.AppState.suspendable" CLASS="Method">AppState.AppState.suspendable(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+is the editor running in an environment where it can be suspended?
+(if, e.g., it was started from a Unix command-line, except for 
+GUI editors which fork, allowing the command-line command to exit).  
+If so, this makes querying the editor to is if it is_active unsafe. </P>
+<P>
+Usually false for Windows and most GUI editors.</P>
+<P>
+<STRONG>NOTE:</STRONG> this method is used to determine how to implement
+is_active and whether is_active_is_safe.  It is generally 
+called only by an AppState subclass (or a ClientEditor wrapper) 
+and only when the editor first starts or connects to the mediator.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if editor is running in an environment where 
+it can be suspended
+
+</DL>
 <H2 ID="AppState.AppState.synchronize_with_app" CLASS="Method">AppState.AppState.synchronize_with_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)</H2>
 <P>None</P>
 
@@ -2069,182 +2725,6 @@ external app.
 </DL>
 <P>
 ..[AS_Update] AppState.AS_Update.html</P>
-<H2 ID="AppStateCached.AppStateCached.init_cache" CLASS="Method">AppStateCached.AppStateCached.init_cache(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Initialises the cache with data obtained from external editor.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
-<P>attempt to call cleanup on object</P>
-
-<P>
-<STRONG>INPUTS*</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>OwnerObject object</EM>
-<DD>note: class of object is the expected
-class, but _cleanup_object doesn't assume this is correct, nor
-does it check whether the object is a subclass of
-OwnerObject, only that it is a class instance and that it
-has a cleanup attribute
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>reason for error (or None if no error).
-
-</DL>
-<H2 ID="Object.OwnerObject.add_grandparent" CLASS="Method">Object.OwnerObject.add_grandparent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">grandparent</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's grandparent (or great-grandparent, etc.)
-(Actually, any other reference which needs to be del'ed but not
-cleaned up)</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR grandparent</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append a new attribute name to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
-<P>append new attribute names to the list of owned objects</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>[STR] owned</EM>
-<DD>names of owned attributes
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-method to cleanup circular references by cleaning up 
-any children, and then removing the reference to the parent</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
-<P>None</P>
-
-<P>
-specify the name of the attribute containing a reference to 
-this object's parent.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR parent</EM>
-<DD>name of the parent, or None if none
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="Object.OwnerObject.owned_by" CLASS="Method">Object.OwnerObject.owned_by(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the name of the parent attribute</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR</EM>
-<DD>name of the parent, or None if none
-
-</DL>
-<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>None</P>
-
-<P>
-additional cleanup to ensure that this object's references to
-its owned objects are the last remaining references</P>
-<P>
-<STRONG>NOTE:</STRONG> subclasses must call their parent class's 
-remove_other_references method, after performing their own duties.
-Also, a class inheriting from two OwnerObject classes MUST
-define remove_other_references and call both subclasses'
-versions</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

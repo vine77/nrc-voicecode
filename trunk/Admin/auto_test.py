@@ -30,7 +30,26 @@ import util
 
 test_reg = {}
 suite_reg = {'all': ['.*']}
+suite_reg['highlights'] = ['automatic_abbreviations',
+'mediator_console', 'python']
+suite_reg['fabfour'] = ['SymDict', 'automatic_abbreviations',
+'mediator_console', 'python']
 
+suite_reg['upto'] = ['CmdInterp', 'EdSim', 'EdSim_alloc_cleanup', 'SymDict', 
+'Object', 'Symdict', 'am_dictionaries', 'automatic_abbreviations']
+
+suite_reg['mostupto'] = ['CmdInterp', 'EdSim', 'EdSim_alloc_cleanup', 
+'SymDict', 'automatic_abbreviations']
+
+suite_reg['threeupto'] = ['CmdInterp', 'EdSim', 
+'SymDict', 'automatic_abbreviations']
+
+suite_reg['twobefore'] = ['CmdInterp', 'EdSim', 
+'automatic_abbreviations']
+
+suite_reg['cibefore'] = ['CmdInterp', 'automatic_abbreviations']
+
+suite_reg['edbefore'] = ['EdSim', 'automatic_abbreviations']
 
 test_header_fmt = '\n\n******************************************************************************\n* Test       : %s\n* Description : %s\n******************************************************************************\n\n'
 

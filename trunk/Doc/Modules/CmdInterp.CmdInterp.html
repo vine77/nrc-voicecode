@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 00:59:39 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:06:44 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -38,6 +38,7 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_word</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Removes a single word from a command.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">clean_symdict=1</SPAN>, <SPAN CLASS="Argument">resave=1</SPAN>)<SPAN CLASS="OneLiner"> # Cleans up the symbol dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.dlg_select_symbol_match"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.dlg_select_symbol_match</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Asks the user to select a match for pseudo symbol.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.enable_symbol_match_dlg"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.enable_symbol_match_dlg</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">enable=1</SPAN>)<SPAN CLASS="OneLiner"> # enables or disables the symbol match dialog</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_CSC"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_CSC</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a CSC.</SPAN>
@@ -489,6 +490,28 @@ matched
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="CmdInterp.CmdInterp.enable_symbol_match_dlg" CLASS="Method">CmdInterp.CmdInterp.enable_symbol_match_dlg(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">enable=1</SPAN>)</H2>
+<P>enables or disables the symbol match dialog</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> enable
+<DD>1 to enable the dialog, 0 to disable it
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>previous status of the dialog
+
 </DL>
 <H2 ID="CmdInterp.CmdInterp.index_csc" CLASS="Method">CmdInterp.CmdInterp.index_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</H2>
 <P>Add a new csc to the command interpreter's command dictionary</P>

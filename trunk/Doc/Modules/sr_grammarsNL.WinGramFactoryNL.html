@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:07:53 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Sep 17 11:08:13 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,12 +18,12 @@
 <P CLASS="DeclaredIn">Declared in module <A HREF="sr_grammarsNL.html">sr_grammarsNL</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_grammarsNL.WinGramFactoryNL<BR>
-&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;sr_grammars.WinGramFactory<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramFactoryNL</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramFactoryNL</SPAN>(<A CLASS="DocLink" HREF="sr_grammars.WinGramFactory.html">WinGramFactory</A>):
     <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
     <A CLASS="DocLink" HREF="#sr_grammarsNL.WinGramFactoryNL.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammarsNL.WinGramFactoryNL.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
@@ -33,6 +33,11 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from sr_grammars.WinGramFactory</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">select_words=['go', 'go after next', 'go after previous', 'go before', 'go before next', 'go before previous', 'go next', 'go previous', 'after next', 'after previous', 'before', 'before next', 'before previous', 'correct', 'correct next', 'correct previous', 'next', 'previous', 'select', 'select next', 'select previous', 'after']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactory.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactory.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
 
 </PRE><H2>Description</H2><P>
 natlink implementation of factory which returns 
@@ -262,6 +267,103 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="sr_grammars.WinGramFactory.__init__" CLASS="Method">sr_grammars.WinGramFactory.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">select_words=['go', 'go after next', 'go after previous', 'go before', 'go before next', 'go before previous', 'go next', 'go previous', 'after next', 'after previous', 'before', 'before next', 'before previous', 'correct', 'correct next', 'correct previous', 'next', 'previous', 'select', 'select next', 'select previous', 'after']</SPAN>, <SPAN CLASS="Argument">through_word='through'</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> select_words
+<DD>list of words which can precede the
+phrase from the visible text in selection grammars
+<DT>
+<EM>STR</EM> through_word
+<DD>word for selecting a range with the 
+selection grammars
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="sr_grammars.WinGramFactory.make_dictation" CLASS="Method">sr_grammars.WinGramFactory.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)</H2>
+<P>create a new dictation grammar</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>WinGramMgr</EM> manager
+<DD>the grammar manager which will own the new
+grammar
+<DT>
+<EM>AppState</EM> app
+<DD>application which is the target of the grammar
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer corresponding to this
+grammar.  Buff_name will be passed to
+CmdInterp.interpret_NL_cmd as the initial buffer.
+<DT>
+<EM>INT</EM> window
+<DD>make grammar specific to a particular window
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>is grammar exclusive?  (prevents other
+non-exclusive grammars from getting results)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>DictWinGram</EM>
+<DD>new dictation grammar
+
+</DL>
+<H2 ID="sr_grammars.WinGramFactory.make_selection" CLASS="Method">sr_grammars.WinGramFactory.make_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>)</H2>
+<P>create a new selection grammar</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>application corresponding to the selection
+grammar, which is queried with buff_name for the currently
+visible range, and is notified of selection changes
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer corresponding to this
+grammar.  Can also be set later in the activate call to the
+grammar.
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>is grammar exclusive?  (prevents other
+non-exclusive grammars from getting results)
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>is grammar exclusive?  (prevents other
+non-exclusive grammars from getting results)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>SelectWinGram</EM>
+<DD>new selection grammar
+
 </DL>
 
 <HR>
