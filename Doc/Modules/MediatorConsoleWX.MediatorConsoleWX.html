@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:13:50 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:41:29 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,15 +25,18 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorConsoleWX</SPAN>(<A CLASS="DocLink" HREF="MediatorConsole.MediatorConsole.html">MediatorConsole</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.pop_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.pop_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # pops  a modal dialog box off the top of the stack</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.push_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.push_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # makes the given wxWindow the foreground one (for the system)</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.show_correction_box"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.show_correction_box</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.show_modal_dialog"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.show_modal_dialog</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.show_recent_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.show_recent_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -46,12 +49,6 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
     <SPAN CLASS="InheritsHead"># Inherited from MediatorConsole.MediatorConsole</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame_handle</SPAN>, <SPAN CLASS="Argument">win_sys</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
@@ -59,9 +56,13 @@
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.heard_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.heard_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">words</SPAN>, <SPAN CLASS="Argument">gram_type=None</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.pop_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.pop_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.push_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.push_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dismiss_event</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_gram_factory"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_gram_factory</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">gram_factory</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.set_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.set_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">mediator</SPAN>)<SPAN CLASS="OneLiner"> # assigns a parent mediator to the console</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.show_correction_box"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.show_correction_box</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.show_recent_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.show_recent_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.user_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.user_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
 
@@ -74,25 +75,29 @@
 <EM>wxFrame main_frame</EM>
 <DD>the main frame window of the console, which
 will be the parent for most modal dialogs
-<DT>
-<EM>[wxDialog] modal_dialogs</EM>
-<DD>stack of modal dialog boxes currently
-active
-<DT>
-<EM>[threading.Event] dismiss_events</EM>
-<DD>stack of threading.Event objects 
-used to signal the modal dialog boxes to close.  Each dialog box
-must have an idle event which checks the state of the Event object
-and closes, returning wxID_DISMISS_MODAL, if the Event's state
-becomes true.
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
 <P>
 <EM>none</EM> 
 </P>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.already_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.already_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>does the console already have a modal dialog running?</P>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.raise_active_window" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.raise_active_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+makes the active window (within the current process) the
+foreground one (for the system)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>makes the given wxWindow the foreground one (for the system)</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -100,46 +105,10 @@ becomes true.
 <EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if a modal dialog is active
-
-</DL>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.correct_recent" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
-<P>None</P>
-
 <P>
-display a correct recent dialog box for to allow the user to 
-select a recent utterance to correct</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>STR editor_name</EM>
-<DD>name of the editor instance
-<DT>
-<EM>[(SpokenUtterance, BOOL)] utterances</EM>
-<DD>the n most recent dictation 
-utterances (or all available if &lt; n), sorted most recent last, 
-with corresponding flags indicating if the utterance can be 
-undone and re-interpreted, or None if no utterances are stored.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the user made changes and approved them
-
-</DL>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.correct_utterance" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
+<EM>none</EM>
+</P>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.show_correction_box" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.show_correction_box(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -181,93 +150,64 @@ the user approves), or if the caller will handle that later.
 <DD>true if the user made changes and approved them
 
 </DL>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.dismiss_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.dismiss_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.show_modal_dialog" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.show_modal_dialog(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>)</H2>
 <P>None</P>
 
 <P>
-dismisses any modal dialog boxes which the console has
-running</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if the modal dialog box was sucessfully dismissed
-(or if there wasn't one to start with)
-
-</DL>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.pop_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.pop_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>pops  a modal dialog box off the top of the stack</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if there was a modal dialog on the stack
-
-</DL>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.push_modal" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.push_modal(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dialog</SPAN>, <SPAN CLASS="Argument">event</SPAN>)</H2>
-<P>None</P>
-
-<P>
-push a modal dialog box onto the stack before calling
-ShowModal</P>
+shows a dismissable modal dialog box, and handles the push/pop modal 
+bookkeeping</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>wxDialog</EM>
-<DD>the dialog
-<DT>
-<EM>threading.Event bye</EM>
-<DD>threading.Event object whose state will be
-set to true if the dialog box should cancel
+<EM>Dismissable, OwnerObject dialog</EM>
+<DD>the dialog to show
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.raise_active_window" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.raise_active_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>the return code from ShowModal 
+
+</DL>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.show_recent_utterances" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.show_recent_utterances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
 <P>None</P>
 
 <P>
-makes the active window (within the current process) the
-foreground one (for the system)</P>
+display a correct recent dialog box for to allow the user to 
+select a recent utterance to correct</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
-<H2 ID="MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.raise_wxWindow(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
-<P>makes the given wxWindow the foreground one (for the system)</P>
 
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-<EM>none</EM></P>
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>[(SpokenUtterance, INT, BOOL)] utterances</EM>
+<DD>the n most recent 
+dictation utterances (or all available if &lt; n), sorted most recent 
+last, each with a corresponding utterance number and a flag 
+indicating if the utterance can be undone and re-interpreted.
+</DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM>
-</P>
+
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>the utterance numbers of 
+those utterances which were corrected by the user, or None if
+none were corrected
+
+</DL>
 <H2 ID="MediatorConsoleWX.MediatorConsoleWX.user_message" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.user_message(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
 <P>None</P>
 
@@ -298,6 +238,136 @@ editor.
 <DD>true if the MediatorConsole implementation has a means
 of displaying user messages 
 
+</DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
 </DL>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>
@@ -454,136 +524,6 @@ versions</P>
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-<P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="MediatorConsole.MediatorConsole.__init__" CLASS="Method">MediatorConsole.MediatorConsole.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame_handle</SPAN>, <SPAN CLASS="Argument">win_sys</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P>None</P>
 
@@ -623,8 +563,10 @@ window-system specific functions
 <P>None</P>
 
 <P>
+Store the current foreground window,
 display a correct recent dialog box for to allow the user to 
-select a recent utterance to correct</P>
+select a recent utterance to correct.  Finally, restore
+the original window to the foreground</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -646,17 +588,21 @@ undone and re-interpreted, or None if no utterances are stored.
 <DL>
 
 <DT>
-<EM>BOOL</EM>
-<DD>true if the user made changes and approved them
+<EM>[INT]</EM>
+<DD>the utterance numbers of 
+those utterances which were corrected by the user, or None if
+none were corrected
 
 </DL>
 <H2 ID="MediatorConsole.MediatorConsole.correct_utterance" CLASS="Method">MediatorConsole.MediatorConsole.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
+Store the current foreground window,
 display a correction box for correction of a complete, recent
 utterance, accept user corrections, allow the user to
-approve or cancel, and adapt the speech engine.</P>
+approve or cancel, and adapt the speech engine.  Finally, restore
+the original window to the foreground</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -696,8 +642,9 @@ the user approves), or if the caller will handle that later.
 <P>None</P>
 
 <P>
-dismisses any modal dialog boxes which the console has
-running</P>
+dismisses the topmost modal dialog box currently shown by the
+console.  Control will return to the next topmost dialog, 
+which is expected to return as well, and so on down the line</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 <P>
@@ -736,6 +683,47 @@ representing the recognition results
 <EM>STR gram_type</EM>
 <DD>type of grammar 
 ('dictation', <CODE>selection</CODE>, or 'correction')
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="MediatorConsole.MediatorConsole.pop_modal" CLASS="Method">MediatorConsole.MediatorConsole.pop_modal(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+pops a DismissModalEvent off the stack after the
+corresponding modal dialog has returned</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if there was a modal dialog on the stack
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.push_modal" CLASS="Method">MediatorConsole.MediatorConsole.push_modal(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">dismiss_event</SPAN>)</H2>
+<P>None</P>
+
+<P>
+push a DismissModalEvent onto the stack before showing the
+corresponding modal dialog</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>DismissModalEvent dismiss_event</EM>
+<DD>DismissModalEvent which can be used
+to dismiss the modal dialog
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -793,6 +781,81 @@ own the console
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="MediatorConsole.MediatorConsole.show_correction_box" CLASS="Method">MediatorConsole.MediatorConsole.show_correction_box(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correction box for correction of a complete, recent
+utterance, accept user corrections, allow the user to
+approve or cancel, and adapt the speech engine.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>SpokenUtterance utterance</EM>
+<DD>the utterance itself
+<DT>
+<EM>BOOL can_reinterpret</EM>
+<DD>flag indicating whether the utterance
+could be reinterpreted upon correction, allowing the correction
+box to give some visual feedback to the user to indictate this.
+Whether the utterance can actually be reinterpreted may change
+between the call to this method and its return, so there is no
+guarantee that reinterpretation will take place.
+<DT>
+<EM>BOOL should_adapt</EM>
+<DD>flag indicating whether correct_utterance
+should adapt the speech engine according to user corrections (if
+the user approves), or if the caller will handle that later.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the user made changes and approved them
+
+</DL>
+<H2 ID="MediatorConsole.MediatorConsole.show_recent_utterances" CLASS="Method">MediatorConsole.MediatorConsole.show_recent_utterances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correct recent dialog box for to allow the user to 
+select a recent utterance to correct</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>[(SpokenUtterance, BOOL)] utterances</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>the utterance numbers of 
+those utterances which were corrected by the user, or None if
+none were corrected
+
+</DL>
 <H2 ID="MediatorConsole.MediatorConsole.store_foreground_window" CLASS="Method">MediatorConsole.MediatorConsole.store_foreground_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 

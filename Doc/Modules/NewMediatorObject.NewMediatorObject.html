@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:13:21 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:37:23 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -753,13 +753,14 @@ all available utterances.
 <DL>
 
 <DT>
-<EM>[(SpokenUtterance, BOOL)]</EM>
+<EM>[(SpokenUtterance, INT, BOOL)]</EM>
 <DD>the n most recent dictation 
 utterances (or all available if &lt; n), sorted most recent last, 
-with corresponding flags indicating if the utterance can be 
-undone and re-interpreted, or None if no utterances are stored.
+each with a corresponding identifying number and a flag indicating 
+if the utterance can be undone and re-interpreted, 
+or None if no utterances are stored.
 </DL>
-Note:  These utterances should not be stored permanently, nor
+The utterance number is unique, within a given editor instance.Note:  These utterances should not be stored permanently, nor
 should they be modified except as part of the correction
 process.  Also, the status of whether a given utterance can be
 re-interpreted may change if the user makes other changes to the 
@@ -808,24 +809,17 @@ testing.  If None, use current setting.
 <H2 ID="NewMediatorObject.NewMediatorObject.reinterpret_recent" CLASS="Method">NewMediatorObject.NewMediatorObject.reinterpret_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)</H2>
 <P>None</P>
 
-undo the effect of one or more recent utterances into the
-specified editor, if possible, and reinterpret these utterances
-(and possibly any intervening utterances), making the
-appropriate changes to the editor buffers.<STRONG>Note:</STRONG> additional dictation into the editor will increment
-the indices of specific utterances, so the mediator must not
-allow dictation into the editor between the call to 
-recent_dictation to get the utterances and the call to 
-reinterpret_recent.<STRONG>Note:</STRONG> this method does not perform adaption of the changed
+undo the effect of one or more recent utterances, if
+possible, and reinterpret these utterances (and possibly any
+intervening utterances), making the appropriate changes to the
+editor buffers.<STRONG>Note:</STRONG> this method does not perform adaption of the changed
 utterances.  The caller should do that itself.<STRONG>INPUTS</STRONG>
 <DL>
 
 <DT>
-<EM>STR instance_name</EM>
-<DD>the editor 
-<DT>
 <EM>[INT] changed</EM>
-<DD>the indices into the stack of recent
-utterances of those utterances which were corrected by the user
+<DD>the utterance numbers of 
+those utterances which were corrected by the user
 </DL>
 <STRONG>NOTE:</STRONG> particular implementations of ResMgr may reinterpret 
 all utterances subsequent to the oldest changed utterance<STRONG>OUTPUTS</STRONG>
@@ -833,9 +827,10 @@ all utterances subsequent to the oldest changed utterance<STRONG>OUTPUTS</STRONG
 
 <DT>
 <EM>[INT]</EM>
-<DD>the indices of the utterances actually reinterpreted
-(including intervening ones), sorted with the oldest first, or 
-None if no utterances could be reinterpreted
+<DD>the indices onto the stack of recent utterances 
+actually reinterpreted (including intervening ones), sorted 
+with the oldest first, or None if no utterances could be 
+reinterpreted
 
 </DL>
 <H2 ID="NewMediatorObject.NewMediatorObject.remove_other_references" CLASS="Method">NewMediatorObject.NewMediatorObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>

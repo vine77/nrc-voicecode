@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:13:50 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:41:29 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,11 +15,14 @@
 
 
 <H1 CLASS="ModuleName">Module MediatorConsoleWX</H1>
-<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.ByeByeMixIn.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ByeByeMixIn</SPAN></A>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<PRE><SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.ByeByeMixIn.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ByeByeMixIn</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsole.Dismissable.html">Dismissable</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectFromRecentWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectFromRecentWX</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectNextPrevWX.html">CorrectNextPrevWX</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectNextPrevWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectNextPrevWX</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectionBoxWX.html">CorrectionBoxWX</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectRecentWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectRecentWX</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.frames.wxDialog.html">wxDialog</A>, <A CLASS="DocLink" HREF="MediatorConsoleWX.ByeByeMixIn.html">ByeByeMixIn</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectionBoxWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectionBoxWX</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.frames.wxDialog.html">wxDialog</A>, <A CLASS="DocLink" HREF="MediatorConsoleWX.ByeByeMixIn.html">ByeByeMixIn</A>, <A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>)</SPAN><SPAN CLASS="OneLiner"> # dialog box for correcting misrecognized dictation results</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectionValidator.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectionValidator</SPAN></A>(<A CLASS="DocLink" HREF="wxPython.windows.wxPyValidator.html">wxPyValidator</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectionValidatorSpoken.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CorrectionValidatorSpoken</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsoleWX.CorrectionValidator.html">CorrectionValidator</A>)</SPAN>
+<SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.DismissModalFlagTimerWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">DismissModalFlagTimerWX</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsole.DismissModalEvent.html">DismissModalEvent</A>)</SPAN>
 <SPAN CLASS="ClassHead"><A CLASS="DocLink" HREF="MediatorConsoleWX.MediatorConsoleWX.html"><SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorConsoleWX</SPAN></A>(<A CLASS="DocLink" HREF="MediatorConsole.MediatorConsole.html">MediatorConsole</A>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EVT_MINE</SPAN>(<SPAN CLASS="Argument">evt_handler</SPAN>, <SPAN CLASS="Argument">evt_type</SPAN>, <SPAN CLASS="Argument">func</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NO_EVT_MINE</SPAN>(<SPAN CLASS="Argument">evt_handler</SPAN>, <SPAN CLASS="Argument">evt_type</SPAN>, <SPAN CLASS="Argument">func</SPAN>)</SPAN>
@@ -625,7 +628,11 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CLEAR</SPAN> = <SPAN CLASS="VariableValue">5033</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CLOSE</SPAN> = <SPAN CLASS="VariableValue">5001</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_COPY</SPAN> = <SPAN CLASS="VariableValue">5031</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CORRECT_MORE</SPAN> = <SPAN CLASS="VariableValue">103</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CORRECT_NEXT</SPAN> = <SPAN CLASS="VariableValue">101</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CORRECT_PREV</SPAN> = <SPAN CLASS="VariableValue">102</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_CUT</SPAN> = <SPAN CLASS="VariableValue">5030</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_DISCARD_CORRECTION</SPAN> = <SPAN CLASS="VariableValue">104</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_DISMISS_MODAL</SPAN> = <SPAN CLASS="VariableValue">100</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_DUPLICATE</SPAN> = <SPAN CLASS="VariableValue">5035</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">wxID_EXIT</SPAN> = <SPAN CLASS="VariableValue">5006</SPAN></SPAN>

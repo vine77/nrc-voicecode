@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Dec 13 12:11:24 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Dec 19 00:34:39 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -57,13 +57,8 @@
     <A CLASS="DocLink" HREF="#SourceBuffTB.SourceBuffTB.set_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffTB.SourceBuffTB.set_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">range</SPAN>, <SPAN CLASS="Argument">cursor_at=1</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffTB.SourceBuffTB.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffTB.SourceBuffTB.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffTB.SourceBuffTB.store_current_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffTB.SourceBuffTB.store_current_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffTB.SourceBuffTB.uses_server_side_indent</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuffTB.SourceBuffTB.valid_cookie"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffTB.SourceBuffTB.valid_cookie</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from SourceBuff.SourceBuff</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.__getitem__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.__getitem__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)<SPAN CLASS="OneLiner"> # Get a character of the buffer using the buff[i] syntax.</SPAN>
@@ -131,7 +126,17 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.set_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.set_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>)<SPAN CLASS="OneLiner"> # changes a portion of the buffer</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.store_current_state"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.store_current_state</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.to_sync"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.to_sync</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">item</SPAN>, <SPAN CLASS="Argument">what</SPAN>, <SPAN CLASS="Argument">exclude</SPAN>)<SPAN CLASS="OneLiner"> # Determines if an item is to be synchronised</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.uses_server_side_indent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.uses_server_side_indent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.valid_cookie"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.valid_cookie</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from SourceBuffNonCached.SourceBuffNonCached</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffNonCached.SourceBuffNonCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from SourceBuff.BackspaceMixIn</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.BackspaceMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
@@ -147,9 +152,6 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
     <A CLASS="DocLink" HREF="#Object.OwnerObject.owned_by"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.owned_by</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the name of the parent attribute</SPAN>
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from SourceBuffNonCached.SourceBuffNonCached</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuffNonCached.SourceBuffNonCached.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
 </PRE><H2>Description</H2><P>
 implementation of (most of) SourceBuff as a wrapper around an
@@ -913,136 +915,6 @@ been lost, valid_cookie will return false.</P>
 <DD>true if cookie is valid (i.e. restore_state should be
 able to work)
 
-</DL>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-<P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <H2 ID="SourceBuff.SourceBuff.__getitem__" CLASS="Method">SourceBuff.SourceBuff.__getitem__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">key</SPAN>)</H2>
 <P>Get a character of the buffer using the buff[i] syntax.</P>
@@ -2223,7 +2095,11 @@ of itmes to be included in the synchronization.
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="SourceBuff.SourceBuff.valid_cookie" CLASS="Method">SourceBuff.SourceBuff.valid_cookie(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
+<H2 ID="SourceBuff.SourceBuff.uses_server_side_indent" CLASS="Method">SourceBuff.SourceBuff.uses_server_side_indent(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+Returns TRUE iif automatic indentation is done on the server side
+using and instance of SB_ServiceIndent<H2 ID="SourceBuff.SourceBuff.valid_cookie" CLASS="Method">SourceBuff.SourceBuff.valid_cookie(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
 <P>None</P>
 
 checks whether a state cookie is valid or expired.
@@ -2245,6 +2121,122 @@ actual type will vary with SourceBuff subclass.
 <DD>true if cookie is valid (i.e. restore_state should be
 able to work)
 
+</DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM>
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
 </DL>
 <H2 ID="SourceBuff.BackspaceMixIn.backspace" CLASS="Method">SourceBuff.BackspaceMixIn.backspace(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)</H2>
 <P>Delete a number of spaces before the cursor.</P>
