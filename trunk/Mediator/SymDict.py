@@ -148,6 +148,7 @@ class SymbolMatch(Object):
     """
     
     def __init__(self, pseudo_symbol=None, native_symbol=None, words=None, word_matches=None, is_new=0, fmt_rank=10, **args_super):
+        debug.trace('SymbolMatch.__init__', 'word_matches=%s' % repr(word_matches))
         self.deep_construct(SymbolMatch, \
                             {'pseudo_symbol': pseudo_symbol, \
                              'native_symbol': native_symbol, \
@@ -390,7 +391,7 @@ class SymDict(OwnerObject):
                          'unresolved_abbreviations': {},
                          'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
                          'min_chars_for_approx_match': 4,
-                         'min_chars_run_together': 3,
+                         'min_chars_run_together': 4,
                          'min_non_consec_chars_for_approx_match': 3,
                          'max_auto_acronym': 3,
                          'word_exists': sr_interface.getWordInfo
@@ -1565,7 +1566,7 @@ class SymDict(OwnerObject):
         return first_letter
 
 
-    def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
+    def add_symbol(self, symbol, user_supplied_spoken_forms=[], 
                    tentative = 1, add_sr_entries=1):
         """Add a symbol to the dictionary
 
@@ -1624,25 +1625,27 @@ class SymDict(OwnerObject):
             # Add an entry to the symbol dictionary
             #
             self.symbol_info[symbol] = SymbolInfo()
+            
+            #
+            # Add user supplied spoken forms
+            #
+            for a_spoken_form in user_supplied_spoken_forms:
+                if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
+                    self.symbol_info[symbol].spoken_forms.append(a_spoken_form)            
                 
             #
             # Update the symbol's spoken forms.
             #
-            self.update_spoken_forms(symbol, add_sr_entries=add_sr_entries)
-
-            #
-            # Add user supplied spoken forms
-            #
-            if user_supplied_spoken_forms:
-                for a_spoken_form in user_supplied_spoken_forms:
-                    if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
-                        self.symbol_info[symbol].spoken_forms.append(a_spoken_form)
+            self.update_spoken_forms(symbol, user_supplied_spoken_forms=user_supplied_spoken_forms,
+                                             add_sr_entries=add_sr_entries)
+            
 
             trace('SymDict.add_symbol', 'new symbol spoken forms = %s' %
                 self.symbol_info[symbol].spoken_forms)
             
 
-    def update_spoken_forms(self, symbol, add_sr_entries=1):
+    def update_spoken_forms(self, symbol, user_supplied_spoken_forms=[], 
+                            add_sr_entries=1):
         """Updates the spoken forms of a native symbol.
 
         **INPUTS**
@@ -1650,8 +1653,12 @@ class SymDict(OwnerObject):
         *STR* symbol -- Native symbol for which we want to update the
          spoken forms.
 
-         *BOOL* add_sr_entries = 1 -- If true, add written\spoken
-          symbols to the SR vocabulary.
+        *BOOL* add_sr_entries = 1 -- If true, add written\spoken
+         symbols to the SR vocabulary.
+         
+        *[STR]* user_supplied_spoken_forms -- list of spoken forms for the symbol
+        which were specified explicitly by the user (NOTE: they may or may not be valid matches
+        for the written form)
 
         **OUTPUTS**
         
@@ -1667,6 +1674,9 @@ class SymDict(OwnerObject):
         #
 
         forms_this_symbol = self.get_spoken_forms(symbol)
+        for explicit_spoken_form in user_supplied_spoken_forms:
+           if not explicit_spoken_form in forms_this_symbol:
+              forms_this_symbol.append(explicit_spoken_form)
         trace('SymDict.update_spoken_forms', 'spoken forms originally are:"%s"\nforms_this_symbol=%s' % (self.symbol_info[symbol].spoken_forms, forms_this_symbol))
         self.symbol_info[symbol].spoken_forms = forms_this_symbol
            
@@ -2112,10 +2122,11 @@ class SymDict(OwnerObject):
         return definition
 
 
-    def _remove_short_symbols(self, pseudo_symbol, words, native_matches):
+    def _remove_bad_symbol_matches(self, pseudo_symbol, words, native_matches):
        """Remove from *native_matches*, those symbols that match 
        *pseudo_symbol* but are too short, or otherwise deemed not
        significant.
+       
        **INPUTS**
 
        *STR pseudo_symbol* -- The pseudo symbol that was matched.
@@ -2137,67 +2148,164 @@ class SymDict(OwnerObject):
        #
        pseudo_symbol = string.lower(pseudo_symbol)
        pseudo_symbol = re.sub('[^a-z0-9]', '', pseudo_symbol)
-       trace('SymDict._remove_short_symbols', 'pseudo_symbol after is: "%s"' % pseudo_symbol)       
+       trace('SymDict._remove_bad_symbol_matches', 'pseudo_symbol after is: "%s"' % pseudo_symbol)       
        
        good_matches = []
        for a_match in native_matches:
           native_sym = a_match.group(0)
           native_sym = native_sym.strip()
-          trace('SymDict._remove_short_symbols', 
+          trace('SymDict._remove_bad_symbol_matches', 
               'checking match with native symbol = "%s"' % native_sym)
           if native_sym == pseudo_symbol:
               good_matches.append(a_match)
-              trace('SymDict._remove_short_symbols', 
+              trace('SymDict._remove_bad_symbol_matches', 
                   'pseudo_symbol matches native_sym, so good match')
               continue
-          trace('SymDict._remove_short_symbols', 
+          trace('SymDict._remove_bad_symbol_matches', 
                   'len(native_sym) = %d' % len(native_sym))
-          if len(native_sym) < self.min_chars_for_approx_match:
-              trace('SymDict._remove_short_symbols', 
+          if self._native_symbol_too_short(native_sym):
+              trace('SymDict._remove_bad_symbol_matches', 
                   'native_sym too short - skipping match')
               continue
           groups = a_match.groups()
+          trace('SymDict._remove_bad_symbol_matches', 'groups=%s' % repr(groups))          
 # this test looks at how many characters come from each word when
 # abbreviations are run together.  It is designed to eliminate false
 # matches like "do some more stuff" -> "do_some_stuff" (because "so"
 # contains the first two characters of "some" and "me" contains the
 # first and last characters of "more")
-          run_together = 0
+          run_together = 0          
           for i in range(1, len(groups)):
+              trace('SymDict._remove_bad_symbol_matches', 
+                    'checking length of group i=%s, len(groups[i])=%s, self.min_non_consec_chars_for_approx_match=%s, words[i-1]=%s' 
+                    % (i, len(groups[i]), self.min_non_consec_chars_for_approx_match, words[i-1]))
+          
               if len(groups[i]) < self.min_non_consec_chars_for_approx_match:
                   if not words[i-1].startswith(groups[i]):
-                      trace('SymDict._remove_short_symbols', 
+                      trace('SymDict._remove_bad_symbol_matches', 
                           'too few non consec characters: %s vs. %s' \
                           % (words[i-1], groups[i]))
                       continue
+                      
           for i in range(1, len(groups)-1):
-              end = a_match.end(i)
-              next_start = a_match.start(i+1)
-              if end == next_start: # words run together
-                  if len(groups[i]) < self.min_chars_run_together and \
-                          groups[i] != words[i-1]:
-                      run_together = 1
-                      trace('SymDict._remove_short_symbols', 
-                          'too few characters in words run together: %s' \
-                          % (groups[i]))
-                      break
-                  if len(groups[i+1]) < self.min_chars_run_together and \
-                          groups[i+1] != words[i]:
-                      trace('SymDict._remove_short_symbols', 
-                          'too few characters in words run together: %s' \
-                          % (groups[i+1]))
-                      run_together = 1
-                      break
+              trace('SymDict._remove_bad_symbol_matches', 
+                    'checking length of run-together group i=%s, groups[i]=%s, self.min_chars_run_together=%s' 
+                    % (i, groups[i], self.min_chars_run_together))
+          
+              # Note: groups in a_match use 1-based indexes while entries in the
+              #       groups list use 0-based indexes.          
+              if self._group_matched_to_same_term_as_next(a_match, i+1):
+                  # words run together
+                  if not self._run_together_is_allowed(groups[i], words[i-1], groups[i+1], words[i]):
+                     run_together = 1
+                     break
+                     
           if not run_together:
-              trace('SymDict._remove_short_symbols', 
+              trace('SymDict._remove_bad_symbol_matches', 
                   'adding to good_matches')
               good_matches.append(a_match)
 
        return good_matches
              
+    def _native_symbol_too_short(self, native_sym):
+       native_sym = re.sub('[^a-zA-Z0-9]', '', native_sym)
+       return len(native_sym) < self.min_chars_for_approx_match
+             
+             
+    def _group_matched_to_same_term_as_next(self, a_match, group_ind):
+       """Returns true if groups *group_ind* and *group_ind+1* in a 
+       symbol match were mapped to the same term of the native symbol.
        
+       **INPUTS**
 
+       *pythonregexpmatch a_match* -- A python regexp match object which was 
+       created by matching regexp *self.reg_pseudo_to_native_symbol()* against a
+       native symbol. 
 
+       *INT group_ind* -- Index of the group to check.
+
+       **OUTPUTS**
+       
+       *BOOL* -- True IIF the two groups were matched to the same term in the
+       native symbol
+       """
+       end_cur = a_match.end(group_ind)
+       start_next = a_match.start(group_ind+1)
+       if end_cur == start_next:
+          # No underscore or anything between the two terms.
+          # Is there a change of case?
+          last_char_cur = a_match.group(group_ind)[len(a_match.group(group_ind))-1]
+          first_char_next = a_match.group(group_ind+1)[0]
+          if not self._marks_term_change(last_char_cur, first_char_next):
+             return 1
+       return 0
+       
+    def _marks_term_change(self, char1, char2):
+       """Returns true IIF going from *char1* to *char2* in a native symbol
+       marks a transition between terms (for example, if we go from a lower
+       case to an upper case character)"""
+       
+       type1 = self._char_type(char1)
+       type2 = self._char_type(char2)
+       
+       if type1 == 'upper' and type2 != 'other':
+          # Alphabetic characters that follow an uppercase character
+          # are deemed to be part of a single capitalised or all-caps
+          # word (this is not bullet proof, for example in APISpecs
+          # I and S are not part of the same word)
+          return 0
+       else:
+          return not type1 == type2
+       
+    def _char_type(self, character):
+       """Returns a category for a character: 'lower', 'upper', 'other'"""
+       if re.match('[a-z]', character):
+          return 'lower'
+       elif re.match('[A-Z]', character):
+          return 'upper'
+       else:
+          return 'other'
+
+    def _run_together_is_allowed(self, abbr1, word1, abbr2, word2):
+       """Checks if abbreviations of two words can be run-together (i.e.
+       concatenated without spaces, underscores or change of case) in
+       a symbol match.
+       
+       Such running together is permitted IIF the two abbreviations are
+       either long enough or are a prefix of the word they abbreviate.
+       
+       **INPUTS**
+
+       *STR abbr1, abbr2* -- abbreviations for the first and second words
+       
+       *STR word1, word* -- first and second word
+       
+       **OUTPUTS**
+       
+       *BOOL* -- True IIF the symbol matching algorithm is allowed to run-together
+       *abbr1* and *abbr2* into a single term of a native symbol.
+       """
+       abbr1 = string.lower(abbr1)
+       abbr2 = string.lower(abbr2)       
+       trace('SymDict._run_together_is_allowed', '** abbr1=%s, abbr2=%s, self.min_chars_run_together=%s' % (abbr1, abbr2, self.min_chars_run_together))
+       if (len(abbr1) < self.min_chars_run_together and
+           not word1.startswith(abbr1)):
+          trace('SymDict._run_together_is_allowed', 
+                'too few characters in words run together: %s' \
+                       % abbr1)
+           
+          return 0
+          
+       if (len(abbr2) < self.min_chars_run_together and
+           not word2.startswith(abbr2)):
+          trace('SymDict._run_together_is_allowed', 
+                'too few characters in words run together: %s' \
+                       % abbr2)           
+          return 0
+          
+       return 1
+
+       
     def match_pseudo_symbol(self, pseudo_symbol):        
         """Returns a prioritized list of all known native symbols that
         match a given pseudo symbol.
@@ -2249,7 +2357,7 @@ class SymDict(OwnerObject):
 
 #        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
 
-        good_matches = self._remove_short_symbols(pseudo_symbol, words,
+        good_matches = self._remove_bad_symbol_matches(pseudo_symbol, words,
             raw_matches)
 
         #
@@ -2259,7 +2367,7 @@ class SymDict(OwnerObject):
         for a_match in good_matches:
             native_symbol = string.strip(a_match.group(0))
             trace('SymDict.match_pseudo_symbol',
-                'matching to native symbol %s' % native_symbol)
+                'matching to native symbol %s, a_match.groups()=%s' % (native_symbol, a_match.groups()))
             matches = matches + [SymbolMatch(pseudo_symbol = pseudo_symbol,
                 native_symbol = native_symbol, words = words, 
                 word_matches = a_match.groups()[1:])]

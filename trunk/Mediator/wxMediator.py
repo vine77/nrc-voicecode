@@ -55,6 +55,22 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'StandardFunctionCallsHelper.add_function_name': 1,
+#                        'ActionFuncCallWithParens.__init__': 1,
+#                        'SymDict.add_symbol': 1,
+##                        'SymDict.match_pseudo_symbol': 1,
+#                        'SymDict.update_spoken_forms': 1,
+##                         'SymDict.reg_pseudo_to_native_symbol': 1,
+##                         'SymDict._remove_bad_symbol_matches': 1,
+##                         'SymDict._run_together_is_allowed': 1,
+##                         'SymbolMatch.__init__': 1,
+#                        'WordTrie.complete_match': 1,
+#                        'WordTrie.add_phrase': 1,
+#                        'CmdInterp.match_untranslated_text': 1, 
+#                        'StandardFunctionCallsHelper': 1,
+#                        'CmdInterp.match_untranslated_text': 1,
+#                        'WordTrie.match_phrase': 1,
+#################################                        
 #                       'AppStateMessaging.apply_upd_descr': 1,
 #                        'SourceBuffEmacs.insert_indent': 1,
 #                        'SourceBuffEmacs.insert': 1,     

@@ -1395,11 +1395,13 @@ class StandardFunctionCallsHelper(Object):
     to print an empty argument list for the function or method name.      
     """
     
-    def __init__(self, language, with_arguments_suffixes=
-                           ['with arguments', 'with argument', 'call with',
-                           'called with', 'function of', 'of'], 
+    def __init__(self, language, 
+                       with_arguments_suffixes=
+                            ['with arguments', 'with argument', 'call with',
+                            'called with', 'function of'], 
+                       ambiguous_with_arguments_suffixes=['of'],                            
                        without_arguments_suffixes=
-                           ['with no arguments', 'without argument', 'without arguments',
+                            ['with no arguments', 'without argument', 'without arguments',
                             'with no argument', 'empty function'], 
                        default_with_arguments_action=gen_parens_pair,
                        default_without_arguments_action=gen_empty_parens_pair,                       
@@ -1408,15 +1410,18 @@ class StandardFunctionCallsHelper(Object):
                        **args):
         self.deep_construct(Object,
                             {'language': language,
-                            'with_arguments_suffixes': with_arguments_suffixes,
+                             'with_arguments_suffixes': with_arguments_suffixes,
+                             'ambiguous_with_arguments_suffixes': ambiguous_with_arguments_suffixes,
                              'without_arguments_suffixes': without_arguments_suffixes,
                              'with_arguments_actions': with_arguments_actions,
                              'without_arguments_actions': without_arguments_actions,
                              'default_with_arguments_action': default_with_arguments_action,
-                             'default_without_arguments_action': default_without_arguments_action},
+                             'default_without_arguments_action': default_without_arguments_action,
+                             'functions': {}},                             
                             args)
                             
-    def add_function_name(self, spoken_forms, written_form, command_set):
+    def add_function_name(self, spoken_forms, written_form,  
+                          arg_list_types=['non-empty', 'non-empty-ambiguous', 'empty']):
        """Add a definition for a standard function or method name to the set.
                
         **INPUTS**
@@ -1424,16 +1429,29 @@ class StandardFunctionCallsHelper(Object):
         *[STR] spoken_forms -- List of spoken forms for the function. 
         
         *STR written_form* -- Written form of the function for language *self.language*.
- 
-        *CSCmdSet command_set* -- CSC set to wich the commands for calling this 
-        function should be added.
-        """
+         
+        *[STR] arg_list_types* -- List of types of argument lists that you want to be able to call with
+        that function. The entries must be one of:
+           'empty': for empty argument lists
+           'non-empty': for non-empty argument lists
+           'ambiguous-non-empty': for non-empty argument lists with a spoken form that could be 
+           highly ambiguous (e.g. "function name of X", where "of" could be ambiguous)
+       """
+       self.functions[written_form] = (spoken_forms, arg_list_types)
        
-       self._add_function_calls(spoken_forms, written_form, 'non-empty', command_set)
-       self._add_function_calls(spoken_forms, written_form, 'empty', command_set)       
+    def create(self, interp):
+       if not interp:
+          return    
+       debug.trace('StandardFunctionCallsHelper.create', '** interp=%s' % interp)
+       for written_form in self.functions.keys():
+          (spoken_forms, arg_list_types) = self.functions[written_form]
+          for arg_type in arg_list_types:
+             self._add_function_calls(spoken_forms, written_form, arg_type, interp)       
+          self._add_function_name_symbol(spoken_forms, written_form, interp)
+       
        
     def _add_function_calls(self, spoken_forms, written_form, arg_list_type, 
-                                  command_set):
+                                  interp):
        """Add CSCs for calling the function with a non-empty list of arguments.
                
         **INPUTS**
@@ -1442,18 +1460,20 @@ class StandardFunctionCallsHelper(Object):
         
         *STR written_form* -- Written form of the function for language *self.language*.
         
-        *STR arg_list_type* -- type of argument list to call the function with. 
-        Either 'empty', or 'non-empty'.
+        *STR arg_list_type* -- type of argument lists to call the function with: 
+        'empty', 'non-empty', 'ambiguous-non-empty'.
         
-        *CSCmdSet command_set* -- CSC set to wich the commands for calling this 
-       function should be added.
+        *CmdInterp interp* -- Command interpreter to which the function call CSCs 
+        should be added.
 
        """
-       
+       debug.trace('StandardFunctionCallsHelper._add_function_calls', '** interp=%s' % interp)       
        call_spoken_forms = []
 
        if arg_list_type == 'non-empty':
           call_suffixes = self.with_arguments_suffixes
+       elif arg_list_type == 'non-empty-ambiguous':
+          call_suffixes = self.ambiguous_with_arguments_suffixes
        else:
           call_suffixes = self.without_arguments_suffixes          
        for a_spoken_form in spoken_forms:
@@ -1469,11 +1489,16 @@ class StandardFunctionCallsHelper(Object):
                    docstring = 'call %s function/method "%s" with %s argument list'  \
                                % (self.language, written_form, arg_list_type))
           
-       command_set.add_csc(aCSC)
+       interp.add_csc(aCSC)
+
+    def _add_function_name_symbol(self, spoken_forms, written_form, interp):
+       interp.interp.add_symbol(written_form, spoken_forms, tentative=0)
 
     def _function_call_action_factory(self, func_name, args_list_type):
        """Returns an action for printing the function or method call."""
                     
+       if args_list_type == 'non-empty-ambiguous':
+          args_list_type = 'non-empty'
        return ActionFuncCallWithParens(func_name, args_list_type)
 
                             
@@ -1487,5 +1512,6 @@ class StandardFunctionCallsHelper(Object):
        if self.without_arguments_actions.has_key(language):
           return self.without_arguments_actions[language]
        else:
-          return self.default_without_arguments_action
+          return self.default_without_arguments_action          
           
+    

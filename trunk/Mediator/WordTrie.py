@@ -58,6 +58,8 @@ class WordTrie(Object):
         *ANY* -- the old value of that phrase, or None if it didn't
         exist
         """
+        debug.trace('WordTrie.add_phrase', 'phrase=%s, value=%s' % (phrase, value))
+        
         if not phrase:
             old = self.value
             self.value = value
