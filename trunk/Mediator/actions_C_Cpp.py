@@ -28,11 +28,17 @@ import string
 
 c_simple_for = \
     ActionInsert(code_bef='for (',
-                 code_after='=0;  <= ; ++)\n\t{\n\t\n\t}\n',
+#                 code_after='=0;  <= ; ++)\n\t{\n\t\n\t}\n',
+# I'm switching this to use the more common indentation, which matches
+# what Emacs does anyway
+# ugh - that's not true -- Emacs does it this way for for-loops which
+# start at indentation = 0, but the way above for for-loops which are
+# inside another block.  That's idiotic!
+                 code_after='=0;  <= ; ++)\n{\n\t\n}\n',
                  docstring = """Insert template code for a simple C for loop""")
 
 c_simple_while = \
-    ActionInsert(code_bef='while (', code_after=')\n\t{\n\t}',
+    ActionInsert(code_bef='while (', code_after=')\n{\n\t\n}',
                  docstring = """Insert template code for a simple C for loop""")
 
 c_goto_body = \
@@ -41,7 +47,7 @@ c_goto_body = \
 
 cpp_class_definition = \
     ActionInsert(code_bef='class ',
-                 code_after='\n\t{\n\n\tpublic:\n\t\n\tprivate:\n\t}',
+                 code_after='\n{\n\npublic:\n\t\nprivate:\n}',
                  docstring = """Insert template code for a C++ class""")
     
 cpp_subclass = \

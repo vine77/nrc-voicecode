@@ -2257,7 +2257,7 @@ def check_recent(instance_name, expected_utterances, expected_status):
         expect = expected_utterances[-i]
 #        expect = string.split(expected_utterances[-i])
         received = recent[-i][0].spoken_forms()
-        status = recent[-i][1]
+        status = recent[-i][2]
         if expect != received:
             print "\nWARNING: utterance %d doesn't match:\n" % i
             print "expected:\n"
@@ -2368,10 +2368,12 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
     print 'detecting changes'
     sys.stdout.flush()
     changed = []
+    changed_numbers = []
     for i, change in errors.items():
         print 'utterance %d: change = %s' % (i, repr(change))
         sys.stdout.flush()
         utterance = recent[-i][0]
+        number = recent[-i][1]
         spoken = utterance.spoken_forms()
         wrong = 0
         for j in range(len(spoken)):
@@ -2385,6 +2387,7 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
                 pass
         if wrong:
             changed.append(i)
+            changed_numbers.append(number)
 # set_spoken doesn't cause adaption
             print 'utterance %d was changed ' % i
             sys.stdout.flush()
@@ -2394,10 +2397,10 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
             print 'utterance %d was corrected' % i
             sys.stdout.flush()
     done = None
-    if changed:
+    if changed_numbers:
         print 'about to reinterpret'
         sys.stdout.flush()
-        done = test_reinterpret(instance_name, changed, user_input = user_input)
+        done = test_reinterpret(instance_name, changed_numbers, user_input = user_input)
 
     if done == None:
         if should_fail:

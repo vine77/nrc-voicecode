@@ -172,7 +172,7 @@ def do_edit_test(testing, edit_file, test_fct, descr=None):
    commands = names['commands']
    
    print '\n*********************\n*** Executing edit test: %s ***\n*********************\n' % descr
-	
+
    commands.open_file(edit_file)
    test_fct(commands)
    
@@ -270,3 +270,4 @@ def add_else_clause_test(commands):
 def add_except_clause_test(commands):   
    commands.goto_line(26)
    commands.say(['catch', 'exceptions'])
+

@@ -55,6 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'reinterpret_recent': 1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
 #                        'get_mess': 1,
@@ -81,7 +82,7 @@ debug.config_traces(status="on",
 #                      'pos_selection_cbk': 1,
 #                      'set_selection_cbk': 1,
 #                      'goto_cbk': 1,
-#                      'listen_one_transaction': 1
+#                      'listen_one_transaction': 1,
 #                                    'SourceBuff.on_change': 1
 #                                   'get_mess':1, 
 #                                   'send_mess': 1,
@@ -145,7 +146,7 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                            )
         self.name_parent('parent')
         wxFrame.__init__(self, None, wxNewId(), self.app_name,
-            wxDefaultPosition, wxSize(300, 100), 
+            wxDefaultPosition, wxSize(400, 100), 
 #            wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP)
             wxDEFAULT_FRAME_STYLE)
         file_menu=wxMenu()

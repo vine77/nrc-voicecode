@@ -479,7 +479,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
     def gotResults_scratch_n(self, words, fullResults):
         """handler for scratch that command
         """
-        count = int(words[1])
+        count = int(words[-1])
         debug.trace('BasicCorrectionWinGramNL.gotResults_scratch_that',
             'heard scratch n, n = %d' % count)
         self.scratch_recent(count)
@@ -807,7 +807,7 @@ class ChoiceGramNL(ChoiceGram, GrammarBase):
         GrammarBase.unload(self)
 
     def gotResults_choose_n(self, words, fullResults):
-        count = int(words[1])
+        count = int(words[-1])
         self.choice_cbk(count)
 
 class NaturalSpellingNL(NaturalSpelling, GrammarBase):
