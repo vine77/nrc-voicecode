@@ -32,7 +32,7 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
    <LI><A HREF="#symbols">Dictating symbols</A>
    <LI><A HREF="#NavigateByPseudoSymbol">NavigateByPseudoCode</A>
    <LI><A HREF="#shellCommands">The command prompt field</A>
-   <LI><A HREF="#sampleCommands">VoiceCode commands</A>
+   <LI><A HREF="#commandIndex">VoiceCode commands</A>
    </UL>
 <LI><A HREF="#config">Configuring VoiceCode</A>
    <UL>
@@ -41,6 +41,7 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
    <LI><A HREF="#customeCSCs">Customising CSCs</A>
    <LI><A HREF="#customLSAs">Customising LSAs</A>
    <LI><A HREF="#abbreviations">Adding/modifying abbreviations</A>
+   <LI><A HREF="#symbolFormatting">Changing symbol formatting conventions</A>
    <LI><A HREF="#VCODE_NOSPEECH">Running the Editor Simulator  without NatSpeak</A>
    </UL>
 <LI><A HREF="#trouble">Trouble shooting</A>
@@ -56,8 +57,6 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
 
 <h2>User Doc TODO</h2>
 <UL>
-   <LI>customising symbol formatting rules
-   <LI>sample commands section
    <LI>picture of edsim
    <LI>weblint it
 </UL>
@@ -82,7 +81,7 @@ currently supports.
 <P>
 
 The basic idea in VoiceCode is to allow programmers to speak in pseudo-code, instead of struggling to dictate statements exactly as they are written (to get a better feel for what that means, I suggest you look at the following 
-<A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/demo-11-04-01.html">demo movie</A>). We achieve this goal through a <A HREF="#sampleCommands">series of voice commands</A> which are natural and easy to utter.
+<A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/demo-11-04-01.html">demo movie</A>). We achieve this goal through a <A HREF="command_index.html">series of voice commands</A> which are natural and easy to utter.
 
 
 <H2><A NAME="using">Using VoiceCode</A></H2>
@@ -159,7 +158,7 @@ section</A>.
 
 Remember that with VoiceCode, you don't have to dictate code the way
 it's written. In fact, that's the whole point of the system. Instead,
-you dictate code using <A HREF="#sampleCommands">voice commands that are natural and easy to utter</A>. Note also that with VoiceCode, you can pretty much <A HREF="#pauses">pause anywhere you want</A> (or not).
+you dictate code using <A HREF="command_index.html">voice commands that are natural and easy to utter</A>. Note also that with VoiceCode, you can pretty much <A HREF="#pauses">pause anywhere you want</A> (or not).
 
 
 <H3><A NAME="CSCs">Context Sensitive Commands (CSCs)</A></H3>
@@ -258,7 +257,7 @@ decreasing instead of increasing.
 
 <P>
 
-VoiceCode comes bundled with a <A HREF="#sampleCommands">series of CSCs</A> for doing common tasks
+VoiceCode comes bundled with a <A HREF="command_index.html">series of CSCs</A> for doing common tasks
 in various languages. If you do not like the way a particular CSC is
 implemented (for example, if you don't like the way it is said) or if
 you want to add your own CSC, you can do that by <A
@@ -286,7 +285,7 @@ advantage that they can be used for <A HREF="#NavigateByPseudoSymbol">Navigation
 
 <P>
 
-Like for CSCs, VoiceCode comes bundled with a <A HREF="#sampleCommands">series of LSAs</A> for doing
+Like for CSCs, VoiceCode comes bundled with a <A HREF="command_index.html">series of LSAs</A> for doing
 common tasks in various languages. If you do not like the way a
 particular CSC is implemented (for example, if you don't like the way
 it is said) or if you want to add your own LSA, you can do that by <A
@@ -373,7 +372,7 @@ abbreviations.
 VoiceCode supports a type of command which we call
 <EM>NavigateByPseudoCode</EM>. This allows you to select or move the
 cursor to a portion of visible code. All you have to do is say phrase
-like: <A HREF="???list of NavigateByPseudoCode commands">"Select",
+like: <A HREF="command_index.html#NavigateByPseudoCode">"Select",
 "Before", "After", "Go", etc..</A> followed by a pseudo code dictation
 of the native code you want to select or move the cursor
 to. Note that contrarily to most VoiceCode commands,
@@ -486,22 +485,103 @@ can however use one of the following approaches:
 </UL>
 </EM>
 
+<H3><A NAME="shellCommands">The command prompt field</A></H3>
 
-<h3><A NAME="sampleCommands">VoiceCode commands</A></h3>
-
-VoiceCode supports a fairly large set of voice commands and
-consequently I haven't had time to document them all. But I will be
-posting an update to this doc within a few days. Chip is currently
-working on an automatic generator of <EM>"what-can-I-say"</EM>
-documentation which should make this straightforward in the future.
+In the <EM>command prompt</EM> field, you can type Python statements
+that affect the state of VoiceCode and the editor. It's meant mostly
+as a debugging and testing aid. You can type any Python statement
+there, but unless you are very familiar with the inner structure of
+VoiceCode, you will probably want to limit yourself to invoking the
+ functions described below.
 
 <P>
 
-For now, all I can suggest is that you read the sections describing
-the customisation of <A HREF="#CSCs">CSCs</A> and <A HREF="#LSAs">LSAs</A>
-and that you take a look at the <EM>vc_config.py</EM> file to see what
-LSAs and CSCs are currently supported.
+<PRE>
+help()
+   display (this) list of commands
 
+open_file(STR fname)
+   Opens file with path name *fname* in the editor
+   simulator. It also compiles a list of symbols for that file.
+</PRE>
+
+<A NAME="compiling">
+<PRE>
+compile_symbols([STR] file_list)
+   Compiles symbols for all source files in list *file_list*.
+
+   Note that opening a file in the editor simulator automatically invokes
+   that command.
+
+clear_symbols()
+   Removes all spoken forms of symbols added by VoiceCode to NatSpeak's 
+   vocabulary. Spoken forms which consist of a single word are however left
+   there.
+
+clear_abbreviations()
+   Removes all defined abbreviations from VoiceCode's symbol dictionary
+
+say(STR utterance, bypass_NatLink=1, user_input=None)
+   Interprets string *utterance* as though it had been said by a user.
+    
+   *utterance* can be either:
+   
+       - a string with the written form of what should be recognised by the
+         SR system
+         e.g.: say('index not equal to 0')
+         
+       - a list of words in their written\spoken form (or just
+         written if it doesn't have a spoken form different from its
+         written form).
+         e.g.: say(['index', ' != \\not equal to', '0'])
+   
+
+    In general, it's better to specify *utterance* as a list of
+    written\spoken words because it allows to simulate exactly what
+    the SR does (e.g. what if the SR recognises an LSA as a sequence
+    of words instead of its written\spoken form?)
+
+    Argument *user_input* is a string that will be sent to the
+    mediator console's standard input. Use in automated regression
+    testing, if the *say* command requires user additional user input
+    (e.g. confirmation of a symbol match).
+     
+    If argument *bypass_NatLink* is true, the interpretation will be done
+    withouth going through NatLink's recognitionMimic function.
+
+goto(INT pos)
+   Moves cursor to position *pos*
+
+goto_line(INT linenum)
+   Moves cursor to the beginning of line number *linenum*
+
+select(INT start, end)
+   Selects from position *start* to position *end* in current buffer
+
+show_buff()
+   Prints the content of the current buffer
+   
+print_abbreviations(show_unresolved=1)
+   Prints out a list of the abbreviations in symbols that were parsed
+   so far. If *show_unresolved=1*, also lists unresolved abbreviations
+   and the symbols they appear in (an unresolved abbreviation is an
+   abbreviation that appeared in a symbol and is neither a speech
+   vocabulary word nor a known abbreviation).
+
+print_error(STR message):
+   Prints an error to stderr
+
+print_symbols()
+   Prints the list of symbols in the known symbols dictionary
+
+provoke()
+   causes an error deliberately
+</PRE>
+
+<h2><A NAME="commandIndex">VoiceCode commands</A></h2>
+
+For a list of commands supported by VoiceCode, see <A
+HREF="command_index.html">this page</A>.
 
 <H2><A NAME="config">Configuring VoiceCode</A></H2>
 
@@ -735,99 +815,31 @@ even if the user has defined abbreviation <EM>pref</EM> for
 symbol would be <EM>a_pref_table</EM>. We plan to support this in the
 future.
 
-<H3><A NAME="shellCommands">The command prompt field</A></H3>
+<H3><A NAME="symbolFormatting">Changing symbol formatting conventions</A></H3>
 
-In the <EM>command prompt</EM> field, you can type Python statements
-that affect the state of VoiceCode and the editor. It's meant mostly
-as a debugging and testing aid. You can type any Python statement
-there, but unless you are very familiar with the inner structure of
-VoiceCode, you will probably want to limit yourself to invoking the
- functions described below.
+When VoiceCode <A HREF="#symbols">creates a new native symbol</A>
+based on an uttered pseudo-symbol, it creates the symbol using the
+format <EM>a_new_symbol</EM>. When correcting the symbol (which is not
+currently supported), it also displays alternative formats in a
+predefined order.
+
+<P>
+
+While it is possible to add/remove symbol formatting conventions and modify the order in which alternative formats are displayed, it is not currently possible to do so through <EM>vc_config</EM> (although it will be in the future). If you want to customise symbol formatting, you will have to read the part of file <EM>Mediator/SymDict.py</EM> which starts with the comment:
 
 <P>
 
 <PRE>
-help()
-   display (this) list of commands
-
-open_file(STR fname)
-   Opens file with path name *fname* in the editor
-   simulator. It also compiles a list of symbols for that file.
+#############################################################################
+# Symbol formatting functions
+#
+# List of formatting functions for generating new native symbols from
+# pseudo_symbols.
+#
+# Each formatting function must return a valid SymbolMatch object.
+#
+#############################################################################
 </PRE>
-
-<A NAME="compiling">
-<PRE>
-compile_symbols([STR] file_list)
-   Compiles symbols for all source files in list *file_list*.
-
-   Note that opening a file in the editor simulator automatically invokes
-   that command.
-
-clear_symbols()
-   Removes all spoken forms of symbols added by VoiceCode to NatSpeak's 
-   vocabulary. Spoken forms which consist of a single word are however left
-   there.
-
-clear_abbreviations()
-   Removes all defined abbreviations from VoiceCode's symbol dictionary
-
-say(STR utterance, bypass_NatLink=1, user_input=None)
-   Interprets string *utterance* as though it had been said by a user.
-    
-   *utterance* can be either:
-   
-       - a string with the written form of what should be recognised by the
-         SR system
-         e.g.: say('index not equal to 0')
-         
-       - a list of words in their written\spoken form (or just
-         written if it doesn't have a spoken form different from its
-         written form).
-         e.g.: say(['index', ' != \\not equal to', '0'])
-   
-
-    In general, it's better to specify *utterance* as a list of
-    written\spoken words because it allows to simulate exactly what
-    the SR does (e.g. what if the SR recognises an LSA as a sequence
-    of words instead of its written\spoken form?)
-
-    Argument *user_input* is a string that will be sent to the
-    mediator console's standard input. Use in automated regression
-    testing, if the *say* command requires user additional user input
-    (e.g. confirmation of a symbol match).
-     
-    If argument *bypass_NatLink* is true, the interpretation will be done
-    withouth going through NatLink's recognitionMimic function.
-
-goto(INT pos)
-   Moves cursor to position *pos*
-
-goto_line(INT linenum)
-   Moves cursor to the beginning of line number *linenum*
-
-select(INT start, end)
-   Selects from position *start* to position *end* in current buffer
-
-show_buff()
-   Prints the content of the current buffer
-   
-print_abbreviations(show_unresolved=1)
-   Prints out a list of the abbreviations in symbols that were parsed
-   so far. If *show_unresolved=1*, also lists unresolved abbreviations
-   and the symbols they appear in (an unresolved abbreviation is an
-   abbreviation that appeared in a symbol and is neither a speech
-   vocabulary word nor a known abbreviation).
-
-print_error(STR message):
-   Prints an error to stderr
-
-print_symbols()
-   Prints the list of symbols in the known symbols dictionary
-
-provoke()
-   causes an error deliberately
-</PRE>
-
 
 <H3><A NAME="VCODE_NOSPEECH">Running the Editor Simulator  without NatSpeak</A></H3>
 
@@ -905,7 +917,7 @@ an untrainted user.
 Second, you can feed some "VoiceCodese" files to NatSpeak for
 training. Basically, take a few source files that are representative
 of the code you write, then translate them to the sequence of <A
-HREF="#sampleCommands">VoiceCode commands</A> that you would use to
+HREF="command_index.html">VoiceCode commands</A> that you would use to
 type that code. Then make a thouasand copies of those files and feed
 them to NatSpeak's vocabulary builder. 
 
