@@ -35,6 +35,11 @@ class EdSim(AppState.AppState):
     
     **INSTANCE ATTRIBUTES**
 
+    *SourceBuffEdSim* only_buffer -- THE buffer
+    
+    *STR* only_buffer_name -- its name 
+
+
     *none* --
     
     **CLASSS ATTRIBUTES**
@@ -45,10 +50,22 @@ class EdSim(AppState.AppState):
     buffer_methods.append('print_buff')
     
     def __init__(self, **attrs):
-        self.deep_construct(EdSim, {}, attrs)
-	self.curr_buffer = SourceBuffEdSim(app = self, file_name = "",
+        self.deep_construct(EdSim, {'only_buffer': None,
+	    'only_buffer_name': ""}, attrs)
+	self.only_buffer = SourceBuffEdSim(app = self, file_name = "",
 	    language =None)
+        self.open_buffers[self.only_buffer_name] = self.only_buffer
 
+    def curr_buffer_name(self):
+
+	"""return the name of the current buffer
+
+        **OUTPUTS**
+
+	*STR*  -- current buffer
+	"""
+	return self.only_buffer_name
+    
     def open_file(self, name, lang=None):
         """Open a file.
 
@@ -60,11 +77,16 @@ class EdSim(AppState.AppState):
             source_file.close()
         except Exception, err:
             source = ''
-        self.curr_buffer =  SourceBuffEdSim(app = self, file_name=name, language=lang, \
-	    initial_contents = source)
+	if self.curr_buffer_name() != None:
+	    del self.open_buffers[self.curr_buffer_name()]
 
-        self.open_buffers[name] = self.curr_buffer
-        
+
+        self.only_buffer =  SourceBuffEdSim(app = self, file_name=name, language=lang, \
+	    initial_contents = source)
+	self.only_buffer_name = name
+
+        self.open_buffers[name] = self.only_buffer
+
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
 

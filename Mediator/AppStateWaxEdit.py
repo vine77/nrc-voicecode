@@ -39,6 +39,10 @@ class AppStateWaxEdit(AppState.AppState):
     **INSTANCE ATTRIBUTES**
 
     *WaxEdit* the_editor -- The WaxEdit editor wrapped into *self*.
+
+    *SourceBuffTB* only_buffer -- THE buffer
+    
+    *STR* only_buffer_name -- its name 
     
     **CLASS ATTRIBUTES**
     
@@ -48,12 +52,23 @@ class AppStateWaxEdit(AppState.AppState):
     buffer_methods.append('print_buff')
     
     def __init__(self, editor, **attrs):
-        self.deep_construct(AppStateWaxEdit, {'the_editor': editor}, attrs)
-        self.curr_buffer =  SourceBuffTB(app = self, file_name="", \
+        self.deep_construct(AppStateWaxEdit, {'the_editor': editor, 
+	    'only_buffer': None, 'only_buffer_name' : ""}, attrs)
+        self.only_buffer =  SourceBuffTB(app = self, file_name="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
-        self.open_buffers[""] = self.curr_buffer
+        self.open_buffers[self.only_buffer_name] = self.only_buffer
       
+    def curr_buffer_name(self):
+
+	"""return the name of the current buffer
+
+        **OUTPUTS**
+
+	*STR*  -- current buffer
+	"""
+	return self.only_buffer_name
+        
     def active_field(self):
 	"""indicates what part of the editor has the focus.
 
@@ -100,15 +115,16 @@ class AppStateWaxEdit(AppState.AppState):
         except Exception, err:
 	    return
 	# WaxEdit only supports one open buffer at a time
-	if self.curr_buffer:
-	    del self.open_buffers[self.curr_buffer.file_name]
-        self.curr_buffer =  SourceBuffTB(app = self, file_name=name, 
+	if self.curr_buffer_name() != None:
+	    del self.open_buffers[self.curr_buffer_name()]
+        self.only_buffer =  SourceBuffTB(app = self, file_name=name, 
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=lang, indent_level=3, indent_to_curr_level=1)
+	self.only_buffer_name = name
 	self.the_editor.editor_buffer().set_text(source)
 	self.the_editor.set_name(short)
 
-        self.open_buffers[name] = self.curr_buffer
+        self.open_buffers[name] = self.only_buffer
         
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?

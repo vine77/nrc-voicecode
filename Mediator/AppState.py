@@ -77,8 +77,6 @@ class AppState(Object):
     
     *STR curr_dir=None* -- Current directory for the programming environment
     
-    SourceBuff curr_buffer=None -- Current source buffer
-
     *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
      the stack is a couple where the first entry is the name of the
      source buffer and the second is the position in that buffer where
@@ -99,8 +97,7 @@ class AppState(Object):
 
     .. [Action] file:///./actions_gen.Action.html
     .. [Context] file:///./Context.Context.html
-    .. [SourceBuff] file:///SourceBuff.SourceBuff.html
-    .. [self.curr_buffer] file:///AppState.AppState.html"""
+    .. [SourceBuff] file:///SourceBuff.SourceBuff.html"""
 
     buffer_methods = ['is_language', 'region_distance', 'cur_pos',
     'get_selection', 'goto_end_of_selection', 'set_selection', 
@@ -118,7 +115,7 @@ class AppState(Object):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
-                 curr_buffer=None, max_history=100,
+                 max_history=100,
                  **attrs):
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
@@ -126,10 +123,26 @@ class AppState(Object):
                              'rec_utterances': [], 
                              'open_buffers': {},
                              'curr_dir': curr_dir, 
-                             'curr_buffer': curr_buffer,
                              'max_history': max_history, 
                              'translation_is_off': translation_is_off},
                             attrs)
+
+    def curr_buffer(self):
+        """Returns the SourceBuff corresponding to the current editor buffer 
+        
+        If no such buffer, returns *None*.
+        
+        """
+	return self.find_buff(self.curr_buffer_name())
+
+    def curr_buffer_name(self):
+	"""returns the file name of the current buffer
+
+	**OUTPUTS**
+
+	*STR* -- file name of current buffer"""
+
+	debug.virtual('curr_buffer_name')
 
 
     def bidirectional_selection(self):
@@ -139,7 +152,7 @@ class AppState(Object):
 
 	*none*
 
-	**OUTPUS**
+	**OUTPUTS**
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
@@ -158,7 +171,7 @@ class AppState(Object):
 	the array refer to a sequence of objects in the user interface
 	that lead to the active field.
 
-	If *None*, then the buffer [self.curr_buffer] has the focus. 
+	If *None*, then the buffer [self.curr_buffer()] has the focus. 
 
 	Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
 	as', 'file name')*.
@@ -178,7 +191,7 @@ class AppState(Object):
         """
 
         if (self.active_field() != None):
-            answer = (lang_name == None) or (self.curr_buffer.is_language(lang_name))
+            answer = (lang_name == None) or (self.curr_buffer().is_language(lang_name))
         return answer
 
     def find_buff(self, buff_name=None):
@@ -191,7 +204,17 @@ class AppState(Object):
         .. [self.curr_buffer] file:///AppState.AppState.html
         """
         if (buff_name == None):
-            return self.curr_buffer
+#	    print 'find current'
+	    current_name = self.curr_buffer_name()
+#	    print 'current is'
+#	    print repr(current_name)
+#	    print repr(self.open_buffers)
+	    if ((current_name != None) and 
+		(self.open_buffers.has_key(current_name))):
+#	      print 'locating ...'
+	      return self.open_buffers[current_name]
+#	    print 'No such buffer'
+	    return None
         elif (self.open_buffers.has_key(buff_name)):
             return self.open_buffers[buff_name]
         #
@@ -255,8 +278,8 @@ class AppState(Object):
         """
         
         language = None
-        if self.curr_buffer != None:
-            language = self.curr_buffer.language
+        if self.curr_buffer() != None:
+            language = self.curr_buffer().language
         return language
 
 

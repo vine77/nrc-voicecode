@@ -194,7 +194,7 @@ def test_CmdInterp():
 
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
     a_mediator.interp.on_app.goto(43)
-    a_mediator.interp.on_app.curr_buffer.language = 'python'
+    a_mediator.interp.on_app.curr_buffer().language = 'python'
     print '\n>>> Interpreting in a Python buffer'    
     print '\n>>> Current buffer is:\n'
     a_mediator.interp.on_app.print_buff()

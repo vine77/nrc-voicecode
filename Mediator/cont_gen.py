@@ -43,7 +43,7 @@ class ContLanguage(Context):
                             {})
 
     def applies(self, app):
-        buff = app.curr_buffer
+        buff = app.curr_buffer()
         return (self.language == None or (buff != None and  buff.language == self.language))
         
 

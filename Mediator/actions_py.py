@@ -74,18 +74,18 @@ class ActionPyAddArgument(Action):
             # See if argument list was empty
             #        
             arg_list_empty = 1
-            pos = app.curr_buffer.cur_pos() - 1
+            pos = app.curr_buffer().cur_pos() - 1
             
             #
             # Find first preceding non-space character
             #
             while pos >= 0:
-                if not re.match('\s', app.curr_buffer.contents()[pos]):
+                if not re.match('\s', app.curr_buffer().contents()[pos]):
                     #
                     # The first preceding non-space character is (
                     #    => argument list is empty
                     #
-                    arg_list_empty = app.curr_buffer.contents()[pos] == '('
+                    arg_list_empty = app.curr_buffer().contents()[pos] == '('
                     break
                 pos = pos - 1
 
