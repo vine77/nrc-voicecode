@@ -99,6 +99,12 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 
     def len(self):
 	return len(self.content)
+
+    def refresh_if_necessary(self):
+	self.print_buff()
+
+    def refresh(self):
+	self.print_buff()
     
     def print_buff(self, from_line=None, to_line=None):
         """Prints buffer to STDOUT
