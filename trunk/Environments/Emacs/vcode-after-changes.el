@@ -29,7 +29,8 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-(setq message-log-max (* 10 message-log-max))
+;;; Change this if you want to see more traces
+(setq message-log-max 1000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; User options
@@ -345,20 +346,6 @@ In the dictation buffer, the format is VR:<micstate>.")
 (defvar vr-mic-state "not connected"
   "String storing the microphone state for display in the mode line.")
 
-(defvar vr-overlay nil
-  "Overlay used to track changes to voice-activated buffers.")
-(make-variable-buffer-local 'vr-overlay)
-
-(defvar vr-select-overlay (make-overlay 1 1)
-  "Overlay used to track and visually indicate the NaturallySpeaking
-selection.")
-(delete-overlay vr-select-overlay)
-(overlay-put vr-select-overlay 'face 'region)
-(if (eq window-system nil)
-    (progn
-      (overlay-put vr-select-overlay 'before-string "[")
-      (overlay-put vr-select-overlay 'after-string "]")))
-
 (defvar vr-process nil "The VR mode subprocess.")
 (defvar vr-emacs-cmds nil)
 (defvar vr-dns-cmds nil)
@@ -370,8 +357,8 @@ from the VR subprocess.")
 See vr-activate-buffer and vr-switch-to-buffer.")
 
 (defvar vr-ignore-changes nil "see comment in vr-overlay-modified")
-(defvar vr-changes-caused-by-sr-cmd nil "see comment in vr-overlay-modified")
-(defvar vr-queued-changes nil "see comment in vr-overlay-modified")
+(defvar vr-changes-caused-by-sr-cmd nil "see comment in vr-report-change")
+(defvar vr-queued-changes nil "see comment in vr-report-change")
 (defvar vr-dont-report-sr-own-changes t 
   "If t, then we don't report the changes that have been caused directly
 by the SR. However, we do report changes done automatically by Emacs
@@ -550,7 +537,6 @@ sync.  (That shouldn't happen, in an ideal world, but..."
   "Predicate indicating whether BUFFER matches any REGEXP element and
 does not match any '(not REGEXP) element of
 vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
-  (vr-log "**-- vr-activate-buffer-p: buffer=%S, vr-activation-list=%S, vr-internal-activation-list=%S\n" buffer vr-activation-list vr-internal-activation-list)
   (if (bufferp buffer)
       (setq buffer (buffer-name buffer)))
   (if (string-match "^ \\*Minibuf-[0-9]+\\*$" buffer)
@@ -587,7 +573,7 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
 	(make-local-hook 'after-change-functions)
 	(add-hook 'after-change-functions 'vr-report-change nil t)
 	)
-    (remove-hook after-change-functions 'vr-report-change t)
+    (remove-hook 'after-change-functions 'vr-report-change t)
     )
 )
 
@@ -595,7 +581,6 @@ vr-internal-activation-list.  BUFFER can be a buffer or a buffer name."
   "Sets the target BUFFER that will receive voice-recognized text.  Called
 interactively, sets the current buffer as the target buffer."
   (interactive (list (current-buffer)))
-
   (vr-log "-- vr-activate-buffer: buffer=%S" buffer)
   (if (buffer-live-p vr-buffer)
       (save-excursion
@@ -619,64 +604,9 @@ interactively, sets the current buffer as the target buffer."
 ;; Tracking changes to voice-activated buffers
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar vr-overlay-before-count 0 "see comment in vr-grow-overlay")
-
-(defun vr-grow-overlay (overlay after beg end &optional len)
-  ;; Make OVERLAY grow to contain range START to END.  If called "before"
-  ;; twice before called "after", only call vr-overlay-modified once.
-  ;; This happens when we type the first char in the buffer, because I
-  ;; guess it is inserted both before and after the empty overlay.
-
-  (vr-log "Grow: %s %d %d %s %d\n" (if after "After: " "Before: ") beg end
-  	  (if after (int-to-string len) "") vr-overlay-before-count)
-  (if after
-      (progn
-	(move-overlay overlay
-		      (min beg (overlay-start overlay))
-		      (max end (overlay-end overlay)))
-	(setq vr-overlay-before-count (1- vr-overlay-before-count))
-	(if (> vr-overlay-before-count 0)
-	    (progn;; (vr-log "   ignored duplicate grow\n")
-	      nil)
-	  (vr-report-change overlay after beg end len))
-	;;(setq vr-modification-stack (cdr vr-modification-stack))
-	)
-
-    (setq vr-overlay-before-count (1+ vr-overlay-before-count))
-    ;;(setq vr-modification-stack (cons (buffer-substring beg end)
-    ;;vr-modification-stack))
-    )
-  (vr-log "-- vr-grow-overlay: exited\n")
-  )
 
 (defvar vr-modification-stack () )
 
-(defun vr-overlay-modified (overlay after beg end &optional len)
-  (vr-log " overlay modified: a:%s vro:%s %d %d %d: \"%s\"\n"
-	  after (eq vr-overlay overlay) beg end (if after len 0)
-	  (buffer-substring beg end))
-  (vr-log "  modification stack: %d\n" (length vr-modification-stack))
-  (if after
-      (progn
-	(vr-log "   %s %s \n" (car vr-modification-stack)
-		(buffer-substring beg end))
-	(if (equal (car vr-modification-stack) (buffer-substring beg end))
-	    ;; the before and after text are the same, so so it's one of these
-	    ;; funky changes we can ignore.
-	    (vr-log "ignoring bogus change\n" );;nil
-	  ;; they're not equal, so we call the modification routine like before.
-	  (vr-report-change overlay after beg end len))
-	(setq vr-modification-stack (cdr vr-modification-stack))
-	(if (< 0 vr-overlay-before-count)
-	    (setq vr-overlay-before-count (1- vr-overlay-before-count))))
-
-    ;; for the before call, we just save the prechange string in the stack
-    (setq vr-modification-stack (cons (buffer-substring beg end)
-				      vr-modification-stack)))
-
-  (vr-log "-- vr-overlay-modified: exited\n")
-
-  )
 
 (defun vr-change-is-delete (beg end &optional len)
   (and (> len 0) (eq beg end))
@@ -715,7 +645,7 @@ interactively, sets the current buffer as the target buffer."
   "Invoked whenever a change happens on the current buffer (if it is
 voice enabled)
 
-Changes are put in a changes queue.
+Changes are put in a changes queue `vr-queued-changes.
 
 If 'vr-changes-caused-by-sr-cmd is nil, the changes were not
 done as a response to a voice command. In that case, send the 
@@ -2100,13 +2030,14 @@ a buffer"
   )
 
 
-(defun vcode-generate-change-hash (a-change)
-  (vr-log "**-- vcode-generate-change-hash: serializing a-change=%S\n" a-change)
+(defun vcode-generate-change-hashes (a-change)
+  (vr-log "**-- vcode-generate-change-hashes: serializing a-change=%S\n" a-change)
   (let ((buff-name (nth 0 a-change))
 	(inserted-start (nth 1 a-change))
 	(inserted-end (nth 2 a-change))
 	(deleted-length (nth 3 a-change))
-	(a-change-hash (make-hash-table :test 'string=))
+	(insert-change-hash (make-hash-table :test 'string=))
+	(select-change-hash (make-hash-table :test 'string=))
 	(deleted-start) (deleted-end) (inserted-text))
 
     (setq deleted-start inserted-start)
@@ -2115,15 +2046,30 @@ a buffer"
      (switch-to-buffer buff-name)
      (setq inserted-text (buffer-substring inserted-start inserted-end))
     )
+
+    ;;;
+    ;;; Generate a hash table describing the insertion change
+    ;;;
+    (cl-puthash "action" "insert" insert-change-hash)
     (cl-puthash "range" 
-		(list deleted-start deleted-end) 
-		a-change-hash)
-      (cl-puthash "buff_name" buff-name a-change-hash)
-      (cl-puthash "action" "insert" a-change-hash)
-      (cl-puthash "text" inserted-text a-change-hash)
-      (vr-log "**-- vcode-generate-change-hash: exiting\n")
-      a-change-hash
-   )
+		(list (vcode-convert-pos deleted-start 'vcode)
+		      (vcode-convert-pos deleted-end 'vcode))
+		insert-change-hash)
+    (cl-puthash "buff_name" buff-name insert-change-hash)
+    (cl-puthash "text" inserted-text insert-change-hash)
+    (vr-log "**-- vcode-generate-change-hash: exiting\n")
+    insert-change-hash
+
+    ;;;
+    ;;; Generate a hash table describing where the cursor ends up after the 
+    ;;; insertion
+    ;;;
+    (cl-puthash "action" "select" insert-change-hash)
+    (cl-puthash "range" (list inserted-end inserted-end) select-change-hash)
+    (cl-puthash "buff_name" buff-name insert-change-hash)
+
+    (list insert-change-hash select-change-hash)
+  )	      
 )
 
 (defun vcode-serialize-changes (change-list)
@@ -2152,13 +2098,14 @@ message.
       (setq a-change (car change-list))
       (setq change-list (cdr change-list))
 
-      ;;; Generate a hash describing this change and append it to the 
+      ;;; Generate a hashes describing this change and append it to the 
       ;;; change list destined for VCode
-      (setq a-change-vcode (vcode-generate-change-hash a-change))
+      (setq a-change-vcode (vcode-generate-change-hashes a-change))
 
       (setq change-list-vcode 
-	    (append change-list-vcode (list a-change-vcode)))
+	    (append change-list-vcode a-change-vcode))
     )
+
     
     ;;; Name the message that will be sent to VCode.
     ;;; Changes generated in response to VCode request "some_command"
@@ -2266,22 +2213,51 @@ message.
   (sleep-for 10)
   ;;; end
 
-  (if (eq 0 save) (kill-buffer buff-name))
+  (if (eq 0 save) 
+      (progn
+	(vr-log "**-- vcode-kill-buffer: before kill-bufferg\n")
+	(kill-buffer buff-name)
+	(vr-log "**-- vcode-kill-buffer: after kill-bufferg\n")
+      )
+  )
   (if (eq -1 save) 
       (progn
 	;;;
 	;;; Don't know how to kill a buffer without asking the user
 	;;; if wants to save.
 	;;; So save buffer under a temporary name, and then kill it.
+        ;;;
 	;;; Since the temporary file will be up to date, Emacs won't
 	;;; query user.
 	;;;
+	;;; Note that we remove the 'after-change-hook before writing
+	;;; to the temporary file. This is because saving to the temporary
+        ;;; file caused a change to be reported on that temporary file, and
+	;;; inserted in 'vr-queued-changes. But when the change queue got
+	;;; cleaned up, the temporary file had been closed and Emacs was 
+        ;;; freezing.
+	;;;
+	(vcode-set-after-change-functions nil)
+
+	(vr-log "**-- vcode-kill-buffer: before write-file\n")
 	(write-file "ignorethisfile.tmp")
+	(vr-log "**-- vcode-kill-buffer: after write-file\n")
+	(vr-log "**-- vcode-kill-buffer: before kill-buffer\n")
 	(kill-buffer "ignorethisfile.tmp")
+	(vr-log "**-- vcode-kill-buffer: after kill-buffer\n")
 ;        (kill-buffer buff-name)
 	)
   )
-  (if (eq 1 save) (progn (save-buffer) (kill-buffer buff-name)))
+  (if (eq 1 save) 
+      (progn 
+	(vr-log "**-- vcode-kill-buffer: before save-buffer\n")
+	(save-buffer) 
+	(vr-log "**-- vcode-kill-buffer: after save-buffer\n")
+	(vr-log "**-- vcode-kill-buffer: before kill-buffer\n")
+	(kill-buffer buff-name)
+	(vr-log "**-- vcode-kill-buffer: after kill-buffer\n")
+      )
+  )
 )
 
 
@@ -2300,7 +2276,11 @@ message.
     (if (not buff)
        ;;; 'buff_name is not the name of a buffer. Maybe the name
        ;;; of a file visited by a buffer?
-	(setq buff (find-buffer-visiting buff-name))
+	(progn
+	  (vr-log "**-- vcode-cmd-close-buffer: before find-buffer-visiting\n")
+	  (setq buff (find-buffer-visiting buff-name))
+	  (vr-log "**-- vcode-cmd-close-buffer: after find-buffer-visiting\n")
+	)
       )
 
     (if buff
@@ -2406,21 +2386,18 @@ to the other"
   (vr-log "-- vcode-cmd-line-num-of: invoked\n")
   (let ((mess-cont (nth 1 vcode-request))
 	(response (make-hash-table :test 'string=))
-	(line-num) (o-point))
+	(line-num) (opoint))
 
-    (vr-log "**-- vcode-cmd-line-num-of: before setq opoint\n")
     (setq opoint (vcode-fix-pos (cl-gethash "position" mess-cont)))
-    (vr-log "**-- vcode-cmd-line-num-of: after setq opoint=%S\n" opoint)
 
+    (vr-log "**-- vcode-cmd-line-num-of: opoint=%S, current buffer=%S" opoint (buffer-name))
     (save-excursion
       (goto-char opoint)
       (beginning-of-line)
       (setq line-num (1+ (count-lines 1 (point))))
       )
 
-    (vr-log "**-- vcode-cmd-line-num-of: after count-lines\n")
     (cl-puthash "value" line-num response)
-    (vr-log "**-- vcode-cmd-line-num-of: before vr-send-reply\n")
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "line_num_of_resp" response)))
@@ -2434,6 +2411,7 @@ to the other"
   (let ((response (make-hash-table :test 'string=))
 	(selection))
     (setq selection (vcode-make-sure-no-nil-in-selection (point) (mark)))
+    (vr-log "**-- vcode-cmd-get-selection: selection=%S\n" selection)
     (cl-puthash 'value 
 		(list (vcode-convert-pos (nth 0 selection) 'vcode)
 		      (vcode-convert-pos (nth 1 selection) 'vcode))
@@ -2574,14 +2552,12 @@ to the other"
 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
-        (vr-log "**-- vcode-cmd-insert: buff-name=%S, current buffer=%S\n" buff-name (buffer-name))
-	(save-excursion
-	  (switch-to-buffer buff-name)
-	  (vr-log "**-- vcode-cmd-insert: switched to current buffer=%S\n" (buffer-name))
-	  (kill-region delete-start delete-end)
-	  (insert text)
-	  (vr-send-queued-changes)
-	)
+        (vr-log "-- vcode-cmd-insert: buff-name=%S, range=%S, text=%S, \n" buff-name range text)
+	
+	(set-buffer buff-name)
+	(kill-region delete-start delete-end)
+	(insert text)
+	(vr-send-queued-changes)
     )
   (vr-log "-- vcode-cmd-insert: exited\n")
 )
@@ -2594,39 +2570,22 @@ to the other"
 	(range) (vr-request) 
 	(indent-start) (indent-end))
 
+    (setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
+    (setq indent-start (elt range 0))
+    (setq indent-end (elt range 1))
+
+    (vr-log "--** vcode-cmd-indent: indent-start=%S, indent-end=%S\n"  indent-start indent-end)
+
+    (set-buffer buff-name)
+    (vr-log "**-- vcode-cmd-indent: switched to current buffer=%S\n" (buffer-name))
 ;;; IGNORE INDENTATION FOR NOW!!!
+;;; Eventually, put call to function for doing the indentation below this
+;;; commment, and before (vr-send-queued-changes)
 ;;;
-; 	(setq range (vcode-fix-range (cl-gethash "range" mess-cont)))
-; 	(vr-log "--** vcode-cmd-indent: range=%S\n" range)
-; 	(setq indent-start (elt range 0))
-; 	(setq indent-end (elt range 1))
 
-;         (vr-log "--** vcode-cmd-indent: indent-start=%S, indent-end=%S\n"  indent-start indent-end)
-
-; 	(setq vr-request (list 1
-; 			       0
-; 			       ""
-; 			       (point)
-; 			       0
-; 			       indent-start
-; 			       (- indent-end indent-start)
-; 			       mess-name))
-;         (vr-log "--** vcode-cmd-indent: vr-request=%S\n" vr-request)
-
-; 	(vr-cmd-make-changes vr-request)
-
-;;;
-;;; WHEN ABOVE CODE IS ACTIVATED AND DEBUGGED, REMOVE STATEMENT BELOW
-;;; THE CALL TO VR-CMD-MAKE-CHANGES WILL END UP SENDING A REPLY
-;;; TO VOICECODE SERVER
-    (let ((reply-cont (make-hash-table :test 'string=)) )
-         (cl-puthash "updates" (list) reply-cont)
-         (vr-send-reply (run-hook-with-args 
-		          'vr-serialize-message-hook 
-		          (list "indent_resp" reply-cont)))
-    )
+    (vr-send-queued-changes)
+    (vr-log "-- vcode-cmd-indent: exited\n")
   )
-  (vr-log "-- vcode-cmd-indent: exited\n")
 )
 
 
@@ -2655,9 +2614,8 @@ to the other"
 ; 			       mess-name))
 
 ;;;
-;;; WHEN AUTO INDENTATION IS ACTUALLY IMPLEMENTED, REMOVE STATEMENT BELOW
-;;; THE CALL TO VR-CMD-MAKE-CHANGES WILL END UP SENDING A REPLY
-;;; TO VOICECODE SERVER
+;;; WHEN AUTO INDENTATION IS ACTUALLY IMPLEMENTED, TAKE A LOOK AT CMD-INDENT
+;;; TO FIGURE OUT HOW TO IMPLEMENT THIS
     (let ((reply-cont (make-hash-table :test 'string=)) )
          (cl-puthash "updates" (list) reply-cont)
          (vr-send-reply (run-hook-with-args 
