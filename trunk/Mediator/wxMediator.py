@@ -56,20 +56,11 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                     'DlgView_CorrectRecentWX.correct_nth': 1,
-                     'CorrectFromRecentWX.__init__': 1,
-                     'CorrectNextPrevWX.__init': 1,
-                     'CorrectionBoxWX.__init__': 1,
-                     'DlgModelViewWX.__init__': 1,
-                     'DlgModelView.Destroy': 1, 
-                     'DlgModelView.__init__': 1,
-#                     'ReformatRecentSymbolsViewWX.__init__': 1,
-#                     'ReformatRecentSymbolsViewWX.__init__': 1,
-#                     'DlgModelView.Destroy': 1,
-#                     'MediatorConsoleWX.show_modal_dialog': 1,
-#                     'MediatorConsoleWX.show_recent_symbols': 1,
-#                     'ReformatRecentSymbolsViewWX.__init__': 1,
-#                     'ReformatRecentSymbolsModel.__init__': 1,
+                     'ActionSearchOrLookback.execute': 1,
+                     'ActionSearchOrLookback.__init__': 1,
+                     'ActionBidirectional.__init__': 1,
+                     'ActionBidirectionalRepeat.__init__': 1,
+                     
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

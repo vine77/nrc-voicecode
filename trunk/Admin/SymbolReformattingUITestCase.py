@@ -28,7 +28,7 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
     
     def setUp(self):
         self.ui = \
-           MediatorConsoleWX.DlgReformatRecentSymbols(None, None, 
+           MediatorConsoleWX.ReformatRecentSymbols(None, None, 
                                                         SymbolReformattingUITestCase.sym_list, 
                                                          None)
         # AD: Uncomment this if you want to see what the window looks like. 
