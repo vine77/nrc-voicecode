@@ -1,18 +1,19 @@
 """Action functions that span different languages"""
 
-import exceptions, os, re
+import copy, exceptions, os, re
 import Object, vc_globals
 
 class Action(Object.Object):
     """Base class for all actions.
     
     **INSTANCE ATTRIBUTES**
-    
-    *none*-- 
+
+    *none* --
 
     CLASS ATTRIBUTES**
     
     *none* -- 
+
     """
     
     def __init__(self, docstring=None, **args_super):
@@ -21,16 +22,72 @@ class Action(Object.Object):
                             args_super, \
                             {})
 
-    def execute(self, app, app_cont):
+    def log_execute(self, app, cont):
+        """Executes the action and logs it in the application's history.
+        
+        **INPUTS**
+        
+        [AppState] app -- The application to execute and log the action on.
+        
+        [Context] cont -- The context object that determines the parameters
+        of how the action will be executed.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+
+        .. [AppState] file:///./AppState.AppState.html
+        .. [Context] file:///./Context.Context.html"""
+
+        #
+        # First, make a copies of the action and context before logging them
+        # to the command, in case the same prototype context and action
+        # instances are being reused everytime a particular CSC is uttered.
+        #
+        # That way, if we later modify a command in the history (e.g.
+        # "previous one" command to reexecute a directional command
+        # but in the opposite direction), we won't end up affecting
+        # all instances of that action.
+        #
+        # Note that we don't do this inside of *log* method because some
+        # subclasses may override this method and forget to do the copies.
+        # For example, actions that just repeat a previous action do not
+        # log themselves, but instead log the actions that they repeat.
+        #
+        action_copy = copy.copy(self)        
+        cont_copy = copy.copy(cont)
+        action_copy.log(app, cont_copy)
+        action_copy.execute(app, cont)
+
+
+    def log(self, app, cont):
+        """Log the action to an application's command history
+        
+        **INPUTS**
+        
+        [AppState] app -- Application to log the action with.
+
+        [Context] cont -- Context in which the action was executed.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        app.log_cmd(cont, self)
+
+
+    def execute(self):
         """Execute the action.
         
         **INPUTS**
         
         [AppState] app -- Application on which to execute the action
         
-        [Context] app_cont -- Context of the application that is
-        relevant for the execution of this action.
-        
+        [Context] app_cont -- Context of the application that
+        determines the parameters of how the action will be executed.
+                
         **OUTPUTS**
         
         *none* -- 
@@ -38,8 +95,6 @@ class Action(Object.Object):
         .. [AppState] file:///./AppState.AppState.html"""
         
         debug.virtual('execute')
-
-
 
     def doc(self):
         """Returns a documentation string for the action.
@@ -56,6 +111,105 @@ class Action(Object.Object):
         
         return self.docstring
 
+class ActionRepeatable(Action):
+    """Base class for repeatable actions.
+
+    This class doesn't actually have any additional methods. It's just
+    used to flag a subclass as being an action class that can be
+    repeated.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, docstring=None, **args_super):
+        self.deep_construct(Action, \
+                            {}, \
+                            args_super, \
+                            {})
+
+class ActionRepeatLastCmd(Action):
+    """This action just repeats the last command in the command history.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *INT n_times=1* -- Number of times to repeate the previous command.
+    
+     **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, n_times=1, **args_super):
+        self.deep_construct(ActionRepeatPreviousCmd, \
+                            {'n_times': n_times}, \
+                            args_super, \
+                            {})
+
+    def log(self, app, cont):
+        """Logs the repeat actions.
+
+        Actually, it just does nothing because instead, the repeated action
+        will log itself everytime it is repeated.
+        
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        pass
+
+    def execute(self, app, cont):
+        """Repeats the last command in the command history [self.n_times].
+
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute
+        .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
+        
+        (last_cont, last_action) = app.get_history(self, 1)
+        for ii in range(self.n_times):
+            last_action.log_execute(app, cont)
+
+class ActionSelect(Action):
+    """This action sets the selection in a buffer.
+
+    **INSTANCE ATTRIBUTES**
+    
+    *(INT, INT) range* -- Start and end position of the range to
+     be selected.
+
+    *INT cursor_at=1* -- If positive, put cursor at end of
+     selection. Otherwise, put it at beginning.
+
+    *STR f_name=None* -- Name of file where to set selection. If
+     *None*, selectin current buffer.
+    
+     **CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, range, cursor_at=1, f_name=None, **args_super):
+        self.deep_construct(ActionSelect,
+                            {'range': range, 'cursor_at': cursor_at,
+                             'f_name': f_name},
+                            args_super,
+                            {})
+
+    def execute(self, app, cont):
+        """Selects a region in a buffer.
+
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute
+        .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
+        
+        app.set_selection(range=self.range, cursor_at=self.cursor_at, f_name=self.f_name)
+        
 class ActionInsert(Action):
     """Action that inserts and indents code at cursor position
         
@@ -75,6 +229,7 @@ class ActionInsert(Action):
                              'code_after': code_after}, \
                             args_super, \
                             {})
+        
         
     def execute(self, app, cont):
         """See [Action.execute].

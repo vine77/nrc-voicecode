@@ -46,10 +46,10 @@ class AppState(Object):
     
     *STR app_name=None* -- name of the programming environment
     
-    *[* [[SpeechCommand]] *] rec_utterances=[]* -- Array of recent
-     utterances that have been recognised. Each utterance is a list of
-     [SpeechComand] objects that speech commands that have been
-     interpreted for that utterance.
+    *[(STR,* [Context], [Action]*) *] history=[]* -- Array of recent
+    commands that have been executed. Each is entry is a 2ple. The first
+    entry is the context in which the command was applied. The third
+    entry is the action that was executed.
     
     *{STR: * [SourceBuff] *} open_buffers={}* -- List of source buffers that
      are currently open in the programming environment.
@@ -74,7 +74,9 @@ class AppState(Object):
     *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
      the stack is a couple where the first entry is the name of the
      source buffer and the second is the position in that buffer where
-     the crumb was dropped.    
+     the crumb was dropped.
+
+    *INT* max_history=100 --  Maximum length of the command history.
 
     *BOOL* translation_is_off -- If true, then translation of CSCs and
      LSAs isturned off for that applications. Everything should be
@@ -87,7 +89,8 @@ class AppState(Object):
     AppState should forward to SourceBuff.  Subclasses of AppState
     should include those from AppState and add their own 
 
-    .. [SpeechCommand] file:///./SpeechCommand.SpeechCommand.html
+    .. [Action] file:///./actions_gen.Action.html
+    .. [Context] files:///./Context.Context.html
     .. [SourceBuff] file:///SourceBuff.SourceBuff.html
     .. [self.curr_buffer] file:///AppState.AppState.html"""
 
@@ -105,9 +108,9 @@ class AppState(Object):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
-                 active_field=None, curr_buffer=None, 
+                 active_field=None, curr_buffer=None, max_history=100,
                  **attrs):
-        self.init_attrs({'breadcrumbs': []})
+        self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
                              'rec_utterances': [], 
@@ -115,6 +118,7 @@ class AppState(Object):
                              'curr_dir': curr_dir, 
                              'active_field': active_field,
                              'curr_buffer': curr_buffer,
+                             'max_history': max_history, 
                              'translation_is_off': translation_is_off},
                             attrs)
 
@@ -221,3 +225,45 @@ class AppState(Object):
             language = self.curr_buffer.language
         return language
 
+
+
+    def log_cmd(self, cont, action):
+        """Logs a command in the application's history
+        
+        **INPUTS**
+        
+        [Context] cont -- Context in which the command was invoked.
+        
+        [Action] action -- Action that was executed in response to the command
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        if len(self.history) > self.max_history:
+            self.history = self.history[:len(self.history)-1]
+        self.history.append((cont, action))
+
+
+    def get_history(self, nth):
+        """Gets the *nth* most recent entry in the application's command
+        history
+        
+        **INPUTS**
+        
+        *INT* nth -- Index of the requested entry (from the end)
+        
+
+        **OUTPUTS**
+        
+        *(* [Context], [Action]*)* hist_entry -- The context and action of the *nth* most
+        recent command in the application's command history.
+
+        .. [Context] file:///./Context.Context.html
+        .. [Action] files:///./Action.Action.html"""
+
+        hist_entry = None
+        if nth <= len(self.history):
+            hist_entry = self.history[len(self.history) - nth - 1]
+        return hist_entry
