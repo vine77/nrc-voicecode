@@ -80,7 +80,7 @@ class CSCmd(Object):
 #            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
             if (cont == None or cont.applies(app)):
 #                print '-- CSCmd.interpret: this context applies'
-		return ameaning
+                return ameaning
 
         return None
 
@@ -102,16 +102,16 @@ class CSCmd(Object):
         # applies
         #
 #        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
-	ameaning = self.applies(app)
-	if ameaning:
+        ameaning = self.applies(app)
+        if ameaning:
             cont, action = ameaning
 #            print '-- CSCmd.interpret: cont=%s' % cont
 #            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
 #                print '-- CSCmd.interpret: this context applies'
-	    action.log_execute(app, cont)
+            action.log_execute(app, cont)
 #                print '-- CSCmd.interpret: current buffer is now:'
 #                app.print_buff_content()
-	    applied = 1
+            applied = 1
 
         return applied
 

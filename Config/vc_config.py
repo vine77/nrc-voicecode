@@ -66,36 +66,36 @@ import sr_interface
 
 if (__name__ == '__main__'):
     if not globals().has_key('add_csc') and not locals().has_key('add_csc'):
-	import MediatorObject
-#	global test_mediator
-	test_mediator = MediatorObject.MediatorObject( \
-	    interp = CmdInterp.CmdInterp())
-#	MediatorObject.to_configure = test_mediator
-	glob_names = globals()
-	test_mediator.define_config_functions(glob_names)
-#	print glob_names['add_abbreviation']
+        import MediatorObject
+#        global test_mediator
+        test_mediator = MediatorObject.MediatorObject( \
+            interp = CmdInterp.CmdInterp())
+#        MediatorObject.to_configure = test_mediator
+        glob_names = globals()
+        test_mediator.define_config_functions(glob_names)
+#        print glob_names['add_abbreviation']
 #    add_abbreviation = MediatorObject.add_abbreviation
 #    add_csc = MediatorObject.add_csc
 #    add_lsa = MediatorObject.add_lsa
 #    print_abbreviations = MediatorObject.print_abbreviations
 #    standard_symbols_in = MediatorObject.standard_symbols_in
-#	add_abbreviation = MediatorObject.to_configure.add_abbreviation
-#	add_csc = MediatorObject.to_configure.add_csc
-#	add_lsa = MediatorObject.to_configure.add_lsa
-#	print_abbreviations = MediatorObject.to_configure.print_abbreviations
-#	standard_symbols_in = MediatorObject.to_configure.standard_symbols_in
+#        add_abbreviation = MediatorObject.to_configure.add_abbreviation
+#        add_csc = MediatorObject.to_configure.add_csc
+#        add_lsa = MediatorObject.to_configure.add_lsa
+#        print_abbreviations = MediatorObject.to_configure.print_abbreviations
+#        standard_symbols_in = MediatorObject.to_configure.standard_symbols_in
 
-#	global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
-#	    standard_symbols_in
-#	add_abbreviation = test_mediator.add_abbreviation
-#	add_csc = test_mediator.add_csc
-#	add_lsa = test_mediator.add_lsa
-#	print_abbreviations = test_mediator.print_abbreviations
-#	standard_symbols_in = test_mediator.standard_symbols_in
+#        global add_abbreviation, add_csc, add_lsa, print_abbreviations, \
+#            standard_symbols_in
+#        add_abbreviation = test_mediator.add_abbreviation
+#        add_csc = test_mediator.add_csc
+#        add_lsa = test_mediator.add_lsa
+#        print_abbreviations = test_mediator.print_abbreviations
+#        standard_symbols_in = test_mediator.standard_symbols_in
         
-	if sr_interface.speech_able():
-#	    natlink.natConnect()    
-	    sr_interface.connect()
+        if sr_interface.speech_able():
+#            natlink.natConnect()    
+            sr_interface.connect()
 
 #try:
 #    print add_abbreviation
@@ -162,7 +162,7 @@ trust_current_window(0)
 
 #     define modules
 mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
-	editor = 'emacs')
+        editor = 'emacs')
 mod_exceed = \
     KnownTargetModule.DualModeDisplayByTitle(title_regex = '^Exceed$',
     module_name = 'EXCEED')

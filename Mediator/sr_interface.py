@@ -106,8 +106,8 @@ def set_mic(mic_state):
     """
     if speech_able():
         if not sr_is_connected:
-	    connect()
-	natlink.setMicState(mic_state)
+            connect()
+        natlink.setMicState(mic_state)
 
 def get_mic():
     """checks the current microphone state
@@ -117,8 +117,8 @@ def get_mic():
     """
     if speech_able():
         if not sr_is_connected:
-	    connect()
-	return natlink.getMicState()
+            connect()
+        return natlink.getMicState()
 
 
 def connect(mic_state=None, mic_change_callback = None):
@@ -150,9 +150,9 @@ def connect(mic_state=None, mic_change_callback = None):
             openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
         if mic_state:
             natlink.setMicState(mic_state)
-	if mic_change_callback:
-	    sr_mic_change_callback = mic_change_callback
-	    natlink.setChangeCallback(change_callback)
+        if mic_change_callback:
+            sr_mic_change_callback = mic_change_callback
+            natlink.setChangeCallback(change_callback)
 
 
 def disconnect():
@@ -170,16 +170,16 @@ def disconnect():
     global sr_is_connected, sr_mic_change_callback
 
     if speech_able() and sr_is_connected:
-	if sr_mic_change_callback:
-	    natlink.setChangeCallback(None)
-	    sr_mic_change_callback = None
+        if sr_mic_change_callback:
+            natlink.setChangeCallback(None)
+            sr_mic_change_callback = None
         natlink.natDisconnect()
     sr_is_connected = 0        
 
 
 def change_callback(*args):
     if args[0] == 'mic' and sr_mic_change_callback:
-	sr_mic_change_callback(args[1])
+        sr_mic_change_callback(args[1])
 
 
 def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_using_topic=None):
@@ -515,7 +515,7 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     *none*
     """
     def __init__(self, results, **attrs):
-	"""creates a SpokenUtteranceNL from a results object
+        """creates a SpokenUtteranceNL from a results object
 
 	**INPUTS**
 
@@ -526,21 +526,21 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*none*
 	"""
-	# local variables needed for initialization in deep_construct
-	raw_words = results.getWords(0)
-	word_list = map(spoken_written_form, raw_words)
-	spoken_only = map(lambda x: x[0], word_list)
+        # local variables needed for initialization in deep_construct
+        raw_words = results.getWords(0)
+        word_list = map(spoken_written_form, raw_words)
+        spoken_only = map(lambda x: x[0], word_list)
       
-	self.deep_construct(SpokenUtteranceNL,
-	    {'results' : results, 
-	    'word_list': word_list,
-	    'spoken_only': spoken_only,
-	    'choices_available': -1,
-	    'choices': []}, 
-	    attrs)
+        self.deep_construct(SpokenUtteranceNL,
+            {'results' : results, 
+            'word_list': word_list,
+            'spoken_only': spoken_only,
+            'choices_available': -1,
+            'choices': []}, 
+            attrs)
 
     def spoken_forms(self):
-	"""returns list of spoken forms from the utterance
+        """returns list of spoken forms from the utterance
 
 	**INPUTS**
 
@@ -550,10 +550,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*[STR]* -- list of spoken forms from the utterance
 	"""
-	return self.spoken_only
+        return self.spoken_only
 
     def words(self):
-	"""returns list of words (as (spoken, written) 2-tuples) 
+        """returns list of words (as (spoken, written) 2-tuples) 
 	from the utterance.
 
 	**INPUTS**
@@ -565,10 +565,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
 	
 	"""
-	return self.word_list
+        return self.word_list
 
     def entry(self, spoken, written = None):
-	"""returns a vocabulary entry in the form used by
+        """returns a vocabulary entry in the form used by
 	NaturallySpeaking/natlink.  If the written form is omitted, then it is
 	assumed to be identical to the spoken form.
 
@@ -582,12 +582,12 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	*STR* -- vocabulary entry in written\spoken form as used by
 	NaturallySpeaking
 	"""
-	if  written == None:
-	    written = spoken
-	return vocabulary_entry(spoken, written) 
+        if  written == None:
+            written = spoken
+        return vocabulary_entry(spoken, written) 
 
     def entry_tuple(self, word):
-	"""returns a vocabulary entry in the form used by
+        """returns a vocabulary entry in the form used by
 	NaturallySpeaking/natlink.  
 
 	**INPUTS**
@@ -599,10 +599,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	*STR* -- vocabulary entry in written\spoken form as used by
 	NaturallySpeaking
 	"""
-	return vocabulary_entry(word[0], word[1])
+        return vocabulary_entry(word[0], word[1])
 
     def same_written(self, spoken_forms):
-	"""converts a list of spoken forms to a list of (spoken, written) 
+        """converts a list of spoken forms to a list of (spoken, written) 
 	2-tuples.
 
 	**INPUTS**
@@ -614,10 +614,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
 	"""
-	return map(lambda s: (s, s), spoken_forms)
+        return map(lambda s: (s, s), spoken_forms)
 
     def entries_spoken( self, spoken_forms):
-	"""converts a list of spoken forms to a list of vocabulary entries
+        """converts a list of spoken forms to a list of vocabulary entries
 	in the form used by NaturallySpeaking/natlink.
 
 	**INPUTS**
@@ -631,10 +631,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	NaturallySpeaking
 
 	"""
-	return map(self.entry, spoken_forms)
+        return map(self.entry, spoken_forms)
 
     def spoken_written_form(self, entry):
-	"""converts a vocabulary entry in the form used by 
+        """converts a vocabulary entry in the form used by 
 	NaturallySpeaking/natlink to a 2-tuple of spoken, written.
 
 	**INPUTS**
@@ -650,10 +650,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	(written forms will be assumed to be identical)
 
 	"""
-	return spoken_written_form(entry)
+        return spoken_written_form(entry)
 
     def adapt(self, words):
-	"""changes the stored list of words so that 
+        """changes the stored list of words so that 
 	subsequent correction boxes can display the corrected list, and
 	informs the speech engine of the corrected list of words, so
 	it can adapt.
@@ -667,19 +667,19 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*BOOL* -- true if the adaption was accepted
 	"""
-	list = entries(words)
-	success = 0
-	try:
-	    success = self.results.correction(list)
-	except natlink.InvalidWord:
+        list = entries(words)
+        success = 0
+        try:
+            success = self.results.correction(list)
+        except natlink.InvalidWord:
 # if the ResObj raises an InvalidWord exception, do not set the 
-#	 word list
-	    return 0
-	set_words(words)
-	return success
+#         word list
+            return 0
+        set_words(words)
+        return success
 
     def adapt_spoken(self, spoken_forms):
-	"""changes the stored list of words so that 
+        """changes the stored list of words so that 
 	subsequent correction boxes can display the corrected list, and
 	informs the speech engine of the corrected list of words, so
 	it can adapt.
@@ -694,11 +694,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*BOOL* -- true if the adaption was accepted
 	"""
-	words = self.same_written(spoken_forms)
-	return self.adapt(words)
+        words = self.same_written(spoken_forms)
+        return self.adapt(words)
 
     def set_words(self, words):
-	"""changes the stored list of words (after correction) so that 
+        """changes the stored list of words (after correction) so that 
 	subsequent correction boxes can display the corrected list.
 	The results object is unaffected.
 
@@ -712,11 +712,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	*none*
 
 	"""
-	self.word_list = words
-	self.spoken_only = map(lambda x: x[0], word_list)
+        self.word_list = words
+        self.spoken_only = map(lambda x: x[0], word_list)
 
     def set_spoken(self, spoken_forms):
-	"""changes the stored list of words (after correction) so that 
+        """changes the stored list of words (after correction) so that 
 	subsequent correction boxes can display the corrected list.
 	The results object is unaffected.
 
@@ -730,11 +730,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	*none*
 
 	"""
-	words = self.same_written(spoken_forms)
-	self.set_words(words)
+        words = self.same_written(spoken_forms)
+        self.set_words(words)
 
     def playback_available(self):
-	"""indicates whether playback of the utterance is available.
+        """indicates whether playback of the utterance is available.
 
 	**INPUTS**
 
@@ -747,11 +747,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	been lost, or because the implementation doesn't support
 	playback)
 	"""
-	return 0
+        return 0
 # ResObj may have wave data, but we don't have code to play it back yet
 
     def playback(self):
-	"""plays back recorded utterance.
+        """plays back recorded utterance.
 
 	Playback is synchronous.  It will handle turning the microphone
 	off and back on again (if necessary)
@@ -766,11 +766,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	there was an error in playback (e.g.  another program had 
 	control of the audio device)
 	"""
-	return 0
+        return 0
 # ResObj may have wave data, but we don't have code to play it back yet
       
     def can_be_adapted(self):
-	"""indicates whether the utterance can be corrected for adaption
+        """indicates whether the utterance can be corrected for adaption
 	of the speech engine.  Utterances for which there was no speech
 	information or for which the speech information has been lost or
 	discarded may not be adaptable.
@@ -783,10 +783,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
 	*BOOL* -- true if the speech information is available for adaption.
 	"""
-	return 1
+        return 1
       
     def alternatives_available(self):
-	"""returns number of recognition alternatives available 
+        """returns number of recognition alternatives available 
 	(for the whole utterance), or -1 if the number
 	is unknown.
 
@@ -801,10 +801,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	doesn't indicate the total number, but simply lets you keep
 	asking for the next one until it runs out.
 	"""
-	return self.choices_available
+        return self.choices_available
 
     def _get_alternative(self, choice):
-	"""private method for getting a single alternative and converting it to
+        """private method for getting a single alternative and converting it to
 	list of 2-tuples.
 	**INPUTS**
 
@@ -816,14 +816,14 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	2-tuples) corresponding to that alternative, or None if choice
 	was unavailable
 	"""
-	try:
-	    list = self.results.getWords(choice)
-	except natlink.OutOfRange:
-	    return None
-	return map(self.spoken_written_form, list)
+        try:
+            list = self.results.getWords(choice)
+        except natlink.OutOfRange:
+            return None
+        return map(self.spoken_written_form, list)
 
     def alternatives(self, n):
-	"""returns the best recognition alternatives available 
+        """returns the best recognition alternatives available 
 	(for the whole utterance) including the original.  
 	Will not return more than n alternatives, but may return fewer
 	(if the speech engine has not provided that many).
@@ -842,22 +842,22 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	2-tuples) 
 	
 	"""
-	if n <= len(self.choices):
-	    return self.choices[0:n-1]
-	if self.choices_available >= 0:
-	    return self.choices
+        if n <= len(self.choices):
+            return self.choices[0:n-1]
+        if self.choices_available >= 0:
+            return self.choices
 # if number of choices available is known, then we already have all
 # available choices, so just return what we have.
 # otherwise, try to get more choices
-	for choice in range(len(self.choices), n):
-	    words = self._get_alternative(choice)
-	    if words == None:
+        for choice in range(len(self.choices), n):
+            words = self._get_alternative(choice)
+            if words == None:
 # no more available, so now we know how many are available
-		self.choices_available = choice
-		break
-	    self.choices.append(words)
+                self.choices_available = choice
+                break
+            self.choices.append(words)
 # return what we have.
-	return self.choices
+        return self.choices
 
 class CommandDictGrammar(DictGramBase):
     """A grammar for mixing continuous dictation and commands.
@@ -898,30 +898,30 @@ class CommandDictGrammar(DictGramBase):
         self.__dict__['app'] = app
         self.__dict__['interpreter'] = interpreter
         DictGramBase.__init__(self)
-	self.window = window
+        self.window = window
         self.exclusive = exclusive
         self.allResults = allResults
         self.state = None
         self.isActive = 0
-	self.last = None
+        self.last = None
         self.dictation_allowed = None
 
     def cleanup(self):
         del self.app
-	del self.interpreter
+        del self.interpreter
 
     def deactivate(self):
 #        trace('sr_interface.CommandDictGramm.deactivate', 'called')
-	DictGramBase.deactivate(self)
-	self.isActive = 0
+        DictGramBase.deactivate(self)
+        self.isActive = 0
 
     def activate(self):
-	if self.isActive:
+        if self.isActive:
 #            trace('sr_interface.CommandDictGramm.activate', 'already active')
-	    return
+            return
 #        trace('sr_interface.CommandDictGramm.activate', 'activating grammar')
-	DictGramBase.activate(self, window = self.window, exclusive = self.exclusive)
-	self.isActive = 1
+        DictGramBase.activate(self, window = self.window, exclusive = self.exclusive)
+        self.isActive = 1
 
     def gotBegin(self, moduleInfo):
         trace('sr_interface.CommandDictGrammar.gotBegin', 
@@ -934,21 +934,21 @@ class CommandDictGrammar(DictGramBase):
         #
         # Check if Editor currently allows user to dictate in that window.
         #
-	self.app.synchronize_with_app()
+        self.app.synchronize_with_app()
         self.dictation_allowed = self.app.recog_begin(moduleInfo[2])
         
-	if self.window == 0:
-	    pass
+        if self.window == 0:
+            pass
             trace('sr_interface.CommandDictGrammar.gotBegin', 'this is a global grammar. Just pass')
-	elif (self.app.active_field() == None and
+        elif (self.app.active_field() == None and
               self.dictation_allowed):
             trace('sr_interface.CommandDictGrammar.gotBegin', 'I think this is supposed to be called only when editor window is active.')
-	    if not self.isActive:
+            if not self.isActive:
                 trace('sr_interface.CommandDictGrammar.gotBegin', 'grammar not active. Activating it.'                )
-		self.activate()
-	else:
+                self.activate()
+        else:
             trace('sr_interface.CommandDictGrammar.gotBegin', 'Local grammar but the editor doesn\'t have focus. Deactivate the grammar')
-	    self.deactivate()
+            self.deactivate()
 
         
     def gotResultsObject(self, recogType, results):
@@ -1017,8 +1017,8 @@ class CodeSelectGrammar(SelectGramBase):
     def __init__(self, app = None, window = 0, exclusive = 0,
                  allResults = 0):
         DictGramBase.__init__(self)
-	self.app = app
-	self.window = window
+        self.app = app
+        self.window = window
         self.exclusive = exclusive
         self.allResults = allResults
         self.isActive = 0
@@ -1037,23 +1037,23 @@ class CodeSelectGrammar(SelectGramBase):
                   'select', 'select next', 'select previous', 'after'], allResults=self.allResults)
        
     def deactivate(self):
-	SelectGramBase.deactivate(self)
-	self.isActive = 0
+        SelectGramBase.deactivate(self)
+        self.isActive = 0
 
     def activate(self):
-	if self.isActive:
-	    return
-	SelectGramBase.activate(self, window = self.window, exclusive = self.exclusive)
-	self.isActive = 1
+        if self.isActive:
+            return
+        SelectGramBase.activate(self, window = self.window, exclusive = self.exclusive)
+        self.isActive = 1
 
     def gotBegin(self, moduleInfo):
         trace('sr_interface.CodeSelectGrammar.gotBegin',
               'called,self.app=%s, self.app.curr_buffer()=%s' % (self.app, self.app.curr_buffer()))
 
-	vis_start, vis_end = self.app.get_visible()
-	self.vis_start = vis_start
-	visible = \
-	    self.app.curr_buffer().get_text(vis_start, vis_end)
+        vis_start, vis_end = self.app.get_visible()
+        self.vis_start = vis_start
+        visible = \
+            self.app.curr_buffer().get_text(vis_start, vis_end)
         trace('sr_interface.CodeSelectGrammar.gotBegin',
               '** vis_start=%s, vis_end=%s, visible="%s"' %
               (vis_start, vis_end, visible))
@@ -1062,15 +1062,15 @@ class CodeSelectGrammar(SelectGramBase):
 #              (self.app.get_text(), self.app.curr_buffer()._get_text_from_app()))
         
         
-	self.setSelectText(visible)
-	if self.window == 0:
-	    self.activate()
-	    self.setSelectText(visible)
-	elif self.app.active_field() == None:
-	    self.setSelectText(visible)
-	    self.activate()
-	else:
-	    self.deactivate()
+        self.setSelectText(visible)
+        if self.window == 0:
+            self.activate()
+            self.setSelectText(visible)
+        elif self.app.active_field() == None:
+            self.setSelectText(visible)
+            self.activate()
+        else:
+            self.deactivate()
         
 
     def gotResultsObject(self,recogType,resObj):

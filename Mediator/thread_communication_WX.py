@@ -28,13 +28,13 @@ from wxPython.wx import *
 
 class GenericEventWX(wxPyEvent):
     def __init__(self, evt_type):
-	wxPyEvent.__init__(self)
-	self.SetEventType(evt_type)
+        wxPyEvent.__init__(self)
+        self.SetEventType(evt_type)
 
 class SocketDataEventWX(GenericEventWX):
     def __init__(self, evt_type, socket_ID):
-	GenericEventWX.__init__(self, evt_type)
-	self.socket_ID = socket_ID
+        GenericEventWX.__init__(self, evt_type)
+        self.socket_ID = socket_ID
 
 class InterThreadEventWX(InterThreadEvent):
     """implementation of InterThreadEvent using the wxPython custom
@@ -52,18 +52,18 @@ class InterThreadEventWX(InterThreadEvent):
     *none*
     """
     def __init__(self, evt_handler, evt_type, **args):
-	"""
+        """
 	**INPUTS**
 
 	*wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
 	post the event.
 	"""
-	self.deep_construct(InterThreadEventWX,
-			    {'evt_handler': evt_handler,
-			     'evt_type': evt_type},
-			    args)
+        self.deep_construct(InterThreadEventWX,
+                            {'evt_handler': evt_handler,
+                             'evt_type': evt_type},
+                            args)
     def notify(self):
-	"""send the message, and return asynchronously
+        """send the message, and return asynchronously
 
 	**INPUTS**
 
@@ -73,8 +73,8 @@ class InterThreadEventWX(InterThreadEvent):
 
 	*none*
 	"""
-	event = GenericEventWX(self.evt_type)
-	wxPostEvent(self.evt_handler, event)
+        event = GenericEventWX(self.evt_type)
+        wxPostEvent(self.evt_handler, event)
 
 class SocketHasDataWX(SocketHasDataEvent):
     """implementation of SocketHasDataEvent using wxPython events.
@@ -93,7 +93,7 @@ class SocketHasDataWX(SocketHasDataEvent):
     *none*
     """
     def __init__(self, evt_handler, evt_type, socket_ID, **args):
-	"""
+        """
 	**INPUTS**
 
 	*wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
@@ -103,13 +103,13 @@ class SocketHasDataWX(SocketHasDataEvent):
 
 	*STR socket_ID* -- the unique ID of the socket
 	"""
-	self.deep_construct(SocketHasDataWX,
-			    {'evt_handler': evt_handler,
-			     'evt_type': evt_type,
-			     'socket_ID': socket_ID},
-			    args)
+        self.deep_construct(SocketHasDataWX,
+                            {'evt_handler': evt_handler,
+                             'evt_type': evt_type,
+                             'socket_ID': socket_ID},
+                            args)
     def notify(self):
-	"""send the message, and return asynchronously
+        """send the message, and return asynchronously
 
 	**INPUTS**
 
@@ -119,7 +119,7 @@ class SocketHasDataWX(SocketHasDataEvent):
 
 	*none*
 	"""
-	event = SocketDataEvent(self.evt_type, self.socket_ID)
-	wxPostEvent(self.evt_handler, event)
+        event = SocketDataEvent(self.evt_type, self.socket_ID)
+        wxPostEvent(self.evt_handler, event)
 
 

@@ -119,7 +119,7 @@ class SB_ServiceLang(SB_Service):
 
         language = None
         fname = self.buff.file_name()
-#	print 'language for "%s"' % fname
+#        print 'language for "%s"' % fname
         if  fname != None:
             language = self.file_language_name(fname)
         return language
@@ -131,10 +131,10 @@ class SB_ServiceLang(SB_Service):
         if a_match:
             extension = a_match.group(1)
 
-#	print 'extension is "%s"' % extension
+#        print 'extension is "%s"' % extension
         if self.file_language.has_key(extension):
             language =  self.file_language[extension]
-#	print 'language is "%s"' % language
+#        print 'language is "%s"' % language
         return language
 
 
@@ -231,8 +231,8 @@ class SB_ServiceLineManip(SB_Service):
         #
         # Make sure the position is within range
         #
-	if position == None:
-	    position = self.buffcur_pos()
+        if position == None:
+            position = self.buffcur_pos()
         position = self.buff.make_within_range(position)
         
         #
@@ -242,7 +242,7 @@ class SB_ServiceLineManip(SB_Service):
         lines = regexp.split(self.buff.contents())
         line_start_pos = None
         line_end_pos = 0
-	line_num = 1
+        line_num = 1
         curr_line = 0
         for a_line in lines:
             curr_line = curr_line + 1
@@ -253,7 +253,7 @@ class SB_ServiceLineManip(SB_Service):
                 break
             
         return line_num
-	
+        
 
 
     def number_lines(self, astring, startnum=1):
@@ -279,7 +279,7 @@ class SB_ServiceLineManip(SB_Service):
         result = []
 
         if (astring != ''):
-	    lineno = startnum
+            lineno = startnum
 #            if (if re.match(self.buff.newline_regexp(), astring):
 #                lineno = startnum + 1
 #  this would make all lines off by 1
@@ -362,11 +362,11 @@ class SB_ServiceLineManip(SB_Service):
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 	"""
-	self.buff.goto(0)
-	ii = 1; found = 1
-	while (ii < linenum and found):
-	    found = self.buff.search_for('\n', 1)
-	    ii = ii + 1
+        self.buff.goto(0)
+        ii = 1; found = 1
+        while (ii < linenum and found):
+            found = self.buff.search_for('\n', 1)
+            ii = ii + 1
         if (where > 0):
             found = self.buff.search_for('\n', 1)
             if not found:
@@ -434,9 +434,9 @@ class SB_ServiceIndent(SB_Service):
 
 #        print '-- SB_ServiceIndent.insert_indent: code_bef=\'%s\', code_after=\'%s\', range=%s' % (code_bef, code_after, range)
         
-	if range == None:
-	    range = self.buff.get_selection()
-	range = self.buff.make_valid_range(range)
+        if range == None:
+            range = self.buff.get_selection()
+        range = self.buff.make_valid_range(range)
 
 
         #
@@ -664,7 +664,7 @@ class SB_ServiceState(SB_Service):
                             {})
 
     def _state_cookie_class(self):
-	"""returns the class object for the type of cookie used by
+        """returns the class object for the type of cookie used by
 	store_current_state.
 
 	**INPUTS**
@@ -678,9 +678,9 @@ class SB_ServiceState(SB_Service):
 
 	"""
         debug.virtual('SB_ServiceState._state_cookie_class')
-	
+        
     def store_current_state(self):
-	"""stores the current state of the buffer, including both the
+        """stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
 	Store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
@@ -716,7 +716,7 @@ class SB_ServiceState(SB_Service):
         debug.virtual('SB_ServiceState.store_current_state')
 
     def restore_state(self, cookie):
-	"""restores the buffer to its state at the time when
+        """restores the buffer to its state at the time when
 	the cookie was returned by store_current_state.  Both the
 	contents and the selection will be restored.  However, other
 	data, such as the search history, may not.  The restore
@@ -737,7 +737,7 @@ class SB_ServiceState(SB_Service):
         debug.virtual('SB_ServiceState.restore_state')
 
     def compare_with_current(self, cookie, selection = 0):
-	"""compares the current buffer state to its state at the time when
+        """compares the current buffer state to its state at the time when
 	the cookie was returned by store_current_state.  By default,
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to the cookie has
@@ -760,7 +760,7 @@ class SB_ServiceState(SB_Service):
 
 
     def valid_cookie(self, cookie):
-	"""checks whether a state cookie is valid or expired.
+        """checks whether a state cookie is valid or expired.
 	If the state corresponding to the cookie has
 	been lost, valid_cookie will return false.
 
@@ -799,7 +799,7 @@ class SB_ServiceFullState(SB_ServiceState):
 
 
     def _state_cookie_class(self):
-	"""returns the class object for the type of cookie used by
+        """returns the class object for the type of cookie used by
 	store_current_state.
 
 	**INPUTS**
@@ -812,10 +812,10 @@ class SB_ServiceFullState(SB_ServiceState):
 	SourceBuff
 
 	"""
-	return SourceBuffState.SourceBuffState
-	
+        return SourceBuffState.SourceBuffState
+        
     def store_current_state(self):
-	"""stores the current state of the buffer, including both the
+        """stores the current state of the buffer, including both the
 	contents and the current selection, for subsequent restoration.
 	Store_current_state returns a "cookie" which can be passed to
 	restore_state or compare_with_current.  The type and attributes
@@ -846,13 +846,13 @@ class SB_ServiceFullState(SB_ServiceState):
 
 	*SourceBuffState* -- state cookie (see above)
 	"""
-	cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
-	    contents = self.buff.contents(), selection =
-	    self.buff.get_selection())
-	return cookie
+        cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
+            contents = self.buff.contents(), selection =
+            self.buff.get_selection())
+        return cookie
 
     def restore_state(self, cookie):
-	"""restores the buffer to its state at the time when
+        """restores the buffer to its state at the time when
 	the cookie was returned by store_current_state.  Both the
 	contents and the selection will be restored.  However, other
 	data, such as the search history, may not.  The restore
@@ -868,16 +868,16 @@ class SB_ServiceFullState(SB_ServiceState):
 	*BOOL* -- true if restore was successful
 
 	"""
-	if not self.valid_cookie(cookie):
-	    return 0
-	self.buff.set_text(cookie.contents())
-	self.buff.set_selection(cookie.get_selection())
-	self.buff.print_buff_if_necessary()
-	return 1
+        if not self.valid_cookie(cookie):
+            return 0
+        self.buff.set_text(cookie.contents())
+        self.buff.set_selection(cookie.get_selection())
+        self.buff.print_buff_if_necessary()
+        return 1
 
 
     def compare_with_current(self, cookie, selection = 0):
-	"""compares the current buffer state to its state at the time when
+        """compares the current buffer state to its state at the time when
 	the cookie was returned by store_current_state.  By default,
 	only the buffer contents are compared, not the selection, unless
 	selection == 1.  If the state corresponding to the cookie has
@@ -894,17 +894,17 @@ class SB_ServiceFullState(SB_ServiceState):
 	*BOOL* -- true if state is the same, false if it is not, or
 	it cannot be determined due to expiration of the cookie
 	"""
-	if not self.valid_cookie(cookie):
-	    return 0
+        if not self.valid_cookie(cookie):
+            return 0
 # unable to make comparison, so treat as false
-	if self.buff.contents() != cookie.contents():
-	    return 0
-	if not selection:
-	    return 1
-	return self.buff.get_selection() == cookie.get_selection()
-	
+        if self.buff.contents() != cookie.contents():
+            return 0
+        if not selection:
+            return 1
+        return self.buff.get_selection() == cookie.get_selection()
+        
     def valid_cookie(self, cookie):
-	"""checks whether a state cookie is valid or expired.
+        """checks whether a state cookie is valid or expired.
 	If the state corresponding to the cookie has
 	been lost, valid_cookie will return false.
 
@@ -925,8 +925,8 @@ class SB_ServiceFullState(SB_ServiceState):
 
 # do make sure that it is at least a subclass of SourceBuffState,
 # otherwise other cookie-related SourceBuffTB methods will fail
-	if not issubclass(cookie.__class__, self._state_cookie_class()):
-	    return 0
+        if not issubclass(cookie.__class__, self._state_cookie_class()):
+            return 0
 
-	return self.buff.name() == cookie.name()
+        return self.buff.name() == cookie.name()
 

@@ -1,17 +1,11 @@
-
-C:\eclipse\workspace\VCode\Mediator>rem  
-
-C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\eclipse\workspace\VCode\Mediator>rem
-
-C:\eclipse\workspace\VCode\Mediator>c:
-
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
-
-C:\eclipse\workspace\VCode\Mediator>python tcp_server.py -t all 
+running ExtLoopWin32 with ServerOldMediator
+running ExtLoopWin32 with ServerOldMediator
 WARNING: virtual method 'AppStateMessaging.config_from_external' called!!!
+new instance
+initializing mediator for regression tests
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+terminating
+starting regression tests
 
 
 *******************************************************************************
@@ -286,10 +280,10 @@ SourceBuff.__init__: %VCODE_HOME%\Data\TestData\small_buff.py
   7:     """This is a dummy class"""
   8:     
 EdSim.remove_other_references
-SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
-SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
 SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.py
+SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.py
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
 EdSim.__del__
@@ -332,7 +326,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at b887a0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 918130>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -348,7 +342,6 @@ Subclassing from non-standard class AnimatedCharacter.*
 *******************************************************************************
 
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -475,7 +468,6 @@ Unresolved abbreviations are:
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
 'superclasses': appears in ['attrs_superclasses']
-'tst': appears in ['autoTst']
 'x': appears in ['x']
 
 *** End of compilation test ***
@@ -741,10 +733,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1838,7 +1830,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2077,15 +2069,16 @@ SourceBuff.remove_other_references:
 SourceBuff.__del__: 
 cleanup app
 EdSim.remove_other_references
+cleanup manager
+SelectWinGramDummy for buffer 'fish.C', window 5
+deactivating
+DictWinGramDummy for buffer = 'fish.C', window 5
+deactivating
+SelectWinGramDummy for buffer 'fish.C', window 5
+del
+DictWinGramDummy for buffer = 'fish.C', window 5
+del
 test ending - expect dels of manager, app
-SelectWinGramDummy for buffer 'fish.C', window 5
-deactivating
-DictWinGramDummy for buffer = 'fish.C', window 5
-deactivating
-DictWinGramDummy for buffer = 'fish.C', window 5
-del
-SelectWinGramDummy for buffer 'fish.C', window 5
-del
 EdSim.__del__
 
 
@@ -2287,15 +2280,16 @@ SourceBuff.remove_other_references:
 SourceBuff.__del__: 
 cleanup app
 EdSim.remove_other_references
+cleanup manager
+SelectWinGramDummy for buffer 'fish.C', global
+deactivating
+DictWinGramDummy for buffer = 'fish.C', global
+deactivating
+SelectWinGramDummy for buffer 'fish.C', global
+del
+DictWinGramDummy for buffer = 'fish.C', global
+del
 test ending - expect dels of manager, app
-SelectWinGramDummy for buffer 'fish.C', global
-deactivating
-DictWinGramDummy for buffer = 'fish.C', global
-deactivating
-DictWinGramDummy for buffer = 'fish.C', global
-del
-SelectWinGramDummy for buffer 'fish.C', global
-del
 EdSim.__del__
 
 
@@ -2501,7 +2495,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2592,12 +2586,10 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 11de250> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -6288,7 +6280,14 @@ Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', '
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
- 19:       attrs)
+Associate 'R. E.' with symbol (Enter selection):
+
+  '0': no association
+  '1': re
+  '2': Re (*new*)
+  '3': RE (*new*)
+
+>  19:       attrs)
  20:       
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -7371,7 +7370,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7457,7 +7456,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -8178,9 +8177,9 @@ SelectWinGramDummy for buffer 'large_buff.py', global
 deactivating
 DictWinGramDummy for buffer = 'large_buff.py', global
 deactivating
-DictWinGramDummy for buffer = 'large_buff.py', global
-del
 SelectWinGramDummy for buffer 'large_buff.py', global
+del
+DictWinGramDummy for buffer = 'large_buff.py', global
 del
 and now the WaxEdit is gone
 current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
@@ -8856,9 +8855,9 @@ SelectWinGramDummy for buffer 'large_buff.py', global
 deactivating
 DictWinGramDummy for buffer = 'large_buff.py', global
 deactivating
-DictWinGramDummy for buffer = 'large_buff.py', global
-del
 SelectWinGramDummy for buffer 'large_buff.py', global
+del
+DictWinGramDummy for buffer = 'large_buff.py', global
 del
 and now the WaxEdit is gone
 current is (27, 'emacs - (Yak 4) - .cshrc', 'EXCEED')
@@ -9563,28 +9562,8 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('blah.c')
-
-WARNING: source file 'blah.c' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['for', 'loop'], user_input='None')
-*** Start of source buffer ***
-  1: for (<CURSOR>=0;  <= ; ++)
-  2:    {
-  3:    
-  4:    }
-
-
->>> Testing console command: quit(save_speech_files=0, disconnect=0)
-
-
-
 
 -----------------------------------------------
-Test suite completed in:  636.776000023 secs
+Test suite completed in:  1101.91000009 secs
 -----------------------------------------------
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

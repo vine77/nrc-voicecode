@@ -104,31 +104,31 @@ wxEVT_SOCKET_DATA = wxNewEventType()
 
 class DummyString:
     def __init__(self, value):
-	self.value = value
+        self.value = value
 
 class AttrValidator(wxPyValidator):
     """validator which merely copies the value of a text control to the
     attribute of a given object"""
     def __init__(self, obj = None):
-	wxPyValidator.__init__(self)
-	self.obj = obj
+        wxPyValidator.__init__(self)
+        self.obj = obj
     def Clone(self):
-	return AttrValidator(self.obj)
+        return AttrValidator(self.obj)
     def Validate(self, win):
-	return 1
+        return 1
     def TransferToWindow(self):
-	c = self.GetWindow()
-	c.SetValue(self.obj.value)
+        c = self.GetWindow()
+        c.SetValue(self.obj.value)
         return 1
     def TransferFromWindow(self):
-	c = self.GetWindow()
-	self.obj.value = c.GetValue()
+        c = self.GetWindow()
+        self.obj.value = c.GetValue()
         return 1
 
 class ConnectionSettingsDlg(wxDialog):
     """server connection dialog"""
     def __init__(self, parent, host, listen_string, talk_string):
-	"""
+        """
 	**INPUTS**
 
 	*DummyString host* -- the default host
@@ -138,43 +138,43 @@ class ConnectionSettingsDlg(wxDialog):
 	talk_port
 	"""
 
-	wxDialog.__init__(self, parent, -1, "Mediator Server",
-	    wxDefaultPosition, (450, 350))
-	vertical = wxBoxSizer(wxVERTICAL)
-	vertical.SetMinSize((250, -1))
-	host_row = wxBoxSizer(wxHORIZONTAL)
-	host_row.Add(wxStaticText(self, -1, "Host name or IP: "), 0)
-	host_text = wxTextCtrl(self, -1, host.value, 
-	    wxDefaultPosition, wxDefaultSize,
-	    validator = AttrValidator(host))
-	host_row.Add(host_text, 1)
-	vertical.AddSizer(host_row, 0, wxGROW)
-	listen_row = wxBoxSizer(wxHORIZONTAL)
-	listen_row.Add(wxStaticText(self, -1, "Listen port #: "), 0)
-	listen_row.Add(wxTextCtrl(self, -1, str(listen_port), 
-	    wxDefaultPosition, wxDefaultSize,
-	    validator = AttrValidator(listen_string)), 1)
-	vertical.AddSizer(listen_row, 0, wxGROW)
-	talk_row = wxBoxSizer(wxHORIZONTAL)
-	talk_row.Add(wxStaticText(self, -1, "talk port #: "), 0)
-	talk_row.Add(wxTextCtrl(self, -1, str(talk_port), 
-	    wxDefaultPosition, wxDefaultSize,
-	    validator = AttrValidator(talk_string)), 1)
-	vertical.AddSizer(talk_row, 0, wxGROW)
-	button_row = wxBoxSizer(wxHORIZONTAL)
-	okay_button = wxButton(self, wxID_OK, "OK")
-	okay_button.SetDefault()
-	button_row.Add(okay_button, 0)
-	button_row.Add(wxButton(self, wxID_CANCEL, "Cancel"), 0)
-	vertical.AddSizer(button_row, 0)
-	self.SetAutoLayout(1)
-	self.SetSizer(vertical)
-	vertical.Fit(self)
-	vertical.SetSizeHints(self)
-	host_text.SetFocus()
+        wxDialog.__init__(self, parent, -1, "Mediator Server",
+            wxDefaultPosition, (450, 350))
+        vertical = wxBoxSizer(wxVERTICAL)
+        vertical.SetMinSize((250, -1))
+        host_row = wxBoxSizer(wxHORIZONTAL)
+        host_row.Add(wxStaticText(self, -1, "Host name or IP: "), 0)
+        host_text = wxTextCtrl(self, -1, host.value, 
+            wxDefaultPosition, wxDefaultSize,
+            validator = AttrValidator(host))
+        host_row.Add(host_text, 1)
+        vertical.AddSizer(host_row, 0, wxGROW)
+        listen_row = wxBoxSizer(wxHORIZONTAL)
+        listen_row.Add(wxStaticText(self, -1, "Listen port #: "), 0)
+        listen_row.Add(wxTextCtrl(self, -1, str(listen_port), 
+            wxDefaultPosition, wxDefaultSize,
+            validator = AttrValidator(listen_string)), 1)
+        vertical.AddSizer(listen_row, 0, wxGROW)
+        talk_row = wxBoxSizer(wxHORIZONTAL)
+        talk_row.Add(wxStaticText(self, -1, "talk port #: "), 0)
+        talk_row.Add(wxTextCtrl(self, -1, str(talk_port), 
+            wxDefaultPosition, wxDefaultSize,
+            validator = AttrValidator(talk_string)), 1)
+        vertical.AddSizer(talk_row, 0, wxGROW)
+        button_row = wxBoxSizer(wxHORIZONTAL)
+        okay_button = wxButton(self, wxID_OK, "OK")
+        okay_button.SetDefault()
+        button_row.Add(okay_button, 0)
+        button_row.Add(wxButton(self, wxID_CANCEL, "Cancel"), 0)
+        vertical.AddSizer(button_row, 0)
+        self.SetAutoLayout(1)
+        self.SetSizer(vertical)
+        vertical.Fit(self)
+        vertical.SetSizeHints(self)
+        host_text.SetFocus()
 
-	
-	
+        
+        
 
 class ClientFrameMixIn(Object.Object):
     """mix-in class which adds a Connection menu and related
@@ -184,7 +184,7 @@ class ClientFrameMixIn(Object.Object):
     **INSTANCE ATTRIBUTES**
     """
     def __init__(self, **args):
-	"""**NOTE:** some of the tasks which would normally be done 
+        """**NOTE:** some of the tasks which would normally be done 
 	in __init__ if this were a subclass of WaxFrameBasic, rather than a 
 	mix-in, are instead performed in finish_construction.  
 	This is to ensure that those tasks are done after
@@ -193,11 +193,11 @@ class ClientFrameMixIn(Object.Object):
 	call finish_construction after its deep_construct has called 
 	WaxFrameBasic's __init__ method.
 	"""
-	self.deep_construct(ClientFrameMixIn, 
-    	                    {}, args)
+        self.deep_construct(ClientFrameMixIn, 
+                            {}, args)
 
     def finish_construction(self):
-	"""Finish constructing the client frame, by adding connection
+        """Finish constructing the client frame, by adding connection
 	menus
 	
 	**NOTE:** this task would normally be done 
@@ -217,28 +217,28 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	connection_menu = wxMenu()
-	ID_CONNECT = wxNewId()
-	ID_CONNECT_TEST = wxNewId()
-	ID_DISCONNECT = wxNewId()
-	ID_HOST = wxNewId()
-	connection_menu.Append(ID_CONNECT, "&Connect", 
-	    "Connect to the mediator server")
-	connection_menu.Append(ID_CONNECT_TEST, "&Run regression tests", 
-	    "Connect to the mediator server for regression tests")
-	connection_menu.Append(ID_DISCONNECT, "&Disconnect", 
-	    "Disconnect from the mediator server")
-	connection_menu.Append(ID_HOST, "&Host and ports...", 
-	    "Change default host and ports")
-	self.insert_menu(connection_menu, "&Connection", before = "Edit")
-	self.update_connection_status()
-	EVT_MENU(self, ID_CONNECT, self.on_connect)
-	EVT_MENU(self, ID_CONNECT_TEST, self.on_connect_test)
-	EVT_MENU(self, ID_DISCONNECT, self.on_disconnect)
-	EVT_MENU(self, ID_HOST, self.on_host)
+        connection_menu = wxMenu()
+        ID_CONNECT = wxNewId()
+        ID_CONNECT_TEST = wxNewId()
+        ID_DISCONNECT = wxNewId()
+        ID_HOST = wxNewId()
+        connection_menu.Append(ID_CONNECT, "&Connect", 
+            "Connect to the mediator server")
+        connection_menu.Append(ID_CONNECT_TEST, "&Run regression tests", 
+            "Connect to the mediator server for regression tests")
+        connection_menu.Append(ID_DISCONNECT, "&Disconnect", 
+            "Disconnect from the mediator server")
+        connection_menu.Append(ID_HOST, "&Host and ports...", 
+            "Change default host and ports")
+        self.insert_menu(connection_menu, "&Connection", before = "Edit")
+        self.update_connection_status()
+        EVT_MENU(self, ID_CONNECT, self.on_connect)
+        EVT_MENU(self, ID_CONNECT_TEST, self.on_connect_test)
+        EVT_MENU(self, ID_DISCONNECT, self.on_disconnect)
+        EVT_MENU(self, ID_HOST, self.on_host)
 
     def connected(self):
-	""" checks whether we are connected to the mediator server
+        """ checks whether we are connected to the mediator server
 	
 	**INPUTS**
 	
@@ -249,10 +249,10 @@ class ClientFrameMixIn(Object.Object):
 	*BOOL* -- true if we are currently connected to  the mediator
 	server
 	"""
-	return self.owner.connected()
+        return self.owner.connected()
 
     def on_host(self, event):
-	"""prompt for new settings for host, listen and talk ports
+        """prompt for new settings for host, listen and talk ports
 
 	**INPUTS**
 
@@ -262,24 +262,24 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	if self.connected():
-	    return 0
-	data = self.owner.connection_data()
-	new_host = DummyString(data['host'])
-	new_listen = DummyString(str(data['listen_port']))
-	new_talk = DummyString(str(data['talk_port']))
-	dlg = ConnectionSettingsDlg(self, new_host, new_listen, new_talk)
-	success = dlg.ShowModal()
-	dlg.Destroy()
-	if success:
-	    i_listen = int(new_listen.value)
-	    i_talk = int(new_talk.value)
-	else:
-	    return 0
-	self.owner.set_connection_data(new_host.value, i_listen, i_talk)
+        if self.connected():
+            return 0
+        data = self.owner.connection_data()
+        new_host = DummyString(data['host'])
+        new_listen = DummyString(str(data['listen_port']))
+        new_talk = DummyString(str(data['talk_port']))
+        dlg = ConnectionSettingsDlg(self, new_host, new_listen, new_talk)
+        success = dlg.ShowModal()
+        dlg.Destroy()
+        if success:
+            i_listen = int(new_listen.value)
+            i_talk = int(new_talk.value)
+        else:
+            return 0
+        self.owner.set_connection_data(new_host.value, i_listen, i_talk)
     
     def connect(self, test_client = 0):
-	"""connect to the mediator server using current settings
+        """connect to the mediator server using current settings
 
 	**INPUTS**
 
@@ -290,25 +290,25 @@ class ClientFrameMixIn(Object.Object):
 
 	*BOOL* -- true if the connection was successfully established
 	"""
-	if self.connected():
-	    return 0
-	self.SetStatusText("Connecting...")
-	success = self.owner.connect(test_client)
-	self.update_connection_status()
-	if success:
-	    self.SetStatusText("Connected to server")
-	    return 1
-	self.SetStatusText("")
-	dlg = wxMessageDialog(self, "Unable to connect to server",
-	    "Connection Error",
-	    wxICON_ERROR | wxOK)
-	wxBell()
-	dlg.ShowModal()
-	dlg.Destroy()
-	return 0
+        if self.connected():
+            return 0
+        self.SetStatusText("Connecting...")
+        success = self.owner.connect(test_client)
+        self.update_connection_status()
+        if success:
+            self.SetStatusText("Connected to server")
+            return 1
+        self.SetStatusText("")
+        dlg = wxMessageDialog(self, "Unable to connect to server",
+            "Connection Error",
+            wxICON_ERROR | wxOK)
+        wxBell()
+        dlg.ShowModal()
+        dlg.Destroy()
+        return 0
 
     def on_connect(self, event):
-	"""event handler for the Connect menu item
+        """event handler for the Connect menu item
 
 	**INPUTS**
 
@@ -319,10 +319,10 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	self.connect()
+        self.connect()
 
     def on_connect_test(self, event):
-	"""event handler for the Connect menu item
+        """event handler for the Connect menu item
 
 	**INPUTS**
 
@@ -333,16 +333,16 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	if self.owner.modified_buffers():
-	    msg = "Running regression tests will close all open\nbuffers without saving.  Are you sure?"
-	    proceed = wxMessageBox(msg, "Regression tests", 
-		wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT, self)
-	    if answer != wxYES:
-		return
-	self.connect(test_client = 1)
+        if self.owner.modified_buffers():
+            msg = "Running regression tests will close all open\nbuffers without saving.  Are you sure?"
+            proceed = wxMessageBox(msg, "Regression tests", 
+                wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT, self)
+            if answer != wxYES:
+                return
+        self.connect(test_client = 1)
 
     def on_disconnect(self, event):
-	"""event handler for the Connect menu item
+        """event handler for the Connect menu item
 
 	**INPUTS**
 
@@ -353,21 +353,21 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	if not self.connected():
-	    return
-	if self.owner.testing():
-	    msg = "We are still running regression tests.\nAre you sure you want to disconnect?"
-	    dlg = wxMessageDialog(self, msg, "Disconnect from Server", 
-		wxYES_NO | wxNO_DEFAULT)
-	    answer = dlg.ShowModal()
-	    dlg.Destroy()
-	    if answer != wxID_YES:
-		return
-	self.owner.disconnect()
-	self.update_connection_status()
+        if not self.connected():
+            return
+        if self.owner.testing():
+            msg = "We are still running regression tests.\nAre you sure you want to disconnect?"
+            dlg = wxMessageDialog(self, msg, "Disconnect from Server", 
+                wxYES_NO | wxNO_DEFAULT)
+            answer = dlg.ShowModal()
+            dlg.Destroy()
+            if answer != wxID_YES:
+                return
+        self.owner.disconnect()
+        self.update_connection_status()
     
     def update_connection_status(self):
-	"""updates the connection menu to reflect the current status
+        """updates the connection menu to reflect the current status
 
 	**INPUTS**
 
@@ -377,14 +377,14 @@ class ClientFrameMixIn(Object.Object):
 
 	*none*
 	"""
-	connected = self.connected()
-	menu = self.get_menu_by_name("Connection")
-	connect_item = self.find_item_by_label(menu, "Connect")
-	connect_item.Enable(not connected)
-	connect_test_item = self.find_item_by_label(menu, "Run regression tests")
-	connect_test_item.Enable(not connected)
-	disconnect_item = self.find_item_by_label(menu, "Disconnect")
-	disconnect_item.Enable(connected)
+        connected = self.connected()
+        menu = self.get_menu_by_name("Connection")
+        connect_item = self.find_item_by_label(menu, "Connect")
+        connect_item.Enable(not connected)
+        connect_test_item = self.find_item_by_label(menu, "Run regression tests")
+        connect_test_item.Enable(not connected)
+        disconnect_item = self.find_item_by_label(menu, "Disconnect")
+        disconnect_item.Enable(connected)
 
 class SimpleWaxClientFrame(SimpleWaxFrame, ClientFrameMixIn):
     """SimpleWaxFrame + client frame interface
@@ -394,8 +394,8 @@ class SimpleWaxClientFrame(SimpleWaxFrame, ClientFrameMixIn):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(SimpleWaxClientFrame, {}, args)
-	self.finish_construction()
+        self.deep_construct(SimpleWaxClientFrame, {}, args)
+        self.finish_construction()
 
 class WaxCmdClientFrame(WaxCmdFrame, ClientFrameMixIn):
     """WaxCmdFrame with command line and log + client frame interface
@@ -405,8 +405,8 @@ class WaxCmdClientFrame(WaxCmdFrame, ClientFrameMixIn):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(WaxCmdClientFrame, {}, args)
-	self.finish_construction()
+        self.deep_construct(WaxCmdClientFrame, {}, args)
+        self.finish_construction()
 
 class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
     """Mix-in base class for WaxEdit clients, providing methods specific
@@ -420,14 +420,14 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
     *STR app_name* -- name of the application
     """
     def __init__(self, app, app_name, **args):
-	self.deep_construct(ClientBase, 
-	                    {'app': app,
-			     'app_name': app_name
-			    }, args)
-	self.name_parent('app')
+        self.deep_construct(ClientBase, 
+                            {'app': app,
+                             'app_name': app_name
+                            }, args)
+        self.name_parent('app')
 
     def connection_data(self):
-	""" returns current default connection data
+        """ returns current default connection data
 	
 	**INPUTS**
 	
@@ -439,11 +439,11 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 	address, 'host', (STR), and the listen and talk ports, 
 	'listen_port' and 'talk_port' (INT)
 	"""
-	return self.app.connection_data()
+        return self.app.connection_data()
 
     def set_connection_data(self, host = None, listen_port = None, 
-	talk_port = None):
-	"""sets new connection data
+        talk_port = None):
+        """sets new connection data
 	
 	**INPUTS**
 
@@ -460,10 +460,10 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 
 	*none*
 	"""
-	self.app.set_connection_data(host, listen_port, talk_port)
+        self.app.set_connection_data(host, listen_port, talk_port)
 
     def connected(self):
-	""" checks whether we are connected to the mediator server
+        """ checks whether we are connected to the mediator server
 	
 	**INPUTS**
 	
@@ -474,10 +474,10 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 	*BOOL* -- true if we are currently connected to  the mediator
 	server
 	"""
-	return self.app.connected()
+        return self.app.connected()
 
     def testing(self):
-	"""tells whether we are connected to the mediator server and running
+        """tells whether we are connected to the mediator server and running
 	regression tests
 
 	**INPUTS**
@@ -489,10 +489,10 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 	*BOOL test_client* -- true if we are connected as
 	a test_client
 	"""
-	return self.app.testing()
+        return self.app.testing()
 
     def connect(self, test_client = 0):
-	"""connect to the mediator server using current settings
+        """connect to the mediator server using current settings
 
 	**INPUTS**
 
@@ -503,10 +503,10 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 
 	*BOOL* -- true if the connection was successfully established
 	"""
-	return self.app.connect(test_client = test_client)
+        return self.app.connect(test_client = test_client)
 
     def disconnect(self):
-	"""disconnect from the mediator server 
+        """disconnect from the mediator server 
 
 	**INPUTS**
 
@@ -516,10 +516,10 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 
 	*none*
 	"""
-	self.app.disconnect()
+        self.app.disconnect()
 
     def update_connection_status(self):
-	"""updates the connection menu to reflect the current status
+        """updates the connection menu to reflect the current status
 
 	**INPUTS**
 
@@ -529,8 +529,8 @@ class ClientBase(GenEdit.ActivateEventMixIn, Object.OwnerObject):
 
 	*none*
 	"""
-	for frame in self.frames.values():
-	    frame.update_connection_status()
+        for frame in self.frames.values():
+            frame.update_connection_status()
 
 class WaxClientBase(ClientBase):
     """Mix-in base class for WaxEdit clients using WaxFrame
@@ -547,21 +547,21 @@ class WaxClientBase(ClientBase):
     entered at the command line 
     """
     def __init__(self, frame_size = None, cmd_line = 0, 
-	command_space = None, **args):
-	self.deep_construct(WaxClientBase, 
-	                    {'frame_size': frame_size,
-			     'cmd_line': cmd_line,
-			     'initial_cmd_space': command_space}, args)
-	if frame_size == None:
-	    if not cmd_line:
-		self.frame_size = (600, 400)
+        command_space = None, **args):
+        self.deep_construct(WaxClientBase, 
+                            {'frame_size': frame_size,
+                             'cmd_line': cmd_line,
+                             'initial_cmd_space': command_space}, args)
+        if frame_size == None:
+            if not cmd_line:
+                self.frame_size = (600, 400)
             else:
-		self.frame_size = (1000, 600)
-#	if cmd_line:
-#	    self.initial_cmd_space['testing'] = 5
+                self.frame_size = (1000, 600)
+#        if cmd_line:
+#            self.initial_cmd_space['testing'] = 5
 
     def new_frame(self, buff_name):
-	"""creates a new frame of the appropriate concrete class
+        """creates a new frame of the appropriate concrete class
 	open buffer and new window callbacks to the AppState interface
 
 	**NOTE:** when adding a new frame with a buffer, you should call
@@ -575,14 +575,14 @@ class WaxClientBase(ClientBase):
 
 	*GenEditFrame* -- the new frame 
 	"""
-	if self.cmd_line:
-	    return WaxCmdClientFrame(owner = self, app_name = self.app_name,
-		ID = wxNewId(), size = self.frame_size, 
-		init_buff_name = buff_name, 
-		command_space = self.initial_cmd_space)
-	return SimpleWaxClientFrame(owner = self, app_name = self.app_name,
-	    ID = wxNewId(), size = self.frame_size, 
-	    init_buff_name = buff_name)
+        if self.cmd_line:
+            return WaxCmdClientFrame(owner = self, app_name = self.app_name,
+                ID = wxNewId(), size = self.frame_size, 
+                init_buff_name = buff_name, 
+                command_space = self.initial_cmd_space)
+        return SimpleWaxClientFrame(owner = self, app_name = self.app_name,
+            ID = wxNewId(), size = self.frame_size, 
+            init_buff_name = buff_name)
 
 class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
     """WaxClient with a single frame
@@ -592,7 +592,7 @@ class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
     *none*
     """
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**NOTE:** subclasses must call their parent class's 
@@ -611,14 +611,14 @@ class WaxClientSingle(WaxClientBase, GenEdit.GenEditSingle):
 	"""
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
-	GenEdit.GenEditSingle.remove_other_references(self)
-	WaxClientBase.remove_other_references(self)
+        GenEdit.GenEditSingle.remove_other_references(self)
+        WaxClientBase.remove_other_references(self)
 
 
     def __init__(self, **args):
-	self.deep_construct(WaxClientSingle, 
-	                    {
-			    }, args)
+        self.deep_construct(WaxClientSingle, 
+                            {
+                            }, args)
 
 
 class WaxClient(WaxClientBase, GenEdit.GenEditSimple):
@@ -629,7 +629,7 @@ class WaxClient(WaxClientBase, GenEdit.GenEditSimple):
     *none*
     """
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**NOTE:** subclasses must call their parent class's 
@@ -648,13 +648,13 @@ class WaxClient(WaxClientBase, GenEdit.GenEditSimple):
 	"""
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
-	GenEdit.GenEditSimple.remove_other_references(self)
-	WaxClientBase.remove_other_references(self)
+        GenEdit.GenEditSimple.remove_other_references(self)
+        WaxClientBase.remove_other_references(self)
 
     def __init__(self, **args):
-	self.deep_construct(WaxClient, 
-	                    {
-			    }, args)
+        self.deep_construct(WaxClient, 
+                            {
+                            }, args)
 
 class WaxClientAppBase(wxApp, Object.OwnerObject):
     """wxApp subclass for WaxEdit clients
@@ -704,43 +704,43 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
     frame?
     """
     def __init__(self, client_indentation = 0, 
-	    host = None, listen_port = None, 
-	    talk_port = None, cmd_line = 0, **args):
-	self.deep_construct(WaxClientAppBase, 
-	                    {
-			     'connection': tcp_client.ClientConnection(),
-			     'host': host,
-			     'listen_port': listen_port,
-			     'talk_port': listen_port,
-			     'old_host_data': {},
-			     'client': None,
-			     'editor': None,
-			     'GUI_editor': None,
-			     'client_indentation': client_indentation,
-			     'cmd_line': cmd_line,
-			     'testing_flag': 0
-			    }, args, exclude_bases = {wxApp: 1})
-	self.add_owned('GUI_editor')
-	self.add_owned('editor')
-	self.add_owned('client')
-	if host == None:
-	    self.host = socket.gethostname()
-	if listen_port == None:
-	    self.listen_port = tcp_client.VC_LISTENER_PORT
-	if talk_port == None:
-	    self.talk_port = tcp_client.VC_TALKER_PORT
+            host = None, listen_port = None, 
+            talk_port = None, cmd_line = 0, **args):
+        self.deep_construct(WaxClientAppBase, 
+                            {
+                             'connection': tcp_client.ClientConnection(),
+                             'host': host,
+                             'listen_port': listen_port,
+                             'talk_port': listen_port,
+                             'old_host_data': {},
+                             'client': None,
+                             'editor': None,
+                             'GUI_editor': None,
+                             'client_indentation': client_indentation,
+                             'cmd_line': cmd_line,
+                             'testing_flag': 0
+                            }, args, exclude_bases = {wxApp: 1})
+        self.add_owned('GUI_editor')
+        self.add_owned('editor')
+        self.add_owned('client')
+        if host == None:
+            self.host = socket.gethostname()
+        if listen_port == None:
+            self.listen_port = tcp_client.VC_LISTENER_PORT
+        if talk_port == None:
+            self.talk_port = tcp_client.VC_TALKER_PORT
 # store the same initial values in old_host_data
-	self.backup_connection_data()
-#	wxApp.__init__(self, 0)
-	wxApp.__init__(self, 1, "appcrash")
+        self.backup_connection_data()
+        wxApp.__init__(self, 0)
+#        wxApp.__init__(self, 1, "appcrash")
 
     def OnInit(self):
-	self.GUI_editor = self.create_editor()
-	self.editor = AppStateGenEdit.AppStateGenEdit(self.GUI_editor)
-	return 1
+        self.GUI_editor = self.create_editor()
+        self.editor = AppStateGenEdit.AppStateGenEdit(self.GUI_editor)
+        return 1
 
     def create_editor(self):
-	"""create the underlying editor
+        """create the underlying editor
 	
 	**INPUTS**
 	
@@ -752,10 +752,10 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 	editor, which must be an instance of a concrete subclass 
 	of WaxClientBase
 	"""
-	debug.virtual('WaxClientApp.create_editor')
+        debug.virtual('WaxClientApp.create_editor')
 
     def connection_data(self):
-	""" returns current default connection data
+        """ returns current default connection data
 	
 	**INPUTS**
 	
@@ -767,14 +767,14 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 	address, 'host', (STR), and the listen and talk ports, 
 	'listen_port' and 'talk_port' (INT)
 	"""
-	m = {}
-	m['host'] = self.host
-	m['listen_port'] = self.listen_port
-	m['talk_port'] = self.talk_port
-	return m
+        m = {}
+        m['host'] = self.host
+        m['listen_port'] = self.listen_port
+        m['talk_port'] = self.talk_port
+        return m
 
     def restore_connection_data(self):
-	"""restores old connection data
+        """restores old connection data
 	
 	**INPUTS**
 
@@ -784,13 +784,13 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.host = self.old_host_data['host']
-	self.listen_port = self.old_host_data['listen_port']
-	self.talk_port = self.old_host_data['talk_port']
+        self.host = self.old_host_data['host']
+        self.listen_port = self.old_host_data['listen_port']
+        self.talk_port = self.old_host_data['talk_port']
 
     def set_connection_data(self, host = None, listen_port = None, 
-	talk_port = None):
-	"""sets new connection data
+        talk_port = None):
+        """sets new connection data
 	
 	**INPUTS**
 
@@ -807,15 +807,15 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	if host != None:
-	    self.host = host
-	if listen_port != None:
-	    self.listen_port = listen_port
-	if talk_port != None:
-	    self.talk_port = talk_port
+        if host != None:
+            self.host = host
+        if listen_port != None:
+            self.listen_port = listen_port
+        if talk_port != None:
+            self.talk_port = talk_port
 
     def backup_connection_data(self):
-	"""copies connection data to old_host_data
+        """copies connection data to old_host_data
 	
 	**INPUTS**
 
@@ -825,12 +825,12 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.old_host_data['host'] = self.host
-	self.old_host_data['listen_port'] = self.listen_port
-	self.old_host_data['talk_port'] = self.talk_port
+        self.old_host_data['host'] = self.host
+        self.old_host_data['listen_port'] = self.listen_port
+        self.old_host_data['talk_port'] = self.talk_port
 
     def connected(self):
-	""" checks whether we are connected to the mediator server
+        """ checks whether we are connected to the mediator server
 	
 	**INPUTS**
 	
@@ -841,10 +841,10 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 	*BOOL* -- true if we are currently connected to the mediator
 	server
 	"""
-	return self.connection.is_connected()
+        return self.connection.is_connected()
 
     def testing(self):
-	"""tells whether we are connected to the mediator server and running
+        """tells whether we are connected to the mediator server and running
 	regression tests
 
 	**INPUTS**
@@ -856,12 +856,12 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 	*BOOL test_client* -- true if we are connected as
 	a test_client
 	"""
-	if self.connected():
-	    return self.testing_flag
-	return 0
+        if self.connected():
+            return self.testing_flag
+        return 0
 
     def connect(self, test_client = 0):
-	"""connect to the mediator server using current settings
+        """connect to the mediator server using current settings
 
 	**INPUTS**
 
@@ -872,55 +872,55 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*BOOL* -- true if the connection was successfully established
 	"""
-	if self.connected():
-	    return 0
-	app_name = 'WaxEdit'
-	if self.client_indentation:
-	    app_name = 'WaxEditClientIndentation'
-	event = thread_communication_WX.InterThreadEventWX(self,
-	    wxEVT_SOCKET_DATA) 
-	messengers = self.connection.connect(app_name, event, host = self.host,
-	    listen_port = self.listen_port, talk_port = self.talk_port, 
-	    test_client = test_client)
-#	print 'connected: ', self.connection.is_connected()
-#	print messengers
-	if messengers == None:
-	    self.restore_connection_data()
-	    return 0
+        if self.connected():
+            return 0
+        app_name = 'WaxEdit'
+        if self.client_indentation:
+            app_name = 'WaxEditClientIndentation'
+        event = thread_communication_WX.InterThreadEventWX(self,
+            wxEVT_SOCKET_DATA) 
+        messengers = self.connection.connect(app_name, event, host = self.host,
+            listen_port = self.listen_port, talk_port = self.talk_port, 
+            test_client = test_client)
+#        print 'connected: ', self.connection.is_connected()
+#        print messengers
+        if messengers == None:
+            self.restore_connection_data()
+            return 0
 # copy successful data to old data
-	talk_msgr, listen_msgr = messengers
-	self.backup_connection_data()
-	self.client = \
-	    tcp_client.ClientEditorChangeSpec(editor = self.editor, 
-		owner = self, ID = 'dummy', owns_editor = 0)
-	self.client.connect(talk_msgr, listen_msgr)
-	self.hook_data_event()
-	self.testing_flag = test_client
-	self.GUI_editor.update_connection_status()
-	return 1
+        talk_msgr, listen_msgr = messengers
+        self.backup_connection_data()
+        self.client = \
+            tcp_client.ClientEditorChangeSpec(editor = self.editor, 
+                owner = self, ID = 'dummy', owns_editor = 0)
+        self.client.connect(talk_msgr, listen_msgr)
+        self.hook_data_event()
+        self.testing_flag = test_client
+        self.GUI_editor.update_connection_status()
+        return 1
 
     def app_closing(self, ID, unexpected = 0):
-	"""method called by ClientEditor when it gets a message from
+        """method called by ClientEditor when it gets a message from
 	AppState saying that it is closing
 	"""
-	self.disconnect(AppState_initiated = 1)
+        self.disconnect(AppState_initiated = 1)
 
     def mediator_closing(self, ID, unexpected = 0):
-	"""method called by editor when it gets a message from the
+        """method called by editor when it gets a message from the
 	mediator that it is closing (or if the connection is broken
 	without warning"""
-	self.disconnect(client_initiated = 0)
+        self.disconnect(client_initiated = 0)
 
     def on_data(self, event):
-	"""event handler for data events
+        """event handler for data events
 	"""
-	if self.connected():
-	    self.client.mediator_cmd()
-	else:
-	    sys.stderr.write('ERROR: received data event while not connected\n')
+        if self.connected():
+            self.client.mediator_cmd()
+        else:
+            sys.stderr.write('ERROR: received data event while not connected\n')
 
     def disconnect(self, client_initiated = 1, AppState_initiated = 0):
-	"""disconnect from the mediator server 
+        """disconnect from the mediator server 
 
 	**INPUTS**
 
@@ -930,20 +930,20 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	if self.connected():
-	    success = self.connection.disconnect()
-	    if success:
-		self.GUI_editor.update_connection_status()
-		if not AppState_initiated:
-		    if client_initiated:
-			self.client.disconnect()
-		    else:
-			self.client.disconnected()
-		self.testing_flag = 0
-		self.client = None
+        if self.connected():
+            success = self.connection.disconnect()
+            if success:
+                self.GUI_editor.update_connection_status()
+                if not AppState_initiated:
+                    if client_initiated:
+                        self.client.disconnect()
+                    else:
+                        self.client.disconnected()
+                self.testing_flag = 0
+                self.client = None
 
     def run(self):
-	"""starts the message loop.  Note: this function does not
+        """starts the message loop.  Note: this function does not
 	return until the GUI exits.
 
 	**INPUTS**
@@ -954,11 +954,11 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	self.MainLoop()
-	self.cleanup()
+        self.MainLoop()
+        self.cleanup()
 
     def hook_data_event(self):
-	"""hook the wxEVT_SOCKET_DATA event up to our handler
+        """hook the wxEVT_SOCKET_DATA event up to our handler
 
 	**INPUTS**
 
@@ -968,7 +968,7 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
-	EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
+        EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
 
 class WaxClientAppSingle(WaxClientAppBase):
     """concrete WaxClientApp subclass using a single WaxFrame 
@@ -978,11 +978,11 @@ class WaxClientAppSingle(WaxClientAppBase):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(WaxClientAppSingle, 
-	                    {
-			    }, args)
+        self.deep_construct(WaxClientAppSingle, 
+                            {
+                            }, args)
     def create_editor(self):
-	"""create the underlying editor
+        """create the underlying editor
 	
 	**INPUTS**
 	
@@ -994,8 +994,8 @@ class WaxClientAppSingle(WaxClientAppBase):
 	editor, which must be an instance of a concrete subclass 
 	of WaxClientBase
 	"""
-	return WaxClientSingle(app = self, app_name = 'WaxEdit',
-	    curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
+        return WaxClientSingle(app = self, app_name = 'WaxEdit',
+            curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
 
 class WaxClientApp(WaxClientAppBase):
     """concrete WaxClientApp subclass using one or more WaxFrame 
@@ -1006,11 +1006,11 @@ class WaxClientApp(WaxClientAppBase):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(WaxClientApp, 
-	                    {
-			    }, args)
+        self.deep_construct(WaxClientApp, 
+                            {
+                            }, args)
     def create_editor(self):
-	"""create the underlying editor
+        """create the underlying editor
 	
 	**INPUTS**
 	
@@ -1022,19 +1022,19 @@ class WaxClientApp(WaxClientAppBase):
 	editor, which must be an instance of a concrete subclass 
 	of WaxClientBase
 	"""
-	return WaxClient(app = self, app_name = 'WaxEdit',
-	    curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
+        return WaxClient(app = self, app_name = 'WaxEdit',
+            curr_dir = vc_globals.test_data, cmd_line = self.cmd_line)
 
 def run(multiple = 0, client_indentation = 0,
-	host = None, listen_port = None, talk_port = None, cmd_line = 0):
+        host = None, listen_port = None, talk_port = None, cmd_line = 0):
     if multiple:
-	app = WaxClientApp(client_indentation = client_indentation, 
-	    host = host, listen_port = listen_port, talk_port = talk_port, 
-	    cmd_line = cmd_line)
+        app = WaxClientApp(client_indentation = client_indentation, 
+            host = host, listen_port = listen_port, talk_port = talk_port, 
+            cmd_line = cmd_line)
     else:
-	app = WaxClientAppSingle(client_indentation = client_indentation, 
-	    host = host, listen_port = listen_port, talk_port = talk_port,
-	    cmd_line = cmd_line)
+        app = WaxClientAppSingle(client_indentation = client_indentation, 
+            host = host, listen_port = listen_port, talk_port = talk_port,
+            cmd_line = cmd_line)
     app.run()
 
 
@@ -1042,26 +1042,26 @@ def run(multiple = 0, client_indentation = 0,
 if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 'm', None, 'p', None,
                             'i', None, 'c', None,
-			    'host=', None,
+                            'host=', None,
                             'talk=', None, 'listen=', None])
     if opts['h']:
         help()
     else:
 #        print sys.modules
-	host = opts['host']
-	listen_port = opts['listen']
-	talk_port = opts['talk']
-	multiple = 0
-	if opts['m']:
-	    multiple = 1
-	client_indentation = 0
-	if opts['i']:
-	    client_indentation = 1
-	cmd_line = 0
-	if opts['c']:
-	    cmd_line = 1
-	run(multiple, client_indentation, host, 
-	    listen_port, talk_port, cmd_line = cmd_line)
+        host = opts['host']
+        listen_port = opts['listen']
+        talk_port = opts['talk']
+        multiple = 0
+        if opts['m']:
+            multiple = 1
+        client_indentation = 0
+        if opts['i']:
+            client_indentation = 1
+        cmd_line = 0
+        if opts['c']:
+            cmd_line = 1
+        run(multiple, client_indentation, host, 
+            listen_port, talk_port, cmd_line = cmd_line)
 
 
 # defaults for vim - otherwise ignore

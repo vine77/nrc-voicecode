@@ -655,15 +655,15 @@ class Object:
         #
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
-		try:
-		    apply(a_base.__init__, [self], args_super)
-		except TypeError:
-		    msg = "TypeError while initializing base %s of class %s\n" \
-		        % (str(a_base), str(this_class))
-		    sys.stderr.write(msg)
-		    msg = "keyword arguments were: %s\n" % str(args_super)
-		    sys.stderr.write(msg)
-		    raise
+                try:
+                    apply(a_base.__init__, [self], args_super)
+                except TypeError:
+                    msg = "TypeError while initializing base %s of class %s\n" \
+                        % (str(a_base), str(this_class))
+                    sys.stderr.write(msg)
+                    msg = "keyword arguments were: %s\n" % str(args_super)
+                    sys.stderr.write(msg)
+                    raise
 
                     
 
@@ -711,6 +711,7 @@ class Object:
         for an_attr_init in attrs.items():
             setattr(self, an_attr_init[0], an_attr_init[1])
 
+# DCF: ChildObject is obsolete.  Use OwnerObject instead.
 class ChildObject(Object):
     """a subclass of Object which contains a reference to its parent
     (e.g. SourceBuff to its parent AppState).  Since the parent contains
@@ -775,11 +776,11 @@ class OwnerObject(Object):
     *none* --
     """
     def __init__(self, **attrs):
-	self.deep_construct(OwnerObject,
-			    {'parent_name': None,
-			     'grandparents': [],
-			     'owned_objects': []},
-			    attrs)
+        self.deep_construct(OwnerObject,
+                            {'parent_name': None,
+                             'grandparents': [],
+                             'owned_objects': []},
+                            attrs)
 
     def owned_by(self):
         """returns the name of the parent attribute
@@ -792,10 +793,10 @@ class OwnerObject(Object):
 
 	*STR* -- name of the parent, or None if none
 	"""
-	return self.parent_name
+        return self.parent_name
 
     def name_parent(self, parent = None):
-	"""specify the name of the attribute containing a reference to 
+        """specify the name of the attribute containing a reference to 
 	this object's parent.
 
 	**INPUTS**
@@ -806,12 +807,12 @@ class OwnerObject(Object):
 
 	*none*
 	"""
-	if self.parent_name != None:
-	    raise RuntimeError('OwnerObject named a second parent')
-	self.parent_name = parent
+        if self.parent_name != None:
+            raise RuntimeError('OwnerObject named a second parent')
+        self.parent_name = parent
 
     def add_grandparent(self, grandparent):
-	"""specify the name of the attribute containing a reference to 
+        """specify the name of the attribute containing a reference to 
 	this object's grandparent (or great-grandparent, etc.)
 	(Actually, any other reference which needs to be del'ed but not
 	cleaned up)
@@ -824,11 +825,11 @@ class OwnerObject(Object):
 
 	*none*
 	"""
-	self.grandparents.append(grandparent)
+        self.grandparents.append(grandparent)
 
 
     def add_owned(self, owned):
-	"""append a new attribute name to the list of owned objects
+        """append a new attribute name to the list of owned objects
 
 	**INPUTS**
 
@@ -838,11 +839,11 @@ class OwnerObject(Object):
 
 	*none*
 	"""
-	self.owned_objects.append(owned)
+        self.owned_objects.append(owned)
 
 
     def add_owned_list(self, owned):
-	"""append new attribute names to the list of owned objects
+        """append new attribute names to the list of owned objects
 
 	**INPUTS**
 
@@ -852,10 +853,10 @@ class OwnerObject(Object):
 
 	*none*
 	"""
-	self.owned_objects.extend(owned)
+        self.owned_objects.extend(owned)
 
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**NOTE:** subclasses must call their parent class's 
@@ -874,10 +875,10 @@ class OwnerObject(Object):
 	"""
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
-	pass
+        pass
 
     def _cleanup_object(self, object):
-	"""attempt to call cleanup on object
+        """attempt to call cleanup on object
 
         **INPUTS***
 
@@ -892,19 +893,34 @@ class OwnerObject(Object):
 	*STR* -- reason for error (or None if no error).
 	"""
 
-	if object == None:
-	    return None
-	if type(object) != types.InstanceType:
-	    return 'because it is not an object, but has type %s' % (type(object))
-	try:
-	    object.cleanup
-	except AttributeError:
-	    return 'because it does not have a cleanup method'
-	try:
-	    object.cleanup()
-	except:
-	    return 'because its cleanup method threw an exception'
-	
+        if object == None:
+            return None
+        if type(object) == types.ListType:
+            for i in range(object):
+                error_msg = self._cleanup_object(object[i])
+                if error_msg != None:
+                    error_msg = 'element %d of ' % i
+                    return error_msg
+            return None
+        elif type(object) == types.DictType:
+            for key in object.keys():
+                error_msg = self._cleanup_object(object[key])
+                if error_msg != None:
+                    error_msg = 'value for key %s of ' % str(key)
+                    return error_msg
+            return None
+
+        if type(object) != types.InstanceType:
+            return 'because it is not an object, but has type %s' % (type(object))
+        try:
+            object.cleanup
+        except AttributeError:
+            return 'because it does not have a cleanup method'
+        try:
+            object.cleanup()
+        except:
+            return 'because its cleanup method threw an exception'
+        
     def cleanup(self):
         """method to cleanup circular references by cleaning up 
 	any children, and then removing the reference to the parent
@@ -917,64 +933,66 @@ class OwnerObject(Object):
 
 	*none*
 	"""
-	self.remove_other_references()
+        self.remove_other_references()
     
-	reversed_names = self.owned_objects
-	reversed_names.reverse()
-	msg_prefix = 'Warning: while cleaning up %s,\nunable to cleanup ' \
-	    % repr(self)
-	for name in reversed_names:
-	    if self.__dict__.has_key(name):
-		attribute = self.__dict__[name]
-		if attribute == None:
-		    continue
-		if type(attribute) == types.ListType:
-		    for i in range(attribute):
-			error_msg = self._cleanup_object(attribute[i])
-			if error_msg != None:
-			    error_msg = 'element %d of attribute %s\n%s\n' \
-				% (i, name, error_msg)
-			    debug.critical_warning(msg_prefix + error_msg)
-			else:
-			    del attribute[i]
-		elif type(attribute) == types.DictType:
-		    for key in attribute.keys():
-			error_msg = self._cleanup_object(attribute[key])
-			if error_msg != None:
-			    error_msg = 'value for key %s of attribute %s\n%s\n' \
-				% (str(key), name, error_msg)
-			    debug.critical_warning(msg_prefix + error_msg)
-			else:
-			    del attribute[key]
-		elif type(attribute) == types.InstanceType:
-		    error_msg = self._cleanup_object(attribute)
-		    if error_msg != None:
-			error_msg = 'attribute %s\n%s\n' \
-			    % (name, error_msg)
-			debug.critical_warning(msg_prefix + error_msg)
-		    else:
-			del self.__dict__[name]
-		else:
-		    error_msg = 'because it is not an object, ' \
-		        + 'but has type %s' % (type(attribute))
-		    error_msg = 'attribute %s\n%s\n' \
-			% (name, error_msg)
-		    debug.critical_warning(msg_prefix + error_msg)
-		    del self.__dict__[name]
+        reversed_names = self.owned_objects
+        reversed_names.reverse()
+        msg_prefix = 'Warning: while cleaning up %s,\nunable to cleanup ' \
+            % repr(self)
+        for name in reversed_names:
+            if self.__dict__.has_key(name):
+                attribute = self.__dict__[name]
+                if attribute == None:
+                    continue
+                if type(attribute) == types.ListType:
+                    rr = range(attribute)
+                    rr.reverse()
+                    for i in rr:
+                        error_msg = self._cleanup_object(attribute[i])
+                        if error_msg != None:
+                            error_msg = 'element %d of attribute %s\n%s\n' \
+                                % (i, name, error_msg)
+                            debug.critical_warning(msg_prefix + error_msg)
+                        else:
+                            del attribute[i]
+                elif type(attribute) == types.DictType:
+                    for key in attribute.keys():
+                        error_msg = self._cleanup_object(attribute[key])
+                        if error_msg != None:
+                            error_msg = 'value for key %s of attribute %s\n%s\n' \
+                                % (str(key), name, error_msg)
+                            debug.critical_warning(msg_prefix + error_msg)
+                        else:
+                            del attribute[key]
+                elif type(attribute) == types.InstanceType:
+                    error_msg = self._cleanup_object(attribute)
+                    if error_msg != None:
+                        error_msg = 'attribute %s\n%s\n' \
+                            % (name, error_msg)
+                        debug.critical_warning(msg_prefix + error_msg)
+                    else:
+                        del self.__dict__[name]
+                else:
+                    error_msg = 'because it is not an object, ' \
+                        + 'but has type %s' % (type(attribute))
+                    error_msg = 'attribute %s\n%s\n' \
+                        % (name, error_msg)
+                    debug.critical_warning(msg_prefix + error_msg)
+                    del self.__dict__[name]
 
-	    else:
-		error_msg = 'because the attribute does not exist\n'
-		error_msg = 'attribute %s\n%s' \
-		    % (name, error_msg)
-		debug.critical_warning(msg_prefix + error_msg)
-	
-	for grandparent in self.grandparents:
-	    if self.__dict__.has_key(grandparent):
-		del self.__dict__[grandparent]
+            else:
+                error_msg = 'because the attribute does not exist\n'
+                error_msg = 'attribute %s\n%s' \
+                    % (name, error_msg)
+                debug.critical_warning(msg_prefix + error_msg)
+        
+        for grandparent in self.grandparents:
+            if self.__dict__.has_key(grandparent):
+                del self.__dict__[grandparent]
 
-	if self.parent_name != None \
-		and self.__dict__.has_key(self.parent_name):
-	    del self.__dict__[self.parent_name]
+        if self.parent_name != None \
+                and self.__dict__.has_key(self.parent_name):
+            del self.__dict__[self.parent_name]
 
 
 
@@ -1424,5 +1442,5 @@ def prof_test():
 
 if (__name__ == "__main__"):
     prof_test()
-			
+                        
 

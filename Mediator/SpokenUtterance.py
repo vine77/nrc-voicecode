@@ -40,11 +40,11 @@ class SpokenUtterance(Object):
     *none*
     """
     def __init__(self, **attrs):
-	self.deep_construct(SpokenUtterance,
-	    {}, attrs)
+        self.deep_construct(SpokenUtterance,
+            {}, attrs)
 
     def spoken_forms(self):
-	"""returns list of spoken forms from the utterance
+        """returns list of spoken forms from the utterance
 
 	**INPUTS**
 
@@ -54,10 +54,10 @@ class SpokenUtterance(Object):
 
 	*[STR]* -- list of spoken forms from the utterance
 	"""
-	debug.virtual('SpokenUtterance.spoken_forms')
+        debug.virtual('SpokenUtterance.spoken_forms')
 
     def words(self):
-	"""returns list of words (as (spoken, written) 2-tuples) 
+        """returns list of words (as (spoken, written) 2-tuples) 
 	from the utterance.
 
 	**INPUTS**
@@ -69,10 +69,10 @@ class SpokenUtterance(Object):
 	*[(STR, STR)]* -- list of words (as (spoken, written) 2-tuples) 
 	
 	"""
-	debug.virtual('SpokenUtterance.words')
+        debug.virtual('SpokenUtterance.words')
       
     def adapt(self, words):
-	"""changes the stored list of words so that 
+        """changes the stored list of words so that 
 	subsequent correction boxes can display the corrected list, and
 	informs the speech engine of the corrected list of words, so
 	it can adapt.
@@ -86,10 +86,10 @@ class SpokenUtterance(Object):
 
 	*BOOL* -- true if the adaption was accepted
 	"""
-	debug.virtual('SpokenUtterance.adapt')
+        debug.virtual('SpokenUtterance.adapt')
 
     def adapt_spoken(self, spoken_forms):
-	"""changes the stored list of words so that 
+        """changes the stored list of words so that 
 	subsequent correction boxes can display the corrected list, and
 	informs the speech engine of the corrected list of words, so
 	it can adapt.
@@ -104,10 +104,10 @@ class SpokenUtterance(Object):
 
 	*BOOL* -- true if the adaption was accepted
 	"""
-	debug.virtual('SpokenUtterance.adapt_spoken')
+        debug.virtual('SpokenUtterance.adapt_spoken')
 
     def set_words(self, words):
-	"""changes the stored list of words (after correction) so that 
+        """changes the stored list of words (after correction) so that 
 	subsequent correction boxes can display the corrected list.
 	The results object is unaffected.
 
@@ -121,10 +121,10 @@ class SpokenUtterance(Object):
 	*none*
 
 	"""
-	debug.virtual('SpokenUtterance.set_words')
+        debug.virtual('SpokenUtterance.set_words')
 
     def set_spoken(self, spoken_forms):
-	"""changes the stored list of words (after correction) so that 
+        """changes the stored list of words (after correction) so that 
 	subsequent correction boxes can display the corrected list.
 	The results object is unaffected.
 
@@ -138,10 +138,10 @@ class SpokenUtterance(Object):
 	*none*
 
 	"""
-	debug.virtual('SpokenUtterance.set_spoken')
+        debug.virtual('SpokenUtterance.set_spoken')
 
     def playback_available(self):
-	"""indicates whether playback of the utterance is available.
+        """indicates whether playback of the utterance is available.
 
 	**INPUTS**
 
@@ -154,11 +154,11 @@ class SpokenUtterance(Object):
 	been lost, or because the implementation doesn't support
 	playback)
 	"""
-	debug.virtual('SpokenUtterance.playback_available')
+        debug.virtual('SpokenUtterance.playback_available')
       
 
     def playback(self):
-	"""plays back recorded utterance.
+        """plays back recorded utterance.
 
 	Playback is synchronous.  It will handle turning the microphone
 	off and back on again (if necessary)
@@ -173,10 +173,10 @@ class SpokenUtterance(Object):
 	there was an error in playback (e.g.  another program had 
 	control of the audio device)
 	"""
-	debug.virtual('SpokenUtterance.playback')
+        debug.virtual('SpokenUtterance.playback')
       
     def can_be_adapted(self):
-	"""indicates whether the utterance can be corrected for adaption
+        """indicates whether the utterance can be corrected for adaption
 	of the speech engine.  Utterances for which there was no speech
 	information or for which the speech information has been lost or
 	discarded may not be adaptable.
@@ -189,10 +189,10 @@ class SpokenUtterance(Object):
 
 	*BOOL* -- true if the speech information is available for adaption.
 	"""
-	debug.virtual('SpokenUtterance.can_be_adapted')
+        debug.virtual('SpokenUtterance.can_be_adapted')
       
     def alternatives_available(self):
-	"""returns number of recognition alternatives available 
+        """returns number of recognition alternatives available 
 	(for the whole utterance), or -1 if the number
 	is unknown.
 
@@ -207,10 +207,10 @@ class SpokenUtterance(Object):
 	doesn't indicate the total number, but simply lets you keep
 	asking for the next one until it runs out.
 	"""
-	debug.virtual('SpokenUtterance.alternatives_available')
+        debug.virtual('SpokenUtterance.alternatives_available')
 
     def alternatives(self, n):
-	"""returns the best recognition alternatives available 
+        """returns the best recognition alternatives available 
 	(for the whole utterance) including the original.  
 	Will not return more than n alternatives, but may return fewer
 	(if the speech engine has not provided that many).
@@ -229,5 +229,5 @@ class SpokenUtterance(Object):
 	2-tuples) 
 	
 	"""
-	debug.virtual('SpokenUtterance.words')
+        debug.virtual('SpokenUtterance.words')
       

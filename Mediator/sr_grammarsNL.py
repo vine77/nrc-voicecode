@@ -43,12 +43,12 @@ class DictWinGramNL(DictWinGram, DictGramBase):
     *none*
     """
     def __init__(self, **attrs):
-	self.deep_construct(DictWinGramNL,
-	    {}, attrs, exclude_bases = {DictGramBase:1})
-	DictGramBase.__init__(self)
+        self.deep_construct(DictWinGramNL,
+            {}, attrs, exclude_bases = {DictGramBase:1})
+        DictGramBase.__init__(self)
 
     def activate(self):
-	"""activates the grammar for recognition
+        """activates the grammar for recognition
 	tied to the current window.
 
 	**INPUTS**
@@ -59,14 +59,14 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
-	if not self.is_active():
-	    DictGramBase.activate(self, window = self.window, exclusive
-		= self.exclusive)
-	    self.active = 1
+        if not self.is_active():
+            DictGramBase.activate(self, window = self.window, exclusive
+                = self.exclusive)
+            self.active = 1
 
     
     def deactivate(self):
-	"""disable recognition from this grammar
+        """disable recognition from this grammar
 
 	**INPUTS**
 
@@ -76,13 +76,13 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
-	debug.virtual('WinGram.deactivate')
-	if self.is_active():
-	    DictGramBase.deactivate(self)
-	    self.active = 0
+        debug.virtual('WinGram.deactivate')
+        if self.is_active():
+            DictGramBase.deactivate(self)
+            self.active = 0
 
     def set_context(self, before = "", after = ""):
-	"""set the context to improve dictation accuracy
+        """set the context to improve dictation accuracy
 
 	**INPUTS**
 
@@ -97,17 +97,18 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
 	*none*
 	"""
-	self.setContext(before, after)
+        self.setContext(before, after)
 
     def gotResultsObject(self, recogType, results):
             if recogType == 'self':
 #                self.last = SpokenUtteranceNL(results)
 # not sure if yet if this is where we should store the utterance
                 words = results.getWords(0)
-                self.interpreter.interpret_NL_cmd(words, self.app,
-		    initial_buffer = self.buff_name)
+                interp = self.interpreter()
+                interp.interpret_NL_cmd(words, self.app,
+                    initial_buffer = self.buff_name)
                 self.app.print_buff_if_necessary(buff_name
-		    = self.buff_name)
+                    = self.buff_name)
 
 class SelectWinGramNL(SelectWinGram, SelectGramBase):
     """natlink implementation of SelectWinGram for window-specific 
@@ -122,14 +123,14 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     *none*
     """
     def __init__(self, **attrs):
-	self.deep_construct(SelectWinGramNL,
-	    {}, attrs, exclude_bases = {SelectGramBase:1})
-	SelectGramBase.__init__(self)
-	self.load(selectWords = self.select_words, throughWord =
-	    self.through_word)
+        self.deep_construct(SelectWinGramNL,
+            {}, attrs, exclude_bases = {SelectGramBase:1})
+        SelectGramBase.__init__(self)
+        self.load(selectWords = self.select_words, throughWord =
+            self.through_word)
 
     def activate(self, buff_name):
-	"""activates the grammar for recognition tied to the current window,
+        """activates the grammar for recognition tied to the current window,
 	and checks with buffer for the currently visible range.
 
 	**INPUTS**
@@ -140,17 +141,17 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
 	*none*
 	"""
-	self.buff_name = buff_name
-	self.find_visible()
+        self.buff_name = buff_name
+        self.find_visible()
 
-	if not self.is_active():
-	    SelectGramBase.activate(self, window = self.window, 
-		exclusive = self.exclusive)
-	    self.active = 1
+        if not self.is_active():
+            SelectGramBase.activate(self, window = self.window, 
+                exclusive = self.exclusive)
+            self.active = 1
 
 
     def deactivate(self):
-	"""disable recognition from this grammar
+        """disable recognition from this grammar
 
 	**INPUTS**
 
@@ -160,9 +161,9 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
 	*none*
 	"""
-	if self.is_active():
-	    DictGramBase.deactivate(self)
-	    self.active = 0
+        if self.is_active():
+            DictGramBase.deactivate(self)
+            self.active = 0
 
     
     def buffer_name(self):
@@ -177,7 +178,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 	*STR* -- name of buffer currently used by this selection grammar.
 	"""
 
-	return self.buff_name
+        return self.buff_name
     
     def gotResultsObject(self,recogType,resObj):
         if recogType == 'self':
@@ -219,10 +220,10 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         self.ranges.append(true_region)
 
             except natlink.OutOfRange:
-		pass
+                pass
 
-	    spoken = self.selection_spoken_form(resObj)
-	    self.find_closest(verb, spoken, results)
+            spoken = self.selection_spoken_form(resObj)
+            self.find_closest(verb, spoken, results)
 
     def selection_spoken_form(self, resObj):
 
@@ -266,7 +267,7 @@ class WinGramFactoryNL(Object):
     *none*
     """
     def __init__(self, **attrs):
-	"""
+        """
 	**INPUTS**
 
 	*none*
@@ -275,16 +276,17 @@ class WinGramFactoryNL(Object):
 
 	*none*
 	"""
-	self.deep_construct(WinGramFactoryNL,
-	    {}, attrs)
+        self.deep_construct(WinGramFactoryNL,
+            {}, attrs)
 
-    def make_dictation(self, interp, app, buff_name, window = None,
-	exclusive = 0):
-	"""create a new dictation grammar
+    def make_dictation(self, manager, app, buff_name, window = None,
+        exclusive = 0):
+        """create a new dictation grammar
 
 	**INPUTS**
 
-	*CmdInterp* interp -- interpreter to which to forward results
+	*WinGramMgr* manager -- the grammar manager which will own the
+	grammar
 
 	*AppState* app -- application which is the target of the grammar
 
@@ -301,12 +303,12 @@ class WinGramFactoryNL(Object):
 
 	*DictWinGram* -- new dictation grammar
 	"""
-	return DictWinGramNL(interp, app, buff_name, window = window, 
-	    exclusive = exclusive) 
+        return DictWinGramNL(manager = manager, app = app, 
+            buff_name = buff_name, window = window, exclusive = exclusive) 
     
     def make_selection(self, app, window = None, buff_name = None,
-	exclusive = 0):
-	"""create a new selection grammar
+        exclusive = 0):
+        """create a new selection grammar
 
 	**INPUTS**
 
@@ -328,7 +330,7 @@ class WinGramFactoryNL(Object):
 
 	*SelectWinGram* -- new selection grammar
 	"""
-	return SelectWinGramNL(app, buff_name, select_words =
-	    self.select_words, through_word = self.through_word, 
-	    window = window, exclusive = exclusive) 
+        return SelectWinGramNL(app = app, buff_name = buff_name, select_words =
+            self.select_words, through_word = self.through_word, 
+            window = window, exclusive = exclusive) 
     

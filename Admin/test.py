@@ -106,10 +106,10 @@ if (__name__ == '__main__'):
         except natlink.UnknownName:
             print 'NatSpeak user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         else:
-	    global testing
-	    testing = regression.PersistentConfigOldMediator(names = globals())
-	    global temp_factory
-	    temp_factory = regression.TempConfigOldMediatorFactory()
+            global testing
+            testing = regression.PersistentConfigOldMediator(names = globals())
+            global temp_factory
+            temp_factory = regression.TempConfigOldMediatorFactory()
             auto_test.run(args)
             
 

@@ -86,14 +86,14 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
     .. [Messenger] file:///./messenger.Messenger.html
     .. [MessengerBasic] file:///./messenger.MessengerBasic.html"""
     def __init__(self, underlying, completed_msgs, event,
-	    connection_ending, conn_broken_msg, **args_super):
+            connection_ending, conn_broken_msg, **args_super):
         self.deep_construct(ListenAndQueueMsgsThread, 
                             {'underlying': underlying,
-			     'completed_msgs': completed_msgs,
-			     'event': event,
-			     'connection_ending': connection_ending,
-			     'conn_broken_msg': conn_broken_msg
-			    }, 
+                             'completed_msgs': completed_msgs,
+                             'event': event,
+                             'connection_ending': connection_ending,
+                             'conn_broken_msg': conn_broken_msg
+                            }, 
                             args_super, 
                             exclude_bases={'threading.Thread': 1})
 # provides debug messages
@@ -101,7 +101,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         threading.Thread.__init__(self)
 
     def message_queue(self):
-	"""returns a reference to the message queue in which the thread
+        """returns a reference to the message queue in which the thread
 	puts completed messages
 
 	**INPUTS**
@@ -112,7 +112,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 
 	*Queue.Queue* -- the message queue
 	"""
-	return self.completed_msgs
+        return self.completed_msgs
 
     def get_mess(self):
         """Gets a message from the external editor.
@@ -128,10 +128,10 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
          from external editor in *(mess_name, {arg:val})* format, or
 	 None if no message is available."""
 
-	return self.underlying.get_mess()
+        return self.underlying.get_mess()
         
     def notify_main(self):
-	"""notify the main thread that there is a new message waiting in 
+        """notify the main thread that there is a new message waiting in 
 	the Queue, and return asynchronously.
 	
 	**INPUTS**
@@ -140,7 +140,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 
 	*none*
 	"""
-	self.event.notify()
+        self.event.notify()
 
     def run(self):
         """Start listening for data.
@@ -154,32 +154,32 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         *none* -- 
         """
         while 1:
-	    try: 
-		data = self.get_mess()
-	    except messaging.SocketError, err:
-		if self.connection_ending.isSet():
-#		    sys.stderr.write('SocketError, but connection_ending was set\n')
-		    break
+            try: 
+                data = self.get_mess()
+            except messaging.SocketError, err:
+                if self.connection_ending.isSet():
+#                    sys.stderr.write('SocketError, but connection_ending was set\n')
+                    break
 # connection broken unexpectedly (unless we just didn't get the
 # connection_ending event in time)
-#		sys.stderr.write('unexpected SocketError\n')
-		self.completed_msgs.put(self.conn_broken_msg)
-		self.notify_main()
-		break
-	    except messaging.WokenUp:
-		break
+#                sys.stderr.write('unexpected SocketError\n')
+                self.completed_msgs.put(self.conn_broken_msg)
+                self.notify_main()
+                break
+            except messaging.WokenUp:
+                break
 
-	    if data:
-		self.completed_msgs.put(data)
-		self.notify_main()
+            if data:
+                self.completed_msgs.put(data)
+                self.notify_main()
 #            time.sleep(0.01)
 #            time.sleep(1)
 #           waits for timeout, or until connection_ending is set
-	    self.connection_ending.wait(0.01)
-#	    self.connection_ending.wait(1.0)
-	    if self.connection_ending.isSet():
-#		sys.stderr.write('connection_ending detected\n')
-		break
+            self.connection_ending.wait(0.01)
+#            self.connection_ending.wait(1.0)
+            if self.connection_ending.isSet():
+#                sys.stderr.write('connection_ending detected\n')
+                break
         self.underlying = None
 
 
@@ -206,13 +206,13 @@ class ListenNewConnThread(threading.Thread, Object.Object):
     def __init__(self, port, event, **args_super):
         self.deep_construct(ListenNewConnThread, 
                             {'port': port, 
-			     'event': event},
+                             'event': event},
                             args_super, 
                             exclude_bases={'threading.Thread': 1})
         threading.Thread.__init__(self)        
         
     def notify_main(self):
-	"""notify the main thread that there is a new connection waiting
+        """notify the main thread that there is a new connection waiting
 	for a handshake, and return asynchronously.
 	
 	**INPUTS**
@@ -221,7 +221,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
 
 	*none*
 	"""
-	self.event.notify()
+        self.event.notify()
 
     def run(self):
         """Start listening for new connections.
@@ -252,7 +252,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
             # it should shake hands with it
             #
             self.log_new_conn(client_socket)
-	    self.notify_main()
+            self.notify_main()
 
             #
             # When debugging, increase this if you want to see things happen
@@ -275,7 +275,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
         
         *none* -- 
         """
-	debug.virtual('ListenNewConnThread.log_new_conn')
+        debug.virtual('ListenNewConnThread.log_new_conn')
 
 
 class NewConnListThread(ListenNewConnThread):

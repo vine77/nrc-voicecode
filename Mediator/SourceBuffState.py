@@ -47,12 +47,12 @@ class SourceBuffState(SourceBuffCookie):
     def __init__(self, buff_name, contents, selection, **attrs):
         self.deep_construct(SourceBuffState,
                             {'text': contents,
-			    'buff_name': buff_name,
-			    'selection_range': selection},
+                            'buff_name': buff_name,
+                            'selection_range': selection},
                             attrs
                             )
     def name(self):
-	"""returns buff_name
+        """returns buff_name
 
 	**INPUTS**
 
@@ -62,10 +62,10 @@ class SourceBuffState(SourceBuffCookie):
 
 	*STR* -- file name
 	"""
-	return self.buff_name
+        return self.buff_name
 
     def get_selection(self):
-	"""retrieves range of stored selection.  
+        """retrieves range of stored selection.  
 
 	**INPUTS**
 
@@ -79,10 +79,10 @@ class SourceBuffState(SourceBuffCookie):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	return self.selection_range
+        return self.selection_range
 
     def contents(self):
-	"""returns stored contents
+        """returns stored contents
 
 	**INPUTS**
 
@@ -92,5 +92,5 @@ class SourceBuffState(SourceBuffCookie):
 
 	*STR* -- contents of the buffer
 	"""
-	return self.text
+        return self.text
       

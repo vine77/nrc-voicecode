@@ -33,9 +33,9 @@ def make_regex(s):
     """
     any = re.compile('')
     if type(s) == types.StringType:
-	return re.compile(s)
+        return re.compile(s)
     if type(s) == type(any):
-	return s
+        return s
     return any
 
 def selected_methods(the_class, include = None,
@@ -73,18 +73,18 @@ def selected_methods(the_class, include = None,
     for key, value in the_class.__dict__.items():
 # for some reason, the_class.__dict__['method_name'] is of type function, 
 # whereas getattr(the_class, 'method_name') is of type method
-	if type(value) != types.FunctionType:
-	    continue
-	if not compiled_in.search(key):
-	    continue
-	if compiled_out.search(key):
-	    continue
-	methods.append(key)
+        if type(value) != types.FunctionType:
+            continue
+        if not compiled_in.search(key):
+            continue
+        if compiled_out.search(key):
+            continue
+        methods.append(key)
     return methods
-	
+        
 class InstanceSpace:
     def bind_to_space(self, names, methods):
-	"""add bound copies of specified methods to the given dictionary
+        """add bound copies of specified methods to the given dictionary
 
 	**NOTE:** bind_to_space doesn't check that the named methods are
 	actually methods
@@ -96,7 +96,7 @@ class InstanceSpace:
 
 	*[STR] methods* -- the list of method names to insert
 	"""
-	for method in methods:
-	    names[method] = getattr(self, method)
-	    
+        for method in methods:
+            names[method] = getattr(self, method)
+            
 

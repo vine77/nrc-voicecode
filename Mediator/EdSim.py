@@ -57,22 +57,22 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
         self.deep_construct(EdSim,
                             {'active_buffer_name': "",
-			    'instance_reporting': instance_reporting,
-			    'multiple': multiple},
+                            'instance_reporting': instance_reporting,
+                            'multiple': multiple},
                             attrs, new_default = {'app_name': 'EdSim'})
-	self.add_owned('breadcrumbs_srv')
-	if self.instance_reporting:
-	    print 'EdSim.__init__'
+        self.add_owned('breadcrumbs_srv')
+        if self.instance_reporting:
+            print 'EdSim.__init__'
         self.open_buffers[self.active_buffer_name] = \
-	    self.new_compatible_sb(buff_name = self.active_buffer_name)
+            self.new_compatible_sb(buff_name = self.active_buffer_name)
   
     def __del__(self):
-	"destructor"
-	if self.instance_reporting:
-	    print 'EdSim.__del__'
+        "destructor"
+        if self.instance_reporting:
+            print 'EdSim.__del__'
 
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**INPUTS**
@@ -85,9 +85,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	"""
 # subclasses must call their parent class's remove_other_references
 # function, after performing their own duties
-	if self.instance_reporting:
-	    print 'EdSim.remove_other_references'
-	AppStateNonCached.AppStateNonCached.remove_other_references(self)
+        if self.instance_reporting:
+            print 'EdSim.remove_other_references'
+        AppStateNonCached.AppStateNonCached.remove_other_references(self)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -109,7 +109,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
         return SourceBuffEdSim.SourceBuffEdSim(app=self, buff_name=buff_name, 
-	    instance_reporting = self.instance_reporting)
+            instance_reporting = self.instance_reporting)
 
         
     def recog_begin(self, window_id, block = 0):
@@ -146,12 +146,12 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         
         ..[AS_Update] file:///./AppState.AS_Update.html"""
         
-	if what == None:
-	    what = []
+        if what == None:
+            what = []
         return []
 
     def mediator_closing(self):
-	"""method called to inform AppState that the mediator is
+        """method called to inform AppState that the mediator is
 	closing.    Internal editors should exit.  They may prompt the
 	user to save modified files, but must not allow the user to
 	cancel and leave the editor running.  External editors should
@@ -170,11 +170,11 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	*none*
 	"""
-	self.close_all_buffers()
+        self.close_all_buffers()
 
     def app_active_buffer_name(self):
         
-	"""Returns the file name of the buffer currently active in the
+        """Returns the file name of the buffer currently active in the
 	external application.
 
         Note that this may or may not be the same the buffer that
@@ -191,10 +191,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-	return self.active_buffer_name
+        return self.active_buffer_name
 
     def app_change_buffer(self, buff_name=None):
-	"""Changes the external application's active buffer.
+        """Changes the external application's active buffer.
 
         This variant only changes the buffer in the external
         application. It does not resynchronise VoiceCode with external
@@ -217,9 +217,9 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         file:///./AppState.AppState.html#curr_buffer_name"""
 
         if self.query_buffer_from_app(buff_name):
-	    self.active_buffer_name = buff_name
-	    return 1
-	return 0
+            self.active_buffer_name = buff_name
+            return 1
+        return 0
      
 
     def drop_breadcrumb(self, buffname=None, pos=None):
@@ -260,21 +260,21 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 # If the file was not opened successfully, treat it as an empty file
 # (contrary to the docstring for tell_editor_to_open_file) because
 # otherwise the regression testing gets messed up.
-	if not self.multiple_buffers() and self.curr_buffer_name() != None:
-	    name = self.curr_buffer_name()
-	    self.close_buffer(name, 0)
+        if not self.multiple_buffers() and self.curr_buffer_name() != None:
+            name = self.curr_buffer_name()
+            self.close_buffer(name, 0)
 
-	self.active_buffer_name = file_name
+        self.active_buffer_name = file_name
         self.open_buffers[self.active_buffer_name] = \
             SourceBuffEdSim.SourceBuffEdSim(app = self, buff_name=file_name,
                                             initial_contents = source,
-					    instance_reporting =
-					    self.instance_reporting)
+                                            instance_reporting =
+                                            self.instance_reporting)
 
         return self.active_buffer_name
 
     def query_buffer_from_app(self, buff_name):
-	"""query the application to see if a buffer by the name of buff_name 
+        """query the application to see if a buffer by the name of buff_name 
 	exists.
 
         **INPUTS**
@@ -285,10 +285,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	*BOOL* -- does the buffer exist?
 	"""
-	return buff_name in self.open_buffers_from_app()
+        return buff_name in self.open_buffers_from_app()
 
     def open_buffers_from_app(self):
-	"""retrieve a list of the names of open buffers from the
+        """retrieve a list of the names of open buffers from the
 	application.
 
         **INPUTS**
@@ -299,7 +299,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	*[STR]* -- list of the names of open buffers
 	"""
-	return self.open_buffers.keys()
+        return self.open_buffers.keys()
 
 
     def app_save_file(self, full_path = None, no_prompt = 0):
@@ -320,44 +320,44 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	failed
 
         """
-	f_path = full_path
-	if f_path == None:
-	    f_path = self.curr_buffer_name()
-	elif not no_prompt:
-	    if self.curr_buffer_name() != f_path \
-		  and os.path.exists(f_path):
-		print 'overwrite file %s (y/n)?' % (f_path)
-		answer = sys.stdin.readline()
-		answer = answer[:len(answer)-1]
-	       
-		while 1:
-		    if answer == 'y':
-			overwrite = 1
-			break
-		    elif answer == 'n':
-			overwrite = 0
-			return None
-		    print "\nPlease answer 'y' or 'n'."
+        f_path = full_path
+        if f_path == None:
+            f_path = self.curr_buffer_name()
+        elif not no_prompt:
+            if self.curr_buffer_name() != f_path \
+                  and os.path.exists(f_path):
+                print 'overwrite file %s (y/n)?' % (f_path)
+                answer = sys.stdin.readline()
+                answer = answer[:len(answer)-1]
+               
+                while 1:
+                    if answer == 'y':
+                        overwrite = 1
+                        break
+                    elif answer == 'n':
+                        overwrite = 0
+                        return None
+                    print "\nPlease answer 'y' or 'n'."
         try:
             source_file = open(f_path, 'w')
             source_file.write(self.curr_buffer().contents())
             source_file.close()
         except Exception, err:
             return None
-	path, short = os.path.split(f_path)
-	if path:
-	    self.curr_dir = path
-	old_name = self.curr_buffer_name()
-	if not old_name or old_name != f_path:
-	    self.active_buffer_name = f_path
+        path, short = os.path.split(f_path)
+        if path:
+            self.curr_dir = path
+        old_name = self.curr_buffer_name()
+        if not old_name or old_name != f_path:
+            self.active_buffer_name = f_path
 # buffer has been renamed.  add a new reference to the open_buffers map,
 # and then delete the old one
-	    self.open_buffers[f_path] = self.open_buffers[old_name]
-	    del self.open_buffers[old_name]
-	return f_path
+            self.open_buffers[f_path] = self.open_buffers[old_name]
+            del self.open_buffers[old_name]
+        return f_path
       
     def is_active(self):
-	"""is the editor application active (not suspended)?
+        """is the editor application active (not suspended)?
 
 	Usually true, except for remote editors running in a (Unix)
 	shell.  GUI editors tend to minimize instead of suspending, so
@@ -371,10 +371,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is active (i.e. has not been suspended)
 	"""
-	return 1
+        return 1
 
     def is_active_is_safe(self):
-	"""can is_active safely be queried, without blocking?
+        """can is_active safely be queried, without blocking?
 
 	For example, Emacs provides a suspend-hook and a
 	suspend-resume-hook, so a properly written AppStateEmacs can
@@ -394,7 +394,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	*BOOL* -- true if is_active can be queried without blocking,
 	even if the editor has been suspended. 
 	"""
-	return 1
+        return 1
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
@@ -419,7 +419,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor is running in a potentially shared window
 	"""
-	return 0
+        return 0
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
@@ -437,7 +437,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	*none*
 	"""
 # can't set the title on an instance-specific basis, so ignore
-	pass
+        pass
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -462,10 +462,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	such a string or cannot set the window title.
 	"""
 # can't set the title on an instance-specific basis
-	return None
+        return None
 
     def title_escape_sequence(self, before = "", after = ""):
-	"""gives the editor a (module-dependent) hint about the escape
+        """gives the editor a (module-dependent) hint about the escape
 	sequence which can be used to set the module's window title, if
 	any.  If the editor has its own mechanism for setting the window
 	title, it should simply ignore this method.  
@@ -484,7 +484,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	*none*
 	"""
 # can't set the title on an instance-specific basis, so ignore
-	pass
+        pass
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
@@ -511,10 +511,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports opening multiple editor windows.  
 	"""
-	return 0
+        return 0
 
     def multiple_buffers(self):
-      	"""does editor support multiple open buffers?
+        """does editor support multiple open buffers?
 
 	**INPUTS**
 
@@ -524,10 +524,10 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor supports having multiple buffers open 
 	at the same time"""
-	return self.multiple
+        return self.multiple
 
     def bidirectional_selection(self):
-      	"""does editor support selections with cursor at left?
+        """does editor support selections with cursor at left?
 
 	**INPUTS**
 
@@ -537,7 +537,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
-	return 0
+        return 0
 
     def app_close_buffer(self, buff_name, save = 0):
         """Close a buffer.
@@ -557,14 +557,14 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
 #        print '-- EdSim.close_buffer: called'
-	buff = self.find_buff(buff_name)
-	if buff == None:
-	    return 0
-	if self.is_bound_to_buffer() == buff_name:
-	    self.unbind_from_buffer()
-	self.open_buffers[buff_name].cleanup()
-	del self.open_buffers[buff_name]
-	return 1
+        buff = self.find_buff(buff_name)
+        if buff == None:
+            return 0
+        if self.is_bound_to_buffer() == buff_name:
+            self.unbind_from_buffer()
+        self.open_buffers[buff_name].cleanup()
+        del self.open_buffers[buff_name]
+        return 1
         
 
 

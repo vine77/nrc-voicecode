@@ -173,12 +173,12 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-	SourceBuff.SourceBuff.rename_buff_cbk(new_buff_name)
+        SourceBuff.SourceBuff.rename_buff_cbk(new_buff_name)
         self.cache['language_name'] = None
         self.cache['file_name'] = None
 
     def cur_pos(self):
-	"""retrieves current position of cursor .  Note: the current
+        """retrieves current position of cursor .  Note: the current
 	position should coincide with either the start or end of the
 	selection.  
 
@@ -192,11 +192,11 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	"""
         if self.cache['cur_pos'] == None:
             self.cache['cur_pos'] = self._cur_pos_from_app()
-	return self.cache['cur_pos']
+        return self.cache['cur_pos']
 
     def _cur_pos_from_app(self):
         
-	"""retrieves current position of cursor directly from external
+        """retrieves current position of cursor directly from external
 	application.
 
 	**INPUTS**
@@ -208,10 +208,10 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	debug.virtual('SourceBuffCached._cur_pos_from_app')        
+        debug.virtual('SourceBuffCached._cur_pos_from_app')        
 
     def get_selection(self):
-	"""retrieves range of current selection.  Note: the current
+        """retrieves range of current selection.  Note: the current
 	position should coincide with either the start or end of the
 	selection. 
 
@@ -229,11 +229,11 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	"""
         if self.cache['get_selection'] == None:
             self.cache['get_selection'] = self._get_selection_from_app()
-	return self.cache['get_selection']
+        return self.cache['get_selection']
         
 
     def _get_selection_from_app(self):
-	"""retrieves range of current selection directly from external editor.
+        """retrieves range of current selection directly from external editor.
 
 	**INPUTS**
 
@@ -248,7 +248,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	following the selection (this matches Python's slice convention).
 	"""
         
-	debug.virtual('SourceBuffCached._get_selection_from_app')	
+        debug.virtual('SourceBuffCached._get_selection_from_app')	
 
 
     def get_text(self, start = None, end = None):
@@ -294,7 +294,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 
     def _get_text_from_app(self, start = None, end = None):
-	"""retrieves a portion of the buffer directly from external editor.
+        """retrieves a portion of the buffer directly from external editor.
 
 	**INPUTS**
 
@@ -310,11 +310,11 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	*STR* -- contents of specified range of the buffer
 	"""
 
-	debug.virtual('SourceBuffCached._get_text_from_app')
+        debug.virtual('SourceBuffCached._get_text_from_app')
 
 
     def get_visible(self):
-	"""Gets start and end positions of visible region from cache.
+        """Gets start and end positions of visible region from cache.
 
 	**INPUTS**
 
@@ -326,11 +326,11 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 	"""
         if self.cache['get_visible'] == None:
             self.cache['get_visible'] = self._get_visible_from_app()
-	return self.cache['get_visible']
+        return self.cache['get_visible']
 
     def _get_visible_from_app(self):
         
-	"""Gets start and end positions of visible region directly
+        """Gets start and end positions of visible region directly
 	from external editor.
 
 	**INPUTS**
@@ -341,10 +341,10 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*INT* (start, end)
 	"""
-	debug.virtual('SourceBuff._get_visible_from_app')        
+        debug.virtual('SourceBuff._get_visible_from_app')        
 
     def len(self):
-	"""return length of buffer in characters from cache.
+        """return length of buffer in characters from cache.
 
 	**INPUTS**
 
@@ -354,7 +354,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 	*INT* length 
 	"""
-	return len(self.contents())
+        return len(self.contents())
 
 
     def newline_conventions(self):
@@ -456,18 +456,18 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 # screwed up because the application will already have made the change.
 # Basically, callbacks should never use defaults for the range
 
-	SourceBuff.SourceBuff.delete_cbk(self, range)
+        SourceBuff.SourceBuff.delete_cbk(self, range)
 
-	if self.cache['get_text'] == None:
+        if self.cache['get_text'] == None:
 # if we don't have the buffer contents cached, just get the entire
 # current contents (which should already include the deletion), thereby
 # caching it
-	    self.get_text()
-	else:
-	    old_text = self.get_text()
-	    self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
+            self.get_text()
+        else:
+            old_text = self.get_text()
+            self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]:]
 
-	self.uncache_data_after_buffer_change(what_changed = 'get_text')
+        self.uncache_data_after_buffer_change(what_changed = 'get_text')
         
 
     def insert_cbk(self, range, text):
@@ -507,7 +507,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         else:
             old_text = self.get_text()
             self.cache['get_text'] = old_text[:range[0]] + text + \
-	             old_text[range[1]:]
+                     old_text[range[1]:]
 
         self.uncache_data_after_buffer_change(what_changed = 'get_text')
         

@@ -23,7 +23,7 @@
 
 import AppStateMessaging, SourceBuffEmacs
 
-	
+        
 class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     """Interface to the Emacs editor.
     """

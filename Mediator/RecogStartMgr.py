@@ -51,7 +51,7 @@ class KnownInstance(Object):
     *none*
     """
     def __init__(self, initial_window = None, module_name = None, **args):
-	"""create the KnownInstance object
+        """create the KnownInstance object
 
 	**INPUTS**
 
@@ -60,16 +60,16 @@ class KnownInstance(Object):
 
 	*STR* module_name -- name of the module of the initial window
 	"""
-	self.deep_construct(KnownInstance,
-			    {'module_name': module_name,
-			     'instance_windows': []
-			    },
-			    args)
-	if initial_window != None:
-	    self.instance_windows.append(initial_window)
+        self.deep_construct(KnownInstance,
+                            {'module_name': module_name,
+                             'instance_windows': []
+                            },
+                            args)
+        if initial_window != None:
+            self.instance_windows.append(initial_window)
 
     def set_module(self, module_name):
-	"""sets the name of the module corresponding to this
+        """sets the name of the module corresponding to this
 	instance, if it was previously unknown.  **NOTE:**  This 
 	method is included only to allow the caller to 
 	supply a module name for an instance whose module name was
@@ -87,13 +87,13 @@ class KnownInstance(Object):
 	(because it had previously been set to a value other than None)
 
 	"""
-	if self.module_name == None:
-	    self.module_name = module_name
-	    return 1
-	return 0
+        if self.module_name == None:
+            self.module_name = module_name
+            return 1
+        return 0
 
     def module(self):
-	"""return the name of the module corresponding to this instance
+        """return the name of the module corresponding to this instance
 
 	**INPUTS**
 
@@ -104,10 +104,10 @@ class KnownInstance(Object):
 	*STR* -- the name of the module, or None if it is unknown
 	because the instance has no known windows yet
 	"""
-	return self.module_name
+        return self.module_name
 
     def windows(self):
-	"""return the windows known to be associated with this module
+        """return the windows known to be associated with this module
 
 	**INPUTS**
 
@@ -118,10 +118,10 @@ class KnownInstance(Object):
 	*[INT]* -- the list of window handles associated with the
 	instance
 	"""
-	return self.instance_windows
+        return self.instance_windows
 
     def add_window(self, window):
-	"""add a new window to the list of windows associated with this
+        """add a new window to the list of windows associated with this
 	module
 
 	**INPUTS**
@@ -132,13 +132,13 @@ class KnownInstance(Object):
 
 	*BOOL* -- true if the window was not already known
 	"""
-	if window in self.instance_windows:
-	    return 0
-	self.instance_windows.append(window)
-	return 1
+        if window in self.instance_windows:
+            return 0
+        self.instance_windows.append(window)
+        return 1
 
     def delete_window(self, window):
-	"""remove a window from the list of windows associated with this
+        """remove a window from the list of windows associated with this
 	module
 
 	**INPUTS**
@@ -149,11 +149,11 @@ class KnownInstance(Object):
 
 	*BOOL* -- true if the window was known
 	"""
-	try:
-	    self.instance_windows.remove(window)
-	    return 1
-	except ValueError:
-	    return 0
+        try:
+            self.instance_windows.remove(window)
+            return 1
+        except ValueError:
+            return 0
 
 
 # Note: While handling recognition-starting callbacks is the primary function 
@@ -185,7 +185,7 @@ class RecogStartMgr(OwnerObject):
     """
 
     def __init__(self, editors, trust_current_window = 0, **args):
-	"""
+        """
 	**INPUTS**
 
 	*AppMgr* editors -- the editors AppMgr object, which provides
@@ -198,13 +198,13 @@ class RecogStartMgr(OwnerObject):
 
         self.deep_construct(RecogStartMgr,
                             {'editors': editors,
-			     'trust_current_window': trust_current_window
-			    },
+                             'trust_current_window': trust_current_window
+                            },
                             args)
-	self.name_parent('editors')
-	
+        self.name_parent('editors')
+        
     def set_app_mgr(self, manager):
-	"""fill in the reference to the parent AppMgr
+        """fill in the reference to the parent AppMgr
 
 	**INPUTS**
 
@@ -214,10 +214,23 @@ class RecogStartMgr(OwnerObject):
 
 	*none*
 	"""
-	self.editors = manager
+        self.editors = manager
+    
+    def interpreter(self):
+        """return a reference to the mediator's current CmdInterp object
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        return self.editors.interpreter()
 
     def trust_current(self, trust = 1):
-	"""specifies whether the RecogStartMgr should trust that the current
+        """specifies whether the RecogStartMgr should trust that the current
 	window corresponds to the editor when the editor first connects to
 	VoiceCode, or when it notifies VoiceCode of a new window.
 
@@ -231,10 +244,10 @@ class RecogStartMgr(OwnerObject):
 
 	*none*
 	"""
-	self.trust_current_window = trust
-	
+        self.trust_current_window = trust
+        
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -244,10 +257,10 @@ class RecogStartMgr(OwnerObject):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	debug.virtual('RecogStartMgr.window_info')
+        debug.virtual('RecogStartMgr.window_info')
 
     def activate(self):
-	"""activate the RecogStartMgr
+        """activate the RecogStartMgr
 
 	**INPUTS**
 
@@ -260,7 +273,7 @@ class RecogStartMgr(OwnerObject):
         debug.virtual('RecogStartMgr.activate')
 
     def deactivate(self):
-	"""deactivate the RecogStartMgr, and disable all window-specific
+        """deactivate the RecogStartMgr, and disable all window-specific
 	grammars
 
 	**INPUTS**
@@ -274,15 +287,11 @@ class RecogStartMgr(OwnerObject):
         debug.virtual('RecogStartMgr.deactivate')
 
     def remove_other_references(self):
-	self.deactivate()
-	OwnerObject.remove_other_references(self)
-# GramMgr is not currently an OwnerObject, but performs cleanup on
-# __del__.  As long as RecogStartMgr gets deleted, so should its grammar 
-# managers and their grammars, so this should be sufficient
-
+        self.deactivate()
+        OwnerObject.remove_other_references(self)
 
     def add_module(self, module):
-	"""add a new KnownTargetModule object
+        """add a new KnownTargetModule object
 
 	**INPUTS**
 
@@ -292,10 +301,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true unless a module of the same name already exists
 	"""
-	debug.virtual('RecogStartMgr.add_module')
+        debug.virtual('RecogStartMgr.add_module')
 
     def known_window(self, window):
-	"""is window a known window ID?
+        """is window a known window ID?
 
 	**INPUTS**
     
@@ -305,10 +314,10 @@ class RecogStartMgr(OwnerObject):
 	
 	*BOOL* -- true if window is a known window 
 	"""
-	debug.virtual('RecogStartMgr.known_window')
+        debug.virtual('RecogStartMgr.known_window')
 
     def shared_window(self, window):
-	"""is window a shared window?
+        """is window a shared window?
 
 	**INPUTS**
     
@@ -319,10 +328,10 @@ class RecogStartMgr(OwnerObject):
 	*BOOL* -- true if window is a known window  and is shared (or
 	shareable).  None if window is unknown
 	"""
-	debug.virtual('RecogStartMgr.shared_window')
+        debug.virtual('RecogStartMgr.shared_window')
 
     def single_display(self, window):
-	"""is window a single-window display?
+        """is window a single-window display?
 
 	**INPUTS**
     
@@ -333,10 +342,10 @@ class RecogStartMgr(OwnerObject):
 	*BOOL* -- true if window is a known window  and is a
 	single-window display.  None if window is unknown
 	"""
-	debug.virtual('RecogStartMgr.single_display')
+        debug.virtual('RecogStartMgr.single_display')
 
     def known_windows(self, instance = None):
-	"""list of windows known to be associated with  a particular
+        """list of windows known to be associated with  a particular
 	named application instance.
 
 	**INPUTS**
@@ -349,11 +358,11 @@ class RecogStartMgr(OwnerObject):
 	
 	*[INT]* -- list of window handles
 	"""
-	debug.virtual('RecogStartMgr.known_windows')
+        debug.virtual('RecogStartMgr.known_windows')
 
 
     def known_module(self, module):
-	"""is this module known?
+        """is this module known?
 
 	**INPUTS**
 
@@ -364,10 +373,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true if the module name is known
 	"""
-	debug.virtual('RecogStartMgr.known_module')
+        debug.virtual('RecogStartMgr.known_module')
     
     def known_instance(self, instance):
-	"""is this instance known?
+        """is this instance known?
 
 	**INPUTS**
 
@@ -377,10 +386,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true if the instance is known
 	"""
-	debug.virtual('RecogStartMgr.known_instance')
+        debug.virtual('RecogStartMgr.known_instance')
 
     def known_instances(self):
-	"""returns the list of known instances
+        """returns the list of known instances
 
 	**INPUTS**
 
@@ -390,10 +399,10 @@ class RecogStartMgr(OwnerObject):
 
 	*[STR]* -- list of names of known instances
 	"""
-	debug.virtual('RecogStartMgr.known_instances')
+        debug.virtual('RecogStartMgr.known_instances')
 
     def window_instances(self, window):
-	"""returns a list of the known instances associated with a given
+        """returns a list of the known instances associated with a given
 	window
 
 	**INPUTS**
@@ -405,10 +414,10 @@ class RecogStartMgr(OwnerObject):
 	*[STR]* -- list of names of instances associated with the
 	window, or None if the window is unknown
 	"""
-	debug.virtual('RecogStartMgr.window_instances')
+        debug.virtual('RecogStartMgr.window_instances')
 
     def instance_module(self, instance):
-	"""returns the module associated with the given instance
+        """returns the module associated with the given instance
 
 	**INPUTS**
 
@@ -420,10 +429,10 @@ class RecogStartMgr(OwnerObject):
 	None if it is unknown (because the instance has not yet been
 	associated with any windows)
 	"""
-	debug.virtual('RecogStartMgr.instance_module')
+        debug.virtual('RecogStartMgr.instance_module')
     
     def new_instance(self, instance, check_window = 1, window_info = None):
-	"""method called by AppMgr to notify RecogStartMgr that a new
+        """method called by AppMgr to notify RecogStartMgr that a new
 	editor instance has been added, and (optionally) to tell it to 
 	check if the current window belongs to (or contains) that instance
     
@@ -444,10 +453,10 @@ class RecogStartMgr(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('RecogStartMgr.new_instance')
+        debug.virtual('RecogStartMgr.new_instance')
 
     def new_universal_instance(self, instance, exclusive = 1):
-	"""method called by AppMgr to notify RecogStartMgr that a new
+        """method called by AppMgr to notify RecogStartMgr that a new
 	test instance has been added which should use global grammars
     
 	**INPUTS**
@@ -464,10 +473,10 @@ class RecogStartMgr(OwnerObject):
 	new instance will be added normally, or if the instance name was
 	already known.
 	"""
-	debug.virtual('RecogStartMgr.new_universal_instance')
+        debug.virtual('RecogStartMgr.new_universal_instance')
 
     def delete_instance(self, instance):
-	"""method called by AppMgr to notify RecogStartMgr that an
+        """method called by AppMgr to notify RecogStartMgr that an
 	editor instance has been deleted
     
 	**INPUTS**
@@ -478,10 +487,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true if instance was known
 	"""
-	debug.virtual('RecogStartMgr.delete_instance')
+        debug.virtual('RecogStartMgr.delete_instance')
 
     def specify_window(self, instance, window_id = None):
-	"""called to indicate that user has manually identified a
+        """called to indicate that user has manually identified a
 	known instance with the current window 
 
 	**INPUTS**
@@ -496,10 +505,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true if window is added
 	"""
-	debug.virtual('RecogStartMgr.specify_window')
+        debug.virtual('RecogStartMgr.specify_window')
 
     def app_new_window(self, instance):
-	"""called when the editor notifies us of a new window for the 
+        """called when the editor notifies us of a new window for the 
 	specified instance
 
 	**INPUTS**
@@ -510,10 +519,10 @@ class RecogStartMgr(OwnerObject):
 
 	*BOOL* -- true if window is added
 	"""
-	debug.virtual('RecogStartMgr.app_new_window')
+        debug.virtual('RecogStartMgr.app_new_window')
 
     def delete_window(self, instance, window):
-	"""remove window from list of known windows
+        """remove window from list of known windows
 	corresponding to an editor application instance.
 
 	**INPUTS**
@@ -527,10 +536,10 @@ class RecogStartMgr(OwnerObject):
 	*BOOL* -- true if window and instance are known (otherwise, does
 	nothing)
 	"""
-	debug.virtual('RecogStartMgr.delete_window')
+        debug.virtual('RecogStartMgr.delete_window')
     
     def activate_instance_window(self, instance, window):
-	"""raise instance to front of list of most recently active instances 
+        """raise instance to front of list of most recently active instances 
 	for that window
 
 	**INPUTS**
@@ -544,10 +553,10 @@ class RecogStartMgr(OwnerObject):
 	*BOOL* -- true if window and instance are known (otherwise, does
 	nothing)
 	"""
-	debug.virtual('RecogStartMgr.activate_instance_window')
+        debug.virtual('RecogStartMgr.activate_instance_window')
 
     def _recognition_starting(self, window, title, module_name = None):
-	"""private method which a concrete subclass will call to handle
+        """private method which a concrete subclass will call to handle
 	the recognition starting event.
 
 	**INPUTS**
@@ -568,7 +577,7 @@ class RecogStartMgr(OwnerObject):
 
 	*none*
 	"""
-	debug.virtual('RecogStartMgr._recognition_starting')
+        debug.virtual('RecogStartMgr._recognition_starting')
     
 class RSMInfrastructure(RecogStartMgr):
     """abstract class defining interface for an object which receives 
@@ -603,7 +612,7 @@ class RSMInfrastructure(RecogStartMgr):
     """
 
     def __init__(self, GM_factory, **args):
-	"""
+        """
 	**INPUTS**
 
 	*GramMgrFactory* GM_factory -- GramMgrFactory to create GramMgr
@@ -612,16 +621,17 @@ class RSMInfrastructure(RecogStartMgr):
 	"""
         self.deep_construct(RSMInfrastructure,
                             {'active': 0,
-			     'GM_factory': GM_factory,
-			     'grammars': {},
-			     'windows': {},
-			     'modules': {},
-			     'instances': {}
-			    },
+                             'GM_factory': GM_factory,
+                             'grammars': {},
+                             'windows': {},
+                             'modules': {},
+                             'instances': {}
+                            },
                             args)
-	
+        self.add_owned('grammars')
+        
     def activate(self):
-	"""activate the RecogStartMgr
+        """activate the RecogStartMgr
 
 	**INPUTS**
 
@@ -631,12 +641,12 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if activated successfully
 	"""
-	if not self.active and hasattr(self, '_activate_detection'):
-	    self._activate_detection()
-	self.active = 1
+        if not self.active and hasattr(self, '_activate_detection'):
+            self._activate_detection()
+        self.active = 1
 
     def deactivate(self):
-	"""deactivate the RecogStartMgr, and disable all window-specific
+        """deactivate the RecogStartMgr, and disable all window-specific
 	grammars
 
 	**INPUTS**
@@ -647,13 +657,13 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	self._deactivate_all_grammars()
-	if self.active and hasattr(self, '_deactivate_detection'):
-	    self._deactivate_detection()
-	self.active = 0
+        self._deactivate_all_grammars()
+        if self.active and hasattr(self, '_deactivate_detection'):
+            self._deactivate_detection()
+        self.active = 0
 
     def add_module(self, module):
-	"""add a new KnownTargetModule object
+        """add a new KnownTargetModule object
 
 	**INPUTS**
 
@@ -663,14 +673,14 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true unless a module of the same name already exists
 	"""
-	module_name = module.name()
-	if self.known_module(module_name):
-	    return 0
-	self.modules[module_name] = module
-	return 1
+        module_name = module.name()
+        if self.known_module(module_name):
+            return 0
+        self.modules[module_name] = module
+        return 1
 
     def known_window(self, window):
-	"""is window a known window ID?
+        """is window a known window ID?
 
 	**INPUTS**
     
@@ -680,14 +690,14 @@ class RSMInfrastructure(RecogStartMgr):
 	
 	*BOOL* -- true if window is a known window 
 	"""
-	if not self.windows.has_key(window):
-	    return 0
-#	if self.windows[window].instances() == 0:
-#	    return 0
-	return 1
+        if not self.windows.has_key(window):
+            return 0
+#        if self.windows[window].instances() == 0:
+#            return 0
+        return 1
 
     def shared_window(self, window):
-	"""is window a shared window?
+        """is window a shared window?
 
 	**INPUTS**
     
@@ -698,12 +708,12 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true if window is a known window  and is shared (or
 	shareable).  None if window is unknown
 	"""
-	if self.known_window(window):
-	    return self.windows[window].shared()
-	return None
+        if self.known_window(window):
+            return self.windows[window].shared()
+        return None
 
     def single_display(self, window):
-	"""is window a single-window display?
+        """is window a single-window display?
 
 	**INPUTS**
     
@@ -714,12 +724,12 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true if window is a known window  and is a
 	single-window display.  None if window is unknown
 	"""
-	if self.known_window(window):
-	    return self.windows[window].single_display()
-	return None
+        if self.known_window(window):
+            return self.windows[window].single_display()
+        return None
 
     def known_windows(self, instance = None):
-	"""list of windows known to be associated with  a particular
+        """list of windows known to be associated with  a particular
 	named application instance.
 
 	**INPUTS**
@@ -732,15 +742,15 @@ class RSMInfrastructure(RecogStartMgr):
 	
 	*[INT]* -- list of window handles
 	"""
-	if instance == None:
-	    return self.windows.keys()
+        if instance == None:
+            return self.windows.keys()
 
-	if not self.instances.has_key(instance):
-	    return []
-	return self.instances[instance].windows()
+        if not self.instances.has_key(instance):
+            return []
+        return self.instances[instance].windows()
 
     def known_module(self, module):
-	"""is this module known?
+        """is this module known?
 
 	**INPUTS**
 
@@ -751,12 +761,12 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the module name is known
 	"""
-	if self.modules.has_key(module):
-	    return 1
-	return 0
+        if self.modules.has_key(module):
+            return 1
+        return 0
     
     def known_instance(self, instance):
-	"""is this instance known?
+        """is this instance known?
 
 	**INPUTS**
 
@@ -766,12 +776,12 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the instance is known
 	"""
-	if self.instances.has_key(instance):
-	    return 1
-	return 0
+        if self.instances.has_key(instance):
+            return 1
+        return 0
 
     def known_instances(self):
-	"""returns the list of known instances
+        """returns the list of known instances
 
 	**INPUTS**
 
@@ -781,10 +791,10 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*[STR]* -- list of names of known instances
 	"""
-	return self.instances.keys()
+        return self.instances.keys()
 
     def window_instances(self, window):
-	"""returns a list of the known instances associated with a given
+        """returns a list of the known instances associated with a given
 	window
 
 	**INPUTS**
@@ -796,12 +806,12 @@ class RSMInfrastructure(RecogStartMgr):
 	*[STR]* -- list of names of instances associated with the
 	window, or None if the window is unknown
 	"""
-	if not self.known_window(window):
-	    return None
-	return self.windows[window].instance_names()
+        if not self.known_window(window):
+            return None
+        return self.windows[window].instance_names()
 
     def instance_module(self, instance):
-	"""returns the module associated with the given instance
+        """returns the module associated with the given instance
 
 	**INPUTS**
 
@@ -813,12 +823,12 @@ class RSMInfrastructure(RecogStartMgr):
 	None if it is unknown (because the instance has not yet been
 	associated with any windows)
 	"""
-	if not self.known_instance(instance):
-	    return None
-	return self.instances[instance].module()
+        if not self.known_instance(instance):
+            return None
+        return self.instances[instance].module()
     
     def _add_instance(self, instance, window_id = None, module = None):
-	"""private method to add a new instance with a given target
+        """private method to add a new instance with a given target
 	window and module
 
 	**INPUTS**
@@ -837,15 +847,15 @@ class RSMInfrastructure(RecogStartMgr):
 	there is already an instance with that name.
 
 	"""
-	if self.known_instance(instance):
-	    return 0
-	self.instances[instance] = KnownInstance(window_id, module)
-	self.grammars[instance] = \
-		self.GM_factory.new_manager(self.editors.app_instance(instance))
-	return 1
+        if self.known_instance(instance):
+            return 0
+        self.instances[instance] = KnownInstance(window_id, module)
+        app = self.editors.app_instance(instance)
+        self.grammars[instance] = self.GM_factory.new_manager(app, self)
+        return 1
 
     def _add_known_window(self, window_id, window, instance):
-	"""private method called internally to add a new
+        """private method called internally to add a new
 	TargetWindow object to the map of windows
 
 	**INPUTS **
@@ -861,25 +871,25 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the window was added successfully
 	"""
-	if self.known_window(window_id):
-	    return 0
-	self.windows[window_id] = window
-	old_module = self.instances[instance].module()
-	success = self.instances[instance].add_window(window_id)
-	if success and old_module == None:
-	    app = self.editors.app_instance(instance)
-	    module_name = window.module_name()
-	    self.instances[instance].set_module(module_name)
-	    module = self.modules[module_name]
-	    title_escape = module.title_escape_sequence()
-	    app.title_escape_sequence(title_escape[0], title_escape[1])
-	if success:
-	    self.grammars[instance].new_window(window_id)
-	return success
+        if self.known_window(window_id):
+            return 0
+        self.windows[window_id] = window
+        old_module = self.instances[instance].module()
+        success = self.instances[instance].add_window(window_id)
+        if success and old_module == None:
+            app = self.editors.app_instance(instance)
+            module_name = window.module_name()
+            self.instances[instance].set_module(module_name)
+            module = self.modules[module_name]
+            title_escape = module.title_escape_sequence()
+            app.title_escape_sequence(title_escape[0], title_escape[1])
+        if success:
+            self.grammars[instance].new_window(window_id)
+        return success
 
     
     def _add_instance_to_window(self, window, instance):
-	"""private method called internally to add a new
+        """private method called internally to add a new
 	instance to a TargetWindow object 
 
 	**INPUTS **
@@ -893,27 +903,27 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the instance was added successfully
 	"""
-	if not self.known_window(window):
-	    return 0
-	if not self.known_instance(instance):
-	    return 0
-	if not self.windows[window].add_instance(instance):
-	    return 0
-	self.instances[instance].add_window(window)
-	old_module = self.instances[instance].module()
-	if old_module == None:
-	    app = self.editors.app_instance(instance)
-	    module_name = self.windows[window].module_name()
-	    self.instances[instance].set_module(module_name)
-	    module = self.modules[module_name]
-	    title_escape = module.title_escape_sequence()
-	    app.title_escape_sequence(title_escape[0], title_escape[1])
-	self.grammars[instance].new_window(window)
-	return 1
+        if not self.known_window(window):
+            return 0
+        if not self.known_instance(instance):
+            return 0
+        if not self.windows[window].add_instance(instance):
+            return 0
+        self.instances[instance].add_window(window)
+        old_module = self.instances[instance].module()
+        if old_module == None:
+            app = self.editors.app_instance(instance)
+            module_name = self.windows[window].module_name()
+            self.instances[instance].set_module(module_name)
+            module = self.modules[module_name]
+            title_escape = module.title_escape_sequence()
+            app.title_escape_sequence(title_escape[0], title_escape[1])
+        self.grammars[instance].new_window(window)
+        return 1
 
     def _new_instance_known_window(self, window, title, instance, 
-	trust = 0):
-	"""private method called internally to verify that the named
+        trust = 0):
+        """private method called internally to verify that the named
 	instance belongs to the given known window, and if so to add 
 	it to the window 
 
@@ -933,11 +943,11 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the instance was added successfully
 	"""
-	debug.virtual('RSMInfrastructure._new_instance_known_window')
+        debug.virtual('RSMInfrastructure._new_instance_known_window')
 
     def _new_instance_known_module(self, window, title, instance, module_name,
-	trust = 0):
-	"""private method called internally to verify that the named
+        trust = 0):
+        """private method called internally to verify that the named
 	instance belongs to the given unknown window.  If so, a 
 	TargetWindow object is created and added to the 
 	known windows map.
@@ -960,10 +970,10 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if the instance was added successfully
 	"""
-	debug.virtual('RSMInfrastructure._new_instance_known_module')
+        debug.virtual('RSMInfrastructure._new_instance_known_module')
 
     def new_instance(self, instance, check_window = 1, window_info = None):
-	"""method called by AppMgr to notify RecogStartMgr that a new
+        """method called by AppMgr to notify RecogStartMgr that a new
 	editor instance has been added, and (optionally) to tell it to 
 	check if the current window belongs to (or contains) that instance
     
@@ -984,22 +994,22 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	if not self._add_instance(instance):
-	    return
-	if check_window:
-	    if window_info == None:
-		window, title, module_name = self.window_info()
-	    else:
-		window, title, module_name = window_info
-	    if self.known_window(window):
-		self._new_instance_known_window(window, title, instance,
-		    trust = self.trust_current_window)
-	    elif self.known_module(module_name):
-		self._new_instance_known_module(window, title, 
-		    instance, module_name, trust = self.trust_current_window)
+        if not self._add_instance(instance):
+            return
+        if check_window:
+            if window_info == None:
+                window, title, module_name = self.window_info()
+            else:
+                window, title, module_name = window_info
+            if self.known_window(window):
+                self._new_instance_known_window(window, title, instance,
+                    trust = self.trust_current_window)
+            elif self.known_module(module_name):
+                self._new_instance_known_module(window, title, 
+                    instance, module_name, trust = self.trust_current_window)
 
     def delete_instance(self, instance):
-	"""method called by AppMgr to notify RecogStartMgr that an
+        """method called by AppMgr to notify RecogStartMgr that an
 	editor instance has been deleted
     
 	**INPUTS**
@@ -1010,18 +1020,19 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if instance was known
 	"""
-	if not self.instances.has_key(instance):
-	    return 0
-	windows = self.known_windows(instance)
-	for window in windows:
-	    self.windows[window].delete_instance(instance)
-	    if self.windows[window].instances() == 0:
-		del self.windows[window]
-	del self.instances[instance]
-	del self.grammars[instance]
+        if not self.instances.has_key(instance):
+            return 0
+        windows = self.known_windows(instance)
+        for window in windows:
+            self.windows[window].delete_instance(instance)
+            if self.windows[window].instances() == 0:
+                del self.windows[window]
+        del self.instances[instance]
+        self.grammars[instance].cleanup()
+        del self.grammars[instance]
 
     def specify_window(self, instance, window_id = None):
-	"""called to indicate that user has manually identified a
+        """called to indicate that user has manually identified a
 	known instance with the current window 
 
 	**INPUTS**
@@ -1037,28 +1048,28 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true if window is added
 	"""
 # we still want to check for consistency
-#	print 'rsm specify'
-#	print instance
-#	print self.instances.keys()
-	if not self.known_instance(instance):
-	    return 0
-	window, title, module_name = self.window_info()
-	if window_id != None and window != window_id:
-	    return 0
-#	print self.window_info()
-	if self.known_window(window):
-#	    print 'specify - known window'
-	    return self._new_instance_known_window(window, 
-		title, instance, trust = 1)
-	elif self.known_module(module_name):
-#	    print 'specify - known module'
-	    return self._new_instance_known_module(window, title, 
-		instance, module_name, trust = 1)
-#	print 'specify - unknown module'
+#        print 'rsm specify'
+#        print instance
+#        print self.instances.keys()
+        if not self.known_instance(instance):
+            return 0
+        window, title, module_name = self.window_info()
+        if window_id != None and window != window_id:
+            return 0
+#        print self.window_info()
+        if self.known_window(window):
+#            print 'specify - known window'
+            return self._new_instance_known_window(window, 
+                title, instance, trust = 1)
+        elif self.known_module(module_name):
+#            print 'specify - known module'
+            return self._new_instance_known_module(window, title, 
+                instance, module_name, trust = 1)
+#        print 'specify - unknown module'
 
 
     def app_new_window(self, instance):
-	"""called when the editor notifies us of a new window for the 
+        """called when the editor notifies us of a new window for the 
 	specified instance
 
 	**INPUTS**
@@ -1069,22 +1080,22 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*BOOL* -- true if window is added
 	"""
-	if not self.known_instance(instance):
-	    return 0
-	window, title, module_name = self.window_info()
-	if self.known_window(window):
-	    return 0
-	if not self.known_module(module_name):
-	    return 0
-	old_module = self.instances[instance].module()
-	if old_module != None:
-	    if module_name != old_module:
-		return 0
-	return self._new_instance_known_module(window, title, 
-		instance, module_name, trust = self.trust_current_window)
+        if not self.known_instance(instance):
+            return 0
+        window, title, module_name = self.window_info()
+        if self.known_window(window):
+            return 0
+        if not self.known_module(module_name):
+            return 0
+        old_module = self.instances[instance].module()
+        if old_module != None:
+            if module_name != old_module:
+                return 0
+        return self._new_instance_known_module(window, title, 
+                instance, module_name, trust = self.trust_current_window)
 
     def delete_window(self, instance, window):
-	"""remove window from list of known windows
+        """remove window from list of known windows
 	corresponding to an editor application instance.
 
 	**INPUTS**
@@ -1098,19 +1109,19 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true if window and instance are known (otherwise, does
 	nothing)
 	"""
-	if not self.known_instance(instance):
-	    return 0
-	if window not in self.known_windows(instance):
-	    return 0
-	self.windows[window].delete_instance(instance)
-	if self.windows[window].instances() == 0:
-	    del self.windows[window]
-	self.instances[instance].delete_window(window)
-	self.grammars[instance].delete_window(window)
-	return 1
+        if not self.known_instance(instance):
+            return 0
+        if window not in self.known_windows(instance):
+            return 0
+        self.windows[window].delete_instance(instance)
+        if self.windows[window].instances() == 0:
+            del self.windows[window]
+        self.instances[instance].delete_window(window)
+        self.grammars[instance].delete_window(window)
+        return 1
     
     def activate_instance_window(self, instance, window):
-	"""raise instance to front of list of most recently active instances 
+        """raise instance to front of list of most recently active instances 
 	for that window
 
 	**INPUTS**
@@ -1124,14 +1135,14 @@ class RSMInfrastructure(RecogStartMgr):
 	*BOOL* -- true if window and instance are known (otherwise, does
 	nothing)
 	"""
-	if not self.known_instance(instance):
-	    return 0
-	if window not in self.known_windows(instance):
-	    return 0
-	return self.windows[window].activate_instance(instance)
+        if not self.known_instance(instance):
+            return 0
+        if window not in self.known_windows(instance):
+            return 0
+        return self.windows[window].activate_instance(instance)
 
     def _activate_grammars(self, app, instance_name, window):
-	"""private method used to activate grammars for the current
+        """private method used to activate grammars for the current
 	buffer of an identified editor and window, assuming that the
 	buffer is VoiceCode-enabled
 	
@@ -1148,23 +1159,23 @@ class RSMInfrastructure(RecogStartMgr):
 	*none*
 	"""
 # ensure that AppState is synchronized with the editor
-	app.synchronize_with_app()
-	self.activate_instance_window(instance_name, window)
-	buff_name = app.curr_buffer_name()
-	dictation_allowed = app.recog_begin(window)
-	if app.active_field() == None and dictation_allowed:
-	    self.grammars[instance_name].activate(buff_name, window)
-	else:
-	    self.grammars[instance_name].deactivate_all(window)
-	others = self.windows[window].instance_names()
-	if self.GM_factory.using_global():
-	    others = self.known_instances()
-	for editor in others:
-	    if editor != instance_name:
-		self.grammars[editor].deactivate_all(window)
-	    
+        app.synchronize_with_app()
+        self.activate_instance_window(instance_name, window)
+        buff_name = app.curr_buffer_name()
+        dictation_allowed = app.recog_begin(window)
+        if app.active_field() == None and dictation_allowed:
+            self.grammars[instance_name].activate(buff_name, window)
+        else:
+            self.grammars[instance_name].deactivate_all(window)
+        others = self.windows[window].instance_names()
+        if self.GM_factory.using_global():
+            others = self.known_instances()
+        for editor in others:
+            if editor != instance_name:
+                self.grammars[editor].deactivate_all(window)
+            
     def _deactivate_all_grammars(self):
-	"""private method used to deactivate all grammars 
+        """private method used to deactivate all grammars 
 	
 	**INPUTS**
 
@@ -1174,11 +1185,11 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	for instance in self.instances.keys():
-	    self.grammars[instance].deactivate_all()
-	
+        for instance in self.instances.keys():
+            self.grammars[instance].deactivate_all()
+        
     def _deactivate_grammars(self, window):
-	"""private method used to deactivate all grammars for a given
+        """private method used to deactivate all grammars for a given
 	window
 	
 	**INPUTS**
@@ -1189,11 +1200,11 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	for instance in self.windows[window].instance_names():
-	    self.grammars[instance].deactivate_all(window)
-	
+        for instance in self.windows[window].instance_names():
+            self.grammars[instance].deactivate_all(window)
+        
     def _recognition_starting_known_window(self, window, title):
-	"""private method called by _recognition_starting when the
+        """private method called by _recognition_starting when the
 	current window is known.
 
 	**INPUTS**
@@ -1207,20 +1218,20 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	win = self.windows[window]
-	instance = win.active_instance(title, self.editors)
-	if instance == None:
-	    self._deactivate_grammars(window)
-	    return
-	app = self.editors.app_instance(instance)
-	if app == None:
-	    self._deactivate_grammars(window)
-	    return
-	self._activate_grammars(app, instance, window)
-	return
+        win = self.windows[window]
+        instance = win.active_instance(title, self.editors)
+        if instance == None:
+            self._deactivate_grammars(window)
+            return
+        app = self.editors.app_instance(instance)
+        if app == None:
+            self._deactivate_grammars(window)
+            return
+        self._activate_grammars(app, instance, window)
+        return
 
     def _recognition_starting_known_module(self, window, title, module_name):
-	"""private method called by _recognition_starting when the
+        """private method called by _recognition_starting when the
 	current window is not a previously known window, but the 
 	current module is known.
 
@@ -1241,10 +1252,10 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	debug.virtual('RSMInfrastructure._recognition_starting_known_module')
+        debug.virtual('RSMInfrastructure._recognition_starting_known_module')
     
     def _recognition_starting(self, window, title, module_name = None):
-	"""private method which a concrete subclass will call to handle
+        """private method which a concrete subclass will call to handle
 	the recognition starting event.
 
 	**INPUTS**
@@ -1265,15 +1276,15 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
-	if self.active:
-	    if self.known_window(window):
-		self._recognition_starting_known_window( window, title)
-	    elif self.known_module(module_name):
-		self._recognition_starting_known_module(window, title, 
-		    module_name)
+        if self.active:
+            if self.known_window(window):
+                self._recognition_starting_known_window( window, title)
+            elif self.known_module(module_name):
+                self._recognition_starting_known_module(window, title, 
+                    module_name)
     
     def _assign_ID_client(self, module_name, window, title):
-	"""check if there is a WinIDClient not yet assigned to a window.
+        """check if there is a WinIDClient not yet assigned to a window.
 	If so, attempt to assign it to the specified window, and return
 	a TargetWindow object.
 
@@ -1293,7 +1304,7 @@ class RSMInfrastructure(RecogStartMgr):
 	client, or the given window is not managed by that client.
 	"""
 # for now, WinIDClient objects are handled by the AppMgr
-	return self.editors._assign_ID_client(module_name, window, title)
+        return self.editors._assign_ID_client(module_name, window, title)
 
 class RSMBasic(RSMInfrastructure):
     """partially concrete subclass of RSMInfrastructure, defining the
@@ -1311,18 +1322,18 @@ class RSMBasic(RSMInfrastructure):
     """
 
     def __init__(self, **args):
-	"""
+        """
 	see RecogStartMgr
 
 	"""
         self.deep_construct(RSMBasic,
                             {'universal': None
-			    },
+                            },
                             args)
-	
+        
     def _new_instance_known_window(self, window, title, instance, 
-	trust = 0):
-	"""private method called internally to verify that the named
+        trust = 0):
+        """private method called internally to verify that the named
 	instance belongs to the given known window, and if so to add 
 	it to the window 
 
@@ -1342,25 +1353,25 @@ class RSMBasic(RSMInfrastructure):
 
 	*BOOL* -- true if the instance was added successfully
 	"""
-	win = self.windows[window]
-	if not win.shared():
+        win = self.windows[window]
+        if not win.shared():
 # window is known and dedicated, so it cannot belong to the new instance
-	    return 0
-	app = self.editors.app_instance(instance)
-	if win.single_display() or app.shared_window():
-	    verified = win.verify_new_instance(title, instance, self.editors)
-	    if verified == 1 or (trust and verified == None):
-		return self._add_instance_to_window(window, instance)
-	    return 0
+            return 0
+        app = self.editors.app_instance(instance)
+        if win.single_display() or app.shared_window():
+            verified = win.verify_new_instance(title, instance, self.editors)
+            if verified == 1 or (trust and verified == None):
+                return self._add_instance_to_window(window, instance)
+            return 0
 # otherwise, instance says it uses dedicated windows, whereas the window
 # is shared, and is not a single-window display, so
 # it cannot belong to the new instance
-	return 0
+        return 0
 
 
     def _new_instance_known_module(self, window, title, instance, module_name,
-	trust = 0):
-	"""private method called internally to verify that the named
+        trust = 0):
+        """private method called internally to verify that the named
 	instance belongs to the given unknown window.  If so, a 
 	TargetWindow object is created and added to the 
 	known windows map.
@@ -1384,30 +1395,30 @@ class RSMBasic(RSMInfrastructure):
 	*BOOL* -- true if the instance was added successfully
 	"""
 # unknown window but known module
-	module = self.modules[module_name]
-	if module.dedicated():
-	    if module.editor() != self.editors.app_name(instance):
-		return 0
-	if module.single_display(window, title):
+        module = self.modules[module_name]
+        if module.dedicated():
+            if module.editor() != self.editors.app_name(instance):
+                return 0
+        if module.single_display(window, title):
 # check if we have a WinIDClient not yet assigned to a window.
-	    target = self._assign_ID_client(module_name, window, title)
-	    if target == None:
-		return 0
-	    return self._new_instance_known_window(window, title, 
-		instance, trust)
+            target = self._assign_ID_client(module_name, window, title)
+            if target == None:
+                return 0
+            return self._new_instance_known_window(window, title, 
+                instance, trust)
 
 # otherwise, verify
-	verified = module.verify_new_instance(window, title, instance, 
-	    self.editors)
-	if verified == 1 or (trust and verified == None):
-	    target = module.new_window(window, title, self.editors, instance)
-	    if target != None:
-		return self._add_known_window(window, target, instance)
-	    return 0
-	return 0
+        verified = module.verify_new_instance(window, title, instance, 
+            self.editors)
+        if verified == 1 or (trust and verified == None):
+            target = module.new_window(window, title, self.editors, instance)
+            if target != None:
+                return self._add_known_window(window, target, instance)
+            return 0
+        return 0
 
     def _recognition_starting_known_module(self, window, title, module_name):
-	"""private method called by _recognition_starting when the
+        """private method called by _recognition_starting when the
 	current window is not a previously known window, but the 
 	current module is known.
 
@@ -1429,29 +1440,29 @@ class RSMBasic(RSMInfrastructure):
 	*none*
 	"""
 # unknown window
-	module = self.modules[module_name]
-#	print 'rs known module'
-	if module.single_display(window, title):
+        module = self.modules[module_name]
+#        print 'rs known module'
+        if module.single_display(window, title):
 # check if we have a WinIDClient not yet assigned to a window.
-	    target = self._assign_ID_client(module_name, window, title)
-	    if target == None:
-		return 
-	    self._recognition_starting_known_window(window, title)
-	    return
-#	print 'rs known module: not single'
-	for instance in self.known_instances():
-#	    print 'rs known module: instance ', instance
-	    info = self.instances[instance]
-	    editor = self.editors.app_instance(instance)
-	    instance_module = info.module()
-	    if module.dedicated():
-#		print 'rs known module: dedicated'
-		app_name = self.editors.app_name(instance)
-		if module.editor() != app_name or editor.shared_window():
-#		    print 'wrong editor or shared window'
-		    continue
-	    if instance_module == None or \
-	       (instance_module == module_name and editor.multiple_windows()):
+            target = self._assign_ID_client(module_name, window, title)
+            if target == None:
+                return 
+            self._recognition_starting_known_window(window, title)
+            return
+#        print 'rs known module: not single'
+        for instance in self.known_instances():
+#            print 'rs known module: instance ', instance
+            info = self.instances[instance]
+            editor = self.editors.app_instance(instance)
+            instance_module = info.module()
+            if module.dedicated():
+#                print 'rs known module: dedicated'
+                app_name = self.editors.app_name(instance)
+                if module.editor() != app_name or editor.shared_window():
+#                    print 'wrong editor or shared window'
+                    continue
+            if instance_module == None or \
+               (instance_module == module_name and editor.multiple_windows()):
 # if the instance has no module, it must be a fresh instance with no
 # windows yet, so the current window might belong to it. Alternatively,
 # if the instance's module matches that of the current window, and the
@@ -1459,23 +1470,23 @@ class RSMBasic(RSMInfrastructure):
 # single-window-display, which we've already ruled out above) then this
 # might be a new window for the existing instance.  In either case,
 # attempt to verify
-#		print 'possible window'
-		verified = module.verify_new_instance(window, title, 
-		    instance, self.editors)
-		if verified == 1:
-#		    print 'verified - creating new window'
-		    target = module.new_window(window, title, 
-			self.editors, instance)
-		    if target != None:
-			if self._add_known_window(window, target, instance):
-			    self._recognition_starting_known_window(window, 
-				title)
-		    return
-#		print 'not verified'
-		continue
+#                print 'possible window'
+                verified = module.verify_new_instance(window, title, 
+                    instance, self.editors)
+                if verified == 1:
+#                    print 'verified - creating new window'
+                    target = module.new_window(window, title, 
+                        self.editors, instance)
+                    if target != None:
+                        if self._add_known_window(window, target, instance):
+                            self._recognition_starting_known_window(window, 
+                                title)
+                    return
+#                print 'not verified'
+                continue
 
     def new_universal_instance(self, instance, exclusive = 1):
-	"""method called by AppMgr to notify RecogStartMgr that a new
+        """method called by AppMgr to notify RecogStartMgr that a new
 	test instance has been added which should use global grammars
     
 	**INPUTS**
@@ -1492,19 +1503,20 @@ class RSMBasic(RSMInfrastructure):
 	new instance will be added normally, or if the instance name was
 	already known.
 	"""
-	if self.known_instance(instance):
-	    return 0
-	if self.universal == None:
-	    self.instances[instance] = KnownInstance()
-	    app = self.editors.app_instance(instance)
-	    self.grammars[instance] = \
-		self.GM_factory.new_global_manager(app, exclusive = exclusive)
-	    self.universal = instance
-	    return 1
-	self.new_instance(instance)
+        if self.known_instance(instance):
+            return 0
+        if self.universal == None:
+            self.instances[instance] = KnownInstance()
+            app = self.editors.app_instance(instance)
+            self.grammars[instance] = \
+                self.GM_factory.new_global_manager(app, self, 
+                exclusive = exclusive)
+            self.universal = instance
+            return 1
+        self.new_instance(instance)
 
     def delete_instance(self, instance):
-	"""method called by AppMgr to notify RecogStartMgr that an
+        """method called by AppMgr to notify RecogStartMgr that an
 	editor instance has been deleted
     
 	**INPUTS**
@@ -1515,12 +1527,12 @@ class RSMBasic(RSMInfrastructure):
 
 	*BOOL* -- true if instance was known
 	"""
-	if instance == self.universal:
-	    self.universal = None
-	return RSMInfrastructure.delete_instance(self, instance)
+        if instance == self.universal:
+            self.universal = None
+        return RSMInfrastructure.delete_instance(self, instance)
 
     def _recognition_starting(self, window, title, module_name = None):
-	"""private method which a concrete subclass will call to handle
+        """private method which a concrete subclass will call to handle
 	the recognition starting event.
 
 	**INPUTS**
@@ -1541,15 +1553,15 @@ class RSMBasic(RSMInfrastructure):
 
 	*none*
 	"""
-	if self.universal == None:
-	    RSMInfrastructure._recognition_starting(self, window, title,
-		module_name)
-	else:
-	    app = self.editors.app_instance(self.universal)
-	    self._activate_universal_grammars(app, self.universal, window)
+        if self.universal == None:
+            RSMInfrastructure._recognition_starting(self, window, title,
+                module_name)
+        else:
+            app = self.editors.app_instance(self.universal)
+            self._activate_universal_grammars(app, self.universal, window)
 
     def _activate_universal_grammars(self, app, instance_name, window):
-	"""private method used to activate global grammars for the 
+        """private method used to activate global grammars for the 
 	universal instance, assuming that the buffer is VoiceCode-enabled
 	
 	**INPUTS**
@@ -1565,24 +1577,24 @@ class RSMBasic(RSMInfrastructure):
 
 	*none*
 	"""
-	buff_name = app.curr_buffer_name()
-	dictation_allowed = app.recog_begin(None)
-	if app.active_field() == None and dictation_allowed:
-	    self.grammars[instance_name].activate(buff_name, -1)
-	else:
-	    self.grammars[instance_name].deactivate_all()
-	others = []
-	if self.known_window(window):
-	    others = self.windows[window].instance_names()
-	if self.GM_factory.using_global():
-	    others = self.known_instances()
-	for editor in others:
-	    if editor != instance_name:
-		self.grammars[editor].deactivate_all(window)
-	    
-	    
+        buff_name = app.curr_buffer_name()
+        dictation_allowed = app.recog_begin(None)
+        if app.active_field() == None and dictation_allowed:
+            self.grammars[instance_name].activate(buff_name, -1)
+        else:
+            self.grammars[instance_name].deactivate_all()
+        others = []
+        if self.known_window(window):
+            others = self.windows[window].instance_names()
+        if self.GM_factory.using_global():
+            others = self.known_instances()
+        for editor in others:
+            if editor != instance_name:
+                self.grammars[editor].deactivate_all(window)
+            
+            
     
-		
+                
 class CurrWindow(Object):
     """abstract class for supplying information about the current window
 
@@ -1595,10 +1607,10 @@ class CurrWindow(Object):
     *none*
     """
     def __init__(self, **args):
-	self.deep_construct(CurrWindow, {}, args)
+        self.deep_construct(CurrWindow, {}, args)
     
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -1608,7 +1620,7 @@ class CurrWindow(Object):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	debug.virtual('CurrWindow.window_info')
+        debug.virtual('CurrWindow.window_info')
 
 class CurrWindowDummy(Object):
     """dummy implementation of CurrWindow for testing purposes.
@@ -1632,8 +1644,8 @@ class CurrWindowDummy(Object):
     *none*
     """
     def __init__(self, window = None, module = None, instance = None, 
-	app_name = None, alt_title = "", **args):
-	"""Initialize with specified window information
+        app_name = None, alt_title = "", **args):
+        """Initialize with specified window information
 
 	**INPUTS**
 
@@ -1653,16 +1665,16 @@ class CurrWindowDummy(Object):
 	*none*
 	"""
 
-	self.deep_construct(CurrWindowDummy, 
-			    {'window': window,
-			     'module': module,
-			     'instance': instance,
-			     'app_name': app_name,
-			     'alt_title': alt_title
-			    }, args)
+        self.deep_construct(CurrWindowDummy, 
+                            {'window': window,
+                             'module': module,
+                             'instance': instance,
+                             'app_name': app_name,
+                             'alt_title': alt_title
+                            }, args)
     
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -1672,24 +1684,24 @@ class CurrWindowDummy(Object):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-#	print 'current is ', (self.window, self.title, self.module)
-	title = ""
-	if self.alt_title != "":
-	    title = self.alt_title
-	if self.instance != None:
-	    ts = self.instance.instance_string()
-	    if ts != None:
-		if self.app_name != None:
-		    title = self.app_name + " - "
-		title = title + self.instance.instance_string()
-		if self.instance.curr_buffer_name():
-		    title = title + " - " + self.instance.curr_buffer_name()
+#        print 'current is ', (self.window, self.title, self.module)
+        title = ""
+        if self.alt_title != "":
+            title = self.alt_title
+        if self.instance != None:
+            ts = self.instance.instance_string()
+            if ts != None:
+                if self.app_name != None:
+                    title = self.app_name + " - "
+                title = title + self.instance.instance_string()
+                if self.instance.curr_buffer_name():
+                    title = title + " - " + self.instance.curr_buffer_name()
 
-	return (self.window, title, self.module)
+        return (self.window, title, self.module)
 
     def set_info(self, window = None, module = None, instance = None, 
-	app_name = None, alt_title = ""):
-	"""set specified window information
+        app_name = None, alt_title = ""):
+        """set specified window information
 
 	**INPUTS**
 
@@ -1708,11 +1720,11 @@ class CurrWindowDummy(Object):
 
 	*none*
 	"""
-	self.window = window
-	self.module = module
-	self.instance = instance
-	self.app_name = app_name
-	self.alt_title = alt_title
+        self.window = window
+        self.module = module
+        self.instance = instance
+        self.app_name = app_name
+        self.alt_title = alt_title
 
 class RSMExtInfo(RSMBasic):
     """subclass of RSMBasic which uses an external object to
@@ -1729,7 +1741,7 @@ class RSMExtInfo(RSMBasic):
     """
 
     def __init__(self, win_info, **args):
-	"""
+        """
 	**INPUTS**
 
 	*AppMgr* editors -- the editors AppMgr object, which provides
@@ -1741,11 +1753,11 @@ class RSMExtInfo(RSMBasic):
 	"""
         self.deep_construct(RSMExtInfo,
                             {'find_info': win_info
-			    },
+                            },
                             args)
-	
+        
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -1755,7 +1767,7 @@ class RSMExtInfo(RSMBasic):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	return self.find_info.window_info()
+        return self.find_info.window_info()
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

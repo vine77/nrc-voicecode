@@ -42,7 +42,7 @@ class CmdPrompt(Object):
     *none* 
     """
     def __init__(self, command_callback=None, **args):
-	"""
+        """
 	**INPUTS**
 
 	*FCT BOOL* command_callback --
@@ -59,7 +59,7 @@ class CmdPrompt(Object):
                             args)
 
     def set_command_callback(self, command_callback = None):
-	"""changes the callback to a new function
+        """changes the callback to a new function
 
 	**INPUTS**
     
@@ -75,10 +75,10 @@ class CmdPrompt(Object):
 
 	*none*
 	"""
-	self.command_callback = command_callback
+        self.command_callback = command_callback
 
     def _on_command(self, command):
-	"""internal function which triggers the
+        """internal function which triggers the
 	entry_callback.  Only the concrete subclass of
 	CmdPrompt implementing the command entry
 	should call this function
@@ -87,13 +87,13 @@ class CmdPrompt(Object):
 	
 	*STR* command -- text of the command entered (without newline)
 	"""
-	if self.command_callback:
-	    (self.command_callback)(self, command)
-	    # note: command_callback is an attribute of 
-	    # CmdPrompt, which is a function, not a method of
-	    # CmdPrompt.  This looks a bit funny (like a
-	    # method being called with a duplicate self argument) but it
-	    # is actually correct.
+        if self.command_callback:
+            (self.command_callback)(self, command)
+            # note: command_callback is an attribute of 
+            # CmdPrompt, which is a function, not a method of
+            # CmdPrompt.  This looks a bit funny (like a
+            # method being called with a duplicate self argument) but it
+            # is actually correct.
 
 class CmdPromptWithHistory(CmdPrompt):
     """(still partly abstract) class which implements the history stack.
@@ -134,7 +134,7 @@ class CmdPromptWithHistory(CmdPrompt):
 
     def __init__(self, max_stack = None, saved_stack = None,
                  cursor_always_on_top=1, **args):
-	"""create a new history stack
+        """create a new history stack
 
 	**INPUT**
 
@@ -145,15 +145,15 @@ class CmdPromptWithHistory(CmdPrompt):
 	"""
         self.deep_construct(CmdPromptWithHistory,
                             {"command_stack": saved_stack,
-			    "max_stack": max_stack,
-			    "stack_index":0,
+                            "max_stack": max_stack,
+                            "stack_index":0,
                             'cursor_always_on_top': cursor_always_on_top},
                             args)
-	if self.command_stack == None:
-	    self.command_stack = []
+        if self.command_stack == None:
+            self.command_stack = []
 
     def save_edited(self):
-	"""store partially edited new command.  A concrete subclass
+        """store partially edited new command.  A concrete subclass
 	of CmdPromptWithHistory must define this method.
 	Note: if appropriate, this command should store additional data,
 	such as the current selection and insertion point.
@@ -166,11 +166,11 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*none*
 	"""
-	debug.virtual('CmdPromptWithHistory.save_edited')
+        debug.virtual('CmdPromptWithHistory.save_edited')
 
 
     def restore_edited(self):
-	"""restore previously saved partially edited new command.
+        """restore previously saved partially edited new command.
 	A concrete subclass of CmdPromptWithHistory must define this method.
 	Note: if appropriate, this command should restore additional data,
 	such as the selection and insertion point.
@@ -183,10 +183,10 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*none*
 	"""
-	debug.virtual('CmdPromptWithHistory.save_edited')
+        debug.virtual('CmdPromptWithHistory.save_edited')
 
     def edited(self):
-	"""contents of saved command line past the last command in the
+        """contents of saved command line past the last command in the
 	stack, if it has previously been saved.  A concrete subclass 
 	of CmdPromptWithHistory must define this method.
 	Unlike restore_edited, this method returns only the string
@@ -201,10 +201,10 @@ class CmdPromptWithHistory(CmdPrompt):
 	*STR* -- partial command previously stored with save_edited, 
 	or None if there is none.
 	"""
-	debug.virtual('CmdPromptWithHistory.save_edited')
+        debug.virtual('CmdPromptWithHistory.save_edited')
 
     def in_progress(self):
-	"""contents of command line currently being edited (not the one
+        """contents of command line currently being edited (not the one
 	stored by save_edited)
 	A concrete subclass of CmdPromptWithHistory must define this method.
 	**INPUT**
@@ -215,10 +215,10 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*STR* -- partial command currently being edited
 	"""
-	debug.virtual('CmdPromptWithHistory.save_edited')
+        debug.virtual('CmdPromptWithHistory.save_edited')
 
     def index(self):
-	"""current index into stack
+        """current index into stack
 	**INPUT**
 
 	*none*
@@ -227,10 +227,10 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*INT* -- index of command currently pointed to in stack
 	"""
-	return self.stack_index
+        return self.stack_index
 
     def peek(self, index):
-	"""peek at command at index from last command in stack
+        """peek at command at index from last command in stack
 
 	**INPUT**
 
@@ -240,21 +240,21 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*STR* -- text of command pointed to by index
 	"""
-	if index:
+        if index:
 # for index non-zero, simply return the appropriate element of the stack
-	    return self.command_stack[-index]
+            return self.command_stack[-index]
 # if index == 0, 
-	if self.stack_index:
+        if self.stack_index:
 # and if we are currently editing the new command buffer, return that
-	    return self.in_progress()
+            return self.in_progress()
 # otherwise return the saved partially edited command, or ""
-	bottom = self.edited()
-	if bottom:
-	    return bottom
-	return ""
+        bottom = self.edited()
+        if bottom:
+            return bottom
+        return ""
 
     def depth(self):
-	"""current depth of stack
+        """current depth of stack
 
 	**INPUT**
 
@@ -264,10 +264,10 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*INT* -- number of commands currently on the stack
 	"""
-	return len(self.command_stack)
+        return len(self.command_stack)
     
     def previous(self):
-	"""move pointer to previous command in stack
+        """move pointer to previous command in stack
 	**INPUTS**
 
 	*none*
@@ -277,16 +277,16 @@ class CmdPromptWithHistory(CmdPrompt):
 	*STR* -- text of the previous command, or None if we
 	have reached the first command in the stack 
 	"""
-	if self.stack_index == 0:
-	    self.save_edited()
-	if self.stack_index < self.depth():
-	    self.stack_index = self.stack_index + 1
-	    return self.peek(self.stack_index)
+        if self.stack_index == 0:
+            self.save_edited()
+        if self.stack_index < self.depth():
+            self.stack_index = self.stack_index + 1
+            return self.peek(self.stack_index)
 # already at the beginning of the stack
-	return None
+        return None
 
     def next(self):
-	"""move pointer to next command in stack
+        """move pointer to next command in stack
 	**INPUTS**
 
 	*none*
@@ -299,18 +299,18 @@ class CmdPromptWithHistory(CmdPrompt):
 	buffer if it is returned, since restore_edited() will already
 	have restored the buffer.
 	"""
-	if self.stack_index > 0:
-	    self.stack_index = self.stack_index -1
-	    if self.stack_index:
-		return self.peek(self.stack_index)
+        if self.stack_index > 0:
+            self.stack_index = self.stack_index -1
+            if self.stack_index:
+                return self.peek(self.stack_index)
 # if we are returning past the last command on the stack, restore the
 # stored partially edited command, and return None so the caller does
 # not change the just-restored command-line.
-	    self.restore_edited()
-	return None
+            self.restore_edited()
+        return None
 
     def _raw_push(self, command):
-	"""push a command onto the stack, without changing stack_index
+        """push a command onto the stack, without changing stack_index
 
 	**INPUTS**
 
@@ -327,13 +327,13 @@ class CmdPromptWithHistory(CmdPrompt):
         Unless this is specifically desired, push
 	should be used instead.
 	"""
-	self.command_stack.append(command)
-	if self.max_stack and self.depth() > self.max_stack:
-	    del self.command_stack[0]
+        self.command_stack.append(command)
+        if self.max_stack and self.depth() > self.max_stack:
+            del self.command_stack[0]
 
 
     def push(self, command):
-	"""push a (non-empty) command onto the stack, 
+        """push a (non-empty) command onto the stack, 
 	and reset stack_index to zero.
 
 	**INPUTS**
@@ -346,8 +346,8 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	"""
 # only store non-empty commands
-	if command:
-	     self._raw_push(command)
+        if command:
+             self._raw_push(command)
 
         if self.cursor_always_on_top:
             #
@@ -367,7 +367,7 @@ class CmdPromptWithHistory(CmdPrompt):
 
 
     def _on_command(self, command):
-	"""internal function which triggers the
+        """internal function which triggers the
 	entry_callback.  Only the concrete subclass of
 	CmdPrompt implementing the command entry
 	should call this function
@@ -381,8 +381,8 @@ class CmdPromptWithHistory(CmdPrompt):
 	*none*
 	"""
     
-	self.push(command)
-	CmdPrompt._on_command(self, command)
+        self.push(command)
+        CmdPrompt._on_command(self, command)
 
 class CmdLog(Object):
     """abstract base class for logging command-line commands and 
@@ -397,7 +397,7 @@ class CmdLog(Object):
     *none* 
     """
     def __init__(self, prompt=None, **args):
-	"""
+        """
 	**INPUTS**
 
 	*STR* prompt -- prompt string to prepend to commands        
@@ -405,11 +405,11 @@ class CmdLog(Object):
         self.deep_construct(CmdLog,
                             {'prompt':prompt}, 
                             args)
-	if not prompt:
-	    self.prompt = ""
+        if not prompt:
+            self.prompt = ""
 
     def log_command(self, command):
-	"""log a command.
+        """log a command.
 
 	**INPUTS**
 
@@ -420,10 +420,10 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	self.write(self.prompt + command + '\n')
+        self.write(self.prompt + command + '\n')
     
     def flush(self):
-	"""flush any buffered output to the command log.
+        """flush any buffered output to the command log.
 	Must be implemented by concrete subclass.
 	This interface allows CmdLog to be used to capture
 	standard output.
@@ -437,10 +437,10 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	debug.virtual('cmd_line.flush')
+        debug.virtual('cmd_line.flush')
 
     def write(self, string):
-	"""add a string to the command log.
+        """add a string to the command log.
 	Must be implemented by concrete subclass.
 	This interface allows CmdLog to be used to capture
 	standard output.
@@ -454,10 +454,10 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	debug.virtual('cmd_line.write')
+        debug.virtual('cmd_line.write')
 
     def log_message(self, message):
-	"""log output/message.  
+        """log output/message.  
 
 	**INPUTS**
 
@@ -468,7 +468,7 @@ class CmdLog(Object):
 
 	*none*
 	"""
-	self.write(message)
+        self.write(message)
 
 class CmdLogFile(CmdLog):
     """implementation of CmdLog which writes to a file, and also
@@ -489,7 +489,7 @@ class CmdLogFile(CmdLog):
     *none*
     """
     def __init__(self, log_file, second_cmd_log = None, flush = 0, **args):
-	"""create a new CmdLog
+        """create a new CmdLog
 
 	**INPUTS**
 
@@ -503,18 +503,18 @@ class CmdLogFile(CmdLog):
 	"""
         self.deep_construct(CmdLogFile,
                             {'log_file':log_file,
-			     'second': second_cmd_log,
-			     'flush': flush}, 
+                             'second': second_cmd_log,
+                             'flush': flush}, 
                             args)
 
     def __del__(self):
-	"""destructor.  Shouldn't be called explicitly.
+        """destructor.  Shouldn't be called explicitly.
 	"""
-	self.log_file.flush()
-	self.log_file.close()
+        self.log_file.flush()
+        self.log_file.close()
 
     def write(self, string):
-	"""add a string to the command log.
+        """add a string to the command log.
 	This interface allows CmdLog to be used to capture
 	standard output.
 
@@ -527,11 +527,11 @@ class CmdLogFile(CmdLog):
 
 	*none*
 	"""
-	self.log_file.write(string)
-	if self.flush:
-	    self.log_file.flush()
-	if self.second:
-	    self.second.write(string)
+        self.log_file.write(string)
+        if self.flush:
+            self.log_file.flush()
+        if self.second:
+            self.second.write(string)
 
 
 

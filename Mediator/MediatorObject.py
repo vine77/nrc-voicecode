@@ -91,14 +91,14 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
     *none*
     """
     def __init__(self, the_mediator, **args):
-	self.deep_construct(AppCbkFilter,
-	                    {
-			     'mediator': the_mediator
-			    }, args)
-	self.name_parent('mediator')
+        self.deep_construct(AppCbkFilter,
+                            {
+                             'mediator': the_mediator
+                            }, args)
+        self.name_parent('mediator')
 
     def close_app_cbk(self, instance, unexpected = 0):
-	"""callback from AppState which indicates that the application has 
+        """callback from AppState which indicates that the application has 
 	closed or disconnected from the mediator
 
 	**INPUTS**
@@ -113,10 +113,10 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
 # for now at least, this does the same thing as delete_instance
-	self.mediator.close_app_cbk(instance, unexpected = unexpected)
+        self.mediator.close_app_cbk(instance, unexpected = unexpected)
 
     def close_buffer_cbk(self, instance, buff_name):
-	"""callback from AppState which notifies us that the application
+        """callback from AppState which notifies us that the application
 	has closed a buffer
 
 	**INPUTS**
@@ -130,10 +130,10 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
 # ignored by MediatorObject
-	pass
+        pass
 
     def open_buffer_cbk(self, instance, buff_name):
-	"""callback from AppState which notifies us that the application
+        """callback from AppState which notifies us that the application
 	has opened a buffer
 
 	**INPUTS**
@@ -147,10 +147,10 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
 # ignored by MediatorObject
-	pass
+        pass
 
     def curr_buff_name_cbk(self, instance, buff_name):
-	"""callback from AppState which notifies us that the current
+        """callback from AppState which notifies us that the current
 	buffer has changed
 
 	**INPUTS**
@@ -164,10 +164,10 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
 # ignored by MediatorObject
-	pass
+        pass
 
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
-	"""callback from AppState which notifies us that the application
+        """callback from AppState which notifies us that the application
 	has renamed a buffer
 
 	**INPUTS**
@@ -183,11 +183,11 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*none*
 	"""
 # ignored by MediatorObject
-	pass
+        pass
 
 
     def new_window(self, instance):
-	"""called when the editor notifies us of a new window for the 
+        """called when the editor notifies us of a new window for the 
 	specified instance
 
 	**INPUTS**
@@ -199,7 +199,7 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 	*BOOL* -- true if window is added
 	"""
 # ignored by MediatorObject
-	pass
+        pass
     
 
 
@@ -260,38 +260,38 @@ class MediatorObject(Object.Object):
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
     def __init__(self, app = None, interp=None,
-		 window = 0, owns_app = 1, exclusive=0,
+                 window = 0, owns_app = 1, exclusive=0,
                  allResults = 0, owner = None, id = None, **attrs):
 #        print '-- MediatorObject.__init__: called, window=%s' % window
         sr_interface.connect('off')        
         self.deep_construct(MediatorObject,
                             {'app': app,
-			     'owns_app': owns_app,
-			     'interp': interp,
+                             'owns_app': owns_app,
+                             'interp': interp,
                              'mixed_grammar': None,
                              'code_select_grammar': None,
-			     'window': window,
-			     'owner': owner,
-			     'id': id,
-			     'cbk_filter': AppCbkFilter(self)},
+                             'window': window,
+                             'owner': owner,
+                             'id': id,
+                             'cbk_filter': AppCbkFilter(self)},
                             attrs,
                             {})
         if self.interp == None:
-	    interp = CmdInterp.CmdInterp()
+            interp = CmdInterp.CmdInterp()
         self.mixed_grammar = \
-	    sr_interface.CommandDictGrammar(app = self.app,
-		interpreter=self.interp, 
-	        window = window, exclusive = exclusive,
+            sr_interface.CommandDictGrammar(app = self.app,
+                interpreter=self.interp, 
+                window = window, exclusive = exclusive,
                 allResults = allResults)
         self.code_select_grammar = \
-	    sr_interface.CodeSelectGrammar(app = self.app,
-		window = window, exclusive = exclusive,
+            sr_interface.CodeSelectGrammar(app = self.app,
+                window = window, exclusive = exclusive,
                 allResults = allResults)
         if self.owns_app and self.app:
-	    self.app.set_manager(self.cbk_filter)
-	    self.app.set_name('dummy')
-#	print 'Mediator constructor: allResults = %d\n' % allResults
-#	print traceback.extract_stack()
+            self.app.set_manager(self.cbk_filter)
+            self.app.set_name('dummy')
+#        print 'Mediator constructor: allResults = %d\n' % allResults
+#        print traceback.extract_stack()
 
     def define_config_functions(self, names, exclude = []):
         """Adds the appropriate configuration functions to the  given
@@ -314,21 +314,21 @@ class MediatorObject(Object.Object):
         
         *none* 
         """        
-	names['add_module'] = do_nothing
-	names['add_prefix'] = do_nothing
-	names['trust_current_window'] = do_nothing
-	if 'interp' in exclude:
-	    names['add_csc'] = do_nothing
-	    names['add_lsa'] = do_nothing
-	    names['add_abbreviation'] = do_nothing
-	    names['standard_symbols_in'] = do_nothing
-	    names['print_abbreviations'] = do_nothing
-	else:
-	    names['add_csc'] = self.add_csc
-	    names['add_lsa'] = self.add_lsa
-	    names['add_abbreviation'] = self.add_abbreviation
-	    names['standard_symbols_in'] = self.standard_symbols_in
-	    names['print_abbreviations'] = self.print_abbreviations
+        names['add_module'] = do_nothing
+        names['add_prefix'] = do_nothing
+        names['trust_current_window'] = do_nothing
+        if 'interp' in exclude:
+            names['add_csc'] = do_nothing
+            names['add_lsa'] = do_nothing
+            names['add_abbreviation'] = do_nothing
+            names['standard_symbols_in'] = do_nothing
+            names['print_abbreviations'] = do_nothing
+        else:
+            names['add_csc'] = self.add_csc
+            names['add_lsa'] = self.add_lsa
+            names['add_abbreviation'] = self.add_abbreviation
+            names['standard_symbols_in'] = self.standard_symbols_in
+            names['print_abbreviations'] = self.print_abbreviations
 
 
     def configure(self, config_file=vc_globals.default_config_file):
@@ -345,18 +345,18 @@ class MediatorObject(Object.Object):
         """        
 
                 
-#	print 'Mediator configure:\n'
-#	print traceback.extract_stack()
+#        print 'Mediator configure:\n'
+#        print traceback.extract_stack()
         if sr_interface.speech_able():
             self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
-	    if self.window == 0:
-		self.mixed_grammar.activate()
+            if self.window == 0:
+                self.mixed_grammar.activate()
             self.code_select_grammar.load_with_verbs()
-	    if self.window == 0:
-		self.code_select_grammar.activate()                
+            if self.window == 0:
+                self.code_select_grammar.activate()                
                         
-	config_dict = {}
-	self.define_config_functions(config_dict)
+        config_dict = {}
+        self.define_config_functions(config_dict)
         try:
             execfile(config_file, config_dict)
         except Exception, err:
@@ -406,22 +406,22 @@ class MediatorObject(Object.Object):
 
             disconnect_from_sr(disconnect, save_speech_files)
 
-	if self.mixed_grammar:
-	    self.mixed_grammar.cleanup()
-	    self.mixed_grammar = None
-	if self.code_select_grammar:
-	    self.code_select_grammar.cleanup()
-	    self.code_select_grammar = None
-	if self.owns_app and self.app:
-	    self.app.cleanup()
-	    self.app = None
-	if self.cbk_filter:
-	    self.cbk_filter.cleanup()
-	    self.cbk_filter = None
-	del self.owner
+        if self.mixed_grammar:
+            self.mixed_grammar.cleanup()
+            self.mixed_grammar = None
+        if self.code_select_grammar:
+            self.code_select_grammar.cleanup()
+            self.code_select_grammar = None
+        if self.owns_app and self.app:
+            self.app.cleanup()
+            self.app = None
+        if self.cbk_filter:
+            self.cbk_filter.cleanup()
+            self.cbk_filter = None
+        del self.owner
                 
     def close_app_cbk(self, instance_name, unexpected = 0):
-	"""method called by our AppState to tell us that it is closing, or
+        """method called by our AppState to tell us that it is closing, or
 	disconnecting from the mediator.  This method is included
 	only to allow an external editor to disconnect when we are
 	running tcp_server with this old MediatorObject implementation.
@@ -442,16 +442,16 @@ class MediatorObject(Object.Object):
 
 	*none*
 	"""
-	debug.trace('MediatorObject.close_app_cbk', 
-	    'Mediator Object received close app callback')
-	if self.owner and self.id:
-	    debug.trace('MediatorObject.close_app_cbk', 
-		'sending delete instance callback to owner')
-	    self.owner.delete_instance_cbk(self.id, 
-		unexpected = unexpected)
+        debug.trace('MediatorObject.close_app_cbk', 
+            'Mediator Object received close app callback')
+        if self.owner and self.id:
+            debug.trace('MediatorObject.close_app_cbk', 
+                'sending delete instance callback to owner')
+            self.owner.delete_instance_cbk(self.id, 
+                unexpected = unexpected)
 
     def add_csc(self, acmd, add_voc_entry=1):
-	"""Add a new Context Sensitive Command.
+        """Add a new Context Sensitive Command.
 
 	[CSCmd] *acmd* is the command to add.
 
@@ -461,11 +461,11 @@ class MediatorObject(Object.Object):
 
 	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-	self.interp.add_csc(acmd, add_voc_entry)
+        self.interp.add_csc(acmd, add_voc_entry)
 
 
     def add_lsa(self, spoken_forms, meanings):
-	"""Add a language specific word.
+        """Add a language specific word.
 
 	These words get added and removed dynamically from the SR
 	vocabulary, depending on the language of the active buffer.
@@ -490,11 +490,11 @@ class MediatorObject(Object.Object):
 	
 	*none* -- 
 	"""
-	
+        
         self.interp.add_lsa(spoken_forms, meanings)
 
     def add_abbreviation(self, abbreviation, expansions):
-	"""Add an abbreviation to VoiceCode's abbreviations dictionary.
+        """Add an abbreviation to VoiceCode's abbreviations dictionary.
 
 	**INPUTS**
 
@@ -507,16 +507,16 @@ class MediatorObject(Object.Object):
 
 	*none* -- 
 	"""
-	self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
+        self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
 
 
     def standard_symbols_in(self, file_list):
-	"""Compile symbols defined in a series of source files"""
+        """Compile symbols defined in a series of source files"""
 
-	self.interp.standard_symbols_in(file_list)
+        self.interp.standard_symbols_in(file_list)
     
     def print_abbreviations(self):
-	self.interp.print_abbreviations()
+        self.interp.print_abbreviations()
     
 ###############################################################################
 # Configuration functions. These are not methods

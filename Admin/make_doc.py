@@ -98,12 +98,12 @@ def find_pydoc_path(names=None):
     *STR* -- full path of the script, or None if it couldn't be found.
     """
     if not names:
-	names = ['pydoc.py', 'pdoc.py']
+        names = ['pydoc.py', 'pdoc.py']
     for name in names:
-	for directory in sys.path:
-	    if os.path.exists(directory):
-		if name in os.listdir(directory):
-		    return os.path.join(directory, name)
+        for directory in sys.path:
+            if os.path.exists(directory):
+                if name in os.listdir(directory):
+                    return os.path.join(directory, name)
     return None
 
 def quit():
@@ -142,21 +142,21 @@ def runme():
     #
     slow = 0
     if sys.argv: 
-	opts, args = util.gopt(['s', None])
+        opts, args = util.gopt(['s', None])
     # parse command line options and arguments
-	if opts:
-	    if opts['s']:
-		slow = 1
-	regs_file_name = args
+        if opts:
+            if opts['s']:
+                slow = 1
+        regs_file_name = args
     if regs_file_name:
         orig_files = files
         files = []
         for a_file in orig_files:
-	    for a_reg in regs_file_name:
-		a_reg = '[\s\S]*\\' + os.sep + a_reg + '$'
-		if re.match(a_reg, a_file):
-		    files = files + [a_file]
-		    break
+            for a_reg in regs_file_name:
+                a_reg = '[\s\S]*\\' + os.sep + a_reg + '$'
+                if re.match(a_reg, a_file):
+                    files = files + [a_file]
+                    break
 
     #
     # Remove make_doc.py from files list
@@ -192,21 +192,21 @@ def runme():
     #
     cmd_line = 'python ' + pydoc_path + ' -i -f HTML4 -d ' + doc_dir + ' '
     for a_file in files:
-	   
-	#
-	# Check to see if HTML doc needs to be refreshed
-	#
-	a_match = re.match('.*?([^\\' + os.sep + ']*)\.py$', a_file)
-	module_name = a_match.groups()[0]
-	html_file = doc_dir + os.sep + module_name + '.html'
+           
+        #
+        # Check to see if HTML doc needs to be refreshed
+        #
+        a_match = re.match('.*?([^\\' + os.sep + ']*)\.py$', a_file)
+        module_name = a_match.groups()[0]
+        html_file = doc_dir + os.sep + module_name + '.html'
 
-	if (util.last_mod(html_file) < util.last_mod(a_file)):
-	    print "   Updating documentation for module '%s'...\n" % module_name
-	    cmd = cmd_line + a_file
-	    os.system(cmd)
-	    if slow:
-		print "   That was module '%s'...\n\n" % module_name
-		raw_input("press enter to continue")
+        if (util.last_mod(html_file) < util.last_mod(a_file)):
+            print "   Updating documentation for module '%s'...\n" % module_name
+            cmd = cmd_line + a_file
+            os.system(cmd)
+            if slow:
+                print "   That was module '%s'...\n\n" % module_name
+                raw_input("press enter to continue")
 
     #
     # Fix problem with references

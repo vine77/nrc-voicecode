@@ -47,7 +47,7 @@ class WinIDClient(Object):
     *none*
     """
     def __init__(self, **args):
-	"""abstract base class, so no arguments
+        """abstract base class, so no arguments
 
 	**INPUTS**
 
@@ -57,11 +57,11 @@ class WinIDClient(Object):
     
 	*none*
 	"""
-	self.deep_construct(WinIDClient,
-	                    {'window': None},
-			    args)
+        self.deep_construct(WinIDClient,
+                            {'window': None},
+                            args)
     def local_window(self):
-	"""return the local window corresponding to the client
+        """return the local window corresponding to the client
 
 	**INPUTS**
 
@@ -73,10 +73,10 @@ class WinIDClient(Object):
 	the client, or None if the client has not yet been identified
 	with a local window
 	"""
-	return self.window
+        return self.window
 
     def new_window(self, window, title, editors, instance_name = None):
-	"""factory which creates a new TargetWindow object for a
+        """factory which creates a new TargetWindow object for a
 	SingleWindowDisplay.
 
 	**INPUTS**
@@ -96,7 +96,7 @@ class WinIDClient(Object):
 	*TargetWindow* -- a new TargetWindow object, or None
 	if the module is unable to create one
 	"""
-	debug.virtual('WinIDClient.new_window')
+        debug.virtual('WinIDClient.new_window')
 
 # defaults for vim - otherwise ignore
 # vim:sw=4

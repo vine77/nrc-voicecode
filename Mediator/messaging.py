@@ -35,13 +35,13 @@ import debug, Object
 class SocketError(RuntimeError):
     def __init__(self, msg):
         RuntimeError.__init__(self, msg)
-#	self.msg = msg
+#        self.msg = msg
 
 # exception to allow receive_string to signal that it was woken from its
 # sleep
 class WokenUp:
     def __init__(self, msg):
-	self.msg = msg
+        self.msg = msg
 
 class LightSleeper(Object.Object):
     """class with a sleep method, like the time module, but which
@@ -58,7 +58,7 @@ class LightSleeper(Object.Object):
     *none*
     """
     def __init__(self, wakeup_event, **args):
-	"""
+        """
 	**INPUTS**
 
 	*threading.Event wakeup_event* -- the underlying threading.Event
@@ -69,11 +69,11 @@ class LightSleeper(Object.Object):
 	sleeping with this object's sleep method, it must retain a
 	reference to the wakeup_event object
 	"""
-	self.deep_construct(LightSleeper,
-			    {'wakeup_event': wakeup_event}, args)
+        self.deep_construct(LightSleeper,
+                            {'wakeup_event': wakeup_event}, args)
     
     def sleep(self, timeout):
-	"""allows the calling thread to sleep for a given number of
+        """allows the calling thread to sleep for a given number of
 	seconds, or until another thread sets the wakeup_event,
 	whichever comes first.
 
@@ -86,10 +86,10 @@ class LightSleeper(Object.Object):
 
 	*none*
 	"""
-	self.wakeup_event.wait(timeout)
+        self.wakeup_event.wait(timeout)
 
     def was_woken(self):
-	"""checks to see if the wakeup_event is set.  Note: since other
+        """checks to see if the wakeup_event is set.  Note: since other
 	threads may also be waiting on the same event, LightSleeper does
 	not clear the wakeup_event.  Unless another thread does so,
 	subsequent calls to sleep will terminate immediately
@@ -102,7 +102,7 @@ class LightSleeper(Object.Object):
 
 	*BOOL* -- true if the wakeup_event is set
 	"""
-	return self.wakeup_event.isSet()
+        return self.wakeup_event.isSet()
 
 
 class Messenger(Object.Object):
@@ -172,7 +172,7 @@ class Messenger(Object.Object):
 
         *none* response -- 
         """
-	debug.virtual('Messenger.send_mess')
+        debug.virtual('Messenger.send_mess')
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
@@ -190,7 +190,7 @@ class Messenger(Object.Object):
          from external editor in *(mess_name, {arg:val})* format, or
 	 None if no message is available."""
 
-	debug.virtual('Messenger.get_mess')
+        debug.virtual('Messenger.get_mess')
 
 
 class MessengerBasic(Messenger):
@@ -283,10 +283,10 @@ class MessengerBasic(Messenger):
         """
 
         trace('send_mess', 'mess_name=\'%s\'' % mess_name)
-	if mess_argvals == None:
-	    tmp_args = {}
-	else:
-	    tmp_args = copy.copy(mess_argvals)
+        if mess_argvals == None:
+            tmp_args = {}
+        else:
+            tmp_args = copy.copy(mess_argvals)
         trace('send_mess', 'mess_argvals=\'%s\'' % tmp_args)        
         unpkd_mess = self.encoder.encode(mess_name, tmp_args)
         pkd_mess = self.packager.pack_mess(unpkd_mess)        
@@ -317,8 +317,8 @@ class MessengerBasic(Messenger):
 #        trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
-	    trace('get_mess', 'wrong_message %s, expectin %s' % \
-		(repr(name_argvals_mess), repr(expect)))
+            trace('get_mess', 'wrong_message %s, expectin %s' % \
+                (repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
         trace('get_mess', 'got it!')
@@ -368,7 +368,7 @@ class MixedMessenger(Messenger):
         *none* response -- 
         """
 
-	self.sender.send_mess(mess_name, mess_argvals)
+        self.sender.send_mess(mess_name, mess_argvals)
 
     def get_mess(self, expect=None):
         """Gets a message from the external editor.
@@ -390,10 +390,10 @@ class MixedMessenger(Messenger):
 
         trace('get_mess', 'expecting %s' % repr(expect))
         
-	try:
-	    name_argvals_mess = self.receiver.get(block=0)
-	except Queue.Empty:
-	    return None
+        try:
+            name_argvals_mess = self.receiver.get(block=0)
+        except Queue.Empty:
+            return None
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
@@ -850,8 +850,8 @@ class MessTransporter_Socket(MessTransporter):
     def __init__(self, sock, sleep = None, sleeper = None, **args_super):
         self.deep_construct(MessTransporter_Socket, \
                             {'sock': sock,
-			     'sleep': sleep,
-			     'sleeper': sleeper}, \
+                             'sleep': sleep,
+                             'sleeper': sleeper}, \
                             args_super, \
                             {})
 #        sys.stderr.write('MessTransporter_Socket on socket %s being created\n' % repr(self.sock))
@@ -875,12 +875,12 @@ class MessTransporter_Socket(MessTransporter):
         mess_len = len(a_string)
         totalsent = 0
         while totalsent < mess_len:
-	    try:
-		sent = self.sock.send(a_string[totalsent:])
-	    except socket.error:
-		raise SocketError("socket connection broken (sending)")
+            try:
+                sent = self.sock.send(a_string[totalsent:])
+            except socket.error:
+                raise SocketError("socket connection broken (sending)")
             if sent == 0:
-		raise SocketError("socket connection broken (sending)")
+                raise SocketError("socket connection broken (sending)")
 #                raise SocketError, "socket connection broken"
             totalsent = totalsent + sent
         
@@ -900,17 +900,17 @@ class MessTransporter_Socket(MessTransporter):
 
         a_string = ''
         while len(a_string) < num_bytes:
-	    if self.sleep:
-		while not self.data_available():
-		    self.sleeper.sleep(self.sleep)
-		    if self.sleeper.was_woken():
-			raise WokenUp("receive_string woken up")
-#		    time.sleep(self.sleep)
-	    try:
-		chunk = self.sock.recv(num_bytes - len(a_string))
-		trace('receive_string', 'read chunk=\'%s\'' % chunk);
+            if self.sleep:
+                while not self.data_available():
+                    self.sleeper.sleep(self.sleep)
+                    if self.sleeper.was_woken():
+                        raise WokenUp("receive_string woken up")
+#                    time.sleep(self.sleep)
+            try:
+                chunk = self.sock.recv(num_bytes - len(a_string))
+                trace('receive_string', 'read chunk=\'%s\'' % chunk);
             except socket.error:
-	        chunk = ''
+                chunk = ''
             if chunk == '':
                 raise SocketError("socket connection broken (receiving)")
 #                raise SocketError, "socket connection broken"
@@ -919,7 +919,7 @@ class MessTransporter_Socket(MessTransporter):
         return a_string         
 
     def data_available(self):
-	"""check whether the input socket has data
+        """check whether the input socket has data
 
 	**INPUTS**
 
@@ -931,11 +931,11 @@ class MessTransporter_Socket(MessTransporter):
 	has data
 	"""
 # poll by using timeout = 0
-	try:
-	    data, dummy, dummy2 = select.select([self.sock], [], [], 0)
-	except socket.error:
-	    raise SocketError("socket connection broken (receiving)")
-	return len(data) != 0
+        try:
+            data, dummy, dummy2 = select.select([self.sock], [], [], 0)
+        except socket.error:
+            raise SocketError("socket connection broken (receiving)")
+        return len(data) != 0
 
 
 
@@ -1508,8 +1508,8 @@ def messenger_factory(sock, sleep = None, sleeper = None):
     #
     packager = MessPackager_FixedLenSeq()
     transporter = MessTransporter_Socket(sock=sock, sleep = sleep,
-	sleeper = sleeper)
+        sleeper = sleeper)
     encoder = MessEncoderWDDX()
     a_messenger = MessengerBasic(packager=packager, 
-	transporter=transporter, encoder=encoder)        
+        transporter=transporter, encoder=encoder)        
     return a_messenger

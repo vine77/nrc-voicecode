@@ -137,11 +137,12 @@ class NewMediatorObject(Object.OwnerObject):
     """
     
     def __init__(self, interp = None,
-		 server = None,
-		 console = None,
-		 test_suite = 0, global_grammars = 0, exclusive = 0, 
+                 server = None,
+                 console = None,
+                 test_suite = 0, global_grammars = 0, exclusive = 0, 
+                 symdict_pickle_fname = None,
                  **attrs):
-	"""creates the NewMediatorObject
+        """creates the NewMediatorObject
 
 	**NOTE:** the caller must also call configure before calling
 	other methods, or starting the server.
@@ -178,34 +179,37 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*BOOL test_next* -- flag to indicate that the mediator should run
 	regression tests using the next editor to connect
+    
+	STR *symdict_pickle_fname=None* -- Name of the file containing the
+	persistent version of the symbols dictionnary.
 	"""
 
         sr_interface.connect('off')        
         self.deep_construct(NewMediatorObject,
                             {'editors': None,
-			     'server': None,
-			     'external_editors': {},
-			     'console': console,
-			     'interp': interp,
-			     'test_suite': test_suite,
-			     'global_grammars': global_grammars,
-			     'exclusive': exclusive,
-			     'test_next': 0,
-			     'config_file': None
-			    },
+                             'server': None,
+                             'external_editors': {},
+                             'console': console,
+                             'interp': interp,
+                             'test_suite': test_suite,
+                             'global_grammars': global_grammars,
+                             'exclusive': exclusive,
+                             'test_next': 0,
+                             'config_file': None
+                            },
                             attrs,
                             {})
-	if self.interp == None:
-	    self.new_interpreter()
-	if self.editors == None:
-	    self.new_app_mgr()
-	if server:
-	    server.set_mediator(self)
-	self.add_owned('server')
-	self.add_owned('editors')
+        if self.interp == None:
+            self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname)
+        if self.editors == None:
+            self.new_app_mgr()
+        if server:
+            server.set_mediator(self)
+        self.add_owned('server')
+        self.add_owned('editors')
 
     def new_app_mgr(self):
-	"""create a new AppMgr if one was not supplied to  the
+        """create a new AppMgr if one was not supplied to  the
 	constructor
 	
 	**INPUTS**
@@ -216,16 +220,16 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*BOOL* -- true if a new AppMgr was sucessfully created
 	"""
-	if self.editors != None:
-	    return 1 # we've already got one!
-	grammar_factory = WinGramFactoryNL()
-	GM_factory = WinGramMgrFactory(grammar_factory, self.interp)
-	recog_mgr = RecogStartMgrNL(GM_factory)
-	self.editors = AppMgr(recog_mgr)
-	return 1
+        if self.editors != None:
+            return 1 # we've already got one!
+        grammar_factory = WinGramFactoryNL()
+        GM_factory = WinGramMgrFactory(grammar_factory, self.interp)
+        recog_mgr = RecogStartMgrNL(GM_factory)
+        self.editors = AppMgr(recog_mgr)
+        return 1
     
-    def new_interpreter(self):
-	"""create a new interpreter
+    def new_interpreter(self, symdict_pickle_fname = None):
+        """create a new interpreter
 
 	**INPUTS**
 
@@ -235,9 +239,10 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*none*
 	"""
-	if self.interp:
-	    self.interp.cleanup(clean_sr_voc=1)
-	self.interp = CmdInterp.CmdInterp()
+        if self.interp:
+            self.interp.cleanup()
+        self.interp = \
+            CmdInterp.CmdInterp(symdict_pickle_fname = symdict_pickle_fname)
 
     def configure(self, config_file = None):
         """Configures a mediator object based on a configuration file.
@@ -253,9 +258,9 @@ class NewMediatorObject(Object.OwnerObject):
         *none* -- 
         """        
 
-#	print 'Mediator configure:\n'
-#	print traceback.extract_stack()
-	self._configure_from_file(config_file = config_file)
+#        print 'Mediator configure:\n'
+#        print traceback.extract_stack()
+        self._configure_from_file(config_file = config_file)
 
     def define_config_functions(self, names, exclude = None):
         """Adds the appropriate configuration functions to the  given
@@ -276,14 +281,14 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none* 
         """        
-	if exclude == None:
-	    exclude = []
-	self.before_app_mgr_config(names, ignore = 'editors' in exclude)
-	self.before_interp_config(names, ignore = 'interp' in exclude)
+        if exclude == None:
+            exclude = []
+        self.before_app_mgr_config(names, ignore = 'editors' in exclude)
+        self.before_interp_config(names, ignore = 'interp' in exclude)
 
 
     def _configure_from_file(self, exclude = None, config_file = None):
-	"""private method used by configure and reconfigure to perform
+        """private method used by configure and reconfigure to perform
 	 actual configuration.
 
         **INPUTS**
@@ -299,13 +304,13 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none*
         """        
-	if exclude == None:
-	    exclude = []
-	config_dict = {}
-	self.define_config_functions(config_dict, exclude)
-	file = config_file
-	if not file:
-	    file = vc_globals.default_config_file
+        if exclude == None:
+            exclude = []
+        config_dict = {}
+        self.define_config_functions(config_dict, exclude)
+        file = config_file
+        if not file:
+            file = vc_globals.default_config_file
         try:
             execfile(config_file, config_dict)
         except Exception, err:
@@ -313,19 +318,19 @@ class NewMediatorObject(Object.OwnerObject):
             raise err
 
 # if successful, store file name so the reconfigure method can reuse it
-	self.config_file = config_file
+        self.config_file = config_file
 
         #
         # Compile standard symbols for the different languages
         #
-	if not 'interp' in exclude:
-	    self.interp.parse_standard_symbols(add_sr_entries = 
-		self.interp.known_symbols.sr_symbols_cleansed)
+        if not 'interp' in exclude:
+            self.interp.parse_standard_symbols(add_sr_entries = 
+                self.interp.known_symbols.sr_symbols_cleansed)
 # what does this mean?  
-	    self.interp.known_symbols.sr_symbols_cleansed = 0
+            self.interp.known_symbols.sr_symbols_cleansed = 0
 
     def before_app_mgr_config(self, config_dict, ignore = 0):
-	"""called by configure to add the functions pertaining to
+        """called by configure to add the functions pertaining to
 	AppMgr configuration to the configuration dictionary.  If
 	ignore is true, this method will instead add dummy versions of those
 	functions which will do nothing.
@@ -336,22 +341,21 @@ class NewMediatorObject(Object.OwnerObject):
 	interpreter configuration functions.  This dictionary will be
 	used as the namespace for executing the configuration file.
 
-	*BOOL ignore* -- if true, add dummy versions of the interpreter
-	configuration functions, so that calls to these functions from
-	the configuration file will be ignored.  Normally, reset should
-	be false if ignore is true
+	*BOOL ignore* -- if true, add dummy versions of the application
+	manager configuration functions, so that calls to these functions from
+	the configuration file will be ignored.  
 	"""
-	if self.ignore:
-	    config_dict['add_module'] = do_nothing
-	    config_dict['trust_current_window'] = do_nothing
-	    config_dict['add_app_prefix'] = do_nothing
-	else:
-	    config_dict['add_module'] = self.add_module
-	    config_dict['trust_current_window'] = self.trust_current_window
-	    config_dict['add_app_prefix'] = self.add_app_prefix
+        if self.ignore:
+            config_dict['add_module'] = do_nothing
+            config_dict['trust_current_window'] = do_nothing
+            config_dict['add_app_prefix'] = do_nothing
+        else:
+            config_dict['add_module'] = self.add_module
+            config_dict['trust_current_window'] = self.trust_current_window
+            config_dict['add_app_prefix'] = self.add_app_prefix
 
     def before_interp_config(self, config_dict, reset = 1, ignore = 0):
-	"""called by configure to reset or replace the current interpreter 
+        """called by configure to reset or replace the current interpreter 
 	(unless reset is false), and add the functions pertaining to
 	interpreter configuration to the configuration dictionary.  If
 	ignore is true, this method will add dummy versions of those
@@ -371,22 +375,36 @@ class NewMediatorObject(Object.OwnerObject):
 	the configuration file will be ignored.  Normally, reset should
 	be false if ignore is true
 	"""
-	if reset:
-	    self.new_interpreter()
-	if self.ignore:
-	    config_dict['add_csc'] = do_nothing
-	    config_dict['add_lsa'] = do_nothing
-	    config_dict['add_abbreviation'] = do_nothing
-	    config_dict['standard_symbols_in'] = do_nothing
-	    config_dict['print_abbreviations'] = do_nothing
-	else:
-	    config_dict['add_csc'] = self.add_csc
-	    config_dict['add_lsa'] = self.add_lsa
-	    config_dict['add_abbreviation'] = self.add_abbreviation
-	    config_dict['standard_symbols_in'] = self.standard_symbols_in
-	    config_dict['print_abbreviations'] = self.print_abbreviations
+        if reset:
+            self.new_interpreter()
+        if self.ignore:
+            config_dict['add_csc'] = do_nothing
+            config_dict['add_lsa'] = do_nothing
+            config_dict['add_abbreviation'] = do_nothing
+            config_dict['standard_symbols_in'] = do_nothing
+            config_dict['print_abbreviations'] = do_nothing
+        else:
+            config_dict['add_csc'] = self.add_csc
+            config_dict['add_lsa'] = self.add_lsa
+            config_dict['add_abbreviation'] = self.add_abbreviation
+            config_dict['standard_symbols_in'] = self.standard_symbols_in
+            config_dict['print_abbreviations'] = self.print_abbreviations
 
-    def reconfigure(self, exclude = ['editors'], config_file=None):
+    def reset(config_file = None):
+        """reset the mediator object to continue regression testing with
+	a fresh interpreter
+
+	**INPUTS**
+
+        *STR* config_file* -- Full path of the config file.  If None,
+	then use the same one used previously by configure, or
+	the vc_globals.default_config_file if configure
+	did not record the filename.
+	"""
+        self.reconfigure(exclude = ['editors'], config_file =
+            config_file)
+
+    def reconfigure(self, exclude = None, config_file=None):
         """reconfigure an existing mediator object.  Unlike configure,
 	reconfigure may be called while the mediator object is already
 	running.  By default, reconfigure will use the same file used by
@@ -408,13 +426,13 @@ class NewMediatorObject(Object.OwnerObject):
         
         *none* -- 
         """        
-	file = config_file
-	if not file:
-	    file = self.config_file
-	self._configure_from_file(exclude = exclude, config_file = file)
+        file = config_file
+        if not file:
+            file = self.config_file
+        self._configure_from_file(exclude = exclude, config_file = file)
 
     def remove_other_references(self):
-	"""additional cleanup to ensure that this object's references to
+        """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
 
 	**NOTE:** subclasses must call their parent class's 
@@ -437,7 +455,7 @@ class NewMediatorObject(Object.OwnerObject):
 
 # for now, don't disconnect from sr_interface -- let the creator do that
 
-	Object.OwnerObject.remove_other_references(self)
+        Object.OwnerObject.remove_other_references(self)
 
     def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
         """Quit the mediator object
@@ -466,15 +484,15 @@ class NewMediatorObject(Object.OwnerObject):
         #
         self.interp.cleanup(clean_sr_voc=clean_sr_voc)
     
-	if self.editors:
-	    self.editors.cleanup()
-	    self.editors = None
+        if self.editors:
+            self.editors.cleanup()
+            self.editors = None
 
         if sr_interface.speech_able():
             disconnect_from_sr(disconnect, save_speech_files)
                 
     def delete_editor_cbk(self, instance_name, unexpected = 0):
-	"""callback from the application manager indicating that
+        """callback from the application manager indicating that
 	an editor closed or disconnected from the mediator
 
 	**INPUTS**
@@ -496,20 +514,20 @@ class NewMediatorObject(Object.OwnerObject):
 #
 # once we add correction, we may have other instance-specific objects 
 # which we will need to clean up.
-	try:
-	    del self.external_editors[instance_name]
-	    self.server.delete_instance_cbk(instance_name, 
-		unexpected = unexpected)
-	except KeyError:
-	    pass
+        try:
+            del self.external_editors[instance_name]
+            self.server.delete_instance_cbk(instance_name, 
+                unexpected = unexpected)
+        except KeyError:
+            pass
 # Note: if we have no server, we should quit when the last internal
 # editor exits.  However, the application which creates
 # NewMediatorObject will be running the internal editor, so it should
 # know when it exits and should call our cleanup method
 
     def new_editor(self, app, server = 1, check_window = 1, 
-	    window_info = None):
-	"""add a new editor application instance
+            window_info = None):
+        """add a new editor application instance
 
 	**INPUTS**
 
@@ -533,14 +551,14 @@ class NewMediatorObject(Object.OwnerObject):
 	*STR* -- name of the application instance.  Necessary
 	if you want to add windows to the application in the future.
 	"""
-	instance_name = self.editors.new_instance(app, 
-	    check_window = check_window, window_info = window_info)
-	if server:
-	    self.external_editors[instance_name] = 1
-	return instance_name
+        instance_name = self.editors.new_instance(app, 
+            check_window = check_window, window_info = window_info)
+        if server:
+            self.external_editors[instance_name] = 1
+        return instance_name
 
     def add_csc(self, acmd, add_voc_entry=1):
-	"""Add a new Context Sensitive Command.
+        """Add a new Context Sensitive Command.
 
 	[CSCmd] *acmd* is the command to add.
 
@@ -550,11 +568,11 @@ class NewMediatorObject(Object.OwnerObject):
 
 	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
-	self.interp.add_csc(acmd, add_voc_entry)
+        self.interp.add_csc(acmd, add_voc_entry)
 
 
     def add_lsa(self, spoken_forms, meanings):
-	"""Add a language specific word.
+        """Add a language specific word.
 
 	These words get added and removed dynamically from the SR
 	vocabulary, depending on the language of the active buffer.
@@ -579,11 +597,11 @@ class NewMediatorObject(Object.OwnerObject):
 	
 	*none* -- 
 	"""
-	
+        
         self.interp.add_lsa(spoken_forms, meanings)
 
     def add_abbreviation(self, abbreviation, expansions):
-	"""Add an abbreviation to VoiceCode's abbreviations dictionary.
+        """Add an abbreviation to VoiceCode's abbreviations dictionary.
 
 	**INPUTS**
 
@@ -596,19 +614,19 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*none* -- 
 	"""
-	self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
+        self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
 
 
     def standard_symbols_in(self, file_list):
-	"""Compile symbols defined in a series of source files"""
+        """Compile symbols defined in a series of source files"""
 
-	self.interp.standard_symbols_in(file_list)
+        self.interp.standard_symbols_in(file_list)
     
     def print_abbreviations(self):
-	self.interp.print_abbreviations()
+        self.interp.print_abbreviations()
 
     def add_module(self, module):
-	"""add a new KnownTargetModule to the AppMgr/RecogStartMgr
+        """add a new KnownTargetModule to the AppMgr/RecogStartMgr
 
 	**INPUTS**
 
@@ -618,10 +636,10 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*BOOL* -- true unless a module of the same name already exists
 	"""
-	return self.editors.add_module(module)
+        return self.editors.add_module(module)
 
     def window_info(self):
-	"""find the window id, title, and module of the current window
+        """find the window id, title, and module of the current window
 
 	**INPUTS**
 
@@ -631,10 +649,10 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*(INT, STR, STR)* -- the window id, title, and module name
 	"""
-	return self.editors.window_info()
+        return self.editors.window_info()
 
     def trust_current_window(self, trust = 1):
-	"""specifies whether the RecogStartMgr should trust that the current
+        """specifies whether the RecogStartMgr should trust that the current
 	window corresponds to the editor when the editor first connects to
 	VoiceCode, or when it notifies VoiceCode of a new window.
 
@@ -648,10 +666,10 @@ class NewMediatorObject(Object.OwnerObject):
 
 	*none*
 	"""
-	self.editors.trust_current(trust)
+        self.editors.trust_current(trust)
 
     def add_app_prefix(self, app_name, title_prefix):
-	"""specifies a title prefix to use for a given editor application.
+        """specifies a title prefix to use for a given editor application.
 
 	**INPUTS**
 
@@ -668,7 +686,7 @@ class NewMediatorObject(Object.OwnerObject):
 	*BOOL* -- false if app_name was already known, or prefix wasn't
 	unique
 	"""
-	return self.editors.add_prefix(app_name, title_prefix)
+        return self.editors.add_prefix(app_name, title_prefix)
 
 
     
