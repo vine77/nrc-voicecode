@@ -648,45 +648,42 @@ class ActionSearchRepeat(ActionSearch, ActionRepeatable):
         return ActionSearch.doc(self) + """ (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one')."""
 
 
+class ActionInsertNewClause(Action):
 
-class ActionSearchInsert(Action):
-    """Inserts some code after an occurence of a regexp
+    """Inserts a new clause in some multiple clause statement like
+    "if" or "try".
         
     **INSTANCE ATTRIBUTES**
         
-    *STR regexp=None* -- The regexp to be searched for
-        
-    *STR to_insert=None* -- String to be inserted
-        
-    *INT direction=1* -- If *positive*, search forward. Otherwise,
-    search backward.
-        
-    *INT num=1* -- Number of occurences to search for.
-        
-    *INT where=1* -- If *positive*, put cursor after
-    occurence. Otherwise, put it before.
+    STR *end_of_clause_regexp=None* -- Use this regexp to find the end
+     of the current clause.
 
-    *STR code_bef=''* -- Code to be inserted before cursor.
+    INT *add_lines* -- Number of lines to insert between end of current clause
+    and the new one.
+        
+    INT *back_indent_by* -- Number of levels to back indent the new
+    clause w.r.t to the body of the current clause.
+        
+    STR *code_bef=''* -- Part of the new clause to be inserted before cursor.
 
-    *STR code_after=''* -- Code to be inserted after cursor.
-
+    STR *code_after=''* -- Part of the new clause to be inserted after cursor.
+    
     CLASS ATTRIBUTES**
         
     *none* -- 
     """
         
-    def __init__(self, regexp=None, to_insert=None, direction=1, num=1, where=1, code_bef='', code_after='', **args_super):
-        self.deep_construct(ActionSearchInsert, \
-                            {'regexp': regexp, \
-                             'to_insert': to_insert, \
-                             'direction': direction, \
-                             'num': num, \
-                             'where': where, \
-                             'code_bef': code_bef, \
-                             'code_after': code_after}, \
-                                args_super, \
+    def __init__(self, end_of_clause_regexp, code_bef='',
+                 code_after='', add_lines=1, back_indent_by=1, **args_super):
+        
+        self.deep_construct(ActionInsertNewClause, 
+                            {'end_of_clause_regexp': end_of_clause_regexp, 
+                             'add_lines': add_lines, 
+                             'code_bef': code_bef, 
+                             'code_after': code_after,
+                             'back_indent_by': back_indent_by}, 
+                            args_super, 
                             {})
-
 
 
     def execute(self, app, cont):
@@ -694,9 +691,14 @@ class ActionSearchInsert(Action):
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
         
-        app.search_for(regexp=self.regexp, direction=self.direction, num=self.num, where=self.where)
-        app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
+        app.search_for(regexp=self.end_of_clause_regexp)
 
+        for ii in range(self.add_lines):
+            app.insert_indent(code_bef='\n', code_after='')
+
+        app.decr_indent_level(levels=self.back_indent_by)
+            
+        app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
 
 
 
@@ -713,7 +715,7 @@ class ActionSwitchTranslation(Action):
     """
         
     def __init__(self, on=None, **args_super):
-        self.deep_construct(ActionSearchInsert, \
+        self.deep_construct(ActionSwitchTranslation, \
                             {'on': on}, \
                                 args_super, \
                             {})

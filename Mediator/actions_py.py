@@ -23,7 +23,7 @@
 
 import re
 import SymDict
-from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
+from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClause
 
 
 py_empty_dictionary = ActionInsert(code_bef='{}', code_after='',
@@ -37,8 +37,10 @@ py_goto_body = \
                  docstring="""Move cursor to the body of a Python compound statement""")
 
 py_new_statement = \
-    ActionSearchInsert(regexp='(\n|$)', where=-1, code_bef='\n', code_after='',
-                       docstring = """Inserts a new line below current one""")
+    ActionInsertNewClause(end_of_clause_regexp='(\n|$)', add_lines = 1, 
+                          code_bef='', code_after='',
+                           back_indent_by=0,
+                           docstring = """Inserts a new line below current one""")
 
 py_class_definition = \
     ActionInsert(code_bef='class ', code_after=':\n\t',

@@ -1166,6 +1166,9 @@ add_lsa(['equal to', 'is equal to', 'is equal'],
 add_lsa(['without arguments', 'with no arguments', 'without argument',
         'with no argument'],
         {'python': '()', 'perl': '()', 'C': '()'})
+add_lsa(['print'], {'python': 'print ', 'perl': 'print '})
+
+
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with'],
              meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
@@ -1234,13 +1237,13 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'elif ', ': \n\t'),
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'elif ', ': \n\t'),
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'else:\n\t', ''),
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'else:\n\t', ''),
                        ContC(): c_else,
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
@@ -1327,15 +1330,15 @@ add_lsa(['import symbols', 'import symbol'], {'python': ' import '})
 # this form used for statements like: from module import all
 add_lsa(['import all'], {'python': ' import all'})
 acmd = CSCmd(spoken_forms=['try'],
-             meanings={ContPy(): ActionInsert('try ', ': \n\t')},
+             meanings={ContPy(): ActionInsert('try:\n\t', '')},
              docstring='python try statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'except ', ': \n\t')},
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'except ', ': \n\t')},
              docstring='python except statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['finally', 'finally do'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'finally:\n\t', '')},
+             meanings={ContPy(): ActionInsertNewClause('($|\n)', 'finally:\n\t', '')},
              docstring='finally clause of python try statement')
 add_csc(acmd)
 add_lsa(['continue'], {'python': 'continue\n'})

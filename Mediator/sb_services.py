@@ -310,8 +310,8 @@ class SB_ServiceLineManip(SB_Service):
         # Find all occurences of a newline and chose the one closest
         # to the cursor
         #
-        closest = None
-        closest_dist = None
+        closest = 0
+        closest_dist = pos
         from_pos = 0
         while 1:            
             a_match = regexp.search(contents, pos=from_pos)
@@ -391,7 +391,7 @@ class SB_ServiceIndent(SB_Service):
 
     ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-    def __init__(self, indent_level=None, indent_to_curr_level=None,
+    def __init__(self, indent_level, indent_to_curr_level=None,
                  **attrs):
         self.deep_construct(SB_ServiceIndent,
                             {'indent_level': indent_level,
@@ -521,24 +521,27 @@ class SB_ServiceIndent(SB_Service):
         
         *none* -- 
         """
-
+        
         if range == None:
             range = self.buff.get_selection()
         range = self.buff.make_valid_range(range)
+
 
         #
         # Unindent from start of first line in range
         #
         start = self.buff.beginning_of_line(range[0])
         end = range[1]
+
         code_to_unindent = self.buff.contents()[start:end]
 
         #
         # Unindent the code using a regexp
         #
+        print '-- SB_ServiceIndent.decr_indent_level: levels=%s, self.indent_level=%s' % (levels, self.indent_level)
         regexp = '(^|%s) {0,%s}' % (self.buff.newline_regexp(), levels * self.indent_level)
         unindented_code = re.sub(regexp, '\\1', code_to_unindent)
-
+        
         self.buff.delete((start, end))
         self.buff.goto(start)
         self.buff.insert(unindented_code)

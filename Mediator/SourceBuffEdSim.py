@@ -110,6 +110,8 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	return self.pos
 
     def get_selection(self):
+        if self.selection == None:
+            self.selection = (self.cur_pos(), self.cur_pos())
 	return self.selection
     
     def set_selection(self, range, cursor_at = 1):
