@@ -985,9 +985,21 @@ class AppState(OwnerObject):
 	"""
         debug.virtual('AppState.mediator_closing')
         
+    def process_pending_updates(self):
+        """Process any pending updates which the editor has already
+        sent us, before querying the editor for additional updates.
+        
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+        
+        *none* 
+        """
+        pass
 
     def synchronize_with_app(self, what = None, exclude=1, updates=None):
-
         """Make sure that VoiceCode is in sync with the state of the
         external editor.
         

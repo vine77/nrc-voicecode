@@ -44,18 +44,26 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     [Messenger] *talk_msgr* -- Messenger used to send commands
     to external application. 
 
+    *BOOL listen_can_block* -- flag indicating that the listen_msgr to
+    can block on get_mess if there is no message waiting.  This flag is
+    provided only for compatibility with ServerSingleThread.  All other
+    servers should be set up so that listen_msgr avoids blocking and 
+    simply return None if there are no messages.
+
     **CLASS ATTRIBUTES**
     
 
     .. [Messenger] file:///messaging.Messenger.html"""
 
     
-    def __init__(self, listen_msgr=None, talk_msgr=None, id=None, **attrs):
+    def __init__(self, listen_msgr=None, talk_msgr=None, id=None, 
+        listen_can_block = 0, **attrs):
         self.init_attrs({'multiple_buffer_support' : 0,
             'bidirectional_selection_support' : 0})        
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
                              'listen_msgr': listen_msgr,
+                             'listen_can_block': listen_can_block,
                              'talk_msgr': talk_msgr
                             },
                             attrs)
@@ -224,7 +232,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         **OUTPUTS**
         
-        *none* -- 
+        *BOOL* -- true if an update message was read successfully
         """
         debug.trace('-- AppStateMessaging.listen_one_transaction', 'called')
         mess = self.listen_msgr.get_mess(expect=['update',
@@ -238,15 +246,34 @@ class AppStateMessaging(AppStateCached.AppStateCached):
             debug.trace('-- AppStateMessaging.listen_one_transaction', 
                 'updates %s' % str(upd_list))
             self.apply_updates(upd_list)
+            return 1
         elif mess_name == 'editor_disconnecting':
             debug.trace('AppStateMessaging.listen_one_transaction',
                 'received editor_disconnecting')
             self.close_app_cbk()
+            return 0
         elif mess_name == 'connection_broken':
             debug.trace('AppStateMessaging.listen_one_transaction',
                 'data thread sent connection')
             self.close_app_cbk(unexpected = 1)
+            return 0
 
+    def process_pending_updates(self):
+        """Process any pending updates which the editor has already
+        sent us, before querying the editor for additional updates.
+        
+        **INPUTS**
+
+        *none*
+        
+        **OUTPUTS**
+        
+        *none* 
+        """
+        if not self.listen_can_block:
+# read messages until the queue is empty
+            while self.listen_one_transaction():
+                pass
 
     def updates_from_app(self, what = None, exclude=1):
         """Gets a list of updates from the external app.

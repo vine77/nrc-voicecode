@@ -378,6 +378,9 @@ class ClientFrameMixIn(Object.Object):
 	*none*
 	"""
         connected = self.connected()
+        if not connected:
+            self.SetStatusText("")
+# if connecting or connected, message may vary, so don't change it here
         menu = self.get_menu_by_name("Connection")
         connect_item = self.find_item_by_label(menu, "Connect")
         connect_item.Enable(not connected)
@@ -930,10 +933,12 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
 
 	*none*
 	"""
+#        print 'app told to disconnect'
         if self.connected():
+#            print 'was connected'
             success = self.connection.disconnect()
             if success:
-                self.GUI_editor.update_connection_status()
+#                print 'success'
                 if not AppState_initiated:
                     if client_initiated:
                         self.client.disconnect()
@@ -941,6 +946,7 @@ class WaxClientAppBase(wxApp, Object.OwnerObject):
                         self.client.disconnected()
                 self.testing_flag = 0
                 self.client = None
+        self.GUI_editor.update_connection_status()
 
     def run(self):
         """starts the message loop.  Note: this function does not

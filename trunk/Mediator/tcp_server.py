@@ -178,7 +178,8 @@ class AppStateFactory(Object.Object):
                             },
                             args)
 
-    def new_instance(self, app_name, id, listen_msgr, talk_msgr):
+    def new_instance(self, app_name, id, listen_msgr, talk_msgr,
+        listen_can_block = 0):
         """create a new AppState of the subclass appropriate to the given
 	app_name.
 
@@ -194,8 +195,13 @@ class AppStateFactory(Object.Object):
 
 	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
 	VC talker side of the connection.
-        
-    
+      
+        *BOOL listen_can_block* -- flag indicating that the listen_msgr to
+        can block on get_mess if there is no message waiting.  This flag is
+        provided only for compatibility with ServerSingleThread.  All other
+        servers should be set up so that listen_msgr avoids blocking and 
+        simply return None if there are no messages.
+
 	**OUTPUTS**
 	
 	*AppStateMessaging* -- the new AppStateMessaging representing the
@@ -239,6 +245,13 @@ class AppStateFactorySimple(AppStateFactory):
 	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
 	VC talker side of the connection.
         
+        *BOOL listen_can_block* -- flag indicating that the listen_msgr to
+        can block on get_mess if there is no message waiting.  This flag is
+        provided only for compatibility with ServerSingleThread.  All other
+        servers should be set up so that listen_msgr avoids blocking and 
+        simply return None if there are no messages.
+
+	**OUTPUTS**
     
 	**OUTPUTS**
 	
@@ -644,7 +657,7 @@ class ServerSingleThread(Object.Object):
         listen_msgr = messaging.messenger_factory(listen_sock)
         talk_msgr = messaging.messenger_factory(talk_sock)        
         an_app_state = self.editor_factory.new_instance(app_name, id, 
-            listen_msgr, talk_msgr)
+            listen_msgr, talk_msgr, listen_can_block = 1)
 
         #
         # Give external editor a chance to configure the AppStateMessaging
@@ -1142,6 +1155,20 @@ class ServerMainThread(Object.OwnerObject):
             self.deactivate_data_thread(id)
         Object.OwnerObject.remove_other_references(self)
 
+    def is_test_server(self):
+        """indicates whether this server running in test mode, and
+        waiting for the next test client
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the server was initialize in test mode
+        """
+        debug.virtual('ServerMainThread.is_test_server')
+
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
 	subclasses 
@@ -1326,7 +1353,7 @@ class ServerMainThread(Object.OwnerObject):
         
         disconnect_event = threading.Event()
         self.connection_ending[id] = disconnect_event
-        testing = test_client and self.test_suite 
+        testing = test_client and self.is_test_server()
         data_thread = self.new_data_thread(id, listen_sock, 
             disconnect_event, testing = testing)
         messages = data_thread.message_queue()
@@ -1348,7 +1375,7 @@ class ServerMainThread(Object.OwnerObject):
         stay_alive = self._new_instance(id, an_app_state, window_info, 
             test_client)
         if stay_alive:
-            sys.stderr.write("successfully created new MediatorObject instance\n")
+            sys.stderr.write("successfully created new instance\n")
             self.data_threads[id] = data_thread
             return 1
         else:
@@ -1361,7 +1388,7 @@ class ServerMainThread(Object.OwnerObject):
 #            sys.stderr.write("deleted our reference to data thread\n")
             an_app_state.cleanup()
 #            sys.stderr.write("cleaned up app_state\n")
-            if test_client and self.test_suite != None:
+            if test_client and self.is_test_server():
 # only if it was a test client and we ran the test suite should we quit now
                 return 0
 # with a regular client, we should still continue to run 
@@ -1616,6 +1643,20 @@ class ServerOldMediator(ServerMainThread):
 #       remove_other_references
 #        print extra_opts
       
+    def is_test_server(self):
+        """indicates whether this server running in test mode, and
+        waiting for the next test client
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the server was initialize in test mode
+        """
+        return self.test_suite != None
+
     def remove_other_references(self):
         """Perform any cleanup prior to quitting.  Called when the main 
 	thread has exited its event loop.  Subclasses which override
@@ -2238,6 +2279,11 @@ class ServerNewMediator(ServerMainThread):
 
     **INSTANCE ATTRIBUTES**
 
+    *NewMediatorObject mediator* -- the parent mediator
+
+    *BOOL test_server* -- flag indicating that the server is set up to
+    run regression tests when a test client connects
+
     *DataEvtSource data_events* -- object which provides data events
     for the data threads for new connections
 
@@ -2247,15 +2293,30 @@ class ServerNewMediator(ServerMainThread):
     {STR : STR} *editor_names* -- map from AppMgr-assigned instance
     names to unique socket IDs
     """
-    def __init__(self, data_events, **args):
+    def __init__(self, data_events, test_server = 0, **args):
         self.deep_construct(ServerNewMediator,
                             {
                              'mediator': None,
                              'data_events': data_events,
+                             'test_server': test_server,
                              'editors': {},
                              'editor_names': {}
                             }, args)
         self.name_parent('mediator')
+
+    def is_test_server(self):
+        """indicates whether this server running in test mode, and
+        waiting for the next test client
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the server was initialize in test mode
+        """
+        return self.test_server
 
     def set_mediator(self, mediator):
         """provides the server with a reference to the new
@@ -2310,7 +2371,8 @@ class ServerNewMediator(ServerMainThread):
 	the test suite and the server should exit 
 	"""
         instance_name = self.mediator.new_editor(app, server = 1,
-            check_window = 1, window_info = window_info)
+            check_window = 1, window_info = window_info, 
+            test_editor = test_client)
         if instance_name == None:
             return 0
         else:

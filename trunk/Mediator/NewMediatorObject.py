@@ -28,6 +28,7 @@ import MediatorConsole
 import sr_grammars
 import RecogStartMgrNL
 import sr_grammarsNL
+import auto_test
 
 """Defines main class for the mediator.
 
@@ -111,14 +112,16 @@ class NewMediatorObject(Object.OwnerObject):
     as a server, and for invoking the correction dialog boxes.  May be
     None if the mediator is not running in GUI mode
 
-    *STR test_suite* -- suite of tests to run (see auto_test.py), or
-    None
+    *{STR:ANY} test_space* -- if the mediator is started in regression 
+    testing mode, test_space is the namespace in which regression tests 
+    have been defined and will run.  Otherwise, it should be None.
 
     *BOOL global_grammars* -- should this instance use global grammars for 
-    regression testing (ignored if test_suite is None)
+    regression testing (ignored if test_space is None)
 
     *BOOL exclusive* -- should this instance use exclusive grammars for 
-    regression testing (ignored if test_suite is None)
+    regression testing (ignored if test_space is None or global_grammars
+    is false)
 
     *BOOL test_next* -- flag to indicate that the mediator should run
     regression tests using the next editor to connect
@@ -139,7 +142,7 @@ class NewMediatorObject(Object.OwnerObject):
     def __init__(self, interp = None,
                  server = None,
                  console = None,
-                 test_suite = 0, global_grammars = 0, exclusive = 0, 
+                 test_space = None, global_grammars = 0, exclusive = 0, 
                  symdict_pickle_fname = None,
                  **attrs):
         """creates the NewMediatorObject
@@ -168,14 +171,16 @@ class NewMediatorObject(Object.OwnerObject):
 	underlying GUI.  May be None if the mediator is not running in 
 	GUI mode.
 
-	*STR test_suite* -- suite of tests to run (see auto_test.py), or
-	None
+        *{STR:ANY} test_space* -- if the mediator is started in regression 
+        testing mode, test_space is the namespace in which regression tests 
+        have been defined and will run.  Otherwise, it should be None.
 
 	*BOOL global_grammars* -- should this instance use global grammars for 
-	regression testing (ignored if test_suite is None)
+	regression testing (ignored if test_space is None)
 
 	*BOOL exclusive* -- should this instance use exclusive grammars for 
-	regression testing (ignored if test_suite is None)
+	regression testing (ignored if test_space is None or
+        global_grammars is false)
 
 	*BOOL test_next* -- flag to indicate that the mediator should run
 	regression tests using the next editor to connect
@@ -191,7 +196,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'external_editors': {},
                              'console': console,
                              'interp': interp,
-                             'test_suite': test_suite,
+                             'test_space': test_space,
                              'global_grammars': global_grammars,
                              'exclusive': exclusive,
                              'test_next': 0,
@@ -199,14 +204,16 @@ class NewMediatorObject(Object.OwnerObject):
                             },
                             attrs,
                             {})
+        self.add_owned('server')
+        self.add_owned('editors')
         if self.interp == None:
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname)
         if self.editors == None:
             self.new_app_mgr()
         if server:
             server.set_mediator(self)
-        self.add_owned('server')
-        self.add_owned('editors')
+        if self.test_space != None:
+            self.test_next = 1
 
     def new_app_mgr(self):
         """create a new AppMgr if one was not supplied to  the
@@ -244,6 +251,19 @@ class NewMediatorObject(Object.OwnerObject):
         self.interp = \
             CmdInterp.CmdInterp(symdict_pickle_fname = symdict_pickle_fname)
 
+    def interpreter(self):
+        """return a reference to the mediator's current CmdInterp object
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        return self.interp
+   
     def configure(self, config_file = None):
         """Configures a mediator object based on a configuration file.
 	Must be called before (and only before) run.
@@ -260,9 +280,11 @@ class NewMediatorObject(Object.OwnerObject):
 
 #        print 'Mediator configure:\n'
 #        print traceback.extract_stack()
-        self._configure_from_file(config_file = config_file)
+        self._configure_from_file(config_file = config_file,
+            symdict_pickle_fname = self.symdict_pickle_fname)
 
-    def define_config_functions(self, names, exclude = None):
+    def define_config_functions(self, names, exclude = None,
+            symdict_pickle_fname = None):
         """Adds the appropriate configuration functions to the  given
 	namespace, to allow the configuration file to access the
 	appropriate mediator methods.  These functions are generally
@@ -284,10 +306,12 @@ class NewMediatorObject(Object.OwnerObject):
         if exclude == None:
             exclude = []
         self.before_app_mgr_config(names, ignore = 'editors' in exclude)
-        self.before_interp_config(names, ignore = 'interp' in exclude)
+        self.before_interp_config(names, ignore = 'interp' in exclude,
+            symdict_pickle_fname = symdict_pickle_fname)
 
 
-    def _configure_from_file(self, exclude = None, config_file = None):
+    def _configure_from_file(self, exclude = None, config_file = None,
+        symdict_pickle_fname = None):
         """private method used by configure and reconfigure to perform
 	 actual configuration.
 
@@ -300,6 +324,9 @@ class NewMediatorObject(Object.OwnerObject):
         *STR* config_file* -- Full path of the config file.  Defaults to
 	the vc_globals.default_config_file 
 
+	STR *symdict_pickle_fname=None* -- Name of the file containing the
+	persistent version of the symbols dictionnary.
+
         **OUTPUTS**
         
         *none*
@@ -307,7 +334,8 @@ class NewMediatorObject(Object.OwnerObject):
         if exclude == None:
             exclude = []
         config_dict = {}
-        self.define_config_functions(config_dict, exclude)
+        self.define_config_functions(config_dict, exclude,
+            symdict_pickle_fname = symdict_pickle_fname)
         file = config_file
         if not file:
             file = vc_globals.default_config_file
@@ -354,7 +382,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['trust_current_window'] = self.trust_current_window
             config_dict['add_app_prefix'] = self.add_app_prefix
 
-    def before_interp_config(self, config_dict, reset = 1, ignore = 0):
+    def before_interp_config(self, config_dict, reset = 1, ignore = 0,
+        symdict_pickle_fname = None):
         """called by configure to reset or replace the current interpreter 
 	(unless reset is false), and add the functions pertaining to
 	interpreter configuration to the configuration dictionary.  If
@@ -374,9 +403,12 @@ class NewMediatorObject(Object.OwnerObject):
 	configuration functions, so that calls to these functions from
 	the configuration file will be ignored.  Normally, reset should
 	be false if ignore is true
+
+	STR *symdict_pickle_fname=None* -- Name of the file containing the
+	persistent version of the symbols dictionnary.
 	"""
         if reset:
-            self.new_interpreter()
+            self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname)
         if self.ignore:
             config_dict['add_csc'] = do_nothing
             config_dict['add_lsa'] = do_nothing
@@ -390,7 +422,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['standard_symbols_in'] = self.standard_symbols_in
             config_dict['print_abbreviations'] = self.print_abbreviations
 
-    def reset(config_file = None):
+    def reset(config_file = None, symdict_pickle_fname = None):
         """reset the mediator object to continue regression testing with
 	a fresh interpreter
 
@@ -402,9 +434,10 @@ class NewMediatorObject(Object.OwnerObject):
 	did not record the filename.
 	"""
         self.reconfigure(exclude = ['editors'], config_file =
-            config_file)
+            config_file, symdict_pickle_fname = symdict_pickle_fname)
 
-    def reconfigure(self, exclude = None, config_file=None):
+    def reconfigure(self, exclude = None, config_file=None,
+        symdict_pickle_fname = None):
         """reconfigure an existing mediator object.  Unlike configure,
 	reconfigure may be called while the mediator object is already
 	running.  By default, reconfigure will use the same file used by
@@ -422,6 +455,9 @@ class NewMediatorObject(Object.OwnerObject):
 	the vc_globals.default_config_file if configure
 	did not record the filename.
 
+	STR *symdict_pickle_fname=None* -- Name of the file containing the
+	persistent version of the symbols dictionnary.
+
         **OUTPUTS**
         
         *none* -- 
@@ -429,7 +465,8 @@ class NewMediatorObject(Object.OwnerObject):
         file = config_file
         if not file:
             file = self.config_file
-        self._configure_from_file(exclude = exclude, config_file = file)
+        self._configure_from_file(exclude = exclude, config_file = file,
+            symdict_pickle_fname = symdict_pickle_fname)
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
@@ -490,6 +527,8 @@ class NewMediatorObject(Object.OwnerObject):
 
         if sr_interface.speech_able():
             disconnect_from_sr(disconnect, save_speech_files)
+
+        self.cleanup()
                 
     def delete_editor_cbk(self, instance_name, unexpected = 0):
         """callback from the application manager indicating that
@@ -525,8 +564,57 @@ class NewMediatorObject(Object.OwnerObject):
 # NewMediatorObject will be running the internal editor, so it should
 # know when it exits and should call our cleanup method
 
-    def new_editor(self, app, server = 1, check_window = 1, 
+    def _new_test_editor(self, app, server = 1, check_window = 1, 
             window_info = None):
+        """private method to a new editor application instance and run
+        regression tests.  This method should only be called by
+        NewMediatorObject.new_editor.
+
+	**INPUTS**
+
+	*AppState* app --  AppState interface corresponding to the new
+	instance
+
+	*BOOL* server -- true if this editor instance is connected to the 
+	mediator via the server.
+
+	*BOOL* check_window -- should we check to see if the
+	current window belongs to this instance?  Normally ignored
+        unless self.global_grammars is false, or the application manager
+        is unable to create a universal instance
+
+	*(INT, STR, STR) window_info*  -- window id, title, and module of 
+	the current window as detected by the TCP server when it
+	originally processed the new editor connection, or None to let
+	RSM.new_instance check now.  Normally ignored unless
+        check_window is true and either self.global_grammars is false
+        or the application manager is unable to create a 
+        universal instance.
+
+	**OUTPUTS**
+
+        *BOOL* -- true if the regression tests were run
+	"""
+        instance_name = None
+        if self.global_grammars:
+            instance_name = self.editors.new_universal_instance(app, 
+                exclusive = self.exclusive)
+        if not instance_name:
+            instance_name = self.editors.new_instance(app, 
+                check_window = check_window, window_info = window_info)
+        if not instance_name:
+            return 0
+        self.test_space['testing'] = \
+            regression.PersistentConfigNewMediator(mediator = self,
+            editor_name = instance_name, names = self.test_space)
+        self.test_space['temp_factory'] = \
+             regression.TempConfigNewMediatorFactory()
+        auto_test.run(args) 
+        self.editors.delete_instance(instance_name)
+        return 1
+
+    def new_editor(self, app, server = 1, check_window = 1, 
+            window_info = None, test_editor = 0):
         """add a new editor application instance
 
 	**INPUTS**
@@ -546,16 +634,42 @@ class NewMediatorObject(Object.OwnerObject):
 	RSM.new_instance check now.  Ignored unless check_window is
 	true.
 
+        BOOL *test_editor* -- flag indicating whether or not the editor
+	is expecting to be used for regression testing
+
+
 	**OUTPUTS**
 
 	*STR* -- name of the application instance.  Necessary
 	if you want to add windows to the application in the future.
 	"""
+        if test_editor:
+            if self.test_space != None and self.test_next:
+                self._new_test_editor(app, server = server, 
+                    check_window = check_window, window_info = window_info)
+                return None
         instance_name = self.editors.new_instance(app, 
             check_window = check_window, window_info = window_info)
         if server:
             self.external_editors[instance_name] = 1
         return instance_name
+
+    def editor_instance(self, instance_name):
+        """return a reference to the AppState object corresponding to a
+	particular instance. **Note:** Use only temporarily.  Storing 
+	this reference is unsafe, and may lead to mediator crashes on 
+	calls to its methods, and to failure to free resources.
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*AppState* -- temporary reference to the corresponding AppState
+	object
+	"""
+        return self.editors.app_instance(instance_name)
 
     def add_csc(self, acmd, add_voc_entry=1):
         """Add a new Context Sensitive Command.
