@@ -486,7 +486,7 @@ class SourceBuff(OwnerObject):
         *INT line_num* -- The line number of that position
         """
         
-	debug.virtual('SourceBuff.line_num_of')
+        debug.virtual('SourceBuff.line_num_of')
 
 
     def number_lines(self, astring, startnum=1):
@@ -1405,18 +1405,19 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
 
-#        print '-- SourceBuff.print_buff: from_line=%s, to_line=%s' % (from_line, to_line)
+        trace('SourceBuff.print_buff', 'from_line=%s, to_line=%s' % (from_line, to_line))
 
         #
         # Figure out the first and last line to be printed
         #
         if from_line == None or to_line == None:
            from_line, to_line = self.lines_around_cursor()
+           trace('SourceBuff.print_buff', '** now, from_line=%s, to_line=%s' % (from_line, to_line))           
 
         #
         # Figure out the text before/withing/after the selection
         #
-	selection_start, selection_end = self.get_selection()
+        selection_start, selection_end = self.get_selection()
 
         before_content = self.get_text(0, selection_start)
         selection_content = self.get_text(selection_start, selection_end)
@@ -1461,11 +1462,14 @@ class SourceBuff(OwnerObject):
         curr_line = self.line_num_of(self.cur_pos())
         from_line = curr_line - self.print_nlines
         to_line = curr_line + self.print_nlines
-	if from_line < 1:
-	    from_line = 1
-	last_line = self.line_num_of(self.len())
-	if to_line > last_line:
-	    to_line = last_line
+        trace('SourceBuff.lines_around_cursor', '** curr_line=%s, self.cur_pos()=%s, self.print_nlines=%s, from_line=%s, to_line=%s' 
+                                                % (curr_line, self.cur_pos(), self.print_nlines, from_line, to_line))                
+        if from_line < 1:
+            from_line = 1
+        last_line = self.line_num_of(self.len())	    
+        trace('SourceBuff.lines_around_cursor', '** self.len()=%s, last_line=%s' % (self.len(), last_line))
+        if to_line > last_line:
+            to_line = last_line	    
         return from_line, to_line
 
 

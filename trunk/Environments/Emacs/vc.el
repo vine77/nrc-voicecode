@@ -2479,6 +2479,7 @@ Argument 'change-list is a list of 5ple:
         (progn 
            ;;; Don't know of a way to kill a buffer without asking for a save
            ;;; So just save it.
+           (if (eq "-1") (erase-buffer))
            (if (not (eq 0 save)) (save-buffer))
            (kill-buffer buff-name)
 	)
@@ -2586,13 +2587,13 @@ to the other"
 	(line-num) (o-point))
 
     (vr-log "**-- vcode-cmd-line-num-of: before setq opoint\n")
-    (setq opoint (vcode-fix-pos (cl-gethash "pos" mess-cont)))
+    (setq opoint (vcode-fix-pos (cl-gethash "position" mess-cont)))
     (vr-log "**-- vcode-cmd-line-num-of: after setq opoint=%S\n" opoint)
 
     (save-excursion
       (goto-char opoint)
       (beginning-of-line)
-      (setq line-num (count-lines 1 (point)))
+      (setq line-num (1+ (count-lines 1 (point))))
       )
 
     (vr-log "**-- vcode-cmd-line-num-of: after count-lines\n")
@@ -2845,7 +2846,7 @@ to the other"
          (cl-puthash "updates" (list) reply-cont)
          (vr-send-reply (run-hook-with-args 
 		          'vr-serialize-message-hook 
-		          (list "indent_resp" reply-cont)))
+		          (list "decr_indent_level_resp" reply-cont)))
     )
   )    
 )

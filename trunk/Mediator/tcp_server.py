@@ -40,10 +40,14 @@ from tcp_threads import *
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
 debug.config_traces(status="on", 
-                    active_traces={'get_mess':1, 
-                                   'send_mess': 1,
-                                   'AppState.synchronize_wit_app': 1,
-                                   })
+                    active_traces={
+#                                   'get_mess':1, 
+#                                   'send_mess': 1,
+#                                   'AppState.synchronize_wit_app': 1,
+#                                   'SourceBuff': 1,
+#                                   'SourceBuffMessaging.line_num_of': 1,
+                                   },
+                                   allow_trace_id_substrings = 1)
 
 #debug.config_traces(status="on", active_traces={'CmdInterp':1, 'sr_interface': 1, 'get_mess':1, 'send_mess': 1, 'sim_commands': 1}, allow_trace_id_substrings = 1)
 #debug.config_traces(status="on", active_traces = 'all')

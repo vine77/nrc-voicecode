@@ -110,7 +110,7 @@ class SB_ServiceLang(SB_Service):
         
         **INPUTS**        
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
@@ -170,7 +170,7 @@ class SB_ServiceLineManip(SB_Service):
                             {})
 
     def line_num_of(self, position = None):
-	"""
+        """
         Returns the line number for a particular cursor position
         
         **INPUTS**
@@ -185,9 +185,9 @@ class SB_ServiceLineManip(SB_Service):
         #
         # Make sure the position is within range
         #
-	if position == None:
-	    position = self.buff.cur_pos()
-        position = self.buff.make_within_range(position)
+        if position == None:
+            position = self.buff.cur_pos()
+            position = self.buff.make_within_range(position)
 
         
         #
@@ -195,7 +195,7 @@ class SB_ServiceLineManip(SB_Service):
         #
         regexp = re.compile('($|%s)' % self.buff.newline_regexp())
         line_start_pos = 0
-	line_num = 1
+        line_num = 1
         curr_line = 1
         while (1):
             a_match = regexp.search(self.buff.contents(), line_start_pos)
@@ -213,7 +213,7 @@ class SB_ServiceLineManip(SB_Service):
 
 
     def line_num_of_old(self, position = None):
-	"""
+        """
         Returns the line number for a particular cursor position
         
         **INPUTS**

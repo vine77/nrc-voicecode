@@ -23,6 +23,7 @@
 VoiceCode via a messaging protocol."""
 
 import messaging, SourceBuffCached
+from debug import trace
 
 class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
     
@@ -245,9 +246,9 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         
         *INT line_num* -- The line number of that position
         """
-        
+        trace('SourceBuffMessaging.line_num_of', '** position=%s' % position)
         args = {'position': position, 'buff_name': self.name()}
-	self.app.talk_msgr.send_mess('line_num_of', args)
+        self.app.talk_msgr.send_mess('line_num_of', args)
         response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
 
         return messaging.messarg2int(response[1]['value'])
