@@ -39,6 +39,7 @@ ID_OPEN_FILE = 150
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
+ID_CHOOSE_FONT=105
 ID_FOCUS_COMMAND = 107
 ID_FOCUS_EDITOR = 108
 ID_PANE = 120
@@ -308,11 +309,15 @@ class WaxEdSimFrame(wxFrame):
         window_menu.Append(ID_FOCUS_EDITOR, "&Editor Window")
         window_menu.Append(ID_FOCUS_COMMAND, "&Command Line")
 
+        format_menu = wxMenu()
+        format_menu.Append(ID_CHOOSE_FONT, "&Font")        
+
         edit_menu = wxMenu()
 
         menuBar=wxMenuBar()
         menuBar.Append(file_menu,"&File");
         menuBar.Append(edit_menu,"&Edit");
+        menuBar.Append(format_menu,"&Format");        
         menuBar.Append(window_menu, "&Window");
 
         self.CreateStatusBar()
@@ -320,6 +325,7 @@ class WaxEdSimFrame(wxFrame):
         self.SetMenuBar(menuBar)
         EVT_MENU(self,ID_EXIT,self.quit_now)
         EVT_MENU(self,ID_OPEN_FILE,self.open_file)
+        EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
 	    command_space = command_space)
@@ -390,6 +396,20 @@ class WaxEdSimFrame(wxFrame):
 # hack to get CmdInterp to scan for symbols	    
 	    self.pane.command_space['open_file'](file_path)
 #	    self.app_control.open_file(file_path)
+
+
+
+    def choose_font(self, event):
+
+        on_window = self.pane.editor
+        current_font = on_window.GetFont()
+        dlg = wxFontDialog(self, wxFontData().SetInitialFont(current_font))
+        dlg.ShowModal()
+        chosen_font = dlg.GetFontData().GetChosenFont()
+        if chosen_font:
+            on_window.SetFont(chosen_font)
+
+
         
     def on_activate(self, event):
         current = wxWindow_FindFocus()
