@@ -2053,7 +2053,7 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
 
     **INSTANCE ATTRIBUTES**
 
-    *ExtLoop owner* -- the owner of the server
+    *ExtLoopWin32OldMediator owner* -- the owner of the server
 
     *PyHandle evt_quit* -- Win32 event to raise to exit the message loop
     and shut down the server.
@@ -2087,12 +2087,11 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
         win32event.SetEvent(self.evt_quit)            
 
 class ExtLoopWin32(Object.OwnerObject):
-    """class providing an external win32 message message loop for
-    ServerOldMediator using win32event
+    """abstract class providing an external win32 message message loop for
+    concrete subclasses of ServerMainThread using win32event
 
     **INSTANCE ATTRIBUTES**
 
-    *ServerOldMediator server* -- the underlying server
 
     *PyHandle evt_new_listen_conn* -- Win32 event raised when a new
      socket connection is opened on VC_LISTEN port.
@@ -2102,30 +2101,33 @@ class ExtLoopWin32(Object.OwnerObject):
     
     *PyHandle evt_sockets_ready* -- Win32 event raised when one of the
      active VC_LISTEN sockets has unread data.
-
-    STR *test_suite=None* -- If not *None*, then upon connection by a
-    new editor run regression test suite *test_suite*.
     """
-    def __init__(self, test_suite = None, extra_opts = None, **args_super):
+    def __init__(self, test_suite = None, **args_super):
         self.deep_construct(ExtLoopWin32, 
                             {'test_suite': test_suite,
-                             'server': None,
                              'evt_new_listen_conn': 
                                  win32event.CreateEvent(None, 0, 0, None),
                              'evt_new_talk_conn': 
                                  win32event.CreateEvent(None, 0, 0, None),
                              'evt_sockets_ready': 
                                  win32event.CreateEvent(None, 0, 0, None),
-                             'evt_quit': win32event.CreateEvent(None, 0, 0, None),
+                             'evt_quit': 
+                                 win32event.CreateEvent(None, 0, 0, None),
                              }, 
                             args_super)
-        factory = AppStateFactorySimple()
-        self.server = ServerOldMediatorExtLoop(owner = self,
-                             test_suite = test_suite, 
-                             editor_factory = factory, evt_quit =
-                             self.evt_quit, extra_opts =
-                             extra_opts)
-        self.add_owned('server')
+
+    def server(self):
+        """returns a reference to the server
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *ServerOldMediator* -- the underlying server
+        """
+        debug.virtual('ExtLoopWin32.server')
 
     def data_event(self, id):
         """virtual method which supplies a data_event for ServerMainThread 
@@ -2185,7 +2187,8 @@ class ExtLoopWin32(Object.OwnerObject):
 
         listener_evt = Win32InterThreadEvent(self.evt_new_listen_conn)
         talker_evt = Win32InterThreadEvent(self.evt_new_talk_conn)
-        self.server.start_other_threads(listener_evt, talker_evt)
+        server = self.server()
+        server.start_other_threads(listener_evt, talker_evt)
 
         #
         # This is the event loop. It is based on a recipe found at:
@@ -2212,14 +2215,14 @@ class ExtLoopWin32(Object.OwnerObject):
                     # A new VC_LISTEN connection was opened
                     #
                     debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
-                    self.server.handshake_listen_socks()
+                    server.handshake_listen_socks()
 
                 elif rc == win32event.WAIT_OBJECT_0+1:
                     #
                     # A new VC_TALK connection was opened
                     #
                     debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
-                    if not self.server.handshake_talk_socks():
+                    if not server.handshake_talk_socks():
 #                    sys.stderr.write("got 0 from handshake_talk_socks\n")
                         break
 
@@ -2235,7 +2238,7 @@ class ExtLoopWin32(Object.OwnerObject):
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                    self.server.process_ready_socks()
+                    server.process_ready_socks()
 
                 elif rc == win32event.WAIT_OBJECT_0+3:
                     #
@@ -2266,11 +2269,43 @@ class ExtLoopWin32(Object.OwnerObject):
                 counter = counter + 1
 
         finally:
-#        sys.stderr.write("cleaning up server from ext loop\n")
-            self.server.cleanup()
-#        sys.stderr.write("done cleaning up server from ext loop\n")
-            self.server = None
-#        sys.stderr.write("server = None")
+            self.cleanup()
+
+
+
+class ExtLoopWin32OldMediator(ExtLoopWin32):
+    """implementation of ExtLoopWin32 for ServerOldMediator 
+
+    **INSTANCE ATTRIBUTES**
+
+    *ServerOldMediator the_server* -- the underlying server
+    """
+    def __init__(self, test_suite = None, extra_opts = None, **args_super):
+        self.deep_construct(ExtLoopWin32OldMediator, 
+                            {
+                             'the_server': None,
+                            }, 
+                            args_super)
+        factory = AppStateFactorySimple()
+        self.the_server = ServerOldMediatorExtLoop(owner = self,
+                             test_suite = test_suite, 
+                             editor_factory = factory, evt_quit =
+                             self.evt_quit, extra_opts =
+                             extra_opts)
+        self.add_owned('the_server')
+
+    def server(self):
+        """returns a reference to the server
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *ServerOldMediator* -- the underlying server
+        """
+        return self.the_server
 
 
 class ServerNewMediator(ServerMainThread):
@@ -2486,9 +2521,10 @@ def run_ext_server(test_suite=None, extra_opts = None):
     win32event and the old MediatorObject.
     """
 
-    sys.stderr.write('running ExtLoopWin32 with ServerOldMediator\n')
-    print 'running ExtLoopWin32 with ServerOldMediator'
-    a_loop = ExtLoopWin32(test_suite, extra_opts = extra_opts)
+    sys.stderr.write('running ExtLoopWin32OldMediator with ServerOldMediator\n')
+    print 'running ExtLoopWin32OldMediator with ServerOldMediator'
+    a_loop = ExtLoopWin32OldMediator(test_suite = test_suite, 
+        extra_opts = extra_opts)
 
     a_loop.run()
 #    sys.stderr.write("run_ext_server finishing\n")
@@ -2548,7 +2584,7 @@ OPTIONS
    an internal win32event message loop
 
 --ext :
-   Run ExtLoopWin32 and ServerOldMediatorExtLoop, which uses old 
+   Run ExtLoopWin32OldMediator and ServerOldMediatorExtLoop, which uses old 
    MediatorObject and an external win32event message loop
 
 --smt :
