@@ -163,6 +163,7 @@ add_module(mod_python)
 add_prefix('emacs', 'Yak')
 add_prefix('WaxEdit', 'Floor')
 add_prefix('EdSim', 'Standby')
+add_prefix('dumbEdSim', 'Dumbo')
 
 #############################################################################
 # CSCs and LSAs that apply for ALL languages

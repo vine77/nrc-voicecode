@@ -3,38 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:37:03 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SB_UpdSetSelection</title>
+<title>Class AppStateFactory</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SB_UpdSetSelection - Update class for setting the selection.</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="AppState.html">AppState</A></P>
+<H1 CLASS="ClassName">class AppStateFactory</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="tcp_server.html">tcp_server</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">AppState.SB_UpdSetSelection<BR>
-&nbsp;&nbsp;<A HREF="AppState.SB_Update.html">AppState.SB_Update</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="AppState.AS_Update.html">AppState.AS_Update</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_server.AppStateFactory<BR>
+&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SB_UpdSetSelection</SPAN>(<A CLASS="DocLink" HREF="AppState.SB_Update.html">SB_Update</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdSetSelection.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.SB_UpdSetSelection.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdSetSelection.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a set selection update on a specific buffer.</SPAN>
-
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.SB_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update on the appropriate source buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_VE_map"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_VE_map</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Update the V-E map to take into account this buffer update.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a buffer update on a specific buffer.</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.on_buff_named</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of the buffer on which to do the update.</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppStateFactory</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AppStateFactory.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.AppStateFactory.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.AppStateFactory.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -42,34 +33,44 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.AS_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">descr</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AS_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update.</SPAN>
-
 </PRE><H2>Description</H2><P>
+factory which produces new instances of concrete subclasses of 
+AppState for the TCP server</P>
+<P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 <P>
-*none*-- </P>
+<EM>none</EM></P>
 <P>
-CLASS ATTRIBUTES**</P>
-
-<DL>
-
-<DT>
+<STRONG>CLASS ATTRIBUTES</STRONG></P>
+<P>
 <EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppState.SB_UpdSetSelection.apply_to_buff" CLASS="Method">AppState.SB_UpdSetSelection.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
-<P>Carry out a set selection update on a specific buffer.</P>
+</P>
+<H2 ID="tcp_server.AppStateFactory.new_instance" CLASS="Method">tcp_server.AppStateFactory.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>)</H2>
+<P>None</P>
 
+<P>
+create a new AppState of the subclass appropriate to the given
+app_name.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-[SourceBuff] <EM>on_buff</EM>
-<DD>The buffer on which to do the update. 
+STR <EM>app_name</EM>
+<DD>Name of the editor for which we want to
+create an [AppStateMessaging].
+<DT>
+STR <EM>id</EM>
+<DD>Unique ID of external editor connected to the [AppState]
+<DT>
+[Messenger] <EM>listen_msgr</EM>
+<DD>[Messenger] instance to use for the
+VC listener side of the connection.
+<DT>
+[Messenger] <EM>talk_msgr</EM>
+<DD>[Messenger] instance to use for the
+VC talker side of the connection.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -77,64 +78,12 @@ CLASS ATTRIBUTES**</P>
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD>
+<EM>AppStateMessaging</EM>
+<DD>the new AppStateMessaging representing the
+editor instance 
 </DL>
-<H2 ID="AppState.SB_Update.apply" CLASS="Method">AppState.SB_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update on the appropriate source buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-[AppState] <EM>on_app</EM> --</P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM> --</P>
 <P>
 ..[AppState] AppState.AppState.html</P>
-<H2 ID="AppState.SB_Update.apply_to_VE_map" CLASS="Method">AppState.SB_Update.apply_to_VE_map(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Update the V-E map to take into account this buffer update.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[AppState] <EM>on_app</EM>
-<DD>Application on which the update is being done.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppState.SB_Update.apply_to_buff" CLASS="Method">AppState.SB_Update.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
-<P>Carry out a buffer update on a specific buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[SourceBuff] <EM>on_buff</EM>
-<DD>The buffer on which to do the update. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -265,19 +214,6 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppState.AS_Update.apply" CLASS="Method">AppState.AS_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-<P>
-[AppState] <EM>on_app</EM> --</P>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-<P>
-<EM>none</EM> --</P>
-<P>
-..[AppState] AppState.AppState.html</P>
 
 <HR>
 <TABLE ALIGN="LEFT">

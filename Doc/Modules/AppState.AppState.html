@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jul 06 17:34:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:06 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -77,11 +77,11 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.set_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.synchronize_with_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.synchronize_with_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to open a file in a new buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.title_escape_sequence"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.title_escape_sequence</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">before=''</SPAN>, <SPAN CLASS="Argument">after=''</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.unbind_from_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.unbind_from_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # unbinds the AppState from a particular buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.updates_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.updates_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)<SPAN CLASS="OneLiner"> # Gets a list of updates from the external app.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -172,6 +172,10 @@ binding.
 <EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
 <EM>STR</EM> buff_name, <EM>BOOL</EM> program_initiated).   See set_change_callback 
 below for details
+<DT>
+BOOL <EM>update_response</EM>
+<DD>flag to signal that an update being
+applied is a response to a mediator-initiated change
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -1438,7 +1442,7 @@ false.</P>
 <DD>true if editor is running in a potentially shared window
 
 </DL>
-<H2 ID="AppState.AppState.synchronize_with_app" CLASS="Method">AppState.AppState.synchronize_with_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)</H2>
+<H2 ID="AppState.AppState.synchronize_with_app" CLASS="Method">AppState.AppState.synchronize_with_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>, <SPAN CLASS="Argument">updates=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -1547,7 +1551,7 @@ See [curr_buffer_name] for a description of buffer binding.</P>
 </DL>
 <P>
 ..[curr_buffer_name] AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="AppState.AppState.updates_from_app" CLASS="Method">AppState.AppState.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=[]</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
+<H2 ID="AppState.AppState.updates_from_app" CLASS="Method">AppState.AppState.updates_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">what=None</SPAN>, <SPAN CLASS="Argument">exclude=1</SPAN>)</H2>
 <P>Gets a list of updates from the external app.</P>
 
 <P>
