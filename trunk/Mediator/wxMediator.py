@@ -55,6 +55,8 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'SourceBuffCached._get_cache_multiple': 1,
+#                        'SourceBuffMessaging._get_text_from_app': 1,
 #                        'SourceBuffCached._not_cached_multiple': 1,
 #                        'SourceBuffCached._get_cache_element_multiple': 1,
 #                        'SourceBuff._get_selection': 1,

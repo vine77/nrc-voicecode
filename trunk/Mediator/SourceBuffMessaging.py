@@ -182,7 +182,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         *STR* -- contents of specified range of the buffer
         """
 
-#        print '-- SourceBuffMessaging._get_text_from_app: start=%s, end=%s' % (start, end)
+        trace('SourceBuffMessaging._get_text_from_app', 'start=%s, end=%s' % (start, end))
         
         args = {'start': start, 'end': end,
             'buff_name': self.name()}

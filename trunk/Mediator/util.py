@@ -241,8 +241,12 @@ def istuple(instance):
 
     return isinstance(instance, types.TupleType)
 
+def issequence(instance):
+    return islist(instance) or istuple(instance)
+
 def isfunction(instance):
     return isinstance(instance, types.FunctionType)
+   
 
 ###############################################################################
 # path manipulation 
