@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:41:47 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Nov 08 00:37:43 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -17,7 +17,8 @@
 <H1 CLASS="ModuleName">Module mediator</H1>
 <PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">cleanup</SPAN>(<SPAN CLASS="Argument">clean_sr_voc=0</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">execute_command</SPAN>(<SPAN CLASS="Argument">cmd</SPAN>)</SPAN>
-<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">init_simulator</SPAN>(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">disable_dlg_select_symbol_matches=None</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">init_simulator</SPAN>(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">disable_dlg_select_symbol_matches=None</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#init_simulator_regression"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">init_simulator_regression</SPAN></A>(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#simulator_mode"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">simulator_mode</SPAN></A>(<SPAN CLASS="Argument">options</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Start mediator in console mode.</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Mediator\\mediator.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
@@ -31,6 +32,7 @@
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_simple_for</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">c_simple_while</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">dictionary</SPAN> <SPAN CLASS="VariableName">command_space</SPAN> = <SPAN CLASS="VariableValue">{}</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">console_win_handle</SPAN> = <SPAN CLASS="VariableValue">2764</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_class_body</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionSearch instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_class_definition</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">cpp_subclass</SPAN> = <SPAN CLASS="VariableValue">actions_gen.ActionInsert instance</SPAN></SPAN>
@@ -85,7 +87,12 @@ To quit, use:</P>
    Quit the simulator.</H3>
    Note that if you don't quit using this command
    (e.g. *Ctrl-C*), your DOS window will hang up.   
-<H2 ID="simulator_mode" CLASS="Function">simulator_mode(<SPAN CLASS="Argument">options</SPAN>)</H2>
+<H2 ID="init_simulator_regression" CLASS="Function">init_simulator_regression(<SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>)</H2>
+<P></P>
+
+Initialises the simulator using a global exclusive grammar so that
+the user can continue to work in other applications using the keyboard
+while the regression test is running<H2 ID="simulator_mode" CLASS="Function">simulator_mode(<SPAN CLASS="Argument">options</SPAN>)</H2>
 <P>Start mediator in console mode.</P>
 
 Useful for debugging purposes when using the mediator separately from
