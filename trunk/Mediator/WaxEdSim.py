@@ -166,7 +166,8 @@ class WaxEdSimPane(wxPanel):
 	*BOOL* -- true if editor window has the focus
 	"""
 #fudge so that recog mimic works from the command line.
-#	return self.parent.is_active()
+	return self.parent.is_active()
+
 	current = wxWindow_FindFocus()
 	if current.GetId() == self.editor.GetId():
 	    return 1
