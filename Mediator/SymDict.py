@@ -620,7 +620,7 @@ class SymDict(PickledObject.PickledObject):
         
         *none* -- 
         """
-        
+
         self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries)
 
     
@@ -639,15 +639,17 @@ class SymDict(PickledObject.PickledObject):
         """
 
 #        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
-        
         for a_file in file_list:
             print 'Compiling symbols for file \'%s\'' % a_file
             self.parse_symbols(a_file, add_sr_entries=add_sr_entries)
-
+            
         #
         # Save dictionary to file
         #
         self.pickle()
+
+#        print '-- SymDict.parse_symbols_from_files: symbols are:'; self.print_symbols()                    
+
     
     def parse_symbols(self, file_name, add_sr_entries=1):
         """Parse symbols from a source file.
@@ -674,7 +676,7 @@ class SymDict(PickledObject.PickledObject):
 #            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
 
             language_definition = self.get_language_definition(file_name)
-#            print '-- SymDict.parse_symbols: language_definition=%s' % language_definition
+#            print '-- SymDict.parse_symbols: language_definition.name=%s' % language_definition.name
             source = self.strip_source(source, language_definition)
 
             #

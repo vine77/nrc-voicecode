@@ -83,28 +83,38 @@ def setmic(state):
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
 
-
-    sr_interface.connect('off')
+    try:
+        sr_interface.connect('off')
+    except natlink.UnknownName:
+        print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
+        quit()
+        
     if sr_interface.speech_able:
         if symdict_pickle_fname == None and the_mediator != None:
             #
             # Remove symbols from NatSpeak's dictionary 
             #
-#            print '-- mediator.init_simulator: before cleanup: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed
             the_mediator.interp.known_symbols.cleanup(resave=0)
-#            print '-- mediator.init_simulator: after cleanup: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed            
 
+        #
+        # It could be that the_mediator has previously been initiated (e.g. if
+        # we are running multiple regression tests). If so, must unload the
+        # SR grammars otherwise they will continue to exist and to recognise
+        # utterances.
+        #
+        if the_mediator:
+            if the_mediator.mixed_grammar:
+                the_mediator.mixed_grammar.unload()
+            if the_mediator.code_select_grammar:
+                the_mediator.code_select_grammar.unload()
+            
         the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-#        print '-- mediator.init_simulator: after MediatorObject(): the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                    
 
         #
         # Read the symbol dictionary from file
         #
         the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
-
-#        print '-- mediator.init_simulator: before init_from_file: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                            
         the_mediator.interp.known_symbols.init_from_file()
-#        print '-- mediator.init_simulator: after init_from_file: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                                    
 
         #
         # Configure the mediator
@@ -114,14 +124,10 @@ def init_simulator(symdict_pickle_fname=None):
 
 
     if sr_interface.speech_able:
-#         natlink.natConnect()
-#         natlink.setMicState('off')
         the_mediator.mixed_grammar.load()
         the_mediator.mixed_grammar.activate(0)
         the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
         the_mediator.code_select_grammar.activate()
-
-#    print '-- mediator.init_mediator: at end, abbrevitions are:'; the_mediator.interp.known_symbols.print_abbreviations()
 
     # define global variables accessible to the simulator commands
     # through the sim_commands module namespace
@@ -175,7 +181,6 @@ def simulator_mode(options):
     #
 #    compile_symbols(['D:/VoiceCode/VCode.testing/Data/TestDatat/native_python.py'])
 #    open_file('D:/blah.py')
-#    say(['define', 'class', 'command', 'interpreter', 'sub', 'class', 'of', 'object', 'class', 'body'])
 
 
     while (not sim_commands.quit_flag):
@@ -185,9 +190,8 @@ def simulator_mode(options):
         
 if (__name__ == '__main__'):
     
-    sr_interface.connect()
-
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None])
+    
 #    print '-- mediator.__main__: opts=%s' % opts
     
     if opts['h']:
@@ -196,7 +200,7 @@ if (__name__ == '__main__'):
 
     elif opts['t']:
         #
-        # Run mediator using an editor simulator
+        # Run mediator using an editor simulator, in profiling mode
         #
         profile.run("""
 simulator_mode(opts)""")
@@ -207,5 +211,5 @@ simulator_mode(opts)""")
         simulator_mode(opts)
 
     cleanup()
-    sr_interface.disconnect()
+    if not opts.has_key('h'): sr_interface.disconnect()
         

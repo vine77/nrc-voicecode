@@ -49,19 +49,15 @@ def run(to_run):
     in *to_run*is either the name of a test or the name of a test suite, or a
     regexp to be matched against test names.
     """
-#    print '-- run: to_run=%s' % str(to_run)
     tests_to_do = {}
     for an_entry in to_run:
         test_suite = expand_suite(an_entry)
         tests_to_do = util.dict_merge(tests_to_do, test_suite)
         
-#    print "-- run: test_to_do=%s\n" % tests_to_do
     test_names = tests_to_do.keys()
     test_names.sort()
-#    print "-- run: test_names=%s\n" % str(test_names)
 
     for a_test_name in test_names:
-#        print "-- run: a_test_name=%s\n" % a_test_name
         [fct, desc] = tests_to_do[a_test_name]
         sys.stdout.write(test_header(a_test_name, desc))
         apply(fct)

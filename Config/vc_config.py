@@ -1172,4 +1172,4 @@ sr_interface.addWord('un')
 sr_interface.addWord('sub class\\sub class')
 
 
-if (__name__ == '__main__'): natlink.natDisconnect()
+if (__name__ == '__main__'): sr_interface.disconnect()

@@ -96,7 +96,6 @@ class CmdInterp(Object):
         """
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
-
 	untranslated_words = []
 
         cmd = self.massage_command(cmd)
@@ -231,7 +230,7 @@ class CmdInterp(Object):
                  # text. Try to match untranslated text to a known (or new)
                  # symbol.
                  #
-#                print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
+#                 print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
                  self.match_untranslated_text(untranslated_words)
 	 	 untranslated_words = []
 
@@ -239,7 +238,7 @@ class CmdInterp(Object):
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self._untranslated_text_start=%s, self._untranslated_text_end=%s, self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self._untranslated_text_start, self._untranslated_text_end, self.on_app.curr_buffer.cur_pos)
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer.cur_pos)
 
 
 
@@ -285,9 +284,8 @@ class CmdInterp(Object):
         
         untranslated_text = string.join(untranslated_words)
 
-#        print '-- CmdInterp.match_untranslated_text: self._untranslated_text_start=%s, self._untranslated_text_end=%s, untranslated_text=\'%s\'' % (self._untranslated_text_start, self._untranslated_text_end, untranslated_text);
+#        print '-- CmdInterp.match_untranslated_text: untranslated_text=\'%s\'' % (untranslated_text);
 #        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
-#        print '-- CmdInterp.match_untranslated_text: self.known_symbols.symbol_info.keys()=%s' % self.known_symbols.symbol_info.keys()
         
         a_match = re.match('(\s*)([\s\S]*)\s*$', untranslated_text)
         text_no_spaces = a_match.group(2)
@@ -311,7 +309,6 @@ class CmdInterp(Object):
         #
         reg = '[\d\s]+'
         num_match = re.match(reg, text_no_spaces)
-#        print '--** CmdInterp.match_untranslated_text: before checking self.known_symbols.symbol_info.keys()=%s' % self.known_symbols.symbol_info.keys()
         if not self.known_symbols.symbol_info.has_key(text_no_spaces) and \
            not num_match:
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
@@ -322,10 +319,6 @@ class CmdInterp(Object):
 		self.on_app.insert_indent(untranslated_text, '')
 	else:
 	    self.on_app.insert_indent(untranslated_text, '')
-
-        #
-        # Now, there is no more untranslated text.
-        #
         
 
     def dlg_select_symbol_match(self, untranslated_text, symbol_matches):
@@ -582,6 +575,7 @@ class CmdInterp(Object):
         *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
         """
 #        print '-- CmdInterp.is_spoken_CSC: spoken_form=%s' % spoken_form
+#        print '--** CmdInterp.is_spoken_CSC:self.cmd_index        
         chopped_CSC = None
         if self.cmd_index.has_key(spoken_form):
             chopped_CSC = spoken_form
@@ -639,10 +633,14 @@ class CmdInterp(Object):
         known symbol.
         """
 
+#        print '-- CmdInterp.is_spoken_symbol: spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info)
+        
         written_symbol = None
         if self.known_symbols.spoken_form_info.has_key(spoken_form):
             written_symbol = self.choose_best_symbol(spoken_form, self.known_symbols.spoken_form_info[spoken_form].symbols)
-            
+
+#        print '-- CmdInterp.is_spoken_symbol: returning written_symbol=\'%s\'' % written_symbol
+        
         return written_symbol
 
     def choose_best_symbol(self, spoken_form, choices):
