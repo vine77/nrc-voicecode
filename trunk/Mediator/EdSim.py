@@ -162,6 +162,8 @@ class EdSim(AppState):
         elif (pos > len(buff.content)):
             pos = len(buff.content)
         buff.cur_pos = pos
+        buff.selection_start = None
+        buff.selection_end = None
 
 
 
@@ -190,6 +192,21 @@ class EdSim(AppState):
             if not found:
                 buff = self.find_buff(f_name)
                 self.goto(len(buff.content) - 1)
+                
+    def select(self, start, end, f_name=None):
+        """Selects from position *INT start* up to *INT end* of source buffer
+        associated to file with name *STR f_name*.
+
+        If *f_name* is *None*, use [self.curr_buffer].
+
+        .. [self.curr_buffer] AppState"""
+
+        buff = self.find_buff(f_name)
+        buff.selection_start = start
+        buff.selection_end = end
+        buff.cur_pos= start
+        self.print_buff_content()
+
         
     def number_lines(self, astring, startnum=1):
         """Assign numbers to lines in a string.
@@ -275,37 +292,37 @@ class EdSim(AppState):
         print. If *None*, then print current buffer.    
         """
         buff = self.find_buff(file_name)
-        pos = buff.cur_pos
         cont = self.curr_buffer.content
 
+        
+#        print '-- EdSim.print_buff_content: selection_start=%s, selection_end=%s, cur_pos=%s' % (buff.selection_start, buff.selection_end, buff.cur_pos)
         if buff.selection_start != None or buff.selection_end != None:
-            if buff.selecton_start <= buff.selection_end:
-                before_end = buff.selection_start - 1
+            if buff.selection_start <= buff.selection_end:
                 selection_start = buff.selection_start
                 selection_end = buff.selection_end
-                after_star = selection_end + 1
-            else 
-                before_end = buff.selection_end - 1
+            else:
                 selection_start = buff.selection_end
                 selection_end = buff.selection_start
-                after_star = selection_start + 1
         else:
-            before_end = buff.cur_pos - 1
             selection_start = buff.cur_pos
             selection_end = buff.cur_pos
-            selection_end = buff.cur_pos + 1
 
-        before_content = cont[:before_end]
+#        print '-- EdSim.print_buff_content: selection_start=%s, selection_end=%s' % (selection_start, selection_end)
+
+        before_content = cont[:selection_start]
         selection_content = cont[selection_start:selection_end]
-        after_content = cont[after_start:]
+        after_content = cont[selection_end:]
+
+#        print '-- EdSim.print_buff_content: before_content=%s, selection_content=%s, after_content=%s' % (before_content, selection_content, after_content)
         
         sys.stdout.write("*** Start of source buffer ***\n")
 
         #
         # Print region before the selection.
         #
-        curr_line_num = 0
+        curr_line_num = 1
         lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
+#        print '-- EdSim.print_buff_content: before selection lines_with_num=%s' % repr(lines_with_num)        
         for aline in lines_with_num[:len(lines_with_num)-1]:
             sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
         if (len(lines_with_num) > 0):
@@ -320,20 +337,22 @@ class EdSim(AppState):
         #
         # Print the selection
         #
-        curr_line_num = line_index + len(lines_with_num) - 1
+        curr_line_num = curr_line_num + len(lines_with_num) - 1
         lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
+#        print '-- EdSim.print_buff_content: selection lines_with_num=%s' % repr(lines_with_num)
         if (len(lines_with_num) > 0):
             firstline = lines_with_num[0]
             sys.stdout.write('%s\n' % firstline[1])
             for aline in lines_with_num[1:]:
                 sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if seletion_content != '': sys.stdout.write('<SEL_END>')
+        if selection_content != '': sys.stdout.write('<SEL_END>')
 
         #
         # Print region after the selection
         #
-        curr_line_num = line_index + len(lines_with_num) - 1
-        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
+        curr_line_num = curr_line_num + len(lines_with_num) - 1
+        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
+#        print '-- EdSim.print_buff_content: after selection lines_with_num=%s' % repr(lines_with_num)
         if (len(lines_with_num) > 0):
             firstline = lines_with_num[0]
             sys.stdout.write('%s\n' % firstline[1])
@@ -395,3 +414,5 @@ auto_test.add_test('EdSim', self_test, desc='self-test for EdSim.py')
 
 if (__name__ == '__main__'):
     self_test()
+
+

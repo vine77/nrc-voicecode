@@ -6,4 +6,4 @@ def not_implemented(name):
 
 def virtual(name):
     """Prints warning message when a virtual method is called."""
-    print "WARNING: virtual method %s called!!!" % name    
+    print "WARNING: virtual method '%s' called!!!" % name    

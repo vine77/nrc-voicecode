@@ -49,6 +49,9 @@ goto(INT pos)
 goto_line(INT linenum)
    Moves cursor to the beginning of line number *linenum*
 
+select(INT start, end)
+   Selects from position *start* to position *end* in current buffer
+
 show_buff()
    Prints the content of the current buffer
 
@@ -149,6 +152,10 @@ def goto_line(linenum):
     config.interp.app.goto_line(linenum)
     show_buff()
 
+def select(start, end):
+    """Selects from position *start* to position *end* in current buffer"""
+    config.interp.app.select(start, end)
+    
 def show_buff():
     """Shows content of current source buffer"""
     config.interp.app.print_buff_content()
@@ -199,26 +206,6 @@ def quit():
 if (__name__ == '__main__'):
 
     opts, args = util.gopt(['h', None, 's', None])
-
-#
-# For better error reporting, you can type some instructions here instead
-# of typing them at the console.
-# The fact that the console commands are eval'ed means the error reporting
-# isn't great
-#
-#    compile_symbols(['D:/Temp/blah.py'])
-#    compile_symbols(['Actions_C.py', 'AppState.py', 'CSCmd.py', 'CmdInterp.py', 'Context.py', 'EdSim.py', 'LangDef.py', 'Object.py', 'SelfHandlingExc.py', 'SourceBuff.py', 'SymDict.py', 'VoiceDictation.py', 'actions_C_Cpp.py', 'actions_gen.py', 'actions_py.py', 'config.py', 'cont_gen.py', 'debug.py', 'mediator.py', 'safe_setattr.py', 'util.py', 'vc_globals.py'])
-#    compile_symbols(['D:/VoiceCode/VCode/Data/TestData/large_buff.py'])
-#    open_file('D:/blah.py')
-#    say('for a base in')
-#    unresolved_abbreviations()
-#    clear_symbols()
-#    say('horizontal position = 0', bypass_NatLink=1)
-#      say('witharguments', bypass_NatLink=1)
-#    unresolved_abbreviations()
-#    clear_symbols()
-#    quit()
-
     if opts['h']:
         print __doc__
     elif opts['s']:
@@ -234,6 +221,26 @@ if (__name__ == '__main__'):
             config.mixed_grammar.activate()
             config.code_select_grammar.load( ['Select', 'Correct'] )
             config.code_select_grammar.activate()
+
+
+#
+# For better error reporting, you can type some instructions here instead
+# of typing them at the console.
+# The fact that the console commands are eval'ed means the error reporting
+# isn't great
+#
+#    compile_symbols(['D:/Temp/blah.py'])
+#    compile_symbols(['Actions_C.py', 'AppState.py', 'CSCmd.py', 'CmdInterp.py', 'Context.py', 'EdSim.py', 'LangDef.py', 'Object.py', 'SelfHandlingExc.py', 'SourceBuff.py', 'SymDict.py', 'VoiceDictation.py', 'actions_C_Cpp.py', 'actions_gen.py', 'actions_py.py', 'config.py', 'cont_gen.py', 'debug.py', 'mediator.py', 'safe_setattr.py', 'util.py', 'vc_globals.py'])
+#    compile_symbols(['D:/VoiceCode/VCode/Data/TestData/large_buff.py'])
+        open_file('D:/VoiceCode/VCode/Data/TestData/small_buff.c')
+#    say('for a base in')
+#    unresolved_abbreviations()
+#    clear_symbols()
+#    say('horizontal position = 0', bypass_NatLink=1)
+#      say('witharguments', bypass_NatLink=1)
+#    unresolved_abbreviations()
+#    clear_symbols()
+#    quit()
         
             
         while (not quit_flag):
