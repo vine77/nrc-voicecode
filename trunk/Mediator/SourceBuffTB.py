@@ -28,7 +28,7 @@ from SourceBuff import *
 
 from Object import Object
 
-class SourceBuffTB(Object):
+class SourceBuffTB(SourceBuff):
     """implementation of (most of) SourceBuff as a wrapper around an
     object which inherits multiple interfaces: TextBuffer, VisibleBuffer, 
     and NumberedLines.
