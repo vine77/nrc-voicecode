@@ -98,6 +98,19 @@ class GenEdit(Object.OwnerObject):
 # has an owner, GenEdit must call cleanup itself when the user
 # tells it to exit
         
+    def file_name(self, buff_name):
+        """returns the current filename associated with a given buffer
+
+        **INPUTS**
+
+        *STR buff_name* -- the name of the buffer
+
+        **OUTPUTS**
+
+        *STR* -- the filename
+        """
+        debug.virtual('GenEdit.file_name')
+
     def set_app_control(self, app_control):
         """method called by app_control's (AppStateGenEdit.) __init__ 
 	to supply reference to itself, so that GenEdit can perform
@@ -530,6 +543,22 @@ class GenEditBuffers(GenEdit):
 # function, after performing their own duties
         GenEdit.remove_other_references(self)
 
+    def file_name(self, buff_name):
+        """returns the current filename associated with a given buffer
+
+        **INPUTS**
+
+        *STR buff_name* -- the name of the buffer
+
+        **OUTPUTS**
+
+        *STR* -- the filename
+        """
+        try:
+            return self.filenames[buff_name]
+        except KeyError:
+            return None
+
     def open_buffers(self):
         """retrieve a list of the names of open buffers from the
 	application.
@@ -637,6 +666,7 @@ class GenEditBuffers(GenEdit):
             return 0
         self.buffers[buff_name] = buffer
         self.filenames[buff_name] = None
+        buffer.name_file("")
         if perform_callback and self.app_control:
             self.app_control.open_buffer_cbk(buff_name)
         return 1
@@ -823,6 +853,7 @@ class GenEditBuffers(GenEdit):
         if path:
             self.curr_dir = path
         self.filenames[new_buff_name] = file_name
+        self.buffers[new_buff_name].name_file(file_name)
         self.show_buffer(new_buff_name, perform_callback =
             user_initiated)
 #        print 'after show buffer: buffers = ', self.buffers.keys()
@@ -935,6 +966,7 @@ class GenEditBuffers(GenEdit):
                 self.rename_buffer(buff_name, new_buff_name,
                     perform_callback = user_initiated)
             self.filenames[new_buff_name] = f_path
+            buffer.name_file(f_path)
             self.update_title(new_buff_name)
         return new_buff_name
 

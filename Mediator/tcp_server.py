@@ -314,7 +314,7 @@ class AppStateFactorySimple(AppStateFactory):
         app = as_class(app_name=app_name, id=id, 
             listen_msgr=listen_msgr, talk_msgr=talk_msgr,
             listen_can_block = listen_can_block)
-        app.app_name = app_name
+#        app.app_name = app_name
         return app
 
 
