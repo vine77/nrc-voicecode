@@ -109,10 +109,17 @@ class WaxEdSimPane(wxPanel):
 	    ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
         self.top_and_bottom=top_and_bottom
+	flags = wxTE_MULTILINE 
+	cr_bug = 1
+	if sys.platform == 'win32':
+# allows text longer than 64K
+	    flags = flags | wxTE_RICH
+	    cr_bug = 0
         editor =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
-	    wxDefaultSize,wxTE_MULTILINE)
+	    wxDefaultSize, flags)
+#	    wxDefaultSize, wxTE_MULTILINE)
         log =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
-	    wxDefaultSize,wxTE_MULTILINE | wxTE_READONLY)
+	    wxDefaultSize, flags | wxTE_READONLY)
         self.editor = editor
         self.log = log
 	self.prompt_text = "Command> "
@@ -142,7 +149,9 @@ class WaxEdSimPane(wxPanel):
 
   
         self.wax_text_buffer = \
-	    TextBufferWX.TextBufferWX(self.editor, change_callback=self.on_editor_change)
+	    TextBufferWX.TextBufferWX(self.editor, 
+	    carriage_return_bug = cr_bug,
+	    change_callback=self.on_editor_change)
         self.SetAutoLayout(1)
         self.SetSizer(self.vbox)
         self.vbox.Fit(self)
