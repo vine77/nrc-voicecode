@@ -68,7 +68,7 @@ def test_py_unit():
    unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test')) 
    print "\n*** Making sure that failing tests won't halt the whole test process."   
    unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test'))    
-#   unittest.TextTestRunner().run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test'))    
+   unittest.TextTestRunner().run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test'))    
    
 add_test('py_unit', test_py_unit, 'Testing that pyUnit works ok.')
 
