@@ -1672,7 +1672,6 @@ class SourceBuff(OwnerObject):
         # Figure out the text before/within/after the selection
         #
         selection_start, selection_end = self.get_selection()
-                                       (self, self.cur_pos(), selection_start, selection_end))
 
         #
         # Figure out the first and last line to be printed

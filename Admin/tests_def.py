@@ -3246,7 +3246,7 @@ def test_new_statement():
                  'of', 'a', 'line'], user_input='1\n', echo_utterance=1)
 
 # goto_beginning_of_line() doesn't work correctly in above tests                
-# add_test('new_statement', test_new_statement, desc='Test creation of new statements above/below current line')   
+#add_test('new_statement', test_new_statement, desc='Test creation of new statements above/below current line')   
 
    
 
@@ -3315,11 +3315,15 @@ add_test('profile_config', test_profile_config,
 
 def test_temporary():  
 
-    temp_config = temp_factory.new_config(skip_config = 1)
-#     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
-#         interp=CmdInterp.CmdInterp())
+   testing.init_simulator_regression()
+   temp_config = temp_factory.new_config()   
+      
+   commands.open_file('blah.py')
 
-    print commands.app
+   commands.say(['hello', 'world', 'new', 'statement'] , user_input="0\n", echo_utterance=1)      
+   commands.say(['hello', 'world', 'two', 'new', 'statement'] , user_input="0\n", echo_utterance=1)         
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+
    
 #add_test('temp', test_temporary, desc='temporary test')
 

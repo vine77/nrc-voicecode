@@ -55,8 +55,8 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-                         'SourceBuff.print_buff': 1,
-                         'SourceBuff.lines_around_cursor': 1,
+#                         'SourceBuff.print_buff': 1,
+#                         'SourceBuff.lines_around_cursor': 1,
 ######################################################
 #                        'SymDict.init_from_file': 1,
 #                        'wxMediator': 1,
