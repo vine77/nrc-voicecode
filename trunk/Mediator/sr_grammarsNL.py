@@ -67,15 +67,27 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
         GrammarBase.__init__(self)
         
         
-        # AD: Set thesee to 0 if you don't want to generate grammars for dictating
+        # AD: When these are set to 1, we generate grammars for dictating
         #     CSCs, LSAs and known symbol through a command grammar.
-        #     Actually, this will still generate the grammars, but they will
-        #     be empty. 
-        #     This is there as a temporary measure so I can experiment with 
-        #     turning the grammars on and off.
-        #     Should be removed once I have decided whether or not such a
-        #     grammar is a good idea.
-        self.generate_csc_lsa_gram = 0
+        #     This is meant to (not proven yet) improve the accuracy,
+        #     but also, in the case of CSCs and LSAs, it prevents conflicts
+        #     between a discrete NatSpeak command and a CSC or LSA with same
+        #     spoken form (for example, the VCode CSC "copy that" would other
+        #     not be recognised because the NatSpeak command "copy that" intercepts
+        #     the utterance).
+        #
+        #     Note that in the case of generate_sym_gram,
+        #     setting it to 1 creates very large grammars and NatSpeak usually
+        #     chokes on them. I leave it here in case we eventually find a
+        #     workaround this problem.
+        #
+        #     Also, currently in the case of generate_csc_lsa_gram, even if it set to 1,
+        #     we only generate discrete commands for CSCs (not LSAs), and even there, we only
+        #     do it for CSCs that have generate_discrete_cmd = 1 (i.e. commands where 
+        #     we explicitly asked for a discrete command because we know the CSC conflicts
+        #     with a NatSpeak command).
+        #
+        self.generate_csc_lsa_gram = 1
         self.generate_sym_gram = 0
         
         self.load(self._gram_spec())

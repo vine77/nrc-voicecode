@@ -80,7 +80,7 @@ class CSCmd(Object):
         """
         self.deep_construct(CSCmd,
                             {'spoken_forms': spoken_forms,
-                             'meanings': CSCmdDict(meanings),
+                             'meanings': CSCmdDict(meanings, generate_discrete_cmd),
                              'generate_discrete_cmd': generate_discrete_cmd
                             },
                             attrs)
@@ -184,6 +184,9 @@ class CSCmdDict(Object):
     *actions=*{* STR: Action *}* -- Dictionary of actions to take in
     the corresponding context.  The key is a string returned by
     Context.equivalence_key (see Context for details).
+    
+    *BOOL generate_discrete_cmd=0* -- If true, then a command should be 
+    added to the discrete commands grammar for CSCs.
 
     CLASS ATTRIBUTES**
         
@@ -192,16 +195,20 @@ class CSCmdDict(Object):
     .. [Context] file:///./Context.Context.html
     .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, meanings={}, **attrs):
+    def __init__(self, meanings={}, generate_discrete_cmd=0, **attrs):
         """
         **INPUTS**
+
+        *BOOL generate_discrete_cmd* -- If true, then a command should be 
+    added to the discrete commands grammar for CSCs.
 
         *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
         possible contextual meanings for this command. Key is a context
         and value is an action object to be fired if that context applies.
-        """
+        """           
         self.deep_construct(CSCmdDict,
-                            {'by_scope': {},
+                            {'generate_discrete_cmd': generate_discrete_cmd,
+                             'by_scope': {},
                              'contexts': {}, 
                              'actions': {}
                             },
@@ -222,7 +229,8 @@ class CSCmdDict(Object):
         *CSCmdDict* -- the copy
         """
         meanings = self._extract_meanings()
-        return CSCmdDict(meanings)
+        generate_discrete_cmd = self.generate_discrete_cmd
+        return CSCmdDict(meanings, generate_discrete_cmd)
 
     def _extract_meanings(self):
         """private method which converts the actions and contexts from a
