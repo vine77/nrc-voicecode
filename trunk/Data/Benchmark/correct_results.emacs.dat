@@ -7,7 +7,7 @@ C:\eclipse\workspace\VCode\Mediator>rem
 
 C:\eclipse\workspace\VCode\Mediator>c:
 
-C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+C:\eclipse\workspace\VCode\Mediator>cd C:\eclipse\workspace\VCode\Mediator 
 
 C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
 
@@ -768,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02317538>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x020C27F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1286,10 +1286,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+'C:\\eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3422,6 +3422,265 @@ Heard act out
 
 symbol act_out has spoken forms ['act out']
 
+***Testing reformatting of a new symbol to another new symbol***
+
+
+
+>>> Testing console command: say(['new', 'statement', 'return', 'size', 'of', 'promised', 'tax', 'cuts'], user_input='0
+')
+Heard new statement return size of promised tax cuts
+  5: 
+  6: class RedBook:
+  7:     def act_out(self):
+  8:         return size_of_promised_tax_cuts<CURSOR>
+  9:         
+
+*** End of source buffer ***
+Removing item sz_of_prom_tax_cuts from list ['size_of_promised_tax_cuts'], with a max number of occurences of None
+Returning ['size_of_promised_tax_cuts']
+  4: success = 1
+  5: 
+  6: class RedBook:
+  7:     def act_out<CURSOR>(self):
+  8:         
+
+*** End of source buffer ***
+  5: 
+  6: class RedBook:
+  7:     def act_out(self):
+  8:         return sz_of_prom_tax_cuts<CURSOR>
+  9:         
+
+*** End of source buffer ***
+
+***Testing state***
+
+
+16 stored utterances, as expected
+
+
+16 recently dictated utterances, as expected
+
+
+***Testing tentative symbol removal and correct symbol addition on correction***
+
+symbol size_of_promised_tax_cuts has spoken forms ['size of promised tax cuts']
+symbol sz_of_prom_tax_cuts has spoken forms ['size of promised tax cuts', 'S. Z. of prom tax cuts', 'SZ of prom tax cuts']
+
+***Testing subsequent dictation of reformatted symbol***
+
+
+
+>>> Testing console command: say(['new', 'statement', 'size', 'of', 'promised', 'tax', 'cuts', 'equals', 'zero'], user_input='0
+')
+Heard new statement size of promised tax cuts equals zero
+  6: class RedBook:
+  7:     def act_out(self):
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0<CURSOR>
+ 10:         
+
+*** End of source buffer ***
+
+***Testing reformatting of an existing symbol to a new symbol***
+
+symbol RedBook has spoken forms ['red book']
+symbol red_bk did not exist, as expected
+
+
+>>> Testing console command: say(['new', 'statement', 'red', 'book', 'equals', 'none'], user_input='0
+')
+Heard new statement red book equals none
+  7:     def act_out(self):
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     RedBook = None<CURSOR>
+ 11:         
+
+*** End of source buffer ***
+Removing item red_bk from list ['RedBook'], with a max number of occurences of None
+Returning ['RedBook']
+  6: class RedBook:
+  7:     def act_out(self):
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0<CURSOR>
+ 10:         
+
+*** End of source buffer ***
+  7:     def act_out(self):
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     red_bk = None<CURSOR>
+ 11:         
+
+*** End of source buffer ***
+
+***Testing state***
+
+
+18 stored utterances, as expected
+
+
+18 recently dictated utterances, as expected
+
+
+***Testing correct new symbol addition on correction***
+
+symbol RedBook has spoken forms ['red book']
+symbol red_bk has spoken forms ['red book', 'red B. K.', 'red BK']
+
+***Testing subsequent dictation of reformatted symbol***
+
+
+
+>>> Testing console command: say(['new', 'statement', 'red', 'book', 'equals', 'zero'], user_input='0
+')
+Heard new statement red book equals zero
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     red_bk = None
+ 11:     red_bk = 0<CURSOR>
+ 12:         
+
+*** End of source buffer ***
+
+***Testing reformatting of an existing symbol to an other existing symgol ***
+
+symbol BlueBook has spoken forms ['blue book']
+symbol blue_bk has spoken forms ['blue book', 'blue B. K.', 'blue BK']
+
+
+>>> Testing console command: say(['new', 'statement', 'blue', 'book', 'equals', 'none'], user_input='0
+')
+Heard new statement blue book equals none
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     red_bk = None
+ 11:     red_bk = 0
+ 12:     BlueBook = None<CURSOR>
+ 13:         
+
+*** End of source buffer ***
+Removing item blue_bk from list ['BlueBook', 'blue_bk'], with a max number of occurences of None
+Returning ['BlueBook']
+  8:         return sz_of_prom_tax_cuts
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     red_bk = None
+ 11:     red_bk = 0<CURSOR>
+ 12:         
+
+*** End of source buffer ***
+  9:     sz_of_prom_tax_cuts = 0
+ 10:     red_bk = None
+ 11:     red_bk = 0
+ 12:     blue_bk = None<CURSOR>
+ 13:         
+
+*** End of source buffer ***
+
+***Testing state***
+
+
+20 stored utterances, as expected
+
+
+20 recently dictated utterances, as expected
+
+
+WARNING: status of utterance 13 (['success', 'equals', 'one', 'new', 'line']) was 0 (expected 1)
+
+***Checking that both symbols are still there***
+
+symbol BlueBook has spoken forms ['blue book']
+symbol blue_bk has spoken forms ['blue book', 'blue B. K.', 'blue BK']
+
+***Testing subsequent dictation of reformatted symbol***
+
+
+
+>>> Testing console command: say(['new', 'statement', 'blue', 'book', 'equals', 'zero'], user_input='0
+')
+Heard new statement blue book equals zero
+ 10:     red_bk = None
+ 11:     red_bk = 0
+ 12:     blue_bk = None
+ 13:     blue_bk = 0<CURSOR>
+ 14:         
+
+*** End of source buffer ***
+
+***Testing reformatting of a new symbol to a existing one ***
+
+symbol osym has spoken forms ['O. symbol', 'osym']
+symbol other_symbol did not exist, as expected
+
+
+>>> Testing console command: say(['new', 'statement', 'other', 'symbol', 'equals', '0'], user_input='0
+')
+Heard new statement other symbol equals 0
+ 11:     red_bk = 0
+ 12:     blue_bk = None
+ 13:     blue_bk = 0
+ 14:     other_symbol = 0<CURSOR>
+ 15:         
+
+*** End of source buffer ***
+Removing item osym from list ['other_symbol'], with a max number of occurences of None
+Returning ['other_symbol']
+ 10:     red_bk = None
+ 11:     red_bk = 0
+ 12:     blue_bk = None
+ 13:     blue_bk = 0<CURSOR>
+ 14:         
+
+*** End of source buffer ***
+ 11:     red_bk = 0
+ 12:     blue_bk = None
+ 13:     blue_bk = 0
+ 14:     osym = 0<CURSOR>
+ 15:         
+
+*** End of source buffer ***
+
+***Testing state***
+
+
+## AD: Is there an issue with the warnings below?##
+
+
+22 stored utterances, as expected
+
+
+22 recently dictated utterances, as expected
+
+
+WARNING: status of utterance 12 (['new', 'class']) was 0 (expected 1)
+
+WARNING: status of utterance 13 (['new', 'statement']) was 0 (expected 1)
+
+WARNING: status of utterance 14 (['back indent']) was 0 (expected 1)
+
+WARNING: status of utterance 15 (['success', 'equals', 'one', 'new', 'line']) was 0 (expected 1)
+
+***Checking that tentative new symbol was removed ***
+
+symbol osym has spoken forms ['O. symbol', 'osym', 'other symbol']
+symbol other_symbol has spoken forms ['other symbol']
+
+***Testing subsequent dictation of reformatted symbol***
+
+
+
+>>> Testing console command: say(['new', 'statement', 'other', 'symbol', 'equals', 'one'], user_input='0
+')
+Heard new statement other symbol equals one
+ 12:     blue_bk = None
+ 13:     blue_bk = 0
+ 14:     osym = 0
+ 15:     osym = 1<CURSOR>
+ 16:         
+
+*** End of source buffer ***
+
 
 *******************************************************************************
 * Name        : beg_end_of_line
@@ -3690,7 +3949,7 @@ Heard check if was done without arguments new statement
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -4874,7 +5133,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5486,7 +5745,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7894,6 +8153,41 @@ Heard this is a commented out
 
 
 *******************************************************************************
+* Name        : py_unit
+* Description : Testing that pyUnit works ok.
+*******************************************************************************
+
+F.
+======================================================================
+FAIL: test_always_fail (pyUnitExample.SampleTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
+    assert self.var == 2, "This should always fail"
+AssertionError: This should always fail
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (failures=1)
+
+*** Making sure that failing tests won't halt the whole test process.
+F.
+======================================================================
+FAIL: test_always_fail (pyUnitExample.SampleTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
+    assert self.var == 2, "This should always fail"
+AssertionError: This should always fail
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (failures=1)
+
+
+*******************************************************************************
 * Name        : python
 * Description : testing the various CSCs and LSAs for dictating Python from scratch
 *******************************************************************************
@@ -9740,7 +10034,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9866,7 +10160,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12553,6 +12847,18 @@ Heard new statement
 
 
 *******************************************************************************
+* Name        : symbol_reformatting_ui
+* Description : Testing symbol reformatting UI.
+*******************************************************************************
+
+.
+----------------------------------------------------------------------
+Ran 1 tests in 0.000s
+
+OK
+
+
+*******************************************************************************
 * Name        : syntax_navigation
 * Description : testing navigation by syntax in C
 *******************************************************************************
@@ -12829,5 +13135,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  585.540999889 secs
+Test suite completed in:  462.705000162 secs
 -----------------------------------------------

@@ -89,6 +89,15 @@ def disconnect_from_sr(disconnect, save_speech_files):
 def do_nothing(*positional, **keywords):
     pass
 
+class BadRelativeUtteranceIndex(exceptions.RuntimeError):
+    """Raised when the relative index of an utterance is wrong.
+    """
+    def __init__(self, rel_index, reason):
+       msg = "Relative uttereance index %s was %s" % (rel_index, reason)
+       RuntimeError.__init__(self, msg)
+       self.msg = msg
+    
+
 class NewMediatorObject(Object.OwnerObject):
     """Main object for the mediator.
 
@@ -370,7 +379,6 @@ class NewMediatorObject(Object.OwnerObject):
             self.new_app_mgr()
         if server:
             server.set_mediator(self)
-        debug.trace('NewMediatorObject.__init__', '** exited')            
 
     def new_app_mgr(self):
         """create a new AppMgr if one was not supplied to  the
@@ -845,7 +853,6 @@ class NewMediatorObject(Object.OwnerObject):
         self.reset_results_mgr()
         self.editors.set_exclusive(exclusive)
         self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
-        debug.trace('NewMediatorObject.reset', '** exited')        
 
     def reconfigure(self, exclude = None, config_file=None,
         user_config_file = None,
@@ -914,7 +921,7 @@ class NewMediatorObject(Object.OwnerObject):
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
             use_pickled_interp = use_pickled_interp)
-        debug.trace('NewMediatorObject.reconfigure', '** exited')                    
+                    
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
@@ -1504,6 +1511,35 @@ class NewMediatorObject(Object.OwnerObject):
         """
         self.editors.reset_results_mgr(instance_name = instance_name)
 
+    def rel_utter_index_to_utter_id(self, rel_index, instance_name):
+        """Converts a relative utterance index (i.e. index from
+        the end of the list of stored utterances) to an absolute
+        index (i.e. index from the start of the stored utterances list).
+        
+        **INPUTS**
+        
+        INT *rel_index*  -- index to be converted.
+        
+        STR *instance_name* -- the editor 
+        
+        
+        **OUTPUTS**
+        
+        INT *utter_id* -- absolute index
+        """
+
+        recent = self.recent_dictation(instance_name)       
+        
+        if rel_index > len(recent):
+            raise BadRelativeUtteranceIndex(rel_index, "too large")
+        elif rel_index < 1:
+            raise BadRelativeUtteranceIndex(rel_index, "too small")
+            
+        utter_id = recent[-rel_index][1]            
+
+
+        return utter_id
+
     def stored_utterances(self, instance_name):
         """queries the ResMgr to see how many dictated utterances have 
         been stored for the specified editor
@@ -1570,7 +1606,7 @@ class NewMediatorObject(Object.OwnerObject):
         debug.trace('NewMediatorObject.scratch_recent', 'instance_name=%s, n=%s' % (instance_name, n))
         return self.editors.scratch_recent(instance_name, n = n)
 
-    def reinterpret_recent(self, instance_name, changed):
+    def reinterpret_recent(self, instance_name, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -1586,6 +1622,10 @@ class NewMediatorObject(Object.OwnerObject):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
+
 
         **OUTPUTS**
 
@@ -1594,7 +1634,7 @@ class NewMediatorObject(Object.OwnerObject):
         with the oldest first, or None if no utterances could be 
         reinterpreted
         """
-        return self.editors.reinterpret_recent(instance_name, changed)
+        return self.editors.reinterpret_recent(instance_name, changed, delete_tentative_syms)
 
 
     def can_correct_that_far_back(self, instance_name, utters_to_correct):
@@ -1622,18 +1662,15 @@ class NewMediatorObject(Object.OwnerObject):
             n_recent = len(recent)
 
         earliest = max(utters_to_correct)
-        debug.trace('NewMediatorObject.can_correct_that_far_back', '** n=%s, n_recent=%s, earliest=%s' % (n, n_recent, earliest))
         if n < earliest:
             print "\ncan't correct error %d utterances ago" % earliest
             print "because stored_utterances only goes back %d\n" % n
             sys.stdout.flush()
-            debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')            
             return 0
         if n_recent < earliest:
             print "\ncan't correct error %d utterances ago" % earliest
             print "because recent_dictation only goes back %d\n" % n_recent
             sys.stdout.flush()
-            debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')                        
             return 0
         okay = 1
         for i in utters_to_correct:
@@ -1642,7 +1679,6 @@ class NewMediatorObject(Object.OwnerObject):
                 print "because can_reinterpret returned false, but we'll try anyway\n" 
                 sys.stdout.flush()
             if not okay:
-                debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')                        
                 return 0
                 
         return 1
@@ -1665,16 +1701,29 @@ class NewMediatorObject(Object.OwnerObject):
 
         *None*
         """
-        debug.trace('NewMediatorObject.correct_recent_symbols', '** invoked')
+        recent = self.recent_dictation(instance_name)
+        utters_to_reinterpret_abs_indices = []
+        debug.trace('NewMediatorObject.correct_recent_symbols', 'corrections=%s' % repr(corrections))
         if self.can_correct_that_far_back(instance_name, corrections.keys()):
-           debug.trace('NewMediatorObject.correct_recent_symbols', '** can correct')        
            for utter_rel_index in corrections.keys():
-              debug.trace('NewMediatorObject.correct_recent_symbols', '** utter_rel_index=%s' % utter_rel_index)
               spoken_form_used, bad_written, correct_written  \
                  = corrections[utter_rel_index]
               self.correct_symbol(spoken_form_used, bad_written, correct_written)
-           self.reinterpret_recent(instance_name, corrections.keys())
-              
+              utters_to_reinterpret_abs_indices.append(self.rel_utter_index_to_utter_id(utter_rel_index, instance_name))
+           
+           #
+           # Note: When correcting format, we don't try to delete the 
+           #       badly formatted symbol even if it was tentative. 
+           #       That's because the same symbol may be formatted
+           #       in different ways in the same file.
+           #
+           #          C++ ex: CmdInterp cmd_interp;
+           #
+           self.reinterpret_recent(instance_name, 
+                                   utters_to_reinterpret_abs_indices, 
+                                   delete_tentative_syms=0)
+
+                          
     def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
         """Correct the written form of a symbol.
 

@@ -1538,20 +1538,12 @@ class CmdInterp(OwnerObject):
            known_spoken_forms = {}
            if not empty:          
               for cmd_dict in  self.commands.items():
-                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                             '** cmd_dict=%s' % repr(cmd_dict))
                  spoken_form = string.join(cmd_dict[0])
                  known_spoken_forms[spoken_form] = 1
                  
-              for lsa_word_trie in self.language_specific_aliases.values():
-                 debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                             '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
+              for lsa_word_trie in self.language_specific_aliases.values():                        
                  for an_lsa_word_trie_entry in lsa_word_trie.items():
-                    debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                                '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
                     spoken_form = string.join(an_lsa_word_trie_entry[0])
-                    debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                                '** spoken_form=%s' % repr(spoken_form))                                                        
                     known_spoken_forms[spoken_form] = 1
 
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
@@ -1559,8 +1551,6 @@ class CmdInterp(OwnerObject):
            #       a crash).           
            self._spoken_commands_gram_rule = "<%s> = dummyghjetqwer" % rule_name
            for a_known_spoken_form in known_spoken_forms.keys():
-              debug.trace('CmdInterp.gram_spec_spoken_cmd', 
-                          '** a_known_spoken_form=%s' % repr(a_known_spoken_form))
               self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + "|%s" % a_known_spoken_form
            self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + ";\n"
                    
@@ -1585,11 +1575,7 @@ class CmdInterp(OwnerObject):
            known_spoken_forms = {}
            if not empty:
               for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
-                 debug.trace('CmdInterp.gram_spec_spoken_symbol', 
-                             '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
                  spoken_form = string.join(a_word_trie_entry[0])
-                 debug.trace('CmdInterp.gram_spec_spoken_symbol', 
-                             '** spoken_form=%s' % repr(spoken_form))                                                        
                  known_spoken_forms[spoken_form] = 1           
                       
            # Note: dummyghjetqwer is an unpronouceable dummy word used to 
@@ -1737,7 +1723,7 @@ class CmdInterp(OwnerObject):
                 'now, phrase = %s' % phrase)
             trace('CmdInterp.interpret_phrase', 
                 'processed phrase = %s' % processed_phrase)
-
+                
             #
             # Identify leading CSC, LSA, symbol and ordinary word
             #
@@ -2498,7 +2484,6 @@ class CmdInterp(OwnerObject):
         match = self.known_symbols.match_phrase(phrase)
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'match = %s' % repr(match))
-#        print match
         if match[0] is None:
             return None, 0
         symbols, rest_spoken = match
@@ -3111,23 +3096,13 @@ class CmdInterp(OwnerObject):
 
     def _cmd_spoken_forms(self):
        known_spoken_forms = {}     
-       debug.trace('CmdInterp._cmd_spoken_forms', 
-                   '** self.commands.items()=%s' % repr(self.commands.items()))            
        for cmd_dict in  self.commands.items():
-          debug.trace('CmdInterp._cmd_spoken_forms', 
-                      '** cmd_dict=%s' % repr(cmd_dict))
           spoken_form = string.join(cmd_dict[0])
           known_spoken_forms[spoken_form] = 1
                  
        for lsa_word_trie in self.language_specific_aliases.values():
-          debug.trace('CmdInterp._cmd_spoken_forms', 
-                      '** lsa_word_trie=%s' % repr(lsa_word_trie))                         
           for an_lsa_word_trie_entry in lsa_word_trie.items():
-             debug.trace('CmdInterp._cmd_spoken_forms', 
-                             '** an_lsa_word_trie_entry=%s' % repr(an_lsa_word_trie_entry))               
              spoken_form = string.join(an_lsa_word_trie_entry[0])
-             debug.trace('CmdInterp._cmd_spoken_forms', 
-                         '** spoken_form=%s' % repr(spoken_form))                                                        
              known_spoken_forms[spoken_form] = 1
                   
        return known_spoken_forms.keys()
@@ -3135,11 +3110,7 @@ class CmdInterp(OwnerObject):
     def _sym_spoken_forms(self):
        known_spoken_forms = {}
        for a_word_trie_entry in self.known_symbols.spoken_form_info.items():
-          debug.trace('CmdInterp._sym_spoken_forms', 
-                      '** a_word_trie_entry=%s' % repr(a_word_trie_entry))               
           spoken_form = string.join(a_word_trie_entry[0])
-          debug.trace('CmdInterp._sym_spoken_forms', 
-                      '** spoken_form=%s' % repr(spoken_form))                                                        
           known_spoken_forms[spoken_form] = 1           
                       
        return known_spoken_forms.keys()

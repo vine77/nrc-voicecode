@@ -27,9 +27,11 @@ import debug
 import re
 import string
 import threading
+import exceptions
 
 import CmdInterp, AppState
 from SpokenUtterance import *
+
 
 class ResMgr(OwnerObject):
     """abstract class defining interface for an object which manages
@@ -52,7 +54,8 @@ class ResMgr(OwnerObject):
         """
         **INPUTS**
 
-        *RecogStartMgr* recog_mgr -- the parent RecogStartMgr object, 
+        *RecogStartMgr* re
+        cog_mgr -- the parent RecogStartMgr object, 
         which provides information about editor application instances, as
         well as access to the CmdInterp interpreter object
 
@@ -249,7 +252,7 @@ class ResMgr(OwnerObject):
         """
         debug.virtual('ResMgr.scratch_recent')
 
-    def reinterpret_recent(self, changed):
+    def reinterpret_recent(self, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -265,6 +268,10 @@ class ResMgr(OwnerObject):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
+
 
         **OUTPUTS**
 
@@ -481,7 +488,7 @@ class ResMgrStd(ResMgr):
         debug.trace('ResMgrStd.scratch_recent', 'n=%s' % n)
         return 0
 
-    def reinterpret_recent(self, changed):
+    def reinterpret_recent(self, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -497,6 +504,10 @@ class ResMgrStd(ResMgr):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
+
 
         **OUTPUTS**
 
@@ -1736,11 +1747,15 @@ class StateStackBasic(StateStack):
 #               if the cookies aren't valid, we might as well delete 
 #               those states
                 self._delete_invalid_states(n-1)
+                debug.trace('StateStackBasic.safe_reinterp_depth',
+                            'Returning n-1=%s' % (n-1))
                 return n - 1
 #           next, check if the utterance was a cross-buffer utterance
             if self.cross_buffer[-n]:
                 debug.trace('StateStackBasic.safe_reinterp_depth', 
                     'cross-buffer utterance at %d' % n)
+                debug.trace('StateStackBasic.safe_reinterp_depth',
+                                'Returning n-1=%s' % (n-1))
                 return n - 1
 #           otherwise, for single-buffer utterances, check that the
 #           buffer still exists
@@ -1751,6 +1766,8 @@ class StateStackBasic(StateStack):
                 else:
                     debug.trace('StateStackBasic.safe_reinterp_depth', 
                         'no buffer for utterance at %d' % n)
+                    debug.trace('StateStackBasic.safe_reinterp_depth',
+                                'Returning n-1=%s' % (n-1))
                     return n - 1
             debug.trace('StateStackBasic.safe_reinterp_depth', 
                     'buffer %s for utterance at %d' % (buff_name, n))
@@ -1758,6 +1775,8 @@ class StateStackBasic(StateStack):
             if buffer is None:
                 debug.trace('StateStackBasic.safe_reinterp_depth', 
                     'deleted buffer %s for utterance at %d' % (buff_name, n))
+                debug.trace('StateStackBasic.safe_reinterp_depth',
+                                'Returning n-1=%s' % (n-1))
                 return n - 1
 #           and finally, check against most_recent_utterance
             try:
@@ -1781,11 +1800,16 @@ class StateStackBasic(StateStack):
                     debug.trace('StateStackBasic.safe_reinterp_depth', 
                         'pos in %s changed\n from %d to %d' \
                         % (buff_name, n, next))
+                    debug.trace('StateStackBasic.safe_reinterp_depth',
+                                'Returning n-1=%s' % (n-1))
                     return n - 1
             except KeyError:
                 pass
 # update most_recent_utterance
             most_recent_utterance[buff_name] = n
+            
+        debug.trace('StateStackBasic.safe_reinterp_depth', 
+                    'Nothing particular, returning len(self.states)=%s' % len(self.states))
         return len(self.states)
 
     def undo_manual_changes(self, app):
@@ -2359,7 +2383,7 @@ class ResMgrBasic(ResMgrStd):
                     'removing symbol %s' % native)
                 interpreter.remove_symbol_if_tentative(native)
 
-    def reinterpret_recent(self, changed):
+    def reinterpret_recent(self, changed, delete_tentative_syms = 1):
         """undo the effect of one or more recent utterances, if
         possible, and reinterpret these utterances (and possibly any
         intervening utterances), making the appropriate changes to the
@@ -2375,6 +2399,9 @@ class ResMgrBasic(ResMgrStd):
 
         **NOTE:** particular implementations of ResMgr may reinterpret 
         all utterances subsequent to the oldest changed utterance
+        
+        *BOOL delete_tentative_syms = 1* -- If *TRUE*, then remove any tentative
+        symbol that do not exist anymore after reinterpretation.
 
         **OUTPUTS**
 
@@ -2384,7 +2411,6 @@ class ResMgrBasic(ResMgrStd):
         reinterpreted
         """
         
-        debug.trace('ResMgrBasic.reinterpret_recent', '** changed=%s' % repr(changed))
         possible = []
         i_possible = []
         for j in changed:
@@ -2405,24 +2431,27 @@ class ResMgrBasic(ResMgrStd):
         m = min(m, n)
         debug.trace('ResMgrBasic.reinterpret_recent', 
             'so popping %d' % m)
+        interpreter = self.interpreter()
 # for any utterances which were changed but can't be reinterpreted, we
 # should still remove symbols which no longer appear in them (just like
 # we adapt the speech engine based on those corrections)
-        interpreter = self.interpreter()
-        for i in range(m+1, n+1):
-            if i in i_possible:
-                symbols = self.interpreted[-i].symbols()
-                utterance = self.utterances[-i]
-                new_spoken_forms = utterance.spoken_forms()
-                spoken = string.join(new_spoken_forms)
-                for symbol in symbols:
-                    spoken_symbol = string.join(symbol.spoken_phrase())
-                    native = symbol.native_symbol()
-                    if spoken.find(spoken_symbol) == -1:
-                        interpreter.remove_symbol_if_tentative(native)
+        if delete_tentative_syms: 
+            for i in range(m+1, n+1):
+                if i in i_possible:
+
+                    symbols = self.interpreted[-i].symbols()
+                    utterance = self.utterances[-i]
+                    new_spoken_forms = utterance.spoken_forms()
+                    spoken = string.join(new_spoken_forms)
+                    for symbol in symbols:
+                        spoken_symbol = string.join(symbol.spoken_phrase())
+                        native = symbol.native_symbol()
+                        if spoken.find(spoken_symbol) == -1:
+
+                            interpreter.remove_symbol_if_tentative(native)
 # with ResMgrBasic, we must undo all utterances back to the first one to
 # be reinterpreted
-        if not self.states.pop(app, m):
+        if not self.states.pop(app, m) and delete_tentative_syms:
 # for any utterances which were changed but can't be reinterpreted, we
 # should still remove symbols which no longer appear in them (just like
 # we adapt the speech engine based on those corrections)
@@ -2440,7 +2469,9 @@ class ResMgrBasic(ResMgrStd):
             return None
 # and then reinterpret all those utterances.
 # First, pop information about those utterances off the top of the stack
-        self.remove_symbols(m)
+        
+        if delete_tentative_syms: 
+           self.remove_symbols(m)
         to_do = self.utterances[-m:]
         buffers = self.initial_buffers[-m:]
         numbers = self.numbers[-m:]
@@ -2505,6 +2536,8 @@ class ResMgrBasic(ResMgrStd):
         *INT* -- depth of this utterance in the stack, or None if not
         found
         """
+        debug.trace('ResMgr.find_utterance', 'utterance_number=%s, self.numbers=%s' % 
+                                             (utterance_number, repr(self.numbers)))
         for i in range(1, len(self.numbers)+1):
             if utterance_number == self.numbers[-i]:
                 return i
@@ -2625,13 +2658,11 @@ class ResMgrBasic(ResMgrStd):
 
         *none*
         """
-        debug.trace('ResMgrBasic.correct_recent_synchronous', '** invoked')
         console = self.console()
         utterances = self.recent_dictation()
         interpreted = self.interpreted[:]
         if utterances:
             i_changed = console.correct_recent(self.name, utterances)
-            debug.trace('ResMgrBasic.correct_recent_synchronous', '** i_changed=%s' % repr(i_changed))
             print "phrases changed were: ", i_changed
             if i_changed:
                 changed = []

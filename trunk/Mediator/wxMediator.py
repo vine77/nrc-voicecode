@@ -56,17 +56,10 @@ import WinSystemMSW
 debug.config_traces(status="on", 
                     active_traces={
 #################################       
-                    'tests_def.basic_correction': 1,
-                    'NewMediatorObject.correct_recent_symbols': 1,
-                    'SymDict.correct_symbol': 1,
-                    'NewMediatorObject.can_correct_that_far_back': 1,
-                    'SymDict.move_written_form_to_top_of_priority_list': 1,
-#                     'scratch_recent': 1,
-#                     'correct_recent': 1,
-#                     'correct_recent_synchronous': 1,
-#                     'reinterpret_recent': 1,
-#                     'StateStackBasic': 1,
-#      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
+                    'OwnerObject.__init__': 1,
+                    'DlgModel.setView':1 ,
+                    'TestCaseWithHelpers.assert_sequences_have_same_content': 1,
+      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
 

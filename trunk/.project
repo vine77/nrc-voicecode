@@ -8,5 +8,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.team.cvs.core.cvsnature</nature>
+		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
 </projectDescription>

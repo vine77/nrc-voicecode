@@ -32,6 +32,10 @@ object named 'testing'
 import os, sys
 import time
 import posixpath
+import unittest
+from pyUnitExample import SampleTestCase
+import TestCaseWithHelpersTest, SymbolReformattingUITestCase
+
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 # import mediator, MediatorObject, Object, SymDict, test_pseudo_python
 import Object, SymDict, test_pseudo_python
@@ -60,9 +64,13 @@ unusual_symbols_py = vc_globals.test_data + os.sep + 'unusual_symbols.py'
 # use this only for foreground tests:
 foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
 
-#  auto_test.add_test('PyUnitTests', unit_testing.run_all_pyunit_tests,
-#                     desc='run a series of unit tests through PyUnit')
-
+def test_py_unit():
+   unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test')) 
+   print "\n*** Making sure that failing tests won't halt the whole test process."   
+   unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test'))    
+#   unittest.TextTestRunner().run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test'))    
+   
+add_test('py_unit', test_py_unit, 'Testing that pyUnit works ok.')
 
 ##############################################################################
 # Testing SymDict
@@ -2744,10 +2752,14 @@ def check_stored_utterances(instance_name, expected):
     sys.stdout.flush()
    
 def check_recent(instance_name, expected_utterances, expected_status):
+    debug.trace('tests_def.check_recent', 
+                 'expected_utterances=%s, expected_status=%s' %
+                 (repr(expected_utterances), repr(expected_status)))
     sys.stdout.flush()
     the_mediator = testing.mediator()
     n = the_mediator.stored_utterances(instance_name)
     recent = the_mediator.recent_dictation(instance_name)
+
     expected = len(expected_utterances)
     n_compare = expected
     if n != expected:
@@ -2768,8 +2780,8 @@ def check_recent(instance_name, expected_utterances, expected_status):
             print received
         if expected_status[-i] != status:
             msg = "\nWARNING: status of utterance "
-            msg = msg + "%d was %d (expected %d)" \
-                % (i, status, expected_status[-i])
+            msg = msg + "%d (%s) was %d (expected %d)" \
+                % (i, expect, status, expected_status[-i])
             print msg
     if n < expected:
         print '\nadditional utterances were expected:'
@@ -2836,6 +2848,7 @@ def test_reinterpret(instance_name, changed, user_input = None):
 
 
 def correct_recent_symbols(instance_name, corrections, user_input):
+    debug.trace('tests_def.correct_recent_symbols', 'corrections=%s' % repr(corrections))
     sys.stdout.flush()
     the_mediator = testing.mediator()
     the_mediator.correct_recent_symbols(instance_name, corrections)
@@ -3436,71 +3449,147 @@ def test_basic_correction():
     print '\n***Testing symbol addition and formatting**\n'
     check_symbol(interpreter, 'act_out', expected = 1)
 
+    print '\n***Testing reformatting of a new symbol to another new symbol***\n'
 
-### AD: Testing symbol correction
-
-#   print '\n***Testing reformatting of a new symbol to another new symbol***\n'
-#
-#    utterances.append(string.split('new statement return size of promised tax cuts'))
-#    input.append('0\n')
-#    status.append(1)    
-#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-#    
-#    sym_corrections = {}
-#    sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
-#    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
-#    
-#    print '\n***Testing state***\n'
-#
-#    check_stored_utterances(instance_name, expected = len(utterances))
-#    check_recent(instance_name, utterances, status)
-#
-#    print '\n***Testing tentative symbol removal and correct symbol addition on correction***\n'
-#
-#    check_symbol(interpreter, 'size_of_promised_tax_cuts', expected = 0)
-#    check_symbol(interpreter, 'sz_of_prom_tax_cuts', expected = 1)
-#
-#    print '\n***Testing subsequent dictation of reformatted symbol***\n'
-#    
-#    utterances.append(string.split('new statement size of promised tax cuts equals zero'))
-#    input.append('0\n')
-#    status.append(1)    
-#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-#    
-#    print '\n***Testing reformatting of an existing symbol to a new symbol***\n'
-#    
-#    check_symbol(interpreter, 'RedBook', expected = 1)    
-#    check_symbol(interpreter, 'red_bk', expected = 0)    
-#    
-#    utterances.append(string.split('new statement red book equals none'))
-#    input.append('0\n')
-#    status.append(1)    
-#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
-#    
-#    sym_corrections = {}
-#    sym_corrections[1] = ('red book', 'RedBook', 'red_bk')
-#    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
-#    
-#    print '\n***Testing state***\n'
-#
-#    check_stored_utterances(instance_name, expected = len(utterances))
-#    check_recent(instance_name, utterances, status)
-#
-#    print '\n***Testing correct new symbol addition on correction***\n'
-#
-#    check_symbol(interpreter, 'red_bk', expected = 1)
-#
-#    print '\n***Testing subsequent dictation of reformatted symbol***\n'
-#    
-#    utterances.append(string.split('new statement command interpreter equals zero'))
-#    input.append('0\n')
-#    status.append(1)    
-#    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+    utterances.append(string.split('new statement return size of promised tax cuts'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
+    sym_corrections = {}
+    sym_corrections[1] = ('size of promised tax cuts', 'size_of_promised_tax_cuts', 'sz_of_prom_tax_cuts')
+    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+    
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing tentative symbol removal and correct symbol addition on correction***\n'
+
+    check_symbol(interpreter, 'size_of_promised_tax_cuts', expected = 1)
+    check_symbol(interpreter, 'sz_of_prom_tax_cuts', expected = 1)
+
+    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+    
+    utterances.append(string.split('new statement size of promised tax cuts equals zero'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+    
+    print '\n***Testing reformatting of an existing symbol to a new symbol***\n'
+    
+    check_symbol(interpreter, 'RedBook', expected = 1)    
+    check_symbol(interpreter, 'red_bk', expected = 0)    
+    
+    utterances.append(string.split('new statement red book equals none'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+    
+    sym_corrections = {}
+    sym_corrections[1] = ('red book', 'RedBook', 'red_bk')
+    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+    
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Testing correct new symbol addition on correction***\n'
+    
+    check_symbol(interpreter, 'RedBook', expected = 1)
+    check_symbol(interpreter, 'red_bk', expected = 1)
+
+    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+    
+    utterances.append(string.split('new statement red book equals zero'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+    
+    
+    print '\n***Testing reformatting of an existing symbol to an other existing symgol ***\n'
+    the_mediator.add_symbol('BlueBook', ['blue book'], tentative=0)
+    the_mediator.add_symbol('blue_bk', ['blue book'], tentative=0)    
+    check_symbol(interpreter, 'BlueBook', expected = 1)    
+    check_symbol(interpreter, 'blue_bk', expected = 1)    
+    
+    utterances.append(string.split('new statement blue book equals none'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+        
+    sym_corrections = {}
+    sym_corrections[1] = ('blue book', 'BlueBook', 'blue_bk')
+    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+    
+    print '\n***Testing state***\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Checking that both symbols are still there***\n'
+
+    check_symbol(interpreter, 'BlueBook', expected = 1)    
+    check_symbol(interpreter, 'blue_bk', expected = 1)    
+
+    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+    
+    utterances.append(string.split('new statement blue book equals zero'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+
+    print '\n***Testing reformatting of a new symbol to a existing one ***\n'
+    the_mediator.add_symbol('osym', ['O. symbol'], tentative=0)
+    check_symbol(interpreter, 'osym', expected = 1)    
+    check_symbol(interpreter, 'other_symbol', expected = 0)    
+    
+    utterances.append(string.split('new statement other symbol equals 0'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
+        
+    sym_corrections = {}
+    sym_corrections[1] = ('other symbol', 'other_symbol', 'osym')
+    correct_recent_symbols(instance_name, sym_corrections, user_input = '0\n')
+    
+    print '\n***Testing state***\n'
+
+    print '\n## AD: Is there an issue with the warnings below?##\n'
+
+    check_stored_utterances(instance_name, expected = len(utterances))
+    check_recent(instance_name, utterances, status)
+
+    print '\n***Checking that tentative new symbol was removed ***\n'
+
+    check_symbol(interpreter, 'osym', expected = 1)    
+    check_symbol(interpreter, 'other_symbol', expected = 1)    
+
+    print '\n***Testing subsequent dictation of reformatted symbol***\n'
+    
+    utterances.append(string.split('new statement other symbol equals one'))
+    input.append('0\n')
+    status.append(1)    
+    test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
     
 
 add_test('basic_correction', test_basic_correction, 
     'Testing basic correction infrastructure with ResMgr.')
+
+
+##############################################################################
+# Testing symbol reformatting UI
+##############################################################################
+
+def test_symbol_reformatting_ui():
+   SymbolReformattingUITestCase.test_mediator = testing.mediator()
+   unittest.TextTestRunner(). \
+       run(unittest.makeSuite(SymbolReformattingUITestCase.SymbolReformattingUITestCase, 'test')) 
+   
+add_test('symbol_reformatting_ui', test_symbol_reformatting_ui, 'Testing symbol reformatting UI.')
+
 
 ##############################################################################
 # Testing set_text 

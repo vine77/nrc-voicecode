@@ -558,8 +558,6 @@ class SB_ServiceIndent(SB_Service):
         debug.trace('SB_ServiceIndent.insert_indent',
             'code_bef="%s", code_after="%s", range=%s' \
             % (code_bef, code_after, repr(range)))
-        debug.trace('SB_ServiceIndent.insert_indent',
-            '** self.indent_level=%s, self.buff=%s' % (self.indent_level, repr(self.buff)))
         
         if range == None:
             range = self.buff.get_selection()
@@ -1095,15 +1093,10 @@ class SB_ServiceFullState(SB_ServiceState):
             'buffer %s' % self.buff.name())
 #        debug.trace('SB_ServiceFullState.store_current_state',
 #            '%s: contents = \n%s\n' % (self.buff.name(), self.buff.contents()))
-        debug.trace('SB_ServiceFullState.store_current_state', 
-                    '*** len(contents)=%d' % len(self.buff.contents()))
         if debug.trace_is_active('SB_ServiceFullState.store_current_state'):
             contents = self.buff.contents()
             first_lines = re.match(r'.*\n.*\n', contents).group()
             last_lines = re.search(r'\n.*\n.*\n?$', contents).group()
-            debug.trace('SB_ServiceFullState.store_current_state', 
-                        '*** excerpt = \n%s\n[...]\n%s\n' \
-                        % (first_lines, last_lines))
         cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
             contents = self.buff.contents(), 
             selection = selection, cursor_at = cursor_at,
@@ -1132,21 +1125,11 @@ class SB_ServiceFullState(SB_ServiceState):
         debug.trace('SB_ServiceFullState.restore_state',
             'buffer %s' % self.buff.name())
         if not self.valid_cookie(cookie):
-            debug.trace('SB_ServiceFullState.restore_state', '*** returning 0')
             return 0
-        debug.trace('SB_ServiceFullState.restore_state', 
-                    '*** len(cookie.contents)=%d' % len(cookie.contents()))
         if debug.trace_is_active('SB_ServiceFullState.restore_state'):
             contents = cookie.contents()
             first_lines = re.match(r'.*\n.*\n', contents).group()
             last_lines = re.search(r'\n.*\n.*\n?$', contents).group()
-            debug.trace('SB_ServiceFullState.restore_state', 
-                        '*** excerpt = \n%s\n[...]\n%s\n' \
-                        % (first_lines, last_lines))
-#        debug.trace('SB_ServiceFullState.restore_state', 
-#                    '*** cookie.contents=\n%s\n' % cookie.contents())
-        debug.trace('SB_ServiceFullState.restore_state', 
-                    '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
                     
         self.buff.set_text(cookie.contents())
         
@@ -1155,7 +1138,6 @@ class SB_ServiceFullState(SB_ServiceState):
             cookie.cursor_at())
         self.buff.print_buff_if_necessary()
         self.buff.last_search = cookie.last_search()
-        debug.trace('SB_ServiceFullState.restore_state', '*** returning 1')        
         return 1
       
     def compare_states(self, first_cookie, second_cookie, selection = 0):
