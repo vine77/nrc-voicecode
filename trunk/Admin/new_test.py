@@ -35,6 +35,7 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 debug.config_traces(status="on", 
                     active_traces={
+#                       'StateStackBasic': 1,
 #                      'CmdInterp': 1
 #                      'CmdInterp': 1
 #                      'DictWinGramNL': 1,

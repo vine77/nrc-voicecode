@@ -27,6 +27,18 @@ from wxPython.wx import *
 from thread_communication_WX import GenericEventWX
 import threading
 import os
+import exceptions
+
+class DummyCapture:
+    pass
+possible_capture = DummyCapture
+try:
+    import wxCapture
+    global possible_capture 
+    possible_capture = wxCapture.ScreenShotCapture
+except exceptions.ImportError:
+    pass
+
 
 
 # unfortunately, I haven't found any non-MS specific way of manipulating
@@ -373,7 +385,7 @@ class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
     def on_dismiss(self):
         debug.virtual('ByeByeMixIn.on_dismiss')
 
-class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
+class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObject):
     """dialog box for correcting misrecognized dictation results
 
     **INSTANCE ATTRIBUTES**
@@ -431,6 +443,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
             use_pos = wxDefaultPosition
         wxDialog.__init__(self, parent, wxNewId(), "Correction", use_pos,
             (600, 400), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        possible_capture.__init__(self)
         self.deep_construct(CorrectionBoxWX,
                             {
                              'console': console,
@@ -441,7 +454,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                              'select_n_gram': None,
                              'selection_gram': None
                             }, args, 
-                            exclude_bases = {wxDialog: 1}
+                            exclude_bases = {possible_capture: 1, wxDialog: 1}
                            )
         self.name_parent('console')
         self.add_owned('choose_n_gram')
@@ -1049,7 +1062,7 @@ class CorrectionValidatorSpoken(CorrectionValidator):
         self.utterance.set_spoken(string.split(corrected))
         return 1
 
-class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
+class CorrectRecentWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObject):
     """dialog box which lists recently dictated utterances, allowing the user 
     to select one for correction of misrecognized results or for symbol 
     reformatting
@@ -1101,6 +1114,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
         wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        possible_capture.__init__(self)
         self.deep_construct(CorrectRecentWX,
                             {
                              'console': console,
@@ -1110,7 +1124,7 @@ class CorrectRecentWX(wxDialog, ByeByeMixIn, Object.OwnerObject):
                              'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
-                            exclude_bases = {wxDialog: 1}
+                            exclude_bases = {possible_capture:1, wxDialog: 1}
                            )
         self.name_parent('console')
         self.add_owned('correct_n_gram')

@@ -1110,13 +1110,42 @@ def messarg2intlist(messarg):
         # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
         # while MessEncoderWDDX encodes it as the empty string
         #
-        intlist = None
-    else:
-        intlist = []
-        for ii in range(len(messarg)):
-            intlist.append(messarg2int(messarg[ii]))
+        return None
+
+    intlist = []
+    for ii in range(len(messarg)):
+        intlist.append(messarg2int(messarg[ii]))
             
     return intlist
+
+def messarg2inttuple(messarg):
+    """Converts a message argument to a tuple of integers.
+
+    If the message argument is the string *'None'*, convert it to
+    the *None* object.
+        
+    **INPUTS**
+        
+    'None' | [STR] *messarg* -- The message argument to be converted.
+        
+
+    **OUTPUTS**
+        
+    None | [INT] *as_intlist* -- The message argument converted a list of ints.
+    """
+        
+    if messarg == 'None' or messarg == '':
+        #
+        # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
+        # while MessEncoderWDDX encodes it as the empty string
+        #
+        return None
+
+    intlist = []
+    for ii in range(len(messarg)):
+        intlist.append(messarg2int(messarg[ii]))
+            
+    return tuple(intlist)
 
         
 ###############################################################################

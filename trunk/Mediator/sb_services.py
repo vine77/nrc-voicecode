@@ -74,7 +74,7 @@ class SB_Service(Object.OwnerObject):
     ..[SourceBuff] file:///./SourceBuff.SourceBuff.html
     ..[sb_services] file:///./sb_services.sb_services.html"""
     
-    def __init__(self, buff=None, **args_super):
+    def __init__(self, buff, **args_super):
         self.deep_construct(SB_Service, 
                             {'buff': buff}, 
                             args_super, 
@@ -801,7 +801,34 @@ class SB_ServiceState(SB_Service):
         *BOOL* -- true if states are the same, false if they are not, or
         it cannot be determined due to expiration of either cookie
         """
-        debug.virtual('SourceBuff.compare_states')
+        debug.virtual('SB_ServiceState.compare_states')
+
+    def compare_state_selections(self, first_cookie, second_cookie):
+        """compares the selection and cursor positions at the times when
+        two cookies were returned by store_current_state.
+        If the state corresponding to either cookie has
+        been lost, compare_states will return false.
+
+        This method does not synchronize with the editor prior to
+        comparing with "current".  To ensure that the "current" state 
+        is really current, the caller must synchronize.
+        (This avoids having duplicate synchronize calls 
+        when comparing with the current state of more than one buffer).
+
+        **INPUTS**
+
+        *SourceBuffCookie* first_cookie, second_cookie -- see 
+        store_current_state.  Note that SourceBuffCookie is a dummy 
+        type, not an actual class.  The actual type will vary with 
+        SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or it cannot be determined due to expiration of 
+        either cookie
+        """
+        debug.virtual('SB_ServiceState.compare_state_selections')
 
     def compare_with_current(self, cookie, selection = 0):
         """compares the current buffer state to its state at the time when
@@ -824,6 +851,45 @@ class SB_ServiceState(SB_Service):
         it cannot be determined due to expiration of the cookie
         """
         debug.virtual('SB_ServiceState.compare_with_current')
+
+    def compare_selection_with_current(self, cookie):
+        """compares the current buffer position and selection to these
+        values at the time when the cookie was returned by 
+        store_current_state.  If the state corresponding to the cookie has
+        been lost, compare_with_current will return false.
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *BOOL* -- true if position and selection are the same, false if 
+        they are not, or if it cannot be determined due to 
+        expiration of the cookie
+        """
+        debug.virtual('SB_ServiceState.compare_selection_with_current')
+
+    def get_state_pos_selection(self, cookie):
+        """retrieves the position and selection from a given state
+        cookie.  
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *(INT, (INT, INT))* -- position and selection at the time the
+        cookie was created by store_current_state, or None if the cookie
+        is invalid (usually because the state corresponding to the cookie 
+        has been lost).
+        """
+        debug.virtual('SB_ServiceState.get_state_pos_selection')
 
 
     def valid_cookie(self, cookie):
@@ -1081,6 +1147,29 @@ class SB_ServiceFullState(SB_ServiceState):
         cookie_pos = cookie_sel[cookie.cursor_at()]
         return self.buff.get_selection() == cookie_sel \
             and self.buff.cur_pos() == cookie_pos
+
+    def get_state_pos_selection(self, cookie):
+        """retrieves the position and selection from a given state
+        cookie.  
+
+        **INPUTS**
+
+        *SourceBuffCookie cookie* -- see store_current_state.  Note that
+        SourceBuffCookie is a dummy type, not an actual class.  The
+        actual type will vary with SourceBuff subclass.
+
+        **OUTPUTS**
+
+        *(INT, (INT, INT))* -- position and selection at the time the
+        cookie was created by store_current_state, or None if the cookie
+        is invalid (usually because the state corresponding to the cookie 
+        has been lost).
+        """
+        if not self.valid_cookie(cookie):
+            return None
+        cookie_sel = cookie.get_selection()
+        cookie_pos = cookie_sel[cookie.cursor_at()]
+        return (cookie_pos, cookie_sel)
 
     def valid_cookie(self, cookie):
         """checks whether a state cookie is valid or expired.
