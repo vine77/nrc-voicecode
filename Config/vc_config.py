@@ -1442,6 +1442,26 @@ define_language('C',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
 
+acmd = CSCmd(spoken_forms=['header wrapper', 'wrap header'],
+             meanings={ContC(): ActionHeaderWrapper()},
+             docstring='insert code template for unique #include')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['macro if'],
+             meanings={ContC(): ActionInsert('#ifdef', '\n#endif\n')},
+             docstring='insert code template for #ifdef')
+add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['macro if not'],
+             meanings={ContC(): ActionInsert('#ifndef', '\n#endif\n')},
+             docstring='insert code template for #ifndef')
+add_csc(acmd)
+
+add_lsa(['macro define'], {'C': '#define'})
+
+add_lsa(['macro include'], {'C': '#include'})                       
+
+add_lsa(['macro undo define'], {'C': '#undef'})
 
 ###############################################################################
 # Add words which are missing from the SR vocab

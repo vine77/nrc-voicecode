@@ -23,6 +23,8 @@
 """Action functions for C language """
 
 from actions_gen import Action, ActionInsert, ActionSearch
+import whrandom
+import string
 
 c_simple_for = \
     ActionInsert(code_bef='for (',
@@ -76,3 +78,54 @@ c_else_if = \
 c_else = \
     ActionInsert(code_bef='*** action c_else_if not implemeted yet ***',
                  docstring='else clause of a C conditional')
+
+class ActionHeaderWrapper(Action):
+    """Action that inserts a code template for one time #include
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *NONE*
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+        
+    def __init__(self, **args_super):
+        self.deep_construct(ActionHeaderWrapper, \
+                            {}, \
+                            args_super, \
+                            {})
+
+        
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        unique_str = str(string.upper(string.replace(app.curr_buffer_name(),'.','_'))) + \
+                     str(whrandom.randint(10**6,(10**7)-1))
+        before_string  = '#ifndef ' + unique_str + '\n' + '#define ' + unique_str + '\n\n'
+        after_string = '\n#endif\n'
+        app.insert_indent(before_string, after_string)
+
+
+    def doc(self):
+        """
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if self.docstring != None:
+            the_doc = self.docstring
+        else:
+            the_doc = 'inserts a code template for one time #include'
+        return the_doc
+
+
