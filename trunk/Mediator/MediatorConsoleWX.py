@@ -580,10 +580,13 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         EVT_KILL_FOCUS(self.text, self.on_kill_focus_text)
         self.Raise()
         self.text.SetFocus()
+        print 'before autolayout: text size is ', self.text.GetSize()
         self.SetAutoLayout(true)
         self.SetSizer(s)
         self.Layout()
+        print 'before fit: text size is ', self.text.GetSize()
         s.Fit(self)
+        print 'after fit: text size is ', self.text.GetSize()
 #        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
 
     def more_buttons(self, button_sizer = None):
@@ -710,6 +713,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.text.SetInsertionPointEnd()
         self.text.SetSelection(0, self.text.GetLastPosition())
         self.text.SetFocus()
+        print 'text changing: text size is ', self.text.GetSize()
 
     def on_selected(self, event):
         self.select_choice(event.GetString())
@@ -975,8 +979,18 @@ class CorrectionValidator(wxPyValidator, Object.Object):
         *BOOL* -- true if data was successfully transfered to the text
         control
         """
+        return true
         win = self.GetWindow()
-        win.SetValue(self.initial_value())
+        text = self.initial_value()
+        win.SetValue(text)
+        win.SetInsertionPointEnd()
+        win.SetSelection(0, len(text))
+        print text
+        print win.GetValue()
+        print win.GetSelection()
+        print win.GetSize()
+        win.Refresh()
+        print win.GetSize()
 #        parent = win.GetParent()
 #        parent.Raise()
 #        print parent.parent.handle

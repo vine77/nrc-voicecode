@@ -118,7 +118,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
                             }, 
                             args)
         self.add_owned('wax_console')
-        sr_interface.connect(mic_change_callback = self.mic_change)
+        sr_interface.set_change_callback(mic_change_callback = self.mic_change)
         app = AppStateGenEdit.AppStateGenEdit(self.wax_console)
         if not self.the_mediator.new_editor(app, server = 0, check_window = 1):
             sys.stderr.write('NewMediatorObject.new_editor failed\n')

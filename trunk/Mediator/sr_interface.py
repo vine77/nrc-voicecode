@@ -98,8 +98,8 @@ def set_mic(mic_state):
     after connection.
     """
 
-    if not sr_is_connected:
-        connect()
+#    if not sr_is_connected:
+#        connect()
     natlink.setMicState(mic_state)
 
 def get_mic():
@@ -108,19 +108,21 @@ def get_mic():
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection.
     """
-    if not sr_is_connected:
-        connect()
+#    if not sr_is_connected:
+#        connect()
     return natlink.getMicState()
 
 
-def connect(mic_state=None, mic_change_callback = None):
+def connect(user_name, mic_state=None, mic_change_callback = None):
     """Connects to the SR system.
     
     **INPUTS**
     
+    *STR* name of the Natspeak user to open
+
     *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
     after connection. If *None*, then leave mic alone.
-    
+
     *FCT* mic_change_callback -- 
       mic_change_callback(*STR* mic_state)
     (optional) function to be called when the microphone state changes.
@@ -139,7 +141,7 @@ def connect(mic_state=None, mic_change_callback = None):
 # 1 means use threads -- needed for GUI apps
         natlink.natConnect(1)
         sr_is_connected = 1            
-        openUser(vc_user_name)
+        openUser(user_name)
     if mic_state:
         natlink.setMicState(mic_state)
     if mic_change_callback:
@@ -172,39 +174,20 @@ def set_change_callback(mic_change_callback):
     sr_mic_change_callback = mic_change_callback
     natlink.setChangeCallback(mic_change_callback)
 
-def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_using_topic=None):
+def openUser(user_name):
 
-    """Open a user, maybe create it if it doesn't exist.
+    """Open a user
         
     **INPUTS**
         
     *STR* user_name -- Name of the user to be opened.
-
-    *BOOL* create_if_not_exist -- If *true* then the user will be
-     created if it doesn't exist.
-        
-    *STR* create_using_model=None -- User model to use for creation of
-     the user (if *create_if_not_exist* is *true*).
-
-    *STR* create_using_topic=None -- Topic to use for creation of
-     the user (if *create_if_not_exist* is *true*)
-        
 
     **OUTPUTS**
         
     *none* -- 
     """
     
-    try:
-        natlink.openUser(user_name)
-    except natlink.UnknownName, exc:
-        if create_if_not_exist:
-            natlink.createUser(user_name, create_using_model, create_using_topic)
-        else:
-            #
-            # Reraise the exception so it can be caught further up the call chain
-            #
-            raise exc
+    natlink.openUser(user_name)
 
 def saveUser():
     """Saves the current user"""
@@ -300,7 +283,6 @@ def addWord(word, *rest):
     #
     # Make sure we are connected to SR system
     #
-    connect()
                 
     if getWordInfo(word) == None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak')

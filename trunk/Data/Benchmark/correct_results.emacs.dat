@@ -142,9 +142,7 @@ Heard select hello
   4: class AClass(ASuper):
   5:     """This is a dummy class"""
 You can now safely use your computer.
-    
-Press Enter to proceed with the rest of the tests.
-> 
+
 
 *******************************************************************************
 * Name        : CmdInterp
@@ -447,7 +445,7 @@ Trying to set the value of attribute 'name', $PY_DEBUG_OBJECT=None
 
 
 Trying to get the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
-   -> Caught AttributeError exception: '[{'args': ('nonexistant',)}]'
+   -> Caught AttributeError exception: '[{'args': ("SmallObject instance has no attribute 'nonexistant'",)}]'
 
 
 Trying to set the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
@@ -467,14 +465,14 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 2449450>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x01E50470>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
    Person2(init_file='C:/temp.txt') -> result={'name': None, 'citizenship': None}
 
 Subclassing from non-standard class AnimatedCharacter.*
-   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'name': 'Alain', 'frames_per_sec': 40, 'animation_file': 'C:/People/Alain.dat', 'citizenship': None}
+   AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'animation_file': 'C:/People/Alain.dat', 'frames_per_sec': 40, 'name': 'Alain', 'citizenship': None}
 
 
 *******************************************************************************
@@ -603,7 +601,7 @@ x: ['x']
 _cached_symbols_as_one_string is:
     autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
-'constr': appears in ['profConstrLargeNonObj', 'profConstrSmallObj', 'profConstrLargeObj', 'profConstrSmallNonObj']
+'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
 'posixpath': appears in ['posixpath']
@@ -652,7 +650,7 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -683,7 +681,7 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
+'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -1077,11 +1075,11 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'f': appears in ['f_name', 'f_name2']
-'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'x': appears in ['x']
 'y': appears in ['y']
+'x': appears in ['x']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
@@ -1284,10 +1282,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'f': appears in ['f_name', 'f_name2']
-'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'x': appears in ['x']
 'y': appears in ['y']
+'x': appears in ['x']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: print_symbols()
@@ -1519,10 +1517,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'f': appears in ['f_name', 'f_name2']
-'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'x': appears in ['x']
 'y': appears in ['y']
+'x': appears in ['x']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
@@ -1746,10 +1744,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'f': appears in ['f_name', 'f_name2']
-'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'x': appears in ['x']
 'y': appears in ['y']
+'x': appears in ['x']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
@@ -1953,10 +1951,10 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'f': appears in ['f_name', 'f_name2']
-'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'x': appears in ['x']
 'y': appears in ['y']
+'x': appears in ['x']
+'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'f': appears in ['f_name', 'f_name2']
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
@@ -2807,9 +2805,9 @@ DictWinGramDummy for buffer = 'fish.h', window 7
 deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
 del
-DictWinGramDummy for buffer = 'dog.pl', window 7
-del
 DictWinGramDummy for buffer = 'fish.h', window 7
+del
+DictWinGramDummy for buffer = 'dog.pl', window 7
 del
 SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
@@ -2836,12 +2834,12 @@ deactivating
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
 close all buffers
-SourceBuff.remove_other_references: fish.h
-SourceBuff.__del__: fish.h
-SourceBuff.remove_other_references: fish.C
-SourceBuff.__del__: fish.C
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
+SourceBuff.remove_other_references: fish.C
+SourceBuff.__del__: fish.C
+SourceBuff.remove_other_references: fish.h
+SourceBuff.__del__: fish.h
 cleanup app
 EdSim.remove_other_references
 cleanup manager
@@ -2970,9 +2968,9 @@ activating buffer fowl.py for window 5
   7:     something('nice')
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
-DictWinGramDummy for buffer = 'dog.pl', global
-deactivating
 DictWinGramDummy for buffer = 'fish.h', global
+deactivating
+DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
 SelectWinGramDummy for buffer 'fowl.py', global
 activating:  global  exclusive 
@@ -2991,15 +2989,15 @@ close buffer fowl.py
 DictWinGramDummy for buffer = 'fowl.py', global
 del
 deactivate all for window 5
+SelectWinGramDummy for buffer 'fowl.py', global
+deactivating
+DictWinGramDummy for buffer = 'fish.C', global
+deactivating
 SelectWinGramDummy for buffer 'fish.h', global
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
-deactivating
-SelectWinGramDummy for buffer 'fowl.py', global
-deactivating
-DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 delete window 7
 SelectWinGramDummy for buffer 'fish.h', global
@@ -3010,9 +3008,9 @@ DictWinGramDummy for buffer = 'fish.h', global
 deactivating
 SelectWinGramDummy for buffer 'fish.h', global
 del
-DictWinGramDummy for buffer = 'dog.pl', global
-del
 DictWinGramDummy for buffer = 'fish.h', global
+del
+DictWinGramDummy for buffer = 'dog.pl', global
 del
 SourceBuff.remove_other_references: dog.pl
 SourceBuff.__del__: dog.pl
@@ -3041,12 +3039,12 @@ deactivating
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 close all buffers
-SourceBuff.remove_other_references: fish.h
-SourceBuff.__del__: fish.h
-SourceBuff.remove_other_references: fish.C
-SourceBuff.__del__: fish.C
 SourceBuff.remove_other_references: 
 SourceBuff.__del__: 
+SourceBuff.remove_other_references: fish.C
+SourceBuff.__del__: fish.C
+SourceBuff.remove_other_references: fish.h
+SourceBuff.__del__: fish.h
 cleanup app
 EdSim.remove_other_references
 cleanup manager
@@ -11462,7 +11460,7 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  785.049999952 secs
+Test suite completed in:  543.439999938 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

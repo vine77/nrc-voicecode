@@ -135,8 +135,8 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 
             win32api.keybd_event(win32con.VK_F9, 0x43, 0, 0)
             win32api.keybd_event(win32con.VK_F9, 0x43, win32con.KEYEVENTF_KEYUP, 0)
-# can't call this from within a gotBegin callback, so we have to
-# simulate this using windows.  Should probably use SendInput, but
+# can't call sr_interface.send_keys from within a gotBegin callback, so we 
+# have to simulate this using windows.  Should probably use SendInput, but
 # that's not wrapped by the win32 Python extensions, so let's try this
 # for now
 #            sr_interface.send_keys('{F9}')

@@ -261,7 +261,6 @@ class NewMediatorObject(Object.OwnerObject):
         persistent version of the symbols dictionnary.
         """
 
-        sr_interface.connect('off')        
         self.deep_construct(NewMediatorObject,
                             {'editors': None,
                              'server': server,
@@ -297,6 +296,15 @@ class NewMediatorObject(Object.OwnerObject):
             self.the_console.set_mediator(self)
         if self.test_args != None and self.test_space != None:
             self.test_next = 1
+        if self.test_next:
+            user = 'VCTest'
+        else:
+# for right now, leave this hard-coded.  Eventually, we want this to be
+# configurable, but that would require a separate pre-config file, because we
+# need to connect to the speech engine before we can run vc_config and
+# user_config.
+            user = 'VoiceCode'
+        sr_interface.connect(user, mic_state = 'off')        
         if self.interp == None:
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
                 symbol_match_dlg = symbol_match_dlg)
