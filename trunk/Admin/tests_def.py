@@ -725,7 +725,8 @@ def test_punctuation():
     commands.say(['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\n\\newline'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
 ## causes recognitionMimic error in Natspeak 4
-    commands.say(['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+#    commands.say(['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -779,14 +780,18 @@ def test_punctuation():
     
     commands.say(['string', ' = \\equals', '\'\\open single quote', 'message', '\'\\close single quote', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['string', ' = \\equals', 'single', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+## causes recognitionMimic error in Natspeak 4
+#    commands.say(['string', ' = \\equals', 'single', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['string', 'equals', 'single', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     
     commands.say(['\'\'\\empty single quotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['string', ' = \\equals', '\"\\open quote', 'message', '\"\\close quote', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['string', ' = \\equals', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+## causes recognitionMimic error in Natspeak 4
+#    commands.say(['string', ' = \\equals', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['string', 'equals', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['""\\empty quotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1105,7 +1110,9 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', ' = \\equals', '2', '/\\slash', '3', '/\\slash', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+## causes recognitionMimic error in Natspeak 4
+#    commands.say(['variable', '= \\equals', '2', '/\\slash', '3', '/\\slash', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2', '/\\slash', '3', '/\\slash', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous slash', 'previous slash'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1129,7 +1136,9 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', ' = \\equals', '2', ' - \\minus', '3', ' - \\minus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+## causes recognitionMimic error in Natspeak 4
+#    commands.say(['variable', ' = \\equals', '2', ' - \\minus', '3', ' - \\minus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2', ' - \\minus', '3', ' - \\minus', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous minus', 'previous minus'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1141,7 +1150,9 @@ def test_punctuation():
     
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['variable', ' = \\equals', '2', ' % \\modulo', '3', ' % \\modulo', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+## causes recognitionMimic error in Natspeak 4
+#    commands.say(['variable', ' = \\equals', '2', ' % \\modulo', '3', ' % \\modulo', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', 'equals', '2', ' % \\modulo', '3', ' % \\modulo', '4'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     commands.say(['previous percent', 'previous percent'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     

@@ -155,7 +155,8 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
 	*BOOL* -- true if the file was loaded successfully
 	"""
-        return self.underlying.LoadFile(f_path)
+        success = self.underlying.LoadFile(f_path)
+        return success
 
     def range_defaults(self, start = None, end = None):
         """translates from TextBuffer defaults for specifying start and

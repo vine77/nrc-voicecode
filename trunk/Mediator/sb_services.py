@@ -49,6 +49,7 @@ variant would have to be cloned and copied to the two classes.
 
 import Object
 import re
+import debug
 
 import SourceBuffState
 
@@ -433,10 +434,16 @@ class SB_ServiceIndent(SB_Service):
 	"""
 
 #        print '-- SB_ServiceIndent.insert_indent: code_bef=\'%s\', code_after=\'%s\', range=%s' % (code_bef, code_after, range)
+        debug.trace('SB_ServiceIndent.insert_indent',
+	    'code_bef="%s", code_after="%s", range=%s' \
+	    % (code_bef, code_after, repr(range)))
         
         if range == None:
             range = self.buff.get_selection()
         range = self.buff.make_valid_range(range)
+
+        debug.trace('SB_ServiceIndent.insert_indent',
+	    'range=%s' % repr(range))
 
 
         #
@@ -620,6 +627,8 @@ class SB_ServiceIndent(SB_Service):
         content = self.buff.contents()
         pos_newline = None
         pos_line_start = pos
+	debug.trace('SB_ServiceIndent.indentation_at',
+	    'len(content) = %d, pos = %d' % (len(content), pos))
 
         #
         # Go back from pos until we meet a newline character. Remember position

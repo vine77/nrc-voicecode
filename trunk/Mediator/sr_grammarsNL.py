@@ -37,15 +37,23 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *CLASS* wave_playback -- class constructor for a concrete
+    subclass of WavePlayback, or None if no playback is available
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, wave_playback = None, **attrs):
+        """
+        **INPUTS**
+
+        *CLASS* wave_playback -- class constructor for a concrete
+        subclass of WavePlayback, or None if no playback is available
+        """
         self.deep_construct(DictWinGramNL,
-            {}, attrs, exclude_bases = {DictGramBase:1})
+            {'wave_playback': wave_playback}, attrs, 
+            exclude_bases = {DictGramBase:1})
         DictGramBase.__init__(self)
 #        self.load(allResults=1)
         self.load()
@@ -119,7 +127,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
     def gotResultsObject(self, recogType, results):
             debug.trace('DictWinGramNL.gotResultsObject', 'recogType=%s, results=%s' % (recogType, repr(results)))
             if recogType == 'self':
-                utterance = sr_interface.SpokenUtteranceNL(results)
+                utterance = \
+                    sr_interface.SpokenUtteranceNL(results, self.wave_playback)
                 self.on_results(utterance)
 #                self.last = SpokenUtteranceNL(results)
 # not sure if yet if this is where we should store the utterance
@@ -507,24 +516,26 @@ class WinGramFactoryNL(WinGramFactory):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *CLASS* wave_playback -- class constructor for a concrete
+    subclass of WavePlayback, or None if no playback is available
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, wave_playback = None, **attrs):
         """
 	**INPUTS**
 
-	*none*
+        *CLASS* wave_playback -- class constructor for a concrete
+        subclass of WavePlayback, or None if no playback is available
 
 	**OUTPUTS**
 
 	*none*
 	"""
         self.deep_construct(WinGramFactoryNL,
-            {}, attrs)
+            {'wave_playback': wave_playback}, attrs)
 
     def make_dictation(self, manager, app, buff_name, window = None,
         exclusive = 0):
@@ -551,7 +562,8 @@ class WinGramFactoryNL(WinGramFactory):
 	*DictWinGram* -- new dictation grammar
 	"""
         return DictWinGramNL(manager = manager, app = app, 
-            buff_name = buff_name, window = window, exclusive = exclusive) 
+            buff_name = buff_name, window = window, exclusive = exclusive,
+            wave_playback = self.wave_playback) 
     
     def make_selection(self, app, window = None, buff_name = None,
         exclusive = 0):

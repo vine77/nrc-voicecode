@@ -28,6 +28,7 @@ import sb_services, SourceBuff
 from LangDef import LangDef
 import auto_test, CmdInterp, EdSim, PickledObject, sr_interface, vc_globals
 import util
+from debug import trace
 
 import copy, cPickle, exceptions, os, re, string, sys
 
@@ -1353,6 +1354,8 @@ class SymDict(PickledObject.PickledObject):
         """
 
 #        print '-- SymDict.reg_pseudo_to_native_symbol: words=%s' % words
+        trace('SymDict.reg_pseudo_to_native_symbol', 
+	    'words = %s' % repr(words))
 
         #
         # Generate string for the regexp.
@@ -1374,7 +1377,8 @@ class SymDict(PickledObject.PickledObject):
         reg_non_alphanums = '[^a-zA-Z0-9\s]*'
         regexp_string = ' (' + reg_non_alphanums
         for a_word in words:
-#            print '-- SymDict.reg_pseudo_to_native_symbol: a_word=%s' % a_word
+            trace('SymDict.reg_pseudo_to_native_symbol',
+	        'a_word=%s' % a_word)
             if len(a_word) > 0:
                 regexp_string = regexp_string + '(' + a_word[0]
                 for a_remaining_char in a_word[1:]:
@@ -1383,12 +1387,13 @@ class SymDict(PickledObject.PickledObject):
         regexp_string = regexp_string +  ') '
 
 
-#        print '-- SymDict.reg_pseudo_to_native_symbol: regexp_string=\'%s\'' % regexp_string
+        trace('SymDict.reg_pseudo_to_native_symbol', 
+	    'regexp_string="%s"' % regexp_string)
         
         #
-        # Compile regexp with flags=1 (i.e. case insensitive match)
+        # Compile regexp with flags=IGNORECASE (i.e. case insensitive match)
         #
-        regexp = re.compile(regexp_string, 1)
+        regexp = re.compile(regexp_string, re.IGNORECASE)
         
         return regexp
 

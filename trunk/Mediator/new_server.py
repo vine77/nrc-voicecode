@@ -141,6 +141,7 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
 #        test_space['auto_test'] = auto_test
         if test_server:
             sys.stderr.write('Loading test definitions...\n')
+            sys.stderr.flush()
             tests_def_fname = posixpath.expandvars('$VCODE_HOME' + \
                 os.sep + 'Admin' + os.sep + 'tests_def.py')
             execfile(tests_def_fname, test_space)        
@@ -152,9 +153,11 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
                 test_space = test_space, global_grammars = 1, exclusive = 1)
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
+        sys.stderr.flush()
         self.the_mediator.configure()
 #        print self.the_mediator.server
         sys.stderr.write('Finished ExtLoop init...\n')
+        sys.stderr.flush()
 
     def server(self):
         """returns a reference to the server

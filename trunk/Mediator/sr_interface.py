@@ -31,6 +31,7 @@ from debug import trace
 
 import SpokenUtterance
 
+
 #import nsformat
 
 #
@@ -514,13 +515,16 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
     *none*
     """
-    def __init__(self, results, **attrs):
+    def __init__(self, results, wave_playback = None, **attrs):
         """creates a SpokenUtteranceNL from a results object
 
 	**INPUTS**
 
 	*ResObj* results -- natlink results object representing speech
 	information
+
+        *CLASS* wave_playback -- class constructor for a concrete
+        subclass of WavePlayback, or None if no playback is available
 
 	**OUTPUTS**
 
@@ -533,11 +537,22 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
       
         self.deep_construct(SpokenUtteranceNL,
             {'results' : results, 
+            'wave': None,
             'word_list': word_list,
             'spoken_only': spoken_only,
             'choices_available': -1,
             'choices': []}, 
             attrs)
+        try:
+            wave_data = self.results.getWave()
+            wave = wave_playback(data = wave_data)
+#            print 'utterance created wave -- checking'
+            if wave.check():
+#                print 'utterance: wave ok'
+                self.wave = wave
+        except DataMissing:
+#            print 'data missing'
+            pass
 
     def spoken_forms(self):
         """returns list of spoken forms from the utterance
@@ -749,8 +764,9 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	been lost, or because the implementation doesn't support
 	playback)
 	"""
+        if self.wave:
+            return 1
         return 0
-# ResObj may have wave data, but we don't have code to play it back yet
 
     def playback(self):
         """plays back recorded utterance.
@@ -768,8 +784,12 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	there was an error in playback (e.g.  another program had 
 	control of the audio device)
 	"""
+        if self.wave and self.wave.check():
+            set_mic('off')
+            self.wave.play()
+            set_mic('on')
+            return 1
         return 0
-# ResObj may have wave data, but we don't have code to play it back yet
       
     def can_be_adapted(self):
         """indicates whether the utterance can be corrected for adaption
