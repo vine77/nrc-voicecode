@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:34:43 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 24 23:31:54 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,6 +26,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">MediatorConsoleWX</SPAN>(<A CLASS="DocLink" HREF="MediatorConsole.MediatorConsole.html">MediatorConsole</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsoleWX.MediatorConsoleWX.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.MediatorConsoleWX.on_double</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">event</SPAN>)
@@ -55,6 +56,7 @@
     <SPAN CLASS="InheritsHead"># Inherited from MediatorConsole.MediatorConsole</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.already_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.already_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does the console already have a modal dialog running?</SPAN>
+    <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.dismiss_modal"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.dismiss_modal</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorConsole.MediatorConsole.raise_active_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.MediatorConsole.raise_active_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -103,6 +105,37 @@ becomes true.
 <DT>
 <EM>BOOL</EM>
 <DD>true if a modal dialog is active
+
+</DL>
+<H2 ID="MediatorConsoleWX.MediatorConsoleWX.correct_recent" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correct recent dialog box for to allow the user to 
+select a recent utterance to correct</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>[(SpokenUtterance, BOOL)] utterances</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the user made changes and approved them
 
 </DL>
 <H2 ID="MediatorConsoleWX.MediatorConsoleWX.correct_utterance" CLASS="Method">MediatorConsoleWX.MediatorConsoleWX.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
@@ -561,11 +594,42 @@ Attributes are only set if they already exist in
 <DD>true if a modal dialog is active
 
 </DL>
+<H2 ID="MediatorConsole.MediatorConsole.correct_recent" CLASS="Method">MediatorConsole.MediatorConsole.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterances</SPAN>)</H2>
+<P>None</P>
+
+<P>
+display a correct recent dialog box for to allow the user to 
+select a recent utterance to correct</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR editor_name</EM>
+<DD>name of the editor instance
+<DT>
+<EM>[(SpokenUtterance, BOOL)] utterances</EM>
+<DD>the n most recent dictation 
+utterances (or all available if &lt; n), sorted most recent last, 
+with corresponding flags indicating if the utterance can be 
+undone and re-interpreted, or None if no utterances are stored.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the user made changes and approved them
+
+</DL>
 <H2 ID="MediatorConsole.MediatorConsole.correct_utterance" CLASS="Method">MediatorConsole.MediatorConsole.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_name</SPAN>, <SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">can_reinterpret</SPAN>, <SPAN CLASS="Argument">should_adapt=1</SPAN>)</H2>
 <P>None</P>
 
 <P>
-display a correction box for correction a complete, recent
+display a correction box for correction of a complete, recent
 utterance, accept user corrections, allow the user to
 approve or cancel, and adapt the speech engine.</P>
 <P>

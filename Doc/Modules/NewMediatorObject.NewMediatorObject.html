@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Nov 08 16:28:28 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 24 23:29:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,7 +24,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">NewMediatorObject</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
-    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates the NewMediatorObject</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._configure_from_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._configure_from_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject._new_test_editor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject._new_test_editor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">server=1</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
@@ -37,6 +37,7 @@
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.console"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.console</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)<SPAN CLASS="OneLiner"> # initiate user selection of a recent utterance to correct</SPAN>
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.define_config_functions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.define_config_functions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">exclude=None</SPAN>, <SPAN CLASS="Argument">reset=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=None</SPAN>)
     <A CLASS="DocLink" HREF="#NewMediatorObject.NewMediatorObject.delete_editor_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">NewMediatorObject.NewMediatorObject.delete_editor_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
@@ -130,6 +131,10 @@ subclass of WavePlayback, or None if no playback is available
 <DD>doorbell used to send an
 event to bring up the correction box asynchronously.
 <DT>
+<EM>CorrectRecentEvent correct_recent_evt</EM>
+<DD>doorbell used to send an
+event to bring up the correct recent box asynchronously.
+<DT>
 <EM>{STR:ANY} test_args</EM>
 <DD>list of test names to run
 <DT>
@@ -165,7 +170,7 @@ This file will also be the default to use if reconfigure is called
 ..[CmdInterp] CmdInterp.CmdInterp.html
 ..[ServerNewMediator] ServerNewMediator.tcp_server.html
 </P>
-<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
+<H2 ID="NewMediatorObject.NewMediatorObject.__init__" CLASS="Method">NewMediatorObject.NewMediatorObject.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp=None</SPAN>, <SPAN CLASS="Argument">server=None</SPAN>, <SPAN CLASS="Argument">console=None</SPAN>, <SPAN CLASS="Argument">wave_playback=None</SPAN>, <SPAN CLASS="Argument">correct_evt=None</SPAN>, <SPAN CLASS="Argument">correct_recent_evt=None</SPAN>, <SPAN CLASS="Argument">test_args=None</SPAN>, <SPAN CLASS="Argument">test_space=None</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">symdict_pickle_fname=None</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg_regression=1</SPAN>, <SPAN CLASS="Argument">symbol_match_dlg=0</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)</H2>
 <P>creates the NewMediatorObject</P>
 
 <P>
@@ -525,6 +530,21 @@ vc_globals.default_config_file
 
 returns a reference to the MediatorConsole which provides the
 GUI correction interfaces.<STRONG>INPUTS</STRONG><EM>none</EM><STRONG>OUTPUTS</STRONG><EM>none</EM>
+<H2 ID="NewMediatorObject.NewMediatorObject.correct_recent" CLASS="Method">NewMediatorObject.NewMediatorObject.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
+<P>initiate user selection of a recent utterance to correct</P>
+
+NOTE: this is a synchronous method which starts a modal
+correction box, and will not return until the user has 
+dismissed the correct recent dialog box.  Generally, it should 
+be called only in response to a CorrectRecent event, rather than
+in direct response to a spoken correction command.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR instance_name</EM>
+<DD>name of the application instance
+</DL>
+<STRONG>OUTPUTS</STRONG><EM>none</EM>
 <H2 ID="NewMediatorObject.NewMediatorObject.correct_utterance" CLASS="Method">NewMediatorObject.NewMediatorObject.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)</H2>
 <P>None</P>
 
@@ -536,6 +556,9 @@ only in response to a CorrectUtterance event, rather than
 in direct response to a spoken correction command.<STRONG>INPUTS</STRONG>
 <DL>
 
+<DT>
+<EM>STR instance_name</EM>
+<DD>name of the application instance
 <DT>
 <EM>INT utterance_number</EM>
 <DD>the number assigned to the utterance by
