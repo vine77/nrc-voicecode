@@ -1394,7 +1394,7 @@ acmd = CSCmd(spoken_forms=['define method', 'declare method', 'add method'],
                        ContPy(): py_method_declaration},
              docstring='method definition')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['define function', 'declare function'],
+acmd = CSCmd(spoken_forms=['define function', 'declare function', 'add function'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): c_function_declaration},
              docstring='function definition')
@@ -1404,7 +1404,7 @@ acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
                        ContPy(): py_function_add_argument},
              docstring='move to end of argument list of a function call or declaration')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['method body'],
+acmd = CSCmd(spoken_forms=['method body', 'function body'],
              meanings={ContC(): c_function_body, ContPy(): py_function_body},
              docstring='move to body of a function definition')
 add_csc(acmd)
