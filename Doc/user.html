@@ -27,6 +27,9 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
 <UL>
 <LI><A HREF="#simulation">Simulation mode</A>
 <LI><A HREF="#config">Configuring VoiceCode</A>
+    <UL>
+    <LI><A HREF="#debugConfig">Debugging the configuration file</A>
+    </UL>
 </UL>
 
 VoiceCode is currently at the prototype stage. It cannot be used in an
@@ -101,9 +104,91 @@ quit()
 <H2><A NAME="config">Configuring VoiceCode</A></H2>
 
 At the center of VoiceCode is a concept called <EM>Context Sensitive
-Command (CSC)</EM>. A conte
+Command (CSC)</EM>. A CSC is an utterance which may fire a particular
+action in a particular context.
+
+<P>
+
+VoiceCode comes bundled with a series of CSCs for doing common
+tasks. If you do not like the way a particular CSC is implemented (for
+example, if you don't like the way it is said) or if you want to add
+your own CSC, you can do that by editing the configuration file
+<EM>VCODE_HOME/Config/vc_config.py</EM>. All the CSC known to
+VoiceCode are defined in that file through Python statements that look
+like this:
 
 
+<PRE>
+acmd = CSCmd(spoken_forms=['at index'], 
+             meanings=[[ContC(), gen_brackets_pair], 
+                       [ContPy(), gen_brackets_pair]])
+add_csc(acmd)
+</PRE>
+
+Basically, these two statements create a new instance of <A
+HREF="CSCmd.CSCmd.html">CSCmd</A> which defines a CSC, and then
+register that instance with VoiceCode through the <EM>add_csc</EM>
+function.
+
+<P>
+
+The <EM>CSCmd</EM> constructor has the following named arguments:
+
+<STRONG>[STR spoken_forms]</STRONG> the <EM>spoken_form</EM> argument
+is a list defining the various ways that the command can be invoked by
+voice. If you prefer to use a different voice command, just add your
+own to that list. 
+
+<P>
+
+<STRONG>[[Context, FCT]] meanings</STRONG>  the <EM>meanings</EM> argument is a list of contextual meanings for the command. Each contextual meaning is a pair consisting of a context object (which is used to determine if a particular applies) and an action function to be fired if the context applies.
+
+<P>
+
+In the above example, the command has only one spoken form <EM>'at
+index'</EM>. The command can be used in one of two contexts,
+<EM>ContC</EM> and <EM>ContPy</EM> (which respectively apply iif the
+current source buffer is in <EM>C</EM> or <EM>Python</EM>). In both
+contexts, the action function is <EM>gen_brackets_pair</EM> which
+simply inserts a pair of square brackets and positions the cursor in
+between.
+
+<P>
+
+The various <A HREF="Context.Context.html">Context</A> object and the
+various <EM>action</EM> functions that can be used to build <A
+HREF="CSCmd.CSCmd.html">CSCmd</A> objects are defined in the following
+files:
+
+<P>
+
+<UL>
+<LI><STRONG>$VCODE_HOME/Mediator/cont_gen.py: </STRONG> defines context objects which are not specific to a particular programming language
+<LI><STRONG>$VCODE_HOME/Mediator/actions_gen.py:</STRONG> defines action functions which are relevant across different programming languages.
+<LI><STRONG>$VCODE_HOME/Mediator/actions_C_Cpp.py:</STRONG> defines action functions relevant only for the <EM>C</EM> and <EM>C++</EM> languages.
+<LI><STRONG>$VCODE_HOME/Mediator/actions_py.py:</STRONG> defines action functions relevant only for the <EM>Python</EM> language.
+</UL>
+
+Of course, you are not limited to those contexts and actions. You can add your own and then use them to build <A HREF="CSCmd.CSCmd.html">CSCmd</A> objects in <EM>vc_config.py</EM>.
+
+
+<H3><A NAME="debugConfig">Debugging the configuration file</A></H3>
+
+The file <EM>vc_config.py</EM> is evaluated at run time by VoiceCode. If there are syntax errors in that file, the error reporting will therefore not be as precise as usual. You will probably get a message like:
+
+<PRE>
+ERROR: in configuration file D:\VoiceCode\VCode\Config\vc_config.py.
+
+Traceback (innermost last):
+  File "mediator.py", line 89, in ?
+    raise err
+</PRE>
+
+with no indication of the line in <EM>vc_config.py</EM> where the error occurred. You can however get better error reporting by running vc_config.py directly from python as follows:
+
+<PRE>
+python %VCODE_HOME%\Config\vc_config.py
+</PRE>
 
 
 <hr>
