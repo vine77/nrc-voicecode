@@ -103,7 +103,8 @@ def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
 def init_simulator(symdict_pickle_fname=None,
                    disable_dlg_select_symbol_matches = None,
                    window=None, exclusive=0, allResults=0,
-                   reuse_mediator=0, on_app=None, owns_app = 1):
+                   reuse_mediator=0, on_app=None, owns_app = 1, owner =
+		   None, id = None):
 
     """
     Creates a global [MediatorObject] instance *the_mediator*, and configures it.
@@ -140,6 +141,11 @@ def init_simulator(symdict_pickle_fname=None,
     *BOOL owns_app* -- create mediator with owns_app flag (see
     MediatorObject)
 
+    *ServerMainThread owner* -- server which owns this mediator, or
+    None.  Note: if owner is set, the id field MUST be provided.
+
+    STR *id* -- The unique identifier assigned by the server to
+    this MediatorObject
     
     **OUTPUT**
 
@@ -188,7 +194,8 @@ def init_simulator(symdict_pickle_fname=None,
         the_mediator = MediatorObject.MediatorObject(app = on_app,
 	    interp=CmdInterp.CmdInterp(), window=window, 
 	    owns_app = owns_app,
-	    exclusive=exclusive, allResults=allResults)
+	    exclusive=exclusive, allResults=allResults, owner = owner,
+	    id = id)
 
         #
         # Read the symbol dictionary from file

@@ -183,21 +183,6 @@ class SourceBuff(OwnerObject):
         """
 	return self.app
 
-
-    def language_name(self):
-        """Returns the name of the language a file is written in
-        
-        **INPUTS**
-        
-        *none*
-        
-        **OUTPUTS**
-        
-        *STR* -- the name of the language
-        """
-        debug.virtual('SourceBuff.language_name')
-
-
     def drop_breadcrumb(self, pos=None):
 
         """Drops a breadcrumb -- see AppState.drop_breadcrumb

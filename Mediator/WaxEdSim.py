@@ -103,6 +103,12 @@ class WaxEdSimPane(wxPanel):
 
     *wxTextControl* editor -- underlying text control for editor window
 
+    *FCT* change_callback --
+    change_callback( *INT* start, *INT* end, *STR* text, 
+    *INT* selection_start, *INT* selection_end, 
+    *STR* buff_name).   See set_change_callback 
+    below for details
+
 
     """
     def __del__(self):
@@ -122,11 +128,14 @@ class WaxEdSimPane(wxPanel):
 	del self.parent
         
         
-    def __init__(self, parent, ID, title, command_space = None):
+    def __init__(self, parent, ID, title, command_space = None,
+	    change_callback = None):
         wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize,
 	    name = title)
         self.parent = parent
 	self.exiting = 0
+
+	self.change_callback = change_callback
 
 # dictionary to provide local name space for user commands
 	self.command_space = {}
@@ -316,7 +325,39 @@ class WaxEdSimPane(wxPanel):
         self.command_line.SetFocus()
     def on_editor_change(self, start, end, text, selection_start,
         selection_end, buffer, program_initiated):
-	pass
+	if self.change_callback != None and not program_initiated:
+	    buff_name = self.parent.app_control.app_active_buff_name()
+	    self.change_callback(start, end, text, selection_start,
+		selection_end, buff_name)
+
+    def set_change_callback(self, change_callback = None):
+	"""changes the callback to a new function
+
+	**INPUTS**
+      
+	*FCT* change_callback --
+	change_callback( *INT* start, *INT* end, *STR* text, 
+	*INT* selection_start, *INT* selection_end, 
+	*STR* buff_name)
+
+	The arguments to the change callback specify the character offsets
+	of the start and end of the changed region (before the change),
+	the text with which this region was replaced, the start and end
+	of the selected region (after the change), and the name of the
+	buffer reporting the change
+
+	Note the difference between this change_callback and the
+	TextBufferWX one: here the name of the buffer is returned,
+	rather than a reference to the underlying TextBufferWX.  Also,
+	this change callback is called only when the change is
+	initiated by the editor, not when the mediator calls a method
+	which makes a change.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.change_callback = change_callback
 
 
 class WaxEdSimFrame(wxFrame):

@@ -33,6 +33,8 @@ import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sim_commands, sr_interface, util
 import Queue
 
+from tcp_threads import *
+
 
 
 # Uncomment this and add some entries to active_traces if you want to 
@@ -488,9 +490,8 @@ class ServerSingleThread(Object.Object):
     *PyHandle evt_quit* -- Win32 event raised when we are shutting
      down the server.
 
-    [MediatorObject] *active_meds* -- Active mediators driving
-    external edtiors. NOTE: This will eventually be moved to the
-    grammar manager class.
+    {STR : MediatorObject} *active_meds* -- map from unique socket IDs
+    to active mediators driving external edtiors.
 
     STR *test_suite=None* -- If not *None*, then upon connection by a
     new editor run regression test suite *test_suite*.
@@ -516,7 +517,7 @@ class ServerSingleThread(Object.Object):
                              'evt_new_talk_conn': win32event.CreateEvent(None, 0, 0, None),
                              'evt_sockets_ready': win32event.CreateEvent(None, 0, 0, None),
                              'evt_quit': win32event.CreateEvent(None, 0, 0, None),
-                             'active_meds': [],
+                             'active_meds': {},
                              'test_suite': None
                              }, 
                             args_super, 
@@ -605,7 +606,7 @@ class ServerSingleThread(Object.Object):
         #
         # Copy the mediator to the list of active mediators.
         #
-        self.active_meds.append(mediator.the_mediator)
+        self.active_meds[id] = mediator.the_mediator
         mediator.the_mediator = None
 
     def handshake_listen_socks(self):
@@ -901,347 +902,6 @@ class ServerSingleThread(Object.Object):
 # ServerSingleThread.
 ##############################################################################
 
-class InterThreadEvent(Object.Object):
-    """abstract interface for sending a dataless message between threads.
-    Particular implementations may use win32 events or wxPython custom
-    events.
-
-    **INSTANCE ATTRIBUTES**
-
-    *none*
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, **args):
-	"""abstract base class so no arguments
-	"""
-	self.deep_construct(InterThreadEvent,
-			    {},
-			    args)
-    def notify(self):
-	"""send the message, and return asynchronously
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('InterThreadEvent.notify')
-
-class SocketHasDataEvent(Object.Object):
-    """abstract interface for sending a message from to the main thread 
-    indicating that a particular socket has data waiting to be read.
-
-    The concrete subclass will have a reference to the particular
-    socket.
-    
-    Particular implementations may use win32 events or wxPython custom
-    events.
-
-    **INSTANCE ATTRIBUTES**
-
-    *none*
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, **args):
-	"""abstract base class so no arguments
-	"""
-	self.deep_construct(SocketHasDataEvent,
-			    {},
-			    args)
-    def notify(self):
-	"""send the message, and return asynchronously
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('SocketHasDataEvent.notify')
-
-class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
-    """class for a thread which listens for messages using a given 
-    Messenger puts completed messages on a Queue.
-
-    **INSTANCE ATTRIBUTES**
-
-    [Messenger] *underlying* -- underlying messenger (usually
-    [MessengerBasic]) used to receive and unpack them messages.
-
-    Queue.Queue *completed_msgs* -- Queue on which to deposit the
-    completed messages.
-
-    SocketHasDataEvent *event* -- object used to notify the main thread
-    that a socket has data
-
-    CLASS ATTRIBUTES**
-    
-    *none* --
-
-    .. [Messenger] file:///./messenger.Messenger.html
-    .. [MessengerBasic] file:///./messenger.MessengerBasic.html"""
-    def __init__(self, underlying, completed_msgs, event, **args_super):
-        self.deep_construct(ListenAndQueueMsgsThread, 
-                            {'underlying': underlying,
-			     'completed_msgs': completed_msgs,
-			     'event': event}, 
-                            args_super, 
-                            exclude_bases={'threading.Thread': 1})
-        threading.Thread.__init__(self)
-
-    def message_queue(self):
-	"""returns a reference to the message queue in which the thread
-	puts completed messages
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*Queue.Queue* -- the message queue
-	"""
-	return self.completed_msgs
-
-    def get_mess(self):
-        """Gets a message from the external editor.
-        
-        **INPUTS**
-
-	*none*
-        
-        **OUTPUTS**
-        
-        (STR, {STR: STR}) name_argvals_mess -- The message retrieved
-         from external editor in *(mess_name, {arg:val})* format.
-         from external editor in *(mess_name, {arg:val})* format, or
-	 None if no message is available."""
-
-	return self.underlying.get_mess()
-        
-    def notify_main(self):
-	"""notify the main thread that there is a new message waiting in 
-	the Queue, and return asynchronously.
-	
-	**INPUTS**
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.event.notify()
-
-    def run(self):
-        """Start listening for data.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        while 1:
-	    data = self.get_mess()
-	    self.completed_msgs.put(data)
-	    self.notify_main()
-            time.sleep(0.01)
-#            time.sleep(1)
-
-
-class ListenNewConnThread(threading.Thread, Object.Object):
-    """Abstract base class which listens for new socket connections on 
-    a port number and uses an InterThreadEvent object to
-    notify the main thread about the new connection.
-
-    Concrete subclasses will define log_conn method to add each new socket 
-    to a data structure containing uninitialised connections.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    INT *port* -- Port on which to listen for connections.
-    
-    InterThreadEvent *event* -- object use to send event to the main
-    thread
-
-    **CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, port, event, **args_super):
-        self.deep_construct(ListenNewConnThread, 
-                            {'port': port, 
-			     'event': event},
-                            args_super, 
-                            exclude_bases={'threading.Thread': 1})
-        threading.Thread.__init__(self)        
-        
-    def notify_main(self):
-	"""notify the main thread that there is a new connection waiting
-	for a handshake, and return asynchronously.
-	
-	**INPUTS**
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.event.notify()
-
-    def run(self):
-        """Start listening for new connections.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.bind((socket.gethostname(), self.port))
-        server_socket.listen(5)
-
-        while 1:
-
-            # Accept a new connection
-            (client_socket, address) = server_socket.accept()
-
-            debug.trace('ListenNewConnThread.run', 'got new connection on port=%s' % self.port)
-            
-            #
-            # Log it notify the main event loop that
-            # it should shake hands with it
-            #
-            self.log_new_conn(client_socket)
-	    self.notify_main()
-
-            #
-            # When debugging, increase this if you want to see things happen
-            # in slow motion
-            #
-            time.sleep(0.01)
-#            time.sleep(1)
-
-
-    def log_new_conn(self, client_socket):
-        
-        """Logs a newly received socket connection, so that main event
-        loop can later shake hands with it.
-        
-        **INPUTS**
-        
-        *socket client_socket* -- Newly received socket connection
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-	debug.virtual('ListenNewConnThread.log_new_conn')
-
-
-class NewConnListThread(ListenNewConnThread):
-    """Listens for new socket connections on a port number
-    and use an InterThreadEvent object to
-    notify the main thread about the new connection.
-
-    Adds each new socket to a list of uninitialised connections.
-
-    This version is used for new talker sockets, because they may not
-    come in in the same order as the previously connected new listener
-    sockets, so you have to look through the whole list anyway.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    [socket] *new_socks* -- List on which to add any new connection.
-    
-    [lock] *new_socks_lock* -- Lock on the new connection list.
-
-    **CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, new_socks, new_socks_lock, **args_super):
-        self.deep_construct(NewConnListThread, 
-                            {'new_socks': new_socks,
-                             'new_socks_lock': new_socks_lock},
-                            args_super)
-        
-    def log_new_conn(self, client_socket):
-        
-        """Logs a newly received socket connection, so that main event
-        loop can later shake hands with it.
-        
-        **INPUTS**
-        
-        *socket client_socket* -- Newly received socket connection
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        self.new_socks_lock.acquire()
-        self.new_socks.append((client_socket, [None, None, None]))
-        self.new_socks_lock.release()        
-
-class ListenNewEditorsThread(ListenNewConnThread):
-    """Listens for new socket editor connections on a port number
-    and use an InterThreadEvent object to notify the main thread about 
-    the new connection.
-
-    Adds each new socket to a Queue of uninitialised connections.
-
-    This version is used for new listener sockets, which should be
-    processed in the order they come in.
-    
-    **INSTANCE ATTRIBUTES**
-    
-    [Queue] *new_socks* -- Queue to which to add any new connection.
-
-    **CLASS ATTRIBUTES**
-    
-    *none* -- 
-    """
-    
-    def __init__(self, new_socks, **args_super):
-        self.deep_construct(ListenNewEditorsThread, 
-                            {'new_socks': new_socks},
-                            args_super)
-
-    def log_new_conn(self, client_socket):
-        
-        """Logs a newly received socket connection, so that main event
-        loop can later shake hands with it.
-        
-        **INPUTS**
-        
-        *socket client_socket* -- Newly received socket connection
-        
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-        
-        self.new_socks.put(client_socket)
-    
 class ServerMainThread(Object.Object):
     """Abstract base class for the main thread of a TCP/IP based 
     VoiceCode server.
@@ -1790,76 +1450,6 @@ class ServerOldMediator(ServerMainThread):
 	if self.active_meds.has_key(id):
 	    return self.active_meds[id].app
 	return None
-
-class Win32InterThreadEvent(InterThreadEvent):
-    """implementation of InterThreadEvent using the win32event module.
-
-    **INSTANCE ATTRIBUTES**
-
-    *PyHandle event* -- Win32 event to raised to notify the main thread
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, event, **args):
-	"""
-	**INPUTS**
-
-	*PyHandle event* -- Win32 event to raised to notify the main thread
-	"""
-	self.deep_construct(Win32InterThreadEvent,
-			    {'event': event},
-			    args)
-    def notify(self):
-	"""send the message, and return asynchronously
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	win32event.SetEvent(self.event)
-
-class Win32SomeSocketHasDataEvent(SocketHasDataEvent):
-    """implementation of SocketHasDataEvent using win32event.
-    
-    There doesn't seem to be any way to pass data on with a win32event.Event.
-    For now, we just let ServerOldMediatorWin32Evt check all sockets.
-
-    **INSTANCE ATTRIBUTES**
-
-    *PyHandle event* -- Win32 event to raised to notify the main thread
-
-    **CLASS ATTRIBUTES**
-
-    *none*
-    """
-    def __init__(self, event, **args):
-	"""
-	**INPUTS**
-
-	*PyHandle event* -- Win32 event to raised to notify the main thread
-	"""
-	self.deep_construct(Win32SomeSocketHasDataEvent,
-			    {'event': event},
-			    args)
-    def notify(self):
-	"""send the message, and return asynchronously
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	win32event.SetEvent(self.event)
-
 
 class ServerOldMediatorWin32Evt(ServerOldMediator):
     """concrete subclass of ServerOldMediator(ServerMainThread) which uses 

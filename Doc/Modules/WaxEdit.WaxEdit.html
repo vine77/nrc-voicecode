@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:55:36 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 01 21:05:04 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,6 +29,7 @@
     <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.open_file_in_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.open_file_in_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # opens a new file in the existing TextBufferWX</SPAN>
     <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_control</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Saves the file in the existing TextBufferWX</SPAN>
+    <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
     <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_instance_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_instance_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)
     <A CLASS="DocLink" HREF="#WaxEdit.WaxEdit.set_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WaxEdit.WaxEdit.set_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # sets the filename to name (usually indicated in the title bar)</SPAN>
 
@@ -169,6 +170,38 @@ an existing file.
 there)
 
 </DL>
+<H2 ID="WaxEdit.WaxEdit.set_change_callback" CLASS="Method">WaxEdit.WaxEdit.set_change_callback(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)</H2>
+<P>changes the callback to a new function</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>FCT</EM> change_callback
+<DD>change_callback( <EM>INT</EM> start, <EM>INT</EM> end, <EM>STR</EM> text, 
+<EM>INT</EM> selection_start, <EM>INT</EM> selection_end, 
+<EM>STR</EM> buff_name)
+</DL>
+<P>
+The arguments to the change callback specify the character offsets
+of the start and end of the changed region (before the change),
+the text with which this region was replaced, the start and end
+of the selected region (after the change), and the name of the
+buffer reporting the change</P>
+<P>
+Note the difference between this change_callback and the
+TextBufferWX one: here the name of the buffer is returned,
+rather than a reference to the underlying TextBufferWX.  Also,
+this change callback is called only when the change is
+initiated by the editor, not when the mediator calls a method
+which makes a change.</P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="WaxEdit.WaxEdit.set_instance_string" CLASS="Method">WaxEdit.WaxEdit.set_instance_string(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_string</SPAN>)</H2>
 <P>None</P>
 

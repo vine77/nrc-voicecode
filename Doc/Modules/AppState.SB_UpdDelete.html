@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Jun 15 18:54:47 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 01 21:03:05 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,9 +29,12 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdDelete.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.SB_UpdDelete.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_UpdDelete.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a delete update on a specific buffer.</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.AS_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">descr</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AS_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.SB_Update</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update on the appropriate source buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_VE_map"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_VE_map</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Update the V-E map to take into account this buffer update.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a buffer update on a specific buffer.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.on_buff_named</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of the buffer on which to do the update.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -39,12 +42,9 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from AppState.SB_Update</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update on the appropriate source buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_VE_map"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_VE_map</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Update the V-E map to take into account this buffer update.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.SB_Update.apply_to_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.apply_to_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)<SPAN CLASS="OneLiner"> # Carry out a buffer update on a specific buffer.</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.SB_Update.on_buff_named</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of the buffer on which to do the update.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AS_Update</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">descr</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AS_Update.apply"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AS_Update.apply</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)<SPAN CLASS="OneLiner"> # Carry out the update.</SPAN>
 
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
@@ -80,8 +80,8 @@ CLASS ATTRIBUTES**</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppState.AS_Update.apply" CLASS="Method">AppState.AS_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update.</P>
+<H2 ID="AppState.SB_Update.apply" CLASS="Method">AppState.SB_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
+<P>Carry out the update on the appropriate source buffer.</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -93,6 +93,48 @@ CLASS ATTRIBUTES**</P>
 <EM>none</EM> --</P>
 <P>
 ..[AppState] AppState.AppState.html</P>
+<H2 ID="AppState.SB_Update.apply_to_VE_map" CLASS="Method">AppState.SB_Update.apply_to_VE_map(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
+<P>Update the V-E map to take into account this buffer update.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[AppState] <EM>on_app</EM>
+<DD>Application on which the update is being done.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppState.SB_Update.apply_to_buff" CLASS="Method">AppState.SB_Update.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
+<P>Carry out a buffer update on a specific buffer.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[SourceBuff] <EM>on_buff</EM>
+<DD>The buffer on which to do the update. 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -223,8 +265,8 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppState.SB_Update.apply" CLASS="Method">AppState.SB_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Carry out the update on the appropriate source buffer.</P>
+<H2 ID="AppState.AS_Update.apply" CLASS="Method">AppState.AS_Update.apply(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
+<P>Carry out the update.</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -236,48 +278,6 @@ Attributes are only set if they already exist in
 <EM>none</EM> --</P>
 <P>
 ..[AppState] AppState.AppState.html</P>
-<H2 ID="AppState.SB_Update.apply_to_VE_map" CLASS="Method">AppState.SB_Update.apply_to_VE_map(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app</SPAN>)</H2>
-<P>Update the V-E map to take into account this buffer update.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[AppState] <EM>on_app</EM>
-<DD>Application on which the update is being done.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="AppState.SB_Update.apply_to_buff" CLASS="Method">AppState.SB_Update.apply_to_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_buff</SPAN>)</H2>
-<P>Carry out a buffer update on a specific buffer.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[SourceBuff] <EM>on_buff</EM>
-<DD>The buffer on which to do the update. 
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 
 <HR>
 <TABLE ALIGN="LEFT">

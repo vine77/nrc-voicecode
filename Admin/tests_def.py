@@ -1690,12 +1690,13 @@ def test_am_dictionaries():
     manager.delete_instance(n)
     manager_state(manager)
 
-def test_rsm_algorithm():
+def test_rsm_algorithm(trust = 0):
     g_factory = sr_grammars.WinGramFactoryDummy(silent = 0)
     GM_factory = GramMgr.WinGramMgrFactory(g_factory, interp = None)
     current = RecogStartMgr.CurrWindowDummy()
-    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, GM_factory = GM_factory, 
-      win_info = current)
+    recog_mgr = RecogStartMgr.RSMExtInfo(editors = None, 
+	GM_factory = GM_factory, 
+	trust_current_window = trust, win_info = current)
     manager = AppMgr.AppMgr(recog_mgr)
     windows = {}
     mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
@@ -1975,10 +1976,19 @@ if ($voiceGripOS eq 'win') {
     start_recog(manager, current)
     instance_status(manager, xe1)
 
+def test_rsm_algorithm_no_trust():
+    test_rsm_algorithm(trust = 0)
+
+def test_rsm_algorithm_trust():
+    test_rsm_algorithm(trust = 1)
+
 auto_test.add_test('am_dictionaries', test_am_dictionaries, 
     'Testing AppMgr dictionary management.')
 
-auto_test.add_test('rsm_algorithm', test_rsm_algorithm, 
+auto_test.add_test('rsm_algorithm', test_rsm_algorithm_no_trust, 
+    'Testing RecogStartMgr algorithm.')
+
+auto_test.add_test('rsm_algorithm_trust', test_rsm_algorithm_trust, 
     'Testing RecogStartMgr algorithm.')
 
 ##############################################################################

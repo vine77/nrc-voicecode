@@ -1306,7 +1306,7 @@ class AppState(OwnerObject):
 
     def close_app_cbk(self):
 	"""editor invokes this method to notify AppState that it is
-	about to close
+	about to close, or is disconnecting from the mediator
 
 	**INPUTS**
 
@@ -1317,7 +1317,7 @@ class AppState(OwnerObject):
 	*none*
 	"""
 	if self.current_manager() and self.name():
-	    self.current_manager().delete_instance(self.name())
+	    self.current_manager().close_app_cbk(self.name())
 
     def close_buffer_cbk(self, buff_name):
 	"""editor invokes this method to notify AppState that a
@@ -1690,10 +1690,54 @@ class AppState(OwnerObject):
         
         debug.virtual('AppState.app_close_buffer')
 
+class AppChangeSpec:
+    """mix-in class for AppState which provides a change specification
+    callback
 
-# defaults for vim - otherwise ignore
-# vim:sw=4
+    **INSTANCE ATTRIBUTES**
 
+    *FCT* change_callback --
+    change_callback( *INT* start, *INT* end, *STR* text, 
+    *INT* selection_start, *INT* selection_end, 
+    *STR* buff_name, *BOOL* program_initiated).   See set_change_callback 
+    below for details
 
+    **CLASS ATTRIBUTES**
 
+    *none*
+    """
+    def __init__(self, change_callback = None, **args):
+	self.deep_construct(AppChangeSpec,
+	                    {'change_callback': change_callback,
+			    },
+			    args)
+
+    def set_change_callback(self, change_callback = None):
+	"""changes the callback to a new function
+
+	**INPUTS**
+      
+	*FCT* change_callback --
+	change_callback( *INT* start, *INT* end, *STR* text, 
+	*INT* selection_start, *INT* selection_end, 
+	*STR* buff_name)
+
+	The arguments to the change callback specify the character offsets
+	of the start and end of the changed region (before the change),
+	the text with which this region was replaced, the start and end
+	of the selected region (after the change), and the name of the
+	buffer reporting the change
+
+	Note the difference between this change_callback and the
+	TextBufferWX one: here the name of the buffer is returned,
+	rather than a reference to the underlying TextBufferWX.  Also,
+	this change callback is called only when the change is
+	initiated by the editor, not when the mediator calls a method
+	which makes a change.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('AppChangeSpec.set_change_callback')
 

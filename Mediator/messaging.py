@@ -30,6 +30,10 @@ import select
 
 import debug, Object
 
+class SocketError(RuntimeError):
+    def __init__(self, msg):
+        self.msg = msg
+
 class Messenger(Object.Object):
    
     """abstract base class for transporting messages betweeen external 
@@ -788,7 +792,7 @@ class MessTransporter_Socket(MessTransporter):
         while totalsent < mess_len:
             sent = self.sock.send(a_string[totalsent:])
             if sent == 0:
-                raise RuntimeError, "socket connection broken"
+                raise SocketError, "socket connection broken"
             totalsent = totalsent + sent
         
 
@@ -812,7 +816,7 @@ class MessTransporter_Socket(MessTransporter):
 		    time.sleep(self.sleep)
             chunk = self.sock.recv(num_bytes - len(a_string))
             if chunk == '':
-                raise RuntimeError, "socket connection broken"
+                raise SocketError, "socket connection broken"
             a_string = a_string + chunk
 
         return a_string         
