@@ -77,6 +77,9 @@ class AppState(Object):
     
     *STR curr_dir=None* -- Current directory for the programming environment
     
+    *STR default_buff_name=None* -- default buffer for buffer-specific
+     operations.  When None, current buffer will be used
+
     *[(STR, INT)]* breadcrumbs -- stack of breadcrumbs. Each entry of
      the stack is a couple where the first entry is the name of the
      source buffer and the second is the position in that buffer where
@@ -123,20 +126,42 @@ class AppState(Object):
                              'rec_utterances': [], 
                              'open_buffers': {},
                              'curr_dir': curr_dir, 
+			     'default_buff_name': None,
                              'max_history': max_history, 
                              'translation_is_off': translation_is_off},
                             attrs)
 
     def curr_buffer(self):
-        """Returns the SourceBuff corresponding to the current editor buffer 
+        """Returns the SourceBuff corresponding to the default editor buffer,
+	or the current buffer if the default is not set
         
         If no such buffer, returns *None*.
         
         """
 	return self.find_buff(self.curr_buffer_name())
 
+    def curr_buffer_from_app(self):
+        """Returns the SourceBuff corresponding to the current editor buffer 
+        
+        If no such buffer, returns *None*.
+        
+        """
+	return self.find_buff(self.curr_buffer_name_from_app())
+
     def curr_buffer_name(self):
-	"""returns the file name of the current buffer
+	"""returns the file name of the default buffer, or current buffer
+	if default is not set
+
+	**OUTPUTS**
+
+	*STR* -- file name of current buffer"""
+
+	if self.default_buff_name != None:
+	    return self.default_buff_name
+	return self.curr_buffer_name_from_app()
+
+    def curr_buffer_name_from_app(self):
+	"""queries the application for the file name of the current buffer
 
 	**OUTPUTS**
 
@@ -144,6 +169,27 @@ class AppState(Object):
 
 	debug.virtual('curr_buffer_name')
 
+    def set_default_buffer(self, buff_name = None):
+	"""sets the default buffer, until it is cleared again
+	Note: generally, set_default_buffer is only called by
+	interpret_NL_cmd, and must be reset to None before
+	interpret_NL_cmd returns
+
+	**INPUTS**
+
+	*STR buff_name* -- name of buffer to set as default
+
+        **OUTPUTS**
+        
+        *BOOL*  -- does a buffer by that name exist?
+	"""
+        if (buff_name == None):
+            self.default_buffer_name = None
+	    return 0
+        elif (self.open_buffers.has_key(buff_name)):
+            self.default_buffer_name = buff_name
+            return 1
+	return 0
 
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 16:31:03 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 17:46:50 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -33,7 +33,7 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_word</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Removes a single word from a command.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.dlg_select_symbol_match"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.dlg_select_symbol_match</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>)<SPAN CLASS="OneLiner"> # Asks the user to select a match for pseudo symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
-    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_CSC"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_CSC</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a CSC.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_LSA"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_LSA</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of an LSA.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a known symbol.</SPAN>
@@ -330,7 +330,7 @@ matched
 <DD>if true, add a SR vocabulary entry
  for the CSC's spoken forms
 </DL>
-<H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)</H2>
+<H2 ID="CmdInterp.CmdInterp.interpret_NL_cmd" CLASS="Method">CmdInterp.CmdInterp.interpret_NL_cmd(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -342,6 +342,12 @@ corresponding instructions.</P>
 <DT>
 <EM>[STR] cmd</EM>
 <DD>The command. It is a list of written\spoken words.
+<DT>
+<EM>[STR] initial_buffer</EM>
+<DD>The name of the target buffer at the 
+start of the utterance.  Some CSCs may change the target buffer of 
+subsequent parts of the command.  If None, then the current buffer 
+will be used.
 
 </DL>
 <H2 ID="CmdInterp.CmdInterp.is_spoken_CSC" CLASS="Method">CmdInterp.CmdInterp.is_spoken_CSC(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)</H2>

@@ -106,15 +106,21 @@ class CmdInterp(Object):
             regexp = regexp + regexp_this_word
         return regexp
 
-    def interpret_NL_cmd(self, cmd):
+    def interpret_NL_cmd(self, cmd, initial_buffer = None):
         
         """Interprets a natural language command and executes
         corresponding instructions.
 
         *[STR] cmd* -- The command. It is a list of written\spoken words.
+        *[STR] initial_buffer* -- The name of the target buffer at the 
+	start of the utterance.  Some CSCs may change the target buffer of 
+	subsequent parts of the command.  If None, then the current buffer 
+	will be used.
         """
         
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
+	self.on_app.set_default_buffer(initial_buffer)
+
 	untranslated_words = []
 
         cmd = self.massage_command(cmd)
@@ -255,6 +261,8 @@ class CmdInterp(Object):
                  untranslated_text = None
 #             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer.cur_pos())
 
+# make sure to clear default buffer before returning
+	self.on_app.set_default_buffer()
 
 
     def massage_command(self, command):

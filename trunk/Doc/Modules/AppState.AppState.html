@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 16:30:58 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 17:46:44 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,8 +29,10 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the SourceBuff corresponding to the current editor buffer </SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns the file name of the current buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns the SourceBuff corresponding to the current editor buffer </SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # queries the application for the file name of the current buffer</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
@@ -38,6 +40,7 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.log_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.log_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cont</SPAN>, <SPAN CLASS="Argument">action</SPAN>)<SPAN CLASS="OneLiner"> # Logs a command in the application's history</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.set_default_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_default_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -70,6 +73,10 @@ entry is the action that was executed.
 <DT>
 <EM>STR curr_dir=None</EM>
 <DD>Current directory for the programming environment
+<DT>
+<EM>STR default_buff_name=None</EM>
+<DD>default buffer for buffer-specific
+ operations.  When None, current buffer will be used
 <DT>
 <EM>[(STR, INT)]</EM> breadcrumbs
 <DD>stack of breadcrumbs. Each entry of
@@ -168,12 +175,35 @@ if no programming language is active).
 left end of the selection
 </DL>
 <H2 ID="AppState.AppState.curr_buffer" CLASS="Method">AppState.AppState.curr_buffer(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Returns the SourceBuff corresponding to the default editor buffer,
+or the current buffer if the default is not set</P>
+<P>
+If no such buffer, returns <EM>None</EM>.</P>
+<H2 ID="AppState.AppState.curr_buffer_from_app" CLASS="Method">AppState.AppState.curr_buffer_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Returns the SourceBuff corresponding to the current editor buffer </P>
 
 <P>
 If no such buffer, returns <EM>None</EM>.</P>
 <H2 ID="AppState.AppState.curr_buffer_name" CLASS="Method">AppState.AppState.curr_buffer_name(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns the file name of the current buffer</P>
+<P>None</P>
+
+<P>
+returns the file name of the default buffer, or current buffer
+if default is not set</P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>file name of current buffer
+</DL>
+<H2 ID="AppState.AppState.curr_buffer_name_from_app" CLASS="Method">AppState.AppState.curr_buffer_name_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>queries the application for the file name of the current buffer</P>
 
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -273,6 +303,33 @@ Open file with name <EM>STR name</EM>.
 if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
 breadcrumb.
 </P>
+<H2 ID="AppState.AppState.set_default_buffer" CLASS="Method">AppState.AppState.set_default_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+sets the default buffer, until it is cleared again
+Note: generally, set_default_buffer is only called by
+interpret_NL_cmd, and must be reset to None before
+interpret_NL_cmd returns</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buff_name</EM>
+<DD>name of buffer to set as default
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> 
+<DD>does a buffer by that name exist?
+
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
