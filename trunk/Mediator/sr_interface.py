@@ -26,8 +26,6 @@ import re
 import string
 import natlink
 from natlinkutils import *
-import actions_gen, CmdInterp
-from Object import Object
 from debug import trace, trace_call_stack
 
 import SpokenUtterance

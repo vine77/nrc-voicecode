@@ -24,6 +24,8 @@
 from Context import Context
 import actions_gen 
 import debug
+import AppStateEmacs
+import re
 
 class ContLanguage(Context):
     """Context that applies only if a particular programming language is the
@@ -318,6 +320,115 @@ class ContBlankLine(Context):
         *STR* -- the key
         """
         return "BlankLine"
+
+
+class ContEmacs(Context):
+    """This context applies iif we are connected to Emacs."""
+
+    def __init__(self, **attrs):        
+        self.deep_construct(ContEmacs, {},
+                            attrs)
+       
+    def _applies(self, app, preceding_symbol = 0):
+
+       return isinstance(app, AppStateEmacs.AppStateEmacs)
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "buffer"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "EmacsInMiniBuffer"
+
+
+class ContEmacsInMinibuffer(Context):
+    """This context applies iif the cursor is in an Emacs minibuffer."""
+
+    def __init__(self, **attrs):        
+        self.deep_construct(ContEmacsInMinibuffer, {},
+                            attrs)
+       
+    def _applies(self, app, preceding_symbol = 0):
+
+       answer = 0
+       tmp_cont = ContEmacs()
+       if tmp_cont.applies(app, preceding_symbol):
+          buff_name = app.curr_buffer_name()
+          if re.match("^\s*\*\s*Minibuf-[\d]+\s*\*\s*$", buff_name):
+             answer = 1
+          
+       debug.trace('ContEmacsInMinibuffer._applies', '\tmp_cont.applies(app, preceding_symbol)=%s, buff_name=%s, returns answer=%s' % (tmp_cont.applies(app, preceding_symbol), buff_name, answer))
+       
+       return answer        
+
+    def scope(self):
+        """returns a string indicating the scope of this context.
+        Commands with more specific scopes are checked first.
+
+        See Context for details of the recognized scopes
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the string identifying the scope
+        """
+        return "buffer"
+
+    def equivalence_key(self):
+        """returns a key used to separate Context instances into
+        equivalence classes.  Two contexts which are equivalent (i.e.
+        share the same set of circumstances under which they apply)
+        should have identical keys.  Two contexts which are not
+        equivalent should have distinct keys.
+
+        For example, two instances of ContPy should both return the same
+        key.
+
+        See Context for more details.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *STR* -- the key
+        """
+        return "EmacsInMiniBuffer"
 
 
 class ContAnyEvenOff(Context):

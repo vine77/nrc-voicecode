@@ -321,7 +321,7 @@ class MessengerBasic(Messenger):
                 (repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
-        trace('get_mess', 'got one of %s!. It was: %s' % (repr(expect), repr(name_argvals_mess)))
+        trace('get_mess', 'got one of %s! It was: %s' % (repr(expect), repr(name_argvals_mess)))
         
         return name_argvals_mess
         
