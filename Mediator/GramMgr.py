@@ -128,29 +128,17 @@ class GramMgr(OwnerObject):
 
         **INPUTS**
 
+        *STR* instance -- name of the application instance 
+
+        **OUTPUTS**
+
         *STR* old_buff_name -- old name of the buffer 
 
         *STR* new_buff_name -- new name of the buffer 
 
-        **OUTPUTS**
-
         *none*
         """
-        if old_buff_name == new_buff_name:
-            return
-        for window, buffer_dict_grammars in self.dict_grammars.items():
-            try:
-                buffer_dict_grammars['new_buff_name'] = buffer_dict_grammars['old_buff_name']               
-                buffer_dict_grammars['old_buff_name'].rename_buffer_cbk(new_buff_name)
-
-                buffer_dict_cmd_grammars = self.dict_as_cmd_grammars['window']
-                buffer_dict_cmd_grammars['new_buff_name'] = buffer_dict_grammars['old_buff_name']                                            
-                buffer_dict_cmd_grammars['old_buff_name'].rename_buffer_cbk(new_buff_name)
-
-                del buffer_dict_grammars['old_buff_name']
-                del buffer_dict_cmd_grammars['old_buff_name']
-            except KeyError:
-                pass
+        debug.virtual('GramMgr.rename_buffer_cbk')
 
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
@@ -913,24 +901,40 @@ class WinGramMgr(GramMgrDictContext):
                     buffer, window = a_window, 
                     exclusive = self.exclusive)
                     
-
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
         """callback which notifies us that the application
         has renamed a buffer
 
         **INPUTS**
 
-        *STR* instance -- name of the application instance 
-
-        **OUTPUTS**
-
         *STR* old_buff_name -- old name of the buffer 
 
         *STR* new_buff_name -- new name of the buffer 
 
+        **OUTPUTS**
+
         *none*
         """
-        debug.virtual('GramMgr.rename_buffer_cbk')
+        if old_buff_name == new_buff_name:
+            return
+
+        for window, buffer_grammars in self.dict_grammars.items():
+            try:
+                grammar = buffer_grammars['old_buff_name']
+                grammar.rename_buffer_cbk(new_buff_name)
+                buffer_grammars['new_buff_name'] = grammar
+                del buffer_grammars['old_buff_name']
+            except KeyError:
+                pass
+
+        for window, buffer_grammars in self.dict_as_cmd_grammars.items():
+            try:
+                grammar = buffer_grammars['old_buff_name']
+                grammar.rename_buffer_cbk(new_buff_name)
+                buffer_grammars['new_buff_name'] = grammar
+                del buffer_grammars['old_buff_name']
+            except KeyError:
+                pass
 
     def new_window(self, window, buffer = None):
         """add a new window

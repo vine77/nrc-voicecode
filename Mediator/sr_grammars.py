@@ -1101,6 +1101,26 @@ class DictThroughCmdGramDummy(DictWinGramDummy):
             self.identify_grammar()
             print "init"
 
+    def identify_grammar(self):
+        """print information identifying the grammar by buffer and
+        window
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.window == None:
+            winname = "global"
+        else:
+            winname = "window %d" % self.window
+        print "DictThroughCmdGramDummy for buffer = %s, %s" % \
+            (repr(self.buff_name), winname)
+
+
 
 class SelectWinGramDummy(SelectWinGram):
     """dummy implementation of window-specific selection grammar 
