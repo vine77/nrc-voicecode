@@ -17,7 +17,7 @@ class CmdInterp(Object):
     
     **INSTANCE ATTRIBUTES**
 
-    [AppState] *app=AppState()* -- application for which we are
+    [AppState] *app=None* -- application for which we are
     interpreting the commands
     
     *{STR: [[* (Context] *, FCT)]} cmd_index={}* -- index of CSCs. Key
@@ -33,15 +33,15 @@ class CmdInterp(Object):
     *BOOL cached_regexp_is_dirty* -- *true* iif *self.cached_regexp* needs
      to be regenerated based on the values in *self.cmd_index*
 
-    *{STR: [STR]}* language_specific_words = {} -- Key is the name of
-     a programming language. Value is a list of written form\spoken
-     form words specific to a language. These words are loaded
-     automatically when we are in a source buffer of that language and
-     removed when we change to a buffer in a different language.
+    *{STR: [STR]}* language_specific_aliases = {} -- Key is the name of
+     a programming language (None means all languages). Value is a
+     list of written form\spoken form words specific to a
+     language. These words are loaded automatically when we are in a
+     source buffer of that language and removed when we change to a
+     buffer in a different language.
 
-    *STR* prev_loaded_language = None -- Name of the previous language
-     for which the language specific words were loaded.
-   
+    *STR* last_loaded_language = None -- Name of the previous language
+     for which the language specific words were loaded.   
     
     CLASS ATTRIBUTES**
 
@@ -51,14 +51,14 @@ class CmdInterp(Object):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, app=AppState(), **attrs):
+    def __init__(self, app=None, **attrs):
         self.deep_construct(CmdInterp,
                             {'app': app, 'cmd_index': {}, \
                              'known_symbols': SymDict.SymDict(), \
                              'cached_regexp': '',\
                              'cached_regexp_is_dirty': 1,\
-                             'language_specific_words': {},\
-                             'prev_loaded_language': None},\
+                             'language_specific_aliases': {},\
+                             'last_loaded_language': None},\
                             attrs)
 
 #      def refresh_dict_buff(self, moduleInfo):
@@ -173,7 +173,8 @@ class CmdInterp(Object):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *STR cmd* is the spoken form of the command."""
+        *STR cmd* is the spoken form of the command.
+        """
         
         #
         # Interpret the begining of the command until nothing left to
@@ -387,6 +388,45 @@ class CmdInterp(Object):
 #                    VoiceDictation.addWord(a_spoken_form)
                     sr_interface.addWord(a_spoken_form)
 
+
+
+    def load_language_specific_aliases(self):
+        
+        """Loads words specific to the language of the current buffer,
+        if needed.
+
+        Also, unloads words specific to previously loaded language if needed.
+        
+        **INPUTS**
+        
+        *none*
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        language = self.app.curr_buffer.language
+        last_language = self.last_loaded_language
+        if language != last_language:
+            print '-- CmdInterp.load_language_specific_aliases: loading words for language \'%s\'' % language
+            #
+            # Remove words from previous language
+            #
+            if self.language_specific_aliases.has_key(last_language):
+                for a_word in self.language_specific_aliases[last_language]:
+                    sr_interface.deleteWord(a_word)
+            
+            #
+            # Add words for new language
+            #
+            if self.language_specific_aliases.has_key(language):
+                for a_word in self.language_specific_aliases[language]:
+                    sr_interface.addWord(a_word)
+
+            self.last_loaded_language = language
+            
+
 def self_test():    
     #
     # Create a command interpreter connected to the editor simulator
@@ -443,3 +483,4 @@ auto_test.add_test('CmdInterp', self_test, 'self-test for CmdInterp.py')
 
 if (__name__ == '__main__'):
     self_test()
+

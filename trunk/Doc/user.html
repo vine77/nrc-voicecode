@@ -31,6 +31,7 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
     <LI><A HREF="#shellCommands">Simulation shell commands</A>
     <LI><A HREF="#VCODE_NOSPEECH">Running the simulation shell without NatSpeak</A>
     <LI><A HREF="#CSCs">Context Sensitive Commands (CSCs)</A>
+    <LI><A HREF="#aliases">Language Specific Aliases (LSAs)</A>
     <LI><A HREF="#symbols">Dictating symbols</A>
     <LI><A HREF="#select">Selecting code</A>
     </UL>
@@ -39,6 +40,7 @@ ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voi
     <LI><A HREF="#configFile">The VoiceCode configuration file</A>
     <LI><A HREF="#debugConfig">Debugging the configuration file</A>
     <LI><A HREF="#customeCSCs">Customising CSCs</A>
+    <LI><A HREF="#customLSAs">Customising LSAs</A>
     <LI><A HREF="#abbreviations">Adding/modifying abbreviations</A>
     </UL>
 <LI><A HREF="#trouble">Trouble shooting</A>
@@ -205,8 +207,100 @@ HREF="#shellCommands">say</A> shell command.
 <H3><A NAME="CSCs">Context Sensitive Commands (CSCs)</A></H3>
 
 At the center of VoiceCode is a concept called <EM>Context Sensitive
-Command (CSC)</EM>. A CSC is an utterance which may fire a particular
-action in a particular context.
+Command (CSC)</EM>. A CSC is an utterance which may fire particular
+actions in particular contexts. A CSC has the following attributes:
+
+<DL>
+
+<DT><EM>Spoken forms:</EM>
+
+<DD>This is a list of all the different ways in which the CSC might be
+pronouced.
+
+<P>
+
+<DT><EM>Contextual meanings:</EM>
+
+<DD>This is a list of the different meanings that the CSC can take in
+different contexts. Each contextual meaning is a pair consisting of a
+<EM>context</EM> and an <EM>action</EM> to be taken if that context
+applies.
+
+</DL>
+
+For example, suppose you want to create a CSC to dictate hash table access in Perl and Python, so that saying:
+
+<P>
+
+<EM>"x at key y"</EM> or<BR>
+<EM>"x with key y"</EM>
+
+
+<P>
+
+types:
+
+<P>
+
+<PRE>x{y}</PRE> in Perl<BR>
+<PRE>x[y]</PRE> in Python
+
+<P>
+
+All you have to do is to define a CSC with <EM>spoken form</EM> "at
+key" (and possibly other forms like "with key") and two <EM>contextual
+meanings</EM>. The first meaning would consist of a context object
+that applies iif the current buffer is in Perl, and its action would
+be to type "{}" and put the cursor in the middle. Similarly, the
+second meaning would have a context object that applies iif the
+current buffer is in Python, and its action would be to type "[]" and
+put the cursor in the middle.
+
+<P>
+
+CSCs can also be used for implementing more complex behavior. For example, suppose you want to be able to change the following C for loop:
+
+<P>
+
+<PRE>
+for (x = 0; x <= max; x++)
+</PRE>
+
+<P>
+
+to:
+
+<P>
+
+<PRE>
+for (x = 0; x >= max; x--)
+</PRE>
+
+
+by positioning the cursor on that line and saying:
+
+<P>
+
+<EM>"decreasing"</EM> or
+<EM>"make that decreasing"</EM> or
+<EM>"make it decreasing"</EM>
+
+<P>
+
+All you have to do is to implement a CSC with <EM>["decreasing", "make
+that decreasing", "make it decreasing"]</EM> as its spoken form. The
+command would have a contextual meaning with a context that applies
+iif the cursor is on the first line of a for loop in a C file. The
+action would be to change appropriate parts of the loop so that it is
+decreasing instead of increasing.
+
+<P>
+
+Note that for commands that only type text and position the cursor at
+the end of that text, it is usually more convenient to define them as
+<A HREF="#aliases">Language Specific Aliases (LSAs)</A> instead of
+CSCs.
+
 
 <P>
 
@@ -215,6 +309,36 @@ in various languages. If you do not like the way a particular CSC is
 implemented (for example, if you don't like the way it is said) or if
 you want to add your own CSC, you can do that by <A
 HREF="#config">modifying the VoiceCode configuration file</A>.
+
+<P>
+
+Note that for commands that only type text and position the cursor at
+the end of that text, it is usually more convenient to define them as
+<A HREF="#aliases">Language Specific Aliases (LSAs)</A> instead of
+CSCs.
+
+
+<H3><A NAME="aliases">Language Specific Aliases (LSAs)</A></H3>
+
+<A HREF="#CSCs">Context Sensitive Commands</A> are meant to provide the user with enough flexibility to define very sophisticated commands and are consequently relatively complex. In most cases however, you can define a command using a simpler concept called Language Specific Alias (LSA). You can define a command as an LSA if:
+
+<UL>
+<LI>the command only inserts text at the current cursor location and puts the cursor at the end of that text
+<LI>the inserted text only depends on the programming language of the current buffer
+</UL>
+
+Besides being <A HREF="#config">simpler to define</A> than CSCs, LSAs
+also have the advantage that they can be used for <A
+HREF="#select">selecting code by voice</A>.
+
+<P>
+
+Like for CSCs, VoiceCode comes bundled with a series of LSAs for doing
+common tasks in various languages. If you do not like the way a
+particular CSC is implemented (for example, if you don't like the way
+it is said) or if you want to add your own LSA, you can do that by <A
+HREF="#config">modifying the VoiceCode configuration file</A>.
+
 
 <H3><A NAME="symbols">Dictating symbols</A></H3>
 
@@ -246,15 +370,15 @@ abbreviation</A> 'pref'.
 <H2><A NAME="select">Selecting code</A></H2>
 
 
-VoiceCode implements a basic <EM>Select XYZ</EM> grammar. If
-<EM>XYZ</EM> is some phrase, word or even symbol that is in the
-current buffer, you can say <EM>"Select XYZ"</EM>, preceded and
-followed by a pause. This will select the occurence of <EM>XYZ</EM>
-which is closest to the cursor.
+VoiceCode supports a type of command which we call: <EM>Select
+pseudo-code</EM> grammar. This allows you to select a portion of
+visible code by saying <EM>"Select"</EM> followed by a pseudo code
+dictation of the code you want to select. You must not pause between
+<EM>"Select"</EM> and the pseudo-code. This command will select the
+closest occurence of the native code corresponding to the dictated
+pseudo-code you dictated.
 
-<P>
-
-Do:
+For example, do:
 
 <PRE>
 open_file('C:/Temp/blah.c')
@@ -282,39 +406,49 @@ for (horiz_pos = 0; horiz_pos <= <CURSOR>; ++)
 
 Then say:
 
-<EM>"select for"</EM>
+<EM>"select horizontal position equals zero"</EM>
 
 <P>
 
-You will then get:
+to get:
 
 <P>
 
 <PRE>
-<SEL_START>for<SEL_END> (horiz_pos = 0; horiz_pos <= ; ++)
+for(<SEL_START>horiz_pos = 0<SEL_END>; horiz_pos <= ; ++)
 {
 
 }
 </PRE>
 
-If you say:
-
-<P>
-
-<EM>"select horizontal position"</EM>
-
-<P>
-
-you should get:
-
-<P>
+As the example shows, <EM>Select pseudo-code</EM> works even if the
+pseudo-code you dictate contains pseudo-symbols (e.g. <EM>"horizontal
+position"</EM> for <EM>horiz_pos</EM>) and <A HREF="#aliases">LSAs</A>
+(e.g. <EM>"equals"</EM> for <EM>' = '</EM>). However, it may not
+always work if if the code to be selected spreads across more than one
+line. For example, if you have the following code:
 
 <PRE>
-for (<SEL_START>horiz_pos<SEL_END> = 0; horiz_pos <= ; ++)
-{
-
-}
+x =
+0
 </PRE>
+
+and say: <EM>"Select x equals zero"</EM>, the selection will not
+work. To select code that spreads across several lines, you must use
+the <EM>"Select from X up to Y"</EM> command. In the above example,
+this would be: <EM>"Select from x equals up to 0"</EM>
+
+<P>
+
+Also, the selection does not work if the
+pseudo-code contains some <A HREF="#CSCs">CSCs</A>. For example, if
+you have code:
+
+<PRE>
+x[0] = 1
+</PRE>
+
+then saying <EM>"Select x at index 0"</EM> will not work. This is because <EM>"at index"</EM> is not an LSA since it types <EM>[]</EM> but doesn't put the cursor at the end of it.
 
 <H2><A NAME="config">Configuring VoiceCode</A></H2>
 
@@ -420,6 +554,36 @@ files:
 </UL>
 
 Of course, you are not limited to those contexts and actions. You can add your own and then use them to build <A HREF="CSCmd.CSCmd.html">CSCmd</A> objects in <EM>vc_config.py</EM>.
+
+
+<H3><A NAME="customLSAs">Customising LSAs</A></H3>
+
+To modify the implementation of a <A HREF="#aliases">Language Sensitive Alias (LSA)</A>, you must locate the statements that define that LSA
+in the <A HREF="#configFile">VoiceCode configuration file</A>. The
+statements that define LSAs look something like this:
+
+<PRE>
+add_lsa(['C', 'python'], 
+        ['not equal to', 'not equal', 'is not equal', 'is not equal to'], 
+        ' != ')
+</PRE>
+
+The first argument of <EM>add_lsa</EM> is the list of languages for
+which the LSA applies. The LSA will be active iif the current buffer
+is written in one of those languages.
+
+<P>
+
+The second argument of <EM>add_lsa</EM> is the list of spoken forms
+for the LSA. The LSA will be invoked when any of those spoken forms is
+uttered in a file of an appropriate language.
+
+<P>
+
+Finally, the third argument of <EM>add_lsa</EM> is the written form of
+the LSA. This text gets inserted at the current cursor location when
+the LSA is invoked. The cursor is then put at the end of the inserted
+text.
 
 
 <H3><A NAME="abbreviations">Adding/modifying abbreviations</A></H3>

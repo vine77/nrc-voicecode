@@ -162,7 +162,7 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), py_assignment]])
+acmd = CSCmd(spoken_forms=['equals', 'assigned value', 'is assigned value'], meanings=[[ContPy(), type]])
 add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['is equal to', 'equal to'], meanings=[[ContPy(), py_logical_equal]])
@@ -181,5 +181,9 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['in'], meanings=[[ContPy(), lambda app, cont: app.insert_indent(' in ', '')]])
 add_csc(acmd)
 
+#
+# Language specific aliases
+#
+add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')
 
 if (__name__ == '__main__'): natlink.natDisconnect()
