@@ -1,16 +1,4 @@
 
-D:\VoiceCode\VCode.TCP_IP\Admin>rem  
-
-D:\VoiceCode\VCode.TCP_IP\Admin>rem Shortcut for invoking VoiceCode regression test 
-
-D:\VoiceCode\VCode.TCP_IP\Admin>rem
-
-D:\VoiceCode\VCode.TCP_IP\Admin>d:
-
-D:\VoiceCode\VCode.TCP_IP\Admin>cd D:\VoiceCode\VCode.TCP_IP\Admin 
-
-D:\VoiceCode\VCode.TCP_IP\Admin>python test.py all         
-
 
 *******************************************************************************
 * Name        : CmdInterp
@@ -195,7 +183,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at f00b80>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8f6eb0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -210,9 +198,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\small_buff.c ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -220,7 +208,7 @@ API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -241,8 +229,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\large_buff.py ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -343,11 +331,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.TCP_IP\\Data\\TestData\\large_buff.py']
+   Source files are: ['%VCODE_HOME%\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -358,14 +346,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+*** Accept symbol match test. source='%VCODE_HOME%\Data\TestData\small_buff.c' ***
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -396,7 +384,7 @@ API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -418,7 +406,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -426,7 +414,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -438,15 +426,15 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -583,7 +571,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -788,7 +776,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -858,7 +846,7 @@ API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -885,7 +873,7 @@ API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -1022,7 +1010,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -1111,7 +1099,7 @@ API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -1248,7 +1236,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -1454,7 +1442,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -1520,7 +1508,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1528,12 +1516,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1613,14 +1601,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -1751,7 +1739,7 @@ List of abbreviations
 'pat' expands to ['pattern']
 'perm' expands to ['permission']
 'pkg' expands to ['package']
-'pos' expands to ['position', 'positionning']
+'pos' expands to ['position', 'positioning']
 'prof' expands to ['profile', 'profiling', 'professional']
 'proto' expands to ['prototype', 'protocol']
 'pty' expands to ['p t y']
@@ -1810,15 +1798,15 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -1855,7 +1843,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1863,9 +1851,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : Testing a series of miscellaneous bugs that might reoccur.
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.py')
@@ -1902,21 +1890,21 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 17dfbf0> from file 'D:\VoiceCode\VCode.TCP_IP\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.TCP_IP\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 9c4860> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -1936,9 +1924,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1953,10 +1941,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1967,7 +1955,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1975,9 +1963,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -4825,7 +4813,7 @@ Saying: ['new statement']
 113:             <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -4835,10 +4823,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.TCP_IP\\Data\\TestData\\native_python.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -4903,7 +4891,7 @@ consumed: ['consumed']
 cont_gen: ['cont gen', 'cont general', 'cont generic', 'control gen', 'control general', 'control generic']
 content: ['content']
 csc_applied: ['csc applied']
-cur_pos: ['cur pos', 'cur position', 'cur positionning', 'cursor pos', 'cursor position', 'cursor positionning', 'current pos', 'current position', 'current positionning']
+cur_pos: ['cur pos', 'cur position', 'cur positioning', 'cursor pos', 'cursor position', 'cursor positioning', 'current pos', 'current position', 'current positioning']
 curr_buffer: ['curr buffer', 'current buffer']
 decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
@@ -4954,10 +4942,10 @@ most_consumed: ['most consumed']
 move_to: ['move to']
 native_symbol: ['native symbol']
 natlink: ['natlink']
-new_pos: ['new pos', 'new position', 'new positionning']
+new_pos: ['new pos', 'new position', 'new positioning']
 not: ['not']
 num_match: ['num match', 'number match']
-old_pos: ['old pos', 'old position', 'old positionning']
+old_pos: ['old pos', 'old position', 'old positioning']
 on_app: ['on app']
 or: ['or']
 os: ['os', 'operating system', 'o s']
@@ -5071,7 +5059,7 @@ consumed: ['consumed']
 cont_gen: ['cont gen', 'cont general', 'cont generic', 'control gen', 'control general', 'control generic']
 content: ['content']
 csc_applied: ['csc applied']
-cur_pos: ['cur pos', 'cur position', 'cur positionning', 'cursor pos', 'cursor position', 'cursor positionning', 'current pos', 'current position', 'current positionning']
+cur_pos: ['cur pos', 'cur position', 'cur positioning', 'cursor pos', 'cursor position', 'cursor positioning', 'current pos', 'current position', 'current positioning']
 curr_buffer: ['curr buffer', 'current buffer']
 decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
@@ -5122,10 +5110,10 @@ most_consumed: ['most consumed']
 move_to: ['move to']
 native_symbol: ['native symbol']
 natlink: ['natlink']
-new_pos: ['new pos', 'new position', 'new positionning']
+new_pos: ['new pos', 'new position', 'new positioning']
 not: ['not']
 num_match: ['num match', 'number match']
-old_pos: ['old pos', 'old position', 'old positionning']
+old_pos: ['old pos', 'old position', 'old positioning']
 on_app: ['on app']
 or: ['or']
 os: ['os', 'operating system', 'o s']
@@ -5700,13 +5688,13 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
@@ -6438,7 +6426,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6446,9 +6434,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -6460,15 +6448,15 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
 f_name2: ['f name 2']
 float: ['float']
-horiz_pos: ['horiz pos', 'horiz position', 'horiz positionning', 'horizontal pos', 'horizontal position', 'horizontal positionning', 'horizontally pos', 'horizontally position', 'horizontally positionning']
+horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
 move_horiz: ['move horiz', 'move horizontal', 'move horizontally']
 move_vert: ['move vert', 'move vertical', 'move vertically']
@@ -6534,7 +6522,7 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6542,12 +6530,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6645,9 +6633,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
@@ -7340,4 +7328,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

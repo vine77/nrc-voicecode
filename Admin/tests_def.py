@@ -23,6 +23,7 @@
 
 import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
+import util
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
@@ -36,7 +37,7 @@ def compilation_test(a_mediator, source):
     
     """Does a compilation test on file *source*        
     """
-    print '*** Compiling symbols from file: %s ***' % source
+    print '*** Compiling symbols from file: %s ***' % util.within_VCode(source)
     a_mediator.interp.known_symbols.cleanup()
     a_mediator.interp.known_symbols.parse_symbols(source)
     print '\n\nParsed symbols are: '
@@ -54,7 +55,8 @@ def compilation_test(a_mediator, source):
 def accept_symbol_match_test(a_mediator, source, symbol_matches):
     """Does a test on SymDict.accept_symbol_match.
     """
-    print '\n\n*** Accept symbol match test. source=\'%s\' ***' % source
+    print '\n\n*** Accept symbol match test. source=\'%s\' ***' \
+	% util.within_VCode(source)
     a_mediator.interp.known_symbols.cleanup()            
     a_mediator.interp.known_symbols.parse_symbols(source)
     print 'Parsed symbols are: '
@@ -105,7 +107,12 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
         *none* -- 
         """
 
-        print '*** Pseudo symbol match test***\n   Source files are: %s\n   Symbols are: %s\n\n' % (sources, pseudo_symbols)
+	strsources = []
+	for source in sources:
+	    strsources.append(util.within_VCode(source))
+
+        print '*** Pseudo symbol match test***\n   Source files are: %s\n   Symbols are: %s\n\n' % (strsources, pseudo_symbols)
+
 
         #
         # Compile symbols
