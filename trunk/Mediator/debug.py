@@ -78,6 +78,9 @@ def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
        (trace_id, location_id))
        print_call_stack(print_to_file)
 
+###############################################################################
+# class introspection functions
+###############################################################################
 
 def what_class(instance):
     """Returns a string describing the class of an instance.
@@ -105,7 +108,6 @@ def methods(instance):
         if isinstance(inst_class.__dict__[method_name], types.FunctionType):
             methods[method_name] = inst_class.__dict__[method_name]
     return methods
-
 
 
 

@@ -127,12 +127,12 @@ if (__name__ == '__main__'):
                 profile_prefix = opts['p'],
                 bypass_sr_recog = opts['bypass'])
         sys.stderr.write('Configuring the mediator...\n')
-        if the_mediator.configure() and the_mediator.ready():
+        if the_mediator.configure():
             sys.stderr.write('Finished configuring...\n')
             ed = EdSim.EdSim()
             the_mediator.new_editor(ed, server = 0, check_window = 0, 
                 test_editor = 1)
-        the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
+        the_mediator.quit(save_speech_files=0, 
             disconnect=1)
         the_mediator.cleanup()
 

@@ -227,6 +227,7 @@ add_alt_abbreviations('vertically', ['vert'])
 
 add_alt_abbreviations('window', ['win'])
 
+add_pronunciation('def', 'deaf')
 add_acronym('cgi')
 add_acronym('db')
 add_acronym('dtd')

@@ -1089,24 +1089,25 @@ class NewMediatorObject(Object.OwnerObject):
         end_time = start_time
         try:
             try:
-                if not server:
-                    msg = 'WARNING: Unable to run foreground tests with\n' \
-                        + 'an internal editor\n'
-                    sys.stderr.write(msg)
-                elif self.test_suite.foreground_count():
-                    self.foreground_testing = 1
-                    self.user_message('Starting foreground tests...')
-                    time.sleep(3)
-                    self.test_suite.run_foreground(profile_prefix =
-                        self.profile_prefix)
-                    self.user_message('Finished foreground tests...')
-                    self.foreground_testing = 0
+                if self.test_suite.foreground_count():
+                    if not server:
+                        msg = 'WARNING: Unable to run foreground tests with\n' \
+                            + 'an internal editor\n'
+                        sys.stderr.write(msg)
+                    else:
+                        self.foreground_testing = 1
+                        self.user_message('Starting foreground tests...')
+                        time.sleep(3)
+                        self.test_suite.run_foreground(profile_prefix =
+                            self.profile_prefix)
+                        self.user_message('Finished foreground tests...')
+                        self.foreground_testing = 0
+                        util.bell()
+                        time.sleep(3)
                 if self.test_suite.background_count():
                     if self.global_grammars:
-                        time.sleep(3)
-                        ok = self.editors.make_universal(instance_name, exclusive =
-                        self.exclusive)
-                    util.bell()
+                        ok = self.editors.make_universal(instance_name, 
+                            exclusive = self.exclusive)
                     self.user_message('Starting background tests...')
                     time.sleep(3)
                     self.test_suite.run_background(profile_prefix =

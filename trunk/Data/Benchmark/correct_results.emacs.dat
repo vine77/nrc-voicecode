@@ -701,7 +701,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D6C820>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D5D008>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -767,7 +767,7 @@ __name__: ['name']
 a_base: ['a base']
 add_test: ['add test']
 age: ['age']
-an_attr_def: ['an attr def', 'an attr default', 'an attr define', 'an attr defined', 'an attr definition', 'an attribute def', 'an attribute default', 'an attribute define', 'an attribute defined', 'an attribute definition']
+an_attr_def: ['an attr deaf', 'an attr def', 'an attr default', 'an attr define', 'an attr defined', 'an attr definition', 'an attribute deaf', 'an attribute def', 'an attribute default', 'an attribute define', 'an attribute defined', 'an attribute definition']
 an_attr_init: ['an attr init', 'an attr initial', 'an attr initialize', 'an attribute init', 'an attribute initial', 'an attribute initialize']
 and: ['and']
 attrs: ['attributes']
@@ -779,7 +779,7 @@ class: ['class']
 code: ['code']
 code_file: ['code file']
 deep_construct: ['deep construct']
-def: ['def', 'default', 'define', 'defined', 'definition']
+def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 else: ['else']
 environ: ['environ', 'environment']
 exc: ['exc', 'exception']
@@ -927,6 +927,35 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
+
+
+*******************************************************************************
+* Name        : SymDict_storage
+* Description : testing storage and version updating system for SymDict
+*******************************************************************************
+
+Exporting abbreviations from an empty SymDict, so
+the following export file should be empty (except for
+one blank line)
+-----------------------------------------
+
+-----------------------------------------
+
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\selected_py_sym.py'
+version number unchanged
+
+comparing symdict.dict created from scratch with
+the reference dictionary current_symdict.dict
+no differences found
+
+initializing SymDict from dictionary
+
+initialization from dictionary was successful
+Abbreviation file was unchanged, as expected
+initializing fresh SymDict from dictionary
+
+initialization from dictionary was successful
+Fresh abbreviation file matches current one, as expected
 
 
 *******************************************************************************
@@ -1183,7 +1212,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -1318,8 +1347,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'f': appears in ['f_name', 'f_name2']
@@ -1393,7 +1420,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -1529,8 +1556,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1634,7 +1659,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -1770,8 +1795,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -1866,7 +1889,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -2002,8 +2025,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -2077,7 +2098,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -2213,8 +2234,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'y': appears in ['y']
-'x': appears in ['x']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'f': appears in ['f_name', 'f_name2']
 
@@ -3315,7 +3334,7 @@ ASuper: ['a super']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 a_method: ['a method']
 class: ['class']
-def: ['def', 'default', 'define', 'defined', 'definition']
+def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 print: ['print']
 self: ['self']
 x: ['x']
@@ -4004,7 +4023,7 @@ List of abbreviations
 'curr' expands to ['current']
 'db' expands to ['D. B.', 'data base']
 'decl' expands to ['declaration', 'declare']
-'def' expands to ['default', 'define', 'defined', 'definition']
+'def' expands to ['deaf', 'default', 'define', 'defined', 'definition']
 'delim' expands to ['delimiter']
 'dev' expands to ['device']
 'dict' expands to ['dictionary']
@@ -8384,7 +8403,7 @@ cur_pos: ['cur pos', 'cur position', 'cur positioning', 'current pos', 'current 
 curr_buffer: ['curr buffer', 'current buffer']
 decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
-def: ['def', 'default', 'define', 'defined', 'definition']
+def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 deleteWord: ['delete word']
 dlg_select_symbol_match: ['dlg select symbol match']
 dummy: ['dummy']
@@ -8553,7 +8572,7 @@ cur_pos: ['cur pos', 'cur position', 'cur positioning', 'current pos', 'current 
 curr_buffer: ['curr buffer', 'current buffer']
 decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
 deep_construct: ['deep construct']
-def: ['def', 'default', 'define', 'defined', 'definition']
+def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 deleteWord: ['delete word']
 dlg_select_symbol_match: ['dlg select symbol match']
 dummy: ['dummy']
@@ -10194,7 +10213,7 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 a_method: ['a method']
 a_method_with_no_arguments: ['a method with no arguments', 'a method with number arguments']
 class: ['class']
-def: ['def', 'default', 'define', 'defined', 'definition']
+def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
 do_some_more: ['do some more']
 do_some_stuff: ['do some stuff']
 if: ['if']
@@ -13175,5 +13194,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1338.98500001 secs
+Test suite completed in:  1439.11900008 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6
