@@ -283,12 +283,13 @@ class MessengerBasic(Messenger):
         *none* response -- 
         """
 
-        trace('send_mess', 'self=%s, mess_name=\'%s\'' % (self, mess_name))
+        trace_id = 'send_mess.%s' % mess_name
+        trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
         if mess_argvals == None:
             tmp_args = {}
         else:
             tmp_args = copy.copy(mess_argvals)
-        trace('send_mess', 'mess_argvals=\'%s\'' % tmp_args)        
+        trace(trace_id, 'mess_argvals=\'%s\'' % tmp_args)        
         unpkd_mess = self.encoder.encode(mess_name, tmp_args)
         pkd_mess = self.packager.pack_mess(unpkd_mess)        
         self.packager.send_packed_mess(pkd_mess, self.transporter)
@@ -321,7 +322,8 @@ class MessengerBasic(Messenger):
                 (repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
-        trace('get_mess', 'got one of %s! It was: %s' % (repr(expect), repr(name_argvals_mess)))
+        trace('get_mess.%s' % name_argvals_mess[0], 
+              'got one of %s! It was: %s' % (repr(expect), repr(name_argvals_mess)))
         
         return name_argvals_mess
         

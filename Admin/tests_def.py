@@ -2942,6 +2942,8 @@ def test_symbol_formatting():
 
 add_test('symbol_formatting', test_symbol_formatting, 
     'Testing styling and manual formatting of new symbols.')
+    
+    
 ##############################################################################
 # Testing basic correction features of ResMgr
 ##############################################################################
