@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:51 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue May 14 14:22:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,20 +18,25 @@
 <P CLASS="DeclaredIn">Declared in module <A HREF="GramMgr.html">GramMgr</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">GramMgr.WinGramMgr<BR>
-&nbsp;&nbsp;<A HREF="GramMgr.GramMgr.html">GramMgr.GramMgr</A><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;<A HREF="GramMgr.GramMgrDictContext.html">GramMgr.GramMgrDictContext</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;<A HREF="GramMgr.GramMgr.html">GramMgr.GramMgr</A><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramMgr</SPAN>(<A CLASS="DocLink" HREF="GramMgr.GramMgr.html">GramMgr</A>):
-    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramMgr</SPAN>(<A CLASS="DocLink" HREF="GramMgr.GramMgrDictContext.html">GramMgrDictContext</A>):
+    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr._deactivate_all_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr._deactivate_all_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.activate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.activate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.buffer_closed"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.buffer_closed</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.deactivate_all"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.deactivate_all</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.new_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.new_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)<SPAN CLASS="OneLiner"> # add grammars for new buffer/window</SPAN>
     <A CLASS="DocLink" HREF="#GramMgr.WinGramMgr.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.WinGramMgr.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">buffer=None</SPAN>)<SPAN CLASS="OneLiner"> # add a new window</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from GramMgr.GramMgrDictContext</SPAN>
+    <A CLASS="DocLink" HREF="#GramMgr.GramMgrDictContext.find_context"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">GramMgr.GramMgrDictContext.find_context</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>)<SPAN CLASS="OneLiner"> # Find context for dictation grammar</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -75,7 +80,7 @@ with new window-specific dictation and selection grammars.
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="GramMgr.WinGramMgr.__init__" CLASS="Method">GramMgr.WinGramMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="GramMgr.WinGramMgr.__init__" CLASS="Method">GramMgr.WinGramMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">factory</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">global_grammars=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -91,8 +96,41 @@ with new window-specific dictation and selection grammars.
 <EM>CmdInterp</EM> interp
 <DD>command interpreter to which dictation
 results should be sent
+<DT>
+<EM>BOOL</EM> global_grammars
+<DD>use global grammars, instead of
+window-specific ones (only for testing purposes)
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>use exclusive grammars which prevent 
+non-exclusive grammars from getting results (only for testing purposes)
+<DT>
+<EM>BOOL</EM> all_results
+<DD>use grammars which are notified about all results
+(only for testing purposes)
 
 </DL>
+<H2 ID="GramMgr.WinGramMgr._deactivate_all_window" CLASS="Method">GramMgr.WinGramMgr._deactivate_all_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+de-activate all buffer-specific grammars which would be
+active in window</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>identifier of current window.  Only grammars associated with 
+that window will be explicitly de-activated.  
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="GramMgr.WinGramMgr.activate" CLASS="Method">GramMgr.WinGramMgr.activate(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
 
@@ -227,6 +265,29 @@ handle.
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="GramMgr.GramMgrDictContext.find_context" CLASS="Method">GramMgr.GramMgrDictContext.find_context(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffer</SPAN>)</H2>
+<P>Find context for dictation grammar</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR buffer</EM>
+<DD>name of the current buffer
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+(STR, STR)
+<DD>(two-word) context before and after the current
+selection
+
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:54 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue May 14 14:22:08 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,8 +25,8 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinGramFactoryDummy</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactoryDummy.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactoryDummy.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
-    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactoryDummy.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactoryDummy.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
-    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactoryDummy.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactoryDummy.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactoryDummy.make_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactoryDummy.make_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new dictation grammar</SPAN>
+    <A CLASS="DocLink" HREF="#sr_grammars.WinGramFactoryDummy.make_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_grammars.WinGramFactoryDummy.make_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)<SPAN CLASS="OneLiner"> # create a new selection grammar</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -59,7 +59,7 @@ no arguments: abstract base class
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="sr_grammars.WinGramFactoryDummy.make_dictation" CLASS="Method">sr_grammars.WinGramFactoryDummy.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>)</H2>
+<H2 ID="sr_grammars.WinGramFactoryDummy.make_dictation" CLASS="Method">sr_grammars.WinGramFactoryDummy.make_dictation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interp</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)</H2>
 <P>create a new dictation grammar</P>
 
 <P>
@@ -78,6 +78,14 @@ CmdInterp.interpret_NL_cmd as the initial buffer.
 <DT>
 <EM>INT</EM> window
 <DD>make grammar specific to a particular window
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>is grammar exclusive?  (prevents other
+non-exclusive grammars from getting results)
+<DT>
+<EM>BOOL</EM> all_results
+<DD>does grammar intercept all results, even for
+other grammars?
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -89,7 +97,7 @@ CmdInterp.interpret_NL_cmd as the initial buffer.
 <DD>new dictation grammar
 
 </DL>
-<H2 ID="sr_grammars.WinGramFactoryDummy.make_selection" CLASS="Method">sr_grammars.WinGramFactoryDummy.make_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<H2 ID="sr_grammars.WinGramFactoryDummy.make_selection" CLASS="Method">sr_grammars.WinGramFactoryDummy.make_selection(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">window=None</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">all_results=0</SPAN>)</H2>
 <P>create a new selection grammar</P>
 
 <P>
@@ -107,6 +115,14 @@ visible range, and is notified of selection changes
 <DD>name of the buffer corresponding to this
 grammar.  Can also be set later in the activate call to the
 grammar.
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>is grammar exclusive?  (prevents other
+non-exclusive grammars from getting results)
+<DT>
+<EM>BOOL</EM> all_results
+<DD>does grammar intercept all results, even for
+other grammars?
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
