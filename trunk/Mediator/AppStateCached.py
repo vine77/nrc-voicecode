@@ -132,7 +132,11 @@ class AppStateCached(AppState.AppState):
 # the application.  That way, this information will be uncached except 
 # for those buffers for which the application explicitly 
 # sends updated values.
+
+# Emacs has no hook for detecting file name changes, so we uncache the
+# file name upon synchronization as well
         for buffer in self.open_buffers.values():
             buffer.uncache_data_after_buffer_change(what_changed = 'get_text')
+            buffer.uncache_file_name()
         AppState.AppState.synchronize_with_app(self, what = what, exclude=exclude, 
             updates=updates)
