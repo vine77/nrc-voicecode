@@ -33,19 +33,21 @@ py_simple_for = ActionInsert(code_bef='for ', code_after=':\n\t',
                              docstring="""Insert template code for a simple Python for loop""")
 
 py_goto_body = \
-    ActionSearch(regexp=':[ \t]*(\n|$)[ \t]*',
+    ActionSearch(regexp=':[ \t]*(\n|$)[ \t]*',  
                  docstring="""Move cursor to the body of a Python compound statement""")
 
 py_new_statement = \
-    ActionInsertNewClause(end_of_clause_regexp='(\n|$)', where = -1, 
-                          add_lines = 1, 
+    ActionInsertNewClause(end_of_clause_regexp='(\n|$)', 
+                          where = -1, direction = 1,
+                          add_lines = 1,
                           code_bef='', code_after='',
-                           back_indent_by=0,
-                           docstring = """Inserts a new line below current one""")
+                          back_indent_by=0,
+                          docstring = """Inserts a new line below current one""")
                            
 py_new_statement_above = \
-    ActionInsertNewClause(end_of_clause_regexp='(^|\n)', where = 1, direction=-1,
-                          ignore_occur_at_cursor=1, add_lines = 1, 
+    ActionInsertNewClause(end_of_clause_regexp='(^|\n)', 
+                          where = 1, direction=-1,
+                          add_lines = 1, 
                           code_bef='', code_after='', back_indent_by=0,
                           docstring = """Inserts a new line below current one""")
                            
@@ -53,10 +55,6 @@ py_new_statement_above = \
 py_class_definition = \
     ActionInsert(code_bef='class ', code_after=':\n\t',
                  docstring="""Inserts template code for a Python class""")
-
-py_old_class_body = \
-    ActionSearch(regexp=':\\s*',
-                 docstring="""Moves cursor to the body of a class""")
 
 class ActionPyInsertInBody(Action):
     """Inserts a new line at the start of the block of the previous or 
@@ -145,10 +143,6 @@ class ActionPyAddArgument(Action):
 
 py_function_add_argument = \
     ActionPyAddArgument()
-
-py_old_function_body = \
-    ActionSearch(regexp=':\s*',
-                 docstring="""Moves cursor to the body of a Python method or function""")
 
 py_function_body = \
     ActionPyInsertInBody()

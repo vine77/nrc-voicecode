@@ -891,10 +891,10 @@ class SourceBuff(OwnerObject):
         *INT pos* -- cursor position of the line we want to go to. If
         *None*, then use cur_pos().
         """
-        if pos == None:
-           pos = self.cur_pos()
-        end_pos = self.end_of_line(pos)
-        self.goto(end_pos)
+        if pos != None:
+           self.goto(pos)
+        self.search_for(regexp=self.newline_regexp(), direction=1,
+                        where=-1, ignore_left_of_cursor=1)
 
     def goto_beginning_of_line(self, pos=None):
         """Go to beginning of the line at a particular cursor position.
@@ -902,10 +902,10 @@ class SourceBuff(OwnerObject):
         *INT pos* -- cursor position of the line we want to go to. If
         *None*, then use cur_pos().
         """
-        if pos == None:
-           pos = self.cur_pos()
-        beg_pos = self.beginning_of_line(pos)
-        self.goto(beg_pos)        
+        if pos != None:
+           self.goto(pos)
+        self.search_for(regexp=self.newline_regexp(), direction=-1,
+                        where=1, ignore_right_of_cursor=1)
         
     def goto_range(self, range, where):
         """Goes to one extremity of a range
@@ -1263,8 +1263,10 @@ class SourceBuff(OwnerObject):
             pos = pos + d
         raise IndexError()
 
-    def search_for(self, regexp, direction=1, num=1, where=1, 
-                   ignore_occur_right_of_cursor = 0, unlogged = 0):
+    def search_for(self, regexp, direction=1, num=1, where=1,
+                   ignore_overlapping_with_cursor = 0,
+                   ignore_left_of_cursor = 0, ignore_right_of_cursor = 0,
+                   unlogged = 0):
         
         """Moves cursor to the next occurence of regular expression
            *STR regexp* in buffer.
@@ -1277,8 +1279,14 @@ class SourceBuff(OwnerObject):
            *INT* where -- if positive, move cursor after the occurence,
            otherwise move it before
            
-           *BOOL* ignore_occur_right_of_cursor -- If true, then ignore any 
-           occurence that that sits at the immediate right of the cursor.
+           *BOOL* ignore_overlapping_with_cursor-- If true, then ignore any 
+           occurence that overlaps with the cursor.           
+           
+           *BOOL* ignore_left_of_cursor-- If true, then ignore any 
+           occurence that is directly left of the cursor.
+           
+           *BOOL* ignore_right_of_cursor-- If true, then ignore any 
+           occurence that is directly right of the cursor.           
 
            *BOOL* unlogged -- if true, don't log the results of this
            search (used for searches done by mediator without user-initiation)
@@ -1342,11 +1350,14 @@ class SourceBuff(OwnerObject):
         # Look in the list of matches for the num'th match closest to
         # the cursor in the right direction
         #
-        closest_match = self.closest_occurence_to_cursor(all_matches_pos,
-                                                         regexp=regexp,
-                                                         direction=direction,
-                                                         ignore_occur_right_of_cursor=ignore_occur_right_of_cursor,
-                                                         where=where)
+        closest_match = \
+           self.closest_occurence_to_cursor(all_matches_pos,
+                                            regexp=regexp,
+                                            direction=direction,
+                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
+                                            ignore_left_of_cursor=ignore_left_of_cursor,
+                                            ignore_right_of_cursor=ignore_right_of_cursor,                                            
+                                            where=where)
 
         trace('SourceBuff.search_for', 'closest_match=%s' % closest_match)
 
@@ -1383,9 +1394,13 @@ class SourceBuff(OwnerObject):
         return success
 
 
-    def closest_occurence_to_cursor(self, occurences, direction=None, 
-                                    regexp=None, where=1, 
-                                    ignore_occur_right_of_cursor=0):
+    def closest_occurence_to_cursor(self, occurences, 
+                                    ignore_overlapping_with_cursor=0,
+                                    ignore_left_of_cursor=0,
+                                    ignore_right_of_cursor=0,
+                                    direction=None, 
+                                    regexp=None, where=1
+                                    ):
         
         """Determines which occurence of a search pattern (or a
         *Select Pseudocode* pattern) is closest to the current cursor
@@ -1403,9 +1418,15 @@ class SourceBuff(OwnerObject):
         *INT* direction -- If negative, only consider occurences that are before
         the cursor. If positive, only consider occurences that are past the
         cursor. If *None*, consider all occurences whether before or after cursor.
+
+        *BOOL* ignore_overlapping_with_cursor-- If true, then ignore any 
+        occurence that overlaps with the cursor.
         
-        *BOOL* ignore_occur_right_of_cursor -- If true, then ignore any occurence
-        that at the immediate right of the cursor.
+        *BOOL* ignore_left_of_cursor-- If true, then ignore any 
+        occurence that is directly left of the cursor.
+           
+        *BOOL* ignore_right_of_cursor-- If true, then ignore any 
+        occurence that is directly right of the cursor.           
         
 
         *STR* regexp -- The regular expression used to generate the
@@ -1420,7 +1441,10 @@ class SourceBuff(OwnerObject):
         trace('SourceBuff.closest_occurence_to_cursor', 
               'occurences=%s, direction=%s, regexp="%s", where=%s' % 
               (repr(occurences), direction, regexp, where))
-        trace('SourceBuff.closest_occurence_to_cursor', 'ignore_occur_right_of_cursor=%s' % ignore_occur_right_of_cursor)
+              
+        trace('SourceBuff.closest_occurence_to_cursor', 
+              '** ignore_overlapping_with_cursor=%s, ignore_left_of_cursor=%s, ignore_right_of_cursor=%s' %
+                 (ignore_overlapping_with_cursor, ignore_left_of_cursor, ignore_right_of_cursor))
         
         closest_index = None
         
@@ -1433,9 +1457,13 @@ class SourceBuff(OwnerObject):
         
             debug.trace('SourceBuff.closest_occurence_to_cursor', 
                         'ii=%s, cur_pos()=%s, occurences[ii]=%s' % (ii, self.cur_pos(), occurences[ii]))
-            if (ignore_occur_right_of_cursor and 
-                occurences[ii][0] == self.cur_pos()):
-               continue        
+
+            if self.ignore_occurence(occurences[ii], ignore_overlapping_with_cursor,
+                                    ignore_left_of_cursor,
+                                    ignore_right_of_cursor):
+               debug.trace('SourceBuff.closest_occurence_to_cursor', 
+                           'skipping occurences[ii]=%s' % repr(occurences[ii]))                                                    
+               continue
 
             if direction == None:
                 #
@@ -1451,16 +1479,14 @@ class SourceBuff(OwnerObject):
                 #
                 # Looking for closest occurence before cursor ...
                 #
-#                if occurences[ii][0] >= self.cur_pos():
-# make sure the entire match is before the cursor
-                if occurences[ii][1] > self.cur_pos():
+                if occurences[ii][0] > self.cur_pos():
                     #
-                    # ... but we have passed cursor.
+                    # We have passed cursor.
                     #
                     break
                 else:
                     #
-                    # ... and we haven't passed the cursor. So this is
+                    # We haven't passed the cursor. So this is
                     # closest occurence before cursor yet.
                     #
                     if not self.same_as_previous_search(regexp, direction,
@@ -1470,7 +1496,7 @@ class SourceBuff(OwnerObject):
                 #
                 # Looking for closest occurence after cursor ...
                 #                
-                if occurences[ii][0] >= self.cur_pos():
+                if occurences[ii][1] >= self.cur_pos():
                     #
                     # ... and we have just passed cursor. So this
                     # is the closest occurence after cursor
@@ -1482,6 +1508,32 @@ class SourceBuff(OwnerObject):
 
         trace('SourceBuff.closest_occurence_to_cursor', '** returning closest_index=%s' % closest_index)
         return closest_index
+
+    def ignore_occurence(self, occurence, ignore_overlapping_with_cursor,
+                         ignore_left_of_cursor, ignore_right_of_cursor):
+
+        debug.trace('SourceBuff.ignore_occurence',
+                    'occurence=%s, ignore_overlapping_with_cursor=%s, ignore_left_of_cursor=%s, ignore_right_of_cursor=%s' %
+                    (occurence, ignore_overlapping_with_cursor,ignore_left_of_cursor, ignore_right_of_cursor) )
+
+        if (ignore_overlapping_with_cursor and 
+            occurence[0] <= self.cur_pos() and
+            occurence[1] >= self.cur_pos()):
+            debug.trace('SourceBuff.ignore_occurence', '** ignoring overlapping')
+            return 1
+                        
+        if (ignore_left_of_cursor and 
+            occurence[1] == self.cur_pos()):
+            debug.trace('SourceBuff.ignore_occurence', '** ignoring left')            
+            return 1
+
+        if (ignore_right_of_cursor and 
+            occurence[0] == self.cur_pos()):
+            debug.trace('SourceBuff.ignore_occurence', '** ignoring right')                        
+            return 1
+
+        debug.trace('SourceBuff.ignore_occurence', '** NOT ignoring')                                    
+        return 0
 
     def same_as_previous_search(self, regexp, direction, where, match):
         

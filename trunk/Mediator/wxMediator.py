@@ -53,10 +53,13 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", 
+debug.config_traces(status="off", 
                     active_traces={
-#                         'SourceBuff.print_buff': 1,
-#                         'SourceBuff.lines_around_cursor': 1,
+                          'ActionInsertNewClause.execute': 1,
+                          'SourceBuff.closest_occurence_to_cursor': 1,
+                          'SourceBuff.ignore_occurence': 1,
+                          'SourceBuff.same_as_previous_search': 1,
+                          'ActionSearch.execute': 1,
 ######################################################
 #                        'SymDict.init_from_file': 1,
 #                        'wxMediator': 1,

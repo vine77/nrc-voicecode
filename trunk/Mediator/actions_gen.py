@@ -607,17 +607,33 @@ class ActionSearch(ActionBidirectional):
     *before.
 
     *INT* num=1 -- Search for *num*th occurence.
+    
+    *BOOL* ignore_overlapping_with_cursor-- If true, then ignore any 
+    occurence that overlaps with the cursor.           
+           
+    *BOOL* ignore_left_of_cursor-- If true, then ignore any 
+    occurence that is directly left of the cursor.
+           
+    *BOOL* ignore_right_of_cursor-- If true, then ignore any 
+    occurence that is directly right of the cursor.           
+    
 
     CLASS ATTRIBUTES**
         
     *none* -- 
     """
         
-    def __init__(self, regexp=None, num=1, where=1, **args_super):
+    def __init__(self, regexp=None, num=1, where=1, 
+                 ignore_overlapping_with_cursor = 0,
+                 ignore_left_of_cursor = 0, ignore_right_of_cursor = 0,
+                 **args_super):
         self.deep_construct(ActionSearch, 
                             {'regexp': regexp, 
                              'num': num, 
-                             'where': where}, 
+                             'where': where,
+                             'ignore_overlapping_with_cursor':  ignore_overlapping_with_cursor,
+                             'ignore_left_of_cursor': ignore_left_of_cursor,
+                             'ignore_right_of_cursor': ignore_right_of_cursor}, 
                             args_super, 
                             {})
 
@@ -629,7 +645,10 @@ class ActionSearch(ActionBidirectional):
 
         debug.trace('ActionSearch.execute', 'called, app=%s' % app)
         app.search_for(regexp=self.regexp, direction=self.direction,
-                       num=self.num, where=self.where)
+                       num=self.num, where=self.where,
+                       ignore_overlapping_with_cursor = self.ignore_overlapping_with_cursor,
+                       ignore_left_of_cursor = self.ignore_left_of_cursor, 
+                       ignore_right_of_cursor = self.ignore_right_of_cursor)
 
 
 
@@ -771,7 +790,6 @@ class ActionInsertNewClause(Action):
                             {'end_of_clause_regexp': end_of_clause_regexp, 
                              'where': where,
                              'direction': direction,
-#                             'ignore_occur_right_of_cursor': ignore_occur_right_of_cursor,
                              'add_lines': add_lines, 
                              'code_bef': code_bef, 
                              'code_after': code_after,
@@ -784,33 +802,34 @@ class ActionInsertNewClause(Action):
         """See [Action.execute] for details.
         
         .. [Action.execute] file:///./Action.Action.html#execute"""
-                
+                        
         
         if self.direction > 0:
-           ignore_occur_right_of_cursor = 0
+           ignore_left_of_cursor = 1
+           ignore_right_of_cursor = 0
         else:
-           ignore_occur_right_of_cursor = 1
+           ignore_left_of_cursor = 0
+           ignore_right_of_cursor = 1
            
         app.search_for(regexp=self.end_of_clause_regexp, 
-                       where = self.where, direction = self.direction, 
-                       ignore_occur_right_of_cursor=ignore_occur_right_of_cursor)
+                       where = self.where, direction = self.direction,
+                       ignore_overlapping_with_cursor=0,
+                       ignore_left_of_cursor=ignore_left_of_cursor, 
+                       ignore_right_of_cursor=ignore_right_of_cursor,
+                       unlogged=1)
                        
-        #ERASE LATER
-#        print "--** after search_for, buffer contains\n"
-#        app.print_buff()
-        #END ERASE LATER
         
         blank_lines = ""
         for ii in range(self.add_lines):
             blank_lines = "%s%s" % (blank_lines, app.pref_newline_convention())
-            
+
         if self.direction > 0:
            code_bef = blank_lines
            code_after = ""
         else:
            code_bef = ""
            code_after = blank_lines
-           
+                       
         app.insert_indent(code_bef=code_bef, code_after=code_after)
             
         #

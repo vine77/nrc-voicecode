@@ -470,7 +470,8 @@ class SelectWinGram(WinGram):
         closest_range_index = \
             self.app.closest_occurence_to_cursor(ranges, 
                 regexp=spoken_form, 
-                direction=direction, where=where, 
+                direction=direction, where=where,
+                ignore_overlapping_with_cursor=0,
                 buff_name = self.buff_name)
                 
         debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' % (repr(ranges), closest_range_index))

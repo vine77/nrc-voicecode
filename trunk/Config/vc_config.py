@@ -370,12 +370,19 @@ out_of_balance = CSCmdSet("balanced expression navigation",
 # All balanced expressions
 #
 acmd = CSCmd(spoken_forms=['jump out'],
-             meanings={ContAny(): ActionSearchBidirectionalRepeat(regexp='[\]\)\}\'\"] {0,1}')},
+             meanings={ContAny(): 
+                ActionSearchBidirectionalRepeat(
+                    regexp='[\]\)\}\'\"] {0,1}',
+                    ignore_left_or_cursor=1)},
              docstring='jump out of innermost balanced expression')
 out_of_balance.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
-             meanings={ContAny(): ActionSearchBidirectionalRepeat(regexp=' {0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
+             meanings={ContAny(): 
+                ActionSearchBidirectionalRepeat(
+                   regexp=' {0,1}[\[\(\{\'\"]',
+                   direction=-1, where=-1,
+                   ignore_right_or_cursor=1)},
              docstring='jump backwards out of innermost balanced expression')
 out_of_balance.add_csc(acmd)
 
