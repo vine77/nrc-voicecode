@@ -473,6 +473,20 @@ class SymBuilderFactory(Object):
         """
         self.next_builder = None
         self.expected_type = None
+        
+    def manually_specified(self):
+        """Indicates whether the style of the following symbol has been
+        manually specified
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the style has been manually specified
+        """
+        return not not self.next_builder
 
     def current_preferences(self, buff):
         """return the list of preferences for a new SymBuilder, given

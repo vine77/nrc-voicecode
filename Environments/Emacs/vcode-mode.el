@@ -326,6 +326,7 @@ sent."
    (setq py-smart-indentation nil) 
    (setq py-indent-offset 3)
    (setq tab-width 999)
+   (auto-fill-mode 0)
 ; DCF - tracing indentation problems (at Alain's suggestion)
    (vcode-trace "vcode-config-py-mode-for-regresion-testing" 
    "py-indent-offset=%S" py-indent-offset)
@@ -336,8 +337,10 @@ sent."
 (defun vcode-configure-for-regression-testing (status)
    (if status
        (progn 
+; the "t" makes add-hook append, so that our test settings will override
+; any user settings for things like auto-fill-mode
 	 (add-hook 'python-mode-hook 
-		   'vcode-config-py-mode-for-regression-testing)
+		   'vcode-config-py-mode-for-regression-testing t)
        )
      (remove-hook 'python-mode-hook 
 		   'vcode-config-py-mode-for-regression-testing)
