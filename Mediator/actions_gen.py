@@ -24,6 +24,7 @@
 import copy, exceptions, os, re
 import Object, vc_globals
 import debug
+import sr_interface
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -959,6 +960,34 @@ class ActionPrintAbbrevs(Action):
            except AttributeError:
              print 'print abbreviations command not supported with old Mediator'    
     
+
+class ActionTypeText(Action):
+    """Types text to the active window.
+    
+    Don't use this action unless you absolutely have to! Instead, use ActionInsert.
+    
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, key_strokes, **args_super):
+        self.deep_construct(ActionTypeText, \
+                            {'key_strokes': key_strokes}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Sends keystrokes: "%s" to the active window';
+                               
+    def execute(self, app, cont):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        sr_interface.send_keys(self.key_strokes)
 
 class ActionSwitchTranslation(Action):
     """Turns translation on/off

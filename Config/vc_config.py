@@ -163,6 +163,16 @@ acmd = CSCmd(spoken_forms=['show abbreviatiosn', 'print abbreviations'],
 mediator_ctrl.add_csc(acmd)
 
 
+#################################################################
+# AD: This doesn't belong here... move it to a new Emacs Specifc
+#     CSCset later on... I'm just having a hard time creating
+#     a CSCSet and activating it.
+#################################################################
+acmd = CSCmd(spoken_forms=['New-Line', 'Enter'],
+             meanings={ContEmacsInMinibuffer(): ActionTypeText(key_strokes='\n')},
+             docstring='Type enter into minibuffer')
+mediator_ctrl.add_csc(acmd)
+
 #############################################################################
 # Punctuation marks.
 #############################################################################
@@ -1042,6 +1052,25 @@ c_preprocessor.add_lsa(LSAlias(['macro define'], {'C': '#define'}))
 c_preprocessor.add_lsa(LSAlias(['macro include'], {'C': '#include'}))
 
 c_preprocessor.add_lsa(LSAlias(['macro undo define'], {'C': '#undef'}))
+
+
+###############################################################################
+# Emacs specific stuff
+###############################################################################
+
+emacs_cscs = CSCmdSet(name = 'Emacs Specific',
+    description = 'commands specific for Emacs')
+    
+#
+# For some reason, if \n is entered into the minbuffer via
+# insert_indent message, that change does not get reported
+# and VCode hangs waiting for insert_indent_resp.
+# So use this special command for newline in minibuffer.
+#    
+acmd = CSCmd(spoken_forms=['New-Line', 'Enter'],
+             meanings={ContEmacsInMinibuffer(): ActionTypeText(key_strokes='\n')},
+             docstring='Type enter into minibuffer')
+emacs_cscs.add_csc(acmd)
 
 
 ###############################################################################

@@ -261,36 +261,8 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-;(cl-puthash  "vcode-indent-line" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-incr-indent-level" 1 vcode-traces-on)
-;(cl-puthash  "vcode-indent-line" 1 vcode-traces-on)
-
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
-;(cl-puthash "vcode-line-start-end-pos" 1 vcode-traces-on)
-;(cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
-;(cl-puthash 'beginning_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
-;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
-;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
-
-;(cl-puthash "vr-deprecated-cmd-alt-frame-activated" 1 vcode-traces-on)
-;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
-
-; testing hang/deadlock with text_mode test 5/8/03 - DCF
-;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
-;(cl-puthash "vcode-serialize-message" 1 vcode-traces-on)
-
-; testing problems with insert_delete test 12/31/02 - DCF
-;(cl-puthash "vcode-cmd-insert" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-insert-indent" 1 vcode-traces-on)
-;(cl-puthash "vcode-fix-positions-in-message" 1 vcode-traces-on)
-
-
-
-; DCF - tracing indentation problems (at Alain's suggestion)
-(cl-puthash "code-config-py-mode-for-regresion-testing" 1 vcode-traces-on)
+;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
+;(cl-puthash  "vcode-execute-command-string" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
@@ -3462,26 +3434,16 @@ change reports it sends to VCode.
 
 	(kill-region delete-start delete-end)
 
-;;; Do we really need to invoke code indentation? I think 
-;;; will do that automatically.
-;;;
+	(vcode-trace "vcode-cmd-insert-indent" "after kill-region")
 
-;	(set-mark (point))
         (vcode-execute-command-string code-bef)
-;	(vcode-trace "vcode-cmd-insert-indent" "after before, buffer=%S"
-;            (buffer-substring (point-min) (point-max)))
+	(vcode-trace "vcode-cmd-insert-indent" "after before, buffer=%S"
+            (buffer-substring (point-min) (point-max)))
 
-;	(save-excursion
-;	  (vcode-indent-region (mark) (point))
-;	)
 
 	(save-excursion
-;	  (set-mark (point))
+
 	  (vcode-execute-command-string code-after)
-;          (vcode-trace "vcode-cmd-insert-indent" "after after, buffer=%S"
-;              (buffer-substring (point-min) (point-max)))
-;	  (vcode-indent-region (mark) (point))
-;	  (set-mark nil)
 	)
 
 	(set-mark nil)

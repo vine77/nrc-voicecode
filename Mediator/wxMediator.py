@@ -56,6 +56,7 @@ import WinSystemMSW
 debug.config_traces(status="on", 
                     active_traces={
 #                       'AppStateMessaging.apply_upd_descr': 1,
+#                       'ContEmacsInMinibuffer._applies': 1,
 ################################
 #                         "ContBlankLine.applies": 1,
 #                        'ActionInsertNewClause.execute': 1,
