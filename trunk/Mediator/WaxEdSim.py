@@ -34,6 +34,7 @@ from wxPython.wx import *
 import WaxEdit
 
 ID_EXIT = 101
+ID_OPEN_FILE = 150
 ID_DICTATED=102
 ID_EDITOR=103
 ID_SPLITTER=104
@@ -234,6 +235,8 @@ class WaxEdSimFrame(wxFrame):
     recently.  Used to restore focus to this window when the user
     switches back to this application from another.
 
+    *AppStateWaxEdit* app_control -- AppState interface
+
     others -- the various menus
     """
 
@@ -241,9 +244,11 @@ class WaxEdSimFrame(wxFrame):
         wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
         wxSize(1000, 600))
 
+	self.app_control = None
 	self.activated = 0
         file_menu=wxMenu()
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
+        file_menu.Append(ID_OPEN_FILE,"&Open","Open a file")
 
         window_menu = wxMenu()
         window_menu.Append(ID_FOCUS_EDITOR, "&Editor Window")
@@ -260,6 +265,7 @@ class WaxEdSimFrame(wxFrame):
 
         self.SetMenuBar(menuBar)
         EVT_MENU(self,ID_EXIT,self.quit_now)
+        EVT_MENU(self,ID_OPEN_FILE,self.open_file)
 
         self.pane = WaxEdSimPane(self, ID_PANE, "WaxEdPanel",
 	    command_space = command_space)
@@ -317,6 +323,14 @@ class WaxEdSimFrame(wxFrame):
     def quit_now(self, event):
 	print 'closing'
         self.Close(true)
+    def open_file(self, event):
+	init_dir = self.app_control.curr_dir
+        dlg = wxFileDialog(self, "Edit File", init_dir)
+        answer = dlg.ShowModal()
+        if answer == wxID_OK:
+            file_path = dlg.GetPath()
+	    self.app_control.open_file(file_path)
+        
     def on_activate(self, event):
         current = wxWindow_FindFocus()
         if event.GetActive():
@@ -412,6 +426,22 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	*BOOL* -- true if editor window has the focus
 	"""
 	return self.frame.editor_has_focus()
+
+    def run(self, app_control):
+	"""starts the message loop.  Note: this function does not
+	return until the GUI exits.
+
+	**INPUTS**
+
+	*AppStateWaxEdit app_control* -- reference to corresponding 
+	AppState interface
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.frame.app_control = app_control
+	self.MainLoop()
 
 def run():
     app=WaxEdSim()

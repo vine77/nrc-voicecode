@@ -83,6 +83,12 @@ class AppStateWaxEdit(AppState.AppState):
 
         Open file with name *STR name* and written in language *STR lang*.        
         """
+	path, short = os.path.split(name)
+	if path:
+	    self.curr_dir = path
+	else:
+	    path = self.curr_dir
+	    name = os.path.join(path, short)
         try:
             source_file = open(name, 'rw')
             source = source_file.read()

@@ -200,7 +200,7 @@ def simulator_mode(options):
     open_file(file_name)
     
 
-    editor_app.MainLoop()
+    editor_app.run(app_control = app)
         
 if (__name__ == '__main__'):
     
