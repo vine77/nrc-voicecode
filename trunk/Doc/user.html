@@ -101,6 +101,24 @@ quit()
 </PRE>
 
 
+For example, if you do the following:
+
+<UL>
+<LI>python mediator.py -s
+<LI>openfile('C:/Temp/blah.c')
+<LI>listen()
+<LI>say: <EM>"for loop index after semi index after equal function xray comma yankee at index 0 after semi index loop body"</EM>
+</UL>
+
+then you should end up with the following code:
+
+<PRE>
+1:   for (index=0; index <= function(x, y[0]); index++)
+2:   {
+3: <CURSOR>
+4:   }
+</PRE>
+
 <H2><A NAME="config">Configuring VoiceCode</A></H2>
 
 At the center of VoiceCode is a concept called <EM>Context Sensitive
@@ -132,18 +150,22 @@ function.
 
 <P>
 
+
 The <EM>CSCmd</EM> constructor has the following named arguments:
 
-<STRONG>[STR spoken_forms]</STRONG> the <EM>spoken_form</EM> argument
+<DL>
+<DT><STRONG>[STR] spoken_forms</STRONG> 
+<DD>the <EM>spoken_form</EM> argument
 is a list defining the various ways that the command can be invoked by
 voice. If you prefer to use a different voice command, just add your
 own to that list. 
 
 <P>
 
-<STRONG>[[Context, FCT]] meanings</STRONG>  the <EM>meanings</EM> argument is a list of contextual meanings for the command. Each contextual meaning is a pair consisting of a context object (which is used to determine if a particular applies) and an action function to be fired if the context applies.
+<DT><STRONG>[[Context, FCT]] meanings</STRONG>  
+<DD>the <EM>meanings</EM> argument is a list of contextual meanings for the command. Each contextual meaning is a pair consisting of a context object (which is used to determine if a particular context applies) and an action function to be fired if the context applies.
 
-<P>
+</DL>
 
 In the above example, the command has only one spoken form <EM>'at
 index'</EM>. The command can be used in one of two contexts,
