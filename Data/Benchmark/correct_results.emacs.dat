@@ -1,10 +1,31 @@
-creating wxMediator
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>python new_server.py --bypass -t all 
+running ExtLoopWin32NewMediator with ServerNewMediator
+running ExtLoopWin32NewMediator with ServerNewMediator
 Loading test definitions...
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Finished wxMediator init...
-starting...
+Finished ExtLoop init...
+Running ExtLoopWin32...
 Starting server threads...
+Starting message loop...
+New connection
+New connection from emacs
+awaiting corresponding talk connection
+received talk connection
+creating messengers
+configuring from external
+creating editor instance
 universal instance named "emacs(0)"
 
 
@@ -465,7 +486,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x01E50470>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 0x0162DF80>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -607,6 +628,7 @@ Unresolved abbreviations are:
 'posixpath': appears in ['posixpath']
 'setattr': appears in ['setattr']
 'stdout': appears in ['stdout']
+'tst': appears in ['autoTst']
 'x': appears in ['x']
 
 *** End of compilation test ***
@@ -870,10 +892,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -2566,7 +2588,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3402,7 +3424,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3476,6 +3498,21 @@ Heard less-than greater-than equal-sign
 
 
 *******************************************************************************
+* Name        : no_config_file
+* Description : test configuration using non-existant file.
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+EdSim instance EdSim(0) connected
+Trying to confugure using non-existant file 'non_existant_config_file.py'
+
+
+
+VCode ERROR: inexistant user configuration file 'non_existant_config_file.py'
+Exception was properly raised!
+
+
+*******************************************************************************
 * Name        : persistence
 * Description : testing persistence between VoiceCode sessions
 *******************************************************************************
@@ -3485,7 +3522,7 @@ Heard less-than greater-than equal-sign
 >>> Starting mediator with persistence
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7331,17 +7368,6 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-> Associate 'Ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
 >   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -7358,18 +7384,7 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-Associate 'Ed simulator' with symbol (Enter selection):
-
-  '0': no association
-  '1': EdSim
-  '2': ed_simulator (*new*)
-  '3': EdSimulator (*new*)
-  '4': edSimulator (*new*)
-  '5': ED_SIMULATOR (*new*)
-  '6': edsimulator (*new*)
-  '7': EDSIMULATOR (*new*)
-
->   7: from EdSim import EdSim
+  7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -7602,14 +7617,7 @@ Heard method body
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
-Associate 'R. E.' with symbol (Enter selection):
-
-  '0': no association
-  '1': re
-  '2': Re (*new*)
-  '3': RE (*new*)
-
->  19:                           attrs)
+ 19:                           attrs)
  20: 
  21:    def spoken_form_regexp(self, spoken_form):
  22:       words = re.split(<CURSOR>)
@@ -9326,7 +9334,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9413,7 +9421,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11460,7 +11468,10 @@ This test should always be the very last one to be executed!
 
 
 -----------------------------------------------
-Test suite completed in:  543.439999938 secs
+Test suite completed in:  186.126999974 secs
 -----------------------------------------------
+Message loop ended, cleaning up
+cleanup method is  <bound method ExtLoopWin32NewMediator.cleanup of <__main__.ExtLoopWin32NewMediator instance at 0x011D7828>>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+ExtLoopWin32.run returning
