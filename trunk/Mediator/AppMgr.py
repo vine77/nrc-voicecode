@@ -156,6 +156,26 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
         OwnerObject.remove_other_references(self)
 
+    def capitalize_rules(self, capitalize):
+        """specifies whether words in rules for context-free grammars 
+        should be capitalized.
+        
+        Note: This is important for ensuring that the correction grammar
+        overrides the corresponding built-in grammars.  capitalize_rules
+        should be true for NaturallySpeaking 5 or earlier, but false for
+        NaturallySpeaking 6 or later (have to check about v. 5)
+
+        **INPUTS**
+
+        *BOOL* capitalize -- if true, then words in rules like "scratch
+        that" should be capitalized.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.recog_mgr.capitalize_rules(capitalize)
+
     def set_exclusive(self, exclusive = 1, instance = None):
         """makes the grammars exclusive (or not).  Generally used only
         for background regression testing

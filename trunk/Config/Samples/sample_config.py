@@ -24,6 +24,16 @@ alt_grouping = alt_US_grouping
 alt_quotes = alt_US_quotes
 std_small_numbers = std_US_small_numbers
 
+# Capitalize command names, according to Natspeak version:
+
+# for Natspeak 5 or earlier, use this line
+
+#capitalize_rules(1)
+
+# fro Natspeak 6 or later, use this line
+
+capitalize_rules(0)
+
 #######################################
 # Include user-defined forms here
 #######################################

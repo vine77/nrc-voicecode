@@ -697,10 +697,12 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_module'] = do_nothing
             config_dict['trust_current_window'] = do_nothing
             config_dict['add_prefix'] = do_nothing
+            config_dict['capitalize_rules'] = do_nothing
         else:
             config_dict['add_module'] = self.add_module
             config_dict['trust_current_window'] = self.trust_current_window
             config_dict['add_prefix'] = self.add_app_prefix
+            config_dict['capitalize_rules'] = self.capitalize_rules
 
     def before_interp_config(self, config_dict, reset = 0, ignore = 0,
         alt_sym_file = None, symbol_match_dlg = None, 
@@ -1418,6 +1420,26 @@ class NewMediatorObject(Object.OwnerObject):
         unique
         """
         return self.editors.add_prefix(app_name, title_prefix)
+
+    def capitalize_rules(self, capitalize):
+        """specifies whether words in rules for context-free grammars 
+        should be capitalized.
+        
+        Note: This is important for ensuring that the correction grammar
+        overrides the corresponding built-in grammars.  capitalize_rules
+        should be true for NaturallySpeaking 5 or earlier, but false for
+        NaturallySpeaking 6 or later (have to check about v. 5)
+
+        **INPUTS**
+
+        *BOOL* capitalize -- if true, then words in rules like "scratch
+        that" should be capitalized.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.editors.capitalize_rules(capitalize)
 
     def reset_results_mgr(self, instance_name = None):
         """resets the ResMgr objects for a given editor, erasing any 

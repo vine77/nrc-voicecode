@@ -1155,7 +1155,7 @@ class SymbolConstruction(Object):
 
         *none*
         """
-        if not self.untranslated_words:
+        if not self.builder:
             self.exact_symbol = 1
         self.untranslated_words.extend(spoken_form)
         if self.builder is None:
