@@ -12,14 +12,14 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
             
                                   
     sym1_1 = SymbolResult('new_symbol_1_1', ['new', 'symbol', 'one', 'one'], None, '', None, [], 
-                          in_utter=utter1)
+                          in_utter_interp=None)
     sym1_2 = SymbolResult('new_symbol_1_2', ['new', 'symbol', 'one', 'two'], None, '', None, [], 
-                          in_utter=utter1)               
+                          in_utter_interp=None)               
     sym_list = [sym1_1, sym1_2]
                                    
     phrase1 = MockUtteranceInterpretation(utter1, symbols = sym_list, )
-    sym1_1.in_utter = phrase1
-    sym1_2.in_utter = phrase1
+    sym1_1.in_utter_interp = phrase1
+    sym1_2.in_utter_interp = phrase1
 
     
     def __init__(self, name):
@@ -28,7 +28,7 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
     
     def setUp(self):
         self.ui = \
-           MediatorConsoleWX.ReformatRecentSymbolsModel(None, None, 
+           MediatorConsoleWX.DlgReformatRecentSymbols(None, None, 
                                                         SymbolReformattingUITestCase.sym_list, 
                                                          None)
         # AD: Uncomment this if you want to see what the window looks like. 

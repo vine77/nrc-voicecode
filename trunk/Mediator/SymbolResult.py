@@ -31,7 +31,7 @@ class SymbolResult(Object):
                  as_inserted, buff_name,
                  builder_preferences, possible_matches = None,
                  forbidden = None,
-                 new_symbol = 0, in_utter = None, **args):
+                 new_symbol = 0, in_utter_interp = None, **args):
         """
         ** INPUTS **
 
@@ -67,9 +67,10 @@ class SymbolResult(Object):
         which may be displayed as alternatives in the exact symbols
         tab of the re-formatting dialog)
         
-        *UtteranceInterpretation in_utter = None* -- Utterance in which that 
-        symbol was heard.
+        *UtteranceInterpretation in_utter_interp = None* -- Utterance 
+        interpretation in which that symbol was heard.
         """
+       
         self.deep_construct(SymbolResult,
                             {
                              'symbol': native_symbol,
@@ -81,8 +82,10 @@ class SymbolResult(Object):
                              'possible': possible_matches,
                              'forbidden': forbidden,
                              'was_new': new_symbol,
-                             'in_utter': in_utter
+                             'in_utter_interp': in_utter_interp
                             }, args)
+       
+                            
     def native_symbol(self):
         return self.symbol
     def buffer(self):
@@ -150,4 +153,4 @@ class SymbolResult(Object):
         return self.forbidden
         
     def cleanup(self):
-        self.in_utter = None
+        self.in_utter_interp = None
