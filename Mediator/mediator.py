@@ -84,15 +84,9 @@ from actions_py import *
 
 the_mediator = None
 
-#
-# Handle of the DOS window in which mediator is running
-#
-sr_interface.connect()
-# print natlink.getCurrentModule()
-console_win_handle = natlink.getCurrentModule()[2]
 
 def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
-    global the_mediator, console_win_handle
+    global the_mediator
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
     if the_mediator:
@@ -271,7 +265,7 @@ def execute_command(cmd):
         traceback.print_exc()
 
         
-def simulator_mode(options):
+def simulator_mode(options, console_win_handle):
     """Start mediator in console mode.
 
     Useful for debugging purposes when using the mediator separately from
@@ -332,18 +326,25 @@ def run(options):
     if opts['h']:
         print __doc__
 	print sim_commands.__doc__
+	return
+#
+# Handle of the DOS window in which mediator is running
+#
+    sr_interface.connect()
+# print natlink.getCurrentModule()
+    console_win_handle = natlink.getCurrentModule()[2]
 
-    elif opts['t']:
+    if opts['t']:
         #
         # Run mediator using an editor simulator, in profiling mode
         #
         profile.run("""
-simulator_mode(opts)""")
+simulator_mode(opts, console_win_handle)""")
     elif opts['s']:
         #
         # Run mediator using an editor simulator
         #
-        simulator_mode(opts)
+        simulator_mode(opts, console_win_handle)
 
     cleanup(sim_commands.clean_sr_voc_flag, 
 	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)
