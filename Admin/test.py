@@ -1,7 +1,7 @@
 """Regression testing script"""
 
 import os, natlink, posixpath, sys
-import MediatorObject, sr_interface, vc_globals
+import mediator, MediatorObject, sim_commands, sr_interface, vc_globals
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
@@ -74,11 +74,10 @@ if (__name__ == '__main__'):
             auto_test.run(args)        
 
     #
-    # Loading VoiceDictation may have caused a connection to NatSpeak.
-    # Need to disconnect otherwise the DOS window hangs up after script
-    # terminates.
+    # Note: we call this instead of sim_commands.quit, because the
+    #       regression tests carried out may not necessarily have created an
+    #       instance for sim_commands.the_mediator.
     #
-    sr_interface.saveUser()
-    sr_interface.disconnect()
+    MediatorObject.disconnect_from_sr(1, 0)
 
 

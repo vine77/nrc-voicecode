@@ -8,6 +8,25 @@ import CmdInterp
 #import nsformat
 
 #
+# Flag that remembers whether or not we have connected to NatSpeak
+#
+sr_is_connected = 0
+
+#
+# Flag that remembers whether or not the VoiceCode SR user was modified since
+# last saved
+#
+sr_user_needs_saving = 0
+
+#
+# Name, base model and base topic to use for VoiceCode
+#
+vc_user_name = 'VoiceCode'
+vc_base_model = 'BestMatch Model'
+vc_base_topic = 'US General English - BestMatch Plus'
+
+
+#
 # Flag used to add a word to NatSpeak
 # 0x40000000 -> added by VoiceCode (i.e. alias Vocabulary Builder)
 # 0x00000001 -> added by user
@@ -40,9 +59,8 @@ else:
 # calling the corresponding natlink functions
 #
 
-def speech_able(mic_state=None):
+def speech_able():
     return not os.environ.has_key('VCODE_NOSPEECH')
-
 
 
 def connect(mic_state=None):
@@ -58,8 +76,15 @@ def connect(mic_state=None):
     
     *none* -- 
     """
-    if speech_able():        
-        natlink.natConnect()
+    global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
+    
+#    print '-- sr_interface.connect: mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected)
+    
+    if speech_able():
+        if not sr_is_connected:
+            natlink.natConnect()
+            sr_is_connected = 1            
+            openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
         if mic_state:
             natlink.setMicState(mic_state)
 
@@ -75,8 +100,58 @@ def disconnect():
     
     *none* -- 
     """
-    if speech_able():        
+    global sr_is_connected
+
+#    print '-- sr_interface.disconnect: called, sr_is_connected=%s' % sr_is_connected
+    if speech_able() and sr_is_connected:
+#        print '-- sr_interface.disconnect: calling natlink.natDisconnect()'
         natlink.natDisconnect()
+    sr_is_connected = 0        
+
+def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_using_topic=None):
+
+    """Open a user, maybe create it if it doesn't exist.
+        
+    **INPUTS**
+        
+    *STR* user_name -- Name of the user to be opened.
+
+    *BOOL* create_if_not_exist -- If *true* then the user will be
+     created if it doesn't exist.
+        
+    *STR* create_using_model=None -- User model to use for creation of
+     the user (if *create_if_not_exist* is *true*).
+
+    *STR* create_using_topic=None -- Topic to use for creation of
+     the user (if *create_if_not_exist* is *true*)
+        
+
+    **OUTPUTS**
+        
+    *none* -- 
+    """
+    
+#    print '-- sr_interface.openUser: user_name=%s, create_if_not_exist=%s, create_using_model=%s, create_using_topic=%s' % (user_name, create_if_not_exist, create_using_model, create_using_topic)
+    try:
+        natlink.openUser(user_name)
+#        print '-- sr_interface.openUser: natlink.openUser succeeded'
+    except natlink.UnknownName, exc:
+#        print '-- sr_interface.openUser: natlink.openUser failed'
+        if create_if_not_exist:
+#            print '-- sr_interface.openUser: creating new user, user_name=%s, create_using_model=%s, create_using_topic=%s' % (user_name, create_using_model, create_using_topic)
+            natlink.createUser(user_name, create_using_model, create_using_topic)
+        else:
+            #
+            # Reraise the exception so it can be caught further up the call chain
+            #
+            raise exc
+
+def saveUser():
+    """Saves the current user"""
+#    print '-- sr_interface.saveUser: saving user'
+    natlink.saveUser()
+#    print '-- sr_interface.saveUser: user saved'    
+    sr_user_needs_saving = 0
 
 def addedByVC(flag):   
     """Returns *true* iif word information *flag* indicates that word
@@ -134,6 +209,11 @@ def addWord(word, *rest):
 
 
     if speech_able():
+        #
+        # Make sure we are connected to SR system
+        #
+        connect()
+                
         if getWordInfo(word) == None:
 #            print '-- sr_interface.addWord: this word is new to NatSpeak'
                    
@@ -145,6 +225,7 @@ def addWord(word, *rest):
                 return None
                 
             natlink.addWord(word, flag)
+            sr_user_needs_saving = 1
 
             #
             # Note: Need to add redundant entry without special
@@ -180,6 +261,7 @@ def deleteWord(word, *rest):
 #        print '-- sr_interface.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
         if addedByVC(flag) and num_words > 1:
 #            print '-- sr_interface.deleteWord: actually deleting word %s' % word
+            sr_user_needs_saving = 1
             return natlink.deleteWord(word)
         else:
 #            print '-- sr_interface.deleteWord: word not added by VoiceCode %s' % word

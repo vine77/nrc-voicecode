@@ -66,15 +66,11 @@ the_mediator = None
 def cleanup(clean_sr_voc=0):
     global the_mediator
 
-    #
-    # Cleanup the vocabulary to remove symbols from NatSpeak's vocabulary,
-    # but don't save SymDict to file (we want the symbols and abbreviations to
-    # still be there when we come back.
-    #
-    the_mediator.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
-    if sr_interface.speech_able():
-        the_mediator.mixed_grammar.unload()
-        the_mediator.code_select_grammar.unload()
+    sim_commands.quit(clean_sr_voc=clean_sr_voc)
+
+def setmic(state):
+    if not os.environ.has_key('VCODE_NOSPEECH'):
+        natlink.setMicState(state)
 
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
@@ -83,7 +79,7 @@ def init_simulator(symdict_pickle_fname=None):
         sr_interface.connect('off')
     except natlink.UnknownName:
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
-        quit()
+        cleanup()        
         
     if sr_interface.speech_able:
         if symdict_pickle_fname == None and the_mediator != None:
@@ -99,10 +95,8 @@ def init_simulator(symdict_pickle_fname=None):
         # utterances.
         #
         if the_mediator:
-            if the_mediator.mixed_grammar:
-                the_mediator.mixed_grammar.unload()
-            if the_mediator.code_select_grammar:
-                the_mediator.code_select_grammar.unload()
+            the_mediator.quit(save_speech_files=0, disconnect=0)            
+            
             
         the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
 
@@ -116,14 +110,6 @@ def init_simulator(symdict_pickle_fname=None):
         # Configure the mediator
         #
         the_mediator.configure()
-
-
-
-    if sr_interface.speech_able:
-        the_mediator.mixed_grammar.load()
-        the_mediator.mixed_grammar.activate(0)
-        the_mediator.code_select_grammar.load( ['Select', 'Correct'] )
-        the_mediator.code_select_grammar.activate()
 
     # define global variables accessible to the simulator commands
     # through the sim_commands module namespace
@@ -166,6 +152,7 @@ def simulator_mode(options):
 
     global the_mediator
 
+    setmic('off')
     init_simulator(symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl')
     
     #
@@ -207,5 +194,4 @@ simulator_mode(opts)""")
         simulator_mode(opts)
 
     cleanup()
-    if not opts.has_key('h'): sr_interface.disconnect()
         

@@ -1,12 +1,8 @@
 Todo list for VoiceCode
 =======================
 
-blobl
-
 To do before 1st release
 ========================
-
-blah
 
 "Not what I said" correction
 ----------------------------
@@ -21,42 +17,42 @@ column gives the type of utterance the user meant. The 2nd column
 gives the type of utterance it was interpreted to be. The third column
 descirbes circumstances when this may happen.
 
-User    Interpreter
+User	Interpreter
 Meant   understood      Happens when
------   -----------     ------------
+-----   -----------	------------
 
-text    CSC             if user didn't turn off interpretation when he 
+text	CSC		if user didn't turn off interpretation when he 
 			should have
 
-	LSA             if user didn't turn off interpretation when he 
+	LSA		if user didn't turn off interpretation when he 
 			should have
 
-	sym             if user didn't turn off interpretation when he 
+	sym		if user didn't turn off interpretation when he 
 			should have
 
-sym     CSC             if spoken symbol is same or substring of spoken CSC
+sym	CSC		if spoken symbol is same or substring of spoken CSC
 
-	LSA             if spoken symbol is same or substring of spoken LSA
+	LSA		if spoken symbol is same or substring of spoken LSA
 
-	text            if interpretation was turned off when it shouldn't have
+	text		if interpretation was turned off when it shouldn't have
 
-	wrong sym       happens if two symbols have same spoken form and
-			interpreter chose the wrong one
+        wrong sym       happens if two symbols have same spoken form and
+                        interpreter chose the wrong one
 
-LSA     CSC             if spoken LSA is same or substring of spoken CSC
+LSA	CSC		if spoken LSA is same or substring of spoken CSC
 
-	sym             if spoken LSA is STRICT SUBSTRING of spoken symbol 
+	sym		if spoken LSA is STRICT SUBSTRING of spoken symbol 
 			(otherwise, the LSA will take precedence).
 
-	text            if interpretation was turned off when it shouldn't have
+	text		if interpretation was turned off when it shouldn't have
 
-CSC     LSA             if spoken CSC is STRICT SUBSTRING of spoken LSA 
+CSC	LSA		if spoken CSC is STRICT SUBSTRING of spoken LSA 
 			(otherwise, the CSC will take precedence)
 
-	sym             if spoken symbol is STRICT SUBSTRING of spoken LSA 
+	sym		if spoken symbol is STRICT SUBSTRING of spoken LSA 
 			(otherwise, the CSC will take precedence)
 
-	text            if interpretation was turned off when it shouldn't have
+	text		if interpretation was turned off when it shouldn't have
 
 
 A full fledge correction dialog might allow the user to select a
@@ -449,12 +445,12 @@ THIS.
 
    - "select from X" [pause] "up to Y" 
 	can be useful if X and/or Y are
-	long to say and/or you realise in mid command that you don't
-	really know where you want the selection to end
+        long to say and/or you realise in mid command that you don't
+        really know where you want the selection to end
 
    - "select from X up to Y" [pause] "extend left"
-	useful if didnt select from right instance of X but ended at the right
-	instance of Y
+        useful if didnt select from right instance of X but ended at the right
+        instance of Y
 
    This could be implemented as follows:
 
@@ -640,7 +636,7 @@ What can I say
     etc...
    Python
     - loops
-	for
+        for
     etc...
        
     

@@ -1366,7 +1366,7 @@ class SymDict(PickledObject.PickledObject):
         *none* -- 
         """
         
-#        print '-- SymDict.cleanup: called, self.standard_symbol_sources=%s' % self.standard_symbol_sources
+        print '-- SymDict.cleanup: called, self.standard_symbol_sources=%s' % self.standard_symbol_sources
 
         global vocabulary_symbols_with_written_form
 
@@ -1384,7 +1384,7 @@ class SymDict(PickledObject.PickledObject):
                 # This spoken form was added specifically by VoiceCode.
                 # Remove it.
                 #
-#              print '-- SymDict.cleanup: removing word %s' % a_form
+              print '-- SymDict.cleanup: removing word %s' % a_form
                 if not vocabulary_symbols_with_written_form:
                     #
                     # Just remove the spoken form
@@ -1402,11 +1402,11 @@ class SymDict(PickledObject.PickledObject):
         # Possibly clean up the symbol dictionary itself
         #
         if clean_symdict:
-#            print '-- SymDict.cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
+            print '-- SymDict.cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
             self.spoken_form_info = {}
             self.symbol_info = {}
             for an_unresolved in self.unresolved_abbreviations.keys():
-#                print '-- SymDict.cleanup: removing unresolved abbreviation %s' % an_unresolved
+                print '-- SymDict.cleanup: removing unresolved abbreviation %s' % an_unresolved
                 if self.abbreviations.has_key(an_unresolved):
                     del self.abbreviations[an_unresolved]
             self.unresolved_abbreviations = {}
