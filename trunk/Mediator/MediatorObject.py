@@ -86,6 +86,12 @@ class MediatorObject(Object.Object):
     
     **INSTANCE ATTRIBUTES**
 
+    *ServerMainThread owner* -- server which owns this mediator, or
+    None.  Note: if owner is set, the id field MUST be provided.
+
+    STR *id* -- The unique identifier assigned by the server to
+    this MediatorObject
+
     [AppState] *app* -- interface to editor 
 
     *BOOL owns_app* -- does the MediatorObject own the editor app?  If
@@ -127,7 +133,7 @@ class MediatorObject(Object.Object):
     
     def __init__(self, app = None, interp=CmdInterp.CmdInterp(), 
 		 window = 0, owns_app = 1, exclusive=0,
-                 allResults = 0, **attrs):
+                 allResults = 0, owner = None, id = None, **attrs):
 #        print '-- MediatorObject.__init__: called, window=%s' % window
         sr_interface.connect('off')        
         self.deep_construct(MediatorObject,
@@ -136,7 +142,9 @@ class MediatorObject(Object.Object):
 			     'interp': interp,
                              'mixed_grammar': None,
                              'code_select_grammar': None,
-			     'window': window},
+			     'window': window,
+			     'owner': owner,
+			     'id': id},
                             attrs,
                             {})
         self.mixed_grammar = \
@@ -264,12 +272,54 @@ class MediatorObject(Object.Object):
 
 	if self.mixed_grammar:
 	    self.mixed_grammar.cleanup()
+	    self.mixed_grammar = None
 	if self.code_select_grammar:
 	    self.code_select_grammar.cleanup()
+	    self.code_select_grammar = None
 	if self.owns_app and self.app:
 	    self.app.cleanup()
 	    del self.app
                 
+    def close_app_cbk(self, instance_name):
+	"""method called by our AppState to tell us that it is closing, or
+	disconnecting from the mediator.  This method is included
+	only to allow an external editor to disconnect when we are
+	running tcp_server with this old MediatorObject implementation.
+	MediatorObject responds to this message only by informing its,
+	if any.
+
+	**INPUTS**
+
+	*STR* instance_name -- name of the instance.  This parameter is
+	included only for compatibility with the usual call from
+	AppState to the AppMgr.  This implementation of MediatorObject
+	has only one editor instance, so it ignores this parameter
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.owner and self.id:
+	    self.owner.delete_instance_cbk(self.id)
+
+    def new_window(self, instance_name):
+	"""method called by our AppState to tell us that the editor has 
+	opened a new window.  This version of MediatorObject doesn't
+	support multiple windows, so we just ignore it.
+	
+	**INPUTS**
+
+	*STR* instance_name -- name of the instance.  This parameter is
+	included only for compatibility with the usual call from
+	AppState to the AppMgr.  This implementation of MediatorObject
+	has only one editor instance, so it ignores this parameter
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	pass
+	
     def add_csc(self, acmd, add_voc_entry=1):
 	"""Add a new Context Sensitive Command.
 

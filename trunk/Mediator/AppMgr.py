@@ -390,6 +390,21 @@ class AppMgr(OwnerObject):
 	    self.instances[instance].cleanup()
 	    del self.instances[instance]
 
+    def close_app_cbk(self, instance):
+	"""callback from AppState which indicates that the application has 
+	closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+# for now at least, this does the same thing as delete_instance
+	self.delete_instance(instance)
+
     def new_window(self, instance):
 	"""called when the editor notifies us of a new window for the 
 	specified instance

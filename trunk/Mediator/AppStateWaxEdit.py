@@ -26,7 +26,8 @@ import auto_test, debug
 import AppState, AppStateNonCached, as_services
 from SourceBuffTB import SourceBuffTB
 
-class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
+class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
+	AppState.AppChangeSpec):
     """This class is a an AppState wrapper on top of WaxEdit.
 
     It is used to decouple from any external editor so that we can
@@ -568,7 +569,61 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	self.open_buffers[buff_name].cleanup()
 	del self.open_buffers[buff_name]
 	return 1
-        
 
+    def query_buffer_from_app(self, buff_name):
+	"""query the application to see if a buffer by the name of buff_name 
+	exists.
 
+        **INPUTS**
+
+	*STR* buff_name -- name of the buffer to check
+
+        **OUTPUTS**
+
+	*BOOL* -- does the buffer exist?
+	"""
+	return self.open_buffers.has_key(buff_name)
+
+    def open_buffers_from_app(self):
+	"""retrieve a list of the names of open buffers from the
+	application.
+
+        **INPUTS**
+
+	*none*
+
+        **OUTPUTS**
+
+	*[STR]* -- list of the names of open buffers
+	"""
+	return self.open_buffers.keys()
+
+    def set_change_callback(self, change_callback = None):
+	"""changes the callback to a new function
+
+	**INPUTS**
+      
+	*FCT* change_callback --
+	change_callback( *INT* start, *INT* end, *STR* text, 
+	*INT* selection_start, *INT* selection_end, 
+	*STR* buff_name)
+
+	The arguments to the change callback specify the character offsets
+	of the start and end of the changed region (before the change),
+	the text with which this region was replaced, the start and end
+	of the selected region (after the change), and the name of the
+	buffer reporting the change
+
+	Note the difference between this change_callback and the
+	TextBufferWX one: here the name of the buffer is returned,
+	rather than a reference to the underlying TextBufferWX.  Also,
+	this change callback is called only when the change is
+	initiated by the editor, not when the mediator calls a method
+	which makes a change.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.the_editor.set_change_callback(change_callback)
 
