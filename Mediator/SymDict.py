@@ -32,6 +32,7 @@ import DictConverter
 import util
 from debug import trace
 import debug
+import StringIO
 
 import copy, cPickle, exceptions, os, re, string, sys
 import shutil
@@ -464,6 +465,10 @@ class SymDict(OwnerObject):
     attributes which should be persistent.  If *None*
     it means the object should never be saved to/read from file.
 
+    *STR* export_file -- name of the default file to which
+    abbreviations are exported (without the trailing .py, so that we can
+    append .on_init)
+
     *BOOL* from_file -- true if the symbol dictionary was successfully
     loaded from a file
 
@@ -491,7 +496,7 @@ class SymDict(OwnerObject):
     .. [symbols_as_one_string] file:///./SymDict.SymDict.html#symbols_as_one_string"""
 
     def __init__(self, sym_file = None, interp = None, 
-                 **attrs):
+        export_file = None, **attrs):
 
         # These attributes can't be set with constructor arguments
         self.decl_attrs({'_cached_symbols_as_one_string': '',
@@ -512,17 +517,117 @@ class SymDict(OwnerObject):
         
         self.deep_construct(SymDict,
                             {'sym_file': sym_file,
+                             'export_file': export_file,
                              'interp': interp,
                              'from_file': 0,
                              'file_time': None},
                             attrs)
         self.name_parent('interp')
+        if not export_file:
+            self.export_file = os.path.join(vc_globals.state, 'abbrevs')
         self.from_file = self.init_from_file()
 
 #        print '-- SymDict.__init__: returning self.__dict__=%s' % self.__dict__
 
+    def export_abbreviations(self, file):
+        """export abbreviation preferences to a text file
 
-    def save(self, file = None):
+        **INPUTS**
+
+        *STR file* -- the name of the output file
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the abbreviations were successfully written to
+        the file
+        """
+        try:
+            backup = None
+            if os.path.exists(file):
+                backup, ext = os.path.splitext(file)
+                if ext == '.bak':
+                    backup = file + '.bak'
+                else:
+                    backup = backup + '.bak'
+                shutil.copyfile(file, backup)
+            f = open(file, "w")
+        except:
+            return 0
+        return self.export_to_file(f)
+
+    def export_to_file(self, f):
+        """export abbreviation preferences to an open text file
+
+        **INPUTS**
+
+        *file f* -- an empty file open for writing
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the abbreviations were successfully written to
+        the file
+        """
+        try:
+            lines = {}
+            words = self.abbreviations.keys()
+            for word in words:
+                cmd = 'add_abbreviations(%s, %s)\n' \
+                    % (repr(word), repr(self.abbreviations[word]))
+                lines[word] = [cmd]
+            words = self.alt_abbreviations.keys()
+            for word in words:
+                cmd = 'add_alt_abbreviations(%s, %s)\n' \
+                    % (repr(word), repr(self.alt_abbreviations[word]))
+                try:
+                    lines[word].append(cmd)
+                except KeyError:
+                    lines[word] = [cmd]
+            words = lines.keys()
+            words.sort(lambda a, b: cmp(string.lower(a), string.lower(b)))
+            for word in words:
+                f.writelines(lines[word])
+            f.write('\n')
+                
+            lines = {}
+            abbreviations = self.pronunciations.keys()
+            for abbreviation in abbreviations:
+                pronunciations = self.pronunciations[abbreviation]
+                pronunciations.sort()
+                lines[abbreviation] = []
+                for pronunciation in pronunciations:
+                    cmd = 'add_pronunciation(%s, %s)\n' \
+                        % (repr(abbreviation), repr(pronunciation))
+                    lines[abbreviation].append(cmd)
+            abbreviations = self.extra_expansions.keys()
+            for abbreviation in abbreviations:
+                expansions = self.extra_expansions[abbreviation]
+                expansions.sort()
+                for expansion in expansions:
+                    cmd = 'add_extra_expansion(%s, %s)\n' \
+                        % (repr(abbreviation), repr(expansion))
+                    try:
+                        lines[abbreviation].append(cmd)
+                    except KeyError:
+                        lines[abbreviation] = [cmd]
+            abbreviations = self.acronyms.keys()
+            for abbreviation in abbreviations:
+                cmd = 'add_acronym(%s)\n' % repr(abbreviation)
+                try:
+                    lines[abbreviation].append(cmd)
+                except KeyError:
+                    lines[abbreviation] = [cmd]
+            abbreviations = lines.keys()
+            abbreviations.sort()
+            abbreviations.sort(lambda a, b: cmp(string.lower(a), 
+                string.lower(b)))
+            for abbreviation in abbreviations:
+                f.writelines(lines[abbreviation])
+            f.close()
+            return 1
+        except:
+            return 0
+
+    def save(self, file = None, export_abbreviations = 1):
         """save persistent attributes to a file
 
         **INPUTS**
@@ -531,6 +636,10 @@ class SymDict(OwnerObject):
         given at construction.  Normally, this argument should be
         omitted.  It is included only for regression testing of the
         persistence features of SymDict
+
+        *BOOL export_abbreviations* -- if true, export abbreviations to
+        text file abbrevs.py.  Ignored if we are running regression
+        tests
 
         **OUTPUTS**
 
@@ -585,6 +694,15 @@ class SymDict(OwnerObject):
             return
 
         f.close()
+        if self.sym_file and export_abbreviations:
+# unless we are running regression tests, export abbreviation
+# preferences to a file as well
+            export_file = self.export_file + '.py'
+            exported = self.export_abbreviations(export_file)
+            if not exported:
+                msg = 'Warning: failure to export current abbreviation\n'
+                msg = msg + 'preferences to abbrevs.py\n'
+                sys.stderr.write(msg)
 
     def match_phrase(self, phrase):
         """looks for a complete or partial (prefix) match of the
@@ -978,7 +1096,7 @@ class SymDict(OwnerObject):
         return 1
 
     def abbrev_config(self):
-        """Parse standard symbols for the various programming languages.
+        """import abbreviations from standard files
         
         **INPUTS**
         
@@ -1003,6 +1121,59 @@ class SymDict(OwnerObject):
 
         if not files:
             return
+        for file in files:
+            try:
+                try:
+                    f = open(file, "r")
+                except:
+                    msg = 'Error opening abbreviation file:\n%s\n' % file
+                    sys.stderr.write(msg)
+                    continue
+                self.import_abbreviations(f)
+            except:
+                traceback.print_exc(file = sys.stderr)
+    
+    def clear_abbreviations(self):
+        """remove all existing abbreviations and expansions
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.abbreviations = {}
+        self.alt_abbreviations = {}
+        self.expansions = {}
+        self.pronunciations = {}
+        self.acronyms = {}
+        self.extra_expansions = {}
+
+    def import_abbreviations(self, f, instructions = None):
+        """import abbreviations and expansions from standard files
+
+        Note: import_abbreviations may raise exceptions due to problems
+        opening the file or executing the python commands therein
+
+        **INPUTS**
+
+        *file or STR f* -- string or open file object from which to import
+        abbreviations
+
+        *STR instructions* -- indicates whether import_abbreviations
+        should 'append' the new abbreviations to the existing ones,
+        'prepend' them, or 'replace' them.  The default is to 'append'.
+        The other options should only be used when the user has
+        explicitly requested them, and (for 'replace') confirmed that
+        existing abbreviations will be lost.
+
+        **OUTPUTS**
+
+        *none*
+
+        """
         names = {}
         names['add_abbreviation'] = self.add_abbreviation
         names['add_abbreviations'] = self.add_abbreviations
@@ -1010,18 +1181,27 @@ class SymDict(OwnerObject):
         names['add_acronym'] = self.add_acronym
         names['add_pronunciation'] = self.add_pronunciation
         names['add_extra_expansion'] = self.add_extra_expansion
-        for file in files:
-            try:
-                execfile(file, names)
-            except:
-                traceback.print_exc(file = sys.stderr)
+        if instructions == 'prepend':
+# store current abbreviations
+            temp_storage = StringIO.StringIO()
+            self.export_to_file(temp_storage)
+        if instructions == 'prepend' or instructions == 'replace':
+            self.clear_abbreviations()
+        exec f in names
+        if instructions == 'prepend':
+# append back the old abbreviations
+            self.import_abbreviations(temp_storage)
     
-    def finish_config(self):
+    def finish_config(self, mark_user = 1):
         """Finish performing those parts of the SymDict
         configuration which can't take place until after the VoiceCode
         configuration files have been executed
         
         **INPUTS**
+
+        *BOOL mark_user* -- if true, mark the user so we don't have to
+        scan the symbol files every time.  Generally, this should be
+        true except in the regression test for SymDict persistence
 
         *none*
         
@@ -2057,7 +2237,7 @@ class SymDict(OwnerObject):
         shutil.copyfile(file, backup)
         os.remove(file)
 
-    def _failed_read(self, msg, fatal = 0):
+    def _failed_read(self, msg):
         """private method to rename a persistent SymDict file if we fail 
         to read it.
 
@@ -2065,12 +2245,37 @@ class SymDict(OwnerObject):
 
         *STR msg* -- reason for failure
 
-        *BOOL fatal* -- true if the error is fatal
-
         **OUTPUTS**
+
+        *BOOL* -- true if we were able to recover abbreviations from an
+        exported text file.
         """
         file = self.sym_file
         backup = file + '.failed'
+        shutil.copyfile(file, backup)
+        os.remove(file)
+
+        fatal = 1
+        on_exit = os.path.join(vc_globals.state, 'abbrevs.py')
+        on_init = os.path.join(vc_globals.state, 'abbrevs.on_init.py')
+        recent = None
+        exit_date = None
+        if os.path.exists(on_exit):
+            exit_date = util.last_mod(on_exit)
+            recent = on_exit
+        if os.path.exists(on_init):
+            init_date = util.last_mod(on_init)
+            if recent and init_date > exit_date:
+                recent = on_init
+        if recent:
+            try:
+                f = open(recent, "r")
+                self.import_abbreviations(f)
+                fatal = 0
+            except:
+                traceback.print_exc(file = sys.stderr)
+                self.clear_abbreviations()
+
         msg = msg + 'We are renaming it to \n%s\n' % backup \
             + 'so that it will not recur next time you run the mediator\n'
         if fatal:
@@ -2078,10 +2283,15 @@ class SymDict(OwnerObject):
                 + '\nHowever, if you proceed without correcting this\n' \
                 + 'problem, you will lose all persistent known symbols\n' \
                 + 'and abbreviation preferences.\n'
+        else:
+            msg = msg \
+                + '\nWe were able to recover your recent abbreviation\n' \
+                + 'preferences from \n%s\n' % recent \
+                + 'However, if you have scanned any source files\n' \
+                + 'for existing symbols, you will need to re-scan them.\n'
+
         msg = msg + '\nIf this error occurred following an update to a\n' \
                   + 'new version of VoiceCode, please submit a bug report.\n'
-        shutil.copyfile(file, backup)
-        os.remove(file)
         if fatal:
             self.sym_file = None
         if self.interp:
@@ -2090,34 +2300,41 @@ class SymDict(OwnerObject):
             sys.stderr.write(msg)
             if fatal:
                 raise RuntimeError(msg)
+        return fatal
 
-    def init_from_file(self):
-        """Initialises the symbol dictionary from a persistent version
-        stored on file.
+    def dict_from_file(self, on_failure = None):
+        """Unpickles the dictionary containing a persistent version of
+        the symbol dictionary.
 
         The file is *self.sym_file*. If *None*, don't reinitialise.
         
         **INPUTS**
-        
-        *none* -- 
+
+        *FCT(STR) on_failure* -- callback function to call if we fail to
+        read from the file.  Normally, this defaults to the _failed_read
+        method, which renames the file and displays an error message
+        so the user knows the consequences of the failure to read.  The
+        only case when on_failure should be specified differently is
+        during regression testing of the persistent SymDict system.
         
         **OUTPUTS**
         
-        *BOOL* -- true if we successfully retrieved the state from the
-        file
+        *{STR: ANY}* -- the dictionary, or None if we failed to read it.
         """
+        if on_failure is None:
+            on_failure = self._failed_read
         file = self.sym_file
         if file is None:
-            return 0
+            return None
         if not os.path.exists(file):
-            return 0
+            return None
         try:
             f = open(file, "r")
         except:
             msg = 'WARNING: Failed to open symbol dictionary file\n%s\n' \
                 % file
-            self._failed_read(msg, fatal = 1)
-            return 0
+            on_failure(msg)
+            return None
         try:
             try:
                 values = cPickle.load(f)
@@ -2125,19 +2342,46 @@ class SymDict(OwnerObject):
                 msg = 'WARNING: error reading symbol dictionary file\n%s\n' \
                     % self.sym_file
                 raise ErrorReadingPersistDict(msg)
-            try:
-                version = values['version']
-            except KeyError:
-                version = 1
-            debug.trace('SymDict.init_from_file',
-                'state file version %s (current is %s)' \
-                % (version, current_version))
         except ErrorReadingPersistDict, e:
             f.close()
-            self._failed_read(e.message, fatal = 1)
-            return 0
+            on_failure(e.message)
+            return None
 
         f.close()
+        return values
+
+    def init_from_file(self, on_failure = None):
+        """Initialises the symbol dictionary from a persistent version
+        stored on file.
+
+        The file is *self.sym_file*. If *None*, don't reinitialise.
+        
+        **INPUTS**
+
+        *FCT(STR) on_failure* -- callback function to call if we fail to
+        read from the file.  Normally, this defaults to the _failed_read
+        method, which renames the file and displays an error message
+        so the user knows the consequences of the failure to read.  The
+        only case when on_failure should be specified differently is
+        during regression testing of the persistent SymDict system.
+        
+        **OUTPUTS**
+        
+        *BOOL* -- true if we successfully retrieved the state from the
+        file
+        """
+        if on_failure is None:
+            on_failure = self._failed_read
+        values = self.dict_from_file()
+        if values is None:
+            return 0
+        try:
+            version = values['version']
+        except KeyError:
+            version = 1
+        debug.trace('SymDict.init_from_file',
+            'state file version %s (current is %s)' \
+            % (version, current_version))
         try:
             if version != current_version:
                 if not symdict_cvtr.known_version(version):
@@ -2161,13 +2405,23 @@ class SymDict(OwnerObject):
             if okay:
                 self.file_time = util.last_mod(self.sym_file)
                 if version != current_version:
-                    self.save()
+# don't export abbreviations automatically, because we want to use a different
+# file name
+                    self.save(export_abbreviations = 0)
+            if okay:
+                export_file = self.export_file + '.on_init.py'
+                exported = self.export_abbreviations(export_file)
+                if not exported:
+                    msg = 'Warning: failure to export initial abbreviation\n'
+                    msg = msg + 'preferences to abbrevs.on_init.py\n'
+                    sys.stderr.write(msg)
             return okay
         except ErrorReadingPersistDict, e:
-            self._failed_read(e.message, fatal = 1)
+            on_failure(e.message)
             return 0
 
-    def init_from_dictionary(self, dict):
+
+    def init_from_dictionary(self, dict, on_failure = None):
         """Initialises the symbol dictionary object from a dictionary of
         attributes.
 
@@ -2179,11 +2433,20 @@ class SymDict(OwnerObject):
         *{STR: ANY} dict* -- dictionary of attributes necessary to
         initialize SymDict
         
+        *FCT(STR) on_failure* -- callback function to call if we fail to
+        read from the file.  Normally, this defaults to the _failed_read
+        method, which renames the file and displays an error message
+        so the user knows the consequences of the failure to read.  The
+        only case when on_failure should be specified differently is
+        during regression testing of the persistent SymDict system.
+        
         **OUTPUTS**
         
         *BOOL* -- true if we successfully initialized from the
         dictionary
         """
+        if on_failure is None:
+            on_failure = self._failed_read
         try:
             try:
                 version = dict['version']
@@ -2210,7 +2473,7 @@ class SymDict(OwnerObject):
 ##} Missing field
         except ErrorReadingPersistDict:
 ## Cleanup (failed_read/rename here?)
-            self._failed_read(msg, fatal = 1)
+            on_failure(msg)
             return 0
 
         try:
@@ -2243,7 +2506,7 @@ class SymDict(OwnerObject):
             msg = msg + '\nwhile initializing SymDict with dictionary data\n'
             msg = msg + ' read from symbol dictionary file\n%s\n' \
                   % self.sym_file
-            self._failed_read(msg, fatal = 1)
+            on_failure(msg)
             return 0
         return 1
 
@@ -2578,3 +2841,5 @@ def define_language(name, definition):
     language_definitions[name] = definition
 
 
+# defaults for vim - otherwise ignore
+# vim:sw=4

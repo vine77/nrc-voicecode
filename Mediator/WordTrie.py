@@ -137,6 +137,9 @@ class WordTrie(Object):
             matches.append((self.value, phrase))
         return matches
 
+    def items(self):
+        return self.all_phrase_values()
+
     def all_phrase_values(self, prefix = None):
         """returns a set of all phrases defined in the WordTrie,
         starting (optionally) with a given prefix
@@ -150,17 +153,23 @@ class WordTrie(Object):
 
         *[([STR], ANY)]* --  list of (phrase, value) tuples 
         """
+        results = []
         if prefix:
             word = prefix[0]
             rest = prefix[1:]
+            if self.value is not None:
+                results.append(([], self.value))
             if self.branches.has_key(word):
-                return self.branches[word].all_phrase_values(rest)
-            return []
-        results = []
+                branch_results = self.branches[word].all_phrase_values(rest)
+                for phrase, value in branch_results:
+                    results.append(([word] + phrase, value))
+            return results
+        if self.value is not None:
+            results.append(([], self.value))
         for word, branch in self.branches.items():
             branch_results = branch.all_phrase_values()
             for phrase, value in branch_results:
-                results.append([word] + phrase, value)
+                results.append(([word] + phrase, value))
         return results
 
 def test_translator(w, sentence):

@@ -40,6 +40,8 @@ import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
 import debug
+import DiffCrawler
+import difflib
 
 from actions_gen import *
 from actions_C_Cpp import *
@@ -826,6 +828,342 @@ def test_persistence():
     
 
 add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
+
+
+##############################################################################
+# Testing persistent SymDict storage system, especially the version
+# updating system
+##############################################################################
+
+class DictReadFailure:
+    def __init__(self):
+        self.reset()
+    def reset(self):
+        self.failed = 0
+        self.msg = ''
+    def on_failure(self, message):
+        self.failed = 1
+        self.msg = message
+
+def mod_diff(x, y):
+    raw_diff = difflib.ndiff(x, y)
+    return filter(lambda x: x[0] != ' ', raw_diff)
+
+def test_SymDict_storage():
+    test_data = vc_globals.test_data
+    export_file = os.path.join(test_data, 'abbrevs')
+
+# create a new SymDict, without reading from a file
+    symbols = SymDict.SymDict(export_file = export_file)
+    symbols.export_abbreviations(export_file + '.py')
+
+    f = open(export_file + '.py', "r")
+    print "Exporting abbreviations from an empty SymDict, so"
+    print "the following export file should be empty (except for"
+    print "one blank line)"
+    print "-----------------------------------------"
+    line = f.readline()
+    last = '\n'
+    while line:
+        sys.stdout.write(line)
+        last = line
+        line = f.readline()
+    f.close()
+    if last[-1] != '\n': print '\n'
+    print "-----------------------------------------\n"
+
+    symbol_file = os.path.join(test_data, 'selected_py_sym.py')
+    symbols.standard_symbols_in([symbol_file])
+     
+    abbrev_file = os.path.join(test_data, 'py_abbrevs.py')
+    symbols.abbreviations_in([abbrev_file])
+
+# make sure we read those symbol and abbreviation files
+    symbols.finish_config(mark_user = 0)
+
+    dict_file = os.path.join(test_data, 'symdict.dict')
+
+    symbols.sym_file = dict_file
+    symbols.save(dict_file)
+
+    fail = DictReadFailure()
+    persistent_symbols = SymDict.SymDict(export_file = export_file + '2')
+    persistent_symbols.sym_file = dict_file
+    d = persistent_symbols.dict_from_file(on_failure = fail.on_failure)
+    if fail.failed:
+        print "ERROR: failed to read \n%s:" % util.within_VCode(dict_file)
+        print fail.msg
+        return
+
+    version = d['version']
+    if version != SymDict.current_version:
+        print "ERROR: version in persistent file doesn't match"
+        print "SymDict.current_version"
+        return
+
+    curr_dict_file = os.path.join(test_data, 'current_symdict.dict')
+    prev_dict_file = os.path.join(test_data, 'previous_symdict.dict')
+    curr_symbols = SymDict.SymDict(export_file = export_file + '.current')
+    curr_symbols.sym_file = curr_dict_file
+    d_curr = curr_symbols.dict_from_file(on_failure = fail.on_failure)
+    if fail.failed:
+        print "ERROR: failed to read \n%s:" % util.within_VCode(curr_dict_file)
+        print fail.msg
+        return
+
+    was_version = d_curr['version']
+    if was_version == version:
+        print "version number unchanged\n"
+        print "comparing symdict.dict created from scratch with"
+        print "the reference dictionary current_symdict.dict"
+        s = DiffCrawler.StructDiff(ignore_heterogeneous = 1, all = 1)
+# since the two dictionaries should be the same in detail, we ignore 
+# heterogeneous containers (but not empty ones) for now, assuming that
+# the detailed comparison with ObjDiff will catch any problems in such
+# containers
+        s.compare(d_curr, d)
+        same_difference = s.differences()
+        incr_version = \
+            "\nIf these differences do reflect changes made to" \
+          + "the persistent SymDict format, you must:\n" \
+          + "  1. increment current_version in SymDict.py\n" \
+          + "  2. create a new SingleVersionDictConverter to\n" \
+          + "     convert from the old version\n" \
+          + "  3. prepend this converter to the global symdict_cvtr\n" \
+          + "     in SymDict.py\n" \
+          + "  4. re-run this test to verify that the old version\n" \
+          + "     can be properly converted\n" 
+        err = \
+            "ERROR: %s of persistent SymDict dictionary appears\n" \
+          + "to have changed, without a change in the version number.\n" \
+          + "Both current_symdict.dict and symdict.dict\n" \
+          + "(the latter created from scratch) have version %d\n" \
+          + "but the following %sdifferences were found:\n"
+        if same_difference:
+            print err % ('structure', version, 'structural ')
+            for diff in same_difference:
+                print diff.location()
+                print diff.description()
+                print ""
+            print incr_version
+            return
+
+# Currently (8/2/03), we are still adding symbols containing unresolved
+# abbreviations to the vocabulary.  As a result, the SymDict object
+# symbols, which we create from scratch, will not detect single word
+# symbols as unresolved abbreviations, if they are present in the
+# vocabulary from a previous test.  This hack avoids erroneously
+# reporting this condition as if it were a change in the persistent 
+# SymDict storage system.
+# - DCF
+        d['unresolved_abbreviations'] = d_curr['unresolved_abbreviations']
+
+# the two dictionaries should also be the same in detail
+        o = DiffCrawler.ObjDiff(all = 1)
+        o.compare(d_curr, d)
+        same_difference = o.differences()
+        if same_difference:
+            print err % ('contents', version, '')
+            for diff in same_difference:
+                print diff.location()
+                print diff.description()
+                print ""
+            print "\nThese differences could be due to a change to"
+            print "the persistent SymDict format without a corresponding"
+            print "increment in current_version in SymDict.py.  They could"
+            print "also be due to changes to the input files py_abbrevs.py"
+            print "and selected_py_sym.py in"
+            print util.within_VCode(vc_globals.test_data) 
+            print incr_version
+            print "\nIf these differences are simply due to changes"
+            print "in the input files, then you must verify the new"
+            print "stored symdict.dict in "
+            print util.within_VCode(vc_globals.test_data) 
+            print "manually, and then copy it to current_symdict.dict"
+            print "in the same directory."
+            return
+        print "no differences found\n"
+
+        print "initializing SymDict from dictionary\n"
+        fail.reset()
+        okay = curr_symbols.init_from_dictionary(d_curr, 
+            on_failure = fail.on_failure)
+        if fail.failed:
+            print "ERROR: failed to initialize SymDict from dictionary"
+            print "read from %s\n" % util.within_VCode(curr_dict_file) 
+            print fail.msg
+            print "\nFix the problem and re-run this test"
+            return
+        if not okay:
+            print "ERROR: init_from_dictionary returned false, but"
+            print "on_failure was not called."
+            return
+        print "initialization from dictionary was successful"
+        okay = curr_symbols.export_abbreviations(export_file + '.current.py')
+        if not okay:
+            print "ERROR: failed to export abbreviations to file"
+            return
+        curr_file = export_file + '.current.py'
+        prev_file = export_file + '.current.bak'
+        try:
+            f = open(curr_file, "r")
+            curr_abbrev = f.readlines()
+            f.close()
+        except IOError:
+            print "ERROR: unable to read abbreviations file %s" % \
+                util.within_VCode(curr_file) 
+            return
+        try:
+            f = open(prev_file, "r")
+            prev_abbrev = f.readlines()
+            f.close()
+            changes = mod_diff(prev_abbrev, curr_abbrev)
+            if changes:
+                print "Unexpected differences between %s\n and %s:\n" \
+                    % (util.within_VCode(prev_file),
+                       util.within_VCode(curr_file))
+                sys.stdout.writelines(changes)
+                print "\nIf these differences are not significant, simply"
+                print "re-run the test to eliminate this error message"
+            else:
+                print "Abbreviation file was unchanged, as expected"
+        except IOError:
+            print "ERROR: unable to read previous abbreviations file %s" % \
+                util.within_VCode(prev_file)
+
+        print "initializing fresh SymDict from dictionary\n"
+        fail.reset()
+        okay = persistent_symbols.init_from_dictionary(d, 
+            on_failure = fail.on_failure)
+        if fail.failed:
+            print "ERROR: failed to initialize SymDict from dictionary"
+            print "read from %s\n" % util.within_VCode(dict_file) 
+            print fail.msg
+            print "\nFix the problem and re-run this test"
+            return
+        if not okay:
+            print "ERROR: init_from_dictionary returned false, but"
+            print "on_failure was not called."
+            return
+        print "initialization from dictionary was successful"
+        fresh_file = export_file + '.py'
+        okay = persistent_symbols.export_abbreviations(fresh_file)
+        if not okay:
+            print "ERROR: failed to export abbreviations to file"
+            return
+        try:
+            f = open(fresh_file, "r")
+            fresh_abbrev = f.readlines()
+            f.close()
+            changes = mod_diff(curr_abbrev, fresh_abbrev)
+            if changes:
+                print "Unexpected differences between %s\n and %s:\n" \
+                    % (util.within_VCode(curr_file), 
+                    util.within_VCode(fresh_abbrev))
+                sys.stdout.writelines(changes)
+                print "\nThe most likely cause is a change to the input"
+                print "files py_abbrevs.py and selected_py_sym.py in"
+                print util.within_VCode(vc_globals.test_data) 
+                print "\nIf these files have been changed, simply copy"
+                print "symdict.dict to current_symdict.dict and re-run"
+                print "this test."
+            else:
+                print "Fresh abbreviation file matches current one, as expected"
+        except IOError:
+            print "ERROR: unable to read abbreviations file %s" % \
+                util.within_VCode(fresh_file)
+            return
+
+    elif was_version > version:
+        print "ERROR: version number decreased from %d to %d" \
+            % (was_version, version)
+        return
+
+    else:
+        if was_version < version - 1:
+            print "version skipped from %d to %d" % (was_version, version)
+        print "Attempting to convert from version %d" % was_version
+        print "to current version, %d" % version
+        fail.reset()
+        okay = curr_symbols.init_from_file(on_failure = fail.on_failure)
+        if fail.failed:
+            print "ERROR: failed to convert to current version"
+            print fail.msg
+            print "\nFix the problem with the conversion and re-run this test"
+            return
+        if not okay:
+            print "ERROR: failed to re-read the dictionary from "
+            print util.within_VCode(curr_dict_file)
+            return
+        print "version update was successful"
+        name, ext = os.path.splitext(curr_dict_file)
+        backup = name + '.%d' % was_version + ext
+        if not os.path.exists(backup):
+            print "\nSymDict failed to rename %s\nto %s" % \
+                (util.within_VCode(curr_dict_file), util.within_VCode(backup))
+            return
+# undo the renaming, so that failures in the following several checks will
+# cause the next attempt to run this regression test to try the whole
+# conversion over again
+        os.rename(backup, curr_dict_file)
+        curr_file = export_file + '.current.py'
+        try:
+            f = open(curr_file, "r")
+            curr_abbrev = f.readlines()
+            f.close()
+        except IOError:
+            print "ERROR: unable to read abbreviations file %s" % \
+                util.within_VCode(curr_file) 
+            return
+        init_file = export_file + '.on_init.py'
+        try:
+            f = open(init_file, "r")
+            init_abbrev = f.readlines()
+            f.close()
+            changes = mod_diff(curr_abbrev, init_abbrev)
+            if changes:
+                print "Unexpected differences between %s\n and %s:\n" \
+                    % (util.within_VCode(curr_file),
+                       util.within_VCode(init_file))
+                sys.stdout.writelines(changes)
+                print "\nThis may indicate that abbreviation preferences"
+                print "were lost during the update"
+                print "\nIf these differences are not significant, copy"
+                print "replace the former file with a copy of the latter"
+                return
+            else:
+                print "Abbreviation file was unchanged, as expected"
+        except IOError:
+            print "ERROR: unable to read new abbreviations file %s" % \
+                util.within_VCode(init_file)
+            return
+
+
+        print "\nupdate successful"
+        if was_version < version - 1:
+            print "\nHowever, version skipped from %d to %d" % (was_version, version)
+            print "therefore, we are leaving the old version as"
+            print util.within_VCode(curr_dict_file)
+            print "If the skip was accidental, fix the new version number"
+            print "and re-run these tests"
+            print "If the skip was done deliberately, please manually"
+            print "rename this file to %s,\n" % \
+                util.within_VCode(prev_dict_file)
+            print "rename %s\nto %s" % (util.within_VCode(dict_file),
+                util.within_VCode(curr_dict_file))
+            print "and re-run this test"
+        else:
+        # update worked, and abbreviation files compared okay, so now
+        # we replace current_symdict.dict with the fresh version
+            os.rename(curr_dict_file, prev_dict_file)
+            persistent_symbols.save(curr_dict_file)
+            print "re-run the test to check the new current version"
+
+
+
+add_test('SymDict_storage', test_SymDict_storage, 
+    desc='testing storage and version updating system for SymDict')
+
 
 
 ##############################################################################
@@ -2606,11 +2944,6 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
 def test_basic_correction():
     testing.init_simulator_regression()
     instance_name = testing.instance_name()
-    if instance_name == None:
-        msg = '\n***Using old Mediator object: '
-        msg = msg + 'unable to test correction features***\n'
-        print msg
-        return
     correction_available = testing.correction_available()
     if not correction_available:
         msg = '\n***No correction available: '
@@ -2892,10 +3225,7 @@ def test_set_text():
     testing.init_simulator_regression()
     the_mediator = testing.mediator()
     instance_name = testing.instance_name()
-    if instance_name: 
-        editor = the_mediator.editors.app_instance(instance_name)
-    else:
-        editor = the_mediator.app
+    editor = the_mediator.editors.app_instance(instance_name)
     commands.open_file(small_buff_py)
     buffer = editor.curr_buffer()
     buffer.set_text('nothing left')
@@ -2925,10 +3255,7 @@ def test_insert_delete_commands():
    test_say(['back space 5'])
    mediator = testing.mediator()
    instance_name = testing.instance_name()
-   if instance_name:
-       editor = mediator.editor_instance(instance_name)
-   else:
-       editor = mediator.app
+   editor = mediator.editor_instance(instance_name)
    editor.set_text('some additional text')
    test_say(['select', 'additional'], never_bypass_sr_recog=1)
    test_say(['back space'])
@@ -2976,10 +3303,7 @@ def test_mixed_kbd_and_voice_editing():
     the_mediator = testing.mediator()    
     commands = testing.namespace()['commands']    
     instance_name = testing.instance_name()
-    if instance_name: 
-        app = the_mediator.editors.app_instance(instance_name)
-    else:
-        app = the_mediator.app    
+    app = the_mediator.editors.app_instance(instance_name)
         
     kbd_evt_sim = testing.kbd_event_sim_factory(app)
 
@@ -3040,10 +3364,11 @@ def test_Emacs_split_window():
     commands = testing.namespace()['commands']    
     instance_name = testing.instance_name()
     the_mediator = testing.mediator()    
-    if instance_name: 
-        app = the_mediator.editors.app_instance(instance_name)
-    else:
-        app = the_mediator.app    
+# this is useless here, since 
+    app = the_mediator.editors.app_instance(instance_name)
+    if app.app_name != 'emacs':
+        print 'This test only works when emacs is the test editor'
+        return
         
     kbd_evt_sim = testing.kbd_event_sim_factory(app)
     
