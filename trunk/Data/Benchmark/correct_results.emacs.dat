@@ -4559,6 +4559,29 @@ after_cursor: (no block)
 
 
 *******************************************************************************
+* Name        : language_name
+* Description : Testing language name of a buffer.
+*******************************************************************************
+
+WARNING: source file 'dummy.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+Language for this file is: python
+
+WARNING: source file 'dummy.c' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+Language for this file is: C
+
+
+
+*******************************************************************************
 * Name        : large_messages
 * Description : Send a message that has more than 1024 character (length of a message chunk)
 *******************************************************************************

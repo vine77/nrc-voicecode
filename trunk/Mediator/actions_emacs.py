@@ -21,7 +21,7 @@
 
 """Actions specific for Emacs"""
 
-from actions_gen import Action
+from actions_gen import *
 import debug
 import sr_interface
 
@@ -60,6 +60,7 @@ class ActionEmacsListBuffers(Action):
         debug.trace('ActionEmacsListBuffers.execute', '** invoked')
         sr_interface.send_keys("{Esc}xlist-buffers{Enter}")
         sr_interface.send_keys("{Esc}xswitch-to-buffer{Enter}*Buffer List*{Enter}")
+        
 
     def doc(self):
         """Returns a documentation string for the action.

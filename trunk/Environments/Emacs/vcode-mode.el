@@ -41,7 +41,7 @@
 invoked as the vr-deprecated mode sub-process.  This can be just the name, if the
 program is in your PATH, or it can be a full path.")
 
-(defvar vr-deprecated-host nil "*The name of the computer running the vr-deprecated Mode
+(defvar vr-deprecated-host nil "*The name of the computer running the vr-deprecavted Mode
 process.  If nil, the process will be started on this computer.  See
 also vr-deprecated-port.")
 (setq vr-deprecated-host ""127.0.0.1"")
@@ -251,9 +251,22 @@ in the 'vr-deprecated-log-buff-name buffer.")
     )
 )
 
+(defvar vcode-language-name-map  (make-hash-table :test 'string=)
+    "Maps file extensions to programming languages"
+)
+(cl-puthash "py" "python" vcode-language-name-map)
+(cl-puthash "c" "C" vcode-language-name-map)
+(cl-puthash "h" "C" vcode-language-name-map)
+(cl-puthash "java" "java" vcode-language-name-map)
+(cl-puthash "pl" "perl" vcode-language-name-map)
+
+
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
+
+;(cl-puthash  "vcode-language-for-file" 1 vcode-traces-on)
+;(cl-puthash  "vcode-language-for-buff" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-execute-command-string" 1 vcode-traces-on)
 
@@ -2083,6 +2096,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'close_buffer 'vcode-cmd-close-buffer vr-deprecated-message-handler-hooks)
   (cl-puthash 'file_name 'vcode-cmd-file-name vr-deprecated-message-handler-hooks)
   (cl-puthash 'language_name 'vcode-cmd-language-name vr-deprecated-message-handler-hooks)
+  (cl-puthash 'file_language_name 'vcode-cmd-file-language-name vr-deprecated-message-handler-hooks)
   (cl-puthash 'line_num_of 'vcode-cmd-line-num-of vr-deprecated-message-handler-hooks)
   (cl-puthash 'cur_pos 'vcode-cmd-cur-pos vr-deprecated-message-handler-hooks)
   (cl-puthash 'get_selection 'vcode-cmd-get-selection vr-deprecated-message-handler-hooks)
@@ -2092,6 +2106,7 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'len 'vcode-cmd-len vr-deprecated-message-handler-hooks)
   (cl-puthash 'newline_conventions 'vcode-cmd-newline-conventions vr-deprecated-message-handler-hooks)
   (cl-puthash 'pref_newline_convention 'vcode-cmd-pref-newline-conventions vr-deprecated-message-handler-hooks)
+
 
   ;;;
   ;;; These messages are used by VCode to change the content of the buffer
@@ -2113,6 +2128,11 @@ See vcode-cmd-prepare-for-ignored-key for more details.
   (cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
   (cl-puthash 'beginning_of_line 'vcode-cmd-beginning-of-line vr-deprecated-message-handler-hooks)  
   (cl-puthash 'mediator_closing 'vcode-cmd-mediator-closing vr-deprecated-message-handler-hooks)  
+
+  ;;; 
+  ;;; These messages are used by VCode to control Emacs (e.g. switch buffer)
+  ;;;
+  (cl-puthash 'change_buff 'vcode-cmd-change-buff vr-deprecated-message-handler-hooks)  
 
   ;;;
   ;;; These ones are currently not handled by VCode, but they probably should
@@ -2868,9 +2888,6 @@ message.
   )
 )
 
-(defun vcode-cmd-language-name (vcode-request)
-  (vr-deprecated-log "WARNING: function vcode-cmd-language-name not implemented!!!\n")
-  )
 
 (defun vcode-fix-pos (pos fix-for-who default-pos)
 
@@ -3261,6 +3278,63 @@ buffer"
     )  
 )
 
+(defun vcode-cmd-file-language-name (vcode-request)
+  (let ((resp-cont (make-hash-table :test 'string=))
+	(mess-cont (nth 1 vcode-request))
+	(file-name) (lang-name))
+    (setq file-name (cl-gethash "file_name" mess-cont))
+    (setq lang-name (vcode-language-for-file file-name))
+    (cl-puthash "value" lang-name resp-cont)
+    (vr-deprecated-send-reply 
+        (run-hook-with-args 'vr-deprecated-serialize-message-hook 
+			    (list "language_name_resp" resp-cont)))
+
+  )   
+)
+
+(defun vcode-cmd-language-name (vcode-request)
+  (let ((resp-cont (make-hash-table :test 'string=))
+	(mess-cont (nth 1 vcode-request))
+	(buff-name) (lang-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (setq lang-name (vcode-language-for-buff buff-name))
+    (cl-puthash "value" lang-name resp-cont)
+    (vr-deprecated-send-reply 
+        (run-hook-with-args 'vr-deprecated-serialize-message-hook 
+			    (list "language_name_resp" resp-cont)))
+
+  )   
+)
+
+
+(defun vcode-language-for-buff  (buff-name)
+   (let ((file-name))
+     (vcode-trace "vcode-language-for-buff" "buff-name=%S" buff-name)
+     (setq file-name (buffer-file-name (get-buffer buff-name)))
+     ;;; In case this is a new buffer not yet associated with a file
+     (if (not file-name) (setq file-name buff-name))
+     (vcode-trace "vcode-language-for-buff" "file-name=%S" file-name)
+     (vcode-language-for-file file-name)
+   )
+)
+
+(defun vcode-language-for-file (file-name)
+  (let ((extension) (lang-name "file_names"))
+    (vcode-trace "vcode-language-for-file" "file-name=%S" file-name)
+    (if file-name 
+	(progn 
+	  (save-match-data
+	    (string-match "\\.\\(.*\\)$" file-name)
+	    (setq extension (substring file-name 
+				       (match-beginning 1) (match-end 1)))
+	  )
+	  (setq lang-name (cl-gethash extension vcode-language-name-map 
+				      "file_names"))
+	)
+    )
+    lang-name
+  )
+)
 
 (defun vcode-force-cursor-and-selection-change-report (buff-name)
   "The 'after-change-functions hook only reports on insertions and
@@ -3711,7 +3785,6 @@ change reports it sends to VCode.
 )
 
 
-
 (defun vcode-cmd-goto (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))
 	(pos) (buff-name) (final-pos))
@@ -3842,6 +3915,31 @@ change reports it sends to VCode.
   (vcode-line-start-end-pos -1 vcode-request)
 )
 
+(defun vcode-cmd-change-buff (vcode-request)
+  (let ((mess-cont (nth 1 vcode-request))
+	(buff-name) (success)
+        (response (make-hash-table :test 'string=)))
+    (setq buff-name (cl-gethash "buff_name" mess-cont nil))
+    (setq success 1)
+    (if (not buff-name) 
+	(vcode-switch-buffer-dlg)
+      (condition-case
+	  (switch-to-buffer buff-name)
+	('error (setq success 0))
+      )
+    )
+    (cl-puthash "value" success response)
+    (vr-deprecated-send-reply 
+        (run-hook-with-args 'vr-deprecated-serialize-message-hook 
+			    (list "change_buff_resp" response)))
+	 
+  )
+)
+
+(defun vcode-switch-buffer-dlg ()
+   (list-buffers)
+   (switch-to-buffer "*Buffer List*")
+)
 
 (defun vcode-cmd-mediator-closing (vcode-request)
    (vcode-mode-activate nil)

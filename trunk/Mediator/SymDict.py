@@ -416,7 +416,9 @@ class SymDict(OwnerObject):
                          'symbol_sources_read': [],
                          'abbrev_sources': [],
                          'unresolved_abbreviations': {},
-                         'lang_name_srv': sb_services.SB_ServiceLang(buff=None),
+                         # AD: This is ugly... should use the AppState's SB_SereviceLang
+                         #     instance instead.
+                         'lang_name_srv': sb_services.SB_ServiceLangServerSide(buff=None),
                          'min_chars_for_approx_match': 4,
                          'min_chars_run_together': 4,
                          'min_non_consec_chars_for_approx_match': 3,
