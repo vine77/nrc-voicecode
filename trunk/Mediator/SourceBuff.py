@@ -893,7 +893,7 @@ class SourceBuff(OwnerObject):
         """
         if pos != None:
            self.goto(pos)
-        self.search_for(regexp=self.newline_regexp(), direction=1,
+        self.search_for(regexp="($|%s)" % self.newline_regexp(), direction=1,
                         where=-1, ignore_left_of_cursor=1)
 
     def goto_beginning_of_line(self, pos=None):
@@ -904,7 +904,8 @@ class SourceBuff(OwnerObject):
         """
         if pos != None:
            self.goto(pos)
-        self.search_for(regexp=self.newline_regexp(), direction=-1,
+        
+        self.search_for(regexp="(^|%s)" % self.newline_regexp(), direction=-1,
                         where=1, ignore_right_of_cursor=1)
         
     def goto_range(self, range, where):
@@ -1262,6 +1263,10 @@ class SourceBuff(OwnerObject):
                 return pos
             pos = pos + d
         raise IndexError()
+
+    def looking_at(self, regexp):
+       return re.match(regexp,
+                       self.get_text(start = self.cur_pos()))
 
     def search_for(self, regexp, direction=1, num=1, where=1,
                    ignore_overlapping_with_cursor = 0,

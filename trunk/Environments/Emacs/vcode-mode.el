@@ -1024,6 +1024,18 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
    )
 )
  
+(defun vcode-trace-call-stack (trace-name)
+  (let ((curr-buff (buffer-name))) 
+    (if (or (not trace-name) (is-in-hash trace-name vcode-traces-on))
+       (progn
+	 (print "*** Call stack is:\n")
+	 (backtrace)
+	 (print "\n*** END OF Call stack\n")
+       )
+    )
+  )
+)
+
 (defun vcode-warning (format-string &rest args)
    (setq format-string (format "** VCode WARNING: %S" format-string))
    (message (apply 'format (append (list format-string) args)))
