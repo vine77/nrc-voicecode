@@ -125,7 +125,7 @@ class CmdInterp(Object):
         #
         while len(cmd) > 0:
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-#             print '-- CmdInterp.interpret_NL_cmd: cur_pos=%s' % self.on_app.curr_buffer.cur_pos; self.on_app.print_buff_content()
+#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer.cur_pos(); self.on_app.print_buff()
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
@@ -181,7 +181,7 @@ class CmdInterp(Object):
                      #
                      cmd = cmd_without_CSC
                      head_was_translated = 1
-#                     print '-- CmdInterp.interpret_NL_cmd: after translating CSC, buffer is:'; self.on_app.print_buff_content()                                                  
+#                     print '-- CmdInterp.interpret_NL_cmd: after translating CSC, buffer is:'; self.on_app.print_buff()                                                  
                  else:
                      #
                      # As it turns out, none of the CSCs with this
@@ -202,10 +202,9 @@ class CmdInterp(Object):
 		     self.match_untranslated_text(untranslated_words)
 		     untranslated_words = []
                  actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(self.on_app, None)
-#                 self.on_app.insert_indent(chopped_LSA, '')
                  cmd = cmd_without_LSA
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating LSA, buffer is:'; self.on_app.print_buff_content()                 
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating LSA, buffer is:'; self.on_app.print_buff()                 
 
 
              if not head_was_translated and symbol_consumes == most_consumed:
@@ -223,7 +222,7 @@ class CmdInterp(Object):
 		 untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating symbol, buffer is:'; self.on_app.print_buff_content()                     
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating symbol, buffer is:'; self.on_app.print_buff()                     
                                           
                     
              if not head_was_translated and word_consumes == most_consumed:
@@ -236,7 +235,7 @@ class CmdInterp(Object):
 		 untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating ordinary word, buffer is:'; self.on_app.print_buff_content()
+#                 print '-- CmdInterp.interpret_NL_cmd: after translating ordinary word, buffer is:'; self.on_app.print_buff()
 
              #
              # Finished translating head of command.
@@ -258,7 +257,7 @@ class CmdInterp(Object):
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer.cur_pos)
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer.cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer.cur_pos())
 
 
 
@@ -567,7 +566,7 @@ class CmdInterp(Object):
         upto = len(words)
         while upto:
             a_spoken_form = string.join(words[:upto], ' ')
-            a_spoken_form = string.lower(a_spoken_form)
+            a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
 #            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
 
             chopped_construct = construct_check(self, a_spoken_form)
@@ -703,6 +702,9 @@ class CmdInterp(Object):
         regexp_is_dirty = 1
 
         for a_spoken_form in acmd.spoken_forms:
+            #
+            # Remove leading, trailing and double blanks from the spoken form
+            #
             a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
 
             #

@@ -25,10 +25,11 @@ import re
 import SymDict
 from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
 
+
 py_empty_dictionary = ActionInsert(code_bef='{}', code_after='',
                                    docstring="""Types code for an empty Python dictionary (e.g. {}^)""")
 
-py_simple_for = ActionInsert(code_bef='for ', code_after=':\n',
+py_simple_for = ActionInsert(code_bef='for ', code_after=':\n\t',
                              docstring="""Insert template code for a simple Python for loop""")
 
 py_goto_body = \
@@ -36,11 +37,11 @@ py_goto_body = \
                  docstring="""Move cursor to the body of a Python compound statement""")
 
 py_new_statement = \
-    ActionSearchInsert(regexp='(\n|$)', code_bef='\n', code_after='',
+    ActionSearchInsert(regexp='(\n|$)', where=-1, code_bef='\n', code_after='',
                        docstring = """Inserts a new line below current one""")
 
 py_class_definition = \
-    ActionInsert(code_bef='class ', code_after=':\n',
+    ActionInsert(code_bef='class ', code_after=':\n\t',
                  docstring="""Inserts template code for a Python class""")
 
 py_class_body = \
@@ -48,7 +49,7 @@ py_class_body = \
                  docstring="""Moves cursor to the body of a class""")
 
 py_method_declaration = \
-    ActionInsert(code_bef='def ', code_after='(self):\n',
+    ActionInsert(code_bef='def ', code_after='(self):\n\t',
                  docstring="""Types template code for a method""")
 
 class ActionPyAddArgument(Action):

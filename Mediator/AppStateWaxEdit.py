@@ -98,9 +98,9 @@ class AppStateWaxEdit(AppState.AppState):
 	# WaxEdit only supports one open buffer at a time
 	if self.curr_buffer:
 	    del self.open_buffers[self.curr_buffer.file_name]
-        self.curr_buffer =  SourceBuffTB(app = self, file_name=name, \
+        self.curr_buffer =  SourceBuffTB(app = self, file_name=name, 
 	    underlying_buffer = self.the_editor.editor_buffer(),
-	    language=lang)
+	    language=lang, indent_level=3, indent_to_curr_level=1)
 	self.the_editor.editor_buffer().set_text(source)
 
         self.open_buffers[name] = self.curr_buffer

@@ -675,7 +675,7 @@ def test_punctuation():
 
     mediator.say(['variable', '::\\double colon', 'index', '::\\colon colon', 'field', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    mediator.say(['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    mediator.say(['if', 'index', '<\\less sign', '0', ' and \\and', 'index', '>\\greater sign', '-\\minus sign', '1', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
 
     mediator.say(['index', '=\\equal sign', '0', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -1320,5 +1320,28 @@ def test_change_direction():
     test_command("""say(['next one'])""")
     
 auto_test.add_test('change_direction', test_change_direction, 'testing changing direction of last command')
+
+##############################################################################
+# Testing LSA masking by NatSpeak words
+##############################################################################
+
+
+def test_misc_bugs():
+    mediator.init_simulator()
+
+    test_command("""open_file('blah.py')""")
+
+    #
+    # NatSpeak defined words like '<\\less-than' used to mask the VoiceCode
+    # defined words like '<\\less than' (i.e. no hyphen). Since interpreter
+    # didn't know of an LSA with spoken form 'less-than', it treated it as
+    # part of a new symbol.
+    #
+    # This tests a fix which ignores non-alphanums in the spoken form of
+    # words to be interpreted.
+    #
+    test_command("""say(['<\\less-than', '>\\greater-than', '=\\equal-sign'])""")
+    
+auto_test.add_test('misc_bugs', test_misc_bugs, 'Testing a series of miscellaneous bugs that might reoccur.')
 
 

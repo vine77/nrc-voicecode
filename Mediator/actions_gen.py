@@ -280,7 +280,7 @@ class ActionRepeatBidirectCmd(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
 
-        print '-- ActionRepeatBidirectCmd.execute: called, self.__dict__=%s' % self.__dict__
+#        print '-- ActionRepeatBidirectCmd.execute: called, self.__dict__=%s' % self.__dict__
 
         #
         # Change the direction of the last action.
@@ -386,6 +386,150 @@ class ActionInsert(Action):
         return the_doc
 
 
+class ActionIncrIndentation(ActionRepeatable):
+    """Action that increases the indent level of selected code by a certain
+    number of level.
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *INT* levels=1 -- number of levels to increase indentation by.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+        
+    def __init__(self, levels=1, **args_super):
+        self.deep_construct(ActionIncrIndentation,
+                            {'levels': levels},
+                            args_super,
+                            {})
+        
+        
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        
+        app.incr_indent_level(levels=self.levels)
+
+
+    def doc(self):
+        """
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if self.docstring != None:
+            the_doc = self.docstring
+        else:
+            the_doc = 'Increase indentation of selected code by %s levels' % self.levels
+        return the_doc
+
+
+class ActionDecrIndentation(ActionRepeatable):
+    """Action that decreases the indent level of selected code by a certain
+    number of level.
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *INT* levels=1 -- number of levels to decrease indentation by.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+        
+    def __init__(self, levels=1, **args_super):
+        self.deep_construct(ActionDecrIndentation,
+                            {'levels': levels},
+                            args_super,
+                            {})
+        
+        
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        
+        app.decr_indent_level(levels=self.levels)
+
+
+    def doc(self):
+        """
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if self.docstring != None:
+            the_doc = self.docstring
+        else:
+            the_doc = 'Decrease indentation of selected code by %s levels' % self.levels
+        return the_doc    
+
+class ActionAutoIndent(Action):
+    
+    """Action that automatically indents code by an appropriate amount of
+    spaces.
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *none* --
+
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+        
+    def __init__(self, levels=1, **args_super):
+        self.deep_construct(ActionAutoIndent,
+                            {},
+                            args_super,
+                            {})
+        
+        
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        
+        app.indent()
+
+
+    def doc(self):
+        """
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        if self.docstring != None:
+            the_doc = self.docstring
+        else:
+            the_doc = 'Indent selected code by appropriate amount'
+        return the_doc    
+
+
 class ActionSearch(ActionRepeatable, ActionBidirectional):
     """Moves cursor to occurence of a regular expression.
         
@@ -451,6 +595,7 @@ class ActionSearch(ActionRepeatable, ActionBidirectional):
             the_doc = 'Moves %s of %s.%s' % (str_occurence, self.regexp, str_where)
         return the_doc
 
+
 class ActionSearchInsert(Action):
     """Inserts some code after an occurence of a regexp
         
@@ -498,6 +643,8 @@ class ActionSearchInsert(Action):
         
         app.search_for(regexp=self.regexp, direction=self.direction, num=self.num, where=self.where)
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
+
+
 
 
 class ActionSwitchTranslation(Action):

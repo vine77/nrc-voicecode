@@ -928,6 +928,21 @@ add_csc(acmd)
 
 
 #############################################################################
+# Code indentation
+#############################################################################
+
+acmd = CSCmd(spoken_forms=['indent', 'tab', 'tab key'],
+             meanings={ContAny(): ActionIncrIndentation(levels=1)})
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['back indent', 'back tab'],
+             meanings={ContAny(): ActionDecrIndentation(levels=1)})
+add_csc(acmd)
+acmd = CSCmd(spoken_forms=['auto indent'],
+             meanings={ContAny(): ActionAutoIndent()})
+add_csc(acmd)
+
+
+#############################################################################
 # Repeating last command
 #############################################################################
 
@@ -1159,7 +1174,7 @@ acmd = CSCmd(spoken_forms=['for', 'for loop'],
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['while', 'while loop'],
              meanings={ContC(): c_simple_while,
-                       ContPy(): ActionInsert('while ', ':\n'),
+                       ContPy(): ActionInsert('while ', ':\n\t'),
                        ContPerl(): c_simple_while},
              docstring='while loop')
 add_csc(acmd)
@@ -1169,20 +1184,20 @@ acmd = CSCmd(spoken_forms=['do', 'loop body', 'for body', 'while body'],
              docstring = 'move to body of loop')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['if', 'if statement'],
-             meanings={ContPy(): ActionInsert('if ', ':\n'),
-                       ContC(): ActionInsert('if (', ')\n{\n}'),
-                       ContPerl(): ActionInsert('if (', ') {\n}')},
+             meanings={ContPy(): ActionInsert('if ', ':\n\t'),
+                       ContC(): ActionInsert('if (', ')\n\t{\n\t}'),
+                       ContPerl(): ActionInsert('if (', ') {\n\t}')},
              docstring = 'if statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'elif ', ': \n'),
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'elif ', ': \n\t'),
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'else:\n', ''),
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'else:\n\t', ''),
                        ContC(): c_else,
                        ContPerl(): c_else},
              docstring = 'else clause of conditional statement')
@@ -1267,15 +1282,15 @@ add_lsa(['import symbols', 'import symbol'], {'python': ' import '})
 # this form used for statements like: from module import all
 add_lsa(['import all'], {'python': ' import all'})
 acmd = CSCmd(spoken_forms=['try'],
-             meanings={ContPy(): ActionInsert('try ', ': \n')},
+             meanings={ContPy(): ActionInsert('try ', ': \n\t')},
              docstring='python try statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'except ', ': \n')},
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'except ', ': \n\t')},
              docstring='python except statement')
 add_csc(acmd)
 acmd = CSCmd(spoken_forms=['finally', 'finally do'],
-             meanings={ContPy(): ActionSearchInsert('($|\n)', 'finally:\n', '')},
+             meanings={ContPy(): ActionSearchInsert('($|\n)', 'finally:\n\t', '')},
              docstring='finally clause of python try statement')
 add_csc(acmd)
 add_lsa(['continue'], {'python': 'continue\n'})

@@ -186,7 +186,8 @@ def simulator_mode(options):
     # commands are eval'ed means the error reporting isn't great
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
-    #    
+    #
+    
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
         cmd = sys.stdin.readline()

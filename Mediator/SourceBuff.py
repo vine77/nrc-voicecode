@@ -241,28 +241,6 @@ class SourceBuff(Object):
 	"""
 	debug.virtual('SourceBuff.set_selection')
 
-    def set_text(self, text, start = None, end = None):
-	"""changes a portion of the buffer.  Note: this is a low level
-	interface.  Usually, higher level interfaces like insert and
-	delete are preferable.
-
-	**INPUTS**
-
-	*STR text* is the new text.
-	
-	*INT start* is the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
-
-	*INT end* is the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	debug.virtual('SourceBuff.set_text')
-
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
 
@@ -456,10 +434,51 @@ class SourceBuff(Object):
             position = 0
 # cursor can be after last character in the buffer
         elif position > length and length > 0:
-            position = length  
+            position = length
         return position
 
 
+    def beginning_of_line(self, pos):
+        """Returns the position of the beginning of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the beginning of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* beg_pos -- Position of the beginning of the line
+        """
+
+        contents = self.contents()
+        if pos >= len(contents): pos = len(contents) - 1
+#        print '-- SourceBuff.beginning_of_line: pos=%s, len(contents)=%s' % (pos, len(contents))
+        while pos >= 0 and contents[pos] != '\n':
+            pos = pos - 1
+
+        beg_pos = self.make_within_range(pos + 1)
+        return beg_pos
+
+    def end_of_line(self, pos):
+        """Returns the position of the end of line at position *pos*
+        
+        **INPUTS**
+        
+        *INT* pos -- Position for which we want to know the end of line.
+        
+
+        **OUTPUTS**
+        
+        *INT* end_pos -- Position of the end of the line
+        """
+        contents = self.contents()
+        if pos >= len(contents): pos = len(contents) - 1        
+        pos = self.make_within_range(pos)
+        a_regexp = re.compile('(\n|$)')
+        end_pos = a_regexp.search(contents, pos).start()
+        return end_pos
+        
         
     def move_relative(self, rel_movement):
         """Move cursor to plus or minus a certain number of characters
@@ -519,6 +538,8 @@ class SourceBuff(Object):
 
 
 
+# DCF - fix - never replaces selection, and independent defaults for
+# start and end don't support replacing selection - 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
 
@@ -563,7 +584,9 @@ class SourceBuff(Object):
         debug.virtual('insert')
 
     def indent(self, range = None):
-        """Indent code in a source buffer region.
+        
+        """Automatically indent the code in a source buffer region. Indentation
+        of each line is determined automatically based on the line's context.
 
 	**INPUTS**
 
@@ -576,6 +599,45 @@ class SourceBuff(Object):
 	"""
 
         debug.virtual('indent')
+
+
+    def incr_indent_level(self, levels=1, range=None):
+        
+        """Increase the indentation of a region of code by a certain
+        number of levels.
+        
+        **INPUTS**
+        
+        *INT* levels=1 -- Number of levels to indent by.
+        
+        *(INT, INT)* range=None -- Region of code to be indented 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        debug.virtual('incr_indent_level')
+
+    def decr_indent_level(self, num_levels=1, range=None):
+
+        """Decrease the indentation of a region of code by a certain number
+        of levels.
+        
+        **INPUTS**
+        
+        *STR* num_levels=1 -- Number of levels to unindent
+
+        *(INT, INT)* range=None -- Start and end position of code to be indent.
+        If *None*, use current selection
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        debug.virtual('decr_indent_level')
 
 
     def delete(self, range = None):
@@ -618,11 +680,11 @@ class SourceBuff(Object):
 # several lines of context around the current cursor position.  Most
 # other editors will automatically refresh the screen on any change, so
 # they need not override this default (no-op) behavior.
-	pass
+	debug.virtual('SourceBuff.refresh_if_necessary')
 
     def refresh(self):
 	"""Force a refresh of the buffer"""
-	pass
+	debug.virtual('SourceBuff.refresh')
 
     def search_for(self, regexp, direction=1, num=1, where=1):
         
@@ -697,7 +759,7 @@ class SourceBuff(Object):
             self.goto(new_cur_pos)
             success = 1
         else:
-            success = 0
+            succses = 0
             
         return success
 
@@ -906,10 +968,6 @@ class SourceBuff(Object):
         *CHAR* -- the character at position *key*
         """
 #        print '-- SourceBuff.__getitem__: caled'
-# conform to Python's convention for negative offsets from the end of
-# the text.
-	if key < 0:
-	    key = key + self.len()
         return self.content()[key]
 
     def __setitem__(self, key, value):
@@ -926,10 +984,6 @@ class SourceBuff(Object):
         *none* -- 
         """
 #        print '-- SourceBuff.__setitem__: caled'        
-# conform to Python's convention for negative offsets from the end of
-# the text.
-	if key < 0:
-	    key = key + self.len()
         self.insert(value, (key, key))
 
     def __getslice__(self, start, end):
@@ -944,15 +998,9 @@ class SourceBuff(Object):
         *STR* -- the slice from *start* to *end*
         """
 #        print '-- SourceBuff.__setitem__: called'        
-# conform to Python's convention for negative offsets from the end of
-# the text.
-	if start < 0:
-	    start = start + self.len()
-	if end < 0:
-	    end = end + self.len()
         return self.content()[start:end]
 
-    def __setslice__(self, start, end, value):
+    def __getslice__(self, start, end, value):
         """Sets slice of the buffer using the buff[start:end] = value syntax.
         
         **INPUTS**
@@ -965,10 +1013,4 @@ class SourceBuff(Object):
         
         """
 #        print '-- SourceBuff.__setitem__: called'        
-# conform to Python's convention for negative offsets from the end of
-# the text.
-	if start < 0:
-	    start = start + self.len()
-	if end < 0:
-	    end = end + self.len()
         self.insert(value, (start,end))
