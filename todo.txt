@@ -4,7 +4,7 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
-Just testing that I can commit with cvs
+Just testing that I can commit with cvs again
 ----------------------------------------
 
 Link with Emacs through vr-mode
