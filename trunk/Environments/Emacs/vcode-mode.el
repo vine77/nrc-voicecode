@@ -260,6 +260,11 @@ in the 'vr-deprecated-log-buff-name buffer.")
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
+;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
+;(cl-puthash "vcode-set-special-event-map-for-ignored-key" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+
 ;(cl-puthash "vr-deprecated-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-line-start-end-pos" 1 vcode-traces-on)
 ;(cl-puthash 'end_of_line 'vcode-cmd-end-of-line vr-deprecated-message-handler-hooks)  
@@ -273,8 +278,6 @@ in the 'vr-deprecated-log-buff-name buffer.")
 
 ; testing hang/deadlock with text_mode test 5/8/03 - DCF
 ;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-prepare-for-ignored-key" 1 vcode-traces-on)
-;(cl-puthash "vcode-restore-special-event-map" 1 vcode-traces-on)
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
 ;(cl-puthash "vcode-serialize-message" 1 vcode-traces-on)
 
@@ -1021,6 +1024,11 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
    )
 )
  
+(defun vcode-warning (format-string &rest args)
+   (setq format-string (format "** VCode WARNING: %S" format-string))
+   (message (apply 'format (append (list format-string) args)))
+)
+
 (defun vr-deprecated-log (&rest s)
   (if vr-deprecated-log-do
       (let* (
@@ -1656,6 +1664,7 @@ which is the list representing the command and its arguments."
 
 See vcode-cmd-prepare-for-ignored-key.
 "
+  (vcode-trace "vcode-set-special-event-map-for-ignored-key" "invoked")
   (setq vcode-was-special-event-map (copy-keymap special-event-map))
   (define-key special-event-map [f9] 'vcode-restore-special-event-map)
 )
@@ -1716,7 +1725,7 @@ focus event, which is the desired effect.
   (let ((mess-cont (elt vcode-request 1)) 
 	(empty-response (make-hash-table :test 'string=))
         )
-
+    (vcode-trace "vcode-cmd-prepare-for-ignored-key" "invoked")
     (vcode-set-special-event-map-for-ignored-key)
 ; if we receive the emacs_prepare_for_ignored_key message, then the old
 ; vr-deprecated-cmd-frame-activated hack is redundant
@@ -2460,10 +2469,12 @@ a buffer"
         ; we received the emacs_prepare_for_ignored_key message, but
         ; failed to receive the expected ignored key before the
         ; recog_begin message.  
-          (vcode-trace "vcode-cmd-recognition-start" 
-              "ERROR: ignored key expected, but not received")
-          (vcode-restore-special-event-map)
-          (setq vcode-frame-activated-necessary)
+          (vcode-warning "ignored key expected, but not received")
+;; Don't do this, in case the user has mapped f9 to some function.
+;; The f9 key will eventually make its way to Emacs and emacs will then
+;; restore the key mapping to what it was.
+;;          (vcode-restore-special-event-map)
+          (setq vcode-frame-activated-necessary t)
         )
     )
 
