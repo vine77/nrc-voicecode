@@ -19,7 +19,33 @@
 #
 ##############################################################################
 
-"""interfaces for editor buffers with change notification"""
+"""interfaces for editor buffers with change notification.
+
+TextBuffer is an abstract interface which is used
+as a wrapper around various text/edit controls, usually either visible 
+(GUI) text controls or hidden (speech) edit controls like the VDct.
+ 
+It is a fairly simple, lightweight interface.  You can find the length
+of the buffer.  You can set/get the text.  You can set/get the
+selection.  That's about it.
+ 
+Various subclasses add additional functionality, such as notification or
+specification of changes.  Also, there are other abstract add-in classes
+which add specific functionality (get_visible for VisibleBuffer,
+activate for SpeechBuffer, set_visible for SelectionBuffers).  In order
+to allow the user to mix and match these additional functionality
+without running into problems with multiple inheritance due to
+ambiguity, these add-in classes are not derived from TextBuffer,
+although it doesn't make much sense to create a concrete class which
+inherits from VisibleBuffer and not from TextBuffer (or a subclass of
+TextBuffer).
+ 
+Then there are concrete subclasses, like TextBufferWX which implements
+TextBufferChangeSpecify and VisibleBuffer using a wxTextCtrl, or
+VoiceDictBuffer which implements TextBufferChangeSpecify,
+SpeechBufferRecogStart, LockableSpeechBuffer, and SelectionBuffer using the
+natlink.DictObj."""
+
 
 import debug
 import find_difference
@@ -67,7 +93,7 @@ class TextBuffer(Object):
 
 	*none*
 	"""
-	pass
+	debug.virtual('TextBuffer.set_text')
 
     def get_length(self):
 	"""returns the length of the buffer
@@ -79,7 +105,7 @@ class TextBuffer(Object):
 	**OUTPUTS**
 
 	*INT* number of characters in the buffer"""
-	pass
+	debug.virtual('TextBuffer.get_length')
          
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
@@ -97,7 +123,7 @@ class TextBuffer(Object):
 
 	*STR* -- contents of specified range of the buffer
 	"""
-	pass
+	debug.virtual('TextBuffer.get_text')
 
     def get_selection(self):
 	"""retrieves range of current selection
@@ -114,7 +140,7 @@ class TextBuffer(Object):
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
 	"""
-	pass
+	debug.virtual('TextBuffer.get_selection')
 
     def set_selection(self, start = None, end = None):
 	"""changes range of current selection
@@ -132,7 +158,7 @@ class TextBuffer(Object):
 
         *none*
 	"""
-	pass
+	debug.virtual('TextBuffer.set_selection')
 
 class SpeechBuffer:
     """abstract base class describing additional interfaces for a
@@ -183,7 +209,7 @@ class SpeechBuffer:
 #	Also note that, for the same reason, the default behavior
 #	activate is different from that of NaturallySpeaking (either
 #	Natlink DictObj, or SDK CDgnDictCustom)
-	pass
+	debug.virtual('SpeechBuffer.activate')
     
     def deactivate(self):
 	"""disable dictation into the SpeechBuffer
@@ -196,7 +222,7 @@ class SpeechBuffer:
 
 	*none*
 	"""
-	pass
+	debug.virtual('SpeechBuffer.deactivate')
 
     def reactivate(self):
 	"""reactivate dictation using the same window (or globally).
@@ -215,7 +241,7 @@ class SpeechBuffer:
 
 	*none*
 	"""
-	pass
+	debug.virtual('SpeechBuffer.reactivate')
 
     def has_been_activated(self):
 	"""indicates whether the activate method has been invoked, or
@@ -234,7 +260,7 @@ class SpeechBuffer:
         # note: if the activation condition (specific window, or globally
 	# active) is lost when deactivate is called, has_been_activated
 	# should return false
-	pass
+	debug.virtual('SpeechBuffer.has_been_activated')
 
     def is_active(self):
 	"""indicates whether dictation into the SpeechBuffer is currently 
@@ -250,7 +276,7 @@ class SpeechBuffer:
 	*BOOL* -- returns true iff dictation into the buffer is 
 	currently active.
 	"""
-	pass
+	debug.virtual('SpeechBuffer.is_active')
 
     def is_activated(self):
 	"""indicates whether the  SpeechBuffer is currently activated or
@@ -267,7 +293,7 @@ class SpeechBuffer:
 	but that window is not active, is_activated will still return
 	true.  To see if dictation is active now, use is_active.
 	"""
-	pass
+	debug.virtual('SpeechBuffer.is_activated')
 
     def is_global(self):
 	"""tells whether the buffer (when activated) is activated
@@ -281,7 +307,7 @@ class SpeechBuffer:
 
 	*BOOL* -- is buffer set for global dictation.
 	"""
-	pass
+	debug.virtual('SpeechBuffer.is_global')
 
 class SpeechBufferRecogStart(SpeechBuffer):
     """abstract subclass of SpeechBuffer which adds a recognition
@@ -454,7 +480,7 @@ class SelectionBuffer:
 
 	*none*
 	"""
-	pass
+	debug.virtual('SelectionBuffer.set_visible')
 
     def get_visible(self):
 	"""returns the current visible range
@@ -476,7 +502,7 @@ class SelectionBuffer:
 
 	*none*
 	"""
-	pass
+	debug.virtual('SelectionBuffer.get_visible')
 
     
 class VisibleBuffer:
@@ -516,7 +542,7 @@ class VisibleBuffer:
 
 	*INT* (start, end)
 	"""
-	pass
+	debug.virtual('VisibleBuffer.get_visible')
 
     def make_position_visible(self, position = None):
 	"""scroll buffer (if necessary) so that  the specified position
@@ -1198,7 +1224,6 @@ class SelectionTextBufferCRToNL(TextBufferCRToNL):
 
 	*none*
 	"""
-	pass
 	s, e = self.underlying.get_visible(s, e)
 	if e >= s:
 	    s, e = self.internal_to_external(s, e)
