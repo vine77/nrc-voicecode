@@ -46,6 +46,8 @@ class EdSim(AppState.AppState):
     
     def __init__(self, **attrs):
         self.deep_construct(EdSim, {}, attrs)
+	self.curr_buffer = SourceBuffEdSim(app = self, file_name = "",
+	    language =None)
 
     def open_file(self, name, lang=None):
         """Open a file.

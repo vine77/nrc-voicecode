@@ -26,6 +26,9 @@ import re
 import natlink
 from natlinkutils import *
 import actions_gen, CmdInterp
+from Object import Object
+import debug
+
 #import nsformat
 
 #
@@ -464,6 +467,148 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 #    print '-- sr_interface.vocabulary_entry: returning entry=\'%s\'' % entry
     return entry
 
+class BufferState(Object):
+    """stores information about the buffer before and after the 
+    most recent dictation utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+    """
+    def __init__(self):
+        pass
+
+class LastDictationUtterance(Object):
+    """stores information about the most recent dictation utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+	self.deep_construct(LastDictationUtterance,
+	    {}, attrs)
+
+    def spoken_forms(self):
+	"""returns list of spoken forms from the utterance
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*[STR]* -- list of spoken forms from the utterance
+	"""
+	words = self.words()
+	l = []
+	for a_word in words:
+	    spoken, written = spoken_written_form(a_word)
+	    l.append(spoken)
+	return l
+
+    def words(self):
+	"""returns list of words (in written\spoken form) from the utterance
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*[STR]* -- list of words (in written\spoken form) from the utterance
+	
+	"""
+	debug.virtual('LastDictationUtterance.words')
+      
+    def set_words(self, words):
+	"""changes the stored list of words (after correction) so that 
+	subsequent correction boxes can display the corrected list.
+	The results object is unaffected.
+
+	**INPUTS**
+
+	*[STR] words* -- corrected list of words (in written\spoken form, or 
+	simply spoken form)
+
+	*none*
+
+	**OUTPUTS**
+	"""
+	debug.virtual('LastDictationUtterance.set_words')
+      
+
+class LastDictNatlink(LastDictationUtterance):
+    """stores information about the most recent dictation utterance
+
+    **INSTANCE ATTRIBUTES**
+
+    *ResObj* results -- natlink ResObj results object
+    *[STR]* last_words -- corresponding list of words
+
+    **CLASS ATTRIBUTES**
+    """
+    def __init__(self, results = None, **attrs):
+	"""initialize LastDictNatlink 
+
+	**INPUTS**
+
+	*ResObj* results -- a new natlink ResObj results object
+	"""
+	self.deep_construct(LastDictNatlink,
+	    {'results': results, 'last_words':[]}, attrs)
+	if results:
+	    self.last_words = results.getWords(0)
+
+    def save(self, results):
+	"""stores the new results object, replacing the old one
+
+	**INPUTS**
+
+	*ResObj* results -- natlink ResObj results object
+
+	"""
+	self.results = results
+	if results:
+	    self.last_words = results.getWords(0)
+
+    def words(self):
+	"""returns list of words (in written\spoken form) from the utterance
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*[STR]* -- list of words (in written\spoken form) from the utterance
+	
+	"""
+	return self.last_words
+
+    def set_words(self, words):
+	"""changes the stored list of words (after correction) so that 
+	subsequent correction boxes can display the corrected list.
+	The results object is unaffected.
+
+	**INPUTS**
+
+	*[STR] words* -- corrected list of words (in written\spoken form, or 
+	simply spoken form)
+
+	*none*
+
+	**OUTPUTS**
+	"""
+	self.last_words = words
+      
+
 class CommandDictGrammar(DictGramBase):
     """A grammar for mixing continuous dictation and commands.
 
@@ -480,6 +625,8 @@ class CommandDictGrammar(DictGramBase):
     foreground for the grammar to be activated, or 0 to make the grammar
     global
 
+    *LastDictNatlink last* -- stores the last recognized dictation utterance 
+
     CLASS ATTRIBUTES**
     
     *none* -- 
@@ -495,6 +642,7 @@ class CommandDictGrammar(DictGramBase):
 	self.window = window
         self.state = None
         self.isActive = 0
+	self.last = LastDictNatlink()
 
     def deactivate(self):
 	DictGramBase.deactivate(self)
@@ -518,20 +666,26 @@ class CommandDictGrammar(DictGramBase):
 	else:
 	    self.deactivate()
         
+    def gotResultsObject(self, recog_type, results):
+	if recog_type == 'self':
+	    self.last.save(results)
+	    words = results.getWords(0)
+	    self.interpreter.interpret_NL_cmd(words)
+	    self.interpreter.on_app.curr_buffer.refresh_if_necessary()
         
-    def gotResults(self, words):
+#    def gotResults(self, words):
         #
         # Interpret the commands, then print buffer content
         #
 #        print '-- CommandDictGrammar.gotResults: Heard mixed dictation and commands:%s' % repr(words)
 
-        self.interpreter.interpret_NL_cmd(words)
+#        self.interpreter.interpret_NL_cmd(words)
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 
 # every change to the buffer.  Other editors will usually refresh
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the refresh_if_necessary message.
-        self.interpreter.on_app.curr_buffer.refresh_if_necessary()
+#        self.interpreter.on_app.curr_buffer.refresh_if_necessary()
         
 
 class CodeSelectGrammar(SelectGramBase):
