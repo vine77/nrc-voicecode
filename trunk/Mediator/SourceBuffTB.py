@@ -47,7 +47,7 @@ class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
     def __init__(self, underlying_buffer, **attrs):
 
         self.init_attrs({'lang_srv': sb_services.SB_ServiceLang(buff=self),
-                         'indent_srv': sb_services.SB_ServiceIndent(buff=self),
+                         'indent_srv': sb_services.SB_ServiceIndent(buff=self, indent_level=3),
                          'line_srv': sb_services.SB_ServiceLineManip(buff=self)})
         self.deep_construct(SourceBuffTB,
                             {'underlying': underlying_buffer},

@@ -22,7 +22,7 @@
 
 """Action functions for C language """
 
-from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
+from actions_gen import Action, ActionInsert, ActionSearch
 
 c_simple_for = \
     ActionInsert(code_bef='for (',

@@ -112,6 +112,25 @@ def dictate_pseudo_python():
     mediator.say(['back indent'], echo_utterance=1)
     
     mediator.say(['return', 'regular', 'expression', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    #beg
+#    mediator.say(['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+#    mediator.say(['then'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+    #end
+
+    mediator.say(['this', 'word', 'equals', 'greetings', 'else'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['try', 'some', 'function', 'with', 'arguments'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+
+    mediator.say(['finally', 'do', 'print', 'single', 'quotes', 'all', 'right'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
     
     mediator.quit(save_speech_files=0, disconnect=0)
 
