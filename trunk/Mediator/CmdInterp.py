@@ -51,10 +51,6 @@ class CmdInterp(Object):
      dictionary of written forms over spoken form keys 
      specific to a language.
 
-    *FILE symdict_pickle_file = None* -- File used to for
-     reading/writing the symbol dictionary. If *None*, then don't
-     read/write the symbol dictionary from/to file.
-
     *BOOL disable_dlg_select_symbol_matches = None* -- If true, then
     do not prompt the user for confirmation of new symbols.
 
@@ -69,6 +65,17 @@ class CmdInterp(Object):
     
     def __init__(self, symdict_pickle_file=None,
                  disable_dlg_select_symbol_matches = None, **attrs):
+        
+	"""
+	**INPUTS**
+
+	*FILE symdict_pickle_file = None* -- File used to for
+	reading/writing the symbol dictionary. If *None*, then don't
+	read/write the symbol dictionary from/to file.
+
+	*BOOL disable_dlg_select_symbol_matches = None* -- If true, then
+	do not prompt the user for confirmation of new symbols.
+	"""
 
         #
         # These attributes can't be set at construction time
@@ -80,9 +87,9 @@ class CmdInterp(Object):
         #
         self.deep_construct(CmdInterp,
                             {'cmd_index': {}, 
-                             'known_symbols': SymDict.SymDict(), 
+                             'known_symbols':
+			     SymDict.SymDict(pickle_fname = symdict_pickle_file), 
                              'language_specific_aliases': {},
-                             'symdict_pickle_file': symdict_pickle_file,
                              'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches},
                             attrs)
 
@@ -886,6 +893,20 @@ class CmdInterp(Object):
         """
 	self.known_symbols.cleanup(clean_sr_voc=0, clean_symdict=1, resave=1)
 
+    def abbreviations_cleanup(self):
+        """Removes all known abbreviations from the symbols dictionary.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+	self.known_symbols.abbreviations_cleanup()
+      
     def parse_standard_symbols(self, add_sr_entries=1):
         """Parse standard symbols for the various programming languages.
         
@@ -945,4 +966,22 @@ class CmdInterp(Object):
         """
 	self.known_symbols.parse_symbols(contents, language_name,
 	    add_sr_entries = add_sr_entries)
+
+    def print_symbols(self):
+        """Print the content of the symbols dictionary.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+	self.known_symbols.print_symbols()
+
+    def print_abbreviations(self, show_unresolved=0):
+        """Prints the known and unresolved abbreviations."""
+	self.known_symbols.print_abbreviations()
 

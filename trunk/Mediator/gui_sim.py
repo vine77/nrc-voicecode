@@ -19,7 +19,9 @@
 #
 ##############################################################################
 
-"""Usage: python gui_sim.py -hs
+"""Usage: python gui_sim.py -h
+            or
+	  python gui_sim.py [-s | -t]
 
 Main script for VoiceCode mediator.
 
@@ -31,8 +33,6 @@ OPTIONS
 -s  : run mediator in simulation mode
 
 -t  : run mediator in timed (profiled) simulation mode
-
--p  : port number for communication with external programming environment
 
 
 Console mode
@@ -66,7 +66,9 @@ import sim_commands
 
 # but test suite assumes that the commands are defined here, so we need
 # this too.
-from sim_commands import *
+# test suite doesn't run from gui_sim, so we don't need this here
+# from sim_commands import *
+
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
@@ -88,12 +90,15 @@ from actions_py import *
 the_mediator = None
 
 
-def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
+def cleanup(the_mediator, clean_sr_voc=0, save_speech_files = None, 
+    disconnect = 1):
 
-    sim_commands.quit(clean_sr_voc=clean_sr_voc)
-    if sim_commands.the_mediator:
-        sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
-	    save_speech_files=save_speech_files, disconnect=disconnect)
+#    sim_commands.quit(clean_sr_voc=clean_sr_voc)
+#    if sim_commands.the_mediator:
+#        sim_commands.the_mediator.quit(clean_sr_voc=clean_sr_voc, 
+#	    save_speech_files=save_speech_files, disconnect=disconnect)
+    the_mediator.quit(clean_sr_voc=clean_sr_voc, 
+	save_speech_files=save_speech_files, disconnect=disconnect)
 
 def simulator_mode(options):
     """Start mediator in console mode.
@@ -105,29 +110,54 @@ def simulator_mode(options):
 
     *[STR: ANY] options* -- Dictionary of options for the script.
 
-
     **OUTPUTS**
 
     *none* -- 
     """
 
 
-    setmic('off')
+#    sim_commands.setmic('off')
+    sr_interface.set_mic('off')
 
-    command_space = copy.copy(sim_commands.__dict__)
-    editor_app = WaxEdSim.WaxEdSim(command_space= sim_commands.__dict__)
+    names = {}
+# stuff from mediator.init_simulator (must be defined here now that we are using
+# mediator.new_simulator
+    home = os.environ['VCODE_HOME']
+    names['home'] = home
+    names['testdata'] = os.path.join(home, 'Data', 'TestData')
+
+# need this early, before SimCmdsObj has a chance to add it
+#    names['getmic'] = sim_commands.getmic
+    names['getmic'] = sr_interface.get_mic
+
+    editor_app = WaxEdSim.WaxEdSim(command_space= names)
     module_info = natlink.getCurrentModule()
     window = module_info[2]
     print module_info
     app = editor_app.editor
     editor_app.got_window()
 
-    mediator.init_simulator(on_app = app, owns_app = 0,
-#	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
-	symdict_pickle_fname = None,
+    the_mediator = mediator.new_simulator(on_app = app, owns_app = 0,
+	symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', 
+#	symdict_pickle_fname = None,
 	disable_dlg_select_symbol_matches = 1, window = window,
 	mic_change = editor_app.mic_change)
         
+
+# get actual namespace used by panel (which is a copy of the names we
+# passed to WaxEdSim)
+    actual_names = editor_app.access_command_space()
+
+    commands = sim_commands.SimCmdsObj(app, the_mediator.interp, actual_names)
+# add bound methods of the commands SimCmdsObj instance, corresponding
+# to the functions in the sim_commands module, to this 
+# namespace 
+#    print actual_names
+    commands.bind_methods(actual_names)
+#    print actual_names
+
+
+
     #
     # For better error reporting, you can type some instructions here
     # instead of typing them at the console. The fact that the console
@@ -136,21 +166,20 @@ def simulator_mode(options):
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
-    open_file(file_name)
+    commands.open_file(file_name)
     
 
     editor_app.run()
+
     print 'gui exited'
+    cleanup(the_mediator, commands.clean_sr_voc, 
+	commands.save_speech_files, commands.disconnect_flag)
         
 if (__name__ == '__main__'):
     
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None])
     
 #    print '-- mediator.__main__: opts=%s' % opts
-  
-    sim_commands.__dict__['clean_sr_voc_flag']=0
-    sim_commands.__dict__['save_speech_files_flag']=None
-    sim_commands.__dict__['disconnect_flag']=1
   
     if opts['h']:
         print __doc__
@@ -162,11 +191,9 @@ if (__name__ == '__main__'):
         #
         profile.run("""
 simulator_mode(opts)""")
-    elif opts['s']:
+    else:
+#    elif opts['s']:
         #
         # Run mediator using an editor simulator
         #
         simulator_mode(opts)
-
-    cleanup(sim_commands.clean_sr_voc_flag, 
-	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)

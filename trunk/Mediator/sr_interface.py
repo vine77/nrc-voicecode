@@ -109,6 +109,18 @@ def set_mic(mic_state):
 	    connect()
 	natlink.setMicState(mic_state)
 
+def get_mic():
+    """checks the current microphone state
+
+    *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
+    after connection.
+    """
+    if speech_able():
+        if not sr_is_connected:
+	    connect()
+	return natlink.getMicState()
+
+
 def connect(mic_state=None, mic_change_callback = None):
     """Connects to the SR system.
     

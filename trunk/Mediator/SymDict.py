@@ -442,6 +442,7 @@ class SymDict(PickledObject.PickledObject):
         self.deep_construct(SymDict,
                             {'pickle_fname': pickle_fname},
                             attrs)
+	self.init_from_file()
 
 #        print '-- SymDict.__init__: returning self.__dict__=%s' % self.__dict__
 

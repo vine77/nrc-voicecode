@@ -152,6 +152,8 @@ sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
+import Object
+import InstanceSpace
 # I think we can get by without CmdInterp, EdSim, MediatorObject
 # import sr_interface, util, vc_globals
 
@@ -171,7 +173,7 @@ from actions_py import *
 quit_flag = 0
 the_mediator = None
 
-gui_sim = 0
+# gui_sim = 0
 
 # local name space for user command-line commands
 command_space = {}
@@ -318,10 +320,11 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         trace('mediator.say', 'words=%s' % words)
 #        print '-- mediator.say: words=%s' % words
 	sys.stdout.flush()
-	global gui_sim
-	if gui_sim:
-	    the_mediator.mixed_grammar.activate()
-	    the_mediator.code_select_grammar.activate()
+# not necessary any more
+#	global gui_sim
+# 	if gui_sim:
+# 	    the_mediator.mixed_grammar.activate()
+# 	    the_mediator.code_select_grammar.activate()
 
 
         #
@@ -341,9 +344,9 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 #        print '-- sim_commands.say: DONE invoking recognitionMimic'        
 	sys.stdout.flush()
         
-	if gui_sim:
-	    the_mediator.mixed_grammar.deactivate()
-	    the_mediator.code_select_grammar.deactivate()
+# 	if gui_sim:
+# 	    the_mediator.mixed_grammar.deactivate()
+# 	    the_mediator.code_select_grammar.deactivate()
 
     #
     # Redirect stdin back to what it was
@@ -443,8 +446,307 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     signal_quitting()
 
 def getmic():
-    if sr_interface.speech_able():
-        sr_interface.connect()
-        return natlink.getMicState()
+    return sr_interface.get_mic()
+
 def setmic(state):
     sr_interface.set_mic(state)
+
+class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
+    """an object providing methods corresponding to the non-method
+    functions of sim_commands, but without resorting to global
+    variables, and in such a way that it can be subclassed to maintain
+    compatibility with NewMediatorObject 
+
+    **CLASS ATTRIBUTES**
+
+    *STR help_string* -- the sim_commands help string
+
+    **INSTANCE ATTRIBUTES**
+
+    *AppState app* -- interface to the editor used for interactive or 
+	regression testing 
+
+    *CmdInterp interp* -- interface to the mediator's command interpreter 
+
+    *{} names* -- namespace in which to put the quit_flag
+
+    *BOOL* clean_sr_voc -- If true, remove all SR entries for known
+    symbols.
+
+    *BOOL* save_speech_files -- Indicates whether or not
+    speech files should be saved. If *None*, then ask the user.
+
+    *BOOL* disconnect = 1 -- Indicates whether or not to disconnect from
+    the SR system.
+    """
+    help_string = __doc__
+    def __init__(self, app, interp, names, **args):
+	self.deep_construct(SimCmdsObj,
+	                    {
+			     'app': app,
+			     'interp': interp,
+			     'names': names,
+			     'quit_flag': 0,
+			     'clean_sr_voc' : 0,
+			     'save_speech_files' : None,
+			     'disconnect_flag': 1
+			    }, args, 
+			    exclude_bases = {InstanceSpace.InstanceSpace: 1})
+    
+    def copy_flags(self):
+	"""copy our internal flags which control the mediator cleanup 
+	process to the namespace, in case they are being read from their
+	instead of from this object"""
+	self.names['clean_sr_voc'] = self.clean_sr_voc
+	self.names['save_speech_files'] = self.save_speech_files
+	self.names['disconnect_flag'] = self.disconnect_flag
+
+    def bind_methods(self, names):
+	"""add bound copies of this class's methods to the given dictionary,
+	excluding those starting with '_'
+
+	**NOTE:** if you subclass this class, you must redefine this method,
+	otherwise if called from an object of the subclass, it will only 
+	include methods of the subclass, not this class
+
+	**INPUTS**
+
+	*{STR:ANY} names* -- dictionary into which to insert the  bound
+	methods
+	"""
+	my_methods = InstanceSpace.selected_methods(self.__class__,
+	    exclude = '^_')
+#	print my_methods
+#	print names
+	self.bind_to_space(names, my_methods)
+#	print names
+
+    def help(self):
+	print self.help_string
+
+    def open_file(self, fname):
+	"""Open a file with name in current buffer.
+
+	*STR fname* is the path of the file"""
+
+	self.app.open_file(fname)
+	self.interp.parse_symbols_from_file(fname)
+	self.app.curr_buffer().print_buff_if_necessary()
+# show_buff()
+
+    def list_buffers(self):
+	print self.app.open_buffers_from_app()
+
+    def change_buffer(self, buff_name):
+	if self.app.change_buffer(buff_name):
+	    self.show_buff()
+	else:
+	    print 'unknown buffer'
+
+    def close_buffer(self, buff_name, save = 0):
+	self.app.close_buffer(buff_name, save)
+
+    def save(self):
+	"""save current buffer"""
+	self.app.save_file()
+
+    def save_as(self, fname, no_prompt = 0):
+	"""save current buffer
+
+	*STR fname* is the path of the file
+	
+	*BOOL no_prompt* -- If true, don't prompt before overwriting
+	an existing file"""
+
+	self.app.save_file(fname, no_prompt = no_prompt)
+
+    def compile_symbols(self, file_list):
+	self.interp.parse_symbols_from_files(file_list)
+	print '>>> Known symbols are: '; self.interp.print_symbols()
+
+	#
+	# Save the symbols dictionary to file
+	#
+	self.interp.known_symbols.pickle()
+
+	
+    def say(self, utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
+	"""Simulate an utterance *STR utterance*
+
+	*STR utterance* -- The utterance. This can be a string with the
+	 written form of what should be recognised by the SR system. If
+	 it's a list, it should be a list of words in their written\spoken
+	 form (or just written if it doesn't have a spoken form different
+	 from its written form).
+
+	In general, it's better to specify *utterance* as a list of
+	written\spoken words because it allows to simulate exactly what
+	the SR does (e.g. what if the SR recognises an LSA as a sequence
+	of words instead of its written\spoken form?)
+
+	*STR user_input* -- A string that will be sent to the mediator console's
+	 standard input. Use in automated regression testing, if the *say*
+	 command requires user additional user input (e.g. confirmation of
+	 a symbol match).
+	
+	*BOOL bypass_NatLink* -- if true, the interpretation will be done
+	withouth going through NatLink's recognitionMimic function.
+
+	*BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+
+	Examples: say('x not equal to') -> 'x != '
+		  say(['x', ' != \\not equal to'] -> 'x != '
+	"""
+	
+	global sleep_before_recognitionMimic
+
+	trace('sim_commands.say', 'utterance=%s' % utterance)
+
+#    print 'Saying: %s' % utterance
+	sys.stdout.flush()
+	if echo_utterance:
+	    print 'Saying: %s' % utterance
+
+	if user_input:
+	    #
+	    # Create temporary user input file
+	    #
+	    old_stdin = sys.stdin
+	    temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
+	    temp_file = open(temp_file_name, 'w')
+#	print 'temp file opened for writing'
+	    sys.stdout.flush()
+	    temp_file.write(user_input)
+	    temp_file.close()
+	    temp_file = open(temp_file_name, 'r')
+#	print 'temp file opened for reading'
+	    sys.stdout.flush()
+	    sys.stdin = temp_file
+	    
+	if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
+	    trace('sim_commands.say', 'bypassing natlink')
+#	print 'bypass'
+	    sys.stdout.flush()
+	    self.interp.interpret_NL_cmd(utterance, the_mediator.app)
+	    show_buff()        
+	else:
+	    if util.islist(utterance) or util.istuple(utterance):
+		words = []
+		#
+		# Clean up the written form in case user didn't type
+		# special characters in the form that the SR expects
+		# (e.g. '\n' instead of '{Enter}'
+		#
+		for a_word in utterance:
+		    spoken, written = sr_interface.spoken_written_form(a_word)
+		    if spoken != written:
+			written = sr_interface.clean_written_form(written, clean_for='sr')
+			words = words + [sr_interface.vocabulary_entry(spoken, written)]
+		    else:
+			words = words + [written]
+	    else:        
+		words = re.split('\s+', utterance)
+
+
+	    trace('mediator.say', 'words=%s' % words)
+#        print '-- mediator.say: words=%s' % words
+	    sys.stdout.flush()
+
+
+	    #
+	    # During interactive sessions, may need to pause a few seconds before
+	    # doing *recognitionMimic*, to give user time to switch to the editor
+	    # window.
+	    #
+	    if sleep_before_recognitionMimic:
+		print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
+		time.sleep(sleep_before_recognitionMimic)
+		
+	    trace('sim_commands.say', 'invoking recognitionMimic')
+#        print '-- sim_commands.say: invoking recognitionMimic'
+	    sys.stdout.flush()
+	    natlink.recognitionMimic(words)
+	    trace('sim_commands.say', 'DONE invoking recognitionMimic')
+#        print '-- sim_commands.say: DONE invoking recognitionMimic'        
+	    sys.stdout.flush()
+	    
+	#
+	# Redirect stdin back to what it was
+	#
+	if user_input:
+	    sys.stdin = old_stdin
+	    temp_file.close()
+
+    def goto(self, pos):
+	"""Goes to position *INT pos* of the current buffer"""
+	self.app.goto(pos)
+	self.show_buff()
+
+    def goto_line(self, linenum):
+	"""Goes to line number *INT linenum* of current source buffer"""
+	self.app.goto_line(linenum)
+	self.show_buff()
+
+    def make_position_visible(self, pos):
+	self.app.make_position_visible(pos)
+	self.show_buff()
+
+    def select(self, start, end):
+	"""Selects from position *start* to position *end* in current buffer"""
+	self.app.set_selection((start, end))
+	self.show_buff()
+	
+    def show_buff(self):
+	"""Shows content of current source buffer"""
+	self.app.curr_buffer().print_buff_if_necessary()
+
+    def move(self, steps):
+	"""Moves cursor by *INT steps* (can be negative)"""
+	self.app.move_relative(steps)
+	self.show_buff()
+
+    def listen(self):
+	if not os.environ.has_key('VCODE_NOSPEECH'):
+	    natlink.setMicState('on')
+	    natlink.waitForSpeech(0)
+	    natlink.setMicState('off')
+
+    def print_error(self, message):
+	sys.stderr.write(message)
+
+    def provoke(self):
+	print slidjf
+
+    def print_symbols(self):
+	self.interp.known_symbols.print_symbols()
+
+    def print_abbreviations(self, show_unresolved=1):
+	self.interp.known_symbols.print_abbreviations(show_unresolved)
+
+    def clear_symbols(self):
+	#
+	# Remove symbols from the Speech Recognition vocabulary
+	#
+	self.interp.cleanup()
+
+    def clear_abbreviations(self):
+	#
+	# Remove abbreviations from the symbol dictionary
+	#
+	self.interp.abbreviations_cleanup()
+
+    def signal_quitting(self, quitting = 1):
+	self.names['quit_flag'] = quitting
+	self.copy_flags()
+
+    def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
+	self.clean_sr_voc = clean_sr_voc
+	self.save_speech_files = save_speech_files
+	self.disconnect_flag = disconnect
+	self.signal_quitting()
+
+    def getmic(self):
+	return sr_interface.get_mic()
+
+    def setmic(self, state):
+	sr_interface.set_mic(state)
