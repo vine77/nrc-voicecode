@@ -51,6 +51,22 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
                             attrs
                             )
         self.add_owned('lang_srv')
+#        self._maybe_disable_cache()
+
+    def _maybe_disable_cache(self):
+        """disable caching for certain buffers where Emacs's change tracking is buggy.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.name() == "*Buffer List*":
+           self.use_cache = 0
+    
 
     def language_name(self):
         """Returns the name of the language a file is written in.

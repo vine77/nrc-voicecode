@@ -200,6 +200,11 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         if not self.use_cache:
            debug.trace('SourceBuffCached._get_cache_element_multiple', 'not using cache')        
            values = apply(get_from_app_method)
+           if len(elt_names) == 1:
+               # if only one element, assume that get_from_app_method returns a single
+               # value for that element, as opposed to a list of values for earch
+               # element
+               values = [values]           
         else:  
            if self._not_cached_multiple(elt_names):
               debug.trace('SourceBuffCached._get_cache_element_multiple', 'cache is dirty... retrieving from app')                   
@@ -368,7 +373,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, text[start:end]="%s"' % (start, end, text[start:end]))
         trace('SourceBuffCached.get_text', '** before returning, len(text)=%s, text="%s"' % (len(text), text))
 
-        return self._get_cache('get_text')[start:end]
+        return text[start:end]
 
 
     def _get_text_from_app(self, start = None, end = None):
@@ -552,7 +557,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         **INPUTS**
         
         (INT, INT) *range* -- Start and end position of text to be
-        replaced by the insertion.
+        replaced by the insertion. If end of range is None, default to 
+        the end of the buffer.
 
         STR *text* -- Text to be inserted
 
@@ -581,9 +587,12 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
                 'no cache - getting text')
             self.get_text()
         else:
+            range_non_nil = [range[0], range[1]]
+            if range_non_nil[1] == None:
+               range_non_nil[1] = len(self._get_cache('get_text')) - 1        
             old_text = self.get_text()
-            self._put_cache('get_text', old_text[:range[0]] + text + \
-                     old_text[range[1]:])
+            self._put_cache('get_text', old_text[:range_non_nil[0]] + text + \
+                     old_text[range_non_nil[1]:])
 
         self.uncache_data_after_buffer_change(what_changed = 'get_text')
         

@@ -512,9 +512,10 @@ class SourceBuffWithDiffs(SourceBuffCached):
         already taken care of outside of the method.
         
         **INPUTS**
-        
+                
         (INT, INT) *range* -- Start and end position of text to be
-        replaced by the insertion.
+        replaced by the insertion. If end of range is None, default to 
+        the end of the buffer.
 
         STR *text* -- Text to be inserted
 
@@ -530,7 +531,7 @@ class SourceBuffWithDiffs(SourceBuffCached):
                 'in process of undoing')
             self.during_undo(text = text, range = range)
         else:
-            if self.cache['get_text'] == None:
+            if self._not_cached('get_text'):
 # if we don't have the buffer contents cached, we don't know what text 
 # was replaced, so we can't create a reverse diff, and all our previous
 # change_history is invalid
@@ -543,7 +544,10 @@ class SourceBuffWithDiffs(SourceBuffCached):
             else:
 # we need the old text, so we have to do all this processing before
 # calling SourceBuffCached.insert_cbk
-                replaced = self.cache['get_text'][range[0]:range[1]]
+                range_non_nil = [range[0], range[1]]
+                if range_non_nil[1] == None:
+                   range_non_nil[1] = len(self._get_cache('get_text')) - 1
+                replaced = self.cache['get_text'][range_non_nil[0]:range_non_nil[1]]
                 debug.trace('SourceBuffWithDiffs.insert_cbk',
                     'replaced text "%s"' % replaced)
 # don't record non-changes
@@ -552,7 +556,7 @@ class SourceBuffWithDiffs(SourceBuffCached):
 # The start of the new text is the same as the start of the old text,
 # but the end is offset from the start by one more than the length of
 # the new text
-                    start = range[0]
+                    start = range_non_nil[0]
 # we use the same convention for ranges as Python's slice
                     end = start + len(text)
                     reverse = ReverseBufferChange(replaced, (start, end))

@@ -103,6 +103,7 @@ class SymbolInfo(Object):
             self.spoken_forms.extend(spoken_forms)
             
     def add_spoken_forms(self, spoken_forms):
+        trace('SymbolInfo.add_spoken_forms', 'spoken_forms=%s' % repr(spoken_forms))
         for form in spoken_forms:
             if not (form in self.spoken_forms):
                 self.spoken_forms.append(form)
@@ -162,7 +163,7 @@ class SymbolMatch(Object):
     """
     
     def __init__(self, pseudo_symbol=None, native_symbol=None, words=None, word_matches=None, is_new=0, fmt_rank=10, **args_super):
-        debug.trace('SymbolMatch.__init__', 'word_matches=%s' % repr(word_matches))
+        trace('SymbolMatch.__init__', 'word_matches=%s' % repr(word_matches))
         self.deep_construct(SymbolMatch, \
                             {'pseudo_symbol': pseudo_symbol, \
                              'native_symbol': native_symbol, \
@@ -1142,9 +1143,9 @@ class SymDict(OwnerObject):
         persistent symbol dictionary file, or if this SymDict instance
         was not initialized from a persisten symbol dictionary
         """
-        debug.trace('SymDict.changed_since_sym_file',
+        trace('SymDict.changed_since_sym_file',
            'symdict file modified %s' % self.file_time)
-        debug.trace('SymDict.changed_since_sym_file',
+        trace('SymDict.changed_since_sym_file',
            'file %s modified %s' % (path, util.last_mod(path)))
         if self.from_file and util.last_mod(path) <= self.file_time:
             return 0
@@ -1452,10 +1453,9 @@ class SymDict(OwnerObject):
         *spoken_forms2symbol* attributes.
         """
 
-#            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
 
         language_definition = self.get_language_definition(language_name)
-#            print '-- SymDict.parse_symbols: language_definition.name=%s' % language_definition.name
+        debug.trace('SymDict.parse_symbols', 'language_name=%s, language_definition=%s' % (language_name, language_definition))
         stripped_contents = self.strip_source(contents, language_definition)
 
             #
@@ -1677,7 +1677,7 @@ class SymDict(OwnerObject):
         .. [get_spoken_forms] file:///./SymDict.SymDict.html#get_spoken_forms
         .. [add_abbreviation] file:///./SymDict.SymDict.html#add_abbreviation"""
         
-#        print '-- SymDict.add_symbol: symbol=%s' % symbol
+        trace('SymDict.add_symbol', 'symbol=%s' % symbol)
 
         spoken_forms = user_supplied_spoken_forms[:]
         
@@ -1691,7 +1691,6 @@ class SymDict(OwnerObject):
             self.tentative_symbols[symbol] = tentative
 
             trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
-#            print '-- SymDict.add_symbol: this is a new symbol'
 
             #
             # Add the symbol to the string used for symbol matching
@@ -2196,9 +2195,10 @@ class SymDict(OwnerObject):
         global language_definitions
         definition = None
         
-#        print '-- SymDict.get_language_definition: language_definitions=%s, language_name=%s' % (language_definitions, language_name)
+        debug.trace('SymDict.get_language_definition', 'language_definitions=%s, language_name=%s' % (language_definitions, language_name))
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]
+        debug.trace('SymDict.get_language_definition', 'returning definition=%s' % definition)            
         return definition
     
     def _score_symbol_matches(self, pseudo_symbol, words, native_matches):

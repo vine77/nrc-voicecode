@@ -264,8 +264,20 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
+;(cl-puthash  "vcode-unindent-region" 1 vcode-traces-on)
+;(cl-puthash  "vcode-unindent-line" 1 vcode-traces-on)
+;(cl-puthash  "vcode-report-insert-delete-change" 1 vcode-traces-on)
+;(cl-puthash  "vcode-cmd-decr-indent-level" 1 vcode-traces-on)
+;(cl-puthash  "vcode-generate-raw-change-description"  1 vcode-traces-on)
+;(cl-puthash  "vcode-send-queued-changes" 1 vcode-traces-on)
 
-;(cl-puthash  "vr-deprecated-report-insert-delete-change" 1 vcode-traces-on)
+;(cl-puthash  "vcode-serialize-changes" 1 vcode-traces-on)
+;(cl-puthash  "vcode-generate-change-hash" 1 vcode-traces-on)
+;(cl-puthash  "vcode-generate-pos-select-change-hash" 1 vcode-traces-on)
+;(cl-puthash  "vcode-generate-whole-buffer-changes" 1 vcode-traces-on)
+;(cl-puthash  "vcode-filter-queued-changes" 1 vcode-traces-on)
+;(cl-puthash  "vcode-generate-whole-buffer-changes" 1 vcode-traces-on)
+;(cl-puthash  "vcode-report-insert-delete-change" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-language-for-file" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-language-for-buff" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
@@ -465,8 +477,8 @@ from the vr-deprecated subprocess.")
 See vr-deprecated-activate-buffer and vr-deprecated-switch-to-buffer.")
 
 (defvar vr-deprecated-ignore-changes nil "see comment in vr-deprecated-overlay-modified")
-(defvar vr-deprecated-changes-caused-by-sr-cmd nil "see comment in vr-deprecated-report-insert-delete-change")
-(defvar vr-deprecated-queued-changes nil "see comment in vr-deprecated-report-insert-delete-change")
+(defvar vr-deprecated-changes-caused-by-sr-cmd nil "see comment in vcode-report-insert-delete-change")
+(defvar vcode-queued-changes nil "see comment in vcode-report-insert-delete-change")
 (defvar vr-deprecated-dont-report-sr-own-changes t 
   "If t, then we don't report the changes that have been caused directly
 by the SR. However, we do report changes done automatically by Emacs
@@ -717,9 +729,9 @@ vr-deprecated-internal-activation-list.  BUFFER can be a buffer or a buffer name
   (if status
       (progn
 ;	(make-local-hook 'after-change-functions)
-	(add-hook 'after-change-functions 'vr-deprecated-report-insert-delete-change)
+	(add-hook 'after-change-functions 'vcode-report-insert-delete-change)
 	)
-    (remove-hook 'after-change-functions 'vr-deprecated-report-insert-delete-change)
+    (remove-hook 'after-change-functions 'vcode-report-insert-delete-change)
     )
   (vr-deprecated-log "--** vcode-set-after-change-functions: upon exit, (current-buffer)=%S, after-change-functions=%S\n" (current-buffer) after-change-functions)  
 )
@@ -785,15 +797,15 @@ interactively, sets the current buffer as the target buffer."
 )
 
 (defun vcode-merge-or-prepend-change (new-change)
-  "merges the new-change with the first change in 'vr-deprecated-queued-changes, if
+  "merges the new-change with the first change in 'vcode-queued-changes, if
   possible, otherwise prepends it to the list.
 
   changes can be merged if they are both of type 'change-is-insert and
   represent contiguous insertions or deletions.
   "
-(if (null vr-deprecated-queued-changes)
-  (setq vr-deprecated-queued-changes (cons new-change vr-deprecated-queued-changes))
-  (let* ((previous-change (car vr-deprecated-queued-changes))
+(if (null vcode-queued-changes)
+  (setq vcode-queued-changes (cons new-change vcode-queued-changes))
+  (let* ((previous-change (car vcode-queued-changes))
         (previous-type (car previous-change))
         (new-type (car new-change))
         (new-entry new-change)
@@ -835,7 +847,7 @@ interactively, sets the current buffer as the target buffer."
                    (end (+ previous-end (- new-end new-start)))
                    (contents (list new-buffer start end text)))
                   ; combine changes, pop previous 
-                  (setq vr-deprecated-queued-changes (cdr vr-deprecated-queued-changes))
+                  (setq vcode-queued-changes (cdr vcode-queued-changes))
                   (setq new-entry (list 'change-is-insert contents))
                 )
               )
@@ -846,7 +858,7 @@ interactively, sets the current buffer as the target buffer."
                    (end previous-end)
                    (contents (list new-buffer start end text)))
                   ; combine changes, pop previous 
-                  (setq vr-deprecated-queued-changes (cdr vr-deprecated-queued-changes))
+                  (setq vcode-queued-changes (cdr vcode-queued-changes))
                   (setq new-entry (list 'change-is-insert contents))
                 )
               )
@@ -856,17 +868,17 @@ interactively, sets the current buffer as the target buffer."
       )
     )
     ; push combined or new
-    (setq vr-deprecated-queued-changes (cons new-entry vr-deprecated-queued-changes))
+    (setq vcode-queued-changes (cons new-entry vcode-queued-changes))
   )
 )
 )
 
 
-(defun vr-deprecated-report-insert-delete-change (inserted-start inserted-end deleted-len)
+(defun vcode-report-insert-delete-change (inserted-start inserted-end deleted-len)
 "Invoked whenever an insertion or deletion change happens on the current 
 buffer (if it is voice enabled). 
 
-Changes are put in a changes queue `vr-deprecated-queued-changes.
+Changes are put in a changes queue `vcode-queued-changes.
 
 If 'vr-deprecated-changes-caused-by-sr-cmd is nil, the changes were not
 done as a response to a voice command. In that case, send the 
@@ -882,18 +894,18 @@ executing.
   (let ((the-change nil))
     (if (vr-deprecated-activate-buffer-p (current-buffer))
 	(progn 
-	  (vcode-trace "vr-deprecated-report-insert-delete-change" "inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
+	  (vcode-trace "vcode-report-insert-delete-change" "inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
 	  (setq the-change
-		(vr-deprecated-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
+		(vcode-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
 		)
 	  
-	  (vcode-trace "vr-deprecated-report-insert-delete-change" "the-change=%S" the-change)
+	  (vcode-trace "vcode-report-insert-delete-change" "the-change=%S" the-change)
 	  
           (vcode-merge-or-prepend-change the-change)
-;	  (setq vr-deprecated-queued-changes (cons the-change vr-deprecated-queued-changes))
+;	  (setq vcode-queued-changes (cons the-change vcode-queued-changes))
 	  
 	  (if (not vr-deprecated-changes-caused-by-sr-cmd)
-	      (vr-deprecated-send-queued-changes)
+	      (vcode-send-queued-changes)
 	    )
 	  
 	  ;;
@@ -906,35 +918,41 @@ executing.
 )
 
 
-(defun vr-deprecated-report-goto-select-change (buff-name sel-start sel-end)
+(defun vcode-report-goto-select-change (buff-name sel-start sel-end)
   "Invoked whenever a change in the cursor position or marked selection 
 happens on a buffer (if it is voice enabled). 
 
-Changes are put in a changes queue `vr-deprecated-queued-changes.
+Changes are put in a changes queue `vcode-queued-changes.
 "
-  (vr-deprecated-log "--** vr-deprecated-report-goto-select-change: buffer %S, start, end = %S, %S\n"
+  (vr-deprecated-log "--** vcode-report-goto-select-change: buffer %S, start, end = %S, %S\n"
   buff-name sel-start sel-end)
-  (setq vr-deprecated-queued-changes 
+  (setq vcode-queued-changes 
 	(cons 
 ;	   (list 'change-is-select buff-name sel-start sel-end)
-	   (vr-deprecated-generate-raw-change-description  'change-is-select (list buff-name sel-start sel-end))
-	   vr-deprecated-queued-changes))
+	   (vcode-generate-raw-change-description  'change-is-select (list buff-name sel-start sel-end))
+	   vcode-queued-changes))
 )
 
-(defun vr-deprecated-generate-raw-change-description (change-type change-data)
+(defun vcode-generate-raw-change-description (change-type change-data)
 
   (let ((change-desc) (buff-name) (inserted-start) (inserted-end) 
 	(deleted-length) (deleted-start) (deleted-end) (inserted-text))
+    (vcode-trace "vcode-generate-raw-change-description" "change-type=%S, change-data=%S" change-type change-data)
     (if (eq 'change-is-select change-type)
-	(progn 
 	  (setq change-desc (list change-type change-data))
-	)
       (setq buff-name (nth 0 change-data))
       (setq inserted-start (nth 1 change-data))
       (setq inserted-end (nth 2 change-data))
       (setq deleted-length (nth 3 change-data))	
       (setq deleted-start inserted-start)
-      (setq deleted-end (+ deleted-start deleted-length))
+      (if deleted-length
+	  (setq deleted-end (+ deleted-start deleted-length))
+	(setq deleted-end nil)
+      )
+      (vcode-trace "vcode-generate-raw-change-description" 
+		   "buff-name=%S, inserted-end=%S, deleted-length=%S, deleted-start=%S, deleted-end=%S"
+		   buff-name inserted-end deleted-length deleted-start 
+		   deleted-end)
       (save-excursion
 	(set-buffer buff-name)
 ; shouldn't this be set-buffer?  -- DCF
@@ -944,8 +962,12 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 ;;;
 	(setq inserted-text (buffer-substring-no-properties 
 			     inserted-start inserted-end))
+
       )
+
+      (vcode-trace "vcode-generate-raw-change-description" "** inserted-text=%S" inserted-text)
       (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
+      (vcode-trace "vcode-generate-raw-change-description" "** EXITING with change-desc=%S" change-desc)
     )
     change-desc
   )
@@ -1152,7 +1174,7 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 
 
 
-(defun vr-deprecated-send-queued-changes ()
+(defun vcode-send-queued-changes ()
   "Sends the message queue.
 
    If 'vr-deprecated-changes-caused-by-sr-cmd is not nil, then these changes happened
@@ -1160,10 +1182,16 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
    of that command)."
 
   (let ((change-message nil))
+    (vcode-trace "vcode-send-queued-changes" "vcode-queued-changes=%S" vcode-queued-changes)
+
+    (vcode-filter-queued-changes)
+    (vcode-trace "vcode-send-queued-changes" "after vcode-filter-queued-changes, vcode-queued-changes=%S" vcode-queued-changes)
 
     (setq change-message
        (run-hook-with-args 'vr-deprecated-serialize-changes-hook
-			   (nreverse vr-deprecated-queued-changes)))
+			   (nreverse vcode-queued-changes)))
+
+    (vcode-trace "vcode-send-queued-changes" "** AFTER vr-deprecated-serialize-changes-hook")
 
     ;;;
     ;;; If these changes happened in response to a command, send them on 
@@ -1174,7 +1202,73 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 	(vr-deprecated-send-reply change-message)
       (vr-deprecated-send-cmd change-message)
     )
-    (setq vr-deprecated-queued-changes nil)
+    (setq vcode-queued-changes nil)
+
+    (vcode-trace "vcode-send-queued-changes" "** EXITING")
+
+  )
+)
+
+(defun vcode-filter-queued-changes ()
+   "Filter queued changes to patch apparent bugs in Emacs' change reporting. 
+
+There seem to be bugs in the way that Emacs reports changes to buffers
+like *Buffer List*. Sometimes, the start and end position of a change do 
+not take into account insertions that have been done in a previous change.
+
+This function filters the queued changes, and replaces any change report for
+such buffers by a unique change report at the end of queue, reporting the 
+whole content of the buffer."
+
+   (let ((filtered-changes nil) (a-change  nil) (buffer-list-has-changed nil)
+         (buff-name nil) (whole-buff-list-change nil) ( buffer-list-len nil))
+     (vcode-trace "vcode-filter-queued-changes" "upon entry, vcode-queued-changes=%S" vcode-queued-changes)
+     (while vcode-queued-changes
+       (setq a-change (car vcode-queued-changes))
+       (setq vcode-queued-changes (cdr vcode-queued-changes))
+       (setq buff-name (nth 0 (nth 1 a-change)))
+       (vcode-trace "vcode-filter-queued-changes" "** buff-name=%S" buff-name)
+       (if (string= buff-name "*Buffer List*")
+           (setq buffer-list-has-changed t)
+	 (setq filtered-changes (append filtered-changes (list a-change)))
+	 (vcode-trace "vcode-filter-queued-changes" "** added this change to filtered-changes, filtered-changes=%S" filtered-changes)
+       )       
+     )
+
+     (vcode-trace "vcode-filter-queued-changes" "After removing *Buffer List* changes, filtered-changes=%S" filtered-changes)
+     (if buffer-list-has-changed 
+	 (setq filtered-changes 
+	       (append (vcode-generate-whole-buffer-changes "*Buffer List*")
+		       filtered-changes))
+     )
+    (setq vcode-queued-changes filtered-changes)
+    (vcode-trace "vcode-filter-queued-changes" "** UPON EXIT, vcode-queued-changes=%S" vcode-queued-changes)
+   )
+)
+
+
+(defun vcode-generate-whole-buffer-changes (buff-name)
+  "Generates a change report that sets the whole content of buff-name."
+  (let ((change nil) (change-list nil) (selection nil))
+    (vcode-trace "vcode-generate-whole-buffer-changes" "buff-name=%S" buff-name)
+    (save-excursion
+      (set-buffer buff-name)
+      (setq buff-len (1+ (- (point-max) (point-min))))
+      (setq change 
+	    (vcode-generate-raw-change-description 
+	     'change-is-insert 
+	     (list buff-name (point-min) buff-len nil)))
+      (setq change-list (cons change change-list))
+      (setq selection (vcode-make-sure-no-nil-in-selection (point) 
+	  (if mark-active (mark))))
+      (setq change 
+	    (vcode-generate-raw-change-description  
+	     'change-is-select (list buff-name (nth 0 selection) 
+				     (nth 1 selection))))
+      (setq change-list (cons change change-list))      
+    )
+    (vcode-trace "vcode-generate-whole-buffer-changes" "buff-name=%S, returning change=%S" buff-name change)
+    change-list
   )
 )
 
@@ -2611,6 +2705,7 @@ a buffer"
 
 (defun vcode-generate-change-hash (a-change)
 
+    (vcode-trace "vcode-generate-change-hash" "a-change=%S" a-change)
     (if (eq (nth 0 a-change) 'change-is-insert)
 	(setq a-change-hash (vcode-generate-insert-change-hash (nth 1 a-change)))
       (setq a-change-hash (vcode-generate-pos-select-change-hash (nth 1 a-change)))
@@ -2654,10 +2749,12 @@ message.
 	(deleted-end)
 	(mess-name) (mess-key "updates") (mess-cont (make-hash-table :test 'string=)))
 
+    (vcode-trace "vcode-serialize-changes" "change-list=%S" change-list)
 
     (while change-list
       (setq a-change (car change-list))
       (setq change-list (cdr change-list))
+      (vcode-trace "vcode-serialize-changes" "after popping a change, a-change=%S, change-list=%S" a-change change-list)
 
       ;;; Generate a hashes describing this change and append it to the 
       ;;; change list destined for VCode
@@ -2665,6 +2762,8 @@ message.
 
       (setq change-list-vcode 
 	    (append change-list-vcode (list a-change-vcode)))
+      (vcode-trace "vcode-serialize-changes" "a-change-vcode=%S, change-list-vcode=%S" a-change-vcode change-list-vcode)
+
     )
 
     
@@ -2694,12 +2793,12 @@ message.
 ; selection changes, so we need to send them when the updates message
 ; requests them
 (defun vcode-cmd-updates (vcode-request)
-  (vr-deprecated-report-goto-select-change 
+  (vcode-report-goto-select-change 
     (buffer-name (current-buffer)) 
     (if mark-active (mark) (point))
     (point)
   )
-  (vr-deprecated-send-queued-changes) 
+  (vcode-send-queued-changes) 
 )
 
 (defun vcode-matching-test-file-name (new-file-name buffers)
@@ -3008,12 +3107,20 @@ then use values in 'default-range."
 positions (Emacs starts from 1, VCode from 0), we need to convert from one
 to the other"
 
-  (if (equal for-who 'vcode)
-      (progn 
-	(1- pos)
-      )
-    (1+ pos)
-    )
+  ;;;
+  ;;; NOTE: It is admissible for 'vcode-conver-pos to be invoked with a
+  ;;;       nil position. For example, we use a nil end position for 
+  ;;;       insert updates that delete the whole buffer and replaces it
+  ;;;       with new content.
+  ;;;
+  (if pos
+      (if (equal for-who 'vcode)
+	  (progn 
+	    (1- pos)
+	    )
+	(1+ pos)
+	)
+  )
 )
 
 (defun vcode-convert-range (start end for-who)
@@ -3353,7 +3460,7 @@ In case where we respond to VCode by just moving the cursor and/or selection,
 we need to add a dummy change report to the queued changes. This dummy change just inserts a blank string over a null region (i.e., it does nothing).
 
 This will in effect end up reporting the position of cursor and selection 
-since `vr-deprecated-send-queued-changes appends that information for each and every 
+since `vcode-send-queued-changes appends that information for each and every 
 change reports it sends to VCode.
 "
   (let ()
@@ -3399,10 +3506,10 @@ change reports it sends to VCode.
     ;;; statement. That way, if there are errors, we can still report
     ;;; where Emacs actually set the selection, as opposed to where we
     ;;; expected it to go.
-    (vr-deprecated-report-goto-select-change buff-name 
+    (vcode-report-goto-select-change buff-name 
 	(if mark-active (mark) (point)) (point))
 
-    (vr-deprecated-send-queued-changes)
+    (vcode-send-queued-changes)
   )
 )
 
@@ -3450,7 +3557,7 @@ change reports it sends to VCode.
 ;        (execute-kbd-macro [127] n-times)
         
 
-	(vr-deprecated-send-queued-changes)
+	(vcode-send-queued-changes)
     )
 )
 
@@ -3481,7 +3588,7 @@ change reports it sends to VCode.
 
         (vcode-execute-command-string text)
 
-	(vr-deprecated-send-queued-changes)
+	(vcode-send-queued-changes)
     )
 )
 
@@ -3522,7 +3629,7 @@ change reports it sends to VCode.
            ('error (message "VCode Error: executing insert_indent"))
 	)
 
-	(vr-deprecated-send-queued-changes)
+	(vcode-send-queued-changes)
     )
 )
 
@@ -3562,7 +3669,7 @@ change reports it sends to VCode.
         )
 
 
- 	(vr-deprecated-send-queued-changes)
+ 	(vcode-send-queued-changes)
     )
 )
 
@@ -3583,7 +3690,7 @@ change reports it sends to VCode.
     (set-buffer buff-name)
     (vcode-indent-region indent-start indent-end)
 
-    (vr-deprecated-send-queued-changes)
+    (vcode-send-queued-changes)
   )
 )
 
@@ -3599,7 +3706,7 @@ change reports it sends to VCode.
     (setq levels (cl-gethash "levels" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
-    (vr-deprecated-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
+    (vcode-trace "vcode-cmd-decr-indent-level" "upon entry, buff-name=%S, (point)=%S, (mark)=%S, range=%S, levels=%S\n" buff-name (point) (mark) range levels)
 
     ;;;
     ;;; Note: don't enclose this in a save-excursion because it causes problems
@@ -3608,9 +3715,10 @@ change reports it sends to VCode.
     (set-buffer buff-name)
 
     (set-mark nil)
+
     (vcode-unindent-region indent-start indent-end levels) 
 
-    (vr-deprecated-send-queued-changes)
+    (vcode-send-queued-changes)
   )
 )
 
@@ -3637,7 +3745,7 @@ change reports it sends to VCode.
 
     )
 
-   (vr-deprecated-send-queued-changes)
+   (vcode-send-queued-changes)
 
   )
 )
@@ -3661,7 +3769,7 @@ change reports it sends to VCode.
 
 (defun vcode-unindent-region (start end n-levels)
   "Deindents region from START to END by N-LEVELS levels."
-  (let (end-line)
+  (let ((end-line))
     (for-lines-in-region-do start end 'vcode-unindent-line (list n-levels))
   )
 )
@@ -3676,7 +3784,7 @@ change reports it sends to VCode.
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
   (let ((counter 0) (start-of-line))
-     (vr-deprecated-log "--** vcode-unindent-line: upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-unindent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
       ;;;
       ;;; Move to the first non-blank character on the line, then simulate the
       ;;; backspace key multiple times.
@@ -3703,14 +3811,14 @@ change reports it sends to VCode.
 		  ;;; backspace key
 ;	          (vcode-execute-command-string "\177")
 ;	          (vcode-execute-command-string "\127")
-	          (vcode-execute-command-string "\d")
-		  (setq counter (1+ counter))
+		(vcode-execute-command-string "\d")
+		(setq counter (1+ counter))
 	      )
            )
 	  )
 ;	)
 
-     (vr-deprecated-log "--** vcode-unindent-line: upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-unindent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
    )
 )
 
@@ -3788,7 +3896,7 @@ change reports it sends to VCode.
 	(kill-region delete-start delete-end)
         (set-mark nil)
 
-	(vr-deprecated-send-queued-changes)
+	(vcode-send-queued-changes)
     )
 )
 
@@ -3826,9 +3934,9 @@ change reports it sends to VCode.
     ;;; Cursor changes do not automatically get queued to the change queue.
     ;;; Need to do so explicitely
     ;;;
-    (vr-deprecated-report-goto-select-change buff-name final-pos final-pos)
+    (vcode-report-goto-select-change buff-name final-pos final-pos)
 
-    (vr-deprecated-send-queued-changes)
+    (vcode-send-queued-changes)
 
   )
 )
@@ -3869,9 +3977,9 @@ change reports it sends to VCode.
     ;;; Cursor changes do not automatically get queued to the change queue.
     ;;; Need to do so explicitely
     ;;;
-    (vr-deprecated-report-goto-select-change buff-name final-pos final-pos)
+    (vcode-report-goto-select-change buff-name final-pos final-pos)
 
-    (vr-deprecated-send-queued-changes)
+    (vcode-send-queued-changes)
 
   )
 )

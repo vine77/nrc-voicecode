@@ -989,15 +989,12 @@ class ActionCompileSymbols(Action):
         buffer = app.find_buff(self.buff_name)
         manager = app.current_manager()
         if manager:
-           try:
-             interpreter = manager.interpreter()
-             interpreter.user_message("Compiling symbols for %s"
-                 % self.buff_name, instance = app.name())
-             interpreter.parse_symbols(buffer.contents(), buffer.language_name())
-             interpreter.user_message("Done compiling symbols", 
-                 instance = app.name())
-           except AttributeError:
-             print 'compile symbols command not supported with old Mediator'
+           interpreter = manager.interpreter()
+           interpreter.user_message("Compiling symbols for %s"
+               % buffer.name(), instance = app.name())
+           interpreter.parse_symbols(buffer.contents(), buffer.language_name())
+           interpreter.user_message("Done compiling symbols", 
+               instance = app.name())
 
 
 class ActionPrintSymbols(Action):
