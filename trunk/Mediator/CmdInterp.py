@@ -1,7 +1,7 @@
 import config, os, re, string
 
 import auto_test, natlink, vc_globals
-from actions_C import *
+from actions_C_C++ import *
 from actions_py import *
 from AppState import AppState
 from cont_gen import ContC, ContPy

@@ -2,7 +2,6 @@
 
 def c_simple_for(app, cont):
     """Insert template code for a simple C for loop"""
-    print '-- actions_C.c_simple_for: called'
     app.insert_indent('for (', '=0;  <= ; ++)\n{\n\n}\n')
 
 def c_goto_body(app, cont):
