@@ -162,14 +162,14 @@ class ListenThread(threading.Thread, Object.Object):
             self.xed.vc_talk_msgr.send_mess('goto_resp', {'updates': self.upd_curpos_sel()})
         elif action == 'get_visible':
             self.xed.vc_talk_msgr.send_mess('get_visible_resp', {'value': self.xed.ed.get_visible()})
-        elif action == 'stop_responding':
-            self.xed.vc_talk_msgr.send_mess('stop_responding_resp')            
-        elif action == 'start_responding':
+        elif action == 'recog_begin':
+            self.xed.vc_talk_msgr.send_mess('recog_begin_resp', {'value': 1}) 
+        elif action == 'recog_end':
             #
-            # *start_responding* is invoked at the end of an utterance.
+            # *recog_end* is invoked at the end of an utterance.
             # print the updated buffer content.
             #
-            self.xed.vc_talk_msgr.send_mess('start_responding_resp')
+            self.xed.vc_talk_msgr.send_mess('recog_end_resp')
             self.xed.ed.refresh()
         elif action == 'refresh_if_necessary':
             self.xed.ed.refresh()
@@ -188,6 +188,9 @@ class ListenThread(threading.Thread, Object.Object):
             print '-- execute_request: action=\'close_buffer\''
             self.xed.ed.close_buffer(buff_name=args['buff_name'], save=['save'])
             self.xed.vc_talk_msgr.send_mess('ok')
+        elif action == 'terminating':
+            print "VoiceCode server was unilaterally shutdown."
+            sys.exit
 
     def run(self):
         """Listen for requests from VoiceCode and execute them.
@@ -205,7 +208,7 @@ class ListenThread(threading.Thread, Object.Object):
         while 1:
 #            print '--  ListenThread.run: polling VoiceCode'
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['cur_pos', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'start_responding', 'stop_responding', 'open_file', 'refresh_if_necessary', 'close_buffer'])
+                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'refresh_if_necessary', 'close_buffer', 'terminating'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'
@@ -276,6 +279,7 @@ class ExternalEdSim(Object.Object):
         #
         # Send name of editor
         #
+        self.vc_listen_msgr.get_mess(expect=['send_app_name'])
         self.vc_listen_msgr.send_mess('app_name', {'value': 'EdSim'})
 
 
@@ -331,8 +335,8 @@ class ExternalEdSim(Object.Object):
         #
         # Send the connection pair ID to the remote server
         #
+        self.vc_talk_msgr.get_mess(expect=['send_id'])
         self.vc_talk_msgr.send_mess('my_id_is', {'value': self.id})
-        answer = self.vc_talk_msgr.get_mess(expect=['ok'])        
         
         print '-- open_vc_talker_conn: done'
 

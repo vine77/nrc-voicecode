@@ -90,14 +90,14 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         
         return SourceBuffTB.SourceBuffTB(app=self, fname=fname)
 
-
-    def stop_responding(self):
+        
+    def recog_begin(self, window_id):
         
         """Haven't figured out how to make WaxEdit block user input"""
 
         pass
-        
-    def start_responding(self):
+
+    def recog_end(self):
         
         """Haven't figured out how to make WaxEdit block user input"""
 

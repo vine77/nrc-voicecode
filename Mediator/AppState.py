@@ -75,7 +75,9 @@ def use_update_class(action):
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
     use_class = {'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
-                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto}
+                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto,
+                 'close_buff': AS_UpdCloseBuffer,
+                 'open_buff': AS_UpdOpenBuffer}
 
     
     return use_class[action]
@@ -123,6 +125,69 @@ class AS_Update(Object):
                             {'descr': descr}, 
                             args_super, 
                             {})
+
+
+    def apply(self, on_app):
+
+        """Carry out the update.
+
+        **INPUTS**
+        
+        [AppState] *on_app* --
+    
+        **OUTPUTS**
+        
+        *none* --
+
+        ..[AppState] file:///./AppState.AppState.html"""
+        debug.virtual('AS_Update.apply')        
+
+
+class AS_UpdOpenBuffer(AS_Update):
+            
+    """Update class for opening a buffer.
+    
+    **INSTANCE ATTRIBUTES**
+
+    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, descr, **args_super):
+        self.deep_construct(AS_UpdOpenBuffer, 
+                            {'descr': descr}, 
+                            args_super, 
+                            {})
+        
+    def apply(self, on_app):
+        on_app.new_source_buffer(self.descr['buff_name'])
+
+        
+class AS_UpdCloseBuffer(AS_Update):
+            
+    """Update class for closing a buffer.
+    
+    **INSTANCE ATTRIBUTES**
+
+    {STR: ENCODABLE} *descr* -- A description of the parameters of the update.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, descr, **args_super):
+        self.deep_construct(AS_UpdCloseBuffer, 
+                            {'descr': descr}, 
+                            args_super, 
+                            {})
+        
+    def apply(self, on_app):
+        on_app.close_buff(self.descr['buff_name'])
+
         
 class SB_Update(AS_Update):
             
@@ -432,34 +497,14 @@ class AppState(Object):
                              'translation_is_off': translation_is_off},
                             attrs)
 
-    def recog_begin(self):
+    def recog_begin(self, window_id):
         """Invoked at the beginning of a recognition event.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
 
-        **OUTPUTS**
-        
-        *none* -- 
-        """
+        The editor then returns telling VoiceCode whether or not the user
+        is allowed to speak into window *window_id*.
 
-        # Give the user a visual indication that he shouldn't be
-        # typing/mousing.
-        self.recog_indicator('on')
-
-        #
-        # Ask the editor to stop responding to user kbd and mouse events
-        # (if it's able to)
-        #
-        self.stop_responding()
-
-
-    def stop_responding(self):
-        
-        """When an utterance is heard, VoiceCode invokes this to ask
-        the editor to stop responding to user input. This is to
+        If possible, the editor should also stop responding to user
+        input until method [recog_end()] is invoked. This is to
         prevent a bunch of problems that can arise if the user types
         while VoiceCode is still processing an utterance. In such
         cases, the results of the utterance interpretation can be
@@ -469,14 +514,14 @@ class AppState(Object):
 
         Ideally, the editor would:
 
-        - Start recording user actions to a log Then execute those
-        - actions later when [start_responding()] is invoked.
+        - Start recording user actions to a log
+        - execute those actions later when [recog_end()] is invoked.
 
         If the editor is able to stop responding to user input, but is
         not able to record them and/or execute them later, then it
         should:
 
-        - Stop responding to user input until [start_responding()] is
+        - Stop responding to user input until [recog_end()] is
           later invoked.
 
         If the editor is not even able to stop responding to user
@@ -486,51 +531,31 @@ class AppState(Object):
         
 
         NOTE: This method may be invoked more than once before
-        [start_responding()] is invoked. In such cases, only the first
+        [recog_end()] is invoked. In such cases, only the first
         call to the method should do anything.
 
+        
         **INPUTS**
         
-        *none* -- 
-        
+        STR *window_id* -- The ID of the window that was active when
+        the recognition began.                
 
         **OUTPUTS**
         
-        *none* -- 
-
-        ..[start_responding()] file:///./AppState.AppState.html#start_responding"""
+        BOOL *can_talk* -- *true* iif editor allows user to speak into window
+        with ID *window_id*
         
-        debug.virtual('AppState.stop_responding')
+        .. [recog_end()] file:///./AppState.AppState.html#recog_end"""
+
+        debug.virtual("AppState.recog_begin")
 
 
     def recog_end(self):
         """Invoked at the end of a recognition event.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
 
-        **OUTPUTS**
-        
-        *none* -- 
-        """
-
-        # Tell the editor it can start responding to user kbd and mouse
-        # events again
-        self.start_responding()
-
-
-        # Give the user a visual indication that he can start typing/mousing
-        # again
-        self.recog_indicator('off')
-
-    def start_responding(self):
-        
-        """Invoked when VoiceCode has finished processing an
-        utterance. This tells the editor to start responding to user
+        This tells the editor to start responding to user
         input again, and possibly to execute any user inputs it may
-        have recorded since [stop_responding()] was invoked.
+        have recorded since [recog_begin()] was invoked.
         
         Each external editor will respond to that message as best it can.
 
@@ -553,7 +578,7 @@ class AppState(Object):
         - Do nothing
 
         NOTE: This method may be invoked more than once before
-        [stop_responding()] is invoked. In such cases, only the first
+        [recog_begin()] is invoked. In such cases, only the first
         call to the method should do anything.
 
         **INPUTS**
@@ -565,11 +590,19 @@ class AppState(Object):
         
         *none* -- 
 
-        ..[stop_responding()] file:///./AppState.AppState.html#stop_responding"""
+        
+        **INPUTS**
+        
+        *none* -- 
+        
 
-        debug.virtual('AppState.start_responding')
+        **OUTPUTS**
+        
+        *none* -- 
 
+        ..[recog_begin()] file:///./AppState.AppState.html#recog_begin"""
 
+        debug.virtual('AppState.recog_end')
 
 
     def recog_indicator(self, status):
@@ -950,6 +983,12 @@ class AppState(Object):
             return None
 
 
+    def close_buff(self, buff_name):
+        if buff_name != None:
+            buff_name = self.curr_buffer_name()
+        if buff_name != None:
+            del self.open_buffers[buff_name]
+
     def drop_breadcrumb(self, buffname=None, pos=None):
 
         """Drops a breadcrumb
@@ -974,14 +1013,17 @@ class AppState(Object):
         debug.virtual('AppState.pop_breadcrumbs')        
 
 
-
-
-    def open_file_cbk(self, name):
+    def open_file_cbk(self, name, last_modified=None):
         """Editor invokes this method to notify VoiceCode that it opened a new source file.
         
         **INPUTS**
         
-        STR *name* -- Name of the buffer         
+        STR *name* -- Name of the buffer
+
+        (INT, INT, INT, INT, INT, INT) *last_modified* -- Date where
+        this buffer was last modified (year, month, day, hours,
+        minutes, seconds). Used to decide whether symbols in that file
+        should be recompiled or not (future use only)
 
         **OUTPUTS**
         
@@ -1203,5 +1245,9 @@ class AppState(Object):
         """
         
         debug.virtual('AppState.close_buffer')
+
+
+
+
 
 
