@@ -65,7 +65,7 @@ debug.config_traces(status="on",
 #                      'SelectWinGram': 1,
 #                      'DictWinGram': 1,
 #                        'GramMgr': 1,
-#                        'BasicCorrectionWinGram': 1
+#                        'BasicCorrectionWinGram': 1,
 #                      'CmdInterp.is_spoken_LSA': 1
 #                       'NewMediatorObject': 1,
 #                       'OwnerObject': 1
