@@ -1,0 +1,5 @@
+(defun tst ()
+  (interactive)
+  (set-mark nil)
+  (message "(point)=%S, (mark)=%S" (point) (mark))
+)
