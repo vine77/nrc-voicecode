@@ -239,7 +239,8 @@ def compile_symbols(file_list):
     the_mediator.interp.known_symbols.pickle()
 
     
-def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
+def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0,
+    selection = 0):
     """Simulate an utterance *STR utterance*
 
     *STR utterance* -- The utterance. This can be a string with the
@@ -262,6 +263,14 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     withouth going through NatLink's recognitionMimic function.
 
     *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+
+    *BOOL selection = 0* -- if true, the utterance should be recognized
+    by a selection grammar.  Normally, this flag is optional.  However,
+    if you are running with Natspeak connected, but bypassing natlink
+    for dictation recognition in order to profile the interpretation code, 
+    you will need to specify selection = 1 for selection utterances to
+    be handled properly.
+      
 
     Examples: say('x not equal to') -> 'x != '
               say(['x', ' != \\not equal to'] -> 'x != '
@@ -470,9 +479,12 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
     *BOOL* disconnect = 1 -- Indicates whether or not to disconnect from
     the SR system.
+
+    *BOOL* bypass_for_dictation -- Indicates that, for profiling
+    purposes, we should bypass natlink for dictation utterances
     """
     help_string = __doc__
-    def __init__(self, app, interp, names, **args):
+    def __init__(self, app, interp, names, bypass_for_dictation = 0, **args):
         self.deep_construct(SimCmdsObj,
                             {
                              'app': app,
@@ -481,6 +493,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                              'quit_flag': 0,
                              'clean_sr_voc' : 0,
                              'save_speech_files' : None,
+                             'bypass_for_dictation': bypass_for_dictation,
                              'disconnect_flag': 1
                             }, args, 
                             exclude_bases = {InstanceSpace.InstanceSpace: 1})
@@ -562,7 +575,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         self.interp.known_symbols.pickle()
 
         
-    def say(self, utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
+    def say(self, utterance, user_input=None, bypass_NatLink=0, 
+        echo_utterance=0, selection = 0):
         """Simulate an utterance *STR utterance*
 
         *STR utterance* -- The utterance. This can be a string with the
@@ -585,6 +599,13 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         withouth going through NatLink's recognitionMimic function.
 
         *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+
+        *BOOL selection = 0* -- if true, the utterance should be recognized
+        by a selection grammar.  Normally, this flag is optional.  However,
+        if you are running with Natspeak connected, but bypassing natlink
+        for dictation recognition in order to profile the interpretation code, 
+        you will need to specify selection = 1 for selection utterances to
+        be handled properly.
 
         Examples: say('x not equal to') -> 'x != '
                   say(['x', ' != \\not equal to'] -> 'x != '
@@ -615,12 +636,30 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             sys.stdout.flush()
             sys.stdin = temp_file
             
-        if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
+        if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH') \
+            or (self.bypass_for_dictation and not selection):
             trace('sim_commands.say', 'bypassing natlink')
 #        print 'bypass'
             sys.stdout.flush()
-            print "Heard  %s" % repr(utterance)            
-            self.interp.interpret_NL_cmd(utterance, app)
+            if util.islist(utterance) or util.istuple(utterance):
+                words = []
+                #
+                # Clean up the written form in case user didn't type
+                # special characters in the form that the SR expects
+                # (e.g. '\n' instead of '{Enter}'
+                #
+                for a_word in utterance:
+                    spoken, written = sr_interface.spoken_written_form(a_word)
+                    if spoken != written:
+                        written = sr_interface.clean_written_form(written, clean_for='sr')
+                        words = words + [sr_interface.vocabulary_entry(spoken, written)]
+                    else:
+                        words = words + [written]
+            else:        
+                words = re.split('\s+', utterance)
+
+            print "Heard %s" % string.join(words)
+            self.interp.interpret_NL_cmd(words, self.app)
             self.show_buff()        
         else:
             if util.islist(utterance) or util.istuple(utterance):

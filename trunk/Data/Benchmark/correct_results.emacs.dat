@@ -329,7 +329,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 245d950>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 246b430>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3289,7 +3289,7 @@ Heard for loop horizontal position loop body
 *** End of source buffer ***
 
 
->>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'])
+>>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'], selection = 1)
 
 Heard select horizontal position equals
 *** Start of source buffer ***
@@ -3339,7 +3339,7 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 276c2b0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 2770860> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -3400,6 +3400,15 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
+
+
+*******************************************************************************
+* Name        : profile_config
+* Description : profiling configuration
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -11314,63 +11323,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 *** End of source buffer ***
 
 
-*******************************************************************************
-* Name        : temp
-* Description : temporary test
-*******************************************************************************
-
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-*** Start of source buffer ***
-  1: <CURSOR># This is a small buffer for testing editing of Python code
-  2: 
-  3: 
-  4: class AClass(ASuper):
- 17:         pass
- 18:            
- 19: 
- 20: <CURSOR>
- 21: 
- 22: class SomeOtherClass():
- 23: 
-Heard class dummy class body
-Associate 'dummy' with symbol (Enter selection):
-
-  '0': no association
-  '1': dummy (*new*)
-  '2': Dummy (*new*)
-  '3': DUMMY (*new*)
-
->  18:            
- 19: 
- 20: class dummy:
- 21:    <CURSOR>
- 22: 
- 23: class SomeOtherClass():
- 24: 
-Heard define method new method method body pass
-Associate 'new method' with symbol (Enter selection):
-
-  '0': no association
-  '1': new_method (*new*)
-  '2': NewMethod (*new*)
-  '3': newMethod (*new*)
-  '4': NEW_METHOD (*new*)
-  '5': newmethod (*new*)
-  '6': NEWMETHOD (*new*)
-
->  20: class dummy:
- 21:    def new_method(self):
- 22:       pass
- 23:    <CURSOR>
- 24: 
- 25: class SomeOtherClass():
- 26: 
-
-
 
 -----------------------------------------------
-Test suite completed in:  1144.48000002 secs
+Test suite completed in:  1053.47000003 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'

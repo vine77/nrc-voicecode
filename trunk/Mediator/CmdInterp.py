@@ -156,8 +156,9 @@ class CmdInterp(OwnerObject):
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *[STR] cmd* -- The command. It is a list of written\spoken words, 
-        with both forms already massaged and cleaned
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         *AppState app* -- the AppState interface to the editor
         
@@ -354,12 +355,14 @@ class CmdInterp(OwnerObject):
         self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
 
     def interpret_cmd_tuples(self, cmd, app, initial_buffer = None):
-        
         """Interprets a natural language command and executes
         corresponding instructions.
 
+        **INPUTS**
+
         *[(STR, STR)]* cmd -- The command to be massaged. It's a list of
-         tuples of (spoken_form, written_form).
+         tuples of (spoken_form, written_form), with the written form
+         already cleaned for VoiceCode.
         
         *AppState app* -- the AppState interface to the editor
         
@@ -367,7 +370,10 @@ class CmdInterp(OwnerObject):
         start of the utterance.  Some CSCs may change the target buffer of 
         subsequent parts of the command.  If None, then the current buffer 
         will be used.
-        
+
+        **OUTPUTS**
+
+        *none*
         """
         cmd = self.massage_command_tuples(cmd)
         self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
@@ -382,22 +388,26 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[(STR, STR)]* command_tuples -- The command to be massaged. It's a list of
-         tuples of (spoken_form, written_form).
+        *[(STR, STR)]* cmd -- The command to be massaged. It's a list of
+         tuples of (spoken_form, written_form), with the written form
+         already cleaned for VoiceCode.
         
         **OUTPUTS**
         
-        *[STR] mod_command* -- The massaged command
+        *[(STR, STR)]* -- The massaged command
         """
         mod_command = []
         trace('CmdInterp.massage_command_tuples', 
             'pre-massaged cmd=%s' % command_tuples)
         for a_word in command_tuples:
             spoken, written = a_word
-            written = sr_interface.clean_written_form(written, clean_for='vc')
-            spoken = re.sub('\s+', ' ', spoken)
-            spoken = re.sub('(^\s+|\s+$)', '', spoken)
-            mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
+# redundant
+#            written = sr_interface.clean_written_form(written, clean_for='vc')
+            spoken = sr_interface.clean_spoken_form(spoken)
+#            spoken = re.sub('\s+', ' ', spoken)
+#            spoken = re.sub('\s+', ' ', spoken)
+#            spoken = re.sub('(^\s+|\s+$)', '', spoken)
+            mod_command.append((spoken, written))
         return mod_command
 
 
@@ -416,11 +426,12 @@ class CmdInterp(OwnerObject):
         
         **OUTPUTS**
         
-        *[STR] mod_command* -- The massaged command
+        *[(STR, STR)]* -- The massaged command
         """
         command_tuples = []
         for a_word in command:
-            spoken, written = sr_interface.spoken_written_form(a_word)
+            spoken, written = sr_interface.spoken_written_form(a_word,
+                clean_spoken = 0)
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
@@ -568,27 +579,28 @@ class CmdInterp(OwnerObject):
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
 #            app.insert_indent(untranslated_text, '')
         
-            
 
     def chop_CSC(self, cmd, app):
         """Chops the start of a command if it starts with a CSC.
         
         **INPUTS**
         
-        *[STR]* cmd -- The command. It is a list of written\spoken words.
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
 
         Returns a tuple *(chopped_CSC, consumed, rest)* where:
         
-        *STR* chopped_symbol -- The written form of the CSC that
+        *STR* chopped_symbol -- The spoken form of the CSC that
         was chopped off. If *None*, it means *cmd* did
         not start with a known CSC.
 
         *INT* consumed* -- Number of words consumed by the CSC from
          the command
 
-        *[STR]* rest -- is what was left of *cmd* after the CSC
+        *(STR, STR)* rest -- is what was left of *cmd* after the CSC
          was chopped off.        
         """
         
@@ -602,8 +614,9 @@ class CmdInterp(OwnerObject):
                 
         **INPUTS**
         
-        *[STR]* command -- The command. It is a list of words in
-         written\spoken form.        
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
         
@@ -617,8 +630,8 @@ class CmdInterp(OwnerObject):
          the command (always 1, but return it anyway because want to
          keep same signature as chop_CSC and chop_symbol)
 
-        *[STR]* rest -- is what was left of *command* after the LSA
-         was chopped off.
+        *(STR, STR)* rest -- is what was left of *cmd* after the LSA
+         was chopped off.        
         """
         
         trace('CmdInterp.chop_LSA', 'command=%s' % command)
@@ -630,7 +643,9 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[STR]* command -- The command. It is a list of written\spoken words.
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
 
@@ -643,7 +658,7 @@ class CmdInterp(OwnerObject):
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
 
-        *[STR]* rest -- is what was left of *command* after the symbol
+        *(STR, STR)* rest -- is what was left of *cmd* after the symbol
          was chopped off.        
         """
 
@@ -659,8 +674,9 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *[STR]* command -- The command. It is a list of written\spoken words.
-        
+        *[(STR, STR)]* cmd -- The command,  a list of
+         tuples of (spoken_form, written_form), with the spoken form
+         cleaned and the written form cleaned for VoiceCode.
 
         **OUTPUTS**
         
@@ -672,17 +688,15 @@ class CmdInterp(OwnerObject):
          return it anyway because want to keep same method signature
          as chop_CSC, chop_LSA and chop_symbol).
 
-        *[STR]* rest -- Rest of the command after the word was chopped
+        *[(STR, STR)]* rest -- Rest of the command after the word was chopped
         
         """
         
-        chopped_word, dummy = sr_interface.spoken_written_form(command[0])
+        chopped_word = command[0][0]
         consumed = 1
         rest = command[1:]
         return chopped_word, consumed, rest
         
-
-
     def chop_construct(self, cmd, construct_check, app):
         """Look at NL command to see if it starts with a
         particular kind of construct (e.g. CSC, LSA, symbol)
@@ -722,7 +736,7 @@ class CmdInterp(OwnerObject):
         #
         words = []
         for a_word in cmd:
-            a_word, dummy = sr_interface.spoken_written_form(a_word)
+            a_word = a_word[0]
             words = words + [a_word]
 
         #
@@ -732,6 +746,9 @@ class CmdInterp(OwnerObject):
         upto = len(words)
         while upto:
             a_spoken_form = string.join(words[:upto], ' ')
+# not completely redundant because the original spoken form might have
+# contained initials (e.g. "M" or "M.") which would not have cleaned 
+#            individually
             a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
             trace('CmdInterp.chop_construct', 'upto=%s, a_spoken_form=%s' % (upto, a_spoken_form))
 #            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
@@ -754,7 +771,6 @@ class CmdInterp(OwnerObject):
         trace('CmdInterp.chop_construct', 'returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest)))
 #        print '-- CmdInterp.chop_construct: returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest))
         return chopped_construct, consumed, rest
-        
 
 
     def is_spoken_CSC(self, spoken_form, app):
@@ -828,7 +844,7 @@ class CmdInterp(OwnerObject):
         known symbol.
         """
 
-        trace('CmdInterp.is_spoken_symbol', 'spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info))
+#        trace('CmdInterp.is_spoken_symbol', 'spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info))
 #        print '-- CmdInterp.is_spoken_symbol: spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info)
         
         written_symbol = None

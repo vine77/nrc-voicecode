@@ -26,6 +26,7 @@ regression tests.
 """
 
 import re, sys, time
+import profile
 import util
 from debug import trace
 
@@ -51,6 +52,9 @@ suite_reg['twobefore'] = ['CmdInterp', 'EdSim',
 suite_reg['cibefore'] = ['CmdInterp', 'automatic_abbreviations']
 
 suite_reg['edbefore'] = ['EdSim', 'automatic_abbreviations']
+suite_reg['insdel'] = ['basic_correction', 'change_direction',
+'compile_symbols', 'insert_delete']
+suite_reg['insdel2'] = ['basic_correction', 'insert_delete']
 
 test_header_fmt = '\n\n******************************************************************************\n* Test       : %s\n* Description : %s\n******************************************************************************\n\n'
 
@@ -82,13 +86,17 @@ def add_suite(name, *patterns):
     """
     suite_reg[name] = patterns
 
-def run(to_run):
+def run(to_run, profile_prefix = None):
     """
     Runs a series of test suites.
     
     Runs all test suites defined in *[STR] to_run*. Each entry
     in *to_run*is either the name of a test or the name of a test suite, or a
     regexp to be matched against test names.
+
+    If profile_prefix is specified, use the profile module to run each
+    test, sending the outputs to a file
+    profile_prefix + '.' + testname + '.dat'
     """
     trace('auto_test.run', '** to_run=%s' % repr(to_run))
     tests_to_do = {}
@@ -106,7 +114,13 @@ def run(to_run):
         [fct, desc] = tests_to_do[a_test_name]
         sys.stdout.write(test_header(a_test_name, desc))
         sys.stdout.flush()
-        apply(fct)
+        if profile_prefix is None:
+            apply(fct)
+        else:
+            import __main__
+            __main__.test_to_profile = fct
+            outfile = profile_prefix + '.' + a_test_name + '.dat'
+            profile.run('test_to_profile()', outfile)
         sys.stdout.flush()
 #        print "-- auto_test.run: global_dicts[a_test_name]=%s" % global_dicts[a_test_name]
 #        print "-- auto_test.run: local_dicts[a_test_name]=%s" % local_dicts[a_test_name]
