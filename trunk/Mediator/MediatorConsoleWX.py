@@ -511,6 +511,11 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
             "&Correct the text (use spoken forms)",
             wxDefaultPosition, wxDefaultSize)
         init_value = string.join(self.utterance.spoken_forms())
+        init_value = ""
+# due to a bug in wxWindows, setting the initial value of a text control
+# with default size may cause some of the text to be cut off.
+#
+# instead, we now set the initial value from the validator
         self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
             wxDefaultSize, style = wxTE_NOHIDESEL, validator = validator)
 #        s.Add(self.text, 0, wxEXPAND | wxALL)
