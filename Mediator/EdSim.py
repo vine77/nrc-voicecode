@@ -259,7 +259,7 @@ class EdSim(AppState):
             source_file.close()
         except Exception, err:
             source = ''
-            
+
         self.curr_buffer.content = source
         self.open_buffers[name] = self.curr_buffer
         
@@ -288,12 +288,9 @@ class EdSim(AppState):
 
         if (len(lines_with_num) > 0):
             firstline = lines_with_num[0]
-            print '-- EdSim.print_buff_content: here2'
             sys.stdout.write('%s\n' % firstline[1])
             for aline in lines_with_num[1:]:
-                #            print '-- EdSim.print_buff_content: aline=%s' % str(aline)
                 sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-                print '-- EdSim.print_buff_content: here3'
         sys.stdout.write("\n*** End of source buffer ***\n")
         
 
