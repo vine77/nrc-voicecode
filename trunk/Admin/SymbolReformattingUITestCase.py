@@ -47,4 +47,3 @@ class SymbolReformattingUITestCase(TestCaseWithHelpers.TestCaseWithHelpers):
                   ], 
                 self.ui.displayed_symbols())
 
-

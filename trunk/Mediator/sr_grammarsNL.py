@@ -30,6 +30,7 @@ import debug
 import exceptions
 from natlinkutils import *
 import string
+import sys
 
 import CmdInterp, AppState
 
@@ -753,6 +754,16 @@ class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
         GrammarBase.__init__(self)
         self.create_rules()
         self.load()
+
+    def gotResults_reformat_recent(self, words, fullResults):
+        """handler for Reformat Recent command
+        """
+        debug.trace('BasicCorrectionWinGramNL.gotResults_reformat_recent',
+            'heard reformat recent')
+        self.on_reformat_recent()
+        
+    def on_reformat_recent(self):
+        self.manager.reformat_recent()
 
     def load(self):
         if self.rules:

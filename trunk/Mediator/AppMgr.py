@@ -455,6 +455,30 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
             return
         self.recog_mgr.correct_recent_synchronous(instance_name)
 
+    def reformat_recent(self, instance_name):
+        """initiate user selection of a recent symbol to reforma
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the reformat recent dialog box.  Generally, it should 
+        be called only in response to a ReformatRecent event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *STR instance_name* -- name of the application instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('AppMgr.reformat_recent', '** instance_name=%s' % instance_name)
+        if not self.known_instance(instance_name):
+            debug.trace('AppMgr.reformat_recent', "** not known instance")
+            return
+        self.recog_mgr.reformat_recent_synchronous(instance_name)
+
+
 
     def add_prefix(self, app_name, title_prefix):
         """add a title prefix for an editor application
@@ -609,6 +633,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         title_prefix = self.title_prefixes[app_name]
         new_name = app_name + "(%d)" % (n)
         self.past_instances[app_name] = n + 1
+        debug.trace('AppMgr._add_new_instance', 'adding instance name: %s' % new_name)
         self.instances[new_name] = app
         app.set_manager(self)
         app.set_name(new_name)
@@ -707,6 +732,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
             self.recog_mgr.delete_instance(instance)
             del self.instance_data[instance]
             self.instances[instance].cleanup()
+            debug.trace('AppMgr.delete_instance', 'deleting instance name: %s' % instance)
             del self.instances[instance]
 
     def close_app_cbk(self, instance, unexpected = 0):

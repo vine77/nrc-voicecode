@@ -422,6 +422,40 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
             return None
 
 
+    def show_recent_symbols(self, editor_name, utterances):
+        """display a dialog box with recent symbols to allow the user to 
+        select a recent symbol to reformat
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        **OUTPUTS**
+
+        *[INT]* -- the symbol numbers of 
+        those symbols which were corrected by the user, or None if
+        none were corrected
+        """
+        print "This will eventually show the recent symbols, but it is not implemented yet."
+#make that correction dialog        box = CorrectRecentWX(self, self.main_frame, utterances, 
+#            self.gram_factory, pos = self.corr_recent_pos)
+#        answer = self.show_modal_dialog(box)
+#        self.corr_recent_pos = box.GetPositionTuple()
+#        changed = box.changed()  
+#        box.cleanup()
+#        box.Destroy()
+#        if answer == wxID_OK:
+##            print 'answer was OK'
+#            return changed
+#        else:
+##            print 'answer was cancel'
+#            return None
+
 class ByeByeMixIn(MediatorConsole.Dismissable, Object.OwnerObject):
     """mix-in for a dialog box with an idle handler which checks a 
     threading.Event object to see if it should simulate being dismissed.

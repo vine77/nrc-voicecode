@@ -701,41 +701,6 @@ class SymbolReformattingWinGram(WinGram):
         *STR* -- type of grammar ('dictation', 'selection', 'correction', or 'reformatting')
         """
         return 'reformatting'
-        
-    def reformat_recent(self, n = 1):
-        """method which subclass must call when the grammar 
-        recognizes Reformat That/Reformat n, to reformat the n symbols,
-        if possible.
-
-        **INPUTS**
-
-        *INT n* -- number of symbols to reformat
-
-        **OUTPUTS**
-        
-        *INT* -- number of symbols successfully reformatted
-        """
-        debug.trace('SymbolReformattingWinGram.scratch_recent', 
-            'trying to scratch %d' %n)
-#        n_done = self.manager.scratch_recent(n)
-#        debug.trace('SymbolReformattingWinGram.scratch_recent', 
-#            'actually scratched %d' %n_done)
-#        return n_done
-
-
-    def on_reformat_last(self):
-        """method which subclass must call when the grammar 
-        recognizes Reformat That with nothing selected
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *none*
-        """
-#        self.manager.correct_last()
 
     def on_reformat_recent(self):
         """method which subclass must call when the grammar 
@@ -749,7 +714,7 @@ class SymbolReformattingWinGram(WinGram):
 
         *none*
         """
-#        self.manager.correct_recent()
+        self.manager.reformat_recent()
 
 
 

@@ -1188,6 +1188,11 @@ class RSMInfrastructure(RecogStartMgr):
         if self.known_instance(instance):
             self.results[instance].correct_recent()
 
+    def reformat_recent(self, instance):
+        print "RSMInfrastructure.reformat_recent invoked... this will eventually display the reformat recent dialog, but it doesn't work yet"
+        if self.known_instance(instance):
+            self.results[instance].reformat_recent()
+                        
     def correct_recent_synchronous(self, instance):
         """initiate user correction of one or more recent dictation 
         utterances into the given editor, if possible
@@ -1224,6 +1229,21 @@ class RSMInfrastructure(RecogStartMgr):
         """
         if self.known_instance(instance_name):
             self.results[instance_name].correct_utterance(utterance_number)
+            
+    def reformat_recent_synchronous(self, instance):
+        """initiate user reformatting of one or more recent symbols 
+        uttered into the given editor, if possible
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance):
+            self.results[instance].reformat_recent_synchronous()
 
     def reset_results_mgr(self, instance_name = None):
         """resets the ResMgr objects for a given editor, erasing any 
@@ -1418,6 +1438,7 @@ class RSMInfrastructure(RecogStartMgr):
         """
         if self.known_instance(instance):
             return 0
+        debug.trace('RSMInfrastructure._add_instance', 'adding instance name: %s' % instance)
         self.instances[instance] = KnownInstance(window_id, module)
         app = self.app_instance(instance)
         debug.trace('RecogStartMgr._add_instance', 'new manager')
@@ -1647,6 +1668,7 @@ class RSMInfrastructure(RecogStartMgr):
             self.windows[window].delete_instance(instance)
             if self.windows[window].instances() == 0:
                 del self.windows[window]
+        debug.trace('RSMInfrastructure.delete_instance', 'deleting instance name: %s' % instance)
         del self.instances[instance]
         self.grammars[instance].cleanup()
         self.results[instance].cleanup()
@@ -2171,6 +2193,7 @@ class RSMBasic(RSMInfrastructure):
         if self.known_instance(instance):
             return 0
         if self.universal == None:
+            debug.trace('RSMBasic.new_universal_instance', 'adding instance name: %s' % instance)
             self.instances[instance] = KnownInstance()
             app = self.app_instance(instance)
             debug.trace('RecogStartMgr.new_universal_instance', 

@@ -2065,6 +2065,9 @@ class ResMgrBasic(ResMgrStd):
 
     *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an 
     event to bring up a correct recent box asynchronously
+    
+    *ReformatSymbolEvent reformat_recent_evt* -- doorbell used to send an 
+    event to bring up a reformat recent box asynchronously
 
     *[SpokenUtterance] utterances* -- stack of recent utterances, sorted with
     most recent last (technically a queue, since it has finite size and
@@ -2097,13 +2100,14 @@ class ResMgrBasic(ResMgrStd):
     *StateStackBasic states* -- stack representing the state of the editor 
     application before/after recent utterances
     """
-    def __init__(self, correct_evt, correct_recent_evt, 
+    def __init__(self, correct_evt, correct_recent_evt, reformat_recent_evt,
         max_utterances = 30, **args):
         self.deep_construct(ResMgrBasic,
                             {
                              'max_utterances': max_utterances,
                              'correct_evt': correct_evt,
                              'correct_recent_evt': correct_recent_evt,
+                             'reformat_recent_evt': reformat_recent_evt,
                              'utterances': [],
                              'interpreted': [],
                              'interp_states': [],
@@ -2120,6 +2124,7 @@ class ResMgrBasic(ResMgrStd):
     def remove_other_references(self):
         self.correct_evt = None
         self.correct_recent_evt = None
+        self.reformat_recent_evt = None
         
     def store(self, result, interpreted, initial_buffer, number):
         """store the result and its interpretation information after
@@ -2697,6 +2702,32 @@ class ResMgrBasic(ResMgrStd):
         """
         self.correct_nth()
 
+    def reformat_recent_synchronous(self):
+        """initiate user reformatting of one or more recent symbol 
+        uttered into the given editor, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace("ResMgrBasicreformat_recent_synchronous", "invoked")
+        console = self.console()
+        utterances = self.recent_dictation()
+        if utterances:
+            console.reformat_recent(self.name, utterances)
+        
+
+
+    def reformat_recent(self):
+        console = self.console()
+        if console.already_modal():
+            console.dismiss_modal()
+        self.reformat_recent_evt.notify(self.name)
+
 
 class ResMgrFactory(Object):
     """abstract class defining the interface for a factory to create
@@ -2751,8 +2782,11 @@ class ResMgrBasicFactory(ResMgrFactory):
 
     *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an 
     event to bring up a correct recent box asynchronously
+    
+    *ReformatSymbolEvent reformat_recent_evt* -- doorbell used to send an 
+    event to bring up a reformat recent box asynchronously
     """
-    def __init__(self, correct_evt, correct_recent_evt, 
+    def __init__(self, correct_evt, correct_recent_evt, reformat_recent_evt,
         max_utterances = 30, **args):
         """
         *INT max_utterances* -- the maximum number of recent dictation 
@@ -2761,6 +2795,7 @@ class ResMgrBasicFactory(ResMgrFactory):
         self.deep_construct(ResMgrBasicFactory, 
                             {'correct_evt': correct_evt,
                              'correct_recent_evt': correct_recent_evt,
+                             'reformat_recent_evt': reformat_recent_evt,
                              'max_utterances': max_utterances}, 
                             args)
 
@@ -2779,6 +2814,7 @@ class ResMgrBasicFactory(ResMgrFactory):
             instance_name = instance_name, 
             correct_evt = self.correct_evt,
             correct_recent_evt = self.correct_recent_evt,
+            reformat_recent_evt = self.reformat_recent_evt,
             max_utterances = self.max_utterances)
 
    

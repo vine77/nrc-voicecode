@@ -357,6 +357,7 @@ class MediatorConsole(Object.OwnerObject):
             can_reinterpret, should_adapt = should_adapt)
         editor_window.restore_to_foreground()
         return ok
+        
 
     def show_correction_box(self, editor_name, utterance, 
         can_reinterpret, should_adapt = 1):
@@ -413,7 +414,7 @@ class MediatorConsole(Object.OwnerObject):
         changed = self.show_recent_utterances(editor_name, utterances)
         editor_window.restore_to_foreground()
         return changed
-
+        
     def show_recent_utterances(self, editor_name, utterances):
         """display a correct recent dialog box for to allow the user to 
         select a recent utterance to correct
@@ -434,6 +435,58 @@ class MediatorConsole(Object.OwnerObject):
         none were corrected
         """
         debug.virtual('MediatorConsole.show_recent_utterances')
+
+    def reformat_recent(self, editor_name, utterances):
+        """Store the current foreground window,
+        display a reformat recent sdialog box to allow the user to 
+        select a recent symbol to reformat.  Finally, restore
+        the original window to the foreground
+
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        **OUTPUTS**
+
+        *[INT]* -- the utterance numbers of 
+        those utterances which were corrected by the user, or None if
+        none were corrected
+        """
+
+        debug.trace('MediatorConsole.reformat_recent', 'invoked with utterances=%s' % utterances)
+        editor_window = self.store_foreground_window()
+        self.show_recent_symbols(editor_name, utterances)
+        print "This will eventually display the recent symbol correction dialog box, but it is not implemented yet"
+        editor_window.restore_to_foreground()
+#        return ok
+
+    def show_recent_symbols(self, editor_name, utterances):
+        """display a dialog box with recent symbols to allow the user to 
+        select a recent symbol to reformat
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
+        utterances (or all available if < n), sorted most recent last, 
+        with corresponding flags indicating if the utterance can be 
+        undone and re-interpreted, or None if no utterances are stored.
+
+        **OUTPUTS**
+
+        *[INT]* -- the symbol numbers of 
+        those symbols which were corrected by the user, or None if
+        none were corrected
+        """
+        debug.virtual('MediatorConsole.show_recent_symbols')
+
 
     def raise_active_window(self):
         """makes the active window (within the current process) the

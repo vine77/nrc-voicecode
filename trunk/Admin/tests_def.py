@@ -64,6 +64,10 @@ unusual_symbols_py = vc_globals.test_data + os.sep + 'unusual_symbols.py'
 # use this only for foreground tests:
 foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
 
+#####################################################################################
+# Some helper functions for testing
+#####################################################################################
+
 def test_py_unit():
    unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test')) 
    print "\n*** Making sure that failing tests won't halt the whole test process."   
@@ -3600,6 +3604,24 @@ def test_symbol_reformatting_ui():
    SymbolReformattingUITestCase.test_mediator = testing.mediator()
    unittest.TextTestRunner(). \
        run(unittest.makeSuite(SymbolReformattingUITestCase.SymbolReformattingUITestCase, 'test')) 
+   symbol_reformatting_acceptance_tests()       
+   
+def symbol_reformatting_acceptance_tests():
+   sys.stdout.write("\n*** Starting acceptance tests:\n\n")
+   testing.init_simulator_regression()
+   
+   commands.open_file('blah.py') 
+   test_say(['some', 'symbol'])
+   # AD: Hum... this doesn't actually end up invoking the dialog.
+   #     The last trace I see is that ReformatSymbolEventWX.notify() was 
+   #     invoked, but the event never gets acted upon. 
+   #     But strangely enough, when testing interactively, 'reformat recent' 
+   #     DOES invoke the dialog.
+   #     Maybe because of a difference in the event loop between test mode
+   #     and interactive mode?
+   test_say(['reformat', 'recent'])
+  
+   
    
 add_test('symbol_reformatting_ui', test_symbol_reformatting_ui, 'Testing symbol reformatting UI.')
 
