@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Sep 12 01:06:09 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:36:17 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -30,8 +30,12 @@
     <A CLASS="DocLink" HREF="#actions_gen.ActionIncrIndentation.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionIncrIndentation.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionIncrIndentation.execute</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # See [Action.execute].</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionRepeatable</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatable.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">already_repeated=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.Action</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#actions_gen.Action.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a documentation string for the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Execute the action.</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Log the action to an application's command history</SPAN>
+    <A CLASS="DocLink" HREF="#actions_gen.Action.log_execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log_execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Executes the action and logs it in the application's history.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -39,12 +43,8 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.Action</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">docstring=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#actions_gen.Action.doc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.doc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a documentation string for the action.</SPAN>
-    <A CLASS="DocLink" HREF="#actions_gen.Action.execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Execute the action.</SPAN>
-    <A CLASS="DocLink" HREF="#actions_gen.Action.log"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Log the action to an application's command history</SPAN>
-    <A CLASS="DocLink" HREF="#actions_gen.Action.log_execute"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.Action.log_execute</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)<SPAN CLASS="OneLiner"> # Executes the action and logs it in the application's history.</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from actions_gen.ActionRepeatable</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">actions_gen.ActionRepeatable.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">already_repeated=0</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
 
 </PRE><H2>Description</H2><P>
 Action that increases the indent level of selected code by a certain
@@ -78,6 +78,101 @@ CLASS ATTRIBUTES**</P>
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.doc" CLASS="Method">actions_gen.Action.doc(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>Returns a documentation string for the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.execute" CLASS="Method">actions_gen.Action.execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Execute the action.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>Application on which to execute the action
+<DT>
+[Context] app_cont
+<DD>Context of the application that
+determines the parameters of how the action will be executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log" CLASS="Method">actions_gen.Action.log(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Log the action to an application's command history</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+[AppState] app
+<DD>Application to log the action with.
+<DT>
+[Context] cont
+<DD>Context in which the action was executed.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="actions_gen.Action.log_execute" CLASS="Method">actions_gen.Action.log_execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
+<P>Executes the action and logs it in the application's history.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<A HREF="AppState.AppState.html">AppState</A> app
+<DD>The application to execute and log the action on.
+<DT>
+<A HREF="Context.Context.html">Context</A> cont
+<DD>The context object that determines the parameters
+of how the action will be executed.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -208,101 +303,6 @@ Attributes are only set if they already exist in
 <EM>{STR: ANY}</EM> attrs
 <DD>dictionary with attribute name as the keys and
  default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="actions_gen.Action.doc" CLASS="Method">actions_gen.Action.doc(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>Returns a documentation string for the action.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="actions_gen.Action.execute" CLASS="Method">actions_gen.Action.execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
-<P>Execute the action.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<A HREF="AppState.AppState.html">AppState</A> app
-<DD>Application on which to execute the action
-<DT>
-[Context] app_cont
-<DD>Context of the application that
-determines the parameters of how the action will be executed.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="actions_gen.Action.log" CLASS="Method">actions_gen.Action.log(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
-<P>Log the action to an application's command history</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-[AppState] app
-<DD>Application to log the action with.
-<DT>
-[Context] cont
-<DD>Context in which the action was executed.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="actions_gen.Action.log_execute" CLASS="Method">actions_gen.Action.log_execute(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">cont</SPAN>)</H2>
-<P>Executes the action and logs it in the application's history.</P>
-
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<A HREF="AppState.AppState.html">AppState</A> app
-<DD>The application to execute and log the action on.
-<DT>
-<A HREF="Context.Context.html">Context</A> cont
-<DD>The context object that determines the parameters
-of how the action will be executed.
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

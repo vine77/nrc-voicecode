@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Sep 25 13:10:56 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Oct 07 15:35:34 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">RSMInfrastructure</SPAN>(<A CLASS="DocLink" HREF="RecogStartMgr.RecogStartMgr.html">RecogStartMgr</A>):
-    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">res_mgr_factory=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._activate_grammars"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._activate_grammars</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._add_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._add_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window_id=None</SPAN>, <SPAN CLASS="Argument">module=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure._add_instance_to_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure._add_instance_to_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
@@ -43,6 +43,10 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.app_new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.app_new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.can_reinterpret"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.can_reinterpret</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.console"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.console</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
@@ -56,6 +60,7 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.recent_dictation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.recent_dictation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.reinterpret_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.reinterpret_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">changed</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.reset_results_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.reset_results_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name=None</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">n=1</SPAN>)
@@ -65,6 +70,12 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.stored_utterances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.stored_utterances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RSMInfrastructure.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RSMInfrastructure.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from RecogStartMgr.RecogStartMgr</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr._recognition_starting"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr._recognition_starting</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>, <SPAN CLASS="Argument">module_name=None</SPAN>)
@@ -73,6 +84,9 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.app_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.app_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.app_new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.app_new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.correct_last"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.correct_last</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.correct_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.correct_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.correct_utterance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.correct_utterance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.deactivate"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.deactivate</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
@@ -88,6 +102,7 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.scratch_recent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.scratch_recent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.set_app_mgr"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.set_app_mgr</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)<SPAN CLASS="OneLiner"> # fill in the reference to the parent AppMgr</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.shared_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.shared_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a shared window?</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.single_display"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.single_display</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a single-window display?</SPAN>
@@ -95,12 +110,6 @@
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.trust_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.trust_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
     <A CLASS="DocLink" HREF="#RecogStartMgr.RecogStartMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">RecogStartMgr.RecogStartMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
@@ -150,6 +159,10 @@ grammars for that instance
 <DD>GramMgrFactory to create GramMgr
 objects for new instances
 <DT>
+<EM>ResMgrFactory</EM> res_mgr_factory
+<DD>factory to create ResMgr objects
+for new instances
+<DT>
 <EM>BOOL</EM> active
 <DD>flag indicating whether the RecogStartMgr is
 active
@@ -159,7 +172,7 @@ active
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="RecogStartMgr.RSMInfrastructure.__init__" CLASS="Method">RecogStartMgr.RSMInfrastructure.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="RecogStartMgr.RSMInfrastructure.__init__" CLASS="Method">RecogStartMgr.RSMInfrastructure.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">GM_factory</SPAN>, <SPAN CLASS="Argument">res_mgr_factory=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -171,6 +184,10 @@ active
 <EM>GramMgrFactory</EM> GM_factory
 <DD>GramMgrFactory to create GramMgr
 objects for new instances
+<DT>
+<EM>ResMgrFactory</EM> res_mgr_factory
+<DD>factory for creating new
+ResMgr objects
 </DL>
 <H2 ID="RecogStartMgr.RSMInfrastructure._activate_grammars" CLASS="Method">RecogStartMgr.RSMInfrastructure._activate_grammars(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
 <P>None</P>
@@ -648,6 +665,88 @@ to be reinterpreted
 <DD>true if we can safely reinterpret that utterance
 
 </DL>
+<H2 ID="RecogStartMgr.RSMInfrastructure.console" CLASS="Method">RecogStartMgr.RSMInfrastructure.console(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns a reference to the MediatorConsole which provides the
+GUI correction interfaces.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.correct_last" CLASS="Method">RecogStartMgr.RSMInfrastructure.correct_last(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of the most recent dictation utterance 
+into the given editor, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the editor instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.correct_recent" CLASS="Method">RecogStartMgr.RSMInfrastructure.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of one or more recent dictation 
+utterances into the given editor, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the editor instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RSMInfrastructure.correct_utterance" CLASS="Method">RecogStartMgr.RSMInfrastructure.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of the utterance with a given
+utterance number into the given instance</P>
+<P>
+NOTE: this is a synchronous method which starts a modal
+correction box, and will not return until the user has 
+dismissed the correction box.  Generally, it should be called
+only in response to a CorrectUtterance event, rather than
+in direct response to a spoken correction command.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT utterance_number</EM>
+<DD>the number assigned to the utterance by
+interpret_dictation
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="RecogStartMgr.RSMInfrastructure.deactivate" CLASS="Method">RecogStartMgr.RSMInfrastructure.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -1206,6 +1305,136 @@ window</P>
 window, or None if the window is unknown
 
 </DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="RecogStartMgr.RecogStartMgr.__init__" CLASS="Method">RecogStartMgr.RecogStartMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust_current_window=0</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
@@ -1379,6 +1608,73 @@ specified instance</P>
 <DD>true if window is added
 
 </DL>
+<H2 ID="RecogStartMgr.RecogStartMgr.correct_last" CLASS="Method">RecogStartMgr.RecogStartMgr.correct_last(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of the most recent dictation utterance 
+into the given editor, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the editor instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.correct_recent" CLASS="Method">RecogStartMgr.RecogStartMgr.correct_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of one or more recent dictation 
+utterances into the given editor, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the editor instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="RecogStartMgr.RecogStartMgr.correct_utterance" CLASS="Method">RecogStartMgr.RecogStartMgr.correct_utterance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">utterance_number</SPAN>)</H2>
+<P>None</P>
+
+<P>
+initiate user correction of the utterance with a given
+utterance number into the given instance</P>
+<P>
+NOTE: this is a synchronous method which starts a modal
+correction box, and will not return until the user has 
+dismissed the correction box.  Generally, it should be called
+only in response to a CorrectUtterance event, rather than
+in direct response to a spoken correction command.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT utterance_number</EM>
+<DD>the number assigned to the utterance by
+interpret_dictation
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="RecogStartMgr.RecogStartMgr.deactivate" CLASS="Method">RecogStartMgr.RecogStartMgr.deactivate(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
@@ -1714,6 +2010,34 @@ instance has renamed a buffer</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="RecogStartMgr.RecogStartMgr.scratch_recent" CLASS="Method">RecogStartMgr.RecogStartMgr.scratch_recent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
+<P>None</P>
+
+<P>
+undo the effect of the n most recent dictation utterances into 
+the given editor, if possible</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR instance</EM>
+<DD>name of the editor instance 
+<DT>
+<EM>INT n</EM>
+<DD>number of utterances to undo
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of utterances successfully undone
+
+</DL>
 <H2 ID="RecogStartMgr.RecogStartMgr.set_app_mgr" CLASS="Method">RecogStartMgr.RecogStartMgr.set_app_mgr(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">manager</SPAN>)</H2>
 <P>fill in the reference to the parent AppMgr</P>
 
@@ -1872,136 +2196,6 @@ window</P>
 <DD>list of names of instances associated with the
 window, or None if the window is unknown
 
-</DL>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-<P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
 </DL>
 <H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
 <P>attempt to call cleanup on object</P>
