@@ -3,28 +3,29 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 24 12:58:46 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 24 12:59:01 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class SymbolInfo</title>
+<title>Class BackspaceMixIn</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class SymbolInfo - Stores information about a parsed symbol.</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="SymDict.html">SymDict</A></P>
+<H1 CLASS="ClassName">class BackspaceMixIn - implements the backspace method by deletion.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="SourceBuff.html">SourceBuff</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SymDict.SymbolInfo<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">SourceBuff.BackspaceMixIn<BR>
 &nbsp;&nbsp;Object.Object<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SymbolInfo</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymbolInfo.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms=[]</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">BackspaceMixIn</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.BackspaceMixIn.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.BackspaceMixIn.backspace"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.BackspaceMixIn.backspace</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)<SPAN CLASS="OneLiner"> # Delete a number of spaces before the cursor.</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -33,23 +34,27 @@
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
 </PRE><H2>Description</H2><P>
-<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+To use, derive a new class from this class and SourceBuff (or an
+existing subclass of SourceBuff).  Make sure that this class appears
+before SourceBuff (or its subclass) in the list of parent classes. 
+</P>
+<H2 ID="SourceBuff.BackspaceMixIn.backspace" CLASS="Method">SourceBuff.BackspaceMixIn.backspace(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)</H2>
+<P>Delete a number of spaces before the cursor.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
 
 <DL>
 
 <DT>
-<EM>[STR] spoken_forms=[]</EM>
-<DD>list of spoken forms for that symbol.
+INT <EM>n_times</EM>
+<DD>number of characters to delete.
 </DL>
 <P>
-CLASS ATTRIBUTES**</P>
-
-<DL>
-
-<DT>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
 <EM>none</EM>
-<DD>
-</DL>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
