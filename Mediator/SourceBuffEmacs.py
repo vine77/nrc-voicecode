@@ -67,3 +67,5 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffMessaging):
         """
 
         return self.lang_srv.language_name()
+
+        
