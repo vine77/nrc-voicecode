@@ -1,4 +1,4 @@
-import exceptions, os, posixpath, profile, sys
+import auto_test, exceptions, os, posixpath, profile, sys
 
 class Object:
     """A base class for objects with safe attribute access methods
@@ -20,19 +20,115 @@ class Object:
     - when *$PY_DEBUG_OBJECT=0*, the performance of attribute *sets* is the same for Object and non-Object instances
     - when *$PY_DEBUG_OBJECT=1*, attribute *sets* are about 150% slower for Object instances than for non-Object instances
 
+    **TEMPLATE CONSTRUCTOR**
+
+    Constructors for each of the subclasses of *Object* are
+    responsible for adding an entry in *self.__dict__* corresponding
+    to the attributes defined by that class (otherwise those
+    attributes will be considered as undefined by the safe
+    *__setattr__* method)
+
+    You can do this using the [def_attrs] method.
+
+    Note however that Python does not automatically invoke the
+    constructor of every superclass of a class, so your constructor
+    should do this explicitly. Below is a template constructor.
+
+    Example:
+
+       class AClass(Super1, ..., SuperN):
+          def __init__(self, attr1=val1, ..., attrN=valN, **attrs):
+             Super1.__init__(self)
+             ...
+             SuperN.__init__(self)
+             self.def_attrs({'attr1': attr1, ..., 'attrN': attrN}
+             self.init_attrs(attrs)
+
+    Where *attr1, ..., attrN* are the new attributes defined by
+    *AClass*, and *val1, ..., valN* are their default values. 
+                         
+    This guarantees that in the end, you have an instance of *AClass*
+    with *all* attributes (i.e. attributes for this class and all superclasses)
+    defined and set to their default values.
+
+    Note the use of dictionary *attrs*. This dictionary collects
+    additional attribute names and values which are then passed to
+    method [init_attrs] to initialise attributes defined by
+    superclasses of *AClass*. Thus if *AClass* is a subclass of
+    *Super1* and if *Super1* defines attribute *blah*, then you can
+    construct an instance of *AClass* with *blah=1* using the statement:
+
+    *x = AClass(blah=1)*
+
+    without the constructor of *AClass* having to know explicitly
+    about attribute *blah*.
+                       
+    Note that the file *Admin/python.el* contains an Emacs macro
+    *py-obclass* which automatically types this kind of template code
+    for a class and its constructor
+
     **INSTANCE ATTRIBUTE**
 
     *none* --
 
     **CLASS ATTRIBUTE**
 
-    *none* --     
-    """
+    *none* --
 
+    .. [def_attrs] file:///./Object.Object.html#Object.Object.def_attrs
+   .. [init_attrs] file:///Object.Object.html#Object.Object.init_attrs"""
+
+
+    #
+    # Safe __setattr__ method is defined in file 'safe_setattr.py'.
+    # Load it only if environment variable PY_DEBUG_OBJECT=1
+    #
     if (os.environ.has_key('PY_DEBUG_OBJECT') and (os.environ['PY_DEBUG_OBJECT'] != '0')):
         code_file = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Mediator' + os.sep + 'safe_setattr.py')
         execfile(code_file)
-	
+
+
+    def __init__(self):
+        pass
+    
+    def def_attrs(self, attrs):
+        """Define new attributes for *self*
+
+        Attributes are set even if they do not exist in
+        *self.__dict__*.
+
+        **INPUTS**
+
+        *{STR: ANY}* attrs -- dictionary with attribute name as the keys and
+         default values as the values.
+
+        **OUTPUTS**
+
+        *none* -- 
+        """
+        for an_attr_def in attrs.items():
+            self.__dict__[an_attr_def[0]] = an_attr_def[1]        
+
+    def init_attrs(self, attrs):
+        """Initialises existing attributes
+
+        Attributes are only set if they already exist in
+         *self.__dict__*. Otherwise, an *AttributeError* exception is
+         raised.
+        
+        **INPUTS**
+
+        *{STR: ANY}* attrs -- dictionary with attribute name as the keys and
+         default values as the values.
+
+        **OUTPUTS**
+
+        *none* -- 
+        """
+        for an_attr_init in attrs.items():
+            setattr(self, an_attr_init[0], an_attr_init[1])
+
+
     
 class SmallObject(Object):
     """A test object with few attributes
@@ -88,9 +184,9 @@ class LargeObject(Object):
 
         **INPUTS**
 
-        *untyped* name="Alain" -- undocumented 
+        *ANY* name="Alain" -- undocumented 
 
-        *untyped* age="36" -- undocumented 
+        *ANY* age="36" -- undocumented 
 
 
         **OUTPUTS**
@@ -460,7 +556,7 @@ def try_attribute(obj, name, operation):
 
     **INPUTS**
 
-    *untyped* obj -- object on which we will get/set attributes 
+    *ANY* obj -- object on which we will get/set attributes 
 
     *STR* name -- name of attribute to get/set 
 
@@ -478,8 +574,8 @@ def try_attribute(obj, name, operation):
     x = 0
     try:
         exec(code)
-    except AttributeError:
-        sys.stdout.write("Caught AttributeError exception.")
+    except AttributeError, exc:
+        sys.stdout.write("Caught AttributeError exception: '%s'" % [exc.__dict__])
     else:
         sys.stdout.write("Caught NO AttributeError exception. ")
         str = "obj.%s=%s, x=%s" % (name, obj.name, x)
@@ -487,9 +583,7 @@ def try_attribute(obj, name, operation):
     sys.stdout.write("\n\n")
         
 
-			
-if (__name__ == "__main__"):
-
+def prof_test():
     sys.stdout.write('\n$PY_DEBUG_OBJECT is: ')
     if (os.environ.has_key('PY_DEBUG_OBJECT')):
         sys.stdout.write(os.environ['PY_DEBUG_OBJECT'])
@@ -499,7 +593,9 @@ if (__name__ == "__main__"):
 
     sys.stdout.write("Profiling speed of Object constructor/get/set.\n\n")
     profile.run("profObject(1000)")
+#    profObject(1000)
 
+def self_test():
     obj = SmallObject()
 
     sys.stdout.write("Testing exceptions for get/set\n\n")
@@ -507,4 +603,11 @@ if (__name__ == "__main__"):
     try_attribute(obj, 'name', 'set')
     try_attribute(obj, 'nonexistant', 'get')
     try_attribute(obj, 'nonexistant', 'set')
+
+auto_test.add_test('Object', self_test, 'self-test for Object.py')
+
+if (__name__ == "__main__"):
+    self_test()
+    prof_test()
+			
 

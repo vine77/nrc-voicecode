@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri May 12 13:20:47 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class EdSim</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class EdSim - VoiceCode editor simulator.</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="EdSim.html">EdSim</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">EdSim.EdSim<BR>
+&nbsp;&nbsp;AppState.AppState<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">EdSim</SPAN>(<A CLASS="DocLink" HREF="AppState.AppState.html">AppState</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.insert"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.insert</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.move_to"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.move_to</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang='C'</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.print_buff_content"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.print_buff_content</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Prints the content of a source  buffer to the VoiceCode console.</SPAN>
+    <A CLASS="DocLink" HREF="#EdSim.EdSim.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">EdSim.EdSim.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.def_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.def_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AppState</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>, <SPAN CLASS="Argument">history=[]</SPAN>, <SPAN CLASS="Argument">open_buffers=[]</SPAN>, <SPAN CLASS="Argument">curr_dir=None</SPAN>, <SPAN CLASS="Argument">active_field=None</SPAN>, <SPAN CLASS="Argument">curr_buffer=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.delete"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.delete</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Delete text in a buffer.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.goto"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.goto</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.insert"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.insert</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.move_to"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.move_to</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)<SPAN CLASS="OneLiner"> # Open a file.</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.search_for"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.search_for</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)
+
+</PRE><H2>Description</H2><P>
+This class is used to simulate an external programming editor.</P>
+<P>
+Useful for debuggin VoiceCode mediator in isolation from external editor.</P>
+<P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<P>
+<STRONG>CLASSS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="EdSim.EdSim.delete" CLASS="Method">EdSim.EdSim.delete(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Delete text in a buffer.</P>
+
+<P>
+Delete text from position <EM>INT start</EM> to position <EM>INT end</EM> in
+source buffer with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use buffer [curr_buffer].</P>
+<P>
+If <EM>end</EM> is <EM>None</EM>, delete til end of buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, delete from position [curr_pos] of the
+buffer.</P>
+<H2 ID="EdSim.EdSim.drop_breadcrumb" CLASS="Method">EdSim.EdSim.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Drops a breadcrumb at position <EM>INT pos</EM> in source buffer
+<A HREF="file:///SourceBuff.SourceBuff.html">SourceBuff</A> <EM>buff</EM>.</P>
+<P>
+If <EM>pos</EM> not specified, drop breadcrumb at position
+<A HREF="file:///SourceBuff.SourceBuff.html">cur_pos</A> of buffer.</P>
+<P>
+If <EM>buff</EM> not specified either, drop breadcrumb <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.find_buff" CLASS="Method">EdSim.EdSim.find_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>Returns the open buffer with name <EM>STR buff_name</EM>.</P>
+
+<P>
+If no such buffer, returns <EM>None</EM>.</P>
+<P>
+If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.goto" CLASS="Method">EdSim.EdSim.goto(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Moves the cursor to position <EM>INT pos</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.        </P>
+<H2 ID="EdSim.EdSim.insert" CLASS="Method">EdSim.EdSim.insert(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Replace text in source buffer with name <EM>STR f_name</EM>
+between positions <EM>INT start</EM> and <EM>INT to</EM> with text *STR
+text*.</P>
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="file:///AppState.Appstate.html">self.curr_buffer</A>.</P>
+<P>
+If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="file:///SourceBuff.SourceBuff.html">cur_pos</A> of the source buffer.</P>
+<P>
+If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="file:///SourceBuff.SourceBuff.html">cur_pos</A> of source buffer.</P>
+<H2 ID="EdSim.EdSim.move_to" CLASS="Method">EdSim.EdSim.move_to(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</P>
+
+<P>
+If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.</P>
+<H2 ID="EdSim.EdSim.open_file" CLASS="Method">EdSim.EdSim.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>, <SPAN CLASS="Argument">lang='C'</SPAN>)</H2>
+<P>Open a file.</P>
+
+<P>
+Open file with name <EM>STR name</EM> and written in language <EM>STR lang</EM>.        
+</P>
+<H2 ID="EdSim.EdSim.print_buff_content" CLASS="Method">EdSim.EdSim.print_buff_content(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name=None</SPAN>)</H2>
+<P>Prints the content of a source  buffer to the VoiceCode console.</P>
+
+<P>
+<EM>[STR file_name]</EM> is the name of the source file for the buffer to
+print. If <EM>None</EM>, then print current buffer.    
+</P>
+<H2 ID="EdSim.EdSim.search_for" CLASS="Method">EdSim.EdSim.search_for(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Moves cursor to the next occurence of regular expression
+<EM>STR regexp</EM> in buffer with file name <EM>STR f_name</EM>.</P>
+
+<H3>Returns 1 if and only if an occurence was found, and 0 otherwise.               
+If <EM>f_name</EM> is <EM>None</EM>, [self.curr_buffer.</H3>
+        .. [self.curr_buffer] file:///AppState.AppState.html<H2 ID="Object.Object.def_attrs" CLASS="Method">Object.Object.def_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+Attributes are set even if they do not exist in
+<EM>self.__dict__</EM>.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="AppState.AppState.delete" CLASS="Method">AppState.AppState.delete(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">end=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Delete text in a buffer.</P>
+
+Delete text from position <EM>INT start</EM> to position <EM>INT end</EM> in
+source buffer with name <EM>STR f_name</EM>.If <EM>f_name</EM> is <EM>None</EM>, use buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.If <EM>end</EM> is <EM>None</EM>, delete til end of buffer.If <EM>start</EM> is <EM>None</EM>, delete from position [self.cur_pos] of the
+buffer.
+.. [self.cur_pos] AppState        
+<H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<P>None</P>
+
+Drops a breadcrumb at position <EM>INT pos</EM> in source buffer
+<A HREF="file:///SourceBuff.SourceBuff.html">SourceBuff</A> <EM>buff</EM>.If <EM>pos</EM> not specified, drop breadcrumb at position
+[self.cur_pos] of buffer.If <EM>buff</EM> not specified either, drop breadcrumb <A HREF="AppState.AppState.html">self.curr_buffer</A>.<H2 ID="AppState.AppState.find_buff" CLASS="Method">AppState.AppState.find_buff(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>Returns the open buffer with name <EM>STR buff_name</EM>.</P>
+
+If no such buffer, returns <EM>None</EM>.If <EM>buff_name</EM> is <EM>None</EM>, return <A HREF="AppState.AppState.html">self.curr_buffer</A>.
+<H2 ID="AppState.AppState.focus_is_source" CLASS="Method">AppState.AppState.focus_is_source(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)</H2>
+<P>Check if prog. env. focus is a source buffer</P>
+
+Returns <EM>true</EM> if and only if focus of programming environment
+is a source buffer written in language <EM>STR lang_name</EM>.
+<H2 ID="AppState.AppState.goto" CLASS="Method">AppState.AppState.goto(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+Moves the cursor to position <EM>INT pos</EM> of source buffer
+associated to file with name <EM>STR f_name</EM>.If <EM>f_name</EM> is <EM>None</EM>, use <A HREF="AppState.AppState.html">self.curr_buffer</A>.<H2 ID="AppState.AppState.insert" CLASS="Method">AppState.AppState.insert(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">start=None</SPAN>, <SPAN CLASS="Argument">to=None</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+Replace text in source buffer with name <EM>STR f_name</EM>
+between positions <EM>INT start</EM> and <EM>INT to</EM> with text *STR
+text*.If <EM>f_name</EM> is <EM>None</EM>, use source buffer <A HREF="AppState.AppState.html">self.curr_buffer</A>.If <EM>to</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of the source buffer.If <EM>start</EM> is <EM>None</EM>, use attribute <A HREF="AppState.AppState.html">self.cur_pos</A> of source buffer.<H2 ID="AppState.AppState.move_to" CLASS="Method">AppState.AppState.move_to(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>Move cursor to position <EM>INT pos</EM> of buffer <EM>STR f_name</EM>.</P>
+
+If <EM>f_name</EM> is <EM>None</EM>, then use buffer <A HREF="file:///AppState.AppState.html">self.curr_buffer</A>.
+<H2 ID="AppState.AppState.open_file" CLASS="Method">AppState.AppState.open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)</H2>
+<P>Open a file.</P>
+
+Open file with name <EM>STR name</EM>.        
+<H2 ID="AppState.AppState.search_for" CLASS="Method">AppState.AppState.search_for(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">regexp</SPAN>, <SPAN CLASS="Argument">f_name=None</SPAN>)</H2>
+<P>None</P>
+
+Moves cursor to the next occurence of regular expression
+<EM>STR regexp</EM> in buffer with file name <EM>STR f_name</EM>.Returns 1 if and only if an occurence was found, and 0 otherwise.               
+If <EM>f_name</EM> is <EM>None</EM>, <A HREF="AppState.AppState.html">self.curr_buffer</A>.
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
