@@ -241,6 +241,28 @@ class SourceBuff(Object):
 	"""
 	debug.virtual('SourceBuff.set_selection')
 
+    def set_text(self, text, start = None, end = None):
+	"""changes a portion of the buffer.  Note: this is a low level
+	interface.  Usually, higher level interfaces like insert and
+	delete are preferable.
+
+	**INPUTS**
+
+	*STR text* is the new text.
+	
+	*INT start* is the offset into the buffer of the text to the
+	replaced.  Defaults to start of buffer.
+
+	*INT end* is the offset into the buffer of the character following 
+	the text to be replaced (this matches Python's slice convention).
+	Defaults to end of buffer.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('SourceBuff.set_text')
+
     def get_text(self, start = None, end = None):
 	"""retrieves a portion of the buffer
 

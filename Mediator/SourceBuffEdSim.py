@@ -93,6 +93,16 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 	start, end = self.make_valid_range((start, end))
 	return self.content[ start: end]
 
+    def set_text(self, text, start = None, end = None):
+	if start == None:
+	    start = 0
+	if end == None:
+	    end = self.len()
+	start, end = self.make_valid_range((start, end))
+	before = self.content[0:start]
+        after = self.content[end:]
+        self.content = before + text + after
+
     def get_visible(self):
 	if self.global_selection:
 	    return (0, self.len())

@@ -124,6 +124,28 @@ class SourceBuffTB(SourceBuff):
 	"""
 	return self.underlying.get_text(start, end)
       
+    def set_text(self, text, start = None, end = None):
+	"""changes a portion of the buffer.  Note: this is a low level
+	interface.  Usually, higher level interfaces like insert and
+	delete are preferable.
+
+	**INPUTS**
+
+	*STR text* is the new text.
+	
+	*INT start* is the offset into the buffer of the text to the
+	replaced.  Defaults to start of buffer.
+
+	*INT end* is the offset into the buffer of the character following 
+	the text to be replaced (this matches Python's slice convention).
+	Defaults to end of buffer.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.underlying.set_text(text, start, end)
+
     def get_visible(self):
 	""" get start and end offsets of the currently visible region of
 	the buffer.  End is the offset of the first character not
