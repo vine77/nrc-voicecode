@@ -144,7 +144,6 @@ quit()
 
 import natlink
 import os, profile, re, string, sys, time
-import traceback
 import vc_globals
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]

@@ -14,9 +14,9 @@ VC_TALKER_PORT = 45771
 HOST = gethostname()
 
 
-# Uncomment this and add some entries to trace_what if you want to 
+# Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", trace_what={'get_mess':1, 'send_mess': 1})
+debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
 
 
 def create_tcp_mess(sock):

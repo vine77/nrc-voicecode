@@ -32,9 +32,9 @@ import sim_commands, sr_interface, util
 
 
 
-# Uncomment this and add some entries to trace_what if you want to 
+# Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-#debug.config_traces(status="on", trace_what={'get_mess':1, 'send_mess': 1})
+#debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
 
 #
 # Port numbers for the communication link
@@ -929,8 +929,6 @@ if __name__ == '__main__':
         #
         tests_def_fname = posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py')
         execfile(tests_def_fname)        
-
-    debug.trace('get_mess', 'THIS IS NOT REALLY FROM get_mess')    
     
     sr_interface.connect()
 
