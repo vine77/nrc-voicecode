@@ -224,20 +224,6 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         SelectGramBase.unload(self)
         SelectWinGram.cleanup(self)
     
-    def buffer_name(self):
-        """returns name of buffer corresponding to this selection grammar.
-
-        **INPUTS**
-
-        *none*
-    
-        **OUTPUTS**
-
-        *STR* -- name of buffer currently used by this selection grammar.
-        """
-
-        return self.buff_name
-    
     def gotResultsObject(self,recogType,resObj):
         debug.trace('SelectWinGramNL.gotResultsObject', '** invoked, resObj=%s' % repr(resObj))
         if recogType == 'self':
@@ -647,6 +633,39 @@ class WinGramFactoryNL(WinGramFactory):
         return NaturalSpellingNL(spell_words = spell_words, spelling_cbk =
             spelling_cbk)
    
+    def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
+        select_cbk, alt_select_words = None):
+        """create a new SimpleSelection grammar
+
+        **INPUTS**
+
+        *STR FCT() get_visible_cbk* -- callback for retrieving the visible range
+
+        *(INT, INT) FCT() get_selection_cbk* -- callback for retrieving the 
+        current selection
+
+        *FCT(range) select_cbk* -- callback which returns the *(INT, INT)* 
+        range to be selected (relative to the start of the visible range 
+        passed to the get_visible_cbk), or None if text wasn't found
+
+        *[STR]* alt_select_words -- words (or phrases) which introduces a
+        selection utterance, or None to use the same value as
+        make_selection does.  (Warning: once we add correct xyz, this
+        won't be wise any more).
+
+        **OUTPUTS**
+
+        *SimpleSelection* -- new selection grammar
+        """
+        if alt_select_words is None:
+            select_words = self.select_words
+        else:
+            select_words = alt_select_words
+        return SimpleSelectionNL(select_words = select_words,
+            get_visible_cbk = get_visible_cbk,
+            get_selection_cbk = get_selection_cbk, 
+            select_cbk = select_cbk)
+
 class ChoiceGramNL(ChoiceGram, GrammarBase):
     """natlink implementation of ChoiceGram
 
@@ -870,7 +889,7 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                     continue
                 continue
 #            print "testing letter"
-            letter_match = re.match(r'([A-Za-z])\\\\l', word)
+            letter_match = re.match(r'([A-Za-z])\\\\l$', word)
             if letter_match:
                 c = letter_match.group(1)
 #                print "matches letter %s" % c
@@ -880,8 +899,18 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                 s = s + c
                 cap_next = 0
                 continue
+            explicit_match = re.match(r'([A-Za-z])\\letter-.*\\l$', word)
+            if explicit_match:
+                c = explicit_match.group(1)
+#                print "matches letter %s" % c
+                if cap_next or caps_on:
+                    c = string.upper(c)
+#                print "matches letter %s" % c
+                s = s + c
+                cap_next = 0
+                continue
 #            print "testing double"
-            double_match = re.match(r'double-([A-Za-z])\\\\l', word)
+            double_match = re.match(r'double-([A-Za-z])\\\\l$', word)
             if double_match:
                 c = double_match.group(1) * 2
 #                print "matches double %s" % c
@@ -892,11 +921,128 @@ class NaturalSpellingNL(NaturalSpelling, GrammarBase):
                 cap_next = 0
                 continue
 #            print "testing digit"
-            spoken, written = sr_interface.spoken_written_form()
+            spoken, written = sr_interface.spoken_written_form(word)
             if cap_next or caps_on:
                 written = string.upper(written)
+#            print "word: %s spoken: %s written: %s" % (word, spoken, written)
             s = s + written
             cap_next = 0
 
         self.spelling_cbk(s)
+
+class SimpleSelectionNL(SimpleSelection, SelectGramBase):
+    """natlink implementation of SimpleSelection 
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(SimpleSelectionNL,
+            {}, attrs, exclude_bases = {SelectGramBase:1})
+        SelectGramBase.__init__(self)
+        self.load(selectWords = self.select_words, throughWord =
+            self.through_word)
+
+    def _set_visible(self, visible):
+        """internal call to set the currently visible range.
+
+        **INPUTS**
+
+        *STR* visible -- visible text range 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        SelectGramBase.setSelectText(self, visible)
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to the current window,
+        and checks with buffer for the currently visible range.
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.is_active():
+            SelectGramBase.activate(self, window = window)
+            self.active = 1
+            self.window = window
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.is_active():
+            SelectGramBase.deactivate(self)
+            self.active = 0
+
+    def cleanup(self):
+        SelectGramBase.unload(self)
+        SimpleSelection.cleanup(self)
+    
+    def gotBegin(self, moduleInfo):
+        if self.is_active() and moduleInfo[2] == self.window:
+            self.recognition_starting()
+
+    def gotResultsObject(self,recogType,resObj):
+        if recogType == 'self':
+            # If there are multiple matches in the text we need to scan through
+            # the list of choices to find every entry which has the highest.
+            
+            ranges = []        
+            try:
+                bestScore = resObj.getWordInfo(0)[0][2]
+                verb = resObj.getWordInfo(0)[0][0]
+
+                #
+                # Collect selection ranges with highest score
+                #
+                for i in range(100):
+                    #
+                    # The candidate regions are sorted from best to worst scores.
+                    # Loop through candidate regions until we reach one whose
+                    # score is not the same as the first score (or until a
+                    # natlink.outOfRange exception is raised to signal the end
+                    # of the list of candidate regions).
+                    #
+                    wordInfo = resObj.getWordInfo(i)
+                    if not wordInfo:
+                        break
+
+                    if wordInfo[0][2] != bestScore:
+                        #
+                        # All remaining regions don't have as good a score as the
+                        # first ones.
+                        break
+                    else:
+                        #
+                        # This region has the same score as the first ones. Add it
+                        # to the candidate selection ranges.
+                        #
+                        region = resObj.getSelectInfo(self.gramObj, i)
+
+                        
+                        ranges.append(region)
+
+            except natlink.OutOfRange:
+                pass
+
+            self.find_closest(verb, ranges)
 

@@ -253,7 +253,7 @@ class SelectWinGram(WinGram):
         selection grammar (can also be set by activate)
         """
         self.deep_construct(SelectWinGram,
-            {'app': app,'buff_name' : buff_name, 
+            {'app': app, 'buff_name' : buff_name, 
             'select_words' : select_words, 'through_word' : through_word}, 
             attrs)
 
@@ -679,6 +679,32 @@ class WinGramFactory(Object):
         *NaturalSpelling* -- the spelling grammar
         """
         debug.virtual('WinGramFactory.make_natural_spelling')
+
+    def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
+        select_cbk, alt_select_words = None):
+        """create a new SimpleSelection grammar
+
+        **INPUTS**
+
+        *STR FCT() get_visible_cbk* -- callback for retrieving the visible range
+
+        *(INT, INT) FCT() get_selection_cbk* -- callback for retrieving the 
+        current selection
+
+        *FCT(range) select_cbk* -- callback which returns the *(INT, INT)* 
+        range to be selected (relative to the start of the visible range 
+        passed to the get_visible_cbk), or None if text wasn't found
+
+        *[STR]* alt_select_words -- words (or phrases) which introduces a
+        selection utterance, or None to use the same value as
+        make_selection does.  (Warning: once we add correct xyz, this
+        won't be wise any more).
+
+        **OUTPUTS**
+
+        *SimpleSelection* -- new selection grammar
+        """
+        debug.virtual('WinGramFactory.make_simple_selection')
 
     
 class DictWinGramDummy(DictWinGram):
@@ -1193,14 +1219,14 @@ class MilitarySpelling(Object):
 
         *none*
         """
-        debug.virtual('NaturalSpelling.activate')
+        debug.virtual('MilitarySpelling.activate')
 
     def cleanup(self):
         """method which must be called by the owner prior to deleting
         the grammar, to ensure that it doesn't have circular references
         to the owner
         """
-        debug.virtual('NaturalSpelling.cleanup')
+        debug.virtual('MilitarySpelling.cleanup')
 
     def deactivate(self):
         """disable recognition from this grammar
@@ -1213,4 +1239,254 @@ class MilitarySpelling(Object):
 
         *none*
         """
-        debug.virtual('NaturalSpelling.deactivate')
+        debug.virtual('MilitarySpelling.deactivate')
+
+class SimpleSelection(WinGram):
+    """abstract base class for simple selection grammars
+
+    **INSTANCE ATTRIBUTES**
+
+    *[STR]* select_words -- words (or phrases) which introduces a
+    selection utterance
+
+    *STR* through_word -- word which separates the beginning and end of
+    a range to be selected.
+
+    *STR FCT() get_visible_cbk* -- callback for retrieving the visible range
+
+    *(INT, INT) FCT() get_selection_cbk* -- callback for retrieving the 
+    current selection
+
+    *FCT(range) select_cbk* -- callback which returns the *(INT, INT)* 
+    range to be selected (relative to the start of the visible range 
+    passed to the get_visible_cbk), or None if text wasn't found
+
+    *STR* visible -- currently visible range 
+
+    *(INT, INT)* selection -- current selection 
+
+    *INT* window -- window handle (unique identifier) for the window to
+    which the grammar is specific
+    """
+    def __init__(self, select_words = ['select'],
+        through_word = 'through', get_visible_cbk = None,
+        get_selection_cbk = None, select_cbk = None, **attrs):
+        self.deep_construct(SimpleSelection,
+            {
+            'select_words' : select_words, 'through_word' : through_word,
+            'get_visible_cbk': get_visible_cbk,
+            'get_selection_cbk': get_selection_cbk,
+            'select_cbk': select_cbk,
+            'visible': None,
+            'selection': None,
+            'window': None}, 
+            attrs)
+
+    def cleanup(self):
+        """clean up the grammar and any circular references
+        """
+        self.select_cbk = None
+        self.get_selection_cbk = None
+        self.get_visible_cbk = None
+
+    def _set_visible(self, visible):
+        """internal call to set the currently visible range.
+
+        **INPUTS**
+
+        *STR* visible -- visible text range 
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('SimpleSelection._set_visible')
+
+    def recognition_starting(self):
+        """method which a concrete subclass should call when recognition
+        is starting
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('SimpleSelection.recognition_starting', 'starting')
+        if self.is_active():
+            self.visible = self.get_visible_cbk()
+            self.selection = self.get_selection_cbk()
+            self._set_visible(self.visible)
+            debug.trace('SimpleSelection.recognition_starting', 
+                'visible = "%s"' % self.visible)
+            debug.trace('SimpleSelection.recognition_starting', 
+                'selection = %d, %d' % self.selection)
+
+    def activate(self, window):
+        """activates the grammar for recognition tied to the current window,
+        and checks with buffer for the currently visible range.
+
+        **INPUTS**
+
+        *INT* window -- window handle (unique identifier) for the window
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('SimpleSelection.activate')
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('SimpleSelection.deactivate')
+
+    def find_closest(self, verb, ranges):
+        """Sort the ranges from earliest to latest, and select the one
+        which is closest to the cursor in the proper direction
+
+        **INPUTS**
+
+        *STR* verb -- verb used by the selection
+
+        *[(INT, INT)] -- list of ranges of offsets into visible range
+        with the best recognition score
+        """
+        
+        #
+        # Analyse the verb used by the user in the Select utterance
+        #
+        direction = None
+        if re.search('previous', verb, 1):
+            direction = -1
+        if re.search('next', verb, 1):                
+            direction = 1
+
+        mark_selection = 1
+        if re.search('go', verb, 1) or re.search('before', verb, 1) or \
+           re.search('after', verb, 1):
+            mark_selection = 0
+
+        where = 1
+        if re.search('before', verb, 1):
+            where = -1
+        if re.search('after', verb, 1):
+            where = 1
+
+        selection = self.selection
+        if selection[1] < selection[0]:
+            selection = selection[1], selection[0]
+
+        debug.trace('SimpleSelection.find_closest', 
+                'direction = %s' % direction)
+        debug.trace('SimpleSelection.find_closest', 
+                'selection = %d, %d' % selection)
+
+        ranges.sort()
+        reversed = map(lambda x: (x[1], x[0]), ranges)
+        reversed.sort()
+        reversed.reverse()
+
+        debug.trace('SimpleSelection.find_closest', 
+                'ranges = %s' % repr(ranges))
+        debug.trace('SimpleSelection.find_closest', 
+                'reversed = %s' % repr(reversed))
+
+        closest_before = None
+        closest_before_end = None
+        for i in range(len(reversed)):
+            if reversed[i][0] <= selection[1]:
+                closest_before_end = reversed[i]
+            if reversed[i][0] <= selection[0]:
+                closest_before = reversed[i]
+                break
+        if closest_before:
+            closest_before = closest_before[1], closest_before[0]
+        if closest_before_end:
+            closest_before_end = closest_before_end[1], closest_before_end[0]
+
+        debug.trace('SimpleSelection.find_closest', 
+                'closest_before = %s' % repr(closest_before))
+        debug.trace('SimpleSelection.find_closest', 
+                'closest_before_end = %s' % repr(closest_before_end))
+
+        closest_after = None
+        closest_after_start = None
+        for i in range(len(ranges)):
+            if ranges[i][0] >= selection[0]:
+                closest_after_start = ranges[i]
+            if ranges[i][0] >= selection[1]:
+                closest_after = ranges[i]
+                break
+
+        debug.trace('SimpleSelection.find_closest', 
+                'closest_after = %s' % repr(closest_after))
+        debug.trace('SimpleSelection.find_closest', 
+                'closest_after_start = %s' % repr(closest_after_start))
+
+        if direction is None:
+            d_after = None
+            if closest_after_start:
+                if closest_after_start == closest_after:
+                    d_after = closest_after_start[0] - selection[1] 
+                else:
+                    d_after = 0
+            debug.trace('SimpleSelection.find_closest', 
+                'd_after = %s' % d_after)
+            d_before = None
+            if closest_before_end:
+                if closest_before_end == closest_before:
+                    d_before = selection[0] - closest_before_end[1]
+                else:
+                    d_before = 0
+            debug.trace('SimpleSelection.find_closest', 
+                'd_before = %s' % d_before)
+            if d_after is None:
+                if d_before is None:
+                    debug.trace('SimpleSelection.find_closest', 
+                        'None at all')
+                    closest = None
+                else:
+                    closest = closest_before_end 
+                    debug.trace('SimpleSelection.find_closest', 
+                        'only before: closest = %s' % repr(closest))
+            elif d_before is None:
+                closest = closest_after_start
+                debug.trace('SimpleSelection.find_closest', 
+                    'only after: closest = %s' % repr(closest))
+            else:
+                debug.trace('SimpleSelection.find_closest', 
+                    'both: d_before, d_after = %d, %d' % (d_before, d_after))
+                if d_after > d_before:
+                    closest = closest_before_end 
+                else:
+                    closest = closest_after_start
+                debug.trace('SimpleSelection.find_closest', 
+                    'closest = %s' % repr(closest))
+        elif direction < 0:
+            closest = closest_before
+        elif direction > 0:
+            closest = closest_after
+
+        if not closest:
+            self.select_cbk(None) 
+            return
+
+        if mark_selection:
+            self.select_cbk(closest)
+        else:
+            if where > 0:
+                self.select_cbk((closest[1], closest[1]))
+            else:
+                self.select_cbk((closest[0], closest[0]))
+

@@ -783,9 +783,10 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 	control of the audio device)
 	"""
         if self.wave and self.wave.check():
+            mic_was = get_mic()
             set_mic('off')
             self.wave.play()
-            set_mic('on')
+            set_mic(mic_was)
             return 1
         return 0
       
