@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 24 12:59:01 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 25 16:40:14 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -33,7 +33,10 @@
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.backspace"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.backspace</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n_times</SPAN>)<SPAN CLASS="OneLiner"> # Delete a number of spaces before the cursor.</SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.beginning_of_line"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.beginning_of_line</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)<SPAN CLASS="OneLiner"> # Returns the position of the beginning of line at position <EM>pos</EM></SPAN>
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.char_search"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.char_search</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">char_exp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.closest_occurence_to_cursor"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.closest_occurence_to_cursor</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">occurences</SPAN>, <SPAN CLASS="Argument">direction=None</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_selection_with_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_selection_with_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)
+    <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_state_selections"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_state_selections</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_states"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_states</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.compare_with_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.compare_with_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)
     <A CLASS="DocLink" HREF="#SourceBuff.SourceBuff.contents"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SourceBuff.SourceBuff.contents</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # retrieves entire contents of the buffer</SPAN>
@@ -270,6 +273,37 @@ INT <EM>n_times</EM>
 <DD>true if editor allows setting the selection at the
 left end of the selection
 </DL>
+<H2 ID="SourceBuff.SourceBuff.char_search" CLASS="Method">SourceBuff.SourceBuff.char_search(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">char_exp</SPAN>, <SPAN CLASS="Argument">direction=1</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
+<P>None</P>
+
+performs a quick search for the next/previous character
+matching char_exp, without moving the cursor, or logging the
+search<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>STR</EM> char_exp
+<DD>a regular expression assumed to match one
+character (e.g. "a", ".", "\s", "\S", "[A-Za-z]"
+<DT>
+<EM>INT</EM> direction
+<DD>if positive, search forward, otherwise
+search backward
+<DT>
+<EM>INT</EM> pos
+<DD>position within buffer to start, or None for
+current position
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>offset into the buffer of the next character in the
+appropriate direction matching the expression.  If a matching
+character was not found, char_search will raise an IndexError.
+
+</DL>
 <H2 ID="SourceBuff.SourceBuff.closest_occurence_to_cursor" CLASS="Method">SourceBuff.SourceBuff.closest_occurence_to_cursor(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">occurences</SPAN>, <SPAN CLASS="Argument">direction=None</SPAN>, <SPAN CLASS="Argument">regexp=None</SPAN>, <SPAN CLASS="Argument">where=1</SPAN>)</H2>
 <P>None</P>
 
@@ -301,6 +335,61 @@ cursor. If <EM>None</EM>, consider all occurences whether before or after cursor
 <EM>INT</EM> closest_index
 <DD>Index in <EM>occurences</EM> of the closest
  occurence. If no such occurence, returns <EM>None</EM>
+</DL>
+<H2 ID="SourceBuff.SourceBuff.compare_selection_with_current" CLASS="Method">SourceBuff.SourceBuff.compare_selection_with_current(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cookie</SPAN>)</H2>
+<P>None</P>
+
+compares the current buffer position and selection to these
+values at the time when the cookie was returned by 
+store_current_state.  If the state corresponding to the cookie has
+been lost, compare_with_current will return false.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>SourceBuffCookie cookie</EM>
+<DD>see store_current_state.  Note that
+SourceBuffCookie is a dummy type, not an actual class.  The
+actual type will vary with SourceBuff subclass.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if position and selection are the same, false if 
+they are not, or if it cannot be determined due to 
+expiration of the cookie
+
+</DL>
+<H2 ID="SourceBuff.SourceBuff.compare_state_selections" CLASS="Method">SourceBuff.SourceBuff.compare_state_selections(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>)</H2>
+<P>None</P>
+
+compares the selection and cursor positions at the times when
+two cookies were returned by store_current_state.
+If the state corresponding to either cookie has
+been lost, compare_states will return false.This method does not synchronize with the editor prior to
+comparing with "current".  To ensure that the "current" state 
+is really current, the caller must synchronize.
+(This avoids having duplicate synchronize calls 
+when comparing with the current state of more than one buffer).<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>SourceBuffCookie</EM> first_cookie, second_cookie
+<DD>see 
+store_current_state.  Note that SourceBuffCookie is a dummy 
+type, not an actual class.  The actual type will vary with 
+SourceBuff subclass.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if position and selection are the same, false if 
+they are not, or it cannot be determined due to expiration of 
+either cookie
+
 </DL>
 <H2 ID="SourceBuff.SourceBuff.compare_states" CLASS="Method">SourceBuff.SourceBuff.compare_states(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">first_cookie</SPAN>, <SPAN CLASS="Argument">second_cookie</SPAN>, <SPAN CLASS="Argument">selection=0</SPAN>)</H2>
 <P>None</P>
@@ -464,9 +553,9 @@ There are no separate buffer-by-buffer stacks.  Therefore, it
 would make no sense to define SourceBuff.pop_breadcrumb.
 SourceBuff.drop_breadcrumb is included only as a convenient
 shorthand for</H3>
-  buff.application().drop_breadcrumb(buffname = buff.file_name(),
+  buff.application().drop_breadcrumb(buff_name = buff.file_name(),
   pos = ...)<EM>INT pos</EM> is the position where to drop the crumb. *STR
- buffname* is the name of the source buffer.If <EM>pos</EM> not specified, drop breadcrumb at cursor position.
+ buff_name* is the name of the source buffer.If <EM>pos</EM> not specified, drop breadcrumb at cursor position.
 <H2 ID="SourceBuff.SourceBuff.end_of_line" CLASS="Method">SourceBuff.SourceBuff.end_of_line(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">pos</SPAN>)</H2>
 <P>Returns the position of the end of line at position <EM>pos</EM></P>
 
