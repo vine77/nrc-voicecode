@@ -1,0 +1,1059 @@
+1c1,14
+< creating wxMediator
+---
+> 
+> C:\eclipse\workspace\VCode\Mediator>rem  
+> 
+> C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+> 
+> C:\eclipse\workspace\VCode\Mediator>rem
+> 
+> C:\eclipse\workspace\VCode\Mediator>c:
+> 
+> C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
+> 
+> C:\eclipse\workspace\VCode\Mediator>python new_server.py -t all 
+> running ExtLoopWin32NewMediator with ServerNewMediator
+> running ExtLoopWin32NewMediator with ServerNewMediator
+5,6c18,19
+< Finished wxMediator init...
+< starting...
+---
+> Finished ExtLoop init...
+> Running ExtLoopWin32...
+8,9c21,22
+< WARNING: virtual method 'AppStateMessaging.config_from_external' called!!!
+< universal instance named "WaxEdit(0)"
+---
+> Starting message loop...
+> universal instance named "emacs(0)"
+284,285d296
+< SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+< SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+287a299,300
+> SourceBuff.remove_other_references: %VCODE_HOME%\Data\TestData\small_buff.c
+> SourceBuff.__del__: %VCODE_HOME%\Data\TestData\small_buff.c
+330c343
+<    Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 23eef20>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+---
+>    Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1b4e8e8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+467a481
+> 'tst': appears in ['autoTst']
+725c739
+< 'H:\\Projects\\VoiceCode\\VCode\\Data\\TestData'
+---
+> 'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
+728c742
+< >>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+---
+> >>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+1806c1820
+< >>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+---
+> >>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+2470c2484
+< >>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+---
+> >>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+2495,2497c2509,2511
+<   2:    {
+<   3: <CURSOR>   
+<   4:    }
+---
+>   2: {
+>   3: <CURSOR>
+>   4: }
+2507,2509c2521,2523
+<   2:    {
+<   3:    
+<   4:    }
+---
+>   2: {
+>   3: 
+>   4: }
+2551,2552c2565,2566
+< Error reading <SymDict.SymDict instance at 247e4a0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+< [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+---
+> Error reading <SymDict.SymDict instance at 18ce170> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+> [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
+2556c2570
+< >>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+---
+> >>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+6142c6156
+<  15:       <CURSOR>)
+---
+>  15:                           <CURSOR>)
+6171c6185
+<  15:       {'on_app': on_app, <CURSOR>})
+---
+>  15:                           {'on_app': on_app, <CURSOR>})
+6177,6178c6191,6192
+<  15:       {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+<  16:       <CURSOR>})
+---
+>  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+>  16:                            <CURSOR>})
+6183,6185c6197,6199
+<  15:       {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+<  16:       'language_specific_aliases': {}, \
+<  17:       <CURSOR>})
+---
+>  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+>  16:                            'language_specific_aliases': {}, \
+>  17:                            <CURSOR>})
+6189,6192c6203,6206
+<  15:       {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+<  16:       'language_specific_aliases': {}, \
+<  17:       'last_loaded_language': None, \
+<  18:       <CURSOR>})
+---
+>  15:                           {'on_app': on_app, 'known_symbols': SymDict.SymDict(), \
+>  16:                            'language_specific_aliases': {}, \
+>  17:                            'last_loaded_language': None, \
+>  18:                            <CURSOR>})
+6216,6219c6230,6233
+< >  16:       'language_specific_aliases': {}, \
+<  17:       'last_loaded_language': None, \
+<  18:       'symdict_pickle_file': symdict_pickle_file}, \
+<  19:       <CURSOR>)
+---
+> >  16:                            'language_specific_aliases': {}, \
+>  17:                            'last_loaded_language': None, \
+>  18:                            'symdict_pickle_file': symdict_pickle_file}, \
+>  19:                           <CURSOR>)
+6223,6225c6237,6239
+<  18:       'symdict_pickle_file': symdict_pickle_file}, \
+<  19:       attrs)
+<  20:       
+---
+>  18:                            'symdict_pickle_file': symdict_pickle_file}, \
+>  19:                           attrs)
+>  20: 
+6230,6233c6244,6247
+<  18:       'symdict_pickle_file': symdict_pickle_file}, \
+<  19:       attrs)
+<  20:       
+<  21:    <CURSOR>
+---
+>  18:                            'symdict_pickle_file': symdict_pickle_file}, \
+>  19:                           attrs)
+>  20: 
+>  21:       <CURSOR>
+6237,6240c6251,6254
+<  19:       attrs)
+<  20:       
+<  21:    def spoken_form_regexp(self, spoken_form):
+<  22:       <CURSOR>
+---
+>  19:                           attrs)
+>  20: 
+>  21:       def spoken_form_regexp(self, spoken_form):
+>  22:          <CURSOR>
+6244,6254c6258,6261
+< Associate 'R. E.' with symbol (Enter selection):
+< 
+<   '0': no association
+<   '1': re
+<   '2': Re (*new*)
+<   '3': RE (*new*)
+< 
+< >  19:       attrs)
+<  20:       
+<  21:    def spoken_form_regexp(self, spoken_form):
+<  22:       words = re.split(<CURSOR>)
+---
+>  19:                           attrs)
+>  20: 
+>  21:       def spoken_form_regexp(self, spoken_form):
+>  22:          words = re.split(<CURSOR>)
+6258,6261c6265,6268
+<  20:       
+<  21:    def spoken_form_regexp(self, spoken_form):
+<  22:       words = re.split('\s+', spoken_form)
+<  23:       <CURSOR>
+---
+>  20: 
+>  21:       def spoken_form_regexp(self, spoken_form):
+>  22:          words = re.split('\s+', spoken_form)
+>  23:          <CURSOR>
+6265,6268c6272,6275
+<  21:    def spoken_form_regexp(self, spoken_form):
+<  22:       words = re.split('\s+', spoken_form)
+<  23:       regexp = ''
+<  24:       <CURSOR>
+---
+>  21:       def spoken_form_regexp(self, spoken_form):
+>  22:          words = re.split('\s+', spoken_form)
+>  23:          regexp = ''
+>  24:          <CURSOR>
+6272,6275c6279,6282
+<  22:       words = re.split('\s+', spoken_form)
+<  23:       regexp = ''
+<  24:       for a_word in words:
+<  25:          <CURSOR>
+---
+>  22:          words = re.split('\s+', spoken_form)
+>  23:          regexp = ''
+>  24:          for a_word in words:
+>  25:             <CURSOR>
+6279,6282c6286,6289
+<  23:       regexp = ''
+<  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          <CURSOR>
+---
+>  23:          regexp = ''
+>  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             <CURSOR>
+6286,6289c6293,6296
+<  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          rest = a_word[1: ]
+<  27:          <CURSOR>
+---
+>  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             rest = a_word[1: ]
+>  27:             <CURSOR>
+6293,6296c6300,6303
+<  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          rest = a_word[1: ]
+<  27:          regexp_this_word = '<CURSOR>'
+---
+>  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             rest = a_word[1: ]
+>  27:             regexp_this_word = '<CURSOR>'
+6300,6303c6307,6310
+<  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          rest = a_word[1: ]
+<  27:          regexp_this_word = '[' + string.lower(first<CURSOR>)
+---
+>  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             rest = a_word[1: ]
+>  27:             regexp_this_word = '[' + string.lower(first<CURSOR>)
+6307,6310c6314,6317
+<  25:          first = a_word[0]
+<  26:          rest = a_word[1: ]
+<  27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          <CURSOR>
+---
+>  25:             first = a_word[0]
+>  26:             rest = a_word[1: ]
+>  27:             regexp_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             <CURSOR>
+6314,6317c6321,6324
+<  26:          rest = a_word[1: ]
+<  27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          if not regexp == '':
+<  29:             <CURSOR>
+---
+>  26:             rest = a_word[1: ]
+>  27:             regexp_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             if not regexp == '':
+>  29:                <CURSOR>
+6321,6324c6328,6331
+<  27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          if not regexp == '':
+<  29:             regexp = regexp + '\s*'
+<  30:             <CURSOR>
+---
+>  27:             regexp_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             if not regexp == '':
+>  29:                regexp = regexp + '\s*'
+>  30:                <CURSOR>
+6328,6331c6335,6338
+<  28:          if not regexp == '':
+<  29:             regexp = regexp + '\s*'
+<  30:             regexp = regexp + regexp_this_word
+<  31:             <CURSOR>
+---
+>  28:             if not regexp == '':
+>  29:                regexp = regexp + '\s*'
+>  30:                regexp = regexp + regexp_this_word
+>  31:                <CURSOR>
+6335,6338c6342,6345
+<  28:          if not regexp == '':
+<  29:             regexp = regexp + '\s*'
+<  30:             regexp = regexp + regexp_this_word
+<  31:          <CURSOR>
+---
+>  28:             if not regexp == '':
+>  29:                regexp = regexp + '\s*'
+>  30:                regexp = regexp + regexp_this_word
+>  31:                <CURSOR>
+6342,6345c6349,6352
+<  29:             regexp = regexp + '\s*'
+<  30:             regexp = regexp + regexp_this_word
+<  31:          return regexp
+<  32:          <CURSOR>
+---
+>  29:                regexp = regexp + '\s*'
+>  30:                regexp = regexp + regexp_this_word
+>  31:                return regexp
+>  32:             <CURSOR>
+6366,6369c6373,6376
+< >  30:             regexp = regexp + regexp_this_word
+<  31:          return regexp
+<  32:          if not this_word:
+<  33:             this_word = 'hello<CURSOR>'
+---
+> >  30:                regexp = regexp + regexp_this_word
+>  31:                return regexp
+>  32:             if not this_word:
+>  33:                this_word = 'hello<CURSOR>'
+6380,6383c6387,6390
+< >  32:          if not this_word:
+<  33:             this_word = 'hello'
+<  34:          elif this_word == hi: 
+<  35:             <CURSOR>
+---
+> >  32:             if not this_word:
+>  33:                this_word = 'hello'
+>  34:             elif :
+>  35:  this_word == hi<CURSOR>              
+6394,6397c6401,6404
+< >  34:          elif this_word == hi: 
+<  35:             this_word = greetings
+<  36:          else:
+<  37:             <CURSOR>
+---
+> >  34:             elif :
+>  35:  this_word == hithis_word = greetings
+>  36:  else:
+>  37:     <CURSOR>
+6408,6411c6415,6418
+< >  35:             this_word = greetings
+<  36:          else:
+<  37:             this_word = 'done'
+<  38:             <CURSOR>
+---
+> >  35:  this_word == hithis_word = greetings
+>  36:  else:
+>  37:     this_word = 'done'
+>  38:     <CURSOR>
+6425,6428c6432,6435
+< >  36:          else:
+<  37:             this_word = 'done'
+<  38:             try:
+<  39:                some_function(<CURSOR>)
+---
+> >  36:  else:
+>  37:     this_word = 'done'
+>  38:     try:
+>  39:        some_function(<CURSOR>)
+6439,6442c6446,6449
+< >  38:             try:
+<  39:                some_function()
+<  40:             except : 
+<  41:                print 'error<CURSOR>'
+---
+> >  38:     try:
+>  39:        some_function()
+>  40:     except :
+>  41:  print 'error<CURSOR>'      
+6456,6459c6463,6466
+< >  40:             except : 
+<  41:                print 'error'
+<  42:             finally:
+<  43:                print 'all_right<CURSOR>'
+---
+> >  40:     except :
+>  41:  print 'error'
+>  42:  finally:
+>  43:     print 'all_right<CURSOR>'
+6844c6851
+<  15:       <CURSOR>)
+---
+>  15:                           <CURSOR>)
+6851c6858
+<  15:       {'on_application': on_application, <CURSOR>})
+---
+>  15:                           {'on_application': on_application, <CURSOR>})
+6867,6868c6874,6875
+<  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+<  16:       <CURSOR>})
+---
+>  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+>  16:                            <CURSOR>})
+6883,6885c6890,6892
+<  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+<  16:       'language_specific_aliases': {}, \
+<  17:       <CURSOR>})
+---
+>  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+>  16:                            'language_specific_aliases': {}, \
+>  17:                            <CURSOR>})
+6899,6902c6906,6909
+< >  15:       {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+<  16:       'language_specific_aliases': {}, \
+<  17:       'last_loaded_language': none, \
+<  18:       <CURSOR>})
+---
+> >  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
+>  16:                            'language_specific_aliases': {}, \
+>  17:                            'last_loaded_language': none, \
+>  18:                            <CURSOR>})
+6906,6909c6913,6916
+<  16:       'language_specific_aliases': {}, \
+<  17:       'last_loaded_language': none, \
+<  18:       'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+<  19:       <CURSOR>)
+---
+>  16:                            'language_specific_aliases': {}, \
+>  17:                            'last_loaded_language': none, \
+>  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+>  19:                           <CURSOR>)
+6913,6915c6920,6922
+<  18:       'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+<  19:       attributes)
+<  20:       
+---
+>  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+>  19:                           attributes)
+>  20: 
+6920,6923c6927,6930
+<  18:       'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+<  19:       attributes)
+<  20:       
+<  21:    <CURSOR>
+---
+>  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+>  19:                           attributes)
+>  20: 
+>  21:       <CURSOR>
+6947,6950c6954,6957
+< >  19:       attributes)
+<  20:       
+<  21:    def spoken_form_regular_expression(self, spoken_form):
+<  22:       <CURSOR>
+---
+> >  19:                           attributes)
+>  20: 
+>  21:       def spoken_form_regular_expression(self, spoken_form):
+>  22:          <CURSOR>
+6975,6978c6982,6985
+< >  19:       attributes)
+<  20:       
+<  21:    def spoken_form_regular_expression(self, spoken_form):
+<  22:       words = re.split(<CURSOR>)
+---
+> >  19:                           attributes)
+>  20: 
+>  21:       def spoken_form_regular_expression(self, spoken_form):
+>  22:          words = re.split(<CURSOR>)
+6982,6985c6989,6992
+<  20:       
+<  21:    def spoken_form_regular_expression(self, spoken_form):
+<  22:       words = re.split('\s+', spoken_form)
+<  23:       <CURSOR>
+---
+>  20: 
+>  21:       def spoken_form_regular_expression(self, spoken_form):
+>  22:          words = re.split('\s+', spoken_form)
+>  23:          <CURSOR>
+7000,7003c7007,7010
+< >  21:    def spoken_form_regular_expression(self, spoken_form):
+<  22:       words = re.split('\s+', spoken_form)
+<  23:       re = ''
+<  24:       <CURSOR>
+---
+> >  21:       def spoken_form_regular_expression(self, spoken_form):
+>  22:          words = re.split('\s+', spoken_form)
+>  23:          re = ''
+>  24:          <CURSOR>
+7017,7020c7024,7027
+< >  22:       words = re.split('\s+', spoken_form)
+<  23:       re = ''
+<  24:       for a_word in words:
+<  25:          <CURSOR>
+---
+> >  22:          words = re.split('\s+', spoken_form)
+>  23:          re = ''
+>  24:          for a_word in words:
+>  25:             <CURSOR>
+7031,7034c7038,7041
+< >  23:       re = ''
+<  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          <CURSOR>
+---
+> >  23:          re = ''
+>  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             <CURSOR>
+7046,7049c7053,7056
+< >  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          re = a_word[1: ]
+<  27:          <CURSOR>
+---
+> >  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             re = a_word[1: ]
+>  27:             <CURSOR>
+7063,7066c7070,7073
+< >  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          re = a_word[1: ]
+<  27:          regular_expression_this_word = '<CURSOR>'
+---
+> >  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             re = a_word[1: ]
+>  27:             regular_expression_this_word = '<CURSOR>'
+7077,7080c7084,7087
+< >  24:       for a_word in words:
+<  25:          first = a_word[0]
+<  26:          re = a_word[1: ]
+<  27:          regular_expression_this_word = '[' + string.lower(first<CURSOR>)
+---
+> >  24:          for a_word in words:
+>  25:             first = a_word[0]
+>  26:             re = a_word[1: ]
+>  27:             regular_expression_this_word = '[' + string.lower(first<CURSOR>)
+7091,7094c7098,7101
+< >  25:          first = a_word[0]
+<  26:          re = a_word[1: ]
+<  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          <CURSOR>
+---
+> >  25:             first = a_word[0]
+>  26:             re = a_word[1: ]
+>  27:             regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             <CURSOR>
+7109,7112c7116,7119
+< >  26:          re = a_word[1: ]
+<  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          if not re == '':
+<  29:             <CURSOR>
+---
+> >  26:             re = a_word[1: ]
+>  27:             regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             if not re == '':
+>  29:                <CURSOR>
+7138,7141c7145,7148
+< >  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+<  28:          if not re == '':
+<  29:             re = re + '\s*'
+<  30:             <CURSOR>
+---
+> >  27:             regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+>  28:             if not re == '':
+>  29:                re = re + '\s*'
+>  30:                <CURSOR>
+7167,7170c7174,7177
+< >  28:          if not re == '':
+<  29:             re = re + '\s*'
+<  30:             re = re + regular_expression_this_word
+<  31:             <CURSOR>
+---
+> >  28:             if not re == '':
+>  29:                re = re + '\s*'
+>  30:                re = re + regular_expression_this_word
+>  31:                <CURSOR>
+7174,7177c7181,7184
+<  28:          if not re == '':
+<  29:             re = re + '\s*'
+<  30:             re = re + regular_expression_this_word
+<  31:          <CURSOR>
+---
+>  28:             if not re == '':
+>  29:                re = re + '\s*'
+>  30:                re = re + regular_expression_this_word
+>  31:                <CURSOR>
+7192,7195c7199,7202
+< >  29:             re = re + '\s*'
+<  30:             re = re + regular_expression_this_word
+<  31:          return re
+<  32:          <CURSOR>
+---
+> >  29:                re = re + '\s*'
+>  30:                re = re + regular_expression_this_word
+>  31:                return re
+>  32:             <CURSOR>
+7216,7219c7223,7226
+< >  30:             re = re + regular_expression_this_word
+<  31:          return re
+<  32:          if not this_word:
+<  33:             this_word = 'hello<CURSOR>'
+---
+> >  30:                re = re + regular_expression_this_word
+>  31:                return re
+>  32:             if not this_word:
+>  33:                this_word = 'hello<CURSOR>'
+7230,7233c7237,7240
+< >  32:          if not this_word:
+<  33:             this_word = 'hello'
+<  34:          elif this_word == hi: 
+<  35:             <CURSOR>
+---
+> >  32:             if not this_word:
+>  33:                this_word = 'hello'
+>  34:             elif :
+>  35:  this_word == hi<CURSOR>              
+7244,7247c7251,7254
+< >  34:          elif this_word == hi: 
+<  35:             this_word = greetings
+<  36:          else:
+<  37:             <CURSOR>
+---
+> >  34:             elif :
+>  35:  this_word == hithis_word = greetings
+>  36:  else:
+>  37:     <CURSOR>
+7258,7261c7265,7268
+< >  35:             this_word = greetings
+<  36:          else:
+<  37:             this_word = 'done'
+<  38:             <CURSOR>
+---
+> >  35:  this_word == hithis_word = greetings
+>  36:  else:
+>  37:     this_word = 'done'
+>  38:     <CURSOR>
+7275,7278c7282,7285
+< >  36:          else:
+<  37:             this_word = 'done'
+<  38:             try:
+<  39:                some_function(<CURSOR>)
+---
+> >  36:  else:
+>  37:     this_word = 'done'
+>  38:     try:
+>  39:        some_function(<CURSOR>)
+7289,7292c7296,7299
+< >  38:             try:
+<  39:                some_function()
+<  40:             except : 
+<  41:                print 'error<CURSOR>'
+---
+> >  38:     try:
+>  39:        some_function()
+>  40:     except :
+>  41:  print 'error<CURSOR>'      
+7306,7309c7313,7316
+< >  40:             except : 
+<  41:                print 'error'
+<  42:             finally:
+<  43:                print 'all_right<CURSOR>'
+---
+> >  40:     except :
+>  41:  print 'error'
+>  42:  finally:
+>  43:     print 'all_right<CURSOR>'
+7332c7339
+< >>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
+---
+> >>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+7417c7424
+< >>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
+---
+> >>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
+7451,7452c7458,7459
+<   1: <CURSOR>
+<   2: # This symbol is here because it is homophonic with auto_test. Just checking
+---
+>   1: 
+>   2: <CURSOR># This symbol is here because it is homophonic with auto_test. Just checking
+7454a7462
+>   5: 
+7482,7483c7490,7491
+<   1: <CURSOR>
+<   2: # This symbol is here because it is homophonic with auto_test. Just checking
+---
+>   1: 
+>   2: <CURSOR># This symbol is here because it is homophonic with auto_test. Just checking
+7485a7494
+>   5: 
+8919,8920c8928,8929
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+8922a8932,8934
+>   6: 
+> 
+> *** End of source buffer ***
+8927c8939
+<   1: index = 0<CURSOR>
+---
+>   1: index = 0
+8929c8941
+<   3: index = 0
+---
+>   3: index = 0<CURSOR>
+8930a8943,8946
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+8937,8938c8953,8954
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+8940a8957,8959
+>   6: 
+> 
+> *** End of source buffer ***
+8959,8960c8978,8979
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+8962a8982,8984
+>   6: 
+> 
+> *** End of source buffer ***
+8966,8970d8987
+< *** Start of source buffer ***
+<   1: index = 0<CURSOR>
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+8977,8978c8994,8995
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+8980a8998,9000
+>   6: 
+> 
+> *** End of source buffer ***
+8985c9005
+<   1: <CURSOR>index = 0
+---
+>   1: index = 0
+8987c9007
+<   3: index = 0
+---
+>   3: <CURSOR>index = 0
+8988a9009,9012
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+8995,8996c9019,9020
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+8998a9023,9025
+>   6: 
+> 
+> *** End of source buffer ***
+9002,9003d9028
+< *** Start of source buffer ***
+<   1: index = 0
+9005c9030
+<   3: <CURSOR>index = 0
+---
+>   3: index = 0
+9007c9032
+<   5: index = 0
+---
+>   5: <CURSOR>index = 0
+9017,9018c9042,9043
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9020a9046,9048
+>   6: 
+> 
+> *** End of source buffer ***
+9024,9028d9051
+< *** Start of source buffer ***
+<   1: <CURSOR>index = 0
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9035,9036c9058,9059
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9038a9062,9064
+>   6: 
+> 
+> *** End of source buffer ***
+9057,9058c9083,9084
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9060a9087,9089
+>   6: 
+> 
+> *** End of source buffer ***
+9064,9068d9092
+< *** Start of source buffer ***
+<   1: index = 0<CURSOR>
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9075,9076c9099,9100
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9078a9103,9105
+>   6: 
+> 
+> *** End of source buffer ***
+9097,9098c9124,9125
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9100a9128,9130
+>   6: 
+> 
+> *** End of source buffer ***
+9104,9108d9133
+< *** Start of source buffer ***
+<   1: index = 0<CURSOR>
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9115,9116c9140,9141
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9118a9144,9146
+>   6: 
+> 
+> *** End of source buffer ***
+9123c9151
+<   1: <CURSOR>index = 0
+---
+>   1: index = 0
+9125c9153
+<   3: index = 0
+---
+>   3: <CURSOR>index = 0
+9126a9155,9158
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+9133,9134c9165,9166
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9136a9169,9171
+>   6: 
+> 
+> *** End of source buffer ***
+9140,9141d9174
+< *** Start of source buffer ***
+<   1: index = 0
+9143c9176
+<   3: <CURSOR>index = 0
+---
+>   3: index = 0
+9145c9178
+<   5: index = 0
+---
+>   5: <CURSOR>index = 0
+9155,9156c9188,9189
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9158a9192,9194
+>   6: 
+> 
+> *** End of source buffer ***
+9162,9166d9197
+< *** Start of source buffer ***
+<   1: <CURSOR>index = 0
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9173,9174c9204,9205
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9176a9208,9210
+>   6: 
+> 
+> *** End of source buffer ***
+9183,9184c9217,9218
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9186a9221,9223
+>   6: 
+> 
+> *** End of source buffer ***
+9205,9206c9242,9243
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9208a9246,9248
+>   6: 
+> 
+> *** End of source buffer ***
+9212,9216d9251
+< *** Start of source buffer ***
+<   1: <SEL_START>index = 0<SEL_END>
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9223,9224c9258,9259
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9226a9262,9264
+>   6: 
+> 
+> *** End of source buffer ***
+9231c9269
+<   1: <SEL_START>index = 0<SEL_END>
+---
+>   1: index = 0
+9233c9271
+<   3: index = 0
+---
+>   3: <SEL_START>index = 0<SEL_END>
+9234a9273,9276
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+9241,9242c9283,9284
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9244a9287,9289
+>   6: 
+> 
+> *** End of source buffer ***
+9263,9264c9308,9309
+<   2: <CURSOR>index = 1
+<   3: index = 0
+---
+>   2: index = 1
+>   3: <CURSOR>index = 0
+9266a9312,9314
+>   6: 
+> 
+> *** End of source buffer ***
+9270,9274d9317
+< *** Start of source buffer ***
+<   1: <SEL_START>index = 0<SEL_END>
+<   2: index = 1
+<   3: index = 0
+<   4: index = 1
+9280,9281c9323,9324
+<   1: <CURSOR>index = 0
+<   2: index = 1
+---
+>   1: index = 0
+>   2: <CURSOR>index = 1
+9283a9327
+>   5: index = 0
+9288c9332
+<   1: index = 0<CURSOR>
+---
+>   1: index = 0
+9290c9334
+<   3: index = 0
+---
+>   3: index = 0<CURSOR>
+9291a9336,9339
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+9295,9296d9342
+< *** Start of source buffer ***
+<   1: index = 0
+9298c9344
+<   3: index = 0<CURSOR>
+---
+>   3: index = 0
+9300c9346
+<   5: index = 0
+---
+>   5: index = 0<CURSOR>
+9341,9342c9387,9388
+<   1: <CURSOR>index = 0
+<   2: index = 1
+---
+>   1: index = 0
+>   2: <CURSOR>index = 1
+9344a9391
+>   5: index = 0
+9349c9396
+<   1: <SEL_START>index = 0<SEL_END>
+---
+>   1: index = 0
+9351c9398
+<   3: index = 0
+---
+>   3: <SEL_START>index = 0<SEL_END>
+9352a9400,9403
+>   5: index = 0
+>   6: 
+> 
+> *** End of source buffer ***
+9356,9357d9406
+< *** Start of source buffer ***
+<   1: index = 0
+9359c9408
+<   3: <SEL_START>index = 0<SEL_END>
+---
+>   3: index = 0
+9361c9410
+<   5: index = 0
+---
+>   5: <SEL_START>index = 0<SEL_END>
+9416,9418c9465
+<   1: nothing left<CURSOR>
+< 
+< *** End of source buffer ***
+---
+>   1: #othing left<CURSOR> This is a small test buffer for Python
+9423c9470
+< Test suite completed in:  1461.62 secs
+---
+> Test suite completed in:  772.891000032 secs
+9424a9472,9473
+> Message loop ended, cleaning up
+> cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bb8dd0>
+9425a9475
+> ExtLoopWin32.run returning

@@ -859,7 +859,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
-    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S\n" (current-buffer) py-indent-offset tab-width command-string)
+    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mar)=%S buffer is\n%S\n" (current-buffer) py-indent-offset tab-width command-string (point) (mark) (buffer-substring (point-min) (point-max)))
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -2548,8 +2548,11 @@ change reports it sends to VCode.
     (setq indent-end (elt range 1))
     (setq levels (cl-gethash "levels" mess-cont))
 
-    (vr-log "--** vcode-cmd-decr-indent-level: range=%S, levels=%S\n" range levels)
+    (vr-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
+
+    (set-mark nil)
     (vcode-unindent-region indent-start indent-end levels) 
+    (vr-log "--** vcode-cmd-decr-indent-level: upon exit, (point)=%S, (mark)=%S, buffer contains\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
     (vr-send-queued-changes)
   )
 )
@@ -2611,6 +2614,23 @@ tabs.
   )
 )
 
+(defun vcode-execute-backspace ()
+   (let ((backspace-executes-this-command (key-binding "\177")))
+     (vr-log "--** vcode-execute-backspace: backspace-executes-this-command=%S\n" backspace-executes-this-command)
+
+     ;;;
+     ;;; First try it without arguments, and if it doesn't work, try 
+     ;;; it with just 1 as argument
+     ;;;
+     (condition-case err
+	 (apply backspace-executes-this-command nil)
+       ('error
+	(apply backspace-executes-this-command (list 1))
+       )
+     )
+     
+   )
+)
 
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
@@ -2634,8 +2654,11 @@ tabs.
           (progn
            (setq counter 0)
 	   (while (< counter n-levels)
+	     (save-excursion
              ;;; Execute a command string containing just the backspace key
-	     (vcode-execute-command-string "\177")
+	       (vcode-execute-command-string "\177")
+;	       (vcode-execute-backspace)
+	     )
              (setq counter (1+ counter))
            )
            )
@@ -2659,69 +2682,26 @@ tabs.
 )
 
 (defun for-lines-in-region-do (start end do-this args)
-  (let ((current-line)(end-line))
+  (let ((start-line) (end-line) (keep-going) (current-line))
     (vr-log "--** for-lines-in-region-do: upon entry, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
     (save-excursion
        (setq end-line (what-line end))
        (message "-- end-line=%S\n" end-line)
        (goto-char start)
-       (setq current-line (count-lines 1 (point)))
-       (while (< (what-line (point)) end-line)
-         (next-line 1)
+       (setq keep-going t)
+       (while keep-going
          (message "-- processing line: current-line=%S, (point)=%S" (what-line (point)) (point))
          (apply do-this args)
+	 (setq current-line (what-line (point)))
+         (if (<  current-line end-line)
+	     (next-line 1)
+	   (setq keep-going nil)
+	 )
        )
+       (vr-log "--** for-lines-in-region-do: before exiting save-excursion, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
     )
     (vr-log "--** for-lines-in-region-do: upon exit, (point)=%S, (mark)=%S, buffer contains:\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
-)
-
-(defun vcode-unindent-region-old (start end n-levels)
-  "Deindents region from START to END by N-LEVELS levels."
-  (let (end-line)
-    (vr-log "-- vcode-unindent-region: start=%S, end=%S, n-levels=%S" start end n-levels)
-
-;;; IGNOE INDENTATION FOR NOW!
-;     (save-excursion
-;       (goto-char end)
-;       (setq end-line (count-lines 1 (point)))
-;       (message "-- end-line=%S\n" end-line)
-;       (goto-char start)
-;       (while (<= (count-lines 1 (point)) end-line)
-;  	(message "-- start of while, current-line=%S" (count-lines 1 (point)))
-;   	(vcode-unindent-line n-levels)
-; 	(next-line 1)
-;  	(message "-- end of while, current-line=%S" (count-lines 1 (point)))
-;        )
-;     )
-
-  )
-)
-
-
-
-
-(defun vcode-unindent-line-old (n-levels)
-  (interactive "nNumber of levels: ")
-  (beginning-of-line)
-  (while (and (looking-at " ") (< (point) (point-max)))
-    (forward-char-nomark 1)
-    )
-
-  ;;; Will need to invoke a different method for different languages
-  ;;; Or maybe, we can just invoke whatever function is bound to the 
-  ;;; Backspace key
-  ;;;
-  ;;; Don't backsapce if empty line, because that will delete the line 
-  ;;; instead of deindenting
-  ;;;
-  (if (not (looking-at "$"))
-      (progn
-	(vr-log "--** vcode-unindent-line: unindenting line")
-	(py-electric-backspace 1)
-	)
-    (vr-log "--** vcode-unindent-line: line was blank... leave it alone")
-    )
 )
 
 
