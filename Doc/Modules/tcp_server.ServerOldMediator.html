@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:37:03 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:15:00 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,8 +26,11 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerOldMediator</SPAN>(<A CLASS="DocLink" HREF="tcp_server.ServerMainThread.html">ServerMainThread</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._destroy_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._destroy_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.delete_instance_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.delete_instance_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -39,15 +42,17 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_factory</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.deactivate_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.deactivate_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_talk_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_talk_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_listener_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_listener_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.process_ready_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.process_ready_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ready_socks</SPAN>)<SPAN CLASS="OneLiner"> # Processes socket connections that have received new data.</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
 
 </PRE><H2>Description</H2><P>
@@ -65,6 +70,27 @@ STR <EM>test_suite=None</EM>
 new editor run regression test suite <EM>test_suite</EM>.
 
 </DL>
+<H2 ID="tcp_server.ServerOldMediator._destroy_mediator" CLASS="Method">tcp_server.ServerOldMediator._destroy_mediator(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method to destroy one the old MediatorObject
+corresponding to the given id</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>id</EM>
+<DD>The unique identifier assigned by VoiceCode to
+that mediator.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_server.ServerOldMediator._new_instance" CLASS="Method">tcp_server.ServerOldMediator._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
 <P>None</P>
 
@@ -94,6 +120,32 @@ AppStateMessaging <EM>instance</EM>
 running the test suite)
 
 </DL>
+<H2 ID="tcp_server.ServerOldMediator.delete_instance_cbk" CLASS="Method">tcp_server.ServerOldMediator.delete_instance_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback to let MediatorObject notify us that the
+corresponding external editor has exited or disconnected from
+the mediator.  Only used with the old MediatorObject</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>id</EM>
+<DD>The unique identifier assigned by VoiceCode to
+that socket pair.
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_server.ServerOldMediator.known_instance" CLASS="Method">tcp_server.ServerOldMediator.known_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
 <P>None</P>
 
@@ -119,6 +171,22 @@ STR <EM>id</EM>
 <DD>the corresponding instance, or None if
 the id is unknown
 </DL>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_server.ServerOldMediator.quit" CLASS="Method">tcp_server.ServerOldMediator.quit(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Perform any cleanup prior to quitting.  Called when the main 
+thread has exited its event loop.  Subclasses which override
+this method should be sure to call their parent class's version.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
 <P>
 <EM>none</EM>
 </P>
@@ -307,6 +375,31 @@ STR <EM>id</EM>
 data thread to ensure that process_ready_socks is called.
 
 </DL>
+<H2 ID="tcp_server.ServerMainThread.deactivate_data_thread" CLASS="Method">tcp_server.ServerMainThread.deactivate_data_thread(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to deactivate the data thread associated with a 
+given socket id.  <STRONG>Note:</STRONG> if the thread is daemonic (will not
+prevent the mediator process from ending), and the particular 
+thread class used doesn't provide a way to kill the thread, 
+this method may simply ensure that no messages from that thread
+are processed.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>id</EM>
+<DD>The unique identifier assigned by VoiceCode to
+the socket pair.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_server.ServerMainThread.handshake_listen_socks" CLASS="Method">tcp_server.ServerMainThread.handshake_listen_socks(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>Invoked when a new socket connection was opened on VC_LISTEN port.</P>
 
@@ -376,7 +469,7 @@ the id is unknown
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="tcp_server.ServerMainThread.new_data_thread" CLASS="Method">tcp_server.ServerMainThread.new_data_thread(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.new_data_thread" CLASS="Method">tcp_server.ServerMainThread.new_data_thread(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -393,6 +486,11 @@ STR <EM>id</EM>
 <DT>
 socket <EM>listen_sock</EM>
 <DD>The listen socket
+<DT>
+Event <EM>connection_ending</EM>
+<DD>threading.Event 
+used to signal to the data thread that the connection is 
+ending, or the server is quitting
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -406,7 +504,7 @@ socket <EM>listen_sock</EM>
 <P>
 ..[ListenAndQueueMsgsThread] 
 tcp_server.ListenAndQueueMsgsThread.html</P>
-<H2 ID="tcp_server.ServerMainThread.new_data_thread_given_event" CLASS="Method">tcp_server.ServerMainThread.new_data_thread_given_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.new_data_thread_given_event" CLASS="Method">tcp_server.ServerMainThread.new_data_thread_given_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -418,15 +516,20 @@ listen_sock</P>
 <DL>
 
 <DT>
-SocketHasDataEvent <EM>data_event</EM>
-<DD>the SocketHasDataEvent event
-to pass to the new thread
-<DT>
 STR <EM>id</EM>
 <DD>The unique ID of the listen socket
 <DT>
 socket <EM>listen_sock</EM>
 <DD>The listen socket
+<DT>
+SocketHasDataEvent <EM>data_event</EM>
+<DD>the SocketHasDataEvent event
+to pass to the new thread
+<DT>
+Event <EM>connection_ending</EM>
+<DD>threading.Event 
+used to signal to the data thread that the connection is 
+ending, or the server is quitting
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -550,6 +653,22 @@ have messages waiting
 <EM>none</EM>
 <DD>
 </DL>
+<H2 ID="tcp_server.ServerMainThread.quit" CLASS="Method">tcp_server.ServerMainThread.quit(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+Perform any cleanup prior to quitting.  Called when the main 
+thread has exited its event loop.  Subclasses which override
+this method should be sure to call their parent class's version.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_server.ServerMainThread.start_other_threads" CLASS="Method">tcp_server.ServerMainThread.start_other_threads(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)</H2>
 <P>None</P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 01 21:09:50 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:15:42 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,11 +25,15 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ListenAndQueueMsgsThread</SPAN>(<A CLASS="DocLink" HREF="threading.Thread.html">Thread</A>, <A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">underlying</SPAN>, <SPAN CLASS="Argument">completed_msgs</SPAN>, <SPAN CLASS="Argument">event</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">underlying</SPAN>, <SPAN CLASS="Argument">completed_msgs</SPAN>, <SPAN CLASS="Argument">event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>, <SPAN CLASS="Argument">conn_broken_msg</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_threads.ListenAndQueueMsgsThread.get_mess"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.get_mess</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Gets a message from the external editor.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_threads.ListenAndQueueMsgsThread.message_queue"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.message_queue</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_threads.ListenAndQueueMsgsThread.notify_main"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.notify_main</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_threads.ListenAndQueueMsgsThread.run"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_threads.ListenAndQueueMsgsThread.run</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Start listening for data.</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from threading.Thread</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.__bootstrap</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -46,10 +50,6 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setDaemon</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">daemonic</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.setName</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">name</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading.Thread.start</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
-
-    <SPAN CLASS="InheritsHead"># Inherited from threading._Verbose</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">verbose=None</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">threading._Verbose._note</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">format</SPAN>, <SPAN CLASS="Argument">*args</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -77,6 +77,23 @@ completed messages.
 SocketHasDataEvent <EM>event</EM>
 <DD>object used to notify the main thread
 that a socket has data
+<DT>
+Event <EM>connection_ending</EM>
+<DD>threading.Event object which will be set
+to true if the connection has been terminated and the thread should die
+<DT>
+(STR, {STR: STR}) conn_broken_msg
+<DD>message to put onto the Queue to 
+indicate that the connection was broken unexpectedly.  Note that
+because of thread timing issues, this can occur even if the
+mediator previously received an editor_disconnecting message, or
+even if the editor disconnected in response to a
+mediator_closing or terminating message.  However, in the former case, 
+AppStateMessaging should process the editor_disconnecting message
+first, and will therefore ignore any subsequent messages in the
+queue (including the conn_broken one).  In the latter case, the mediator 
+should already have left the message loop, so, again, the
+conn_broken message should not be processed.
 </DL>
 <P>
 CLASS ATTRIBUTES**</P>

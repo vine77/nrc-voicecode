@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:36:06 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:11:31 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -38,13 +38,13 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.bind_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bind_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Binds the AppState to a particular buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_all_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_all_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to close all buffers known to VoiceCode</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # close a buffer</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.curr_buffer_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.curr_buffer_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
-    <A CLASS="DocLink" HREF="#AppState.AppState.current_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.current_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the AppMgr which owns this AppState</SPAN>
+    <A CLASS="DocLink" HREF="#AppState.AppState.current_manager"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.current_manager</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns a reference to the the manager which owns this AppState</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.find_buff"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.find_buff</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Returns the open buffer with name <EM>STR buff_name</EM>.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.focus_is_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.focus_is_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">lang_name</SPAN>)<SPAN CLASS="OneLiner"> # Check if prog. env. focus is a source buffer</SPAN>
@@ -70,6 +70,7 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_begin"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_begin</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>, <SPAN CLASS="Argument">block=0</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the beginning of a recognition event.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_end"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_end</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked at the end of a recognition event.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.recog_indicator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.recog_indicator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">status</SPAN>)<SPAN CLASS="OneLiner"> # Sets a "recognition in progress" visual indicator.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#AppState.AppState.save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.set_change_callback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.set_change_callback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">change_callback=None</SPAN>)<SPAN CLASS="OneLiner"> # changes the callback to a new function</SPAN>
@@ -150,16 +151,22 @@ entry is the action that was executed.
 of the current buffer whenever it changes (used mostly for regression
 testing external editor).
 <DT>
-<EM>AppMgr</EM> manager
-<DD>the AppMgr object which owns this AppState.
+<EM>AppCbkHandler</EM> manager
+<DD>the AppCbkHandler object which handles
+callbacks from this AppState (and is usually its owner).
+</DL>
+<P>
 Certain callback methods (close_app_cbk, new_buffer_cbk) will notify 
 the manager.  If we are using the old mediator infrastructure, manager 
 may be None.  Therefore, AppState must check whether manager == None
-before sending such notifications.
+before sending such notifications.</P>
+
+<DL>
+
 <DT>
 <EM>STR</EM> instance_name
 <DD>the name of this editor instance, assigned by
-AppMgr, and used to identify the editor in callbacks to the manager.
+the manager, and used to identify the editor in callbacks to the manager.
 <DT>
 <EM>STR</EM> bound_buffer_name=None
 <DD>Name of the buffer that VoiceCode
@@ -192,13 +199,20 @@ should include those from AppState and add their own
 <P>None</P>
 
 <P>
-Creates a new [SourceBuff] instances and adds it to the
+Creates a new [SourceBuff] instance and adds it to the
 list of open buffers.</P>
 <P>
 Note: this method should not only be called by other AppState
 methods, not from outside AppState, and only if such methods
 have already verified that self.open_buffers doesn't already
 have a key matching buff_name</P>
+<P>
+Note: this method does not automatically synchronize the new
+SourceBuff with an external editor.  Normally, for external editors, 
+we will be using SourceBuffCached which will be initialized with an 
+empty cache for the buffer contents, so it will be synchronized
+the first time someone tries to access the buffer contents.  The
+caller may force immediate synchronization if it is appropriate.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -501,7 +515,7 @@ INT <EM>save</EM>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="AppState.AppState.close_app_cbk" CLASS="Method">AppState.AppState.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="AppState.AppState.close_app_cbk" CLASS="Method">AppState.AppState.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -509,6 +523,14 @@ editor invokes this method to notify AppState that it is
 about to close, or is disconnecting from the mediator</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
+</DL>
 <P>
 <EM>none</EM></P>
 <P>
@@ -628,7 +650,7 @@ the current buffer.  </P>
 <EM>none</EM>
 </P>
 <H2 ID="AppState.AppState.current_manager" CLASS="Method">AppState.AppState.current_manager(<SPAN CLASS="Argument">self</SPAN>)</H2>
-<P>returns a reference to the AppMgr which owns this AppState</P>
+<P>returns a reference to the the manager which owns this AppState</P>
 
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -640,9 +662,9 @@ the current buffer.  </P>
 <DL>
 
 <DT>
-<EM>AppMgr</EM>
-<DD>the AppMgr object which owns this AppState, or None
-if there is none.
+<EM>AppCbkHandler</EM>
+<DD>the AppCbkHandler object which owns this 
+AppState, or None if there is none.
 
 </DL>
 <H2 ID="AppState.AppState.drop_breadcrumb" CLASS="Method">AppState.AppState.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
@@ -925,7 +947,7 @@ display method.</P>
 <P>None</P>
 
 <P>
-the unique name (assigned by the AppMgr) to this editor
+the unique name (assigned by the the manager) to this editor
 instance</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
@@ -1383,8 +1405,9 @@ the manager.  </P>
 <DL>
 
 <DT>
-<EM>AppMgr</EM> manager
-<DD>the AppMgr object which owns this AppState.
+<EM>AppCbkHandler</EM> manager
+<DD>the AppCbkHandler object which owns 
+this AppState.  
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -1396,7 +1419,7 @@ the manager.  </P>
 
 <P>
 assign a unique name to this editor instance.  
-<STRONG>NOTE:</STRONG> only AppMgr should call this method.</P>
+<STRONG>NOTE:</STRONG> only the manager should call this method.</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
