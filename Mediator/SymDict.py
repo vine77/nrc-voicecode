@@ -910,14 +910,14 @@ class SymDict(PickledObject.PickledObject):
 
         global vocabulary_symbols_with_written_form
 
-#        print '-- SymDict.update_spoken_forms: symbol=\'%s\'' % symbol
+        trace('SymDict.update_spoken_forms', 'symbol="%s"' % symbol)
         
         #
         # Get the symbol's spoken forms
         #
 
         forms_this_symbol = self.get_spoken_forms(symbol)
-#        print '-- SymDict.update_spoken_forms: spoken forms originally are:\'%s\'\nforms_this_symbol=%s' % (self.symbol_info[symbol].spoken_forms, forms_this_symbol)
+        trace('SymDict.update_spoken_forms', 'spoken forms originally are:"%s"\nforms_this_symbol=%s' % (self.symbol_info[symbol].spoken_forms, forms_this_symbol))
         self.symbol_info[symbol].spoken_forms = forms_this_symbol
            
         #
