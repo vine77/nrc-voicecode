@@ -43,6 +43,7 @@ from actions_gen import *
 from actions_C_Cpp import *
 from actions_py import *
 from actions_perl import *
+import vc_globals
 
 import KnownTargetModule
 
@@ -51,31 +52,6 @@ import sr_interface
 ##############################################################################
 # Customize from here only
 ##############################################################################
-
-#import traceback
-#try:
-#    add_abbreviation('attr', ['attribute'])
-#except Exception, err:
-#    print 'error adding abbreviation'
-#    traceback.print_exc(err)
-#    raise err
-
-#
-# Load abbreviations files
-#
-for abbrev_file in ('user_abbrevs.py', 'py_abbrevs.py'):
-    try:
-        full_file = vc_globals.config + os.sep + abbrev_file
-#        print '-- vc_config.__main__: full_file=\'%s\'' % full_file
-        execfile(full_file)
-    except Exception, err:
-        print 'ERROR: in abbreviations file: %s' % full_file
-        raise err
-
-        
-# print add_abbreviation
-add_abbreviation('attr', ['attribute'])
-
 
 ###############################################################################
 # Associate file extensions to programming languages

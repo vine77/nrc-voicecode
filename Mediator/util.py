@@ -160,6 +160,10 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
     return opt_dict, args
 
 
+###############################################################################
+# file system
+###############################################################################
+
 
 def last_mod(f_name):
     """Returns the time at which a file was last modified.
@@ -285,6 +289,11 @@ def within_VCode(path):
     return relative_name(path, vc_globals.home, prefix = '%VCODE_HOME%')
 #    return relative_name(path, vc_globals.home, 
 #        prefix = os.path.basename(vc_globals.home))
+
+
+###############################################################################
+# miscellaneous
+###############################################################################
 
 
 def bell(length=3):

@@ -21,12 +21,61 @@ std_small_numbers = std_US_small_numbers
 # Include user-defined forms here
 #######################################
 
-# Alain's odd forms
-# alt_US_punc.add('&', ['and percent'])
-# alt_US_punc.add('<', ['less-sign'], spacing =
-#     no_spaces)
-# alt_US_punc.add('>', ['greater-sign'], spacing =
-#     no_spaces)
+###################################################################
+# Standard symbols:
+#
+# Choose which files you want to scan for standard symbols (these 
+# files will be re-scanned whenever the saved symbol dictionary 
+# is lost, or when these files have changed since the symbol dictionary,
+# or when you create a new set of speech files for VoiceCode.
+#
+# You can include your own files, as well as the standard ones which
+# ship with VoiceCode.
+###################################################################
+
+#
+# Python standard symbols
+#
+symbol_files = []
+
+py_std_sym = os.path.join(vc_globals.config, 'py_std_sym.py')
+
+symbol_files.append(py_std_sym)
+
+standard_symbols_in(symbol_files)
+
+###################################################################
+# Standard abbreviations:
+#
+# Specify the abbreviation files which define abbreviations 
+# and expansions.  
+#
+# These files will be re-scanned whenever the saved symbol dictionary 
+# is lost, or when these files have changed since the symbol dictionary
+#
+# Abbreviations read from these files are appended to the list of
+# abbreviations for a given word, so the first file in the list takes 
+# precedence.  However, because the abbreviation dictionary is
+# persistent, previously added entries will take precedence over the
+# ones included in these files.  To override these abbreviations, use
+# the import abbreviation function from within the mediator.
+#
+# You can include your own files, as well as the standard ones which
+# ship with VoiceCode, but because of the persistence noted above,
+# personal abbreviations are normally added by importing them, so that
+# they take precedence.
+#
+###################################################################
+
+abbrev_files = []
+
+std_abbrevs = os.path.join(vc_globals.config, 'std_abbrevs.py')
+py_abbrevs = os.path.join(vc_globals.config, 'py_abbrevs.py')
+
+abbrev_files.append(std_abbrevs)
+abbrev_files.append(py_abbrevs)
+
+abbreviations_in(abbrev_files)
 
 #######################################
 # add standard command and alias sets
@@ -87,7 +136,7 @@ add_csc_set(backspacing)
 # add punctuation sets
 #######################################
 
-# always add the standard (std_) sets after the corresponding alternative 
+# always create the standard (std_) sets after the corresponding alternative 
 # sets (or any user-defined sets).  This allows you to override the 
 # spacing behavior of standard punctuation by adding punctuation with 
 # the same spoken form to the corresponding
@@ -114,9 +163,9 @@ alt_quotes.create(interpreter, force = 1)
 std_quotes.create(interpreter)
 
 
+
 #######################################
 # add sets for dictating 2-digit numbers
 #######################################
-
 
 std_small_numbers.create(interpreter)

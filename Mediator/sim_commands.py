@@ -306,11 +306,6 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         self.interp.parse_symbols_from_files(file_list)
         print '>>> Known symbols are: '; self.interp.print_symbols()
 
-        #
-        # Save the symbols dictionary to file
-        #
-        self.interp.known_symbols.pickle()
-
     def utterance_spoken_forms(self, utterance, echo_cmd=0):
         spoken_forms = []
         for a_word in utterance:
@@ -537,7 +532,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         #
         # Remove symbols from the Speech Recognition vocabulary
         #
-        self.interp.cleanup()
+        self.interp.cleanup_dictionary()
 
     def clear_abbreviations(self, echo_cmd=0):
         if echo_cmd: self.echo_command('clear_abbreviations')

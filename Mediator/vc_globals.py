@@ -58,6 +58,7 @@ doc_modules = os.path.join(doc, 'Modules')
 default_config_file = os.path.join(config, 'vc_config.py')
 default_user_config_file = os.path.join(config, 'user_config.py')
 regression_user_config_file = os.path.join(config, 'regression_config.py')
+sym_state_file = os.path.join(state, 'symdict.dat')
 
 # Add some paths to $PYTHONPATH
 sys.path = [admin] + sys.path

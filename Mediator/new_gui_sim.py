@@ -57,6 +57,8 @@ from wxMediator import *
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'interp_massaged':1,
+#                        'match_untranslated_text': 1,
 #                        'SB_ServiceIndent':1,
 #                        'ActionInsertNewClause':1,
 #                        'sr_interface.connect':1,

@@ -188,6 +188,6 @@ class wxFrameMenuMixIn(Object):
 #        print 'index ', index
         if index == None:
             return 0
-        menu.Insert(index, menu_item)
+        menu.InsertItem(index, menu_item)
 
 

@@ -64,7 +64,7 @@ def compilation_test(interp, source):
     """Does a compilation test on file *source*        
     """
     print '*** Compiling symbols from file: %s ***' % util.within_VCode(source)
-    interp.cleanup()
+    interp.cleanup_dictionary()
     interp.parse_symbols_from_file(source)
     print '\n\nParsed symbols are: '
     interp.print_symbols()
@@ -85,7 +85,7 @@ def accept_symbol_match_test(interp, source, symbol_matches):
     """
     print '\n\n*** Accept symbol match test. source=\'%s\' ***' \
         % util.within_VCode(source)
-    interp.cleanup()            
+    interp.cleanup_dictionary()            
     interp.parse_symbols_from_file(source)
     print 'Parsed symbols are: '
     interp.print_symbols()
@@ -147,7 +147,7 @@ def symbol_match_test(interp, sources, pseudo_symbols):
         #
         # Compile symbols
         #
-        interp.cleanup()        
+        interp.cleanup_dictionary()        
         for a_source in sources:
             interp.parse_symbols_from_file(a_source)
 #        print '\n Known symbols are: \n'
@@ -717,7 +717,7 @@ def test_persistence():
     #
     # Create make mediator console use an empty file for SymDict persistence
     #
-    fname = vc_globals.tmp + os.sep + 'tmp_symdict.pkl'
+    fname = vc_globals.tmp + os.sep + 'tmp_symdict.dat'
     try:
         os.remove(fname)
     except:
@@ -731,15 +731,17 @@ def test_persistence():
 # but we don't want standard symbols defined.  How can
 # we achieve that?  Oddly enough, configuration doesn't seem to define any 
 # standard symbols - why not?
-    #
-    # Question... could this be refactored to get the interp from testing.interp()
-    # instead? Trying to get rid of the temp_factory. AD.
-    #
+#
+# Question... could this be refactored to get the interp from testing.interp()
+# instead? Trying to get rid of the temp_factory. AD.
+#
+# Answer: No.  The persistence test needs to use its own interpreter, 
+# so that it doesn't interfere with the other tests.
+#  
 
 #    temp_config = temp_factory.new_config(skip_config = 1)
+# create new interpreter without a pickle file, but do configure it
     temp_config = temp_factory.new_config()
-# here, try with no official pickle file
-#    testing.init_simulator_regression(symdict_pickle_fname=fname)
     interp = temp_config.interpreter()
 
     #
@@ -754,7 +756,7 @@ def test_persistence():
     sys.stdout.flush()
 # but manually pickle before quitting (quit would clean out the symbol
 # dictionary and reparse the standard files before pickling)
-    interp.known_symbols.pickle(alt_file = fname)
+    interp.known_symbols.save(file = fname)
 
     #
     # Restart the mediator, with saved SymDict. The symbols should still be
@@ -762,9 +764,6 @@ def test_persistence():
     #
     print '\n\n>>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.\n'
 
-# DCF: Ugh: don't know if this quit command does anything:
-# SimCmdsObj.quit just sets a flag, right?
-#    test_command("""quit(save_speech_files=0, disconnect=0)""")
     fake_command = "quit(save_speech_files=0, disconnect=0)"
     print '\n\n>>> Testing console command: %s\n' % fake_command
 # this actually does do something
@@ -783,12 +782,9 @@ def test_persistence():
 # configuration, which would be the normal thing to do in the new
 # scheme).  Or should we skip configuration?
 
-#    testing.init_simulator_regression(symdict_pickle_fname=fname)
 # now, start with the file we created
     temp_config = temp_factory.new_config(skip_config = 1,
-        symdict_pickle_fname = fname)
-#    temp_config = temp_factory.new_config(symdict_pickle_fname = fname)
-#    testing.init_simulator_regression(symdict_pickle_fname=fname)
+        alt_sym_file = fname)
     interp = temp_config.interpreter()
     fake_command = "print_symbols()"
     print '\n\n>>> Testing console command: %s\n' % fake_command
@@ -802,12 +798,8 @@ def test_persistence():
     fake_command = "quit(save_speech_files=0, disconnect=0)"
     print '\n\n>>> Testing console command: %s\n' % fake_command
     temp_config.quit()
-#    test_command("""quit(save_speech_files=0, disconnect=0)""")
-#    testing.init_simulator_regression(symdict_pickle_fname=None)
 # back to no file
     temp_config = temp_factory.new_config(skip_config = 1)
-#    temp_config = temp_factory.new_config()
-#    testing.init_simulator_regression(symdict_pickle_fname=fname)
     interp = temp_config.interpreter()
 
     fake_command = "print_symbols()"
@@ -3172,5 +3164,7 @@ define_suite_by_range(name = 'few_early', first = 'CmdInterp', last = 'SymDict')
 define_suite_by_range(name = 'thru_SymDict', last = 'SymDict')
 
 # tests starting with 'select_pseudocode' and going through the last
-# test
 define_suite_by_range(name = 'from_select_pseudo', first = 'select_pseudocode')
+
+# tests starting with 'python' and going through the last
+define_suite_by_range(name = 'from_python', first = 'python')
