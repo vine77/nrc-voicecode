@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import exceptions, sys, traceback, types
+import exceptions, string, sys, traceback, types
 
 """Functions for debugging purposes."""
 
@@ -30,19 +30,6 @@ def not_implemented(name):
 def virtual(name):
     """Prints warning message when a virtual method is called."""
     print "WARNING: virtual method '%s' called!!!" % name    
-
-def critical_warning(warn):
-    """Prints a critical warning message.
-    
-    A critical warning usually indicates a bug in the code which should
-    be reported and resolved, but in a circumstance where the best 
-    immediate response is to ignore and continue running.  For example, 
-    if an error is detected by an object destructor or during cleanup, it 
-    may be advisable to proceed to free the rest of the resources used
-    by the object."""
-#   for now, just write to stderr.  Later, we may want to log this to a
-#   file and/or tell the user to submit a bug report
-    sys.stderr.write(warn)
 
 
 def print_call_stack(print_to_file=sys.stdout):
@@ -76,6 +63,16 @@ def what_class(instance):
 
     return is_class
 
+def methods(instance):
+    methods = {}
+    inst_class = instance.__class__
+    for method_name in inst_class.__dict__.keys():
+        if isinstance(inst_class.__dict__[method_name], types.FunctionType):
+            methods[method_name] = inst_class.__dict__[method_name]
+    return methods
+
+
+
 
 ###############################################################################
 # Managing trace printing
@@ -87,8 +84,9 @@ def dont_print_trace(trace_id, message, insert_nl=1):
 
 def print_trace(trace_id, message, insert_nl=1):
     global to_be_traced, trace_file
-    
-    if to_be_traced == 'all' or to_be_traced.has_key(trace_id):
+
+#    print '-- debug.print_trace: trace_id=%s, trace_is_active(trace_id)=%s' % (trace_id, trace_is_active(trace_id))
+    if trace_is_active(trace_id):
         trace_file.write('-- %s: %s' % (trace_id, message))
         if insert_nl:
             trace_file.write('\n')
@@ -97,6 +95,25 @@ def print_trace(trace_id, message, insert_nl=1):
 trace_fct = dont_print_trace
 trace_file = sys.stdout
 to_be_traced = {}
+activate_trace_id_substrings = 0
+
+def trace_is_active(trace_id):
+    global to_be_traced, activate_trace_id_substrings
+#    print '-- debug.trace_is_active: trace_id=%s' % trace_id
+
+    if to_be_traced == 'all':
+        return 1
+    
+    if not activate_trace_id_substrings and to_be_traced.has_key(trace_id):
+        return 1
+
+    if activate_trace_id_substrings:
+        for a_substring in to_be_traced.keys():
+            if string.find(trace_id, a_substring) >= 0:
+                return 1
+
+    return 0
+        
 
 def trace(trace_id, message):
     #
@@ -110,10 +127,11 @@ def trace(trace_id, message):
     #
     trace_fct(trace_id, message)
 
-def config_traces(print_to=None, status=None, active_traces={}):
+def config_traces(print_to=None, status=None, active_traces=None,
+                  allow_trace_id_substrings=None):
     """Configures what traces are printed, and where"""
 
-    global trace_fct, trace_file, to_be_traced
+    global trace_fct, trace_file, to_be_traced, activate_trace_id_substrings
 
     #
     # trace_fct is a function that we set on the fly. It's never defined explicitly
@@ -131,6 +149,10 @@ def config_traces(print_to=None, status=None, active_traces={}):
     if active_traces:
         to_be_traced = active_traces
 
+    if allow_trace_id_substrings != None:
+        activate_trace_id_substrings = allow_trace_id_substrings
         
+#    print '-- debug.config_traces: upon exit, trace_fct=%s, trace_file=%s, to_be_traced=%s, activate_trace_id_substrings=%s' % (trace_fct, trace_file, to_be_traced, activate_trace_id_substrings)
+
 
     

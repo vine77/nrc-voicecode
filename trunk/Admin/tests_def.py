@@ -24,7 +24,7 @@
 import os, sys
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 import mediator, MediatorObject, Object, SymDict, test_pseudo_python
-import util, vc_globals
+import util, unit_testing, vc_globals
 import RecogStartMgr, GramMgr, sr_grammars
 
 from actions_gen import *
@@ -34,6 +34,9 @@ from cont_gen import *
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
+
+#  auto_test.add_test('PyUnitTests', unit_testing.run_all_pyunit_tests,
+#                     desc='run a series of unit tests through PyUnit')
 
 
 ##############################################################################
@@ -1632,3 +1635,19 @@ def test_EdSim_alloc_cleanup():
 
 auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup, 
     'Testing EdSim allocation and cleanup.')
+
+##############################################################################
+# Use this to create temporary tests
+##############################################################################
+
+def test_temporary():
+    pass
+
+    mediator.init_simulator_regression()
+    test_command("""open_file('D:/blah.py')""")
+    mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    mediator.say(['if', 'index', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    mediator.say(['back', 'indent'])
+    test_command("""quit(save_speech_files=0, disconnect=0)""")        
+
+# auto_test.add_test('temp', test_temporary, desc='temporary test')

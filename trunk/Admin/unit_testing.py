@@ -1,8 +1,10 @@
-import exceptions, re, string, sys
-from debug import trace, config_traces, trace_file, trace_fct, to_be_traced
+from vc_globals import unit_tests_dir, benchmark_dir
+import exceptions, glob, os, re, string, sys
+from debug import trace, config_traces, trace_file, trace_fct, to_be_traced, \
+                  activate_trace_id_substrings
 from unittest import makeSuite, TestCase, TestSuite, TextTestRunner
+import debug
 
-config_traces(status='off', active_traces='all')
 
 def containsString(str, substring):
     return string.find(str, substring) >= 0
@@ -41,8 +43,8 @@ class VCPyUnitTestRunner(TextTestRunner):
                            repr(test_class))
         return a_match.group(1)
 
-    def add_suite(self, test_class):
-        self.all_suites[self.get_test_class_name(test_class)] = makeSuite(test_class, 'test')
+    def add_suite(self, test_class, test_methods_prefix='test'):
+        self.all_suites[self.get_test_class_name(test_class)] = makeSuite(test_class, test_methods_prefix)
 
     
     def generate_suite_to_run(self, test_names_list):
@@ -62,43 +64,129 @@ class VCPyUnitTestRunner(TextTestRunner):
         test_runner = TextTestRunner()        
         test_suite_to_run = self.generate_suite_to_run(test_names_list)
         self.run(test_suite_to_run)
-           
+
+class TestCaseDiffingOutputs(TestCase):
+    
+    """This class, captures STDOUT to a string and compares it to a
+    benchmark file.
+
+    The test fails if the two files differ.
+
+    NOTE: All *test* methods of this class should:
+    - invoke self.start_new_test() at the beginning
+    - invoke self.compare_outputs() at the end
+
+    There must be a way to automate this, but I fought with pyUnit for a while
+    and couldn't figure it out.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [StreamMock] *output_captures* -- The [StreamMock] used to capture STDOUT
+
+    FILE *old_stdout* -- What *sys.stdout* was set at before we started the
+    output capture.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+
+    def start_new_test(self, test_name=None):
+        self.output_capture = StreamMock('w')
+        sys.stdout = self.output_capture
+        self.test_name = test_name
+
+    def file_names_root(self):
+        class_name = "%s" % self.__class__
+        a_match = re.match('[\s\S]*?.{0,1}([^.]*)$', class_name)
+        class_name_root = a_match.group(1)
+        return os.path.join(benchmark_dir, class_name_root)
+
+    def file_names_root(self):
+        class_name = "%s" % self.__class__
+        a_match = re.match('[\s\S]*?.{0,1}([^.]*)$', class_name)
+        test_file_name = a_match.group(1)
+        if self.test_name:
+            test_file_name = "%s-%s" % (test_file_name, self.test_name)
+        return os.path.join(benchmark_dir, test_file_name)
+
+    def benchmark_file_path(self):
+        return self.file_names_root() + '.benchmark'
+    
+    def output_file_path(self):
+        return self.file_names_root() + '.out'
+
+    def compare_outputs(self):
+        sys.stderr.write('STDERR -- TestCaseDiffingOutputs.compare_outputs: invoked\n')                
+        benchmark_file = open(self.benchmark_file_path(), 'r')
+        benchmark = benchmark_file.read()
+        benchmark_file.close()
+
+        sys.stderr.write('STDERR -- TestCaseDiffingOutputs.test: self.output_capture.stream=\'%s\'\n' % self.output_capture.stream) 
+        sys.stderr.write('STDERR -- TestCaseDiffingOutputs.test: benchmark=\'%s\'\n' % benchmark)       
+        
+
+        if self.output_capture.stream != benchmark:
+            output_file = open(self.output_file_path(), 'w')
+            output_file.write(self.output_capture.stream)
+            output_file.close()
+            
+        assert self.output_capture.stream == benchmark, \
+               "Output file differs from benchmark.\nOutput file='%s'\nBenchmark file = '%s'" % (self.output_file_path(), self.benchmark_file_path())
+
+
+    def setUp(self):
+       self.old_stdout = sys.stdout
+       self.start_new_test()
+
+    def tearDown(self):
+        sys.stderr.write('STDERR -- TestCaseDiffingOutputs.tearDown: self.output_capture.stream=\'%s\'\n' % self.output_capture.stream)                
+        sys.stderr.write('STDERR -- TestCaseDiffingOutputs.tearDown: restoring stdout\n')        
+        sys.stdout = self.old_stdout
+        pass
+
+    def runTest(self):
+        self.test()
+                   
 test_runner = VCPyUnitTestRunner()
 
-class HelloTest(TestCase):
-    def test_hello(self):
-        abc = "hello"
-        assert (abc == 1), 'string was not 1'
+def define_all_test_suites():
+    #
+    # find all the .py files in %VCODE_HOME%/Admin/UnitTests/
+    # and import them.
+    #
+    
+    unit_test_files = glob.glob(os.path.join(unit_tests_dir, '*.py'))
+    for a_test_file in unit_test_files:
+        execfile(a_test_file)
 
-    def test_1(self):
-        abc = 1
-        assert (abc == 1), 'string was not 1'
-
-test_runner.add_suite(HelloTest)
-                              
 
 class TraceTest(TestCase):
     def setUp(self):
         self.old_trace_fct = trace_fct
         self.old_trace_file = trace_file
         self.old_to_be_traced = to_be_traced
+        self.old_activate_trace_id_substrings = activate_trace_id_substrings
 
     def reset_traces_config(self):
         trace_fct = self.old_trace_fct
         trace_file = self.old_trace_file
         to_be_traced = self.old_to_be_traced        
     
-    def do_some_traces(self, status, activate_all=0):
+    def do_some_traces(self, status, activate_all=0, allow_trace_id_substring=None):
         global mock_stdout
         mock_stdout = StreamMock(mode='w')
         if activate_all:
             active_traces = 'all'
         else:
             active_traces = {'always_in_active_list': 1}
+            
         config_traces(print_to=mock_stdout, status=status,
-                      active_traces=active_traces)
+                      active_traces=active_traces,
+                      allow_trace_id_substrings=allow_trace_id_substring)
         trace('always_in_active_list', '')
         trace('never_in_active_list', '')
+        trace('XXXXXalways_in_active_list', '')        
         self.reset_traces_config()        
         return mock_stdout.stream
 
@@ -132,10 +220,30 @@ class TraceTest(TestCase):
                               '-- always_in_active_list'), \
                'active trace not printed when all traces overriden with active.' + \
                self.what_was_printed()
-                
-        
 
+    def test_substring_traces_not_printed_when_substrings_not_allowed(self):
+        assert not containsString(self.do_some_traces('on'),
+                                 'XXXalways_in_active_list'), \
+               'substring trace printed eventhough substrings were not allowed' + \
+               self.what_was_printed()
+
+    def test_traces_printed_when_activated_through_substring(self):
+        assert containsString(self.do_some_traces('on', allow_trace_id_substring=1),
+                              'XXXXalways_in_active_list'), \
+               'trace NOT printed eventhough activated through regexp' + \
+               self.what_was_printed()
+            
+    def test_traces_not_printed_when_not_activated_through_substring(self):
+        assert not containsString(self.do_some_traces('on', allow_trace_id_substring=1),
+                                  '-- never_in_active_list'), \
+               'trace printed eventhough NOT activated through regexp' + \
+               self.what_was_printed()
+                                      
 test_runner.add_suite(TraceTest)
+
+
+def run_all_pyunit_tests():
+    test_runner.run_tests_with_names(['all'])
 
 
 ###############################################################################
@@ -162,7 +270,8 @@ class StreamMock:
 
 mock_stdout = StreamMock()
 
+define_all_test_suites()
 
 if __name__ == '__main__':
-    test_runner.run_tests_with_names(['all'])
-#    test_runner.run_tests_with_names(['TraceTest'])
+    run_all_pyunit_tests()
+
