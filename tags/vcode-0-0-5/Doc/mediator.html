@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Oct 03 16:08:14 2000)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Module mediator</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ModuleName">Module mediator</H1>
+<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">clear_symbols</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">compile_symbols</SPAN>(<SPAN CLASS="Argument">file_list</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">execute_command</SPAN>(<SPAN CLASS="Argument">cmd</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to position <EM>INT pos</EM> of the current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto_line</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">init_simulator</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">open_file</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a file with name in current buffer.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">quit</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate an utterance <EM>STR utterance</EM></SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#say_select"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">say_select</SPAN></A>(<SPAN CLASS="Argument">utterance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Simulate a <EM>Select XYZ</EM> utterance</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">select</SPAN>(<SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Selects from position <EM>start</EM> to position <EM>end</EM> in current buffer</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">setmic</SPAN>(<SPAN CLASS="Argument">state</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">show_buff</SPAN>()</SPAN><SPAN CLASS="OneLiner"> # Shows content of current source buffer</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#simulator_mode"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">simulator_mode</SPAN></A>(<SPAN CLASS="Argument">options</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Start mediator in console mode.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">unresolved_abbreviations</SPAN>()</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'D:\\VoiceCode\\VCode.redund...rans\\Mediator\\mediator.pyc'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">anonymous_action_curr_num</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">quit_flag</SPAN> = <SPAN CLASS="VariableValue">0</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">instance</SPAN> <SPAN CLASS="VariableName">the_mediator</SPAN> = <SPAN CLASS="VariableValue">MediatorObject.MediatorObject instance</SPAN></SPAN>
+</PRE><H2>Description</H2><P>
+Main script for VoiceCode mediator.</P>
+<P>
+OPTIONS
+-------</P>
+<P>
+-h  : print this help message.</P>
+<P>
+-s  : run mediator in simulation mode</P>
+<P>
+-p  : port number for communication with external programming environment</P>
+<P>
+Console mode
+------------</P>
+<P>
+When used with <CODE>-s</CODE> option, the script runs in simulation mode. It
+asks for commands and executes those using an editor simulator.</P>
+<P>
+After each command, the content of the current buffer is printed. The
+position of the cursor is indicated by a mark <EM>&lt;CURSOR&gt;</EM>.</P>
+<P>
+Valid commands are:</P>
+<P>
+open_file(STR fname)
+   Opens file with path name <EM>fname</EM> in the editor
+   simulator. It also compiles a list of symbols for that file.</P>
+<P>
+compile_symbols([STR] file_list)
+   Compiles symbols for all source files in list <EM>file_list</EM>.</P>
+<P>
+clear_symbols()
+   Removes all spoken forms of symbols added by VoiceCode to NatSpeak's 
+   vocabulary. Spoken forms which consist of a single word are however left
+   there.</P>
+
+<H3>say(STR utterance)
+   Interprets string <EM>utterance</EM> as though it had been said by a user.</H3>
+   When called in this way, the system will simulate a recognition
+   event using NatLink's &lt;EM&gt;recognitionMimic&lt;/EM&gt; function.   Note that this command will not work with Select XYZ
+   utterances. For those, you must use the say_select command
+   described below.say(STR utterance, bypass_NatLink=1)
+   Same as above, except that the interpretation process will bypass
+   NatLink's &lt;EM&gt;recognitionMimic&lt;/EM&gt; function.
+<H3>say_select([STR] utterrance)
+   Simulates a Select XYZ utterance.</H3>
+   Elements of list <EM>utterance</EM> are the individual NatSpeak vocabulary
+   entries that make the utterance. For vocabulary entries of the form
+   written\spoken form, you must specify both the written and spoken
+   form of the entry.
+<OL>
+
+<LI>say_select(['Select', '!=\not equal to'])
+</OL>
+goto(INT pos)
+   Moves cursor to position <EM>pos</EM>goto_line(INT linenum)
+   Moves cursor to the beginning of line number <EM>linenum</EM>select(INT start, end)
+   Selects from position <EM>start</EM> to position <EM>end</EM> in current buffershow_buff()
+   Prints the content of the current buffer
+<H3>listen()
+   Throws the mediator into a dictation loop. It will listen for
+   dictation utterances and interpret and execute any part of the
+   utterance that corresponds to a Context Sensitive Command.</H3>
+   Once in <CODE>listen</CODE> mode, you cannot type console commands until you
+   have clicked the <CODE>OK</CODE> button on the <CODE>Natlink/ Python Subsystem</CODE>
+   window.
+<H3>unresolved_abbreviations()
+   Prints out a list of the unresolved abbreviations in symbols that were
+   parsed so far. An unresolved abbreviation is an abbreviation that appeared
+   in a symbol and is neither a speech vocabulary word nor a known
+   abbreviation.</H3>
+   The unresolved abbreviations are printed in increasing order of length, 
+   to make it easier to spot the ones that are actually abbreviations (they
+   will tend to be short and appear at the beginning).
+<H3>quit()
+   Quit the simulator.</H3>
+   Note that if you don't quit using this command
+   (e.g. *Ctrl-C*), your DOS window will hang up.   
+<H2 ID="open_file" CLASS="Function">open_file(<SPAN CLASS="Argument">fname</SPAN>)</H2>
+<P>Open a file with name in current buffer.</P>
+
+<EM>STR fname</EM> is the path of the file<H2 ID="say" CLASS="Function">say(<SPAN CLASS="Argument">utterance</SPAN>, <SPAN CLASS="Argument">bypass_NatLink=0</SPAN>)</H2>
+<P>Simulate an utterance <EM>STR utterance</EM></P>
+
+Note that this command will not work with <EM>Select XYZ</EM> utterances.
+For those, you must use the [say_select] command.IF <EM>BOOL bypass_NatLink</EM> is true, the interpretation will be done withouth
+going through NatLink's recognitionMimic function.
+<DL>
+
+<DT>
+<EM>[STR] utterance</EM>
+<DD>The list of words in the utterance. If parts
+of the utterance are written\spoken words, then they should be
+written as such. For example:
+</DL>
+say(['horiz_pos\horizontal position', <CODE>{Spacebar}!={Spacebar}\not equal to</CODE>, '0'])will type: horiz_pos != 0Note also that if the utterance is a Select XYZ utterance, and
+some words in utterance correspond to LSAs, make sure to omit the
+{Spacebar} from the LSA's written form (Select XYZ grammar doesn't
+seem to recognise words that contain {Spacebar}). This will work
+because VoiceCode automatically adds a redundant vocabulary entry
+for each LSA, which has the {Spacebar}s removed.Also, for Select XYZ, make sure to CAPITALISE the word Select.
+<H2 ID="say_select" CLASS="Function">say_select(<SPAN CLASS="Argument">utterance</SPAN>)</H2>
+<P>Simulate a <EM>Select XYZ</EM> utterance</P>
+
+Elements of list <EM>utterance</EM> are the individual NatSpeak vocabulary
+entries that make the utterance. For vocabulary entries of the form
+written\spoken form, you must specify both the written and spoken
+form of the entry.
+<OL>
+
+<LI>say_select(['Select', '!=\not equal to'])    
+
+</OL>
+<H2 ID="simulator_mode" CLASS="Function">simulator_mode(<SPAN CLASS="Argument">options</SPAN>)</H2>
+<P>Start mediator in console mode.</P>
+
+Useful for debugging purposes when using the mediator separately from
+an external editor.<STRONG>INPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>[STR: ANY] options</EM>
+<DD>Dictionary of options for the script.
+</DL>
+<STRONG>OUTPUTS</STRONG>
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
