@@ -26,6 +26,7 @@ appropriate grammars.
 """
 
 import debug
+import natlink
 import string
 import re
 import sys
@@ -192,12 +193,15 @@ class RecogStartMgr(OwnerObject):
 
     **INSTANCE ATTRIBUTES**
 
-    *AppMgr* editors -- the parent AppMgr object, which provides
+    AppMgr *editors* -- the parent AppMgr object, which provides
     information about editor application instances
 
-    *BOOL* trust_current_window -- 1 if RSM should trust that the current
+    BOOL *trust_current_window* -- 1 if RSM should trust that the current
     window corresponds to the editor when the editor first connects to
     VoiceCode, or when it notifies VoiceCode of a new window.
+    
+    BOOL *is_in_text_mode = 0* -- TRUE iif code dictation is disabled. In that case,
+    dictation utterances should be typed as normal text.
 
     **CLASS ATTRIBUTES**
     
@@ -219,7 +223,8 @@ class RecogStartMgr(OwnerObject):
 
         self.deep_construct(RecogStartMgr,
                             {'editors': None,
-                             'trust_current_window': trust_current_window
+                             'trust_current_window': trust_current_window,
+                             'is_in_text_mode': 0
                             },
                             args)
         self.name_parent('editors')
@@ -271,6 +276,31 @@ class RecogStartMgr(OwnerObject):
         object
         """
         return self.editors.app_instance(instance)
+        
+    def set_text_mode(self, set_to):
+        """Sets text mode on/off. In text mode, dictation utterances are
+        typed as regular text instead of being translated to code.
+
+        **INPUTS**
+
+        BOOL *set_to* -- Set text mode on or off depending on this argument.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.is_in_text_mode = set_to
+        
+        #
+        # Note: Enable NatText when enabling text mode. We could also disable it
+        #       when text mode is disabled, but what if the user wants
+        #       NatText to stay on in other applications?
+        #
+        #       Ideally, you would want to remember the state of NatText
+        #       and reset NatText to that state when you disable text mode.
+        #
+        if set_to:
+           natlink.execScript('SetNaturalText 1')
 
     def interpret_dictation(self, instance, result, initial_buffer = None):
         """interpret the result of recognition by a dictation grammar,

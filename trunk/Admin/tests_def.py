@@ -46,6 +46,10 @@ from cont_gen import *
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
 small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
 edit_this_buff_py = vc_globals.test_data + os.sep + 'edit_this_buff.py'
+
+right_before_foreground_tests = -3
+during_foreground_tests = right_before_foreground_tests + 1
+right_after_foreground_tests = during_foreground_tests + 1
  
 #  auto_test.add_test('PyUnitTests', unit_testing.run_all_pyunit_tests,
 #                     desc='run a series of unit tests through PyUnit')
@@ -2876,6 +2880,18 @@ auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insert
 
 
 ##############################################################################
+# This dummy test is just there to request that the user bring
+# Emacs to the foreground.
+##############################################################################
+
+def test_dummy_request_foreground():
+    request_that_user_bring_editor_to_foreground()    
+
+
+auto_test.add_test('request_foreground', test_dummy_request_foreground, 'This dummy test is just there to request that user bring Emacs to the foreground.', order=right_before_foreground_tests)
+
+
+##############################################################################
 # Testing interaction between user inputs and speech
 ##############################################################################
 
@@ -2923,14 +2939,14 @@ def test_mixed_kbd_and_voice_editing():
         
     kbd_evt_sim = testing.kbd_event_sim_factory(app)
 
-    request_that_user_bring_editor_to_foreground()
+#    request_that_user_bring_editor_to_foreground()
     
     test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
     test_selection_set_by_kbd(app, commands, kbd_evt_sim)
     test_search_for_typed_text(app, commands, kbd_evt_sim)
     test_select_typed_text_by_voice(app, commands, kbd_evt_sim)
     
-    notify_user_that_editor_can_be_in_background()    
+#    notify_user_that_editor_can_be_in_background()    
    
 def test_cursor_moved_by_kbd(app, commands, kbd_evt_sim):
    commands.open_file(edit_this_buff_py, echo_cmd=1)
@@ -2965,8 +2981,45 @@ def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
    
    commands.say(['select', 'hello'], never_bypass_sr_recog=1, echo_cmd=1)
 
-auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=-1)
+auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', order=during_foreground_tests)
 
+##############################################################################
+# Test normal text dictation.
+##############################################################################
+
+def test_normal_text_dictation():
+   testing.init_simulator_regression()
+   
+   temp_config = temp_factory.new_config()
+   mediator = temp_config.mediator() 
+   recog_mgr = mediator.editors.recog_mgr
+   
+   print "before setting text mode on: is_in_text_mode=%s" % recog_mgr.is_in_text_mode      
+   recog_mgr.set_text_mode(1)
+   print "after setting text mode on:is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
+   print "before setting text mode off: is_in_text_mode=%s" % recog_mgr.is_in_text_mode      
+   recog_mgr.set_text_mode(0)
+   print "after setting text mode off:is_in_text_mode=%s" % recog_mgr.is_in_text_mode   
+
+#   commands.open_file('blah.py')   
+#   recog_mgr.set_text_mode(1)
+#   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text', 'comma'], never_bypass_sr_recog=1, user_input="0\n0\n")
+#   recog_mgr.set_text_mode(0)
+#   commands.say(['but', 'this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="0\n0\n0\n")
+   
+auto_test.add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', order=during_foreground_tests)   
+
+
+##############################################################################
+# This dummy test is just there to ring a bell to notify
+# the user that he can now bring any other window in the foreground
+##############################################################################
+
+def test_dummy_just_ring_bell():
+    notify_user_that_editor_can_be_in_background()    
+
+
+auto_test.add_test('just_ring_bell', test_dummy_just_ring_bell, 'This dummy test is just there to ring a bell, to notify the user of the end of the foreground tests.', order=right_after_foreground_tests)
 
 ##############################################################################
 # Number dictation
@@ -2975,15 +3028,9 @@ auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Test
 def test_number_dictation():
    testing.init_simulator_regression()
    commands.open_file('blah.py')   
-#   commands.say(['twenty-three\\twenty-three', 'comma', 'fifty-four\\fifty-four', 'comma', 'sixty-one\\sixty-one', 'comma', 'twenty-three\\twenty-three', 'fifty-four\\fifty-four'])
    commands.say(['twenty-three\\twenty-three', 'fifty-four\\fifty-four'])
    commands.say(['select', '54'], never_bypass_sr_recog=1)   
    commands.say(['select', '23', '54'], never_bypass_sr_recog=1)   
-
-   
-
-
-
 
 auto_test.add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
