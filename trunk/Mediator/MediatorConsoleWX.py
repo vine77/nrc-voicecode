@@ -383,12 +383,10 @@ class CorrectionBoxWX(wxDialog, Object.OwnerObject):
         self.select_choice(self.choices[n])
 
     def on_focus_text(self, event):
-        print 'activating'
         if self.spelling_gram:
             self.spelling_gram.activate(self.GetHandle())
 
     def on_kill_focus_text(self, event):
-        print 'deactivating'
         if self.spelling_gram:
             self.spelling_gram.deactivate()
 

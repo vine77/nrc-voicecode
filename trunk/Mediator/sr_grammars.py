@@ -680,6 +680,25 @@ class WinGramFactory(Object):
         """
         debug.virtual('WinGramFactory.make_natural_spelling')
 
+    def make_military_spelling(self, spell_words = None, spelling_cbk = None):
+        """create a new MilitarySpelling grammar
+
+        **INPUTS**
+
+        *[STR]* spell_words -- words which must proceed the first spelled 
+        letter, or None for an unrestricted spelling grammar.  The latter is not
+        advisable unless dictation is disabled.
+
+        *FCT(STR)* spelling_cbk -- callback to signal recognition.
+        Currently, the letters or numbers spelled are returned as a single 
+        string 
+
+        **OUTPUTS**
+
+        *MilitarySpelling* -- the spelling grammar
+        """
+        debug.virtual('WinGramFactory.make_military_spelling')
+
     def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
         select_cbk, alt_select_words = None):
         """create a new SimpleSelection grammar
@@ -1196,9 +1215,9 @@ class MilitarySpelling(Object):
 
     *[STR]* spell_words -- words which must proceed the first spelled letter, 
     or None for an unrestricted spelling grammar.  
-    Currently, the letters spelled are returned as a single string
 
     *FCT(STR)* spelling_cbk -- callback to signal recognition
+    Currently, the letters spelled are returned as a single string
     """
     def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
         self.deep_construct(MilitarySpelling,
@@ -1226,7 +1245,7 @@ class MilitarySpelling(Object):
         the grammar, to ensure that it doesn't have circular references
         to the owner
         """
-        debug.virtual('MilitarySpelling.cleanup')
+        self.spelling_cbk = None
 
     def deactivate(self):
         """disable recognition from this grammar
@@ -1241,6 +1260,7 @@ class MilitarySpelling(Object):
         """
         debug.virtual('MilitarySpelling.deactivate')
 
+        
 class SimpleSelection(WinGram):
     """abstract base class for simple selection grammars
 
