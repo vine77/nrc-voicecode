@@ -107,13 +107,6 @@ output1, output2 :
 
 
 if (__name__ == '__main__'):
-    config_file = vc_globals.config + os.sep + 'vc_config.py'
-    try:
-        execfile(config_file)        
-    except Exception, err:
-        print 'ERROR: in configuration file %s.\n' % config_file
-        raise err
-    
     opts, args = util.gopt(('d', None, 
         'bypass', None,
         'h', None, 
@@ -124,27 +117,21 @@ if (__name__ == '__main__'):
     elif (opts['d']):
         print "-d option not implemented yet.\n"
     else:
-        try:
-            sr_interface.connect('off')
-        except natlink.UnknownName:
-            print 'NatSpeak user VCTest not defined.'
-            print 'Define it and restart VoiceCode' 
-        else:
-            the_mediator = \
-                NewMediatorObject.NewMediatorObject(
-                    test_or_suite = args[0],
-                    global_grammars = 1, exclusive = 1, 
-                    profile_prefix = opts['p'],
-                    bypass_sr_recog = opts['bypass'])
-            sys.stderr.write('Configuring the mediator...\n')
-            the_mediator.configure()
-            sys.stderr.write('Finished configuring...\n')
-            ed = EdSim.EdSim()
-            the_mediator.new_editor(ed, server = 0, check_window = 0, 
-                test_editor = 1)
-            the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
-                disconnect=1)
-            the_mediator.cleanup()
- 
+        the_mediator = \
+            NewMediatorObject.NewMediatorObject(
+                test_or_suite = args[0],
+                global_grammars = 1, exclusive = 1, 
+                profile_prefix = opts['p'],
+                bypass_sr_recog = opts['bypass'])
+        sys.stderr.write('Configuring the mediator...\n')
+        the_mediator.configure()
+        sys.stderr.write('Finished configuring...\n')
+        ed = EdSim.EdSim()
+        the_mediator.new_editor(ed, server = 0, check_window = 0, 
+            test_editor = 1)
+        the_mediator.quit(clean_sr_voc = 0, save_speech_files=0, 
+            disconnect=1)
+        the_mediator.cleanup()
+
 
 

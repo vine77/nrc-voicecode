@@ -2955,29 +2955,29 @@ def test_mixed_kbd_and_voice_editing():
     kbd_evt_sim = testing.kbd_event_sim_factory(app)
 
     init_line = 9
+    commands.open_file(foreground_py, echo_cmd=1)
     test_cursor_moved_by_kbd(app, commands, kbd_evt_sim, init_line)
     test_selection_set_by_kbd(app, commands, kbd_evt_sim, init_line)
     test_search_for_typed_text(app, commands, kbd_evt_sim, init_line)
     test_select_typed_text_by_voice(app, commands, kbd_evt_sim, init_line)
     
 def test_cursor_moved_by_kbd(app, commands, kbd_evt_sim, init_line):
-   commands.open_file(foreground_py, echo_cmd=1)
    commands.goto_line(init_line)
    pos = app.cur_pos()
    commands.goto(pos + 1, echo_cmd=1)
    kbd_evt_sim.move_cursor_by_kbd('Right', 10)
+   time.sleep(5)
    commands.say(['hello'], user_input="0\n", echo_cmd=1)
 
 def test_selection_set_by_kbd(app, commands, kbd_evt_sim, init_line):
-   commands.open_file(foreground_py, echo_cmd=1)
    commands.goto_line(init_line)
    pos = app.cur_pos()
    commands.goto(pos + 1, echo_cmd=1)
    kbd_evt_sim.set_selection_by_kbd('Right', 10)
+   time.sleep(5)
    commands.say(['hello'], user_input="0\n", echo_cmd=1)
    
 def test_search_for_typed_text(app, commands, kbd_evt_sim, init_line):
-   commands.open_file(foreground_py, echo_cmd=1)
    commands.goto_line(init_line + 1, echo_cmd = 1)
    kbd_evt_sim.type_text(', hi')
    
@@ -2985,17 +2985,20 @@ def test_search_for_typed_text(app, commands, kbd_evt_sim, init_line):
    time.sleep(5)
    
    kbd_evt_sim.move_cursor_by_kbd('Left', 5)
+
+   time.sleep(5)
    commands.say(['next', 'comma'], echo_cmd=1)
    
 def test_select_typed_text_by_voice(app, commands, kbd_evt_sim, init_line):
-   commands.open_file(foreground_py, echo_cmd=1)
    commands.goto_line(init_line + 1, echo_cmd = 1)
    kbd_evt_sim.type_text(' hello ')   
    
    # Need to give Emacs time to notify the server of the typed text
    time.sleep(1)
    
-   commands.say(['select', 'hello'], never_bypass_sr_recog=1, echo_cmd=1)
+# user input shouldn't be necessary, but is useful for testing with
+# WaxEditClient where the keyboard input isn't working
+   commands.say(['select', 'hello'], never_bypass_sr_recog=1, echo_cmd=1, user_input = "0\n")
 
 add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', foreground = 1)
 
@@ -3051,9 +3054,23 @@ def test_number_dictation():
    testing.init_simulator_regression()
    commands.open_file('blah.py')   
    commands.say(['23\\twenty-three', '54\\fifty-four', 'comma', '0\\zero', '.\\point', '04\\oh four'], echo_cmd=1)
-# not sure why this doesn't work
-#   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+# not sure why this doesn't work for me (DCF), but does? for Alain
+   commands.say(['select', '23\\twenty-three', '54\\fifty-four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   app = testing.editor()
+   app.print_buff()
+
+# this works for DCF but apparently not for Alain
    commands.say(['select', 'twenty', 'three', 'fifty', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   app.print_buff()
+# what about this?
+   commands.say(['select', '23', '54'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+   app.print_buff()
+# or this?
+# (this fails with badWord, because there is no word '2354' in the
+# vocabulary - DCF)
+#   commands.say(['select', '2354'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
+
+   commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
    commands.say(['select', '0\\zero', '.\\point'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")
    commands.say(['select', '04\\oh four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")   
    commands.say(['select', '0\\zero', '.\\point', 'oh', 'four'], never_bypass_sr_recog=1, echo_cmd=1, user_input="0\n")      
