@@ -2238,7 +2238,7 @@ class StateStackBasic(StateStack):
         """
         debug.trace('StateStackBasic.pop', 'called with n = %d' % n)
         if not self.can_restore(app, n):
-            debug.trace('StateStack.pop', 'unable to restore')
+            debug.trace('StateStackBasic.pop', 'unable to restore')
             return 0
         temporary = BufferStatesBasic(app)
 # create a map from buffer names to the oldest BufferStatesBasic which
@@ -2257,12 +2257,12 @@ class StateStackBasic(StateStack):
 # since we checked cookies in can_restore, this shouldn't happen, but
 # if it does, un-restore the state before returning 0 to signal failure
                 warning = \
-                    'StateStack.pop: unexpected failure to restore state\n'
+                    'StateStackBasic.pop: unexpected failure to restore state\n'
                 debug.critical_warning(warning)
                 temporary.restore_state(app)
                 return 0
         for i in range(1, n+1):
-            debug.trace('StateStack.pop', 'popping %d' % i)
+            debug.trace('StateStackBasic.pop', 'popping %d' % i)
             which_buffers = []
             for buff in self.states[-i].known_buffers():
                 if buff_indices[buff] == i:
@@ -2275,7 +2275,7 @@ class StateStackBasic(StateStack):
 # since we checked cookies in can_restore, this shouldn't happen, but
 # if it does, un-restore the state before returning 0 to signal failure
                 warning = \
-                    'StateStack.pop: unexpected failure to restore state\n'
+                    'StateStackBasic.pop: unexpected failure to restore state\n'
                 debug.critical_warning(warning)
                 temporary.restore_state(app)
                 return 0
